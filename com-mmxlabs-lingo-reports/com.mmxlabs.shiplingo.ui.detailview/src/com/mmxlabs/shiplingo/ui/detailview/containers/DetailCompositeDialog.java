@@ -15,7 +15,6 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -35,9 +34,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 import com.mmxlabs.shiplingo.ui.autocorrector.AutoCorrector;
@@ -278,11 +275,8 @@ public class DetailCompositeDialog extends Dialog {
 		try {
 			// tell validation support to ignore the originals and see the
 			// duplicates
-			final Pair<EObject, EReference> p = ValidationSupport.getInstance()
-					.getContainer(objects.get(0));
-			ValidationSupport.getInstance().setContainers(duplicates,
-					p.getFirst(), p.getSecond());
-			ValidationSupport.getInstance().ignoreObjects(objects);
+
+			ValidationSupport.getInstance().startEditingObjects(objects, duplicates);
 
 			final int value = open();
 			if (value == OK) {
@@ -304,9 +298,7 @@ public class DetailCompositeDialog extends Dialog {
 			}
 			return value;
 		} finally {
-			// clear validation support
-			ValidationSupport.getInstance().clearContainers(duplicates);
-			ValidationSupport.getInstance().unignoreObjects(objects);
+			ValidationSupport.getInstance().endEditingObjects(objects, duplicates);
 		}
 	}
 

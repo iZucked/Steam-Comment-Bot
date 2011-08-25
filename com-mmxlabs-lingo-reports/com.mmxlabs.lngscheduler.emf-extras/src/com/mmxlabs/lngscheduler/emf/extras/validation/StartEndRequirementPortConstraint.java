@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.validation;
 
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -11,9 +15,11 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import scenario.Scenario;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
+import scenario.fleet.VesselClass;
 import scenario.port.Port;
 
 import com.mmxlabs.common.Pair;
@@ -41,20 +47,54 @@ public class StartEndRequirementPortConstraint extends AbstractModelConstraint {
 				final Pair<EObject, EReference> container = ValidationSupport.getInstance().getContainer(pat);
 				if (container.getFirst() instanceof Vessel) {
 					final Vessel vessel = (Vessel) container.getFirst();
-					final Port port = pat.getPort();
-					if (vessel.getClass_().getInaccessiblePorts().contains(port)) {
+					if (isValid(pat, vessel.getClass_()) == false) {
 						final String startOrEnd = (container.getSecond() == FleetPackage.eINSTANCE.getVessel_StartRequirement() ? "start" : "end");
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vessel.getName(), startOrEnd, vessel.getClass_()
-								.getName(),
-								port.getName()));
+								.getName(), pat.getPort().getName()));
 
 						dcsd.addEObjectAndFeature(pat, FleetPackage.eINSTANCE.getPortAndTime_Port());
-						dcsd.addEObjectAndFeature(vessel.getClass_(), FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts());
 						return dcsd;
 					}
 				}
 			}
+		} else if (target instanceof VesselClass) {
+			final VesselClass vesselClass = (VesselClass) target;
+			final Scenario scenario = ValidationSupport.getInstance().getScenario(vesselClass);
+
+			final HashSet<String> badPorts = new HashSet<String>();
+			final List<String> badVessels = new LinkedList<String>();
+
+			for (final Vessel v : scenario.getFleetModel().getFleet()) {
+				if (ValidationSupport.getInstance().isSame(v.getClass_(), vesselClass)) {
+					boolean bad = false;
+					if (!isValid(v.getStartRequirement(), vesselClass)) {
+						badPorts.add(v.getStartRequirement().getPort().getName());
+						bad = true;
+						badVessels.add(v.getName());
+					}
+					if (!isValid(v.getEndRequirement(), vesselClass)) {
+						badPorts.add(v.getEndRequirement().getPort().getName());
+						if (!bad)
+							badVessels.add(v.getName());
+					}
+				}
+
+			}
+
+			if (badVessels.isEmpty() == false) {
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(badVessels, badPorts));
+				dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts());
+				return dcsd;
+			}
 		}
 		return ctx.createSuccessStatus();
+	}
+
+	private boolean isValid(final PortAndTime pat, final VesselClass vc) {
+		if (pat.isSetPort()) {
+			final Port port = pat.getPort();
+			return !(vc.getInaccessiblePorts().contains(port));
+		}
+		return true;
 	}
 }

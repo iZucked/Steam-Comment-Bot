@@ -4,14 +4,11 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.validation.context;
 
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.eclipse.emf.common.util.EList;
@@ -42,12 +39,46 @@ public class ValidationSupport {
 
 	private final WeakHashMap<EObject, Boolean> ignoredObjects = new WeakHashMap<EObject, Boolean>();
 
+	private final WeakHashMap<EObject, EObject> editedObjects = new WeakHashMap<EObject, EObject>();
+
 	protected ValidationSupport() {
 
 	}
 
 	public static ValidationSupport getInstance() {
 		return INSTANCE;
+	}
+
+	public synchronized void startEditingObjects(final Collection<? extends EObject> real, final Collection<? extends EObject> copy) {
+		final Iterator<? extends EObject> i1 = real.iterator();
+		final Iterator<? extends EObject> i2 = copy.iterator();
+		while (i1.hasNext() && i2.hasNext()) {
+			final EObject r = i1.next();
+			final EObject c = i2.next();
+
+			editedObjects.put(r, c);
+
+			final Pair<EObject, EReference> container = getContainer(r);
+
+			setContainers(Collections.singleton(r), container.getFirst(), container.getSecond());
+		}
+		ignoreObjects(real);
+	}
+
+	public boolean isSame(EObject a, EObject b) {
+		if (editedObjects.containsKey(a)) {
+			a = editedObjects.get(a);
+		}
+		if (editedObjects.containsKey(b)) {
+			b = editedObjects.get(b);
+		}
+
+		return a == b;
+	}
+
+	public synchronized void endEditingObjects(final Collection<? extends EObject> real, final Collection<? extends EObject> copy) {
+		clearContainers(copy);
+		unignoreObjects(real);
 	}
 
 	public synchronized void ignoreObjects(
