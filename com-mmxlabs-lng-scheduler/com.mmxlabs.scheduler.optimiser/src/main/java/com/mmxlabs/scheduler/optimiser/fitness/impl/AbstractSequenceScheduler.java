@@ -41,16 +41,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * Abstract {@link ISequenceScheduler} implementation to manage the sequence
- * optimisation given a set of arrival times at each sequence element. This
- * class handles the construction of {@link VoyagePlan}s and uses a
- * {@link IVoyagePlanOptimiser} implementation to make the best route choices.
+ * Abstract {@link ISequenceScheduler} implementation to manage the sequence optimisation given a set of arrival times at each sequence element. This class handles the construction of
+ * {@link VoyagePlan}s and uses a {@link IVoyagePlanOptimiser} implementation to make the best route choices.
  * 
  * @author Simon Goodall
  * 
  */
-public abstract class AbstractSequenceScheduler<T> implements
-		ISequenceScheduler<T> {
+public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler<T> {
 
 	private IElementDurationProvider<T> durationsProvider;
 
@@ -78,8 +75,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		this.routeCostProvider = routeCostProvider;
 	}
 
-	public ScheduledSequences schedule(final ISequences<T> sequences,
-			final int[][] arrivalTimes) {
+	public ScheduledSequences schedule(final ISequences<T> sequences, final int[][] arrivalTimes) {
 		final ScheduledSequences result = new ScheduledSequences();
 
 		final List<IResource> resources = sequences.getResources();
@@ -87,8 +83,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		for (int i = 0; i < sequences.size(); i++) {
 			final ISequence<T> sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
-			final ScheduledSequence scheduledSequence = schedule(resource,
-					sequence, arrivalTimes[i]);
+			final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
 			if (scheduledSequence == null)
 				return null;
 			result.add(scheduledSequence);
@@ -98,20 +93,16 @@ public abstract class AbstractSequenceScheduler<T> implements
 	}
 
 	/**
-	 * Schedule an {@link ISequence} using the given array of arrivalTimes,
-	 * indexed according to sequence elements. These times will be used as the
-	 * base arrival time. However is some cases the time between elements may be
-	 * too short (i.e. because the vessel is already travelling at max speed).
-	 * In such cases, if adjustArrivals is true, then arrival times will be
-	 * adjusted in the {@link VoyagePlan}s. Otherwise null will be returned.
+	 * Schedule an {@link ISequence} using the given array of arrivalTimes, indexed according to sequence elements. These times will be used as the base arrival time. However is some cases the time
+	 * between elements may be too short (i.e. because the vessel is already travelling at max speed). In such cases, if adjustArrivals is true, then arrival times will be adjusted in the
+	 * {@link VoyagePlan}s. Otherwise null will be returned.
 	 * 
 	 * @param resource
 	 * @param sequence
 	 * @param arrivalTimes
 	 * @return
 	 */
-	public ScheduledSequence schedule(final IResource resource,
-			final ISequence<T> sequence, final int[] arrivalTimes) {
+	public ScheduledSequence schedule(final IResource resource, final ISequence<T> sequence, final int[] arrivalTimes) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
@@ -137,24 +128,20 @@ public abstract class AbstractSequenceScheduler<T> implements
 			final T element = itr.next();
 
 			final IPort thisPort = portProvider.getPortForElement(element);
-			final IPortSlot thisPortSlot = portSlotProvider
-					.getPortSlot(element);
+			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
 			if (prevPort != null) {
-				if (prevPortType == PortType.Load
-						|| prevPortType == PortType.CharterOut) {
+				if (prevPortType == PortType.Load || prevPortType == PortType.CharterOut) {
 					useNBO = true;
 				}
 
 				// Available time, as determined by inputs.
-				final int availableTime = arrivalTimes[idx]
-						- arrivalTimes[idx - 1] - prevVisitDuration;
+				final int availableTime = arrivalTimes[idx] - arrivalTimes[idx - 1] - prevVisitDuration;
 
 				// Get the min NBO travelling speed
-				final int nboSpeed = vessel.getVesselClass().getMinNBOSpeed(
-						vesselState);
+				final int nboSpeed = vessel.getVesselClass().getMinNBOSpeed(vesselState);
 
 				final VoyageOptions options = new VoyageOptions();
 
@@ -166,15 +153,9 @@ public abstract class AbstractSequenceScheduler<T> implements
 				options.setAvailableTime(availableTime);
 
 				if (prevPortType == PortType.CharterOut) {
-					options.setAvailableLNG(Math.min(vessel.getVesselClass()
-							.getCargoCapacity(),
-							((IVesselEventPortSlot) prevPortSlot)
-									.getVesselEvent().getMaxHeelOut()));
-
-				} else if (prevPortType == PortType.Load
-						|| prevPortType == PortType.Discharge) {
-					options.setAvailableLNG(vessel.getVesselClass()
-							.getCargoCapacity());
+					options.setAvailableLNG(Math.min(vessel.getVesselClass().getCargoCapacity(), ((IVesselEventPortSlot) prevPortSlot).getVesselEvent().getMaxHeelOut()));
+				} else if (useNBO) {
+					options.setAvailableLNG(vessel.getVesselClass().getCargoCapacity());
 				} else {
 					options.setAvailableLNG(0);
 				}
@@ -192,16 +173,12 @@ public abstract class AbstractSequenceScheduler<T> implements
 					// NBO
 
 					if (vesselState == VesselState.Ballast) {
-						voyagePlanOptimiser
-								.addChoice(new NBOTravelVoyagePlanChoice(
-										previousOptions, options));
+						voyagePlanOptimiser.addChoice(new NBOTravelVoyagePlanChoice(previousOptions, options));
 					}
 
-					voyagePlanOptimiser.addChoice(new FBOVoyagePlanChoice(
-							options));
+					voyagePlanOptimiser.addChoice(new FBOVoyagePlanChoice(options));
 
-					voyagePlanOptimiser.addChoice(new IdleNBOVoyagePlanChoice(
-							options));
+					voyagePlanOptimiser.addChoice(new IdleNBOVoyagePlanChoice(options));
 				}
 
 				if (thisPortSlot.getPortType() == PortType.Load) {
@@ -224,9 +201,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 							} else {
 								// we have a choice
 								options.setAllowCooldown(false);
-								voyagePlanOptimiser
-										.addChoice(new CooldownVoyagePlanChoice(
-												options));
+								voyagePlanOptimiser.addChoice(new CooldownVoyagePlanChoice(options));
 							}
 						} else {
 							// we have to allow cooldown, because there is no
@@ -238,24 +213,21 @@ public abstract class AbstractSequenceScheduler<T> implements
 					options.setShouldBeCold(false);
 				}
 
-				final List<MatrixEntry<IPort, Integer>> distances = new ArrayList<IMultiMatrixProvider.MatrixEntry<IPort, Integer>>(
-						distanceProvider.getValues(prevPort, thisPort));
+				final List<MatrixEntry<IPort, Integer>> distances = new ArrayList<IMultiMatrixProvider.MatrixEntry<IPort, Integer>>(distanceProvider.getValues(prevPort, thisPort));
 				// Only add route choice if there is one
 				if (distances.size() == 1) {
 					final MatrixEntry<IPort, Integer> d = distances.get(0);
 					options.setDistance(d.getValue());
 					options.setRoute(d.getKey());
 				} else {
-					voyagePlanOptimiser.addChoice(new RouteVoyagePlanChoice(
-							options, distances));
+					voyagePlanOptimiser.addChoice(new RouteVoyagePlanChoice(options, distances));
 				}
 
 				currentSequence.add(options);
 				previousOptions = options;
 			}
 
-			final int visitDuration = durationsProvider.getElementDuration(
-					element, resource);
+			final int visitDuration = durationsProvider.getElementDuration(element, resource);
 
 			final PortDetails portDetails = new PortDetails();
 			portDetails.setVisitDuration(visitDuration);
@@ -265,11 +237,9 @@ public abstract class AbstractSequenceScheduler<T> implements
 			currentSequence.add(portDetails);
 
 			final PortType portType = portTypeProvider.getPortType(element);
-			if (currentSequence.size() > 1 && (portType == PortType.Load)
-					|| portType == PortType.CharterOut) {
+			if (currentSequence.size() > 1 && (portType == PortType.Load) || portType == PortType.CharterOut) {
 
-				if (!optimiseSequence(voyagePlans, currentSequence,
-						currentTimes, voyagePlanOptimiser)) {
+				if (!optimiseSequence(voyagePlans, currentSequence, currentTimes, voyagePlanOptimiser)) {
 					return null;
 				}
 
@@ -293,8 +263,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 			// Update vessel state
 			if (portType == PortType.Load) {
 				vesselState = VesselState.Laden;
-			} else if (portType == PortType.Discharge
-					|| portType == PortType.CharterOut) {
+			} else if (portType == PortType.Discharge || portType == PortType.CharterOut || portType == PortType.DryDock) {
 				vesselState = VesselState.Ballast;
 			} else {
 				// No change in state
@@ -306,8 +275,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		// Populate final plan details
 		// if (!currentSequence.isEmpty()) {
 		if (currentSequence.size() > 1) {
-			if (!optimiseSequence(voyagePlans, currentSequence, currentTimes,
-					voyagePlanOptimiser)) {
+			if (!optimiseSequence(voyagePlans, currentSequence, currentTimes, voyagePlanOptimiser)) {
 				return null;
 			}
 		}
@@ -315,10 +283,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		return new ScheduledSequence(resource, startTime, voyagePlans);
 	}
 
-	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans,
-			final List<Object> currentSequence,
-			final List<Integer> currentTimes,
-			final IVoyagePlanOptimiser<T> optimiser) {
+	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser<T> optimiser) {
 
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(currentSequence);
@@ -332,13 +297,11 @@ public abstract class AbstractSequenceScheduler<T> implements
 			if (obj instanceof VoyageDetails) {
 				@SuppressWarnings("unchecked")
 				final VoyageDetails<T> details = (VoyageDetails<T>) obj;
-				final int availableTime = details.getOptions()
-						.getAvailableTime();
+				final int availableTime = details.getOptions().getAvailableTime();
 
 				// Take voyage details time as this can be larger than
 				// available time e.g. due to reaching max speed.
-				final int duration = details.getTravelTime()
-						+ details.getIdleTime();
+				final int duration = details.getTravelTime() + details.getIdleTime();
 
 				// assert duration >= (availableTime - 1) :
 				// "Duration should exceed available time less one, but is "
@@ -360,8 +323,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		return portSlotProvider;
 	}
 
-	public final void setPortSlotProvider(
-			final IPortSlotProvider<T> portSlotProvider) {
+	public final void setPortSlotProvider(final IPortSlotProvider<T> portSlotProvider) {
 		this.portSlotProvider = portSlotProvider;
 	}
 
@@ -369,8 +331,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		return portTypeProvider;
 	}
 
-	public final void setPortTypeProvider(
-			final IPortTypeProvider<T> portTypeProvider) {
+	public final void setPortTypeProvider(final IPortTypeProvider<T> portTypeProvider) {
 		this.portTypeProvider = portTypeProvider;
 	}
 
@@ -378,8 +339,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		return durationsProvider;
 	}
 
-	public final void setDurationsProvider(
-			final IElementDurationProvider<T> durationsProvider) {
+	public final void setDurationsProvider(final IElementDurationProvider<T> durationsProvider) {
 		this.durationsProvider = durationsProvider;
 	}
 
@@ -387,8 +347,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		return timeWindowProvider;
 	}
 
-	public final void setTimeWindowProvider(
-			final ITimeWindowDataComponentProvider<T> timeWindowProvider) {
+	public final void setTimeWindowProvider(final ITimeWindowDataComponentProvider<T> timeWindowProvider) {
 		this.timeWindowProvider = timeWindowProvider;
 	}
 
@@ -404,8 +363,7 @@ public abstract class AbstractSequenceScheduler<T> implements
 		return distanceProvider;
 	}
 
-	public final void setDistanceProvider(
-			final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
+	public final void setDistanceProvider(final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
 		this.distanceProvider = distanceProvider;
 	}
 
@@ -421,14 +379,12 @@ public abstract class AbstractSequenceScheduler<T> implements
 		return voyagePlanOptimiser;
 	}
 
-	public void setVoyagePlanOptimiser(
-			final IVoyagePlanOptimiser<T> voyagePlanOptimiser) {
+	public void setVoyagePlanOptimiser(final IVoyagePlanOptimiser<T> voyagePlanOptimiser) {
 		this.voyagePlanOptimiser = voyagePlanOptimiser;
 	}
 
 	/**
-	 * Ensures all required data items are present, otherwise an
-	 * {@link IllegalStateException} will be thrown.
+	 * Ensures all required data items are present, otherwise an {@link IllegalStateException} will be thrown.
 	 */
 	public void init() {
 
