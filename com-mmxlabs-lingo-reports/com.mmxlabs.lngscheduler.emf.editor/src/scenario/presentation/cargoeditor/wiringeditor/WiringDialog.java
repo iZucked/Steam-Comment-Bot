@@ -28,7 +28,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 import scenario.cargo.Cargo;
-import scenario.presentation.cargoeditor.IReferenceValueProvider;
+
+import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
 
 /**
  * A dialog which contains a {@link WiringComposite} - all the logic happens in

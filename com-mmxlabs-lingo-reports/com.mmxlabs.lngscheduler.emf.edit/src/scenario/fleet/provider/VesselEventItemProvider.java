@@ -29,6 +29,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselEvent;
 
+import scenario.provider.AnnotatedObjectItemProvider;
 import scenario.provider.LngEditPlugin;
 
 /**
@@ -38,7 +39,7 @@ import scenario.provider.LngEditPlugin;
  * @generated
  */
 public class VesselEventItemProvider
-	extends ItemProviderAdapter
+	extends AnnotatedObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,

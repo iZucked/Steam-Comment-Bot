@@ -12,8 +12,9 @@ import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.contract.ContractPackage;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.NumericAttributeManipulator;
-import scenario.presentation.cargoeditor.SingleReferenceManipulator;
+
+import com.mmxlabs.shiplingo.ui.tableview.NumericAttributeManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.SingleReferenceManipulator;
 
 /**
  * @author Tom Hinton

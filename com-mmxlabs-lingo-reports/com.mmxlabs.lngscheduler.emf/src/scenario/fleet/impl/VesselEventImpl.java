@@ -21,6 +21,7 @@ import scenario.fleet.FleetPackage;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselEvent;
+import scenario.impl.AnnotatedObjectImpl;
 import scenario.port.Port;
 
 /**
@@ -42,7 +43,7 @@ import scenario.port.Port;
  *
  * @generated
  */
-public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent {
+public abstract class VesselEventImpl extends AnnotatedObjectImpl implements VesselEvent {
 	/**
 	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->

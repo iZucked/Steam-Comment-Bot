@@ -19,6 +19,7 @@ import scenario.cargo.LoadSlot;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.cargo.impl.LoadSlotImpl#getCargoCVvalue <em>Cargo CVvalue</em>}</li>
+ *   <li>{@link scenario.cargo.impl.LoadSlotImpl#isArriveCold <em>Arrive Cold</em>}</li>
  * </ul>
  * </p>
  *
@@ -53,6 +54,35 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * @ordered
 	 */
 	protected boolean cargoCVvalueESet;
+
+	/**
+	 * The default value of the '{@link #isArriveCold() <em>Arrive Cold</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isArriveCold()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ARRIVE_COLD_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isArriveCold() <em>Arrive Cold</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isArriveCold()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean arriveCold = ARRIVE_COLD_EDEFAULT;
+
+	/**
+	 * This is true if the Arrive Cold attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean arriveColdESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -124,6 +154,52 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isArriveCold() {
+		return arriveCold;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setArriveCold(boolean newArriveCold) {
+		boolean oldArriveCold = arriveCold;
+		arriveCold = newArriveCold;
+		boolean oldArriveColdESet = arriveColdESet;
+		arriveColdESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__ARRIVE_COLD, oldArriveCold, arriveCold, !oldArriveColdESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetArriveCold() {
+		boolean oldArriveCold = arriveCold;
+		boolean oldArriveColdESet = arriveColdESet;
+		arriveCold = ARRIVE_COLD_EDEFAULT;
+		arriveColdESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.LOAD_SLOT__ARRIVE_COLD, oldArriveCold, ARRIVE_COLD_EDEFAULT, oldArriveColdESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetArriveCold() {
+		return arriveColdESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public float getCargoOrPortCVValue() {
 		if (isSetCargoCVvalue()) 
 			return getCargoCVvalue();
@@ -143,6 +219,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		switch (featureID) {
 			case CargoPackage.LOAD_SLOT__CARGO_CVVALUE:
 				return getCargoCVvalue();
+			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
+				return isArriveCold();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -157,6 +235,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		switch (featureID) {
 			case CargoPackage.LOAD_SLOT__CARGO_CVVALUE:
 				setCargoCVvalue((Float)newValue);
+				return;
+			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
+				setArriveCold((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -173,6 +254,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 			case CargoPackage.LOAD_SLOT__CARGO_CVVALUE:
 				unsetCargoCVvalue();
 				return;
+			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
+				unsetArriveCold();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -187,6 +271,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		switch (featureID) {
 			case CargoPackage.LOAD_SLOT__CARGO_CVVALUE:
 				return isSetCargoCVvalue();
+			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
+				return isSetArriveCold();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -217,6 +303,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (cargoCVvalue: ");
 		if (cargoCVvalueESet) result.append(cargoCVvalue); else result.append("<unset>");
+		result.append(", arriveCold: ");
+		if (arriveColdESet) result.append(arriveCold); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

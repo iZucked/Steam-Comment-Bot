@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import scenario.ScenarioPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -128,13 +129,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO = 1;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__NOTES = ScenarioPackage.ANNOTATED_OBJECT__NOTES;
+
+	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ID = 0;
+	int CARGO__ID = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -143,7 +153,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOWED_VESSELS = 1;
+	int CARGO__ALLOWED_VESSELS = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Load Slot</b></em>' containment reference.
@@ -152,7 +162,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__LOAD_SLOT = 2;
+	int CARGO__LOAD_SLOT = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Slot</b></em>' containment reference.
@@ -161,7 +171,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__DISCHARGE_SLOT = 3;
+	int CARGO__DISCHARGE_SLOT = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Type</b></em>' attribute.
@@ -170,7 +180,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__CARGO_TYPE = 4;
+	int CARGO__CARGO_TYPE = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
@@ -179,7 +189,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = 5;
+	int CARGO_FEATURE_COUNT = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of operations of the '<em>Cargo</em>' class.
@@ -188,7 +198,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_OPERATION_COUNT = 0;
+	int CARGO_OPERATION_COUNT = ScenarioPackage.ANNOTATED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.impl.SlotImpl <em>Slot</em>}' class.
@@ -327,13 +337,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_PORT_DURATION = 3;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Contract Min Quantity</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY__OBJECT = 4;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Max Quantity</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY__OBJECT = 5;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = 4;
+	int SLOT_OPERATION_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -436,13 +464,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__CARGO_CVVALUE = SLOT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Arrive Cold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__ARRIVE_COLD = SLOT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 1;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Local Window Start</em>' operation.
@@ -479,6 +516,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_PORT_DURATION = SLOT___GET_SLOT_OR_PORT_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Min Quantity</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY__OBJECT = SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY__OBJECT;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Max Quantity</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY__OBJECT = SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY__OBJECT;
 
 	/**
 	 * The operation id for the '<em>Get Cargo Or Port CV Value</em>' operation.
@@ -767,6 +822,26 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrPortDuration();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrContractMinQuantity(java.lang.Object) <em>Get Slot Or Contract Min Quantity</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Min Quantity</em>' operation.
+	 * @see scenario.cargo.Slot#getSlotOrContractMinQuantity(java.lang.Object)
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrContractMinQuantity__Object();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.cargo.Slot#getSlotOrContractMaxQuantity(java.lang.Object) <em>Get Slot Or Contract Max Quantity</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Max Quantity</em>' operation.
+	 * @see scenario.cargo.Slot#getSlotOrContractMaxQuantity(java.lang.Object)
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrContractMaxQuantity__Object();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -786,6 +861,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getLoadSlot_CargoCVvalue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Arrive Cold</em>'.
+	 * @see scenario.cargo.LoadSlot#isArriveCold()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EAttribute getLoadSlot_ArriveCold();
 
 	/**
 	 * Returns the meta object for the '{@link scenario.cargo.LoadSlot#getCargoOrPortCVValue() <em>Get Cargo Or Port CV Value</em>}' operation.
@@ -1029,6 +1115,22 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_PORT_DURATION = eINSTANCE.getSlot__GetSlotOrPortDuration();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Min Quantity</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY__OBJECT = eINSTANCE.getSlot__GetSlotOrContractMinQuantity__Object();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Max Quantity</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY__OBJECT = eINSTANCE.getSlot__GetSlotOrContractMaxQuantity__Object();
+
+		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1045,6 +1147,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOAD_SLOT__CARGO_CVVALUE = eINSTANCE.getLoadSlot_CargoCVvalue();
+
+		/**
+		 * The meta object literal for the '<em><b>Arrive Cold</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_SLOT__ARRIVE_COLD = eINSTANCE.getLoadSlot_ArriveCold();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Cargo Or Port CV Value</b></em>' operation.

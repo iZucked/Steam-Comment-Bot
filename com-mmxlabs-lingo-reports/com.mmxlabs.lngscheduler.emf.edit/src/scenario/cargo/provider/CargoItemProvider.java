@@ -32,6 +32,7 @@ import scenario.cargo.Cargo;
 import scenario.cargo.CargoFactory;
 import scenario.cargo.CargoPackage;
 
+import scenario.provider.AnnotatedObjectItemProvider;
 import scenario.provider.LngEditPlugin;
 
 /**
@@ -41,7 +42,7 @@ import scenario.provider.LngEditPlugin;
  * @generated
  */
 public class CargoItemProvider
-	extends ItemProviderAdapter
+	extends AnnotatedObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,

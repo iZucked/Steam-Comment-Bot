@@ -128,13 +128,22 @@ public interface PortPackage extends EPackage {
 	int PORT__NAME = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__NOTES = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Time Zone</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__TIME_ZONE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int PORT__TIME_ZONE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Regas Efficiency</b></em>' attribute.
@@ -143,7 +152,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__REGAS_EFFICIENCY = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int PORT__REGAS_EFFICIENCY = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Default CVvalue</b></em>' attribute.
@@ -152,7 +161,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_CVVALUE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int PORT__DEFAULT_CVVALUE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Default Window Start</b></em>' attribute.
@@ -161,7 +170,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_WINDOW_START = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int PORT__DEFAULT_WINDOW_START = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Default Slot Duration</b></em>' attribute.
@@ -170,7 +179,16 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_SLOT_DURATION = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int PORT__DEFAULT_SLOT_DURATION = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Should Arrive Cold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__SHOULD_ARRIVE_COLD = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -179,7 +197,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int PORT_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -320,22 +338,13 @@ public interface PortPackage extends EPackage {
 	int CANAL__NAME = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Default Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CANAL__DEFAULT_COST = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Distance Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL__DISTANCE_MODEL = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int CANAL__DISTANCE_MODEL = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Canal</em>' class.
@@ -344,7 +353,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int CANAL_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -488,6 +497,17 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_DefaultSlotDuration();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.Port#isShouldArriveCold <em>Should Arrive Cold</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Should Arrive Cold</em>'.
+	 * @see scenario.port.Port#isShouldArriveCold()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_ShouldArriveCold();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -560,17 +580,6 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getCanal();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.port.Canal#getDefaultCost <em>Default Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Default Cost</em>'.
-	 * @see scenario.port.Canal#getDefaultCost()
-	 * @see #getCanal()
-	 * @generated
-	 */
-	EAttribute getCanal_DefaultCost();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link scenario.port.Canal#getDistanceModel <em>Distance Model</em>}'.
@@ -696,6 +705,14 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT__DEFAULT_SLOT_DURATION = eINSTANCE.getPort_DefaultSlotDuration();
 
 		/**
+		 * The meta object literal for the '<em><b>Should Arrive Cold</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__SHOULD_ARRIVE_COLD = eINSTANCE.getPort_ShouldArriveCold();
+
+		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -756,14 +773,6 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CANAL = eINSTANCE.getCanal();
-
-		/**
-		 * The meta object literal for the '<em><b>Default Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CANAL__DEFAULT_COST = eINSTANCE.getCanal_DefaultCost();
 
 		/**
 		 * The meta object literal for the '<em><b>Distance Model</b></em>' containment reference feature.

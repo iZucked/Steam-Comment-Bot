@@ -6,6 +6,7 @@
  */
 package scenario.port;
 
+import scenario.AnnotatedObject;
 import scenario.NamedObject;
 import scenario.UUIDObject;
 
@@ -22,6 +23,7 @@ import scenario.UUIDObject;
  *   <li>{@link scenario.port.Port#getDefaultCVvalue <em>Default CVvalue</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultWindowStart <em>Default Window Start</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultSlotDuration <em>Default Slot Duration</em>}</li>
+ *   <li>{@link scenario.port.Port#isShouldArriveCold <em>Should Arrive Cold</em>}</li>
  * </ul>
  * </p>
  *
@@ -29,7 +31,7 @@ import scenario.UUIDObject;
  * @model
  * @generated
  */
-public interface Port extends UUIDObject, NamedObject {
+public interface Port extends UUIDObject, NamedObject, AnnotatedObject {
 	/**
 	 * Returns the value of the '<em><b>Time Zone</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -162,5 +164,31 @@ public interface Port extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setDefaultSlotDuration(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Should Arrive Cold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Should Arrive Cold</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Should Arrive Cold</em>' attribute.
+	 * @see #setShouldArriveCold(boolean)
+	 * @see scenario.port.PortPackage#getPort_ShouldArriveCold()
+	 * @model required="true"
+	 * @generated
+	 */
+	boolean isShouldArriveCold();
+
+	/**
+	 * Sets the value of the '{@link scenario.port.Port#isShouldArriveCold <em>Should Arrive Cold</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Should Arrive Cold</em>' attribute.
+	 * @see #isShouldArriveCold()
+	 * @generated
+	 */
+	void setShouldArriveCold(boolean value);
 
 } // Port

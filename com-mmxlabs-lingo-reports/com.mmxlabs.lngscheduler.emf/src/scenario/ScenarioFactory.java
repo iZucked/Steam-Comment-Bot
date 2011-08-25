@@ -35,6 +35,15 @@ public interface ScenarioFactory extends EFactory {
 	Scenario createScenario();
 
 	/**
+	 * Returns a new object of class '<em>Annotated Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Annotated Object</em>'.
+	 * @generated
+	 */
+	AnnotatedObject createAnnotatedObject();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

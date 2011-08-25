@@ -56,7 +56,7 @@ import scenario.schedule.ScheduleModel;
  *
  * @generated
  */
-public class ScenarioImpl extends EObjectImpl implements Scenario {
+public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	/**
 	 * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
 	 * <!-- begin-user-doc -->

@@ -92,6 +92,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
 /**
@@ -187,28 +188,9 @@ public class LNGScenarioTransformer {
 		 * A reverse-lookup for the {@link allPorts} array.
 		 */
 		Map<IPort, Integer> portIndices = new HashMap<IPort, Integer>();
+
 		/*
-		 * Construct ports for each port in the scenario port model, and keep
-		 * them in a two-way lookup table (the two-way lookup is needed to do
-		 * things like setting distances later).
-		 */
-		for (Port ePort : scenario.getPortModel().getPorts()) {
-			IPort port = builder.createPort(ePort.getName());
-			portAssociation.add(ePort, port);
-			portIndices.put(port, allPorts.size());
-			allPorts.add(port);
-
-			entities.addModelObject(ePort, port);
-		}
-
-		Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(
-				builder, portAssociation, entities);
-
-		buildDistances(builder, portAssociation, allPorts, portIndices,
-				vesselAssociations.getFirst());
-
-		/**
-		 * Next create the contract logic models
+		 * Create the contract logic models
 		 */
 
 		final Association<PurchaseContract, ILoadPriceCalculator> purchaseContractAssociation = new Association<PurchaseContract, ILoadPriceCalculator>();
@@ -242,6 +224,30 @@ public class LNGScenarioTransformer {
 
 			purchaseContractAssociation.add(c, calculator);
 		}
+		
+		/*
+		 * Construct ports for each port in the scenario port model, and keep
+		 * them in a two-way lookup table (the two-way lookup is needed to do
+		 * things like setting distances later).
+		 */
+		for (Port ePort : scenario.getPortModel().getPorts()) {
+			IPort port = builder.createPort(ePort.getName(), ePort
+					.isShouldArriveCold(),
+					(ISimpleLoadPriceCalculator) purchaseContractAssociation
+							.lookup(scenario.getContractModel()
+									.getCooldownContract(ePort)));
+			portAssociation.add(ePort, port);
+			portIndices.put(port, allPorts.size());
+			allPorts.add(port);
+
+			entities.addModelObject(ePort, port);
+		}
+
+		Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(
+				builder, portAssociation, entities);
+
+		buildDistances(builder, portAssociation, allPorts, portIndices,
+				vesselAssociations.getFirst());
 
 		buildCargoes(builder, portAssociation, indexAssociation,
 				vesselAssociations.getSecond(), entities,
@@ -496,12 +502,16 @@ public class LNGScenarioTransformer {
 			}
 
 			final ILoadSlot load = builder.createLoadSlot(loadSlot.getId(),
-					ports.lookup(loadSlot.getPort()), loadWindow,
-					Calculator.scale(loadSlot.getMinQuantity()),
-					Calculator.scale(loadSlot.getMaxQuantity()),
-					loadPriceCalculator,
-					(int) Calculator.scale(loadSlot.getCargoOrPortCVValue()),
-					dischargeSlot.getSlotOrPortDuration());
+					ports.lookup(loadSlot.getPort()), loadWindow, Calculator
+							.scale(loadSlot
+									.getSlotOrContractMinQuantity(scenario)),
+					Calculator.scale(loadSlot
+							.getSlotOrContractMaxQuantity(scenario)),
+					loadPriceCalculator, (int) Calculator.scale(loadSlot
+							.getCargoOrPortCVValue()), dischargeSlot
+							.getSlotOrPortDuration(),
+							loadSlot.isSetArriveCold(), loadSlot.isArriveCold()		
+					);
 
 			final ICurve dischargeCurve;
 
@@ -525,8 +535,10 @@ public class LNGScenarioTransformer {
 			final IDischargeSlot discharge = builder.createDischargeSlot(
 					dischargeSlot.getId(),
 					ports.lookup(dischargeSlot.getPort()), dischargeWindow,
-					Calculator.scale(dischargeSlot.getMinQuantity()),
-					Calculator.scale(dischargeSlot.getMaxQuantity()),
+					Calculator.scale(dischargeSlot
+							.getSlotOrContractMinQuantity(scenario)),
+					Calculator.scale(dischargeSlot
+							.getSlotOrContractMaxQuantity(scenario)),
 					dischargeCurve, dischargeSlot.getSlotOrPortDuration());
 
 			entities.addModelObject(loadSlot, load);
@@ -633,8 +645,7 @@ public class LNGScenarioTransformer {
 		if (scenario.getCanalModel() != null) {
 			for (Canal canal : scenario.getCanalModel().getCanals()) {
 				final String name = canal.getName();
-				builder.setDefaultRouteCost(name,
-						Calculator.scale(canal.getDefaultCost()));
+				builder.setDefaultRouteCost(name, 0);
 
 				for (final DistanceLine dl : canal.getDistanceModel()
 						.getDistances()) {
@@ -693,11 +704,12 @@ public class LNGScenarioTransformer {
 		// precision
 
 		for (VesselClass eVc : scenario.getFleetModel().getVesselClasses()) {
-			IVesselClass vc = builder.createVesselClass(eVc.getName(),
+			IVesselClass vc = builder.createVesselClass(
+					eVc.getName(),
 					Calculator.scaleToInt(eVc.getMinSpeed()),
 					Calculator.scaleToInt(eVc.getMaxSpeed()),
-					Calculator.scale((int) (eVc.getFillCapacity()*
-							eVc.getCapacity())), // TODO is
+					Calculator.scale((int) (eVc.getFillCapacity() * eVc
+							.getCapacity())), // TODO is
 					// capacity mean
 					// to be scaled?
 					Calculator.scaleToInt(eVc.getMinHeelVolume()), Calculator
@@ -705,7 +717,9 @@ public class LNGScenarioTransformer {
 					Calculator.scaleToInt(eVc.getBaseFuel()
 							.getEquivalenceFactor()),
 					// This should be divide?
-					Calculator.scaleToInt(eVc.getDailyCharterInPrice() / 24.0));
+					Calculator.scaleToInt(eVc.getDailyCharterInPrice() / 24.0),
+					eVc.getWarmupTime(), eVc.getCooldownTime(), Calculator
+							.scale(eVc.getCooldownVolume()));
 			vesselClassAssociation.add(eVc, vc);
 
 			/*

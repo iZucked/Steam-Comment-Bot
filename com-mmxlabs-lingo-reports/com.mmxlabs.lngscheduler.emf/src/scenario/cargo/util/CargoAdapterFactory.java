@@ -11,6 +11,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.AnnotatedObject;
 import scenario.cargo.*;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoModel;
@@ -91,6 +92,10 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createLoadSlotAdapter();
 			}
 			@Override
+			public Adapter caseAnnotatedObject(AnnotatedObject object) {
+				return createAnnotatedObjectAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -163,6 +168,20 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createLoadSlotAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.AnnotatedObject <em>Annotated Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.AnnotatedObject
+	 * @generated
+	 */
+	public Adapter createAnnotatedObjectAdapter() {
 		return null;
 	}
 

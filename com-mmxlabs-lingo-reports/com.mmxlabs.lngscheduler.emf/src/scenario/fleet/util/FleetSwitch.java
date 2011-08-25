@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
+import scenario.AnnotatedObject;
 import scenario.NamedObject;
 import scenario.ScenarioObject;
 import scenario.fleet.*;
@@ -94,6 +95,7 @@ public class FleetSwitch<T> extends Switch<T> {
 				Vessel vessel = (Vessel)theEObject;
 				T result = caseVessel(vessel);
 				if (result == null) result = caseNamedObject(vessel);
+				if (result == null) result = caseAnnotatedObject(vessel);
 				if (result == null) result = caseScenarioObject(vessel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -102,6 +104,7 @@ public class FleetSwitch<T> extends Switch<T> {
 				VesselClass vesselClass = (VesselClass)theEObject;
 				T result = caseVesselClass(vesselClass);
 				if (result == null) result = caseNamedObject(vesselClass);
+				if (result == null) result = caseAnnotatedObject(vesselClass);
 				if (result == null) result = caseScenarioObject(vesselClass);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -127,6 +130,7 @@ public class FleetSwitch<T> extends Switch<T> {
 			case FleetPackage.VESSEL_EVENT: {
 				VesselEvent vesselEvent = (VesselEvent)theEObject;
 				T result = caseVesselEvent(vesselEvent);
+				if (result == null) result = caseAnnotatedObject(vesselEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -134,6 +138,7 @@ public class FleetSwitch<T> extends Switch<T> {
 				CharterOut charterOut = (CharterOut)theEObject;
 				T result = caseCharterOut(charterOut);
 				if (result == null) result = caseVesselEvent(charterOut);
+				if (result == null) result = caseAnnotatedObject(charterOut);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -141,6 +146,7 @@ public class FleetSwitch<T> extends Switch<T> {
 				Drydock drydock = (Drydock)theEObject;
 				T result = caseDrydock(drydock);
 				if (result == null) result = caseVesselEvent(drydock);
+				if (result == null) result = caseAnnotatedObject(drydock);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -376,6 +382,21 @@ public class FleetSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Annotated Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Annotated Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAnnotatedObject(AnnotatedObject object) {
 		return null;
 	}
 

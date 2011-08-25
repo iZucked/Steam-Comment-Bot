@@ -39,18 +39,18 @@ import scenario.optimiser.OptimiserPackage;
 import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.lso.LsoPackage;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.BasicAttributeManipulator;
-import scenario.presentation.cargoeditor.DialogFeatureManipulator;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
-import scenario.presentation.cargoeditor.NumericAttributeManipulator;
 import scenario.presentation.cargoeditor.curveeditor.CurveDialog;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailView.ICommandProcessor;
-import scenario.presentation.cargoeditor.detailview.EObjectDetailView.IInlineEditor;
-import scenario.presentation.cargoeditor.detailview.LocalDateInlineEditor;
-import scenario.presentation.cargoeditor.detailview.NumberInlineEditor;
 
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.shiplingo.ui.detailview.editors.ICommandProcessor;
+import com.mmxlabs.shiplingo.ui.detailview.editors.IInlineEditor;
+import com.mmxlabs.shiplingo.ui.detailview.editors.LocalDateInlineEditor;
+import com.mmxlabs.shiplingo.ui.detailview.editors.NumberInlineEditor;
+import com.mmxlabs.shiplingo.ui.tableview.BasicAttributeManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.DialogFeatureManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.NumericAttributeManipulator;
 
 /**
  * A dialog for editing the optimisation's current settings.

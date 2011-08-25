@@ -25,6 +25,7 @@ import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.contract.SimplePurchaseContract;
 import scenario.contract.TotalVolumeLimit;
 import scenario.port.Port;
 
@@ -151,6 +152,23 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 		
 		for (final Contract c : getSalesContracts()) {
 		   if (c.getDefaultPorts().contains(port)) return c;
+		}
+		
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SimplePurchaseContract getCooldownContract(Port port) {
+		for (final Contract c : getPurchaseContracts()) {
+		   if (c instanceof SimplePurchaseContract) {
+			if (
+			((SimplePurchaseContract) c).getCooldownPorts().contains(port)) return 
+				(SimplePurchaseContract) c;
+		   }
 		}
 		
 		return null;
@@ -382,6 +400,8 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 		switch (operationID) {
 			case ContractPackage.CONTRACT_MODEL___GET_DEFAULT_CONTRACT__PORT:
 				return getDefaultContract((Port)arguments.get(0));
+			case ContractPackage.CONTRACT_MODEL___GET_COOLDOWN_CONTRACT__PORT:
+				return getCooldownContract((Port)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

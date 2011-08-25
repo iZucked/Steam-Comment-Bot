@@ -80,16 +80,6 @@ import scenario.port.Canal;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortPackage;
-import scenario.presentation.cargoeditor.dialogs.ImportWarningDialog;
-import scenario.presentation.cargoeditor.importer.CSVReader;
-import scenario.presentation.cargoeditor.importer.DeferredReference;
-import scenario.presentation.cargoeditor.importer.EObjectImporter;
-import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
-import scenario.presentation.cargoeditor.importer.IImportWarningListener;
-import scenario.presentation.cargoeditor.importer.ImportWarning;
-import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
-import scenario.presentation.cargoeditor.importer.Postprocessor;
-import scenario.presentation.cargoeditor.importer.WarningCollector;
 import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
 
@@ -111,6 +101,14 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.shiplingo.importer.importers.CSVReader;
+import com.mmxlabs.shiplingo.importer.importers.DeferredReference;
+import com.mmxlabs.shiplingo.importer.importers.EObjectImporter;
+import com.mmxlabs.shiplingo.importer.importers.EObjectImporterFactory;
+import com.mmxlabs.shiplingo.importer.importers.NamedObjectRegistry;
+import com.mmxlabs.shiplingo.importer.importers.Postprocessor;
+import com.mmxlabs.shiplingo.importer.importers.WarningCollector;
+import com.mmxlabs.shiplingo.importer.ui.ImportWarningDialog;
 
 public class CSVImportWizard extends Wizard implements IImportWizard {
 	WizardNewFileCreationPage destinationPage;
@@ -643,6 +641,10 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							1));
 			objectives.add(createObjective(of,
 					CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME,
+					1));
+			
+			objectives.add(createObjective(of,
+					CargoSchedulerFitnessCoreFactory.COST_COOLDOWN_COMPONENT_NAME,
 					1));
 			objectives
 					.add(createObjective(

@@ -10,6 +10,7 @@ import java.util.Date;
 
 import org.eclipse.emf.ecore.EObject;
 
+import scenario.Scenario;
 import scenario.contract.Contract;
 import scenario.port.Port;
 
@@ -75,9 +76,11 @@ public interface Slot extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Min Quantity</em>' attribute.
+	 * @see #isSetMinQuantity()
+	 * @see #unsetMinQuantity()
 	 * @see #setMinQuantity(int)
 	 * @see scenario.cargo.CargoPackage#getSlot_MinQuantity()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	int getMinQuantity();
@@ -87,10 +90,35 @@ public interface Slot extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Min Quantity</em>' attribute.
+	 * @see #isSetMinQuantity()
+	 * @see #unsetMinQuantity()
 	 * @see #getMinQuantity()
 	 * @generated
 	 */
 	void setMinQuantity(int value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.cargo.Slot#getMinQuantity <em>Min Quantity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMinQuantity()
+	 * @see #getMinQuantity()
+	 * @see #setMinQuantity(int)
+	 * @generated
+	 */
+	void unsetMinQuantity();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.cargo.Slot#getMinQuantity <em>Min Quantity</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Min Quantity</em>' attribute is set.
+	 * @see #unsetMinQuantity()
+	 * @see #getMinQuantity()
+	 * @see #setMinQuantity(int)
+	 * @generated
+	 */
+	boolean isSetMinQuantity();
 
 	/**
 	 * Returns the value of the '<em><b>Max Quantity</b></em>' attribute.
@@ -102,9 +130,11 @@ public interface Slot extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Max Quantity</em>' attribute.
+	 * @see #isSetMaxQuantity()
+	 * @see #unsetMaxQuantity()
 	 * @see #setMaxQuantity(int)
 	 * @see scenario.cargo.CargoPackage#getSlot_MaxQuantity()
-	 * @model default="2147483647"
+	 * @model default="2147483647" unsettable="true"
 	 * @generated
 	 */
 	int getMaxQuantity();
@@ -114,10 +144,35 @@ public interface Slot extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Max Quantity</em>' attribute.
+	 * @see #isSetMaxQuantity()
+	 * @see #unsetMaxQuantity()
 	 * @see #getMaxQuantity()
 	 * @generated
 	 */
 	void setMaxQuantity(int value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMaxQuantity()
+	 * @see #getMaxQuantity()
+	 * @see #setMaxQuantity(int)
+	 * @generated
+	 */
+	void unsetMaxQuantity();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Max Quantity</em>' attribute is set.
+	 * @see #unsetMaxQuantity()
+	 * @see #getMaxQuantity()
+	 * @see #setMaxQuantity(int)
+	 * @generated
+	 */
+	boolean isSetMaxQuantity();
 
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.
@@ -366,5 +421,21 @@ public interface Slot extends EObject {
 	 * @generated
 	 */
 	int getSlotOrPortDuration();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetMinQuantity())\n\treturn getMinQuantity();\nelse\n\treturn getSlotOrPortContract(scenario).getMinQuantity();'"
+	 * @generated
+	 */
+	int getSlotOrContractMinQuantity(Object scenario);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetMaxQuantity())\n\treturn getMaxQuantity();\nelse\n\treturn getSlotOrPortContract(scenario).getMaxQuantity();'"
+	 * @generated
+	 */
+	int getSlotOrContractMaxQuantity(Object scenario);
 
 } // Slot

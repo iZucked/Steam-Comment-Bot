@@ -32,7 +32,6 @@ import scenario.port.PortPackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.port.impl.CanalImpl#getName <em>Name</em>}</li>
- *   <li>{@link scenario.port.impl.CanalImpl#getDefaultCost <em>Default Cost</em>}</li>
  *   <li>{@link scenario.port.impl.CanalImpl#getDistanceModel <em>Distance Model</em>}</li>
  * </ul>
  * </p>
@@ -59,26 +58,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getDefaultCost() <em>Default Cost</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDefaultCost()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int DEFAULT_COST_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getDefaultCost() <em>Default Cost</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDefaultCost()
-	 * @generated
-	 * @ordered
-	 */
-	protected int defaultCost = DEFAULT_COST_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getDistanceModel() <em>Distance Model</em>}' containment reference.
@@ -137,27 +116,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 	 */
 	public EObject getContainer() {
 		return eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getDefaultCost() {
-		return defaultCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDefaultCost(int newDefaultCost) {
-		int oldDefaultCost = defaultCost;
-		defaultCost = newDefaultCost;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.CANAL__DEFAULT_COST, oldDefaultCost, defaultCost));
 	}
 
 	/**
@@ -250,8 +208,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 		switch (featureID) {
 			case PortPackage.CANAL__NAME:
 				return getName();
-			case PortPackage.CANAL__DEFAULT_COST:
-				return getDefaultCost();
 			case PortPackage.CANAL__DISTANCE_MODEL:
 				if (resolve) return getDistanceModel();
 				return basicGetDistanceModel();
@@ -271,9 +227,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 			case PortPackage.CANAL__NAME:
 				setName((String)newValue);
 				return;
-			case PortPackage.CANAL__DEFAULT_COST:
-				setDefaultCost((Integer)newValue);
-				return;
 			case PortPackage.CANAL__DISTANCE_MODEL:
 				setDistanceModel((DistanceModel)newValue);
 				return;
@@ -292,9 +245,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 			case PortPackage.CANAL__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case PortPackage.CANAL__DEFAULT_COST:
-				setDefaultCost(DEFAULT_COST_EDEFAULT);
-				return;
 			case PortPackage.CANAL__DISTANCE_MODEL:
 				setDistanceModel((DistanceModel)null);
 				return;
@@ -312,8 +262,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 		switch (featureID) {
 			case PortPackage.CANAL__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case PortPackage.CANAL__DEFAULT_COST:
-				return defaultCost != DEFAULT_COST_EDEFAULT;
 			case PortPackage.CANAL__DISTANCE_MODEL:
 				return distanceModel != null;
 		}
@@ -409,8 +357,6 @@ public class CanalImpl extends UUIDObjectImpl implements Canal {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", defaultCost: ");
-		result.append(defaultCost);
 		result.append(')');
 		return result.toString();
 	}

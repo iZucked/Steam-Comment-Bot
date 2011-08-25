@@ -56,7 +56,7 @@ import scenario.schedule.fleetallocation.FleetallocationFactory;
  * @generated
  */
 public class ScenarioItemProvider
-	extends ItemProviderAdapter
+	extends AnnotatedObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -285,6 +285,11 @@ public class ScenarioItemProvider
 			(createChildParameter
 				(ScenarioPackage.Literals.SCENARIO__OPTIMISATION,
 				 OptimiserFactory.eINSTANCE.createOptimisation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScenarioFactory.eINSTANCE.createAnnotatedObject()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -646,17 +651,6 @@ public class ScenarioItemProvider
 				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return LngEditPlugin.INSTANCE;
 	}
 
 }

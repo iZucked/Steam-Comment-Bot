@@ -2492,10 +2492,10 @@
             referenceValue="lng.ecore#//NamedObject"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//port/Canal" referenceName="eStructuralFeatures"
-          element="lng.ecore#//port/Canal/defaultCost">
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Canal/defaultCost"
+          element="#//@releases.3/@changes.145/@element">
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.145/@element"
             featureName="name" dataValue="defaultCost"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//port/Canal/defaultCost"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.145/@element"
             featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//port/Canal" referenceName="eStructuralFeatures"
@@ -4581,5 +4581,295 @@
         featureName="key" dataValue="body"/>
     <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/getEffectiveEndPort/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
         featureName="value" dataValue="if (isSetEndPort()) return getEndPort();&#xA;else return getStartPort();"/>
+    <changes xsi:type="history:Delete" target="lng.ecore#//port/Canal" referenceName="eStructuralFeatures">
+      <element xsi:type="ecore:EAttribute" name="defaultCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#/" referenceName="eClassifiers"
+        element="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject" featureName="name"
+        dataValue="AnnotatedObject"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//AnnotatedObject" referenceName="eStructuralFeatures"
+        element="lng.ecore#//AnnotatedObject/notes"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject/notes" featureName="name"
+        dataValue="notes"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject/notes" featureName="lowerBound"
+        dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject/notes" featureName="eType"
+        referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject/notes" featureName="defaultValueLiteral"
+        dataValue=" "/>
+    <changes xsi:type="history:Set" element="lng.ecore#//AnnotatedObject/notes" featureName="defaultValueLiteral"
+        dataValue="" oldDataValue=" "/>
+    <changes xsi:type="history:Add" element="lng.ecore#//Scenario" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//cargo/Cargo" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//fleet/Vessel" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//fleet/VesselClass" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//port/Port" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//fleet/VesselEvent" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//AnnotatedObject"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/Contract" referenceName="eStructuralFeatures"
+        element="lng.ecore#//contract/Contract/minQuantity"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/minQuantity"
+        featureName="name" dataValue="minimumVolume"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/minQuantity"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/minQuantity"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/Contract" referenceName="eStructuralFeatures"
+        element="lng.ecore#//contract/Contract/maxQuantity"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/maxQuantity"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/maxQuantity"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/maxQuantity"
+        featureName="name" dataValue="maximumVolume"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/minQuantity"
+        featureName="name" dataValue="minQuantity" oldDataValue="minimumVolume"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/Contract/maxQuantity"
+        featureName="name" dataValue="maxQuantity" oldDataValue="maximumVolume"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/minQuantity" featureName="unsettable"
+        dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/maxQuantity" featureName="unsettable"
+        dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot" referenceName="eOperations"
+        element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        featureName="name" dataValue="getSlotOrContractMinQuantity"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot" referenceName="eStructuralFeatures"
+        element="#//@releases.3/@changes.175/@element"/>
+    <changes xsi:type="history:Delete" target="lng.ecore#//cargo/Slot" referenceName="eStructuralFeatures">
+      <element xsi:type="ecore:EAttribute"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot" referenceName="eOperations"
+        element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        featureName="name" dataValue="getSlotOrContractMaxQuantity"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        referenceName="eAnnotations" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        referenceName="eAnnotations" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="key" dataValue="body"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getContract().getMinQuantity();"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="key" dataValue="body"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getContract().getMaxQuantity();"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract().getMinQuantity();"
+        oldDataValue="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getContract().getMinQuantity();"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract().getMaxQuantity();"
+        oldDataValue="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getContract().getMaxQuantity();"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        referenceName="eParameters" element="#//@releases.3/@changes.207/@element"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="eType" referenceValue="lng.ecore#//Scenario"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="name" dataValue="scenario"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        referenceName="eParameters" element="#//@releases.3/@changes.208/@element"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.208/@element"
+        featureName="eType" referenceValue="lng.ecore#//Scenario"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.208/@element"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.208/@element"
+        featureName="name" dataValue="scenario"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract(scenario).getMinQuantity();"
+        oldDataValue="if (isSetMinQuantity())&#xA;&#x9;return getMinQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract().getMinQuantity();"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract(scenario).getMaxQuantity();"
+        oldDataValue="if (isSetMaxQuantity())&#xA;&#x9;return getMaxQuantity();&#xA;else&#xA;&#x9;return getSlotOrPortContract().getMaxQuantity();"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.208/@element"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        oldReferenceValue="lng.ecore#//Scenario"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaClass"
+        oldReferenceValue="lng.ecore#//Scenario"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaClass"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.207/@element"
+        featureName="lowerBound" dataValue="0" oldDataValue="1"/>
+    <changes xsi:type="history:Set" element="#//@releases.3/@changes.208/@element"
+        featureName="lowerBound" dataValue="0" oldDataValue="1"/>
+    <changes xsi:type="history:Delete" target="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        referenceName="eParameters">
+      <element xsi:type="ecore:EParameter" name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </changes>
+    <changes xsi:type="history:Delete" target="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        referenceName="eParameters">
+      <element xsi:type="ecore:EParameter" name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity"
+        referenceName="eParameters" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/scenario">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/scenario"
+          featureName="name" dataValue="scenario"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/scenario"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity"
+        referenceName="eParameters" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/scenario">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/scenario"
+          featureName="name" dataValue="scenario"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/scenario"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//port/Port" referenceName="eStructuralFeatures"
+        element="lng.ecore#//port/Port/shouldArriveCold"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/shouldArriveCold"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/shouldArriveCold"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/shouldArriveCold"
+        featureName="name" dataValue="allowsCooldown"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass" referenceName="eStructuralFeatures"
+        element="lng.ecore#//fleet/VesselClass/warmupTime"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/warmupTime"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/warmupTime"
+        featureName="name" dataValue="warmupTime"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/warmupTime"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/warmupTime"
+        featureName="defaultValueLiteral" dataValue="24"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass" referenceName="eStructuralFeatures"
+        element="lng.ecore#//fleet/VesselClass/cooldownTime"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/cooldownTime"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/cooldownTime"
+        featureName="name" dataValue="cooldownTime"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/cooldownTime"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EEList"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/cooldownTime"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        oldReferenceValue="http://www.eclipse.org/emf/2002/Ecore#//EEList"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/cooldownTime"
+        featureName="defaultValueLiteral" dataValue="12"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass" referenceName="eStructuralFeatures"
+        element="lng.ecore#//fleet/VesselClass/cooldownVolume"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/cooldownVolume"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/cooldownVolume"
+        featureName="name" dataValue="cooldownVolume"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/cooldownVolume"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/cooldownVolume"
+        featureName="defaultValueLiteral" dataValue="500"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/LoadSlot" referenceName="eStructuralFeatures"
+        element="lng.ecore#//cargo/LoadSlot/arriveCold"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/arriveCold"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/arriveCold"
+        featureName="name" dataValue="arriveCold"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/arriveCold"
+        featureName="name" dataValue="cooldown" oldDataValue="arriveCold"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/arriveCold"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/arriveCold"
+        featureName="unsettable" dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/shouldArriveCold"
+        featureName="name" dataValue="shouldArriveCold" oldDataValue="allowsCooldown"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/arriveCold"
+        featureName="name" dataValue="arriveCold" oldDataValue="cooldown"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract" referenceName="eClassifiers"
+        element="#//@releases.3/@changes.240/@element"/>
+    <changes xsi:type="history:Delete" target="lng.ecore#//contract" referenceName="eClassifiers">
+      <element xsi:type="ecore:EClass"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract" referenceName="eClassifiers"
+        element="lng.ecore#//contract/SimplePurchaseContract"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/SimplePurchaseContract"
+        featureName="name" dataValue="SimplePurchaseContract"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/SimplePurchaseContract"
+        featureName="abstract" dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//contract/SimplePurchaseContract"
+        featureName="eSuperTypes" referenceValue="lng.ecore#//contract/Contract"/>
+    <changes xsi:type="history:Remove" element="lng.ecore#//contract/FixedPricePurchaseContract"
+        featureName="eSuperTypes" referenceValue="lng.ecore#//contract/PurchaseContract"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//contract/FixedPricePurchaseContract"
+        featureName="eSuperTypes" referenceValue="lng.ecore#//contract/SimplePurchaseContract"/>
+    <changes xsi:type="history:Remove" element="lng.ecore#//contract/IndexPricePurchaseContract"
+        featureName="eSuperTypes" referenceValue="lng.ecore#//contract/PurchaseContract"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//contract/IndexPricePurchaseContract"
+        featureName="eSuperTypes" referenceValue="lng.ecore#//contract/SimplePurchaseContract"/>
+    <changes xsi:type="history:Remove" element="lng.ecore#//contract/SimplePurchaseContract"
+        featureName="eSuperTypes" referenceValue="lng.ecore#//contract/Contract"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//contract/SimplePurchaseContract"
+        featureName="eSuperTypes" referenceValue="lng.ecore#//contract/PurchaseContract"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/SimplePurchaseContract"
+        referenceName="eStructuralFeatures" element="lng.ecore#//contract/SimplePurchaseContract/cooldownPorts"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/SimplePurchaseContract/cooldownPorts"
+        featureName="eType" referenceValue="lng.ecore#//port/Port"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/SimplePurchaseContract/cooldownPorts"
+        featureName="upperBound" dataValue="-1" oldDataValue="1"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/SimplePurchaseContract/cooldownPorts"
+        featureName="name" dataValue="cooldownPorts"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/ContractModel"
+        referenceName="eOperations" element="lng.ecore#//contract/ContractModel/getCooldownContract"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract"
+        featureName="name" dataValue="getCooldownContract"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract"
+        featureName="eType" referenceValue="lng.ecore#//contract/Contract"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/ContractModel/getCooldownContract"
+        referenceName="eParameters" element="lng.ecore#//contract/ContractModel/getCooldownContract/port"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract/port"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract/port"
+        featureName="name" dataValue="port"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract/port"
+        featureName="eType" referenceValue="lng.ecore#//port/Port"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/ContractModel/getCooldownContract"
+        referenceName="eAnnotations" element="lng.ecore#//contract/ContractModel/getCooldownContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//contract/ContractModel/getCooldownContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//contract/ContractModel/getCooldownContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="key" dataValue="body"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="for (final Contract c : getPurchaseContracts()) {&#xA;   if (c instanceof SimplePurchaseContract) {&#xA;&#x9;if (((SimplePurchaseContract)c).getCooldownPorts().contains(port) return c;&#xA;   }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;return null;"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract"
+        featureName="eType" referenceValue="lng.ecore#//contract/SimplePurchaseContract"
+        oldReferenceValue="lng.ecore#//contract/Contract"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="for (final Contract c : getPurchaseContracts()) {&#xA;   if (c instanceof SimplePurchaseContract) {&#xA;&#x9;if (&#xA;&#x9;((SimplePurchaseContract) c).getCooldownPorts().contains(port)) return c;&#xA;   }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;return null;"
+        oldDataValue="for (final Contract c : getPurchaseContracts()) {&#xA;   if (c instanceof SimplePurchaseContract) {&#xA;&#x9;if (((SimplePurchaseContract)c).getCooldownPorts().contains(port) return c;&#xA;   }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;return null;"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//contract/ContractModel/getCooldownContract/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="for (final Contract c : getPurchaseContracts()) {&#xA;   if (c instanceof SimplePurchaseContract) {&#xA;&#x9;if (&#xA;&#x9;((SimplePurchaseContract) c).getCooldownPorts().contains(port)) return &#xA;&#x9;&#x9;(SimplePurchaseContract) c;&#xA;   }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;return null;"
+        oldDataValue="for (final Contract c : getPurchaseContracts()) {&#xA;   if (c instanceof SimplePurchaseContract) {&#xA;&#x9;if (&#xA;&#x9;((SimplePurchaseContract) c).getCooldownPorts().contains(port)) return c;&#xA;   }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;return null;"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//schedule/events/FuelType"
+        referenceName="eLiterals" element="lng.ecore#//schedule/events/FuelType/Cooldown"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule/events/FuelType/Cooldown"
+        featureName="literal" dataValue=""/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule/events/FuelType/Cooldown"
+        featureName="literal" dataValue="Cooldown" oldDataValue=""/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule/events/FuelType/Cooldown"
+        featureName="name" dataValue="Cooldown"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//schedule/events/FuelType/Cooldown"
+        featureName="value" dataValue="3" oldDataValue="0"/>
   </releases>
 </history:History>

@@ -8,6 +8,7 @@
   <foreignModel>lng.ecore</foreignModel>
   <genPackages prefix="Scenario" disposableProviderFactory="true" ecorePackage="lng.ecore#/">
     <genDataTypes ecoreDataType="lng.ecore#//DateAndOptionalTime"/>
+    <genDataTypes ecoreDataType="lng.ecore#//Percentage"/>
     <genClasses ecoreClass="lng.ecore#//Scenario">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//Scenario/version"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//Scenario/name"/>
@@ -34,6 +35,9 @@
     </genClasses>
     <genClasses image="false" ecoreClass="lng.ecore#//UUIDObject">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//UUIDObject/UUID"/>
+    </genClasses>
+    <genClasses ecoreClass="lng.ecore#//AnnotatedObject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//AnnotatedObject/notes"/>
     </genClasses>
     <nestedGenPackages prefix="Fleet" disposableProviderFactory="true" ecorePackage="lng.ecore#//fleet">
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="lng.ecore#//fleet/VesselState">
@@ -84,6 +88,9 @@
         <genFeatures property="None" children="true" createChild="true" propertyCategory=""
             propertyDescription="The costs associated with taking a vessel of this class through any defined canals."
             ecoreFeature="ecore:EReference lng.ecore#//fleet/VesselClass/canalCosts"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClass/warmupTime"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClass/cooldownTime"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClass/cooldownVolume"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//fleet/FuelConsumptionLine">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//fleet/FuelConsumptionLine/speed"/>
@@ -135,6 +142,7 @@
             ecoreFeature="ecore:EAttribute lng.ecore#//fleet/CharterOut/dailyCharterOutPrice"/>
         <genFeatures createChild="false" propertyDescription="If set, this amount will be incurred as a cost for repositioning the vessel after the charter out."
             ecoreFeature="ecore:EAttribute lng.ecore#//fleet/CharterOut/repositioningFee"/>
+        <genOperations ecoreOperation="lng.ecore#//fleet/CharterOut/getEffectiveEndPort"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//fleet/Drydock"/>
       <genClasses ecoreClass="lng.ecore#//fleet/VesselFuel">
@@ -364,6 +372,8 @@
         <genFeatures createChild="false" propertyDescription="The default CV value for cargoes loaded at this port."
             ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/defaultCVvalue"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/defaultWindowStart"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/defaultSlotDuration"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/shouldArriveCold"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//port/DistanceModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//port/DistanceModel/distances"/>
@@ -376,7 +386,6 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/DistanceLine/distance"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//port/Canal">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Canal/defaultCost"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//port/Canal/distanceModel"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//port/CanalModel">
@@ -428,10 +437,18 @@
         <genOperations ecoreOperation="lng.ecore#//cargo/Slot/getSlotOrPortContract">
           <genParameters ecoreParameter="lng.ecore#//cargo/Slot/getSlotOrPortContract/scenario"/>
         </genOperations>
+        <genOperations ecoreOperation="lng.ecore#//cargo/Slot/getSlotOrPortDuration"/>
+        <genOperations ecoreOperation="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity">
+          <genParameters ecoreParameter="lng.ecore#//cargo/Slot/getSlotOrContractMinQuantity/scenario"/>
+        </genOperations>
+        <genOperations ecoreOperation="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity">
+          <genParameters ecoreParameter="lng.ecore#//cargo/Slot/getSlotOrContractMaxQuantity/scenario"/>
+        </genOperations>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//cargo/LoadSlot">
         <genFeatures createChild="false" propertyDescription="If set, specifies a cargo CV value for this cargo. Otherwise, the CV value is taken from the load port."
             ecoreFeature="ecore:EAttribute lng.ecore#//cargo/LoadSlot/cargoCVvalue"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//cargo/LoadSlot/arriveCold"/>
         <genOperations ecoreOperation="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue"/>
       </genClasses>
     </nestedGenPackages>
@@ -444,6 +461,9 @@
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//contract/ContractModel/salesContracts"/>
         <genOperations ecoreOperation="lng.ecore#//contract/ContractModel/getDefaultContract">
           <genParameters ecoreParameter="lng.ecore#//contract/ContractModel/getDefaultContract/port"/>
+        </genOperations>
+        <genOperations ecoreOperation="lng.ecore#//contract/ContractModel/getCooldownContract">
+          <genParameters ecoreParameter="lng.ecore#//contract/ContractModel/getCooldownContract/port"/>
         </genOperations>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//contract/TotalVolumeLimit">
@@ -463,6 +483,8 @@
             ecoreFeature="ecore:EReference lng.ecore#//contract/Contract/entity"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference lng.ecore#//contract/Contract/defaultPorts"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/Contract/minQuantity"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//contract/Contract/maxQuantity"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//contract/PurchaseContract"/>
       <genClasses ecoreClass="lng.ecore#//contract/SalesContract">
@@ -489,6 +511,10 @@
             ecoreFeature="ecore:EReference lng.ecore#//contract/ProfitSharingPurchaseContract/index"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference lng.ecore#//contract/ProfitSharingPurchaseContract/referenceIndex"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="lng.ecore#//contract/SimplePurchaseContract">
+        <genFeatures notify="false" createChild="false" propertyDescription="A list of ports which use this contract to price LNG used when cooling vessels down."
+            propertySortChoices="true" ecoreFeature="ecore:EReference lng.ecore#//contract/SimplePurchaseContract/cooldownPorts"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Market" disposableProviderFactory="true" ecorePackage="lng.ecore#//market">

@@ -11,8 +11,10 @@ import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
+import scenario.Scenario;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
 
@@ -37,10 +39,15 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 		if (object instanceof Slot) {
 			final EMFEventType eventType = ctx.getEventType();
 			if (eventType == EMFEventType.NULL) {
+				final Scenario scenario = ValidationSupport.getInstance()
+						.getScenario(object);
+				
+				if (scenario == null) return ctx.createSuccessStatus();
+				
 				// This is being triggered by a batch mode validation.
 				final Slot slot = (Slot) object;
 				//TODO return some placeholders for the error message
-				if (slot.getMinQuantity() < 0) {
+				if (slot.getSlotOrContractMinQuantity(scenario) < 0) {
 					final DetailConstraintStatusDecorator dsd = 
 						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
 	
@@ -48,14 +55,14 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 					return dsd;
 					
 				}
-				if (slot.getMaxQuantity() < 0) {
+				if (slot.getSlotOrContractMaxQuantity(scenario) < 0) {
 					final DetailConstraintStatusDecorator dsd = 
 						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
 
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 					return dsd;
 				}
-				if (slot.getMinQuantity() > slot.getMaxQuantity()) {
+				if (slot.getSlotOrContractMinQuantity(scenario) > slot.getSlotOrContractMaxQuantity(scenario)) {
 					final DetailConstraintStatusDecorator dsd = 
 						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
 

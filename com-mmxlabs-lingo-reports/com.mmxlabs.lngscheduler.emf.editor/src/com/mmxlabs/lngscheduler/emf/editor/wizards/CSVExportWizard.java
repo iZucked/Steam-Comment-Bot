@@ -35,8 +35,9 @@ import scenario.contract.ContractPackage;
 import scenario.fleet.FleetPackage;
 import scenario.market.MarketPackage;
 import scenario.port.PortPackage;
-import scenario.presentation.cargoeditor.importer.ImporterUtil;
 import scenario.schedule.SchedulePackage;
+
+import com.mmxlabs.shiplingo.importer.importers.ImporterUtil;
 
 /**
  * @author Tom Hinton

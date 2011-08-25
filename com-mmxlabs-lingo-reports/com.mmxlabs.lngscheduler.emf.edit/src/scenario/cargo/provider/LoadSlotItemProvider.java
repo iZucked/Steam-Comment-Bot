@@ -62,6 +62,7 @@ public class LoadSlotItemProvider
 			super.getPropertyDescriptors(object);
 
 			addCargoCVvaluePropertyDescriptor(object);
+			addArriveColdPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -84,6 +85,28 @@ public class LoadSlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Arrive Cold feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addArriveColdPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LoadSlot_arriveCold_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_arriveCold_feature", "_UI_LoadSlot_type"),
+				 CargoPackage.Literals.LOAD_SLOT__ARRIVE_COLD,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -126,6 +149,7 @@ public class LoadSlotItemProvider
 
 		switch (notification.getFeatureID(LoadSlot.class)) {
 			case CargoPackage.LOAD_SLOT__CARGO_CVVALUE:
+			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

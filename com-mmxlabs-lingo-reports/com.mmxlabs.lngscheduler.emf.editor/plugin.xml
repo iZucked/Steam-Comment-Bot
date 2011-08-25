@@ -353,5 +353,13 @@
             name="Export Scenario to CSV Files">
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="test.TestEditorPart"
+            id="test.TestEditorPart"
+            name="est Editor">
+      </view>
+   </extension>
 
 </plugin>

@@ -30,6 +30,8 @@ import scenario.port.Port;
  * <ul>
  *   <li>{@link scenario.contract.impl.ContractImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link scenario.contract.impl.ContractImpl#getDefaultPorts <em>Default Ports</em>}</li>
+ *   <li>{@link scenario.contract.impl.ContractImpl#getMinQuantity <em>Min Quantity</em>}</li>
+ *   <li>{@link scenario.contract.impl.ContractImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  * </ul>
  * </p>
  *
@@ -55,6 +57,46 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected EList<Port> defaultPorts;
+
+	/**
+	 * The default value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinQuantity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MIN_QUANTITY_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinQuantity()
+	 * @generated
+	 * @ordered
+	 */
+	protected int minQuantity = MIN_QUANTITY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxQuantity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MAX_QUANTITY_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxQuantity()
+	 * @generated
+	 * @ordered
+	 */
+	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -130,6 +172,48 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getMinQuantity() {
+		return minQuantity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMinQuantity(int newMinQuantity) {
+		int oldMinQuantity = minQuantity;
+		minQuantity = newMinQuantity;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.CONTRACT__MIN_QUANTITY, oldMinQuantity, minQuantity));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMaxQuantity() {
+		return maxQuantity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMaxQuantity(int newMaxQuantity) {
+		int oldMaxQuantity = maxQuantity;
+		maxQuantity = newMaxQuantity;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.CONTRACT__MAX_QUANTITY, oldMaxQuantity, maxQuantity));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -138,6 +222,10 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 				return basicGetEntity();
 			case ContractPackage.CONTRACT__DEFAULT_PORTS:
 				return getDefaultPorts();
+			case ContractPackage.CONTRACT__MIN_QUANTITY:
+				return getMinQuantity();
+			case ContractPackage.CONTRACT__MAX_QUANTITY:
+				return getMaxQuantity();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -158,6 +246,12 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 				getDefaultPorts().clear();
 				getDefaultPorts().addAll((Collection<? extends Port>)newValue);
 				return;
+			case ContractPackage.CONTRACT__MIN_QUANTITY:
+				setMinQuantity((Integer)newValue);
+				return;
+			case ContractPackage.CONTRACT__MAX_QUANTITY:
+				setMaxQuantity((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -176,6 +270,12 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 			case ContractPackage.CONTRACT__DEFAULT_PORTS:
 				getDefaultPorts().clear();
 				return;
+			case ContractPackage.CONTRACT__MIN_QUANTITY:
+				setMinQuantity(MIN_QUANTITY_EDEFAULT);
+				return;
+			case ContractPackage.CONTRACT__MAX_QUANTITY:
+				setMaxQuantity(MAX_QUANTITY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -192,8 +292,30 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 				return entity != null;
 			case ContractPackage.CONTRACT__DEFAULT_PORTS:
 				return defaultPorts != null && !defaultPorts.isEmpty();
+			case ContractPackage.CONTRACT__MIN_QUANTITY:
+				return minQuantity != MIN_QUANTITY_EDEFAULT;
+			case ContractPackage.CONTRACT__MAX_QUANTITY:
+				return maxQuantity != MAX_QUANTITY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (minQuantity: ");
+		result.append(minQuantity);
+		result.append(", maxQuantity: ");
+		result.append(maxQuantity);
+		result.append(')');
+		return result.toString();
 	}
 
 } //ContractImpl

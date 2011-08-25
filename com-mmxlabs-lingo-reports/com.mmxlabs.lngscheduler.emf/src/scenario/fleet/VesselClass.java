@@ -8,6 +8,7 @@ package scenario.fleet;
 
 import org.eclipse.emf.common.util.EList;
 
+import scenario.AnnotatedObject;
 import scenario.NamedObject;
 import scenario.port.Port;
 
@@ -33,6 +34,9 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.VesselClass#getPortExclusions <em>Port Exclusions</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getCanalCosts <em>Canal Costs</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getWarmupTime <em>Warmup Time</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getCooldownTime <em>Cooldown Time</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getCooldownVolume <em>Cooldown Volume</em>}</li>
  * </ul>
  * </p>
  *
@@ -40,7 +44,7 @@ import scenario.port.Port;
  * @model
  * @generated
  */
-public interface VesselClass extends NamedObject {
+public interface VesselClass extends NamedObject, AnnotatedObject {
 	/**
 	 * Returns the value of the '<em><b>Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -355,6 +359,87 @@ public interface VesselClass extends NamedObject {
 	 * @generated
 	 */
 	EList<VesselClassCost> getCanalCosts();
+
+	/**
+	 * Returns the value of the '<em><b>Warmup Time</b></em>' attribute.
+	 * The default value is <code>"24"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Warmup Time</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Warmup Time</em>' attribute.
+	 * @see #setWarmupTime(int)
+	 * @see scenario.fleet.FleetPackage#getVesselClass_WarmupTime()
+	 * @model default="24" required="true"
+	 * @generated
+	 */
+	int getWarmupTime();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getWarmupTime <em>Warmup Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Warmup Time</em>' attribute.
+	 * @see #getWarmupTime()
+	 * @generated
+	 */
+	void setWarmupTime(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Cooldown Time</b></em>' attribute.
+	 * The default value is <code>"12"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cooldown Time</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cooldown Time</em>' attribute.
+	 * @see #setCooldownTime(int)
+	 * @see scenario.fleet.FleetPackage#getVesselClass_CooldownTime()
+	 * @model default="12" required="true"
+	 * @generated
+	 */
+	int getCooldownTime();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getCooldownTime <em>Cooldown Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cooldown Time</em>' attribute.
+	 * @see #getCooldownTime()
+	 * @generated
+	 */
+	void setCooldownTime(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Cooldown Volume</b></em>' attribute.
+	 * The default value is <code>"500"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cooldown Volume</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cooldown Volume</em>' attribute.
+	 * @see #setCooldownVolume(int)
+	 * @see scenario.fleet.FleetPackage#getVesselClass_CooldownVolume()
+	 * @model default="500" required="true"
+	 * @generated
+	 */
+	int getCooldownVolume();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getCooldownVolume <em>Cooldown Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cooldown Volume</em>' attribute.
+	 * @see #getCooldownVolume()
+	 * @generated
+	 */
+	void setCooldownVolume(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Base Fuel</b></em>' reference.

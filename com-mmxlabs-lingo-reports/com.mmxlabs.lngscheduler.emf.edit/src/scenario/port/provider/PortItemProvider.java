@@ -69,11 +69,13 @@ public class PortItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addNotesPropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
 			addRegasEfficiencyPropertyDescriptor(object);
 			addDefaultCVvaluePropertyDescriptor(object);
 			addDefaultWindowStartPropertyDescriptor(object);
 			addDefaultSlotDurationPropertyDescriptor(object);
+			addShouldArriveColdPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -92,6 +94,28 @@ public class PortItemProvider
 				 getString("_UI_NamedObject_name_feature"),
 				 getString("_UI_NamedObject_name_description"),
 				 ScenarioPackage.Literals.NAMED_OBJECT__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Notes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNotesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AnnotatedObject_notes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AnnotatedObject_notes_feature", "_UI_AnnotatedObject_type"),
+				 ScenarioPackage.Literals.ANNOTATED_OBJECT__NOTES,
 				 true,
 				 false,
 				 false,
@@ -211,6 +235,28 @@ public class PortItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Should Arrive Cold feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addShouldArriveColdPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_shouldArriveCold_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_shouldArriveCold_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__SHOULD_ARRIVE_COLD,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Port.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -248,11 +294,13 @@ public class PortItemProvider
 
 		switch (notification.getFeatureID(Port.class)) {
 			case PortPackage.PORT__NAME:
+			case PortPackage.PORT__NOTES:
 			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__REGAS_EFFICIENCY:
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 			case PortPackage.PORT__DEFAULT_WINDOW_START:
 			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
+			case PortPackage.PORT__SHOULD_ARRIVE_COLD:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

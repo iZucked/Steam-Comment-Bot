@@ -99,6 +99,29 @@ public class ScenarioItemProviderAdapterFactory extends ScenarioAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.AnnotatedObject} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AnnotatedObjectItemProvider annotatedObjectItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.AnnotatedObject}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAnnotatedObjectAdapter() {
+		if (annotatedObjectItemProvider == null) {
+			annotatedObjectItemProvider = new AnnotatedObjectItemProvider(this);
+		}
+
+		return annotatedObjectItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -198,6 +221,7 @@ public class ScenarioItemProviderAdapterFactory extends ScenarioAdapterFactory i
 	 */
 	public void dispose() {
 		if (scenarioItemProvider != null) scenarioItemProvider.dispose();
+		if (annotatedObjectItemProvider != null) annotatedObjectItemProvider.dispose();
 	}
 
 }

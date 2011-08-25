@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 public class EMFPath {
 	final Object[] path;
 	final boolean failSilently;
-
+	
 	public EMFPath(boolean failSilently, final Iterable<?> path) {
 		final ArrayList<Object> scratch = new ArrayList<Object>();
 

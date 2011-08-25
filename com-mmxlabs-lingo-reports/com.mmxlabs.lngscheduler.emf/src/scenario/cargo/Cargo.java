@@ -7,6 +7,7 @@
 package scenario.cargo;
 
 import org.eclipse.emf.common.util.EList;
+import scenario.AnnotatedObject;
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.fleet.Vessel;
@@ -31,7 +32,7 @@ import scenario.fleet.Vessel;
  * @model
  * @generated
  */
-public interface Cargo extends EObject {
+public interface Cargo extends AnnotatedObject {
 	/**
 	 * Returns the value of the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->

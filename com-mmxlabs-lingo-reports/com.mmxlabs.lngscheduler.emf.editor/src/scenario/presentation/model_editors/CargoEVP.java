@@ -18,15 +18,16 @@ import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.cargo.CargoPackage;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.BasicAttributeManipulator;
-import scenario.presentation.cargoeditor.CargoInitialVesselManipulator;
-import scenario.presentation.cargoeditor.DateManipulator;
-import scenario.presentation.cargoeditor.EObjectTableViewer;
-import scenario.presentation.cargoeditor.EnumAttributeManipulator;
-import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
-import scenario.presentation.cargoeditor.SingleReferenceManipulator;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
 import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
+
+import com.mmxlabs.shiplingo.ui.tableview.BasicAttributeManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.CargoInitialVesselManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.DateManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
+import com.mmxlabs.shiplingo.ui.tableview.EnumAttributeManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.MultipleReferenceManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.SingleReferenceManipulator;
 
 /**
  * EVP for cargoes

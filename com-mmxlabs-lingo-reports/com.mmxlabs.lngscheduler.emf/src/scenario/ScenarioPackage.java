@@ -63,6 +63,43 @@ public interface ScenarioPackage extends EPackage {
 	ScenarioPackage eINSTANCE = scenario.impl.ScenarioPackageImpl.init();
 
 	/**
+	 * The meta object id for the '{@link scenario.impl.AnnotatedObjectImpl <em>Annotated Object</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.impl.AnnotatedObjectImpl
+	 * @see scenario.impl.ScenarioPackageImpl#getAnnotatedObject()
+	 * @generated
+	 */
+	int ANNOTATED_OBJECT = 4;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANNOTATED_OBJECT__NOTES = 0;
+
+	/**
+	 * The number of structural features of the '<em>Annotated Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANNOTATED_OBJECT_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Annotated Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANNOTATED_OBJECT_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.impl.ScenarioImpl <em>Scenario</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -73,13 +110,22 @@ public interface ScenarioPackage extends EPackage {
 	int SCENARIO = 0;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO__NOTES = ANNOTATED_OBJECT__NOTES;
+
+	/**
 	 * The feature id for the '<em><b>Version</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__VERSION = 0;
+	int SCENARIO__VERSION = ANNOTATED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -88,7 +134,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__NAME = 1;
+	int SCENARIO__NAME = ANNOTATED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Fleet Model</b></em>' containment reference.
@@ -97,7 +143,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__FLEET_MODEL = 2;
+	int SCENARIO__FLEET_MODEL = ANNOTATED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
@@ -106,7 +152,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__SCHEDULE_MODEL = 3;
+	int SCENARIO__SCHEDULE_MODEL = ANNOTATED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Port Model</b></em>' reference.
@@ -115,7 +161,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__PORT_MODEL = 4;
+	int SCENARIO__PORT_MODEL = ANNOTATED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Distance Model</b></em>' reference.
@@ -124,7 +170,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__DISTANCE_MODEL = 5;
+	int SCENARIO__DISTANCE_MODEL = ANNOTATED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Canal Model</b></em>' reference.
@@ -133,7 +179,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__CANAL_MODEL = 6;
+	int SCENARIO__CANAL_MODEL = ANNOTATED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Model</b></em>' containment reference.
@@ -142,7 +188,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__CARGO_MODEL = 7;
+	int SCENARIO__CARGO_MODEL = ANNOTATED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Contract Model</b></em>' containment reference.
@@ -151,7 +197,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__CONTRACT_MODEL = 8;
+	int SCENARIO__CONTRACT_MODEL = ANNOTATED_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Market Model</b></em>' containment reference.
@@ -160,7 +206,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__MARKET_MODEL = 9;
+	int SCENARIO__MARKET_MODEL = ANNOTATED_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Optimisation</b></em>' containment reference.
@@ -169,7 +215,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__OPTIMISATION = 10;
+	int SCENARIO__OPTIMISATION = ANNOTATED_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Contained Models</b></em>' containment reference list.
@@ -178,7 +224,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO__CONTAINED_MODELS = 11;
+	int SCENARIO__CONTAINED_MODELS = ANNOTATED_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The number of structural features of the '<em>Scenario</em>' class.
@@ -187,7 +233,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_FEATURE_COUNT = 12;
+	int SCENARIO_FEATURE_COUNT = ANNOTATED_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Create Missing Models</em>' operation.
@@ -196,7 +242,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO___CREATE_MISSING_MODELS = 0;
+	int SCENARIO___CREATE_MISSING_MODELS = ANNOTATED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Get Or Create Fleet Model</em>' operation.
@@ -205,7 +251,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO___GET_OR_CREATE_FLEET_MODEL = 1;
+	int SCENARIO___GET_OR_CREATE_FLEET_MODEL = ANNOTATED_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Or Create Schedule Model</em>' operation.
@@ -214,7 +260,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL = 2;
+	int SCENARIO___GET_OR_CREATE_SCHEDULE_MODEL = ANNOTATED_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Scenario</em>' class.
@@ -223,7 +269,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_OPERATION_COUNT = 3;
+	int SCENARIO_OPERATION_COUNT = ANNOTATED_OBJECT_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link scenario.impl.ScenarioObjectImpl <em>Object</em>}' class.
@@ -355,7 +401,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @see scenario.impl.ScenarioPackageImpl#getDateAndOptionalTime()
 	 * @generated
 	 */
-	int DATE_AND_OPTIONAL_TIME = 4;
+	int DATE_AND_OPTIONAL_TIME = 5;
 
 	/**
 	 * The meta object id for the '<em>Percentage</em>' data type.
@@ -365,7 +411,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @see scenario.impl.ScenarioPackageImpl#getPercentage()
 	 * @generated
 	 */
-	int PERCENTAGE = 5;
+	int PERCENTAGE = 6;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.Scenario <em>Scenario</em>}'.
@@ -602,6 +648,27 @@ public interface ScenarioPackage extends EPackage {
 	EAttribute getUUIDObject_UUID();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.AnnotatedObject <em>Annotated Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Annotated Object</em>'.
+	 * @see scenario.AnnotatedObject
+	 * @generated
+	 */
+	EClass getAnnotatedObject();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.AnnotatedObject#getNotes <em>Notes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Notes</em>'.
+	 * @see scenario.AnnotatedObject#getNotes()
+	 * @see #getAnnotatedObject()
+	 * @generated
+	 */
+	EAttribute getAnnotatedObject_Notes();
+
+	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime <em>Date And Optional Time</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -829,6 +896,24 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute UUID_OBJECT__UUID = eINSTANCE.getUUIDObject_UUID();
+
+		/**
+		 * The meta object literal for the '{@link scenario.impl.AnnotatedObjectImpl <em>Annotated Object</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.impl.AnnotatedObjectImpl
+		 * @see scenario.impl.ScenarioPackageImpl#getAnnotatedObject()
+		 * @generated
+		 */
+		EClass ANNOTATED_OBJECT = eINSTANCE.getAnnotatedObject();
+
+		/**
+		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ANNOTATED_OBJECT__NOTES = eINSTANCE.getAnnotatedObject_Notes();
 
 		/**
 		 * The meta object literal for the '<em>Date And Optional Time</em>' data type.

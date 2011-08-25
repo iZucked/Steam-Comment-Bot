@@ -23,7 +23,7 @@ package scenario.contract;
  * @model
  * @generated
  */
-public interface FixedPricePurchaseContract extends PurchaseContract {
+public interface FixedPricePurchaseContract extends SimplePurchaseContract {
 	/**
 	 * Returns the value of the '<em><b>Unit Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->

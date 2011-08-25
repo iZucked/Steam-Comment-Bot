@@ -15,8 +15,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import scenario.port.DistanceModel;
 import scenario.port.PortPackage;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.DialogFeatureManipulator;
-import scenario.presentation.distance_editor.DistanceEditorDialog;
+
+import com.mmxlabs.shiplingo.ui.detailview.editors.dialogs.DistanceEditorDialog;
+import com.mmxlabs.shiplingo.ui.tableview.DialogFeatureManipulator;
 
 /**
  * Editor for canals. Has a name column and a distance matrix column.
@@ -46,7 +47,7 @@ public class CanalEVP extends NamedObjectEVP {
 				final DistanceModel dm = (DistanceModel) getValue(object);
 				final DistanceEditorDialog ded = new DistanceEditorDialog(cellEditorWindow.getShell());
 				
-				if (ded.open(part, dm) == Window.OK) return ded.getResult();
+				if (ded.open(part, part.getEditingDomain(), dm) == Window.OK) return ded.getResult();
 				
 				return null;
 			}

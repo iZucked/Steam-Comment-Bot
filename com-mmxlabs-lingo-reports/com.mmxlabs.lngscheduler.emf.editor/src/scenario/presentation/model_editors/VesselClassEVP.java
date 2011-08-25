@@ -26,24 +26,24 @@ import org.eclipse.ui.PlatformUI;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselStateAttributes;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.BasicAttributeManipulator;
-import scenario.presentation.cargoeditor.DialogFeatureManipulator;
-import scenario.presentation.cargoeditor.MultipleReferenceManipulator;
-import scenario.presentation.cargoeditor.NumericAttributeManipulator;
-import scenario.presentation.cargoeditor.dialogs.CanalCostsDialog;
-import scenario.presentation.cargoeditor.dialogs.ImportWarningDialog;
-import scenario.presentation.cargoeditor.dialogs.VesselStateAttributesDialog;
-import scenario.presentation.cargoeditor.importer.CSVReader;
-import scenario.presentation.cargoeditor.importer.DeferredReference;
-import scenario.presentation.cargoeditor.importer.EObjectImporter;
-import scenario.presentation.cargoeditor.importer.EObjectImporterFactory;
-import scenario.presentation.cargoeditor.importer.ImportCSVAction;
-import scenario.presentation.cargoeditor.importer.ImportUI;
-import scenario.presentation.cargoeditor.importer.NamedObjectRegistry;
-import scenario.presentation.cargoeditor.importer.Postprocessor;
-import scenario.presentation.cargoeditor.importer.WarningCollector;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.shiplingo.importer.importers.CSVReader;
+import com.mmxlabs.shiplingo.importer.importers.DeferredReference;
+import com.mmxlabs.shiplingo.importer.importers.EObjectImporter;
+import com.mmxlabs.shiplingo.importer.importers.EObjectImporterFactory;
+import com.mmxlabs.shiplingo.importer.importers.ImportCSVAction;
+import com.mmxlabs.shiplingo.importer.importers.ImportUI;
+import com.mmxlabs.shiplingo.importer.importers.NamedObjectRegistry;
+import com.mmxlabs.shiplingo.importer.importers.Postprocessor;
+import com.mmxlabs.shiplingo.importer.importers.WarningCollector;
+import com.mmxlabs.shiplingo.importer.ui.ImportWarningDialog;
+import com.mmxlabs.shiplingo.ui.detailview.editors.dialogs.CanalCostsDialog;
+import com.mmxlabs.shiplingo.ui.detailview.editors.dialogs.VesselStateAttributesDialog;
+import com.mmxlabs.shiplingo.ui.tableview.BasicAttributeManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.DialogFeatureManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.MultipleReferenceManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.NumericAttributeManipulator;
 
 /**
  * Custom editor viewer pane for vessel classes

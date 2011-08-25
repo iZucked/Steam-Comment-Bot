@@ -33,7 +33,7 @@ import scenario.contract.FixedPricePurchaseContract;
  * @generated
  */
 public class FixedPricePurchaseContractItemProvider
-	extends PurchaseContractItemProvider
+	extends SimplePurchaseContractItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,

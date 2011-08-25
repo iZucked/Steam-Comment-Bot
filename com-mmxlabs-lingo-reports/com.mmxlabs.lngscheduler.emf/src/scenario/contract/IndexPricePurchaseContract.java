@@ -24,7 +24,7 @@ import scenario.market.Index;
  * @model
  * @generated
  */
-public interface IndexPricePurchaseContract extends PurchaseContract {
+public interface IndexPricePurchaseContract extends SimplePurchaseContract {
 	/**
 	 * Returns the value of the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->

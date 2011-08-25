@@ -54,6 +54,8 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 
 		fuelTypes.put(FuelComponent.FBO, FuelType.FBO);
 
+		fuelTypes.put(FuelComponent.Cooldown, FuelType.COOLDOWN);
+		
 		fuelUnits.put(FuelUnit.M3, scenario.schedule.events.FuelUnit.M3);
 		fuelUnits.put(FuelUnit.MT, scenario.schedule.events.FuelUnit.MT);
 		fuelUnits.put(FuelUnit.MMBTu, scenario.schedule.events.FuelUnit.MMB_TU);
@@ -115,11 +117,11 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 				// add to existing
 				// TODO this will accumulate rounding error worse than batch
 				// adding with a final division.
-				fq.setQuantity(fq.getQuantity() + consumption
-						/ Calculator.ScaleFactor);
-				fq.setTotalPrice(fq.getTotalPrice() + cost
-						/ Calculator.ScaleFactor);
-				fq.setUnitPrice(consumption == 0 ? 0 : cost / consumption);
+				final long newQuantity = fq.getQuantity() + consumption / Calculator.ScaleFactor;
+				final long newTotalPrice = fq.getTotalPrice() + cost / Calculator.ScaleFactor;
+				fq.setQuantity(newQuantity);
+				fq.setTotalPrice(newTotalPrice);
+				fq.setUnitPrice(newQuantity == 0 ? 0 : newTotalPrice / newQuantity);
 				return;
 			}
 		}

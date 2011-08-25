@@ -15,7 +15,8 @@ import scenario.contract.IndexPricePurchaseContract;
 import scenario.contract.NetbackPurchaseContract;
 import scenario.contract.ProfitSharingPurchaseContract;
 import scenario.presentation.ScenarioEditor;
-import scenario.presentation.cargoeditor.NonEditableColumn;
+
+import com.mmxlabs.shiplingo.ui.tableview.NonEditableColumn;
 
 /**
  * @author Tom Hinton

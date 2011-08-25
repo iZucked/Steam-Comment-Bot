@@ -398,6 +398,24 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getSlot__GetSlotOrContractMinQuantity__Object() {
+		return slotEClass.getEOperations().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrContractMaxQuantity__Object() {
+		return slotEClass.getEOperations().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getLoadSlot() {
 		return loadSlotEClass;
 	}
@@ -409,6 +427,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EAttribute getLoadSlot_CargoCVvalue() {
 		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLoadSlot_ArriveCold() {
+		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -483,9 +510,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_WINDOW_END);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_DURATION);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY__OBJECT);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY__OBJECT);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CVVALUE);
+		createEAttribute(loadSlotEClass, LOAD_SLOT__ARRIVE_COLD);
 		createEOperation(loadSlotEClass, LOAD_SLOT___GET_CARGO_OR_PORT_CV_VALUE);
 
 		// Create enums
@@ -516,9 +546,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
+		ScenarioPackage theScenarioPackage = (ScenarioPackage)EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
-		ScenarioPackage theScenarioPackage = (ScenarioPackage)EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI);
 		ContractPackage theContractPackage = (ContractPackage)EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI);
 
 		// Create type parameters
@@ -526,6 +556,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		cargoEClass.getESuperTypes().add(theScenarioPackage.getAnnotatedObject());
 		loadSlotEClass.getESuperTypes().add(this.getSlot());
 
 		// Initialize classes, features, and operations; add parameters
@@ -543,8 +574,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(slotEClass, Slot.class, "Slot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSlot_Id(), ecorePackage.getEString(), "id", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", "2147483647", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", "2147483647", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowStart(), theScenarioPackage.getDateAndOptionalTime(), "windowStart", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowDuration(), ecorePackage.getEInt(), "windowDuration", "24", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -561,8 +592,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getSlot__GetSlotOrPortDuration(), ecorePackage.getEInt(), "getSlotOrPortDuration", 1, 1, IS_UNIQUE, IS_ORDERED);
 
+		op = initEOperation(getSlot__GetSlotOrContractMinQuantity__Object(), ecorePackage.getEInt(), "getSlotOrContractMinQuantity", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEJavaObject(), "scenario", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getSlot__GetSlotOrContractMaxQuantity__Object(), ecorePackage.getEInt(), "getSlotOrContractMaxQuantity", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEJavaObject(), "scenario", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCVvalue(), ecorePackage.getEFloat(), "cargoCVvalue", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLoadSlot_ArriveCold(), ecorePackage.getEBoolean(), "arriveCold", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getLoadSlot__GetCargoOrPortCVValue(), ecorePackage.getEFloat(), "getCargoOrPortCVValue", 1, 1, IS_UNIQUE, IS_ORDERED);
 

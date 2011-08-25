@@ -8,6 +8,7 @@ package scenario.fleet;
 
 import org.eclipse.emf.common.util.EList;
 
+import scenario.AnnotatedObject;
 import scenario.NamedObject;
 
 /**
@@ -31,7 +32,7 @@ import scenario.NamedObject;
  * @model
  * @generated
  */
-public interface Vessel extends NamedObject {
+public interface Vessel extends NamedObject, AnnotatedObject {
 	/**
 	 * Returns the value of the '<em><b>Class</b></em>' reference.
 	 * <!-- begin-user-doc -->

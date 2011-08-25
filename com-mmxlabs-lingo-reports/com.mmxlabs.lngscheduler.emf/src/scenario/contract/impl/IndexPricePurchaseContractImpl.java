@@ -28,7 +28,7 @@ import scenario.market.Index;
  *
  * @generated
  */
-public class IndexPricePurchaseContractImpl extends PurchaseContractImpl implements IndexPricePurchaseContract {
+public class IndexPricePurchaseContractImpl extends SimplePurchaseContractImpl implements IndexPricePurchaseContract {
 	/**
 	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
 	 * <!-- begin-user-doc -->
