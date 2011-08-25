@@ -288,6 +288,46 @@
                      class="VesselClass">
                </target>
             </constraint>
+           
+            <constraint
+                  class="com.mmxlabs.lngscheduler.emf.extras.validation.ShipFillPercentageConstraint"
+                  id="com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_validity"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Ship Fill Percentage is Valid"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+               	  Vessel {0} has a fill capacity of {1} percent, which is not between 0 (exclusive) and 100 (inclusive). 
+               </message>
+               <description>
+               		Fill capacity should not be zero, negative or exceed 100 percent.
+               </description>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+            
+            <constraint
+                  class="com.mmxlabs.lngscheduler.emf.extras.validation.ShipFillPercentageConstraint"
+                  id="com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_sanity"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Ship Fill Percentage is low"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+               	  Vessel {0} has a fill capacity of {1} percent, which is less than the sensible threshold of {2} percent. 
+               </message>
+               <description>
+               		Fill capacity should not be too low.
+               </description>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
             
              <constraint
             	class="com.mmxlabs.lngscheduler.emf.extras.validation.VesselEventDateConstraint"
