@@ -32,6 +32,8 @@ import org.eclipse.ui.IWorkbench;
 import scenario.Scenario;
 import scenario.presentation.LngEditorAdvisor;
 
+import com.mmxlabs.lngscheduler.emf.extras.ScenarioUtils;
+
 public class RandomScenarioWizard extends Wizard implements INewWizard {
 	private IWorkbench workbench;
 	private DetailsPage details;
@@ -51,7 +53,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 	@Override
 	public boolean performFinish() {
 		final String outputFileName = details.getFileName();
-		
+
 		Scenario scenario = null;
 
 		try {
@@ -59,37 +61,36 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			scenario = utils.createScenario();
 			final String matrixPath = details.getMatrixURI().toFileString();
 			final String slotsPath = details.getSlotsURI().toFileString();
-			
+
 			utils.addDistanceModel(scenario, matrixPath);
-			
+
 			if (details.shouldCreateVesselClasses()) {
-				//default setting: add 3* each vessel class as a charter-in
+				// default setting: add 3* each vessel class as a charter-in
 				utils.addDefaultFleet(scenario, 3);
 			}
-			
+
 			if (details.getCargoCount() > 0) {
 				// default settings:
-				// 6 hr time windows, 24 hr visits, 1-15 days of slack between pickup and delivery, 
+				// 6 hr time windows, 24 hr visits, 1-15 days of slack between pickup and delivery,
 				// no locality bias and 1 year total duration.
-				
+
 				// if you want to control all of these variables, there is a command-line
 				// class called {@link HeadlessScenarioGenerator} which exposes these parameters
-				
-				utils.addRandomCargoes(scenario, matrixPath, slotsPath, details.getCargoCount(), 
-						6, 6, 24, 24, 
-						
-						1
-						
-						, 15, 
-						
-						details.getLocality(),///locality
-						
+
+				utils.addRandomCargoes(scenario, matrixPath, slotsPath, details.getCargoCount(), 6, 6, 24, 24,
+
+				1
+
+				, 15,
+
+				details.getLocality(),// /locality
+
 						365);
 				utils.addCharterOuts(scenario, 1, 25, 35, 365);
 			}
-			
-			utils.addDefaultSettings(scenario);
-			
+
+			ScenarioUtils.addDefaultSettings(scenario);
+
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 			return false;
@@ -97,7 +98,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			e1.printStackTrace();
 			return false;
 		}
-		
+
 		final URI fileURI = URI.createFileURI(outputFileName);
 
 		// save scenario to file
@@ -113,8 +114,8 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			return false;
 		}
 
-		//try adding file to selected project?
-		
+		// try adding file to selected project?
+
 		return LngEditorAdvisor.openEditor(workbench, fileURI);
 	}
 
@@ -134,7 +135,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 				s = s + ".scenario";
 			}
 			return s;
-//			return URI.createFileURI(s);
+			// return URI.createFileURI(s);
 		}
 
 		public URI getMatrixURI() {
@@ -152,7 +153,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 		public double getLocality() {
 			return localitySpinner.getSelection() / Math.pow(10, localitySpinner.getDigits());
 		}
-		
+
 		protected Text fileField;
 		protected Text matrixField;
 		private Spinner cargoSpinner;
@@ -166,13 +167,11 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			GridLayout layout = new GridLayout(1, false);
 			myContents.setLayout(layout);
 
-			fileField = makeElement(myContents, "Scenario file to create",
-					"scenario", false);
-			matrixField = makeElement(myContents, "Distance matrix to import",
-					"csv", true);
+			fileField = makeElement(myContents, "Scenario file to create", "scenario", false);
+			matrixField = makeElement(myContents, "Distance matrix to import", "csv", true);
 
 			slotsField = makeElement(myContents, "Slot count list", "csv", true);
-			
+
 			Label label = new Label(myContents, SWT.NONE);
 			label.setText("Other model features");
 			Composite row = new Composite(myContents, SWT.NONE);
@@ -200,16 +199,13 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			setControl(myContents);
 		}
 
-		public Text makeElement(Composite contents, String caption,
-				String extension, boolean open) {
+		public Text makeElement(Composite contents, String caption, String extension, boolean open) {
 			Label label = new Label(contents, SWT.NONE);
 			label.setText(caption);
-			return makeFilePicker(contents, new String[] { "*." + extension },
-					open);
+			return makeFilePicker(contents, new String[] { "*." + extension }, open);
 		}
 
-		public Text makeFilePicker(Composite container,
-				final String[] extensions, final boolean open) {
+		public Text makeFilePicker(Composite container, final String[] extensions, final boolean open) {
 			Composite row = new Composite(container, SWT.NONE);
 
 			row.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -230,8 +226,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					FileDialog fd = new FileDialog(getShell(), open ? SWT.OPEN
-							: SWT.SAVE);
+					FileDialog fd = new FileDialog(getShell(), open ? SWT.OPEN : SWT.SAVE);
 					fd.setFilterExtensions(extensions);
 					final String sd = fd.open();
 					if (sd != null) {
