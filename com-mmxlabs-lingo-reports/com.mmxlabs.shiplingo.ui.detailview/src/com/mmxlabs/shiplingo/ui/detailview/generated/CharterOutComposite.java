@@ -67,6 +67,7 @@ public  class CharterOutComposite extends AbstractDetailComposite {
 	 */
 	protected static void createFieldsFromSupers(final AbstractDetailComposite composite, final Composite mainGroup) {
       VesselEventComposite.createFields(composite, mainGroup);
+      HeelOptionsComposite.createFields(composite, mainGroup);
   }
 
 	/**
@@ -74,33 +75,11 @@ public  class CharterOutComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	protected static void createCharterOutFields(final AbstractDetailComposite composite, final Composite mainGroup) {
-    createMaxHeelOutEditor(composite, mainGroup);
-    createHeelCVValueEditor(composite, mainGroup);
     createEndPortEditor(composite, mainGroup);
     createDailyCharterOutPriceEditor(composite, mainGroup);
     createRepositioningFeeEditor(composite, mainGroup);
   }
 
-		
-	/**
-	 * Create an editor for the maxHeelOut feature on CharterOut
-	 * @generated
-	 */
-	protected static void createMaxHeelOutEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getCharterOut_MaxHeelOut()),
-      "Max Heel Out");
-  }
-		
-	/**
-	 * Create an editor for the heelCVValue feature on CharterOut
-	 * @generated
-	 */
-	protected static void createHeelCVValueEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getCharterOut_HeelCVValue()),
-      "Heel CVValue");
-  }
 		
 	/**
 	 * Create an editor for the endPort feature on CharterOut

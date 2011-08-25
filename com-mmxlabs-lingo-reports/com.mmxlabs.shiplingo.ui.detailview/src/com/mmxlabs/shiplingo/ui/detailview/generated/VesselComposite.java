@@ -120,8 +120,8 @@ public  class VesselComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	protected static void createStartRequirementEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    final PortAndTimeComposite sub = 
-      new PortAndTimeComposite(composite, composite.getStyle(), 
+    final PortTimeAndHeelComposite sub = 
+      new PortTimeAndHeelComposite(composite, composite.getStyle(), 
         "Start Requirement", false);
     sub.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
         true));
