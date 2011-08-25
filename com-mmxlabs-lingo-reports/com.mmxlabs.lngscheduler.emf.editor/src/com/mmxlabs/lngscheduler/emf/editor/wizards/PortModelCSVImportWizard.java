@@ -14,7 +14,7 @@ import scenario.port.PortPackage;
  * A reduced import wizard which imports "static" data.
  * 
  * @author Tom Hinton
- *
+ * 
  */
 public class PortModelCSVImportWizard extends CSVImportWizard {
 	@Override
@@ -34,38 +34,29 @@ public class PortModelCSVImportWizard extends CSVImportWizard {
 	}
 
 	@Override
-	protected void createWizardPageControls(CSVWizardPage page,
-			Composite topLevel) {
+	protected void createWizardPageControls(CSVWizardPage page, Composite topLevel) {
 		final String[] extensions = new String[] { "*.csv" };
 
 		{
-			final Group group = page.createGroup(topLevel,
-					"Ports and Distances");
+			final Group group = page.createGroup(topLevel, "Ports and Distances");
 
-			page.makeEditor(group, "Ports", PortPackage.eINSTANCE.getPort(),
-					extensions);
-			page.makeEditor(group, "Distance Matrix",
-					PortPackage.eINSTANCE.getDistanceModel(), extensions);
-			page.makeEditor(group, "Canals", PortPackage.eINSTANCE.getCanal(),
-					extensions);
+			page.makeEditor(group, "Ports", PortPackage.eINSTANCE.getPort(), extensions);
+			page.makeEditor(group, "Distance Matrix", PortPackage.eINSTANCE.getDistanceModel(), extensions);
+			page.makeEditor(group, "Canals", PortPackage.eINSTANCE.getCanal(), extensions);
 		}
-//		{
-//			final Group group = page.createGroup(topLevel,
-//					"Indices and Contracts");
-//
-//			page.makeEditor(group, "Indices",
-//					MarketPackage.eINSTANCE.getIndex(), extensions);
-//			page.makeEditor(group, "Purchase Contracts",
-//					ContractPackage.eINSTANCE.getPurchaseContract(), extensions);
-//			page.makeEditor(group, "Sales Contracts",
-//					ContractPackage.eINSTANCE.getSalesContract(), extensions);
-//			page.makeEditor(group, "Entities",
-//					ContractPackage.eINSTANCE.getEntity(), extensions);
-//		}
+		// {
+		// final Group group = page.createGroup(topLevel,
+		// "Indices and Contracts");
+		//
+		// page.makeEditor(group, "Indices",
+		// MarketPackage.eINSTANCE.getIndex(), extensions);
+		// page.makeEditor(group, "Purchase Contracts",
+		// ContractPackage.eINSTANCE.getPurchaseContract(), extensions);
+		// page.makeEditor(group, "Sales Contracts",
+		// ContractPackage.eINSTANCE.getSalesContract(), extensions);
+		// page.makeEditor(group, "Entities",
+		// ContractPackage.eINSTANCE.getEntity(), extensions);
+		// }
 	}
 
-	@Override
-	protected void addDefaultSettings(Scenario scenario) {
-		
-	}
 }

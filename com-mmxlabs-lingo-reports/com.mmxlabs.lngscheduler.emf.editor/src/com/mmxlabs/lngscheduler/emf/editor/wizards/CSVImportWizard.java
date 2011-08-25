@@ -21,7 +21,6 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -67,15 +66,6 @@ import scenario.fleet.VesselEvent;
 import scenario.fleet.VesselFuel;
 import scenario.market.Index;
 import scenario.market.MarketPackage;
-import scenario.optimiser.Constraint;
-import scenario.optimiser.Objective;
-import scenario.optimiser.Optimisation;
-import scenario.optimiser.OptimiserFactory;
-import scenario.optimiser.OptimiserPackage;
-import scenario.optimiser.lso.LSOSettings;
-import scenario.optimiser.lso.LsoFactory;
-import scenario.optimiser.lso.LsoPackage;
-import scenario.optimiser.lso.ThresholderSettings;
 import scenario.port.Canal;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
@@ -89,18 +79,14 @@ import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
+import com.mmxlabs.lngscheduler.emf.extras.ScenarioUtils;
 import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
-import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
-import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.shiplingo.importer.importers.CSVReader;
 import com.mmxlabs.shiplingo.importer.importers.DeferredReference;
 import com.mmxlabs.shiplingo.importer.importers.EObjectImporter;
@@ -127,6 +113,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 	 * 
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
+	@Override
 	public boolean performFinish() {
 		// try and run imports
 
@@ -135,37 +122,27 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 
 		final LinkedList<EObject> importedObjects = new LinkedList<EObject>();
 		final WarningCollector warningCollector = new WarningCollector();
-		
+
 		try {
 			getContainer().run(true, true, new IRunnableWithProgress() {
 				@Override
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-					
-					monitor.beginTask("Import CSV Files",
-							inputFilePaths.size() + 6);
+					monitor.beginTask("Import CSV Files", inputFilePaths.size() + 6);
 
-					for (final Map.Entry<EClass, String> job : inputFilePaths
-							.entrySet()) {
-						if (job.getKey()
-								.equals(FleetPackage.eINSTANCE
-										.getFuelConsumptionLine()))
+					for (final Map.Entry<EClass, String> job : inputFilePaths.entrySet()) {
+						if (job.getKey().equals(FleetPackage.eINSTANCE.getFuelConsumptionLine()))
 							continue;
 						if (job.getValue() == null || job.getValue().isEmpty())
 							continue;
 						try {
-							monitor.subTask("Import "
-									+ new File(job.getValue()).getName());
+							monitor.subTask("Import " + new File(job.getValue()).getName());
 							monitor.worked(1);
-							final EObjectImporter importer = EObjectImporterFactory
-									.getInstance().getImporter(job.getKey());
+							final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(job.getKey());
 							importer.addImportWarningListener(warningCollector);
-							final CSVReader reader = new CSVReader(job
-									.getValue());
+							final CSVReader reader = new CSVReader(job.getValue());
 
-							importedObjects.addAll(importer.importObjects(
-									reader, refs, nor));
+							importedObjects.addAll(importer.importObjects(reader, refs, nor));
 						} catch (final IOException ex) {
 						}
 					}
@@ -178,19 +155,12 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 						nor.addEObjects(object);
 					}
 					// process fuel curves
-					if (inputFilePaths.containsKey(FleetPackage.eINSTANCE
-							.getFuelConsumptionLine())) {
-						final String pth = inputFilePaths
-								.get(FleetPackage.eINSTANCE
-										.getFuelConsumptionLine());
+					if (inputFilePaths.containsKey(FleetPackage.eINSTANCE.getFuelConsumptionLine())) {
+						final String pth = inputFilePaths.get(FleetPackage.eINSTANCE.getFuelConsumptionLine());
 						if (pth != null && pth.isEmpty() == false) {
 							try {
 								final CSVReader reader = new CSVReader(pth);
-								final EObjectImporter importer = EObjectImporterFactory
-										.getInstance()
-										.getImporter(
-												FleetPackage.eINSTANCE
-														.getFuelConsumptionLine());
+								final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(FleetPackage.eINSTANCE.getFuelConsumptionLine());
 								importer.importObjects(reader, refs, nor);
 							} catch (final IOException ex) {
 							}
@@ -220,76 +190,52 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					for (final EObject object : importedObjects) {
 						if (object != null) {
 							if (object instanceof Cargo) {
-								scenario.getCargoModel().getCargoes()
-										.add((Cargo) object);
+								scenario.getCargoModel().getCargoes().add((Cargo) object);
 							} else if (object instanceof VesselClass) {
-								scenario.getFleetModel().getVesselClasses()
-										.add((VesselClass) object);
+								scenario.getFleetModel().getVesselClasses().add((VesselClass) object);
 							} else if (object instanceof Vessel) {
-								scenario.getFleetModel().getFleet()
-										.add((Vessel) object);
+								scenario.getFleetModel().getFleet().add((Vessel) object);
 							} else if (object instanceof Index) {
-								scenario.getMarketModel().getIndices()
-										.add((Index) object);
+								scenario.getMarketModel().getIndices().add((Index) object);
 							} else if (object instanceof SalesContract) {
-								scenario.getContractModel().getSalesContracts()
-										.add((SalesContract) object);
+								scenario.getContractModel().getSalesContracts().add((SalesContract) object);
 							} else if (object instanceof PurchaseContract) {
-								scenario.getContractModel()
-										.getPurchaseContracts()
-										.add((PurchaseContract) object);
+								scenario.getContractModel().getPurchaseContracts().add((PurchaseContract) object);
 							} else if (object instanceof DistanceModel) {
 								// don't add distance model, because of
 								// containment relationship.
-								scenario.getDistanceModel()
-										.getDistances()
-										.addAll(((DistanceModel) object)
-												.getDistances());
+								scenario.getDistanceModel().getDistances().addAll(((DistanceModel) object).getDistances());
 							} else if (object instanceof Port) {
-								scenario.getPortModel().getPorts()
-										.add((Port) object);
+								scenario.getPortModel().getPorts().add((Port) object);
 							} else if (object instanceof Entity) {
-								scenario.getContractModel().getEntities()
-										.add((Entity) object);
+								scenario.getContractModel().getEntities().add((Entity) object);
 							} else if (object instanceof VesselEvent) {
-								scenario.getFleetModel().getVesselEvents()
-										.add((VesselEvent) object);
+								scenario.getFleetModel().getVesselEvents().add((VesselEvent) object);
 							} else if (object instanceof VesselFuel) {
-								scenario.getFleetModel().getFuels()
-										.add((VesselFuel) object);
+								scenario.getFleetModel().getFuels().add((VesselFuel) object);
 							} else if (object instanceof Canal) {
-								scenario.getCanalModel().getCanals()
-										.add((Canal) object);
+								scenario.getCanalModel().getCanals().add((Canal) object);
 							} else if (object instanceof Schedule) {
-								scenario.getScheduleModel().getSchedules()
-										.add((Schedule) object);
+								scenario.getScheduleModel().getSchedules().add((Schedule) object);
 							}
 						}
 					}
 
 					postProcess(scenario);
 
-					if (scenario.getOptimisation() != null
-							&& scenario.getOptimisation().getCurrentSettings() != null
-							&& scenario.getOptimisation().getCurrentSettings()
-									.getInitialSchedule() != null) {
+					if (scenario.getOptimisation() != null && scenario.getOptimisation().getCurrentSettings() != null && scenario.getOptimisation().getCurrentSettings().getInitialSchedule() != null) {
 						// evaluate initial schedule
 						monitor.subTask("Evaluating initial schedule...");
 						try {
 							final ResourceSet set = new ResourceSetImpl();
 							final XMIResourceFactoryImpl rf = new XMIResourceFactoryImpl();
-							set.getResourceFactoryRegistry()
-									.getExtensionToFactoryMap().put("*", rf);
+							set.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", rf);
 
-							set.getPackageRegistry().put(
-									scenario.eClass().getEPackage().getNsURI(),
-									scenario.eClass().getEPackage());
+							set.getPackageRegistry().put(scenario.eClass().getEPackage().getNsURI(), scenario.eClass().getEPackage());
 
-							URI nonsenseURI = URI.createGenericURI("invalid",
-									"invalid", "").trimFragment();
+							URI nonsenseURI = URI.createGenericURI("invalid", "invalid", "").trimFragment();
 
-							final Resource resource = set
-									.createResource(nonsenseURI);
+							final Resource resource = set.createResource(nonsenseURI);
 
 							resource.setURI(nonsenseURI.trimFragment());
 
@@ -299,49 +245,36 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							// for things to
 							// function.
 
-							final LNGScenarioTransformer lst = new LNGScenarioTransformer(
-									scenario);
-							final OptimisationTransformer ot = new OptimisationTransformer(
-									lst.getOptimisationSettings());
+							final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
+							final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 							final ModelEntityMap entities = new ResourcelessModelEntityMap();
 							entities.setScenario(scenario);
 							IOptimisationData<ISequenceElement> data;
 							data = lst.createOptimisationData(entities);
 							monitor.worked(1);
 
-							final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot
-									.createOptimiserAndContext(data, entities);
+							final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot.createOptimiserAndContext(data, entities);
 
-							final IOptimisationContext<ISequenceElement> context = optAndContext
-									.getFirst();
-							LocalSearchOptimiser<ISequenceElement> optimiser = optAndContext
-									.getSecond();
+							final IOptimisationContext<ISequenceElement> context = optAndContext.getFirst();
+							LocalSearchOptimiser<ISequenceElement> optimiser = optAndContext.getSecond();
 
 							// because we are driving the optimiser ourself, so
 							// we can be paused, we
 							// don't actually get progress callbacks.
-							optimiser
-									.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
+							optimiser.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
 
 							optimiser.init();
-							IAnnotatedSolution<ISequenceElement> startSolution = optimiser
-									.start(context);
+							IAnnotatedSolution<ISequenceElement> startSolution = optimiser.start(context);
 							monitor.worked(1);
 							final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-							final Schedule schedule = exporter
-									.exportAnnotatedSolution(scenario,
-											entities, startSolution);
+							final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);
 
-							schedule.setName(scenario.getOptimisation()
-									.getCurrentSettings().getInitialSchedule()
-									.getName());
+							schedule.setName(scenario.getOptimisation().getCurrentSettings().getInitialSchedule().getName());
 
 							scenario.getScheduleModel().getSchedules().clear();
-							scenario.getScheduleModel().getSchedules()
-									.add(schedule);
+							scenario.getScheduleModel().getSchedules().add(schedule);
 
-							scenario.getOptimisation().getCurrentSettings()
-									.setInitialSchedule(schedule);
+							scenario.getOptimisation().getCurrentSettings().setInitialSchedule(schedule);
 							monitor.worked(1);
 						} catch (Exception ex) {
 							monitor.worked(3);
@@ -374,31 +307,25 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 			dialog.setWarnings(warningCollector.getWarnings());
 			dialog.open();
 		}
-		
+
 		return true;
 	}
 
 	/**
-	 * Subclasses can override to prevent default settings being added or
-	 * contract model being manipulated.
+	 * Subclasses can override to prevent default settings being added or contract model being manipulated.
 	 * 
 	 * @param scenario2
 	 */
 	protected void postProcess(Scenario scenario2) {
-		addDefaultSettings(scenario);
+		ScenarioUtils.addDefaultSettings(scenario);
 
 		// copy shipping entity from last entity.
 		if (scenario.getContractModel().getEntities().isEmpty() == false)
-			scenario.getContractModel().setShippingEntity(
-					scenario.getContractModel()
-							.getEntities()
-							.get(scenario.getContractModel().getEntities()
-									.size() - 1));
+			scenario.getContractModel().setShippingEntity(scenario.getContractModel().getEntities().get(scenario.getContractModel().getEntities().size() - 1));
 	}
 
 	/**
-	 * Subclasses can override in case they want to create a scenario with fewer
-	 * models.
+	 * Subclasses can override in case they want to create a scenario with fewer models.
 	 * 
 	 * @param createMissingModels
 	 */
@@ -406,59 +333,41 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		scenario.createMissingModels();
 	}
 
-	protected void createWizardPageControls(final CSVWizardPage page,
-			final Composite topLevel) {
+	protected void createWizardPageControls(final CSVWizardPage page, final Composite topLevel) {
 		final String[] extensions = new String[] { "*.csv" };
 
 		{
-			final Group group = page.createGroup(topLevel,
-					"Ports and Distances");
+			final Group group = page.createGroup(topLevel, "Ports and Distances");
 
-			page.makeEditor(group, "Ports", PortPackage.eINSTANCE.getPort(),
-					extensions);
-			page.makeEditor(group, "Distance Matrix",
-					PortPackage.eINSTANCE.getDistanceModel(), extensions);
-			page.makeEditor(group, "Canals", PortPackage.eINSTANCE.getCanal(),
-					extensions);
+			page.makeEditor(group, "Ports", PortPackage.eINSTANCE.getPort(), extensions);
+			page.makeEditor(group, "Distance Matrix", PortPackage.eINSTANCE.getDistanceModel(), extensions);
+			page.makeEditor(group, "Canals", PortPackage.eINSTANCE.getCanal(), extensions);
 		}
 
 		{
 			final Group group = page.createGroup(topLevel, "Fleet");
 
-			page.makeEditor(group, "Vessel Classes",
-					FleetPackage.eINSTANCE.getVesselClass(), extensions);
-			page.makeEditor(group, "Fuel Curves",
-					FleetPackage.eINSTANCE.getFuelConsumptionLine(), extensions);
-			page.makeEditor(group, "Vessels",
-					FleetPackage.eINSTANCE.getVessel(), extensions);
-			page.makeEditor(group, "Base Fuels",
-					FleetPackage.eINSTANCE.getVesselFuel(), extensions);
+			page.makeEditor(group, "Vessel Classes", FleetPackage.eINSTANCE.getVesselClass(), extensions);
+			page.makeEditor(group, "Fuel Curves", FleetPackage.eINSTANCE.getFuelConsumptionLine(), extensions);
+			page.makeEditor(group, "Vessels", FleetPackage.eINSTANCE.getVessel(), extensions);
+			page.makeEditor(group, "Base Fuels", FleetPackage.eINSTANCE.getVesselFuel(), extensions);
 		}
 
 		{
-			final Group group = page.createGroup(topLevel,
-					"Indices and Contracts");
+			final Group group = page.createGroup(topLevel, "Indices and Contracts");
 
-			page.makeEditor(group, "Indices",
-					MarketPackage.eINSTANCE.getIndex(), extensions);
-			page.makeEditor(group, "Purchase Contracts",
-					ContractPackage.eINSTANCE.getPurchaseContract(), extensions);
-			page.makeEditor(group, "Sales Contracts",
-					ContractPackage.eINSTANCE.getSalesContract(), extensions);
-			page.makeEditor(group, "Entities",
-					ContractPackage.eINSTANCE.getEntity(), extensions);
+			page.makeEditor(group, "Indices", MarketPackage.eINSTANCE.getIndex(), extensions);
+			page.makeEditor(group, "Purchase Contracts", ContractPackage.eINSTANCE.getPurchaseContract(), extensions);
+			page.makeEditor(group, "Sales Contracts", ContractPackage.eINSTANCE.getSalesContract(), extensions);
+			page.makeEditor(group, "Entities", ContractPackage.eINSTANCE.getEntity(), extensions);
 		}
 
 		{
-			final Group group = page
-					.createGroup(topLevel, "Cargoes and Events");
+			final Group group = page.createGroup(topLevel, "Cargoes and Events");
 
-			page.makeEditor(group, "Cargoes",
-					CargoPackage.eINSTANCE.getCargo(), extensions);
-			page.makeEditor(group, "Events",
-					FleetPackage.eINSTANCE.getVesselEvent(), extensions);
-			page.makeEditor(group, "Sequence",
-					SchedulePackage.eINSTANCE.getSchedule(), extensions);
+			page.makeEditor(group, "Cargoes", CargoPackage.eINSTANCE.getCargo(), extensions);
+			page.makeEditor(group, "Events", FleetPackage.eINSTANCE.getVesselEvent(), extensions);
+			page.makeEditor(group, "Sequence", SchedulePackage.eINSTANCE.getSchedule(), extensions);
 		}
 	}
 
@@ -468,10 +377,9 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		}
 
 		/**
-		 * Used to let the directory picker set the default file names where
-		 * they exist.
+		 * Used to let the directory picker set the default file names where they exist.
 		 */
-		private Map<EClass, Pair<FileFieldEditor, Composite>> editorMap = new HashMap<EClass, Pair<FileFieldEditor, Composite>>();
+		private final Map<EClass, Pair<FileFieldEditor, Composite>> editorMap = new HashMap<EClass, Pair<FileFieldEditor, Composite>>();
 
 		{
 			setTitle("Choose Input Data");
@@ -505,8 +413,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 
 			final Button pickAll = new Button(topLevel, SWT.NONE);
 			pickAll.setText("Use Default Filenames");
-			pickAll.setLayoutData(new GridData(SWT.END, SWT.CENTER, false,
-					false));
+			pickAll.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
 
 			pickAll.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -516,18 +423,12 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					if (s == null) {
 						return;
 					}
-					for (final Map.Entry<EClass, Pair<FileFieldEditor, Composite>> entry : editorMap
-							.entrySet()) {
-						final String defaultName = getDefaultName(entry
-								.getKey());
+					for (final Map.Entry<EClass, Pair<FileFieldEditor, Composite>> entry : editorMap.entrySet()) {
+						final String defaultName = getDefaultName(entry.getKey());
 						final File f = new File(s + "/" + defaultName + ".csv");
 						if (f.exists()) {
 
-							entry.getValue()
-									.getFirst()
-									.getTextControl(
-											entry.getValue().getSecond())
-									.setText(f.getAbsolutePath());
+							entry.getValue().getFirst().getTextControl(entry.getValue().getSecond()).setText(f.getAbsolutePath());
 						}
 					}
 				}
@@ -549,38 +450,33 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		}
 
 		void makeEditor(Group group, String name, EClass ec, String[] extensions) {
-			final FileFieldEditor portsEditor = new FileFieldEditor(name
-					+ "Select", name, group);
+			final FileFieldEditor portsEditor = new FileFieldEditor(name + "Select", name, group);
 			portsEditor.setFileExtensions(extensions);
 			portsEditor.setEmptyStringAllowed(true);
 			portsEditor.getTextControl(group).addModifyListener(listener(ec));
 
 			portsEditor.setPreferenceStore(PlatformUI.getPreferenceStore());
-			editorMap.put(ec, new Pair<FileFieldEditor, Composite>(portsEditor,
-					group));
+			editorMap.put(ec, new Pair<FileFieldEditor, Composite>(portsEditor, group));
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
-	 * org.eclipse.jface.viewers.IStructuredSelection)
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
 	 */
+	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle("File Import Wizard"); // NON-NLS-1
 		setNeedsProgressMonitor(true);
-		destinationPage = new WizardNewFileCreationPage(
-				"Choose Scenario Destination", selection) {
+		destinationPage = new WizardNewFileCreationPage("Choose Scenario Destination", selection) {
 			@Override
 			protected InputStream getInitialContents() {
-				return new ByteArrayInputStream(
-						EMFUtils.serializeEObject(scenario));
+				return new ByteArrayInputStream(EMFUtils.serializeEObject(scenario));
 			}
 		};
 		destinationPage.setTitle("Choose scenario destination");
-		destinationPage
-				.setDescription("Select a location in the workspace where the new scenario will be created and provide a name for it.");
+		destinationPage.setDescription("Select a location in the workspace where the new scenario will be created and provide a name for it.");
 		inputPage = new CSVWizardPage("Choose CSV Data to Import");
 	}
 
@@ -589,127 +485,11 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 	 * 
 	 * @see org.eclipse.jface.wizard.IWizard#addPages()
 	 */
+	@Override
 	public void addPages() {
 		super.addPages();
 		addPage(inputPage);
 		addPage(destinationPage);
 	}
 
-	/**
-	 * Add some standard optimiser settings to the given scenario
-	 * 
-	 * Copied from RandomScenarioUtils, due to build cycle issues.
-	 * 
-	 * TODO check these are reasonable settings (num. iters etc)
-	 * 
-	 * @param scenario
-	 */
-	protected void addDefaultSettings(Scenario scenario) {
-		final OptimiserFactory of = OptimiserPackage.eINSTANCE
-				.getOptimiserFactory();
-		final LsoFactory lsof = LsoPackage.eINSTANCE.getLsoFactory();
-
-		Optimisation optimisation = of.createOptimisation();
-
-		LSOSettings settings = lsof.createLSOSettings();
-
-		settings.setName("Default LSO Settings");
-
-		// create constraints
-		{
-			final EList<Constraint> constraints = settings.getConstraints();
-			constraints.add(createConstraint(of,
-					ResourceAllocationConstraintCheckerFactory.NAME, true));
-			constraints
-					.add(createConstraint(
-							of,
-							OrderedSequenceElementsConstraintCheckerFactory.NAME,
-							true));
-			constraints.add(createConstraint(of,
-					PortTypeConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(of,
-					TravelTimeConstraintCheckerFactory.NAME, true));
-		}
-
-		// create objectives
-		{
-			final EList<Objective> objectives = settings.getObjectives();
-			objectives
-					.add(createObjective(
-							of,
-							CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME,
-							1));
-			objectives.add(createObjective(of,
-					CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME,
-					1));
-			
-			objectives.add(createObjective(of,
-					CargoSchedulerFitnessCoreFactory.COST_COOLDOWN_COMPONENT_NAME,
-					1));
-			objectives
-					.add(createObjective(
-							of,
-							CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME,
-							1));
-			objectives
-					.add(createObjective(
-							of,
-							CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME,
-							1));
-			objectives
-					.add(createObjective(
-							of,
-							CargoSchedulerFitnessCoreFactory.DISTANCE_COMPONENT_NAME,
-							0));
-			objectives
-					.add(createObjective(
-							of,
-							CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME,
-							1));
-			objectives
-					.add(createObjective(
-							of,
-							CargoSchedulerFitnessCoreFactory.CARGO_ALLOCATION_COMPONENT_NAME,
-							1));
-
-			objectives
-					.add(createObjective(
-							of,
-							CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME,
-							1));
-		}
-
-		settings.setNumberOfSteps(20000);
-		ThresholderSettings thresholderSettings = lsof
-				.createThresholderSettings();
-		thresholderSettings.setAlpha(0.9);
-		thresholderSettings.setEpochLength(1000);
-		thresholderSettings.setInitialAcceptanceRate(0.2);
-		settings.setThresholderSettings(thresholderSettings);
-
-		optimisation.getAllSettings().add(settings);
-		optimisation.setCurrentSettings(settings);
-		scenario.setOptimisation(optimisation);
-
-		if (scenario.getScheduleModel().getSchedules().isEmpty() == false) {
-			settings.setInitialSchedule(scenario.getScheduleModel()
-					.getSchedules().get(0));
-		}
-	}
-
-	private Constraint createConstraint(OptimiserFactory of, String name,
-			boolean enabled) {
-		Constraint c = of.createConstraint();
-		c.setName(name);
-		c.setEnabled(enabled);
-		return c;
-	}
-
-	private Objective createObjective(OptimiserFactory of, String name,
-			double weight) {
-		Objective o = of.createObjective();
-		o.setName(name);
-		o.setWeight(weight);
-		return o;
-	}
 }
