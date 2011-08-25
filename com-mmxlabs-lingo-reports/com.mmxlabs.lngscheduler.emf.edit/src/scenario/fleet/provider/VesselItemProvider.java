@@ -263,12 +263,17 @@ public class VesselItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(FleetPackage.Literals.VESSEL__START_REQUIREMENT,
-				 FleetFactory.eINSTANCE.createPortAndTime()));
+				 FleetFactory.eINSTANCE.createPortTimeAndHeel()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(FleetPackage.Literals.VESSEL__END_REQUIREMENT,
 				 FleetFactory.eINSTANCE.createPortAndTime()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FleetPackage.Literals.VESSEL__END_REQUIREMENT,
+				 FleetFactory.eINSTANCE.createPortTimeAndHeel()));
 
 		newChildDescriptors.add
 			(createChildParameter

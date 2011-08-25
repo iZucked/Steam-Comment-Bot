@@ -8,6 +8,7 @@ package scenario.fleet.provider;
 
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -20,20 +21,20 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import scenario.fleet.CharterOut;
+
 import scenario.fleet.FleetPackage;
+import scenario.fleet.PortTimeAndHeel;
 
 /**
- * This is the item provider adapter for a {@link scenario.fleet.CharterOut} object.
+ * This is the item provider adapter for a {@link scenario.fleet.PortTimeAndHeel} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CharterOutItemProvider
-	extends VesselEventItemProvider
+public class PortTimeAndHeelItemProvider
+	extends PortAndTimeItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -46,7 +47,7 @@ public class CharterOutItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterOutItemProvider(AdapterFactory adapterFactory) {
+	public PortTimeAndHeelItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -64,9 +65,6 @@ public class CharterOutItemProvider
 			addHeelLimitPropertyDescriptor(object);
 			addHeelCVValuePropertyDescriptor(object);
 			addHeelUnitPricePropertyDescriptor(object);
-			addEndPortPropertyDescriptor(object);
-			addDailyCharterOutPricePropertyDescriptor(object);
-			addRepositioningFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -85,72 +83,6 @@ public class CharterOutItemProvider
 				 getString("_UI_HeelOptions_heelLimit_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_HeelOptions_heelLimit_feature", "_UI_HeelOptions_type"),
 				 FleetPackage.Literals.HEEL_OPTIONS__HEEL_LIMIT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the End Port feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addEndPortPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CharterOut_endPort_feature"),
-				 getString("_UI_CharterOut_endPort_description"),
-				 FleetPackage.Literals.CHARTER_OUT__END_PORT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Daily Charter Out Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDailyCharterOutPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CharterOut_dailyCharterOutPrice_feature"),
-				 getString("_UI_CharterOut_dailyCharterOutPrice_description"),
-				 FleetPackage.Literals.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Repositioning Fee feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRepositioningFeePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CharterOut_repositioningFee_feature"),
-				 getString("_UI_CharterOut_repositioningFee_description"),
-				 FleetPackage.Literals.CHARTER_OUT__REPOSITIONING_FEE,
 				 true,
 				 false,
 				 false,
@@ -204,14 +136,14 @@ public class CharterOutItemProvider
 	}
 
 	/**
-	 * This returns CharterOut.gif.
+	 * This returns PortTimeAndHeel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CharterOut"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/PortTimeAndHeel"));
 	}
 
 	/**
@@ -222,10 +154,11 @@ public class CharterOutItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((CharterOut)object).getId();
+		Date labelValue = ((PortTimeAndHeel)object).getStartTime();
+		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_CharterOut_type") :
-			getString("_UI_CharterOut_type") + " " + label;
+			getString("_UI_PortTimeAndHeel_type") :
+			getString("_UI_PortTimeAndHeel_type") + " " + label;
 	}
 
 	/**
@@ -239,12 +172,10 @@ public class CharterOutItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(CharterOut.class)) {
-			case FleetPackage.CHARTER_OUT__HEEL_LIMIT:
-			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
-			case FleetPackage.CHARTER_OUT__HEEL_UNIT_PRICE:
-			case FleetPackage.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE:
-			case FleetPackage.CHARTER_OUT__REPOSITIONING_FEE:
+		switch (notification.getFeatureID(PortTimeAndHeel.class)) {
+			case FleetPackage.PORT_TIME_AND_HEEL__HEEL_LIMIT:
+			case FleetPackage.PORT_TIME_AND_HEEL__HEEL_CV_VALUE:
+			case FleetPackage.PORT_TIME_AND_HEEL__HEEL_UNIT_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

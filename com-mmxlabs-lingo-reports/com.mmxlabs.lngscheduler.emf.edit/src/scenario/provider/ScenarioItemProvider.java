@@ -354,6 +354,16 @@ public class ScenarioItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createPortTimeAndHeel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createHeelOptions()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
 				 ScheduleFactory.eINSTANCE.createScheduleModel()));
 
 		newChildDescriptors.add

@@ -329,6 +329,52 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.fleet.PortTimeAndHeel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortTimeAndHeelItemProvider portTimeAndHeelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.fleet.PortTimeAndHeel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortTimeAndHeelAdapter() {
+		if (portTimeAndHeelItemProvider == null) {
+			portTimeAndHeelItemProvider = new PortTimeAndHeelItemProvider(this);
+		}
+
+		return portTimeAndHeelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link scenario.fleet.HeelOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected HeelOptionsItemProvider heelOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.fleet.HeelOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createHeelOptionsAdapter() {
+		if (heelOptionsItemProvider == null) {
+			heelOptionsItemProvider = new HeelOptionsItemProvider(this);
+		}
+
+		return heelOptionsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -438,6 +484,8 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (vesselFuelItemProvider != null) vesselFuelItemProvider.dispose();
 		if (portExclusionItemProvider != null) portExclusionItemProvider.dispose();
 		if (vesselClassCostItemProvider != null) vesselClassCostItemProvider.dispose();
+		if (portTimeAndHeelItemProvider != null) portTimeAndHeelItemProvider.dispose();
+		if (heelOptionsItemProvider != null) heelOptionsItemProvider.dispose();
 	}
 
 }
