@@ -27,8 +27,7 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 	private final VisitEventExporter visitExporter;
 
 	/**
-	 * Take a reference to the visit exporter, as a hack to get the last visited
-	 * port
+	 * Take a reference to the visit exporter, as a hack to get the last visited port
 	 * 
 	 * @param visitExporter
 	 */
@@ -41,11 +40,9 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public ScheduledEvent export(final ISequenceElement element,
-			final Map<String, Object> annotations, final AllocatedVessel v) {
+	public ScheduledEvent export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel v) {
 		@SuppressWarnings("unchecked")
-		final IIdleEvent<ISequenceElement> event = (IIdleEvent<ISequenceElement>) annotations
-				.get(SchedulerConstants.AI_idleInfo);
+		final IIdleEvent<ISequenceElement> event = (IIdleEvent<ISequenceElement>) annotations.get(SchedulerConstants.AI_idleInfo);
 
 		if (event == null)
 			return null;
@@ -77,10 +74,13 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		}
 
 		for (final FuelComponent fc : FuelComponent.getIdleFuelComponents()) {
-			addFuelQuantity(idle, fc,
-					event.getFuelConsumption(fc, fc.getDefaultFuelUnit()),
-					event.getFuelCost(fc));
+			if (event.getFuelConsumption(fc, fc.getDefaultFuelUnit()) > 0 && event.getFuelCost(fc) <= 0) {
+				System.err.println("Getting free " + fc);
+			}
+			addFuelQuantity(idle, fc, event.getFuelConsumption(fc, fc.getDefaultFuelUnit()), event.getFuelCost(fc));
 		}
+
+		scaleFuelQuantities(idle);
 
 		// if (idle.getPort() == null) {
 		// System.err.println("This shouldn't have happened");

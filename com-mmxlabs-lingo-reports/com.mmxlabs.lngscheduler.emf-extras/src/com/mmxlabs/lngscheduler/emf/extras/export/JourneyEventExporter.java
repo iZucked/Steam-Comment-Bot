@@ -28,21 +28,19 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public Journey export(final ISequenceElement element,
-			final Map<String, Object> annotations, final AllocatedVessel v) {
+	public Journey export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel v) {
 
 		@SuppressWarnings("unchecked")
-		final IJourneyEvent<ISequenceElement> event = (IJourneyEvent<ISequenceElement>) annotations
-				.get(SchedulerConstants.AI_journeyInfo);
+		final IJourneyEvent<ISequenceElement> event = (IJourneyEvent<ISequenceElement>) annotations.get(SchedulerConstants.AI_journeyInfo);
 
-		if (event == null) return null;
-		
-		if (event.getDistance() == 0) return null; // filter out zero-length journeys
-		
-		final Port eFromPort = entities.getModelObject(event.getFromPort(),
-				Port.class);
-		final Port eToPort = entities.getModelObject(event.getToPort(),
-				Port.class);
+		if (event == null)
+			return null;
+
+		if (event.getDistance() == 0)
+			return null; // filter out zero-length journeys
+
+		final Port eFromPort = entities.getModelObject(event.getFromPort(), Port.class);
+		final Port eToPort = entities.getModelObject(event.getToPort(), Port.class);
 
 		if (eFromPort == null || eToPort == null)
 			return null;
@@ -61,7 +59,7 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 		journey.setDistance(event.getDistance());
 		journey.setRoute(event.getRoute());
 		journey.setRouteCost(event.getRouteCost() / Calculator.ScaleFactor);
-		
+
 		switch (event.getVesselState()) {
 		case Ballast:
 			journey.setVesselState(VesselState.BALLAST);
@@ -74,11 +72,13 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 		journey.setSpeed(event.getSpeed() / (double) Calculator.ScaleFactor);
 
 		for (final FuelComponent fc : FuelComponent.getTravelFuelComponents()) {
-			final long consumption = event.getFuelConsumption(fc,
-					fc.getDefaultFuelUnit());
+			final long consumption = event.getFuelConsumption(fc, fc.getDefaultFuelUnit());
 			final long cost = event.getFuelCost(fc);
+
 			addFuelQuantity(journey, fc, consumption, cost);
 		}
+
+		scaleFuelQuantities(journey);
 
 		return journey;
 	}

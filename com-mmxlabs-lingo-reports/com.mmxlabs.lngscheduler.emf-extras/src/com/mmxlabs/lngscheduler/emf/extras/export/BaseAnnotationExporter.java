@@ -35,11 +35,9 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	protected Scenario inputScenario;
 	protected Schedule output;
 	protected ModelEntityMap entities;
-	protected final ScheduleFactory scheduleFactory = SchedulePackage.eINSTANCE
-			.getScheduleFactory();
+	protected final ScheduleFactory scheduleFactory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
-	protected final EventsFactory factory = EventsPackage.eINSTANCE
-			.getEventsFactory();
+	protected final EventsFactory factory = EventsPackage.eINSTANCE.getEventsFactory();
 
 	private static final Map<FuelUnit, scenario.schedule.events.FuelUnit> fuelUnits = new HashMap<FuelUnit, scenario.schedule.events.FuelUnit>();
 
@@ -55,15 +53,14 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 		fuelTypes.put(FuelComponent.FBO, FuelType.FBO);
 
 		fuelTypes.put(FuelComponent.Cooldown, FuelType.COOLDOWN);
-		
+
 		fuelUnits.put(FuelUnit.M3, scenario.schedule.events.FuelUnit.M3);
 		fuelUnits.put(FuelUnit.MT, scenario.schedule.events.FuelUnit.MT);
 		fuelUnits.put(FuelUnit.MMBTu, scenario.schedule.events.FuelUnit.MMB_TU);
 	}
 
 	@Override
-	public void setAnnotatedSolution(
-			IAnnotatedSolution<ISequenceElement> annotatedSolution) {
+	public void setAnnotatedSolution(IAnnotatedSolution<ISequenceElement> annotatedSolution) {
 		this.annotatedSolution = annotatedSolution;
 	}
 
@@ -92,12 +89,11 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	 * @param cost
 	 * @return
 	 */
-	private FuelQuantity createFuelQuantity(final FuelComponent fc,
-			final long consumption, final long cost) {
+	private FuelQuantity createFuelQuantity(final FuelComponent fc, final long consumption, final long cost) {
 		final FuelQuantity fq = factory.createFuelQuantity();
 
-		fq.setQuantity(consumption / Calculator.ScaleFactor);
-		fq.setTotalPrice(cost / Calculator.ScaleFactor);
+		fq.setQuantity(consumption);
+		fq.setTotalPrice(cost);
 		// TODO float?
 		fq.setUnitPrice(consumption == 0 ? 0 : cost / consumption);
 
@@ -107,9 +103,7 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 		return fq;
 	}
 
-	protected void addFuelQuantity(final FuelMixture mixture,
-			final FuelComponent component, final long consumption,
-			final long cost) {
+	protected void addFuelQuantity(final FuelMixture mixture, final FuelComponent component, final long consumption, final long cost) {
 		final FuelType fuelType = fuelTypes.get(component);
 
 		for (final FuelQuantity fq : mixture.getFuelUsage()) {
@@ -117,8 +111,8 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 				// add to existing
 				// TODO this will accumulate rounding error worse than batch
 				// adding with a final division.
-				final long newQuantity = fq.getQuantity() + consumption / Calculator.ScaleFactor;
-				final long newTotalPrice = fq.getTotalPrice() + cost / Calculator.ScaleFactor;
+				final long newQuantity = fq.getQuantity() + consumption;
+				final long newTotalPrice = fq.getTotalPrice() + cost;
 				fq.setQuantity(newQuantity);
 				fq.setTotalPrice(newTotalPrice);
 				fq.setUnitPrice(newQuantity == 0 ? 0 : newTotalPrice / newQuantity);
@@ -126,7 +120,13 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 			}
 		}
 
-		mixture.getFuelUsage().add(
-				createFuelQuantity(component, consumption, cost));
+		mixture.getFuelUsage().add(createFuelQuantity(component, consumption, cost));
+	}
+
+	protected void scaleFuelQuantities(final FuelMixture mixture) {
+		for (final FuelQuantity fq : mixture.getFuelUsage()) {
+			fq.setQuantity(fq.getQuantity() / Calculator.ScaleFactor);
+			fq.setTotalPrice(fq.getTotalPrice() / Calculator.ScaleFactor);
+		}
 	}
 }
