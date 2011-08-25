@@ -60,6 +60,9 @@ public abstract class AbstractManagedJob implements IManagedJob {
 			} catch (final InterruptedException e) {
 				kill();
 				return Status.CANCEL_STATUS;
+			} catch (final Exception ex) {
+				kill();
+				return Status.CANCEL_STATUS;
 			} finally {
 				monitor.done();
 			}
@@ -120,9 +123,14 @@ public abstract class AbstractManagedJob implements IManagedJob {
 
 	@Override
 	public void prepare() {
-		setJobState(JobState.INITIALISING);
-		reallyPrepare();
-		setJobState(JobState.INITIALISED);
+		try {
+			setJobState(JobState.INITIALISING);
+			reallyPrepare();
+			setJobState(JobState.INITIALISED);
+		} catch (final Exception ex) {
+			kill();
+			setJobState(JobState.CANCELLED);
+		}
 	}
 
 	@Override
