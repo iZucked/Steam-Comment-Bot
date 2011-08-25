@@ -346,6 +346,23 @@
             	<target class="PortAndTime" />
             </constraint>
             
+            <constraint
+            	class="com.mmxlabs.lngscheduler.emf.extras.validation.StartEndRequirementPortConstraint"
+            	id="com.mmxlabs.lngscheduler.emf-extras.constraints.start_end_requirement_port_access"
+            	lang="Java"
+            	mode="Batch"
+            	name="Start / End Port Accessibility"
+            	severity="ERROR"
+            	statusCode="1">
+            	<message>
+            		Vessel {0}'s {1} requirement is set for port {3}, but the vessel is of class {2} which cannot dock at {3}.
+            	</message>
+            	<description>
+            		The start or end port of a vessel must be compatible with that vessel's class
+            	</description>
+            	<target class="PortAndTime" />
+            </constraint>
+            
              <constraint
             	class="com.mmxlabs.lngscheduler.emf.extras.validation.VesselEventDateConstraint"
             	id="com.mmxlabs.lngscheduler.emf-extras.constraints.vessel_event_date_order"
