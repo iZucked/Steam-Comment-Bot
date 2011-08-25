@@ -802,13 +802,13 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT__START_PORT = VESSEL_EVENT__START_PORT;
 
 	/**
-	 * The feature id for the '<em><b>Max Heel Out</b></em>' attribute.
+	 * The feature id for the '<em><b>Heel Limit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__MAX_HEEL_OUT = VESSEL_EVENT_FEATURE_COUNT + 0;
+	int CHARTER_OUT__HEEL_LIMIT = VESSEL_EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Heel CV Value</b></em>' attribute.
@@ -820,13 +820,22 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT__HEEL_CV_VALUE = VESSEL_EVENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Heel Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT__HEEL_UNIT_PRICE = VESSEL_EVENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>End Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__END_PORT = VESSEL_EVENT_FEATURE_COUNT + 2;
+	int CHARTER_OUT__END_PORT = VESSEL_EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Daily Charter Out Price</b></em>' attribute.
@@ -835,7 +844,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__DAILY_CHARTER_OUT_PRICE = VESSEL_EVENT_FEATURE_COUNT + 3;
+	int CHARTER_OUT__DAILY_CHARTER_OUT_PRICE = VESSEL_EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
@@ -844,7 +853,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT__REPOSITIONING_FEE = VESSEL_EVENT_FEATURE_COUNT + 4;
+	int CHARTER_OUT__REPOSITIONING_FEE = VESSEL_EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Charter Out</em>' class.
@@ -853,7 +862,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 5;
+	int CHARTER_OUT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Effective End Port</em>' operation.
@@ -1175,6 +1184,143 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS_COST_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link scenario.fleet.impl.PortTimeAndHeelImpl <em>Port Time And Heel</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.fleet.impl.PortTimeAndHeelImpl
+	 * @see scenario.fleet.impl.FleetPackageImpl#getPortTimeAndHeel()
+	 * @generated
+	 */
+	int PORT_TIME_AND_HEEL = 12;
+
+	/**
+	 * The feature id for the '<em><b>Start Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_TIME_AND_HEEL__START_TIME = PORT_AND_TIME__START_TIME;
+
+	/**
+	 * The feature id for the '<em><b>End Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_TIME_AND_HEEL__END_TIME = PORT_AND_TIME__END_TIME;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_TIME_AND_HEEL__PORT = PORT_AND_TIME__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Heel Limit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_TIME_AND_HEEL__HEEL_LIMIT = PORT_AND_TIME_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Heel CV Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_TIME_AND_HEEL__HEEL_CV_VALUE = PORT_AND_TIME_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Heel Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_TIME_AND_HEEL__HEEL_UNIT_PRICE = PORT_AND_TIME_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Port Time And Heel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_TIME_AND_HEEL_FEATURE_COUNT = PORT_AND_TIME_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of operations of the '<em>Port Time And Heel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_TIME_AND_HEEL_OPERATION_COUNT = PORT_AND_TIME_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link scenario.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.fleet.impl.HeelOptionsImpl
+	 * @see scenario.fleet.impl.FleetPackageImpl#getHeelOptions()
+	 * @generated
+	 */
+	int HEEL_OPTIONS = 13;
+
+	/**
+	 * The feature id for the '<em><b>Heel Limit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__HEEL_LIMIT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Heel CV Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__HEEL_CV_VALUE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Heel Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__HEEL_UNIT_PRICE = 2;
+
+	/**
+	 * The number of structural features of the '<em>Heel Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Heel Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link scenario.fleet.VesselState <em>Vessel State</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1182,7 +1328,7 @@ public interface FleetPackage extends EPackage {
 	 * @see scenario.fleet.impl.FleetPackageImpl#getVesselState()
 	 * @generated
 	 */
-	int VESSEL_STATE = 12;
+	int VESSEL_STATE = 14;
 
 
 	/**
@@ -1793,28 +1939,6 @@ public interface FleetPackage extends EPackage {
 	EOperation getCharterOut__GetEffectiveEndPort();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getMaxHeelOut <em>Max Heel Out</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Max Heel Out</em>'.
-	 * @see scenario.fleet.CharterOut#getMaxHeelOut()
-	 * @see #getCharterOut()
-	 * @generated
-	 */
-	EAttribute getCharterOut_MaxHeelOut();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.fleet.CharterOut#getHeelCVValue <em>Heel CV Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Heel CV Value</em>'.
-	 * @see scenario.fleet.CharterOut#getHeelCVValue()
-	 * @see #getCharterOut()
-	 * @generated
-	 */
-	EAttribute getCharterOut_HeelCVValue();
-
-	/**
 	 * Returns the meta object for class '{@link scenario.fleet.Drydock <em>Drydock</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1941,6 +2065,59 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselClassCost_TransitFuel();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.fleet.PortTimeAndHeel <em>Port Time And Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Port Time And Heel</em>'.
+	 * @see scenario.fleet.PortTimeAndHeel
+	 * @generated
+	 */
+	EClass getPortTimeAndHeel();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.fleet.HeelOptions <em>Heel Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Heel Options</em>'.
+	 * @see scenario.fleet.HeelOptions
+	 * @generated
+	 */
+	EClass getHeelOptions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.HeelOptions#getHeelLimit <em>Heel Limit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Heel Limit</em>'.
+	 * @see scenario.fleet.HeelOptions#getHeelLimit()
+	 * @see #getHeelOptions()
+	 * @generated
+	 */
+	EAttribute getHeelOptions_HeelLimit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.HeelOptions#getHeelCVValue <em>Heel CV Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Heel CV Value</em>'.
+	 * @see scenario.fleet.HeelOptions#getHeelCVValue()
+	 * @see #getHeelOptions()
+	 * @generated
+	 */
+	EAttribute getHeelOptions_HeelCVValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.fleet.HeelOptions#getHeelUnitPrice <em>Heel Unit Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Heel Unit Price</em>'.
+	 * @see scenario.fleet.HeelOptions#getHeelUnitPrice()
+	 * @see #getHeelOptions()
+	 * @generated
+	 */
+	EAttribute getHeelOptions_HeelUnitPrice();
 
 	/**
 	 * Returns the meta object for the attribute '{@link scenario.fleet.PortExclusion#getStartDate <em>Start Date</em>}'.
@@ -2462,22 +2639,6 @@ public interface FleetPackage extends EPackage {
 		EOperation CHARTER_OUT___GET_EFFECTIVE_END_PORT = eINSTANCE.getCharterOut__GetEffectiveEndPort();
 
 		/**
-		 * The meta object literal for the '<em><b>Max Heel Out</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHARTER_OUT__MAX_HEEL_OUT = eINSTANCE.getCharterOut_MaxHeelOut();
-
-		/**
-		 * The meta object literal for the '<em><b>Heel CV Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHARTER_OUT__HEEL_CV_VALUE = eINSTANCE.getCharterOut_HeelCVValue();
-
-		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.DrydockImpl <em>Drydock</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2580,6 +2741,50 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS_COST__TRANSIT_FUEL = eINSTANCE.getVesselClassCost_TransitFuel();
+
+		/**
+		 * The meta object literal for the '{@link scenario.fleet.impl.PortTimeAndHeelImpl <em>Port Time And Heel</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.fleet.impl.PortTimeAndHeelImpl
+		 * @see scenario.fleet.impl.FleetPackageImpl#getPortTimeAndHeel()
+		 * @generated
+		 */
+		EClass PORT_TIME_AND_HEEL = eINSTANCE.getPortTimeAndHeel();
+
+		/**
+		 * The meta object literal for the '{@link scenario.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.fleet.impl.HeelOptionsImpl
+		 * @see scenario.fleet.impl.FleetPackageImpl#getHeelOptions()
+		 * @generated
+		 */
+		EClass HEEL_OPTIONS = eINSTANCE.getHeelOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel Limit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HEEL_OPTIONS__HEEL_LIMIT = eINSTANCE.getHeelOptions_HeelLimit();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel CV Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HEEL_OPTIONS__HEEL_CV_VALUE = eINSTANCE.getHeelOptions_HeelCVValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel Unit Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HEEL_OPTIONS__HEEL_UNIT_PRICE = eINSTANCE.getHeelOptions_HeelUnitPrice();
 
 		/**
 		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.

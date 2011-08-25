@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.fleet.CharterOut;
 import scenario.fleet.FleetPackage;
+import scenario.fleet.HeelOptions;
 import scenario.port.Port;
 
 /**
@@ -24,8 +25,9 @@ import scenario.port.Port;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.fleet.impl.CharterOutImpl#getMaxHeelOut <em>Max Heel Out</em>}</li>
+ *   <li>{@link scenario.fleet.impl.CharterOutImpl#getHeelLimit <em>Heel Limit</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getHeelCVValue <em>Heel CV Value</em>}</li>
+ *   <li>{@link scenario.fleet.impl.CharterOutImpl#getHeelUnitPrice <em>Heel Unit Price</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getEndPort <em>End Port</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
  *   <li>{@link scenario.fleet.impl.CharterOutImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
@@ -36,24 +38,31 @@ import scenario.port.Port;
  */
 public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	/**
-	 * The default value of the '{@link #getMaxHeelOut() <em>Max Heel Out</em>}' attribute.
+	 * The default value of the '{@link #getHeelLimit() <em>Heel Limit</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMaxHeelOut()
+	 * @see #getHeelLimit()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int MAX_HEEL_OUT_EDEFAULT = 2147483647;
+	protected static final int HEEL_LIMIT_EDEFAULT = 0;
 	/**
-	 * The cached value of the '{@link #getMaxHeelOut() <em>Max Heel Out</em>}' attribute.
+	 * The cached value of the '{@link #getHeelLimit() <em>Heel Limit</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMaxHeelOut()
+	 * @see #getHeelLimit()
 	 * @generated
 	 * @ordered
 	 */
-	protected int maxHeelOut = MAX_HEEL_OUT_EDEFAULT;
-
+	protected int heelLimit = HEEL_LIMIT_EDEFAULT;
+	/**
+	 * This is true if the Heel Limit attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean heelLimitESet;
 	/**
 	 * The default value of the '{@link #getHeelCVValue() <em>Heel CV Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -72,6 +81,24 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 * @ordered
 	 */
 	protected float heelCVValue = HEEL_CV_VALUE_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getHeelUnitPrice() <em>Heel Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelUnitPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final float HEEL_UNIT_PRICE_EDEFAULT = 0.0F;
+	/**
+	 * The cached value of the '{@link #getHeelUnitPrice() <em>Heel Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelUnitPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected float heelUnitPrice = HEEL_UNIT_PRICE_EDEFAULT;
 	/**
 	 * The cached value of the '{@link #getEndPort() <em>End Port</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -160,6 +187,52 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.CHARTER_OUT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelLimit() {
+		return heelLimit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelLimit(int newHeelLimit) {
+		int oldHeelLimit = heelLimit;
+		heelLimit = newHeelLimit;
+		boolean oldHeelLimitESet = heelLimitESet;
+		heelLimitESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT__HEEL_LIMIT, oldHeelLimit, heelLimit, !oldHeelLimitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetHeelLimit() {
+		int oldHeelLimit = heelLimit;
+		boolean oldHeelLimitESet = heelLimitESet;
+		heelLimit = HEEL_LIMIT_EDEFAULT;
+		heelLimitESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.CHARTER_OUT__HEEL_LIMIT, oldHeelLimit, HEEL_LIMIT_EDEFAULT, oldHeelLimitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetHeelLimit() {
+		return heelLimitESet;
 	}
 
 	/**
@@ -332,27 +405,6 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getMaxHeelOut() {
-		return maxHeelOut;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setMaxHeelOut(int newMaxHeelOut) {
-		int oldMaxHeelOut = maxHeelOut;
-		maxHeelOut = newMaxHeelOut;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT__MAX_HEEL_OUT, oldMaxHeelOut, maxHeelOut));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public float getHeelCVValue() {
 		return heelCVValue;
 	}
@@ -374,13 +426,36 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public float getHeelUnitPrice() {
+		return heelUnitPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelUnitPrice(float newHeelUnitPrice) {
+		float oldHeelUnitPrice = heelUnitPrice;
+		heelUnitPrice = newHeelUnitPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT__HEEL_UNIT_PRICE, oldHeelUnitPrice, heelUnitPrice));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
-				return getMaxHeelOut();
+			case FleetPackage.CHARTER_OUT__HEEL_LIMIT:
+				return getHeelLimit();
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
 				return getHeelCVValue();
+			case FleetPackage.CHARTER_OUT__HEEL_UNIT_PRICE:
+				return getHeelUnitPrice();
 			case FleetPackage.CHARTER_OUT__END_PORT:
 				if (resolve) return getEndPort();
 				return basicGetEndPort();
@@ -400,11 +475,14 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
-				setMaxHeelOut((Integer)newValue);
+			case FleetPackage.CHARTER_OUT__HEEL_LIMIT:
+				setHeelLimit((Integer)newValue);
 				return;
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
 				setHeelCVValue((Float)newValue);
+				return;
+			case FleetPackage.CHARTER_OUT__HEEL_UNIT_PRICE:
+				setHeelUnitPrice((Float)newValue);
 				return;
 			case FleetPackage.CHARTER_OUT__END_PORT:
 				setEndPort((Port)newValue);
@@ -427,11 +505,14 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
-				setMaxHeelOut(MAX_HEEL_OUT_EDEFAULT);
+			case FleetPackage.CHARTER_OUT__HEEL_LIMIT:
+				unsetHeelLimit();
 				return;
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
 				setHeelCVValue(HEEL_CV_VALUE_EDEFAULT);
+				return;
+			case FleetPackage.CHARTER_OUT__HEEL_UNIT_PRICE:
+				setHeelUnitPrice(HEEL_UNIT_PRICE_EDEFAULT);
 				return;
 			case FleetPackage.CHARTER_OUT__END_PORT:
 				unsetEndPort();
@@ -454,10 +535,12 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.CHARTER_OUT__MAX_HEEL_OUT:
-				return maxHeelOut != MAX_HEEL_OUT_EDEFAULT;
+			case FleetPackage.CHARTER_OUT__HEEL_LIMIT:
+				return isSetHeelLimit();
 			case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE:
 				return heelCVValue != HEEL_CV_VALUE_EDEFAULT;
+			case FleetPackage.CHARTER_OUT__HEEL_UNIT_PRICE:
+				return heelUnitPrice != HEEL_UNIT_PRICE_EDEFAULT;
 			case FleetPackage.CHARTER_OUT__END_PORT:
 				return isSetEndPort();
 			case FleetPackage.CHARTER_OUT__DAILY_CHARTER_OUT_PRICE:
@@ -466,6 +549,42 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 				return isSetRepositioningFee();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == HeelOptions.class) {
+			switch (derivedFeatureID) {
+				case FleetPackage.CHARTER_OUT__HEEL_LIMIT: return FleetPackage.HEEL_OPTIONS__HEEL_LIMIT;
+				case FleetPackage.CHARTER_OUT__HEEL_CV_VALUE: return FleetPackage.HEEL_OPTIONS__HEEL_CV_VALUE;
+				case FleetPackage.CHARTER_OUT__HEEL_UNIT_PRICE: return FleetPackage.HEEL_OPTIONS__HEEL_UNIT_PRICE;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == HeelOptions.class) {
+			switch (baseFeatureID) {
+				case FleetPackage.HEEL_OPTIONS__HEEL_LIMIT: return FleetPackage.CHARTER_OUT__HEEL_LIMIT;
+				case FleetPackage.HEEL_OPTIONS__HEEL_CV_VALUE: return FleetPackage.CHARTER_OUT__HEEL_CV_VALUE;
+				case FleetPackage.HEEL_OPTIONS__HEEL_UNIT_PRICE: return FleetPackage.CHARTER_OUT__HEEL_UNIT_PRICE;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
@@ -492,10 +611,12 @@ public class CharterOutImpl extends VesselEventImpl implements CharterOut {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (maxHeelOut: ");
-		result.append(maxHeelOut);
+		result.append(" (heelLimit: ");
+		if (heelLimitESet) result.append(heelLimit); else result.append("<unset>");
 		result.append(", heelCVValue: ");
 		result.append(heelCVValue);
+		result.append(", heelUnitPrice: ");
+		result.append(heelUnitPrice);
 		result.append(", dailyCharterOutPrice: ");
 		if (dailyCharterOutPriceESet) result.append(dailyCharterOutPrice); else result.append("<unset>");
 		result.append(", repositioningFee: ");

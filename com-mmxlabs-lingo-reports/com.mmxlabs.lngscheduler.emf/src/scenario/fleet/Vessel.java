@@ -68,12 +68,12 @@ public interface Vessel extends NamedObject, AnnotatedObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start Requirement</em>' containment reference.
-	 * @see #setStartRequirement(PortAndTime)
+	 * @see #setStartRequirement(PortTimeAndHeel)
 	 * @see scenario.fleet.FleetPackage#getVessel_StartRequirement()
 	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
-	PortAndTime getStartRequirement();
+	PortTimeAndHeel getStartRequirement();
 
 	/**
 	 * Sets the value of the '{@link scenario.fleet.Vessel#getStartRequirement <em>Start Requirement</em>}' containment reference.
@@ -83,7 +83,7 @@ public interface Vessel extends NamedObject, AnnotatedObject {
 	 * @see #getStartRequirement()
 	 * @generated
 	 */
-	void setStartRequirement(PortAndTime value);
+	void setStartRequirement(PortTimeAndHeel value);
 
 	/**
 	 * Returns the value of the '<em><b>End Requirement</b></em>' containment reference.

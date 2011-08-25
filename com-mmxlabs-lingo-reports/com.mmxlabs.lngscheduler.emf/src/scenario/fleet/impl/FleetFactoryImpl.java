@@ -84,6 +84,8 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.VESSEL_FUEL: return createVesselFuel();
 			case FleetPackage.PORT_EXCLUSION: return createPortExclusion();
 			case FleetPackage.VESSEL_CLASS_COST: return createVesselClassCost();
+			case FleetPackage.PORT_TIME_AND_HEEL: return createPortTimeAndHeel();
+			case FleetPackage.HEEL_OPTIONS: return createHeelOptions();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -227,6 +229,26 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	public VesselClassCost createVesselClassCost() {
 		VesselClassCostImpl vesselClassCost = new VesselClassCostImpl();
 		return vesselClassCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortTimeAndHeel createPortTimeAndHeel() {
+		PortTimeAndHeelImpl portTimeAndHeel = new PortTimeAndHeelImpl();
+		return portTimeAndHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public HeelOptions createHeelOptions() {
+		HeelOptionsImpl heelOptions = new HeelOptionsImpl();
+		return heelOptions;
 	}
 
 	/**

@@ -125,6 +125,24 @@ public interface FleetFactory extends EFactory {
 	VesselClassCost createVesselClassCost();
 
 	/**
+	 * Returns a new object of class '<em>Port Time And Heel</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Port Time And Heel</em>'.
+	 * @generated
+	 */
+	PortTimeAndHeel createPortTimeAndHeel();
+
+	/**
+	 * Returns a new object of class '<em>Heel Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Heel Options</em>'.
+	 * @generated
+	 */
+	HeelOptions createHeelOptions();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -138,6 +138,7 @@ public class FleetSwitch<T> extends Switch<T> {
 				CharterOut charterOut = (CharterOut)theEObject;
 				T result = caseCharterOut(charterOut);
 				if (result == null) result = caseVesselEvent(charterOut);
+				if (result == null) result = caseHeelOptions(charterOut);
 				if (result == null) result = caseAnnotatedObject(charterOut);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -168,6 +169,20 @@ public class FleetSwitch<T> extends Switch<T> {
 			case FleetPackage.VESSEL_CLASS_COST: {
 				VesselClassCost vesselClassCost = (VesselClassCost)theEObject;
 				T result = caseVesselClassCost(vesselClassCost);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.PORT_TIME_AND_HEEL: {
+				PortTimeAndHeel portTimeAndHeel = (PortTimeAndHeel)theEObject;
+				T result = casePortTimeAndHeel(portTimeAndHeel);
+				if (result == null) result = casePortAndTime(portTimeAndHeel);
+				if (result == null) result = caseHeelOptions(portTimeAndHeel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.HEEL_OPTIONS: {
+				HeelOptions heelOptions = (HeelOptions)theEObject;
+				T result = caseHeelOptions(heelOptions);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -352,6 +367,36 @@ public class FleetSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseVesselClassCost(VesselClassCost object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Port Time And Heel</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Port Time And Heel</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePortTimeAndHeel(PortTimeAndHeel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Heel Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Heel Options</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseHeelOptions(HeelOptions object) {
 		return null;
 	}
 

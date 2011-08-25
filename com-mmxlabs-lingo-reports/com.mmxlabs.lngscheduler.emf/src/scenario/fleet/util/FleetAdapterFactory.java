@@ -134,6 +134,14 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createVesselClassCostAdapter();
 			}
 			@Override
+			public Adapter casePortTimeAndHeel(PortTimeAndHeel object) {
+				return createPortTimeAndHeelAdapter();
+			}
+			@Override
+			public Adapter caseHeelOptions(HeelOptions object) {
+				return createHeelOptionsAdapter();
+			}
+			@Override
 			public Adapter caseScenarioObject(ScenarioObject object) {
 				return createScenarioObjectAdapter();
 			}
@@ -330,6 +338,34 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createVesselClassCostAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.fleet.PortTimeAndHeel <em>Port Time And Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.fleet.PortTimeAndHeel
+	 * @generated
+	 */
+	public Adapter createPortTimeAndHeelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.fleet.HeelOptions <em>Heel Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.fleet.HeelOptions
+	 * @generated
+	 */
+	public Adapter createHeelOptionsAdapter() {
 		return null;
 	}
 

@@ -25,8 +25,10 @@ import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetModel;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.FuelConsumptionLine;
+import scenario.fleet.HeelOptions;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.PortExclusion;
+import scenario.fleet.PortTimeAndHeel;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselClassCost;
@@ -140,6 +142,20 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	private EClass vesselClassCostEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass portTimeAndHeelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass heelOptionsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -715,7 +731,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getCharterOut_EndPort() {
-		return (EReference)charterOutEClass.getEStructuralFeatures().get(2);
+		return (EReference)charterOutEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -724,7 +740,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getCharterOut_DailyCharterOutPrice() {
-		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -733,7 +749,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getCharterOut_RepositioningFee() {
-		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -743,24 +759,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	public EOperation getCharterOut__GetEffectiveEndPort() {
 		return charterOutEClass.getEOperations().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getCharterOut_MaxHeelOut() {
-		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getCharterOut_HeelCVValue() {
-		return (EAttribute)charterOutEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -869,6 +867,51 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	public EAttribute getVesselClassCost_TransitFuel() {
 		return (EAttribute)vesselClassCostEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getPortTimeAndHeel() {
+		return portTimeAndHeelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getHeelOptions() {
+		return heelOptionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getHeelOptions_HeelLimit() {
+		return (EAttribute)heelOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getHeelOptions_HeelCVValue() {
+		return (EAttribute)heelOptionsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getHeelOptions_HeelUnitPrice() {
+		return (EAttribute)heelOptionsEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -985,8 +1028,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEReference(vesselEventEClass, VESSEL_EVENT__START_PORT);
 
 		charterOutEClass = createEClass(CHARTER_OUT);
-		createEAttribute(charterOutEClass, CHARTER_OUT__MAX_HEEL_OUT);
-		createEAttribute(charterOutEClass, CHARTER_OUT__HEEL_CV_VALUE);
 		createEReference(charterOutEClass, CHARTER_OUT__END_PORT);
 		createEAttribute(charterOutEClass, CHARTER_OUT__DAILY_CHARTER_OUT_PRICE);
 		createEAttribute(charterOutEClass, CHARTER_OUT__REPOSITIONING_FEE);
@@ -1009,6 +1050,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__UNLADEN_COST);
 		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__TRANSIT_TIME);
 		createEAttribute(vesselClassCostEClass, VESSEL_CLASS_COST__TRANSIT_FUEL);
+
+		portTimeAndHeelEClass = createEClass(PORT_TIME_AND_HEEL);
+
+		heelOptionsEClass = createEClass(HEEL_OPTIONS);
+		createEAttribute(heelOptionsEClass, HEEL_OPTIONS__HEEL_LIMIT);
+		createEAttribute(heelOptionsEClass, HEEL_OPTIONS__HEEL_CV_VALUE);
+		createEAttribute(heelOptionsEClass, HEEL_OPTIONS__HEEL_UNIT_PRICE);
 
 		// Create enums
 		vesselStateEEnum = createEEnum(VESSEL_STATE);
@@ -1052,9 +1100,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		vesselClassEClass.getESuperTypes().add(theScenarioPackage.getAnnotatedObject());
 		vesselEventEClass.getESuperTypes().add(theScenarioPackage.getAnnotatedObject());
 		charterOutEClass.getESuperTypes().add(this.getVesselEvent());
+		charterOutEClass.getESuperTypes().add(this.getHeelOptions());
 		drydockEClass.getESuperTypes().add(this.getVesselEvent());
 		vesselFuelEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
 		portExclusionEClass.getESuperTypes().add(theScenarioPackage.getScenarioObject());
+		portTimeAndHeelEClass.getESuperTypes().add(this.getPortAndTime());
+		portTimeAndHeelEClass.getESuperTypes().add(this.getHeelOptions());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(fleetModelEClass, FleetModel.class, "FleetModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1067,7 +1118,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVessel_TimeChartered(), ecorePackage.getEBoolean(), "timeChartered", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_DailyCharterOutPrice(), ecorePackage.getEInt(), "dailyCharterOutPrice", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_Class(), this.getVesselClass(), null, "class", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVessel_StartRequirement(), this.getPortAndTime(), null, "startRequirement", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVessel_StartRequirement(), this.getPortTimeAndHeel(), null, "startRequirement", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_EndRequirement(), this.getPortAndTime(), null, "endRequirement", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_PortExclusions(), this.getPortExclusion(), null, "portExclusions", null, 0, -1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1116,8 +1167,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getVesselEvent_StartPort(), thePortPackage.getPort(), null, "startPort", null, 1, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterOutEClass, CharterOut.class, "CharterOut", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCharterOut_MaxHeelOut(), ecorePackage.getEInt(), "maxHeelOut", "2147483647", 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCharterOut_HeelCVValue(), ecorePackage.getEFloat(), "heelCVValue", "22.8", 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterOut_EndPort(), thePortPackage.getPort(), null, "endPort", null, 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOut_DailyCharterOutPrice(), ecorePackage.getEInt(), "dailyCharterOutPrice", null, 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOut_RepositioningFee(), ecorePackage.getEInt(), "repositioningFee", null, 1, 1, CharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1141,6 +1190,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVesselClassCost_UnladenCost(), ecorePackage.getEInt(), "unladenCost", null, 0, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClassCost_TransitTime(), ecorePackage.getEInt(), "transitTime", "24", 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClassCost_TransitFuel(), ecorePackage.getEFloat(), "transitFuel", "50", 1, 1, VesselClassCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(portTimeAndHeelEClass, PortTimeAndHeel.class, "PortTimeAndHeel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(heelOptionsEClass, HeelOptions.class, "HeelOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getHeelOptions_HeelLimit(), ecorePackage.getEInt(), "heelLimit", "0", 1, 1, HeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getHeelOptions_HeelCVValue(), ecorePackage.getEFloat(), "heelCVValue", "22.8", 1, 1, HeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getHeelOptions_HeelUnitPrice(), ecorePackage.getEFloat(), "heelUnitPrice", null, 1, 1, HeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(vesselStateEEnum, VesselState.class, "VesselState");

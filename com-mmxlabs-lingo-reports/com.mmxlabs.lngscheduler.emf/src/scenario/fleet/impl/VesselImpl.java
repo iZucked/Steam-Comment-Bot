@@ -22,6 +22,7 @@ import scenario.ScenarioPackage;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.PortExclusion;
+import scenario.fleet.PortTimeAndHeel;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.impl.NamedObjectImpl;
@@ -133,7 +134,7 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * @generated
 	 * @ordered
 	 */
-	protected PortAndTime startRequirement;
+	protected PortTimeAndHeel startRequirement;
 
 	/**
 	 * The cached value of the '{@link #getEndRequirement() <em>End Requirement</em>}' containment reference.
@@ -238,10 +239,10 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortAndTime getStartRequirement() {
+	public PortTimeAndHeel getStartRequirement() {
 		if (startRequirement != null && startRequirement.eIsProxy()) {
 			InternalEObject oldStartRequirement = (InternalEObject)startRequirement;
-			startRequirement = (PortAndTime)eResolveProxy(oldStartRequirement);
+			startRequirement = (PortTimeAndHeel)eResolveProxy(oldStartRequirement);
 			if (startRequirement != oldStartRequirement) {
 				InternalEObject newStartRequirement = (InternalEObject)startRequirement;
 				NotificationChain msgs = oldStartRequirement.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL__START_REQUIREMENT, null, null);
@@ -261,7 +262,7 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortAndTime basicGetStartRequirement() {
+	public PortTimeAndHeel basicGetStartRequirement() {
 		return startRequirement;
 	}
 
@@ -270,8 +271,8 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetStartRequirement(PortAndTime newStartRequirement, NotificationChain msgs) {
-		PortAndTime oldStartRequirement = startRequirement;
+	public NotificationChain basicSetStartRequirement(PortTimeAndHeel newStartRequirement, NotificationChain msgs) {
+		PortTimeAndHeel oldStartRequirement = startRequirement;
 		startRequirement = newStartRequirement;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__START_REQUIREMENT, oldStartRequirement, newStartRequirement);
@@ -285,7 +286,7 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setStartRequirement(PortAndTime newStartRequirement) {
+	public void setStartRequirement(PortTimeAndHeel newStartRequirement) {
 		if (newStartRequirement != startRequirement) {
 			NotificationChain msgs = null;
 			if (startRequirement != null)
@@ -513,7 +514,7 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 				setClass((VesselClass)newValue);
 				return;
 			case FleetPackage.VESSEL__START_REQUIREMENT:
-				setStartRequirement((PortAndTime)newValue);
+				setStartRequirement((PortTimeAndHeel)newValue);
 				return;
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				setEndRequirement((PortAndTime)newValue);
@@ -547,7 +548,7 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 				setClass((VesselClass)null);
 				return;
 			case FleetPackage.VESSEL__START_REQUIREMENT:
-				setStartRequirement((PortAndTime)null);
+				setStartRequirement((PortTimeAndHeel)null);
 				return;
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				setEndRequirement((PortAndTime)null);

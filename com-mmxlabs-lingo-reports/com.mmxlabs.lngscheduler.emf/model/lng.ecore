@@ -84,7 +84,7 @@
       </eStructuralFeatures>
       <eStructuralFeatures xsi:type="ecore:EReference" name="class" eType="#//fleet/VesselClass"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="startRequirement" lowerBound="1"
-          eType="#//fleet/PortAndTime" containment="true"/>
+          eType="#//fleet/PortTimeAndHeel" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="endRequirement" lowerBound="1"
           eType="#//fleet/PortAndTime" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="portExclusions" upperBound="-1"
@@ -181,16 +181,12 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="startPort" lowerBound="1"
           eType="#//port/Port"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="CharterOut" eSuperTypes="#//fleet/VesselEvent">
+    <eClassifiers xsi:type="ecore:EClass" name="CharterOut" eSuperTypes="#//fleet/VesselEvent #//fleet/HeelOptions">
       <eOperations name="getEffectiveEndPort" lowerBound="1" eType="#//port/Port">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="body" value="if (isSetEndPort()) return getEndPort();&#xA;else return getStartPort();"/>
         </eAnnotations>
       </eOperations>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxHeelOut" lowerBound="1"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="2147483647"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelCVValue" lowerBound="1"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="22.8"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="endPort" lowerBound="1"
           eType="#//port/Port" unsettable="true"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="dailyCharterOutPrice"
@@ -246,6 +242,16 @@
           <details key="documentation" value="The amount of base fuel or base fuel equivalent, in metric tonnes per day (MT/day), consumed by vessels of this class during their passage through the canal. The total fuel consumption for a journey through the canal is then given by transitTime * (transitFuel / 24)."/>
         </eAnnotations>
       </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PortTimeAndHeel" eSuperTypes="#//fleet/PortAndTime #//fleet/HeelOptions"/>
+    <eClassifiers xsi:type="ecore:EClass" name="HeelOptions">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelLimit" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"
+          unsettable="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelCVValue" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="22.8"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelUnitPrice" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf2/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">

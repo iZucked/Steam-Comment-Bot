@@ -568,25 +568,25 @@
             referenceValue="lng.ecore#//fleet/VesselEvent"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//fleet/CharterOut" referenceName="eStructuralFeatures"
-          element="lng.ecore#//fleet/CharterOut/maxHeelOut">
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/maxHeelOut"
+          element="#//@releases.3/@changes.286/@element">
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.286/@element"
             featureName="name" dataValue="maxHeelOut"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/maxHeelOut"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.286/@element"
             featureName="lowerBound" dataValue="1" oldDataValue="0"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/maxHeelOut"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.286/@element"
             featureName="defaultValueLiteral" dataValue="2147483647"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/maxHeelOut"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.286/@element"
             featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//fleet/CharterOut" referenceName="eStructuralFeatures"
-          element="lng.ecore#//fleet/CharterOut/heelCVValue">
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/heelCVValue"
+          element="#//@releases.3/@changes.285/@element">
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.285/@element"
             featureName="name" dataValue="heelCVValue"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/heelCVValue"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.285/@element"
             featureName="lowerBound" dataValue="1" oldDataValue="0"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/heelCVValue"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.285/@element"
             featureName="defaultValueLiteral" dataValue="22.8"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/CharterOut/heelCVValue"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.285/@element"
             featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//fleet" referenceName="eClassifiers"
@@ -4871,5 +4871,65 @@
         featureName="name" dataValue="Cooldown"/>
     <changes xsi:type="history:Set" element="lng.ecore#//schedule/events/FuelType/Cooldown"
         featureName="value" dataValue="3" oldDataValue="0"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet" referenceName="eClassifiers"
+        element="lng.ecore#//fleet/PortTimeAndHeel"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/PortTimeAndHeel" featureName="name"
+        dataValue="PortTimeAndHeel"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//fleet/PortTimeAndHeel" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//fleet/PortAndTime"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet" referenceName="eClassifiers"
+        element="lng.ecore#//fleet/HeelOptions"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions" featureName="name"
+        dataValue="HeelOptions"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//fleet/PortTimeAndHeel" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//fleet/HeelOptions"/>
+    <changes xsi:type="history:Add" element="lng.ecore#//fleet/CharterOut" featureName="eSuperTypes"
+        referenceValue="lng.ecore#//fleet/HeelOptions"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/HeelOptions" referenceName="eStructuralFeatures"
+        element="lng.ecore#//fleet/HeelOptions/heelLimit">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelLimit"
+          featureName="name" dataValue="maxHeelOut"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelLimit"
+          featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelLimit"
+          featureName="defaultValueLiteral" dataValue="2147483647"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelLimit"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/HeelOptions" referenceName="eStructuralFeatures"
+        element="lng.ecore#//fleet/HeelOptions/heelCVValue">
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelCVValue"
+          featureName="name" dataValue="heelCVValue"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelCVValue"
+          featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelCVValue"
+          featureName="defaultValueLiteral" dataValue="22.8"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelCVValue"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </changes>
+    <changes xsi:type="history:Delete" target="lng.ecore#//fleet/CharterOut" referenceName="eStructuralFeatures">
+      <element xsi:type="ecore:EAttribute" name="heelCVValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+          defaultValueLiteral="22.8"/>
+    </changes>
+    <changes xsi:type="history:Delete" target="lng.ecore#//fleet/CharterOut" referenceName="eStructuralFeatures">
+      <element xsi:type="ecore:EAttribute" name="maxHeelOut" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="2147483647"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/HeelOptions" referenceName="eStructuralFeatures"
+        element="lng.ecore#//fleet/HeelOptions/heelUnitPrice"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelUnitPrice"
+        featureName="name" dataValue="heelUnitPrice"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelUnitPrice"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelUnitPrice"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelLimit"
+        featureName="name" dataValue="heelLimit" oldDataValue="maxHeelOut"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelLimit"
+        featureName="unsettable" dataValue="true" oldDataValue="false"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/HeelOptions/heelLimit"
+        featureName="defaultValueLiteral" dataValue="0" oldDataValue="2147483647"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/Vessel/startRequirement"
+        featureName="eType" referenceValue="lng.ecore#//fleet/PortTimeAndHeel" oldReferenceValue="lng.ecore#//fleet/PortAndTime"/>
   </releases>
 </history:History>
