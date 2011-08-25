@@ -4,10 +4,10 @@
  */
 package com.mmxlabs.common;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,14 +17,19 @@ public class DateTreeSetComparatorTest {
 	@Test
 	public void testDateTreeSetComparator() {
 
-		final Date d1 = Calendar.getInstance().getTime();
+		final long time = System.currentTimeMillis();
+		final long timePlusADay = time + TimeUnit.DAYS.toMillis(1);
+
+		// Get the current time as a date
+		final Date d1 = new Date(time);
+		// Get a different time (current time + a day) as a date.
+		final Date d2 = new Date(timePlusADay);
 
 		final Object obj1 = new Object();
 		final Object obj2 = new Object();
 
-		final Date d2 = Calendar.getInstance().getTime();
-
 		final Map<Object, Date> datemap = new HashMap<Object, Date>();
+
 		datemap.put(obj1, d1);
 		datemap.put(obj2, d2);
 
