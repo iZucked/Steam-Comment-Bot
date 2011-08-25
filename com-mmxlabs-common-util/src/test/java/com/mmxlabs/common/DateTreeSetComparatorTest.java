@@ -62,9 +62,8 @@ public class DateTreeSetComparatorTest {
 		Assert.assertEquals(0, cmp.compare(obj1, obj1));
 		Assert.assertEquals(0, cmp.compare(obj2, obj2));
 
-		// the two entered objects are different (because they have different
-		// hash codes, so expect them not to be the same.
-		Assert.assertTrue(0 != cmp.compare(d1, obj1));
-		Assert.assertTrue(0 != cmp.compare(d2, obj2));
+		// Check obj1 retrieves d1, therefore obj1 equals d1
+		Assert.assertEquals(0, cmp.compare(d1, obj1));
+		Assert.assertEquals(0, cmp.compare(d2, obj2));
 	}
 }
