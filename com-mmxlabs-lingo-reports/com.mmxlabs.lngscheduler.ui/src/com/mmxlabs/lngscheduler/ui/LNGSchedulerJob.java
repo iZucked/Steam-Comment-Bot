@@ -83,7 +83,9 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
 
 		optimiser.init();
-		final IAnnotatedSolution<ISequenceElement> startSolution = optimiser.start(context);
+		// final IAnnotatedSolution<ISequenceElement> startSolution = optimiser.start(context);
+		optimiser.start(context);
+		final IAnnotatedSolution<ISequenceElement> startSolution = optimiser.getBestSolution(true);
 
 		saveSolution("start state", startSolution);
 	}
