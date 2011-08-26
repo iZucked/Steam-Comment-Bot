@@ -4,9 +4,14 @@
  */
 package com.mmxlabs.lngscheduler.ui;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.validation.marker.MarkerUtil;
+import org.eclipse.emf.validation.model.EvaluationMode;
+import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.ModelValidationService;
 
 import scenario.Scenario;
 import scenario.schedule.Schedule;
@@ -54,10 +59,30 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 	 */
 	@Override
 	protected void reallyPrepare() {
-
-		scenario = EcoreUtil.copy(scenario);
 		// scenario.setName(resource.getName().replaceAll(resource.getFileExtension(),
 		// ""));
+
+		// run validation
+
+		final IBatchValidator batchValidator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+
+		batchValidator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
+		batchValidator.setOption(IBatchValidator.OPTION_TRACK_RESOURCES, true);
+
+		final IStatus status = batchValidator.validate(scenario);
+
+		try {
+			MarkerUtil.updateMarkers(status);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+		if (status.matches(IStatus.ERROR)) {
+			throw new RuntimeException("Scenario failed initial validation - check the problems view for a list of validation errors");
+		}
+
+		scenario = EcoreUtil.copy(scenario);
 
 		entities.setScenario(scenario);
 
