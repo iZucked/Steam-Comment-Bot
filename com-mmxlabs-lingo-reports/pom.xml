@@ -64,6 +64,7 @@
 		<module>com.mmxlabs.demo.app</module>
 		<module>com.mmxlabs.lngscheduler.emf</module>
 		<module>com.mmxlabs.lngscheduler.emf-extras</module>
+		<module>com.mmxlabs.lngscheduler.emf-extras.tests</module>
 		<module>com.mmxlabs.lngscheduler.emf.edit</module>
 		<module>com.mmxlabs.lngscheduler.emf.editor</module>
 		<module>com.mmxlabs.lngscheduler.ui</module>
