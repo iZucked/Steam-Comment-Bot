@@ -618,8 +618,11 @@ public class LNGScenarioTransformer {
 			final int dailyCharterPrice = eV.isSetDailyCharterOutPrice() ? eV.getDailyCharterOutPrice() : (eV.getClass_().isSetDailyCharterOutPrice() ? eV.getClass_().getDailyCharterOutPrice() : eV
 					.getClass_().getDailyCharterInPrice());
 
+			final long heelLimit = eV.getStartRequirement().isSetHeelLimit() ? (eV.getStartRequirement().getHeelLimit() * (long) Calculator.ScaleFactor) : 0;
+
 			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getClass_()), Calculator.scale(dailyCharterPrice) / 24,
-					eV.isTimeChartered() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement);
+					eV.isTimeChartered() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
+					Calculator.scaleToInt(eV.getStartRequirement().getHeelCVValue()), Calculator.scaleToInt(eV.getStartRequirement().getHeelUnitPrice()));
 			vesselAssociation.add(eV, vessel);
 
 			entities.addModelObject(eV, vessel);
