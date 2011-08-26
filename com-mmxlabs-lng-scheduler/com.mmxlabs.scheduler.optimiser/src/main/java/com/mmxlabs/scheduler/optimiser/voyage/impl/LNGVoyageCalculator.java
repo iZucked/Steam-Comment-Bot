@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -547,6 +549,23 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		// same price is used in all valid voyage legs.
 
 		int cooldownM3Price = 0;
+
+		final boolean setLNGPrice;
+		if (dischargeIdx != -1) {
+			setLNGPrice = true;
+		} else {
+			if (((PortDetails) sequence[0]).getPortSlot() instanceof IHeelOptionsPortSlot) {
+				final IHeelOptions options = ((IHeelOptionsPortSlot) ((PortDetails) sequence[0]).getPortSlot()).getHeelOptions();
+				if (options.getHeelLimit() > 0) {
+					setLNGPrice = true;
+					dischargeM3Price = (int) Calculator.multiply(options.getHeelUnitPrice(), options.getHeelCVValue());
+				} else {
+					setLNGPrice = false;
+				}
+			} else {
+				setLNGPrice = false;
+			}
+		}
 
 		// assert FuelComponent.NBO.getDefaultFuelUnit() == FuelUnit.M3;
 		// assert FuelComponent.FBO.getDefaultFuelUnit() == FuelUnit.M3;
