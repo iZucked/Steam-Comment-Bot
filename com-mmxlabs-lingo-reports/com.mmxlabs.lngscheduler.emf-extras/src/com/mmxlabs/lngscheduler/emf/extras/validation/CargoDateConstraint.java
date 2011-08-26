@@ -115,7 +115,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 						for (final DistanceLine dl : c.getDistanceModel().getDistances()) {
 							canalMatrix.put(new Pair<Port, Port>(dl.getFromPort(), dl.getToPort()), dl.getDistance());
 						}
-						distanceMatrices.put(scenario.getDistanceModel(), canalMatrix);
+						distanceMatrices.put(c.getDistanceModel(), canalMatrix);
 					}
 					final Integer distance2 = canalMatrix.get(key);
 					if (distance2 != null) {
