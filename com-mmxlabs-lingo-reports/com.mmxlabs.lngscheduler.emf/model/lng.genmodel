@@ -37,7 +37,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//UUIDObject/UUID"/>
     </genClasses>
     <genClasses ecoreClass="lng.ecore#//AnnotatedObject">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//AnnotatedObject/notes"/>
+      <genFeatures createChild="false" propertyDescription="Any notes associated with the {0}."
+          ecoreFeature="ecore:EAttribute lng.ecore#//AnnotatedObject/notes"/>
     </genClasses>
     <nestedGenPackages prefix="Fleet" disposableProviderFactory="true" ecorePackage="lng.ecore#//fleet">
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="lng.ecore#//fleet/VesselState">
@@ -132,10 +133,6 @@
             propertySortChoices="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/VesselEvent/startPort"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//fleet/CharterOut">
-        <genFeatures createChild="false" propertyDescription="The maximum amount of heel left on board after the charter out is completed."
-            ecoreFeature="ecore:EAttribute lng.ecore#//fleet/CharterOut/maxHeelOut"/>
-        <genFeatures createChild="false" propertyDescription="The CV value of any heel left on board after the charter out is completed."
-            ecoreFeature="ecore:EAttribute lng.ecore#//fleet/CharterOut/heelCVValue"/>
         <genFeatures notify="false" createChild="false" propertyDescription="A port to which the vessel will be returned once the charter out is completed."
             propertySortChoices="true" ecoreFeature="ecore:EReference lng.ecore#//fleet/CharterOut/endPort"/>
         <genFeatures createChild="false" propertyDescription="If set, this will be used to calculate the price for this charter out. Otherwise, the daily rate on the vessel or vessel class will be used."
@@ -168,6 +165,15 @@
             ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClassCost/transitTime"/>
         <genFeatures createChild="false" propertyDescription="The amount of base fuel consumed by a trip through the canal."
             ecoreFeature="ecore:EAttribute lng.ecore#//fleet/VesselClassCost/transitFuel"/>
+      </genClasses>
+      <genClasses ecoreClass="lng.ecore#//fleet/PortTimeAndHeel"/>
+      <genClasses ecoreClass="lng.ecore#//fleet/HeelOptions">
+        <genFeatures createChild="false" propertyDescription="If set, this is an upper bound on the M3 of heel available here. If unset, there is no upper bound on heel use, so to prevent heel use enter zero."
+            ecoreFeature="ecore:EAttribute lng.ecore#//fleet/HeelOptions/heelLimit"/>
+        <genFeatures createChild="false" propertyDescription="The CV value of any heel gas available."
+            ecoreFeature="ecore:EAttribute lng.ecore#//fleet/HeelOptions/heelCVValue"/>
+        <genFeatures createChild="false" propertyCategory="" propertyDescription="The unit price in $/mmbtu of any heel."
+            ecoreFeature="ecore:EAttribute lng.ecore#//fleet/HeelOptions/heelUnitPrice"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Schedule" disposableProviderFactory="true" ecorePackage="lng.ecore#//schedule">
@@ -269,6 +275,7 @@
           <genEnumLiterals ecoreEnumLiteral="lng.ecore#//schedule/events/FuelType/FBO"/>
           <genEnumLiterals ecoreEnumLiteral="lng.ecore#//schedule/events/FuelType/NBO"/>
           <genEnumLiterals ecoreEnumLiteral="lng.ecore#//schedule/events/FuelType/BaseFuel"/>
+          <genEnumLiterals ecoreEnumLiteral="lng.ecore#//schedule/events/FuelType/Cooldown"/>
         </genEnums>
         <genClasses ecoreClass="lng.ecore#//schedule/events/FuelMixture">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//schedule/events/FuelMixture/fuelUsage"/>
@@ -371,9 +378,12 @@
             ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/regasEfficiency"/>
         <genFeatures createChild="false" propertyDescription="The default CV value for cargoes loaded at this port."
             ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/defaultCVvalue"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/defaultWindowStart"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/defaultSlotDuration"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/shouldArriveCold"/>
+        <genFeatures createChild="false" propertyDescription="The hour at which slots at this port with no hour set should start."
+            ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/defaultWindowStart"/>
+        <genFeatures createChild="false" propertyDescription="The default duration in hours for slots at this port with no duration set."
+            ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/defaultSlotDuration"/>
+        <genFeatures createChild="false" propertyDescription="If true, vessels will not typically cool down at this port (although cooldown may still occur if absolutely required). Otherwise, cooldown will be considered."
+            ecoreFeature="ecore:EAttribute lng.ecore#//port/Port/shouldArriveCold"/>
       </genClasses>
       <genClasses ecoreClass="lng.ecore#//port/DistanceModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lng.ecore#//port/DistanceModel/distances"/>
@@ -448,7 +458,8 @@
       <genClasses ecoreClass="lng.ecore#//cargo/LoadSlot">
         <genFeatures createChild="false" propertyDescription="If set, specifies a cargo CV value for this cargo. Otherwise, the CV value is taken from the load port."
             ecoreFeature="ecore:EAttribute lng.ecore#//cargo/LoadSlot/cargoCVvalue"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lng.ecore#//cargo/LoadSlot/arriveCold"/>
+        <genFeatures createChild="false" propertyDescription="If set, forces the vessel to arrive cold or to maintain a heel, irrespective of the port's preference."
+            ecoreFeature="ecore:EAttribute lng.ecore#//cargo/LoadSlot/arriveCold"/>
         <genOperations ecoreOperation="lng.ecore#//cargo/LoadSlot/getCargoOrPortCVValue"/>
       </genClasses>
     </nestedGenPackages>

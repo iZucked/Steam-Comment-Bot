@@ -101,7 +101,7 @@ public class LoadSlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_LoadSlot_arriveCold_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_arriveCold_feature", "_UI_LoadSlot_type"),
+				 getString("_UI_LoadSlot_arriveCold_description"),
 				 CargoPackage.Literals.LOAD_SLOT__ARRIVE_COLD,
 				 true,
 				 false,

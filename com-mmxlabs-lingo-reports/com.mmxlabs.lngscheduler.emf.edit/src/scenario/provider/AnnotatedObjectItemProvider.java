@@ -81,7 +81,7 @@ public class AnnotatedObjectItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_AnnotatedObject_notes_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AnnotatedObject_notes_feature", "_UI_AnnotatedObject_type"),
+				 getString("_UI_AnnotatedObject_notes_description"),
 				 ScenarioPackage.Literals.ANNOTATED_OBJECT__NOTES,
 				 true,
 				 false,
