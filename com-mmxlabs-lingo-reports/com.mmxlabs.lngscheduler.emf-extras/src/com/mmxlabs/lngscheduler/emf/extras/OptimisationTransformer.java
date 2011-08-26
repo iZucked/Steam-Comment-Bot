@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import scenario.fleet.CharterOut;
+import scenario.fleet.VesselEvent;
 import scenario.optimiser.Constraint;
 import scenario.optimiser.Objective;
 import scenario.optimiser.OptimisationSettings;
@@ -21,6 +22,7 @@ import scenario.schedule.Sequence;
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
+import scenario.schedule.events.VesselEventVisit;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetVessel;
 import scenario.schedule.fleetallocation.SpotVessel;
@@ -67,7 +69,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * 
  */
 public class OptimisationTransformer {
-	private OptimisationSettings settings;
+	private final OptimisationSettings settings;
 
 	public OptimisationTransformer(OptimisationSettings settings) {
 		this.settings = settings;
@@ -281,6 +283,10 @@ public class OptimisationTransformer {
 								.getOptimiserObject(co,
 										IVesselEventPortSlot.class);
 						ms.add(psp.getElement(coSlot));
+					} else if (event instanceof VesselEventVisit) {
+						final VesselEvent ve = ((VesselEventVisit) event).getVesselEvent();
+						final IVesselEventPortSlot veSlot = mem.getOptimiserObject(ve, IVesselEventPortSlot.class);
+						ms.add(psp.getElement(veSlot));
 					}
 				}
 				ms.add(serp.getEndElement(vp.getResource(vessel)));
