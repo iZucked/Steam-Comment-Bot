@@ -10,10 +10,10 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
-
 import scenario.port.DistanceLine;
 import scenario.port.PortPackage;
+
+import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 /**
  * A constraint which checks the reasonableness of entries in the distance matrix.
@@ -21,7 +21,7 @@ import scenario.port.PortPackage;
  * 
  */
 public class DistanceLineValidityConstraint extends AbstractModelConstraint {
-	private static final int MAX_DISTANCE = 10000;
+	private static final int MAX_DISTANCE = 20000;
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
