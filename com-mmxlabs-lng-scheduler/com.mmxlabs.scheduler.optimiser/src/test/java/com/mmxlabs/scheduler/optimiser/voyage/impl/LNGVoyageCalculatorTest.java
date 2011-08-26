@@ -1309,7 +1309,7 @@ public class LNGVoyageCalculatorTest {
 		final PortDetails loadDetails = new PortDetails();
 		final PortDetails dischargeDetails = new PortDetails();
 
-		final PortSlot otherSlot = new StartPortSlot();
+		final PortSlot otherSlot = new StartPortSlot(0, 0, 0);
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 
