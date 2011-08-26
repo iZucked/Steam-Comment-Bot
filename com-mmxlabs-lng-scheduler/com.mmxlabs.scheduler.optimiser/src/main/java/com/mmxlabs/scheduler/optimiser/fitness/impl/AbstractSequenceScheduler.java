@@ -20,11 +20,11 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
@@ -152,12 +152,18 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 				options.setVesselState(vesselState);
 				options.setAvailableTime(availableTime);
 
-				if (prevPortType == PortType.CharterOut) {
-					options.setAvailableLNG(Math.min(vessel.getVesselClass().getCargoCapacity(), ((IVesselEventPortSlot) prevPortSlot).getVesselEvent().getMaxHeelOut()));
+				if (prevPortSlot instanceof IHeelOptionsPortSlot) {
+					// TODO make use of heel price and CV value in cost calculation.
+					options.setAvailableLNG(Math.min(vessel.getVesselClass().getCargoCapacity(), ((IHeelOptionsPortSlot) prevPortSlot).getHeelOptions().getHeelLimit()));
+					useNBO = true;
 				} else if (useNBO) {
 					options.setAvailableLNG(vessel.getVesselClass().getCargoCapacity());
 				} else {
 					options.setAvailableLNG(0);
+				}
+
+				if (options.getAvailableLNG() == 0) {
+					useNBO = false;
 				}
 
 				// Determined by voyage plan optimiser
