@@ -503,7 +503,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			dischargeVolumeInM3 = Math.min(upperLoadLimit - lngConsumed, maxDischargeVolume);
 
 			if (dischargeVolumeInM3 < 0) {
-				throw new RuntimeException("Capacity violation: discharge volume = " + dischargeVolumeInM3 + ", but " + lngConsumed + " LNG used for fuel, max load volume = " + upperLoadLimit
+				throw new RuntimeException("Capacity violation on cargo " + loadSlot.getId() + "-" + dischargeSlot.getId() + " : discharge volume = " + dischargeVolumeInM3 + ", but " + lngConsumed
+						+ " LNG used for fuel, max load volume = " + upperLoadLimit
 						+ "(capacity = " + cargoCapacity + ", slot max load = " + maxLoadVolume + ") and slot max discharge = " + maxDischargeVolume);
 			}
 			loadVolumeInM3 = dischargeVolumeInM3 + lngConsumed;
