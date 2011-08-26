@@ -5,8 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
 
 public class VesselEvent implements IVesselEvent {
 	private ITimeWindow timeWindow;
@@ -70,7 +70,7 @@ public class VesselEvent implements IVesselEvent {
 	 * @see com.mmxlabs.scheduler.optimiser.components.IVesselEvent#getMaxHeelOut()
 	 */
 	@Override
-	public long getMaxHeelOut() {
+	public long getHeelLimit() {
 		return maxHeelOut;
 	}
 
@@ -80,5 +80,15 @@ public class VesselEvent implements IVesselEvent {
 	@Override
 	public int getHeelCVValue() {
 		return heelCVValue;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.mmxlabs.scheduler.optimiser.components.IHeelOptions#getHeelUnitPrice()
+	 */
+	@Override
+	public int getHeelUnitPrice() {
+		return 0;
 	}
 }

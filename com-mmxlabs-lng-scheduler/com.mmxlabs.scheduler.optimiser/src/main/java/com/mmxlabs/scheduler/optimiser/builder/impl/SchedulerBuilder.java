@@ -497,8 +497,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IVessel createVessel(final String name, final IVesselClass vesselClass, int hourlyCharterOutRate, final IStartEndRequirement start, final IStartEndRequirement end) {
-		return this.createVessel(name, vesselClass, hourlyCharterOutRate, VesselInstanceType.FLEET, start, end);
+	public IVessel createVessel(final String name, final IVesselClass vesselClass, int hourlyCharterOutRate, final IStartEndRequirement start, final IStartEndRequirement end, final long heelLimit,
+			final int heelCVValue, final int heelUnitPrice) {
+		return this.createVessel(name, vesselClass, hourlyCharterOutRate, VesselInstanceType.FLEET, start, end, heelLimit, heelCVValue, heelUnitPrice);
 	}
 
 	/**
@@ -530,12 +531,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final IStartEndRequirement start = createStartEndRequirement();
 		final IStartEndRequirement end = createStartEndRequirement();
 
-		return createVessel(name, vesselClass, 0, VesselInstanceType.SPOT_CHARTER, start, end);
+		return createVessel(name, vesselClass, 0, VesselInstanceType.SPOT_CHARTER, start, end, 0, 0, 0);
 	}
 
 	@Override
 	public IVessel createVessel(final String name, final IVesselClass vesselClass, int hourlyCharterOutRate, final VesselInstanceType vesselInstanceType, final IStartEndRequirement start,
-			final IStartEndRequirement end) {
+			final IStartEndRequirement end, final long heelLimit, final int heelCVValue, final int heelUnitPrice) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
@@ -571,7 +572,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// very start of the job
 		final ITimeWindow startWindow = start.hasTimeRequirement() ? start.getTimeWindow() : createTimeWindow(0, 0);
 
-		final StartPortSlot startSlot = new StartPortSlot();
+		final StartPortSlot startSlot = new StartPortSlot(heelLimit, heelCVValue, heelUnitPrice);
 		startSlot.setId("start-" + name);
 		startSlot.setPort(start.hasPortRequirement() ? start.getLocation() : ANYWHERE);
 

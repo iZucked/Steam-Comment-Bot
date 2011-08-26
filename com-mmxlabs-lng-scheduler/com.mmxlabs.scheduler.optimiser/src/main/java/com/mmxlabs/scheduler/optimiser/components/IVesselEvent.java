@@ -11,7 +11,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
  * @author Tom Hinton
  *
  */
-public interface IVesselEvent {
+public interface IVesselEvent extends IHeelOptions {
 	/**
 	 * This is the time window in which the vessel must arrive at the start port
 	 * @return
@@ -34,14 +34,14 @@ public interface IVesselEvent {
 	 */
 	public IPort getEndPort();
 	
-	/**
-	 * The maximum volume of LNG available for travel after the event
-	 * @return
-	 */
-	public long getMaxHeelOut();
-	/**
-	 * The CV Value of any LNG available for travel after the event.
-	 * @return
-	 */
-	public int getHeelCVValue();
+	// /**
+	// * The maximum volume of LNG available for travel after the event
+	// * @return
+	// */
+	// public long getMaxHeelOut();
+	// /**
+	// * The CV Value of any LNG available for travel after the event.
+	// * @return
+	// */
+	// public int getHeelCVValue();
 }
