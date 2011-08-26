@@ -34,7 +34,8 @@ public class SequenceNoGapsConstraint extends AbstractModelConstraint {
 			for (final ScheduledEvent event : sequence.getEvents()) {
 				final Date eventStart = event.getStartTime();
 				final Date eventEnd = event.getEndTime();
-				
+				if (eventStart == null || eventEnd == null)
+					continue;
 				if (eventStart.before(lastEndDate)) {
 					return ctx.createFailureStatus(sequence.getVessel().getName());
 				} else if (eventStart.after(lastEndDate)) {
