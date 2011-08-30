@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.jmock.Expectations;
@@ -50,15 +51,23 @@ public class ShipFillPercentageConstraintTest {
 	private static final double sensiblefill = 0.8;
 
 	@Test
-	public void testValidityConstraintSensibleFill() {
+	public void testSanityConstraintOverSensibleFill() {
 
 		final double fill = 0.9d;
 		testValidityConstraintSuccess(fill,
 				ShipFillPercentageConstraint.SANITY_ID);
 	}
+	
+	@Test
+	public void testSanityConstraintAtSensibleFill() {
+
+		final double fill = 0.8d;
+		testValidityConstraintSuccess(fill,
+				ShipFillPercentageConstraint.SANITY_ID);
+	}
 
 	@Test
-	public void testValidityConstraintUnderSensibleFill() {
+	public void testSanityConstraintUnderSensibleFill() {
 
 		final double undersensiblefill = 0.7d;
 		testValidityConstraintFailure(undersensiblefill,
@@ -66,9 +75,19 @@ public class ShipFillPercentageConstraintTest {
 	}
 
 	@Test
+	public void testValidityConstraintFillInRage() {
+
+		final double negativefill = 0.5d;
+		// negative fill should fail validity test
+		testValidityConstraintSuccess(negativefill,
+				ShipFillPercentageConstraint.VALIDITY_ID);
+	}
+
+	@Test
 	public void testValidityConstraintNegativeFill() {
 
 		final double negativefill = -1;
+		// negative fill should fail validity test
 		testValidityConstraintFailure(negativefill,
 				ShipFillPercentageConstraint.VALIDITY_ID);
 	}
@@ -77,8 +96,38 @@ public class ShipFillPercentageConstraintTest {
 	public void testValidityConstraintOverfullFill() {
 
 		final double overfill = 1.1d;
+		// fills over 1 should fail validity test
 		testValidityConstraintFailure(overfill,
 				ShipFillPercentageConstraint.VALIDITY_ID);
+	}
+	
+	@Test
+	public void testTargetNotVesselClass() {
+
+		// Create a mockery to mock up all the objects involved in a test
+		final Mockery context = new Mockery();
+		// This is the constraint we will be testing
+		final ShipFillPercentageConstraint constraint = new ShipFillPercentageConstraint();
+
+		// mock a vessel class
+		final EObject notVesselClass = context.mock(EObject.class);
+
+		final IValidationContext validationContext = context
+				.mock(IValidationContext.class);
+
+		context.checking(new Expectations() {
+			{
+				// what's the target?
+				exactly(1).of(validationContext).getTarget();
+				will(returnValue(notVesselClass));
+
+				atLeast(1).of(validationContext).createSuccessStatus();
+			}
+		});
+
+		constraint.validate(validationContext);
+
+		context.assertIsSatisfied();
 	}
 
 	public void testValidityConstraintFailure(final double fill, final String id) {
