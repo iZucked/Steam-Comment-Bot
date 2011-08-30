@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.jmock.Expectations;
@@ -16,9 +15,6 @@ import scenario.fleet.VesselClass;
 import com.mmxlabs.lngscheduler.emf.extras.validation.ShipFillPercentageConstraint;
 
 /**
- * Test the {@link ShipFillPercentageConstraintTest}. You will need the
- * org.jmock eclipse plugin from our codebase repository to run this, as jmock
- * doesn't currently provide an eclipse plugin.
  * 
  * TODO test behaviour of test when passed a VesselClass. It's a bit less tidy.
  * 
@@ -50,6 +46,9 @@ public class ShipFillPercentageConstraintTest {
 
 	private static final double sensiblefill = 0.8;
 
+	/**
+	 * Test that a fill of 0.9 is reasonable.
+	 */
 	@Test
 	public void testSanityConstraintOverSensibleFill() {
 
@@ -57,7 +56,10 @@ public class ShipFillPercentageConstraintTest {
 		testValidityConstraintSuccess(fill,
 				ShipFillPercentageConstraint.SANITY_ID);
 	}
-	
+
+	/**
+	 * Test that a fill of 0.8 (the limit) is reasonable.
+	 */
 	@Test
 	public void testSanityConstraintAtSensibleFill() {
 
@@ -66,6 +68,9 @@ public class ShipFillPercentageConstraintTest {
 				ShipFillPercentageConstraint.SANITY_ID);
 	}
 
+	/**
+	 * Test a fill of 0.7 is reasonable.
+	 */
 	@Test
 	public void testSanityConstraintUnderSensibleFill() {
 
@@ -74,6 +79,9 @@ public class ShipFillPercentageConstraintTest {
 				ShipFillPercentageConstraint.SANITY_ID);
 	}
 
+	/**
+	 * Test a fill of 0.5 is in the valid range.
+	 */
 	@Test
 	public void testValidityConstraintFillInRage() {
 
@@ -83,6 +91,9 @@ public class ShipFillPercentageConstraintTest {
 				ShipFillPercentageConstraint.VALIDITY_ID);
 	}
 
+	/**
+	 * Test that a negative fill is not a valid fill.
+	 */
 	@Test
 	public void testValidityConstraintNegativeFill() {
 
@@ -92,6 +103,9 @@ public class ShipFillPercentageConstraintTest {
 				ShipFillPercentageConstraint.VALIDITY_ID);
 	}
 
+	/**
+	 * Test that a fill over 1 is not valid.
+	 */
 	@Test
 	public void testValidityConstraintOverfullFill() {
 
@@ -100,36 +114,38 @@ public class ShipFillPercentageConstraintTest {
 		testValidityConstraintFailure(overfill,
 				ShipFillPercentageConstraint.VALIDITY_ID);
 	}
-	
+
+	/**
+	 * Test that a fill of 0 is not valid.
+	 */
 	@Test
-	public void testTargetNotVesselClass() {
+	public void testValidityConstraintZeroFill() {
 
-		// Create a mockery to mock up all the objects involved in a test
-		final Mockery context = new Mockery();
-		// This is the constraint we will be testing
-		final ShipFillPercentageConstraint constraint = new ShipFillPercentageConstraint();
-
-		// mock a vessel class
-		final EObject notVesselClass = context.mock(EObject.class);
-
-		final IValidationContext validationContext = context
-				.mock(IValidationContext.class);
-
-		context.checking(new Expectations() {
-			{
-				// what's the target?
-				exactly(1).of(validationContext).getTarget();
-				will(returnValue(notVesselClass));
-
-				atLeast(1).of(validationContext).createSuccessStatus();
-			}
-		});
-
-		constraint.validate(validationContext);
-
-		context.assertIsSatisfied();
+		final double fill = 0d;
+		// fills over 1 should fail validity test
+		testValidityConstraintFailure(fill,
+				ShipFillPercentageConstraint.VALIDITY_ID);
 	}
 
+	/**
+	 * Test that a fill of 1 is valid.
+	 */
+	@Test
+	public void testValidityConstraintOneFill() {
+
+		final double fill = 1d;
+		// fills over 1 should fail validity test
+		testValidityConstraintSuccess(fill,
+				ShipFillPercentageConstraint.VALIDITY_ID);
+	}
+
+	/**
+	 * Runs a test given a fill and a constraint to check. Expects the test to
+	 * fail and produce a failure status.
+	 * 
+	 * @param fill
+	 * @param id
+	 */
 	public void testValidityConstraintFailure(final double fill, final String id) {
 
 		// Create a mockery to mock up all the objects involved in a test
@@ -173,6 +189,14 @@ public class ShipFillPercentageConstraintTest {
 		context.assertIsSatisfied();
 	}
 
+
+	/**
+	 * Runs a test given a fill and a constraint to check. Expects the test to
+	 * succeed and produce a success status.
+	 * 
+	 * @param fill
+	 * @param id
+	 */
 	public void testValidityConstraintSuccess(final double fill, final String id) {
 
 		// Create a mockery to mock up all the objects involved in a test
