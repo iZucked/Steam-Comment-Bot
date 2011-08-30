@@ -5,9 +5,9 @@
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
 import org.eclipse.emf.validation.IValidationContext;
+import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.junit.Assert;
 import org.junit.Test;
 
 import scenario.fleet.VesselClass;
@@ -46,9 +46,43 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.ShipFillPercentageConstrai
  * 
  */
 public class ShipFillPercentageConstraintTest {
-	
+
+	private static final double sensiblefill = 0.8;
+
 	@Test
-	public void testValidityConstraint2() {
+	public void testValidityConstraintSensibleFill() {
+
+		final double fill = 0.9d;
+		testValidityConstraintSuccess(fill,
+				ShipFillPercentageConstraint.SANITY_ID);
+	}
+
+	@Test
+	public void testValidityConstraintUnderSensibleFill() {
+
+		final double undersensiblefill = 0.7d;
+		testValidityConstraintFailure(undersensiblefill,
+				ShipFillPercentageConstraint.SANITY_ID);
+	}
+
+	@Test
+	public void testValidityConstraintNegativeFill() {
+
+		final double negativefill = -1;
+		testValidityConstraintFailure(negativefill,
+				ShipFillPercentageConstraint.VALIDITY_ID);
+	}
+
+	@Test
+	public void testValidityConstraintOverfullFill() {
+
+		final double overfill = 1.1d;
+		testValidityConstraintFailure(overfill,
+				ShipFillPercentageConstraint.VALIDITY_ID);
+	}
+
+	public void testValidityConstraintFailure(final double fill, final String id) {
+
 		// Create a mockery to mock up all the objects involved in a test
 		final Mockery context = new Mockery();
 		// This is the constraint we will be testing
@@ -60,31 +94,66 @@ public class ShipFillPercentageConstraintTest {
 		final IValidationContext validationContext = context
 				.mock(IValidationContext.class);
 
-		final String validity = "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_validity";
-		final String sanity = "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_sanity";
-		
+		final IConstraintStatus failureStatus = context
+				.mock(IConstraintStatus.class);
+
 		context.checking(new Expectations() {
 			{
+				atLeast(1).of(vesselClass).getName();
+				will(returnValue("vc"));
+
 				atLeast(1).of(vesselClass).getFillCapacity();
-				will(returnValue(0.9));
-				
+				will(returnValue(fill));
+
 				// what's the target?
 				exactly(1).of(validationContext).getTarget();
 				will(returnValue(vesselClass));
-				
+
 				atLeast(1).of(validationContext).getCurrentConstraintId();
-				will(returnValue(validity));
+				will(returnValue(id));
+
+				// and it will want a failure status thing
+				atLeast(1).of(validationContext).createFailureStatus("vc",
+						fill * 100, sensiblefill * 100);
+				will(returnValue(failureStatus));
+			}
+		});
+
+		constraint.validate(validationContext);
+
+		context.assertIsSatisfied();
+	}
+
+	public void testValidityConstraintSuccess(final double fill, final String id) {
+
+		// Create a mockery to mock up all the objects involved in a test
+		final Mockery context = new Mockery();
+		// This is the constraint we will be testing
+		final ShipFillPercentageConstraint constraint = new ShipFillPercentageConstraint();
+
+		// mock a vessel class
+		final VesselClass vesselClass = context.mock(VesselClass.class);
+
+		final IValidationContext validationContext = context
+				.mock(IValidationContext.class);
+
+		context.checking(new Expectations() {
+			{
+				atLeast(1).of(vesselClass).getFillCapacity();
+				will(returnValue(fill));
+
+				// what's the target?
+				exactly(1).of(validationContext).getTarget();
+				will(returnValue(vesselClass));
+
+				atLeast(1).of(validationContext).getCurrentConstraintId();
+				will(returnValue(id));
 
 				atLeast(1).of(validationContext).createSuccessStatus();
 			}
 		});
-		
-		constraint.validate(validationContext);
-		
-		final String constraintID = validationContext.getCurrentConstraintId();
 
-		Assert.assertTrue(constraintID.equals(validity)
-				|| constraintID.equals(sanity));
+		constraint.validate(validationContext);
 
 		context.assertIsSatisfied();
 	}
