@@ -15,11 +15,6 @@ import scenario.fleet.VesselClass;
 import com.mmxlabs.lngscheduler.emf.extras.validation.ShipFillPercentageConstraint;
 
 /**
- * 
- * TODO test behaviour of test when passed a VesselClass. It's a bit less tidy.
- * 
- * ----
- * 
  * Info from case 170:
  * 
  * Write a test for the ShipFillPercentageConstraint.
@@ -188,7 +183,6 @@ public class ShipFillPercentageConstraintTest {
 
 		context.assertIsSatisfied();
 	}
-
 
 	/**
 	 * Runs a test given a fill and a constraint to check. Expects the test to
