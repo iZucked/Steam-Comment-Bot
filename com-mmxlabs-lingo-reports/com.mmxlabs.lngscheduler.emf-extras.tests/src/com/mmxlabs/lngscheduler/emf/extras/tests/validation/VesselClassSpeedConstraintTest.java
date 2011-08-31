@@ -25,8 +25,7 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.VesselClassSpeedConstraint
  */
 public class VesselClassSpeedConstraintTest {
 
-	// these three are copied from VesselClassSpeedConstraint because they're
-	// not private.
+	// these three are copied from VesselClassSpeedConstraint because they're private.
 	private static final String MIN_ID = "com.mmxlabs.lngscheduler.emf-extras.vessel_class_min_speed";
 	private static final String MAX_ID = "com.mmxlabs.lngscheduler.emf-extras.vessel_class_max_speed";
 	private static final String ORDER_ID = "com.mmxlabs.lngscheduler.emf-extras.vessel_class_speed_order";
@@ -55,15 +54,16 @@ public class VesselClassSpeedConstraintTest {
 	public void testVesselClassSpeedConstraintNullBallastAndLaden() {
 
 		final Mockery context = new Mockery();
-		final VesselStateAttributes laden = null;
-		final VesselStateAttributes ballast = null;
+		final VesselStateAttributes ladenNull = null;
+		final VesselStateAttributes ballastNull = null;
 
-		testVesselClassSpeedConstraintSuccess(context, laden, ballast);
+		testVesselClassSpeedConstraintSuccess(context, ladenNull, ballastNull);
 	}
 
 	@Test
 	public void testVesselClassSpeedConstraintMinGreaterThanMax() {
 
+		// The max is less than the min
 		final float maxSpeed = 1;
 		final float minSpeed = 2;
 
@@ -78,6 +78,15 @@ public class VesselClassSpeedConstraintTest {
 		testVesselClassSpeedConstraintOrderSuccess(speed, speed);
 	}
 
+	/**
+	 * Test the VesselClassSpeedConstraint given a context and vessel state attributes for the laden and ballast.
+	 * 
+	 * The laden and ballast should have already been mocked using the Mockery context given in the arguments.
+	 * 
+	 * @param context
+	 * @param laden
+	 * @param ballast
+	 */
 	private void testVesselClassSpeedConstraintSuccess(final Mockery context, final VesselStateAttributes laden, final VesselStateAttributes ballast) {
 
 		// mock a vessel class
