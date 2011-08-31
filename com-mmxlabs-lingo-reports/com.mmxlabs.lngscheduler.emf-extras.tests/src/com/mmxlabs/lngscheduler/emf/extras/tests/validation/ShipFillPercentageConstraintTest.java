@@ -15,11 +15,6 @@ import scenario.fleet.VesselClass;
 import com.mmxlabs.lngscheduler.emf.extras.validation.ShipFillPercentageConstraint;
 
 /**
- * 
- * TODO test behaviour of test when passed a VesselClass. It's a bit less tidy.
- * 
- * ----
- * 
  * Info from case 170:
  * 
  * Write a test for the ShipFillPercentageConstraint.
@@ -146,7 +141,7 @@ public class ShipFillPercentageConstraintTest {
 	 * @param fill
 	 * @param id
 	 */
-	public void testValidityConstraintFailure(final double fill, final String id) {
+	private void testValidityConstraintFailure(final double fill, final String id) {
 
 		// Create a mockery to mock up all the objects involved in a test
 		final Mockery context = new Mockery();
@@ -189,7 +184,6 @@ public class ShipFillPercentageConstraintTest {
 		context.assertIsSatisfied();
 	}
 
-
 	/**
 	 * Runs a test given a fill and a constraint to check. Expects the test to
 	 * succeed and produce a success status.
@@ -197,7 +191,7 @@ public class ShipFillPercentageConstraintTest {
 	 * @param fill
 	 * @param id
 	 */
-	public void testValidityConstraintSuccess(final double fill, final String id) {
+	private void testValidityConstraintSuccess(final double fill, final String id) {
 
 		// Create a mockery to mock up all the objects involved in a test
 		final Mockery context = new Mockery();
