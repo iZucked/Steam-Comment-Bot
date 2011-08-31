@@ -400,6 +400,11 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		 */
 		int routeCostAccumulator = 0;
 
+		/**
+		 * Accumulates the total time in the plan.
+		 */
+		int durationAccumulator = 0;
+		
 		for (int i = 0; i < sequence.length; ++i) {
 			if (i % 2 == 0) {
 				// Port Slot
@@ -418,6 +423,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				for (final FuelComponent fc : FuelComponent.values()) {
 					fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc);
 				}
+				
+				durationAccumulator += details.getVisitDuration();
 			} else {
 				// Voyage
 				final VoyageDetails<?> details = (VoyageDetails<?>) sequence[i];
@@ -448,6 +455,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				details.setFuelUnitPrice(FuelComponent.PilotLight, baseFuelPricePerMT);
 				details.setFuelUnitPrice(FuelComponent.IdlePilotLight, baseFuelPricePerMT);
 
+				durationAccumulator += details.getTravelTime() + details.getIdleTime();
 			}
 		}
 
@@ -660,7 +668,6 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		voyagePlan.setSalesRevenue(salesRevenue);
 
 		voyagePlan.setTotalRouteCost(routeCostAccumulator);
-
 	}
 
 	@Override

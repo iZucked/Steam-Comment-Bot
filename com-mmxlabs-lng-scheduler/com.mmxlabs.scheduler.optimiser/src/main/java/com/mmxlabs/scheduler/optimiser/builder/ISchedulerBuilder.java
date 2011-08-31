@@ -65,7 +65,8 @@ public interface ISchedulerBuilder {
 	 *            $/Hour rate to charter-in vessels of this class
 	 * @return
 	 */
-	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int hourlyCharterPrice,
+	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
+			int hourlyCharterPrice,
 			int warmupTimeInHours, int cooldownTimeInHours, int cooldownVolumeInM3);
 
 	/**

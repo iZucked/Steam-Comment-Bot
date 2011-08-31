@@ -27,14 +27,14 @@ public class DirectRandomSequenceScheduler<T> extends
 	 * 
 	 */
 	private static final int RETRY_COUNT = 5;
-	private int seed = 0;
+	private final int seed = 0;
 	private Random random;
 	private static final Logger log = LoggerFactory.getLogger(DirectRandomSequenceScheduler.class);
 	/**
 	 * Do this many times the usual number of samples for an exported solution.
 	 * Slightly improves the quality of the exported schedule.
 	 */
-	private static final int EXPORT_INTENSITY = 200; 
+	private static final int EXPORT_INTENSITY = 1000;
 
 	/**
 	 * Never do more than this many samples
@@ -54,7 +54,7 @@ public class DirectRandomSequenceScheduler<T> extends
 		setSequences(sequences);
 		resetBest();
 		final long approximateSpaceSize = prepare(samplingUpperBound*10000);
-		final int sampleCount = ((int) Math.min(samplingUpperBound, (int)(sampleProportion * approximateSpaceSize)))
+		final int sampleCount = Math.min(samplingUpperBound, (int)(sampleProportion * approximateSpaceSize))
 			* (forExport ? EXPORT_INTENSITY : 1);
 		
 		int failures = 0;

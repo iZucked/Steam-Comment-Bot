@@ -85,8 +85,7 @@ public class SimpleSchedulerTest {
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(
 				keypoints);
 
-		final IVesselClass vesselClass1 = builder.createVesselClass(
-				"vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, 0, Integer.MAX_VALUE, 0, 0);
 
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
 				150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor,

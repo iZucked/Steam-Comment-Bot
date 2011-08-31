@@ -91,9 +91,7 @@ public class TestCalculations {
 		final int maxSpeed = 20000;
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = 400000;
-		final IVesselClass vesselClass1 = builder.createVesselClass(
-				"vessel-class-1", minSpeed, maxSpeed, capacity, 0,
-				baseFuelUnitPrice, 500, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, 500, 0, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, 600l);
@@ -705,10 +703,7 @@ public class TestCalculations {
 		final int maxSpeed = 20000;
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = 400000;
-		final IVesselClass vesselClass1 = builder.createVesselClass(
-				"vessel-class-1", minSpeed, maxSpeed, capacity, 0,
-				baseFuelUnitPrice, 500, 0,
-				Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, 500, 0, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, 600l);
@@ -1324,9 +1319,7 @@ public class TestCalculations {
 		final int maxSpeed = 20000;
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = 1000;
-		final IVesselClass vesselClass1 = builder.createVesselClass(
-				"vessel-class-1", minSpeed, maxSpeed, capacity, 0,
-				baseFuelUnitPrice, 500, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, 500, 0, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, 600l);

@@ -11,8 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -169,6 +171,9 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		long cost;
 		VoyagePlan currentPlan;
 
+		VoyageOptions optionsToRestore = null;
+		int availableTimeToRestore = 0;
+
 		if (optimiseLastLeg) {
 
 			// There are some cases where we wish to evaluate the best time to
@@ -189,17 +194,26 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			final VoyageOptions options = (VoyageOptions) basicSequence
 					.get(basicSequence.size() - 2);
 			final int originalTime = options.getAvailableTime();
-
+			optionsToRestore = options;
+			availableTimeToRestore = originalTime;
 			VoyagePlan bestLastLegPlan = null;
 			long bestLastLegCost = Long.MAX_VALUE;
 			long lastCost = Long.MAX_VALUE;
 
-			for (int i = 0; i < 300; i+=10) {
-				options.setAvailableTime(options.getAvailableTime() + 1);
+			final int hireRate = vessel.getVesselInstanceType() == VesselInstanceType.FLEET ? 0 : vessel.getVesselClass().getHourlyCharterInPrice();
+
+			for (int i = 0; i < 30; i++) {
 
 				currentPlan = calculateVoyagePlan();
+
 				if (currentPlan != null) {
-					final long currentCost = evaluatePlan(currentPlan);
+					final VoyageDetails lastVoyageDetails = (VoyageDetails) (currentPlan.getSequence()[currentPlan.getSequence().length - 2]);
+
+					long currentCost = evaluatePlan(currentPlan);
+
+					long hireCost = Calculator.multiply(hireRate, lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
+					currentCost += hireCost;
+
 					if (currentCost < bestLastLegCost) {
 						bestLastLegCost = currentCost;
 						bestLastLegPlan = currentPlan;
@@ -212,15 +226,10 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 					} else {
 						lastCost = currentCost;
 					}
-
-					final Object[] sequence = currentPlan.getSequence();
-					
-					final VoyageDetails lastVoyage = (VoyageDetails) sequence[sequence.length-2];
-					if (lastVoyage.getIdleTime() > 0) {
-						options.setAvailableTime(options.getAvailableTime() - lastVoyage.getIdleTime());
-					}
 				}
+				options.setAvailableTime(options.getAvailableTime() + 1);
 			}
+
 
 			cost = bestLastLegCost;
 			currentPlan = bestLastLegPlan;
@@ -279,7 +288,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 					final VoyageDetails<T> details = (VoyageDetails<T>) obj;
 					// Skip cast check as we created the object in the first
 					// place
-					final VoyageOptions options = (VoyageOptions) details
+					final VoyageOptions options = details
 							.getOptions();
 
 					try {
@@ -292,7 +301,9 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 				}
 			}
 		}
-
+		if (optionsToRestore != null) {
+			optionsToRestore.setAvailableTime(availableTimeToRestore);
+		}
 	}
 
 	public long evaluatePlan(final VoyagePlan plan) {
@@ -327,6 +338,9 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 //		System.err.println("Total Cost = " + cost);
 //		if (cost < bestCost)
 //			System.err.println("Maybe new best ^^");
+		// include cost of hire
+
+		// cost += plan.getTotalHireCost();
 		return cost;
 	}
 
@@ -369,6 +383,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 	private List<Integer> arrivalTimes;
 
+	@Override
 	public void setArrivalTimes(final List<Integer> arrivalTimes) {
 		this.arrivalTimes = arrivalTimes;
 	}

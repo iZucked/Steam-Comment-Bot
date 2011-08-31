@@ -30,9 +30,7 @@ public class SchedulerBuilderTest {
 	public void testSchedulerBuilder() {
 
 		/**
-		 * How to test builder? -- No access to state until we get the finished
-		 * product? Perhaps a second constructor passing in DCP objects and
-		 * ensure they are called correctly.
+		 * How to test builder? -- No access to state until we get the finished product? Perhaps a second constructor passing in DCP objects and ensure they are called correctly.
 		 */
 
 		fail("Not yet implemented");
@@ -52,7 +50,7 @@ public class SchedulerBuilderTest {
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
 		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
-		
+
 		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false);
 	}
 
@@ -117,8 +115,7 @@ public class SchedulerBuilderTest {
 
 		final ILoadSlot loadSlot = context.mock(ILoadSlot.class);
 
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("id",
-				port, window, 0, 0, curve, 0);
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
 
 		builder.createCargo("id", loadSlot, dischargeSlot);
 	}
@@ -132,8 +129,7 @@ public class SchedulerBuilderTest {
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
 
-		final ILoadSlot loadSlot = builder.createLoadSlot("id", port, window,
-				0, 0, contract, 0, 0, false, false);
+		final ILoadSlot loadSlot = builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false);
 		final IDischargeSlot dischargeSlot = context.mock(IDischargeSlot.class);
 
 		builder.createCargo("id", loadSlot, dischargeSlot);
@@ -196,8 +192,7 @@ public class SchedulerBuilderTest {
 		final long capacity = 3l;
 		final int minHeel = 4;
 
-		final IVesselClass vesselClass = builder.createVesselClass("name",
-				minSpeed, maxSpeed, capacity, minHeel, 7000, 1000, 1234, 35353, 80808, 10101);
+		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, minHeel, 7000, 1000, 0, 1234, 35353, 80808, 10101);
 		// createVesselClass("name", minSpeed,
 		// maxSpeed, capacity, minHeel, 700;
 
@@ -212,7 +207,7 @@ public class SchedulerBuilderTest {
 		Assert.assertEquals(35353, vesselClass.getWarmupTime());
 		Assert.assertEquals(80808, vesselClass.getCooldownTime());
 		Assert.assertEquals(10101, vesselClass.getCooldownVolume());
-		
+
 		fail("Not yet implemented - Internal state checks");
 	}
 
