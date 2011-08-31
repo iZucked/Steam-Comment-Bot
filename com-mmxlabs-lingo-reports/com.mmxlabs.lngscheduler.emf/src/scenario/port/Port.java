@@ -24,6 +24,8 @@ import scenario.UUIDObject;
  *   <li>{@link scenario.port.Port#getDefaultWindowStart <em>Default Window Start</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultSlotDuration <em>Default Slot Duration</em>}</li>
  *   <li>{@link scenario.port.Port#isShouldArriveCold <em>Should Arrive Cold</em>}</li>
+ *   <li>{@link scenario.port.Port#getDefaultLoadDuration <em>Default Load Duration</em>}</li>
+ *   <li>{@link scenario.port.Port#getDefaultDischargeDuration <em>Default Discharge Duration</em>}</li>
  * </ul>
  * </p>
  *
@@ -190,5 +192,57 @@ public interface Port extends UUIDObject, NamedObject, AnnotatedObject {
 	 * @generated
 	 */
 	void setShouldArriveCold(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Default Load Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Default Load Duration</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Default Load Duration</em>' attribute.
+	 * @see #setDefaultLoadDuration(int)
+	 * @see scenario.port.PortPackage#getPort_DefaultLoadDuration()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getDefaultLoadDuration();
+
+	/**
+	 * Sets the value of the '{@link scenario.port.Port#getDefaultLoadDuration <em>Default Load Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Default Load Duration</em>' attribute.
+	 * @see #getDefaultLoadDuration()
+	 * @generated
+	 */
+	void setDefaultLoadDuration(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Default Discharge Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Default Discharge Duration</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Default Discharge Duration</em>' attribute.
+	 * @see #setDefaultDischargeDuration(int)
+	 * @see scenario.port.PortPackage#getPort_DefaultDischargeDuration()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getDefaultDischargeDuration();
+
+	/**
+	 * Sets the value of the '{@link scenario.port.Port#getDefaultDischargeDuration <em>Default Discharge Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Default Discharge Duration</em>' attribute.
+	 * @see #getDefaultDischargeDuration()
+	 * @generated
+	 */
+	void setDefaultDischargeDuration(int value);
 
 } // Port

@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
+import scenario.cargo.Slot;
 
 /**
  * <!-- begin-user-doc -->
@@ -214,6 +215,18 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getSlotOrPortDuration() {
+		if (isSetSlotDuration())
+			return getSlotDuration();
+		else
+			return getPort().getDefaultLoadDuration();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -283,10 +296,28 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * @generated
 	 */
 	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == Slot.class) {
+			switch (baseOperationID) {
+				case CargoPackage.SLOT___GET_SLOT_OR_PORT_DURATION: return CargoPackage.LOAD_SLOT___GET_SLOT_OR_PORT_DURATION;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 			case CargoPackage.LOAD_SLOT___GET_CARGO_OR_PORT_CV_VALUE:
 				return getCargoOrPortCVValue();
+			case CargoPackage.LOAD_SLOT___GET_SLOT_OR_PORT_DURATION:
+				return getSlotOrPortDuration();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

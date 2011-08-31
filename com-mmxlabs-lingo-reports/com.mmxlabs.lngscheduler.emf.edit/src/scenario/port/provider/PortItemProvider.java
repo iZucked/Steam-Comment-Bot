@@ -76,6 +76,8 @@ public class PortItemProvider
 			addDefaultWindowStartPropertyDescriptor(object);
 			addDefaultSlotDurationPropertyDescriptor(object);
 			addShouldArriveColdPropertyDescriptor(object);
+			addDefaultLoadDurationPropertyDescriptor(object);
+			addDefaultDischargeDurationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -257,6 +259,50 @@ public class PortItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Default Load Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultLoadDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_defaultLoadDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultLoadDuration_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__DEFAULT_LOAD_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Default Discharge Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultDischargeDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_defaultDischargeDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultDischargeDuration_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__DEFAULT_DISCHARGE_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Port.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -301,6 +347,8 @@ public class PortItemProvider
 			case PortPackage.PORT__DEFAULT_WINDOW_START:
 			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
 			case PortPackage.PORT__SHOULD_ARRIVE_COLD:
+			case PortPackage.PORT__DEFAULT_LOAD_DURATION:
+			case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

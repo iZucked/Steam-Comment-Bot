@@ -417,7 +417,7 @@ public interface Slot extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetSlotDuration())\n\treturn getSlotDuration();\nelse\n\treturn getPort().getDefaultSlotDuration();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetSlotDuration())\n\treturn getSlotDuration();\nelse\n\treturn getPort().getDefaultDischargeDuration();'"
 	 * @generated
 	 */
 	int getSlotOrPortDuration();

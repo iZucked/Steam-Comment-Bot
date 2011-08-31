@@ -40,7 +40,6 @@ import scenario.impl.NamedObjectImpl;
  *   <li>{@link scenario.fleet.impl.VesselImpl#getClass_ <em>Class</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getStartRequirement <em>Start Requirement</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselImpl#getEndRequirement <em>End Requirement</em>}</li>
- *   <li>{@link scenario.fleet.impl.VesselImpl#getPortExclusions <em>Port Exclusions</em>}</li>
  * </ul>
  * </p>
  *
@@ -145,16 +144,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * @ordered
 	 */
 	protected PortAndTime endRequirement;
-
-	/**
-	 * The cached value of the '{@link #getPortExclusions() <em>Port Exclusions</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortExclusions()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<PortExclusion> portExclusions;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -392,18 +381,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<PortExclusion> getPortExclusions() {
-		if (portExclusions == null) {
-			portExclusions = new EObjectContainmentEList.Resolving<PortExclusion>(PortExclusion.class, this, FleetPackage.VESSEL__PORT_EXCLUSIONS);
-		}
-		return portExclusions;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getDailyCharterOutPrice() {
 		return dailyCharterOutPrice;
 	}
@@ -457,8 +434,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 				return basicSetStartRequirement(null, msgs);
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				return basicSetEndRequirement(null, msgs);
-			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
-				return ((InternalEList<?>)getPortExclusions()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -486,8 +461,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				if (resolve) return getEndRequirement();
 				return basicGetEndRequirement();
-			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
-				return getPortExclusions();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -519,10 +492,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				setEndRequirement((PortAndTime)newValue);
 				return;
-			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
-				getPortExclusions().clear();
-				getPortExclusions().addAll((Collection<? extends PortExclusion>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -553,9 +522,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				setEndRequirement((PortAndTime)null);
 				return;
-			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
-				getPortExclusions().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -580,8 +546,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 				return startRequirement != null;
 			case FleetPackage.VESSEL__END_REQUIREMENT:
 				return endRequirement != null;
-			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
-				return portExclusions != null && !portExclusions.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

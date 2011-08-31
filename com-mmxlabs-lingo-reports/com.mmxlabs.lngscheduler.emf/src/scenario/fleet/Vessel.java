@@ -24,7 +24,6 @@ import scenario.NamedObject;
  *   <li>{@link scenario.fleet.Vessel#getClass_ <em>Class</em>}</li>
  *   <li>{@link scenario.fleet.Vessel#getStartRequirement <em>Start Requirement</em>}</li>
  *   <li>{@link scenario.fleet.Vessel#getEndRequirement <em>End Requirement</em>}</li>
- *   <li>{@link scenario.fleet.Vessel#getPortExclusions <em>Port Exclusions</em>}</li>
  * </ul>
  * </p>
  *
@@ -136,22 +135,6 @@ public interface Vessel extends NamedObject, AnnotatedObject {
 	 * @generated
 	 */
 	void setTimeChartered(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Port Exclusions</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.fleet.PortExclusion}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Port Exclusions</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Port Exclusions</em>' containment reference list.
-	 * @see scenario.fleet.FleetPackage#getVessel_PortExclusions()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	EList<PortExclusion> getPortExclusions();
 
 	/**
 	 * Returns the value of the '<em><b>Daily Charter Out Price</b></em>' attribute.
