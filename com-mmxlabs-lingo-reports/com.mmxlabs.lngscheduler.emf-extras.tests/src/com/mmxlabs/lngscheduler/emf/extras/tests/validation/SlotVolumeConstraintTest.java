@@ -146,7 +146,7 @@ public class SlotVolumeConstraintTest {
 		context.assertIsSatisfied();
 	}
 
-	public void testSlotVolumeConstraintSuccess(final int min, final int max) {
+	private void testSlotVolumeConstraintSuccess(final int min, final int max) {
 
 		final Mockery context = new Mockery();
 		// This is the constraint we will be testing
@@ -191,7 +191,7 @@ public class SlotVolumeConstraintTest {
 		context.assertIsSatisfied();
 	}
 
-	public void testSlotVolumeConstraintFailure(final int min, final int max) {
+	private void testSlotVolumeConstraintFailure(final int min, final int max) {
 
 		final Mockery context = new Mockery();
 		// This is the constraint we will be testing
