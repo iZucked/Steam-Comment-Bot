@@ -17,12 +17,8 @@ package com.mmxlabs.lngscheduler.emf.extras.plugin;
  * $Id$
  */
 
-import org.eclipse.emf.ecore.resource.Resource.Factory;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
-import com.mmxlabs.lngscheduler.emf.extras.UpgradingResourceFactory;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -37,7 +33,6 @@ public class ExtrasPlugin extends AbstractUIPlugin {
 	 */
 	public ExtrasPlugin() {
 		super();
-		plugin = this;
 	}
 
 	/**
@@ -46,9 +41,7 @@ public class ExtrasPlugin extends AbstractUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-
-		Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("scenario",
-				new UpgradingResourceFactory(new XMIResourceFactoryImpl()));
+		plugin = this;
 	}
 
 	/**
