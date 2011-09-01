@@ -15,27 +15,16 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.SlotVolumeConstraint;
 /**
  * Details from case 171:
  * 
- * SlotVolumeConstraint is supposed to check that a slot's min and max volume
- * limits are set sensibly, i.e. that the minimum volume is not greater than the
- * maximum volume.
+ * SlotVolumeConstraint is supposed to check that a slot's min and max volume limits are set sensibly, i.e. that the minimum volume is not greater than the maximum volume.
  * 
- * Although slot volumes limits can be queried by the Slot.getMinQuantity() and
- * Slot.getMaxQuantity() methods, these values are "unsettable", and have
- * corresponding Slot.isSetMinQuantity() and isSetMaxQuantity() methods. If the
- * values aren't set, then the min and max values are taken from the slot's
- * contract instead, and so on
+ * Although slot volumes limits can be queried by the Slot.getMinQuantity() and Slot.getMaxQuantity() methods, these values are "unsettable", and have corresponding Slot.isSetMinQuantity() and
+ * isSetMaxQuantity() methods. If the values aren't set, then the min and max values are taken from the slot's contract instead, and so on
  * 
- * However, all the code uses the convenience method
- * Slot.getOrContractMinQuantity(Scenario) and its Max counterpart, so you can
- * Mock a slot which has these.
+ * However, all the code uses the convenience method Slot.getOrContractMinQuantity(Scenario) and its Max counterpart, so you can Mock a slot which has these.
  * 
- * A little fiddle here is that the constraint needs to figure out the Scenario
- * which contains a slot, your mock slot will need to have Slot.eContainer() and
- * Slot.eContainingFeature() methods. eContainer() should return a mocked
- * Scenario and eContainingFeature() can probably return null. Something similar
- * will be required in any other constraints that need to find out which
- * Scenario the object they are validating belongs to, as the IValidationContext
- * only gives the Slot or whatever.
+ * A little fiddle here is that the constraint needs to figure out the Scenario which contains a slot, your mock slot will need to have Slot.eContainer() and Slot.eContainingFeature() methods.
+ * eContainer() should return a mocked Scenario and eContainingFeature() can probably return null. Something similar will be required in any other constraints that need to find out which Scenario the
+ * object they are validating belongs to, as the IValidationContext only gives the Slot or whatever.
  * 
  */
 public class SlotVolumeConstraintTest {
@@ -115,10 +104,8 @@ public class SlotVolumeConstraintTest {
 
 		final Slot slot = context.mock(Slot.class);
 
-		final IValidationContext validationContext = context
-				.mock(IValidationContext.class);
-		final IConstraintStatus successStatus = context
-				.mock(IConstraintStatus.class);
+		final IValidationContext validationContext = context.mock(IValidationContext.class);
+		final IConstraintStatus successStatus = context.mock(IConstraintStatus.class);
 
 		context.checking(new Expectations() {
 			{
@@ -155,10 +142,8 @@ public class SlotVolumeConstraintTest {
 		final Slot slot = context.mock(Slot.class);
 		final Scenario scenario = context.mock(Scenario.class);
 
-		final IValidationContext validationContext = context
-				.mock(IValidationContext.class);
-		final IConstraintStatus successStatus = context
-				.mock(IConstraintStatus.class);
+		final IValidationContext validationContext = context.mock(IValidationContext.class);
+		final IConstraintStatus successStatus = context.mock(IConstraintStatus.class);
 
 		context.checking(new Expectations() {
 			{
@@ -200,10 +185,8 @@ public class SlotVolumeConstraintTest {
 		final Slot slot = context.mock(Slot.class);
 		final Scenario scenario = context.mock(Scenario.class);
 
-		final IValidationContext validationContext = context
-				.mock(IValidationContext.class);
-		final IConstraintStatus failureStatus = context
-				.mock(IConstraintStatus.class);
+		final IValidationContext validationContext = context.mock(IValidationContext.class);
+		final IConstraintStatus failureStatus = context.mock(IConstraintStatus.class);
 
 		context.checking(new Expectations() {
 			{
