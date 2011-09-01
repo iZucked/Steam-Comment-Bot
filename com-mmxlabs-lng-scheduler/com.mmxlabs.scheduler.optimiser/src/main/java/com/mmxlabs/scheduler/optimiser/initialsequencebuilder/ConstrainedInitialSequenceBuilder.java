@@ -216,15 +216,32 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 			});
 		}
 
+		final Map<IResource, SequenceChunk<T>> endChunks = new HashMap<IResource, SequenceChunk<T>>();
+
+		final IResourceAllocationConstraintDataComponentProvider racdcp = data.getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider,
+				IResourceAllocationConstraintDataComponentProvider.class);
+
 		List<SequenceChunk<T>> chunks = new LinkedList<SequenceChunk<T>>();
 		for (T head : heads) {
 			SequenceChunk<T> chunk = new SequenceChunk<T>();
+			if (portTypeProvider.getPortType(head) == PortType.End) {
+				chunk.setEndElement(true);
+				final Collection<IResource> c = racdcp.getAllowedResources(head);
+				assert c.size() == 1;
+				endChunks.put(c.iterator().next(), chunk);
+			}
 			chunk.add(head);
 			while (followerCache.get(head).size() == 1) {
 				head = followerCache.get(head).iterator().next();
 				if (!unsequencedElements.contains(head))
 					break;
 				chunk.add(head);
+				if (portTypeProvider.getPortType(head) == PortType.End) {
+					chunk.setEndElement(true);
+					final Collection<IResource> c = racdcp.getAllowedResources(head);
+					assert c.size() == 1;
+					endChunks.put(c.iterator().next(), chunk);
+				}
 			}
 			chunks.add(chunk);
 
@@ -246,10 +263,6 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 
 		// now add chunks for things with only one element
 
-		final Map<IResource, SequenceChunk<T>> endChunks = new HashMap<IResource, SequenceChunk<T>>();
-
-		final IResourceAllocationConstraintDataComponentProvider racdcp = data.getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider,
-				IResourceAllocationConstraintDataComponentProvider.class);
 		for (Map.Entry<T, Set<T>> entry : followerCache.entrySet()) {
 			final T place = entry.getKey();
 			final PortType portType = portTypeProvider.getPortType(place);
