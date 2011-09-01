@@ -38,9 +38,8 @@
    </features>
 
    <configurations>
-      <plugin id="com.mmxlabs.lngscheduler.emf-extras" autoStart="true" startLevel="3" />
-      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
-      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="0" />
    </configurations>
 
 </product>

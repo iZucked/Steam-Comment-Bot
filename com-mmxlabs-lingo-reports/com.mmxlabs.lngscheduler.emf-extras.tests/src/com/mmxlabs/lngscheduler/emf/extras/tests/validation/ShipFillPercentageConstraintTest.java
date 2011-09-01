@@ -154,8 +154,7 @@ public class ShipFillPercentageConstraintTest {
 		final IValidationContext validationContext = context
 				.mock(IValidationContext.class);
 
-		final IConstraintStatus failureStatus = context
-				.mock(IConstraintStatus.class);
+		final IConstraintStatus failureStatus = context.mock(IConstraintStatus.class);
 
 		context.checking(new Expectations() {
 			{

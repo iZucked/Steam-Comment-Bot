@@ -473,5 +473,12 @@
                menubarPath="org.eclipse.emf.validationMenuID/additions">
          </action>
       </viewerContribution>
+   </extension>
+   <extension
+         point="org.eclipse.emf.ecore.extension_parser">
+      <parser
+            class="com.mmxlabs.lngscheduler.emf.extras.XMIUpgradingResourceFactory"
+            type="scenario">
+      </parser>
    </extension> 
 </plugin>
