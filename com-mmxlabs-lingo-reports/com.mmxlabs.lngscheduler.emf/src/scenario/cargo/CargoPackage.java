@@ -509,15 +509,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT = SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Port Duration</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___GET_SLOT_OR_PORT_DURATION = SLOT___GET_SLOT_OR_PORT_DURATION;
-
-	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Quantity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -545,13 +536,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_CARGO_OR_PORT_CV_VALUE = SLOT_OPERATION_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Port Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_PORT_DURATION = SLOT_OPERATION_COUNT + 1;
+
+	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 1;
+	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link scenario.cargo.CargoType <em>Type</em>}' enum.
@@ -884,6 +884,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getLoadSlot__GetCargoOrPortCVValue();
 
 	/**
+	 * Returns the meta object for the '{@link scenario.cargo.LoadSlot#getSlotOrPortDuration() <em>Get Slot Or Port Duration</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Port Duration</em>' operation.
+	 * @see scenario.cargo.LoadSlot#getSlotOrPortDuration()
+	 * @generated
+	 */
+	EOperation getLoadSlot__GetSlotOrPortDuration();
+
+	/**
 	 * Returns the meta object for enum '{@link scenario.cargo.CargoType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1163,6 +1173,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation LOAD_SLOT___GET_CARGO_OR_PORT_CV_VALUE = eINSTANCE.getLoadSlot__GetCargoOrPortCVValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LOAD_SLOT___GET_SLOT_OR_PORT_DURATION = eINSTANCE.getLoadSlot__GetSlotOrPortDuration();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.CargoType <em>Type</em>}' enum.

@@ -30,6 +30,7 @@ import scenario.ScenarioPackage;
 import scenario.cargo.Slot;
 import scenario.fleet.CharterOut;
 import scenario.fleet.PortAndTime;
+import scenario.fleet.VesselEvent;
 
 import com.mmxlabs.common.Pair;
 
@@ -169,7 +170,7 @@ public class EMFUtils {
 				final Slot slot = (Slot) o;
 				updateMinMax(result, slot.getWindowStart());
 				updateMinMax(result, slot.getWindowEnd());
-			} else if (o instanceof CharterOut) {
+			} else if (o instanceof VesselEvent) {
 				updateMinMax(result, ((CharterOut) o).getStartDate());
 				updateMinMax(result, ((CharterOut) o).getEndDate());
 			}

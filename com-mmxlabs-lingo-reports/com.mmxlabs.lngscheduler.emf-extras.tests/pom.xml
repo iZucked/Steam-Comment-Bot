@@ -8,8 +8,8 @@
 		<groupId>com.mmxlabs.shiplingo</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.mmxlabs.scheduler.emf-extras.tests</groupId>
-	<artifactId>com.mmxlabs.scheduler.emf-extras.tests</artifactId>
+	<groupId>com.mmxlabs.lngscheduler.emf-extras.tests</groupId>
+	<artifactId>com.mmxlabs.lngscheduler.emf-extras.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 	<version>1.0.0.qualifier</version>
 </project>

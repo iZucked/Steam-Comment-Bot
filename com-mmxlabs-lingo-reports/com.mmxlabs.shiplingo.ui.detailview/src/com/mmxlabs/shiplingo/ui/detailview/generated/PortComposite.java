@@ -100,6 +100,8 @@ public class PortComposite extends AbstractDetailComposite {
     createDefaultWindowStartEditor(composite, mainGroup);
     createDefaultSlotDurationEditor(composite, mainGroup);
     createShouldArriveColdEditor(composite, mainGroup);
+    createDefaultLoadDurationEditor(composite, mainGroup);
+    createDefaultDischargeDurationEditor(composite, mainGroup);
   }
 
 	/**
@@ -182,5 +184,25 @@ public class PortComposite extends AbstractDetailComposite {
     composite.createEditorControl(mainGroup,
       composite.createEditor(PortPackage.eINSTANCE.getPort_ShouldArriveCold()),
       "Should Arrive Cold");
+  }
+
+  /**
+   * Create an editor for the defaultLoadDuration feature on Port
+   * @generated
+   */
+  protected static void createDefaultLoadDurationEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(PortPackage.eINSTANCE.getPort_DefaultLoadDuration()),
+      "Default Load Duration");
+  }
+
+  /**
+   * Create an editor for the defaultDischargeDuration feature on Port
+   * @generated
+   */
+  protected static void createDefaultDischargeDurationEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(PortPackage.eINSTANCE.getPort_DefaultDischargeDuration()),
+      "Default Discharge Duration");
   }
 }

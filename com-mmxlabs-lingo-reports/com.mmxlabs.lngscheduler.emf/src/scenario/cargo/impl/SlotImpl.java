@@ -597,7 +597,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		if (isSetSlotDuration())
 			return getSlotDuration();
 		else
-			return getPort().getDefaultSlotDuration();
+			return getPort().getDefaultDischargeDuration();
 	}
 
 	/**

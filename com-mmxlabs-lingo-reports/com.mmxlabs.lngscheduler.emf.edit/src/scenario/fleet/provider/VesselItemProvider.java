@@ -180,7 +180,6 @@ public class VesselItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL__START_REQUIREMENT);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL__END_REQUIREMENT);
-			childrenFeatures.add(FleetPackage.Literals.VESSEL__PORT_EXCLUSIONS);
 		}
 		return childrenFeatures;
 	}
@@ -242,7 +241,6 @@ public class VesselItemProvider
 				return;
 			case FleetPackage.VESSEL__START_REQUIREMENT:
 			case FleetPackage.VESSEL__END_REQUIREMENT:
-			case FleetPackage.VESSEL__PORT_EXCLUSIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -274,11 +272,6 @@ public class VesselItemProvider
 			(createChildParameter
 				(FleetPackage.Literals.VESSEL__END_REQUIREMENT,
 				 FleetFactory.eINSTANCE.createPortTimeAndHeel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.VESSEL__PORT_EXCLUSIONS,
-				 FleetFactory.eINSTANCE.createPortExclusion()));
 	}
 
 	/**

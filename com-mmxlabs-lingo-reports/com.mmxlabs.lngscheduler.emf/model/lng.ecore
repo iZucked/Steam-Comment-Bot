@@ -87,8 +87,6 @@
           eType="#//fleet/PortTimeAndHeel" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="endRequirement" lowerBound="1"
           eType="#//fleet/PortAndTime" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="portExclusions" upperBound="-1"
-          eType="#//fleet/PortExclusion" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="VesselClass" eSuperTypes="#//NamedObject #//AnnotatedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
@@ -124,8 +122,8 @@
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuel" lowerBound="1"
           eType="#//fleet/VesselFuel"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="portExclusions" upperBound="-1"
-          eType="#//fleet/PortExclusion" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="pilotLightRate" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1"
           eType="#//port/Port">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -652,6 +650,10 @@
           lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="shouldArriveCold" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultLoadDuration"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultDischargeDuration"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DistanceModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="distances" upperBound="-1"
@@ -710,7 +712,7 @@
       </eOperations>
       <eOperations name="getSlotOrPortDuration" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="if (isSetSlotDuration())&#xA;&#x9;return getSlotDuration();&#xA;else&#xA;&#x9;return getPort().getDefaultSlotDuration();"/>
+          <details key="body" value="if (isSetSlotDuration())&#xA;&#x9;return getSlotDuration();&#xA;else&#xA;&#x9;return getPort().getDefaultDischargeDuration();"/>
         </eAnnotations>
       </eOperations>
       <eOperations name="getSlotOrContractMinQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
@@ -744,6 +746,11 @@
       <eOperations name="getCargoOrPortCVValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="body" value="if (isSetCargoCVvalue()) &#xD;&#xA;&#x9;return getCargoCVvalue();&#xD;&#xA;else if (getPort()!=null)&#xD;&#xA;&#x9;return getPort().getDefaultCVvalue();&#xD;&#xA;else&#xD;&#xA;&#x9;return 0;"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getSlotOrPortDuration" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (isSetSlotDuration())&#xA;&#x9;return getSlotDuration();&#xA;else&#xA;&#x9;return getPort().getDefaultLoadDuration();"/>
         </eAnnotations>
       </eOperations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoCVvalue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"

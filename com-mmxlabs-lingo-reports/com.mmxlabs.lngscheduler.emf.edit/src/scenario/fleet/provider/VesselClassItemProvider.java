@@ -80,6 +80,7 @@ public class VesselClassItemProvider
 			addDailyCharterInPricePropertyDescriptor(object);
 			addDailyCharterOutPricePropertyDescriptor(object);
 			addBaseFuelPropertyDescriptor(object);
+			addPilotLightRatePropertyDescriptor(object);
 			addInaccessiblePortsPropertyDescriptor(object);
 			addWarmupTimePropertyDescriptor(object);
 			addCooldownTimePropertyDescriptor(object);
@@ -397,6 +398,28 @@ public class VesselClassItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Pilot Light Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPilotLightRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_pilotLightRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_pilotLightRate_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__PILOT_LIGHT_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -410,7 +433,6 @@ public class VesselClassItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__LADEN_ATTRIBUTES);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__BALLAST_ATTRIBUTES);
-			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__PORT_EXCLUSIONS);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__CANAL_COSTS);
 		}
 		return childrenFeatures;
@@ -475,6 +497,7 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
 			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
 			case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
 			case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
 			case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
@@ -482,7 +505,6 @@ public class VesselClassItemProvider
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
-			case FleetPackage.VESSEL_CLASS__PORT_EXCLUSIONS:
 			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -510,11 +532,6 @@ public class VesselClassItemProvider
 			(createChildParameter
 				(FleetPackage.Literals.VESSEL_CLASS__BALLAST_ATTRIBUTES,
 				 FleetFactory.eINSTANCE.createVesselStateAttributes()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.VESSEL_CLASS__PORT_EXCLUSIONS,
-				 FleetFactory.eINSTANCE.createPortExclusion()));
 
 		newChildDescriptors.add
 			(createChildParameter

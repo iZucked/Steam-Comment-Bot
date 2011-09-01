@@ -92,6 +92,7 @@ public class PortRotationReportView extends EMFReportView {
 
 		});
 		addColumn("Speed", objectFormatter, ep.getJourney_Speed());
+		addColumn("Distance", integerFormatter, ep.getJourney_Distance());
 		addColumn("From Port", objectFormatter, ep.getJourney_FromPort(),
 				name);
 		addColumn("To Port", objectFormatter, ep.getJourney_ToPort(),
@@ -151,6 +152,20 @@ public class PortRotationReportView extends EMFReportView {
 					} else {
 						return null;
 					}
+				}
+			});
+			addColumn(ft.getName() + " Unit Price", new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+					if (object instanceof FuelMixture) {
+						for (final FuelQuantity q : ((FuelMixture) object).getFuelUsage()) {
+							if (q.getFuelType().equals(ft)) {
+								return (int) q.getUnitPrice();
+							}
+						}
+					}
+
+					return null;
 				}
 			});
 			addColumn(ft.getName() + " Cost", new IntegerFormatter() {

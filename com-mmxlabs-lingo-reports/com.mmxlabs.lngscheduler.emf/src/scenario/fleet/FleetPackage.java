@@ -202,22 +202,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__END_REQUIREMENT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Port Exclusions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__PORT_EXCLUSIONS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
-
-	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+	int VESSEL_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -365,13 +356,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__BASE_FUEL = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 11;
 
 	/**
-	 * The feature id for the '<em><b>Port Exclusions</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Pilot Light Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__PORT_EXCLUSIONS = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 12;
+	int VESSEL_CLASS__PILOT_LIGHT_RATE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
@@ -1440,17 +1431,6 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVessel_TimeChartered();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link scenario.fleet.Vessel#getPortExclusions <em>Port Exclusions</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Port Exclusions</em>'.
-	 * @see scenario.fleet.Vessel#getPortExclusions()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EReference getVessel_PortExclusions();
-
-	/**
 	 * Returns the meta object for the attribute '{@link scenario.fleet.Vessel#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1648,15 +1628,15 @@ public interface FleetPackage extends EPackage {
 	EReference getVesselClass_BaseFuel();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link scenario.fleet.VesselClass#getPortExclusions <em>Port Exclusions</em>}'.
+	 * Returns the meta object for the attribute '{@link scenario.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Port Exclusions</em>'.
-	 * @see scenario.fleet.VesselClass#getPortExclusions()
+	 * @return the meta object for the attribute '<em>Pilot Light Rate</em>'.
+	 * @see scenario.fleet.VesselClass#getPilotLightRate()
 	 * @see #getVesselClass()
 	 * @generated
 	 */
-	EReference getVesselClass_PortExclusions();
+	EAttribute getVesselClass_PilotLightRate();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.fleet.FuelConsumptionLine <em>Fuel Consumption Line</em>}'.
@@ -2259,14 +2239,6 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL__TIME_CHARTERED = eINSTANCE.getVessel_TimeChartered();
 
 		/**
-		 * The meta object literal for the '<em><b>Port Exclusions</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL__PORT_EXCLUSIONS = eINSTANCE.getVessel_PortExclusions();
-
-		/**
 		 * The meta object literal for the '<em><b>Daily Charter Out Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2413,12 +2385,12 @@ public interface FleetPackage extends EPackage {
 		EReference VESSEL_CLASS__BASE_FUEL = eINSTANCE.getVesselClass_BaseFuel();
 
 		/**
-		 * The meta object literal for the '<em><b>Port Exclusions</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Pilot Light Rate</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL_CLASS__PORT_EXCLUSIONS = eINSTANCE.getVesselClass_PortExclusions();
+		EAttribute VESSEL_CLASS__PILOT_LIGHT_RATE = eINSTANCE.getVesselClass_PilotLightRate();
 
 		/**
 		 * The meta object literal for the '{@link scenario.fleet.impl.FuelConsumptionLineImpl <em>Fuel Consumption Line</em>}' class.

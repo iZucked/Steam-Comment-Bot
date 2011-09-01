@@ -48,7 +48,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBaseFuel <em>Base Fuel</em>}</li>
- *   <li>{@link scenario.fleet.impl.VesselClassImpl#getPortExclusions <em>Port Exclusions</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCanalCosts <em>Canal Costs</em>}</li>
  *   <li>{@link scenario.fleet.impl.VesselClassImpl#getWarmupTime <em>Warmup Time</em>}</li>
@@ -280,14 +280,24 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected VesselFuel baseFuel;
 
 	/**
-	 * The cached value of the '{@link #getPortExclusions() <em>Port Exclusions</em>}' containment reference list.
+	 * The default value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPortExclusions()
+	 * @see #getPilotLightRate()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<PortExclusion> portExclusions;
+	protected static final int PILOT_LIGHT_RATE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPilotLightRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected int pilotLightRate = PILOT_LIGHT_RATE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getInaccessiblePorts() <em>Inaccessible Ports</em>}' reference list.
@@ -864,11 +874,20 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<PortExclusion> getPortExclusions() {
-		if (portExclusions == null) {
-			portExclusions = new EObjectContainmentEList.Resolving<PortExclusion>(PortExclusion.class, this, FleetPackage.VESSEL_CLASS__PORT_EXCLUSIONS);
-		}
-		return portExclusions;
+	public int getPilotLightRate() {
+		return pilotLightRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPilotLightRate(int newPilotLightRate) {
+		int oldPilotLightRate = pilotLightRate;
+		pilotLightRate = newPilotLightRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE, oldPilotLightRate, pilotLightRate));
 	}
 
 	/**
@@ -883,8 +902,6 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				return basicSetLadenAttributes(null, msgs);
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 				return basicSetBallastAttributes(null, msgs);
-			case FleetPackage.VESSEL_CLASS__PORT_EXCLUSIONS:
-				return ((InternalEList<?>)getPortExclusions()).basicRemove(otherEnd, msgs);
 			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
 				return ((InternalEList<?>)getCanalCosts()).basicRemove(otherEnd, msgs);
 		}
@@ -926,8 +943,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
 				if (resolve) return getBaseFuel();
 				return basicGetBaseFuel();
-			case FleetPackage.VESSEL_CLASS__PORT_EXCLUSIONS:
-				return getPortExclusions();
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				return getPilotLightRate();
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				return getInaccessiblePorts();
 			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
@@ -987,9 +1004,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
 				setBaseFuel((VesselFuel)newValue);
 				return;
-			case FleetPackage.VESSEL_CLASS__PORT_EXCLUSIONS:
-				getPortExclusions().clear();
-				getPortExclusions().addAll((Collection<? extends PortExclusion>)newValue);
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				setPilotLightRate((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
@@ -1056,8 +1072,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
 				setBaseFuel((VesselFuel)null);
 				return;
-			case FleetPackage.VESSEL_CLASS__PORT_EXCLUSIONS:
-				getPortExclusions().clear();
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				setPilotLightRate(PILOT_LIGHT_RATE_EDEFAULT);
 				return;
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
@@ -1110,8 +1126,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				return ballastAttributes != null;
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
 				return baseFuel != null;
-			case FleetPackage.VESSEL_CLASS__PORT_EXCLUSIONS:
-				return portExclusions != null && !portExclusions.isEmpty();
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				return pilotLightRate != PILOT_LIGHT_RATE_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
 			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
@@ -1186,6 +1202,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 		result.append(dailyCharterInPrice);
 		result.append(", dailyCharterOutPrice: ");
 		if (dailyCharterOutPriceESet) result.append(dailyCharterOutPrice); else result.append("<unset>");
+		result.append(", pilotLightRate: ");
+		result.append(pilotLightRate);
 		result.append(", warmupTime: ");
 		result.append(warmupTime);
 		result.append(", cooldownTime: ");

@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -231,8 +230,13 @@ public class MultiDetailDialog extends Dialog {
 		if (result == OK) {
 			final CompoundCommand cc = new CompoundCommand();
 			for (final Pair<EMFPath, EStructuralFeature> p : featuresToSet) {
-				final Object value = ((EObject) p.getFirst().get(proxy)).eGet(p
-						.getSecond());
+				final Object value;
+				if (p.getSecond().isUnsettable() && ((EObject) p.getFirst().get(proxy)).eIsSet(p.getSecond()) == false) {
+					value = SetCommand.UNSET_VALUE;
+				} else {
+					value = ((EObject) p.getFirst().get(proxy)).eGet(p.getSecond());
+				}
+
 				for (final EObject object : objects) {
 					cc.append(SetCommand.create(editingDomain, p.getFirst()
 							.get(object), p.getSecond(), value));

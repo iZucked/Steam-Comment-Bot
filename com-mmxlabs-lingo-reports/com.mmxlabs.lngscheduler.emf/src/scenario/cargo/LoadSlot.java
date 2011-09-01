@@ -139,4 +139,13 @@ public interface LoadSlot extends Slot {
 	 */
 	float getCargoOrPortCVValue();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetSlotDuration())\n\treturn getSlotDuration();\nelse\n\treturn getPort().getDefaultLoadDuration();'"
+	 * @generated
+	 */
+	int getSlotOrPortDuration();
+
 } // LoadSlot

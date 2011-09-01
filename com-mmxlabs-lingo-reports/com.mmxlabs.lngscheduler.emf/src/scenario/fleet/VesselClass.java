@@ -31,7 +31,7 @@ import scenario.port.Port;
  *   <li>{@link scenario.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getPortExclusions <em>Port Exclusions</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getCanalCosts <em>Canal Costs</em>}</li>
  *   <li>{@link scenario.fleet.VesselClass#getWarmupTime <em>Warmup Time</em>}</li>
@@ -468,19 +468,30 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	void setBaseFuel(VesselFuel value);
 
 	/**
-	 * Returns the value of the '<em><b>Port Exclusions</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.fleet.PortExclusion}.
+	 * Returns the value of the '<em><b>Pilot Light Rate</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Port Exclusions</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Pilot Light Rate</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Port Exclusions</em>' containment reference list.
-	 * @see scenario.fleet.FleetPackage#getVesselClass_PortExclusions()
-	 * @model containment="true" resolveProxies="true"
+	 * @return the value of the '<em>Pilot Light Rate</em>' attribute.
+	 * @see #setPilotLightRate(int)
+	 * @see scenario.fleet.FleetPackage#getVesselClass_PilotLightRate()
+	 * @model default="0" required="true"
 	 * @generated
 	 */
-	EList<PortExclusion> getPortExclusions();
+	int getPilotLightRate();
+
+	/**
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pilot Light Rate</em>' attribute.
+	 * @see #getPilotLightRate()
+	 * @generated
+	 */
+	void setPilotLightRate(int value);
 
 } // VesselClass
