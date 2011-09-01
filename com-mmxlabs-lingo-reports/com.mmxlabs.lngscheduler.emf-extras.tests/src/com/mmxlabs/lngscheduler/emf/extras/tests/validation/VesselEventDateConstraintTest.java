@@ -22,27 +22,37 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.VesselEventDateConstraint;
  */
 public class VesselEventDateConstraintTest {
 
+	/**
+	 * Test various combinations of test input.
+	 */
 	@Test
 	public void testVesselEventDateConstraint() {
 		
 		// Create some dates to test.
 		final long time = System.currentTimeMillis();
-		final Date today = new Date(time);
-		final Date tomorrow = new Date(time + TimeUnit.DAYS.toMillis(1));
+		final Date now = new Date(time);
+		final Date nowPlusOne = new Date(time + 1);
 		
 		// right way around
-		testVesselEventDateConstraint(true, today, tomorrow);
+		testVesselEventDateConstraint(true, now, nowPlusOne);
 		// wrong way around
-		testVesselEventDateConstraint(false, tomorrow, today);
+		testVesselEventDateConstraint(false, nowPlusOne, now);
 		// the same day should be fine.
-		testVesselEventDateConstraint(true, today, today);
+		testVesselEventDateConstraint(true, now, now);
 		
-		// test nulls, any null should produce a failure
-		testVesselEventDateConstraint(false, today, null);
-		testVesselEventDateConstraint(false, null, tomorrow);
+		// Test null dates. Any null should produce a failure.
+		testVesselEventDateConstraint(false, now, null);
+		testVesselEventDateConstraint(false, null, nowPlusOne);
 		testVesselEventDateConstraint(false, null, null);
 	}
 
+	/**
+	 * Tests VesselEventDateConstraint given a start and end date for a VesselDate. If the test is expected to pass, the boolean expectSuccess should be true.
+	 * 
+	 * @param expectSuccess Whether the test is expected to succeed. If false then the test will be expected to fail.
+	 * @param start The start date of the VesselEvent.
+	 * @param end The end date of the VesselEvent.
+	 */
 	private void testVesselEventDateConstraint(final boolean expectSuccess, final Date start, final Date end) {
 
 		// Create a mockery to mock up all the objects involved in a test
