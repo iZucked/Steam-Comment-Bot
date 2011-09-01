@@ -191,13 +191,31 @@ public interface PortPackage extends EPackage {
 	int PORT__SHOULD_ARRIVE_COLD = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Default Load Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DEFAULT_LOAD_DURATION = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Default Discharge Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DEFAULT_DISCHARGE_DURATION = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int PORT_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -508,6 +526,28 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_ShouldArriveCold();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.Port#getDefaultLoadDuration <em>Default Load Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default Load Duration</em>'.
+	 * @see scenario.port.Port#getDefaultLoadDuration()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_DefaultLoadDuration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.port.Port#getDefaultDischargeDuration <em>Default Discharge Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default Discharge Duration</em>'.
+	 * @see scenario.port.Port#getDefaultDischargeDuration()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_DefaultDischargeDuration();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -711,6 +751,22 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__SHOULD_ARRIVE_COLD = eINSTANCE.getPort_ShouldArriveCold();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Load Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__DEFAULT_LOAD_DURATION = eINSTANCE.getPort_DefaultLoadDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Discharge Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__DEFAULT_DISCHARGE_DURATION = eINSTANCE.getPort_DefaultDischargeDuration();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.

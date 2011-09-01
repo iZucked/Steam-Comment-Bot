@@ -99,7 +99,7 @@ public class VesselClassComposite extends AbstractDetailComposite {
     createLadenAttributesEditor(composite, mainGroup);
     createBallastAttributesEditor(composite, mainGroup);
     createBaseFuelEditor(composite, mainGroup);
-    createPortExclusionsEditor(composite, mainGroup);
+    createPilotLightRateEditor(composite, mainGroup);
     createInaccessiblePortsEditor(composite, mainGroup);
     createCanalCostsEditor(composite, mainGroup);
     createWarmupTimeEditor(composite, mainGroup);
@@ -248,18 +248,16 @@ public class VesselClassComposite extends AbstractDetailComposite {
   }
 
 	/**
-	 * Create an editor for the portExclusions feature on VesselClass
-	 * 
-	 * @generated
-	 */
-	protected static void createPortExclusionsEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
+   * Create an editor for the pilotLightRate feature on VesselClass
+   * @generated
+   */
+  protected static void createPilotLightRateEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
     composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_PortExclusions()),
-      "Port Exclusions");
+      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_PilotLightRate()),
+      "Pilot Light Rate");
   }
 
-	/**
+  /**
 	 * Create an editor for the inaccessiblePorts feature on VesselClass
 	 * 
 	 * @generated

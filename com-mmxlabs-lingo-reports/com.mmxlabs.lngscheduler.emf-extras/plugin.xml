@@ -128,7 +128,7 @@
                </description>
                <target class="Scenario" />
             </constraint>
-			-->
+			
             <constraint
             	class="com.mmxlabs.lngscheduler.emf.extras.validation.SequenceNoGapsConstraint"
             	id="com.mmxlabs.lngscheduler.emf-extras.constraints.sequence_gaps"
@@ -147,7 +147,7 @@
             	</description>
             	<target class="Sequence" />
             </constraint>
-            
+            -->
              <constraint
             	class="com.mmxlabs.lngscheduler.emf.extras.validation.DistanceLineValidityConstraint"
             	id="com.mmxlabs.lngscheduler.emf-extras.constraints.distanceline_distance"

@@ -355,8 +355,7 @@ public class LNGScenarioTransformer {
 				final CharterOut charterOut = (CharterOut) event;
 				final IPort endPort = portAssociation.lookup(charterOut.getEffectiveEndPort());
 				final long maxHeel = charterOut.isSetHeelLimit() ? (charterOut.getHeelLimit() * Calculator.ScaleFactor) : Long.MAX_VALUE;
-				builderSlot = builder.createCharterOutEvent(event.getId(), window, port, endPort, durationHours, maxHeel,
-						Calculator.scaleToInt(charterOut.getHeelCVValue()));
+				builderSlot = builder.createCharterOutEvent(event.getId(), window, port, endPort, durationHours, maxHeel, Calculator.scaleToInt(charterOut.getHeelCVValue()));
 			} else {
 				builderSlot = builder.createDrydockEvent(event.getId(), window, port, durationHours);
 			}
@@ -396,13 +395,10 @@ public class LNGScenarioTransformer {
 
 			// not escargot.
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
-			final Slot dischargeSlot = eCargo.getDischargeSlot();
 			final int loadStart = convertTime(earliestTime, loadSlot.getWindowStart(), loadSlot.getPort());
-			final int dischargeStart = convertTime(earliestTime, dischargeSlot.getWindowStart(), dischargeSlot.getPort());
 
 			// TODO check units again
 			final ITimeWindow loadWindow = builder.createTimeWindow(loadStart, loadStart + loadSlot.getWindowDuration());
-			final ITimeWindow dischargeWindow = builder.createTimeWindow(dischargeStart, dischargeStart + dischargeSlot.getWindowDuration());
 
 			final ILoadPriceCalculator loadPriceCalculator;
 			if (loadSlot.isSetFixedPrice()) {
@@ -419,9 +415,12 @@ public class LNGScenarioTransformer {
 			}
 
 			final ILoadSlot load = builder.createLoadSlot(loadSlot.getId(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity(scenario)),
-					Calculator.scale(loadSlot.getSlotOrContractMaxQuantity(scenario)), loadPriceCalculator, (int) Calculator.scale(loadSlot.getCargoOrPortCVValue()),
-					dischargeSlot.getSlotOrPortDuration(), loadSlot.isSetArriveCold(), loadSlot.isArriveCold());
+					Calculator.scale(loadSlot.getSlotOrContractMaxQuantity(scenario)), loadPriceCalculator, (int) Calculator.scale(loadSlot.getCargoOrPortCVValue()), loadSlot.getSlotOrPortDuration(),
+					loadSlot.isSetArriveCold(), loadSlot.isArriveCold());
 
+			final Slot dischargeSlot = eCargo.getDischargeSlot();
+			final int dischargeStart = convertTime(earliestTime, dischargeSlot.getWindowStart(), dischargeSlot.getPort());
+			final ITimeWindow dischargeWindow = builder.createTimeWindow(dischargeStart, dischargeStart + dischargeSlot.getWindowDuration());
 			final ICurve dischargeCurve;
 
 			if (dischargeSlot.isSetFixedPrice()) {
@@ -582,6 +581,7 @@ public class LNGScenarioTransformer {
 					// capacity mean
 					// to be scaled?
 					Calculator.scaleToInt(eVc.getMinHeelVolume()), Calculator.scaleToInt(eVc.getBaseFuel().getUnitPrice()), Calculator.scaleToInt(eVc.getBaseFuel().getEquivalenceFactor()),
+					Calculator.scaleToInt(eVc.getPilotLightRate()) / 24,
 					// This should be divide?
 					Calculator.scaleToInt(eVc.getDailyCharterInPrice() / 24.0), eVc.getWarmupTime(), eVc.getCooldownTime(), Calculator.scale(eVc.getCooldownVolume()));
 			vesselClassAssociation.add(eVc, vc);

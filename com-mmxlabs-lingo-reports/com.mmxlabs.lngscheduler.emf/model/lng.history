@@ -649,25 +649,25 @@
             featureName="eSuperTypes" referenceValue="lng.ecore#//ScenarioObject"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//fleet/Vessel" referenceName="eStructuralFeatures"
-          element="lng.ecore#//fleet/Vessel/portExclusions">
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/Vessel/portExclusions"
+          element="#//@releases.3/@changes.311/@element">
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.311/@element"
             featureName="name" dataValue="portExclusions"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/Vessel/portExclusions"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.311/@element"
             featureName="upperBound" dataValue="-1" oldDataValue="1"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/Vessel/portExclusions"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.311/@element"
             featureName="containment" dataValue="true" oldDataValue="false"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/Vessel/portExclusions"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.311/@element"
             featureName="eType" referenceValue="lng.ecore#//fleet/PortExclusion"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass" referenceName="eStructuralFeatures"
-          element="lng.ecore#//fleet/VesselClass/portExclusions">
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/portExclusions"
+          element="#//@releases.3/@changes.310/@element">
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.310/@element"
             featureName="name" dataValue="portExclusions"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/portExclusions"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.310/@element"
             featureName="upperBound" dataValue="-1" oldDataValue="1"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/portExclusions"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.310/@element"
             featureName="containment" dataValue="true" oldDataValue="false"/>
-        <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/portExclusions"
+        <changes xsi:type="history:Set" element="#//@releases.3/@changes.310/@element"
             featureName="eType" referenceValue="lng.ecore#//fleet/PortExclusion"/>
       </changes>
       <changes xsi:type="history:Create" target="lng.ecore#//fleet/PortExclusion"
@@ -4931,5 +4931,74 @@
         featureName="defaultValueLiteral" dataValue="0" oldDataValue="2147483647"/>
     <changes xsi:type="history:Set" element="lng.ecore#//fleet/Vessel/startRequirement"
         featureName="eType" referenceValue="lng.ecore#//fleet/PortTimeAndHeel" oldReferenceValue="lng.ecore#//fleet/PortAndTime"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//port/Port" referenceName="eStructuralFeatures"
+        element="lng.ecore#//port/Port/defaultLoadDuration">
+      <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultLoadDuration"
+          featureName="name" dataValue="defaultSlotDuration"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultLoadDuration"
+          featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultLoadDuration"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </changes>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultLoadDuration"
+        featureName="name" dataValue="defaultLoadDuration" oldDataValue="defaultSlotDuration"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//port/Port" referenceName="eStructuralFeatures"
+        element="lng.ecore#//port/Port/defaultDischargeDuration">
+      <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultDischargeDuration"
+          featureName="name" dataValue="defaultLoadDuration"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultDischargeDuration"
+          featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultDischargeDuration"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </changes>
+    <changes xsi:type="history:Set" element="lng.ecore#//port/Port/defaultDischargeDuration"
+        featureName="name" dataValue="defaultDischargeDuration" oldDataValue="defaultLoadDuration"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/Slot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetSlotDuration())&#xA;&#x9;return getSlotDuration();&#xA;else&#xA;&#x9;return getPort().getDefaultDischargeDuration();"
+        oldDataValue="if (isSetSlotDuration())&#xA;&#x9;return getSlotDuration();&#xA;else&#xA;&#x9;return getPort().getDefaultSlotDuration();"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/LoadSlot" referenceName="eOperations"
+        element="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration"
+          featureName="name" dataValue="getSlotOrPortDuration"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration"
+          featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration"
+          featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration"
+        referenceName="eAnnotations" element="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+          featureName="source" dataValue="http://www.eclipse.org/emf/2002/GenModel"/>
+    </changes>
+    <changes xsi:type="history:Create" target="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%"
+        referenceName="details" element="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0">
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="key" dataValue="body"/>
+      <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+          featureName="value" dataValue="if (isSetSlotDuration())&#xA;&#x9;return getSlotDuration();&#xA;else&#xA;&#x9;return getPort().getDefaultDischargeDuration();"/>
+    </changes>
+    <changes xsi:type="history:Set" element="lng.ecore#//cargo/LoadSlot/getSlotOrPortDuration/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%/@details.0"
+        featureName="value" dataValue="if (isSetSlotDuration())&#xA;&#x9;return getSlotDuration();&#xA;else&#xA;&#x9;return getPort().getDefaultLoadDuration();"
+        oldDataValue="if (isSetSlotDuration())&#xA;&#x9;return getSlotDuration();&#xA;else&#xA;&#x9;return getPort().getDefaultDischargeDuration();"/>
+    <changes xsi:type="history:Create" target="lng.ecore#//fleet/VesselClass" referenceName="eStructuralFeatures"
+        element="lng.ecore#//fleet/VesselClass/pilotLightRate"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/pilotLightRate"
+        featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/pilotLightRate"
+        featureName="name" dataValue="pilotLightRate"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/pilotLightRate"
+        featureName="lowerBound" dataValue="1" oldDataValue="0"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/pilotLightRate"
+        featureName="defaultValueLiteral" dataValue="-"/>
+    <changes xsi:type="history:Set" element="lng.ecore#//fleet/VesselClass/pilotLightRate"
+        featureName="defaultValueLiteral" dataValue="0" oldDataValue="-"/>
+    <changes xsi:type="history:Delete" target="lng.ecore#//fleet/VesselClass" referenceName="eStructuralFeatures">
+      <element xsi:type="ecore:EReference" name="portExclusions" upperBound="-1" eType="ecore:EClass lng.ecore#//fleet/PortExclusion"
+          containment="true"/>
+    </changes>
+    <changes xsi:type="history:Delete" target="lng.ecore#//fleet/Vessel" referenceName="eStructuralFeatures">
+      <element xsi:type="ecore:EReference" name="portExclusions" upperBound="-1" eType="ecore:EClass lng.ecore#//fleet/PortExclusion"
+          containment="true"/>
+    </changes>
   </releases>
 </history:History>

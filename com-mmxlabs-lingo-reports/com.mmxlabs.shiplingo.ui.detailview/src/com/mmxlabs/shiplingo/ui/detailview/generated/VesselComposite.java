@@ -81,7 +81,6 @@ public  class VesselComposite extends AbstractDetailComposite {
     createClassEditor(composite, mainGroup);
     createStartRequirementEditor(composite, mainGroup);
     createEndRequirementEditor(composite, mainGroup);
-    createPortExclusionsEditor(composite, mainGroup);
   }
 
 		
@@ -141,15 +140,5 @@ public  class VesselComposite extends AbstractDetailComposite {
         true));
     sub.setPath(new CompiledEMFPath(composite.getInputPath(), FleetPackage.eINSTANCE.getVessel_EndRequirement()));
     composite.addSubEditor(sub);
-  }
-		
-	/**
-	 * Create an editor for the portExclusions feature on Vessel
-	 * @generated
-	 */
-	protected static void createPortExclusionsEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVessel_PortExclusions()),
-      "Port Exclusions");
   }
 }
