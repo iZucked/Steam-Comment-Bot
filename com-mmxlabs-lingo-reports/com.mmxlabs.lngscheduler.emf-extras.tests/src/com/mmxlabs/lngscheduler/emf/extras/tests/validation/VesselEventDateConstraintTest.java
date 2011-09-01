@@ -5,7 +5,6 @@
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
