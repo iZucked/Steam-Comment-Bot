@@ -307,25 +307,20 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	public long evaluatePlan(final VoyagePlan plan) {
-//		System.err.println("Evaluating a plan");
-//		for (final Object o : plan.getSequence()) {
-//			if (o instanceof VoyageDetails) {
-//				final VoyageDetails vd = (VoyageDetails) o;
-//				System.err.println("\tvoyage from "
-//						+ vd.getOptions().getFromPortSlot().getPort().getName()
-//						+ " to "
-//						+ vd.getOptions().getToPortSlot().getPort().getName());
-//				System.err.println(vd.getOptions());
-//				System.err.println("idle:"+ vd.getIdleTime() + ", journey" + vd.getTravelTime());
-//				for (final FuelComponent fc : FuelComponent.values()) {
-//					final long consumption = vd.getFuelConsumption(fc,
-//							fc.getDefaultFuelUnit());
-//					final long up = vd.getFuelUnitPrice(fc);
-//					System.err.println("\t\t" + fc + " = " + consumption + ", "
-//							+ Calculator.multiply(consumption, up));
-//				}
-//			}
-//		}
+		// System.err.println("Evaluating a plan");
+		// for (final Object o : plan.getSequence()) {
+		// if (o instanceof VoyageDetails) {
+		// final VoyageDetails vd = (VoyageDetails) o;
+		// System.err.println("\tvoyage from " + vd.getOptions().getFromPortSlot().getPort().getName() + " to " + vd.getOptions().getToPortSlot().getPort().getName());
+		// System.err.println(vd.getOptions());
+		// System.err.println("idle:" + vd.getIdleTime() + ", journey" + vd.getTravelTime());
+		// for (final FuelComponent fc : FuelComponent.values()) {
+		// final long consumption = vd.getFuelConsumption(fc, fc.getDefaultFuelUnit());
+		// final long up = vd.getFuelUnitPrice(fc);
+		// System.err.println("\t\t" + fc + " = " + consumption + ", " + Calculator.multiply(consumption, up));
+		// }
+		// }
+		// }
 
 		// long revenue = currentPlan.getSalesRevenue() -
 		// currentPlan.getSalesRevenue();
@@ -333,12 +328,12 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		for (final FuelComponent fuel : FuelComponent.values()) {
 			cost += plan.getTotalFuelCost(fuel);
 		}
-//		System.err.println("Fuel Cost = " + cost);
+		// System.err.println("Fuel Cost = " + cost);
 		cost += plan.getTotalRouteCost();
-//		System.err.println("Total Cost = " + cost);
-//		if (cost < bestCost)
-//			System.err.println("Maybe new best ^^");
-		// include cost of hire
+		// System.err.println("Total Cost = " + cost);
+		// if (cost < bestCost)
+		// System.err.println("Maybe new best ^^");
+		// // include cost of hire
 
 		// cost += plan.getTotalHireCost();
 		return cost;
