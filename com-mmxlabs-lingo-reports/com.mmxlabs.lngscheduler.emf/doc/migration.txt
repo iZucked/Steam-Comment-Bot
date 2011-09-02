@@ -47,6 +47,8 @@ elements from scratch, even if copy-paste would be easier.
 3.2 Updating other projects
 
  * Open lng.genmodel and rebuild the model & edit plugins
+ * Open the plugin.xml for the emf plugin, and replace all instances
+   of the old namespace URI with the new namespace URI from step 3.1.
  * Open the plugin.xml for the emf.edit plugin, and replace all instances
    of the old namespace URI with the new namespace URI from step 3.1 (not sure
    why re-generating the edit plugin doesn't do this either). 
