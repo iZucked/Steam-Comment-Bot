@@ -153,7 +153,6 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 				options.setAvailableTime(availableTime);
 
 				if (prevPortSlot instanceof IHeelOptionsPortSlot) {
-					// TODO make use of heel price and CV value in cost calculation.
 					options.setAvailableLNG(Math.min(vessel.getVesselClass().getCargoCapacity(), ((IHeelOptionsPortSlot) prevPortSlot).getHeelOptions().getHeelLimit()));
 					useNBO = true;
 				} else if (useNBO) {
@@ -164,6 +163,12 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 
 				if (options.getAvailableLNG() == 0) {
 					useNBO = false;
+				}
+
+				if (prevPortType == PortType.DryDock) {
+					options.setWarm(true);
+				} else {
+					options.setWarm(false);
 				}
 
 				// Determined by voyage plan optimiser

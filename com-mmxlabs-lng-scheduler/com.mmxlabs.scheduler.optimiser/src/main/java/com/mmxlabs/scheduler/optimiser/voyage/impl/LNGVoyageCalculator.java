@@ -256,7 +256,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					// we can only do a cooldown here, because there is no LNG.
 					// this situation shouldn't get presented to us by the
 					// sequence scheduler unless it's unavoidable.
-					if (options.getAvailableTime() > vesselClass.getWarmupTime()) {
+					if (options.isWarm() || options.getAvailableTime() > vesselClass.getWarmupTime()) {
 						output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, vesselClass.getCooldownVolume());
 					}
 				}
@@ -345,6 +345,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			if (options.shouldBeCold() && output.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) == 0) {
 				// check whether idle boiloff is going to cut it, or if we need
 				// to force a cooldown (ignoring whether it's allowed)
+				// TODO there is also a corner case here where the vessel
+				// runs down all its gas during travel and so starts warming up
+				// outside of the idle time.
 
 				if (idleTimeInHours - idleBoiloffTimeInHours > vesselClass.getWarmupTime()) {
 					// there will be a warmup, so we need a cooldown

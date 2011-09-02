@@ -39,6 +39,11 @@ public final class VoyageOptions implements Cloneable {
 	 */
 	private boolean shouldBeCold;
 
+	/**
+	 * If true, the vessel is warm at the start of this voyage, because it is coming out of a drydock or something similar.
+	 */
+	private boolean startWarm;
+
 	private String route;
 
 	private VesselState vesselState;
@@ -177,6 +182,14 @@ public final class VoyageOptions implements Cloneable {
 		this.shouldBeCold = shouldBeCold;
 	}
 
+	public final boolean isWarm() {
+		return startWarm;
+	}
+
+	public final void setWarm(boolean startWarm) {
+		this.startWarm = startWarm;
+	}
+
 	@Override
 	public final boolean equals(final Object obj) {
 
@@ -225,6 +238,9 @@ public final class VoyageOptions implements Cloneable {
 				return false;
 
 			if (shouldBeCold != vo.shouldBeCold)
+				return false;
+
+			if (startWarm != vo.startWarm)
 				return false;
 
 			return true;
