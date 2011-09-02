@@ -28,7 +28,6 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.Slot;
-import scenario.fleet.CharterOut;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.VesselEvent;
 
@@ -171,8 +170,8 @@ public class EMFUtils {
 				updateMinMax(result, slot.getWindowStart());
 				updateMinMax(result, slot.getWindowEnd());
 			} else if (o instanceof VesselEvent) {
-				updateMinMax(result, ((CharterOut) o).getStartDate());
-				updateMinMax(result, ((CharterOut) o).getEndDate());
+				updateMinMax(result, ((VesselEvent) o).getStartDate());
+				updateMinMax(result, ((VesselEvent) o).getEndDate());
 			}
 		}
 
