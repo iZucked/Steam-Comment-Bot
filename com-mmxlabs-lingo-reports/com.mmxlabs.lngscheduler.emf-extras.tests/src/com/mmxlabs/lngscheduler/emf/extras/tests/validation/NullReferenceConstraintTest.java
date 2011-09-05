@@ -29,6 +29,9 @@ import scenario.port.PortFactory;
 import com.mmxlabs.lngscheduler.emf.extras.validation.NullReferenceConstraint;
 
 /**
+ * 
+ * From case 174:
+ * <p>
  * This test is meant to check for certain null values on scenario objects - because of how it works you probably don't want to use mock objects for the targets (you'll have to mock loads of EMF
  * generated methods), but instead construct them using the EMF generated factories.
  * <p>
@@ -64,6 +67,11 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.NullReferenceConstraint;
  */
 public class NullReferenceConstraintTest {
 
+	/**
+	 * Test the interface VesselEvent by using the implementation CharterOut.
+	 * <p>
+	 * {@link VesselEvent#getStartPort()} should not be null, and the constraint should fail when it is.
+	 */
 	@Test
 	public void testVesselEvent() {
 		// CharterOut is an implementation of VesselEvent
@@ -71,16 +79,22 @@ public class NullReferenceConstraintTest {
 
 		// start port is initially null, so set it.
 		ve.setStartPort(PortFactory.eINSTANCE.createPort());
-		
+		// test it
 		Assert.assertNotNull(ve.getStartPort());
-		
 		testNullReferenceConstraint(true, ve);
 
-		// now the test should fail.
+		// Set start port to null.
 		ve.setStartPort(null);
+		// now the test should fail.
 		testNullReferenceConstraint(false, ve);
 	}
 
+	/**
+	 * Check {@link CharterOut#getEndPort()} is not null, and expect a failure if it is.
+	 * <p>
+	 * NullReferenceConstraint also checks the start port (since CharterOut is an implementation of VesselEvent, which
+	 * is checked for the start port), so here it is set to a value.
+	 */
 	@Test
 	public void testCharterOut() {
 		final CharterOut co = FleetFactory.eINSTANCE.createCharterOut();
@@ -88,16 +102,20 @@ public class NullReferenceConstraintTest {
 		// start and end ports are both checked and are initially null, so set them.
 		co.setEndPort(PortFactory.eINSTANCE.createPort());
 		co.setStartPort(PortFactory.eINSTANCE.createPort());
-		
+
 		// only test end port. Start port is tested by testVesselEvent()
 		Assert.assertNotNull(co.getEndPort());
 		testNullReferenceConstraint(true, co);
 
-		// now the test should fail.
+		// Set the end port to null.
 		co.setEndPort(null);
+		// now the test should fail.
 		testNullReferenceConstraint(false, co);
 	}
 
+	/**
+	 * Test the {@link Slot#getPort()} of a Slot is not null, and expect a failure if it is.
+	 */
 	@Test
 	public void testSlot() {
 		final Slot slot = CargoFactory.eINSTANCE.createSlot();
@@ -108,11 +126,14 @@ public class NullReferenceConstraintTest {
 
 		testNullReferenceConstraint(true, slot);
 
-		// now the test should fail.
 		slot.setPort(null);
+		// now the test should fail.
 		testNullReferenceConstraint(false, slot);
 	}
 
+	/**
+	 * Test {@link Cargo#getLoadSlot()} and {@link Cargo#getDischargeSlot()} are not null. If either are null expect a failure.
+	 */
 	@Test
 	public void testCargo() {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
@@ -126,16 +147,29 @@ public class NullReferenceConstraintTest {
 		Assert.assertNotNull(cargo.getLoadSlot());
 		Assert.assertNotNull(cargo.getDischargeSlot());
 
+		// Test for success, neither are null.
 		testNullReferenceConstraint(true, cargo);
 
+		// set load slot to null and expect a failure
 		cargo.setLoadSlot(null);
 		testNullReferenceConstraint(false, cargo);
+		
+		// reset it for the next test
 		cargo.setLoadSlot(load);
 
+		// set discharge slot to null and expect a failure
 		cargo.setDischargeSlot(null);
+		testNullReferenceConstraint(false, cargo);
+		
+		// now set both to null and expect a failure
+		cargo.setDischargeSlot(null);
+		cargo.setLoadSlot(null);
 		testNullReferenceConstraint(false, cargo);
 	}
 
+	/**
+	 * Test that {@link VesselClass#getBaseFuel()}, {@link VesselClass#getBallastAttributes()}, and {@link VesselClass#getLadenAttributes()} are not null. If any one is null, the test should fail.
+	 */
 	@Test
 	public void testVesselClass() {
 
@@ -173,6 +207,9 @@ public class NullReferenceConstraintTest {
 		testNullReferenceConstraint(false, vc);
 	}
 
+	/**
+	 * Test that {@link Vessel#getClass_()} is not null. If it is then expect a failure.
+	 */
 	@Test
 	public void testVessel() {
 
@@ -193,18 +230,27 @@ public class NullReferenceConstraintTest {
 		testNullReferenceConstraint(false, v);
 	}
 
+	/**
+	 * Test {@link PortAndTime#getPort()} is not null. If it is then expect a failure.
+	 */
 	@Test
 	public void testPortAndTime() {
 
 		final PortAndTime pat = FleetFactory.eINSTANCE.createPortAndTime();
 
+		// port is initialised not-null, so expect a success
 		testNullReferenceConstraint(true, pat);
 
+		// set port to null then expect a failure
 		pat.setPort(null);
-
 		testNullReferenceConstraint(false, pat);
 	}
 
+	/**
+	 * Generically test an EObject against the constraint NullReferenceConstraint.
+	 * @param expectSuccess Whether the test is expected to succeed or fail.
+	 * @param target The EObject to validate.
+	 */
 	private void testNullReferenceConstraint(final boolean expectSuccess, final EObject target) {
 
 		// Create a mockery to mock up all the objects involved in a test
