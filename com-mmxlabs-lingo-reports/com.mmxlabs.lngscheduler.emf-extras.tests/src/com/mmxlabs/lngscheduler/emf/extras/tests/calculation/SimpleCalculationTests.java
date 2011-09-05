@@ -5,6 +5,7 @@
 package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.management.timer.Timer;
 
@@ -73,7 +74,7 @@ public class SimpleCalculationTests {
 		final float baseFuelPrice = 700; // $/MT -- normal
 		final float dischargePrice = 1.0f; // $/mmbtu - cheap
 		final float cvValue = 22.8f;
-		final int travelTime = 24 * 3;
+		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
 
 		final Scenario scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
 		// evaluate and get a schedule
@@ -193,13 +194,52 @@ public class SimpleCalculationTests {
 	 * @return
 	 */
 	private Scenario createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
+		
+		// 'magic' numbers that should be set in the arguments.
+		// vessel class
+		final float equivalenceFactor = 0.5f;
+		final int minSpeed = 12;
+		final int maxSpeed = 20;
+		final int capacity = 150000;
+		final int pilotLightRate = 0;
+		final int cooldownTime = 0;
+		final int warmupTime = Integer.MAX_VALUE;
+		final int cooldownVolume = 0;
+		final int minHeelVolume = 0;
+		final int spotCharterCount = 0;
+		final Double fillCapacity = 1.0;
+		// ballast
+		final int ballastMinSpeed = 12;
+		final int ballastMinConsumption = 80;
+		final int ballastMaxSpeed = 20;
+		final int ballastMaxConsumption = 200;
+		final int ballastIdleConsumptionRate = 15;
+		final int ballastIdleNBORate = 100;
+		final int ballastNBORate = 180;
+		// laden
+		final int ladenMinSpeed = 12;
+		final int ladenMinConsumption = 100;
+		final int ladenMaxSpeed = 20;
+		final int ladenMaxConsumption = 230;
+		final int ladenIdleConsumptionRate = 15;
+		final int ladenIdleNBORate = 180;
+		final int ladenNBORate = 200;
+		// ports
+		final int distanceFromAToB = 1000;
+		final int distanceFromBToA = 1000;
+		// load and discharge prices and quantities
+		final int loadPrice = 1000;
+		final int loadMaxQuantity = 100000;
+		final int dischargeMaxQuantity = 100000;
+		
+		
 		final Scenario scenario = ScenarioFactory.eINSTANCE.createScenario();
 		scenario.createMissingModels();
 
 		final VesselFuel baseFuel = FleetFactory.eINSTANCE.createVesselFuel();
 		baseFuel.setName("BASE FUEL");
 		baseFuel.setUnitPrice(baseFuelUnitPrice);
-		baseFuel.setEquivalenceFactor(0.5f);
+		baseFuel.setEquivalenceFactor(equivalenceFactor);
 
 		scenario.getFleetModel().getFuels().add(baseFuel);
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
@@ -216,15 +256,16 @@ public class SimpleCalculationTests {
 
 		vc.setName("Vessel Class");
 		vc.setBaseFuel(baseFuel);
-		vc.setMinSpeed(12);
-		vc.setMaxSpeed(20);
-		vc.setCapacity(150000);
-		vc.setPilotLightRate(0);
-		vc.setCooldownTime(0);
-		vc.setWarmupTime(Integer.MAX_VALUE);
-		vc.setCooldownVolume(0);
-		vc.setMinHeelVolume(0);
-		vc.setSpotCharterCount(0);
+		vc.setMinSpeed(minSpeed);
+		vc.setMaxSpeed(maxSpeed);
+		vc.setCapacity(capacity);
+		vc.setPilotLightRate(pilotLightRate);
+		vc.setCooldownTime(cooldownTime);
+		vc.setWarmupTime(warmupTime);
+		vc.setCooldownVolume(cooldownVolume);
+		vc.setMinHeelVolume(minHeelVolume);
+		vc.setSpotCharterCount(spotCharterCount);
+		vc.setFillCapacity(fillCapacity);
 
 		final FuelConsumptionLine ladenMin = FleetFactory.eINSTANCE.createFuelConsumptionLine();
 		final FuelConsumptionLine ladenMax = FleetFactory.eINSTANCE.createFuelConsumptionLine();
@@ -232,15 +273,15 @@ public class SimpleCalculationTests {
 		final FuelConsumptionLine ballastMin = FleetFactory.eINSTANCE.createFuelConsumptionLine();
 		final FuelConsumptionLine ballastMax = FleetFactory.eINSTANCE.createFuelConsumptionLine();
 
-		ballastMin.setSpeed(12);
-		ballastMin.setConsumption(80);
-		ballastMax.setSpeed(20);
-		ballastMax.setConsumption(200);
+		ballastMin.setSpeed(ballastMinSpeed);
+		ballastMin.setConsumption(ballastMinConsumption);
+		ballastMax.setSpeed(ballastMaxSpeed);
+		ballastMax.setConsumption(ballastMaxConsumption);
 
-		ladenMin.setSpeed(12);
-		ladenMin.setConsumption(100);
-		ladenMax.setSpeed(20);
-		ladenMax.setConsumption(230);
+		ladenMin.setSpeed(ladenMinSpeed);
+		ladenMin.setConsumption(ladenMinConsumption);
+		ladenMax.setSpeed(ladenMaxSpeed);
+		ladenMax.setConsumption(ladenMaxConsumption);
 
 		laden.getFuelConsumptionCurve().add(ladenMin);
 		laden.getFuelConsumptionCurve().add(ladenMax);
@@ -248,15 +289,13 @@ public class SimpleCalculationTests {
 		ballast.getFuelConsumptionCurve().add(ballastMin);
 		ballast.getFuelConsumptionCurve().add(ballastMax);
 
-		laden.setIdleConsumptionRate(15);
-		laden.setIdleNBORate(180);
-		laden.setNboRate(200);
+		laden.setIdleConsumptionRate(ladenIdleConsumptionRate);
+		laden.setIdleNBORate(ladenIdleNBORate);
+		laden.setNboRate(ladenNBORate);
 
-		ballast.setIdleConsumptionRate(15);
-		ballast.setIdleNBORate(100);
-		ballast.setNboRate(180);
-
-		vc.setFillCapacity(1.0);
+		ballast.setIdleConsumptionRate(ballastIdleConsumptionRate);
+		ballast.setIdleNBORate(ballastIdleNBORate);
+		ballast.setNboRate(ballastNBORate);
 
 		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 		vessel.setClass(vc);
@@ -282,13 +321,13 @@ public class SimpleCalculationTests {
 		final DistanceLine distance = PortFactory.eINSTANCE.createDistanceLine();
 		distance.setFromPort(A);
 		distance.setToPort(B);
-		distance.setDistance(1000);
+		distance.setDistance(distanceFromAToB);
 
 		// don't forget that distances can be asymmetric, so have to go both ways.
 		final DistanceLine distance2 = PortFactory.eINSTANCE.createDistanceLine();
 		distance2.setFromPort(B);
 		distance2.setToPort(A);
-		distance2.setDistance(1000);
+		distance2.setDistance(distanceFromBToA);
 
 		scenario.getDistanceModel().getDistances().add(distance);
 		scenario.getDistanceModel().getDistances().add(distance2);
@@ -334,10 +373,10 @@ public class SimpleCalculationTests {
 		dis.setId("discharge");
 
 		dis.setFixedPrice(dischargePrice);
-		load.setFixedPrice(1000);
+		load.setFixedPrice(loadPrice);
 
-		load.setMaxQuantity(100000);
-		dis.setMaxQuantity(100000);
+		load.setMaxQuantity(loadMaxQuantity);
+		dis.setMaxQuantity(dischargeMaxQuantity);
 
 		load.setCargoCVvalue(cvValue);
 
