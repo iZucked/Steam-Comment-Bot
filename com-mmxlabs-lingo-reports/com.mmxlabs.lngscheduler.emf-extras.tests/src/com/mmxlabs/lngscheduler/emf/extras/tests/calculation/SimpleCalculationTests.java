@@ -67,12 +67,50 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
  * 
  */
 public class SimpleCalculationTests {
+	
+	// Create a dummy scenario
+	private static final float baseFuelPriceNormal = 700; // $/MT -- normal
+	private static final float baseFuelPriceCheap = 0; // $/MT -- very cheap, normally around 700
+	private static final float dischargePriceCheap = 1.0f; // $/mmbtu - cheap
+	@SuppressWarnings("unused")
+	private static final float dischargePriceNormal = 7.0f; // $/mmbtu // normal
+	private static final float dischargePriceExpensive = 7000.0f; // $/mmbtu // very expensive, normally around 7
+
+
+	/**
+	 * Test case that "ballast leg just cheaper to do on base fuel - there should be no heel around"
+	 */
+	@Test
+	public void testBallastLeg() {
+		// Create a dummy scenario
+		final float baseFuelPrice = baseFuelPriceNormal; // $/MT -- normal
+		final float dischargePrice = dischargePriceExpensive; // $/mmbtu - cheap
+		final float cvValue = 22.8f;
+		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
+
+		final Scenario scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
+		// evaluate and get a schedule
+		final Schedule result = evaluate(scenario);
+		// check result is how we expect it to be
+		// there will be a single cargo allocation for this cargo
+		final CargoAllocation a = result.getCargoAllocations().get(0);
+		print(a);
+
+		// on the laden leg we always use NBO; decision time is on the ballast leg
+		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			Assert.assertTrue("Ballast leg never uses base", fq.getQuantity() == 0 || fq.getFuelType() == FuelType.BASE_FUEL);
+		}
+
+		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
+			Assert.assertTrue("Ballast idle never uses base", fq.getQuantity() == 0 || fq.getFuelType() == FuelType.BASE_FUEL);
+		}
+	}
 
 	@Test
 	public void testLNGSelection() {
 		// Create a dummy scenario
-		final float baseFuelPrice = 700; // $/MT -- normal
-		final float dischargePrice = 1.0f; // $/mmbtu - cheap
+		final float baseFuelPrice = baseFuelPriceNormal; // $/MT -- normal
+		final float dischargePrice = dischargePriceCheap; // $/mmbtu - cheap
 		final float cvValue = 22.8f;
 		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
 
@@ -97,10 +135,10 @@ public class SimpleCalculationTests {
 	@Test
 	public void testBaseSelection() {
 		// Create a dummy scenario
-		final float baseFuelPrice = 0; // $/MT -- very cheap, normally around 700
-		final float dischargePrice = 7000.0f; // $/mmbtu // very expensive, normally around 7
+		final float baseFuelPrice = baseFuelPriceCheap; // $/MT -- very cheap, normally around 700
+		final float dischargePrice = dischargePriceExpensive; // $/mmbtu // very expensive, normally around 7
 		final float cvValue = 22.8f;
-		final int travelTime = 24 * 3;
+		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
 
 		final Scenario scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
 		// evaluate and get a schedule
@@ -154,7 +192,7 @@ public class SimpleCalculationTests {
 	 * @return the evaluated schedule
 	 */
 	private Schedule evaluate(final Scenario scenario) {
-		final LNGScenarioTransformer transformer = new LNGScenarioTransformer(scenario);
+		//final LNGScenarioTransformer transformer = new LNGScenarioTransformer(scenario);
 		final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
 
 		final ModelEntityMap entities = new ResourcelessModelEntityMap();
@@ -195,7 +233,7 @@ public class SimpleCalculationTests {
 	 */
 	private Scenario createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
 		
-		// 'magic' numbers that should be set in the arguments.
+		// 'magic' numbers that could be set in the arguments.
 		// vessel class
 		final float equivalenceFactor = 0.5f;
 		final int minSpeed = 12;
