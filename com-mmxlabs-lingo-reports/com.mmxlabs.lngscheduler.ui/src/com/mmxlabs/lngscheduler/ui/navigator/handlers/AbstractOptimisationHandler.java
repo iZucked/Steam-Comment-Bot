@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngscheduler.ui.navigator.handlers;
 
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.HandlerEvent;
 import org.eclipse.core.commands.IHandler;
@@ -15,18 +14,19 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
-import com.mmxlabs.jobcontroller.core.IManagedJobListener;
-import com.mmxlabs.jobcontroller.core.impl.JobManagerListener;
-import com.mmxlabs.jobcontroller.core.impl.ManagedJobListener;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.jobmanager.eclipse.manager.impl.EclipseJobManagerAdapter;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlListener;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.jobs.impl.JobControlAdapter;
+import com.mmxlabs.jobmanager.manager.IJobManagerListener;
 import com.mmxlabs.lngscheduler.ui.Activator;
 
 /**
- * Base {@link IHandler} implementation to cause enabled state to be refreshed
- * on job progress updates.
+ * Base {@link IHandler} implementation to cause enabled state to be refreshed on job progress updates.
  * 
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
@@ -34,18 +34,15 @@ import com.mmxlabs.lngscheduler.ui.Activator;
 public abstract class AbstractOptimisationHandler extends AbstractHandler {
 
 	/**
-	 * {@link IManagedJobListener} to trigger event handler enabled state
-	 * refresh
+	 * {@link IJobControlListener} to trigger event handler enabled state refresh
 	 */
-	private final IManagedJobListener jobListener = new ManagedJobListener() {
+	private final IJobControlListener jobListener = new JobControlAdapter() {
 
 		@Override
-		public boolean jobStateChanged(final IManagedJob job,
-				final JobState oldState, final JobState newState) {
+		public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
 
 			// Create Event to trigger enabled state update
-			final HandlerEvent event = new HandlerEvent(
-					AbstractOptimisationHandler.this, true, false);
+			final HandlerEvent event = new HandlerEvent(AbstractOptimisationHandler.this, true, false);
 
 			// Fire the event
 			AbstractOptimisationHandler.this.fireHandlerChanged(event);
@@ -55,33 +52,28 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 	};
 
 	/**
-	 * {@link IJobManagerListener} to hook up our {@link #jobListener} to any
-	 * jobs added to the manager, and remove the listener as the job is removed.
+	 * {@link IJobManagerListener} to hook up our {@link #jobListener} to any jobs added to the manager, and remove the listener as the job is removed.
 	 */
-	final IJobManagerListener jobManagerListener = new JobManagerListener() {
+	final IEclipseJobManagerListener jobManagerListener = new EclipseJobManagerAdapter() {
 
 		@Override
-		public void jobAdded(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
-			job.addListener(jobListener);
+		public void jobAdded(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+			control.addListener(jobListener);
 		}
 
 		@Override
-		public void jobRemoved(final IJobManager jobManager,
-				final IManagedJob job, final IResource resource) {
+		public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
 
-			job.removeListener(jobListener);
+			control.removeListener(jobListener);
 		}
 	};
 
 	private final ISelectionListener selectionListener = new ISelectionListener() {
 
 		@Override
-		public void selectionChanged(final IWorkbenchPart part,
-				final ISelection selection) {
+		public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 			// Create Event to trigger enabled state update
-			final HandlerEvent handlerEvent = new HandlerEvent(
-					AbstractOptimisationHandler.this, true, false);
+			final HandlerEvent handlerEvent = new HandlerEvent(AbstractOptimisationHandler.this, true, false);
 
 			// Fire the event
 			AbstractOptimisationHandler.this.fireHandlerChanged(handlerEvent);
@@ -92,37 +84,36 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 	 * The constructor.
 	 */
 	public AbstractOptimisationHandler() {
-		final IJobManager jmv = Activator.getDefault().getJobManager();
+		final IEclipseJobManager jmv = Activator.getDefault().getJobManager();
 		// Hook in a listener to automatically dispose the job once it is no
 		// longer needed
-		jmv.addJobManagerListener(jobManagerListener);
+		jmv.addEclipseJobManagerListener(jobManagerListener);
 
 		// Hook listener in to current jobs
-		for (final IManagedJob j : jmv.getJobs()) {
-			j.addListener(jobListener);
+		for (final IJobDescriptor j : jmv.getJobs()) {
+			final IJobControl control = jmv.getControlForJob(j);
+			control.addListener(jobListener);
 		}
 
 		// Track user selection changes and cause enabled state to change
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-				.getSelectionService().addSelectionListener(selectionListener);
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
 	}
 
 	@Override
 	public void dispose() {
 
-		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI
-				.getWorkbench().getActiveWorkbenchWindow();
+		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		if (activeWorkbenchWindow != null) {
-			activeWorkbenchWindow.getSelectionService()
-					.removeSelectionListener(selectionListener);
+			activeWorkbenchWindow.getSelectionService().removeSelectionListener(selectionListener);
 		}
 
-		final IJobManager jmv = Activator.getDefault().getJobManager();
+		final IEclipseJobManager jmv = Activator.getDefault().getJobManager();
 
-		jmv.removeJobManagerListener(jobManagerListener);
+		jmv.removeEclipseJobManagerListener(jobManagerListener);
 
-		for (final IManagedJob j : jmv.getJobs()) {
-			j.removeListener(jobListener);
+		for (final IJobDescriptor j : jmv.getJobs()) {
+			final IJobControl control = jmv.getControlForJob(j);
+			control.removeListener(jobListener);
 		}
 		super.dispose();
 	}

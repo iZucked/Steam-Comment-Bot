@@ -49,7 +49,7 @@ import scenario.Scenario;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
@@ -256,7 +256,7 @@ public abstract class EMFReportView extends ViewPart implements
 
 	private Action copyTableAction;
 	private final String helpContextId;
-	private IJobManagerListener jobManagerListener;
+	private IEclipseJobManagerListener jobManagerListener;
 
 	protected abstract IStructuredContentProvider getContentProvider();
 

@@ -18,12 +18,13 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonLabelProvider;
 
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.lngscheduler.ui.Activator;
 
-public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
-		ICommonLabelProvider, ITableLabelProvider {
+public class ScenarioLabelProvider extends WorkbenchLabelProvider implements ICommonLabelProvider, ITableLabelProvider {
 
 	private final Map<Object, Image> imageCache = new HashMap<Object, Image>();
 
@@ -34,8 +35,8 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 		}
 
 		ImageDescriptor desc = null;
-		if (key instanceof JobState) {
-			final JobState state = (JobState) key;
+		if (key instanceof EJobState) {
+			final EJobState state = (EJobState) key;
 
 			switch (state) {
 			case CANCELLED:
@@ -46,28 +47,22 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 
 			case COMPLETED:
 
-				desc = Activator
-						.getImageDescriptor("/icons/elcl16/terminate_co.gif");
+				desc = Activator.getImageDescriptor("/icons/elcl16/terminate_co.gif");
 				break;
 			case INITIALISED:
-				desc = Activator
-						.getImageDescriptor("/icons/elcl16/terminate_co.gif");
+				desc = Activator.getImageDescriptor("/icons/elcl16/terminate_co.gif");
 				break;
 			case PAUSED:
-				desc = Activator
-						.getImageDescriptor("/icons/elcl16/suspend_co.gif");
+				desc = Activator.getImageDescriptor("/icons/elcl16/suspend_co.gif");
 				break;
 			case PAUSING:
-				desc = Activator
-						.getImageDescriptor("/icons/dlcl16/suspend_co.gif");
+				desc = Activator.getImageDescriptor("/icons/dlcl16/suspend_co.gif");
 				break;
 			case RESUMING:
-				desc = Activator
-						.getImageDescriptor("/icons/dlcl16/resume_co.gif");
+				desc = Activator.getImageDescriptor("/icons/dlcl16/resume_co.gif");
 				break;
 			case RUNNING:
-				desc = Activator
-						.getImageDescriptor("/icons/elcl16/resume_co.gif");
+				desc = Activator.getImageDescriptor("/icons/elcl16/resume_co.gif");
 				break;
 			case UNKNOWN:
 				return Display.getDefault().getSystemImage(SWT.ICON_WARNING);
@@ -104,12 +99,15 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 
 		if (columnIndex == 1) {
 			if (element instanceof IResource) {
-				final IManagedJob job = com.mmxlabs.jobcontoller.Activator
-						.getDefault().getJobManager()
-						.findJobForResource((IResource) element);
+				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+				final IJobDescriptor job = jobManager.findJobForResource((IResource) element);
 
 				if (job != null) {
-					return getCachedImage(job.getJobState());
+					final IJobControl control = jobManager.getControlForJob(job);
+
+					if (control != null) {
+						return getCachedImage(control.getJobState());
+					}
 				}
 			}
 
@@ -130,18 +128,17 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 
 		if (columnIndex == 1) {
 			if (element instanceof IResource) {
-				final IManagedJob job = com.mmxlabs.jobcontoller.Activator
-						.getDefault().getJobManager()
-						.findJobForResource((IResource) element);
+				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+				final IJobDescriptor job = jobManager.findJobForResource((IResource) element);
 				if (job != null) {
-					final JobState jobState = job.getJobState();
-					if (jobState == JobState.RUNNING
-							|| jobState == JobState.PAUSED
-							|| jobState == JobState.PAUSING) {
-						return jobState.toString() + " (" + job.getProgress()
-								+ "%)";
-					} else {
-						return jobState.toString();
+					final IJobControl control = jobManager.getControlForJob(job);
+					if (control != null) {
+						final EJobState jobState = control.getJobState();
+						if (jobState == EJobState.RUNNING || jobState == EJobState.PAUSED || jobState == EJobState.PAUSING) {
+							return jobState.toString() + " (" + control.getProgress() + "%)";
+						} else {
+							return jobState.toString();
+						}
 					}
 				}
 			}
@@ -171,8 +168,7 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements
 	@Override
 	public String getDescription(final Object anElement) {
 		if (anElement instanceof IResource) {
-			return ((IResource) anElement).getFullPath().makeRelative()
-					.toString();
+			return ((IResource) anElement).getFullPath().makeRelative().toString();
 		}
 		return null;
 	}

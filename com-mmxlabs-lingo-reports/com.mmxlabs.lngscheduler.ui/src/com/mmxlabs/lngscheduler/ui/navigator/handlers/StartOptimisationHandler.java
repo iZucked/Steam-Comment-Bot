@@ -16,11 +16,12 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import scenario.Scenario;
 
-import com.mmxlabs.jobcontoller.Activator;
-import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
-import com.mmxlabs.jobcontroller.core.impl.DisposeOnRemoveListener;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.lngscheduler.ui.Activator;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -43,7 +44,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		IJobManager jobManager = Activator.getDefault().getJobManager();
+		final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
 		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 
@@ -58,41 +59,42 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					final IResource resource = (IResource) obj;
 
 					// Adapt to a new or existing job
-					IManagedJob job = (IManagedJob) resource.getAdapter(IManagedJob.class);
-					
+					IJobDescriptor job = (IJobDescriptor) resource.getAdapter(IJobDescriptor.class);
+
 					// No job - then unable to adapt or wrong type of resource
 					if (job == null) {
 						// Not a lot we can do here....
 						return null;
 					}
 
+					IJobControl control = jobManager.getControlForJob(job);
+
 					// If there is a job, but it is terminated, then we need to create a new one
-					if (job != null && (job.getJobState() == JobState.CANCELLED || job.getJobState() == JobState.COMPLETED)) {
+					if (control != null && (control.getJobState() == EJobState.CANCELLED || control.getJobState() == EJobState.COMPLETED)) {
 
 						// Remove from job handler -- this should trigger the dispose listener registered on creation.
 						jobManager.removeJob(job);
 
 						// Create a new instance - this should use the default job manager
-						job = (IManagedJob) resource.getAdapter(IManagedJob.class);
+						job = (IJobDescriptor) resource.getAdapter(IJobDescriptor.class);
 					}
 
 					// If the job does not already exist - it may do perhaps due to a race condition as did not exist when we started this code branch - then register it
 					if (!jobManager.getSelectedJobs().contains(job)) {
 						// Clean up when job is removed from manager
-						jobManager.addJobManagerListener(new DisposeOnRemoveListener(job));
-						jobManager.addJob(job, resource);
+						jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
+						control = jobManager.submitJob(job, resource);
 					}
 
-
 					// Now look to see whether or not we need to prepare, start or resume
-					if (job.getJobState() == JobState.CREATED) {
-						job.prepare();
-						job.start();
+					if (control.getJobState() == EJobState.CREATED) {
+						control.prepare();
+						control.start();
 						// Resume if paused
-					} else if (job.getJobState() == JobState.PAUSED) {
-						job.resume();
+					} else if (control.getJobState() == EJobState.PAUSED) {
+						control.resume();
 					} else {
-						job.start();
+						control.start();
 					}
 				}
 			}
@@ -117,16 +119,14 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
-			// if
-			// (id.equals("com.mmxlabs.rcp.navigator.commands.optimisation.play"))
-			// {
+			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 			final Iterator<?> itr = strucSelection.iterator();
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
-					// FIXME: Make this work efficently without a scenario
+					// FIXME: Make this work efficiently without a scenario
 					final Scenario s = (Scenario) resource.getAdapter(Scenario.class);
 
 					// Need a scenario to start an optimisation
@@ -134,13 +134,14 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 						return false;
 					}
 
-					final IManagedJob job = Activator.getDefault().getJobManager().findJobForResource(resource);
+					final IJobDescriptor job = jobManager.findJobForResource(resource);
+					final IJobControl control = jobManager.getControlForJob(job);
 
-					if (job == null) {
+					if (control == null) {
 						return true;
 					}
 
-					return (job.getJobState() != JobState.RUNNING && job.getJobState() != JobState.CANCELLING);
+					return (control.getJobState() != EJobState.RUNNING && control.getJobState() != EJobState.CANCELLING);
 				}
 			}
 		}

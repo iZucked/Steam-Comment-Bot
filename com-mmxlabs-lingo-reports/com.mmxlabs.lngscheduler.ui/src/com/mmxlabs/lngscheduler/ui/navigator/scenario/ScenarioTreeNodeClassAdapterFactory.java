@@ -13,9 +13,8 @@ import scenario.Scenario;
 import scenario.schedule.Schedule;
 import scenario.schedule.ScheduleModel;
 
-import com.mmxlabs.jobcontoller.Activator;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.lngscheduler.ui.Activator;
 import com.mmxlabs.rcp.common.ecore.EcoreContentProvider;
 
 /**
@@ -43,18 +42,21 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 			 * back to loading the scenario from the resource. This allows the
 			 * current optimisation state to be shown.
 			 */
-			final IManagedJob job = Activator.getDefault().getJobManager()
+			final IJobDescriptor job = Activator.getDefault().getJobManager()
 					.findJobForResource((IResource) adaptableObject);
-			if (job != null) {
-				final Scenario scenario = ((LNGSchedulerJob) job).getScenario();
-				if (scenario != null) {
-					if (Scenario.class.isAssignableFrom(adapterType)) {
-						return scenario;
-					} else if (Schedule.class.isAssignableFrom(adapterType)) {
-						return getSchedule(scenario);
-					}
-				}
-			}
+			
+			
+//			if (job != null) {
+//				FIXME
+//				final Scenario scenario = ((LNGSchedulerJob) job).getScenario();
+//				if (scenario != null) {
+//					if (Scenario.class.isAssignableFrom(adapterType)) {
+//						return scenario;
+//					} else if (Schedule.class.isAssignableFrom(adapterType)) {
+//						return getSchedule(scenario);
+//					}
+//				}
+//			}
 
 			// Fall back to directly loading from resource
 			if (Scenario.class.isAssignableFrom(adapterType)) {

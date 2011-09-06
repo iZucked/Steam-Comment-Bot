@@ -16,7 +16,7 @@
                       ifEmpty="false"
                       operator="or">
                    <instanceof
-                         value="com.mmxlabs.lngscheduler.ui.LNGSchedulerJob">
+                         value="com.mmxlabs.lngscheduler.ui.LNGSchedulerJobDescriptor">
                    </instanceof>
                 </iterate>
              </or>
@@ -216,9 +216,16 @@
          </factory>
          <factory
                adaptableType="org.eclipse.core.resources.IResource"
-               class="com.mmxlabs.lngscheduler.ui.adapterfactories.LNGManagedJobAdapterFactory">
+               class="com.mmxlabs.lngscheduler.ui.adapterfactories.LNGJobDescriptorAdapterFactory">
             <adapter
-                  type="com.mmxlabs.jobcontroller.core.IManagedJob">
+                  type="com.mmxlabs.jobmanager.jobs.IJobDescriptor">
+            </adapter>
+         </factory>
+         <factory
+               adaptableType="com.mmxlabs.lngscheduler.ui.LNGSchedulerJobDescriptor"
+               class="com.mmxlabs.lngscheduler.ui.adapterfactories.LNGJobControlAdapterFactory">
+            <adapter
+                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
             </adapter>
          </factory>
       </extension>

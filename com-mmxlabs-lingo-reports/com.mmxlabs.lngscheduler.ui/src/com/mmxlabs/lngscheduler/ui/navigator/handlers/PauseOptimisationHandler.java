@@ -14,9 +14,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.mmxlabs.jobcontoller.Activator;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.lngscheduler.ui.Activator;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -34,15 +36,13 @@ public class PauseOptimisationHandler extends AbstractOptimisationHandler {
 	}
 
 	/**
-	 * the command has been executed, so extract extract the needed information
-	 * from the application context.
+	 * the command has been executed, so extract extract the needed information from the application context.
 	 */
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		final ISelection selection = HandlerUtil
-				.getActiveWorkbenchWindow(event).getActivePage().getSelection();
-		
+		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
+
 		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
@@ -52,12 +52,13 @@ public class PauseOptimisationHandler extends AbstractOptimisationHandler {
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
 
-					final IManagedJob job = Activator.getDefault()
-							.getJobManager().findJobForResource(resource);
+					final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+					final IJobDescriptor job = jobManager.findJobForResource(resource);
+					final IJobControl control = jobManager.getControlForJob(job);
 
-					if (job != null) {
-						if (job.getJobState() == JobState.RUNNING) {
-							job.pause();
+					if (control != null) {
+						if (control.getJobState() == EJobState.RUNNING) {
+							control.pause();
 						}
 					}
 				}
@@ -81,30 +82,25 @@ public class PauseOptimisationHandler extends AbstractOptimisationHandler {
 			return false;
 		}
 
-		final ISelection selection = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getSelectionService()
-				.getSelection();
+		final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
 		if (selection != null && selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
-			// if
-			// (id.equals("com.mmxlabs.rcp.navigator.commands.optimisation.play"))
-			// {
 			final Iterator<?> itr = strucSelection.iterator();
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
 
-					final IManagedJob job = Activator.getDefault()
-							.getJobManager().findJobForResource(resource);
+					final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+					final IJobDescriptor job = jobManager.findJobForResource(resource);
+					final IJobControl control = jobManager.getControlForJob(job);
 
-					if (job == null) {
+					if (control == null) {
 						return false;
 					}
-
-					return (job.getJobState() == JobState.RUNNING);
+					return (control.getJobState() == EJobState.RUNNING);
 				}
 			}
 		}
