@@ -40,7 +40,6 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements ICo
 
 			switch (state) {
 			case CANCELLED:
-			case ERROR:
 				return Display.getDefault().getSystemImage(SWT.ICON_ERROR);
 			case CANCELLING:
 				return Display.getDefault().getSystemImage(SWT.ICON_ERROR);
