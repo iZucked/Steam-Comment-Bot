@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,6 +42,8 @@ import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
+import scenario.schedule.events.Idle;
+import scenario.schedule.events.Journey;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
@@ -67,43 +70,44 @@ import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
  * 
  */
 public class SimpleCalculationTests {
-	
+
 	// Create a dummy scenario
-	private static final float baseFuelPriceNormal = 700; // $/MT -- normal
 	private static final float baseFuelPriceCheap = 0; // $/MT -- very cheap, normally around 700
+	private static final float baseFuelPriceNormal = 700; // $/MT -- normal
+	private static final float baseFuelPriceExpensive = 70000; // $/MT
 	private static final float dischargePriceCheap = 1.0f; // $/mmbtu - cheap
-	@SuppressWarnings("unused")
 	private static final float dischargePriceNormal = 7.0f; // $/mmbtu // normal
 	private static final float dischargePriceExpensive = 7000.0f; // $/mmbtu // very expensive, normally around 7
 
-
 	/**
-	 * Test case that "ballast leg just cheaper to do on base fuel - there should be no heel around"
+	 * A simple test. Attributes for the laden and ballast legs are identical.
 	 */
 	@Test
-	public void testBallastLeg() {
+	public void testSimple() {
 		// Create a dummy scenario
-		final float baseFuelPrice = baseFuelPriceNormal; // $/MT -- normal
-		final float dischargePrice = dischargePriceExpensive; // $/mmbtu - cheap
-		final float cvValue = 22.8f;
-		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
+		final float baseFuelUnitPrice = 1;
+		final float dischargePrice = 2;
+		final float cvValue = 1;
+		final int travelTime = 100;
 
-		final Scenario scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
+		final float equivalenceFactor = 1;
+		// for simplicity all speeds, fuel and NBO consumptions and rates are equal
+		final int speed = 10;
+		final int capacity = 1000000;
+
+		final int fuelConsumption = 10 * (int) TimeUnit.DAYS.toHours(1);
+		final int NBORate = 10 * (int) TimeUnit.DAYS.toHours(1);
+
+		final int portDistance = 1000;
+
+		final Scenario scenario = createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed, fuelConsumption, speed,
+				fuelConsumption, fuelConsumption, NBORate, NBORate, speed, fuelConsumption, speed, fuelConsumption, fuelConsumption, NBORate, NBORate);
 		// evaluate and get a schedule
 		final Schedule result = evaluate(scenario);
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
-		print(a);
-
-		// on the laden leg we always use NBO; decision time is on the ballast leg
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			Assert.assertTrue("Ballast leg never uses base", fq.getQuantity() == 0 || fq.getFuelType() == FuelType.BASE_FUEL);
-		}
-
-		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			Assert.assertTrue("Ballast idle never uses base", fq.getQuantity() == 0 || fq.getFuelType() == FuelType.BASE_FUEL);
-		}
+		print("testSimple", a);
 	}
 
 	@Test
@@ -120,7 +124,7 @@ public class SimpleCalculationTests {
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
-		print(a);
+		print("testLNGSelection", a);
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
@@ -146,7 +150,7 @@ public class SimpleCalculationTests {
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
-		print(a);
+		print("testBaseSelection", a);
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
@@ -157,34 +161,6 @@ public class SimpleCalculationTests {
 			Assert.assertTrue("Ballast idle only uses base", fq.getQuantity() == 0 || fq.getFuelType() == FuelType.BASE_FUEL);
 		}
 	}
-
-	/**
-	 * @param a
-	 */
-	private void print(final CargoAllocation a) {
-		System.err.println("Allocation " + ((Cargo) a.getLoadSlot().eContainer()).getId());
-		System.err.println("Total LNG volume used for fuel: " + a.getFuelVolume() + "M3");
-		System.err.println("Laden Leg:");
-		for (final FuelQuantity fq : a.getLadenLeg().getFuelUsage()) {
-			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at " + fq.getTotalPrice());
-		}
-
-		System.err.println("Laden Idle:");
-		for (final FuelQuantity fq : a.getLadenIdle().getFuelUsage()) {
-			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at " + fq.getTotalPrice());
-		}
-
-		System.err.println("Ballast Leg:");
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at " + fq.getTotalPrice());
-		}
-
-		System.err.println("Ballast Idle:");
-		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at " + fq.getTotalPrice());
-		}
-	}
-
 	/**
 	 * Evaluate the scenario and create a schedule with costs in it.
 	 * 
@@ -192,7 +168,7 @@ public class SimpleCalculationTests {
 	 * @return the evaluated schedule
 	 */
 	private Schedule evaluate(final Scenario scenario) {
-		//final LNGScenarioTransformer transformer = new LNGScenarioTransformer(scenario);
+		// final LNGScenarioTransformer transformer = new LNGScenarioTransformer(scenario);
 		final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
 
 		final ModelEntityMap entities = new ResourcelessModelEntityMap();
@@ -232,7 +208,7 @@ public class SimpleCalculationTests {
 	 * @return
 	 */
 	private Scenario createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
-		
+
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
 		final float equivalenceFactor = 0.5f;
@@ -245,7 +221,7 @@ public class SimpleCalculationTests {
 		final int cooldownVolume = 0;
 		final int minHeelVolume = 0;
 		final int spotCharterCount = 0;
-		final Double fillCapacity = 1.0;
+		final double fillCapacity = 1.0;
 		// ballast
 		final int ballastMinSpeed = 12;
 		final int ballastMinConsumption = 80;
@@ -263,14 +239,39 @@ public class SimpleCalculationTests {
 		final int ladenIdleNBORate = 180;
 		final int ladenNBORate = 200;
 		// ports
-		final int distanceFromAToB = 1000;
-		final int distanceFromBToA = 1000;
+		final int distanceBetweenPorts = 1000;
 		// load and discharge prices and quantities
 		final int loadPrice = 1000;
 		final int loadMaxQuantity = 100000;
 		final int dischargeMaxQuantity = 100000;
-		
-		
+
+		return createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption,
+				ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption,
+				ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate);
+	}
+
+	private Scenario createScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
+			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
+			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
+			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate) {
+
+		// 'magic' numbers that could be set in the arguments.
+		// vessel class
+		final int pilotLightRate = 0;
+		final int cooldownTime = 0;
+		final int warmupTime = Integer.MAX_VALUE;
+		final int cooldownVolume = 0;
+		final int minHeelVolume = 0;
+		final int spotCharterCount = 0;
+		final double fillCapacity = 1.0;
+		// ports
+		final int distanceFromAToB = distanceBetweenPorts;
+		final int distanceFromBToA = distanceBetweenPorts;
+		// load and discharge prices and quantities
+		final int loadPrice = 1000;
+		final int loadMaxQuantity = 100000;
+		final int dischargeMaxQuantity = 100000;
+
 		final Scenario scenario = ScenarioFactory.eINSTANCE.createScenario();
 		scenario.createMissingModels();
 
@@ -420,8 +421,10 @@ public class SimpleCalculationTests {
 
 		final Date now = new Date();
 		load.setWindowStart(new DateAndOptionalTime(now, false));
+		load.setWindowDuration(0);
 		final Date then = new Date(now.getTime() + Timer.ONE_HOUR * travelTime);
 		dis.setWindowStart(new DateAndOptionalTime(then, false));
+		dis.setWindowDuration(0);
 
 		cargo.setId("CARGO");
 
@@ -431,4 +434,41 @@ public class SimpleCalculationTests {
 
 		return scenario;
 	}
+
+	/**
+	 * @param a
+	 */
+	private void print(final String testName, final CargoAllocation a) {
+		System.err.println(testName);
+		System.err.println("Allocation " + ((Cargo) a.getLoadSlot().eContainer()).getId());
+		System.err.println("Total LNG volume used for fuel: " + a.getFuelVolume() + "M3");
+
+		printJourney("Laden Leg", a.getLadenLeg());
+		printIdle("Laden Idle", a.getLadenIdle());
+		printJourney("Ballast Leg", a.getBallastLeg());
+		printIdle("Ballast Idle", a.getBallastIdle());
+	}
+
+	private void printJourney(final String journeyName, final Journey journey) {
+
+		System.err.println(journeyName + ":");
+		System.err.println("\tDuration:" + journey.getEventDuration());
+		System.err.println("\tSpeed:" + journey.getSpeed());
+
+		printFuel(journey.getFuelUsage());
+	}
+
+	private void printIdle(final String idleName, final Idle idle) {
+
+		System.err.println(idleName + ":");
+		System.err.println("\tDuration:" + idle.getEventDuration());
+		printFuel(idle.getFuelUsage());
+	}
+
+	private void printFuel(EList<FuelQuantity> fuelQuantities) {
+
+		for (final FuelQuantity fq : fuelQuantities)
+			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at ¤" + fq.getTotalPrice());
+	}
+
 }
