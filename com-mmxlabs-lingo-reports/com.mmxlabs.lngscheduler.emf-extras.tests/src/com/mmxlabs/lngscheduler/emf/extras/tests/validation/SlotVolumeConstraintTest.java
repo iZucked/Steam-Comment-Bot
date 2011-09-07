@@ -29,6 +29,8 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.SlotVolumeConstraint;
  */
 public class SlotVolumeConstraintTest {
 
+	private final Mockery context = new Mockery();
+
 	/**
 	 * Check that the constraint succeeds if everything is correct.
 	 */
@@ -40,7 +42,7 @@ public class SlotVolumeConstraintTest {
 		final int max = 2;
 		final int min = 1;
 
-		testSlotVolumeConstraintSuccess(min, max);
+		testSlotVolumeConstraint(true, min, max);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class SlotVolumeConstraintTest {
 		final int max = 2;
 		final int min = 2;
 
-		testSlotVolumeConstraintSuccess(max, min);
+		testSlotVolumeConstraint(true, max, min);
 	}
 
 	/**
@@ -63,7 +65,7 @@ public class SlotVolumeConstraintTest {
 		final int min = 2;
 		final int max = 1;
 
-		testSlotVolumeConstraintFailure(min, max);
+		testSlotVolumeConstraint(false, min, max);
 	}
 
 	/**
@@ -77,7 +79,7 @@ public class SlotVolumeConstraintTest {
 		// anyway.
 		final int max = 2;
 
-		testSlotVolumeConstraintFailure(min, max);
+		testSlotVolumeConstraint(false, min, max);
 	}
 
 	/**
@@ -89,7 +91,7 @@ public class SlotVolumeConstraintTest {
 		final int min = 1;
 		final int max = -1;
 
-		testSlotVolumeConstraintFailure(min, max);
+		testSlotVolumeConstraint(false, min, max);
 	}
 
 	/**
@@ -98,7 +100,6 @@ public class SlotVolumeConstraintTest {
 	@Test
 	public void testSlotVolumeConstraintNullScenario() {
 
-		final Mockery context = new Mockery();
 		// This is the constraint we will be testing
 		final SlotVolumeConstraint constraint = new SlotVolumeConstraint();
 
@@ -133,7 +134,7 @@ public class SlotVolumeConstraintTest {
 		context.assertIsSatisfied();
 	}
 
-	private void testSlotVolumeConstraintSuccess(final int min, final int max) {
+	private void testSlotVolumeConstraint(final boolean expectSuccess, final int min, final int max) {
 
 		final Mockery context = new Mockery();
 		// This is the constraint we will be testing
@@ -143,50 +144,7 @@ public class SlotVolumeConstraintTest {
 		final Scenario scenario = context.mock(Scenario.class);
 
 		final IValidationContext validationContext = context.mock(IValidationContext.class);
-		final IConstraintStatus successStatus = context.mock(IConstraintStatus.class);
-
-		context.checking(new Expectations() {
-			{
-				atLeast(1).of(slot).eContainer();
-				will(returnValue(scenario));
-
-				atLeast(1).of(slot).eContainingFeature();
-				will(returnValue(null));
-
-				// Set the min.
-				atLeast(1).of(slot).getSlotOrContractMinQuantity(scenario);
-				will(returnValue(min));
-				// Set the max.
-				atLeast(1).of(slot).getSlotOrContractMaxQuantity(scenario);
-				will(returnValue(max));
-
-				atLeast(1).of(validationContext).getTarget();
-				will(returnValue(slot));
-
-				atLeast(1).of(validationContext).getEventType();
-				will(returnValue(EMFEventType.NULL));
-
-				atLeast(1).of(validationContext).createSuccessStatus();
-				will(returnValue(successStatus));
-			}
-		});
-
-		constraint.validate(validationContext);
-
-		context.assertIsSatisfied();
-	}
-
-	private void testSlotVolumeConstraintFailure(final int min, final int max) {
-
-		final Mockery context = new Mockery();
-		// This is the constraint we will be testing
-		final SlotVolumeConstraint constraint = new SlotVolumeConstraint();
-
-		final Slot slot = context.mock(Slot.class);
-		final Scenario scenario = context.mock(Scenario.class);
-
-		final IValidationContext validationContext = context.mock(IValidationContext.class);
-		final IConstraintStatus failureStatus = context.mock(IConstraintStatus.class);
+		final IConstraintStatus resultStatus = context.mock(IConstraintStatus.class);
 
 		context.checking(new Expectations() {
 			{
@@ -209,8 +167,13 @@ public class SlotVolumeConstraintTest {
 				atLeast(1).of(validationContext).getEventType();
 				will(returnValue(EMFEventType.NULL));
 
-				atLeast(1).of(validationContext).createFailureStatus();
-				will(returnValue(failureStatus));
+				if (expectSuccess) {
+					atLeast(1).of(validationContext).createSuccessStatus();
+					will(returnValue(resultStatus));
+				} else {
+					atLeast(1).of(validationContext).createFailureStatus();
+					will(returnValue(resultStatus));
+				}
 			}
 		});
 
