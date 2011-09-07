@@ -20,7 +20,9 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.VesselEventDateConstraint;
  * The VesselEventDateConstraint expects a VesselEvent as a target, and checks that the startDate is not after the endDate.
  */
 public class VesselEventDateConstraintTest {
-	
+
+	// Create a mockery to mock up all the objects involved in a test
+	private final Mockery context = new Mockery();
 	// Create some dates to test.
 	private static final long time = System.currentTimeMillis();
 	private static final Date now = new Date(time);
@@ -47,18 +49,33 @@ public class VesselEventDateConstraintTest {
 	/**
 	 * Test the constraint succeeds if given the same date.
 	 */
+	@Test
 	public void testVesselEventDateConstraintSameDay() {
 		// the same day should be fine.
 		testVesselEventDateConstraint(true, now, now);
 	}
 	
 	/**
-	 * Test the constraint fails if either of the dates are null.
+	 * Test the constraint fails if the first date is null.
 	 */
-	public void testVesselEventDateConstraintNull() {
-		// Test null dates. Any null should produce a failure.
-		testVesselEventDateConstraint(false, now, null);
+	@Test
+	public void testVesselEventDateConstraintFirstDateNull() {
 		testVesselEventDateConstraint(false, null, nowPlusOne);
+	}
+	
+	/**
+	 * Test the constraint fails if the second date is null.
+	 */
+	@Test
+	public void testVesselEventDateConstraintSecondDateNull() {
+		testVesselEventDateConstraint(false, now, null);
+	}
+	
+	/**
+	 * Test the constraint fails if both dates are null.
+	 */
+	@Test
+	public void testVesselEventDateConstraintDatesBothNull() {
 		testVesselEventDateConstraint(false, null, null);
 	}
 
@@ -70,9 +87,6 @@ public class VesselEventDateConstraintTest {
 	 * @param end The end date of the VesselEvent.
 	 */
 	private void testVesselEventDateConstraint(final boolean expectSuccess, final Date start, final Date end) {
-
-		// Create a mockery to mock up all the objects involved in a test
-		final Mockery context = new Mockery();
 		// This is the constraint we will be testing
 		final VesselEventDateConstraint constraint = new VesselEventDateConstraint();
 
