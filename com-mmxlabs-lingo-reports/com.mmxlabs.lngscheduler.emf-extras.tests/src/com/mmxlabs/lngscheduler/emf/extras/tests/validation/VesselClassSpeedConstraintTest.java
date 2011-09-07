@@ -28,6 +28,8 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.VesselClassSpeedConstraint
  */
 public class VesselClassSpeedConstraintTest {
 
+	private final Mockery context = new Mockery();
+
 	// these three are copied from VesselClassSpeedConstraint because they're private.
 	private static final String MIN_ID = "com.mmxlabs.lngscheduler.emf-extras.vessel_class_min_speed";
 	private static final String MAX_ID = "com.mmxlabs.lngscheduler.emf-extras.vessel_class_max_speed";
@@ -39,11 +41,10 @@ public class VesselClassSpeedConstraintTest {
 	@Test
 	public void testVesselClassSpeedConstraintNullLaden() {
 
-		final Mockery context = new Mockery();
 		final VesselStateAttributes laden = null;
 		final VesselStateAttributes ballast = context.mock(VesselStateAttributes.class);
 
-		testVesselClassSpeedConstraintSuccess(context, laden, ballast);
+		testVesselClassSpeedConstraintSuccess(laden, ballast);
 	}
 
 	/**
@@ -52,11 +53,10 @@ public class VesselClassSpeedConstraintTest {
 	@Test
 	public void testVesselClassSpeedConstraintNullBallast() {
 
-		final Mockery context = new Mockery();
 		final VesselStateAttributes laden = context.mock(VesselStateAttributes.class);
 		final VesselStateAttributes ballast = null;
 
-		testVesselClassSpeedConstraintSuccess(context, laden, ballast);
+		testVesselClassSpeedConstraintSuccess(laden, ballast);
 	}
 
 	/**
@@ -65,11 +65,10 @@ public class VesselClassSpeedConstraintTest {
 	@Test
 	public void testVesselClassSpeedConstraintNullBallastAndLaden() {
 
-		final Mockery context = new Mockery();
 		final VesselStateAttributes ladenNull = null;
 		final VesselStateAttributes ballastNull = null;
 
-		testVesselClassSpeedConstraintSuccess(context, ladenNull, ballastNull);
+		testVesselClassSpeedConstraintSuccess(ladenNull, ballastNull);
 	}
 
 	/**
@@ -108,7 +107,7 @@ public class VesselClassSpeedConstraintTest {
 	 * @param laden
 	 * @param ballast
 	 */
-	private void testVesselClassSpeedConstraintSuccess(final Mockery context, final VesselStateAttributes laden, final VesselStateAttributes ballast) {
+	private void testVesselClassSpeedConstraintSuccess(final VesselStateAttributes laden, final VesselStateAttributes ballast) {
 
 		// mock a vessel class
 		final VesselClass vesselClass = context.mock(VesselClass.class);
@@ -144,9 +143,6 @@ public class VesselClassSpeedConstraintTest {
 	 * @param maxSpeed
 	 */
 	private void testVesselClassSpeedConstraintOrderFailure(final float minSpeed, final float maxSpeed) {
-
-		// Create a mockery to mock up all the objects involved in a test
-		final Mockery context = new Mockery();
 
 		// mock a vessel class
 		final VesselClass vesselClass = context.mock(VesselClass.class);
@@ -204,9 +200,6 @@ public class VesselClassSpeedConstraintTest {
 	 */
 	private void testVesselClassSpeedConstraintOrderSuccess(final float minSpeed, final float maxSpeed) {
 
-		// Create a mockery to mock up all the objects involved in a test
-		final Mockery context = new Mockery();
-
 		// mock a vessel class
 		final VesselClass vesselClass = context.mock(VesselClass.class);
 
@@ -261,30 +254,44 @@ public class VesselClassSpeedConstraintTest {
 		// the speeds won't get tested so their values aren't important.
 		final float speed = 10;
 
-		testVesselClassSpeedConstraintIDSuccess(wrongID, speed, speed, speed, speed);
+		testVesselClassSpeedConstraintID(true, wrongID, speed, speed, speed, speed);
+	}
+
+	@Test
+	public void testVesselClassSpeedConstraintMAX_ID() {
+		testVesselClassSpeedConstraint(MAX_ID);
+	}
+
+	@Test
+	public void testVesselClassSpeedConstraintMIN_ID() {
+		testVesselClassSpeedConstraint(MIN_ID);
 	}
 
 	/**
 	 * Test that the constraint succeeds for sensible input.
 	 */
-	@Test
-	public void testVesselClassSpeedConstraintMax() {
-
-		// Depending on whether MAX_ID or MIN_ID is sent only the min or max vessel class speed will be tested, so they might as well be the same.
+	private void testVesselClassSpeedConstraint(final String ID) {
 		final float vcSpeed = 10;
 		final float minFCLSpeed = 5;
 		final float maxFCLSpeed = 15;
 
-		// Test the case for both the MAX_ID and MIN_ID cases.
-		testVesselClassSpeedConstraintIDSuccess(MAX_ID, vcSpeed, vcSpeed, minFCLSpeed, maxFCLSpeed);
-		testVesselClassSpeedConstraintIDSuccess(MIN_ID, vcSpeed, vcSpeed, minFCLSpeed, maxFCLSpeed);
+		testVesselClassSpeedConstraintID(true, ID, vcSpeed, vcSpeed, minFCLSpeed, maxFCLSpeed);
+	}
+
+	@Test
+	public void testVesselClassSpeedConstraintIDFCLsMinGreaterThanVCMinMax_ID() {
+		testVesselClassSpeedConstraintIDFCLsMinGreaterThanVCMin(MAX_ID);
+	}
+
+	@Test
+	public void testVesselClassSpeedConstraintIDFCLsMinGreaterThanVCMinMin_ID() {
+		testVesselClassSpeedConstraintIDFCLsMinGreaterThanVCMin(MIN_ID);
 	}
 
 	/**
 	 * If the largest FCL minimum speed is greater than the miniumum vessel class speed then the constraint should fail.
 	 */
-	@Test
-	public void testVesselClassSpeedConstraintIDFCLsMinGreaterThanVCMin() {
+	private void testVesselClassSpeedConstraintIDFCLsMinGreaterThanVCMin(final String ID) {
 
 		// The max and min speeds for the vessel class.
 		final float minSpeed = 10;
@@ -293,17 +300,24 @@ public class VesselClassSpeedConstraintTest {
 		final float minFCLSpeed = 8;
 		final float maxFCLSpeed = 9;
 
-		// Test once for the max and for the min. Shouldn't make a difference.
-		testVesselClassSpeedConstraintIDFailure(MAX_ID, minSpeed, maxSpeed, minFCLSpeed, maxFCLSpeed);
-		testVesselClassSpeedConstraintIDFailure(MIN_ID, minSpeed, maxSpeed, minFCLSpeed, maxFCLSpeed);
+		// Test with the min. Should be the same result as MAX_ID.
+		testVesselClassSpeedConstraintID(false, ID, minSpeed, maxSpeed, minFCLSpeed, maxFCLSpeed);
 	}
 
+	@Test
+	public void testVesselClassSpeedConstraintIDFCLsMaxGreaterThanVCMaxMAX_ID() {
+		testVesselClassSpeedConstraintIDFCLsMaxGreaterThanVCMax(MAX_ID);
+	}
+
+	@Test
+	public void testVesselClassSpeedConstraintIDFCLsMaxGreaterThanVCMaxMIN_ID() {
+		testVesselClassSpeedConstraintIDFCLsMaxGreaterThanVCMax(MIN_ID);
+	}
 
 	/**
 	 * If the smallest FCL maximum speed is greater than the maximum vessel class speed then the constraint should fail.
 	 */
-	@Test
-	public void testVesselClassSpeedConstraintIDFCLsMaxGreaterThanVCMax() {
+	private void testVesselClassSpeedConstraintIDFCLsMaxGreaterThanVCMax(final String ID) {
 
 		// The max and min speeds for the vessel class.
 		final float minSpeed = 9;
@@ -312,99 +326,26 @@ public class VesselClassSpeedConstraintTest {
 		final float minFCLSpeed = 11;
 		final float maxFCLSpeed = 12;
 
-		// Test once for the max and for the min. Shouldn't make a difference.
-		testVesselClassSpeedConstraintIDFailure(MAX_ID, minSpeed, maxSpeed, minFCLSpeed, maxFCLSpeed);
-		testVesselClassSpeedConstraintIDFailure(MIN_ID, minSpeed, maxSpeed, minFCLSpeed, maxFCLSpeed);
+		testVesselClassSpeedConstraintID(false, ID, minSpeed, maxSpeed, minFCLSpeed, maxFCLSpeed);
 	}
 
 	/**
-	 * Runs a test on the VesselClassSpeedConstraint and expects a success.
-	 *  
-	 * @param ID Should either be MAX_ID or MIN_ID.
-	 * @param minVCSpeed The minimum speed of the vessel class.
-	 * @param maxVCSpeed The maximum speed of the vessel class.
-	 * @param minFCLSpeed The minimum speed of fuel consumption line for both laden and ballast.
-	 * @param maxFCLSpeed The maximum speed of fuel consumption line for both laden and ballast.
+	 * Runs a test on the VesselClassSpeedConstraint. Whether the outcome is a success or failure is based on the argument expectSuccess.
+	 * 
+	 * @param expectSuccess
+	 *            Whether the constraint is expected to pass or fail.
+	 * @param ID
+	 *            Should either be MAX_ID or MIN_ID.
+	 * @param minVCSpeed
+	 *            The minimum speed of the vessel class.
+	 * @param maxVCSpeed
+	 *            The maximum speed of the vessel class.
+	 * @param minFCLSpeed
+	 *            The minimum speed of fuel consumption line for both laden and ballast.
+	 * @param maxFCLSpeed
+	 *            The maximum speed of fuel consumption line for both laden and ballast.
 	 */
-	private void testVesselClassSpeedConstraintIDSuccess(final String ID, final float minVCSpeed, final float maxVCSpeed, final float minFCLSpeed, final float maxFCLSpeed) {
-
-		// Create a mockery to mock up all the objects involved in a test
-		final Mockery context = new Mockery();
-
-		// mock a vessel class
-		final VesselClass vesselClass = context.mock(VesselClass.class);
-
-		final IValidationContext validationContext = context.mock(IValidationContext.class);
-
-		// make sure to give these two different names, else they are given the same name (the class, vesselStateAttributes), and same names aren't allowed.
-		final VesselStateAttributes laden = context.mock(VesselStateAttributes.class, "ladenVesselStateAttributes");
-		final VesselStateAttributes ballast = context.mock(VesselStateAttributes.class, "ballastVesselStateAttributes");
-		final VesselClassSpeedConstraint constraint = new VesselClassSpeedConstraint();
-
-		// Can't mock up a list without having some elements, so mock some elements and then add them to a created list.
-		final FuelConsumptionLine minFCL = context.mock(FuelConsumptionLine.class, "minFCL");
-		final FuelConsumptionLine maxFCL = context.mock(FuelConsumptionLine.class, "maxFCL");
-		final BasicEList<FuelConsumptionLine> list = new BasicEList<FuelConsumptionLine>();
-		list.add(minFCL);
-		list.add(maxFCL);
-
-		context.checking(new Expectations() {
-			{
-				// what's the target?
-				exactly(1).of(validationContext).getTarget();
-				will(returnValue(vesselClass));
-
-				// Make sure the vessel class returns the ballast and laden attribs.
-				exactly(1).of(vesselClass).getBallastAttributes();
-				will(returnValue(ballast));
-				exactly(1).of(vesselClass).getLadenAttributes();
-				will(returnValue(laden));
-
-				// The ID that we are testing for.
-				atLeast(1).of(validationContext).getCurrentConstraintId();
-				will(returnValue(ID));
-
-				// The vessel class has a min and max speed as specified by the method arguments.
-				atMost(1).of(vesselClass).getMinSpeed();
-				will(returnValue(minVCSpeed));
-				atMost(1).of(vesselClass).getMaxSpeed();
-				will(returnValue(maxVCSpeed));
-
-				// Set the fuel consump. lines to return a speed as specified by the method arguments.
-				atLeast(1).of(minFCL).getSpeed();
-				will(returnValue(minFCLSpeed));
-				atLeast(1).of(maxFCL).getSpeed();
-				will(returnValue(maxFCLSpeed));
-
-				// Return the same list of fuel consumption values for the laden and ballast
-				atLeast(1).of(laden).getFuelConsumptionCurve();
-				will(returnValue(list));
-				atLeast(1).of(ballast).getFuelConsumptionCurve();
-				will(returnValue(list));
-
-				// expect a success
-				exactly(1).of(validationContext).createSuccessStatus();
-			}
-		});
-
-		constraint.validate(validationContext);
-		context.assertIsSatisfied();
-	}
-
-
-	/**
-	 * Runs a test on the VesselClassSpeedConstraint and expects a failure.
-	 *  
-	 * @param ID Should either be MAX_ID or MIN_ID.
-	 * @param minVCSpeed The minimum speed of the vessel class.
-	 * @param maxVCSpeed The maximum speed of the vessel class.
-	 * @param minFCLSpeed The minimum speed of fuel consumption line for both laden and ballast.
-	 * @param maxFCLSpeed The maximum speed of fuel consumption line for both laden and ballast.
-	 */
-	private void testVesselClassSpeedConstraintIDFailure(final String ID, final float minVCSpeed, final float maxVCSpeed, final float minFCLSpeed, final float maxFCLSpeed) {
-
-		// Create a mockery to mock up all the objects involved in a test
-		final Mockery context = new Mockery();
+	private void testVesselClassSpeedConstraintID(final boolean expectSuccess, final String ID, final float minVCSpeed, final float maxVCSpeed, final float minFCLSpeed, final float maxFCLSpeed) {
 
 		// mock a vessel class
 		final VesselClass vesselClass = context.mock(VesselClass.class);
@@ -470,9 +411,15 @@ public class VesselClassSpeedConstraintTest {
 				else if (ID.equals(MAX_ID))
 					failureSpeed = maxVCSpeed;
 
-				// expect a failure
-				exactly(1).of(validationContext).createFailureStatus(failureSpeed, minFCLSpeed, maxFCLSpeed);
-				will(returnValue(failureStatus));
+				if (expectSuccess) {
+					// expect a success
+					exactly(1).of(validationContext).createSuccessStatus();
+
+				} else {
+					// expect a failure
+					exactly(1).of(validationContext).createFailureStatus(failureSpeed, minFCLSpeed, maxFCLSpeed);
+					will(returnValue(failureStatus));
+				}
 			}
 		});
 
