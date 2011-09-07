@@ -23,6 +23,7 @@ import scenario.contract.ContractFactory;
 import scenario.contract.Entity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.fleet.Drydock;
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
@@ -350,6 +351,8 @@ public class SimpleCalculationTests {
 
 		final Port A = PortFactory.eINSTANCE.createPort();
 		final Port B = PortFactory.eINSTANCE.createPort();
+		// TODO Set up dry dock.
+		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
 
 		A.setName("A");
 		B.setName("B");
