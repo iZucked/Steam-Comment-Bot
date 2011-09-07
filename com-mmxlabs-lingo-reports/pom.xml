@@ -286,6 +286,13 @@
 			<layout>p2</layout>
 		</repository>
 		
+		<repository>
+			<!--  This replaces the old cope update site, as cope is now EDapt -->
+			<id>edapt-updates</id>
+			<url>http://download.eclipse.org/edapt/update-site/</url>
+			<layout>p2</layout>
+		</repository>
+		
 		<!-- This is an old style update site and not directly consumable by tycho -->
 		<repository>
 			<id>cope-updates</id>
