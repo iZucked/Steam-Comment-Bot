@@ -351,8 +351,6 @@ public class SimpleCalculationTests {
 
 		final Port A = PortFactory.eINSTANCE.createPort();
 		final Port B = PortFactory.eINSTANCE.createPort();
-		// TODO Set up dry dock.
-		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
 
 		A.setName("A");
 		B.setName("B");
@@ -371,6 +369,14 @@ public class SimpleCalculationTests {
 		distance2.setToPort(A);
 		distance2.setDistance(distanceFromBToA);
 
+
+		// TODO Set up dry dock.
+		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
+		dryDock.setDuration(0);
+		dryDock.setStartPort(A);
+		// add to scenario's fleet model
+		scenario.getFleetModel().getVesselEvents().add(dryDock);
+		
 		scenario.getDistanceModel().getDistances().add(distance);
 		scenario.getDistanceModel().getDistances().add(distance2);
 
@@ -428,6 +434,9 @@ public class SimpleCalculationTests {
 		final Date then = new Date(now.getTime() + Timer.ONE_HOUR * travelTime);
 		dis.setWindowStart(new DateAndOptionalTime(then, false));
 		dis.setWindowDuration(0);
+		final Date thenNext = new Date(then.getTime() + Timer.ONE_HOUR * travelTime);
+		dryDock.setStartDate(thenNext);
+		dryDock.setEndDate(thenNext);
 
 		cargo.setId("CARGO");
 
