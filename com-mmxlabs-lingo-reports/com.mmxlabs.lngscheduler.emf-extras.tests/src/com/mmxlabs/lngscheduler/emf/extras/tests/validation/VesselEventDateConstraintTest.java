@@ -20,25 +20,42 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.VesselEventDateConstraint;
  * The VesselEventDateConstraint expects a VesselEvent as a target, and checks that the startDate is not after the endDate.
  */
 public class VesselEventDateConstraintTest {
-
+	
+	// Create some dates to test.
+	private static final long time = System.currentTimeMillis();
+	private static final Date now = new Date(time);
+	private static final Date nowPlusOne = new Date(time + 1);
+	
 	/**
-	 * Test various combinations of test input.
+	 * Test the constraint succeeds with the correct input.
 	 */
 	@Test
 	public void testVesselEventDateConstraint() {
-		
-		// Create some dates to test.
-		final long time = System.currentTimeMillis();
-		final Date now = new Date(time);
-		final Date nowPlusOne = new Date(time + 1);
-		
 		// right way around
 		testVesselEventDateConstraint(true, now, nowPlusOne);
+	}
+	
+	/**
+	 * Test the constraint fails if the dates are the wrong way around.
+	 */
+	@Test
+	public void testVesselEventDateConstraintWrongWayAround() {
 		// wrong way around
 		testVesselEventDateConstraint(false, nowPlusOne, now);
+	}
+	
+	/**
+	 * Test the constraint succeeds if given the same date.
+	 */
+	public void testVesselEventDateConstraintSameDay() {
 		// the same day should be fine.
 		testVesselEventDateConstraint(true, now, now);
-		
+	}
+	
+	/**
+	 * Test the constraint fails if either of the dates are null.
+	 */
+	public void testVesselEventDateConstraintNull() {
 		// Test null dates. Any null should produce a failure.
 		testVesselEventDateConstraint(false, now, null);
 		testVesselEventDateConstraint(false, null, nowPlusOne);
