@@ -33,7 +33,7 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.ShipFillPercentageConstrai
 public class ShipFillPercentageConstraintTest {
 
 	// Create a mockery to mock up all the objects involved in a test
-	final Mockery context = new Mockery();
+	private final Mockery context = new Mockery();
 	// the fill that is defined as sensible in ShipFillPercentageConstraint.
 	private static final double sensiblefill = 0.8;
 
