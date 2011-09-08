@@ -81,14 +81,80 @@ public class SimpleCalculationTests {
 	private static final float dischargePriceExpensive = 7000.0f; // $/mmbtu // very expensive, normally around 7
 
 	/**
-	 * A simple test. Attributes for the laden and ballast legs are identical.
+	 * Check that the base fuel is just cheaper, and so FBO is never used.
 	 */
 	@Test
-	public void testSimple() {
-		// Create a dummy scenario
+	public void testBoundaryConditionBaseFuelCheaper() {
 		final float baseFuelUnitPrice = 1;
-		final float dischargePrice = 2;
+		// this value makes the NBO 1 unit more expensive than base fuel.
+		final float dischargePrice = 1.01f;
 		final float cvValue = 1;
+		final int fuelConsumptionHours = 11;
+		final int NBORateHours = 10;
+
+		CargoAllocation a = testSimple("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionHours, NBORateHours);
+
+		// need to check that FBO is never used on any leg or idle.
+		for (final FuelQuantity fq : a.getLadenLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.FBO)
+				Assert.assertTrue("Laden leg never uses FBO", fq.getQuantity() == 0);
+		}
+		for (final FuelQuantity fq : a.getLadenIdle().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.FBO)
+				Assert.assertTrue("Laden idle never uses FBO", fq.getQuantity() == 0);
+		}
+
+		// Check there is no heel by checking there is no NBO used after discharge
+		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO)
+				Assert.assertTrue("Ballast leg never uses NBO", fq.getQuantity() == 0);
+		}
+		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO)
+				Assert.assertTrue("Ballast idle never uses NBO", fq.getQuantity() == 0);
+		}
+	}
+
+	/**
+	 * Check that the LNG is just cheaper, and so base fuel is never used.
+	 */
+	@Test
+	public void testBoundaryConditionNBOCheaper() {
+		// this value makes the base fuel 1 unit more expensive than NBO.
+		final float baseFuelUnitPrice = 1.01f;
+		final float dischargePrice = 1;
+		final float cvValue = 1;
+		final int fuelConsumptionHours = 11;
+		final int NBORateHours = 10;
+
+		CargoAllocation a = testSimple("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionHours, NBORateHours);
+
+		// need to check that base fuel is never used on any leg or idle.
+		for (final FuelQuantity fq : a.getLadenLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Laden leg never uses base fuel", fq.getQuantity() == 0);
+		}
+		for (final FuelQuantity fq : a.getLadenIdle().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Laden idle never uses base fuel", fq.getQuantity() == 0);
+		}
+		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Ballast leg never uses base fuel", fq.getQuantity() == 0);
+		}
+		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Ballast idle never uses base fuel", fq.getQuantity() == 0);
+		}
+	}
+
+	/**
+	 * A simple test. Attributes for the laden and ballast legs are identical. The vessel can only travel at 10, the distances between all ports is 1000, and the travel time is 100.
+	 * 
+	 * @return
+	 */
+	private CargoAllocation testSimple(final String name, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelConsumptionHours, final int NBORateHours) {
+		// Create a dummy scenario
 		final int travelTime = 100;
 
 		final float equivalenceFactor = 1;
@@ -96,19 +162,22 @@ public class SimpleCalculationTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelConsumption = 10 * (int) TimeUnit.DAYS.toHours(1);
-		final int NBORate = 10 * (int) TimeUnit.DAYS.toHours(1);
+		final int fuelConsumptionDays = (int) TimeUnit.DAYS.toHours(fuelConsumptionHours);
+		final int NBORateDays = (int) TimeUnit.DAYS.toHours(NBORateHours);
 
 		final int portDistance = 1000;
+		final boolean useDryDock = true;
 
-		final Scenario scenario = createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed, fuelConsumption, speed,
-				fuelConsumption, fuelConsumption, NBORate, NBORate, speed, fuelConsumption, speed, fuelConsumption, fuelConsumption, NBORate, NBORate);
+		final Scenario scenario = createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed, fuelConsumptionDays, speed,
+				fuelConsumptionDays, fuelConsumptionDays, NBORateDays, NBORateDays, speed, fuelConsumptionDays, speed, fuelConsumptionDays, fuelConsumptionDays, NBORateDays, NBORateDays, useDryDock);
 		// evaluate and get a schedule
 		final Schedule result = evaluate(scenario);
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
-		print("testSimple", a);
+		print(name, a);
+
+		return a;
 	}
 
 	@Test
@@ -162,6 +231,7 @@ public class SimpleCalculationTests {
 			Assert.assertTrue("Ballast idle only uses base", fq.getQuantity() == 0 || fq.getFuelType() == FuelType.BASE_FUEL);
 		}
 	}
+
 	/**
 	 * Evaluate the scenario and create a schedule with costs in it.
 	 * 
@@ -246,15 +316,46 @@ public class SimpleCalculationTests {
 		final int loadMaxQuantity = 100000;
 		final int dischargeMaxQuantity = 100000;
 
+		final boolean useDryDock = true;
+
 		return createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption,
 				ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption,
-				ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate);
+				ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock);
 	}
 
+	/**
+	 * 
+	 * @param distanceBetweenPorts
+	 * @param baseFuelUnitPrice
+	 * @param dischargePrice
+	 * @param cvValue
+	 * @param travelTime
+	 * @param equivalenceFactor
+	 * @param minSpeed
+	 * @param maxSpeed
+	 * @param capacity
+	 * @param ballastMinSpeed
+	 * @param ballastMinConsumption
+	 * @param ballastMaxSpeed
+	 * @param ballastMaxConsumption
+	 * @param ballastIdleConsumptionRate
+	 * @param ballastIdleNBORate
+	 * @param ballastNBORate
+	 * @param ladenMinSpeed
+	 * @param ladenMinConsumption
+	 * @param ladenMaxSpeed
+	 * @param ladenMaxConsumption
+	 * @param ladenIdleConsumptionRate
+	 * @param ladenIdleNBORate
+	 * @param ladenNBORate
+	 * @param useDryDock
+	 *            Use a dry dock to stop 15 days of ballast idle.
+	 * @return
+	 */
 	private Scenario createScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
-			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate) {
+			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -369,14 +470,6 @@ public class SimpleCalculationTests {
 		distance2.setToPort(A);
 		distance2.setDistance(distanceFromBToA);
 
-
-		// TODO Set up dry dock.
-		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
-		dryDock.setDuration(0);
-		dryDock.setStartPort(A);
-		// add to scenario's fleet model
-		scenario.getFleetModel().getVesselEvents().add(dryDock);
-		
 		scenario.getDistanceModel().getDistances().add(distance);
 		scenario.getDistanceModel().getDistances().add(distance2);
 
@@ -434,9 +527,18 @@ public class SimpleCalculationTests {
 		final Date then = new Date(now.getTime() + Timer.ONE_HOUR * travelTime);
 		dis.setWindowStart(new DateAndOptionalTime(then, false));
 		dis.setWindowDuration(0);
-		final Date thenNext = new Date(then.getTime() + Timer.ONE_HOUR * travelTime);
-		dryDock.setStartDate(thenNext);
-		dryDock.setEndDate(thenNext);
+
+		if (useDryDock) {
+			// TODO Set up dry dock.
+			final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
+			dryDock.setDuration(0);
+			dryDock.setStartPort(A);
+			// add to scenario's fleet model
+			scenario.getFleetModel().getVesselEvents().add(dryDock);
+			final Date thenNext = new Date(then.getTime() + Timer.ONE_HOUR * travelTime);
+			dryDock.setStartDate(thenNext);
+			dryDock.setEndDate(thenNext);
+		}
 
 		cargo.setId("CARGO");
 
