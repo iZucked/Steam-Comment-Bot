@@ -11,10 +11,12 @@ import java.util.Date;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.common.impl.MappingTransformer;
 
+@Ignore("Skip until API is sorted out. See Case 188")
 public class DateTreeSetTest {
 
 	@Test
