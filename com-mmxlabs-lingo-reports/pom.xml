@@ -69,8 +69,6 @@
 		<module>com.mmxlabs.lngscheduler.emf.editor</module>
 		<module>com.mmxlabs.lngscheduler.ui</module>
 		<module>com.mmxlabs.lngscheduler.emf.migrator</module>
-		<module>com.mmxlabs.jobmanager</module>
-		<module>com.mmxlabs.jobmanager.ui</module>
 		<module>com.mmxlabs.demo.reports</module>
 		<module>com.mmxlabs.ganttviewer</module>
 		<module>com.mmxlabs.scheduleview</module>
