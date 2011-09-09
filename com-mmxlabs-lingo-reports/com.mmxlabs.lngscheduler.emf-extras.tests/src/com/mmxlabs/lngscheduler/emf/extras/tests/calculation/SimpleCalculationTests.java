@@ -180,6 +180,71 @@ public class SimpleCalculationTests {
 		return a;
 	}
 
+	/**
+	 * Test that ballast leg is cheaper on NBO, but ballast idle is cheaper on base fuel.
+	 */
+	@Test
+	public void testTravelCheaperNBOIdleCheaperBase() {
+
+		final int travelFuelConsumption = 10;
+		final int idleFuelConsumption = 9;
+		final int travelNBORate = 10;
+		final int idleNBORate = 10;
+		final float baseFuelUnitPrice = 1.01f;
+		final float dischargePrice = 1f;
+
+		CargoAllocation a = test("Ballast cheaper on NBO, ballast idle cheaper on base", travelFuelConsumption, travelNBORate, idleFuelConsumption, idleNBORate, baseFuelUnitPrice, dischargePrice);
+
+		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() != FuelType.NBO)
+				Assert.assertTrue("Ballast leg only uses NBO", fq.getQuantity() == 0);
+		}
+		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Ballast idle uses base fuel", fq.getQuantity() > 0);
+		}
+	}
+
+	/**
+	 * Test that ballast travel is cheaper on NBO, but ballast idle is cheaper on base fuel.
+	 * <p>
+	 * This test gives 10 hours of idle time after ballast and laden legs.
+	 */
+	private CargoAllocation test(final String name, final int travelFuelConsumptionHours, final int travelNBORateHours, final int idleFuelConsumptionHours, final int idleNBORateHours,
+			final float baseFuelUnitPrice, final float dischargePrice) {
+		// Create a dummy scenario
+
+		// this gives 100 hours of travel and idle time for ballast and laden.
+		final int travelTime = 200;
+
+		final float cvValue = 1;
+
+		final float equivalenceFactor = 1;
+		// for simplicity all speeds, fuel and NBO consumptions and rates are equal
+		final int speed = 10;
+		final int capacity = 1000000;
+
+		final int travelFuelConsumption = (int) TimeUnit.DAYS.toHours(travelFuelConsumptionHours);
+		final int travelNBORate = (int) TimeUnit.DAYS.toHours(travelNBORateHours);
+		final int idleFuelConsumption = (int) TimeUnit.DAYS.toHours(idleFuelConsumptionHours);
+		final int idleNBORate = (int) TimeUnit.DAYS.toHours(idleNBORateHours);
+
+		final int portDistance = 1000;
+		final boolean useDryDock = true;
+
+		final Scenario scenario = createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed, travelFuelConsumption, speed,
+				travelFuelConsumption, idleFuelConsumption, idleNBORate, travelNBORate, speed, travelFuelConsumption, speed, travelFuelConsumption, idleFuelConsumption, idleNBORate, travelNBORate,
+				useDryDock);
+		// evaluate and get a schedule
+		final Schedule result = evaluate(scenario);
+		// check result is how we expect it to be
+		// there will be a single cargo allocation for this cargo
+		final CargoAllocation a = result.getCargoAllocations().get(0);
+		print(name, a);
+
+		return a;
+	}
+
 	@Test
 	public void testLNGSelection() {
 		// Create a dummy scenario
@@ -349,7 +414,7 @@ public class SimpleCalculationTests {
 	 * @param ladenIdleNBORate
 	 * @param ladenNBORate
 	 * @param useDryDock
-	 *            Use a dry dock to stop 15 days of ballast idle.
+	 *            Use a dry dock, otherwise there is 15 days of ballast idle.
 	 * @return
 	 */
 	private Scenario createScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
@@ -524,18 +589,19 @@ public class SimpleCalculationTests {
 		final Date now = new Date();
 		load.setWindowStart(new DateAndOptionalTime(now, false));
 		load.setWindowDuration(0);
-		final Date then = new Date(now.getTime() + Timer.ONE_HOUR * travelTime);
-		dis.setWindowStart(new DateAndOptionalTime(then, false));
+		final Date dischargeDate = new Date(now.getTime() + Timer.ONE_HOUR * travelTime);
+		dis.setWindowStart(new DateAndOptionalTime(dischargeDate, false));
 		dis.setWindowDuration(0);
 
 		if (useDryDock) {
-			// TODO Set up dry dock.
+			// Set up dry dock.
 			final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
 			dryDock.setDuration(0);
 			dryDock.setStartPort(A);
 			// add to scenario's fleet model
 			scenario.getFleetModel().getVesselEvents().add(dryDock);
-			final Date thenNext = new Date(then.getTime() + Timer.ONE_HOUR * travelTime);
+			// set the date to be after the discharge date
+			final Date thenNext = new Date(dischargeDate.getTime() + Timer.ONE_HOUR * travelTime);
 			dryDock.setStartDate(thenNext);
 			dryDock.setEndDate(thenNext);
 		}
