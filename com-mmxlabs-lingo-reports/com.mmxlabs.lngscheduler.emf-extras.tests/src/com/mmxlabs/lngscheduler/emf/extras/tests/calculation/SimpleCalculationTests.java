@@ -167,9 +167,11 @@ public class SimpleCalculationTests {
 
 		final int portDistance = 1000;
 		final boolean useDryDock = true;
+		final int pilotLightRate = 0;
 
 		final Scenario scenario = createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed, fuelConsumptionDays, speed,
-				fuelConsumptionDays, fuelConsumptionDays, NBORateDays, NBORateDays, speed, fuelConsumptionDays, speed, fuelConsumptionDays, fuelConsumptionDays, NBORateDays, NBORateDays, useDryDock);
+				fuelConsumptionDays, fuelConsumptionDays, NBORateDays, NBORateDays, speed, fuelConsumptionDays, speed, fuelConsumptionDays, fuelConsumptionDays, NBORateDays, NBORateDays, useDryDock,
+				pilotLightRate);
 		// evaluate and get a schedule
 		final Schedule result = evaluate(scenario);
 		// check result is how we expect it to be
@@ -184,16 +186,11 @@ public class SimpleCalculationTests {
 	 * Test that ballast leg is cheaper on NBO, but ballast idle is cheaper on base fuel.
 	 */
 	@Test
-	public void testTravelCheaperNBOIdleCheaperBase() {
+	public void testTravelCheaperOnNBO_IdleCheaperOnBase() {
 
-		final int travelFuelConsumption = 10;
-		final int idleFuelConsumption = 9;
-		final int travelNBORate = 10;
-		final int idleNBORate = 10;
-		final float baseFuelUnitPrice = 1.01f;
-		final float dischargePrice = 1f;
-
-		CargoAllocation a = test("Ballast cheaper on NBO, ballast idle cheaper on base", travelFuelConsumption, travelNBORate, idleFuelConsumption, idleNBORate, baseFuelUnitPrice, dischargePrice);
+		final int pilotLightRate = 0;
+		
+		CargoAllocation a = testPilotLight("Test ballast cheaper on NBO, ballast idle cheaper on base", pilotLightRate);
 
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
 			if (fq.getFuelType() != FuelType.NBO)
@@ -206,12 +203,58 @@ public class SimpleCalculationTests {
 	}
 
 	/**
+	 * Test that ballast leg would be cheaper on NBO, but the pilot light costs are just enough to make base fuel cheaper.
+	 */
+	@Test
+	public void testTravelCheaperOnBaseBecausePilotLight() {
+
+		final int pilotLightRate = 3;
+		
+		CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
+
+		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() != FuelType.BASE_FUEL)
+				Assert.assertTrue("Ballast leg only uses base fuel", fq.getQuantity() == 0);
+		}
+	}
+
+	/**
+	 * Test that ballast leg would be cheaper on NBO, even though the pilot light is non-zero.
+	 */
+	@Test
+	public void testTravelCheaperOnBaseDespitePilotLight() {
+
+		final int pilotLightRate = 2;
+		
+		CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
+
+		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() != FuelType.FBO)
+				Assert.assertTrue("Ballast leg uses NBO and base fuel", fq.getQuantity() > 0);
+		}
+	}
+	
+	
+	private CargoAllocation testPilotLight(final String nameOfTest, final int pilotLightRate) {
+
+		final int travelFuelConsumption = 10;
+		final int idleFuelConsumption = 9;
+		final int travelNBORate = 10;
+		final int idleNBORate = 10;
+		final float baseFuelUnitPrice = 1.01f;
+		final float dischargePrice = 1f;
+
+		return test(nameOfTest, travelFuelConsumption, travelNBORate, idleFuelConsumption, idleNBORate, baseFuelUnitPrice, dischargePrice,
+				pilotLightRate);
+	}
+
+	/**
 	 * Test that ballast travel is cheaper on NBO, but ballast idle is cheaper on base fuel.
 	 * <p>
 	 * This test gives 10 hours of idle time after ballast and laden legs.
 	 */
 	private CargoAllocation test(final String name, final int travelFuelConsumptionHours, final int travelNBORateHours, final int idleFuelConsumptionHours, final int idleNBORateHours,
-			final float baseFuelUnitPrice, final float dischargePrice) {
+			final float baseFuelUnitPrice, final float dischargePrice, final int pilotLightRate) {
 		// Create a dummy scenario
 
 		// this gives 100 hours of travel and idle time for ballast and laden.
@@ -234,7 +277,7 @@ public class SimpleCalculationTests {
 
 		final Scenario scenario = createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed, travelFuelConsumption, speed,
 				travelFuelConsumption, idleFuelConsumption, idleNBORate, travelNBORate, speed, travelFuelConsumption, speed, travelFuelConsumption, idleFuelConsumption, idleNBORate, travelNBORate,
-				useDryDock);
+				useDryDock, pilotLightRate);
 		// evaluate and get a schedule
 		final Schedule result = evaluate(scenario);
 		// check result is how we expect it to be
@@ -385,7 +428,7 @@ public class SimpleCalculationTests {
 
 		return createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption,
 				ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption,
-				ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock);
+				ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate);
 	}
 
 	/**
@@ -420,11 +463,11 @@ public class SimpleCalculationTests {
 	private Scenario createScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
-			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock) {
+			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
+			final int pilotLightRate) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
-		final int pilotLightRate = 0;
 		final int cooldownTime = 0;
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
