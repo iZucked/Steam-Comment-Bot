@@ -92,7 +92,7 @@ public class SimpleCalculationTests {
 		final int fuelConsumptionHours = 11;
 		final int NBORateHours = 10;
 
-		CargoAllocation a = testSimple("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionHours, NBORateHours);
+		CargoAllocation a = testPriceConsumption("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionHours, NBORateHours);
 
 		// need to check that FBO is never used on any leg or idle.
 		for (final FuelQuantity fq : a.getLadenLeg().getFuelUsage()) {
@@ -127,7 +127,7 @@ public class SimpleCalculationTests {
 		final int fuelConsumptionHours = 11;
 		final int NBORateHours = 10;
 
-		CargoAllocation a = testSimple("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionHours, NBORateHours);
+		CargoAllocation a = testPriceConsumption("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionHours, NBORateHours);
 
 		// need to check that base fuel is never used on any leg or idle.
 		for (final FuelQuantity fq : a.getLadenLeg().getFuelUsage()) {
@@ -149,11 +149,13 @@ public class SimpleCalculationTests {
 	}
 
 	/**
-	 * A simple test. Attributes for the laden and ballast legs are identical. The vessel can only travel at 10, the distances between all ports is 1000, and the travel time is 100.
+	 * Test the difference that prices and fuel consumption/nbo rates can make. Attributes for the laden and ballast legs are identical. The vessel can only travel at 10, the distances between all
+	 * ports is 1000, and the travel time is 100 (meaning there is no idle time).
 	 * 
 	 * @return
 	 */
-	private CargoAllocation testSimple(final String name, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelConsumptionHours, final int NBORateHours) {
+	private CargoAllocation testPriceConsumption(final String name, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelConsumptionHours,
+			final int NBORateHours) {
 		// Create a dummy scenario
 		final int travelTime = 100;
 
@@ -189,7 +191,7 @@ public class SimpleCalculationTests {
 	public void testTravelCheaperOnNBO_IdleCheaperOnBase() {
 
 		final int pilotLightRate = 0;
-		
+
 		CargoAllocation a = testPilotLight("Test ballast cheaper on NBO, ballast idle cheaper on base", pilotLightRate);
 
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
@@ -209,7 +211,7 @@ public class SimpleCalculationTests {
 	public void testTravelCheaperOnBaseBecausePilotLight() {
 
 		final int pilotLightRate = 3;
-		
+
 		CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
 
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
@@ -225,7 +227,7 @@ public class SimpleCalculationTests {
 	public void testTravelCheaperOnBaseDespitePilotLight() {
 
 		final int pilotLightRate = 2;
-		
+
 		CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
 
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
@@ -233,10 +235,17 @@ public class SimpleCalculationTests {
 				Assert.assertTrue("Ballast leg uses NBO and base fuel", fq.getQuantity() > 0);
 		}
 	}
-	
-	
+
+	/**
+	 * Test the difference a pilot light can make. With a zero pilot light rate the ballast journey will be cheaper on NBO, whilst ballast idle will be cheaper on base fuel.
+	 * 
+	 * @param nameOfTest
+	 * @param pilotLightRate
+	 * @return
+	 */
 	private CargoAllocation testPilotLight(final String nameOfTest, final int pilotLightRate) {
 
+		// These are set up so that the ballast journey is cheaper on NBO, whilst the ballast idle is cheaper on base fuel.
 		final int travelFuelConsumption = 10;
 		final int idleFuelConsumption = 9;
 		final int travelNBORate = 10;
@@ -244,8 +253,7 @@ public class SimpleCalculationTests {
 		final float baseFuelUnitPrice = 1.01f;
 		final float dischargePrice = 1f;
 
-		return test(nameOfTest, travelFuelConsumption, travelNBORate, idleFuelConsumption, idleNBORate, baseFuelUnitPrice, dischargePrice,
-				pilotLightRate);
+		return test(nameOfTest, travelFuelConsumption, travelNBORate, idleFuelConsumption, idleNBORate, baseFuelUnitPrice, dischargePrice, pilotLightRate);
 	}
 
 	/**
@@ -288,6 +296,9 @@ public class SimpleCalculationTests {
 		return a;
 	}
 
+	/**
+	 * Test that the ballast leg and idle never use base fuel.
+	 */
 	@Test
 	public void testLNGSelection() {
 		// Create a dummy scenario
@@ -314,6 +325,9 @@ public class SimpleCalculationTests {
 		}
 	}
 
+	/**
+	 * Test that the ballast leg and idle only use base.
+	 */
 	@Test
 	public void testBaseSelection() {
 		// Create a dummy scenario
@@ -659,7 +673,9 @@ public class SimpleCalculationTests {
 	}
 
 	/**
-	 * @param a
+	 * Print a cargo allocation's details.
+	 * @param testName The name of the test being performed (to aid with identification in the console).
+	 * @param a The cargo allocation to print to console.
 	 */
 	private void print(final String testName, final CargoAllocation a) {
 		System.err.println(testName);
@@ -672,6 +688,11 @@ public class SimpleCalculationTests {
 		printIdle("Ballast Idle", a.getBallastIdle());
 	}
 
+	/**
+	 * Print a journey, including the name, duration, speed, and fuel usage.
+	 * @param journeyName
+	 * @param journey
+	 */
 	private void printJourney(final String journeyName, final Journey journey) {
 
 		System.err.println(journeyName + ":");
@@ -681,6 +702,11 @@ public class SimpleCalculationTests {
 		printFuel(journey.getFuelUsage());
 	}
 
+	/**
+	 * Print details of an idle.
+	 * @param idleName
+	 * @param idle
+	 */
 	private void printIdle(final String idleName, final Idle idle) {
 
 		System.err.println(idleName + ":");
@@ -688,6 +714,10 @@ public class SimpleCalculationTests {
 		printFuel(idle.getFuelUsage());
 	}
 
+	/**
+	 * Print the details of fuel used for a section of a voyage.
+	 * @param fuelQuantities
+	 */
 	private void printFuel(EList<FuelQuantity> fuelQuantities) {
 
 		for (final FuelQuantity fq : fuelQuantities)
