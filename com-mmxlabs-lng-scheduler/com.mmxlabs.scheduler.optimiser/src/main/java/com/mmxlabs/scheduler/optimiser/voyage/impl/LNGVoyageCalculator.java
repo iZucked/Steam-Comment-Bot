@@ -166,10 +166,13 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				}
 			}
 
-			final long pilotLightRateINMTPerHour = vesselClass.getPilotLightRate();
-			final long pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerHour, travelTimeInHours + additionalRouteTimeInHours);
-			output.setFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT, pilotLightConsumptionInMT);
-
+			// TODO There is an edge case here where the supplemental base is less than pilot light
+			// in which case we ought to bump it up to the right amount.
+			if (output.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT) == 0) {
+				final long pilotLightRateINMTPerHour = vesselClass.getPilotLightRate();
+				final long pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerHour, travelTimeInHours + additionalRouteTimeInHours);
+				output.setFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT, pilotLightConsumptionInMT);
+			}
 		} else {
 			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, 0);
 			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.MT, 0);
