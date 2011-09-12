@@ -188,6 +188,14 @@ public class ScenarioTools {
 		vc.setLadenAttributes(laden);
 		vc.setBallastAttributes(ballast);
 
+		// if given a canal and canal costs, add it to the scenario.
+		if (canalCost != null) {
+			// add the canal to the scenario
+			scenario.getCanalModel().getCanals().add(canalCost.getCanal());
+
+			vc.getCanalCosts().add(canalCost);
+		}
+
 		laden.setVesselState(VesselState.LADEN);
 		ballast.setVesselState(VesselState.BALLAST);
 
@@ -235,7 +243,7 @@ public class ScenarioTools {
 		ballast.setIdleConsumptionRate(ballastIdleConsumptionRate);
 		ballast.setIdleNBORate(ballastIdleNBORate);
 		ballast.setNboRate(ballastNBORate);
-
+		
 		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 		vessel.setClass(vc);
 		vessel.setName("Vessel");
@@ -331,14 +339,6 @@ public class ScenarioTools {
 			final Date thenNext = new Date(dischargeDate.getTime() + Timer.ONE_HOUR * travelTime);
 			dryDock.setStartDate(thenNext);
 			dryDock.setEndDate(thenNext);
-		}
-
-		// if given a canal and canal costs, add it to the scenario.
-		if (canalCost != null) {
-			// add the canal to the scenario
-			scenario.getCanalModel().getCanals().add(canalCost.getCanal());
-
-			vc.getCanalCosts().add(canalCost);
 		}
 
 		cargo.setId("CARGO");
@@ -466,6 +466,7 @@ public class ScenarioTools {
 	private static void printJourney(final String journeyName, final Journey journey) {
 
 		System.err.println(journeyName + ":");
+		System.err.println("\tRoute: " + journey.getRoute());
 		System.err.println("\tDuration:" + journey.getEventDuration());
 		System.err.println("\tSpeed:" + journey.getSpeed());
 
