@@ -353,20 +353,27 @@ public class ScenarioTools {
 	/**
 	 * Creates a canal and costs. Although this only returns a VesselClassCost for the canal costs, the canal can be retrieved by using {@link VesselClassCost#getCanal()}.
 	 * 
-	 * @param name
+	 * @param canalName
+	 *            The name of the canal
 	 * @param distanceAToB
+	 *            Distance along the canal from port A to port B
 	 * @param distanceBToA
+	 *            Distance along the canal from port B to port A
 	 * @param canalLadenCost
+	 *            Cost in dollars for a laden vessel
 	 * @param canalUnladenCost
+	 *            Cost in dollars for a ballast vessel
 	 * @param canalTransitFuel
+	 *            MT of base fuel per day used when in transit
 	 * @param canalTransitTime
+	 *            Transit time in hours
 	 * @return
 	 */
-	public static VesselClassCost createCanalAndCost(final String name, final int distanceAToB, final int distanceBToA, final int canalLadenCost, final int canalUnladenCost,
+	public static VesselClassCost createCanalAndCost(final String canalName, final int distanceAToB, final int distanceBToA, final int canalLadenCost, final int canalUnladenCost,
 			final int canalTransitFuel, final int canalTransitTime) {
 
 		final Canal canal = PortFactory.eINSTANCE.createCanal();
-		canal.setName("suez");
+		canal.setName(canalName);
 		final DistanceModel canalDistances = PortFactory.eINSTANCE.createDistanceModel();
 		canal.setDistanceModel(canalDistances);
 		// add distance lines, as for the main distance model:
@@ -430,7 +437,7 @@ public class ScenarioTools {
 
 		return schedule;
 	}
-	
+
 	/**
 	 * Print a cargo allocation's details.
 	 * 
