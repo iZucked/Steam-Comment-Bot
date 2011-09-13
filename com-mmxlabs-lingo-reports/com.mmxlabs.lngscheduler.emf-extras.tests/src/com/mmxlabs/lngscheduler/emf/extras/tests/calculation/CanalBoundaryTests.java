@@ -25,7 +25,7 @@ public class CanalBoundaryTests {
 	private static final String canalName = "Suez canal";
 
 	/**
-	 * Test that a canal is used if it's just shorter than the ocean route.
+	 * Test that a canal is used if it's just shorter than the ocean route. No costs are associated with the canal (see {@link #testSimpleCanalDistance(String, int, int)).
 	 */
 	@Test
 	public void testCanalShorter() {
@@ -42,7 +42,7 @@ public class CanalBoundaryTests {
 	}
 
 	/**
-	 * Test that a canal isn't used if it's just longer than the ocean route.
+	 * Test that a canal isn't used if it's just longer than the ocean route. No costs are associated with the canal (see {@link #testSimpleCanalDistance(String, int, int)).
 	 */
 	@Test
 	public void testCanalLonger() {
@@ -60,11 +60,14 @@ public class CanalBoundaryTests {
 	/**
 	 * Test the results of having different canal and ocean distances between the ports.
 	 * <p>
-	 * The canals cost nothing and incur no extra fuel costs.
+	 * The canals cost nothing and incur no extra fuel costs, and take the same time to travel as the ocean.
 	 * 
 	 * @param testName
+	 *            An name used to identify console output
 	 * @param canalDistance
+	 *            The distance between two ports when travelling by canal
 	 * @param portDistance
+	 *            The distance between two ports when travelling by ocean
 	 * @return
 	 */
 	private CargoAllocation testSimpleCanalDistance(final String testName, final int canalDistance, final int portDistance) {
@@ -72,18 +75,14 @@ public class CanalBoundaryTests {
 		final int canalLadenCost = 0;
 		final int canalUnladenCost = 0;
 		final int canalTransitFuel = 0;
-		// final int canalTransitTime = 50;
-		final float baseFuelUnitPrice = 1;
-		final float dischargePrice = 1;
-		final float cvValue = 1;
 		final int fuelConsumptionHours = 10;
 		final int NBORateHours = 10;
 
-		return testCanalCost(testName, portDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuel, baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionHours, NBORateHours);
+		return testCanalCost(testName, portDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuel, fuelConsumptionHours, NBORateHours);
 	}
 
 	/**
-	 * Test that if a canal is actually cheaper it is used. The fuel costs at 0 but the fee is non-zero.
+	 * Test that if a canal is actually cheaper (despite the fee for the canal) it is used. The canal fuel costs 0 but the fee is non-zero.
 	 */
 	@Test
 	public void testCanalCheaperFee() {
@@ -98,6 +97,9 @@ public class CanalBoundaryTests {
 		Assert.assertTrue("Ballast leg travels in canal", canalName.equals(a.getBallastLeg().getRoute()));
 	}
 
+	/**
+	 * If the ocean and canal cost the same then the vessel will travel on the canal. The canal fuel costs 0 but the fee is non-zero. TODO is this the correct behaviour?
+	 */
 	@Test
 	public void testCanalOceanSameCost() {
 
@@ -107,12 +109,12 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel);
 
-		Assert.assertTrue("Laden leg travels on ocean", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on ocean", canalName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
-	 * Test that if a canal is more expensive it is not used. The fuel costs at 0 but the fee is non-zero.
+	 * Test that if a canal is slightly more expensive (because of the fee for the canal) it is not used. The canal fuel costs 0 but the fee is non-zero.
 	 */
 	@Test
 	public void testCanalMoreExpensiveFee() {
@@ -138,14 +140,10 @@ public class CanalBoundaryTests {
 		final int canalDistance = 90;
 		final int portDistance = 100;
 
-		// final int canalTransitTime = 50;
-		final float baseFuelUnitPrice = 1;
-		final float dischargePrice = 1;
-		final float cvValue = 1;
 		final int fuelConsumptionHours = 10;
 		final int NBORateHours = 10;
 
-		return testCanalCost(testName, portDistance, canalDistance, canalCost, canalCost, canalFuel, baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionHours, NBORateHours);
+		return testCanalCost(testName, portDistance, canalDistance, canalCost, canalCost, canalFuel, fuelConsumptionHours, NBORateHours);
 	}
 
 	/**
@@ -163,20 +161,23 @@ public class CanalBoundaryTests {
 	 *            The cost of the canal if the vessel is unladen in dollars
 	 * @param canalTransitFuel
 	 *            MT of base fuel / day used when in transit
-	 * @param baseFuelUnitPrice
-	 * @param dischargePrice
-	 * @param cvValue
-	 * @param fuelTravelConsumptionHours
+	 * @param fuelTravelConsumptionHour
+	 *            The base fuel required whilst travelling per hour
 	 * @param NBOTravelRateHours
+	 *            The rate at which NBO occurs per hour
 	 * @return
 	 */
 	private CargoAllocation testCanalCost(final String testName, final int distanceBetweenPorts, final int canalDistance, final int canalLadenCost, final int canalUnladenCost,
-			final int canalTransitFuel, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelTravelConsumptionHours, final int NBOTravelRateHours) {
+			final int canalTransitFuel, final int fuelTravelConsumptionHours, final int NBOTravelRateHours) {
 
 		// Create a dummy scenario
 		final int travelTime = 100;
 
+		// for equality between canals and oceans and for simplicity set these to 1
+		final float baseFuelUnitPrice = 1;
 		final float equivalenceFactor = 1;
+		final float dischargePrice = 1;
+		final float cvValue = 1;
 		// for simplicity all speeds, fuel and NBO consumptions and rates are equal
 		final int speed = 10;
 		final int capacity = 1000000;
