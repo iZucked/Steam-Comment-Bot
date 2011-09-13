@@ -34,7 +34,7 @@ public class CanalBoundaryTests {
 		final int distanceBetweenPorts = 1000;
 		final int canalDistance = 999;
 
-		CargoAllocation a = testCanalDistance(testName, canalDistance, distanceBetweenPorts);
+		CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
 
 		// TODO is there a better way to test a canal is used rather than testing the canal name?
 		Assert.assertEquals("Laden leg travels down canal", canalName, a.getLadenLeg().getRoute());
@@ -51,7 +51,7 @@ public class CanalBoundaryTests {
 		final int distanceBetweenPorts = 1000;
 		final int canalDistance = 1001;
 
-		CargoAllocation a = testCanalDistance(testName, canalDistance, distanceBetweenPorts);
+		CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
 
 		Assert.assertNotSame("Laden leg travels on open sea", canalName, a.getLadenLeg().getRoute());
 		Assert.assertNotSame("Ballast leg travels on open sea", canalName, a.getBallastLeg().getRoute());
@@ -67,7 +67,7 @@ public class CanalBoundaryTests {
 	 * @param portDistance
 	 * @return
 	 */
-	private CargoAllocation testCanalDistance(final String testName, final int canalDistance, final int portDistance) {
+	private CargoAllocation testSimpleCanalDistance(final String testName, final int canalDistance, final int portDistance) {
 
 		final int canalLadenCost = 0;
 		final int canalUnladenCost = 0;
