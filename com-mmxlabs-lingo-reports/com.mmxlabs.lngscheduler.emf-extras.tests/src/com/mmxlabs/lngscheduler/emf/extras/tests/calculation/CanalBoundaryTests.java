@@ -15,6 +15,8 @@ import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 
 /**
+ * Tests for case 184.
+ * 
  * @author Adam Semenenko
  * 
  */
