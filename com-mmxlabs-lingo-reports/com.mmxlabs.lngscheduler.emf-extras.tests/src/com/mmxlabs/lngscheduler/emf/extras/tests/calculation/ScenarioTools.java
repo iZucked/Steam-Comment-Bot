@@ -243,7 +243,7 @@ public class ScenarioTools {
 		ballast.setIdleConsumptionRate(ballastIdleConsumptionRate);
 		ballast.setIdleNBORate(ballastIdleNBORate);
 		ballast.setNboRate(ballastNBORate);
-		
+
 		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 		vessel.setClass(vc);
 		vessel.setName("Vessel");
@@ -466,11 +466,10 @@ public class ScenarioTools {
 	private static void printJourney(final String journeyName, final Journey journey) {
 
 		System.err.println(journeyName + ":");
-		System.err.println("\tRoute: " + journey.getRoute());
-		System.err.println("\tDuration:" + journey.getEventDuration());
-		System.err.println("\tSpeed:" + journey.getSpeed());
-
+		System.err.println("\tRoute: " + journey.getRoute() + ", Duration:" + journey.getEventDuration() + ", Speed:" + journey.getSpeed());
 		printFuel(journey.getFuelUsage());
+		// TODO Does getTotalCost get the cost for this journey?
+		System.err.println("\tRoute cost: $" + journey.getRouteCost() + ", Total cost: $" + journey.getTotalCost());
 	}
 
 	/**
@@ -484,6 +483,7 @@ public class ScenarioTools {
 		System.err.println(idleName + ":");
 		System.err.println("\tDuration:" + idle.getEventDuration());
 		printFuel(idle.getFuelUsage());
+		System.err.println("\tTotal cost: $" + idle.getTotalCost());
 	}
 
 	/**
@@ -494,7 +494,7 @@ public class ScenarioTools {
 	private static void printFuel(EList<FuelQuantity> fuelQuantities) {
 
 		for (final FuelQuantity fq : fuelQuantities)
-			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at ¤" + fq.getTotalPrice());
+			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
 	}
 
 }
