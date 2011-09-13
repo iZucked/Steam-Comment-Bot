@@ -466,7 +466,7 @@ public class ScenarioTools {
 	private static void printJourney(final String journeyName, final Journey journey) {
 
 		System.err.println(journeyName + ":");
-		System.err.println("\tRoute: " + journey.getRoute() + ", Duration:" + journey.getEventDuration() + ", Speed:" + journey.getSpeed());
+		System.err.println("\tRoute: " + journey.getRoute() + ", Distance: " + journey.getDistance() + ", Duration: " + journey.getEventDuration() + ", Speed: " + journey.getSpeed());
 		printFuel(journey.getFuelUsage());
 		// TODO Does getTotalCost get the cost for this journey?
 		System.err.println("\tRoute cost: $" + journey.getRouteCost() + ", Total cost: $" + journey.getTotalCost());
@@ -481,7 +481,7 @@ public class ScenarioTools {
 	private static void printIdle(final String idleName, final Idle idle) {
 
 		System.err.println(idleName + ":");
-		System.err.println("\tDuration:" + idle.getEventDuration());
+		System.err.println("\tDuration: " + idle.getEventDuration());
 		printFuel(idle.getFuelUsage());
 		System.err.println("\tTotal cost: $" + idle.getTotalCost());
 	}
