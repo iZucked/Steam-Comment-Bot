@@ -87,7 +87,7 @@ public class CanalBoundaryTests {
 	@Test
 	public void testCanalCheaperFee() {
 
-		final String testName = "Canal cheaper than ocean route.";
+		final String testName = "Canal cheaper than ocean route despite fee.";
 		final int canalCost = 9;
 		final int canalFuel = 0;
 
@@ -103,7 +103,7 @@ public class CanalBoundaryTests {
 	@Test
 	public void testCanalOceanSameCost() {
 
-		final String testName = "Ocean and canal same price.";
+		final String testName = "Ocean and canal same price because of fee.";
 		final int canalCost = 10;
 		final int canalFuel = 0;
 
@@ -119,9 +119,25 @@ public class CanalBoundaryTests {
 	@Test
 	public void testCanalMoreExpensiveFee() {
 
-		final String testName = "Ocean route cheaper than canal.";
+		final String testName = "Ocean route cheaper than canal because of fee.";
 		final int canalCost = 11;
 		final int canalFuel = 0;
+
+		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel);
+
+		Assert.assertFalse("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertFalse("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+	}
+
+	/**
+	 * Test that if a canal is slightly more expensive (because of the fuel for the canal) it is not used. The canal fuel is non-zero but the fee is zero.
+	 */
+	@Test
+	public void testCanalMoreExpensiveFuel() {
+
+		final String testName = "Ocean route cheaper than canal.";
+		final int canalCost = 0;
+		final int canalFuel = 10;
 
 		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel);
 
@@ -181,10 +197,11 @@ public class CanalBoundaryTests {
 		// for simplicity all speeds, fuel and NBO consumptions and rates are equal
 		final int speed = 10;
 		final int capacity = 1000000;
-
+ 
 		final int fuelTravelConsumptionDays = (int) TimeUnit.DAYS.toHours(fuelTravelConsumptionHours);
-		final int fuelIdleConsumptionDays = 1;
 		final int NBOTravelRateDays = (int) TimeUnit.DAYS.toHours(NBOTravelRateHours);
+		// Set the idle consumption/rates to 1 to minimise the cost of idle time affecting route choice
+		final int fuelIdleConsumptionDays = 1;
 		final int NBOIdleRateDays = 1;
 
 		final boolean useDryDock = true;
