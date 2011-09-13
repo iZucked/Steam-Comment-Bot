@@ -135,14 +135,14 @@ public class CanalBoundaryTests {
 	@Test
 	public void testCanalMoreExpensiveFuel() {
 
-		final String testName = "Ocean route cheaper than canal.";
+		final String testName = "Ocean route cheaper than canal because of canal fuel.";
 		final int canalCost = 0;
-		final int canalFuel = 10;
+		final int canalFuel = 20;
 
 		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel);
 
-		Assert.assertFalse("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertFalse("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertFalse("Laden leg travels on ocean", canalName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertFalse("Ballast leg travels on ocean", canalName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class CanalBoundaryTests {
 	 * @return
 	 */
 	private CargoAllocation testCanalCost(final String testName, final int distanceBetweenPorts, final int canalDistance, final int canalLadenCost, final int canalUnladenCost,
-			final int canalTransitFuel, final int fuelTravelConsumptionHours, final int NBOTravelRateHours) {
+			final int canalTransitFuelHours, final int fuelTravelConsumptionHours, final int NBOTravelRateHours) {
 
 		// Create a dummy scenario
 		final int travelTime = 100;
@@ -200,6 +200,7 @@ public class CanalBoundaryTests {
  
 		final int fuelTravelConsumptionDays = (int) TimeUnit.DAYS.toHours(fuelTravelConsumptionHours);
 		final int NBOTravelRateDays = (int) TimeUnit.DAYS.toHours(NBOTravelRateHours);
+		final int canalTransitFuelDays = (int) TimeUnit.DAYS.toHours(canalTransitFuelHours);
 		// Set the idle consumption/rates to 1 to minimise the cost of idle time affecting route choice
 		final int fuelIdleConsumptionDays = 1;
 		final int NBOIdleRateDays = 1;
@@ -210,7 +211,7 @@ public class CanalBoundaryTests {
 		// calculate the transit time in the canal so the speeds in and out of the canal are the same.
 		final int canalTransitTime = canalDistance / speed;
 
-		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuel, canalTransitTime);
+		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelDays, canalTransitTime);
 
 		Scenario canalScenario = ScenarioTools.createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
 				fuelTravelConsumptionDays, speed, fuelTravelConsumptionDays, fuelIdleConsumptionDays, NBOIdleRateDays, NBOTravelRateDays, speed, fuelTravelConsumptionDays, speed,
