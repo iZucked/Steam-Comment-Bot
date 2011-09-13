@@ -83,6 +83,72 @@ public class CanalBoundaryTests {
 	}
 
 	/**
+	 * Test that if a canal is actually cheaper it is used. The fuel costs at 0 but the fee is non-zero.
+	 */
+	@Test
+	public void testCanalCheaperFee() {
+
+		final String testName = "Canal cheaper than ocean route.";
+		final int canalCost = 9;
+		final int canalFuel = 0;
+
+		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel);
+
+		Assert.assertTrue("Laden leg travels in canal", canalName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels in canal", canalName.equals(a.getBallastLeg().getRoute()));
+	}
+
+	@Test
+	public void testCanalOceanSameCost() {
+
+		final String testName = "Ocean and canal same price.";
+		final int canalCost = 10;
+		final int canalFuel = 0;
+
+		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel);
+
+		Assert.assertTrue("Laden leg travels on ocean", canalName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on ocean", canalName.equals(a.getBallastLeg().getRoute()));
+	}
+
+	/**
+	 * Test that if a canal is more expensive it is not used. The fuel costs at 0 but the fee is non-zero.
+	 */
+	@Test
+	public void testCanalMoreExpensiveFee() {
+
+		final String testName = "Ocean route cheaper than canal.";
+		final int canalCost = 11;
+		final int canalFuel = 0;
+
+		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel);
+
+		Assert.assertFalse("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertFalse("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+	}
+
+	/**
+	 * For testing whether the canal is/isn't used if it is cheaper/more expensive.
+	 * <p>
+	 * The distances are very small compared to the time available to ensure that the only reason for selection of a route is due to price, not avoiding lateness. The fuel required for idle and the
+	 * idle NBO rate are both as low as possible to prevent the cost of idling preventing route choice.
+	 */
+	private CargoAllocation testCanalCost(final String testName, final int canalCost, final int canalFuel) {
+
+		final int canalDistance = 90;
+		final int portDistance = 100;
+
+		// final int canalTransitTime = 50;
+		final float baseFuelUnitPrice = 1;
+		final float dischargePrice = 1;
+		final float cvValue = 1;
+		final int fuelConsumptionHours = 10;
+		final int NBORateHours = 10;
+
+		return testCanalCost(testName, portDistance, canalDistance, canalCost, canalCost, canalFuel, baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionHours, NBORateHours);
+	}
+
+	/**
 	 * Tests a simple scenario with a canal. The canal's cost, distance and fuel can be set. The canal speed is set to be the same as the speed of the vessel in the ocean.
 	 * 
 	 * @param testName
