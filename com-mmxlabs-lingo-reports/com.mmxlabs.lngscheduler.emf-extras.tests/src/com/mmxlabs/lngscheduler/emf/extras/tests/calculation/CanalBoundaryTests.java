@@ -28,7 +28,7 @@ public class CanalBoundaryTests {
 	@Test
 	public void testCanalShorter() {
 
-		final String testName = "Canal shorter than normal route.";
+		final String testName = "Canal shorter than ocean route.";
 		final int distanceBetweenPorts = 1000;
 		final int canalDistance = 999;
 
@@ -45,7 +45,7 @@ public class CanalBoundaryTests {
 	@Test
 	public void testCanalLonger() {
 
-		final String testName = "Canal longer than normal route.";
+		final String testName = "Canal longer than ocean route.";
 		final int distanceBetweenPorts = 1000;
 		final int canalDistance = 1001;
 
