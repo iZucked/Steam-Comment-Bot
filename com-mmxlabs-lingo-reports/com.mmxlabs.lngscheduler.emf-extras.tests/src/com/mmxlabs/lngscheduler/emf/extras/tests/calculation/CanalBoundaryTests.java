@@ -36,9 +36,9 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
 
-		// TODO is there a better way to test a canal is used rather than testing the canal name?
-		Assert.assertEquals("Laden leg travels down canal", canalName, a.getLadenLeg().getRoute());
-		Assert.assertEquals("Ballast leg travels down canal", canalName, a.getBallastLeg().getRoute());
+		// TODO is there a better way to test a canal is used rather than testing the route name is the same as the canal name?
+		Assert.assertTrue("Laden leg travels down canal", canalName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels down canal", canalName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
@@ -53,8 +53,8 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
 
-		Assert.assertNotSame("Laden leg travels on open sea", canalName, a.getLadenLeg().getRoute());
-		Assert.assertNotSame("Ballast leg travels on open sea", canalName, a.getBallastLeg().getRoute());
+		Assert.assertFalse("Laden leg travels on open sea", canalName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertFalse("Ballast leg travels on open sea", canalName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
