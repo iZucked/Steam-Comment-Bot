@@ -166,12 +166,12 @@ public class CanalBoundaryTests {
 	 * @param baseFuelUnitPrice
 	 * @param dischargePrice
 	 * @param cvValue
-	 * @param fuelConsumptionHours
-	 * @param NBORateHours
+	 * @param fuelTravelConsumptionHours
+	 * @param NBOTravelRateHours
 	 * @return
 	 */
 	private CargoAllocation testCanalCost(final String testName, final int distanceBetweenPorts, final int canalDistance, final int canalLadenCost, final int canalUnladenCost,
-			final int canalTransitFuel, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelConsumptionHours, final int NBORateHours) {
+			final int canalTransitFuel, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelTravelConsumptionHours, final int NBOTravelRateHours) {
 
 		// Create a dummy scenario
 		final int travelTime = 100;
@@ -181,8 +181,10 @@ public class CanalBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelConsumptionDays = (int) TimeUnit.DAYS.toHours(fuelConsumptionHours);
-		final int NBORateDays = (int) TimeUnit.DAYS.toHours(NBORateHours);
+		final int fuelTravelConsumptionDays = (int) TimeUnit.DAYS.toHours(fuelTravelConsumptionHours);
+		final int fuelIdleConsumptionDays = 1;
+		final int NBOTravelRateDays = (int) TimeUnit.DAYS.toHours(NBOTravelRateHours);
+		final int NBOIdleRateDays = 1;
 
 		final boolean useDryDock = true;
 		final int pilotLightRate = 0;
@@ -193,8 +195,8 @@ public class CanalBoundaryTests {
 		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuel, canalTransitTime);
 
 		Scenario canalScenario = ScenarioTools.createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
-				fuelConsumptionDays, speed, fuelConsumptionDays, fuelConsumptionDays, NBORateDays, NBORateDays, speed, fuelConsumptionDays, speed, fuelConsumptionDays, fuelConsumptionDays,
-				NBORateDays, NBORateDays, useDryDock, pilotLightRate, canalCost);
+				fuelTravelConsumptionDays, speed, fuelTravelConsumptionDays, fuelIdleConsumptionDays, NBOIdleRateDays, NBOTravelRateDays, speed, fuelTravelConsumptionDays, speed,
+				fuelTravelConsumptionDays, fuelIdleConsumptionDays, NBOIdleRateDays, NBOTravelRateDays, useDryDock, pilotLightRate, canalCost);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(canalScenario);
 		// check result is how we expect it to be
