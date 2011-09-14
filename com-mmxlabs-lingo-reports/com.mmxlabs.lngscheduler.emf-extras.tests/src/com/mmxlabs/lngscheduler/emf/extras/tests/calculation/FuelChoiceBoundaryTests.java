@@ -19,17 +19,15 @@ import scenario.schedule.events.FuelType;
  * From case 179:
  * 
  * The first thing to check is that the fuel choices being made are really the cheapest, by creating some situations which are right on the boundary of costs. The main options that I see are
-
- * Ballast leg just cheaper to do on base fuel - there should be no heel around
- * Ballast travel just cheaper to do on NBO, but ballast idle just cheaper on base fuel
- * Ballast travel would be just cheaper on NBO, but pilot light costs are just enough to make basefuel cheaper.
- * Everything just cheaper on NBO
+ * 
+ * Ballast leg just cheaper to do on base fuel - there should be no heel around Ballast travel just cheaper to do on NBO, but ballast idle just cheaper on base fuel Ballast travel would be just
+ * cheaper on NBO, but pilot light costs are just enough to make basefuel cheaper. Everything just cheaper on NBO
  * 
  * @author Adam Semenenko
- *
+ * 
  */
 public class FuelChoiceBoundaryTests {
-	
+
 	/**
 	 * Check that the base fuel is just cheaper, and so FBO is never used.
 	 */
@@ -104,8 +102,7 @@ public class FuelChoiceBoundaryTests {
 	 * 
 	 * @return
 	 */
-	private CargoAllocation testPriceConsumption(final String name, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelConsumptionHours,
-			final int NBORateHours) {
+	private CargoAllocation testPriceConsumption(final String name, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelConsumptionDays, final int NBORateDays) {
 		// Create a dummy scenario
 		final int travelTime = 100;
 
@@ -114,16 +111,16 @@ public class FuelChoiceBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelConsumptionDays = (int) TimeUnit.DAYS.toHours(fuelConsumptionHours);
-		final int NBORateDays = (int) TimeUnit.DAYS.toHours(NBORateHours);
+		final int fuelConsumptionHours = (int) TimeUnit.DAYS.toHours(fuelConsumptionDays);
+		final int NBORateHours = (int) TimeUnit.DAYS.toHours(NBORateDays);
 
 		final int portDistance = 1000;
 		final boolean useDryDock = true;
 		final int pilotLightRate = 0;
 
-		final Scenario scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed, fuelConsumptionDays, speed,
-				fuelConsumptionDays, fuelConsumptionDays, NBORateDays, NBORateDays, speed, fuelConsumptionDays, speed, fuelConsumptionDays, fuelConsumptionDays, NBORateDays, NBORateDays, useDryDock,
-				pilotLightRate);
+		final Scenario scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
+				fuelConsumptionHours, speed, fuelConsumptionHours, fuelConsumptionHours, NBORateHours, NBORateHours, speed, fuelConsumptionHours, speed, fuelConsumptionHours, fuelConsumptionHours,
+				NBORateHours, NBORateHours, useDryDock, pilotLightRate);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
@@ -207,11 +204,9 @@ public class FuelChoiceBoundaryTests {
 	}
 
 	/**
-	 * Test that ballast travel is cheaper on NBO, but ballast idle is cheaper on base fuel.
-	 * <p>
 	 * This test gives 10 hours of idle time after ballast and laden legs.
 	 */
-	private CargoAllocation test(final String name, final int travelFuelConsumptionHours, final int travelNBORateHours, final int idleFuelConsumptionHours, final int idleNBORateHours,
+	private CargoAllocation test(final String name, final int travelFuelConsumptionDays, final int travelNBORateDays, final int idleFuelConsumptionDays, final int idleNBORateDays,
 			final float baseFuelUnitPrice, final float dischargePrice, final int pilotLightRate) {
 		// Create a dummy scenario
 
@@ -225,17 +220,17 @@ public class FuelChoiceBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int travelFuelConsumption = (int) TimeUnit.DAYS.toHours(travelFuelConsumptionHours);
-		final int travelNBORate = (int) TimeUnit.DAYS.toHours(travelNBORateHours);
-		final int idleFuelConsumption = (int) TimeUnit.DAYS.toHours(idleFuelConsumptionHours);
-		final int idleNBORate = (int) TimeUnit.DAYS.toHours(idleNBORateHours);
+		final int travelFuelConsumptionHours = (int) TimeUnit.DAYS.toHours(travelFuelConsumptionDays);
+		final int travelNBORateHours = (int) TimeUnit.DAYS.toHours(travelNBORateDays);
+		final int idleFuelConsumptionHours = (int) TimeUnit.DAYS.toHours(idleFuelConsumptionDays);
+		final int idleNBORateHours = (int) TimeUnit.DAYS.toHours(idleNBORateDays);
 
 		final int portDistance = 1000;
 		final boolean useDryDock = true;
 
-		final Scenario scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed, travelFuelConsumption, speed,
-				travelFuelConsumption, idleFuelConsumption, idleNBORate, travelNBORate, speed, travelFuelConsumption, speed, travelFuelConsumption, idleFuelConsumption, idleNBORate, travelNBORate,
-				useDryDock, pilotLightRate);
+		final Scenario scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
+				travelFuelConsumptionHours, speed, travelFuelConsumptionHours, idleFuelConsumptionHours, idleNBORateHours, travelNBORateHours, speed, travelFuelConsumptionHours, speed,
+				travelFuelConsumptionHours, idleFuelConsumptionHours, idleNBORateHours, travelNBORateHours, useDryDock, pilotLightRate);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
