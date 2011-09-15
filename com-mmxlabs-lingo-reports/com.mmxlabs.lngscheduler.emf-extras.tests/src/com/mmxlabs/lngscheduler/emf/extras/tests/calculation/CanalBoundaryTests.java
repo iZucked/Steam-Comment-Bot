@@ -15,7 +15,9 @@ import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 
 /**
- * Tests for case 184.
+ * Tests for <a href="https://mmxlabs.fogbugz.com/default.asp?184">FogBugz: Case 184</a>
+ * 
+ * Testing whether a canal is/isn't used depending on the distances, the canals transit time & fuel consumption, and the canal fee.
  * 
  * @author Adam Semenenko
  * 
@@ -36,7 +38,6 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
 
-		// TODO is there a better way to test a canal is used rather than testing the route name is the same as the canal name?
 		Assert.assertTrue("Laden leg travels down canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels down canal", canalName.equals(a.getBallastLeg().getRoute()));
 	}
