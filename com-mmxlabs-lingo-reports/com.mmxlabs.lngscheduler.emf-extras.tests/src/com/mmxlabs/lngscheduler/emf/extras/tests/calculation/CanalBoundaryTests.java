@@ -48,7 +48,26 @@ public class CanalBoundaryTests {
 	}
 
 	/**
-	 * Test that a canal isn't used if it's just longer than the ocean route. No costs are associated with the canal (see {@link #testSimpleCanalDistance(String, int, int)).
+	 * Test that a canal isn't used if it's just longer than the ocean route. No costs are associated with the canal.
+	 * @see #testSimpleCanalDistance(String, int, int) testSimpleCanalDistance
+	 */
+	@Test
+	public void testOceanShorter() {
+
+		final String testName = "Ocean shorter than canal.";
+		final int distanceBetweenPorts = 999;
+		final int canalDistance = 1000;
+
+		CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
+
+		Assert.assertTrue("Laden leg travels on open sea", defaultRouteName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on open sea", defaultRouteName.equals(a.getBallastLeg().getRoute()));
+	}
+
+	/**
+	 * Test that if the canal is longer then it isn't chosen.
+	 * <p>
+	 * Note: the canal has to be 10miles longer than the port distance due to rounding (1001 miles at 10mph takes 10hours, the same as 1000miles).
 	 */
 	@Test
 	public void testCanalLonger() {
