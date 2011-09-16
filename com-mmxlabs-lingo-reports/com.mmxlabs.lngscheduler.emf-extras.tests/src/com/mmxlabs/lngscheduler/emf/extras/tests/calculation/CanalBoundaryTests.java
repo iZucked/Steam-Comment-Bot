@@ -131,22 +131,6 @@ public class CanalBoundaryTests {
 	}
 
 	/**
-	 * If the ocean and canal cost the same then the vessel will travel on the canal. The canal fuel costs 0 but the fee is non-zero. TODO is this the correct behaviour?
-	 */
-	@Test
-	public void testCanalOceanSameCost() {
-
-		final String testName = "Ocean and canal same price because of fee.";
-		final int canalCost = 10;
-		final int canalFuel = 0;
-
-		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel);
-
-		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
-	}
-
-	/**
 	 * Test that if a canal is slightly more expensive (because of the fee for the canal) it is not used. The canal fuel costs 0 but the fee is non-zero.
 	 */
 	@Test
