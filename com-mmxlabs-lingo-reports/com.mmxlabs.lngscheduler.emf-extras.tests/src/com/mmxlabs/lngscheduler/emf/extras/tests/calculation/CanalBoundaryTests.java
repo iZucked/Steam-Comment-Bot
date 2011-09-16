@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
+
 import scenario.Scenario;
 import scenario.fleet.VesselClassCost;
 import scenario.schedule.CargoAllocation;
@@ -24,6 +26,9 @@ import scenario.schedule.Schedule;
  */
 public class CanalBoundaryTests {
 
+	// The default route name of the ocean route between ports.
+	// TODO move to ScenarioTools and make public
+	private static final String defaultRouteName = IMultiMatrixProvider.Default_Key;
 	private static final String canalName = "Suez canal";
 
 	/**
