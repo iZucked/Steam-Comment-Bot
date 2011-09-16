@@ -75,7 +75,7 @@ public class CanalBoundaryTests {
 
 		final String testName = "Canal longer than ocean route.";
 		final int distanceBetweenPorts = 1000;
-		final int canalDistance = 1001;
+		final int canalDistance = 1010;
 
 		CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
 
