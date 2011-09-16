@@ -176,8 +176,25 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel, canalTransitTimeHours);
 
-		Assert.assertFalse("Laden leg travels on ocean", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertFalse("Ballast leg travels on ocean", canalName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on ocean", defaultRouteName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on ocean", defaultRouteName.equals(a.getBallastLeg().getRoute()));
+	}
+
+	/**
+	 * Test that if a canal is slightly cheaper (because of the fuel for the canal transit time) and so the ocean route is not used. The fee is zero.
+	 */
+	@Test
+	public void testCanalCheaperFuel() {
+
+		final String testName = "Ocean route cheaper than canal because of canal fuel.";
+		final int canalCost = 0;
+		final int canalFuel = 19;
+		final int canalTransitTimeHours = 5;
+
+		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel, canalTransitTimeHours);
+
+		Assert.assertTrue("Laden leg travels on ocean", defaultRouteName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on ocean", defaultRouteName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
