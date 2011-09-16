@@ -9,8 +9,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-
 import scenario.Scenario;
 import scenario.fleet.VesselClassCost;
 import scenario.schedule.CargoAllocation;
