@@ -79,8 +79,8 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
 
-		Assert.assertFalse("Laden leg travels on open sea", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertFalse("Ballast leg travels on open sea", canalName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on open sea", defaultRouteName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on open sea", defaultRouteName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
@@ -159,8 +159,8 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel, canalTransitTimeHours);
 
-		Assert.assertFalse("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertFalse("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on canal", defaultRouteName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on canal", defaultRouteName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
