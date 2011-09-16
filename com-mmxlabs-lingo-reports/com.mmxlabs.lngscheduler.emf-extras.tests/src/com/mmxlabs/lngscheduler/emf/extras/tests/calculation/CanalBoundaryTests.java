@@ -205,11 +205,11 @@ public class CanalBoundaryTests {
 	 */
 	private CargoAllocation testCanalCost(final String testName, final int canalCost, final int canalFuelDays, final int canalTransitTimeHours) {
 
-		final int canalDistance = 90;
-		final int portDistance = 100;
+		final int canalDistance = 900;
+		final int portDistance = 1000;
 
 		final int fuelConsumptionHours = 10;
-		final int NBORateHours = 10;
+		final int NBORateHours = 5;
 
 		return testCanalCost(testName, portDistance, canalDistance, canalCost, canalCost, canalFuel, fuelConsumptionHours, NBORateHours);
 	}
@@ -241,10 +241,7 @@ public class CanalBoundaryTests {
 	private CargoAllocation testCanalCost(final String testName, final int distanceBetweenPorts, final int canalDistance, final int canalLadenCost, final int canalUnladenCost,
 			final int canalTransitFuelHours, final int fuelTravelConsumptionHours, final int NBOTravelRateHours) {
 
-		// Create a dummy scenario
-		final int travelTime = 100;
-
-		// for equality between canals and oceans and for simplicity set these to 1
+		final int travelTime = 200;
 		final float baseFuelUnitPrice = 1;
 		final float equivalenceFactor = 1;
 		final float dischargePrice = 1;
