@@ -32,7 +32,8 @@ public class CanalBoundaryTests {
 	private static final String canalName = "Suez canal";
 
 	/**
-	 * Test that a canal is used if it's just shorter than the ocean route. No costs are associated with the canal (see {@link #testSimpleCanalDistance(String, int, int)).
+	 * Test that a canal is used if it's just shorter than the ocean route. No costs are associated with the canal
+	 * @see #testSimpleCanalDistance(String, int, int) testSimpleCanalDistance
 	 */
 	@Test
 	public void testCanalShorter() {
@@ -85,7 +86,8 @@ public class CanalBoundaryTests {
 	/**
 	 * Test the results of having different canal and ocean distances between the ports.
 	 * <p>
-	 * The canals cost nothing and incur no extra fuel costs, and take the same time to travel as the ocean.
+	 * The canals have no fees or transit time, and the fuel consumption rate is the same for all routes/ballasts, but is less for idles (idles being cheaper gives incentive towards choosing the
+	 * shortest/quickest route).
 	 * 
 	 * @param testName
 	 *            An name used to identify console output
@@ -107,7 +109,10 @@ public class CanalBoundaryTests {
 	}
 
 	/**
-	 * Test that if a canal is actually cheaper (despite the fee for the canal) it is used. The canal fuel costs 0 but the fee is non-zero.
+	 * Test that if a canal is actually cheaper (despite the fee for the canal) it is used. The canal fuel consumption is less than other routes but the fee is non-zero.
+	 * 
+	 * TODO Resolve this. Bug? The canal should be 10 cheaper than the ocean, but the ocean route is chosen. Spoke to Simon (15/09/11), track it down through the code, see why. Test that the cost
+	 * being calculated for both routes correctly and find out where it's not working.
 	 */
 	@Test
 	public void testCanalCheaperFee() {
@@ -155,7 +160,7 @@ public class CanalBoundaryTests {
 	}
 
 	/**
-	 * Test that if a canal is slightly more expensive (because of the fuel for the canal) it is not used. The canal fuel is non-zero but the fee is zero.
+	 * Test that if a canal is slightly more expensive (because of the fuel for the canal transit time) and so it is not used. The fee is zero.
 	 */
 	@Test
 	public void testCanalMoreExpensiveFuel() {
@@ -188,7 +193,10 @@ public class CanalBoundaryTests {
 	}
 
 	/**
-	 * Tests a simple scenario with a canal. The canal's cost, distance and fuel can be set. The canal speed is set to be the same as the speed of the vessel in the ocean.
+	 * Tests a simple scenario with a canal. The canal's cost, distance and fuel can be set. Travel time is 200 hours, speed is 10mph.
+	 * <p>
+	 * The travel time of the ballast and laden voyages leave a minimum of 10 hours idle time to ensure that the cost of idle is always non-zero. If it's zero then it will affect the route choice
+	 * (e.g. taking a longer router to avoid the potentially expensive idle costs).
 	 * 
 	 * @param testName
 	 *            The name of the test being run (to distinguish console output).
@@ -243,7 +251,6 @@ public class CanalBoundaryTests {
 				fuelTravelConsumptionDays, fuelIdleConsumptionDays, NBOIdleRateDays, NBOTravelRateDays, useDryDock, pilotLightRate, canalCost);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(canalScenario);
-		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
 		ScenarioTools.printScenario(testName, a);
