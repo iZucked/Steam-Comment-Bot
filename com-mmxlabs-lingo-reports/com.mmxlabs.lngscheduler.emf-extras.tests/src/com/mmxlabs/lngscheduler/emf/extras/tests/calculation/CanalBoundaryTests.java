@@ -153,7 +153,7 @@ public class CanalBoundaryTests {
 	public void testCanalMoreExpensiveFee() {
 
 		final String testName = "Ocean route cheaper than canal because of fee.";
-		final int canalCost = 11;
+		final int canalCost = 101;
 		final int canalFuel = 0;
 		final int canalTransitTimeHours = 0;
 
