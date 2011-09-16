@@ -26,9 +26,6 @@ import scenario.schedule.Schedule;
  */
 public class CanalBoundaryTests {
 
-	// The default route name of the ocean route between ports.
-	// TODO move to ScenarioTools and make public
-	private static final String defaultRouteName = IMultiMatrixProvider.Default_Key;
 	private static final String canalName = "Suez canal";
 
 	/**
@@ -61,8 +58,8 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
 
-		Assert.assertTrue("Laden leg travels on open sea", defaultRouteName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on open sea", defaultRouteName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on open sea", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on open sea", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
@@ -79,8 +76,8 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
 
-		Assert.assertTrue("Laden leg travels on open sea", defaultRouteName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on open sea", defaultRouteName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on open sea", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on open sea", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
@@ -143,8 +140,8 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel, canalTransitTimeHours);
 
-		Assert.assertTrue("Laden leg travels on canal", defaultRouteName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on canal", defaultRouteName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on canal", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on canal", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
@@ -160,8 +157,8 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel, canalTransitTimeHours);
 
-		Assert.assertTrue("Laden leg travels on ocean", defaultRouteName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on ocean", defaultRouteName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
@@ -177,8 +174,8 @@ public class CanalBoundaryTests {
 
 		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel, canalTransitTimeHours);
 
-		Assert.assertTrue("Laden leg travels on ocean", defaultRouteName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on ocean", defaultRouteName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**

@@ -57,6 +57,7 @@ import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
@@ -75,6 +76,9 @@ public class ScenarioTools {
 		A.setName("A");
 		B.setName("B");
 	}
+
+	// The default route name of the ocean route between ports.
+	public static final String defaultRouteName = IMultiMatrixProvider.Default_Key;
 
 	/**
 	 * Creates a scenario.
@@ -363,14 +367,14 @@ public class ScenarioTools {
 	 *            Cost in dollars for a laden vessel
 	 * @param canalUnladenCost
 	 *            Cost in dollars for a ballast vessel
-	 * @param canalTransitFuel
+	 * @param canalTransitFuelDays
 	 *            MT of base fuel per day used when in transit
 	 * @param canalTransitTime
 	 *            Transit time in hours
 	 * @return
 	 */
 	public static VesselClassCost createCanalAndCost(final String canalName, final int distanceAToB, final int distanceBToA, final int canalLadenCost, final int canalUnladenCost,
-			final int canalTransitFuel, final int canalTransitTime) {
+			final int canalTransitFuelDays, final int canalTransitTime) {
 
 		final Canal canal = PortFactory.eINSTANCE.createCanal();
 		canal.setName(canalName);
@@ -395,7 +399,7 @@ public class ScenarioTools {
 		canalCost.setCanal(canal);
 		canalCost.setLadenCost(canalLadenCost); // cost in dollars for a laden vessel
 		canalCost.setUnladenCost(canalUnladenCost); // cost in dollars for a ballast vessel
-		canalCost.setTransitFuel(canalTransitFuel); // MT of base fuel / day used when in transit
+		canalCost.setTransitFuel(canalTransitFuelDays); // MT of base fuel / day used when in transit
 		canalCost.setTransitTime(canalTransitTime); // transit time in hours
 
 		return canalCost;
