@@ -117,7 +117,7 @@ public class CanalBoundaryTests {
 	 * being calculated for both routes correctly and find out where it's not working.
 	 */
 	@Test
-	public void testCanalCheaperFee() {
+	public void testCanalCheaperDespiteFee() {
 
 		final String testName = "Canal cheaper than ocean route despite fee.";
 		final int canalCost = 90;
