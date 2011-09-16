@@ -101,11 +101,13 @@ public class CanalBoundaryTests {
 
 		final int canalLadenCost = 0;
 		final int canalUnladenCost = 0;
-		final int canalTransitFuel = 0;
-		final int fuelConsumptionHours = 10;
-		final int NBORateHours = 10;
+		final int canalTransitTime = 0;
+		final int fuelTravelConsumptionDays = 10;
+		final int fuelIdleConsumptionDays = 5;
+		final int NBORateDays = 10;
 
-		return testCanalCost(testName, portDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuel, fuelConsumptionHours, NBORateHours);
+		return testCanalCost(testName, portDistance, canalDistance, canalLadenCost, canalUnladenCost, fuelTravelConsumptionDays, canalTransitTime, fuelTravelConsumptionDays, fuelIdleConsumptionDays,
+				NBORateDays, fuelIdleConsumptionDays);
 	}
 
 	/**
@@ -118,10 +120,11 @@ public class CanalBoundaryTests {
 	public void testCanalCheaperFee() {
 
 		final String testName = "Canal cheaper than ocean route despite fee.";
-		final int canalCost = 9;
-		final int canalFuel = 0;
+		final int canalCost = 90;
+		final int canalTranistFuel = 10;
+		final int canalTransitTimeHours = 0;
 
-		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel);
+		CargoAllocation a = testCanalCost(testName, canalCost, canalTranistFuel, canalTransitTimeHours);
 
 		Assert.assertTrue("Laden leg travels in canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels in canal", canalName.equals(a.getBallastLeg().getRoute()));
@@ -152,8 +155,9 @@ public class CanalBoundaryTests {
 		final String testName = "Ocean route cheaper than canal because of fee.";
 		final int canalCost = 11;
 		final int canalFuel = 0;
+		final int canalTransitTimeHours = 0;
 
-		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel);
+		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel, canalTransitTimeHours);
 
 		Assert.assertFalse("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertFalse("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
@@ -167,9 +171,10 @@ public class CanalBoundaryTests {
 
 		final String testName = "Ocean route cheaper than canal because of canal fuel.";
 		final int canalCost = 0;
-		final int canalFuel = 20;
+		final int canalFuel = 21;
+		final int canalTransitTimeHours = 5;
 
-		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel);
+		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel, canalTransitTimeHours);
 
 		Assert.assertFalse("Laden leg travels on ocean", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertFalse("Ballast leg travels on ocean", canalName.equals(a.getBallastLeg().getRoute()));
@@ -181,7 +186,7 @@ public class CanalBoundaryTests {
 	 * The distances are very small compared to the time available to ensure that the only reason for selection of a route is due to price, not avoiding lateness. The fuel required for idle and the
 	 * idle NBO rate are both as low as possible to prevent the cost of idling preventing route choice.
 	 */
-	private CargoAllocation testCanalCost(final String testName, final int canalCost, final int canalFuel) {
+	private CargoAllocation testCanalCost(final String testName, final int canalCost, final int canalFuelDays, final int canalTransitTimeHours) {
 
 		final int canalDistance = 90;
 		final int portDistance = 100;
