@@ -208,6 +208,7 @@ public class CanalBoundaryTests {
 		final int canalDistance = 900;
 		final int portDistance = 1000;
 
+		// use the same fuel consumption for every travel/idle/canal
 		final int fuelConsumptionHours = 10;
 		final int NBORateHours = 5;
 
@@ -246,7 +247,7 @@ public class CanalBoundaryTests {
 		final float equivalenceFactor = 1;
 		final float dischargePrice = 1;
 		final float cvValue = 1;
-		// for simplicity all speeds, fuel and NBO consumptions and rates are equal
+
 		final int speed = 10;
 		final int capacity = 1000000;
 
