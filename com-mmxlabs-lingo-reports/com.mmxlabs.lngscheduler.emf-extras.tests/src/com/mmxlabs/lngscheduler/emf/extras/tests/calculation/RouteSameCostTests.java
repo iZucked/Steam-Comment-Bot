@@ -7,6 +7,7 @@ package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -34,12 +35,17 @@ public class RouteSameCostTests {
 	/**
 	 * Canal is twice the distance of a sea route. Fuel consumption and NBO rates are all identical. Canal has no fees.
 	 * 
+	 * <p>
 	 * TODO Create more tests along this line.
 	 * 
+	 * <p>
 	 * The routes are identically priced. Add some more expensive routes. Check at
 	 * 1) the two cheapest routes are the same price.
 	 * 2) one of the two cheapest are selected over the more expensive routes.
+	 * <p>
+	 * Ignore test until test methods are improved (more routes, test same cost, test cheapest used)
 	 */
+	@Ignore
 	@Test
 	public void canalTwiceDistance() {
 
@@ -64,9 +70,14 @@ public class RouteSameCostTests {
 	
 	/**
 	 * TODO What's the default behaviour if a canal and ocean are equal?
+	 * <p>
 	 * 
 	 * test costs ARE identical & one is chosen, add worse costs
+	 * <p>
+	 * 
+	 * Ignore test until test methods are improved (more routes, test same cost, test cheapest used)
 	 */
+	@Ignore
 	@Test
 	public void testCanalOceanSameCost() {
 
