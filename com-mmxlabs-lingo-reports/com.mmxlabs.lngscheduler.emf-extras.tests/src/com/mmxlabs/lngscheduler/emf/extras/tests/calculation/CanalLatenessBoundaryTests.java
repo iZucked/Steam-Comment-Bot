@@ -22,6 +22,9 @@ public class CanalLatenessBoundaryTests {
 
 	private static final String canalName = "Suez canal";
 
+	/**
+	 * If the vessel is going to be late if it takes the longer ocean route check it takes the shorter canal route, even if it costs more.
+	 */
 	@Test
 	public void canalUsedToAvoidLateness() {
 
@@ -39,6 +42,9 @@ public class CanalLatenessBoundaryTests {
 		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
 	}
 	
+	/**
+	 * If the vessel is going to be late in either the ocean or canal route, test that the canal route is used if it is slightly shorter but is more costly. 
+	 */
 	@Test
 	public void expensiveCanalUsedWhenLate() {
 
