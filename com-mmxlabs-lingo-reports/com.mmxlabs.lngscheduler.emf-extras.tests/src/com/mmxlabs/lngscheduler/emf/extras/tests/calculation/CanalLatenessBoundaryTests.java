@@ -50,9 +50,9 @@ public class CanalLatenessBoundaryTests {
 	 * If the vessel is going to be late in either the ocean or canal route, test that the canal route is used if it is slightly shorter but is more costly.
 	 */
 	@Test
-	public void expensiveCanalUsedWhenLate() {
+	public void expensiveShorterCanalUsedWhenLate() {
 
-		final String testName = "Expensive canal used when late";
+		final String testName = "Expensive shorter canal used when late";
 
 		final int canalCost = 1000;
 		final int travelTime = 100;
@@ -66,6 +66,28 @@ public class CanalLatenessBoundaryTests {
 
 		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+	}
+
+	/**
+	 * If the vessel is going to be late in either the ocean or canal route, test that the canal route is used if it is the same length but is more costly.
+	 */
+	@Test
+	public void expensiveCanalNotUsedWhenLate() {
+
+		final String testName = "Expensive canal not used when late if same length";
+
+		final int canalCost = 1000;
+		final int travelTime = 100;
+		
+		// The canal will take 104 + 1 = 105 hours, the ocean route will take 105 hours
+		final int canalTransitTimeHours = 1;
+		final int canalDistance = 1040;
+		final int oceanRouteDistance = 1050;
+
+		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours);
+
+		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
 	}
 
 	/**
