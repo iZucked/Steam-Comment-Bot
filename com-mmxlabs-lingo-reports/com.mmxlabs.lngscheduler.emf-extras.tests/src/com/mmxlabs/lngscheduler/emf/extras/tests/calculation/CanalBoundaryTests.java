@@ -110,13 +110,19 @@ public class CanalBoundaryTests {
 	 * 
 	 * TODO Resolve this. Bug? The canal should be 10 cheaper than the ocean, but the ocean route is chosen. Spoke to Simon (15/09/11), track it down through the code, see why. Test that the cost
 	 * being calculated for both routes correctly and find out where it's not working.
+	 * 
+	 * The test works if the canal fee is 50 or less.
+	 * 
+	 * The total cost of the ocean is $1000.
+	 * The cost of the canal in fuel is $900 (not including fee).
+	 * Therefore, if the canal fee is less than $99, the canal should be used.
 	 */
 	@Test
 	public void testCanalCheaperDespiteFee() {
 
 		final String testName = "Canal cheaper than ocean route despite fee.";
 		final int canalCost = 90;
-		final int canalTranistFuel = 10;
+		final int canalTranistFuel = 0;
 		final int canalTransitTimeHours = 0;
 
 		CargoAllocation a = testCanalCost(testName, canalCost, canalTranistFuel, canalTransitTimeHours);
@@ -126,7 +132,7 @@ public class CanalBoundaryTests {
 	}
 
 	/**
-	 * Test that if a canal is slightly more expensive (because of the fee for the canal) it is not used. The canal fuel costs 0 but the fee is non-zero.
+	 * Test that if a canal is slightly more expensive (because of the fee for the canal) it is not used. There is no canal transit time.
 	 */
 	@Test
 	public void testCanalMoreExpensiveFee() {
