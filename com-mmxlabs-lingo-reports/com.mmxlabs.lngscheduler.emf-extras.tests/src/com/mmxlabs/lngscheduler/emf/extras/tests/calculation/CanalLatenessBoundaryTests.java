@@ -32,18 +32,19 @@ public class CanalLatenessBoundaryTests {
 
 		final int canalCost = 500;
 		final int travelTime = 100;
+		final int canalTransitTimeHours = 0;
 		// The ocean route is 100 miles longer so it will be 10 hours (10mph vessel) late. The canal route will be 100 hours early.
 		final int canalDistance = 990;
 		final int oceanRouteDistance = 1010;
 
-		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime);
+		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours);
 
 		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
 	}
-	
+
 	/**
-	 * If the vessel is going to be late in either the ocean or canal route, test that the canal route is used if it is slightly shorter but is more costly. 
+	 * If the vessel is going to be late in either the ocean or canal route, test that the canal route is used if it is slightly shorter but is more costly.
 	 */
 	@Test
 	public void expensiveCanalUsedWhenLate() {
@@ -52,33 +53,33 @@ public class CanalLatenessBoundaryTests {
 
 		final int canalCost = 1000;
 		final int travelTime = 100;
+		final int canalTransitTimeHours = 0;
 		// The ocean route is 100 miles longer so it will be 10 hours (10mph vessel) late. The canal route will be 100 hours early.
 		final int canalDistance = 1050;
 		final int oceanRouteDistance = 1060;
 
-		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime);
+		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours);
 
 		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
 	}
 
-	private CargoAllocation testRouteWhenLate(final String testName, final int canalFee, final int canalDistance, final int oceanRouteDistance, final int travelTime) {
+	private CargoAllocation testRouteWhenLate(final String testName, final int canalFee, final int canalDistance, final int oceanRouteDistance, final int travelTime, final int canalTransitTimeHours) {
 
 		// have no transit time for the canal TODO change this to argument, should test it.
-		final int canalTransitFuelDays = 0;
-		final int canalTransitTimeHours = 0;
 
 		// use the same fuel consumption for every travel/idle/canal
 		final int fuelConsumptionDays = 10;
 		final int NBORateDays = 10;
-		
+
 		// same fee for laden and ballast
 		final int canalLadenCost = canalFee;
 		final int canalUnladenCost = canalFee;
-		
+
 		// have same fuel consumption/nbo rate for travel and idle
 		final int fuelTravelConsumptionDays = fuelConsumptionDays;
 		final int fuelIdleConsumptionDays = fuelConsumptionDays;
+		final int canalTransitFuelDays = fuelConsumptionDays;
 		final int NBOTravelRateDays = NBORateDays;
 		final int NBOIdleRateDays = NBORateDays;
 
