@@ -16,7 +16,7 @@ import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
 
 /**
- * From case 179:
+ * From <a href="https://mmxlabs.fogbugz.com/default.asp?179">case 179</a>:
  * 
  * The first thing to check is that the fuel choices being made are really the cheapest, by creating some situations which are right on the boundary of costs. The main options that I see are
  * 
@@ -204,7 +204,7 @@ public class FuelChoiceBoundaryTests {
 	}
 
 	/**
-	 * This test gives 10 hours of idle time after ballast and laden legs.
+	 * This test gives 100 hours of idle time after ballast and laden legs.
 	 */
 	private CargoAllocation test(final String name, final int travelFuelConsumptionDays, final int travelNBORateDays, final int idleFuelConsumptionDays, final int idleNBORateDays,
 			final float baseFuelUnitPrice, final float dischargePrice, final int pilotLightRate) {
