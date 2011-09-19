@@ -30,7 +30,7 @@ public class CanalLatenessBoundaryTests {
 
 		final String testName = "Expensive canal used to avoid lateness";
 
-		final int canalCost = 500;
+		final int canalCost = 1000;
 		final int travelTime = 100;
 		
 		// Canal: 980 miles @ 10mph + 1 hour transit time = 99 hours
