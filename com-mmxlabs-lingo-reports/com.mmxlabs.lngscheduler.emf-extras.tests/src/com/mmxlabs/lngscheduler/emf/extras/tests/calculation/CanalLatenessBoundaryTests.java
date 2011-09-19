@@ -32,9 +32,12 @@ public class CanalLatenessBoundaryTests {
 
 		final int canalCost = 500;
 		final int travelTime = 100;
-		final int canalTransitTimeHours = 0;
-		// The ocean route is 100 miles longer so it will be 10 hours (10mph vessel) late. The canal route will be 100 hours early.
-		final int canalDistance = 990;
+		
+		// Canal: 980 miles @ 10mph + 1 hour transit time = 99 hours
+		// Ocean 1010 miles @ 10mph = 101 hours
+		// The canal will take 98 + 1 = 99 hours, the ocean will take 101 hours.
+		final int canalTransitTimeHours = 1;
+		final int canalDistance = 980;
 		final int oceanRouteDistance = 1010;
 
 		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours);
@@ -53,9 +56,10 @@ public class CanalLatenessBoundaryTests {
 
 		final int canalCost = 1000;
 		final int travelTime = 100;
-		final int canalTransitTimeHours = 0;
-		// The ocean route is 100 miles longer so it will be 10 hours (10mph vessel) late. The canal route will be 100 hours early.
-		final int canalDistance = 1050;
+		
+		// The canal will take 104 + 1 = 105 hours, the ocean route will take 106 hours
+		final int canalTransitTimeHours = 1;
+		final int canalDistance = 1040;
 		final int oceanRouteDistance = 1060;
 
 		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours);
