@@ -15,6 +15,10 @@ import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 
 /**
+ * Tests for <a href="https://mmxlabs.fogbugz.com/default.asp?184">FogBugz: Case 184</a>
+ * 
+ * Test that a canal is used if a vessel will be late if it takes the ocean route.
+ * 
  * @author Adam Semenenko
  * 
  */
@@ -32,7 +36,7 @@ public class CanalLatenessBoundaryTests {
 
 		final int canalCost = 1000;
 		final int travelTime = 100;
-		
+
 		// Canal: 980 miles @ 10mph + 1 hour transit time = 99 hours
 		// Ocean 1010 miles @ 10mph = 101 hours
 		// The canal will take 98 + 1 = 99 hours, the ocean will take 101 hours.
@@ -56,7 +60,7 @@ public class CanalLatenessBoundaryTests {
 
 		final int canalCost = 1000;
 		final int travelTime = 100;
-		
+
 		// The canal will take 104 + 1 = 105 hours, the ocean route will take 106 hours
 		final int canalTransitTimeHours = 1;
 		final int canalDistance = 1040;
@@ -78,7 +82,7 @@ public class CanalLatenessBoundaryTests {
 
 		final int canalCost = 1000;
 		final int travelTime = 100;
-		
+
 		// The canal will take 104 + 1 = 105 hours, the ocean route will take 105 hours
 		final int canalTransitTimeHours = 1;
 		final int canalDistance = 1040;
@@ -100,7 +104,7 @@ public class CanalLatenessBoundaryTests {
 
 		final int canalCost = 1000;
 		final int travelTime = 100;
-		
+
 		// The canal will take 98 + 1 = 99 hours, the ocean route will take 100 hours
 		final int canalTransitTimeHours = 1;
 		final int canalDistance = 980;
@@ -123,7 +127,7 @@ public class CanalLatenessBoundaryTests {
 		// The canal is free
 		final int canalCost = 0;
 		final int travelTime = 100;
-		
+
 		// The canal will take 98 + 1 = 99 hours, the ocean route will take 100 hours
 		final int canalTransitTimeHours = 1;
 		final int canalDistance = 980;
@@ -135,6 +139,24 @@ public class CanalLatenessBoundaryTests {
 		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
 	}
 
+	/**
+	 * For testing scenarios between two ports with an ocean route and a canal route. Fuel consumption and NBO rates are identical for laden/ballast/idle vessels). The speed of the vessel is always
+	 * 10mph.
+	 * 
+	 * @param testName
+	 *            Name of the test for identifying console output
+	 * @param canalFee
+	 *            The one off fee of the canal
+	 * @param canalDistance
+	 *            The distance between the two ports via canal
+	 * @param oceanRouteDistance
+	 *            The distance between the two ports via ocean
+	 * @param travelTime
+	 *            The time in hours of the voyage
+	 * @param canalTransitTimeHours
+	 *            Extra time in hours added onto the time of the canal (due to delays, e.g. queues).
+	 * @return
+	 */
 	private CargoAllocation testRouteWhenLate(final String testName, final int canalFee, final int canalDistance, final int oceanRouteDistance, final int travelTime, final int canalTransitTimeHours) {
 
 		// use the same fuel consumption for every travel/idle/canal
