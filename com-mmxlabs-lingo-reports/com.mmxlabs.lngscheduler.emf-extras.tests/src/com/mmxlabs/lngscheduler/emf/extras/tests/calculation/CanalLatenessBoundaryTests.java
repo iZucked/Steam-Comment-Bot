@@ -38,22 +38,43 @@ public class CanalLatenessBoundaryTests {
 		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
 	}
+	
+	@Test
+	public void canalNotUsedWhenLate() {
 
-	private CargoAllocation testRouteWhenLate(final String testName, final int canalCost, final int canalDistance, final int portDistance, final int travelTime) {
+		final String testName = "Expensive canal used when late";
 
-		final int canalFuelDays = 0;
+		final int canalCost = 0;
+		final int travelTime = 100;
+		// The ocean route is 100 miles longer so it will be 10 hours (10mph vessel) late. The canal route will be 100 hours early.
+		final int canalDistance = 900;
+		final int portDistance = 1100;
+
+		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, portDistance, travelTime);
+
+		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+	}
+
+	private CargoAllocation testRouteWhenLate(final String testName, final int canalFee, final int canalDistance, final int distanceBetweenPorts, final int travelTime) {
+
+		// have no transit time for the canal TODO change this to argument, should test it.
+		final int canalTransitFuelDays = 0;
 		final int canalTransitTimeHours = 0;
 
 		// use the same fuel consumption for every travel/idle/canal
-		final int fuelConsumptionHours = 10;
-		final int NBORateHours = 10;
-
-		return testCanalCost(testName, travelTime, portDistance, canalDistance, canalCost, canalCost, canalFuelDays, canalTransitTimeHours, fuelConsumptionHours, fuelConsumptionHours, NBORateHours,
-				NBORateHours);
-	}
-
-	private CargoAllocation testCanalCost(final String testName, final int travelTime, final int distanceBetweenPorts, final int canalDistance, final int canalLadenCost, final int canalUnladenCost,
-			final int canalTransitFuelDays, final int canalTransitTime, final int fuelTravelConsumptionDays, final int fuelIdleConsumptionDays, final int NBOTravelRateDays, final int NBOIdleRateDays) {
+		final int fuelConsumptionDays = 10;
+		final int NBORateDays = 10;
+		
+		// same fee for laden and ballast
+		final int canalLadenCost = canalFee;
+		final int canalUnladenCost = canalFee;
+		
+		// have same fuel consumption/nbo rate for travel and idle
+		final int fuelTravelConsumptionDays = fuelConsumptionDays;
+		final int fuelIdleConsumptionDays = fuelConsumptionDays;
+		final int NBOTravelRateDays = NBORateDays;
+		final int NBOIdleRateDays = NBORateDays;
 
 		final float baseFuelUnitPrice = 1;
 		final float equivalenceFactor = 1;
@@ -73,7 +94,7 @@ public class CanalLatenessBoundaryTests {
 		final boolean useDryDock = true;
 		final int pilotLightRate = 0;
 
-		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelHours, canalTransitTime);
+		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelHours, canalTransitTimeHours);
 
 		Scenario canalScenario = ScenarioTools.createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
 				fuelTravelConsumptionHours, speed, fuelTravelConsumptionHours, fuelIdleConsumptionHours, NBOIdleRateHours, NBOTravelRateHours, speed, fuelTravelConsumptionHours, speed,
