@@ -90,6 +90,29 @@ public class CanalLatenessBoundaryTests {
 		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
 	}
 
+	/**
+	 * Test that an free canal is used if it is quicker than the ocean route, but the ocean route will get there on time anyway.
+	 */
+	@Test
+	public void freeCanalNotUsed() {
+
+		final String testName = "Free canal used";
+
+		// The canal is free
+		final int canalCost = 0;
+		final int travelTime = 100;
+		
+		// The canal will take 98 + 1 = 99 hours, the ocean route will take 100 hours
+		final int canalTransitTimeHours = 1;
+		final int canalDistance = 980;
+		final int oceanRouteDistance = 1000;
+
+		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours);
+
+		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
+		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+	}
+
 	private CargoAllocation testRouteWhenLate(final String testName, final int canalFee, final int canalDistance, final int oceanRouteDistance, final int travelTime, final int canalTransitTimeHours) {
 
 		// have no transit time for the canal TODO change this to argument, should test it.
