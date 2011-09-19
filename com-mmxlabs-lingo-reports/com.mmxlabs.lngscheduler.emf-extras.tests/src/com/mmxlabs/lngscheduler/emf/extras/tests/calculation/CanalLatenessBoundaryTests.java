@@ -137,8 +137,6 @@ public class CanalLatenessBoundaryTests {
 
 	private CargoAllocation testRouteWhenLate(final String testName, final int canalFee, final int canalDistance, final int oceanRouteDistance, final int travelTime, final int canalTransitTimeHours) {
 
-		// have no transit time for the canal TODO change this to argument, should test it.
-
 		// use the same fuel consumption for every travel/idle/canal
 		final int fuelConsumptionDays = 10;
 		final int NBORateDays = 10;
