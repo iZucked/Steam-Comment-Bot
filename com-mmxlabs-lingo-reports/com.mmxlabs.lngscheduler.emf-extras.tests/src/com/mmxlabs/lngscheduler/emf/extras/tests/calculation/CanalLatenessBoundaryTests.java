@@ -23,9 +23,9 @@ public class CanalLatenessBoundaryTests {
 	private static final String canalName = "Suez canal";
 
 	@Test
-	public void canalUsedWhenLate() {
+	public void canalUsedToAvoidLateness() {
 
-		final String testName = "Expensive canal used when late";
+		final String testName = "Expensive canal used to avoid lateness";
 
 		final int canalCost = 500;
 		final int travelTime = 100;
@@ -40,15 +40,15 @@ public class CanalLatenessBoundaryTests {
 	}
 	
 	@Test
-	public void canalNotUsedWhenLate() {
+	public void expensiveCanalUsedWhenLate() {
 
 		final String testName = "Expensive canal used when late";
 
-		final int canalCost = 0;
+		final int canalCost = 1000;
 		final int travelTime = 100;
 		// The ocean route is 100 miles longer so it will be 10 hours (10mph vessel) late. The canal route will be 100 hours early.
-		final int canalDistance = 900;
-		final int portDistance = 1100;
+		final int canalDistance = 1050;
+		final int portDistance = 1060;
 
 		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, portDistance, travelTime);
 
