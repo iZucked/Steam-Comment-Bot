@@ -34,9 +34,9 @@ public class CanalLatenessBoundaryTests {
 		final int travelTime = 100;
 		// The ocean route is 100 miles longer so it will be 10 hours (10mph vessel) late. The canal route will be 100 hours early.
 		final int canalDistance = 990;
-		final int portDistance = 1010;
+		final int oceanRouteDistance = 1010;
 
-		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, portDistance, travelTime);
+		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime);
 
 		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
@@ -54,15 +54,15 @@ public class CanalLatenessBoundaryTests {
 		final int travelTime = 100;
 		// The ocean route is 100 miles longer so it will be 10 hours (10mph vessel) late. The canal route will be 100 hours early.
 		final int canalDistance = 1050;
-		final int portDistance = 1060;
+		final int oceanRouteDistance = 1060;
 
-		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, portDistance, travelTime);
+		CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime);
 
 		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
 	}
 
-	private CargoAllocation testRouteWhenLate(final String testName, final int canalFee, final int canalDistance, final int distanceBetweenPorts, final int travelTime) {
+	private CargoAllocation testRouteWhenLate(final String testName, final int canalFee, final int canalDistance, final int oceanRouteDistance, final int travelTime) {
 
 		// have no transit time for the canal TODO change this to argument, should test it.
 		final int canalTransitFuelDays = 0;
@@ -102,7 +102,7 @@ public class CanalLatenessBoundaryTests {
 
 		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelHours, canalTransitTimeHours);
 
-		Scenario canalScenario = ScenarioTools.createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
+		Scenario canalScenario = ScenarioTools.createScenarioWithCanal(oceanRouteDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
 				fuelTravelConsumptionHours, speed, fuelTravelConsumptionHours, fuelIdleConsumptionHours, NBOIdleRateHours, NBOTravelRateHours, speed, fuelTravelConsumptionHours, speed,
 				fuelTravelConsumptionHours, fuelIdleConsumptionHours, NBOIdleRateHours, NBOTravelRateHours, useDryDock, pilotLightRate, canalCost);
 		// evaluate and get a schedule
