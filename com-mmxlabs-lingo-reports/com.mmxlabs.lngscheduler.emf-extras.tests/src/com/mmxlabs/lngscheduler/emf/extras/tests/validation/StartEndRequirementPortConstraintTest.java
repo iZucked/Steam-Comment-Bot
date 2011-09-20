@@ -31,10 +31,12 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintSta
  * 
  */
 public class StartEndRequirementPortConstraintTest {
+	
+	// Create a mockery to mock up all the objects involved in a test
+	final Mockery context = new Mockery();
+	
 	@Test
 	public void testValidityConstraint() {
-		// Create a mockery to mock up all the objects involved in a test
-		final Mockery context = new Mockery();
 		// This is the constraint we will be testing
 		final StartEndRequirementPortConstraint constraint = new StartEndRequirementPortConstraint();
 		// Mock a port and time to test
@@ -119,8 +121,6 @@ public class StartEndRequirementPortConstraintTest {
 
 	@Test
 	public void testValidityConstraintFromVesselClass() {
-		// Create a mockery to mock up all the objects involved in a test
-		final Mockery context = new Mockery();
 		// This is the constraint we will be testing
 		final StartEndRequirementPortConstraint constraint = new StartEndRequirementPortConstraint();
 		// Mock a port and time to test
