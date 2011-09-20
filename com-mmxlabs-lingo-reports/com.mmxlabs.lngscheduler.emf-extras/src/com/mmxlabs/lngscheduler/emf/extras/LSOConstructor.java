@@ -45,8 +45,8 @@ import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
  * 
  */
 public class LSOConstructor {
-	private LSOSettings settings;
-	private boolean instrumenting = true;
+	private final LSOSettings settings;
+	private final boolean instrumenting = true;
 
 	public LSOConstructor(LSOSettings settings) {
 		this.settings = settings;
@@ -76,15 +76,13 @@ public class LSOConstructor {
 
 		final IMoveGenerator<T> moveGenerator = createMoveGenerator(context);
 
-		final InstrumentingMoveGenerator<T> instrumentingMoveGenerator = instrumenting ? new InstrumentingMoveGenerator<T>(
-				moveGenerator, false // profile moves (true) or just rate
-										// (false)
-				,false //don't log moves to file
+		final InstrumentingMoveGenerator<T> instrumentingMoveGenerator = instrumenting ? new InstrumentingMoveGenerator<T>(moveGenerator, false // profile moves (true) or just rate
+																																				// (false)
+				, false // don't log moves to file
 		)
 				: null;
 
-		final IFitnessEvaluator<T> fitnessEvaluator = createFitnessEvaluator(
-				fitnessComponents, instrumentingMoveGenerator);
+		final IFitnessEvaluator<T> fitnessEvaluator = createFitnessEvaluator(fitnessComponents, instrumentingMoveGenerator);
 
 		final DefaultLocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
 
