@@ -23,7 +23,17 @@ public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrix
 
 	@Override
 	public U get(final T x, final T y) {
-		return matrix[x.getIndex()][y.getIndex()];
+		// added bounds check - we may not have seen all indexed objects possible.
+		final int xi = x.getIndex();
+		if (xi >= matrix.length) {
+			return defaultValue;
+		}
+		final int yi = y.getIndex();
+		final U[] subMatrix = matrix[xi];
+		if (yi >= subMatrix.length) {
+			return defaultValue;
+		}
+		return subMatrix[yi];
 	}
 
 	@Override
@@ -71,6 +81,6 @@ public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrix
 
 	@Override
 	public boolean has(T x, T y) {
-		return matrix[x.getIndex()][y.getIndex()] != defaultValue;
+		return get(x, y) != defaultValue;
 	}
 }
