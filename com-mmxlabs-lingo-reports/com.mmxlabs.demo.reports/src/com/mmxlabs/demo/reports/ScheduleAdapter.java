@@ -108,6 +108,7 @@ public class ScheduleAdapter {
 
 		final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 		final List<IJobDescriptor> selectedJobs = jobManager.getSelectedJobs();
+
 		for (final IJobDescriptor job : selectedJobs) {
 
 			// if (job instanceof LNGSchedulerJob) {
@@ -115,7 +116,14 @@ public class ScheduleAdapter {
 			// // Need to do something here with separate descriptor/control
 			// final Scenario s = ((LNGSchedulerJob) job).getScenario();
 
-			Object jobContext = job.getJobContext();
+			// this does not work; the job copies the scenario when it starts, rather than modifying the original.
+			// What is the intended behavior here? Should the job modify the original?
+			// Shouldn't this thing be able to ask the descriptor for some current state to display rather than
+			// messing around with the context?
+
+			final IJobControl control = jobManager.getControlForJob(job);
+			Object jobContext = control.getJobOutput();
+
 			if (jobContext instanceof Scenario) {
 				Scenario s = (Scenario) jobContext;
 				final Schedule schedule = getLastScheduleFromScenario(s);
