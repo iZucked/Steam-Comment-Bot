@@ -141,12 +141,11 @@ public class TheNavigator extends CommonNavigator {
 						final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 						// If checked, we may need to create a job
 						if (ti.getChecked() && jobManager.findJobForResource(resource) == null) {
-
+							IJobControl control = null;
 							// Adapt to a new or existing job
 							final IJobDescriptor job = (IJobDescriptor) resource.getAdapter(IJobDescriptor.class);
-							IJobControl control = jobManager.getControlForJob(job);
 							// No job - then unable to adapt or wrong type of resource
-							if (control == null) {
+							if (job == null) {
 								// Only allow resources with a scenario to be
 								// checked
 								ti.setChecked(false);
@@ -157,6 +156,13 @@ public class TheNavigator extends CommonNavigator {
 								// Clean up when job is removed from manager
 								jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
 								control = jobManager.submitJob(job, resource);
+							} else {
+								control = jobManager.getControlForJob(job);
+							}
+
+							if (control == null) {
+								ti.setChecked(false);
+								return;
 							}
 						}
 
