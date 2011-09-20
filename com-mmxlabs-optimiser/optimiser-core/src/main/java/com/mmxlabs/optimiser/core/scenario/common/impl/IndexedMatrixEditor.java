@@ -80,7 +80,7 @@ public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrix
 	}
 
 	@Override
-	public boolean has(T x, T y) {
+	public boolean has(final T x, final T y) {
 		return get(x, y) != defaultValue;
 	}
 }
