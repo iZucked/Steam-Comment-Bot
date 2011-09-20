@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -82,8 +81,8 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 					if (control != null && control.getJobState() == EJobState.CREATED) {
 						// Remove existing job. We assume that it will be disposed somehow.....
 						jm.removeJob(existingJob);
-					} else {
-						return false;
+						// } else {
+						// return false;
 					}
 
 					final WorkspaceJob job = new WorkspaceJob("Evaluate Scenario") {
@@ -101,32 +100,21 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 								control.prepare();
 
 
-								// By using a Copier instance, we should be able to copy the schedule and keep references to the newly copied schedule.
-								Copier copier = new Copier();
+								final Scenario output = control.getJobOutput();
 								
-								// Perform copy
-								final Scenario newS = (Scenario) copier.copy(newJob.getJobContext());
+								final Iterator<Schedule> iterator = output.getScheduleModel().getSchedules().iterator();
+								Schedule lastSchedule = null;
+								while (iterator.hasNext()) {
+									lastSchedule = iterator.next();
+									if (iterator.hasNext())
+										iterator.remove();
+								}
+								output.getOptimisation().getCurrentSettings().setInitialSchedule(lastSchedule);
 								
-								// Look up copied reference
-								// FIXME: In this case we "know" that the schedule is already linked to the scenario.
-								// However this may not always be true
-								final Schedule schedule = (Schedule) copier.get(control.getJobOutput());
-								
-								// Make sure things are properly hooked up?
-								copier.copyReferences();
-
-								// This should validate our assumptions...
-								assert newS.getScheduleModel().getSchedules().contains(schedule);
-
-								// Process scenario - prune out intermediate schedules ....
-								newS.getScheduleModel().getSchedules().clear();
-								newS.getScheduleModel().getSchedules().add(schedule);
-								newS.getOptimisation().getCurrentSettings().setInitialSchedule(schedule);
-
 								// Create new resource using original scenario URI
 								final XMIResourceImpl r = new XMIResourceImpl(scenario.eResource().getURI());
 								// Copy scenario to ensure we don't change resources.
-								r.getContents().add(EcoreUtil.copy(newS));
+								r.getContents().add(EcoreUtil.copy(output));
 								try {
 									r.save(Collections.emptyMap());
 									monitor.worked(4);
