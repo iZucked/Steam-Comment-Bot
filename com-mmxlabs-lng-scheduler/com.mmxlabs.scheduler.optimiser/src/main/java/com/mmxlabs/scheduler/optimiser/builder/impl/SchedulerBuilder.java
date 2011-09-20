@@ -721,12 +721,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// set the self-self distance to zero for all ports to make sure indexed DCP has seen every element.
 
-		for (final String s : portDistanceProvider.getKeySet()) {
-			final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(s);
-			for (final IPort port : ports) {
-				matrix.set(port, port, 0);
-			}
-		}
+		// this is no good, because it makes lots of canal choices happen.
+		// for (final String s : portDistanceProvider.getKeySet()) {
+		// final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(s);
+		// for (final IPort port : ports) {
+		// matrix.set(port, port, 0);
+		// }
+		// }
 
 		portDistanceProvider.cacheExtremalValues(ports);
 
