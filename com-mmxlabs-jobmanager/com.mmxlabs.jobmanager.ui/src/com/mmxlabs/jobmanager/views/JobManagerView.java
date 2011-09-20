@@ -455,7 +455,7 @@ public class JobManagerView extends ViewPart {
 		}
 
 		// update button state
-		updateActionEnablement((IStructuredSelection) viewer.getSelection());
+		updateActionEnablement(viewer.getSelection());
 
 		// Make the table a selection provider
 		getSite().setSelectionProvider(viewer);
@@ -580,9 +580,28 @@ public class JobManagerView extends ViewPart {
 				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
 				while (itr.hasNext()) {
 					final IJobDescriptor job = itr.next();
+
 					final IJobControl control = jobManager.getControlForJob(job);
+
+
+					control.addListener(new IJobControlListener() {
+
+						@Override
+						public boolean jobStateChanged(IJobControl jc, EJobState oldState, EJobState newState) {
+							if (newState == EJobState.CANCELLED) {
+								jobManager.removeJob(job);
+								return false;
+							}
+							return true;
+						}
+
+						@Override
+						public boolean jobProgressUpdated(IJobControl job, int progressDelta) {
+							return true;
+						}
+					});
+
 					control.cancel();
-					jobManager.removeJob(job);
 				}
 			}
 		};
