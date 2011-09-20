@@ -124,8 +124,9 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 	@Override
 	public synchronized void start() {
-		if (currentState != EJobState.INITIALISED) {
-			// we are probably preparing, so add a listener which waits
+		switch (getJobState()) {
+		case UNKNOWN:
+		case INITIALISING:
 			this.addListener(new IJobControlListener() {
 				@Override
 				public boolean jobStateChanged(IJobControl jobControl, EJobState oldState, EJobState newState) {
@@ -141,15 +142,32 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 					return false;
 				}
 			});
-		} else {
+			break;
+		case INITIALISED:
 			runner.schedule();
+			break;
+		default:
 		}
 	}
 
 	@Override
 	public void cancel() {
-		runner.cancel();
+		switch (getJobState()) {
+		case CANCELLING:
+		case CANCELLED:
+			return;
+		}
 		setJobState(EJobState.CANCELLING);
+		switch (getJobState()) {
+		case PAUSED:
+			resume();
+		case RUNNING:
+			runner.cancel();
+			break;
+		default:
+			kill();
+			setJobState(EJobState.CANCELLED);
+		}
 	}
 
 	@Override
