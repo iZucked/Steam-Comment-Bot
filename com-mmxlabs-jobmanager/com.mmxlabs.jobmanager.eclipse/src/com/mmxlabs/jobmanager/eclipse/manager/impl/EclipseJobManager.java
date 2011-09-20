@@ -107,11 +107,19 @@ public final class EclipseJobManager implements IEclipseJobManager {
 			deselectJob(job);
 		}
 
+
 		jobs.remove(job);
 		jobResourceMap.remove(job);
 
 		final IResource resource = jobResourceMap.get(job);
 		final IJobControl control = jobToControls.get(job);
+
+		for (final IJobManager manager : jobManagers.values()) {
+			if (manager.getJobs().contains(job)) {
+				manager.removeJobDescriptor(job);
+			}
+		}
+
 		fireJobRemoved(job, control, resource);
 	}
 
