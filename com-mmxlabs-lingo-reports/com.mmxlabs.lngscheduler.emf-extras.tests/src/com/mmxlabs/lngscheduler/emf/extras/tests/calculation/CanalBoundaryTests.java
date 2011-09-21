@@ -97,12 +97,12 @@ public class CanalBoundaryTests {
 		final int canalLadenCost = 0;
 		final int canalUnladenCost = 0;
 		final int canalTransitTime = 0;
-		final int fuelTravelConsumptionDays = 10;
-		final int fuelIdleConsumptionDays = 5;
-		final int NBORateDays = 10;
+		final int fuelTravelConsumptionPerHour = 10;
+		final int fuelIdleConsumptionPerHour = 5;
+		final int NBORatePerHour = 10;
 
-		return testCanalCost(testName, portDistance, canalDistance, canalLadenCost, canalUnladenCost, fuelTravelConsumptionDays, canalTransitTime, fuelTravelConsumptionDays, fuelIdleConsumptionDays,
-				NBORateDays, fuelIdleConsumptionDays);
+		return testCanalCost(testName, portDistance, canalDistance, canalLadenCost, canalUnladenCost, fuelTravelConsumptionPerHour, canalTransitTime, fuelTravelConsumptionPerHour, fuelIdleConsumptionPerHour,
+				NBORatePerHour, fuelIdleConsumptionPerHour);
 	}
 
 	/**
@@ -119,9 +119,9 @@ public class CanalBoundaryTests {
 		final String testName = "Canal cheaper than ocean route despite fee.";
 		final int canalCost = 49; // 50 is equal cost, don't use as behaviour for equal cost is undefined.
 		final int canalTranistFuel = 0;
-		final int canalTransitTimeHours = 0;
+		final int canalTransitTimePerHour = 0;
 
-		CargoAllocation a = testCanalCost(testName, canalCost, canalTranistFuel, canalTransitTimeHours);
+		CargoAllocation a = testCanalCost(testName, canalCost, canalTranistFuel, canalTransitTimePerHour);
 
 		Assert.assertTrue("Laden leg travels in canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels in canal", canalName.equals(a.getBallastLeg().getRoute()));
@@ -135,10 +135,10 @@ public class CanalBoundaryTests {
 
 		final String testName = "Ocean route cheaper than canal because of fee.";
 		final int canalCost = 101;
-		final int canalFuel = 0;
+		final int canalFuelPerHour = 0;
 		final int canalTransitTimeHours = 0;
 
-		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel, canalTransitTimeHours);
+		CargoAllocation a = testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours);
 
 		Assert.assertTrue("Laden leg travels on canal", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on canal", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
@@ -152,10 +152,10 @@ public class CanalBoundaryTests {
 
 		final String testName = "Ocean route cheaper than canal because of canal fuel.";
 		final int canalCost = 0;
-		final int canalFuel = 21;
+		final int canalFuelPerHour = 21;
 		final int canalTransitTimeHours = 5;
 
-		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel, canalTransitTimeHours);
+		CargoAllocation a = testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours);
 
 		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
@@ -169,10 +169,10 @@ public class CanalBoundaryTests {
 
 		final String testName = "Ocean route cheaper than canal because of canal fuel.";
 		final int canalCost = 0;
-		final int canalFuel = 19;
+		final int canalFuelPerHour = 19;
 		final int canalTransitTimeHours = 5;
 
-		CargoAllocation a = testCanalCost(testName, canalCost, canalFuel, canalTransitTimeHours);
+		CargoAllocation a = testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours);
 
 		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
@@ -190,10 +190,11 @@ public class CanalBoundaryTests {
 		final int portDistance = 1000;
 
 		// use the same fuel consumption for every travel/idle/canal
-		final int fuelConsumptionHours = 10;
-		final int NBORateHours = 5;
+		final int fuelConsumptionPerHour = 10;
+		final int NBORatePerHour = 5;
 
-		return testCanalCost(testName, portDistance, canalDistance, canalCost, canalCost, canalFuelDays, canalTransitTimeHours, fuelConsumptionHours, fuelConsumptionHours, NBORateHours, NBORateHours);
+		return testCanalCost(testName, portDistance, canalDistance, canalCost, canalCost, canalFuelDays, canalTransitTimeHours, fuelConsumptionPerHour, fuelConsumptionPerHour, NBORatePerHour,
+				NBORatePerHour);
 	}
 
 	/**
@@ -221,7 +222,8 @@ public class CanalBoundaryTests {
 	 * @return
 	 */
 	private CargoAllocation testCanalCost(final String testName, final int distanceBetweenPorts, final int canalDistance, final int canalLadenCost, final int canalUnladenCost,
-			final int canalTransitFuelDays, final int canalTransitTime, final int fuelTravelConsumptionDays, final int fuelIdleConsumptionDays, final int NBOTravelRateDays, final int NBOIdleRateDays) {
+			final int canalTransitFuelPerHour, final int canalTransitTime, final int fuelTravelConsumptionPerHour, final int fuelIdleConsumptionPerHour, final int NBOTravelRatePerHour,
+			final int NBOIdleRatePerHour) {
 
 		final int travelTime = 200;
 		final float baseFuelUnitPrice = 1;
@@ -232,22 +234,21 @@ public class CanalBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		// TODO rename variables
-		final int fuelTravelConsumptionHours = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionDays);
-		final int NBOTravelRateHours = ScenarioTools.convertPerHourToPerDay(NBOTravelRateDays);
-		final int canalTransitFuelHours = ScenarioTools.convertPerHourToPerDay(canalTransitFuelDays);
+		final int fuelTravelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
+		final int NBOTravelRatePerDay = ScenarioTools.convertPerHourToPerDay(NBOTravelRatePerHour);
+		final int canalTransitFuelPerDay = ScenarioTools.convertPerHourToPerDay(canalTransitFuelPerHour);
 
-		final int fuelIdleConsumptionHours = ScenarioTools.convertPerHourToPerDay(fuelIdleConsumptionDays);
-		final int NBOIdleRateHours = ScenarioTools.convertPerHourToPerDay(NBOIdleRateDays);
+		final int fuelIdleConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelIdleConsumptionPerHour);
+		final int NBOIdleRatePerDay = ScenarioTools.convertPerHourToPerDay(NBOIdleRatePerHour);
 
 		final boolean useDryDock = true;
 		final int pilotLightRate = 0;
 
-		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelHours, canalTransitTime);
+		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelPerDay, canalTransitTime);
 
 		Scenario canalScenario = ScenarioTools.createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
-				fuelTravelConsumptionHours, speed, fuelTravelConsumptionHours, fuelIdleConsumptionHours, NBOIdleRateHours, NBOTravelRateHours, speed, fuelTravelConsumptionHours, speed,
-				fuelTravelConsumptionHours, fuelIdleConsumptionHours, NBOIdleRateHours, NBOTravelRateHours, useDryDock, pilotLightRate, canalCost);
+				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed, fuelTravelConsumptionPerDay, speed,
+				fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, canalCost);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(canalScenario);
 		// there will be a single cargo allocation for this cargo
