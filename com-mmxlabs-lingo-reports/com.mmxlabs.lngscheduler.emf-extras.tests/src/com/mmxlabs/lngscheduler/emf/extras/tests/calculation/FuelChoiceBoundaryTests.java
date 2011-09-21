@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 
-import java.util.concurrent.TimeUnit;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -111,8 +109,8 @@ public class FuelChoiceBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelConsumptionPerDay = (int) TimeUnit.DAYS.toHours(fuelConsumptionPerHour);
-		final int NBORatePerDay = (int) TimeUnit.DAYS.toHours(NBORatePerHour);
+		final int fuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelConsumptionPerHour);
+		final int NBORatePerDay = ScenarioTools.convertPerHourToPerDay(NBORatePerHour);
 
 		final int portDistance = 1000;
 		final boolean useDryDock = true;
