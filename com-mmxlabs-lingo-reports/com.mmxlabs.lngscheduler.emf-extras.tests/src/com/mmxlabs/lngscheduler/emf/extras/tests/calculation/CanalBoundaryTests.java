@@ -107,21 +107,23 @@ public class CanalBoundaryTests {
 
 	/**
 	 * Test that if a canal is actually cheaper (despite the fee for the canal) it is used. The canal fuel consumption is less than other routes but the fee is non-zero.
-	 * 
+	 * <p>
 	 * TODO Resolve this. Bug? The canal should be 10 cheaper than the ocean, but the ocean route is chosen. Spoke to Simon (15/09/11), track it down through the code, see why. Test that the cost
-	 * being calculated for both routes correctly and find out where it's not working.
-	 * 
-	 * The test works if the canal fee is 50 or less.
-	 * 
-	 * The total cost of the ocean is $1000.
-	 * The cost of the canal in fuel is $900 (not including fee).
-	 * Therefore, if the canal fee is less than $99, the canal should be used.
+	 * being calculated for both routes correctly and find out where it's not working.<p>
+	 * <p>
+	 * The test works if the canal fee is 50 or less.<p>
+	 * <p>
+	 * The total cost of the ocean is $1000.<br>
+	 * The cost of the canal in fuel is $900 (not including fee).<br>
+	 * Therefore, if the canal fee is less than $99, the canal should be used.<br>
+	 * <p>
+	 * 20/09/11 Spoke to Tom, actually difference is 50 because of cheaper idle.<p>
 	 */
 	@Test
 	public void testCanalCheaperDespiteFee() {
 
 		final String testName = "Canal cheaper than ocean route despite fee.";
-		final int canalCost = 90;
+		final int canalCost = 49; // 50 is equal cost, don't use as behaviour undefined.
 		final int canalTranistFuel = 0;
 		final int canalTransitTimeHours = 0;
 
@@ -235,7 +237,9 @@ public class CanalBoundaryTests {
 
 		final int speed = 10;
 		final int capacity = 1000000;
-
+		
+		// TODO Change these to good methods, not clear how these convert!
+		// TODO rename variables
 		final int fuelTravelConsumptionHours = (int) TimeUnit.DAYS.toHours(fuelTravelConsumptionDays);
 		final int NBOTravelRateHours = (int) TimeUnit.DAYS.toHours(NBOTravelRateDays);
 		final int canalTransitFuelHours = (int) TimeUnit.DAYS.toHours(canalTransitFuelDays);
