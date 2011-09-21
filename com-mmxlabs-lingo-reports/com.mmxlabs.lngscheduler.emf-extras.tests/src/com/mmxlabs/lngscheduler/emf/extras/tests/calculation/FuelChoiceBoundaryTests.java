@@ -220,10 +220,10 @@ public class FuelChoiceBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int travelFuelConsumptionHours = (int) TimeUnit.DAYS.toHours(travelFuelConsumptionDays);
-		final int travelNBORateHours = (int) TimeUnit.DAYS.toHours(travelNBORateDays);
-		final int idleFuelConsumptionHours = (int) TimeUnit.DAYS.toHours(idleFuelConsumptionDays);
-		final int idleNBORateHours = (int) TimeUnit.DAYS.toHours(idleNBORateDays);
+		final int travelFuelConsumptionHours = ScenarioTools.convertPerHourToPerDay(travelFuelConsumptionDays);
+		final int travelNBORateHours = ScenarioTools.convertPerHourToPerDay(travelNBORateDays);
+		final int idleFuelConsumptionHours = ScenarioTools.convertPerHourToPerDay(idleFuelConsumptionDays);
+		final int idleNBORateHours = ScenarioTools.convertPerHourToPerDay(idleNBORateDays);
 
 		final int portDistance = 1000;
 		final boolean useDryDock = true;
