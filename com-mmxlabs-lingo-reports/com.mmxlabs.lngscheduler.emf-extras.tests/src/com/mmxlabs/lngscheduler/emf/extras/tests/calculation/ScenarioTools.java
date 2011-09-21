@@ -501,4 +501,12 @@ public class ScenarioTools {
 			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
 	}
 
+	/**
+	 * Convert a unit that is measured per hour to per day (multiply unitPerHour by 24).
+	 * @param unitPerHour
+	 * @return
+	 */
+	public static int convertPerHourToPerDay(int unitPerHour) {
+		return unitPerHour * 24;
+	}
 }

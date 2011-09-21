@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 
-import java.util.concurrent.TimeUnit;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,6 +26,7 @@ public class CanalBoundaryTests {
 
 	/**
 	 * Test that a canal is used if it's just shorter than the ocean route. No costs are associated with the canal
+	 * 
 	 * @see #testSimpleCanalDistance(String, int, int) testSimpleCanalDistance
 	 */
 	@Test
@@ -45,6 +44,7 @@ public class CanalBoundaryTests {
 
 	/**
 	 * Test that a canal isn't used if it's just longer than the ocean route. No costs are associated with the canal.
+	 * 
 	 * @see #testSimpleCanalDistance(String, int, int) testSimpleCanalDistance
 	 */
 	@Test
@@ -111,7 +111,7 @@ public class CanalBoundaryTests {
 	 * Travelling costs $10 per hour, idling costs $5 per hour (regardless of fuel, e-factor is 1).
 	 * <p>
 	 * Ocean route cost = $1000 travel fuel cost + $500 idle fuel cost = $1500<br>
-	 * Canal route cost =  $900 travel fuel cost + $550 idle fuel cost + $49 canal fee = $1499<br>
+	 * Canal route cost = $900 travel fuel cost + $550 idle fuel cost + $49 canal fee = $1499<br>
 	 */
 	@Test
 	public void testCanalCheaperDespiteFee() {
@@ -231,15 +231,14 @@ public class CanalBoundaryTests {
 
 		final int speed = 10;
 		final int capacity = 1000000;
-		
-		// TODO Change these to good methods, not clear how these convert!
-		// TODO rename variables
-		final int fuelTravelConsumptionHours = (int) TimeUnit.DAYS.toHours(fuelTravelConsumptionDays);
-		final int NBOTravelRateHours = (int) TimeUnit.DAYS.toHours(NBOTravelRateDays);
-		final int canalTransitFuelHours = (int) TimeUnit.DAYS.toHours(canalTransitFuelDays);
 
-		final int fuelIdleConsumptionHours = (int) TimeUnit.DAYS.toHours(fuelIdleConsumptionDays);
-		final int NBOIdleRateHours = (int) TimeUnit.DAYS.toHours(NBOIdleRateDays);
+		// TODO rename variables
+		final int fuelTravelConsumptionHours = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionDays);
+		final int NBOTravelRateHours = ScenarioTools.convertPerHourToPerDay(NBOTravelRateDays);
+		final int canalTransitFuelHours = ScenarioTools.convertPerHourToPerDay(canalTransitFuelDays);
+
+		final int fuelIdleConsumptionHours = ScenarioTools.convertPerHourToPerDay(fuelIdleConsumptionDays);
+		final int NBOIdleRateHours = ScenarioTools.convertPerHourToPerDay(NBOIdleRateDays);
 
 		final boolean useDryDock = true;
 		final int pilotLightRate = 0;
