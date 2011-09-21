@@ -182,12 +182,12 @@ public class CanalLatenessBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelTravelConsumptionHours = (int) TimeUnit.DAYS.toHours(fuelTravelConsumptionDays);
-		final int NBOTravelRateHours = (int) TimeUnit.DAYS.toHours(NBOTravelRateDays);
-		final int canalTransitFuelHours = (int) TimeUnit.DAYS.toHours(canalTransitFuelDays);
+		final int fuelTravelConsumptionHours = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionDays);
+		final int NBOTravelRateHours = ScenarioTools.convertPerHourToPerDay(NBOTravelRateDays);
+		final int canalTransitFuelHours = ScenarioTools.convertPerHourToPerDay(canalTransitFuelDays);
 
-		final int fuelIdleConsumptionHours = (int) TimeUnit.DAYS.toHours(fuelIdleConsumptionDays);
-		final int NBOIdleRateHours = (int) TimeUnit.DAYS.toHours(NBOIdleRateDays);
+		final int fuelIdleConsumptionHours = ScenarioTools.convertPerHourToPerDay(fuelIdleConsumptionDays);
+		final int NBOIdleRateHours = ScenarioTools.convertPerHourToPerDay(NBOIdleRateDays);
 
 		final boolean useDryDock = true;
 		final int pilotLightRate = 0;
