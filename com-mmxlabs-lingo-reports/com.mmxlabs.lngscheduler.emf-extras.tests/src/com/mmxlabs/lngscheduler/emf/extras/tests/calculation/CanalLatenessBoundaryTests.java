@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 
-import java.util.concurrent.TimeUnit;
-
 import org.junit.Assert;
 import org.junit.Test;
 
