@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
 public final class SchedulerUtils {
-	private final static int DEFAULT_VPO_CACHE_SIZE = 400000;
+	private final static int DEFAULT_VPO_CACHE_SIZE = 200000;
 
 	private SchedulerUtils() {
 
@@ -65,7 +65,7 @@ public final class SchedulerUtils {
 		scheduler.setVesselProvider(data.getDataComponentProvider(
 				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
 
-		scheduler.setVoyagePlanOptimiser((IVoyagePlanOptimiser<T>) createVPO(
+		scheduler.setVoyagePlanOptimiser(createVPO(
 				data, DEFAULT_VPO_CACHE_SIZE));
 
 		scheduler.init();
@@ -207,7 +207,7 @@ public final class SchedulerUtils {
 
 		// set up scheduler
 		setDataComponentProviders(data, scheduler);
-		scheduler.setVoyagePlanOptimiser((IVoyagePlanOptimiser<T>) createVPO(
+		scheduler.setVoyagePlanOptimiser(createVPO(
 				data, vpoCacheSize));
 		scheduler.setScheduleEvaluator(evaluator);
 
@@ -501,7 +501,7 @@ public final class SchedulerUtils {
 
 		// set up scheduler
 		setDataComponentProviders(data, scheduler);
-		scheduler.setVoyagePlanOptimiser((IVoyagePlanOptimiser<T>) createVPO(
+		scheduler.setVoyagePlanOptimiser(createVPO(
 				data, vpoCacheSize));
 		scheduler.setScheduleEvaluator(evaluator);
 
@@ -525,7 +525,7 @@ public final class SchedulerUtils {
 
 		// set up scheduler
 		setDataComponentProviders(data, scheduler);
-		scheduler.setVoyagePlanOptimiser((IVoyagePlanOptimiser<T>) createVPO(
+		scheduler.setVoyagePlanOptimiser(createVPO(
 				data, vpoCacheSize));
 		scheduler.setScheduleEvaluator(evaluator);
 
