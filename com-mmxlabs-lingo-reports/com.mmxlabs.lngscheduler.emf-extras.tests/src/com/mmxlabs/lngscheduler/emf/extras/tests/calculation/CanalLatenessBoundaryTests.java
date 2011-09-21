@@ -160,19 +160,18 @@ public class CanalLatenessBoundaryTests {
 	private CargoAllocation testRouteWhenLate(final String testName, final int canalFee, final int canalDistance, final int oceanRouteDistance, final int travelTime, final int canalTransitTimeHours) {
 
 		// use the same fuel consumption for every travel/idle/canal
-		final int fuelConsumptionDays = 10;
-		final int NBORateDays = 10;
+		final int fuelConsumptionPerHour = 10;
+		final int NBORatePerHour = 10;
+		// have same fuel consumption/nbo rate for travel and idle
+		final int fuelTravelConsumptionPerHour = fuelConsumptionPerHour;
+		final int fuelIdleConsumptionPerHour = fuelConsumptionPerHour;
+		final int canalTransitFuelPerHour = fuelConsumptionPerHour;
+		final int NBOTravelRatePerHour = NBORatePerHour;
+		final int NBOIdleRatePerHour = NBORatePerHour;
 
 		// same fee for laden and ballast
 		final int canalLadenCost = canalFee;
 		final int canalUnladenCost = canalFee;
-
-		// have same fuel consumption/nbo rate for travel and idle
-		final int fuelTravelConsumptionDays = fuelConsumptionDays;
-		final int fuelIdleConsumptionDays = fuelConsumptionDays;
-		final int canalTransitFuelDays = fuelConsumptionDays;
-		final int NBOTravelRateDays = NBORateDays;
-		final int NBOIdleRateDays = NBORateDays;
 
 		final float baseFuelUnitPrice = 1;
 		final float equivalenceFactor = 1;
@@ -182,21 +181,21 @@ public class CanalLatenessBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelTravelConsumptionHours = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionDays);
-		final int NBOTravelRateHours = ScenarioTools.convertPerHourToPerDay(NBOTravelRateDays);
-		final int canalTransitFuelHours = ScenarioTools.convertPerHourToPerDay(canalTransitFuelDays);
+		final int fuelTravelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
+		final int NBOTravelRatePerDay = ScenarioTools.convertPerHourToPerDay(NBOTravelRatePerHour);
+		final int canalTransitFuelPerDay = ScenarioTools.convertPerHourToPerDay(canalTransitFuelPerHour);
 
-		final int fuelIdleConsumptionHours = ScenarioTools.convertPerHourToPerDay(fuelIdleConsumptionDays);
-		final int NBOIdleRateHours = ScenarioTools.convertPerHourToPerDay(NBOIdleRateDays);
+		final int fuelIdleConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelIdleConsumptionPerHour);
+		final int NBOIdleRatePerDay = ScenarioTools.convertPerHourToPerDay(NBOIdleRatePerHour);
 
 		final boolean useDryDock = true;
 		final int pilotLightRate = 0;
 
-		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelHours, canalTransitTimeHours);
+		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelPerDay, canalTransitTimeHours);
 
 		Scenario canalScenario = ScenarioTools.createScenarioWithCanal(oceanRouteDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
-				fuelTravelConsumptionHours, speed, fuelTravelConsumptionHours, fuelIdleConsumptionHours, NBOIdleRateHours, NBOTravelRateHours, speed, fuelTravelConsumptionHours, speed,
-				fuelTravelConsumptionHours, fuelIdleConsumptionHours, NBOIdleRateHours, NBOTravelRateHours, useDryDock, pilotLightRate, canalCost);
+				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed, fuelTravelConsumptionPerDay, speed,
+				fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, canalCost);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(canalScenario);
 		// there will be a single cargo allocation for this cargo
