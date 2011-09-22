@@ -62,9 +62,8 @@ public class PortRotationReportView extends EMFReportView {
 				ScenarioPackage.eINSTANCE.getScenarioObject__GetContainer(),
 				sp.getSequence_Vessel(),
 				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
-		addColumn("Type", objectFormatter,
-				ep.getScheduledEvent__GetDisplayTypeName()
-		);
+
+		addColumn("Type", objectFormatter, ep.getScheduledEvent__GetDisplayTypeName());
 
 		addColumn("ID", objectFormatter,
 				ep.getScheduledEvent__GetName()
@@ -77,7 +76,7 @@ public class PortRotationReportView extends EMFReportView {
 				ep.getScheduledEvent__GetLocalStartTime());
 		addColumn("End Date", calendarFormatter,
 				ep.getScheduledEvent__GetLocalEndTime());
-		addColumn("Duration (DD:HH)", new BaseFormatter() {
+		final ColumnHandler durationColumn = addColumn("Duration (DD:HH)", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				final ScheduledEvent se = (ScheduledEvent) object;
@@ -220,7 +219,7 @@ public class PortRotationReportView extends EMFReportView {
 				return (int) total;
 			}
 		});
-
+		makeSortColumn(durationColumn);
 		makeSortColumn(dateColumn);
 		makeSortColumn(vesselColumn);
 	}
