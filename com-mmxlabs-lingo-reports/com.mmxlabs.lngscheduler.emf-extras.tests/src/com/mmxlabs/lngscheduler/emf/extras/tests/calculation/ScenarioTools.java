@@ -511,7 +511,8 @@ public class ScenarioTools {
 		charterOut.setHeelLimit(heelLimit);
 		charterOut.setDuration(charterOutTimeDays);
 		charterOut.setHeelCVValue(cvValue);
-		charterOut.setHeelUnitPrice(baseFuelUnitPrice);
+		// TODO check setHeelUnitPrice is supposed to take the price of the LNG, or is it supposed to take the price of BF?
+		charterOut.setHeelUnitPrice(dischargePrice);
 		charterOut.setDailyCharterOutPrice(0);
 		charterOut.setRepositioningFee(0);
 		// add to the scenario's fleet model
