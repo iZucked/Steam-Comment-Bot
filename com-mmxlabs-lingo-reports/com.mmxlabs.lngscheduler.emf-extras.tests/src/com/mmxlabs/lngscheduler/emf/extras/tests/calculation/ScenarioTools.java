@@ -5,6 +5,7 @@
 package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.management.timer.Timer;
 
@@ -362,7 +363,7 @@ public class ScenarioTools {
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate,
-			final int pilotLightRate, final int charterOutTime, final int heelLimit) {
+			final int pilotLightRate, final int charterOutTimeDays, final int heelLimit) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -375,10 +376,6 @@ public class ScenarioTools {
 		// ports
 		final int distanceFromAToB = distanceBetweenPorts;
 		final int distanceFromBToA = distanceBetweenPorts;
-		// load and discharge prices and quantities
-		final int loadPrice = 1000;
-		final int loadMaxQuantity = 100000;
-		final int dischargeMaxQuantity = 100000;
 
 		final Scenario scenario = ScenarioFactory.eINSTANCE.createScenario();
 		scenario.createMissingModels();
@@ -499,68 +496,37 @@ public class ScenarioTools {
 		scenario.getContractModel().getSalesContracts().add(sc);
 		scenario.getContractModel().getPurchaseContracts().add(pc);
 
-		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		final LoadSlot load = CargoFactory.eINSTANCE.createLoadSlot();
-		final Slot dis = CargoFactory.eINSTANCE.createSlot();
-
-		cargo.setLoadSlot(load);
-		cargo.setDischargeSlot(dis);
-
-		load.setPort(A);
-		dis.setPort(B);
-		load.setContract(pc);
-		dis.setContract(sc);
-		load.setId("load");
-		dis.setId("discharge");
-
-		dis.setFixedPrice(dischargePrice);
-		load.setFixedPrice(loadPrice);
-
-		load.setMaxQuantity(loadMaxQuantity);
-		dis.setMaxQuantity(dischargeMaxQuantity);
-
-		load.setCargoCVvalue(cvValue);
 
 		final Date startCharterOut = new Date();
-		final Date endCharterOut = new Date(startCharterOut.getTime() + Timer.ONE_HOUR * charterOutTime);
-		// load as soon as charter out ends.
-		final Date loadDate = new Date(endCharterOut.getTime());
-		load.setWindowStart(new DateAndOptionalTime(loadDate, false));
-		load.setWindowDuration(0);
-		final Date dischargeDate = new Date(loadDate.getTime() + Timer.ONE_HOUR * travelTime);
-		dis.setWindowStart(new DateAndOptionalTime(dischargeDate, false));
-		dis.setWindowDuration(0);
+		final Date endCharterOut = new Date(startCharterOut.getTime() + TimeUnit.DAYS.toMillis(charterOutTimeDays));
+		final Date dryDockJourneyStartDate = new Date(endCharterOut.getTime() + TimeUnit.HOURS.toMillis(travelTime));
 
 		final CharterOut charterOut = FleetFactory.eINSTANCE.createCharterOut();
 		charterOut.setStartDate(startCharterOut);
-		charterOut.setEndDate(endCharterOut);
+		charterOut.setEndDate(startCharterOut);
 		// same start and end port.
 		charterOut.setStartPort(A);
 		charterOut.setEndPort(A);
-		charterOut.setId("test charter out");
+		charterOut.setId("Charter Out");
 		charterOut.setHeelLimit(heelLimit);
-		charterOut.setDuration(0);//(int) (endCharterOut.getTime() - startCharterOut.getTime()));//
+		charterOut.setDuration(charterOutTimeDays);
 		charterOut.setHeelCVValue(cvValue);
-		charterOut.setHeelUnitPrice(baseFuelUnitPrice);
-		charterOut.setDailyCharterOutPrice(1);
-		charterOut.setRepositioningFee(1);
-		
-		// Set up dry dock (used to prevent default of 15 days idle time after ballast).
-		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
-		dryDock.setDuration(0);
-		dryDock.setStartPort(A);
-		// add to scenario's fleet model
-		scenario.getFleetModel().getVesselEvents().add(dryDock);
-		// set the date to be after the discharge date
-		final Date thenNext = new Date(dischargeDate.getTime() + Timer.ONE_HOUR * travelTime);
-		dryDock.setStartDate(thenNext);
-		dryDock.setEndDate(thenNext);
-		
+		// TODO check setHeelUnitPrice is supposed to take the price of the LNG, or is it supposed to take the price of BF?
+		charterOut.setHeelUnitPrice(dischargePrice);
+		charterOut.setDailyCharterOutPrice(0);
+		charterOut.setRepositioningFee(0);
+		// add to the scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(charterOut);
-
-		cargo.setId("CARGO");
-
-		scenario.getCargoModel().getCargoes().add(cargo);
+		
+		// Set up dry dock to cause journey
+		final Drydock dryDockJourney = FleetFactory.eINSTANCE.createDrydock();
+		dryDockJourney.setDuration(0);
+		dryDockJourney.setStartPort(B);
+		// set the date to be after the charter out date
+		dryDockJourney.setStartDate(dryDockJourneyStartDate);
+		dryDockJourney.setEndDate(dryDockJourneyStartDate);
+		// add to scenario's fleet model
+		scenario.getFleetModel().getVesselEvents().add(dryDockJourney);
 
 		ScenarioUtils.addDefaultSettings(scenario);
 
@@ -708,7 +674,7 @@ public class ScenarioTools {
 	 * 
 	 * @param fuelQuantities
 	 */
-	private static void printFuel(EList<FuelQuantity> fuelQuantities) {
+	public static void printFuel(EList<FuelQuantity> fuelQuantities) {
 
 		for (final FuelQuantity fq : fuelQuantities)
 			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
