@@ -9,13 +9,6 @@ import org.junit.Test;
 import scenario.Scenario;
 import scenario.schedule.Schedule;
 import scenario.schedule.Sequence;
-import scenario.schedule.events.CharterOutVisit;
-import scenario.schedule.events.Idle;
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.PortVisit;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.events.SlotVisit;
-import scenario.schedule.events.VesselEventVisit;
 
 /**
  * @author Adam Semenenko
