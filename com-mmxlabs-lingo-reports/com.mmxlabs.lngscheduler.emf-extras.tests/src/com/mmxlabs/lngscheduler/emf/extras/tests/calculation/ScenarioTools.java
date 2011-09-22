@@ -673,7 +673,7 @@ public class ScenarioTools {
 	 * 
 	 * @param fuelQuantities
 	 */
-	private static void printFuel(EList<FuelQuantity> fuelQuantities) {
+	public static void printFuel(EList<FuelQuantity> fuelQuantities) {
 
 		for (final FuelQuantity fq : fuelQuantities)
 			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
