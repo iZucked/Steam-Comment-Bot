@@ -20,6 +20,7 @@ import scenario.contract.ContractFactory;
 import scenario.contract.Entity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.fleet.CharterOut;
 import scenario.fleet.Drydock;
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FuelConsumptionLine;
@@ -344,6 +345,218 @@ public class ScenarioTools {
 			dryDock.setStartDate(thenNext);
 			dryDock.setEndDate(thenNext);
 		}
+
+		cargo.setId("CARGO");
+
+		scenario.getCargoModel().getCargoes().add(cargo);
+
+		ScenarioUtils.addDefaultSettings(scenario);
+
+		return scenario;
+	}
+
+	/**
+	 * Creates a scenario with a charter out.
+	 */
+	public static Scenario createCharterOutScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
+			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
+			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
+			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate,
+			final int pilotLightRate, final int charterOutTime, final int heelLimit) {
+
+		// 'magic' numbers that could be set in the arguments.
+		// vessel class
+		final int cooldownTime = 0;
+		final int warmupTime = Integer.MAX_VALUE;
+		final int cooldownVolume = 0;
+		final int minHeelVolume = 0;
+		final int spotCharterCount = 0;
+		final double fillCapacity = 1.0;
+		// ports
+		final int distanceFromAToB = distanceBetweenPorts;
+		final int distanceFromBToA = distanceBetweenPorts;
+		// load and discharge prices and quantities
+		final int loadPrice = 1000;
+		final int loadMaxQuantity = 100000;
+		final int dischargeMaxQuantity = 100000;
+
+		final Scenario scenario = ScenarioFactory.eINSTANCE.createScenario();
+		scenario.createMissingModels();
+
+		final VesselFuel baseFuel = FleetFactory.eINSTANCE.createVesselFuel();
+		baseFuel.setName("BASE FUEL");
+		baseFuel.setUnitPrice(baseFuelUnitPrice);
+		baseFuel.setEquivalenceFactor(equivalenceFactor);
+
+		scenario.getFleetModel().getFuels().add(baseFuel);
+		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
+		final VesselStateAttributes laden = FleetFactory.eINSTANCE.createVesselStateAttributes();
+		final VesselStateAttributes ballast = FleetFactory.eINSTANCE.createVesselStateAttributes();
+
+		vc.setLadenAttributes(laden);
+		vc.setBallastAttributes(ballast);
+
+		laden.setVesselState(VesselState.LADEN);
+		ballast.setVesselState(VesselState.BALLAST);
+
+		scenario.getFleetModel().getVesselClasses().add(vc);
+
+		vc.setName("Vessel Class");
+		vc.setBaseFuel(baseFuel);
+		vc.setMinSpeed(minSpeed);
+		vc.setMaxSpeed(maxSpeed);
+		vc.setCapacity(capacity);
+		vc.setPilotLightRate(pilotLightRate);
+		vc.setCooldownTime(cooldownTime);
+		vc.setWarmupTime(warmupTime);
+		vc.setCooldownVolume(cooldownVolume);
+		vc.setMinHeelVolume(minHeelVolume);
+		vc.setSpotCharterCount(spotCharterCount);
+		vc.setFillCapacity(fillCapacity);
+
+		final FuelConsumptionLine ladenMin = FleetFactory.eINSTANCE.createFuelConsumptionLine();
+		final FuelConsumptionLine ladenMax = FleetFactory.eINSTANCE.createFuelConsumptionLine();
+
+		final FuelConsumptionLine ballastMin = FleetFactory.eINSTANCE.createFuelConsumptionLine();
+		final FuelConsumptionLine ballastMax = FleetFactory.eINSTANCE.createFuelConsumptionLine();
+
+		ballastMin.setSpeed(ballastMinSpeed);
+		ballastMin.setConsumption(ballastMinConsumption);
+		ballastMax.setSpeed(ballastMaxSpeed);
+		ballastMax.setConsumption(ballastMaxConsumption);
+
+		ladenMin.setSpeed(ladenMinSpeed);
+		ladenMin.setConsumption(ladenMinConsumption);
+		ladenMax.setSpeed(ladenMaxSpeed);
+		ladenMax.setConsumption(ladenMaxConsumption);
+
+		laden.getFuelConsumptionCurve().add(ladenMin);
+		laden.getFuelConsumptionCurve().add(ladenMax);
+
+		ballast.getFuelConsumptionCurve().add(ballastMin);
+		ballast.getFuelConsumptionCurve().add(ballastMax);
+
+		laden.setIdleConsumptionRate(ladenIdleConsumptionRate);
+		laden.setIdleNBORate(ladenIdleNBORate);
+		laden.setNboRate(ladenNBORate);
+
+		ballast.setIdleConsumptionRate(ballastIdleConsumptionRate);
+		ballast.setIdleNBORate(ballastIdleNBORate);
+		ballast.setNboRate(ballastNBORate);
+
+		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
+		vessel.setClass(vc);
+		vessel.setName("Vessel");
+
+		final PortTimeAndHeel start = FleetFactory.eINSTANCE.createPortTimeAndHeel();
+		final PortAndTime end = FleetFactory.eINSTANCE.createPortAndTime();
+
+		vessel.setStartRequirement(start);
+		vessel.setEndRequirement(end);
+
+		scenario.getFleetModel().getFleet().add(vessel);
+
+		scenario.getPortModel().getPorts().add(A);
+		scenario.getPortModel().getPorts().add(B);
+
+		final DistanceLine distance = PortFactory.eINSTANCE.createDistanceLine();
+		distance.setFromPort(A);
+		distance.setToPort(B);
+		distance.setDistance(distanceFromAToB);
+
+		// don't forget that distances can be asymmetric, so have to go both ways.
+		final DistanceLine distance2 = PortFactory.eINSTANCE.createDistanceLine();
+		distance2.setFromPort(B);
+		distance2.setToPort(A);
+		distance2.setDistance(distanceFromBToA);
+
+		scenario.getDistanceModel().getDistances().add(distance);
+		scenario.getDistanceModel().getDistances().add(distance2);
+
+		final Entity e = ContractFactory.eINSTANCE.createEntity();
+		scenario.getContractModel().getEntities().add(e);
+		final Entity s = ContractFactory.eINSTANCE.createEntity();
+		scenario.getContractModel().setShippingEntity(s);
+
+		e.setName("Other");
+		s.setName("Shipping");
+
+		final SalesContract sc = ContractFactory.eINSTANCE.createSalesContract();
+		final PurchaseContract pc = ContractFactory.eINSTANCE.createFixedPricePurchaseContract();
+
+		final Index sales = MarketFactory.eINSTANCE.createIndex();
+		sales.setName("Sales");
+		final StepwisePriceCurve curve = MarketFactory.eINSTANCE.createStepwisePriceCurve();
+		sales.setPriceCurve(curve);
+		curve.setDefaultValue(dischargePrice);
+
+		scenario.getMarketModel().getIndices().add(sales);
+
+		sc.setEntity(e);
+		pc.setEntity(e);
+		sc.setIndex(sales);
+
+		scenario.getContractModel().getSalesContracts().add(sc);
+		scenario.getContractModel().getPurchaseContracts().add(pc);
+
+		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
+		final LoadSlot load = CargoFactory.eINSTANCE.createLoadSlot();
+		final Slot dis = CargoFactory.eINSTANCE.createSlot();
+
+		cargo.setLoadSlot(load);
+		cargo.setDischargeSlot(dis);
+
+		load.setPort(A);
+		dis.setPort(B);
+		load.setContract(pc);
+		dis.setContract(sc);
+		load.setId("load");
+		dis.setId("discharge");
+
+		dis.setFixedPrice(dischargePrice);
+		load.setFixedPrice(loadPrice);
+
+		load.setMaxQuantity(loadMaxQuantity);
+		dis.setMaxQuantity(dischargeMaxQuantity);
+
+		load.setCargoCVvalue(cvValue);
+
+		final Date startCharterOut = new Date();
+		final Date endCharterOut = new Date(startCharterOut.getTime() + Timer.ONE_HOUR * charterOutTime);
+		// load as soon as charter out ends.
+		final Date loadDate = new Date(endCharterOut.getTime());
+		load.setWindowStart(new DateAndOptionalTime(loadDate, false));
+		load.setWindowDuration(0);
+		final Date dischargeDate = new Date(loadDate.getTime() + Timer.ONE_HOUR * travelTime);
+		dis.setWindowStart(new DateAndOptionalTime(dischargeDate, false));
+		dis.setWindowDuration(0);
+
+		final CharterOut charterOut = FleetFactory.eINSTANCE.createCharterOut();
+		charterOut.setStartDate(startCharterOut);
+		charterOut.setEndDate(endCharterOut);
+		// same start and end port.
+		charterOut.setStartPort(A);
+		charterOut.setEndPort(A);
+		charterOut.setId("test charter out");
+		charterOut.setHeelLimit(heelLimit);
+		charterOut.setDuration(0);//(int) (endCharterOut.getTime() - startCharterOut.getTime()));//
+		charterOut.setHeelCVValue(cvValue);
+		charterOut.setHeelUnitPrice(baseFuelUnitPrice);
+		charterOut.setDailyCharterOutPrice(1);
+		charterOut.setRepositioningFee(1);
+		
+		// Set up dry dock (used to prevent default of 15 days idle time after ballast).
+		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
+		dryDock.setDuration(0);
+		dryDock.setStartPort(A);
+		// add to scenario's fleet model
+		scenario.getFleetModel().getVesselEvents().add(dryDock);
+		// set the date to be after the discharge date
+		final Date thenNext = new Date(dischargeDate.getTime() + Timer.ONE_HOUR * travelTime);
+		dryDock.setStartDate(thenNext);
+		dryDock.setEndDate(thenNext);
+		
+		scenario.getFleetModel().getVesselEvents().add(charterOut);
 
 		cargo.setId("CARGO");
 
