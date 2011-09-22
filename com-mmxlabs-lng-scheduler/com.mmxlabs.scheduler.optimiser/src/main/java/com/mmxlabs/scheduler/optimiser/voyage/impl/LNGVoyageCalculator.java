@@ -310,7 +310,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					}
 				} else if (slot instanceof IDischargeSlot) {
 					dischargeIdx = i;
-				} else if (slot instanceof IHeelOptionsPortSlot) {
+				} else if (i == 0 && slot instanceof IHeelOptionsPortSlot) {
 					availableHeelinM3 = ((IHeelOptionsPortSlot) slot).getHeelOptions().getHeelLimit();
 				}
 
