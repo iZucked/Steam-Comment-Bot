@@ -498,15 +498,15 @@ public class ScenarioTools {
 
 
 		final Date startCharterOut = new Date();
-		final Date dryDockStartDate = new Date(startCharterOut.getTime() + TimeUnit.DAYS.toMillis(charterOutTimeDays));
-		final Date dryDockEndDate = new Date(dryDockStartDate.getTime() + TimeUnit.DAYS.toMillis(charterOutTimeDays));
+		final Date endCharterOut = new Date(startCharterOut.getTime() + TimeUnit.DAYS.toMillis(charterOutTimeDays));
+		final Date dryDockJourneyStartDate = new Date(endCharterOut.getTime() + TimeUnit.HOURS.toMillis(travelTime));
 
 		final CharterOut charterOut = FleetFactory.eINSTANCE.createCharterOut();
 		charterOut.setStartDate(startCharterOut);
 		charterOut.setEndDate(startCharterOut);
 		// same start and end port.
-		charterOut.setStartPort(B);
-		charterOut.setEndPort(B);
+		charterOut.setStartPort(A);
+		charterOut.setEndPort(A);
 		charterOut.setId("Charter Out");
 		charterOut.setHeelLimit(heelLimit);
 		charterOut.setDuration(charterOutTimeDays);
@@ -517,15 +517,15 @@ public class ScenarioTools {
 		// add to the scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(charterOut);
 		
-		// Set up dry dock (used to prevent default of 15 days idle time after ballast).
-		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
-		dryDock.setDuration(0);
-		dryDock.setStartPort(A);
+		// Set up dry dock to cause journey
+		final Drydock dryDockJourney = FleetFactory.eINSTANCE.createDrydock();
+		dryDockJourney.setDuration(0);
+		dryDockJourney.setStartPort(B);
 		// set the date to be after the charter out date
-		dryDock.setStartDate(dryDockStartDate);
-		dryDock.setEndDate(dryDockEndDate);
+		dryDockJourney.setStartDate(dryDockJourneyStartDate);
+		dryDockJourney.setEndDate(dryDockJourneyStartDate);
 		// add to scenario's fleet model
-		scenario.getFleetModel().getVesselEvents().add(dryDock);
+		scenario.getFleetModel().getVesselEvents().add(dryDockJourney);
 
 		ScenarioUtils.addDefaultSettings(scenario);
 
