@@ -25,6 +25,14 @@ public interface IConstraintCheckerRegistry {
 	void registerConstraintCheckerFactory(IConstraintCheckerFactory factory);
 
 	/**
+	 * De-registers a {@link IConstraintCheckerFactory} instance.
+	 * 
+	 * @param factory
+	 */
+	void deregisterConstraintCheckerFactory(IConstraintCheckerFactory factory);
+
+	
+	/**
 	 * Return a {@link Collection} of the registered
 	 * {@link IConstraintCheckerFactory} instances.
 	 * 

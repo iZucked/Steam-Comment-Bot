@@ -19,8 +19,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
  * @author Simon Goodall
  * 
  */
-public final class ConstraintCheckerRegistry implements
-		IConstraintCheckerRegistry {
+public final class ConstraintCheckerRegistry implements IConstraintCheckerRegistry {
 
 	private final Map<String, IConstraintCheckerFactory> constraintFactoriesByName;
 
@@ -29,16 +28,19 @@ public final class ConstraintCheckerRegistry implements
 	}
 
 	@Override
-	public void registerConstraintCheckerFactory(
-			final IConstraintCheckerFactory factory) {
+	public void registerConstraintCheckerFactory(final IConstraintCheckerFactory factory) {
 
 		if (constraintFactoriesByName.containsKey(factory.getName())) {
-			throw new RuntimeException(
-					"Constraint checker name already registered: "
-							+ factory.getName());
+			throw new RuntimeException("Constraint checker name already registered: " + factory.getName());
 		}
 
 		constraintFactoriesByName.put(factory.getName(), factory);
+	}
+
+	@Override
+	public void deregisterConstraintCheckerFactory(final IConstraintCheckerFactory factory) {
+
+		constraintFactoriesByName.remove(factory.getName());
 	}
 
 	@Override
@@ -52,17 +54,14 @@ public final class ConstraintCheckerRegistry implements
 	}
 
 	@Override
-	public Set<IConstraintCheckerFactory> getConstraintCheckerFactories(
-			final Collection<String> names) {
+	public Set<IConstraintCheckerFactory> getConstraintCheckerFactories(final Collection<String> names) {
 
-		final Set<IConstraintCheckerFactory> factories = new HashSet<IConstraintCheckerFactory>(
-				names.size());
+		final Set<IConstraintCheckerFactory> factories = new HashSet<IConstraintCheckerFactory>(names.size());
 
 		for (final String name : names) {
 
 			if (constraintFactoriesByName.containsKey(name)) {
-				final IConstraintCheckerFactory factory = constraintFactoriesByName
-						.get(name);
+				final IConstraintCheckerFactory factory = constraintFactoriesByName.get(name);
 				factories.add(factory);
 			}
 		}
@@ -71,13 +70,11 @@ public final class ConstraintCheckerRegistry implements
 	}
 
 	/**
-	 * Setter to register a {@link Collection} of
-	 * {@link IConstraintCheckerFactory} instances.
+	 * Setter to register a {@link Collection} of {@link IConstraintCheckerFactory} instances.
 	 * 
 	 * @param factories
 	 */
-	public void setConstraintCheckerFactories(
-			final Collection<IConstraintCheckerFactory> factories) {
+	public void setConstraintCheckerFactories(final Collection<IConstraintCheckerFactory> factories) {
 
 		for (final IConstraintCheckerFactory factory : factories) {
 			registerConstraintCheckerFactory(factory);
