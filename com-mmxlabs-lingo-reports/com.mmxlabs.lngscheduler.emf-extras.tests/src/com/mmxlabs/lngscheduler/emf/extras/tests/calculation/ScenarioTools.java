@@ -43,9 +43,15 @@ import scenario.port.Port;
 import scenario.port.PortFactory;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
+import scenario.schedule.Sequence;
+import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.Idle;
 import scenario.schedule.events.Journey;
+import scenario.schedule.events.PortVisit;
+import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.events.SlotVisit;
+import scenario.schedule.events.VesselEventVisit;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
@@ -687,5 +693,51 @@ public class ScenarioTools {
 	 */
 	public static int convertPerHourToPerDay(int unitPerHour) {
 		return unitPerHour * 24;
+	}
+
+	public static void printSequence(final Sequence seq) {
+
+		for (final ScheduledEvent e : seq.getEvents()) {
+
+			if (e instanceof Idle) {
+				
+				final Idle i = (Idle) e;
+				System.err.println("Idle:");
+				System.err.println("\tvessel state: " + i.getVesselState() + ", Duration: " + i.getEventDuration() + ", port: " + i.getPort().getName());
+				ScenarioTools.printFuel(i.getFuelUsage());
+				
+			} else if (e instanceof CharterOutVisit) {
+				
+				final CharterOutVisit cov = (CharterOutVisit) e;
+				System.err.println("Charter Out:");
+				System.err.println("\tDuration: " + cov.getEventDuration());
+				
+			} else if (e instanceof VesselEventVisit) {
+				
+				final VesselEventVisit vev = (VesselEventVisit) e;
+				System.err.println("VesselEventVisit:");
+				System.err.println("\tDuration: " + vev.getEventDuration());
+				
+			} else if (e instanceof Journey) {
+				
+				final Journey j = (Journey) e;
+				System.err.println("Journey:");
+				System.err.println("\tDuration: " + j.getEventDuration() + ", distance: " + j.getDistance() + ", destination: " + j.getToPort().getName());
+
+				ScenarioTools.printFuel(j.getFuelUsage());
+
+			} else if (e instanceof SlotVisit) {
+				SlotVisit sv = (SlotVisit) e;
+				System.err.println("SlotVisit:");
+				System.err.println("\tDuration: " + sv.getEventDuration());
+			}  else if (e instanceof PortVisit) {
+				PortVisit pv = (PortVisit) e;
+				System.err.println("PortVisit:");
+				System.err.println("\tDuration: " + pv.getEventDuration());
+			} else {
+				System.err.println("Unknown:");
+				System.err.println("\t" + e.getClass());
+			}
+		}
 	}
 }
