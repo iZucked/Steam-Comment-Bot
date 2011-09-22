@@ -376,10 +376,6 @@ public class ScenarioTools {
 		// ports
 		final int distanceFromAToB = distanceBetweenPorts;
 		final int distanceFromBToA = distanceBetweenPorts;
-		// load and discharge prices and quantities
-		final int loadPrice = 1000;
-		final int loadMaxQuantity = 100000;
-		final int dischargeMaxQuantity = 100000;
 
 		final Scenario scenario = ScenarioFactory.eINSTANCE.createScenario();
 		scenario.createMissingModels();
@@ -500,66 +496,36 @@ public class ScenarioTools {
 		scenario.getContractModel().getSalesContracts().add(sc);
 		scenario.getContractModel().getPurchaseContracts().add(pc);
 
-		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		final LoadSlot load = CargoFactory.eINSTANCE.createLoadSlot();
-		final Slot dis = CargoFactory.eINSTANCE.createSlot();
-
-		cargo.setLoadSlot(load);
-		cargo.setDischargeSlot(dis);
-
-		load.setPort(A);
-		dis.setPort(B);
-		load.setContract(pc);
-		dis.setContract(sc);
-		load.setId("load");
-		dis.setId("discharge");
-
-		dis.setFixedPrice(dischargePrice);
-		load.setFixedPrice(loadPrice);
-
-		load.setMaxQuantity(loadMaxQuantity);
-		dis.setMaxQuantity(dischargeMaxQuantity);
-
-		load.setCargoCVvalue(cvValue);
 
 		final Date startCharterOut = new Date();
-		final Date loadDate = new Date(startCharterOut.getTime() + TimeUnit.DAYS.toMillis(charterOutTimeDays));
-		load.setWindowStart(new DateAndOptionalTime(loadDate, false));
-		load.setWindowDuration(0);
-		final Date dischargeDate = new Date(loadDate.getTime() + Timer.ONE_HOUR * travelTime);
-		dis.setWindowStart(new DateAndOptionalTime(dischargeDate, false));
-		dis.setWindowDuration(0);
+		final Date dryDockStartDate = new Date(startCharterOut.getTime() + TimeUnit.DAYS.toMillis(charterOutTimeDays));
+		final Date dryDockEndDate = new Date(dryDockStartDate.getTime() + TimeUnit.DAYS.toMillis(charterOutTimeDays));
 
 		final CharterOut charterOut = FleetFactory.eINSTANCE.createCharterOut();
 		charterOut.setStartDate(startCharterOut);
 		charterOut.setEndDate(startCharterOut);
 		// same start and end port.
-		charterOut.setStartPort(A);
-		charterOut.setEndPort(A);
-		charterOut.setId("test charter out");
+		charterOut.setStartPort(B);
+		charterOut.setEndPort(B);
+		charterOut.setId("Charter Out");
 		charterOut.setHeelLimit(heelLimit);
 		charterOut.setDuration(charterOutTimeDays);
 		charterOut.setHeelCVValue(cvValue);
 		charterOut.setHeelUnitPrice(baseFuelUnitPrice);
-		charterOut.setDailyCharterOutPrice(1);
-		charterOut.setRepositioningFee(1);
+		charterOut.setDailyCharterOutPrice(0);
+		charterOut.setRepositioningFee(0);
+		// add to the scenario's fleet model
+		scenario.getFleetModel().getVesselEvents().add(charterOut);
 		
 		// Set up dry dock (used to prevent default of 15 days idle time after ballast).
 		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
 		dryDock.setDuration(0);
 		dryDock.setStartPort(A);
+		// set the date to be after the charter out date
+		dryDock.setStartDate(dryDockStartDate);
+		dryDock.setEndDate(dryDockEndDate);
 		// add to scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(dryDock);
-		// set the date to be after the discharge date
-		final Date thenNext = new Date(dischargeDate.getTime() + Timer.ONE_HOUR * travelTime);
-		dryDock.setStartDate(thenNext);
-		dryDock.setEndDate(thenNext);
-		
-		scenario.getFleetModel().getVesselEvents().add(charterOut);
-
-		cargo.setId("CARGO");
-
-		scenario.getCargoModel().getCargoes().add(cargo);
 
 		ScenarioUtils.addDefaultSettings(scenario);
 
