@@ -107,7 +107,7 @@ public interface ISchedulerBuilder {
 	 *            the CV value of heel available for travel
 	 * @return
 	 */
-	IVesselEventPortSlot createCharterOutEvent(String id, ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort, int durationHours, long maxHeelOut, int heelCVValue);
+	IVesselEventPortSlot createCharterOutEvent(String id, ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort, int durationHours, long maxHeelOut, int heelCVValue, int heelUnitPrice);
 
 	/**
 	 * Create a dry dock event
