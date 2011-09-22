@@ -77,6 +77,10 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		// cast to int. as if long is required, then what are we doing?
 		int speed = availableTimeInHours == 0 ? 0 : Calculator.speedFromDistanceTime(distance, availableTimeInHours);
 
+		// speed calculation is not always correct - with a linear consumption
+		// curve on base fuel for example, the best option is always either maximum speed
+		// or minimum speed.
+
 		if (distance != 0) {
 			// Check NBO speed
 			if (options.useNBOForTravel()) {
