@@ -23,10 +23,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * The {@link VoyagePlanOptimiser} performs an exhaustive search through the
- * choices in a {@link VoyagePlan}. {@link IVoyagePlanChoice} implementations
- * are provided in a set order which edit the voyage plan objects. TODO: Develop
- * unit tests.
+ * The {@link VoyagePlanOptimiser} performs an exhaustive search through the choices in a {@link VoyagePlan}. {@link IVoyagePlanChoice} implementations are provided in a set order which edit the
+ * voyage plan objects. TODO: Develop unit tests.
  * 
  * @author Simon Goodall
  * 
@@ -35,8 +33,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(VoyagePlanOptimiser.class);
+	private static final Logger log = LoggerFactory.getLogger(VoyagePlanOptimiser.class);
 
 	private final List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
 
@@ -49,8 +46,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	private VoyagePlan bestPlan = null;
 
 	/**
-	 * True iff {@link #bestPlan} meets the requirement that every voyage uses
-	 * less than or equal to the available time for that voyage
+	 * True iff {@link #bestPlan} meets the requirement that every voyage uses less than or equal to the available time for that voyage
 	 */
 	private boolean bestPlanFitsInAvailableTime = false;
 
@@ -69,8 +65,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			throw new IllegalStateException("Vessel has not been set");
 		}
 		if (voyageCalculator == null) {
-			throw new IllegalStateException(
-					"Voyage Calculator has not been set");
+			throw new IllegalStateException("Voyage Calculator has not been set");
 		}
 		if (basicSequence == null) {
 			throw new IllegalStateException("Basic sequence has not been set");
@@ -113,33 +108,28 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	public VoyagePlan optimise() {
 
 		// nonRecursiveRunLoop();
-//		System.err.println("==============Optimising voyage plan=============");
-		
+		// System.err.println("==============Optimising voyage plan=============");
+
 		runLoop(0);
 
-//		if (!bestPlanFitsInAvailableTime) {
-//			System.err.println("Impossible situation!");
-//		}
-		
+		// if (!bestPlanFitsInAvailableTime) {
+		// System.err.println("Impossible situation!");
+		// }
+
 		return bestPlan;
 	}
 
 	private void evaluateVoyagePlan() {
-		final PortDetails endElement = (PortDetails) basicSequence
-				.get(basicSequence.size() - 1);
+		final PortDetails endElement = (PortDetails) basicSequence.get(basicSequence.size() - 1);
 
-		final boolean calculateEndTime = endElement.getPortSlot()
-				.getTimeWindow() == null;
+		final boolean calculateEndTime = endElement.getPortSlot().getTimeWindow() == null;
 
 		evaluateVoyagePlan(calculateEndTime);
 	}
 
 	/**
-	 * Recursive function to iterate through all the possible combinations of
-	 * {@link IVoyagePlanChoice}s. For each set of choices, calculate a
-	 * {@link VoyagePlan} and store the cheapest cost plan. The
-	 * {@link VoyageOptions} objects will be modified, but cloned into each
-	 * {@link VoyagePlan} calculated.
+	 * Recursive function to iterate through all the possible combinations of {@link IVoyagePlanChoice}s. For each set of choices, calculate a {@link VoyagePlan} and store the cheapest cost plan. The
+	 * {@link VoyageOptions} objects will be modified, but cloned into each {@link VoyagePlan} calculated.
 	 * 
 	 * @param i
 	 */
@@ -160,9 +150,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	/**
-	 * Evaluates the current sequences from the current choice set. Optionally,
-	 * the last voyage can be further optimised to find the best arrival time
-	 * that minimises cost.
+	 * Evaluates the current sequences from the current choice set. Optionally, the last voyage can be further optimised to find the best arrival time that minimises cost.
 	 * 
 	 * @param optimiseLastLeg
 	 */
@@ -191,8 +179,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			// However this may miss potential cheaper solutions past this
 			// boundary
 
-			final VoyageOptions options = (VoyageOptions) basicSequence
-					.get(basicSequence.size() - 2);
+			final VoyageOptions options = (VoyageOptions) basicSequence.get(basicSequence.size() - 2);
 			final int originalTime = options.getAvailableTime();
 			optionsToRestore = options;
 			availableTimeToRestore = originalTime;
@@ -230,7 +217,6 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 				options.setAvailableTime(options.getAvailableTime() + 1);
 			}
 
-
 			cost = bestLastLegCost;
 			currentPlan = bestLastLegPlan;
 		} else {
@@ -248,32 +234,34 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		// determine whether the plan is OK in that respect
 
 		/**
-		 * True iff the current plan ensures that every voyage fits in the
-		 * available time for that voyage.
+		 * True iff the current plan ensures that every voyage fits in the available time for that voyage.
 		 */
 		boolean currentPlanFitsInAvailableTime = true;
-		for (final Object obj : currentPlan.getSequence()) {
-			if (obj instanceof VoyageDetails) {
-				final VoyageDetails<T> details = (VoyageDetails<T>) obj;
+		if (currentPlan == null) {
+			currentPlanFitsInAvailableTime = false;
+		} else {
+			for (final Object obj : currentPlan.getSequence()) {
+				if (obj instanceof VoyageDetails) {
+					final VoyageDetails<T> details = (VoyageDetails<T>) obj;
 
-				if ((details.getTravelTime() + details.getIdleTime()) > details
-						.getOptions().getAvailableTime()) {
-					// this plan is bad. If the old plan was not bad, we
-					// should stick with the old plan even though this one
-					// costs less. If the old plan was bad, we might as well
-					// go with it
-					currentPlanFitsInAvailableTime = false;
-					break;
+					if ((details.getTravelTime() + details.getIdleTime()) > details.getOptions().getAvailableTime()) {
+						// this plan is bad. If the old plan was not bad, we
+						// should stick with the old plan even though this one
+						// costs less. If the old plan was bad, we might as well
+						// go with it
+						currentPlanFitsInAvailableTime = false;
+						break;
+					}
 				}
 			}
 		}
 
 		// Store cheapest cost
-		if (
+		if (currentPlan != null &&
 		// this plan is valid, but the other is not, who cares about cost
-		(currentPlanFitsInAvailableTime && !bestPlanFitsInAvailableTime) ||
+				((currentPlanFitsInAvailableTime && !bestPlanFitsInAvailableTime) ||
 		// this plan is valid, or the other is not, and it's cheaper
-				((currentPlanFitsInAvailableTime || !bestPlanFitsInAvailableTime) && (cost < bestCost))) {
+				((currentPlanFitsInAvailableTime || !bestPlanFitsInAvailableTime) && (cost < bestCost)))) {
 			bestPlanFitsInAvailableTime = currentPlanFitsInAvailableTime;
 			bestCost = cost;
 			bestPlan = currentPlan;
@@ -288,8 +276,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 					final VoyageDetails<T> details = (VoyageDetails<T>) obj;
 					// Skip cast check as we created the object in the first
 					// place
-					final VoyageOptions options = details
-							.getOptions();
+					final VoyageOptions options = details.getOptions();
 
 					try {
 						details.setOptions(options.clone());
@@ -307,6 +294,8 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	public long evaluatePlan(final VoyagePlan plan) {
+		if (plan == null)
+			return Long.MAX_VALUE;
 		// System.err.println("Evaluating a plan");
 		// for (final Object o : plan.getSequence()) {
 		// if (o instanceof VoyageDetails) {
@@ -344,8 +333,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	private VoyagePlan calculateVoyagePlan() {
 		// For each voyage options, calculate new Details.
 
-		final List<Object> currentSequence = new ArrayList<Object>(
-				basicSequence.size());
+		final List<Object> currentSequence = new ArrayList<Object>(basicSequence.size());
 
 		for (final Object element : basicSequence) {
 
@@ -358,8 +346,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 				voyageDetails.setOptions(options);
 
 				// Calculate voyage cost
-				voyageCalculator.calculateVoyageFuelRequirements(options,
-						voyageDetails);
+				voyageCalculator.calculateVoyageFuelRequirements(options, voyageDetails);
 				currentSequence.add(voyageDetails);
 			} else {
 				currentSequence.add(element);
@@ -369,11 +356,13 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
-		voyageCalculator.calculateVoyagePlan(currentPlan, vessel,
-				CollectionsUtil.integersToIntArray(arrivalTimes),
-				currentSequence.toArray());
+		final boolean feasible = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, CollectionsUtil.integersToIntArray(arrivalTimes), currentSequence.toArray());
 
-		return currentPlan;
+		if (feasible) {
+			return currentPlan;
+		} else {
+			return null;
+		}
 	}
 
 	private List<Integer> arrivalTimes;
@@ -394,10 +383,8 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	/**
-	 * Sets the basic voyage plan sequence. This should be {@link IPortSlot}
-	 * instances separated by {@link VoyageOptions} instances implementing
-	 * {@link Cloneable}. The {@link VoyageOptions} objects will be modified
-	 * during optimisation.
+	 * Sets the basic voyage plan sequence. This should be {@link IPortSlot} instances separated by {@link VoyageOptions} instances implementing {@link Cloneable}. The {@link VoyageOptions} objects
+	 * will be modified during optimisation.
 	 * 
 	 * @param basicSequence
 	 */
@@ -447,8 +434,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	/**
-	 * Returns the {@link ILNGVoyageCalculator} used in the
-	 * {@link VoyagePlanOptimiser}.
+	 * Returns the {@link ILNGVoyageCalculator} used in the {@link VoyagePlanOptimiser}.
 	 * 
 	 * @return
 	 */
@@ -458,9 +444,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	/**
-	 * Add a new choice to the ordered stack of choices. If this choice depends
-	 * upon the choice of another {@link IVoyagePlanChoice}, then that object
-	 * should have already been added.
+	 * Add a new choice to the ordered stack of choices. If this choice depends upon the choice of another {@link IVoyagePlanChoice}, then that object should have already been added.
 	 * 
 	 * @param choice
 	 */
