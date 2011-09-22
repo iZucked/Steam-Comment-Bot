@@ -5,6 +5,7 @@
 package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.management.timer.Timer;
 
@@ -362,7 +363,7 @@ public class ScenarioTools {
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate,
-			final int pilotLightRate, final int charterOutTime, final int heelLimit) {
+			final int pilotLightRate, final int charterOutTimeDays, final int heelLimit) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -522,9 +523,7 @@ public class ScenarioTools {
 		load.setCargoCVvalue(cvValue);
 
 		final Date startCharterOut = new Date();
-		final Date endCharterOut = new Date(startCharterOut.getTime() + Timer.ONE_HOUR * charterOutTime);
-		// load as soon as charter out ends.
-		final Date loadDate = new Date(endCharterOut.getTime());
+		final Date loadDate = new Date(startCharterOut.getTime() + TimeUnit.DAYS.toMillis(charterOutTimeDays));
 		load.setWindowStart(new DateAndOptionalTime(loadDate, false));
 		load.setWindowDuration(0);
 		final Date dischargeDate = new Date(loadDate.getTime() + Timer.ONE_HOUR * travelTime);
@@ -533,13 +532,13 @@ public class ScenarioTools {
 
 		final CharterOut charterOut = FleetFactory.eINSTANCE.createCharterOut();
 		charterOut.setStartDate(startCharterOut);
-		charterOut.setEndDate(endCharterOut);
+		charterOut.setEndDate(startCharterOut);
 		// same start and end port.
 		charterOut.setStartPort(A);
 		charterOut.setEndPort(A);
 		charterOut.setId("test charter out");
 		charterOut.setHeelLimit(heelLimit);
-		charterOut.setDuration(0);//(int) (endCharterOut.getTime() - startCharterOut.getTime()));//
+		charterOut.setDuration(charterOutTimeDays);
 		charterOut.setHeelCVValue(cvValue);
 		charterOut.setHeelUnitPrice(baseFuelUnitPrice);
 		charterOut.setDailyCharterOutPrice(1);
