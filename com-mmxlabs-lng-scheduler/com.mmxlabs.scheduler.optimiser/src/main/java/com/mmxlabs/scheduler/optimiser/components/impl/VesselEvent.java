@@ -14,6 +14,7 @@ public class VesselEvent implements IVesselEvent {
 	private IPort startPort, endPort;
 	private long maxHeelOut;
 	private int heelCVValue;
+	private int heelUnitPrice;
 		
 	public VesselEvent() {
 		super();
@@ -41,6 +42,10 @@ public class VesselEvent implements IVesselEvent {
 
 	public void setHeelCVValue(final int heelCVValue) {
 		this.heelCVValue = heelCVValue;
+	}
+
+	public void setHeelUnitPrice(final int heelUnitPrice) {
+		this.heelUnitPrice = heelUnitPrice;
 	}
 
 	@Override
@@ -89,6 +94,6 @@ public class VesselEvent implements IVesselEvent {
 	 */
 	@Override
 	public int getHeelUnitPrice() {
-		return 0;
+		return heelUnitPrice;
 	}
 }
