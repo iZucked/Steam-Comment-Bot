@@ -12,7 +12,9 @@ import scenario.schedule.Sequence;
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.Idle;
 import scenario.schedule.events.Journey;
+import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.events.SlotVisit;
 import scenario.schedule.events.VesselEventVisit;
 
 /**
@@ -29,11 +31,13 @@ public class HeelOutOfCharterOutTests {
 		final int NBORate = ScenarioTools.convertPerHourToPerDay(5);
 
 		final int distanceBetweenPorts = 1000;
-		final float baseFuelUnitPrice = 1;
-		final float dischargePrice = 2;
-		final float cvValue = 1;
+		final float baseFuelUnitPrice = 1f;
+		// set discharge price and cv value high to make NBO expensive to try and force BF use.
+		final float dischargePrice = 100;
+		final float cvValue = 100;
+		
 		final int travelTime = 100;
-		final float equivalenceFactor = 1;
+		final float equivalenceFactor = 1f;
 
 		final int minSpeed = speed;
 		final int maxSpeed = speed;
@@ -70,34 +74,47 @@ public class HeelOutOfCharterOutTests {
 		}
 	}
 
-	
-	private static void printSequence(final Sequence seq) { 
+	private static void printSequence(final Sequence seq) {
 
 		for (final ScheduledEvent e : seq.getEvents()) {
 
 			if (e instanceof Idle) {
+				
 				final Idle i = (Idle) e;
 				System.err.println("Idle:");
-				System.err.println("\tvessel state: " + i.getVesselState() + ", Duration: " + i.getEventDuration());
+				System.err.println("\tvessel state: " + i.getVesselState() + ", Duration: " + i.getEventDuration() + ", port: " + i.getPort().getName());
 				ScenarioTools.printFuel(i.getFuelUsage());
+				
 			} else if (e instanceof CharterOutVisit) {
+				
 				final CharterOutVisit cov = (CharterOutVisit) e;
 				System.err.println("Charter Out:");
 				System.err.println("\tDuration: " + cov.getEventDuration());
+				
 			} else if (e instanceof VesselEventVisit) {
+				
 				final VesselEventVisit vev = (VesselEventVisit) e;
 				System.err.println("VesselEventVisit:");
 				System.err.println("\tDuration: " + vev.getEventDuration());
+				
 			} else if (e instanceof Journey) {
+				
 				final Journey j = (Journey) e;
 				System.err.println("Journey:");
 				System.err.println("\tDuration: " + j.getEventDuration() + ", distance: " + j.getDistance() + ", destination: " + j.getToPort().getName());
-				
+
 				ScenarioTools.printFuel(j.getFuelUsage());
-				
-				
+
+			} else if (e instanceof SlotVisit) {
+				SlotVisit sv = (SlotVisit) e;
+				System.err.println("SlotVisit:");
+				System.err.println("\tDuration: " + sv.getEventDuration());
+			}  else if (e instanceof PortVisit) {
+				PortVisit pv = (PortVisit) e;
+				System.err.println("PortVisit:");
+				System.err.println("\tDuration: " + pv.getEventDuration());
 			} else {
-				System.err.println("Unknown::");
+				System.err.println("Unknown:");
 				System.err.println("\t" + e.getClass());
 			}
 		}
