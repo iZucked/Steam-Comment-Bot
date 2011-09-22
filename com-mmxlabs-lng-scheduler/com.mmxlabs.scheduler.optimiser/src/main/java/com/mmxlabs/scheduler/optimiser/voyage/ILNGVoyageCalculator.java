@@ -47,9 +47,8 @@ public interface ILNGVoyageCalculator<T> {
 			VoyageDetails<T> output);
 
 	/**
-	 * Given an alternating sequence of {@link IPortDetails} and
-	 * {@link IVoyageDetails}, populate a {@link VoyagePlan} object with the
-	 * group voyage details. E.g. calculate load and discharge quantities.
+	 * Given an alternating sequence of {@link IPortDetails} and {@link IVoyageDetails}, populate a {@link VoyagePlan} object with the group voyage details. E.g. calculate load and discharge
+	 * quantities.
 	 * 
 	 * @param voyagePlan
 	 * @param vessel
@@ -62,8 +61,9 @@ public interface ILNGVoyageCalculator<T> {
 	 *            ...
 	 * </pre>
 	 * @param sequence
+	 * @return
 	 */
-	void calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel,
+	boolean calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel,
 			int[] arrivalTimes, Object... sequence);
 
 	/**
