@@ -517,7 +517,6 @@ public class ScenarioTools {
 		charterOut.setHeelLimit(heelLimit);
 		charterOut.setDuration(charterOutTimeDays);
 		charterOut.setHeelCVValue(cvValue);
-		// TODO check setHeelUnitPrice is supposed to take the price of the LNG, or is it supposed to take the price of BF?
 		charterOut.setHeelUnitPrice(dischargePrice);
 		charterOut.setDailyCharterOutPrice(0);
 		charterOut.setRepositioningFee(0);
@@ -657,7 +656,6 @@ public class ScenarioTools {
 		System.err.println(journeyName + ":");
 		System.err.println("\tRoute: " + journey.getRoute() + ", Distance: " + journey.getDistance() + ", Duration: " + journey.getEventDuration() + ", Speed: " + journey.getSpeed());
 		printFuel(journey.getFuelUsage());
-		// TODO Does getTotalCost get the cost for this journey?
 		System.err.println("\tRoute cost: $" + journey.getRouteCost() + ", Total cost: $" + journey.getTotalCost());
 	}
 
