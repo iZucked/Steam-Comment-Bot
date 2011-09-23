@@ -102,14 +102,16 @@ public class HeelOutOfCharterOutTests {
 	 */
 	private Schedule evaluateCharterOutScenario(final float dischargePrice, final float cvValue, final float baseFuelUnitPrice, final int charterOutTimeDays, final int heelLimit) {
 
-		final int speed = 10;
 		// Set NBO so it is not enough to cover travelling fuel, so either need base fuel or FBO.
 		final int fuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(10);
 		final int NBORatePerHour = ScenarioTools.convertPerHourToPerDay(5);
 
+		// same distance between both ports.
 		final int distanceBetweenPorts = 1000;
-
 		final int travelTime = 100;
+		// Have the same speed for all travel.
+		final int speed = 10;
+		// make fuel and LNG equivalent for ease.
 		final float equivalenceFactor = 1f;
 
 		final int minSpeed = speed;
