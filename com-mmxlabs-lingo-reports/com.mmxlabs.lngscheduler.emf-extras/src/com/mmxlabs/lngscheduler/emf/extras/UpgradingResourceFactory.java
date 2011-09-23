@@ -10,18 +10,17 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Factory;
+import org.eclipse.emf.edapt.history.Release;
+import org.eclipse.emf.edapt.migration.MigrationException;
+import org.eclipse.emf.edapt.migration.ReleaseUtils;
+import org.eclipse.emf.edapt.migration.execution.Migrator;
+import org.eclipse.emf.edapt.migration.execution.MigratorRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import edu.tum.cs.cope.migration.execution.MigrationException;
-import edu.tum.cs.cope.migration.execution.Migrator;
-import edu.tum.cs.cope.migration.execution.MigratorRegistry;
-import edu.tum.cs.cope.migration.execution.ReleaseUtil;
 
 /**
  * A {@link Factory} which delegates to another factory, but also runs any COPE
@@ -56,7 +55,7 @@ public class UpgradingResourceFactory implements Factory {
 	 * Invocations from thread B should block on any migrating URI until it's
 	 * done - this is handled by the {@link #monitors} map.
 	 */
-	private ThreadLocal<Set<URI>> currentlyMigrating = new ThreadLocal<Set<URI>>() {
+	private final ThreadLocal<Set<URI>> currentlyMigrating = new ThreadLocal<Set<URI>>() {
 		@Override
 		protected Set<URI> initialValue() {
 			return new HashSet<URI>();
@@ -71,7 +70,7 @@ public class UpgradingResourceFactory implements Factory {
 	 * 
 	 * TODO Consider the leaking issue here. It's a small one.
 	 */
-	private Map<URI, Object> monitors = new HashMap<URI, Object>();
+	private final Map<URI, Object> monitors = new HashMap<URI, Object>();
 
 	/**
 	 * Get a monitor for the given URI, to prevent reentry on load.
@@ -93,22 +92,23 @@ public class UpgradingResourceFactory implements Factory {
 	private void migrate(final URI uri) {
 		if (currentlyMigrating.get().contains(uri))
 			return;
-		final String namespace = ReleaseUtil.getNamespaceURI(uri);
+		final String namespace = ReleaseUtils.getNamespaceURI(uri);
 		final Migrator migrator = MigratorRegistry.getInstance().getMigrator(
 				namespace);
 
 		if (migrator != null) {
 			// int r = migrator.getRelease(uri).iterator().next();
-			int r = Integer.MIN_VALUE;
-			for (int x : migrator.getRelease(uri)) {
-				r = Math.max(r, x);
+			Release latest = null;
+
+			for (final Release x : migrator.getRelease(uri)) {
+				if (x.isLatestRelease())
+					latest = x;
 			}
-			if (r != Integer.MIN_VALUE)
+			if (latest != null)
 				try {
 					currentlyMigrating.get().add(uri);
-					log.info("Migrating " + uri + " to version " + r);
-					migrator.migrateAndSave(Collections.singletonList(uri), r,
-							Integer.MAX_VALUE, new NullProgressMonitor());
+					log.info("Migrating " + uri + " to version " + latest);
+					migrator.migrateAndSave(Collections.singletonList(uri), latest, null, new NullProgressMonitor());
 				} catch (final MigrationException e) {
 					throw new RuntimeException(e);
 				} finally {

@@ -4,20 +4,16 @@
  */
 package com.mmxlabs.lngscheduler.ui;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.validation.marker.MarkerUtil;
-import org.eclipse.emf.validation.model.EvaluationMode;
-import org.eclipse.emf.validation.service.IBatchValidator;
-import org.eclipse.emf.validation.service.ModelValidationService;
 
 import scenario.Scenario;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.jobcontroller.core.AbstractManagedJob;
+import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
 import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
@@ -31,14 +27,14 @@ import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
-/**
- * @author hinton
- * 
- */
-public class LNGSchedulerJob extends AbstractManagedJob {
+public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
+
 	private static final int REPORT_PERCENTAGE = 1;
-	private Scenario scenario;
 	private int currentProgress = 0;
+
+	private final LNGSchedulerJobDescriptor jobDescriptor;
+
+	private Scenario scenario;
 
 	private Schedule intermediateSchedule = null;
 
@@ -46,43 +42,18 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 
 	private LocalSearchOptimiser<ISequenceElement> optimiser;
 
-	public LNGSchedulerJob(final Scenario scenario) {
-		super("Optimising " + scenario.getName());
-		this.scenario = scenario;
-		// entities.setScenario(scenario);
+	public LNGSchedulerJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
+		super("Optimising " + jobDescriptor.getJobName());
+		this.jobDescriptor = jobDescriptor;
+		this.scenario = jobDescriptor.getJobContext();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.jobcontroller.core.AbstractManagedJob#reallyPrepare()
-	 */
 	@Override
 	protected void reallyPrepare() {
-		// scenario.setName(resource.getName().replaceAll(resource.getFileExtension(),
-		// ""));
-
-		// run validation
-
-		final IBatchValidator batchValidator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
-
-		batchValidator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
-
-		batchValidator.setOption(IBatchValidator.OPTION_TRACK_RESOURCES, true);
-
-		final IStatus status = batchValidator.validate(scenario);
-
-		try {
-			MarkerUtil.updateMarkers(status);
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-
-		if (status.matches(IStatus.ERROR)) {
-			throw new RuntimeException("Scenario failed initial validation - check the problems view for a list of validation errors");
-		}
 
 		scenario = EcoreUtil.copy(scenario);
+		// scenario.setName(resource.getName().replaceAll(resource.getFileExtension(),
+		// ""));
 
 		entities.setScenario(scenario);
 
@@ -109,8 +80,6 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 
 		optimiser.init();
 		final IAnnotatedSolution<ISequenceElement> startSolution = optimiser.start(context);
-		// optimiser.start(context);
-		// final IAnnotatedSolution<ISequenceElement> startSolution = optimiser.getBestSolution(true);
 
 		saveSolution("start state", startSolution);
 	}
@@ -153,14 +122,12 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 		if (optimiser.isFinished()) {
 			// export final state
 			if (intermediateSchedule != null) {
-				((EList<EObject>) intermediateSchedule.eContainer().eGet(intermediateSchedule.eContainingFeature())).remove(intermediateSchedule);
+				@SuppressWarnings("unchecked")
+				final EList<EObject> schedules = ((EList<EObject>) intermediateSchedule.eContainer().eGet(intermediateSchedule.eContainingFeature()));
+				schedules.remove(intermediateSchedule);
 			}
 			intermediateSchedule = null;
 			saveSolution("optimised", optimiser.getBestSolution(true));
-
-			// lose optimiser reference, for GC to clear up.
-			optimiser = null;
-
 			return false;
 		} else {
 			return true;
@@ -192,7 +159,18 @@ public class LNGSchedulerJob extends AbstractManagedJob {
 		super.dispose();
 	}
 
-	public final Scenario getScenario() {
+	@Override
+	public final Scenario getJobOutput() {
 		return scenario;
+	}
+
+	@Override
+	public IJobDescriptor getJobDescriptor() {
+		return jobDescriptor;
+	}
+
+	@Override
+	public boolean isPauseable() {
+		return true;
 	}
 }

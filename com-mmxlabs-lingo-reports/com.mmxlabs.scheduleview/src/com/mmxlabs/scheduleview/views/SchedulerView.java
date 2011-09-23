@@ -38,7 +38,7 @@ import com.mmxlabs.ganttviewer.PackAction;
 import com.mmxlabs.ganttviewer.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.scheduleview.Activator;
 import com.mmxlabs.scheduleview.views.colourschemes.CooldownColourScheme;
 import com.mmxlabs.scheduleview.views.colourschemes.FuelChoiceColourScheme;
@@ -70,7 +70,7 @@ public class SchedulerView extends ViewPart {
 
 	private final ScenarioViewerComparator viewerComparator = new ScenarioViewerComparator();
 
-	private IJobManagerListener jobManagerListener;
+	private IEclipseJobManagerListener jobManagerListener;
 
 	/**
 	 * The constructor.
@@ -216,7 +216,7 @@ public class SchedulerView extends ViewPart {
 	@Override
 	public void dispose() {
 		
-		ScheduleAdapter	.deregisterView(jobManagerListener);
+		ScheduleAdapter.deregisterView(jobManagerListener);
 //		getSite().getPage().removeSelectionListener(
 //				"com.mmxlabs.rcp.navigator", selectionListener);
 

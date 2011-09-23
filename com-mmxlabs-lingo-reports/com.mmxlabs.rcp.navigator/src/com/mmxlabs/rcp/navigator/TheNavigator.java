@@ -24,20 +24,20 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 
-import com.mmxlabs.jobcontoller.Activator;
-import com.mmxlabs.jobcontroller.core.IJobManager;
-import com.mmxlabs.jobcontroller.core.IJobManagerListener;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.jobcontroller.core.IManagedJob.JobState;
-import com.mmxlabs.jobcontroller.core.impl.DisposeOnRemoveListener;
-import com.mmxlabs.jobcontroller.core.impl.JobManagerListener;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
+import com.mmxlabs.jobmanager.eclipse.manager.impl.EclipseJobManagerAdapter;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 
 public class TheNavigator extends CommonNavigator {
 
 	private final ResourceListener resourceListener = new ResourceListener();
 
-	final IJobManagerListener jobManagerListener = new JobManagerListener() {
+	final IEclipseJobManagerListener jobManagerListener = new EclipseJobManagerAdapter() {
 
 		/**
 		 * Update the checked status of items in the tree
@@ -63,7 +63,7 @@ public class TheNavigator extends CommonNavigator {
 		}
 
 		@Override
-		public void jobSelected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
+		public void jobSelected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
 
 			final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
 			for (final TreeItem i : items) {
@@ -72,7 +72,7 @@ public class TheNavigator extends CommonNavigator {
 		}
 
 		@Override
-		public void jobDeselected(final IJobManager jobManager, final IManagedJob job, final IResource resource) {
+		public void jobDeselected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
 			final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
 			for (final TreeItem i : items) {
 				checkItems(i, resource, false);
@@ -138,12 +138,12 @@ public class TheNavigator extends CommonNavigator {
 						}
 
 						// Get current job manager
-						final IJobManager jobManager = Activator.getDefault().getJobManager();
+						final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 						// If checked, we may need to create a job
 						if (ti.getChecked() && jobManager.findJobForResource(resource) == null) {
-
+							IJobControl control = null;
 							// Adapt to a new or existing job
-							final IManagedJob job = (IManagedJob) resource.getAdapter(IManagedJob.class);
+							final IJobDescriptor job = (IJobDescriptor) resource.getAdapter(IJobDescriptor.class);
 							// No job - then unable to adapt or wrong type of resource
 							if (job == null) {
 								// Only allow resources with a scenario to be
@@ -154,8 +154,15 @@ public class TheNavigator extends CommonNavigator {
 							// If the job does not already exist - it may do perhaps due to a race condition as did not exist when we started this code branch - then register it
 							if (!jobManager.getSelectedJobs().contains(job)) {
 								// Clean up when job is removed from manager
-								jobManager.addJobManagerListener(new DisposeOnRemoveListener(job));
-								jobManager.addJob(job, resource);
+								jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
+								control = jobManager.submitJob(job, resource);
+							} else {
+								control = jobManager.getControlForJob(job);
+							}
+
+							if (control == null) {
+								ti.setChecked(false);
+								return;
 							}
 						}
 
@@ -166,7 +173,7 @@ public class TheNavigator extends CommonNavigator {
 			}
 		});
 
-		Activator.getDefault().getJobManager().addJobManagerListener(jobManagerListener);
+		Activator.getDefault().getJobManager().addEclipseJobManagerListener(jobManagerListener);
 
 		final IActionBars bars = getViewSite().getActionBars();
 		// Add pack columns action
@@ -181,7 +188,7 @@ public class TheNavigator extends CommonNavigator {
 	@Override
 	public void dispose() {
 
-		Activator.getDefault().getJobManager().removeJobManagerListener(jobManagerListener);
+		Activator.getDefault().getJobManager().removeEclipseJobManagerListener(jobManagerListener);
 
 		resourceListener.dispose();
 
@@ -221,15 +228,19 @@ public class TheNavigator extends CommonNavigator {
 
 			if (changedResource.getType() == IResource.FILE) {
 
-				final IJobManager jobManager = Activator.getDefault().getJobManager();
+				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 				if (jobManager != null) {
 					// If checked, then ensure we have a job
-					final IManagedJob oldJ = jobManager.findJobForResource(changedResource);
+					final IJobDescriptor oldJ = jobManager.findJobForResource(changedResource);
 					if (oldJ == null) {
 						return false;
 					}
+					final IJobControl control = jobManager.getControlForJob(oldJ);
+					if (control  == null) {
+						return false;
+					}
 
-					if (oldJ.getJobState() != JobState.CREATED) {
+					if (control.getJobState() != EJobState.CREATED) {
 						return false;
 					}
 

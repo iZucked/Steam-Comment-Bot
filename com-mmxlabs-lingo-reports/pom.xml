@@ -69,8 +69,6 @@
 		<module>com.mmxlabs.lngscheduler.emf.editor</module>
 		<module>com.mmxlabs.lngscheduler.ui</module>
 		<module>com.mmxlabs.lngscheduler.emf.migrator</module>
-		<module>com.mmxlabs.jobmanager</module>
-		<module>com.mmxlabs.jobmanager.ui</module>
 		<module>com.mmxlabs.demo.reports</module>
 		<module>com.mmxlabs.ganttviewer</module>
 		<module>com.mmxlabs.scheduleview</module>
@@ -275,8 +273,21 @@
 		</repository>
 
 		<repository>
+			<id>eclipse-3.7</id>
+			<url>http://download.eclipse.org/eclipse/updates/3.7</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
 			<id>swtbot</id>
 			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</url>
+			<layout>p2</layout>
+		</repository>
+		
+		<repository>
+			<!--  This replaces the old cope update site, as cope is now EDapt -->
+			<id>edapt-updates</id>
+			<url>http://download.eclipse.org/edapt/update-site/</url>
 			<layout>p2</layout>
 		</repository>
 		

@@ -20,9 +20,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.mmxlabs.jobcontoller.Activator;
-import com.mmxlabs.jobcontroller.core.IManagedJob;
-import com.mmxlabs.lngscheduler.ui.LNGSchedulerJob;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.lngscheduler.ui.Activator;
+import com.mmxlabs.lngscheduler.ui.LNGSchedulerJobControl;
+import com.mmxlabs.lngscheduler.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.lngscheduler.ui.SaveJobUtil;
 
 /**
@@ -57,9 +60,12 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
 
-					final IManagedJob job = Activator.getDefault().getJobManager().findJobForResource(resource);
+					final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+					final IJobDescriptor job = jobManager.findJobForResource(resource);
+					final IJobControl control = jobManager.getControlForJob(job);
 
-					if (job instanceof LNGSchedulerJob) {
+					
+					if (job instanceof LNGSchedulerJobDescriptor) {
 
 						final IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
 
@@ -69,7 +75,8 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 								monitor.beginTask("Save Scenario", 2);
 								try {
 									// Attempt to save job
-									final IPath path = SaveJobUtil.saveLNGSchedulerJob((LNGSchedulerJob) job, resource);
+									// FIXME: Do not hardcode extension
+									final IPath path = SaveJobUtil.saveLNGSchedulerJob((LNGSchedulerJobDescriptor) job, (LNGSchedulerJobControl)control, resource.getFileExtension(), resource);
 									if (path != null) {
 										// An IPath has been returned, try and find the IResource that it corresponds to
 										final IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
@@ -119,8 +126,11 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 				final Object obj = itr.next();
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
-					final IManagedJob job = Activator.getDefault().getJobManager().findJobForResource(resource);
-					return job != null;
+					final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+					final IJobDescriptor job = jobManager.findJobForResource(resource);
+					final IJobControl control = jobManager.getControlForJob(job);
+
+					return (control != null);
 
 				}
 			}

@@ -9,16 +9,14 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceEvent;
-import org.osgi.framework.ServiceListener;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.mmxlabs.jobcontroller.core.IJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin implements ServiceListener {
+public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.scheduleview"; //$NON-NLS-1$
@@ -26,9 +24,7 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 	// The shared instance
 	private static Activator plugin;
 
-	private ServiceTracker<IJobManager, IJobManager> jobManagerServiceTracker;
-
-	private IJobManager jobManager;
+	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerServiceTracker;
 
 	/**
 	 * The constructor
@@ -46,12 +42,8 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 		super.start(context);
 		plugin = this;
 
-		jobManagerServiceTracker = new ServiceTracker<IJobManager, IJobManager>(context, IJobManager.class.getName(), null);
+		jobManagerServiceTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context, IEclipseJobManager.class.getName(), null);
 		jobManagerServiceTracker.open();
-
-		context.addServiceListener(this, "(objectclass=" + IJobManager.class.getName() + ")");
-
-		jobManager = (IJobManager) jobManagerServiceTracker.getService();
 	}
 
 	/*
@@ -90,13 +82,8 @@ public class Activator extends AbstractUIPlugin implements ServiceListener {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
-	public IJobManager getJobManager() {
-		return jobManager;
-	}
-
-	@Override
-	public void serviceChanged(final ServiceEvent event) {
-		jobManager = jobManagerServiceTracker.getService();
+	public IEclipseJobManager getJobManager() {
+		return jobManagerServiceTracker.getService();
 	}
 
 	public static void warning(final String message) {
