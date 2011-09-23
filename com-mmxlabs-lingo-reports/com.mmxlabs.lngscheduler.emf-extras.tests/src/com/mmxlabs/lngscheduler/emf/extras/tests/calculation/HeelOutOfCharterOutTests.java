@@ -22,6 +22,18 @@ import scenario.schedule.events.ScheduledEvent;
  * Need to check that heel out of charter is used when it's available and cheaper, not used when it's not available and cheaper, not used when it's available and not cheaper, not used when not
  * available and not cheaper.
  * <p>
+ * Whether the heel is used (y) or not (n):
+ * 
+ * <pre>
+ * Quantity    \  price | Cheaper   | Expensive
+ * ---------------------|-----------|----------
+ * Enough for FBO + NBO | y (No BF) |   n
+ *                      |           |
+ * Enough for NBO       | y (NBO+BF)|   n
+ *                      |           |
+ * Not enough           | n         |   n
+ * </pre>
+ * <p>
  * Check heel out limits are respected correctly (i.e. no more heel used than limit allows).
  * 
  * @author Adam Semenenko
@@ -97,6 +109,29 @@ public class HeelOutOfCharterOutTests {
 
 		// expect BF to be used as heel is not enough, but NBO to be used as there is still heel.
 		assertFBONotUsed(j);
+	}
+
+	/**
+	 * Test that the heel is never used regardless of quantity as LNG is slightly more expensive than base fuel
+	 * 
+	 * @param heelLimit
+	 */
+	public void testHeelWithExpensiveLNG(final int heelLimit) {
+
+		final float baseFuelUnitPrice = 1f;
+
+		// discharge price makes LNG slightly cheaper than BF.
+		final float dischargePrice = 1.01f;
+		final float cvValue = 1;
+		// set charter out details.
+		final int charterOutTimeDays = 10;
+
+		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
+
+		Journey j = getJourneyAfterCharterOut(result);
+
+		// expect LNG to never be used as the discharge price of the LNG makes it more expensive than base fuel.
+		assertLNGNotUsed(j);
 	}
 
 	/**
@@ -200,6 +235,7 @@ public class HeelOutOfCharterOutTests {
 				Assert.assertTrue("FBO and NBO not used", fq.getQuantity() == 0);
 		}
 	}
+
 	private void assertBaseFuelNotUsed(Journey j) {
 
 		for (FuelQuantity fq : j.getFuelUsage()) {
@@ -209,7 +245,7 @@ public class HeelOutOfCharterOutTests {
 				Assert.assertTrue("FBO and NBO used", fq.getQuantity() >= 0);
 		}
 	}
-	
+
 	private void assertFBONotUsed(Journey j) {
 
 		for (FuelQuantity fq : j.getFuelUsage()) {
