@@ -49,16 +49,11 @@ public class HeelOutOfCharterOutTests {
 		Journey j = getJourneyAfterCharterOut(result);
 
 		// Because LNG is expensive and BF is cheap, expect BF to be used on the journey after the charter out.
-		for (FuelQuantity fq : j.getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL)
-				Assert.assertTrue("Base fuel used", fq.getQuantity() > 0);
-			else
-				Assert.assertTrue("FBO and NBO not used", fq.getQuantity() == 0);
-		}
+		assertLNGNotUsed(j);
 	}
 
 	/**
-	 * LNG is available and slightly cheaper than BF, so expect no NBO/FBO to be used and BF to be used instead.
+	 * LNG is available and slightly cheaper than BF, so expect FBO and NBO to be used.
 	 */
 	@Test
 	public void heelUsed() {
@@ -76,13 +71,32 @@ public class HeelOutOfCharterOutTests {
 
 		Journey j = getJourneyAfterCharterOut(result);
 
-		// Because LNG is expensive and BF is cheap, expect BF to be used on the journey after the charter out.
-		for (FuelQuantity fq : j.getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL)
-				Assert.assertTrue("Base fuel not used", fq.getQuantity() == 0);
-			else
-				Assert.assertTrue("FBO and NBO used", fq.getQuantity() > 0);
-		}
+		// expect LNG to be used on the journey.
+		assertBaseFuelNotUsed(j);
+	}
+
+	/**
+	 * LNG is not available and slightly cheaper than BF, so expect no NBO/FBO to be used and BF to be used instead.
+	 */
+	@Test
+	public void heelNotAvailable() {
+
+		final float baseFuelUnitPrice = 1f;
+
+		// discharge price makes LNG slightly cheaper than BF.
+		final float dischargePrice = 0.99f;
+		final float cvValue = 1;
+		// set charter out details.
+		final int charterOutTimeDays = 10;
+		// not enough to cover distance
+		final int heelLimit = 999;
+
+		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
+
+		Journey j = getJourneyAfterCharterOut(result);
+
+		// expect BF to be used as heel is not enough, but NBO to be used as there is still heel.
+		assertFBONotUsed(j);
 	}
 
 	/**
@@ -175,5 +189,34 @@ public class HeelOutOfCharterOutTests {
 
 		Assert.fail("No charter out in sequence");
 		return null;
+	}
+
+	private void assertLNGNotUsed(Journey j) {
+
+		for (FuelQuantity fq : j.getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Base fuel used", fq.getQuantity() > 0);
+			else
+				Assert.assertTrue("FBO and NBO not used", fq.getQuantity() == 0);
+		}
+	}
+	private void assertBaseFuelNotUsed(Journey j) {
+
+		for (FuelQuantity fq : j.getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Base fuel not used", fq.getQuantity() == 0);
+			else
+				Assert.assertTrue("FBO and NBO used", fq.getQuantity() >= 0);
+		}
+	}
+	
+	private void assertFBONotUsed(Journey j) {
+
+		for (FuelQuantity fq : j.getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.FBO)
+				Assert.assertTrue("FBO not used", fq.getQuantity() == 0);
+			else
+				Assert.assertTrue("NBO and BF used", fq.getQuantity() > 0);
+		}
 	}
 }
