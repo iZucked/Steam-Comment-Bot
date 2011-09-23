@@ -149,6 +149,32 @@ public class HeelOutOfCharterOutTests {
 	}
 
 	/**
+	 * Check that for varying heel limits LNG usage never exceeds (but may equal) the amount of heel).
+	 */
+	@Test
+	public void heelNotExceeded() {
+
+		final int maxHeelLimit = 1250;
+
+		for (int heelLimit = 0; heelLimit <= maxHeelLimit; heelLimit += 250) {
+			
+			System.err.println("Heel limit: " + heelLimit);
+			
+			Journey j = testHeelWithCheaperLNG(heelLimit);
+
+			// get the amount of heel used
+			long LNGUsed = 0;
+			for (FuelQuantity fq : j.getFuelUsage()) {
+				if (fq.getFuelType() == FuelType.FBO || fq.getFuelType() == FuelType.NBO)
+					LNGUsed += fq.getQuantity();
+			}
+
+			Assert.assertTrue("Heel not exceeded", LNGUsed <= heelLimit);
+		}
+
+	}
+
+	/**
 	 * Evaluate a scenario with a charter out and return the result.
 	 * 
 	 * @param dischargePrice
@@ -242,6 +268,7 @@ public class HeelOutOfCharterOutTests {
 
 	/**
 	 * Assert that during a given journey NBO and FBO are not used and base fuel is.
+	 * 
 	 * @param j
 	 */
 	private void assertLNGNotUsed(Journey j) {
@@ -258,6 +285,7 @@ public class HeelOutOfCharterOutTests {
 
 	/**
 	 * Assert that during a given journey base fuel is not used, but NBO and FBO are
+	 * 
 	 * @param j
 	 */
 	private void assertBaseFuelNotUsed(Journey j) {
@@ -274,6 +302,7 @@ public class HeelOutOfCharterOutTests {
 
 	/**
 	 * Assert that during a given journey FBO is not used, but NBO and base fuel are.
+	 * 
 	 * @param j
 	 */
 	private void assertFBONotUsed(Journey j) {
