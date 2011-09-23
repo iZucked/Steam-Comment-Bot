@@ -50,6 +50,7 @@ public class HeelOutOfCharterOutTests {
 		final int heelLimit = 1000;
 		testHeelWithExpensiveLNG(heelLimit);
 	}
+
 	/**
 	 * LNG is not available for FBO but not used for NBO as LNG is slightly more expensive
 	 */
@@ -59,6 +60,7 @@ public class HeelOutOfCharterOutTests {
 		final int heelLimit = 500;
 		testHeelWithExpensiveLNG(heelLimit);
 	}
+
 	/**
 	 * LNG is not available so is not used
 	 */
@@ -67,53 +69,6 @@ public class HeelOutOfCharterOutTests {
 
 		final int heelLimit = 0;
 		testHeelWithExpensiveLNG(heelLimit);
-	}
-
-	/**
-	 * LNG is available and slightly cheaper than BF, so expect FBO and NBO to be used.
-	 */
-	@Test
-	public void heelUsed() {
-
-		final float baseFuelUnitPrice = 1f;
-
-		// discharge price makes LNG slightly cheaper than BF.
-		final float dischargePrice = 0.99f;
-		final float cvValue = 1;
-		// set charter out details.
-		final int charterOutTimeDays = 10;
-		final int heelLimit = 1000;
-
-		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
-
-		Journey j = getJourneyAfterCharterOut(result);
-
-		// expect LNG to be used on the journey.
-		assertBaseFuelNotUsed(j);
-	}
-
-	/**
-	 * LNG is not available and slightly cheaper than BF, so expect no NBO/FBO to be used and BF to be used instead.
-	 */
-	@Test
-	public void heelNotAvailable() {
-
-		final float baseFuelUnitPrice = 1f;
-
-		// discharge price makes LNG slightly cheaper than BF.
-		final float dischargePrice = 0.99f;
-		final float cvValue = 1;
-		// set charter out details.
-		final int charterOutTimeDays = 10;
-		// not enough to cover distance
-		final int heelLimit = 999;
-
-		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
-
-		Journey j = getJourneyAfterCharterOut(result);
-
-		// expect BF to be used as heel is not enough, but NBO to be used as there is still heel.
-		assertFBONotUsed(j);
 	}
 
 	/**
@@ -139,10 +94,9 @@ public class HeelOutOfCharterOutTests {
 		assertLNGNotUsed(j);
 	}
 
-	
-	
 	/**
 	 * For testing whether the heel limit affects fuel choice if LNG is cheaper than BF.
+	 * 
 	 * @param heelLimit
 	 * @return The journey after the charter out to test.
 	 */
@@ -160,7 +114,6 @@ public class HeelOutOfCharterOutTests {
 
 		return getJourneyAfterCharterOut(result);
 	}
-	
 
 	/**
 	 * If the heel is available and cheaper
@@ -169,10 +122,10 @@ public class HeelOutOfCharterOutTests {
 	public void heelAvailableCheaper() {
 
 		final int heelLimit = 1000;
-		Journey j  = testHeelWithCheaperLNG(heelLimit);
+		Journey j = testHeelWithCheaperLNG(heelLimit);
 		assertBaseFuelNotUsed(j);
 	}
-	
+
 	/**
 	 * Heel is only available for NBO, BF used to supplement.
 	 */
@@ -183,6 +136,7 @@ public class HeelOutOfCharterOutTests {
 		Journey j = testHeelWithCheaperLNG(heelLimit);
 		assertFBONotUsed(j);
 	}
+
 	/**
 	 * LNG is not available so is not used even though it is cheaper.
 	 */
