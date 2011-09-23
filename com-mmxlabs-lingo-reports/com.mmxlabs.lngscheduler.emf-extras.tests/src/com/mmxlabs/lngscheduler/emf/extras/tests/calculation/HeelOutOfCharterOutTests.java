@@ -42,26 +42,31 @@ import scenario.schedule.events.ScheduledEvent;
 public class HeelOutOfCharterOutTests {
 
 	/**
-	 * LNG is available and slightly more expensive than BF, so expect no NBO/FBO to be used and BF to be used instead.
+	 * LNG is available but BF is used as LNG is slightly more expensive
 	 */
 	@Test
-	public void heelNotUsed() {
+	public void heelFBOAvailableLNGExpensiveNotUsed() {
 
-		final float baseFuelUnitPrice = 1f;
-
-		// discharge price makes LNG slightly more expensive than BF.
-		final float dischargePrice = 1.01f;
-		final float cvValue = 1;
-		// set charter out details.
-		final int charterOutTimeDays = 10;
 		final int heelLimit = 1000;
+		testHeelWithExpensiveLNG(heelLimit);
+	}
+	/**
+	 * LNG is not available for FBO but not used for NBO as LNG is slightly more expensive
+	 */
+	@Test
+	public void heelNBOAvailableLNGExpensiveNotUsed() {
 
-		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
+		final int heelLimit = 500;
+		testHeelWithExpensiveLNG(heelLimit);
+	}
+	/**
+	 * LNG is not available so is not used
+	 */
+	@Test
+	public void heelNotAvailableNotUsed() {
 
-		Journey j = getJourneyAfterCharterOut(result);
-
-		// Because LNG is expensive and BF is cheap, expect BF to be used on the journey after the charter out.
-		assertLNGNotUsed(j);
+		final int heelLimit = 0;
+		testHeelWithExpensiveLNG(heelLimit);
 	}
 
 	/**
