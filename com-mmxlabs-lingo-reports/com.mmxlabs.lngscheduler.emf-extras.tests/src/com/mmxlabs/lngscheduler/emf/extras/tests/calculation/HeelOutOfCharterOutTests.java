@@ -264,7 +264,7 @@ public class HeelOutOfCharterOutTests {
 			if (fq.getFuelType() == FuelType.BASE_FUEL)
 				Assert.assertTrue("Base fuel not used", fq.getQuantity() == 0);
 			else
-				Assert.assertTrue("FBO and NBO used", fq.getQuantity() >= 0);
+				Assert.assertTrue("FBO and NBO used", fq.getQuantity() > 0);
 		}
 	}
 
