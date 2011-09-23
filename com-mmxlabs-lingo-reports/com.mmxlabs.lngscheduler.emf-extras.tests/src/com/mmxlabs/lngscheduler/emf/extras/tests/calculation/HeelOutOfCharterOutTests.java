@@ -37,11 +37,7 @@ public class HeelOutOfCharterOutTests {
 
 		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
 		
-		// get the journey after the charter out.
-		ScheduledEvent e = result.getSequences().get(0).getEvents().get(2); // TODO fix this so it's not hacky.
-		Assert.assertTrue(e instanceof Journey);
-		
-		Journey j = (Journey) e;
+		Journey j = getJourneyAfterCharterOut(result);
 		
 		// Because LNG is expensive and BF is cheap, expect BF to be used on the journey after the charter out.
 		for (FuelQuantity fq : j.getFuelUsage())
@@ -109,5 +105,17 @@ public class HeelOutOfCharterOutTests {
 			ScenarioTools.printSequence(seq);
 
 		return result;
+	}
+	
+	private Journey getJourneyAfterCharterOut(Schedule charterOutSchedule)
+	{
+
+		// get the journey after the charter out.
+		ScheduledEvent e = charterOutSchedule.getSequences().get(0).getEvents().get(2); // TODO fix this so it's not hacky.
+		Assert.assertTrue(e instanceof Journey);
+		
+		Journey j = (Journey) e;
+		
+		return j;
 	}
 }
