@@ -17,21 +17,29 @@ import scenario.schedule.events.Journey;
 import scenario.schedule.events.ScheduledEvent;
 
 /**
+ * <a href="https://mmxlabs.fogbugz.com/default.asp?186">Case 186: Heel out of charter out</a>
+ * 
+ * Need to check that heel out of charter is used when it's available and cheaper, not used when it's not available and cheaper, not used when it's available and not cheaper, not used when not
+ * available and not cheaper.
+ * <p>
+ * Check heel out limits are respected correctly (i.e. no more heel used than limit allows).
+ * 
  * @author Adam Semenenko
  * 
  */
 public class HeelOutOfCharterOutTests {
 
 	/**
-	 * Test that the heel out of charter out is used as NBO but not FBO because LNG is expensive.
+	 * LNG is slightly more expensive than BF, so expect no NBO/FBO to be used and BF to be used instead.
 	 */
 	@Test
-	public void heelFBONotUsed() {
+	public void heelNotUsed() {
 
 		final float baseFuelUnitPrice = 1f;
-		// set discharge price and cv value high to make NBO expensive to try and force BF use.
-		final float dischargePrice = 100;
-		final float cvValue = 100;
+
+		// discharge price makes LNG slightly more expensive than BF.
+		final float dischargePrice = 1.01f;
+		final float cvValue = 1;
 		// set charter out details.
 		final int charterOutTimeDays = 10;
 		final int heelLimit = 1000;
@@ -44,6 +52,36 @@ public class HeelOutOfCharterOutTests {
 		for (FuelQuantity fq : j.getFuelUsage()) {
 			if (fq.getFuelType() == FuelType.BASE_FUEL)
 				Assert.assertTrue("Base fuel used", fq.getQuantity() > 0);
+			else
+				Assert.assertTrue("FBO and NBO not used", fq.getQuantity() == 0);
+		}
+	}
+
+	/**
+	 * LNG is slightly cheaper than BF, so expect no NBO/FBO to be used and BF to be used instead.
+	 */
+	@Test
+	public void heelUsed() {
+
+		final float baseFuelUnitPrice = 1f;
+
+		// discharge price makes LNG slightly cheaper than BF.
+		final float dischargePrice = 0.99f;
+		final float cvValue = 1;
+		// set charter out details.
+		final int charterOutTimeDays = 10;
+		final int heelLimit = 1000;
+
+		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
+
+		Journey j = getJourneyAfterCharterOut(result);
+
+		// Because LNG is expensive and BF is cheap, expect BF to be used on the journey after the charter out.
+		for (FuelQuantity fq : j.getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Base fuel not used", fq.getQuantity() == 0);
+			else
+				Assert.assertTrue("FBO and NBO used", fq.getQuantity() > 0);
 		}
 	}
 
