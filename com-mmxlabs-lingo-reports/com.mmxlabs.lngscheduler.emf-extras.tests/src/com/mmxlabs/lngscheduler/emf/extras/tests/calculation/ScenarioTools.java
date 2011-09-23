@@ -368,8 +368,8 @@ public class ScenarioTools {
 	public static Scenario createCharterOutScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
-			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate,
-			final int pilotLightRate, final int charterOutTimeDays, final int heelLimit) {
+			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate,
+			final int charterOutTimeDays, final int heelLimit) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -502,7 +502,6 @@ public class ScenarioTools {
 		scenario.getContractModel().getSalesContracts().add(sc);
 		scenario.getContractModel().getPurchaseContracts().add(pc);
 
-
 		final Date startCharterOut = new Date();
 		final Date endCharterOut = new Date(startCharterOut.getTime() + TimeUnit.DAYS.toMillis(charterOutTimeDays));
 		final Date dryDockJourneyStartDate = new Date(endCharterOut.getTime() + TimeUnit.HOURS.toMillis(travelTime));
@@ -522,7 +521,7 @@ public class ScenarioTools {
 		charterOut.setRepositioningFee(0);
 		// add to the scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(charterOut);
-		
+
 		// Set up dry dock to cause journey
 		final Drydock dryDockJourney = FleetFactory.eINSTANCE.createDrydock();
 		dryDockJourney.setDuration(0);
@@ -686,7 +685,9 @@ public class ScenarioTools {
 
 	/**
 	 * Convert a unit that is measured per hour to per day (multiply unitPerHour by 24).
-	 * @param unitPerHour The measurement per hour to convert  to per day.
+	 * 
+	 * @param unitPerHour
+	 *            The measurement per hour to convert to per day.
 	 * @return The measurement per day.
 	 */
 	public static int convertPerHourToPerDay(int unitPerHour) {
@@ -698,26 +699,26 @@ public class ScenarioTools {
 		for (final ScheduledEvent e : seq.getEvents()) {
 
 			if (e instanceof Idle) {
-				
+
 				final Idle i = (Idle) e;
 				System.err.println("Idle:");
 				System.err.println("\tvessel state: " + i.getVesselState() + ", Duration: " + i.getEventDuration() + ", port: " + i.getPort().getName());
 				ScenarioTools.printFuel(i.getFuelUsage());
-				
+
 			} else if (e instanceof CharterOutVisit) {
-				
+
 				final CharterOutVisit cov = (CharterOutVisit) e;
 				System.err.println("Charter Out:");
 				System.err.println("\tDuration: " + cov.getEventDuration());
-				
+
 			} else if (e instanceof VesselEventVisit) {
-				
+
 				final VesselEventVisit vev = (VesselEventVisit) e;
 				System.err.println("VesselEventVisit:");
 				System.err.println("\tDuration: " + vev.getEventDuration());
-				
+
 			} else if (e instanceof Journey) {
-				
+
 				final Journey j = (Journey) e;
 				System.err.println("Journey:");
 				System.err.println("\tDuration: " + j.getEventDuration() + ", distance: " + j.getDistance() + ", destination: " + j.getToPort().getName());
@@ -728,7 +729,7 @@ public class ScenarioTools {
 				SlotVisit sv = (SlotVisit) e;
 				System.err.println("SlotVisit:");
 				System.err.println("\tDuration: " + sv.getEventDuration());
-			}  else if (e instanceof PortVisit) {
+			} else if (e instanceof PortVisit) {
 				PortVisit pv = (PortVisit) e;
 				System.err.println("PortVisit:");
 				System.err.println("\tDuration: " + pv.getEventDuration());
