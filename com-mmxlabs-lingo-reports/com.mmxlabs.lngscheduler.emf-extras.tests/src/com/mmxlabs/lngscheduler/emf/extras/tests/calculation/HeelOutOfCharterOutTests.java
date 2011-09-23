@@ -76,7 +76,7 @@ public class HeelOutOfCharterOutTests {
 	 * 
 	 * @param heelLimit
 	 */
-	public void testHeelWithExpensiveLNG(final int heelLimit) {
+	private void testHeelWithExpensiveLNG(final int heelLimit) {
 
 		final float baseFuelUnitPrice = 1f;
 
@@ -100,7 +100,7 @@ public class HeelOutOfCharterOutTests {
 	 * @param heelLimit
 	 * @return The journey after the charter out to test.
 	 */
-	public Journey testHeelWithCheaperLNG(final int heelLimit) {
+	private Journey testHeelWithCheaperLNG(final int heelLimit) {
 
 		final float baseFuelUnitPrice = 1f;
 
