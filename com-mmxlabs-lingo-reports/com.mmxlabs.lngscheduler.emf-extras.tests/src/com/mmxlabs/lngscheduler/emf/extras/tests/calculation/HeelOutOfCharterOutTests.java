@@ -18,7 +18,7 @@ import scenario.schedule.events.ScheduledEvent;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?186">Case 186: Heel out of charter out</a>
- * 
+ * <p>
  * Need to check that heel out of charter is used when it's available and cheaper, not used when it's not available and cheaper, not used when it's available and not cheaper, not used when not
  * available and not cheaper.
  * <p>
@@ -30,7 +30,7 @@ import scenario.schedule.events.ScheduledEvent;
 public class HeelOutOfCharterOutTests {
 
 	/**
-	 * LNG is slightly more expensive than BF, so expect no NBO/FBO to be used and BF to be used instead.
+	 * LNG is available and slightly more expensive than BF, so expect no NBO/FBO to be used and BF to be used instead.
 	 */
 	@Test
 	public void heelNotUsed() {
@@ -58,7 +58,7 @@ public class HeelOutOfCharterOutTests {
 	}
 
 	/**
-	 * LNG is slightly cheaper than BF, so expect no NBO/FBO to be used and BF to be used instead.
+	 * LNG is available and slightly cheaper than BF, so expect no NBO/FBO to be used and BF to be used instead.
 	 */
 	@Test
 	public void heelUsed() {
