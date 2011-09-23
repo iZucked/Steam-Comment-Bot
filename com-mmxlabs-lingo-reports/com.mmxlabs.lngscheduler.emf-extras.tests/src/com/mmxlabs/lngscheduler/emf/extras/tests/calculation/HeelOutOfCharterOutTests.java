@@ -193,7 +193,7 @@ public class HeelOutOfCharterOutTests {
 
 		// Set NBO so it is not enough to cover travelling fuel, so either need base fuel or FBO.
 		final int fuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(10);
-		final int NBORatePerHour = ScenarioTools.convertPerHourToPerDay(5);
+		final int NBORatePerDay = ScenarioTools.convertPerHourToPerDay(5);
 
 		// same distance between both ports.
 		final int distanceBetweenPorts = 1000;
@@ -211,15 +211,15 @@ public class HeelOutOfCharterOutTests {
 		final int ballastMaxSpeed = speed;
 		final int ballastMaxConsumption = fuelConsumptionPerDay;
 		final int ballastIdleConsumptionRate = fuelConsumptionPerDay;
-		final int ballastIdleNBORate = NBORatePerHour;
-		final int ballastNBORate = NBORatePerHour;
+		final int ballastIdleNBORate = NBORatePerDay;
+		final int ballastNBORate = NBORatePerDay;
 		final int ladenMinSpeed = speed;
 		final int ladenMinConsumption = fuelConsumptionPerDay;
 		final int ladenMaxSpeed = speed;
 		final int ladenMaxConsumption = fuelConsumptionPerDay;
 		final int ladenIdleConsumptionRate = fuelConsumptionPerDay;
-		final int ladenIdleNBORate = NBORatePerHour;
-		final int ladenNBORate = NBORatePerHour;
+		final int ladenIdleNBORate = NBORatePerDay;
+		final int ladenNBORate = NBORatePerDay;
 		final int pilotLightRate = 0;
 
 		Scenario scenario = ScenarioTools.createCharterOutScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
