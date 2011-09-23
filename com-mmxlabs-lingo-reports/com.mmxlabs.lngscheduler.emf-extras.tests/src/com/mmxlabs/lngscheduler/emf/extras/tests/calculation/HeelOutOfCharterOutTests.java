@@ -140,6 +140,26 @@ public class HeelOutOfCharterOutTests {
 	}
 
 	/**
+	 * For testing whether the heel limit affects fuel choice if LNG is cheaper than BF.
+	 * @param heelLimit
+	 * @return The journey after the charter out to test.
+	 */
+	public Journey testHeelWithCheaperLNG(final int heelLimit) {
+
+		final float baseFuelUnitPrice = 1f;
+
+		// discharge price makes LNG slightly cheaper than BF.
+		final float dischargePrice = 0.99f;
+		final float cvValue = 1;
+		// set charter out details.
+		final int charterOutTimeDays = 10;
+
+		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
+
+		return getJourneyAfterCharterOut(result);
+	}
+
+	/**
 	 * Evaluate a scenario with a charter out and return the result.
 	 * 
 	 * @param dischargePrice
