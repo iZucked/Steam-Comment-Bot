@@ -10,6 +10,7 @@ import org.junit.Test;
 import scenario.Scenario;
 import scenario.schedule.Schedule;
 import scenario.schedule.Sequence;
+import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
 import scenario.schedule.events.Journey;
@@ -36,14 +37,13 @@ public class HeelOutOfCharterOutTests {
 		final int heelLimit = 1000;
 
 		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
-		
+
 		Journey j = getJourneyAfterCharterOut(result);
-		
+
 		// Because LNG is expensive and BF is cheap, expect BF to be used on the journey after the charter out.
-		for (FuelQuantity fq : j.getFuelUsage())
-		{
+		for (FuelQuantity fq : j.getFuelUsage()) {
 			if (fq.getFuelType() == FuelType.BASE_FUEL)
-			Assert.assertTrue("Base fuel used", fq.getQuantity() > 0);
+				Assert.assertTrue("Base fuel used", fq.getQuantity() > 0);
 		}
 	}
 
@@ -106,16 +106,34 @@ public class HeelOutOfCharterOutTests {
 
 		return result;
 	}
-	
-	private Journey getJourneyAfterCharterOut(Schedule charterOutSchedule)
-	{
 
-		// get the journey after the charter out.
-		ScheduledEvent e = charterOutSchedule.getSequences().get(0).getEvents().get(2); // TODO fix this so it's not hacky.
-		Assert.assertTrue(e instanceof Journey);
-		
-		Journey j = (Journey) e;
-		
-		return j;
+	/**
+	 * Assuming that a schedule has a charter out and a journey afterwards, this method will return the journey immediately after the charter out. If there is none an assert will fail.
+	 * 
+	 * @param charterOutSchedule
+	 * @return
+	 */
+	private Journey getJourneyAfterCharterOut(Schedule charterOutSchedule) {
+		// only expect one sequence.
+		Assert.assertTrue("Only one sequence", charterOutSchedule.getSequences().size() == 1);
+		Sequence seq = charterOutSchedule.getSequences().get(0);
+
+		// get the event after the charter out.
+		for (ScheduledEvent e : seq.getEvents()) {
+
+			if (e instanceof CharterOutVisit) {
+				// got the charter out, now get the event after it and make sure it is a journey. If it is, return it.
+				int charterOutIndex = seq.getEvents().indexOf(e);
+				int nextEventIndex = charterOutIndex + 1;
+				Assert.assertTrue("There is an event after the charter out", seq.getEvents().size() >= nextEventIndex);
+				ScheduledEvent eventAfterCharterOut = seq.getEvents().get(charterOutIndex + 1);
+				Assert.assertTrue("Event after charter out is a journey", eventAfterCharterOut instanceof Journey);
+
+				return (Journey) eventAfterCharterOut;
+			}
+		}
+
+		Assert.fail("No charter out in sequence");
+		return null;
 	}
 }
