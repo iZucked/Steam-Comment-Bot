@@ -122,11 +122,11 @@ public class ScenarioTools {
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
-			final int pilotLightRate) {
+			final int pilotLightRate, final int minHeelVolume) {
 
 		return createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed,
 				ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed,
-				ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate, null);
+				ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate, minHeelVolume, null);
 
 	}
 
@@ -166,14 +166,14 @@ public class ScenarioTools {
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
-			final int pilotLightRate, final VesselClassCost canalCost) {
+			final int pilotLightRate, final int minHeelVolume, final VesselClassCost canalCost) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
 		final int cooldownTime = 0;
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
-		final int minHeelVolume = 0;
+		//final int minHeelVolume = 0;
 		final int spotCharterCount = 0;
 		final double fillCapacity = 1.0;
 		// ports
