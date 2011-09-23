@@ -240,6 +240,10 @@ public class HeelOutOfCharterOutTests {
 		return null;
 	}
 
+	/**
+	 * Assert that during a given journey NBO and FBO is not used and base fuel is.
+	 * @param j
+	 */
 	private void assertLNGNotUsed(Journey j) {
 
 		for (FuelQuantity fq : j.getFuelUsage()) {
@@ -250,6 +254,10 @@ public class HeelOutOfCharterOutTests {
 		}
 	}
 
+	/**
+	 * Assert that during a given journey base fuel is not used, but NBO and FBO are
+	 * @param j
+	 */
 	private void assertBaseFuelNotUsed(Journey j) {
 
 		for (FuelQuantity fq : j.getFuelUsage()) {
@@ -260,6 +268,10 @@ public class HeelOutOfCharterOutTests {
 		}
 	}
 
+	/**
+	 * Assert that during a given journey FBO is not used, but NBO and base fuel are.
+	 * @param j
+	 */
 	private void assertFBONotUsed(Journey j) {
 
 		for (FuelQuantity fq : j.getFuelUsage()) {
