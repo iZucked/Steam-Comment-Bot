@@ -139,6 +139,8 @@ public class HeelOutOfCharterOutTests {
 		assertLNGNotUsed(j);
 	}
 
+	
+	
 	/**
 	 * For testing whether the heel limit affects fuel choice if LNG is cheaper than BF.
 	 * @param heelLimit
@@ -157,6 +159,39 @@ public class HeelOutOfCharterOutTests {
 		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
 
 		return getJourneyAfterCharterOut(result);
+	}
+	
+
+	/**
+	 * If the heel is available and cheaper
+	 */
+	@Test
+	public void heelAvailableCheaper() {
+
+		final int heelLimit = 1000;
+		Journey j  = testHeelWithCheaperLNG(heelLimit);
+		assertBaseFuelNotUsed(j);
+	}
+	
+	/**
+	 * Heel is only available for NBO, BF used to supplement.
+	 */
+	@Test
+	public void heelNBOAvailableCheaper() {
+
+		final int heelLimit = 500;
+		Journey j = testHeelWithCheaperLNG(heelLimit);
+		assertFBONotUsed(j);
+	}
+	/**
+	 * LNG is not available so is not used even though it is cheaper.
+	 */
+	@Test
+	public void heelCheaperButNotAvailable() {
+
+		final int heelLimit = 0;
+		Journey j = testHeelWithCheaperLNG(heelLimit);
+		assertLNGNotUsed(j);
 	}
 
 	/**
