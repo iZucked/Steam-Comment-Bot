@@ -241,16 +241,18 @@ public class HeelOutOfCharterOutTests {
 	}
 
 	/**
-	 * Assert that during a given journey NBO and FBO is not used and base fuel is.
+	 * Assert that during a given journey NBO and FBO are not used and base fuel is.
 	 * @param j
 	 */
 	private void assertLNGNotUsed(Journey j) {
 
 		for (FuelQuantity fq : j.getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL)
+			if (fq.getFuelType() == FuelType.NBO)
+				Assert.assertTrue("NBO not used", fq.getQuantity() == 0);
+			else if (fq.getFuelType() == FuelType.FBO)
+				Assert.assertTrue("FBO not used", fq.getQuantity() == 0);
+			else if (fq.getFuelType() == FuelType.BASE_FUEL)
 				Assert.assertTrue("Base fuel used", fq.getQuantity() > 0);
-			else
-				Assert.assertTrue("FBO and NBO not used", fq.getQuantity() == 0);
 		}
 	}
 
@@ -263,8 +265,10 @@ public class HeelOutOfCharterOutTests {
 		for (FuelQuantity fq : j.getFuelUsage()) {
 			if (fq.getFuelType() == FuelType.BASE_FUEL)
 				Assert.assertTrue("Base fuel not used", fq.getQuantity() == 0);
-			else
-				Assert.assertTrue("FBO and NBO used", fq.getQuantity() > 0);
+			else if (fq.getFuelType() == FuelType.NBO)
+				Assert.assertTrue("NBO used", fq.getQuantity() > 0);
+			else if (fq.getFuelType() == FuelType.FBO)
+				Assert.assertTrue("FBO used", fq.getQuantity() > 0);
 		}
 	}
 
@@ -277,8 +281,10 @@ public class HeelOutOfCharterOutTests {
 		for (FuelQuantity fq : j.getFuelUsage()) {
 			if (fq.getFuelType() == FuelType.FBO)
 				Assert.assertTrue("FBO not used", fq.getQuantity() == 0);
-			else
-				Assert.assertTrue("NBO and BF used", fq.getQuantity() > 0);
+			else if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("BF used", fq.getQuantity() > 0);
+			else if (fq.getFuelType() == FuelType.NBO)
+				Assert.assertTrue("NBO used", fq.getQuantity() > 0);
 		}
 	}
 }
