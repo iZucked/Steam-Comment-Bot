@@ -124,16 +124,33 @@ public class ScenarioTools {
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
 			final int pilotLightRate, final int minHeelVolume) {
 
-		return createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed,
+		return createScenarioWithCanal(new int[] { distanceBetweenPorts }, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed,
 				ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed,
 				ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate, minHeelVolume, null);
 
 	}
 
 	/**
+	 * Same as
+	 * {@link #createScenarioWithCanal(int[], float, float, float, int, float, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, boolean, int, int, VesselClassCost)}
+	 * but only has argument for one distance between the two ports.
+	 */
+	public static Scenario createScenarioWithCanal(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
+			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
+			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
+			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
+			final int pilotLightRate, final int minHeelVolume, final VesselClassCost canalCost) {
+		return createScenarioWithCanal(new int[] { distanceBetweenPorts }, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed,
+				ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed,
+				ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate, minHeelVolume, canalCost);
+
+	}
+
+	/**
 	 * Creates a scenario.
 	 * 
-	 * @param distanceBetweenPorts
+	 * @param distancesBetweenPorts
+	 *            An array with distances using ocean routes between ports A and B
 	 * @param baseFuelUnitPrice
 	 * @param dischargePrice
 	 * @param cvValue
@@ -162,7 +179,7 @@ public class ScenarioTools {
 	 *            If this is not null a canal is added. If it is null no canal is added.
 	 * @return
 	 */
-	public static Scenario createScenarioWithCanal(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
+	public static Scenario createScenarioWithCanal(final int[] distancesBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
@@ -173,12 +190,12 @@ public class ScenarioTools {
 		final int cooldownTime = 0;
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
-		//final int minHeelVolume = 0;
+		// final int minHeelVolume = 0;
 		final int spotCharterCount = 0;
 		final double fillCapacity = 1.0;
 		// ports
-		final int distanceFromAToB = distanceBetweenPorts;
-		final int distanceFromBToA = distanceBetweenPorts;
+		// final int distanceFromAToB = distanceBetweenPorts;
+		// final int distanceFromBToA = distanceBetweenPorts;
 		// load and discharge prices and quantities
 		final int loadPrice = 1000;
 		final int loadMaxQuantity = 100000;
@@ -271,19 +288,20 @@ public class ScenarioTools {
 		scenario.getPortModel().getPorts().add(A);
 		scenario.getPortModel().getPorts().add(B);
 
-		final DistanceLine distance = PortFactory.eINSTANCE.createDistanceLine();
-		distance.setFromPort(A);
-		distance.setToPort(B);
-		distance.setDistance(distanceFromAToB);
+		for (int distance : distancesBetweenPorts) {
+			final DistanceLine distanceLine = PortFactory.eINSTANCE.createDistanceLine();
+			distanceLine.setFromPort(A);
+			distanceLine.setToPort(B);
+			distanceLine.setDistance(distance);
+			scenario.getDistanceModel().getDistances().add(distanceLine);
 
-		// don't forget that distances can be asymmetric, so have to go both ways.
-		final DistanceLine distance2 = PortFactory.eINSTANCE.createDistanceLine();
-		distance2.setFromPort(B);
-		distance2.setToPort(A);
-		distance2.setDistance(distanceFromBToA);
-
-		scenario.getDistanceModel().getDistances().add(distance);
-		scenario.getDistanceModel().getDistances().add(distance2);
+			// don't forget that distances can be asymmetric, so have to go both ways.
+			final DistanceLine distancLineBack = PortFactory.eINSTANCE.createDistanceLine();
+			distancLineBack.setFromPort(B);
+			distancLineBack.setToPort(A);
+			distancLineBack.setDistance(distance);
+			scenario.getDistanceModel().getDistances().add(distancLineBack);
+		}
 
 		final Entity e = ContractFactory.eINSTANCE.createEntity();
 		scenario.getContractModel().getEntities().add(e);
