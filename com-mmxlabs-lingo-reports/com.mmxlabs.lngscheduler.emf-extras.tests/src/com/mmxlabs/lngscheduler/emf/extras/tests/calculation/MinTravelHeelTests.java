@@ -30,20 +30,14 @@ import scenario.schedule.events.FuelType;
 public class MinTravelHeelTests {
 
 	/**
-	 * Test that ballast leg is NBO, idle is cheaper on BF. TODO test result of non-zero min heel
+	 * Min heel is zero. Test that ballast leg is NBO, idle is cheaper on BF. TODO test result of non-zero min heel
 	 */
 	@Test
 	public void testZeroMinHeel() {
-		final String testName = "Test min heel";
+		final String testName = "Test zero min heel";
 		final int minHeelVolume = 0;
-		
-		// These are set up so that the ballast journey is cheaper on NBO, whilst the ballast idle is cheaper on base fuel.
-		final int travelFuelConsumptionPerHour = 10;
-		final int idleFuelConsumptionPerHour = 9;
-		final int travelNBORatePerHour = 10;
-		final int idleNBORatePerHour = 10;
 
-		CargoAllocation a = test(testName, minHeelVolume, travelFuelConsumptionPerHour, idleFuelConsumptionPerHour, travelNBORatePerHour, idleNBORatePerHour);
+		CargoAllocation a = testMinHeel(testName, minHeelVolume);
 
 		// ballast travel is cheaper on NBO
 		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
@@ -60,13 +54,56 @@ public class MinTravelHeelTests {
 				Assert.assertTrue("Ballast idle doesn't use NBO or FBO", fq.getQuantity() == 0);
 		}
 	}
+	/**
+	 * Min heel is non-zero. Test that ballast leg is NBO, idle is cheaper on BF but NBO is used because min heel is left over
+	 */
+	@Test
+	public void testNonZeroMinHeel() {
+		final String testName = "Test non-zero min heel";
+		// travel uses 1000 MT of LNG, so give 90 MT extra for idle (9 MT/hour * 10 hours = 90 MT)
+		final int minHeelVolume = 2000;
+
+		CargoAllocation a = testMinHeel(testName, minHeelVolume);
+
+		// ballast travel is cheaper on NBO
+		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO)
+				Assert.assertTrue("Ballast leg uses NBO", fq.getQuantity() > 0);
+			else
+				Assert.assertTrue("Ballast leg doesn't use FBO or base fuel", fq.getQuantity() == 0);
+		}
+		// ballast idle is cheaper on base fuel but NBO used from left over min heel.
+		for (FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO)
+				Assert.assertTrue("Ballast idle uses NBO", fq.getQuantity() > 0);
+			else if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Ballast idle doesn't use base fuel", fq.getQuantity() == 0);
+		}
+	}
+
+	/**
+	 * Test the result of different min heel volumes.
+	 * <p>
+	 * The ballast leg is cheaper on NBO, but the ballast idle is cheaper on base fuel. If the vessel has a min heel large enough to provide enough NBO for the idle then NBO should be used on the
+	 * idle. If the vessel doesn't have enough min heel then base fuel should be used on the idle.
+	 */
+	public CargoAllocation testMinHeel(final String testName, final int minHeelVolume) {
+
+		// These are set up so that the ballast journey is cheaper on NBO, whilst the ballast idle is cheaper on base fuel.
+		final int travelFuelConsumptionPerHour = 10;
+		final int idleFuelConsumptionPerHour = 9;
+		final int travelNBORatePerHour = 10;
+		final int idleNBORatePerHour = 10;
+
+		return test(testName, minHeelVolume, travelFuelConsumptionPerHour, idleFuelConsumptionPerHour, travelNBORatePerHour, idleNBORatePerHour);
+	}
 
 	private CargoAllocation test(final String testName, final int minHeelVolume, final int fuelTravelConsumptionPerHour, final int fuelIdleConsumptionPerHour, final int NBOTravelRatePerHour,
 			final int NBOIdleRatePerHour) {
 
 		// NBO can cover fuel consumption
-		//final int fuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(10);
-		//final int NBORatePerDay = ScenarioTools.convertPerHourToPerDay(10);
+		// final int fuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(10);
+		// final int NBORatePerDay = ScenarioTools.convertPerHourToPerDay(10);
 
 		// same distance between both ports.
 		final int distanceBetweenPorts = 1000;
