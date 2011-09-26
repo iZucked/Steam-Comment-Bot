@@ -115,10 +115,11 @@ public class FuelChoiceBoundaryTests {
 		final int portDistance = 1000;
 		final boolean useDryDock = true;
 		final int pilotLightRate = 0;
+		final int minHeelVolume = 0;
 
 		final Scenario scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
 				fuelConsumptionPerDay, speed, fuelConsumptionPerDay, fuelConsumptionPerDay, NBORatePerDay, NBORatePerDay, speed, fuelConsumptionPerDay, speed, fuelConsumptionPerDay, fuelConsumptionPerDay,
-				NBORatePerDay, NBORatePerDay, useDryDock, pilotLightRate);
+				NBORatePerDay, NBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
@@ -224,11 +225,12 @@ public class FuelChoiceBoundaryTests {
 		final int idleNBORatePerDay = ScenarioTools.convertPerHourToPerDay(idleNBORatePerHour);
 
 		final int portDistance = 1000;
+		final int minHeelVolume = 0;
 		final boolean useDryDock = true;
 
 		final Scenario scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
 				travelFuelConsumptionPerDay, speed, travelFuelConsumptionPerDay, idleFuelConsumptionPerDay, idleNBORatePerDay, travelNBORatePerDay, speed, travelFuelConsumptionPerDay, speed,
-				travelFuelConsumptionPerDay, idleFuelConsumptionPerDay, idleNBORatePerDay, travelNBORatePerDay, useDryDock, pilotLightRate);
+				travelFuelConsumptionPerDay, idleFuelConsumptionPerDay, idleNBORatePerDay, travelNBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
