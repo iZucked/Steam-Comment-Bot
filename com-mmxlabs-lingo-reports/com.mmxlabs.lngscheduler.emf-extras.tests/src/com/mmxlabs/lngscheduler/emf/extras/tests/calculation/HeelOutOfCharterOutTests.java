@@ -207,7 +207,7 @@ public class HeelOutOfCharterOutTests {
 		final int maxSpeed = speed;
 		final int capacity = 100000;
 		final int ballastMinSpeed = speed;
-		final int ballastMinConsumption = speed;
+		final int ballastMinConsumption = fuelConsumptionPerDay;
 		final int ballastMaxSpeed = speed;
 		final int ballastMaxConsumption = fuelConsumptionPerDay;
 		final int ballastIdleConsumptionRate = fuelConsumptionPerDay;
