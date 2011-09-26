@@ -43,7 +43,7 @@ public class MinTravelHeelTests {
 		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
 			if (fq.getFuelType() == FuelType.NBO)
 				Assert.assertTrue("Ballast leg uses NBO", fq.getQuantity() > 0);
-			else
+			else if (fq.getFuelType() == FuelType.BASE_FUEL || fq.getFuelType() == FuelType.FBO)
 				Assert.assertTrue("Ballast leg doesn't use FBO or base fuel", fq.getQuantity() == 0);
 		}
 		// ballast idle is cheaper on base fuel
@@ -69,7 +69,7 @@ public class MinTravelHeelTests {
 		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
 			if (fq.getFuelType() == FuelType.NBO)
 				Assert.assertTrue("Ballast leg uses NBO", fq.getQuantity() > 0);
-			else
+			else if (fq.getFuelType() == FuelType.BASE_FUEL || fq.getFuelType() == FuelType.FBO)
 				Assert.assertTrue("Ballast leg doesn't use FBO or base fuel", fq.getQuantity() == 0);
 		}
 		// ballast idle is cheaper on base fuel but NBO used from left over min heel.
