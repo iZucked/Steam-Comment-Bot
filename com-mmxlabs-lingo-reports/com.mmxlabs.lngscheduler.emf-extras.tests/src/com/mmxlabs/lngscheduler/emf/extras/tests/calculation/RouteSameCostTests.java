@@ -18,6 +18,8 @@ import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 
 /**
+ * <a href="https://mmxlabs.fogbugz.com/default.asp?209">Case 209: Equally priced routes</a>
+ * <p>
  * Test behaviour when there are two cheapest routes with identical prices. The order doesn't matter so long as the price is the same.
  * <p>
  * Should test that for at least two identically priced routes they are the same price and are chosen over more expensive routes.
