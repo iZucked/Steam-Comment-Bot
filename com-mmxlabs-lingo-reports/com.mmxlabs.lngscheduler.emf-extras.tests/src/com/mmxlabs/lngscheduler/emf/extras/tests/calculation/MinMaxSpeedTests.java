@@ -34,13 +34,14 @@ public class MinMaxSpeedTests {
 		final String testName = "Max speed due to lateness";
 		final int minSpeed = 8;
 		final int maxSpeed = 9;
+		final int travelTime = 100;
 		
-		CargoAllocation a = test(testName, minSpeed, maxSpeed);
+		CargoAllocation a = test(testName, minSpeed, maxSpeed, travelTime);
 
 		Assert.assertTrue("Laden leg travels at full speed", a.getLadenLeg().getSpeed() == maxSpeed);
 	}
 	
-	private CargoAllocation test(final String testName, final int minSpeed, final int maxSpeed) {
+	private CargoAllocation test(final String testName, final int minSpeed, final int maxSpeed, final int travelTime) {
 
 		final float dischargePrice = 1;
 		final float cvValue = 1;
@@ -52,7 +53,6 @@ public class MinMaxSpeedTests {
 
 		// same distance between both ports.
 		final int distanceBetweenPorts = 1000;
-		final int travelTime = 100;
 
 		// make fuel and LNG equivalent for ease.
 		final float equivalenceFactor = 1f;
