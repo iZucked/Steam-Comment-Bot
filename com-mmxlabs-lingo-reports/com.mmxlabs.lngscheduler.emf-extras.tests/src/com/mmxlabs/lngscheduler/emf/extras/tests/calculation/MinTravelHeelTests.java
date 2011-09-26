@@ -61,7 +61,7 @@ public class MinTravelHeelTests {
 	public void testNonZeroMinHeel() {
 		final String testName = "Test non-zero min heel";
 		// travel uses 1000 MT of LNG, so give 90 MT extra for idle (9 MT/hour * 10 hours = 90 MT)
-		final int minHeelVolume = 2000;
+		final int minHeelVolume = 100;
 
 		CargoAllocation a = testMinHeel(testName, minHeelVolume);
 
@@ -116,7 +116,7 @@ public class MinTravelHeelTests {
 
 		final float dischargePrice = 1;
 		final float cvValue = 1;
-		final float baseFuelUnitPrice = 1;
+		final float baseFuelUnitPrice = 1.1f;
 
 		final int minSpeed = speed;
 		final int maxSpeed = speed;
