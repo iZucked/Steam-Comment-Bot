@@ -205,7 +205,7 @@ public class FuelChoiceBoundaryTests {
 	/**
 	 * This test gives 100 hours of idle time after ballast and laden legs.
 	 */
-	private CargoAllocation test(final String name, final int travelFuelConsumptionPerHour, final int travelNBORatePerHour, final int idleFuelConsumptionPerHour, final int idleNBORatePerHour,
+	private CargoAllocation test(final String testName, final int travelFuelConsumptionPerHour, final int travelNBORatePerHour, final int idleFuelConsumptionPerHour, final int idleNBORatePerHour,
 			final float baseFuelUnitPrice, final float dischargePrice, final int pilotLightRate) {
 		// Create a dummy scenario
 
@@ -236,7 +236,7 @@ public class FuelChoiceBoundaryTests {
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
-		ScenarioTools.printScenario(name, a);
+		ScenarioTools.printScenario(testName, a);
 
 		return a;
 	}
