@@ -29,9 +29,9 @@ public class MinMaxSpeedTests {
 	 * Test that the max speed is hit when the available time is not enough.
 	 */
 	@Test
-	public void maxSpeed() {
+	public void maxSpeedWhenLate() {
 		
-		final String testName = "Max speed hit";
+		final String testName = "Max speed due to lateness";
 		final int minSpeed = 8;
 		final int maxSpeed = 9;
 		
