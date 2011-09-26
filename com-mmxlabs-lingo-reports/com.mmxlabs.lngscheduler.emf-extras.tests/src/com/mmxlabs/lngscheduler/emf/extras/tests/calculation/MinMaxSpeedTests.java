@@ -30,17 +30,33 @@ public class MinMaxSpeedTests {
 	 */
 	@Test
 	public void maxSpeedWhenLate() {
-		
+
 		final String testName = "Max speed due to lateness";
 		final int minSpeed = 8;
 		final int maxSpeed = 9;
 		final int travelTime = 100;
-		
+
 		CargoAllocation a = test(testName, minSpeed, maxSpeed, travelTime);
 
-		Assert.assertTrue("Laden leg travels at full speed", a.getLadenLeg().getSpeed() == maxSpeed);
+		Assert.assertTrue("Laden leg travels at max speed", a.getLadenLeg().getSpeed() == maxSpeed);
 	}
-	
+
+	/**
+	 * Test that the min speed is used if the vessel won't be late
+	 * */
+	@Test
+	public void minSpeedUsed() {
+
+		final String testName = "";
+		final int minSpeed = 10;
+		final int maxSpeed = 20;
+		final int travelTime = 150;
+
+		CargoAllocation a = test(testName, minSpeed, maxSpeed, travelTime);
+
+		Assert.assertTrue("Laden leg travels at min speed", a.getLadenLeg().getSpeed() == minSpeed);
+	}
+
 	private CargoAllocation test(final String testName, final int minSpeed, final int maxSpeed, final int travelTime) {
 
 		final float dischargePrice = 1;
