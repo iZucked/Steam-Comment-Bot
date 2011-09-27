@@ -110,9 +110,9 @@ public class RouteSameCostTests {
 	 * TODO remove this, add a method for creating a scenario with an arbitrary number of routes (canals and oceans)
 	 */
 	private CargoAllocation testCanalCost(final String testName, final int distanceBetweenPorts, final int canalDistance, final int canalLadenCost, final int canalUnladenCost,
-			final int canalTransitFuelPerHour, final int canalTransitTime, final int fuelTravelConsumptionPerHour, final int fuelIdleConsumptionPerHour, final int NBOTravelRatePerHour, final int NBOIdleRatePerHour) {
+			final int canalTransitFuelPerHour, final int canalTransitTime, final int fuelTravelConsumptionPerHour, final int fuelIdleConsumptionPerHour, final int NBOTravelRatePerHour,
+			final int NBOIdleRatePerHour) {
 
-		// Note: the variables are named incorrectly (per day rather than per hour) and should use ScenarioTools.convertPerHourToPerDay() not TimeUnit.
 		final int travelTime = 200;
 		final float baseFuelUnitPrice = 1;
 		final float equivalenceFactor = 1;
