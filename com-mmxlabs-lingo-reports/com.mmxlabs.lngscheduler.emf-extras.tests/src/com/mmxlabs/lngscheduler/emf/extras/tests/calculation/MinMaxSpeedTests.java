@@ -25,18 +25,28 @@ import scenario.schedule.Schedule;
  */
 public class MinMaxSpeedTests {
 
+	// The min and max speed of the vessel class.
+	private static final int minSpeed = 10;
+	private static final int maxSpeed = 20;
+
+	// The distance between both ports.
+	private static final int distanceBetweenPorts = 1000;
+	/** Base fuel more expensive than NBO. */
+	private static final float baseFuelExpensive = 1.1f;
+	/** Base fuel cheaper than NBO. */
+	private static final float baseFuelCheap = 0.9f;
+	
 	/**
-	 * Test that the max speed is hit when the available time is not enough.
+	 * Test that the max speed is hit on NBO when the available time is not enough.
 	 */
 	@Test
 	public void maxSpeedWhenLate() {
 
 		final String testName = "Max speed due to lateness";
-		final int minSpeed = 8;
-		final int maxSpeed = 9;
-		final int travelTime = 100;
+		// set the travel time to be one hour too little
+		final int travelTime = (distanceBetweenPorts / maxSpeed) - 1;
 
-		CargoAllocation a = test(testName, minSpeed, maxSpeed, travelTime);
+		CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
 
 		Assert.assertTrue("Laden leg travels at max speed", a.getLadenLeg().getSpeed() == maxSpeed);
 	}
@@ -47,31 +57,24 @@ public class MinMaxSpeedTests {
 	@Test
 	public void minSpeedUsed() {
 
-		final String testName = "";
-		final int minSpeed = 10;
-		final int maxSpeed = 20;
-		final int travelTime = 150;
+		final String testName = "Min speed used";
+		// set the travel time to be sufficient for min speed travel
+		final int travelTime = (distanceBetweenPorts / minSpeed) + 1;
 
-		CargoAllocation a = test(testName, minSpeed, maxSpeed, travelTime);
+		CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
 
 		Assert.assertTrue("Laden leg travels at min speed", a.getLadenLeg().getSpeed() == minSpeed);
 	}
 
-	private CargoAllocation test(final String testName, final int minSpeed, final int maxSpeed, final int travelTime) {
+	private CargoAllocation test(final String testName, final int travelTime, final float baseFuelUnitPrice) {
 
 		final float dischargePrice = 1;
 		final float cvValue = 1;
-		final float baseFuelUnitPrice = 1;
-
-		// Set NBO so it is not enough to cover travelling fuel, so either need base fuel or FBO.
-		final int fuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(10);
-		final int NBORatePerDay = ScenarioTools.convertPerHourToPerDay(10);
-
-		// same distance between both ports.
-		final int distanceBetweenPorts = 1000;
-
 		// make fuel and LNG equivalent for ease.
 		final float equivalenceFactor = 1f;
+
+		final int fuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(10);
+		final int NBORatePerDay = ScenarioTools.convertPerHourToPerDay(10);
 
 		final int capacity = 100000;
 		final int ballastMinSpeed = minSpeed;
