@@ -25,14 +25,12 @@ import scenario.schedule.Schedule;
  * Should test that for at least two identically priced routes they are the same price and are chosen over more expensive routes.
  * 
  * @author Adam Semenenko
- *
+ * 
  */
 public class RouteSameCostTests {
 
 	private static final String defaultRouteName = IMultiMatrixProvider.Default_Key;
 	private static final String canalName = "Suez canal";
-
-
 
 	/**
 	 * Canal is twice the distance of a sea route. Fuel consumption and NBO rates are all identical. Canal has no fees.
@@ -41,9 +39,8 @@ public class RouteSameCostTests {
 	 * TODO Create more tests along this line.
 	 * 
 	 * <p>
-	 * The routes are identically priced. Add some more expensive routes. Check at
-	 * 1) the two cheapest routes are the same price.
-	 * 2) one of the two cheapest are selected over the more expensive routes.
+	 * The routes are identically priced. Add some more expensive routes. Check at 1) the two cheapest routes are the same price. 2) one of the two cheapest are selected over the more expensive
+	 * routes.
 	 * <p>
 	 * Ignore test until test methods are improved (more routes, test same cost, test cheapest used)
 	 */
@@ -69,7 +66,7 @@ public class RouteSameCostTests {
 		Assert.assertTrue("Laden leg travels on open sea", defaultRouteName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on open sea", defaultRouteName.equals(a.getBallastLeg().getRoute()));
 	}
-	
+
 	/**
 	 * TODO What's the default behaviour if a canal and ocean are equal?
 	 * <p>
@@ -108,13 +105,14 @@ public class RouteSameCostTests {
 
 		return testCanalCost(testName, portDistance, canalDistance, canalCost, canalCost, canalFuelDays, canalTransitTimeHours, fuelConsumptionHours, fuelConsumptionHours, NBORateHours, NBORateHours);
 	}
-	
+
 	/**
 	 * TODO remove this, add a method for creating a scenario with an arbitrary number of routes (canals and oceans)
 	 */
 	private CargoAllocation testCanalCost(final String testName, final int distanceBetweenPorts, final int canalDistance, final int canalLadenCost, final int canalUnladenCost,
 			final int canalTransitFuelDays, final int canalTransitTime, final int fuelTravelConsumptionDays, final int fuelIdleConsumptionDays, final int NBOTravelRateDays, final int NBOIdleRateDays) {
 
+		// Note: the variables are named incorrectly (per day rather than per hour) and should use ScenarioTools.convertPerHourToPerDay() not TimeUnit.
 		final int travelTime = 200;
 		final float baseFuelUnitPrice = 1;
 		final float equivalenceFactor = 1;
@@ -149,5 +147,5 @@ public class RouteSameCostTests {
 
 		return a;
 	}
-	
+
 }
