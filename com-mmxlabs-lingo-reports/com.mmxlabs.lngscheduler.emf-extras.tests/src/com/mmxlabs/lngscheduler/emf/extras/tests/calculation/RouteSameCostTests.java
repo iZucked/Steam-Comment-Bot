@@ -110,7 +110,7 @@ public class RouteSameCostTests {
 	 * TODO remove this, add a method for creating a scenario with an arbitrary number of routes (canals and oceans)
 	 */
 	private CargoAllocation testCanalCost(final String testName, final int distanceBetweenPorts, final int canalDistance, final int canalLadenCost, final int canalUnladenCost,
-			final int canalTransitFuelDays, final int canalTransitTime, final int fuelTravelConsumptionDays, final int fuelIdleConsumptionDays, final int NBOTravelRateDays, final int NBOIdleRateDays) {
+			final int canalTransitFuelPerHour, final int canalTransitTime, final int fuelTravelConsumptionPerHour, final int fuelIdleConsumptionPerHour, final int NBOTravelRatePerHour, final int NBOIdleRatePerHour) {
 
 		// Note: the variables are named incorrectly (per day rather than per hour) and should use ScenarioTools.convertPerHourToPerDay() not TimeUnit.
 		final int travelTime = 200;
@@ -123,21 +123,21 @@ public class RouteSameCostTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelTravelConsumptionHours = (int) TimeUnit.DAYS.toHours(fuelTravelConsumptionDays);
-		final int NBOTravelRateHours = (int) TimeUnit.DAYS.toHours(NBOTravelRateDays);
-		final int canalTransitFuelHours = (int) TimeUnit.DAYS.toHours(canalTransitFuelDays);
+		final int fuelTravelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
+		final int NBOTravelRatePerDay = ScenarioTools.convertPerHourToPerDay(NBOTravelRatePerHour);
+		final int canalTransitFuelPerDay = ScenarioTools.convertPerHourToPerDay(canalTransitFuelPerHour);
 
-		final int fuelIdleConsumptionHours = (int) TimeUnit.DAYS.toHours(fuelIdleConsumptionDays);
-		final int NBOIdleRateHours = (int) TimeUnit.DAYS.toHours(NBOIdleRateDays);
+		final int fuelIdleConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelIdleConsumptionPerHour);
+		final int NBOIdleRatePerDay = ScenarioTools.convertPerHourToPerDay(NBOIdleRatePerHour);
 
 		final boolean useDryDock = true;
 		final int pilotLightRate = 0;
 
-		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelHours, canalTransitTime);
+		VesselClassCost canalCost = ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelPerDay, canalTransitTime);
 
 		Scenario canalScenario = ScenarioTools.createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
-				fuelTravelConsumptionHours, speed, fuelTravelConsumptionHours, fuelIdleConsumptionHours, NBOIdleRateHours, NBOTravelRateHours, speed, fuelTravelConsumptionHours, speed,
-				fuelTravelConsumptionHours, fuelIdleConsumptionHours, NBOIdleRateHours, NBOTravelRateHours, useDryDock, pilotLightRate, minHeelVolume, canalCost);
+				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed, fuelTravelConsumptionPerDay, speed,
+				fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, minHeelVolume, canalCost);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(canalScenario);
 		// check result is how we expect it to be
