@@ -29,11 +29,11 @@ public class MinMaxSpeedTests {
 	private static final int minSpeed = 10;
 	private static final int maxSpeed = 20;
 
-	// The distance between both ports.
+	/** The distance between the ports. */
 	private static final int distanceBetweenPorts = 1000;
-	/** Base fuel more expensive than NBO. */
+	/** This value makes base fuel more expensive than NBO. */
 	private static final float baseFuelExpensive = 1.1f;
-	/** Base fuel cheaper than NBO. */
+	/** This value makes base fuel cheaper than NBO. */
 	private static final float baseFuelCheap = 0.9f;
 	
 	/**
