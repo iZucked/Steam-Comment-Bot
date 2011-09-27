@@ -49,6 +49,7 @@ public class MinMaxSpeedTests {
 		CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
 
 		Assert.assertTrue("Laden leg travels at max speed", a.getLadenLeg().getSpeed() == maxSpeed);
+		Assert.assertTrue("Ballast leg travels at max speed", a.getBallastLeg().getSpeed() == maxSpeed);
 	}
 
 	/**
@@ -64,6 +65,7 @@ public class MinMaxSpeedTests {
 		CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
 
 		Assert.assertTrue("Laden leg travels at min speed", a.getLadenLeg().getSpeed() == minSpeed);
+		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minSpeed);
 	}
 
 	private CargoAllocation test(final String testName, final int travelTime, final float baseFuelUnitPrice) {
@@ -96,7 +98,7 @@ public class MinMaxSpeedTests {
 
 		Scenario scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
 				ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption,
-				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, false, pilotLightRate, minHeelVolume);
+				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, true, pilotLightRate, minHeelVolume);
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
