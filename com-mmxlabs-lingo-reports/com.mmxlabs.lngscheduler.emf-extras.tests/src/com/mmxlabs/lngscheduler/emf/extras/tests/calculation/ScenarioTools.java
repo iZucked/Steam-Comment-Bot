@@ -164,6 +164,7 @@ public class ScenarioTools {
 	 * @param ballastMaxSpeed
 	 * @param ballastMaxConsumption
 	 * @param ballastIdleConsumptionRate
+	 *            This will be set to ballastIdleNBORate if it is larger (code can't cope otherwise).
 	 * @param ballastIdleNBORate
 	 * @param ballastNBORate
 	 * @param ladenMinSpeed
@@ -171,6 +172,7 @@ public class ScenarioTools {
 	 * @param ladenMaxSpeed
 	 * @param ladenMaxConsumption
 	 * @param ladenIdleConsumptionRate
+	 *            This will be set to ladenIdleNBORate if it is larger (code can't cope otherwise).
 	 * @param ladenIdleNBORate
 	 * @param ladenNBORate
 	 * @param useDryDock
@@ -181,8 +183,8 @@ public class ScenarioTools {
 	 */
 	public static Scenario createScenarioWithCanals(final int[] distancesBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
-			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
-			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
+			final int ballastMaxConsumption, int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
+			final int ladenMaxSpeed, final int ladenMaxConsumption, int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
 			final int pilotLightRate, final int minHeelVolume, final VesselClassCost[] canalCosts) {
 
 		// 'magic' numbers that could be set in the arguments.
@@ -200,6 +202,12 @@ public class ScenarioTools {
 		final int loadPrice = 1000;
 		final int loadMaxQuantity = 100000;
 		final int dischargeMaxQuantity = 100000;
+
+		// idle consumption will never be more than the idle NBO rate, so clamp the idle consumptions
+		if (ballastIdleConsumptionRate > ballastIdleNBORate)
+			ballastIdleConsumptionRate = ballastIdleNBORate;
+		if (ladenIdleConsumptionRate > ladenIdleNBORate)
+			ladenIdleConsumptionRate = ladenIdleNBORate;
 
 		final Scenario scenario = ScenarioFactory.eINSTANCE.createScenario();
 		scenario.createMissingModels();
