@@ -7,6 +7,8 @@ package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.common.TimeUnitConvert;
+
 import scenario.Scenario;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
@@ -19,6 +21,8 @@ import scenario.schedule.Schedule;
  * - min speed when available time is long enough and on base fuel mode<br>
  * - min NBO speed when available time is long enough and on NBO<br>
  * mode
+ * 
+ * TODO NBO speed not currently set. Wait for fix then properly implement tests for each min/max speed.
  * 
  * @author Adam Semenenko
  * 
@@ -75,8 +79,8 @@ public class MinMaxSpeedTests {
 		// make fuel and LNG equivalent for ease.
 		final float equivalenceFactor = 1f;
 
-		final int fuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(10);
-		final int NBORatePerDay = ScenarioTools.convertPerHourToPerDay(10);
+		final int fuelConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(10);
+		final int NBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(10);
 
 		final int capacity = 100000;
 		final int ballastMinSpeed = minSpeed;

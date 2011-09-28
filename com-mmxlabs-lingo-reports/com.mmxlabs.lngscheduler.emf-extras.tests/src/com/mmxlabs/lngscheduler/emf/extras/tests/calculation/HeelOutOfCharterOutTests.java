@@ -7,6 +7,8 @@ package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.common.TimeUnitConvert;
+
 import scenario.Scenario;
 import scenario.schedule.Schedule;
 import scenario.schedule.Sequence;
@@ -192,8 +194,8 @@ public class HeelOutOfCharterOutTests {
 	private Schedule evaluateCharterOutScenario(final float dischargePrice, final float cvValue, final float baseFuelUnitPrice, final int charterOutTimeDays, final int heelLimit) {
 
 		// Set NBO so it is not enough to cover travelling fuel, so either need base fuel or FBO.
-		final int fuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(10);
-		final int NBORatePerDay = ScenarioTools.convertPerHourToPerDay(5);
+		final int fuelConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(10);
+		final int NBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(5);
 
 		// same distance between both ports.
 		final int distanceBetweenPorts = 1000;

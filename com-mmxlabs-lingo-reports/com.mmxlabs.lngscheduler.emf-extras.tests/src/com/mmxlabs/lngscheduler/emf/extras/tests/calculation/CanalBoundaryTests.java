@@ -7,6 +7,8 @@ package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.common.TimeUnitConvert;
+
 import scenario.Scenario;
 import scenario.fleet.VesselClassCost;
 import scenario.schedule.CargoAllocation;
@@ -235,12 +237,12 @@ public class CanalBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelTravelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
-		final int NBOTravelRatePerDay = ScenarioTools.convertPerHourToPerDay(NBOTravelRatePerHour);
-		final int canalTransitFuelPerDay = ScenarioTools.convertPerHourToPerDay(canalTransitFuelPerHour);
+		final int fuelTravelConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
+		final int NBOTravelRatePerDay = TimeUnitConvert.convertPerHourToPerDay(NBOTravelRatePerHour);
+		final int canalTransitFuelPerDay = TimeUnitConvert.convertPerHourToPerDay(canalTransitFuelPerHour);
 
-		final int fuelIdleConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelIdleConsumptionPerHour);
-		final int NBOIdleRatePerDay = ScenarioTools.convertPerHourToPerDay(NBOIdleRatePerHour);
+		final int fuelIdleConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(fuelIdleConsumptionPerHour);
+		final int NBOIdleRatePerDay = TimeUnitConvert.convertPerHourToPerDay(NBOIdleRatePerHour);
 
 		final boolean useDryDock = true;
 		final int pilotLightRate = 0;

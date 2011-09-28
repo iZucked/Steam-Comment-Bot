@@ -7,6 +7,8 @@ package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.common.TimeUnitConvert;
+
 import scenario.Scenario;
 import scenario.fleet.VesselClassCost;
 import scenario.schedule.CargoAllocation;
@@ -41,7 +43,7 @@ public class RouteSameCostTests {
 		final String canalName = "Canal 1";
 		final int canalDistance = 900;
 		final int canalCost = 50;
-		final int canalTransitFuelPerDay = ScenarioTools.convertPerHourToPerDay(0);
+		final int canalTransitFuelPerDay = TimeUnitConvert.convertPerHourToPerDay(0);
 		final int canalTransitTime = 0;
 
 		final VesselClassCost[] canalCosts = { ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalCost, canalCost, canalTransitFuelPerDay, canalTransitTime) };
@@ -84,7 +86,7 @@ public class RouteSameCostTests {
 		final String canalName = "Canal 1";
 		final int canalDistance = 2000;
 		final int canalCost = 0;
-		final int canalTransitFuelPerDay = ScenarioTools.convertPerHourToPerDay(0);
+		final int canalTransitFuelPerDay = TimeUnitConvert.convertPerHourToPerDay(0);
 		final int canalTransitTime = 0;
 
 		final VesselClassCost[] canalCosts = { ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalCost, canalCost, canalTransitFuelPerDay, canalTransitTime) };
@@ -131,11 +133,11 @@ public class RouteSameCostTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelTravelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
-		final int NBOTravelRatePerDay = ScenarioTools.convertPerHourToPerDay(NBORatePerHour);
+		final int fuelTravelConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
+		final int NBOTravelRatePerDay = TimeUnitConvert.convertPerHourToPerDay(NBORatePerHour);
 
 		// idle consumption and NBO rates are the same for every idle.
-		final int NBOIdleRatePerDay = ScenarioTools.convertPerHourToPerDay(NBORatePerHour);
+		final int NBOIdleRatePerDay = TimeUnitConvert.convertPerHourToPerDay(NBORatePerHour);
 		final int fuelIdleConsumptionPerDay = NBOIdleRatePerDay;
 
 		final boolean useDryDock = true;

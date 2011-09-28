@@ -7,6 +7,8 @@ package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.common.TimeUnitConvert;
+
 import scenario.Scenario;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
@@ -106,8 +108,8 @@ public class FuelChoiceBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelTravelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelConsumptionPerHour);
-		final int NBORatePerDay = ScenarioTools.convertPerHourToPerDay(NBORatePerHour);
+		final int fuelTravelConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(fuelConsumptionPerHour);
+		final int NBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(NBORatePerHour);
 
 		final int fuelIdleConsumptionPerDay = NBORatePerDay;
 
@@ -218,10 +220,10 @@ public class FuelChoiceBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int travelFuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(travelFuelConsumptionPerHour);
-		final int travelNBORatePerDay = ScenarioTools.convertPerHourToPerDay(travelNBORatePerHour);
-		final int idleFuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(idleFuelConsumptionPerHour);
-		final int idleNBORatePerDay = ScenarioTools.convertPerHourToPerDay(idleNBORatePerHour);
+		final int travelFuelConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(travelFuelConsumptionPerHour);
+		final int travelNBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(travelNBORatePerHour);
+		final int idleFuelConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(idleFuelConsumptionPerHour);
+		final int idleNBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(idleNBORatePerHour);
 
 		final int portDistance = 1000;
 		final int minHeelVolume = 0;
