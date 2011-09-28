@@ -658,7 +658,7 @@ public class ScenarioTools {
 	public static void printScenario(final String testName, final CargoAllocation a) {
 		System.err.println(testName);
 		System.err.println("Allocation " + ((Cargo) a.getLoadSlot().eContainer()).getId());
-		System.err.println("Total LNG volume used for fuel: " + a.getFuelVolume() + "M3");
+		System.err.println("Total cost: " + a.getTotalCost() + ", Total LNG volume used for fuel: " + a.getFuelVolume() + "M3");
 
 		printJourney("Laden Leg", a.getLadenLeg());
 		printIdle("Laden Idle", a.getLadenIdle());
