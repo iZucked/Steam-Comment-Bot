@@ -45,10 +45,6 @@ public class FuelChoiceBoundaryTests {
 			if (fq.getFuelType() == FuelType.FBO)
 				Assert.assertTrue("Laden leg never uses FBO", fq.getQuantity() == 0);
 		}
-		for (final FuelQuantity fq : a.getLadenIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.FBO)
-				Assert.assertTrue("Laden idle never uses FBO", fq.getQuantity() == 0);
-		}
 
 		// Check there is no heel by checking there is no NBO used after discharge
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
@@ -100,7 +96,8 @@ public class FuelChoiceBoundaryTests {
 	 * 
 	 * @return
 	 */
-	private CargoAllocation testPriceConsumption(final String name, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelConsumptionPerHour, final int NBORatePerHour) {
+	private CargoAllocation testPriceConsumption(final String name, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelConsumptionPerHour,
+			final int NBORatePerHour) {
 		// Create a dummy scenario
 		final int travelTime = 100;
 
@@ -109,8 +106,10 @@ public class FuelChoiceBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelConsumptionPerHour);
+		final int fuelTravelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelConsumptionPerHour);
 		final int NBORatePerDay = ScenarioTools.convertPerHourToPerDay(NBORatePerHour);
+
+		final int fuelIdleConsumptionPerDay = NBORatePerDay;
 
 		final int portDistance = 1000;
 		final boolean useDryDock = true;
@@ -118,8 +117,8 @@ public class FuelChoiceBoundaryTests {
 		final int minHeelVolume = 0;
 
 		final Scenario scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
-				fuelConsumptionPerDay, speed, fuelConsumptionPerDay, fuelConsumptionPerDay, NBORatePerDay, NBORatePerDay, speed, fuelConsumptionPerDay, speed, fuelConsumptionPerDay, fuelConsumptionPerDay,
-				NBORatePerDay, NBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
+				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, speed, fuelTravelConsumptionPerDay, speed,
+				fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
