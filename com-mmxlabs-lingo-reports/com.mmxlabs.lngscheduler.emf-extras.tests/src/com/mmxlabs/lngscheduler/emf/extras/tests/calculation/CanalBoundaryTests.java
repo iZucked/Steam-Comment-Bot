@@ -101,8 +101,8 @@ public class CanalBoundaryTests {
 		final int fuelIdleConsumptionPerHour = 5;
 		final int NBORatePerHour = 10;
 
-		return testCanalCost(testName, portDistance, canalDistance, canalLadenCost, canalUnladenCost, fuelTravelConsumptionPerHour, canalTransitTime, fuelTravelConsumptionPerHour, fuelIdleConsumptionPerHour,
-				NBORatePerHour, fuelIdleConsumptionPerHour);
+		return testCanalCost(testName, portDistance, canalDistance, canalLadenCost, canalUnladenCost, fuelTravelConsumptionPerHour, canalTransitTime, fuelTravelConsumptionPerHour,
+				fuelIdleConsumptionPerHour, NBORatePerHour, fuelIdleConsumptionPerHour);
 	}
 
 	/**
@@ -189,12 +189,13 @@ public class CanalBoundaryTests {
 		final int canalDistance = 900;
 		final int portDistance = 1000;
 
-		// use the same fuel consumption for every travel/idle/canal
-		final int fuelConsumptionPerHour = 10;
+		// use the same fuel consumption for laden and ballast travel/idle
+		final int fuelTravelConsumptionPerHour = 10;
 		final int NBORatePerHour = 5;
+		final int fuelIdleConsumptionPerHour = 5;
 
-		return testCanalCost(testName, portDistance, canalDistance, canalCost, canalCost, canalFuelDays, canalTransitTimeHours, fuelConsumptionPerHour, fuelConsumptionPerHour, NBORatePerHour,
-				NBORatePerHour);
+		return testCanalCost(testName, portDistance, canalDistance, canalCost, canalCost, canalFuelDays, canalTransitTimeHours, fuelTravelConsumptionPerHour, fuelIdleConsumptionPerHour,
+				NBORatePerHour, NBORatePerHour);
 	}
 
 	/**
