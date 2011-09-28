@@ -204,10 +204,14 @@ public class ScenarioTools {
 		final int dischargeMaxQuantity = 100000;
 
 		// idle consumption will never be more than the idle NBO rate, so clamp the idle consumptions
-		if (ballastIdleConsumptionRate > ballastIdleNBORate)
+		if (ballastIdleConsumptionRate > ballastIdleNBORate) {
+			System.err.println("Warning: had to clamp ballast idle consumption rate");
 			ballastIdleConsumptionRate = ballastIdleNBORate;
-		if (ladenIdleConsumptionRate > ladenIdleNBORate)
+		}
+		if (ladenIdleConsumptionRate > ladenIdleNBORate) {
+			System.err.println("Warning: had to clamp laden idle consumption rate");
 			ladenIdleConsumptionRate = ladenIdleNBORate;
+		}
 
 		final Scenario scenario = ScenarioFactory.eINSTANCE.createScenario();
 		scenario.createMissingModels();
