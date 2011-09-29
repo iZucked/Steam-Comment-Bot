@@ -36,7 +36,7 @@ public class StartEndRequirementPortConstraintTest {
 	final Mockery context = new Mockery();
 	
 	@Test
-	public void testValidityConstraint() {
+	public void testValidityConstraintFromPortAndTime() {
 		// This is the constraint we will be testing
 		final StartEndRequirementPortConstraint constraint = new StartEndRequirementPortConstraint();
 		// Mock a port and time to test
