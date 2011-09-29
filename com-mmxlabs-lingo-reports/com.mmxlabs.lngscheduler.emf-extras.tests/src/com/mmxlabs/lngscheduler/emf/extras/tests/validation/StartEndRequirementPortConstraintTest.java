@@ -45,7 +45,6 @@ public class StartEndRequirementPortConstraintTest {
 		final Vessel vessel = context.mock(Vessel.class);
 		// Mock a port to think about
 		final Port portA = context.mock(Port.class, "Port A");
-		final Port portB = context.mock(Port.class, "Port B");
 		// Finally mock a vessel class for the vessel to have
 		final VesselClass vesselClass = context.mock(VesselClass.class);
 
@@ -53,7 +52,8 @@ public class StartEndRequirementPortConstraintTest {
 
 		final IConstraintStatus failureStatus = context.mock(IConstraintStatus.class);
 
-		final EList inaccessiblePorts = context.mock(EList.class);
+		@SuppressWarnings("unchecked")
+		final EList<Port> inaccessiblePorts = context.mock(EList.class);
 
 		context.checking(new Expectations() {
 			{
@@ -129,13 +129,13 @@ public class StartEndRequirementPortConstraintTest {
 		final Vessel vessel = context.mock(Vessel.class);
 		// Mock a port to think about
 		final Port portA = context.mock(Port.class, "Port A");
-		final Port portB = context.mock(Port.class, "Port B");
 
 		final IValidationContext validationContext = context.mock(IValidationContext.class);
 
 		final IConstraintStatus failureStatus = context.mock(IConstraintStatus.class);
 
-		final EList inaccessiblePorts = context.mock(EList.class);
+		@SuppressWarnings("unchecked")
+		final EList<Port> inaccessiblePorts = context.mock(EList.class);
 
 		context.checking(new Expectations() {
 			{
@@ -152,15 +152,6 @@ public class StartEndRequirementPortConstraintTest {
 				// contains port A
 				exactly(1).of(inaccessiblePorts).contains(portA);
 				will(returnValue(true));
-
-				// // The constraint will want to ask if the port has been set (it
-				// // has)
-				// atLeast(1).of(vc).isSetPort();
-				// will(returnValue(true));
-				//
-				// // Then it will want to get the port
-				// atLeast(1).of(vc).getPort();
-				// will(returnValue(portA));
 
 				// It will ask for the port's name
 				atLeast(1).of(portA).getName();
