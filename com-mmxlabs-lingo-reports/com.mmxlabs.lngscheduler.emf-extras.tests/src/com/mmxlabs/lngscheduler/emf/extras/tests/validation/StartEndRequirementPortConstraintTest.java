@@ -31,10 +31,10 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintSta
  * 
  */
 public class StartEndRequirementPortConstraintTest {
-	
+
 	// Create a mockery to mock up all the objects involved in a test
 	final Mockery context = new Mockery();
-	
+
 	@Test
 	public void testValidityConstraintFromPortAndTime() {
 		// This is the constraint we will be testing
@@ -139,17 +139,14 @@ public class StartEndRequirementPortConstraintTest {
 
 		context.checking(new Expectations() {
 			{
-				// The constraint will need to be able to get at the port and
-				// time's eContainer (the vessel owning it, in this case)
+				// The constraint will need to be able to get vessel class' eContainer (the vessel owning it, in this case)
 				atLeast(1).of(vc).eContainer();
 				will(returnValue(vessel));
-				// It will also need to know which feature in the vessel is
-				// containing pat (the start requirement)
+				// It will also need to know which feature in the vessel is containing vessel class (the start requirement)
 				atLeast(1).of(vc).eContainingFeature();
 				will(returnValue(FleetPackage.eINSTANCE.getVessel_StartRequirement()));
 
-				// the inaccessible port list will be queried whether it
-				// contains port A
+				// the inaccessible port list will be queried whether it contains port A
 				exactly(1).of(inaccessiblePorts).contains(portA);
 				will(returnValue(true));
 
@@ -161,8 +158,9 @@ public class StartEndRequirementPortConstraintTest {
 				atLeast(1).of(vessel).getName();
 				will(returnValue("vessel"));
 
-				// // finally it will ask some questions to the context
-				// // what's the target?
+				// finally it will ask some questions to the context
+
+				// what's the target?
 				// exactly(1).of(validationContext).getTarget();
 				// will(returnValue(pat));
 
