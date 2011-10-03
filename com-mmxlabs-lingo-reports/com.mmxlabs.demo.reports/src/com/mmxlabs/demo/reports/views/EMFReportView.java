@@ -64,6 +64,7 @@ import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 public abstract class EMFReportView extends ViewPart implements
 		ISelectionListener {
 	private final List<ColumnHandler> handlers = new ArrayList<ColumnHandler>();
+	private final List<ColumnHandler> handlersInOrder = new ArrayList<ColumnHandler>();
 	boolean sortDescending = false;
 
 	protected EMFReportView() {
@@ -217,18 +218,25 @@ public abstract class EMFReportView extends ViewPart implements
 		}
 	}
 
-	protected final IFormatter calendarFormatter = new BaseFormatter() {
+	protected class CalendarFormatter extends BaseFormatter {
+		final DateFormat dateFormat;
+		final boolean showZone;
+
+		public CalendarFormatter(final DateFormat dateFormat, final boolean showZone) {
+			this.dateFormat = dateFormat;
+			this.showZone = showZone;
+		}
+		
 		@Override
 		public String format(final Object object) {
 			if (object == null)
 				return "";
 			final Calendar cal = (Calendar) object;
-			final DateFormat df = DateFormat.getDateTimeInstance(
-					DateFormat.SHORT, DateFormat.SHORT);
-			df.setCalendar(cal);
-			return df.format(cal.getTime()) + " ("
+
+			dateFormat.setCalendar(cal);
+			return dateFormat.format(cal.getTime()) + (showZone ? (" ("
 					+ cal.getTimeZone().getDisplayName(false, TimeZone.SHORT)
-					+ ")";
+ + ")") : "");
 		}
 
 		@Override
@@ -237,7 +245,12 @@ public abstract class EMFReportView extends ViewPart implements
 				return new Date(-Long.MAX_VALUE);
 			return ((Calendar) object).getTime();
 		}
-	};
+	}
+
+	protected final IFormatter calendarFormatter = new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), true);
+
+	protected final IFormatter datePartFormatter = new CalendarFormatter(DateFormat.getDateInstance(DateFormat.LONG), false);
+	protected final IFormatter timePartFormatter = new CalendarFormatter(DateFormat.getTimeInstance(DateFormat.SHORT), false);
 
 	protected final IntegerFormatter integerFormatter = new IntegerFormatter();
 
@@ -264,6 +277,7 @@ public abstract class EMFReportView extends ViewPart implements
 			final Object... path) {
 		final ColumnHandler handler = new ColumnHandler(formatter, path, title);
 		handlers.add(handler);
+		handlersInOrder.add(handler);
 
 		if (viewer != null) {
 			handler.createColumn(viewer).getColumn().pack();
@@ -311,7 +325,7 @@ public abstract class EMFReportView extends ViewPart implements
 			}
 		});
 
-		for (final ColumnHandler handler : handlers) {
+		for (final ColumnHandler handler : handlersInOrder) {
 			handler.createColumn(viewer).getColumn().pack();
 		}
 
@@ -421,6 +435,7 @@ public abstract class EMFReportView extends ViewPart implements
 		for (final ColumnHandler h : handlers) {
 			if (h.title.equals(title)) {
 				handlers.remove(h);
+				handlersInOrder.remove(h);
 				break;
 			}
 		}
