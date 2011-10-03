@@ -4,8 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser;
 
-import static org.junit.Assert.fail;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 public class CalculatorTest {
@@ -18,8 +17,7 @@ public class CalculatorTest {
 	}
 
 	/**
-	 * A division by zero should throw an exception even if the distance is
-	 * invalid.
+	 * A division by zero should throw an exception even if the distance is invalid.
 	 */
 	@Test(expected = ArithmeticException.class)
 	public void testSpeedFromDistanceTimeForNegDistanceAndDivideByZero() {
@@ -29,16 +27,50 @@ public class CalculatorTest {
 
 	@Test
 	public void testGetTimeFromSpeedDistance() {
-		fail("Not yet implemented");
+
+		final int limit = 1000;
+
+		for (int distance = 1; distance < limit; distance++) {
+			for (int speed = 1; speed < limit; speed++) {
+
+				final int expected = (int) ((Calculator.scale(distance)) / speed);
+				final int actual = Calculator.getTimeFromSpeedDistance(speed, distance);
+
+				Assert.assertEquals("Distance: " + distance + ", speed: " + speed, expected, actual);
+			}
+		}
 	}
 
 	@Test
 	public void testQuantityFromRateTime() {
-		fail("Not yet implemented");
+
+		final int limit = 1000;
+
+		for (long rate = 1; rate < limit; rate++) {
+			for (int time = 1; time < limit; time++) {
+
+				final long expectedQuantity = rate * time;
+				final long actualQuantity = Calculator.quantityFromRateTime(rate, time);
+
+				Assert.assertEquals("Rate: " + rate + ", time: " + time, expectedQuantity, actualQuantity);
+			}
+		}
 	}
 
 	@Test
 	public void testGetTimeFromRateQuantity() {
-		fail("Not yet implemented");
+
+		final long limit = 1000;
+
+		for (long quantity = 1; quantity < limit; quantity++) {
+			for (long rate = 1; rate < limit; rate++) {
+
+				final int expectedTime = (int) (quantity / rate);
+				final int actualTime = Calculator.getTimeFromRateQuantity(rate, quantity);
+
+				Assert.assertEquals("Quantity: " + quantity + ", rate: " + rate, expectedTime, actualTime);
+			}
+		}
+
 	}
 }
