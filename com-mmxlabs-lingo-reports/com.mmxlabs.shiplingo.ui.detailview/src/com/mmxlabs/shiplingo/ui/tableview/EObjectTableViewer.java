@@ -345,6 +345,7 @@ public class EObjectTableViewer extends TableViewer {
 				// get the notifier we are interested in
 				final Notifier n = notifierAndFeatures.getFirst();
 				if (n == null) {
+					// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
 					System.err.println(pathAndRenderer
 							+ " has given a null notifier for " + object);
 					continue;

@@ -353,6 +353,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 								Collections.singleton(newObject));
 
 						if (replace.canExecute() == false) {
+							// FIXME: Use e.g. log.error(xxx, new RuntimeException());
 							System.err
 									.println("Cannot execute replace command from "
 											+ oldObject + " to " + newObject);
@@ -366,6 +367,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				}
 
 				if (cc.canExecute() == false) {
+					// FIXME: Use e.g. log.error(xxx, new RuntimeException());
 					System.err
 							.println("Warning: cannot evaluate import command");
 				}
