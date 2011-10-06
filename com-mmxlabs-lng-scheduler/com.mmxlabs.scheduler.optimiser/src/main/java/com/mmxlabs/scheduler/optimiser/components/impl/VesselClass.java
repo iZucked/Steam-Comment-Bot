@@ -163,16 +163,16 @@ public final class VesselClass implements IVesselClass {
 		consumptionRate.put(vesselState, calc);
 	}
 
-	@Override
-	public int getNBOSpeed(final VesselState state) {
-
-		return CollectionsUtil.getValue(nboSpeeds, state, 0);
-	}
-
-	@Override
-	public void setNBOSpeed(final VesselState vesselState, final int nboSpeed) {
-		nboSpeeds.put(vesselState, nboSpeed);
-	}
+	// @Override
+	// public int getNBOSpeed(final VesselState state) {
+	//
+	// return CollectionsUtil.getValue(nboSpeeds, state, 0);
+	// }
+	//
+	// @Override
+	// public void setNBOSpeed(final VesselState vesselState, final int nboSpeed) {
+	// nboSpeeds.put(vesselState, nboSpeed);
+	// }
 
 	@Override
 	public int getBaseFuelUnitPrice() {

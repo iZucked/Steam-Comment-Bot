@@ -116,23 +116,23 @@ public interface IVesselClass {
 	 */
 	long getNBORate(VesselState vesselState);
 
-	/**
-	 * Returns the minimum speed to travel at when using NBO. This will
-	 * typically be equivalent to the speed required to use up all NBO as fuel.
-	 * 
-	 * @param state
-	 * @return
-	 */
-	int getNBOSpeed(VesselState state);
-
-	/**
-	 * Set the minimum speed to travel at when using NBO. This will typically be
-	 * equivalent to the speed required to use up all NBO as fuel.
-	 * 
-	 * @param vesselState
-	 * @param nboSpeed
-	 */
-	void setNBOSpeed(VesselState vesselState, int nboSpeed);
+	// /**
+	// * Returns the minimum speed to travel at when using NBO. This will
+	// * typically be equivalent to the speed required to use up all NBO as fuel.
+	// *
+	// * @param state
+	// * @return
+	// */
+	// int getNBOSpeed(VesselState state);
+	//
+	// /**
+	// * Set the minimum speed to travel at when using NBO. This will typically be
+	// * equivalent to the speed required to use up all NBO as fuel.
+	// *
+	// * @param vesselState
+	// * @param nboSpeed
+	// */
+	// void setNBOSpeed(VesselState vesselState, int nboSpeed);
 
 	/**
 	 * Returns the unit price of base fuel for this vessel class, where the unit
