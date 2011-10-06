@@ -7,6 +7,8 @@ package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.common.TimeUnitConvert;
+
 import scenario.Scenario;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
@@ -61,7 +63,7 @@ public class MinTravelHeelTests {
 	public void testNonZeroMinHeel() {
 		final String testName = "Test non-zero min heel";
 		// travel uses 1000 MT of LNG, so give 90 MT extra for idle (9 MT/hour * 10 hours = 90 MT)
-		final int minHeelVolume = 2000;
+		final int minHeelVolume = 100;
 
 		CargoAllocation a = testMinHeel(testName, minHeelVolume);
 
@@ -116,7 +118,7 @@ public class MinTravelHeelTests {
 
 		final float dischargePrice = 1;
 		final float cvValue = 1;
-		final float baseFuelUnitPrice = 1;
+		final float baseFuelUnitPrice = 1.1f;
 
 		final int minSpeed = speed;
 		final int maxSpeed = speed;
@@ -124,17 +126,17 @@ public class MinTravelHeelTests {
 		final int ballastMinSpeed = speed;
 		final int ballastMinConsumption = speed;
 		final int ballastMaxSpeed = speed;
-		final int ballastMaxConsumption = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
-		final int ballastIdleConsumptionRate = ScenarioTools.convertPerHourToPerDay(fuelIdleConsumptionPerHour);
-		final int ballastIdleNBORate = ScenarioTools.convertPerHourToPerDay(NBOIdleRatePerHour);
-		final int ballastNBORate = ScenarioTools.convertPerHourToPerDay(NBOTravelRatePerHour);
+		final int ballastMaxConsumption = TimeUnitConvert.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
+		final int ballastIdleConsumptionRate = TimeUnitConvert.convertPerHourToPerDay(fuelIdleConsumptionPerHour);
+		final int ballastIdleNBORate = TimeUnitConvert.convertPerHourToPerDay(NBOIdleRatePerHour);
+		final int ballastNBORate = TimeUnitConvert.convertPerHourToPerDay(NBOTravelRatePerHour);
 		final int ladenMinSpeed = speed;
-		final int ladenMinConsumption = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
+		final int ladenMinConsumption = TimeUnitConvert.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
 		final int ladenMaxSpeed = speed;
-		final int ladenMaxConsumption = ScenarioTools.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
-		final int ladenIdleConsumptionRate = ScenarioTools.convertPerHourToPerDay(fuelIdleConsumptionPerHour);
-		final int ladenIdleNBORate = ScenarioTools.convertPerHourToPerDay(NBOIdleRatePerHour);
-		final int ladenNBORate = ScenarioTools.convertPerHourToPerDay(NBOTravelRatePerHour);
+		final int ladenMaxConsumption = TimeUnitConvert.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
+		final int ladenIdleConsumptionRate = TimeUnitConvert.convertPerHourToPerDay(fuelIdleConsumptionPerHour);
+		final int ladenIdleNBORate = TimeUnitConvert.convertPerHourToPerDay(NBOIdleRatePerHour);
+		final int ladenNBORate = TimeUnitConvert.convertPerHourToPerDay(NBOTravelRatePerHour);
 		final int pilotLightRate = 0;
 
 		Scenario scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,

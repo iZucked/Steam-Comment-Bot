@@ -7,6 +7,8 @@ package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.common.TimeUnitConvert;
+
 import scenario.Scenario;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
@@ -44,10 +46,6 @@ public class FuelChoiceBoundaryTests {
 		for (final FuelQuantity fq : a.getLadenLeg().getFuelUsage()) {
 			if (fq.getFuelType() == FuelType.FBO)
 				Assert.assertTrue("Laden leg never uses FBO", fq.getQuantity() == 0);
-		}
-		for (final FuelQuantity fq : a.getLadenIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.FBO)
-				Assert.assertTrue("Laden idle never uses FBO", fq.getQuantity() == 0);
 		}
 
 		// Check there is no heel by checking there is no NBO used after discharge
@@ -100,7 +98,8 @@ public class FuelChoiceBoundaryTests {
 	 * 
 	 * @return
 	 */
-	private CargoAllocation testPriceConsumption(final String name, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelConsumptionPerHour, final int NBORatePerHour) {
+	private CargoAllocation testPriceConsumption(final String name, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int fuelConsumptionPerHour,
+			final int NBORatePerHour) {
 		// Create a dummy scenario
 		final int travelTime = 100;
 
@@ -109,8 +108,10 @@ public class FuelChoiceBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int fuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(fuelConsumptionPerHour);
-		final int NBORatePerDay = ScenarioTools.convertPerHourToPerDay(NBORatePerHour);
+		final int fuelTravelConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(fuelConsumptionPerHour);
+		final int NBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(NBORatePerHour);
+
+		final int fuelIdleConsumptionPerDay = NBORatePerDay;
 
 		final int portDistance = 1000;
 		final boolean useDryDock = true;
@@ -118,8 +119,8 @@ public class FuelChoiceBoundaryTests {
 		final int minHeelVolume = 0;
 
 		final Scenario scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
-				fuelConsumptionPerDay, speed, fuelConsumptionPerDay, fuelConsumptionPerDay, NBORatePerDay, NBORatePerDay, speed, fuelConsumptionPerDay, speed, fuelConsumptionPerDay, fuelConsumptionPerDay,
-				NBORatePerDay, NBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
+				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, speed, fuelTravelConsumptionPerDay, speed,
+				fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
@@ -205,7 +206,7 @@ public class FuelChoiceBoundaryTests {
 	/**
 	 * This test gives 100 hours of idle time after ballast and laden legs.
 	 */
-	private CargoAllocation test(final String name, final int travelFuelConsumptionPerHour, final int travelNBORatePerHour, final int idleFuelConsumptionPerHour, final int idleNBORatePerHour,
+	private CargoAllocation test(final String testName, final int travelFuelConsumptionPerHour, final int travelNBORatePerHour, final int idleFuelConsumptionPerHour, final int idleNBORatePerHour,
 			final float baseFuelUnitPrice, final float dischargePrice, final int pilotLightRate) {
 		// Create a dummy scenario
 
@@ -219,10 +220,10 @@ public class FuelChoiceBoundaryTests {
 		final int speed = 10;
 		final int capacity = 1000000;
 
-		final int travelFuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(travelFuelConsumptionPerHour);
-		final int travelNBORatePerDay = ScenarioTools.convertPerHourToPerDay(travelNBORatePerHour);
-		final int idleFuelConsumptionPerDay = ScenarioTools.convertPerHourToPerDay(idleFuelConsumptionPerHour);
-		final int idleNBORatePerDay = ScenarioTools.convertPerHourToPerDay(idleNBORatePerHour);
+		final int travelFuelConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(travelFuelConsumptionPerHour);
+		final int travelNBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(travelNBORatePerHour);
+		final int idleFuelConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(idleFuelConsumptionPerHour);
+		final int idleNBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(idleNBORatePerHour);
 
 		final int portDistance = 1000;
 		final int minHeelVolume = 0;
@@ -236,7 +237,7 @@ public class FuelChoiceBoundaryTests {
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
-		ScenarioTools.printScenario(name, a);
+		ScenarioTools.printScenario(testName, a);
 
 		return a;
 	}
