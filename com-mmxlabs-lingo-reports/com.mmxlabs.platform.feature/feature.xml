@@ -1342,20 +1342,6 @@
          unpack="false"/>
 
    <plugin
-         id="edu.tum.cs.cope.migration.execution"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="edu.tum.cs.cope.migration"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.ocl"
          download-size="0"
          install-size="0"
@@ -1364,13 +1350,6 @@
 
    <plugin
          id="org.eclipse.ocl.ecore"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="edu.tum.cs.cope.declaration.registry"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -1397,20 +1376,6 @@
          unpack="false"/>
 
    <plugin
-         id="edu.tum.cs.cope.common"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="edu.tum.cs.cope.declaration"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.apache.ant"
          download-size="0"
          install-size="0"
@@ -1418,6 +1383,27 @@
 
    <plugin
          id="org.eclipse.osgi.util"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.edapt.common"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.edapt.history"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.edapt.migration"
          download-size="0"
          install-size="0"
          version="0.0.0"
