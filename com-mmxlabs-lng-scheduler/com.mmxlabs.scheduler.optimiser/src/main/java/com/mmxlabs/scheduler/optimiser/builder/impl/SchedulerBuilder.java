@@ -710,6 +710,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// The return time should be the soonest we can get back to the previous load,
 		// presumably in the slowest vessel without going via a canal.
 
+		// TODO what about return to first load rule?
+
 		int latestDischarge = 0;
 		IPort loadPort = null, dischargePort = null;
 		for (final ICargo cargo : cargoes) {
