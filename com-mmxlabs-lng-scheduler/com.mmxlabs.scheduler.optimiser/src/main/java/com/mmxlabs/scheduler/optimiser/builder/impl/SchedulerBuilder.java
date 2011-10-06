@@ -843,7 +843,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vc.setIdleNBORate(state, idleNBORateInM3PerHour);
 		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHour);
 		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerHour);
-		vc.setNBOSpeed(state, nboSpeed);
+		vc.setMinNBOSpeed(state, nboSpeed);
 	}
 
 	/**
