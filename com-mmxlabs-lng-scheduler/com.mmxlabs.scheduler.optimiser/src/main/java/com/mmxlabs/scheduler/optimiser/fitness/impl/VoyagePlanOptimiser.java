@@ -334,7 +334,6 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		// For each voyage options, calculate new Details.
 
 		final List<Object> currentSequence = new ArrayList<Object>(basicSequence.size());
-
 		for (final Object element : basicSequence) {
 
 			// Loop through basic elements, calculating voyage requirements
@@ -344,7 +343,6 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 				final VoyageDetails<T> voyageDetails = new VoyageDetails<T>();
 				voyageDetails.setOptions(options);
-
 				// Calculate voyage cost
 				voyageCalculator.calculateVoyageFuelRequirements(options, voyageDetails);
 				currentSequence.add(voyageDetails);
