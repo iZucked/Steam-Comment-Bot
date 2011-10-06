@@ -6,6 +6,7 @@ package com.mmxlabs.lngscheduler.emf.extras;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
@@ -126,5 +127,30 @@ public class EMFPath {
 			}
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (failSilently ? 1231 : 1237);
+		result = prime * result + Arrays.hashCode(path);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EMFPath other = (EMFPath) obj;
+		if (failSilently != other.failSilently)
+			return false;
+		if (!Arrays.equals(path, other.path))
+			return false;
+		return true;
 	}
 }

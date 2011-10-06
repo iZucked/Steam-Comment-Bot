@@ -72,10 +72,13 @@ public class PortRotationReportView extends EMFReportView {
 //				ep.getSlotVisit_CargoAllocation(),
 //				sp.getCargoAllocation__GetName()
 //		);
-		final ColumnHandler dateColumn = addColumn("Start Date", calendarFormatter,
-				ep.getScheduledEvent__GetLocalStartTime());
-		addColumn("End Date", calendarFormatter,
-				ep.getScheduledEvent__GetLocalEndTime());
+
+		final ColumnHandler dateColumn = addColumn("Start Date", datePartFormatter, ep.getScheduledEvent__GetLocalStartTime());
+		addColumn("Start Time", timePartFormatter, ep.getScheduledEvent__GetLocalStartTime());
+
+		addColumn("End Date", datePartFormatter, ep.getScheduledEvent__GetLocalEndTime());
+		addColumn("End Time", timePartFormatter, ep.getScheduledEvent__GetLocalEndTime());
+
 		final ColumnHandler durationColumn = addColumn("Duration (DD:HH)", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
