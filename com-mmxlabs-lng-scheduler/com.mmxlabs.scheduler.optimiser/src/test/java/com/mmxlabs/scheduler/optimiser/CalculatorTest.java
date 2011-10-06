@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser;
 
-import static org.junit.Assert.fail;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -19,8 +17,7 @@ public class CalculatorTest {
 	}
 
 	/**
-	 * A division by zero should throw an exception even if the distance is
-	 * invalid.
+	 * A division by zero should throw an exception even if the distance is invalid.
 	 */
 	@Test(expected = ArithmeticException.class)
 	public void testSpeedFromDistanceTimeForNegDistanceAndDivideByZero() {
@@ -28,61 +25,52 @@ public class CalculatorTest {
 		Calculator.speedFromDistanceTime(-1, 0);
 	}
 
-	/**
-	 * A division by zero should throw an exception, except for the case where
-	 * the distance is zero (so that 0 / 0 equals 0).
-	 */
-	@Test
-	public void testSpeedFromDistanceTimeAndDistanceZero() {
-
-		// A zero distance should return zero iff the time is zero.
-		Assert.assertEquals(0, Calculator.speedFromDistanceTime(0, 0));
-	}
-
-	/**
-	 * Should you expect an Exception if a negative time is input, because it
-	 * gives a negative speed?
-	 */
-	@Test(expected = ArithmeticException.class)
-	public void testSpeedFromDistanceTimeForNegTimeInput() {
-
-		// Negative time?
-		Calculator.speedFromDistanceTime(1, -1);
-	}
-
-	/**
-	 * Should you expect an Exception if a negative distance is input, because
-	 * it gives a negative speed?
-	 */
-	@Test(expected = ArithmeticException.class)
-	public void testSpeedFromDistanceTimeForNegDistanceInput() {
-
-		// Negative distance?
-		Calculator.speedFromDistanceTime(-1, 1);
-	}
-
-	/**
-	 * If both inputs are negative then they will cancel out to give a positive
-	 * result. This doesn't make sense though, so an exception should be thrown.
-	 */
-	@Test(expected = ArithmeticException.class)
-	public void testSpeedFromDistanceTimeForNegInput() {
-
-		Calculator.speedFromDistanceTime(-1, -1);
-	}
-
 	@Test
 	public void testGetTimeFromSpeedDistance() {
-		fail("Not yet implemented");
+
+		final int limit = 1000;
+
+		for (int distance = 1; distance < limit; distance++) {
+			for (int speed = 1; speed < limit; speed++) {
+
+				final int expected = (int) ((Calculator.scale(distance)) / speed);
+				final int actual = Calculator.getTimeFromSpeedDistance(speed, distance);
+
+				Assert.assertEquals("Distance: " + distance + ", speed: " + speed, expected, actual);
+			}
+		}
 	}
 
 	@Test
 	public void testQuantityFromRateTime() {
-		fail("Not yet implemented");
+
+		final int limit = 1000;
+
+		for (long rate = 1; rate < limit; rate++) {
+			for (int time = 1; time < limit; time++) {
+
+				final long expectedQuantity = rate * time;
+				final long actualQuantity = Calculator.quantityFromRateTime(rate, time);
+
+				Assert.assertEquals("Rate: " + rate + ", time: " + time, expectedQuantity, actualQuantity);
+			}
+		}
 	}
 
 	@Test
 	public void testGetTimeFromRateQuantity() {
-		fail("Not yet implemented");
+
+		final long limit = 1000;
+
+		for (long quantity = 1; quantity < limit; quantity++) {
+			for (long rate = 1; rate < limit; rate++) {
+
+				final int expectedTime = (int) (quantity / rate);
+				final int actualTime = Calculator.getTimeFromRateQuantity(rate, quantity);
+
+				Assert.assertEquals("Quantity: " + quantity + ", rate: " + rate, expectedTime, actualTime);
+			}
+		}
+
 	}
 }
