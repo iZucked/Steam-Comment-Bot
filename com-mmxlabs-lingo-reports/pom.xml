@@ -111,7 +111,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven.compiler.plugin.version}</version>
 				<!-- Build code for java 1.6 -->
 				<configuration>
 					<source>1.6</source>
@@ -206,7 +205,6 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<version>${maven.bundle.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>install-bundle</id>
