@@ -147,11 +147,11 @@ public class VesselClassTest {
 
 		final int value = 100;
 		final VesselClass vesselClass = new VesselClass();
-		Assert.assertEquals(0, vesselClass.getNBOSpeed(state1));
-		Assert.assertEquals(0, vesselClass.getNBOSpeed(state2));
-		vesselClass.setNBOSpeed(state1, value);
-		Assert.assertEquals(value, vesselClass.getNBOSpeed(state1));
-		Assert.assertEquals(0, vesselClass.getNBOSpeed(state2));
+		Assert.assertEquals(0, vesselClass.getMinNBOSpeed(state1));
+		Assert.assertEquals(0, vesselClass.getMinNBOSpeed(state2));
+		vesselClass.setMinNBOSpeed(state1, value);
+		Assert.assertEquals(value, vesselClass.getMinNBOSpeed(state1));
+		Assert.assertEquals(0, vesselClass.getMinNBOSpeed(state2));
 	}
 
 	@Test
