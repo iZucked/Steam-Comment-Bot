@@ -129,6 +129,7 @@ public class DerivedScenarioWizardPage extends WizardPage {
 	 * @return
 	 */
 	public Scenario createScenario() {
+		// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
 		System.err.println(sourceMap);
 		final Scenario result = ScenarioFactory.eINSTANCE.createScenario();
 

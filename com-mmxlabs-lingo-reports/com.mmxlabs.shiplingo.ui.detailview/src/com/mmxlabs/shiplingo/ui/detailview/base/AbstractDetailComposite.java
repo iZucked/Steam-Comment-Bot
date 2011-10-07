@@ -179,6 +179,7 @@ public abstract class AbstractDetailComposite extends Composite {
 			result = Math.max(result, p.x);
 		}
 
+		// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
 		System.err.println(result);
 
 		return result * (1 + subEditors.size());

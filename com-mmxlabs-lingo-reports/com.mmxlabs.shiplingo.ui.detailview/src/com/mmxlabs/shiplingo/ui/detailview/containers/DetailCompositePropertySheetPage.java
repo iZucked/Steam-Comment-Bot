@@ -87,6 +87,7 @@ public class DetailCompositePropertySheetPage extends DetailCompositeContainer i
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		// watch out of re-entry
 		if (selectionChanging) {
+			// FIXME: Use e.g. log.error(xxx, new RuntimeException());
 			System.err.println("re-entrant selection?");
 			return;
 		}
