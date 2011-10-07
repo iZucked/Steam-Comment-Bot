@@ -48,8 +48,8 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 		fuelTypes.put(FuelComponent.Base_Supplemental, FuelType.BASE_FUEL);
 		fuelTypes.put(FuelComponent.IdleBase, FuelType.BASE_FUEL);
 
-		fuelTypes.put(FuelComponent.PilotLight, FuelType.BASE_FUEL);
-		fuelTypes.put(FuelComponent.IdlePilotLight, FuelType.BASE_FUEL);
+		fuelTypes.put(FuelComponent.PilotLight, FuelType.PILOT_LIGHT);
+		fuelTypes.put(FuelComponent.IdlePilotLight, FuelType.PILOT_LIGHT);
 
 		fuelTypes.put(FuelComponent.NBO, FuelType.NBO);
 		fuelTypes.put(FuelComponent.IdleNBO, FuelType.NBO);
