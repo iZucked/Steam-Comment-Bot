@@ -444,6 +444,7 @@
         <eLiterals name="NBO" value="1" literal="NBO"/>
         <eLiterals name="BaseFuel" value="2" literal="BaseFuel"/>
         <eLiterals name="Cooldown" value="3" literal="Cooldown"/>
+        <eLiterals name="PilotLight" value="4" literal="PilotLight"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="FuelQuantity">
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="fuelType" lowerBound="1"
