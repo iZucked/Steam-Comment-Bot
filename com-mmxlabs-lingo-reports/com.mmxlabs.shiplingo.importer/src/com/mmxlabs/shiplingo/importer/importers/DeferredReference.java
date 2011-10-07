@@ -73,6 +73,7 @@ public class DeferredReference implements Runnable {
 			}
 		} else {
 			if (key.getSecond().isEmpty() == false) {
+				// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
 				//TODO generate proper warning, with line # and filename.
 				System.err.println("Warning: no value for "
 						+ key.getFirst().getName() + " named "

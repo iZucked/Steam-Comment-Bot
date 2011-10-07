@@ -46,6 +46,7 @@ public class CanalImporter extends EObjectImporter {
 							reader, deferredReferences, registry);
 					result.eSet(reference, matrix.iterator().next());
 				} catch (IOException e) {
+					// FIXME: Use e.g. log.error(xxx, e);
 					System.err.println("Unable to import " + referenceName
 							+ " from " + fields.get(referenceName) + ": "
 							+ e.getMessage());

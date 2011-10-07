@@ -82,6 +82,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	public Object getValue(final Object object) {
 		int x = valueList.indexOf(super.getValue(object));
 		if (x == -1) {
+			// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
 			System.err.println("index of " + object + ", "
 					+ super.getValue(object) + " is -1!");
 		}

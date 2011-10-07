@@ -292,6 +292,7 @@ public class DetailCompositeDialog extends Dialog {
 				if (isExecutable) {
 					editingDomain.getCommandStack().execute(cc);
 				} else {
+					// FIXME: Use e.g. log.error(xxx, new RuntimeException());
 					System.err
 							.println("Something is wrong with the equalizing command");
 				}
@@ -346,6 +347,7 @@ public class DetailCompositeDialog extends Dialog {
 									original, feature,
 									(Collection) duplicate.eGet(feature));
 					if (mas.canExecute() == false) {
+						// FIXME: Use e.g. log.error(xxx, new RuntimeException());
 						System.err
 								.println("Problem on multi-value containment setter");
 					}
@@ -372,6 +374,7 @@ public class DetailCompositeDialog extends Dialog {
 						editingDomain, original, feature,
 						(Collection) duplicate.eGet(feature));
 				if (mas.canExecute() == false) {
+					// FIXME: Use e.g. log.error(xxx, new RuntimeException());
 					System.err
 							.println("Problem on multi-value reference setter");
 				}
