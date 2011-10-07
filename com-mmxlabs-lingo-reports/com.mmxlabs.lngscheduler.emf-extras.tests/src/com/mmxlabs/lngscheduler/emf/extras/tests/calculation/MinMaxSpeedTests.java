@@ -12,6 +12,8 @@ import com.mmxlabs.common.TimeUnitConvert;
 import scenario.Scenario;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
+import scenario.schedule.events.FuelQuantity;
+import scenario.schedule.events.FuelType;
 
 /**
  * <a href="">Case 203: Test for min/max speed conditions</a>
@@ -33,13 +35,17 @@ public class MinMaxSpeedTests {
 	private static final int minSpeed = 10;
 	private static final int maxSpeed = 20;
 
+	private static final int fuelMinConsumptionPerHour = 10;
+	private static final int fuelMaxConsumptionPerHour = 20;
+	private static final int NBORatePerHour = 11;
+
 	/** The distance between the ports. */
 	private static final int distanceBetweenPorts = 1000;
 	/** This value makes base fuel more expensive than NBO. */
 	private static final float baseFuelExpensive = 1.1f;
 	/** This value makes base fuel cheaper than NBO. */
 	private static final float baseFuelCheap = 0.9f;
-	
+
 	/**
 	 * Test that the max speed is hit on NBO when the available time is not enough.
 	 */
@@ -57,7 +63,7 @@ public class MinMaxSpeedTests {
 	}
 
 	/**
-	 * Test that the min speed is used if the vessel won't be late
+	 * Test that the min speed is used if the vessel won't be late and vessel uses base fuel.
 	 * */
 	@Test
 	public void minSpeedUsed() {
@@ -66,10 +72,52 @@ public class MinMaxSpeedTests {
 		// set the travel time to be sufficient for min speed travel
 		final int travelTime = (distanceBetweenPorts / minSpeed) + 1;
 
+		CargoAllocation a = test(testName, travelTime, baseFuelCheap);
+
+		// assert that base fuel is used on the ballast leg as it is cheaper than LNG
+		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO || fq.getFuelType() == FuelType.FBO)
+				Assert.assertTrue("LNG not used as BF cheaper", fq.getQuantity() == 0);
+			else if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Base fuel used, LNG more expensive", fq.getQuantity() > 0);
+		}
+
+		// assert that the vessel travels at min speed as there is sufficient time.
+		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minSpeed);
+	}
+
+	/**
+	 * Test min NBO speed used when available time is long enough and on NBO mode
+	 * <p>
+	 * The NBO min speed is the speed at which the vessel should travel to use up all the NBO. If the vessel travels slower than this speed, boil-off is wasted so it is not desirable to do this.
+	 */
+	@Test
+	public void minNBOSpeedUsed() {
+
+		final String testName = "Min speed used";
+		// set the travel time to be sufficient for min speed travel
+		final int travelTime = (distanceBetweenPorts / minSpeed) + 10;
+
 		CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
 
-		Assert.assertTrue("Laden leg travels at min speed", a.getLadenLeg().getSpeed() == minSpeed);
-		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minSpeed);
+		// assert that NBO is used on the ballast leg as it is cheaper than base fuel
+		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO)
+				Assert.assertTrue("Cheap NBO used", fq.getQuantity() > 0);
+			else if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Base fuel not used", fq.getQuantity() == 0);
+		}
+
+		/*
+		 * TODO work out NBO min speed
+		 * 
+		 * Get equivalent MT of base fuel, if more than fuel consumption, travel at higher speed?
+		 * nbo rate per hour * equivalence ... ?
+		 */
+		
+		// TODO reactivate test when min NBO speed is found and check ballast leg speed against that.
+		// assert that the vessel travels at min speed as there is sufficient time.
+		//Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minSpeed);
 	}
 
 	private CargoAllocation test(final String testName, final int travelTime, final float baseFuelUnitPrice) {
@@ -79,22 +127,23 @@ public class MinMaxSpeedTests {
 		// make fuel and LNG equivalent for ease.
 		final float equivalenceFactor = 1f;
 
-		final int fuelConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(10);
-		final int NBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(10);
+		final int fuelMinConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(fuelMinConsumptionPerHour);
+		final int fuelMaxConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(fuelMaxConsumptionPerHour);
+		final int NBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(NBORatePerHour);
 
 		final int capacity = 100000;
 		final int ballastMinSpeed = minSpeed;
-		final int ballastMinConsumption = fuelConsumptionPerDay;
+		final int ballastMinConsumption = fuelMinConsumptionPerDay;
 		final int ballastMaxSpeed = maxSpeed;
-		final int ballastMaxConsumption = fuelConsumptionPerDay;
-		final int ballastIdleConsumptionRate = fuelConsumptionPerDay;
+		final int ballastMaxConsumption = fuelMaxConsumptionPerDay;
+		final int ballastIdleConsumptionRate = fuelMinConsumptionPerDay;
 		final int ballastIdleNBORate = NBORatePerDay;
 		final int ballastNBORate = NBORatePerDay;
 		final int ladenMinSpeed = minSpeed;
-		final int ladenMinConsumption = fuelConsumptionPerDay;
+		final int ladenMinConsumption = fuelMinConsumptionPerDay;
 		final int ladenMaxSpeed = maxSpeed;
-		final int ladenMaxConsumption = fuelConsumptionPerDay;
-		final int ladenIdleConsumptionRate = fuelConsumptionPerDay;
+		final int ladenMaxConsumption = fuelMaxConsumptionPerDay;
+		final int ladenIdleConsumptionRate = fuelMinConsumptionPerDay;
 		final int ladenIdleNBORate = NBORatePerDay;
 		final int ladenNBORate = NBORatePerDay;
 		final int pilotLightRate = 0;
