@@ -14,43 +14,45 @@ import org.eclipse.emf.common.util.Enumerator;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the literals of the enumeration '<em><b>Fuel Type</b></em>',
+ * A representation of the literals of the enumeration '<em><b>Fuel Purpose</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
- * @see scenario.schedule.events.EventsPackage#getFuelType()
+ * @see scenario.schedule.events.EventsPackage#getFuelPurpose()
  * @model
  * @generated
  */
-public enum FuelType implements Enumerator {
+public enum FuelPurpose implements Enumerator {
 	/**
-	 * The '<em><b>FBO</b></em>' literal object.
+	 * The '<em><b>Travel</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #FBO_VALUE
+	 * @see #TRAVEL_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	FBO(0, "FBO", "FBO"),
+	TRAVEL(0, "Travel", "Travel"),
 
 	/**
-	 * The '<em><b>NBO</b></em>' literal object.
+	 * The '<em><b>Pilot Light</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #NBO_VALUE
+	 * @see #PILOT_LIGHT_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	NBO(1, "NBO", "NBO"),
+	PILOT_LIGHT(1, "PilotLight", "PilotLight"),
 
 	/**
-	 * The '<em><b>Base Fuel</b></em>' literal object.
+	 * The '<em><b>Idle</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #BASE_FUEL_VALUE
+	 * @see #IDLE_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	BASE_FUEL(2, "BaseFuel", "BaseFuel"), /**
+	IDLE(2, "Idle", "Idle"),
+
+	/**
 	 * The '<em><b>Cooldown</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -61,49 +63,49 @@ public enum FuelType implements Enumerator {
 	COOLDOWN(3, "Cooldown", "Cooldown");
 
 	/**
-	 * The '<em><b>FBO</b></em>' literal value.
+	 * The '<em><b>Travel</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>FBO</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>Travel</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #FBO
-	 * @model
+	 * @see #TRAVEL
+	 * @model name="Travel"
 	 * @generated
 	 * @ordered
 	 */
-	public static final int FBO_VALUE = 0;
+	public static final int TRAVEL_VALUE = 0;
 
 	/**
-	 * The '<em><b>NBO</b></em>' literal value.
+	 * The '<em><b>Pilot Light</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>NBO</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>Pilot Light</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #NBO
-	 * @model
+	 * @see #PILOT_LIGHT
+	 * @model name="PilotLight"
 	 * @generated
 	 * @ordered
 	 */
-	public static final int NBO_VALUE = 1;
+	public static final int PILOT_LIGHT_VALUE = 1;
 
 	/**
-	 * The '<em><b>Base Fuel</b></em>' literal value.
+	 * The '<em><b>Idle</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>Base Fuel</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>Idle</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #BASE_FUEL
-	 * @model name="BaseFuel"
+	 * @see #IDLE
+	 * @model name="Idle"
 	 * @generated
 	 * @ordered
 	 */
-	public static final int BASE_FUEL_VALUE = 2;
+	public static final int IDLE_VALUE = 2;
 
 	/**
 	 * The '<em><b>Cooldown</b></em>' literal value.
@@ -121,36 +123,36 @@ public enum FuelType implements Enumerator {
 	public static final int COOLDOWN_VALUE = 3;
 
 	/**
-	 * An array of all the '<em><b>Fuel Type</b></em>' enumerators.
+	 * An array of all the '<em><b>Fuel Purpose</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final FuelType[] VALUES_ARRAY =
-		new FuelType[] {
-			FBO,
-			NBO,
-			BASE_FUEL,
+	private static final FuelPurpose[] VALUES_ARRAY =
+		new FuelPurpose[] {
+			TRAVEL,
+			PILOT_LIGHT,
+			IDLE,
 			COOLDOWN,
 		};
 
 	/**
-	 * A public read-only list of all the '<em><b>Fuel Type</b></em>' enumerators.
+	 * A public read-only list of all the '<em><b>Fuel Purpose</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final List<FuelType> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
+	public static final List<FuelPurpose> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
-	 * Returns the '<em><b>Fuel Type</b></em>' literal with the specified literal value.
+	 * Returns the '<em><b>Fuel Purpose</b></em>' literal with the specified literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static FuelType get(String literal) {
+	public static FuelPurpose get(String literal) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			FuelType result = VALUES_ARRAY[i];
+			FuelPurpose result = VALUES_ARRAY[i];
 			if (result.toString().equals(literal)) {
 				return result;
 			}
@@ -159,14 +161,14 @@ public enum FuelType implements Enumerator {
 	}
 
 	/**
-	 * Returns the '<em><b>Fuel Type</b></em>' literal with the specified name.
+	 * Returns the '<em><b>Fuel Purpose</b></em>' literal with the specified name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static FuelType getByName(String name) {
+	public static FuelPurpose getByName(String name) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			FuelType result = VALUES_ARRAY[i];
+			FuelPurpose result = VALUES_ARRAY[i];
 			if (result.getName().equals(name)) {
 				return result;
 			}
@@ -175,16 +177,16 @@ public enum FuelType implements Enumerator {
 	}
 
 	/**
-	 * Returns the '<em><b>Fuel Type</b></em>' literal with the specified integer value.
+	 * Returns the '<em><b>Fuel Purpose</b></em>' literal with the specified integer value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static FuelType get(int value) {
+	public static FuelPurpose get(int value) {
 		switch (value) {
-			case FBO_VALUE: return FBO;
-			case NBO_VALUE: return NBO;
-			case BASE_FUEL_VALUE: return BASE_FUEL;
+			case TRAVEL_VALUE: return TRAVEL;
+			case PILOT_LIGHT_VALUE: return PILOT_LIGHT;
+			case IDLE_VALUE: return IDLE;
 			case COOLDOWN_VALUE: return COOLDOWN;
 		}
 		return null;
@@ -217,7 +219,7 @@ public enum FuelType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private FuelType(int value, String name, String literal) {
+	private FuelPurpose(int value, String name, String literal) {
 		this.value = value;
 		this.name = name;
 		this.literal = literal;
@@ -261,4 +263,4 @@ public enum FuelType implements Enumerator {
 		return literal;
 	}
 	
-} //FuelType
+} //FuelPurpose

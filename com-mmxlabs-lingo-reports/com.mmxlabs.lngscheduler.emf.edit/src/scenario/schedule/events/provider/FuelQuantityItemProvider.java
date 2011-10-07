@@ -72,6 +72,7 @@ public class FuelQuantityItemProvider
 			addUnitPricePropertyDescriptor(object);
 			addTotalPricePropertyDescriptor(object);
 			addFuelUnitPropertyDescriptor(object);
+			addPurposePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -187,6 +188,28 @@ public class FuelQuantityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Purpose feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPurposePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FuelQuantity_purpose_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FuelQuantity_purpose_feature", "_UI_FuelQuantity_type"),
+				 EventsPackage.Literals.FUEL_QUANTITY__PURPOSE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns FuelQuantity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -229,6 +252,7 @@ public class FuelQuantityItemProvider
 			case EventsPackage.FUEL_QUANTITY__UNIT_PRICE:
 			case EventsPackage.FUEL_QUANTITY__TOTAL_PRICE:
 			case EventsPackage.FUEL_QUANTITY__FUEL_UNIT:
+			case EventsPackage.FUEL_QUANTITY__PURPOSE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

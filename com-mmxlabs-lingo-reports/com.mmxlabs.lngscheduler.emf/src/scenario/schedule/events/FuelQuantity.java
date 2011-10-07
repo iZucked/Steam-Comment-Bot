@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link scenario.schedule.events.FuelQuantity#getUnitPrice <em>Unit Price</em>}</li>
  *   <li>{@link scenario.schedule.events.FuelQuantity#getTotalPrice <em>Total Price</em>}</li>
  *   <li>{@link scenario.schedule.events.FuelQuantity#getFuelUnit <em>Fuel Unit</em>}</li>
+ *   <li>{@link scenario.schedule.events.FuelQuantity#getPurpose <em>Purpose</em>}</li>
  * </ul>
  * </p>
  *
@@ -164,5 +165,34 @@ public interface FuelQuantity extends EObject {
 	 * @generated
 	 */
 	void setFuelUnit(FuelUnit value);
+
+	/**
+	 * Returns the value of the '<em><b>Purpose</b></em>' attribute.
+	 * The literals are from the enumeration {@link scenario.schedule.events.FuelPurpose}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Purpose</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Purpose</em>' attribute.
+	 * @see scenario.schedule.events.FuelPurpose
+	 * @see #setPurpose(FuelPurpose)
+	 * @see scenario.schedule.events.EventsPackage#getFuelQuantity_Purpose()
+	 * @model required="true"
+	 * @generated
+	 */
+	FuelPurpose getPurpose();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.events.FuelQuantity#getPurpose <em>Purpose</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Purpose</em>' attribute.
+	 * @see scenario.schedule.events.FuelPurpose
+	 * @see #getPurpose()
+	 * @generated
+	 */
+	void setPurpose(FuelPurpose value);
 
 } // FuelQuantity
