@@ -14,6 +14,7 @@ import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.EventsFactory;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.FuelMixture;
+import scenario.schedule.events.FuelPurpose;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
 
@@ -43,13 +44,15 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 
 	private static final Map<FuelComponent, FuelType> fuelTypes = new HashMap<FuelComponent, FuelType>();
 
+	private static final Map<FuelComponent, FuelPurpose> fuelPurposes = new HashMap<FuelComponent, FuelPurpose>();
+
 	static {
 		fuelTypes.put(FuelComponent.Base, FuelType.BASE_FUEL);
 		fuelTypes.put(FuelComponent.Base_Supplemental, FuelType.BASE_FUEL);
 		fuelTypes.put(FuelComponent.IdleBase, FuelType.BASE_FUEL);
 
-		fuelTypes.put(FuelComponent.PilotLight, FuelType.PILOT_LIGHT);
-		fuelTypes.put(FuelComponent.IdlePilotLight, FuelType.PILOT_LIGHT);
+		fuelTypes.put(FuelComponent.PilotLight, FuelType.BASE_FUEL);
+		fuelTypes.put(FuelComponent.IdlePilotLight, FuelType.BASE_FUEL);
 
 		fuelTypes.put(FuelComponent.NBO, FuelType.NBO);
 		fuelTypes.put(FuelComponent.IdleNBO, FuelType.NBO);
@@ -61,6 +64,16 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 		fuelUnits.put(FuelUnit.M3, scenario.schedule.events.FuelUnit.M3);
 		fuelUnits.put(FuelUnit.MT, scenario.schedule.events.FuelUnit.MT);
 		fuelUnits.put(FuelUnit.MMBTu, scenario.schedule.events.FuelUnit.MMB_TU);
+
+		fuelPurposes.put(FuelComponent.Base, FuelPurpose.TRAVEL);
+		fuelPurposes.put(FuelComponent.Base_Supplemental, FuelPurpose.TRAVEL);
+		fuelPurposes.put(FuelComponent.NBO, FuelPurpose.TRAVEL);
+		fuelPurposes.put(FuelComponent.FBO, FuelPurpose.TRAVEL);
+		fuelPurposes.put(FuelComponent.IdleBase, FuelPurpose.IDLE);
+		fuelPurposes.put(FuelComponent.IdleNBO, FuelPurpose.IDLE);
+		fuelPurposes.put(FuelComponent.PilotLight, FuelPurpose.PILOT_LIGHT);
+		fuelPurposes.put(FuelComponent.IdlePilotLight, FuelPurpose.PILOT_LIGHT);
+		fuelPurposes.put(FuelComponent.Cooldown, FuelPurpose.COOLDOWN);
 	}
 
 	@Override
@@ -103,15 +116,16 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 
 		fq.setFuelType(fuelTypes.get(fc));
 		fq.setFuelUnit(fuelUnits.get(fc.getDefaultFuelUnit()));
-
+		fq.setPurpose(fuelPurposes.get(fc));
+		
 		return fq;
 	}
 
 	protected void addFuelQuantity(final FuelMixture mixture, final FuelComponent component, final long consumption, final long cost) {
 		final FuelType fuelType = fuelTypes.get(component);
-
+		final FuelPurpose purpose = fuelPurposes.get(component);
 		for (final FuelQuantity fq : mixture.getFuelUsage()) {
-			if (fq.getFuelType().equals(fuelType)) {
+			if (fq.getFuelType().equals(fuelType) && fq.getPurpose().equals(purpose)) {
 				// add to existing
 				// TODO this will accumulate rounding error worse than batch
 				// adding with a final division.
