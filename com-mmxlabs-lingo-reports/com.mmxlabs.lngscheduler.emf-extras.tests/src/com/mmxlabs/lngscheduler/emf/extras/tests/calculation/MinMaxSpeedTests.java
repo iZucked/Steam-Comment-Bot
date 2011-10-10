@@ -24,8 +24,6 @@ import scenario.schedule.events.FuelType;
  * - min NBO speed when available time is long enough and on NBO<br>
  * mode
  * 
- * TODO NBO speed not currently set. Wait for fix then properly implement tests for each min/max speed.
- * 
  * @author Adam Semenenko
  * 
  */
@@ -94,7 +92,7 @@ public class MinMaxSpeedTests {
 	@Test
 	public void minNBOSpeedUsed() {
 
-		final String testName = "Min speed used";
+		final String testName = "Min NBO speed used";
 		// set the travel time to be sufficient for min speed travel
 		final int travelTime = (distanceBetweenPorts / minSpeed) + 10;
 
@@ -111,13 +109,21 @@ public class MinMaxSpeedTests {
 		/*
 		 * TODO work out NBO min speed
 		 * 
-		 * Get equivalent MT of base fuel, if more than fuel consumption, travel at higher speed?
-		 * nbo rate per hour * equivalence ... ?
+		 * Get equivalent MT of base fuel, if more than fuel consumption, travel at higher speed? nbo rate per hour * equivalence ... ?
 		 */
-		
+
 		// TODO reactivate test when min NBO speed is found and check ballast leg speed against that.
 		// assert that the vessel travels at min speed as there is sufficient time.
-		//Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minSpeed);
+
+		// Min NBO Speed is 11 because
+		// - min speed is 10, with fuel consumption of 10
+		// - max speed is 20, with fuel consumption of 20
+		// - LNG and base fuel are equivalent (equiv. factor = 1)
+		// - NBO rate is 11
+		// - So lerp the min/max speeds/consumptions, and you get a speed of 11 from a fuel consumption of 11
+
+		final int minNBOSpeed = 11;
+		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minNBOSpeed);
 	}
 
 	private CargoAllocation test(final String testName, final int travelTime, final float baseFuelUnitPrice) {
