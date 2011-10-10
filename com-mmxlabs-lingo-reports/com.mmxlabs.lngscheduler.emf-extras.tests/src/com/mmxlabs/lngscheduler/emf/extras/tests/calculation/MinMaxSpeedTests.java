@@ -109,13 +109,16 @@ public class MinMaxSpeedTests {
 		/*
 		 * TODO work out NBO min speed
 		 * 
-		 * Get equivalent MT of base fuel, if more than fuel consumption, travel at higher speed?
-		 * nbo rate per hour * equivalence ... ?
+		 * Get equivalent MT of base fuel, if more than fuel consumption, travel at higher speed? nbo rate per hour * equivalence ... ?
 		 */
-		
+
 		// TODO reactivate test when min NBO speed is found and check ballast leg speed against that.
 		// assert that the vessel travels at min speed as there is sufficient time.
-		//Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minSpeed);
+
+		// Min NBO Speed is 11 because LNG and BF are equivalent (equiv = 1). Min speed on ballast is 10 with fuel consumption 10, max speed is 20 with fuel consump. 20. NBO rate is 11. So
+		// lerp the min/max speeds to get speed of 11 with fuel consumption of 11.
+		final int minNBOSpeed = 11;
+		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minNBOSpeed);
 	}
 
 	private CargoAllocation test(final String testName, final int travelTime, final float baseFuelUnitPrice) {
