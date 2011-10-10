@@ -722,16 +722,20 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				dischargePort = cargo.getDischargeSlot().getPort();
 			}
 		}
+		final int maxFastReturnTime;
+		if (dischargePort != null && loadPort != null) {
+			final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadPort);
+			// what's the slowest vessel class
+			int slowestMaxSpeed = Integer.MAX_VALUE;
+			for (final IVesselClass vesselClass : vesselClasses) {
+				slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
+			}
 
-		final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadPort);
-		// what's the slowest vessel class
-		int slowestMaxSpeed = Integer.MAX_VALUE;
-		for (final IVesselClass vesselClass : vesselClasses) {
-			slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
+			maxFastReturnTime = Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance);
+		} else {
+			maxFastReturnTime = 0;
+			latestDischarge = 0;
 		}
-
-		final int maxFastReturnTime = Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance);
-
 		final int latestTime = Math.max(endOfLatestWindow, maxFastReturnTime + latestDischarge);
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
 			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + 1);
