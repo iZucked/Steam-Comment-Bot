@@ -5,6 +5,7 @@
 package com.mmxlabs.lngscheduler.emf.extras.export;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import scenario.Scenario;
@@ -142,9 +143,15 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	}
 
 	protected void scaleFuelQuantities(final FuelMixture mixture) {
-		for (final FuelQuantity fq : mixture.getFuelUsage()) {
+		final Iterator<FuelQuantity> iterator = mixture.getFuelUsage().iterator();
+		while (iterator.hasNext()) {
+			final FuelQuantity fq = iterator.next();
+			if (fq.getQuantity() == 0) {
+				iterator.remove();
+			} else {
 			fq.setQuantity(fq.getQuantity() / Calculator.ScaleFactor);
 			fq.setTotalPrice(fq.getTotalPrice() / Calculator.ScaleFactor);
+			}
 		}
 	}
 }
