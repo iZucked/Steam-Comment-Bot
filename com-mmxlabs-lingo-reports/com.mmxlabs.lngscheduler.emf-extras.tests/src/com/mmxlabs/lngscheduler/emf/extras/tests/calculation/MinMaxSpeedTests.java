@@ -24,8 +24,6 @@ import scenario.schedule.events.FuelType;
  * - min NBO speed when available time is long enough and on NBO<br>
  * mode
  * 
- * TODO NBO speed not currently set. Wait for fix then properly implement tests for each min/max speed.
- * 
  * @author Adam Semenenko
  * 
  */
@@ -94,7 +92,7 @@ public class MinMaxSpeedTests {
 	@Test
 	public void minNBOSpeedUsed() {
 
-		final String testName = "Min speed used";
+		final String testName = "Min NBO speed used";
 		// set the travel time to be sufficient for min speed travel
 		final int travelTime = (distanceBetweenPorts / minSpeed) + 10;
 
