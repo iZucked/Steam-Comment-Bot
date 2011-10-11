@@ -22,6 +22,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.ScenarioPackage;
 import scenario.port.Port;
@@ -36,6 +38,7 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
  * 
  */
 public class EObjectImporter {
+	private static final Logger log = LoggerFactory.getLogger(EObjectImporter.class);
 	protected static final String SEPARATOR = ".";
 	protected EClass outputEClass;
 
@@ -160,7 +163,7 @@ public class EObjectImporter {
 		}
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
-			final Object value = object.eIsSet(attribute) ? object.eGet(attribute) : null;
+			final Object value = (!attribute.isUnsettable() || object.eIsSet(attribute)) ? object.eGet(attribute) : null;
 			String svalue = "";
 			if (value instanceof Date) {
 				svalue = DateTimeParser.getInstance().formatDate((Date) value, timezone);
@@ -298,6 +301,8 @@ public class EObjectImporter {
 		for (final IImportWarningListener listener : warningListeners) {
 			listener.importWarning(iw);
 		}
+
+		log.warn("Import warning:" + iw.toString());
 	}
 
 	/**
@@ -441,7 +446,8 @@ public class EObjectImporter {
 					target.eUnset(attribute);
 				}
 			} catch (final Exception ex) {
-				warn("Error parsing value \"" + value + "\" - " + ex.getMessage(), true, attributeName);
+				if (!(attribute.isUnsettable() && value.isEmpty()))
+					warn("Error parsing value \"" + value + "\" - " + ex.getMessage(), true, attributeName);
 			}
 		} else {
 			// warn that the column is missing; ignore line number
