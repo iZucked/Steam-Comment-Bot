@@ -15,6 +15,8 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
@@ -29,6 +31,7 @@ import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
  * 
  */
 public class SingleReferenceManipulator extends BasicAttributeManipulator {
+	private static final Logger log = LoggerFactory.getLogger(SingleReferenceManipulator.class);
 	final IReferenceValueProvider valueProvider;
 	final EditingDomain editingDomain;
 
@@ -82,9 +85,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	public Object getValue(final Object object) {
 		int x = valueList.indexOf(super.getValue(object));
 		if (x == -1) {
-			// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
-			System.err.println("index of " + object + ", "
-					+ super.getValue(object) + " is -1!");
+			log.warn("Index of " + object + " to be selected is -1, so it is not a legal option in the control");
 		}
 		return x;
 	}

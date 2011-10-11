@@ -33,6 +33,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
@@ -50,6 +52,8 @@ import com.mmxlabs.shiplingo.ui.detailview.utils.EditorUtils;
  * @author hinton
  */
 public class DetailCompositeDialog extends Dialog {
+	private static final Logger log = LoggerFactory.getLogger(DetailCompositeDialog.class);
+
 	/**
 	 * Provides the detail views which edit the contents.
 	 */
@@ -292,9 +296,7 @@ public class DetailCompositeDialog extends Dialog {
 				if (isExecutable) {
 					editingDomain.getCommandStack().execute(cc);
 				} else {
-					// FIXME: Use e.g. log.error(xxx, new RuntimeException());
-					System.err
-							.println("Something is wrong with the equalizing command");
+					log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 				}
 			}
 			return value;
@@ -347,9 +349,8 @@ public class DetailCompositeDialog extends Dialog {
 									original, feature,
 									(Collection) duplicate.eGet(feature));
 					if (mas.canExecute() == false) {
-						// FIXME: Use e.g. log.error(xxx, new RuntimeException());
-						System.err
-								.println("Problem on multi-value containment setter");
+						log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
+								"Attempt to set feature which could not be set."));
 					}
 					compound.append(mas);
 				} else {
@@ -375,8 +376,8 @@ public class DetailCompositeDialog extends Dialog {
 						(Collection) duplicate.eGet(feature));
 				if (mas.canExecute() == false) {
 					// FIXME: Use e.g. log.error(xxx, new RuntimeException());
-					System.err
-							.println("Problem on multi-value reference setter");
+					log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
+							"Attempt to set feature which could not be set."));
 				}
 				compound.append(mas);
 			} else {

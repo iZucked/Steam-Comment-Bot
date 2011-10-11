@@ -367,7 +367,6 @@ public class RandomScenarioUtils {
 				// loadFactor ;+ dFactor
 				;
 
-				System.err.println(load.getKey() + " to " + discharge.getKey() + " loadFactor = " + loadFactor);
 				wheel.add(new Pair<Pair<String, String>, Double>(slot, p));
 
 				totalp += p;

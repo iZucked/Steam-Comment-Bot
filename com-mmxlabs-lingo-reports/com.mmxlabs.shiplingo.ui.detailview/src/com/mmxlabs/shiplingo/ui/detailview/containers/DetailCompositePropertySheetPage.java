@@ -24,6 +24,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
 import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
@@ -36,6 +38,7 @@ import com.mmxlabs.shiplingo.ui.detailview.editors.ICommandProcessor;
  * 
  */
 public class DetailCompositePropertySheetPage extends DetailCompositeContainer implements IPropertySheetPage {
+	private final Logger log = LoggerFactory.getLogger(DetailCompositePropertySheetPage.class);
 	private Composite control;// , top;
 	private ScrolledComposite sc;
 
@@ -87,8 +90,7 @@ public class DetailCompositePropertySheetPage extends DetailCompositeContainer i
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		// watch out of re-entry
 		if (selectionChanging) {
-			// FIXME: Use e.g. log.error(xxx, new RuntimeException());
-			System.err.println("re-entrant selection?");
+			log.warn("Re-entrant selection");
 			return;
 		}
 		selectionChanging = true;

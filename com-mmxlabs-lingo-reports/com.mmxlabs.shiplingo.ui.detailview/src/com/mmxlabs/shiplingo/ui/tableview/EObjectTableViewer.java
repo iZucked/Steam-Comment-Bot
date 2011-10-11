@@ -53,6 +53,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.fleet.VesselClass;
 import scenario.port.Canal;
@@ -70,6 +72,7 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
  * 
  */
 public class EObjectTableViewer extends TableViewer {
+	private final static Logger log = LoggerFactory.getLogger(EObjectTableViewer.class);
 	private static final String COLUMN_RENDERER = "COLUMN_RENDERER";
 	private static final String COLUMN_PATH = "COLUMN_PATH";
 
@@ -345,9 +348,7 @@ public class EObjectTableViewer extends TableViewer {
 				// get the notifier we are interested in
 				final Notifier n = notifierAndFeatures.getFirst();
 				if (n == null) {
-					// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
-					System.err.println(pathAndRenderer
-							+ " has given a null notifier for " + object);
+					log.debug(pathAndRenderer + " has provided a null notifier for " + object);
 					continue;
 				}
 				notifiers.add(n); // add it to the notifiers for this object

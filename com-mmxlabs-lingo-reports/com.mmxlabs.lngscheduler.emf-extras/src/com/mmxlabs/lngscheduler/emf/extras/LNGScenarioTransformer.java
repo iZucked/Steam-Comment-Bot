@@ -24,6 +24,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.Scenario;
 import scenario.ScenarioPackage;
@@ -103,6 +105,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
  * 
  */
 public class LNGScenarioTransformer {
+	private static final Logger log = LoggerFactory.getLogger(LNGScenarioTransformer.class);
+
 	private Scenario scenario;
 	private TimeZone timezone;
 	private Date earliestTime;
@@ -736,7 +740,7 @@ public class LNGScenarioTransformer {
 			// post-hoc changes to same it has to be this way.
 
 			final Date freezeDate = entities.getDateFromHours(freezeHours);
-			System.err.println("Freezing sequencing decisions before " + freezeDate);
+			log.debug("Freezing sequencing decisions before " + freezeDate);
 			for (final Sequence sequence : initialSchedule.getSequences()) {
 				final AllocatedVessel av = sequence.getVessel();
 				final IVessel builderVessel;

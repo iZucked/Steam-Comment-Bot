@@ -139,7 +139,7 @@ public class EMFUtils {
 		final Pair<Date, Date> result = new Pair<Date, Date>();
 
 		findMinMaxDateAttributes(object, result);
-		System.err.println(result);
+
 		return result;
 
 	}
