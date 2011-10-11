@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.shiplingo.ui.detailview.editors;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
@@ -25,8 +27,16 @@ public class TimezoneInlineEditor extends ValueListInlineEditor {
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 
 		for (final String s : TimeZone.getAvailableIDs()) {
-			values.add(new Pair<String, Object>(s, s));
+			if (s.indexOf("/") != -1)
+				values.add(new Pair<String, Object>(s, s));
 		}
+
+		Collections.sort(values, new Comparator<Pair<String, Object>>() {
+			@Override
+			public int compare(Pair<String, Object> o1, Pair<String, Object> o2) {
+				return o1.getFirst().compareTo(o2.getFirst());
+			}
+		});
 
 		return values;
 	}
