@@ -106,15 +106,6 @@ public class MinMaxSpeedTests {
 				Assert.assertTrue("Base fuel not used", fq.getQuantity() == 0);
 		}
 
-		/*
-		 * TODO work out NBO min speed
-		 * 
-		 * Get equivalent MT of base fuel, if more than fuel consumption, travel at higher speed? nbo rate per hour * equivalence ... ?
-		 */
-
-		// TODO reactivate test when min NBO speed is found and check ballast leg speed against that.
-		// assert that the vessel travels at min speed as there is sufficient time.
-
 		// Min NBO Speed is 11 because
 		// - min speed is 10, with fuel consumption of 10
 		// - max speed is 20, with fuel consumption of 20
