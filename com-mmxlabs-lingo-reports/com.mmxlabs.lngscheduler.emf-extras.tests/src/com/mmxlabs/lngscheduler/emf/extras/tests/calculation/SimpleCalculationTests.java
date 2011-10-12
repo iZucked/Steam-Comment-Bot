@@ -111,12 +111,7 @@ public class SimpleCalculationTests {
 		final int maxSpeed = 20;
 		final int capacity = 150000;
 		final int pilotLightRate = 0;
-		final int cooldownTime = 0;
-		final int warmupTime = Integer.MAX_VALUE;
-		final int cooldownVolume = 0;
 		final int minHeelVolume = 0;
-		final int spotCharterCount = 0;
-		final double fillCapacity = 1.0;
 		// ballast
 		final int ballastMinSpeed = 12;
 		final int ballastMinConsumption = 80;
@@ -135,11 +130,7 @@ public class SimpleCalculationTests {
 		final int ladenNBORate = 200;
 		// ports
 		final int distanceBetweenPorts = 1000;
-		// load and discharge prices and quantities
-		final int loadPrice = 1000;
-		final int loadMaxQuantity = 100000;
-		final int dischargeMaxQuantity = 100000;
-
+		
 		final boolean useDryDock = true;
 
 		return ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed,
