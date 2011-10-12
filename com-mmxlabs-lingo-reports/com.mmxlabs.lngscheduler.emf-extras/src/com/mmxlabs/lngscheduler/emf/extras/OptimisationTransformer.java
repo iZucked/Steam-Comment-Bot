@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import scenario.fleet.CharterOut;
 import scenario.fleet.VesselEvent;
 import scenario.optimiser.Constraint;
@@ -69,6 +72,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * 
  */
 public class OptimisationTransformer {
+	private static final Logger log = LoggerFactory.getLogger(OptimisationTransformer.class);
 	private final OptimisationSettings settings;
 
 	public OptimisationTransformer(OptimisationSettings settings) {
@@ -259,9 +263,7 @@ public class OptimisationTransformer {
 				final IModifiableSequence<ISequenceElement> ms = advice
 						.getModifiableSequence(vp.getResource(vessel));
 				final IResource r = vp.getResource(vessel);
-				if (r == null) {
-					int x = 1;
-				}
+
 				ms.add(serp.getStartElement(r));
 				for (final ScheduledEvent event : sequence.getEvents()) {
 					if (event instanceof SlotVisit) {
@@ -269,10 +271,7 @@ public class OptimisationTransformer {
 						final IPortSlot portSlot = mem.getOptimiserObject(
 								((SlotVisit) event).getSlot(), IPortSlot.class);
 						if (portSlot == null) {
-							System.err
-									.println("Slot "
-											+ v.getSlot().getId()
-											+ " is missing from the optimisation - perhaps you changed its cargo type but didn't delete it from the initial solution");
+							log.debug("Slot " + v.getSlot().getId() + " is missing from the optimisation input, but contained in the initial sequences. It will be ignored.");
 							continue;
 						}
 						ms.add(psp.getElement(portSlot));

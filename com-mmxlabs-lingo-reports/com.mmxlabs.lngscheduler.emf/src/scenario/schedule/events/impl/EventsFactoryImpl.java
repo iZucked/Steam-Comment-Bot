@@ -96,6 +96,8 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 		switch (eDataType.getClassifierID()) {
 			case EventsPackage.FUEL_UNIT:
 				return createFuelUnitFromString(eDataType, initialValue);
+			case EventsPackage.FUEL_PURPOSE:
+				return createFuelPurposeFromString(eDataType, initialValue);
 			case EventsPackage.FUEL_TYPE:
 				return createFuelTypeFromString(eDataType, initialValue);
 			default:
@@ -113,6 +115,8 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 		switch (eDataType.getClassifierID()) {
 			case EventsPackage.FUEL_UNIT:
 				return convertFuelUnitToString(eDataType, instanceValue);
+			case EventsPackage.FUEL_PURPOSE:
+				return convertFuelPurposeToString(eDataType, instanceValue);
 			case EventsPackage.FUEL_TYPE:
 				return convertFuelTypeToString(eDataType, instanceValue);
 			default:
@@ -227,6 +231,26 @@ public class EventsFactoryImpl extends EFactoryImpl implements EventsFactory {
 	 * @generated
 	 */
 	public String convertFuelUnitToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FuelPurpose createFuelPurposeFromString(EDataType eDataType, String initialValue) {
+		FuelPurpose result = FuelPurpose.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertFuelPurposeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

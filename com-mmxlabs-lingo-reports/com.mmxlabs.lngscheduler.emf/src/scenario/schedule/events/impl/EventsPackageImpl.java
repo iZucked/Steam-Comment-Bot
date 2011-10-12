@@ -35,6 +35,7 @@ import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsFactory;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.FuelMixture;
+import scenario.schedule.events.FuelPurpose;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
 import scenario.schedule.events.FuelUnit;
@@ -124,6 +125,13 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * @generated
 	 */
 	private EEnum fuelUnitEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum fuelPurposeEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -304,6 +312,15 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 */
 	public EAttribute getFuelQuantity_FuelUnit() {
 		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFuelQuantity_Purpose() {
+		return (EAttribute)fuelQuantityEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -707,6 +724,15 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getFuelPurpose() {
+		return fuelPurposeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelType() {
 		return fuelTypeEEnum;
 	}
@@ -749,6 +775,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__UNIT_PRICE);
 		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__TOTAL_PRICE);
 		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__FUEL_UNIT);
+		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__PURPOSE);
 
 		scheduledEventEClass = createEClass(SCHEDULED_EVENT);
 		createEAttribute(scheduledEventEClass, SCHEDULED_EVENT__START_TIME);
@@ -802,6 +829,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
+		fuelPurposeEEnum = createEEnum(FUEL_PURPOSE);
 		fuelTypeEEnum = createEEnum(FUEL_TYPE);
 	}
 
@@ -862,6 +890,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		initEAttribute(getFuelQuantity_UnitPrice(), ecorePackage.getELong(), "unitPrice", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFuelQuantity_TotalPrice(), ecorePackage.getELong(), "totalPrice", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFuelQuantity_FuelUnit(), this.getFuelUnit(), "fuelUnit", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFuelQuantity_Purpose(), this.getFuelPurpose(), "purpose", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scheduledEventEClass, ScheduledEvent.class, "ScheduledEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getScheduledEvent_StartTime(), ecorePackage.getEDate(), "startTime", null, 1, 1, ScheduledEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -938,6 +967,12 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 		addEEnumLiteral(fuelUnitEEnum, FuelUnit.MT);
 		addEEnumLiteral(fuelUnitEEnum, FuelUnit.M3);
 		addEEnumLiteral(fuelUnitEEnum, FuelUnit.MMB_TU);
+
+		initEEnum(fuelPurposeEEnum, FuelPurpose.class, "FuelPurpose");
+		addEEnumLiteral(fuelPurposeEEnum, FuelPurpose.TRAVEL);
+		addEEnumLiteral(fuelPurposeEEnum, FuelPurpose.PILOT_LIGHT);
+		addEEnumLiteral(fuelPurposeEEnum, FuelPurpose.IDLE);
+		addEEnumLiteral(fuelPurposeEEnum, FuelPurpose.COOLDOWN);
 
 		initEEnum(fuelTypeEEnum, FuelType.class, "FuelType");
 		addEEnumLiteral(fuelTypeEEnum, FuelType.FBO);

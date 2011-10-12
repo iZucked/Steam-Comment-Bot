@@ -166,13 +166,22 @@ public interface EventsPackage extends EPackage {
 	int FUEL_QUANTITY__FUEL_UNIT = 4;
 
 	/**
+	 * The feature id for the '<em><b>Purpose</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_QUANTITY__PURPOSE = 5;
+
+	/**
 	 * The number of structural features of the '<em>Fuel Quantity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FUEL_QUANTITY_FEATURE_COUNT = 5;
+	int FUEL_QUANTITY_FEATURE_COUNT = 6;
 
 	/**
 	 * The number of operations of the '<em>Fuel Quantity</em>' class.
@@ -1227,6 +1236,16 @@ public interface EventsPackage extends EPackage {
 	int FUEL_UNIT = 9;
 
 	/**
+	 * The meta object id for the '{@link scenario.schedule.events.FuelPurpose <em>Fuel Purpose</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.schedule.events.FuelPurpose
+	 * @see scenario.schedule.events.impl.EventsPackageImpl#getFuelPurpose()
+	 * @generated
+	 */
+	int FUEL_PURPOSE = 10;
+
+	/**
 	 * The meta object id for the '{@link scenario.schedule.events.FuelType <em>Fuel Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1234,7 +1253,7 @@ public interface EventsPackage extends EPackage {
 	 * @see scenario.schedule.events.impl.EventsPackageImpl#getFuelType()
 	 * @generated
 	 */
-	int FUEL_TYPE = 10;
+	int FUEL_TYPE = 11;
 
 
 	/**
@@ -1332,6 +1351,17 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getFuelQuantity_FuelUnit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.schedule.events.FuelQuantity#getPurpose <em>Purpose</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Purpose</em>'.
+	 * @see scenario.schedule.events.FuelQuantity#getPurpose()
+	 * @see #getFuelQuantity()
+	 * @generated
+	 */
+	EAttribute getFuelQuantity_Purpose();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.schedule.events.ScheduledEvent <em>Scheduled Event</em>}'.
@@ -1790,6 +1820,16 @@ public interface EventsPackage extends EPackage {
 	EEnum getFuelUnit();
 
 	/**
+	 * Returns the meta object for enum '{@link scenario.schedule.events.FuelPurpose <em>Fuel Purpose</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Fuel Purpose</em>'.
+	 * @see scenario.schedule.events.FuelPurpose
+	 * @generated
+	 */
+	EEnum getFuelPurpose();
+
+	/**
 	 * Returns the meta object for enum '{@link scenario.schedule.events.FuelType <em>Fuel Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1897,6 +1937,14 @@ public interface EventsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute FUEL_QUANTITY__FUEL_UNIT = eINSTANCE.getFuelQuantity_FuelUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Purpose</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUEL_QUANTITY__PURPOSE = eINSTANCE.getFuelQuantity_Purpose();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.impl.ScheduledEventImpl <em>Scheduled Event</em>}' class.
@@ -2265,6 +2313,16 @@ public interface EventsPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum FUEL_UNIT = eINSTANCE.getFuelUnit();
+
+		/**
+		 * The meta object literal for the '{@link scenario.schedule.events.FuelPurpose <em>Fuel Purpose</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.schedule.events.FuelPurpose
+		 * @see scenario.schedule.events.impl.EventsPackageImpl#getFuelPurpose()
+		 * @generated
+		 */
+		EEnum FUEL_PURPOSE = eINSTANCE.getFuelPurpose();
 
 		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.FuelType <em>Fuel Type</em>}' enum.

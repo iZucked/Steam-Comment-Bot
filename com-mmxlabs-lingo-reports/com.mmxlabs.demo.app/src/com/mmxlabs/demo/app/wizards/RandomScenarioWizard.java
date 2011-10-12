@@ -109,7 +109,6 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 
 		try {
 			resource.save(new HashMap<Object, Object>());
-			System.err.println("Created " + fileURI.path());
 		} catch (IOException e) {
 			return false;
 		}

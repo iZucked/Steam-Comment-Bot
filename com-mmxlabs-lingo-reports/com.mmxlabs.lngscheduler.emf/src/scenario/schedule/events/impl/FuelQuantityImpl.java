@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import scenario.schedule.events.EventsPackage;
+import scenario.schedule.events.FuelPurpose;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
 import scenario.schedule.events.FuelUnit;
@@ -28,6 +29,7 @@ import scenario.schedule.events.FuelUnit;
  *   <li>{@link scenario.schedule.events.impl.FuelQuantityImpl#getUnitPrice <em>Unit Price</em>}</li>
  *   <li>{@link scenario.schedule.events.impl.FuelQuantityImpl#getTotalPrice <em>Total Price</em>}</li>
  *   <li>{@link scenario.schedule.events.impl.FuelQuantityImpl#getFuelUnit <em>Fuel Unit</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.FuelQuantityImpl#getPurpose <em>Purpose</em>}</li>
  * </ul>
  * </p>
  *
@@ -133,6 +135,26 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * @ordered
 	 */
 	protected FuelUnit fuelUnit = FUEL_UNIT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPurpose() <em>Purpose</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPurpose()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final FuelPurpose PURPOSE_EDEFAULT = FuelPurpose.TRAVEL;
+
+	/**
+	 * The cached value of the '{@link #getPurpose() <em>Purpose</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPurpose()
+	 * @generated
+	 * @ordered
+	 */
+	protected FuelPurpose purpose = PURPOSE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -263,6 +285,27 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public FuelPurpose getPurpose() {
+		return purpose;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPurpose(FuelPurpose newPurpose) {
+		FuelPurpose oldPurpose = purpose;
+		purpose = newPurpose == null ? PURPOSE_EDEFAULT : newPurpose;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.FUEL_QUANTITY__PURPOSE, oldPurpose, purpose));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -276,6 +319,8 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 				return getTotalPrice();
 			case EventsPackage.FUEL_QUANTITY__FUEL_UNIT:
 				return getFuelUnit();
+			case EventsPackage.FUEL_QUANTITY__PURPOSE:
+				return getPurpose();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -302,6 +347,9 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 				return;
 			case EventsPackage.FUEL_QUANTITY__FUEL_UNIT:
 				setFuelUnit((FuelUnit)newValue);
+				return;
+			case EventsPackage.FUEL_QUANTITY__PURPOSE:
+				setPurpose((FuelPurpose)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -330,6 +378,9 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 			case EventsPackage.FUEL_QUANTITY__FUEL_UNIT:
 				setFuelUnit(FUEL_UNIT_EDEFAULT);
 				return;
+			case EventsPackage.FUEL_QUANTITY__PURPOSE:
+				setPurpose(PURPOSE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -352,6 +403,8 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 				return totalPrice != TOTAL_PRICE_EDEFAULT;
 			case EventsPackage.FUEL_QUANTITY__FUEL_UNIT:
 				return fuelUnit != FUEL_UNIT_EDEFAULT;
+			case EventsPackage.FUEL_QUANTITY__PURPOSE:
+				return purpose != PURPOSE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -376,6 +429,8 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 		result.append(totalPrice);
 		result.append(", fuelUnit: ");
 		result.append(fuelUnit);
+		result.append(", purpose: ");
+		result.append(purpose);
 		result.append(')');
 		return result.toString();
 	}

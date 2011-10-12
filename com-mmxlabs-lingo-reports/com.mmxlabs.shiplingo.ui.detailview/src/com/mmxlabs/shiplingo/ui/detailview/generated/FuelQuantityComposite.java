@@ -78,6 +78,7 @@ public  class FuelQuantityComposite extends AbstractDetailComposite {
     createUnitPriceEditor(composite, mainGroup);
     createTotalPriceEditor(composite, mainGroup);
     createFuelUnitEditor(composite, mainGroup);
+    createPurposeEditor(composite, mainGroup);
   }
 
 		
@@ -129,5 +130,15 @@ public  class FuelQuantityComposite extends AbstractDetailComposite {
     composite.createEditorControl(mainGroup,
       composite.createEditor(EventsPackage.eINSTANCE.getFuelQuantity_FuelUnit()),
       "Fuel Unit");
+  }
+
+  /**
+   * Create an editor for the purpose feature on FuelQuantity
+   * @generated
+   */
+  protected static void createPurposeEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(EventsPackage.eINSTANCE.getFuelQuantity_Purpose()),
+      "Purpose");
   }
 }
