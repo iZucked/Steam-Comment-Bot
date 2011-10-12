@@ -53,6 +53,8 @@
 		<module>com.mmxlabs.jobmanager.ui</module>
 		<module>com.mmxlabs.jobmanager.eclipse</module>
 		<module>com.mmxlabs.jobmanager.tests</module>
+		<module>com.mmxlabs.jobmanager.ipc</module>
+		<module>com.mmxlabs.jobmanager.ipc.runner</module>
 	</modules>
 
 	<!-- Pom dependencies to "consider". These need to be OSGi bundles for the 
