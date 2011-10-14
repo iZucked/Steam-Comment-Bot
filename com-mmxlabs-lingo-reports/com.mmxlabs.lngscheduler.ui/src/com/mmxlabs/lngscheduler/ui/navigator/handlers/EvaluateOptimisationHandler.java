@@ -100,7 +100,7 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 								control.prepare();
 
 
-								final Scenario output = control.getJobOutput();
+								final Scenario output = control.getJobOutput().scenario;
 								
 								final Iterator<Schedule> iterator = output.getScheduleModel().getSchedules().iterator();
 								Schedule lastSchedule = null;

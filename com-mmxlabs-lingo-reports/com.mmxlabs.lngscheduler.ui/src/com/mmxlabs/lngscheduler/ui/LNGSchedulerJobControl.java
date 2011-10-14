@@ -160,8 +160,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	}
 
 	@Override
-	public final Scenario getJobOutput() {
-		return scenario;
+	public final SerializableScenario getJobOutput() {
+		return new SerializableScenario(scenario);
 	}
 
 	@Override

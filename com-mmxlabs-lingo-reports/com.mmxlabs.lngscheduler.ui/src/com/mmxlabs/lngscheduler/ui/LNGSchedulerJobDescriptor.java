@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lngscheduler.ui;
 
+import java.io.Serializable;
+
 import scenario.Scenario;
 
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
@@ -14,15 +16,19 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
  * @author Simon Goodall
  * 
  */
-public final class LNGSchedulerJobDescriptor implements IJobDescriptor {
+public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private final String name;
 
-	private Scenario scenario;
+	private SerializableScenario scenario;
+
+	// private Scenario scenario;
 
 	public LNGSchedulerJobDescriptor(final String name, final Scenario scenario) {
 		this.name = name;
-		this.scenario = scenario;
+		this.scenario = new SerializableScenario(scenario);
+		// this.scenario = scenario;
 	}
 
 	@Override
@@ -37,7 +43,7 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor {
 
 	@Override
 	public Scenario getJobContext() {
-		return scenario;
+		return scenario.scenario;
 	}
 
 	@Override
