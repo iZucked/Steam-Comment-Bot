@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
@@ -17,11 +18,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 public class CostComponentTest {
 
+	@Ignore
 	@Test
 	public void testInit() {
 		fail("Not yet implemented");
 	}
 
+	@Ignore
 	@Test
 	public void testEvaluateSequence() {
 		fail("Not yet implemented");
