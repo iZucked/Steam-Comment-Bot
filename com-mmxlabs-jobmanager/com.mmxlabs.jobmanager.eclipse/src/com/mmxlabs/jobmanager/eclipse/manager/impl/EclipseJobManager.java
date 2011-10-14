@@ -49,6 +49,12 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	private final Set<IEclipseJobManagerListener> jobManagerListeners = new HashSet<IEclipseJobManagerListener>();
 
 	public EclipseJobManager() {
+		setJobMatcher(new IJobMatcher() {
+			@Override
+			public int matchJob(final IJobDescriptor descriptor, final IJobManager jobManager) {
+				return jobManager.getJobs().size();
+			}
+		});
 	}
 
 	/*
@@ -416,7 +422,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 		return jobMatcher;
 	}
 
-	public final void setJobMatcher(IJobMatcher jobMatcher) {
+	public final void setJobMatcher(final IJobMatcher jobMatcher) {
 		this.jobMatcher = jobMatcher;
 	}
 
