@@ -27,6 +27,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.jobmanager.manager.IJobManagerListener;
+import com.mmxlabs.lngscheduler.ui.SerializableScenario;
 
 public class ScheduleAdapter {
 
@@ -124,8 +125,8 @@ public class ScheduleAdapter {
 			final IJobControl control = jobManager.getControlForJob(job);
 			Object jobContext = control.getJobOutput();
 
-			if (jobContext instanceof Scenario) {
-				Scenario s = (Scenario) jobContext;
+			if (jobContext instanceof SerializableScenario) {
+				Scenario s = ((SerializableScenario) jobContext).scenario;
 				final Schedule schedule = getLastScheduleFromScenario(s);
 				if (schedule != null) {
 					schedules.add(schedule);
