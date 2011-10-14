@@ -20,28 +20,26 @@ import scenario.port.PortModel;
 import scenario.schedule.ScheduleModel;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Scenario</b></em>'.
- * <!-- end-user-doc -->
- *
- * <p>
- * The following features are supported:
- * <ul>
- *   <li>{@link scenario.Scenario#getVersion <em>Version</em>}</li>
- *   <li>{@link scenario.Scenario#getName <em>Name</em>}</li>
- *   <li>{@link scenario.Scenario#getFleetModel <em>Fleet Model</em>}</li>
- *   <li>{@link scenario.Scenario#getScheduleModel <em>Schedule Model</em>}</li>
- *   <li>{@link scenario.Scenario#getPortModel <em>Port Model</em>}</li>
- *   <li>{@link scenario.Scenario#getDistanceModel <em>Distance Model</em>}</li>
- *   <li>{@link scenario.Scenario#getCanalModel <em>Canal Model</em>}</li>
- *   <li>{@link scenario.Scenario#getCargoModel <em>Cargo Model</em>}</li>
- *   <li>{@link scenario.Scenario#getContractModel <em>Contract Model</em>}</li>
- *   <li>{@link scenario.Scenario#getMarketModel <em>Market Model</em>}</li>
- *   <li>{@link scenario.Scenario#getOptimisation <em>Optimisation</em>}</li>
- *   <li>{@link scenario.Scenario#getContainedModels <em>Contained Models</em>}</li>
- * </ul>
- * </p>
- *
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Scenario</b></em>'. <!-- end-user-doc -->
+ * 
+ *          <p>
+ *          The following features are supported:
+ *          <ul>
+ *          <li>{@link scenario.Scenario#getVersion <em>Version</em>}</li>
+ *          <li>{@link scenario.Scenario#getName <em>Name</em>}</li>
+ *          <li>{@link scenario.Scenario#getFleetModel <em>Fleet Model</em>}</li>
+ *          <li>{@link scenario.Scenario#getScheduleModel <em>Schedule Model</em>}</li>
+ *          <li>{@link scenario.Scenario#getPortModel <em>Port Model</em>}</li>
+ *          <li>{@link scenario.Scenario#getDistanceModel <em>Distance Model</em>}</li>
+ *          <li>{@link scenario.Scenario#getCanalModel <em>Canal Model</em>}</li>
+ *          <li>{@link scenario.Scenario#getCargoModel <em>Cargo Model</em>}</li>
+ *          <li>{@link scenario.Scenario#getContractModel <em>Contract Model</em>}</li>
+ *          <li>{@link scenario.Scenario#getMarketModel <em>Market Model</em>}</li>
+ *          <li>{@link scenario.Scenario#getOptimisation <em>Optimisation</em>}</li>
+ *          <li>{@link scenario.Scenario#getContainedModels <em>Contained Models</em>}</li>
+ *          </ul>
+ *          </p>
+ * 
  * @see scenario.ScenarioPackage#getScenario()
  * @model
  * @generated
@@ -376,5 +374,10 @@ public interface Scenario extends AnnotatedObject {
 	 * @generated
 	 */
 	void createMissingModels();
+
+	/**
+	 * @return
+	 */
+	Scenario getSelfContainedCopy();
 
 } // Scenario
