@@ -8,10 +8,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
+import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.jobmanager.ipc.impl.IPCJobControlFactory.MessageLoop;
 import com.mmxlabs.jobmanager.ipc.runner.protocol.Message;
+import com.mmxlabs.jobmanager.ipc.runner.protocol.Message.States;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
@@ -23,79 +28,30 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
  */
 public class IPCJobControl implements IJobControl {
 	private final IJobDescriptor descriptor;
-	private final BlockingQueue<Message> messageChannel;
-	private final UUID uuid;
-	private Serializable payload;
 
-	private Object lastOutput = null;
-	private int lastPercentage = 0;
-	private EJobState jobState = EJobState.UNKNOWN;
+	private final UUID uuid;
 
 	private final List<IJobControlListener> controlListeners = new ArrayList<IJobControlListener>();
+	private final MessageLoop loop;
 
+	private final Map<Message.Type, BlockingQueue<Object>> resultQueues = CollectionsUtil.makeHashMap(Message.Type.ReplyOutput, new LinkedBlockingQueue<Object>(), Message.Type.ReplyProgress,
+			new LinkedBlockingQueue<Object>(), Message.Type.ReplyPauseable, new LinkedBlockingQueue<Object>(), Message.Type.ReplyState, new LinkedBlockingQueue<Object>());
 	/**
 	 * @param job
 	 * @param randomUUID
 	 */
-	public IPCJobControl(IJobDescriptor job, UUID randomUUID, final BlockingQueue<Message> replyChannel) {
+	public IPCJobControl(IJobDescriptor job, UUID randomUUID, final MessageLoop loop) {
 		this.descriptor = job;
 		this.uuid = randomUUID;
-		this.messageChannel = replyChannel;
+		this.loop = loop;
 	}
 
-	protected void sendMessage(final Message outbound) {
-		try {
-			messageChannel.put(outbound);
-		} catch (final InterruptedException e) {
-
-		}
+	public void createRemote() {
+		loop.sendMessage(new Message(Message.Type.Create, uuid, (Serializable) descriptor));
 	}
 
-	protected void receiveMessage(final Message inbound) {
-		switch (inbound.getType()) {
-		case PERCENTAGE:
-			updateState(jobState, jobState, lastPercentage, (Integer) inbound.getPayload());
-			break;
-		case ERROR:
-			lastOutput = inbound.getPayload();
-			updateState(jobState, EJobState.CANCELLING, lastPercentage, lastPercentage);
-			updateState(jobState, EJobState.CANCELLED, lastPercentage, lastPercentage);
-			break;
-		case FINISHED:
-			lastOutput = inbound.getPayload();
-			updateState(jobState, EJobState.COMPLETED, lastPercentage, 100);
-			break;
-		case OUTPUT:
-			lastOutput = inbound.getPayload();
-			break;
-		default:
-			break;
-		}
-	}
-
-	private void updateState(final EJobState oldState, final EJobState newState, final int oldPercentage, final int newPercentage) {
-		final int percentageDelta = newPercentage - oldPercentage;
-		final Iterator<IJobControlListener> iterator = controlListeners.iterator();
-		while (iterator.hasNext()) {
-			IJobControlListener listener = iterator.next();
-
-			if (percentageDelta > 0) {
-				if (!listener.jobProgressUpdated(this, percentageDelta)) {
-					iterator.remove();
-					listener = null;
-				}
-			}
-
-			if (oldState != newState) {
-				if (listener != null) {
-					if (!listener.jobStateChanged(this, oldState, newState))
-						iterator.remove();
-				}
-			}
-		}
-
-		this.jobState = newState;
-		this.lastPercentage = newPercentage;
+	public UUID getUUID() {
+		return uuid;
 	}
 
 	@Override
@@ -105,68 +61,119 @@ public class IPCJobControl implements IJobControl {
 
 	@Override
 	public void prepare() {
-
+		loop.sendMessage(new Message(Message.Type.Prepare, uuid));
 	}
 
 	@Override
 	public void start() {
-		sendMessage(new Message(Message.Type.START, uuid, payload));
+		loop.sendMessage(new Message(Message.Type.Start, uuid));
 	}
 
 	@Override
 	public void cancel() {
-		sendMessage(new Message(Message.Type.CANCEL, uuid, null));
+		loop.sendMessage(new Message(Message.Type.Cancel, uuid));
+	}
+
+	private Object waitForAnswer(final Message.Type type) {
+		try {
+			final BlockingQueue<Object> queue = resultQueues.get(type);
+			return queue.take();
+		} catch (final Exception ex) {
+			return null;
+		}
 	}
 
 	@Override
 	public boolean isPauseable() {
-		return true;
+		loop.sendMessage(new Message(Message.Type.GetPauseable, uuid));
+		return (Boolean) waitForAnswer(Message.Type.ReplyPauseable);
 	}
 
 	@Override
 	public void pause() {
-		sendMessage(new Message(Message.Type.PAUSE, uuid));
+		loop.sendMessage(new Message(Message.Type.Pause, uuid));
 	}
 
 	@Override
 	public void resume() {
-		sendMessage(new Message(Message.Type.RESUME, uuid));
+		loop.sendMessage(new Message(Message.Type.Resume, uuid));
 	}
 
 	@Override
 	public EJobState getJobState() {
-		return jobState;
+		loop.sendMessage(new Message(Message.Type.GetState, uuid));
+		return (EJobState) waitForAnswer(Message.Type.ReplyState);
 	}
 
 	@Override
 	public int getProgress() {
-		return lastPercentage;
+		loop.sendMessage(new Message(Message.Type.GetProgress, uuid));
+		return (Integer) waitForAnswer(Message.Type.ReplyProgress);
 	}
 
 	@Override
 	public Object getJobOutput() {
-		return lastOutput;
+		loop.sendMessage(new Message(Message.Type.GetOutput, uuid));
+		return waitForAnswer(Message.Type.ReplyOutput);
 	}
 
 	@Override
 	public void addListener(final IJobControlListener listener) {
-
+		controlListeners.add(listener);
 	}
 
 	@Override
 	public void removeListener(final IJobControlListener listener) {
+		controlListeners.add(listener);
+	}
 
+	private void notifyProgress(int delta) {
+		final Iterator<IJobControlListener> iterator = controlListeners.iterator();
+		while (iterator.hasNext()) {
+			final IJobControlListener listener = iterator.next();
+			if (!listener.jobProgressUpdated(this, delta))
+				iterator.remove();
+		}
+	}
+
+	private void notifyState(final EJobState oldState, final EJobState newState) {
+		final Iterator<IJobControlListener> iterator = controlListeners.iterator();
+		while (iterator.hasNext()) {
+			final IJobControlListener listener = iterator.next();
+			if (!listener.jobStateChanged(this, oldState, newState))
+				iterator.remove();
+		}
 	}
 
 	@Override
 	public void dispose() {
-
+		loop.sendMessage(new Message(Message.Type.Destroy, uuid));
 	}
 
 	/**
-	 * @return
+	 * Handle an incoming message
+	 * 
+	 * @param message
 	 */
-	public UUID getUUID() {
-		return uuid;
+	public void receiveMessage(final Message message) {
+		switch (message.getType()) {
+		case NotifyProgressChanage:
+			notifyProgress((Integer) message.getPayload());
+			break;
+		case NotifyStateChange:
+			final States states = (States) message.getPayload();
+			notifyState(states.oldState, states.newState);
+			break;
+		case ReplyOutput:
+		case ReplyPauseable:
+		case ReplyProgress:
+		case ReplyState:
+			try {
+				resultQueues.get(message.getType()).put(message.getPayload());
+			} catch (final InterruptedException ex) {
+				// bug
+			}
+			break;
+		}
 	}
 }

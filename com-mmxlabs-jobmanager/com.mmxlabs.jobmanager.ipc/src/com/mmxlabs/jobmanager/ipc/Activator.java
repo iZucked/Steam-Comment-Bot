@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
@@ -29,7 +30,6 @@ import com.mmxlabs.jobmanager.manager.impl.JobManagerDescriptor;
  * @author hinton
  * 
  */
-@SuppressWarnings("restriction")
 public class Activator implements BundleActivator {
 
 	private final Logger log = LoggerFactory.getLogger(Activator.class);
@@ -48,6 +48,7 @@ public class Activator implements BundleActivator {
 	 * @param bundle
 	 * @param output
 	 */
+	@SuppressWarnings("unused")
 	private void collectRequiredBundles(final Bundle bundle, final Set<Bundle> output) {
 		final BundleWiring wiring = bundle.adapt(BundleWiring.class);
 
@@ -95,17 +96,24 @@ public class Activator implements BundleActivator {
 				@Override
 				public void run() {
 					try {
-						runner.start();
 						final HashSet<Bundle> requiredBundles = new HashSet<Bundle>();
 						// Question : why does this method not capture the full dependency set?
 						// Do we have to start the bundles or something to force full dependency loading?
 						// collectRequiredBundles(runnerBundle, requiredBundles);
 						requiredBundles.addAll(Arrays.asList(context.getBundles()));
+
+						final Iterator<Bundle> filter = requiredBundles.iterator();
+						while (filter.hasNext()) {
+							if (filter.next().getLocation().startsWith("reference:file:") == false)
+								filter.remove();
+						}
+
+						runner.considerBundlesForDevFile(requiredBundles);
+
+						runner.start();
 						requiredBundles.remove(runnerBundle); // want to install this last
 						for (final Bundle b : requiredBundles) {
-							if (b.getLocation().startsWith("reference:file:")) {
-								runner.installBundle(b.getLocation());
-							}
+							runner.installBundle(b.getLocation());
 						}
 						runner.installBundle(runnerBundle.getLocation());
 						runner.startBundle(runnerBundle.getSymbolicName());

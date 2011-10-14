@@ -7,6 +7,7 @@ package com.mmxlabs.jobmanager.ipc.impl;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +16,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -153,7 +155,6 @@ public class EquinoxRunner {
 
 	private Process process = null;
 	private BufferedWriter outputWriter;
-	private BufferedReader errorReader;
 	private BufferedReader inputReader;
 	private EquinoxOutputParser outputParser;
 
@@ -175,7 +176,7 @@ public class EquinoxRunner {
 	/**
 	 * How many milliseconds to wait before sending a command; if you talk to equinox too quickly it has problems, for unknown reasons, and fails to load bundles which it's otherwise fine with.
 	 */
-	private static final long COMMAND_DELAY = 50;
+	private static final long COMMAND_DELAY = 5;
 
 	/**
 	 * How many milliseconds to give equinox to finish starting up; for some reason it presents the osgi> prompt when it's not really ready, and if you ask it to load a bundle immediately it will blow
@@ -183,7 +184,7 @@ public class EquinoxRunner {
 	 * 
 	 * Good work there equinox.
 	 */
-	private static final long STARTUP_DELAY = 2000;
+	private static final long STARTUP_DELAY = 2500;
 
 	public EquinoxRunner() {
 
@@ -249,9 +250,19 @@ public class EquinoxRunner {
 		assert confDir.exists();
 		assert dataDir.exists();
 		arguments.add("-configuration");
-		arguments.add(confDir.toString());
+		arguments.add(confDir.toURI().toString());
 		arguments.add("-data");
-		arguments.add(dataDir.toString());
+		arguments.add(dataDir.toURI().toString());
+
+		if (devFileBuffer.length() > 0) {
+			final File devFile = new File(tempDir, "dev.properties");
+			final FileWriter writer = new FileWriter(devFile);
+			writer.write(devFileBuffer.toString());
+			writer.flush();
+			writer.close();
+			arguments.add("-dev");
+			arguments.add(devFile.toURI().toString());
+		}
 
 		arguments.addAll(extraEquinoxArgs);
 
@@ -281,7 +292,7 @@ public class EquinoxRunner {
 		this.process = process;
 		this.outputWriter = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
 		this.inputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-		this.errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+		new BufferedReader(new InputStreamReader(process.getErrorStream()));
 	}
 
 	public static File createTempDir() throws IOException {
@@ -379,7 +390,7 @@ public class EquinoxRunner {
 			while (result == null && outputParser.isRunning()) {
 				result = outputQueue.poll(1, TimeUnit.SECONDS);
 			}
-			log.debug("result=" + result);
+			// log.debug("result=" + result);
 			return result;
 		} catch (final IOException ex) {
 			log.error("IO Error executing " + command, ex);
@@ -412,5 +423,29 @@ public class EquinoxRunner {
 
 	public void startBundle(final String name) {
 		execute("start " + name);
+	}
+
+	private final StringBuffer devFileBuffer = new StringBuffer();
+
+	/**
+	 * Because of something about how eclipse works, we have to do a hack to make workspace bundles work if we are running from within eclipse, rather than with everything compiled to a jar.
+	 * 
+	 * Furthermore, I am making the assumption that the classes always live in target/classes.
+	 * 
+	 * Essentially this is a hack.
+	 * 
+	 * @param requiredBundles
+	 */
+	public void considerBundlesForDevFile(final HashSet<Bundle> requiredBundles) {
+		for (final Bundle b : requiredBundles) {
+			try {
+				final File file = new File(new URI(b.getLocation().substring("reference:".length())));
+				if (file.isDirectory() && new File(new File(file, "target"), "classes").exists()) {
+					// add to dev file
+					devFileBuffer.append(b.getSymbolicName() + "=target/classes\n");
+				}
+			} catch (URISyntaxException e) {
+			}
+		}
 	}
 }
