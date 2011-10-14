@@ -704,8 +704,39 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// because the next bit will have to patch up their time windows
 		createReturnElements();
 
+		portDistanceProvider.cacheExtremalValues(ports);
+
 		// Patch up end time windows
-		final int latestTime = endOfLatestWindow + 24 * 15;
+		// The return time should be the soonest we can get back to the previous load,
+		// presumably in the slowest vessel without going via a canal.
+
+		// TODO what about return to first load rule?
+
+		int latestDischarge = 0;
+		IPort loadPort = null, dischargePort = null;
+		for (final ICargo cargo : cargoes) {
+			final int endOfDischargeWindow = cargo.getDischargeSlot().getTimeWindow().getEnd();
+			if (endOfDischargeWindow > latestDischarge) {
+				latestDischarge = endOfDischargeWindow;
+				loadPort = cargo.getLoadSlot().getPort();
+				dischargePort = cargo.getDischargeSlot().getPort();
+			}
+		}
+		final int maxFastReturnTime;
+		if (dischargePort != null && loadPort != null) {
+			final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadPort);
+			// what's the slowest vessel class
+			int slowestMaxSpeed = Integer.MAX_VALUE;
+			for (final IVesselClass vesselClass : vesselClasses) {
+				slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
+			}
+
+			maxFastReturnTime = Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance);
+		} else {
+			maxFastReturnTime = 0;
+			latestDischarge = 0;
+		}
+		final int latestTime = Math.max(endOfLatestWindow, maxFastReturnTime + latestDischarge);
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
 			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + 1);
 			elementAndSlot.getSecond().setTimeWindow(endWindow);
@@ -729,7 +760,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// }
 		// }
 
-		portDistanceProvider.cacheExtremalValues(ports);
+
 
 		final OptimisationData<ISequenceElement> data = new OptimisationData<ISequenceElement>();
 
@@ -843,7 +874,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vc.setIdleNBORate(state, idleNBORateInM3PerHour);
 		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHour);
 		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerHour);
-		vc.setNBOSpeed(state, nboSpeed);
+		vc.setMinNBOSpeed(state, nboSpeed);
 	}
 
 	/**

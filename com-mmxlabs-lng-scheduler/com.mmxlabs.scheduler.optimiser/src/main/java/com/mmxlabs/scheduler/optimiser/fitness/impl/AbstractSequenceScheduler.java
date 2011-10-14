@@ -103,7 +103,6 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 	 * @return
 	 */
 	public ScheduledSequence schedule(final IResource resource, final ISequence<T> sequence, final int[] arrivalTimes) {
-
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
 		// Get start time
@@ -248,7 +247,7 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 			currentSequence.add(portDetails);
 
 			final PortType portType = portTypeProvider.getPortType(element);
-			if (currentSequence.size() > 1 && (portType == PortType.Load) || portType == PortType.CharterOut) {
+			if (currentSequence.size() > 1 && (portType == PortType.Load) || portType == PortType.CharterOut || portType == PortType.DryDock) {
 
 				if (!optimiseSequence(voyagePlans, currentSequence, currentTimes, voyagePlanOptimiser)) {
 					return null;
@@ -295,7 +294,6 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 	}
 
 	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser<T> optimiser) {
-
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(currentSequence);
 		optimiser.setArrivalTimes(currentTimes);

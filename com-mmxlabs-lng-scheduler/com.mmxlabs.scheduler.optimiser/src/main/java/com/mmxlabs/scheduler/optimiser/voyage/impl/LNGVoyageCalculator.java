@@ -51,7 +51,6 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 	 */
 	@Override
 	public final void calculateVoyageFuelRequirements(final VoyageOptions options, final VoyageDetails<T> output) {
-
 		output.setOptions(options);
 
 		final IVessel vessel = options.getVessel();
@@ -76,7 +75,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		// Calculate speed
 		// cast to int. as if long is required, then what are we doing?
 		int speed = availableTimeInHours == 0 ? 0 : Calculator.speedFromDistanceTime(distance, availableTimeInHours);
-
+		
 		// speed calculation is not always correct - with a linear consumption
 		// curve on base fuel for example, the best option is always either maximum speed
 		// or minimum speed.
@@ -194,7 +193,9 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		} else {
 			final long idleRateInMTPerHour = vesselClass.getIdleConsumptionRate(vesselState);
 
-			long idleConsumptionInMT = Calculator.quantityFromRateTime(idleRateInMTPerHour, idleTimeInHours);
+			int remainingIdleTimeInHours = idleTimeInHours;
+
+			// long idleConsumptionInMT = Calculator.quantityFromRateTime(idleRateInMTPerHour, idleTimeInHours);
 
 			if (options.useNBOForTravel()) {
 				// Run down boil off after travel. On ballast voyages running on
@@ -220,22 +221,22 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					if (warmingTimeInHours > vesselClass.getWarmupTime()) {
 						if (options.getAllowCooldown() && idleTimeInHours > (vesselClass.getWarmupTime() + vesselClass.getCooldownTime())) {
 							output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, vesselClass.getCooldownVolume());
-
 							// don't use any idle base during the cooldown
-							idleConsumptionInMT -= Calculator.quantityFromRateTime(idleRateInMTPerHour, vesselClass.getCooldownTime());
+							remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 						} else {
-							deltaTimeInHours = vesselClass.getWarmupTime();
+							// warming time = idle - delta
+							// therefore we need
+							// idle - delta = vesselClass.getWarmupTime();
+							// delta = idle - warmup
+							deltaTimeInHours = idleTimeInHours - vesselClass.getWarmupTime();
 							heelInM3 = idleNBORateInM3PerHour * deltaTimeInHours;
 						}
 					}
 				}
 
+				remainingIdleTimeInHours -= deltaTimeInHours;
+
 				final long heelInMT = Calculator.convertM3ToMT(heelInM3, equivalenceFactorM3ToMT);
-				// Get fuel equivalence factor
-				final long equivalentConsumptionInMT = Calculator.quantityFromRateTime(idleRateInMTPerHour, deltaTimeInHours);
-
-				idleConsumptionInMT -= equivalentConsumptionInMT;
-
 				output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3, heelInM3);
 				output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT, heelInMT);
 
@@ -253,12 +254,14 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 					// sequence scheduler unless it's unavoidable.
 					if (options.isWarm() || options.getAvailableTime() > vesselClass.getWarmupTime()) {
 						output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, vesselClass.getCooldownVolume());
+						remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 					}
 				}
 			}
 
-			if (idleConsumptionInMT > 0) {
+			if (remainingIdleTimeInHours > 0) {
 				// Use base for remaining quantity
+				final long idleConsumptionInMT = Calculator.quantityFromRateTime(idleRateInMTPerHour, remainingIdleTimeInHours);
 				output.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT, idleConsumptionInMT);
 			}
 		}
@@ -447,7 +450,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		// Can this be moved into the scheduler? If so, we need to ensure the
 		// same price is used in all valid voyage legs.
 
-		int cooldownM3Price = 0;
+
 
 		final boolean setLNGPrice;
 		if (dischargeIdx != -1) {
@@ -466,6 +469,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			}
 		}
 
+		int cooldownM3Price = 0;
+
 		// assert FuelComponent.NBO.getDefaultFuelUnit() == FuelUnit.M3;
 		// assert FuelComponent.FBO.getDefaultFuelUnit() == FuelUnit.M3;
 		// assert FuelComponent.IdleNBO.getDefaultFuelUnit() == FuelUnit.M3;
@@ -481,6 +486,11 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				}
 				if (details.getOptions().shouldBeCold() && details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0) {
 					final IPort port = details.getOptions().getToPortSlot().getPort();
+
+					if (loadIdx != -1 && dischargeIdx != -1 && port.shouldVesselsArriveCold()) {
+						// TODO trap this as a violation and respond to violation count in the outer loop.
+						return false;
+					}
 
 					final int cooldownTime = arrivalTimes[i / 2] - vesselClass.getCooldownTime();
 
