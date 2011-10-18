@@ -32,8 +32,7 @@ public class LatenessComponentTest {
 	public void testLatenessComponent() {
 		final String name = "name";
 		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
-		final LatenessComponent<Object> c = new LatenessComponent<Object>(name,
-				core);
+		final LatenessComponent<Object> c = new LatenessComponent<Object>(name, core);
 
 		Assert.assertSame(name, c.getName());
 		Assert.assertSame(core, c.getFitnessCore());
@@ -44,18 +43,15 @@ public class LatenessComponentTest {
 
 		final String name = "name";
 		final CargoSchedulerFitnessCore<Object> core = null;
-		final LatenessComponent<Object> c = new LatenessComponent<Object>(name,
-				core);
+		final LatenessComponent<Object> c = new LatenessComponent<Object>(name, core);
 
 		@SuppressWarnings("unchecked")
-		final IOptimisationData<Object> data = context
-				.mock(IOptimisationData.class);
+		final IOptimisationData<Object> data = context.mock(IOptimisationData.class);
 
 		final String key = "provider-discount-curve";
 		final Class<IDataComponentProvider> classDataComponentProvider = IDataComponentProvider.class;
 		final Class<IDiscountCurveProvider> classDiscountCurveProvider = IDiscountCurveProvider.class;
-		
-		
+
 		context.checking(new Expectations() {
 			{
 				one(data).getDataComponentProvider(key, classDataComponentProvider);
@@ -68,13 +64,13 @@ public class LatenessComponentTest {
 		context.assertIsSatisfied();
 	}
 
-	@Ignore("TODO: Fix me") // TODO FIXME
+	@Ignore("TODO: Fix me")
+	// TODO FIXME
 	@Test
 	public void testEvaluateSequence() {
 		final String name = "name";
 		final CargoSchedulerFitnessCore<Object> core = null;
-		final LatenessComponent<Object> c = new LatenessComponent<Object>(name,
-				core);
+		final LatenessComponent<Object> c = new LatenessComponent<Object>(name, core);
 		c.init(null);
 
 		final Object obj1 = new Object();
@@ -91,38 +87,34 @@ public class LatenessComponentTest {
 
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setPortSlot(loadSlot);
-		
 
 		final PortDetails dischargeDetails = new PortDetails();
 		dischargeDetails.setPortSlot(dischargeSlot);
-		
 
-		final Object[] routeSequence = new Object[] { loadDetails, null,
-				dischargeDetails };
+		final Object[] routeSequence = new Object[] { loadDetails, null, dischargeDetails };
 		final VoyagePlan voyagePlan = new VoyagePlan();
 		voyagePlan.setSequence(routeSequence);
 
 		final IResource resource = context.mock(IResource.class);
-		final IModifiableSequence<Object> sequence = OptimiserTestUtil
-				.makeSequence(obj1, obj2);
+		final IModifiableSequence<Object> sequence = OptimiserTestUtil.makeSequence(obj1, obj2);
 
 		Assert.fail("TODO: Fix me");
-		
-//		c.prepare();
-//
-//		c.beginIterating(resource);
-//		c.evaluateNextObject(loadDetails, 15);
-//		c.evaluateNextObject(dischargeDetails, 20);
-//		c.endIterating();
-//		
-//		c.evaluateSequence(resource, sequence,
-//				CollectionsUtil.makeArrayList(voyagePlan),false,0);
-//
-//		c.complete();
-//
-//		// 4 hours lateness * hardcoded weight
-//		Assert.assertEquals(4 * 1000000, c.getFitness());
-//
-//		context.assertIsSatisfied();
+
+		// c.prepare();
+		//
+		// c.beginIterating(resource);
+		// c.evaluateNextObject(loadDetails, 15);
+		// c.evaluateNextObject(dischargeDetails, 20);
+		// c.endIterating();
+		//
+		// c.evaluateSequence(resource, sequence,
+		// CollectionsUtil.makeArrayList(voyagePlan),false,0);
+		//
+		// c.complete();
+		//
+		// // 4 hours lateness * hardcoded weight
+		// Assert.assertEquals(4 * 1000000, c.getFitness());
+		//
+		// context.assertIsSatisfied();
 	}
 }
