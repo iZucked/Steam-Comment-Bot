@@ -14,11 +14,13 @@ import org.junit.Test;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -49,9 +51,15 @@ public class LatenessComponentTest {
 		final IOptimisationData<Object> data = context
 				.mock(IOptimisationData.class);
 
+		final String key = "provider-discount-curve";
+		final Class<IDataComponentProvider> classDataComponentProvider = IDataComponentProvider.class;
+		final Class<IDiscountCurveProvider> classDiscountCurveProvider = IDiscountCurveProvider.class;
+		
+		
 		context.checking(new Expectations() {
 			{
-				// Expect nothing
+				one(data).getDataComponentProvider(key, classDataComponentProvider);
+				one(data).getDataComponentProvider(key, classDiscountCurveProvider);
 			}
 		});
 
