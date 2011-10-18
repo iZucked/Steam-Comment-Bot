@@ -15,7 +15,6 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
@@ -50,12 +49,10 @@ public class LatenessComponentTest {
 		final IOptimisationData<Object> data = context.mock(IOptimisationData.class);
 
 		final String key = "provider-discount-curve";
-		final Class<IDiscountCurveProvider> classDiscountCurveProvider = IDiscountCurveProvider.class;
-		
-		final IDiscountCurveProvider discountCurveProvider = context.mock(IDiscountCurveProvider.class);
-
 		final String componentName = "name";
 		
+		final Class<IDiscountCurveProvider> classDiscountCurveProvider = IDiscountCurveProvider.class;
+		final IDiscountCurveProvider discountCurveProvider = context.mock(IDiscountCurveProvider.class);
 		final ICurve curve = context.mock(ICurve.class);
 		
 		context.checking(new Expectations() {
