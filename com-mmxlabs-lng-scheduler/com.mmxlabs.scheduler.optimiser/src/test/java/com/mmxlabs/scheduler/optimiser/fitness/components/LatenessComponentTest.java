@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
@@ -49,13 +50,21 @@ public class LatenessComponentTest {
 		final IOptimisationData<Object> data = context.mock(IOptimisationData.class);
 
 		final String key = "provider-discount-curve";
-		final Class<IDataComponentProvider> classDataComponentProvider = IDataComponentProvider.class;
 		final Class<IDiscountCurveProvider> classDiscountCurveProvider = IDiscountCurveProvider.class;
+		
+		final IDiscountCurveProvider discountCurveProvider = context.mock(IDiscountCurveProvider.class);
 
+		final String componentName = "name";
+		
+		final ICurve curve = context.mock(ICurve.class);
+		
 		context.checking(new Expectations() {
 			{
-				one(data).getDataComponentProvider(key, classDataComponentProvider);
-				one(data).getDataComponentProvider(key, classDiscountCurveProvider);
+				exactly(1).of(data).getDataComponentProvider(key, classDiscountCurveProvider);
+				will(returnValue(discountCurveProvider));
+				
+				exactly(1).of(discountCurveProvider).getDiscountCurve(componentName);
+				will(returnValue(curve));
 			}
 		});
 
