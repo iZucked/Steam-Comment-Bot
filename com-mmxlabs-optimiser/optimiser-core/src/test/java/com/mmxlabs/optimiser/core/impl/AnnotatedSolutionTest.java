@@ -4,12 +4,11 @@
  */
 package com.mmxlabs.optimiser.core.impl;
 
-import java.util.Map;
-
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -54,6 +53,7 @@ public class AnnotatedSolutionTest {
 		Assert.assertSame(annotation, solution.getGeneralAnnotation(key, Object.class));
 	}
 
+	@Ignore("Incomplete test")
 	@Test
 	public void getElementAnnotations() {
 		final AnnotatedSolution solution = new AnnotatedSolution();
@@ -65,6 +65,7 @@ public class AnnotatedSolutionTest {
 		Assert.fail("How to test this further?");
 	}
 
+	@Ignore("Incomplete test")
 	@Test
 	public void testDispose() {
 		final ISequences sequences = context.mock(ISequences.class);

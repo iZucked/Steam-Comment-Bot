@@ -12,6 +12,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -33,8 +34,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		final LinearSimulatedAnnealingFitnessEvaluator<Object> evaluator = new LinearSimulatedAnnealingFitnessEvaluator<Object>();
 		Assert.assertNull(evaluator.getFitnessComponents());
-		final List<IFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final List<IFitnessComponent<Object>> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 		Assert.assertSame(fitnessComponents, evaluator.getFitnessComponents());
 	}
@@ -44,8 +44,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		final LinearSimulatedAnnealingFitnessEvaluator<Object> evaluator = new LinearSimulatedAnnealingFitnessEvaluator<Object>();
 		Assert.assertNull(evaluator.getFitnessHelper());
 		@SuppressWarnings("unchecked")
-		final IFitnessHelper<Object> fitnessHelper = context
-				.mock(IFitnessHelper.class);
+		final IFitnessHelper<Object> fitnessHelper = context.mock(IFitnessHelper.class);
 		evaluator.setFitnessHelper(fitnessHelper);
 		Assert.assertSame(fitnessHelper, evaluator.getFitnessHelper());
 	}
@@ -54,8 +53,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 	public void testGetSetFitnessCombiner() {
 		final LinearSimulatedAnnealingFitnessEvaluator<Object> evaluator = new LinearSimulatedAnnealingFitnessEvaluator<Object>();
 		Assert.assertNull(evaluator.getFitnessCombiner());
-		final IFitnessCombiner fitnessCombiner = context
-				.mock(IFitnessCombiner.class);
+		final IFitnessCombiner fitnessCombiner = context.mock(IFitnessCombiner.class);
 		evaluator.setFitnessCombiner(fitnessCombiner);
 		Assert.assertSame(fitnessCombiner, evaluator.getFitnessCombiner());
 	}
@@ -73,8 +71,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 	public void testInit() {
 		final LinearSimulatedAnnealingFitnessEvaluator<Object> evaluator = new LinearSimulatedAnnealingFitnessEvaluator<Object>();
 
-		final List<IFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final List<IFitnessComponent<Object>> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
 		final IThresholder thresholder = context.mock(IThresholder.class);
@@ -84,8 +81,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		evaluator.setFitnessCombiner(combiner);
 
 		@SuppressWarnings("unchecked")
-		final IFitnessHelper<Object> fitnessHelper = context
-				.mock(IFitnessHelper.class);
+		final IFitnessHelper<Object> fitnessHelper = context.mock(IFitnessHelper.class);
 		evaluator.setFitnessHelper(fitnessHelper);
 
 		evaluator.init();
@@ -103,8 +99,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		evaluator.setFitnessCombiner(combiner);
 
 		@SuppressWarnings("unchecked")
-		final IFitnessHelper<Object> fitnessHelper = context
-				.mock(IFitnessHelper.class);
+		final IFitnessHelper<Object> fitnessHelper = context.mock(IFitnessHelper.class);
 		evaluator.setFitnessHelper(fitnessHelper);
 
 		evaluator.init();
@@ -115,16 +110,14 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 	public void testInit3() {
 		final LinearSimulatedAnnealingFitnessEvaluator<Object> evaluator = new LinearSimulatedAnnealingFitnessEvaluator<Object>();
 
-		final List<IFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final List<IFitnessComponent<Object>> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
 		final IFitnessCombiner combiner = context.mock(IFitnessCombiner.class);
 		evaluator.setFitnessCombiner(combiner);
 
 		@SuppressWarnings("unchecked")
-		final IFitnessHelper<Object> fitnessHelper = context
-				.mock(IFitnessHelper.class);
+		final IFitnessHelper<Object> fitnessHelper = context.mock(IFitnessHelper.class);
 		evaluator.setFitnessHelper(fitnessHelper);
 
 		evaluator.init();
@@ -135,16 +128,14 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 	public void testInit4() {
 		final LinearSimulatedAnnealingFitnessEvaluator<Object> evaluator = new LinearSimulatedAnnealingFitnessEvaluator<Object>();
 
-		final List<IFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final List<IFitnessComponent<Object>> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
 		final IThresholder thresholder = context.mock(IThresholder.class);
 		evaluator.setThresholder(thresholder);
 
 		@SuppressWarnings("unchecked")
-		final IFitnessHelper<Object> fitnessHelper = context
-				.mock(IFitnessHelper.class);
+		final IFitnessHelper<Object> fitnessHelper = context.mock(IFitnessHelper.class);
 		evaluator.setFitnessHelper(fitnessHelper);
 
 		evaluator.init();
@@ -155,8 +146,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 	public void testInit5() {
 		final LinearSimulatedAnnealingFitnessEvaluator<Object> evaluator = new LinearSimulatedAnnealingFitnessEvaluator<Object>();
 
-		final List<IFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final List<IFitnessComponent<Object>> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
 		final IThresholder thresholder = context.mock(IThresholder.class);
@@ -177,8 +167,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		final LinearSimulatedAnnealingFitnessEvaluator<Object> evaluator = new LinearSimulatedAnnealingFitnessEvaluator<Object>();
 
-		final List<IFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final List<IFitnessComponent<Object>> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
 		final IThresholder thresholder = context.mock(IThresholder.class);
@@ -188,16 +177,14 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		evaluator.setFitnessCombiner(combiner);
 
 		@SuppressWarnings("unchecked")
-		final IFitnessHelper<Object> fitnessHelper = context
-				.mock(IFitnessHelper.class);
+		final IFitnessHelper<Object> fitnessHelper = context.mock(IFitnessHelper.class);
 		evaluator.setFitnessHelper(fitnessHelper);
 
 		evaluator.init();
 
 		context.checking(new Expectations() {
 			{
-				one(fitnessHelper).evaluateSequencesFromComponents(source,
-						fitnessComponents);
+				one(fitnessHelper).evaluateSequencesFromComponents(source, fitnessComponents);
 				one(combiner).calculateFitness(fitnessComponents);
 				one(thresholder).init();
 			}
@@ -212,7 +199,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		evaluator.setInitialSequences(source);
 
 		context.assertIsSatisfied();
-		
+
 		Assert.assertEquals(1000, evaluator.getBestFitness());
 		Assert.assertEquals(1000, evaluator.getCurrentFitness());
 
@@ -230,14 +217,12 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		context.checking(new Expectations() {
 			{
-				one(fitnessHelper).evaluateSequencesFromComponents(source,
-						fitnessComponents, affectedResources);
+				one(fitnessHelper).evaluateSequencesFromComponents(source, fitnessComponents, affectedResources);
 				one(combiner).calculateFitness(fitnessComponents);
 
 				one(thresholder).accept(-500l);
 
-				one(fitnessHelper).acceptFromComponents(fitnessComponents,
-						source, affectedResources);
+				one(fitnessHelper).acceptFromComponents(fitnessComponents, source, affectedResources);
 
 				one(thresholder).step();
 			}
@@ -246,7 +231,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		evaluator.evaluateSequences(source, affectedResources);
 
 		context.assertIsSatisfied();
-		
+
 		Assert.assertEquals(500, evaluator.getBestFitness());
 		Assert.assertEquals(500, evaluator.getCurrentFitness());
 
@@ -261,14 +246,12 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		context.checking(new Expectations() {
 			{
-				one(fitnessHelper).evaluateSequencesFromComponents(source,
-						fitnessComponents, affectedResources);
+				one(fitnessHelper).evaluateSequencesFromComponents(source, fitnessComponents, affectedResources);
 				one(combiner).calculateFitness(fitnessComponents);
 
 				one(thresholder).accept(200l);
 
-				one(fitnessHelper).acceptFromComponents(fitnessComponents,
-						source, affectedResources);
+				one(fitnessHelper).acceptFromComponents(fitnessComponents, source, affectedResources);
 
 				one(thresholder).step();
 			}
@@ -284,17 +267,16 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertNotSame(current, evaluator.getCurrentSequences());
 		Assert.assertSame(best, evaluator.getBestSequences());
 
-		Assert.fail("This test will fail as we need the thresholder to return false, but the helper to return true!"); 
-		context.setDefaultResultForType(boolean.class, false);
-		context.setDefaultResultForType(long.class, 600l);
-
 		context.checking(new Expectations() {
 			{
-				one(fitnessHelper).evaluateSequencesFromComponents(source,
-						fitnessComponents, affectedResources);
+				one(fitnessHelper).evaluateSequencesFromComponents(source, fitnessComponents, affectedResources);
+				will(returnValue(true));
+				
 				one(combiner).calculateFitness(fitnessComponents);
+				will(returnValue(600l));
 
 				one(thresholder).accept(-100l);
+				will(returnValue(false));
 
 				one(thresholder).step();
 			}
@@ -307,8 +289,8 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		Assert.assertNotNull(evaluator.getBestSequences());
 
-		Assert.assertSame(current, evaluator.getCurrentSequences());
-		Assert.assertSame(best, evaluator.getBestSequences());
+		Assert.assertEquals(current, evaluator.getCurrentSequences());
+		Assert.assertEquals(best, evaluator.getBestSequences());
 
 		context.assertIsSatisfied();
 	}
@@ -321,8 +303,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		final LinearSimulatedAnnealingFitnessEvaluator<Object> evaluator = new LinearSimulatedAnnealingFitnessEvaluator<Object>();
 
-		final List<IFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final List<IFitnessComponent<Object>> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
 		final IThresholder thresholder = context.mock(IThresholder.class);
@@ -332,16 +313,14 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		evaluator.setFitnessCombiner(combiner);
 
 		@SuppressWarnings("unchecked")
-		final IFitnessHelper<Object> fitnessHelper = context
-				.mock(IFitnessHelper.class);
+		final IFitnessHelper<Object> fitnessHelper = context.mock(IFitnessHelper.class);
 		evaluator.setFitnessHelper(fitnessHelper);
 
 		evaluator.init();
 
 		context.checking(new Expectations() {
 			{
-				one(fitnessHelper).evaluateSequencesFromComponents(source,
-						fitnessComponents);
+				one(fitnessHelper).evaluateSequencesFromComponents(source, fitnessComponents);
 				one(combiner).calculateFitness(fitnessComponents);
 				one(thresholder).init();
 			}
@@ -367,4 +346,3 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 	}
 
 }
-

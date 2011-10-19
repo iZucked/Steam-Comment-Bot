@@ -14,12 +14,11 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.ISegment;
-import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
-import com.mmxlabs.optimiser.core.impl.ListSegment;
 
 /**
  * Test the {@link ListModifiableSequence} against the documented API. Most of
@@ -268,6 +267,7 @@ public class ListModifiableSequenceTest {
 		Assert.assertSame(object4, sequence.get(1));
 	}
 
+	@Ignore("Incomplete test")
 	@Test
 	public void testRemoveISegmentOfT_2() {
 
