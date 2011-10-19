@@ -10,6 +10,7 @@ import junit.framework.Assert;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,6 +27,7 @@ public class SchedulerBuilderTest {
 
 	Mockery context = new JUnit4Mockery();
 
+	@Ignore
 	@Test
 	public void testSchedulerBuilder() {
 
@@ -36,6 +38,7 @@ public class SchedulerBuilderTest {
 		fail("Not yet implemented");
 	}
 
+	@Ignore
 	@Test
 	public void testCreateLoadSlot() {
 		fail("Not yet implemented");
@@ -67,6 +70,7 @@ public class SchedulerBuilderTest {
 		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false);
 	}
 
+	@Ignore
 	@Test
 	public void testCreateDischargeSlot() {
 		fail("Not yet implemented");
@@ -98,6 +102,7 @@ public class SchedulerBuilderTest {
 		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
 	}
 
+	@Ignore
 	@Test
 	public void testCreateCargo() {
 		fail("Not yet implemented");
@@ -135,16 +140,19 @@ public class SchedulerBuilderTest {
 		builder.createCargo("id", loadSlot, dischargeSlot);
 	}
 
+	@Ignore
 	@Test
 	public void testCreatePortString() {
 		fail("Not yet implemented");
 	}
 
+	@Ignore
 	@Test
 	public void testCreatePortStringFloatFloat() {
 		fail("Not yet implemented");
 	}
 
+	@Ignore
 	@Test
 	public void testCreateTimeWindow() {
 
@@ -157,31 +165,37 @@ public class SchedulerBuilderTest {
 		fail("Not yet implemented - Test internal state");
 	}
 
+	@Ignore
 	@Test
 	public void testCreateVessel() {
 		fail("Not yet implemented");
 	}
 
+	@Ignore
 	@Test
 	public void testSetPortToPortDistance() {
 		fail("Not yet implemented");
 	}
 
+	@Ignore
 	@Test
 	public void testSetElementDurations() {
 		fail("Not yet implemented");
 	}
 
+	@Ignore
 	@Test
 	public void testGetOptimisationData() {
 		fail("Not yet implemented");
 	}
 
+	@Ignore
 	@Test
 	public void testDispose() {
 		fail("Not yet implemented");
 	}
 
+	@Ignore
 	@Test
 	public void testCreateVesselClass() {
 
@@ -211,6 +225,7 @@ public class SchedulerBuilderTest {
 		fail("Not yet implemented - Internal state checks");
 	}
 
+	@Ignore
 	@Test
 	public void testSetVesselClassStateParamaters() {
 		fail("Not yet implemented");
