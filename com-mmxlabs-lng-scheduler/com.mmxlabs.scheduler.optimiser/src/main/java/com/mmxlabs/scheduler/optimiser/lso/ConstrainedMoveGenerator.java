@@ -252,18 +252,18 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			final T firstElementInSegment = sequence.get(beforeFirstCut + 1);
 			final T lastElementInSegment = sequence.get(beforeSecondCut);
 
+			// Collect the elements which can go after the segment we are cutting out
 			final Followers<T> followers = validFollowers
 					.get(lastElementInSegment);
 
-			// pick a follower and do a reverse-lookup
+			// Pick one of these followers and find where it is at the moment
 			final T precursor = followers.get(random.nextInt(followers.size()));
 			final Pair<Integer, Integer> posPrecursor = reverseLookup
 					.get(precursor);
 
 			// now check whether the element before the precursor can precede
 			// the first element in the segment
-			final T beforeInsert = sequences.getSequence(
-					posPrecursor.getFirst()).get(posPrecursor.getSecond());
+			final T beforeInsert = sequences.getSequence(posPrecursor.getFirst()).get(posPrecursor.getSecond() - 1);
 			if (validFollowers.get(beforeInsert)
 					.contains(firstElementInSegment)) {
 				// we have a legal 3opt2, so do that. It might be a 3opt1
@@ -318,7 +318,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			}
 
 			// if it would be, maybe do it
-			if (valid2opt2 && random.nextBoolean()) {
+			if (valid2opt2 && random.nextDouble() < 0.05) {
 				// make 2opt2
 				final Move2over2<T> result = new Move2over2A();
 				result.setResource1(resources.get(sequence1));
