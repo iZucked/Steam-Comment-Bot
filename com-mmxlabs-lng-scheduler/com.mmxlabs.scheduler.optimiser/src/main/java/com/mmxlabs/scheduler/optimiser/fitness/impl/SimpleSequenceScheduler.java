@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 public final class SimpleSequenceScheduler<T> extends
 		AbstractSequenceScheduler<T> {
 
+	@Override
 	public ScheduledSequences schedule(final ISequences<T> sequences, final boolean forExport) {
 		final ScheduledSequences answer = new ScheduledSequences();
 		
@@ -70,5 +72,15 @@ public final class SimpleSequenceScheduler<T> extends
 			arrivalTimes[idx++] = timeWindowStart;
 		}
 		return super.schedule(resource, sequence, arrivalTimes);
+	}
+
+	@Override
+	public ScheduledSequences schedule(ISequences<T> sequences, Collection<IResource> affectedResources, boolean forExport) {
+		return schedule(sequences, forExport);
+	}
+
+	@Override
+	public void acceptLastSchedule() {
+
 	}
 }
