@@ -25,7 +25,7 @@ import com.mmxlabs.optimiser.lso.IMove;
  * @param <T>
  *            Sequence element type
  */
-public final class Move3over2<T> implements IMove<T> {
+public class Move3over2<T> implements IMove<T> {
 
 	private IResource resource1;
 
