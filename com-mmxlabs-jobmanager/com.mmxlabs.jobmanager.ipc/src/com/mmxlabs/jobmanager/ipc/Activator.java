@@ -27,6 +27,20 @@ import com.mmxlabs.jobmanager.manager.impl.JobManagerDescriptor;
 /**
  * Plugin activator for the IPC Job Manager; this registers the client side job manager service.
  * 
+ * TODO items:
+ * 
+ * 1. Sort out the print statements
+ * 
+ * 2. Handle error conditions better, so it doesn't all block and die (at least always close the socket if the runner terminates)
+ * 
+ * 3. Possibly start a new equinox stack for each job; this is not ideal right now because installing all the bundles takes time
+ * 
+ * This could be improved by reusing configuration areas somehow (create them in the workspace somewhere, rather than in temp), so that equinox can be resumed rather than started afresh each time, but
+ * that adds lots of overhead managing the state of the stack. Another smaller improvement would be to work out how to make {@link #collectRequiredBundles(Bundle, Set)} work as intended. At the moment
+ * it can't work because OSGi is too dynamic; we can only find out all the bundles which must be installed to support the runner by running it in a complete installation so that all the dependencies
+ * are activated and wired up. I suppose we could just make a list of bundle ids that are known to be necessary.
+ * 
+ * 
  * @author hinton
  * 
  */
