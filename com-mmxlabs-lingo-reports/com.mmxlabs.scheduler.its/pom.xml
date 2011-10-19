@@ -27,6 +27,7 @@
 							<failIfNoTests>false</failIfNoTests>
 							<excludes>
 								<exclude>**/OptimisationRepeatabilityTest.java</exclude>
+								<exclude>**/OptimisationResultTest.java</exclude>
 							</excludes>
 						</configuration>
 					</plugin>
