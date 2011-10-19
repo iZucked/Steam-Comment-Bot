@@ -157,14 +157,16 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 		case CANCELLED:
 			return;
 		}
-		setJobState(EJobState.CANCELLING);
+
 		switch (getJobState()) {
 		case PAUSED:
 			resume();
 		case RUNNING:
 			runner.cancel();
+			setJobState(EJobState.CANCELLING);
 			break;
 		default:
+			setJobState(EJobState.CANCELLING);
 			kill();
 			setJobState(EJobState.CANCELLED);
 		}

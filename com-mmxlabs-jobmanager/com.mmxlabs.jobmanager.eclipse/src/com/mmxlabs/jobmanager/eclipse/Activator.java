@@ -25,8 +25,8 @@ public class Activator implements BundleActivator {
 
 		localJobManager.setJobManagerDescriptor(jobManagerDescriptor);
 
-//		localJobManager.restoreState();
-		
+		// localJobManager.restoreState();
+
 		localJobManagerService = context.registerService(IJobManager.class, localJobManager, null);
 	}
 
@@ -36,8 +36,8 @@ public class Activator implements BundleActivator {
 		localJobManagerService.unregister();
 
 		// TODO: What about existing jobs?
-//		localJobManager.saveState();
-		
+		// localJobManager.saveState();
+
 		localJobManager.dispose();
 	}
 }
