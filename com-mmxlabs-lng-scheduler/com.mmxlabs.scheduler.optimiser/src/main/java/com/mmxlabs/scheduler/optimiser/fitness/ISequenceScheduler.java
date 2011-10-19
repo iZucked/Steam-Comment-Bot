@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness;
 
+import java.util.Collection;
+
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 
@@ -19,12 +22,29 @@ import com.mmxlabs.optimiser.core.ISequences;
 public interface ISequenceScheduler<T> {
 
 	/**
-	 * Schedule the given set of sequences, returning a {@link ScheduledSequences}
+	 * Schedule the given set of sequences, returning a {@link ScheduledSequences}.
+	 * 
+	 * It is now the schedulers job to make sure that the schedule returned is the last one evaluated.
+	 * 
+	 * This is in the interests of saving an unnecessary evaluation in the cargo scheduler fitness core in the event that the scheduler evaluates a schedule and then returns it directly.
 	 * 
 	 * @return
 	 */
-	ScheduledSequences schedule(
-			ISequences<T> sequences, boolean forExport);
+	ScheduledSequences schedule(ISequences<T> sequences, final Collection<IResource> affectedResources, boolean forExport);
+
+	/**
+	 * Like {@link #schedule(ISequences, Collection, boolean)}, but with all resources needing evaluation.
+	 * 
+	 * @param sequences
+	 * @param forExport
+	 * @return
+	 */
+	ScheduledSequences schedule(ISequences<T> sequences, boolean forExport);
+
+	/**
+	 * The caller can use this to avoid full evaluation on the next cycle if a schedule is accepted.
+	 */
+	void acceptLastSchedule();
 
 	/**
 	 * Release resources.
