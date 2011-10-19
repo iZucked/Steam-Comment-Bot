@@ -20,7 +20,7 @@ import com.mmxlabs.common.Pair;
  * 
  */
 public class DeferredReference implements Runnable {
-	private final Pair<EClass, String> key;
+	protected final Pair<EClass, String> key;
 	protected EObject target;
 	private final EReference reference;
 
@@ -32,6 +32,19 @@ public class DeferredReference implements Runnable {
 		this.target = target;
 		this.reference = reference;
 		this.key = new Pair<EClass, String>(reference.getEReferenceType(), key);
+	}
+
+	public DeferredReference(final EObject target, final EReference reference, final EClass referenceType, final String key) {
+		super();
+		this.target = target;
+		this.reference = reference;
+		this.key = new Pair<EClass, String>(referenceType, key);
+	}
+
+	public DeferredReference() {
+		this.key = null;
+		this.reference = null;
+		this.target = null;
 	}
 
 	public Map<Pair<EClass, String>, EObject> getRegistry() {

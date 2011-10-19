@@ -23,34 +23,34 @@ import scenario.fleet.VesselStateAttributes;
 import com.mmxlabs.common.Pair;
 
 /**
- * This is a hack; it generates a bunch of fuel consumption lines and adds them
- * where they need to go by direct lookups
+ * This is a hack; it generates a bunch of fuel consumption lines and adds them where they need to go by direct lookups
  * 
  * @author Tom Hinton
  * 
  */
 public class FuelConsumptionLineImporter extends EObjectImporter {
 	@Override
-	public EObject importObject(final Map<String, String> fields,
-			final Collection<DeferredReference> deferredReferences,
-			final NamedObjectRegistry registry) {
+	public EObject importObject(final Map<String, String> fields, final Collection<DeferredReference> deferredReferences, final NamedObjectRegistry registry) {
 		final String className = fields.get("class");
 		final String stateName = fields.get("state");
 
-		final ArrayList<FuelConsumptionLine> lines = new ArrayList<FuelConsumptionLine>(
-				fields.size() - 2);
+		final ArrayList<FuelConsumptionLine> lines = new ArrayList<FuelConsumptionLine>(fields.size() - 2);
 		final FleetFactory factory = FleetFactory.eINSTANCE;
 
 		fields.remove("class");
 		fields.remove("state");
 
 		for (final Map.Entry<String, String> column : fields.entrySet()) {
-			final float speed = Float.parseFloat(column.getKey());
-			final float consumption = Float.parseFloat(column.getValue());
-			final FuelConsumptionLine fcl = factory.createFuelConsumptionLine();
-			fcl.setSpeed(speed);
-			fcl.setConsumption(consumption);
-			lines.add(fcl);
+			try {
+				final float speed = Float.parseFloat(column.getKey());
+				final float consumption = Float.parseFloat(column.getValue());
+				final FuelConsumptionLine fcl = factory.createFuelConsumptionLine();
+				fcl.setSpeed(speed);
+				fcl.setConsumption(consumption);
+				lines.add(fcl);
+			} catch (final NumberFormatException nfe) {
+
+			}
 		}
 
 		Collections.sort(lines, new Comparator<FuelConsumptionLine>() {
@@ -67,15 +67,13 @@ public class FuelConsumptionLineImporter extends EObjectImporter {
 			ref = FleetPackage.eINSTANCE.getVesselClass_BallastAttributes();
 		}
 
-		final VesselClass vc = (VesselClass) registry.getContents().get(
-				new Pair<EClass, String>(FleetPackage.eINSTANCE
-						.getVesselClass(), className));
+		final VesselClass vc = (VesselClass) registry.getContents().get(new Pair<EClass, String>(FleetPackage.eINSTANCE.getVesselClass(), className));
 
 		if (vc != null) {
 			final VesselStateAttributes vsa = (VesselStateAttributes) vc.eGet(ref);
 			vsa.getFuelConsumptionCurve().addAll(lines);
 		}
-		
+
 		return null;
 	}
 }
