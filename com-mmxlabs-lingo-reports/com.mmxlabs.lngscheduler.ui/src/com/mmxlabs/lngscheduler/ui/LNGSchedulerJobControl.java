@@ -4,9 +4,13 @@
  */
 package com.mmxlabs.lngscheduler.ui;
 
+import javax.management.timer.Timer;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.Scenario;
 import scenario.schedule.Schedule;
@@ -28,6 +32,7 @@ import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
+	private static final Logger log = LoggerFactory.getLogger(LNGSchedulerJobControl.class);
 
 	private static final int REPORT_PERCENTAGE = 1;
 	private int currentProgress = 0;
@@ -42,6 +47,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 	private LocalSearchOptimiser<ISequenceElement> optimiser;
 
+	private long startTimeMillis;
+
 	public LNGSchedulerJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super("Optimising " + jobDescriptor.getJobName());
 		this.jobDescriptor = jobDescriptor;
@@ -50,7 +57,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void reallyPrepare() {
-
+		startTimeMillis = System.currentTimeMillis();
 		scenario = EcoreUtil.copy(scenario);
 		// scenario.setName(resource.getName().replaceAll(resource.getFileExtension(),
 		// ""));
@@ -128,6 +135,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			}
 			intermediateSchedule = null;
 			saveSolution("optimised", optimiser.getBestSolution(true));
+			optimiser = null;
+			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 			return false;
 		} else {
 			return true;
@@ -143,6 +152,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	protected void kill() {
 		if (optimiser != null) {
 			optimiser.dispose();
+			optimiser = null;
 		}
 	}
 
