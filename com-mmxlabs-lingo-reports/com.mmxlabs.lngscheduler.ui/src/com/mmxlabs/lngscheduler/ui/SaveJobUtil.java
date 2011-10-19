@@ -10,7 +10,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
@@ -52,7 +51,9 @@ public final class SaveJobUtil {
 		}
 
 		// Take copy of scenario
-		final Scenario scenario = EcoreUtil.copy((job).getJobContext());
+		// this was wrong
+		// final Scenario scenario = EcoreUtil.copy((job).getJobContext());
+		final Scenario scenario = control.getJobOutput().scenario;
 
 		// Process scenario - prune out intermediate schedules ....
 		int numSchedules = scenario.getScheduleModel().getSchedules().size();
