@@ -593,8 +593,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		if (end.hasTimeRequirement() == false) {
 			// put end slot into list of slots to patch up later.
-			// Only fleet vessels have the late end window set.
-			if (vesselInstanceType.equals(VesselInstanceType.FLEET))
+			// Fleet vessels and spot vessels both run to the end of the optimisation if they don't have an end date.
+			if (!vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER))
 				endSlots.add(new Pair<ISequenceElement, PortSlot>(endElement, endSlot));
 		} else {
 			endSlot.setTimeWindow(end.getTimeWindow());
@@ -736,7 +736,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			maxFastReturnTime = 0;
 			latestDischarge = 0;
 		}
-		final int latestTime = Math.max(endOfLatestWindow, maxFastReturnTime + latestDischarge);
+		final int latestTime = Math.max(endOfLatestWindow + 24 * 10, maxFastReturnTime + latestDischarge);
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
 			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + 1);
 			elementAndSlot.getSecond().setTimeWindow(endWindow);
