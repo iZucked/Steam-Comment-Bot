@@ -11,15 +11,14 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
+ * Just an arraylist containing some {@link ScheduledSequence}s, and a convenience method for adding one ({@link #addScheduledSequence(IResource, int, List)}).
+ * 
  * @author hinton
- *
+ * 
  */
 public final class ScheduledSequences extends ArrayList<ScheduledSequence>  {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	public void addScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans) {
 		add(new ScheduledSequence(resource, startTime, voyagePlans));
 	}
