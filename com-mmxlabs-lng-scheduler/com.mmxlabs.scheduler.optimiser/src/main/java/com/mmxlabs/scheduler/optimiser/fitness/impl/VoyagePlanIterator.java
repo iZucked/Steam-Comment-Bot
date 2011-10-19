@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -16,8 +18,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * A class to help you iterate through a list of voyage plans, adding up the
- * time as you go
+ * A class to help you iterate through a list of voyage plans, adding up the time as you go
  * 
  * @author hinton
  * 
@@ -38,8 +39,7 @@ public final class VoyagePlanIterator<T> {
 
 	}
 
-	public final void setVoyagePlans(final List<VoyagePlan> plans,
-			final int startTime) {
+	public final void setVoyagePlans(final List<VoyagePlan> plans, final int startTime) {
 		this.plans = plans;
 		this.startTime = startTime;
 		reset();
@@ -87,13 +87,11 @@ public final class VoyagePlanIterator<T> {
 	}
 
 	public final boolean hasNextObject() {
-		return (currentSequence != null && currentIndex < currentSequence.length)
-				|| planIterator.hasNext();
+		return (currentSequence != null && currentIndex < currentSequence.length) || planIterator.hasNext();
 	}
 
 	public final boolean nextObjectIsStartOfPlan() {
-		return (currentSequence != null && currentIndex == 0)
-				|| planIterator.hasNext();
+		return (currentSequence != null && currentIndex == 0) || planIterator.hasNext();
 	}
 
 	public final int getCurrentTime() {
@@ -110,9 +108,7 @@ public final class VoyagePlanIterator<T> {
 	 * @param components
 	 * @param sequences
 	 */
-	public boolean iterateSchedulerComponents(
-			final Iterable<ICargoSchedulerFitnessComponent<T>> components,
-			final ScheduledSequences sequences) {
+	public boolean iterateSchedulerComponents(final Iterable<ICargoSchedulerFitnessComponent<T>> components, final ScheduledSequences sequences, final Collection<IResource> affectedResources) {
 
 		if (sequences == null)
 			return false;
@@ -122,7 +118,8 @@ public final class VoyagePlanIterator<T> {
 		}
 
 		for (final ScheduledSequence sequence : sequences) {
-			if (!iterateSchedulerComponents(components, sequence))
+			// TODO work out why this makes for problems.
+			if (!iterateSchedulerComponents(components, sequence, affectedResources.contains(sequence.getResource())))
 				return false;
 		}
 
@@ -134,25 +131,22 @@ public final class VoyagePlanIterator<T> {
 	}
 
 	/**
-	 * Iterate the given scheduler components, and copy the resulting fitness
-	 * values into the fitnesses array provided (the last parameter)
+	 * Iterate the given scheduler components, and copy the resulting fitness values into the fitnesses array provided (the last parameter)
 	 * 
 	 * @param components
 	 * @param sequences
 	 * @param fitnesses
-	 *            output parameter containing fitnesses, in the order the
-	 *            iterator provides the components
+	 *            output parameter containing fitnesses, in the order the iterator provides the components
 	 * @return
 	 */
-	public boolean iterateSchedulerComponents(
-			final Iterable<ICargoSchedulerFitnessComponent<T>> components,
-			final ScheduledSequences sequences, final long[] fitnesses) {
+	public boolean iterateSchedulerComponents(final Iterable<ICargoSchedulerFitnessComponent<T>> components, final ScheduledSequences sequences, final Collection<IResource> affectedResources,
+			final long[] fitnesses) {
 		for (final ICargoSchedulerFitnessComponent<T> component : components) {
 			component.startEvaluation();
 		}
 
 		for (final ScheduledSequence sequence : sequences) {
-			if (!iterateSchedulerComponents(components, sequence))
+			if (!iterateSchedulerComponents(components, sequence, affectedResources.contains(sequence.getResource())))
 				return false;
 		}
 
@@ -165,26 +159,20 @@ public final class VoyagePlanIterator<T> {
 	}
 
 	/**
-	 * Iterate through the given sequence, with the given components. Assumes
-	 * start/end evaluation process has been done.
+	 * Iterate through the given sequence, with the given components. Assumes start/end evaluation process has been done.
 	 * 
 	 * @param components
 	 * @param sequence
 	 * @return
 	 */
-	public boolean iterateSchedulerComponents(
-			final Iterable<ICargoSchedulerFitnessComponent<T>> components,
-			final ScheduledSequence sequence) {
+	public boolean iterateSchedulerComponents(final Iterable<ICargoSchedulerFitnessComponent<T>> components, final ScheduledSequence sequence, final boolean sequenceHasChanged) {
 
 		for (final ICargoSchedulerFitnessComponent<T> component : components) {
 			/*
-			 * Although the "true" here looks bad (always evaluate every
-			 * sequence), we need to keep track somehow of which sequences have
-			 * changed in the layer above. The random sequence scheduler may
-			 * well change every sequence's schedule even if only one or two
-			 * sequences' elements have been shifted by a move.
+			 * Although the "true" here looks bad (always evaluate every sequence), we need to keep track somehow of which sequences have changed in the layer above. The random sequence scheduler may
+			 * well change every sequence's schedule even if only one or two sequences' elements have been shifted by a move.
 			 */
-			component.startSequence(sequence.getResource(), true);
+			component.startSequence(sequence.getResource(), sequenceHasChanged);
 		}
 
 		setVoyagePlans(sequence.getVoyagePlans(), sequence.getStartTime());
@@ -227,10 +215,7 @@ public final class VoyagePlanIterator<T> {
 	 * @param sequence
 	 * @param annotatedSequence
 	 */
-	public void annotateSchedulerComponents(
-			final Iterable<ICargoSchedulerFitnessComponent<T>> components,
-			final ScheduledSequences sequences,
-			final IAnnotatedSolution<T> annotatedSolution) {
+	public void annotateSchedulerComponents(final Iterable<ICargoSchedulerFitnessComponent<T>> components, final ScheduledSequences sequences, final IAnnotatedSolution<T> annotatedSolution) {
 
 		for (final ICargoSchedulerFitnessComponent<T> component : components) {
 			component.startEvaluation();
@@ -250,9 +235,7 @@ public final class VoyagePlanIterator<T> {
 	 * @param components
 	 * @param annotatedSolution
 	 */
-	private void annotateSequence(final ScheduledSequence sequence,
-			final Iterable<ICargoSchedulerFitnessComponent<T>> components,
-			final IAnnotatedSolution<T> annotatedSolution) {
+	private void annotateSequence(final ScheduledSequence sequence, final Iterable<ICargoSchedulerFitnessComponent<T>> components, final IAnnotatedSolution<T> annotatedSolution) {
 		for (final ICargoSchedulerFitnessComponent<T> component : components) {
 			component.startSequence(sequence.getResource(), true);
 		}
@@ -268,16 +251,14 @@ public final class VoyagePlanIterator<T> {
 				for (final ICargoSchedulerFitnessComponent<T> component : components) {
 					if (!component.nextVoyagePlan(plan, time))
 						return;
-					if (!component.annotateNextObject(obj, time,
-							annotatedSolution))
+					if (!component.annotateNextObject(obj, time, annotatedSolution))
 						return;
 				}
 			} else {
 				final Object obj = nextObject();
 				final int time = getCurrentTime();
 				for (final ICargoSchedulerFitnessComponent<T> component : components) {
-					if (!component.annotateNextObject(obj, time,
-							annotatedSolution))
+					if (!component.annotateNextObject(obj, time, annotatedSolution))
 						return;
 				}
 			}
