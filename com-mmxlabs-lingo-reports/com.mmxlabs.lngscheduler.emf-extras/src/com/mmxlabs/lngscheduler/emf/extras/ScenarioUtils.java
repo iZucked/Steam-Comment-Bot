@@ -74,11 +74,11 @@ public class ScenarioUtils {
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, 1));
 		}
 
-		settings.setNumberOfSteps(20000);
+		settings.setNumberOfSteps(200000);
 		ThresholderSettings thresholderSettings = lsof.createThresholderSettings();
-		thresholderSettings.setAlpha(0.9);
-		thresholderSettings.setEpochLength(1000);
-		thresholderSettings.setInitialAcceptanceRate(0.2);
+		thresholderSettings.setAlpha(0.85);
+		thresholderSettings.setEpochLength(20000);
+		thresholderSettings.setInitialAcceptanceRate(45000);
 		settings.setThresholderSettings(thresholderSettings);
 
 		optimisation.getAllSettings().add(settings);
