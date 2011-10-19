@@ -1,6 +1,7 @@
 
 ~$
 .swp$
+\.project$
 
 syntax: regexp
 ^com\.mmxlabs\.jobmanager/target$
