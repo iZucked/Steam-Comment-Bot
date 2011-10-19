@@ -34,7 +34,7 @@ public class RelaxingSequenceScheduler<T> extends
 	public ScheduledSequences schedule(final ISequences<T> sequences, final boolean forExport) {
 		setSequences(sequences);
 		resetBest();
-		prepare();
+		prepare2();
 		evaluate();
 
 		for (int seq = 0; seq < arrivalTimes.length; seq++) {
@@ -43,7 +43,7 @@ public class RelaxingSequenceScheduler<T> extends
 			}
 		}
 		log.debug("relaxed; " + count + " evaluations");
-		return getBestResult();
+		return reEvaluateAndGetBestResult();
 	}
 
 	private void relax(final int seq, final int pos) {
@@ -83,8 +83,8 @@ public class RelaxingSequenceScheduler<T> extends
 	/**
 	 * Prepare and ignore approximate space size; also set arrival times to min
 	 */
-	private final void prepare() {
-		prepare(0);
+	private final void prepare2() {
+		prepare();
 
 		for (int seq = 0; seq < arrivalTimes.length; seq++) {
 			for (int pos = 0; pos < sizes[seq]; pos++) {
