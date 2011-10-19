@@ -7,6 +7,7 @@ package com.mmxlabs.optimiser.core.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ public final class ModifiableSequences<T> implements IModifiableSequences<T> {
 	public ModifiableSequences(final List<IResource> resources) {
 		// Copy the list as we do not track changes
 		this.resources = new ArrayList<IResource>(resources);
-		sequenceMap = new HashMap<IResource, IModifiableSequence<T>>();
+		sequenceMap = new LinkedHashMap<IResource, IModifiableSequence<T>>();
 		for (final IResource resource : resources) {
 			sequenceMap.put(resource, new ListModifiableSequence<T>(
 					new LinkedList<T>()));
