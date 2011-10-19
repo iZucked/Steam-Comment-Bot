@@ -33,7 +33,8 @@ public class OptimisationResultTest {
 	@Test
 	public void test() throws IOException, IncompleteScenarioException, InterruptedException {
 
-		final URL url = getClass().getResource("/hand-tweaked.scenario");
+		//final URL url = getClass().getResource("/hand-tweaked.scenario");
+		final URL url = getClass().getResource("/optimisationResultTest.scenario");
 
 		final Resource resource = new XMIResourceImpl(URI.createURI(url.toString()));
 		resource.load(Collections.emptyMap());

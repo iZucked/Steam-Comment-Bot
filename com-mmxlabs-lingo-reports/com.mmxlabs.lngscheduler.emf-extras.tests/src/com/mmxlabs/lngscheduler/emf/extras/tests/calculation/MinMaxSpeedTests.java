@@ -116,6 +116,29 @@ public class MinMaxSpeedTests {
 		final int minNBOSpeed = 11;
 		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minNBOSpeed);
 	}
+	
+	/**
+	 * Check that the min vessel is speed is used if NBO is not used on the ballast voyage.
+	 */
+	@Test
+	public void minNBOSpeedNotUsed() {
+
+		final String testName = "Min vessel speed used";
+		// set the travel time to be sufficient for min speed travel
+		final int travelTime = (distanceBetweenPorts / minSpeed) + 10;
+
+		CargoAllocation a = test(testName, travelTime, baseFuelCheap);
+
+		// Base fuel used on ballast as it is cheaper than LNG
+		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO)
+				Assert.assertTrue("NBO not used", fq.getQuantity() == 0);
+			else if (fq.getFuelType() == FuelType.BASE_FUEL)
+				Assert.assertTrue("Base fuel used", fq.getQuantity() > 0);
+		}
+
+		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minSpeed);
+	}
 
 	private CargoAllocation test(final String testName, final int travelTime, final float baseFuelUnitPrice) {
 
