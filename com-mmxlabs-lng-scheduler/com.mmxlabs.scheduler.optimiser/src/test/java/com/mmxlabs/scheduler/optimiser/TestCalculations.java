@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser;
 
 
+import java.util.Collection;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -1938,6 +1939,16 @@ public class TestCalculations {
 		public ScheduledSequences schedule(ISequences<T> sequences, boolean b) {
 			throw new UnsupportedOperationException(
 					"Method invocation is not part of the tests!");
+		}
+
+		@Override
+		public ScheduledSequences schedule(ISequences<T> sequences, Collection<IResource> affectedResources, boolean forExport) {
+			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
+		}
+
+		@Override
+		public void acceptLastSchedule() {
+			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 	}
 }

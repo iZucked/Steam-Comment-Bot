@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -1065,6 +1066,16 @@ public final class AbstractSequenceSchedulerTest {
 			throw new UnsupportedOperationException(
 					"Method invocation is not part of the tests!");
 
+		}
+
+		@Override
+		public ScheduledSequences schedule(ISequences<T> sequences, Collection<IResource> affectedResources, boolean forExport) {
+			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
+		}
+
+		@Override
+		public void acceptLastSchedule() {
+			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 	}
 }

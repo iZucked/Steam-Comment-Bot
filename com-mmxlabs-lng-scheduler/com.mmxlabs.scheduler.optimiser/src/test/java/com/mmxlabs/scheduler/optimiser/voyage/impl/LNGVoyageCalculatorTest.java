@@ -847,7 +847,7 @@ public class LNGVoyageCalculatorTest {
 				FuelComponent.Base_Supplemental,
 				FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 		Assert.assertEquals(
-				/* route cost consumption */1000 * 24 * 2 +
+		/* route cost consumption */1000 * 24 * 2 + // why is this *2
 				/* standard consumption */150 * 24 * Calculator.ScaleFactor,
 				details.getFuelConsumption(FuelComponent.NBO,
 						FuelComponent.NBO.getDefaultFuelUnit()));

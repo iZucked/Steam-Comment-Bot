@@ -53,12 +53,29 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class IndividualEvaluatorTest {
 
-	private static final class MockSequenceScheduler extends
-			AbstractSequenceScheduler<Object> {
+	/**
+	 * Mock implementation of {@link AbstractSequenceScheduler} to allow use of abstract class in tests
+	 * 
+	 * @author Simon Goodall
+	 * 
+	 * @param <T>
+	 */
+	private static class MockSequenceScheduler<T> extends AbstractSequenceScheduler<T> {
 
 		@Override
-		public ScheduledSequences schedule(ISequences<Object> sequences, boolean b) {
-			throw new UnsupportedOperationException();
+		public ScheduledSequences schedule(ISequences<T> sequences, boolean b) {
+			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
+
+		}
+
+		@Override
+		public ScheduledSequences schedule(ISequences<T> sequences, Collection<IResource> affectedResources, boolean forExport) {
+			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
+		}
+
+		@Override
+		public void acceptLastSchedule() {
+			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 	}
 
