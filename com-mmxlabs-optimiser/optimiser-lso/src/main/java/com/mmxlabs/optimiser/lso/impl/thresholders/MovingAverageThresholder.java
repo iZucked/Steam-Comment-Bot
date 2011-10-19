@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.lso.impl.thresholders;
 
+import java.util.BitSet;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -12,11 +13,13 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.optimiser.lso.IThresholder;
 
 public class MovingAverageThresholder implements IThresholder {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(MovingAverageThresholder.class);
-	
+
+	private final BitSet accepts;
 	private final long[] window;
 	private double sum = 0;
+	private int acceptCount = 0;
 	private int front = 0;
 	private double logAlpha;
 	final double alpha0;
@@ -26,15 +29,16 @@ public class MovingAverageThresholder implements IThresholder {
 	int epoch = 0;
 	private final int epochLength;
 	private double lastT;
-	
+
 	public MovingAverageThresholder(final Random random, final double initialAcceptance, final double cooling, final int epochLength, final int window) {
 		this.random = random;
 		this.window = new long[window];
+		accepts = new BitSet(window);
 		this.alpha0 = initialAcceptance;
 		this.cooling = cooling;
 		this.epochLength = epochLength;
 	}
-	
+
 	@Override
 	public void init() {
 		tick = 0;
@@ -43,21 +47,29 @@ public class MovingAverageThresholder implements IThresholder {
 
 	@Override
 	public boolean accept(final long delta) {
-		if (delta <= 0) {
+		if (delta < 0) {
 			return true;
 		}
-		
+
 		sum -= window[front];
 		sum += delta;
 		window[front] = delta;
-		front = (front+1)%window.length;
-		
-		final double mean = sum/window.length;
-		
-		final double T = -mean/logAlpha;
+
+		final double mean = sum / window.length;
+
+		final double T = -mean / logAlpha;
 		lastT = T;
-		
-		return random.nextDouble() < Math.exp(-delta/T);
+
+		final boolean accepted = random.nextDouble() < Math.exp(-delta / T);
+		accepts.set(front, accepted);
+		if (accepted)
+			acceptCount++;
+		front = (front + 1) % window.length;
+		if (accepts.get(front)) {
+			acceptCount--;
+		}
+		return random.nextDouble() < Math.exp(-delta / T);
+
 	}
 
 	@Override
