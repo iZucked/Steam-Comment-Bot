@@ -35,19 +35,25 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 
 	private final List<IRandomMoveGeneratorUnit<T>> units = new ArrayList<IRandomMoveGeneratorUnit<T>>();
 
+	private final List<Double> weights = new ArrayList<Double>();
+
+	private double totalWeight = 0;
+
 	public RandomMoveGenerator() {
 
 	}
 
 	@Override
 	public IMove<T> generateMove() {
+		double newMove = random.nextDouble() * totalWeight;
+		for (int i = 0; i < units.size(); i++) {
+			final double weight = weights.get(i);
+			if (newMove <= weight)
+				return units.get(i).generateRandomMove(this, sequences);
+			newMove -= weight;
+		}
 
-		final int newMove = random.nextInt(units.size());
-
-		final IMove<T> move = units.get(newMove).generateRandomMove(this,
-				sequences);
-
-		return move;
+		return null;
 	}
 
 	public void init() {
@@ -128,8 +134,14 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	 * 
 	 * @param unit
 	 */
-	public void addMoveGeneratorUnit(final IRandomMoveGeneratorUnit<T> unit) {
+	public void addMoveGeneratorUnit(final IRandomMoveGeneratorUnit<T> unit, final double weight) {
+		totalWeight += weight;
+		weights.add(weight);
 		units.add(unit);
+	}
+
+	public void addMoveGeneratorUnit(final IRandomMoveGeneratorUnit<T> unit) {
+		this.addMoveGeneratorUnit(unit, 1);
 	}
 
 	/**
@@ -138,7 +150,12 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	 * @param unit
 	 */
 	public void removeMoveGeneratorUnit(final IRandomMoveGeneratorUnit<T> unit) {
-		units.remove(unit);
+		final int i = units.indexOf(unit);
+		if (i != -1) {
+			totalWeight -= weights.get(i);
+			units.remove(i);
+			weights.remove(i);
+		}
 	}
 
 	/**
