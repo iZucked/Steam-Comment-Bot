@@ -328,13 +328,49 @@ public interface LsoPackage extends EPackage {
 	int RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER2 = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Weight For2opt2</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR2OPT2 = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Weight For3opt2</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR3OPT2 = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Weight For4opt1</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR4OPT1 = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Weight For4opt2</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR4OPT2 = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Random Move Generator Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RANDOM_MOVE_GENERATOR_SETTINGS_FEATURE_COUNT = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 4;
+	int RANDOM_MOVE_GENERATOR_SETTINGS_FEATURE_COUNT = MOVE_GENERATOR_SETTINGS_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of operations of the '<em>Random Move Generator Settings</em>' class.
@@ -525,6 +561,50 @@ public interface LsoPackage extends EPackage {
 	EAttribute getRandomMoveGeneratorSettings_Using4over2();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.RandomMoveGeneratorSettings#getWeightFor2opt2 <em>Weight For2opt2</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Weight For2opt2</em>'.
+	 * @see scenario.optimiser.lso.RandomMoveGeneratorSettings#getWeightFor2opt2()
+	 * @see #getRandomMoveGeneratorSettings()
+	 * @generated
+	 */
+	EAttribute getRandomMoveGeneratorSettings_WeightFor2opt2();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.RandomMoveGeneratorSettings#getWeightFor3opt2 <em>Weight For3opt2</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Weight For3opt2</em>'.
+	 * @see scenario.optimiser.lso.RandomMoveGeneratorSettings#getWeightFor3opt2()
+	 * @see #getRandomMoveGeneratorSettings()
+	 * @generated
+	 */
+	EAttribute getRandomMoveGeneratorSettings_WeightFor3opt2();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.RandomMoveGeneratorSettings#getWeightFor4opt1 <em>Weight For4opt1</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Weight For4opt1</em>'.
+	 * @see scenario.optimiser.lso.RandomMoveGeneratorSettings#getWeightFor4opt1()
+	 * @see #getRandomMoveGeneratorSettings()
+	 * @generated
+	 */
+	EAttribute getRandomMoveGeneratorSettings_WeightFor4opt1();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.lso.RandomMoveGeneratorSettings#getWeightFor4opt2 <em>Weight For4opt2</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Weight For4opt2</em>'.
+	 * @see scenario.optimiser.lso.RandomMoveGeneratorSettings#getWeightFor4opt2()
+	 * @see #getRandomMoveGeneratorSettings()
+	 * @generated
+	 */
+	EAttribute getRandomMoveGeneratorSettings_WeightFor4opt2();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.optimiser.lso.ConstrainedMoveGeneratorSettings <em>Constrained Move Generator Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -676,6 +756,38 @@ public interface LsoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER2 = eINSTANCE.getRandomMoveGeneratorSettings_Using4over2();
+
+		/**
+		 * The meta object literal for the '<em><b>Weight For2opt2</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR2OPT2 = eINSTANCE.getRandomMoveGeneratorSettings_WeightFor2opt2();
+
+		/**
+		 * The meta object literal for the '<em><b>Weight For3opt2</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR3OPT2 = eINSTANCE.getRandomMoveGeneratorSettings_WeightFor3opt2();
+
+		/**
+		 * The meta object literal for the '<em><b>Weight For4opt1</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR4OPT1 = eINSTANCE.getRandomMoveGeneratorSettings_WeightFor4opt1();
+
+		/**
+		 * The meta object literal for the '<em><b>Weight For4opt2</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR4OPT2 = eINSTANCE.getRandomMoveGeneratorSettings_WeightFor4opt2();
 
 		/**
 		 * The meta object literal for the '{@link scenario.optimiser.lso.impl.ConstrainedMoveGeneratorSettingsImpl <em>Constrained Move Generator Settings</em>}' class.

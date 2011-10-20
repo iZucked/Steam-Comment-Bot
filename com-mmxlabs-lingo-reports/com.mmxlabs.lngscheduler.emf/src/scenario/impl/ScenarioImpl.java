@@ -7,17 +7,20 @@
 package scenario.impl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import scenario.Scenario;
@@ -221,6 +224,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FleetModel getFleetModel() {
 		if (fleetModel != null && fleetModel.eIsProxy()) {
 			InternalEObject oldFleetModel = (InternalEObject)fleetModel;
@@ -268,6 +272,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFleetModel(FleetModel newFleetModel) {
 		if (newFleetModel != fleetModel) {
 			NotificationChain msgs = null;
@@ -287,6 +292,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortModel getPortModel() {
 		if (portModel != null && portModel.eIsProxy()) {
 			InternalEObject oldPortModel = (InternalEObject)portModel;
@@ -313,6 +319,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortModel(PortModel newPortModel) {
 		PortModel oldPortModel = portModel;
 		portModel = newPortModel;
@@ -325,6 +332,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoModel getCargoModel() {
 		if (cargoModel != null && cargoModel.eIsProxy()) {
 			InternalEObject oldCargoModel = (InternalEObject)cargoModel;
@@ -372,6 +380,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoModel(CargoModel newCargoModel) {
 		if (newCargoModel != cargoModel) {
 			NotificationChain msgs = null;
@@ -391,6 +400,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ContractModel getContractModel() {
 		if (contractModel != null && contractModel.eIsProxy()) {
 			InternalEObject oldContractModel = (InternalEObject)contractModel;
@@ -438,6 +448,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setContractModel(ContractModel newContractModel) {
 		if (newContractModel != contractModel) {
 			NotificationChain msgs = null;
@@ -457,6 +468,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleModel getScheduleModel() {
 		if (scheduleModel != null && scheduleModel.eIsProxy()) {
 			InternalEObject oldScheduleModel = (InternalEObject)scheduleModel;
@@ -504,6 +516,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScheduleModel(ScheduleModel newScheduleModel) {
 		if (newScheduleModel != scheduleModel) {
 			NotificationChain msgs = null;
@@ -523,6 +536,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MarketModel getMarketModel() {
 		if (marketModel != null && marketModel.eIsProxy()) {
 			InternalEObject oldMarketModel = (InternalEObject)marketModel;
@@ -570,6 +584,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMarketModel(MarketModel newMarketModel) {
 		if (newMarketModel != marketModel) {
 			NotificationChain msgs = null;
@@ -589,6 +604,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DistanceModel getDistanceModel() {
 		if (distanceModel != null && distanceModel.eIsProxy()) {
 			InternalEObject oldDistanceModel = (InternalEObject)distanceModel;
@@ -615,6 +631,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDistanceModel(DistanceModel newDistanceModel) {
 		DistanceModel oldDistanceModel = distanceModel;
 		distanceModel = newDistanceModel;
@@ -627,6 +644,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CanalModel getCanalModel() {
 		if (canalModel != null && canalModel.eIsProxy()) {
 			InternalEObject oldCanalModel = (InternalEObject)canalModel;
@@ -653,6 +671,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalModel(CanalModel newCanalModel) {
 		CanalModel oldCanalModel = canalModel;
 		canalModel = newCanalModel;
@@ -665,6 +684,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Optimisation getOptimisation() {
 		if (optimisation != null && optimisation.eIsProxy()) {
 			InternalEObject oldOptimisation = (InternalEObject)optimisation;
@@ -712,6 +732,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOptimisation(Optimisation newOptimisation) {
 		if (newOptimisation != optimisation) {
 			NotificationChain msgs = null;
@@ -731,6 +752,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EObject> getContainedModels() {
 		if (containedModels == null) {
 			containedModels = new EObjectContainmentEList.Resolving<EObject>(EObject.class, this, ScenarioPackage.SCENARIO__CONTAINED_MODELS);
@@ -743,6 +765,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVersion() {
 		return version;
 	}
@@ -752,6 +775,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVersion(int newVersion) {
 		int oldVersion = version;
 		version = newVersion;
@@ -764,6 +788,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -773,6 +798,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -785,6 +811,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FleetModel getOrCreateFleetModel() {
 		if (getFleetModel() == null)
 					setFleetModel(scenario.fleet.FleetFactory.eINSTANCE.createFleetModel());
@@ -797,6 +824,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleModel getOrCreateScheduleModel() {
 		if (getScheduleModel() == null)
 					setScheduleModel(scenario.schedule.ScheduleFactory.eINSTANCE.createScheduleModel());
@@ -808,6 +836,7 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void createMissingModels() {
 		if (getPortModel() == null) {
 			setPortModel(scenario.port.PortFactory.eINSTANCE.createPortModel());
@@ -1085,4 +1114,43 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 		return result.toString();
 	}
 
+
+
+	public Scenario getSelfContainedCopy() {
+		final Scenario scenario = EcoreUtil.copy(this);
+		final List<EObject> toCopy = new ArrayList<EObject>();
+		toCopy.add(scenario);
+		for (final EReference reference : scenario.eClass().getEAllReferences()) {
+			if (reference.isContainment() == false) {
+				if (reference.isMany()) {
+					final EList<EObject> values = (EList<EObject>) scenario.eGet(reference);
+					for (final EObject value : values) {
+						if (value != null && value.eContainer() != scenario)
+							toCopy.add(value);
+					}
+				} else {
+					final EObject value = (EObject) scenario.eGet(reference);
+					if (value != null && value.eContainer() != scenario)
+						toCopy.add(value);
+				}
+			}
+		}
+
+		final Collection<EObject> copies = EcoreUtil.copyAll(toCopy);
+		Scenario copy = null;
+		for (final EObject object : copies) {
+			if (object instanceof Scenario)
+				copy = (Scenario) object;
+			break;
+		}
+		if (copy != null) {
+			for (final EObject object : copies) {
+				if (!(object instanceof Scenario)) {
+					if (copy.getContainedModels().contains(object) == false)
+						copy.getContainedModels().add(object);
+				}
+			}
+		}
+		return copy;
+	}
 } //ScenarioImpl

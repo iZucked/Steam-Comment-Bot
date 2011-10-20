@@ -65,6 +65,10 @@ public class RandomMoveGeneratorSettingsItemProvider
 			addUsing3over2PropertyDescriptor(object);
 			addUsing4over1PropertyDescriptor(object);
 			addUsing4over2PropertyDescriptor(object);
+			addWeightFor2opt2PropertyDescriptor(object);
+			addWeightFor3opt2PropertyDescriptor(object);
+			addWeightFor4opt1PropertyDescriptor(object);
+			addWeightFor4opt2PropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -158,6 +162,94 @@ public class RandomMoveGeneratorSettingsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Weight For2opt2 feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWeightFor2opt2PropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RandomMoveGeneratorSettings_weightFor2opt2_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RandomMoveGeneratorSettings_weightFor2opt2_feature", "_UI_RandomMoveGeneratorSettings_type"),
+				 LsoPackage.Literals.RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR2OPT2,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Weight For3opt2 feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWeightFor3opt2PropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RandomMoveGeneratorSettings_weightFor3opt2_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RandomMoveGeneratorSettings_weightFor3opt2_feature", "_UI_RandomMoveGeneratorSettings_type"),
+				 LsoPackage.Literals.RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR3OPT2,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Weight For4opt1 feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWeightFor4opt1PropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RandomMoveGeneratorSettings_weightFor4opt1_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RandomMoveGeneratorSettings_weightFor4opt1_feature", "_UI_RandomMoveGeneratorSettings_type"),
+				 LsoPackage.Literals.RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR4OPT1,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Weight For4opt2 feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWeightFor4opt2PropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RandomMoveGeneratorSettings_weightFor4opt2_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RandomMoveGeneratorSettings_weightFor4opt2_feature", "_UI_RandomMoveGeneratorSettings_type"),
+				 LsoPackage.Literals.RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR4OPT2,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns RandomMoveGeneratorSettings.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -196,6 +288,10 @@ public class RandomMoveGeneratorSettingsItemProvider
 			case LsoPackage.RANDOM_MOVE_GENERATOR_SETTINGS__USING3OVER2:
 			case LsoPackage.RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER1:
 			case LsoPackage.RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER2:
+			case LsoPackage.RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR2OPT2:
+			case LsoPackage.RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR3OPT2:
+			case LsoPackage.RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR4OPT1:
+			case LsoPackage.RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR4OPT2:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

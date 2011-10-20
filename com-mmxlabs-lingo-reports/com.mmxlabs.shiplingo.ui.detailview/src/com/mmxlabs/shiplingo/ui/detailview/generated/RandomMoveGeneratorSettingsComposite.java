@@ -78,6 +78,10 @@ public  class RandomMoveGeneratorSettingsComposite extends AbstractDetailComposi
     createUsing3over2Editor(composite, mainGroup);
     createUsing4over1Editor(composite, mainGroup);
     createUsing4over2Editor(composite, mainGroup);
+    createWeightFor2opt2Editor(composite, mainGroup);
+    createWeightFor3opt2Editor(composite, mainGroup);
+    createWeightFor4opt1Editor(composite, mainGroup);
+    createWeightFor4opt2Editor(composite, mainGroup);
   }
 
 		
@@ -119,5 +123,45 @@ public  class RandomMoveGeneratorSettingsComposite extends AbstractDetailComposi
     composite.createEditorControl(mainGroup,
       composite.createEditor(LsoPackage.eINSTANCE.getRandomMoveGeneratorSettings_Using4over2()),
       "Using4over2");
+  }
+
+  /**
+   * Create an editor for the weightFor2opt2 feature on RandomMoveGeneratorSettings
+   * @generated
+   */
+  protected static void createWeightFor2opt2Editor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(LsoPackage.eINSTANCE.getRandomMoveGeneratorSettings_WeightFor2opt2()),
+      "Weight For2opt2");
+  }
+
+  /**
+   * Create an editor for the weightFor3opt2 feature on RandomMoveGeneratorSettings
+   * @generated
+   */
+  protected static void createWeightFor3opt2Editor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(LsoPackage.eINSTANCE.getRandomMoveGeneratorSettings_WeightFor3opt2()),
+      "Weight For3opt2");
+  }
+
+  /**
+   * Create an editor for the weightFor4opt1 feature on RandomMoveGeneratorSettings
+   * @generated
+   */
+  protected static void createWeightFor4opt1Editor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(LsoPackage.eINSTANCE.getRandomMoveGeneratorSettings_WeightFor4opt1()),
+      "Weight For4opt1");
+  }
+
+  /**
+   * Create an editor for the weightFor4opt2 feature on RandomMoveGeneratorSettings
+   * @generated
+   */
+  protected static void createWeightFor4opt2Editor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(LsoPackage.eINSTANCE.getRandomMoveGeneratorSettings_WeightFor4opt2()),
+      "Weight For4opt2");
   }
 }

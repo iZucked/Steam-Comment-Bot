@@ -306,6 +306,42 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getRandomMoveGeneratorSettings_WeightFor2opt2() {
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRandomMoveGeneratorSettings_WeightFor3opt2() {
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRandomMoveGeneratorSettings_WeightFor4opt1() {
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRandomMoveGeneratorSettings_WeightFor4opt2() {
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getConstrainedMoveGeneratorSettings() {
 		return constrainedMoveGeneratorSettingsEClass;
 	}
@@ -355,6 +391,10 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 		createEAttribute(randomMoveGeneratorSettingsEClass, RANDOM_MOVE_GENERATOR_SETTINGS__USING3OVER2);
 		createEAttribute(randomMoveGeneratorSettingsEClass, RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER1);
 		createEAttribute(randomMoveGeneratorSettingsEClass, RANDOM_MOVE_GENERATOR_SETTINGS__USING4OVER2);
+		createEAttribute(randomMoveGeneratorSettingsEClass, RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR2OPT2);
+		createEAttribute(randomMoveGeneratorSettingsEClass, RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR3OPT2);
+		createEAttribute(randomMoveGeneratorSettingsEClass, RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR4OPT1);
+		createEAttribute(randomMoveGeneratorSettingsEClass, RANDOM_MOVE_GENERATOR_SETTINGS__WEIGHT_FOR4OPT2);
 
 		constrainedMoveGeneratorSettingsEClass = createEClass(CONSTRAINED_MOVE_GENERATOR_SETTINGS);
 	}
@@ -412,6 +452,10 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 		initEAttribute(getRandomMoveGeneratorSettings_Using3over2(), ecorePackage.getEBoolean(), "using3over2", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRandomMoveGeneratorSettings_Using4over1(), ecorePackage.getEBoolean(), "using4over1", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRandomMoveGeneratorSettings_Using4over2(), ecorePackage.getEBoolean(), "using4over2", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_WeightFor2opt2(), ecorePackage.getEDouble(), "weightFor2opt2", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_WeightFor3opt2(), ecorePackage.getEDouble(), "weightFor3opt2", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_WeightFor4opt1(), ecorePackage.getEDouble(), "weightFor4opt1", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_WeightFor4opt2(), ecorePackage.getEDouble(), "weightFor4opt2", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(constrainedMoveGeneratorSettingsEClass, ConstrainedMoveGeneratorSettings.class, "ConstrainedMoveGeneratorSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 	}

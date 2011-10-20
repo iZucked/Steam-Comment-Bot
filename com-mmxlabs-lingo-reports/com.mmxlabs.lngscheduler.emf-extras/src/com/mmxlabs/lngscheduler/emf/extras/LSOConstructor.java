@@ -5,6 +5,7 @@
 package com.mmxlabs.lngscheduler.emf.extras;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -15,6 +16,7 @@ import scenario.optimiser.lso.RandomMoveGeneratorSettings;
 import scenario.optimiser.lso.ThresholderSettings;
 
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
@@ -28,15 +30,20 @@ import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
-import com.mmxlabs.optimiser.lso.impl.thresholders.CalibratingGeometricThresholder;
+import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 import com.mmxlabs.optimiser.lso.impl.thresholders.InstrumentingThresholder;
+import com.mmxlabs.optimiser.lso.movegenerators.impl.CompoundMoveGenerator;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move2over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.lso.CounterCharterOutMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
  * A class for converting the settings in the EMF into optimisation jobs
@@ -74,9 +81,26 @@ public class LSOConstructor {
 				.instantiateFitnesses(context.getFitnessFunctionRegistry(),
 						context.getFitnessComponents());
 
-		final IMoveGenerator<T> moveGenerator = createMoveGenerator(context);
+		final IMoveGenerator<T> normalMoveGenerator = createMoveGenerator(context);
 
-		final InstrumentingMoveGenerator<T> instrumentingMoveGenerator = instrumenting ? new InstrumentingMoveGenerator<T>(moveGenerator, false // profile moves (true) or just rate
+		final CompoundMoveGenerator<T> moveGenerator = new CompoundMoveGenerator<T>();
+		final CounterCharterOutMoveGenerator<T> removeCharterOuts = new CounterCharterOutMoveGenerator<T>();
+		
+		removeCharterOuts.setRandom(getRandom());
+		final HashSet<IResource> badResource = new HashSet<IResource>();
+		final IVesselProvider vesselProvider = context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+		for (final IResource resource : context.getOptimisationData().getResources()) {
+			if (vesselProvider.getVessel(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
+				badResource.add(resource);
+			}
+		}
+		removeCharterOuts.setBadResources(badResource);
+
+		moveGenerator.addGenerator(normalMoveGenerator, 95);
+		moveGenerator.addGenerator(removeCharterOuts, 5);
+		moveGenerator.setRandom(getRandom());
+
+		final InstrumentingMoveGenerator<T> instrumentingMoveGenerator = instrumenting ? new InstrumentingMoveGenerator<T>(moveGenerator, true // profile moves (true) or just rate
 																																				// (false)
 				, false // don't log moves to file
 		)
@@ -111,19 +135,13 @@ public class LSOConstructor {
 			// Ideally this code should go in the EMF classes, to be honest.
 			final RandomMoveGeneratorSettings rmgs = (RandomMoveGeneratorSettings) generatorSettings;
 			final RandomMoveGenerator<T> moveGenerator = new RandomMoveGenerator<T>();
+
 			moveGenerator.setRandom(getRandom());
-			if (rmgs.isUsing2over2())
-				moveGenerator
-						.addMoveGeneratorUnit(new Move2over2GeneratorUnit<T>());
-			if (rmgs.isUsing3over2())
-				moveGenerator
-						.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
-			if (rmgs.isUsing4over2())
-				moveGenerator
-						.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
-			if (rmgs.isUsing4over1())
-				moveGenerator
-						.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
+
+			moveGenerator.addMoveGeneratorUnit(new Move2over2GeneratorUnit<T>(), rmgs.getWeightFor2opt2());
+			moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>(), rmgs.getWeightFor3opt2());
+			moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>(), rmgs.getWeightFor4opt2());
+			moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>(), rmgs.getWeightFor4opt1());
 
 			return moveGenerator;
 		} else {
@@ -169,8 +187,9 @@ public class LSOConstructor {
 	private IThresholder getThresholder() {
 		// For now we are just going to generate a self-calibrating thresholder
 		final ThresholderSettings ts = settings.getThresholderSettings();
-//		return new MovingAverageThresholder(getRandom(), ts.getInitialAcceptanceRate(), ts.getAlpha(), ts.getEpochLength(), 3000);
-		return new CalibratingGeometricThresholder(getRandom(), ts.getEpochLength(), ts.getInitialAcceptanceRate(), ts.getAlpha());
+		return new GeometricThresholder(getRandom(), ts.getEpochLength(), ts.getInitialAcceptanceRate(), ts.getAlpha());
+		// return new MovingAverageThresholder(getRandom(), ts.getInitialAcceptanceRate(), ts.getAlpha(), ts.getEpochLength(), 3000);
+		// return new CalibratingGeometricThresholder(getRandom(), ts.getEpochLength(), ts.getInitialAcceptanceRate(), ts.getAlpha());
 	}
 
 	private Random getRandom() {

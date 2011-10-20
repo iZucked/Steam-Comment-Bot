@@ -20,9 +20,7 @@ import scenario.port.PortModel;
 import scenario.schedule.ScheduleModel;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Scenario</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Scenario</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
@@ -376,5 +374,10 @@ public interface Scenario extends AnnotatedObject {
 	 * @generated
 	 */
 	void createMissingModels();
+
+	/**
+	 * @return
+	 */
+	Scenario getSelfContainedCopy();
 
 } // Scenario
