@@ -37,13 +37,21 @@ public class OptimisationResultTest {
 	 * Toggle between printing a map of fitness names to fitness values to testing the map against the fitnesses generated at runtime.
 	 */
 	private static final boolean printFitnessMap = true;
-	
+
+	/**
+	 * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the fitness
+	 * to the value to the console. This is copied and pasted into the method. The second execution will test that map against a the fitnesses that have been generated again.
+	 * 
+	 * @throws IOException
+	 * @throws IncompleteScenarioException
+	 * @throws InterruptedException
+	 */
 	@Ignore("Currently broken.")
 	@Test
-	public void test() throws IOException, IncompleteScenarioException, InterruptedException {
+	public void testFitnessRepeatability() throws IOException, IncompleteScenarioException, InterruptedException {
 
+		// Load the scenaio to test
 		final URL url = getClass().getResource("/optimisationResultTest.scenario");
-
 		final Resource resource = new XMIResourceImpl(URI.createURI(url.toString()));
 		resource.load(Collections.emptyMap());
 
@@ -59,6 +67,8 @@ public class OptimisationResultTest {
 		final ResourceSetImpl cpyResourceSet = new ResourceSetImpl();
 		cpyResourceSet.getResources().add(cpyResource);
 
+		// Create two scenario runners.
+		// TODO are two necessary?
 		final ScenarioRunner originalScenarioRunner = new ScenarioRunner(originalScenario);
 		originalScenarioRunner.init();
 		originalScenarioRunner.run();
@@ -66,16 +76,16 @@ public class OptimisationResultTest {
 		endScenarioRunner.init();
 		endScenarioRunner.run();
 
-
+		// get the fitnesses.
 		final EList<ScheduleFitness> currentOriginalFitnesses = originalScenarioRunner.getIntialSchedule().getFitness();
 		final EList<ScheduleFitness> currentEndFitnesses = endScenarioRunner.getFinalSchedule().getFitness();
-		
+
 		if (printFitnessMap) {
 			printFitnessesAsMap("originalFitnesses", currentOriginalFitnesses);
 			printFitnessesAsMap("endFitnesses", currentEndFitnesses);
 		}
-
 		else {
+			// ↓ ↓ PASTE PRINTED MAP HERE ↓ ↓ //
 			final HashMap<String, Long> originalFitnesses = new HashMap<String, Long>();
 			originalFitnesses.put("cargo-scheduler-canal-cost", 9315000L);
 			originalFitnesses.put("cargo-scheduler-volume-allocation", 0L);
@@ -86,7 +96,6 @@ public class OptimisationResultTest {
 			originalFitnesses.put("cargo-scheduler-cost-lng", 253328260L);
 			originalFitnesses.put("cargo-scheduler-charter-cost", 0L);
 
-
 			final HashMap<String, Long> endFitnesses = new HashMap<String, Long>();
 			endFitnesses.put("cargo-scheduler-canal-cost", 690000L);
 			endFitnesses.put("cargo-scheduler-volume-allocation", 0L);
@@ -96,15 +105,24 @@ public class OptimisationResultTest {
 			endFitnesses.put("cargo-scheduler-cost-base", 25372620L);
 			endFitnesses.put("cargo-scheduler-cost-lng", 213198070L);
 			endFitnesses.put("cargo-scheduler-charter-cost", 0L);
-
-			printOldAndNew("old", originalFitnesses, currentOriginalFitnesses);
-			printOldAndNew("old", endFitnesses, currentEndFitnesses);
+			// ↑ ↑ PASTE PRINTED MAP HERE ↑ ↑ //
 			
+			// print them to console (for manual checking)
+			printOldAndNew("original", originalFitnesses, currentOriginalFitnesses);
+			printOldAndNew("end", endFitnesses, currentEndFitnesses);
+
+			// Assert old and new are equal
 			testOriginalAndCurrentFitnesses(originalFitnesses, currentOriginalFitnesses);
 			testOriginalAndCurrentFitnesses(endFitnesses, currentEndFitnesses);
 		}
 	}
 
+	/**
+	 * Prints the given EList as a Map to the console.
+	 * 
+	 * @param mapName The variable name of the map.
+	 * @param fitnesses A list of fitnesses to print.
+	 */
 	private void printFitnessesAsMap(final String mapName, final EList<ScheduleFitness> fitnesses) {
 
 		System.out.println();
@@ -115,7 +133,10 @@ public class OptimisationResultTest {
 
 		System.out.println();
 	}
-	
+
+	/**
+	 * Test the original (previously generated) fitnesses against the current. Also test that the total of the original and current are equal.
+	 */
 	private void testOriginalAndCurrentFitnesses(final HashMap<String, Long> originalFitnesses, final EList<ScheduleFitness> currentFitnesses) {
 
 		long totalOriginalFitness = 0;
@@ -123,24 +144,33 @@ public class OptimisationResultTest {
 
 		for (ScheduleFitness f : currentFitnesses) {
 
+			// get the values
 			final long originalFitnessValue = originalFitnesses.get(f.getName()).longValue();
 			final long currentFitness = f.getValue();
 
+			// test they are equal
 			Assert.assertEquals(f.getName() + " - Previous fitness matches current fitness", originalFitnessValue, currentFitness);
 
+			// add to total
 			totalOriginalFitness += originalFitnessValue;
 			totalCurrentFitness += currentFitness;
 		}
 
+		// test totals are equal
 		Assert.assertEquals("Total original fitnesses equal current fitnesses", totalOriginalFitness, totalCurrentFitness);
 	}
-	
-	private void printOldAndNew(final String name, final HashMap<String, Long> originalFitnesses, final EList<ScheduleFitness> currentFitnesses) { 
+
+	/**
+	 * Print the old and new fitnesses to the console.
+	 * @param name The name of the fitnesses (for identification in the console).
+	 * @param originalFitnesses The fitnesses previously generated.
+	 * @param currentFitnesses The fitnesses generated in this execution.
+	 */
+	private void printOldAndNew(final String name, final HashMap<String, Long> originalFitnesses, final EList<ScheduleFitness> currentFitnesses) {
 
 		System.out.println(name);
-		for (ScheduleFitness f : currentFitnesses) {
+		for (ScheduleFitness f : currentFitnesses)
 			System.out.println(f.getName() + ": " + originalFitnesses.get(f.getName()).longValue() + ", " + f.getValue());
-		}
 		System.out.println();
 	}
 
