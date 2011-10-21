@@ -101,7 +101,7 @@ public class OptimisationResultTest {
 		}
 	}
 
-	private void printFitnessesAsMap(String mapName, EList<ScheduleFitness> fitnesses) {
+	private void printFitnessesAsMap(final String mapName, final EList<ScheduleFitness> fitnesses) {
 
 		System.out.println();
 		System.out.println("final HashMap<String, Long> " + mapName + " = new HashMap<String, Long>();");
@@ -112,7 +112,7 @@ public class OptimisationResultTest {
 		System.out.println();
 	}
 	
-	private void testOriginalAndCurrentFitnesses(HashMap<String, Long> originalFitnesses, EList<ScheduleFitness> currentFitnesses) {
+	private void testOriginalAndCurrentFitnesses(final HashMap<String, Long> originalFitnesses, final EList<ScheduleFitness> currentFitnesses) {
 
 		long totalOriginalFitness = 0;
 		long totalCurrentFitness = 0;
@@ -131,7 +131,7 @@ public class OptimisationResultTest {
 		Assert.assertEquals("Total original fitnesses equal current fitnesses", totalOriginalFitness, totalCurrentFitness);
 	}
 	
-	private void printOldAndNew(final String name, HashMap<String, Long> originalFitnesses, EList<ScheduleFitness> currentFitnesses) { 
+	private void printOldAndNew(final String name, final HashMap<String, Long> originalFitnesses, final EList<ScheduleFitness> currentFitnesses) { 
 
 		System.out.println(name);
 		for (ScheduleFitness f : currentFitnesses) {
