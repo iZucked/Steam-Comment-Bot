@@ -63,9 +63,12 @@ public class OptimisationResultTest {
 
 		final boolean printFitnessMap = true;
 
+		final EList<ScheduleFitness> currentOriginalFitnesses = originalScenarioRunner.getIntialSchedule().getFitness();
+		final EList<ScheduleFitness> currentEndFitnesses = endScenarioRunner.getFinalSchedule().getFitness();
+		
 		if (printFitnessMap) {
-			printFitnessesAsMap("originalFitnesses", originalScenarioRunner.getFinalSchedule().getFitness());
-			printFitnessesAsMap("endFitnesses", endScenarioRunner.getFinalSchedule().getFitness());
+			printFitnessesAsMap("originalFitnesses", currentOriginalFitnesses);
+			printFitnessesAsMap("endFitnesses", currentEndFitnesses);
 		}
 
 		else {
@@ -90,11 +93,11 @@ public class OptimisationResultTest {
 			endFitnesses.put("cargo-scheduler-cost-lng", 213198070L);
 			endFitnesses.put("cargo-scheduler-charter-cost", 0L);
 
-			printOldAndNew("old", originalFitnesses, originalScenarioRunner.getIntialSchedule().getFitness());
-			printOldAndNew("old", endFitnesses, endScenarioRunner.getFinalSchedule().getFitness());
+			printOldAndNew("old", originalFitnesses, currentOriginalFitnesses);
+			printOldAndNew("old", endFitnesses, currentEndFitnesses);
 			
-			testOriginalAndCurrentFitnesses(originalFitnesses, originalScenarioRunner.getIntialSchedule().getFitness());
-			testOriginalAndCurrentFitnesses(endFitnesses, endScenarioRunner.getFinalSchedule().getFitness());
+			testOriginalAndCurrentFitnesses(originalFitnesses, currentOriginalFitnesses);
+			testOriginalAndCurrentFitnesses(endFitnesses, currentEndFitnesses);
 		}
 	}
 
