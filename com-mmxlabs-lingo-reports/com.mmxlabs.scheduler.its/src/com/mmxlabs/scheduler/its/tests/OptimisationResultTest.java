@@ -37,6 +37,9 @@ public class OptimisationResultTest {
 	 * Toggle between printing a map of fitness names to fitness values to testing the map against the fitnesses generated at runtime.
 	 */
 	private static final boolean printFitnessMap = true;
+	
+	private static final String originalFitnessesMapName = "originalFitnesses";
+	private static final String endFitnessesMapName = "endFitnesses";
 
 	/**
 	 * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the fitness
@@ -81,8 +84,8 @@ public class OptimisationResultTest {
 		final EList<ScheduleFitness> currentEndFitnesses = endScenarioRunner.getFinalSchedule().getFitness();
 
 		if (printFitnessMap) {
-			printFitnessesAsMap("originalFitnesses", currentOriginalFitnesses);
-			printFitnessesAsMap("endFitnesses", currentEndFitnesses);
+			printFitnessesAsMap(originalFitnessesMapName, currentOriginalFitnesses);
+			printFitnessesAsMap(endFitnessesMapName, currentEndFitnesses);
 		}
 		else {
 			// ↓ ↓ PASTE PRINTED MAP HERE ↓ ↓ //
@@ -173,5 +176,4 @@ public class OptimisationResultTest {
 			System.out.println(f.getName() + ": " + originalFitnesses.get(f.getName()).longValue() + ", " + f.getValue());
 		System.out.println();
 	}
-
 }
