@@ -70,26 +70,29 @@ public class OptimisationResultTest {
 
 		else {
 			final HashMap<String, Long> originalFitnesses = new HashMap<String, Long>();
-			originalFitnesses.put("cargo-scheduler-canal-cost", 680000L);
+			originalFitnesses.put("cargo-scheduler-canal-cost", 9315000L);
 			originalFitnesses.put("cargo-scheduler-volume-allocation", 0L);
-			originalFitnesses.put("cargo-scheduler-cost-cooldown", 30692220L);
+			originalFitnesses.put("cargo-scheduler-cost-cooldown", 29076840L);
 			originalFitnesses.put("cargo-scheduler-charter-revenue", 0L);
-			originalFitnesses.put("cargo-scheduler-lateness", 0L);
-			originalFitnesses.put("cargo-scheduler-cost-base", 24199464L);
-			originalFitnesses.put("cargo-scheduler-cost-lng", 216413999L);
+			originalFitnesses.put("cargo-scheduler-lateness", 538000000L);
+			originalFitnesses.put("cargo-scheduler-cost-base", 51417391L);
+			originalFitnesses.put("cargo-scheduler-cost-lng", 253328260L);
 			originalFitnesses.put("cargo-scheduler-charter-cost", 0L);
 
 
 			final HashMap<String, Long> endFitnesses = new HashMap<String, Long>();
-			endFitnesses.put("cargo-scheduler-canal-cost", 1735000L);
+			endFitnesses.put("cargo-scheduler-canal-cost", 690000L);
 			endFitnesses.put("cargo-scheduler-volume-allocation", 0L);
 			endFitnesses.put("cargo-scheduler-cost-cooldown", 30692220L);
 			endFitnesses.put("cargo-scheduler-charter-revenue", 0L);
 			endFitnesses.put("cargo-scheduler-lateness", 0L);
-			endFitnesses.put("cargo-scheduler-cost-base", 27140645L);
-			endFitnesses.put("cargo-scheduler-cost-lng", 210235932L);
+			endFitnesses.put("cargo-scheduler-cost-base", 25372620L);
+			endFitnesses.put("cargo-scheduler-cost-lng", 213198070L);
 			endFitnesses.put("cargo-scheduler-charter-cost", 0L);
 
+			printOldAndNew("old", originalFitnesses, originalScenarioRunner.getIntialSchedule().getFitness());
+			printOldAndNew("old", endFitnesses, endScenarioRunner.getFinalSchedule().getFitness());
+			
 			testOriginalAndCurrentFitnesses(originalFitnesses, originalScenarioRunner.getIntialSchedule().getFitness());
 			testOriginalAndCurrentFitnesses(endFitnesses, endScenarioRunner.getFinalSchedule().getFitness());
 		}
@@ -123,6 +126,15 @@ public class OptimisationResultTest {
 		}
 
 		Assert.assertEquals("Total original fitnesses equal current fitnesses", totalOriginalFitness, totalCurrentFitness);
+	}
+	
+	private void printOldAndNew(final String name, HashMap<String, Long> originalFitnesses, EList<ScheduleFitness> currentFitnesses) { 
+
+		System.out.println(name);
+		for (ScheduleFitness f : currentFitnesses) {
+			System.out.println(f.getName() + ": " + originalFitnesses.get(f.getName()).longValue() + ", " + f.getValue());
+		}
+		System.out.println();
 	}
 
 }
