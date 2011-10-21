@@ -33,6 +33,11 @@ import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
  */
 public class OptimisationResultTest {
 
+	/**
+	 * Toggle between printing a map of fitness names to fitness values to testing the map against the fitnesses generated at runtime.
+	 */
+	private static final boolean printFitnessMap = true;
+	
 	@Ignore("Currently broken.")
 	@Test
 	public void test() throws IOException, IncompleteScenarioException, InterruptedException {
@@ -61,7 +66,6 @@ public class OptimisationResultTest {
 		endScenarioRunner.init();
 		endScenarioRunner.run();
 
-		final boolean printFitnessMap = true;
 
 		final EList<ScheduleFitness> currentOriginalFitnesses = originalScenarioRunner.getIntialSchedule().getFitness();
 		final EList<ScheduleFitness> currentEndFitnesses = endScenarioRunner.getFinalSchedule().getFitness();
