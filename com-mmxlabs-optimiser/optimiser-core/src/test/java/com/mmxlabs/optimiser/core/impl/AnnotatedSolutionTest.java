@@ -53,7 +53,6 @@ public class AnnotatedSolutionTest {
 		Assert.assertSame(annotation, solution.getGeneralAnnotation(key, Object.class));
 	}
 
-	@Ignore("Incomplete test")
 	@Test
 	public void getElementAnnotations() {
 		final AnnotatedSolution solution = new AnnotatedSolution();
@@ -62,7 +61,7 @@ public class AnnotatedSolutionTest {
 
 		Assert.assertNotNull(elementAnnotations);
 		
-		Assert.fail("How to test this further?");
+		// How to test this further?
 	}
 
 	@Test
