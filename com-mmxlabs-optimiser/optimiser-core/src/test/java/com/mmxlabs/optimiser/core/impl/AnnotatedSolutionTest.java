@@ -65,7 +65,6 @@ public class AnnotatedSolutionTest {
 		Assert.fail("How to test this further?");
 	}
 
-	@Ignore("Incomplete test")
 	@Test
 	public void testDispose() {
 		final ISequences sequences = context.mock(ISequences.class);
@@ -96,8 +95,7 @@ public class AnnotatedSolutionTest {
 		Assert.assertNull(solution.getContext());
 		
 		Assert.assertNull(solution.getGeneralAnnotation(key, Object.class));
-		
-		Assert.fail("Unable to test disposal of ElementAnnotations");
+		Assert.assertNull(solution.getElementAnnotations());
 	}
 
 }
