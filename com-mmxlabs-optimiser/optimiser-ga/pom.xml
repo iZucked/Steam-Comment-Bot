@@ -57,6 +57,23 @@
 
 	<build>
 		<plugins>
+
+			<!-- Use the tycho packaging plugin to set an appropriate qualifier -->
+			<!-- Note release versions should (probably...) use ${pom.version} instead 
+				of ${unqualifiedVersion}-${buildQualifier} -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-qualifier</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- Hook bundle manifest generation into build process -->
 			<plugin>
 				<groupId>org.apache.felix</groupId>
@@ -78,7 +95,8 @@
 					<instructions>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
-						<Export-Package>com.mmxlabs.optimiser.ga.*;version="${project.version}"</Export-Package>
+						<Export-Package>com.mmxlabs.optimiser.ga.*;version="${unqualifiedVersion}-${buildQualifier}"</Export-Package>
+						<Bundle-Version>${unqualifiedVersion}-${buildQualifier}</Bundle-Version>
 					</instructions>
 				</configuration>
 			</plugin>
