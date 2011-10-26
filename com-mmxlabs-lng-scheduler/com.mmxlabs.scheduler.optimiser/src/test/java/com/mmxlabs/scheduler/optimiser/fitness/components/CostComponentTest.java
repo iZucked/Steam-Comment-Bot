@@ -25,14 +25,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 public class CostComponentTest {
 
 	Mockery context = new JUnit4Mockery();
-	
+
 	@Test
 	public void testInit() {
 		final String name = "name";
 		final CargoSchedulerFitnessCore<Object> core = null;
 		final List<FuelComponent> fuelComponents = Collections.emptyList();
-		final CostComponent<Object> c = new CostComponent<Object>(name, fuelComponents,
-				core);
+		final CostComponent<Object> c = new CostComponent<Object>(name, fuelComponents, core);
 
 		@SuppressWarnings("unchecked")
 		final IOptimisationData<Object> data = context.mock(IOptimisationData.class);
@@ -70,8 +69,7 @@ public class CostComponentTest {
 		final String name = "name";
 		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
 		final List<FuelComponent> fuelComponents = Collections.emptyList();
-		final CostComponent<Object> c = new CostComponent<Object>(name, fuelComponents,
-				core);
+		final CostComponent<Object> c = new CostComponent<Object>(name, fuelComponents, core);
 
 		Assert.assertSame(name, c.getName());
 		Assert.assertSame(core, c.getFitnessCore());
