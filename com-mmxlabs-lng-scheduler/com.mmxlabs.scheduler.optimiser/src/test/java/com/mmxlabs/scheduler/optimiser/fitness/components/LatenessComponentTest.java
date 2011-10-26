@@ -50,16 +50,16 @@ public class LatenessComponentTest {
 
 		final String key = "provider-discount-curve";
 		final String componentName = "name";
-		
+
 		final Class<IDiscountCurveProvider> classDiscountCurveProvider = IDiscountCurveProvider.class;
 		final IDiscountCurveProvider discountCurveProvider = context.mock(IDiscountCurveProvider.class);
 		final ICurve curve = context.mock(ICurve.class);
-		
+
 		context.checking(new Expectations() {
 			{
 				exactly(1).of(data).getDataComponentProvider(key, classDiscountCurveProvider);
 				will(returnValue(discountCurveProvider));
-				
+
 				exactly(1).of(discountCurveProvider).getDiscountCurve(componentName);
 				will(returnValue(curve));
 			}
