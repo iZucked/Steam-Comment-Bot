@@ -106,6 +106,18 @@ public class LatenessComponentTest {
 
 		Assert.fail("TODO: Fix me");
 
+
+		// what is meant to happen is that the component should get stuff like
+		// c.startEvaluation()
+		// c.startSequence(resource, true)
+		// c.nextVoyagePlan(plan, time)
+		// c.nextObject(object, time)
+		// c.nextObject(object, time)
+		// ...
+		// c.endSequence()
+		// c.endEvaluationAndGetCost()
+		
+		// OLD BROKEN
 		// c.prepare();
 		//
 		// c.beginIterating(resource);
