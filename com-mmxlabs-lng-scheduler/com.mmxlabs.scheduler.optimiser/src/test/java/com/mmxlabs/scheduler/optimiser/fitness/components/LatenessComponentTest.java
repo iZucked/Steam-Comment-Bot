@@ -74,6 +74,7 @@ public class LatenessComponentTest {
 		final int penalty = 1000000;
 
 		// the expected times
+		final int voyageStartTime = 0;
 		final int loadStartTime = 10;
 		final int loadEndTime = 11;
 		final int dischargeStartTime = 20;
@@ -112,7 +113,7 @@ public class LatenessComponentTest {
 
 		c.startEvaluation();
 		c.startSequence(resource, true);
-		c.nextVoyagePlan(voyagePlan, 0);
+		c.nextVoyagePlan(voyagePlan, voyageStartTime);
 		c.nextObject(loadDetails, loadEndTime + loadLateTime);
 		c.nextObject(dischargeDetails, dischargeEndTime + dischargeLateTime);
 		
