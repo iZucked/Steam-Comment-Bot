@@ -122,7 +122,7 @@ public class LatenessComponentTest {
 		final long cost = c.endEvaluationAndGetCost();
 		
 		final long expectedCost = (dischargeLateTime  + loadLateTime) * penalty;
-		Assert.assertEquals("Expected cost equals calculated cost.", cost, expectedCost);
+		Assert.assertEquals("Expected cost equals calculated cost.", expectedCost, cost);
 		
 		context.assertIsSatisfied();
 		
