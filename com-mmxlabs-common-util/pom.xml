@@ -3,15 +3,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.common</groupId>
 	<artifactId>common-util</artifactId>
-	<packaging>jar</packaging>
+	<packaging>bundle</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<name>common-util</name>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
-		<artifactId>mmxlabs-parent</artifactId>
-		<version>1.0-SNAPSHOT</version>
-		<relativePath/>
+		<artifactId>bundle-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath />
 	</parent>
 
 	<description>Project containing commonly used classes and utility functions.</description>
@@ -32,48 +32,25 @@
 		<url>http://www.minimaxlabs.com/</url>
 	</organization>
 
+
 	<build>
 		<plugins>
 
-			<!-- Use the tycho packaging plugin to set an appropriate qualifier -->
-			<!-- Note release versions should (probably...) use ${pom.version} instead 
-				of ${unqualifiedVersion}-${buildQualifier} -->
 			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-packaging-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>build-qualifier</goal>
-						</goals>
-					</execution>
-				</executions>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
 			</plugin>
 
 			<!-- Hook bundle manifest generation into build process -->
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>bundle-manifests</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>manifest</goal>
-						</goals>
-					</execution>
-				</executions>
 
 				<configuration>
-					<!-- Generate manifest in top level so Eclipse/PDE can pick it up in 
-						source tree -->
-					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
-						<Export-Package>com.mmxlabs.common.*;version="${unqualifiedVersion}-${buildQualifier}"</Export-Package>
-						<Bundle-Version>${unqualifiedVersion}-${buildQualifier}</Bundle-Version>
+						<Export-Package>com.mmxlabs.common.*;version="${Bundle-UnqualifiedVersion}"</Export-Package>
 					</instructions>
 				</configuration>
 
@@ -81,49 +58,7 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifestFile>META-INF/MANIFEST.MF</manifestFile>
-					</archive>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>META-INF</directory>
-						</fileset>
-					</filesets>
-				</configuration>
-			</plugin>
-
-			<!-- Use Tycho to install bundle with P2 metadata into local repo -->
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-p2-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<executions>
-					<execution>
-						<id>p2-metadata</id>
-						<phase>package</phase>
-						<goals>
-							<goal>p2-metadata</goal>
-						</goals>
-					</execution>
-
-					<execution>
-						<id>update-local-index</id>
-						<phase>install</phase>
-						<goals>
-							<goal>update-local-index</goal>
-						</goals>
-					</execution>
-
-				</executions>
+				<artifactId>maven-source-plugin</artifactId>
 			</plugin>
 
 		</plugins>
