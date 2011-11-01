@@ -24,13 +24,6 @@
    </license>
 
    <plugin
-         id="com.mmxlabs.common.util"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.mmxlabs.demo.app"
          download-size="0"
          install-size="0"
@@ -88,27 +81,6 @@
 
    <plugin
          id="com.mmxlabs.lngscheduler.emf.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.optimiser.common"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.optimiser.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.optimiser.lso"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -186,13 +158,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.optimiser.ga"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.mmxlabs.demo.doc"
          download-size="0"
          install-size="0"
@@ -229,6 +194,41 @@
 
    <plugin
          id="com.mmxlabs.jobmanager.eclipse"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.optimiser.optimiser-common"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.optimiser.optimiser-core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.optimiser.optimiser-ga"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.optimiser.optimiser-lso"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.common.common-util"
          download-size="0"
          install-size="0"
          version="0.0.0"
