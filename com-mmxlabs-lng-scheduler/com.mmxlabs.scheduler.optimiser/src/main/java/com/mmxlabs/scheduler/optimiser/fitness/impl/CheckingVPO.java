@@ -42,12 +42,14 @@ public class CheckingVPO<T> implements IVoyagePlanOptimiser<T> {
 	public VoyagePlan optimise() {
 		final VoyagePlan ref = reference.optimise();
 		final VoyagePlan res = delegate.optimise();
-		
+		// FIXME: Use check if logging is enabled
 		if (ref.toString().equals(res.toString())  == false) {
+			// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
 			System.err.println("Checking VPO Error: (plans are different)");
 			System.err.println("   reference value:" + ref.toString());
 			System.err.println("    delegate value:" + res.toString());
 		} else if (reference.getBestCost() != delegate.getBestCost()) {
+			// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
 			System.err.println("Checking VPO Error: (Costs are different)");
 			System.err.println("    reference cost:" + reference.getBestCost());
 			System.err.println("     delegate cost:" + delegate.getBestCost());
