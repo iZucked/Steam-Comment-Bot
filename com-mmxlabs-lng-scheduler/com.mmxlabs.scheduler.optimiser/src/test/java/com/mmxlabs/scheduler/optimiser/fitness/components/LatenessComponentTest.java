@@ -8,15 +8,12 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
-import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
@@ -50,16 +47,16 @@ public class LatenessComponentTest {
 
 		final String key = "provider-discount-curve";
 		final String componentName = "name";
-		
+
 		final Class<IDiscountCurveProvider> classDiscountCurveProvider = IDiscountCurveProvider.class;
 		final IDiscountCurveProvider discountCurveProvider = context.mock(IDiscountCurveProvider.class);
 		final ICurve curve = context.mock(ICurve.class);
-		
+
 		context.checking(new Expectations() {
 			{
 				exactly(1).of(data).getDataComponentProvider(key, classDiscountCurveProvider);
 				will(returnValue(discountCurveProvider));
-				
+
 				exactly(1).of(discountCurveProvider).getDiscountCurve(componentName);
 				will(returnValue(curve));
 			}
@@ -70,20 +67,31 @@ public class LatenessComponentTest {
 		context.assertIsSatisfied();
 	}
 
-	@Ignore("TODO: Fix me")
-	// TODO FIXME
 	@Test
 	public void testEvaluateSequence() {
+		
+		// the penalty per 1 unit (hour?) of late. As set in LatenessComponent. 
+		final int penalty = 1000000;
+
+		// the expected times
+		final int voyageStartTime = 0;
+		final int loadStartTime = 10;
+		final int loadEndTime = 11;
+		final int dischargeStartTime = 20;
+		final int dischargeEndTime = 21;
+		
+		// the amounts to be late by
+		final int loadLateTime = 1;
+		final int dischargeLateTime = 1;
+		
 		final String name = "name";
 		final CargoSchedulerFitnessCore<Object> core = null;
 		final LatenessComponent<Object> c = new LatenessComponent<Object>(name, core);
 		c.init(null);
-
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-
-		final TimeWindow window1 = new TimeWindow(10, 11);
-		final TimeWindow window2 = new TimeWindow(20, 21);
+		
+		// set up time windows from load/discharge end/start times above
+		final TimeWindow window1 = new TimeWindow(loadStartTime, loadEndTime);
+		final TimeWindow window2 = new TimeWindow(dischargeStartTime, dischargeEndTime);
 
 		final LoadSlot loadSlot = new LoadSlot();
 		loadSlot.setTimeWindow(window1);
@@ -102,25 +110,21 @@ public class LatenessComponentTest {
 		voyagePlan.setSequence(routeSequence);
 
 		final IResource resource = context.mock(IResource.class);
-		final IModifiableSequence<Object> sequence = OptimiserTestUtil.makeSequence(obj1, obj2);
 
-		Assert.fail("TODO: Fix me");
-
-		// c.prepare();
-		//
-		// c.beginIterating(resource);
-		// c.evaluateNextObject(loadDetails, 15);
-		// c.evaluateNextObject(dischargeDetails, 20);
-		// c.endIterating();
-		//
-		// c.evaluateSequence(resource, sequence,
-		// CollectionsUtil.makeArrayList(voyagePlan),false,0);
-		//
-		// c.complete();
-		//
-		// // 4 hours lateness * hardcoded weight
-		// Assert.assertEquals(4 * 1000000, c.getFitness());
-		//
-		// context.assertIsSatisfied();
+		c.startEvaluation();
+		c.startSequence(resource, true);
+		c.nextVoyagePlan(voyagePlan, voyageStartTime);
+		c.nextObject(loadDetails, loadEndTime + loadLateTime);
+		c.nextObject(dischargeDetails, dischargeEndTime + dischargeLateTime);
+		
+		c.endSequence();
+		
+		final long cost = c.endEvaluationAndGetCost();
+		
+		final long expectedCost = (dischargeLateTime  + loadLateTime) * penalty;
+		Assert.assertEquals("Expected cost equals calculated cost.", expectedCost, cost);
+		
+		context.assertIsSatisfied();
+		
 	}
 }

@@ -21,7 +21,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
+/**
+ * Currently disabled as {@link DistanceComponent} is disabled.
+ * 
+ * @see DistanceComponent
+ */
 @RunWith(JMock.class)
+@Ignore("DistanceComponent is disabled")
 public class DistanceComponentTest {
 
 	Mockery context = new JUnit4Mockery();
