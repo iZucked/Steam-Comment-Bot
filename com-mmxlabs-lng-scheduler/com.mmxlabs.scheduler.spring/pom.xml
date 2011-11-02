@@ -16,8 +16,9 @@
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
-		<artifactId>mmxlabs-parent</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<artifactId>bundle-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath />
 	</parent>
 
 	<dependencies>
@@ -119,10 +120,15 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+
+				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>${exec.maven.plugin.version}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -136,29 +142,13 @@
 				</configuration>
 			</plugin>
 
-<!---->
-<!--			 Hook bundle manifest generation into build process -->
+			<!-- Hook bundle manifest generation into build process -->
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>bundle-manifests</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>manifest</goal>
-						</goals>
-					</execution>
-				</executions>
-
 				<configuration>
-<!--					 Generate manifest in top level so Eclipse/PDE can pick it up in -->
-<!--						source tree -->
-					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
-						 Export all packages with this prefix. Default is all local excluding 
-							.impl packages 
-						<Export-Package>com.mmxlabs.scheduler.spring.*;version="${project.version}"</Export-Package>
+						<Export-Package>com.mmxlabs.scheduler.spring.*;version="${Bundle-UnqualifiedVersion}"</Export-Package>
 					</instructions>
 				</configuration>
 
@@ -166,29 +156,8 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifestFile>META-INF/MANIFEST.MF</manifestFile>
-					</archive>
-				</configuration>
+				<artifactId>maven-source-plugin</artifactId>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>META-INF/</directory>
-							<includes>
-								<include>MANIFEST.MF</include>
-							</includes>
-						</fileset>
-					</filesets>
-				</configuration>
-			</plugin>
-
 		</plugins>
 	</build>
 
