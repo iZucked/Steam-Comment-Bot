@@ -197,12 +197,12 @@
 	<profiles>
 		<profile>
 			<id>macosx</id>
-				<activation>
-					<os>
-						<name>mac os x</name>
-						<family>mac</family>
-					</os>
-				</activation>
+			<activation>
+				<os>
+					<name>mac os x</name>
+					<family>mac</family>
+				</os>
+			</activation>
 			<properties>
 				<ui.test.vmargs>-Xmx512m -XstartOnFirstThread</ui.test.vmargs>
 			</properties>
@@ -212,7 +212,7 @@
 			<activation>
 				<os>
 					<name>not-mac</name>
-          				<family>!mac</family>
+					<family>!mac</family>
 				</os>
 			</activation>
 			<properties>
