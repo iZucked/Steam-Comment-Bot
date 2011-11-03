@@ -17,6 +17,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>mmxlabs-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
+		<relativePath />
 	</parent>
 
 	<issueManagement>
