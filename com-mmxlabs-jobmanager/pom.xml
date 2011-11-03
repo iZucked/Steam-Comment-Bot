@@ -58,19 +58,6 @@
 		
 	</modules>
 
-	<!-- Pom dependencies to "consider". These need to be OSGi bundles for the 
-		P2 resolver to correctly pick them up. Ideally these would be installed in 
-		a p2 repository which can be specified in the target definition. -->
-	<!-- Tycho-570 (https://issues.sonatype.org/browse/TYCHO-570) means these 
-		are not correctly being used. -->
-	<dependencies>
-
-		<!-- Now in mmx 3rd Part Repo -->
-		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-math</artifactId> 
-			<version>2.1</version> <scope>compile</scope> </dependency> -->
-
-	</dependencies>
-
 	<build>
 		<!-- Required for some tycho workaround - may no longer be needed -->
 		<sourceDirectory>src</sourceDirectory>
