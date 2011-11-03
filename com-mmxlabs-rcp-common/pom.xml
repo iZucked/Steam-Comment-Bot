@@ -239,6 +239,12 @@
 		</repository>
 
 		<repository>
+			<id>mmxlabs-p2-snapshots</id>
+			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-p2-snapshots/</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
 			<id>swtbot</id>
 			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</url>
 			<layout>p2</layout>
