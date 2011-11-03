@@ -50,10 +50,6 @@
 	</properties>
 
 	<modules>
-		<!-- Platform target file - disabled as we use the repositories section 
-			below to allow local mirrors of p2 repositories -->
-		<!-- <module>target-definition</module> -->
-
 		<module>com.mmxlabs.rcp.common</module>
 		<!-- Test Plugins -->
 		<module>com.mmxlabs.rcp.common.tests</module>
