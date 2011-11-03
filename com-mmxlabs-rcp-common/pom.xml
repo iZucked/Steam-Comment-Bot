@@ -85,9 +85,6 @@
 						<version>0.0.1-SNAPSHOT</version> <classifier>shiplingo</classifier> </artifact> 
 						</target> -->
 
-					<!-- List of target environments. However, Tycho seems to only be able 
-						to build one at a time and complains if the product definition contains the 
-						other launcher fragments. -->
 					<environments>
 
 						<environment>
