@@ -38,7 +38,7 @@
 
 	<properties>
 		<!-- Tycho version to use -->
-		<tycho.version>0.13.0-SNAPSHOT</tycho.version>
+		<tycho.version>0.13.0</tycho.version>
 
 		<!-- Continue even when tests fail -->
 		<maven.test.failure.ignore>true</maven.test.failure.ignore>
