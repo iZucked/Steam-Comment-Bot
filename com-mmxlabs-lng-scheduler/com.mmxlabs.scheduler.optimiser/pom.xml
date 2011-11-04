@@ -6,8 +6,14 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Scheduler - Optimiser</name>
+	<description>LNG Scheduler</description>
 
-	<description>LNG Scheduler </description>
+	<parent>
+		<groupId>com.mmxlabs.parent</groupId>
+		<artifactId>bundle-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath />
+	</parent>
 
 	<issueManagement>
 		<system>CodebaseHQ</system>
@@ -23,11 +29,6 @@
 		<name>Minimax Labs</name>
 	</organization>
 
-	<parent>
-		<groupId>com.mmxlabs.parent</groupId>
-		<artifactId>bundle-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
-	</parent>
 
 
 	<dependencies>
