@@ -4,14 +4,18 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Test;
 
 import scenario.fleet.VesselClass;
-import static org.mockito.Mockito.*;
 
 import com.mmxlabs.lngscheduler.emf.extras.validation.ShipFillPercentageConstraint;
 
@@ -32,9 +36,6 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.ShipFillPercentageConstrai
  * 
  */
 public class ShipFillPercentageConstraintTest {
-
-	// the fill that is defined as sensible in ShipFillPercentageConstraint.
-	private static final double sensiblefill = 0.8;
 
 	/**
 	 * Test that a fill of 0.9 is reasonable.
