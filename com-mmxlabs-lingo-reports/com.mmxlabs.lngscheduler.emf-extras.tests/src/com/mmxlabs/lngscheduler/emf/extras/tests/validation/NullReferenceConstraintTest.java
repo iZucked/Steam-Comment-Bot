@@ -4,11 +4,15 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -64,14 +68,12 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.NullReferenceConstraint;
  */
 public class NullReferenceConstraintTest {
 
-	// Create a mockery to mock up all the objects involved in a test
-	private final Mockery context = new Mockery();
-		
-	private VesselEvent initVesselEvent(){
+	private VesselEvent initVesselEvent() {
 		VesselEvent vesselEvent = FleetFactory.eINSTANCE.createCharterOut();
 		vesselEvent.setStartPort(PortFactory.eINSTANCE.createPort());
 		return vesselEvent;
 	}
+
 	private CharterOut initCharterOut() {
 		final CharterOut co = FleetFactory.eINSTANCE.createCharterOut();
 
@@ -80,12 +82,14 @@ public class NullReferenceConstraintTest {
 		co.setStartPort(PortFactory.eINSTANCE.createPort());
 		return co;
 	}
+
 	private Slot initSlot() {
 		final Slot slot = CargoFactory.eINSTANCE.createSlot();
 		// port is initially null, so set it.
 		slot.setPort(PortFactory.eINSTANCE.createPort());
 		return slot;
 	}
+
 	private Cargo initCargo() {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 
@@ -94,15 +98,17 @@ public class NullReferenceConstraintTest {
 		cargo.setDischargeSlot(CargoFactory.eINSTANCE.createSlot());
 		return cargo;
 	}
+
 	private VesselClass initVesselClass() {
 		final VesselClass vesselClass = FleetFactory.eINSTANCE.createVesselClass();
 		// create and set values for fields that start out as null
 		vesselClass.setBaseFuel(FleetFactory.eINSTANCE.createVesselFuel());
 		vesselClass.setBallastAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
 		vesselClass.setLadenAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
-		
+
 		return vesselClass;
 	}
+
 	private Vessel initVessel() {
 		final Vessel v = FleetFactory.eINSTANCE.createVessel();
 
@@ -123,6 +129,7 @@ public class NullReferenceConstraintTest {
 		Assert.assertNotNull(ve.getStartPort());
 		testNullReferenceConstraint(true, ve);
 	}
+
 	/**
 	 * Test the interface VesselEvent by using the implementation CharterOut.
 	 * <p>
@@ -141,8 +148,7 @@ public class NullReferenceConstraintTest {
 	/**
 	 * Check {@link CharterOut#getEndPort()} is not null, and expect a failure if it is.
 	 * <p>
-	 * NullReferenceConstraint also checks the start port (since CharterOut is an implementation of VesselEvent, which
-	 * is checked for the start port), so here it is set to a value.
+	 * NullReferenceConstraint also checks the start port (since CharterOut is an implementation of VesselEvent, which is checked for the start port), so here it is set to a value.
 	 */
 	@Test
 	public void testCharterOut() {
@@ -152,12 +158,11 @@ public class NullReferenceConstraintTest {
 		Assert.assertNotNull(co.getEndPort());
 		testNullReferenceConstraint(true, co);
 	}
-	
+
 	/**
 	 * Check {@link CharterOut#getEndPort()} is not null, and expect a failure if it is.
 	 * <p>
-	 * NullReferenceConstraint also checks the start port (since CharterOut is an implementation of VesselEvent, which
-	 * is checked for the start port), so here it is set to a value.
+	 * NullReferenceConstraint also checks the start port (since CharterOut is an implementation of VesselEvent, which is checked for the start port), so here it is set to a value.
 	 */
 	@Test
 	public void testCharterOutEndPortNull() {
@@ -340,35 +345,37 @@ public class NullReferenceConstraintTest {
 
 	/**
 	 * Generically test an EObject against the constraint NullReferenceConstraint.
-	 * @param expectSuccess Whether the test is expected to succeed or fail.
-	 * @param target The EObject to validate.
+	 * 
+	 * @param expectSuccess
+	 *            Whether the test is expected to succeed or fail.
+	 * @param target
+	 *            The EObject to validate.
 	 */
 	private void testNullReferenceConstraint(final boolean expectSuccess, final EObject target) {
 
 		// This is the constraint we will be testing
 		final NullReferenceConstraint constraint = new NullReferenceConstraint();
 
-		final IValidationContext validationContext = context.mock(IValidationContext.class);
+		// mock things
+		final IValidationContext validationContext = mock(IValidationContext.class);
+		final IConstraintStatus resultStatus = mock(IConstraintStatus.class);
 
-		final IConstraintStatus failureStatus = context.mock(IConstraintStatus.class);
+		// mock results of method calls
+		when(validationContext.getTarget()).thenReturn(target);
+		if (expectSuccess)
+			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
+		else
+			when(validationContext.createFailureStatus()).thenReturn(resultStatus);
 
-		context.checking(new Expectations() {
-			{
-				exactly(1).of(validationContext).getTarget();
-				will(returnValue(target));
-
-				if (expectSuccess)
-					exactly(1).of(validationContext).createSuccessStatus();
-				else {
-					exactly(1).of(validationContext).createFailureStatus();
-					will(returnValue(failureStatus));
-				}
-			}
-		});
-
+		// run the thing
 		constraint.validate(validationContext);
 
-		context.assertIsSatisfied();
+		// verify mocked methods are called
+		verify(validationContext).getTarget();
+		verify(validationContext, atLeast(0)).createSuccessStatus();
+		verify(validationContext, atLeast(0)).createFailureStatus();
+		// verify that only the methods above are called.
+		verifyNoMoreInteractions(validationContext);
 	}
 
 }
