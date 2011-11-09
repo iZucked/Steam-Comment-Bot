@@ -116,6 +116,10 @@ public class StartEndRequirementPortConstraintTest {
 		verifyNoMoreInteractions(validationContext);
 	}
 
+	/**
+	 * Don't bother with mocking, instead just create a scenario with a port, vessel, etc, and then run it.
+	 */
+	@Ignore("ValidationSupport doesn't allow mocking, test disabled until mocking removed.")
 	@Test
 	public void testValidityConstraintFromVesselClass() {
 		// This is the constraint we will be testing
