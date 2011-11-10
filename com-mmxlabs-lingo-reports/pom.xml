@@ -279,14 +279,6 @@
 			<layout>p2</layout>
 		</repository>
 		
-		<!-- This is an old style update site and not directly consumable by tycho -->
-		<repository>
-			<id>cope-updates</id>
-<!-- 			<url>http://cope.in.tum.de/update-site/</url> -->
-			<url>https://server1.mmxlabs.com/static/mirrors/cope/</url>
-			<layout>p2</layout>
-		</repository>
-		
 		<repository>
 			<id>mmxlabs-p2-snapshots</id>
 			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-p2-snapshots/</url>
