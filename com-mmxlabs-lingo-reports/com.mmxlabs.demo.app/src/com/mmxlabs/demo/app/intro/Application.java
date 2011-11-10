@@ -10,19 +10,27 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.demo.app.DelayedOpenFileProcessor;
+
 /**
  * This class controls all aspects of the application's execution
  */
 public class Application implements IApplication {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.IApplicationContext)
 	 */
 	@Override
 	public Object start(IApplicationContext context) {
+
 		Display display = PlatformUI.createDisplay();
+
+		DelayedOpenFileProcessor processor = new DelayedOpenFileProcessor(display);
+
 		try {
-			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
+			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor(processor));
 			if (returnCode == PlatformUI.RETURN_RESTART) {
 				return IApplication.EXIT_RESTART;
 			}
@@ -32,7 +40,9 @@ public class Application implements IApplication {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.equinox.app.IApplication#stop()
 	 */
 	@Override
