@@ -1,10 +1,10 @@
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
+import static org.mockito.Mockito.*;
+
 import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Test;
 
 import scenario.Scenario;
@@ -28,9 +28,6 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.SlotVolumeConstraint;
  * 
  */
 public class SlotVolumeConstraintTest {
-
-	private final Mockery context = new Mockery();
-
 	/**
 	 * Check that the constraint succeeds if everything is correct.
 	 */
@@ -103,82 +100,69 @@ public class SlotVolumeConstraintTest {
 		// This is the constraint we will be testing
 		final SlotVolumeConstraint constraint = new SlotVolumeConstraint();
 
-		final Slot slot = context.mock(Slot.class);
+		final Slot slot = mock(Slot.class);
+		final IValidationContext validationContext = mock(IValidationContext.class);
+		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
 
-		final IValidationContext validationContext = context.mock(IValidationContext.class);
-		final IConstraintStatus successStatus = context.mock(IConstraintStatus.class);
+		// Set up the expected return values of methods.
+		when(slot.eContainer()).thenReturn(null);
+		when(slot.eContainingFeature()).thenReturn(null);
+		when(validationContext.getTarget()).thenReturn(slot);
+		when(validationContext.getEventType()).thenReturn(EMFEventType.NULL);
+		when(validationContext.createSuccessStatus()).thenReturn(successStatus);
 
-		context.checking(new Expectations() {
-			{
-				// This should return a scenario, but we set it to null to test
-				// that the constraint still succeeds.
-				atLeast(1).of(slot).eContainer();
-				will(returnValue(null));
-
-				atLeast(1).of(slot).eContainingFeature();
-				will(returnValue(null));
-
-				atLeast(1).of(validationContext).getTarget();
-				will(returnValue(slot));
-
-				atLeast(1).of(validationContext).getEventType();
-				will(returnValue(EMFEventType.NULL));
-
-				atLeast(1).of(validationContext).createSuccessStatus();
-				will(returnValue(successStatus));
-			}
-		});
-
+		// validate the constraint using the mocked expected values set above
 		constraint.validate(validationContext);
 
-		context.assertIsSatisfied();
+		// verify that the mocked methods are called.
+		verify(slot).eContainer();
+		verify(slot).eContainingFeature();
+		verify(validationContext).getTarget();
+		verify(validationContext).getEventType();
+		verify(validationContext).createSuccessStatus();
+		// verify that only the methods above are called.
+		verifyNoMoreInteractions(slot);
+		verifyNoMoreInteractions(validationContext);
+
 	}
 
 	private void testSlotVolumeConstraint(final boolean expectSuccess, final int min, final int max) {
 
-		final Mockery context = new Mockery();
 		// This is the constraint we will be testing
 		final SlotVolumeConstraint constraint = new SlotVolumeConstraint();
 
-		final Slot slot = context.mock(Slot.class);
-		final Scenario scenario = context.mock(Scenario.class);
+		final Slot slot = mock(Slot.class);
+		final Scenario scenario = mock(Scenario.class);
+		final IValidationContext validationContext = mock(IValidationContext.class);
+		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
 
-		final IValidationContext validationContext = context.mock(IValidationContext.class);
-		final IConstraintStatus resultStatus = context.mock(IConstraintStatus.class);
+		// Set up the expected return values of methods.
+		when(slot.eContainer()).thenReturn(scenario);
+		when(slot.eContainingFeature()).thenReturn(null);
+		when(slot.getSlotOrContractMinQuantity(scenario)).thenReturn(min);
+		when(slot.getSlotOrContractMaxQuantity(scenario)).thenReturn(max);
+		when(validationContext.getTarget()).thenReturn(slot);
+		when(validationContext.getEventType()).thenReturn(EMFEventType.NULL);
 
-		context.checking(new Expectations() {
-			{
-				atLeast(1).of(slot).eContainer();
-				will(returnValue(scenario));
+		if (expectSuccess)
+			when(validationContext.createSuccessStatus()).thenReturn(successStatus);
+		else
+			when(validationContext.createFailureStatus()).thenReturn(successStatus);
 
-				atLeast(1).of(slot).eContainingFeature();
-				will(returnValue(null));
-
-				atLeast(1).of(slot).getSlotOrContractMinQuantity(scenario);
-				will(returnValue(min));
-				// The test may fail at the checking the minimum and never get
-				// to check the max, so put atLeast(0)
-				atLeast(0).of(slot).getSlotOrContractMaxQuantity(scenario);
-				will(returnValue(max));
-
-				atLeast(1).of(validationContext).getTarget();
-				will(returnValue(slot));
-
-				atLeast(1).of(validationContext).getEventType();
-				will(returnValue(EMFEventType.NULL));
-
-				if (expectSuccess) {
-					atLeast(1).of(validationContext).createSuccessStatus();
-					will(returnValue(resultStatus));
-				} else {
-					atLeast(1).of(validationContext).createFailureStatus();
-					will(returnValue(resultStatus));
-				}
-			}
-		});
-
+		// validate the constraint using the mocked expected values set above
 		constraint.validate(validationContext);
 
-		context.assertIsSatisfied();
+		// verify that the mocked methods are called.
+		verify(slot).eContainer();
+		verify(slot).eContainingFeature();
+		verify(slot, atLeast(0)).getSlotOrContractMinQuantity(scenario);
+		verify(slot, atLeast(0)).getSlotOrContractMaxQuantity(scenario);
+		verify(validationContext).getTarget();
+		verify(validationContext).getEventType();
+		verify(validationContext, atLeast(0)).createSuccessStatus();
+		verify(validationContext, atLeast(0)).createFailureStatus();
+		// verify that only the methods above are called.
+		verifyNoMoreInteractions(slot);
+		verifyNoMoreInteractions(validationContext);
 	}
 }
