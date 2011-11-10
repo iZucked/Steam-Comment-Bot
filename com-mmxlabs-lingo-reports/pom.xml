@@ -197,27 +197,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- Install plugin into the OBR metadata -->
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>install-bundle</id>
-						<phase>install</phase>
-						<goals>
-							<goal>install</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<supportedProjectTypes>
-						<supportedProjectType>eclipse-plugin</supportedProjectType>
-					</supportedProjectTypes>
-
-				</configuration>
-			</plugin>
-
 		</plugins>
 	</build>
 
