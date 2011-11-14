@@ -672,10 +672,14 @@ public class ScenarioTools {
 		System.err.println("Allocation " + ((Cargo) a.getLoadSlot().eContainer()).getId());
 		System.err.println("Total cost: " + a.getTotalCost() + ", Total LNG volume used for fuel: " + a.getFuelVolume() + "M3");
 
-		printJourney("Laden Leg", a.getLadenLeg());
-		printIdle("Laden Idle", a.getLadenIdle());
-		printJourney("Ballast Leg", a.getBallastLeg());
-		printIdle("Ballast Idle", a.getBallastIdle());
+		if (a.getLadenLeg() != null)
+			printJourney("Laden Leg", a.getLadenLeg());
+		if (a.getLadenIdle() != null)
+			printIdle("Laden Idle", a.getLadenIdle());
+		if (a.getBallastLeg() != null)
+			printJourney("Ballast Leg", a.getBallastLeg());
+		if (a.getBallastIdle() != null)
+			printIdle("Ballast Idle", a.getBallastIdle());
 	}
 
 	/**
