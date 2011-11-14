@@ -40,8 +40,7 @@ import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 import com.mmxlabs.lngscheduler.emf.extras.ScenarioUtils;
 
 /**
- * Class to create a scenario. Methods will customise the scenario.
- * <br>
+ * Class to create a scenario. Methods will customise the scenario. <br>
  * Untested, probably broken currently.
  * 
  * @author Adam Semenenko
@@ -93,7 +92,7 @@ public class CustomScenarioCreator {
 
 	public void addVesselSimple(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final int speed, final int capacity, final int consumption,
 			final int NBORate, final int pilotLightRate, final int minHeelVolume) {
-		
+
 		final float equivalenceFactor = 1;
 
 		addVessel(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption, NBORate, NBORate, speed,
@@ -221,7 +220,7 @@ public class CustomScenarioCreator {
 		}
 	}
 
-	public void addCargo(final Port loadPort, final Port dischargePort, final float dischargePrice, final float cvValue, final int travelTime) {
+	public void addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final float dischargePrice, final float cvValue, final Date loadWindowStart, final int travelTime) {
 
 		final int loadPrice = 1000;
 		final int loadMaxQuantity = 100000;
@@ -249,16 +248,27 @@ public class CustomScenarioCreator {
 
 		load.setCargoCVvalue(cvValue);
 
-		final Date now = new Date();
-		load.setWindowStart(new DateAndOptionalTime(now, false));
+		load.setWindowStart(new DateAndOptionalTime(loadWindowStart, false));
 		load.setWindowDuration(0);
-		final Date dischargeDate = new Date(now.getTime() + Timer.ONE_HOUR * travelTime);
+		final Date dischargeDate = new Date(loadWindowStart.getTime() + Timer.ONE_HOUR * travelTime);
 		dis.setWindowStart(new DateAndOptionalTime(dischargeDate, false));
 		dis.setWindowDuration(0);
 
-		cargo.setId("CARGO");
+		cargo.setId(cargoID);
 
 		scenario.getCargoModel().getCargoes().add(cargo);
+	}
+	
+	/**
+	 * Need to create port here so it can be added to the scenario's port model.
+	 * @return
+	 */
+	public Port createPort(final String portName) {
+
+		final Port port = PortFactory.eINSTANCE.createPort();
+		port.setName(portName);
+		scenario.getPortModel().getPorts().add(port);
+		return port;
 	}
 
 	public Scenario buildScenario() {
