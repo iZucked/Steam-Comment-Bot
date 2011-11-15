@@ -194,6 +194,10 @@ public class CustomScenarioCreator {
 		if (canalCost != null)
 			canalCosts.add(canalCost);
 	}
+	
+	public void addPorts(final Port portA, final Port portB, final int distance) {
+		addPorts(portA, portB, new int[] {distance});
+	}
 
 	public void addPorts(final Port portA, final Port portB, final int[] distancesSymmetric) {
 		addPorts(portA, portB, distancesSymmetric, distancesSymmetric);
