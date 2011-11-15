@@ -40,19 +40,21 @@ import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 import com.mmxlabs.lngscheduler.emf.extras.ScenarioUtils;
 
 /**
- * Class to create a scenario. Methods will customise the scenario. <br>
- * Untested, probably broken currently.
+ * Class to create a scenario. Call methods to customise the scenario. When finished get the final scenario using {@link #buildScenario()}. <br>
+ * The scenario can probably have more stuff added to it after getting it from {@link #buildScenario()}, but it could also break it, it's untested.
  * 
  * @author Adam Semenenko
  * 
  */
 public class CustomScenarioCreator {
 
+	/** The scenario being built */
 	private final Scenario scenario;
 
 	final SalesContract sc;
 	final PurchaseContract pc;
 
+	/** List of vessel classes needs to be stored until the scenario is finally built and added to the scenario then. */
 	private ArrayList<VesselClass> vesselClasses = new ArrayList<VesselClass>();
 	private ArrayList<VesselClassCost> canalCosts = new ArrayList<VesselClassCost>();
 
@@ -90,6 +92,27 @@ public class CustomScenarioCreator {
 		ScenarioUtils.addDefaultSettings(scenario);
 	}
 
+	/**
+	 * Add a simple vessel to the scenario.
+	 * 
+	 * @param vesselClassName
+	 *            The name of the class of the vessel
+	 * @param numOfVesselsToCreate
+	 *            The number of identical vessels to create.
+	 * @param baseFuelUnitPrice
+	 *            The base fuel unit price.
+	 * @param speed
+	 *            The one speed the vessel can travel at.
+	 * @param capacity
+	 * @param consumption
+	 *            The fuel consumption (constant for all legs/idles) per day
+	 * @param NBORate
+	 *            The NBO rate (constant for all legs/idles) per day
+	 * @param pilotLightRate
+	 *            THe pilot light rate
+	 * @param minHeelVolume
+	 *            The minimum heel volume
+	 */
 	public void addVesselSimple(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final int speed, final int capacity, final int consumption,
 			final int NBORate, final int pilotLightRate, final int minHeelVolume) {
 
@@ -99,6 +122,9 @@ public class CustomScenarioCreator {
 				consumption, speed, consumption, consumption, NBORate, NBORate, pilotLightRate, minHeelVolume);
 	}
 
+	/**
+	 * Creates a vessel class and adds the specified number of vessels of the created class to the scenario. The attributes of the vessel class and vessel are set using the arguments.
+	 */
 	public void addVessel(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final float equivalenceFactor, final int minSpeed, final int maxSpeed,
 			final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed, final int ballastMaxConsumption, int ballastIdleConsumptionRate,
 			final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption,
@@ -179,7 +205,6 @@ public class CustomScenarioCreator {
 			vessel.setClass(vc);
 			vessel.setName(i + " (class " + vesselClassName + ")");
 
-			// TODO Not sure if this should be here?
 			final PortTimeAndHeel start = FleetFactory.eINSTANCE.createPortTimeAndHeel();
 			final PortAndTime end = FleetFactory.eINSTANCE.createPortAndTime();
 
@@ -190,19 +215,59 @@ public class CustomScenarioCreator {
 		}
 	}
 
+	/**
+	 * Add a canal to the scenario.
+	 * 
+	 * TODO Test this.
+	 * 
+	 * @param canalCost
+	 */
 	public void addCanal(final VesselClassCost canalCost) {
 		if (canalCost != null)
 			canalCosts.add(canalCost);
 	}
 
+	/**
+	 * Add two ports to the scenario. There is one distance between the ports.
+	 * 
+	 * @param portA
+	 *            The port to add.
+	 * @param portB
+	 *            The second port to add.
+	 * @param distance
+	 *            The single symmetrical distance between the ports.
+	 */
 	public void addPorts(final Port portA, final Port portB, final int distance) {
 		addPorts(portA, portB, new int[] { distance });
 	}
 
+	/**
+	 * Add two ports to the scenario with one or many distances that are symmetric.
+	 * 
+	 * @param portA
+	 *            The port to add.
+	 * @param portB
+	 *            The second port to add.
+	 * @param distancesSymmetric
+	 *            A list of symmetrical distances between the two ports.
+	 */
 	public void addPorts(final Port portA, final Port portB, final int[] distancesSymmetric) {
 		addPorts(portA, portB, distancesSymmetric, distancesSymmetric);
 	}
 
+	/**
+	 * Add two ports to the scenario and specify the distances from and to each port. <br>
+	 * The ports must be created from the method {@link CustomScenarioCreator#createPort(String)} to be correctly added to the scenario.
+	 * 
+	 * @param portA
+	 *            The port to add.
+	 * @param portB
+	 *            The second port to add.
+	 * @param AtoBDistances
+	 *            A list of distances from port A to port B
+	 * @param BtoADistances
+	 *            A list of distances from port B to port A
+	 */
 	public void addPorts(final Port portA, final Port portB, final int[] AtoBDistances, final int[] BtoADistances) {
 		scenario.getPortModel().getPorts().add(portA);
 		scenario.getPortModel().getPorts().add(portB);
@@ -224,6 +289,10 @@ public class CustomScenarioCreator {
 		}
 	}
 
+	/**
+	 * Add a cargo to the scenario. <br>
+	 * Both the load and discharge ports must be created from the method {@link CustomScenarioCreator#createPort(String)} to be correctly added to the scenario.
+	 */
 	public void addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
 			final int travelTime) {
 
@@ -267,7 +336,7 @@ public class CustomScenarioCreator {
 	/**
 	 * Need to create port here so it can be added to the scenario's port model.
 	 * 
-	 * @return
+	 * @return The port that has been added to the scenario.
 	 */
 	public Port createPort(final String portName) {
 
@@ -277,6 +346,11 @@ public class CustomScenarioCreator {
 		return port;
 	}
 
+	/**
+	 * Finish making the scenario by adding the canals to the vessel classes.
+	 * 
+	 * @return The finished scenario.
+	 */
 	public Scenario buildScenario() {
 
 		for (VesselClassCost canalCost : canalCosts) {
