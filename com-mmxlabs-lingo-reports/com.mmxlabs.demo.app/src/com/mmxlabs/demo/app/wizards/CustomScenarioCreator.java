@@ -194,9 +194,9 @@ public class CustomScenarioCreator {
 		if (canalCost != null)
 			canalCosts.add(canalCost);
 	}
-	
+
 	public void addPorts(final Port portA, final Port portB, final int distance) {
-		addPorts(portA, portB, new int[] {distance});
+		addPorts(portA, portB, new int[] { distance });
 	}
 
 	public void addPorts(final Port portA, final Port portB, final int[] distancesSymmetric) {
@@ -224,9 +224,10 @@ public class CustomScenarioCreator {
 		}
 	}
 
-	public void addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final float dischargePrice, final float cvValue, final Date loadWindowStart, final int travelTime) {
+	public void addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
+			final int travelTime) {
 
-		final int loadPrice = 1000;
+		// final int loadPrice = 1000;
 		final int loadMaxQuantity = 100000;
 		final int dischargeMaxQuantity = 100000;
 
@@ -262,9 +263,10 @@ public class CustomScenarioCreator {
 
 		scenario.getCargoModel().getCargoes().add(cargo);
 	}
-	
+
 	/**
 	 * Need to create port here so it can be added to the scenario's port model.
+	 * 
 	 * @return
 	 */
 	public Port createPort(final String portName) {
