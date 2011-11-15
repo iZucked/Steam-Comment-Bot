@@ -667,7 +667,7 @@ public class ScenarioTools {
 	 * @param a
 	 *            The cargo allocation to print to console.
 	 */
-	public static void printScenario(final String testName, final CargoAllocation a) {
+	public static void printCargoAllocation(final String testName, final CargoAllocation a) {
 		System.err.println(testName);
 		System.err.println("Allocation " + ((Cargo) a.getLoadSlot().eContainer()).getId());
 		System.err.println("Total cost: " + a.getTotalCost() + ", Total LNG volume used for fuel: " + a.getFuelVolume() + "M3");

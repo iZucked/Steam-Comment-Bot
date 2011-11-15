@@ -76,7 +76,7 @@ public class MultipleCargoFuelConsumptionTests {
 
 
 		for (CargoAllocation ca : result.getCargoAllocations())
-			ScenarioTools.printScenario(ca.getName(), ca);
+			ScenarioTools.printCargoAllocation(ca.getName(), ca);
 		
 		// add assertions on results
 		for (CargoAllocation ca : result.getCargoAllocations()) {

@@ -201,7 +201,7 @@ public class CanalLatenessBoundaryTests {
 		final Schedule result = ScenarioTools.evaluate(canalScenario);
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
-		ScenarioTools.printScenario(testName, a);
+		ScenarioTools.printCargoAllocation(testName, a);
 
 		return a;
 	}

@@ -126,7 +126,7 @@ public class FuelChoiceBoundaryTests {
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
-		ScenarioTools.printScenario(name, a);
+		ScenarioTools.printCargoAllocation(name, a);
 
 		return a;
 	}
@@ -237,7 +237,7 @@ public class FuelChoiceBoundaryTests {
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
-		ScenarioTools.printScenario(testName, a);
+		ScenarioTools.printCargoAllocation(testName, a);
 
 		return a;
 	}
