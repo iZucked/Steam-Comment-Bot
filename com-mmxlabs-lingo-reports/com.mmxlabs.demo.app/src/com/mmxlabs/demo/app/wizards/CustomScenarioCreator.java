@@ -19,6 +19,7 @@ import scenario.contract.ContractFactory;
 import scenario.contract.Entity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.fleet.Drydock;
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FuelConsumptionLine;
 import scenario.fleet.PortAndTime;
@@ -344,6 +345,24 @@ public class CustomScenarioCreator {
 		port.setName(portName);
 		scenario.getPortModel().getPorts().add(port);
 		return port;
+	}
+	
+	/**
+	 * Adds a dry dock. Useful for preventing excess ballast idle time.
+	 * @param startPort The port the dry dock will start at.
+	 * @param date The date the dry dock will start (and end, instantaneously).
+	 */
+	public void addDryDock(final Port startPort, final Date date) { 
+
+		// Set up dry dock.
+		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
+		dryDock.setDuration(0);
+		dryDock.setStartPort(startPort);
+		// add to scenario's fleet model
+		scenario.getFleetModel().getVesselEvents().add(dryDock);
+		// set the date to be after the discharge date
+		dryDock.setStartDate(date);
+		dryDock.setEndDate(date);
 	}
 
 	/**
