@@ -54,7 +54,40 @@
 				</configuration>
 
 			</plugin>
+
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>jnlp</id>
+			<build>
+				<plugins>
+
+					<plugin>
+						<groupId>org.sonatype.tycho</groupId>
+						<artifactId>tycho-jnlp-plugin</artifactId>
+						<version>1.0.0-SNAPSHOT</version>
+						<configuration>
+							<jnlpFile>${project.build.directory}/repository/ShipLiNGO.jnlp</jnlpFile>
+							<target>${project.build.directory}/repository/</target>
+							<skip>false</skip>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>jnlp-file</goal>
+									<goal>sign-jars</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+	<!-- <pluginRepositories> <pluginRepository> <id>tycho-snapshots</id> <url>https://repository.sonatype.org/content/groups/forge/</url> 
+		<name>tycho - snapshots</name> <layout>default</layout> <snapshots> <enabled>true</enabled> 
+		</snapshots> </pluginRepository> </pluginRepositories> -->
+		</profile>
+	</profiles>
 </project>

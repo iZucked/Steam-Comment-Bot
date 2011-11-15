@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.5+" version="${unqualifiedVersion}.${buildQualifier}">
+  <information>
+    <title>${project.name}</title>
+    <vendor>${project.organization.name}</vendor>
+    <offline-allowed/>
+  </information>
+  <security>
+    <all-permissions/>
+  </security>
+
+  <application-desc main-class="org.eclipse.equinox.launcher.WebStartMain">
+    <argument>-nosplash </argument>
+  </application-desc>
+
+  <component-desc/>
+  <resources>
+    <j2se version="1.6+"/>
+    <property name="eclipse.product" value="com.mmxlabs.demo.app.product"/>
+    <property name="eclipse.application" value="com.mmxlabs.demo.app.application"/>
+    <property name="osgi.bundles" value="org.eclipse.core.runtime@start,org.eclipse.equinox.ds@start"/>
+    <property name="osgi.bundles.defaultStartLevel" value="4"/>
+    <property name="org.eclipse.update.install.features" value="true"/>
+
+    <property name="equinox.use.ds" value="true"/>
+  </resources>
+</jnlp>
