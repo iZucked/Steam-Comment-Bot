@@ -65,6 +65,10 @@ public class MultipleCargoFuelConsumptionTests {
 		csc.addCargo("alpha", portA, portB, loadPrice, dischargePrice, 10, cargoAStart, cargoADuration);
 		csc.addCargo("beta", portA, portB, loadPrice, dischargePrice, 10, cargoBStart, cargoBDuration);
 
+		// add a dry dock so ballast idle doesn't take ages.
+		final Date cargoBEnd = new Date(cargoBStart.getTime() + Timer.ONE_HOUR * cargoBDuration);
+		csc.addDryDock(portA, cargoBEnd);
+		
 		final Scenario scenario = csc.buildScenario();
 
 		// evaluate and get a schedule
