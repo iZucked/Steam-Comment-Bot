@@ -41,7 +41,7 @@ public class MultipleCargoFuelConsumptionTests {
 
 		// We want a leg between ports A and B to take 10 hours (9 hours travel, 1 hour idle).
 		final long legDuration = 10 * Timer.ONE_HOUR;
-		
+
 		final Port portA = csc.createPort("A");
 		final Port portB = csc.createPort("B");
 		final int distanceBetweenPorts = 90;
@@ -62,7 +62,7 @@ public class MultipleCargoFuelConsumptionTests {
 		final Date cargoAStart = new Date(System.currentTimeMillis());
 		final int cargoADuration = 10;
 		// cargo B starts one hour after the vessel makes it back to port A (the vessel takes 10 hours to get to portB, then 10 hours to travel back to portA).
-		final Date cargoBStart = new Date(cargoAStart.getTime() +  2 * legDuration);
+		final Date cargoBStart = new Date(cargoAStart.getTime() + 2 * legDuration);
 		final int cargoBDuration = 10;
 
 		csc.addCargo("alpha", portA, portB, loadPrice, dischargePrice, 10, cargoAStart, cargoADuration);
@@ -71,16 +71,21 @@ public class MultipleCargoFuelConsumptionTests {
 		// add a dry dock so ballast idle doesn't take ages, but leave enough time for a 1 hour idle.
 		final Date dryDockStart = new Date(cargoBStart.getTime() + 2 * legDuration);
 		csc.addDryDock(portA, dryDockStart);
-		
+
 		final Scenario scenario = csc.buildScenario();
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
-
+		// print the legs to console
 		for (CargoAllocation ca : result.getCargoAllocations())
 			ScenarioTools.printCargoAllocation(ca.getName(), ca);
-		
+
+		// expected fuel consumptions
+		// NBO rate is 10, so expect 90M3 of NBO for the 9 hour legs and 10M3 for the 1 hour idle.s 
+		final int expectedLegNBO = 90;
+		final int expectedIdleNBO = 10;
+
 		// add assertions on results
 		for (CargoAllocation ca : result.getCargoAllocations()) {
 			// expect only NBO to be used always
@@ -92,7 +97,7 @@ public class MultipleCargoFuelConsumptionTests {
 				if (fq.getFuelType() == FuelType.BASE_FUEL)
 					Assert.assertTrue("Laden leg never uses base fuel", fq.getQuantity() == 0);
 				if (fq.getFuelType() == FuelType.NBO)
-					Assert.assertTrue("Laden leg uses NBO", fq.getQuantity() > 0);
+					Assert.assertTrue("Laden leg uses 90M3 NBO", fq.getQuantity() == expectedLegNBO);
 			}
 			for (final FuelQuantity fq : ca.getLadenIdle().getFuelUsage()) {
 				if (fq.getFuelType() == FuelType.FBO)
@@ -100,7 +105,7 @@ public class MultipleCargoFuelConsumptionTests {
 				if (fq.getFuelType() == FuelType.BASE_FUEL)
 					Assert.assertTrue("Laden idle never uses base fuel", fq.getQuantity() == 0);
 				if (fq.getFuelType() == FuelType.NBO)
-					Assert.assertTrue("Laden idle uses NBO", fq.getQuantity() > 0);
+					Assert.assertTrue("Laden idle uses 10M3 NBO", fq.getQuantity() == expectedIdleNBO);
 			}
 
 			// check the ballast journey
@@ -110,7 +115,7 @@ public class MultipleCargoFuelConsumptionTests {
 				if (fq.getFuelType() == FuelType.BASE_FUEL)
 					Assert.assertTrue("Ballast leg never uses base fuel", fq.getQuantity() == 0);
 				if (fq.getFuelType() == FuelType.NBO)
-					Assert.assertTrue("Ballast leg uses NBO", fq.getQuantity() > 0);
+					Assert.assertTrue("Ballast leg uses 90M3 NBO", fq.getQuantity() == expectedLegNBO);
 			}
 			for (final FuelQuantity fq : ca.getBallastIdle().getFuelUsage()) {
 				if (fq.getFuelType() == FuelType.FBO)
@@ -118,7 +123,7 @@ public class MultipleCargoFuelConsumptionTests {
 				if (fq.getFuelType() == FuelType.BASE_FUEL)
 					Assert.assertTrue("Ballast idle never uses base fuel", fq.getQuantity() == 0);
 				if (fq.getFuelType() == FuelType.NBO)
-					Assert.assertTrue("Ballast idle uses NBO", fq.getQuantity() > 0);
+					Assert.assertTrue("Ballast idle uses 10M3 NBO", fq.getQuantity() == expectedIdleNBO);
 			}
 		}
 	}
