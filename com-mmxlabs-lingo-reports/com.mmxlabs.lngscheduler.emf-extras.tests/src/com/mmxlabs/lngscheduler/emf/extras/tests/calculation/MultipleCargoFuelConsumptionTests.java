@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import scenario.Scenario;
 import scenario.port.Port;
+import scenario.port.PortFactory;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.events.FuelQuantity;
@@ -42,8 +43,8 @@ public class MultipleCargoFuelConsumptionTests {
 		// We want a leg between ports A and B to take 10 hours (9 hours travel, 1 hour idle).
 		final long legDuration = 10 * Timer.ONE_HOUR;
 
-		final Port portA = csc.createPort("A");
-		final Port portB = csc.createPort("B");
+		final Port portA = PortFactory.eINSTANCE.createPort();
+		final Port portB = PortFactory.eINSTANCE.createPort();
 		final int distanceBetweenPorts = 90;
 		csc.addPorts(portA, portB, distanceBetweenPorts);
 

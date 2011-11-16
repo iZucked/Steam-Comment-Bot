@@ -270,8 +270,10 @@ public class CustomScenarioCreator {
 	 *            A list of distances from port B to port A
 	 */
 	public void addPorts(final Port portA, final Port portB, final int[] AtoBDistances, final int[] BtoADistances) {
-		scenario.getPortModel().getPorts().add(portA);
-		scenario.getPortModel().getPorts().add(portB);
+		if (!scenario.getPortModel().getPorts().contains(portA))
+			scenario.getPortModel().getPorts().add(portA);
+		if (!scenario.getPortModel().getPorts().contains(portB))
+			scenario.getPortModel().getPorts().add(portB);
 
 		for (int distance : AtoBDistances) {
 			final DistanceLine distanceLine = PortFactory.eINSTANCE.createDistanceLine();
@@ -292,10 +294,19 @@ public class CustomScenarioCreator {
 
 	/**
 	 * Add a cargo to the scenario. <br>
-	 * Both the load and discharge ports must be created from the method {@link CustomScenarioCreator#createPort(String)} to be correctly added to the scenario.
+	 * Both the load and discharge ports must be added using {@link #addPorts(Port, Port, int[], int[])} to correctly set up distances.
 	 */
 	public void addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
 			final int travelTime) {
+
+		if (!scenario.getPortModel().getPorts().contains(loadPort)) {
+			System.err.println("Warning: scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.");
+			scenario.getPortModel().getPorts().add(loadPort);
+		}
+		if (!scenario.getPortModel().getPorts().contains(dischargePort)) {
+			System.err.println("Warning: scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.");
+			scenario.getPortModel().getPorts().add(dischargePort);
+		}
 
 		// final int loadPrice = 1000;
 		final int loadMaxQuantity = 100000;
@@ -335,25 +346,20 @@ public class CustomScenarioCreator {
 	}
 
 	/**
-	 * Need to create port here so it can be added to the scenario's port model.
-	 * 
-	 * @return The port that has been added to the scenario.
-	 */
-	public Port createPort(final String portName) {
-
-		final Port port = PortFactory.eINSTANCE.createPort();
-		port.setName(portName);
-		scenario.getPortModel().getPorts().add(port);
-		return port;
-	}
-	
-	/**
 	 * Adds a dry dock. Useful for preventing excess ballast idle time.
-	 * @param startPort The port the dry dock will start at.
-	 * @param date The date the dry dock will start (and end, instantaneously).
+	 * 
+	 * @param startPort
+	 *            The port the dry dock will start at.
+	 * @param date
+	 *            The date the dry dock will start (and end, instantaneously).
 	 */
-	public void addDryDock(final Port startPort, final Date date) { 
+	public void addDryDock(final Port startPort, final Date date) {
 
+		if (!scenario.getPortModel().getPorts().contains(startPort)) {
+			System.err.println("Warning: scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.");
+			scenario.getPortModel().getPorts().add(startPort);
+		}
+		
 		// Set up dry dock.
 		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
 		dryDock.setDuration(0);
