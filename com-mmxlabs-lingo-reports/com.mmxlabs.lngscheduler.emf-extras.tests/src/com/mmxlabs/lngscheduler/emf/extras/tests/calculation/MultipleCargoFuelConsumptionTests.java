@@ -61,7 +61,7 @@ public class MultipleCargoFuelConsumptionTests {
 		// Set up start dates and durations.
 		final Date cargoAStart = new Date(System.currentTimeMillis());
 		final int cargoADuration = 10;
-		// cargo B starts one hour after the vessel makes it back to port A (i.e. twice the time it takes to travel one way).
+		// cargo B starts one hour after the vessel makes it back to port A (the vessel takes 10 hours to get to portB, then 10 hours to travel back to portA).
 		final Date cargoBStart = new Date(cargoAStart.getTime() +  2 * legDuration);
 		final int cargoBDuration = 10;
 
