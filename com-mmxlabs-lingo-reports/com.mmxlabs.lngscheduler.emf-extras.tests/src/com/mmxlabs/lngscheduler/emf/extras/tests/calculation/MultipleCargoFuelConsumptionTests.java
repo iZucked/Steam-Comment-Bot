@@ -39,6 +39,9 @@ public class MultipleCargoFuelConsumptionTests {
 
 		CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
+		// We want a leg between ports A and B to take 10 hours (9 hours travel, 1 hour idle).
+		final long legDuration = 10 * Timer.ONE_HOUR;
+		
 		final Port portA = csc.createPort("A");
 		final Port portB = csc.createPort("B");
 		final int distanceBetweenPorts = 90;
@@ -58,16 +61,16 @@ public class MultipleCargoFuelConsumptionTests {
 		// Set up start dates and durations.
 		final Date cargoAStart = new Date(System.currentTimeMillis());
 		final int cargoADuration = 10;
-		// cargo B starts one hour after the vessel makes it back to port A (i.e. twice the time it takes to travel one way, which is 9 hours (90 miles @ 10mph)).
-		final Date cargoBStart = new Date(cargoAStart.getTime() + Timer.ONE_HOUR * 20);
+		// cargo B starts one hour after the vessel makes it back to port A (i.e. twice the time it takes to travel one way).
+		final Date cargoBStart = new Date(cargoAStart.getTime() +  2 * legDuration);
 		final int cargoBDuration = 10;
 
 		csc.addCargo("alpha", portA, portB, loadPrice, dischargePrice, 10, cargoAStart, cargoADuration);
 		csc.addCargo("beta", portA, portB, loadPrice, dischargePrice, 10, cargoBStart, cargoBDuration);
 
 		// add a dry dock so ballast idle doesn't take ages, but leave enough time for a 1 hour idle.
-		final Date cargoBEnd = new Date(cargoBStart.getTime() + Timer.ONE_HOUR * 20);
-		csc.addDryDock(portA, cargoBEnd);
+		final Date dryDockStart = new Date(cargoBStart.getTime() + 2 * legDuration);
+		csc.addDryDock(portA, dryDockStart);
 		
 		final Scenario scenario = csc.buildScenario();
 
