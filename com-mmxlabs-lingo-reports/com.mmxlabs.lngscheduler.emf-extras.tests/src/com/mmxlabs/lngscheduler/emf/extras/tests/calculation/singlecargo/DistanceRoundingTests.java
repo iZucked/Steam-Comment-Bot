@@ -12,6 +12,7 @@ import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
 
 /**
  * 

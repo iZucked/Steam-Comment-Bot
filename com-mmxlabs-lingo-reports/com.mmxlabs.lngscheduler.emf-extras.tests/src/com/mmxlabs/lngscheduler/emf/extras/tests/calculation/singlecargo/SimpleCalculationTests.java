@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
+
 import scenario.Scenario;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;

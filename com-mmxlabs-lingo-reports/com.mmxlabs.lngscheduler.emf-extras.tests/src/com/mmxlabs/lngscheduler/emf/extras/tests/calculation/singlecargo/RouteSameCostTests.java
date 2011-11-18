@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
 
 import scenario.Scenario;
 import scenario.fleet.VesselClassCost;

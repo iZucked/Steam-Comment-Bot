@@ -23,7 +23,7 @@ import scenario.schedule.events.FuelType;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
-import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.singlecargo.ScenarioTools;
+import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
 
 /**
  * @author Adam Semenenko
