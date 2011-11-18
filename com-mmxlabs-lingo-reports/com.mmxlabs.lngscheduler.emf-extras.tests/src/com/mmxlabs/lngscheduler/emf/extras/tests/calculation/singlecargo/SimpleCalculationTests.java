@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
+package com.mmxlabs.lngscheduler.emf.extras.tests.calculation.singlecargo;
 
 import java.util.concurrent.TimeUnit;
 

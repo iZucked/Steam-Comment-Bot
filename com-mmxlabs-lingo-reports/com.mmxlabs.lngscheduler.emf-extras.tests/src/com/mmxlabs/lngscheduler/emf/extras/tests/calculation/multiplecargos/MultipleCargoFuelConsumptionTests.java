@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
+package com.mmxlabs.lngscheduler.emf.extras.tests.calculation.multiplecargos;
 
 import java.util.Date;
 
@@ -23,6 +23,7 @@ import scenario.schedule.events.FuelType;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
+import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.singlecargo.ScenarioTools;
 
 /**
  * @author Adam Semenenko
