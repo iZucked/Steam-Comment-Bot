@@ -33,7 +33,9 @@ import scenario.fleet.VesselStateAttributes;
 import scenario.market.Index;
 import scenario.market.MarketFactory;
 import scenario.market.StepwisePriceCurve;
+import scenario.port.Canal;
 import scenario.port.DistanceLine;
+import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortFactory;
 
@@ -55,9 +57,8 @@ public class CustomScenarioCreator {
 	final SalesContract sc;
 	final PurchaseContract pc;
 
-	/** List of vessel classes needs to be stored until the scenario is finally built and added to the scenario then. */
-	private ArrayList<VesselClass> vesselClasses = new ArrayList<VesselClass>();
-	private ArrayList<VesselClassCost> canalCosts = new ArrayList<VesselClassCost>();
+	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
+	private ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
 
 	public CustomScenarioCreator(final float dischargePrice) {
 
@@ -217,15 +218,18 @@ public class CustomScenarioCreator {
 	}
 
 	/**
-	 * Add a canal to the scenario.
-	 * 
-	 * TODO Test this.
-	 * 
-	 * @param canalCost
+	 * Add a canal to all vessel classes.
 	 */
 	public void addCanal(final VesselClassCost canalCost) {
-		if (canalCost != null)
-			canalCosts.add(canalCost);
+
+		canalCostsForAllVesselClasses.add(canalCost);
+	}
+
+	/**
+	 * Add a canal to specific vessel class.
+	 */
+	public void addCanal(final VesselClass vc, final VesselClassCost canalCost) {
+		vc.getCanalCosts().add(canalCost);
 	}
 
 	/**
@@ -359,7 +363,7 @@ public class CustomScenarioCreator {
 			System.err.println("Warning: scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.");
 			scenario.getPortModel().getPorts().add(startPort);
 		}
-		
+
 		// Set up dry dock.
 		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
 		dryDock.setDuration(0);
@@ -378,12 +382,51 @@ public class CustomScenarioCreator {
 	 */
 	public Scenario buildScenario() {
 
-		for (VesselClassCost canalCost : canalCosts) {
-			scenario.getCanalModel().getCanals().add(canalCost.getCanal());
-			for (VesselClass vc : vesselClasses)
-				vc.getCanalCosts().add(canalCost);
-		}
+		// Add every canal to every vessel class.
+		for (VesselClassCost canalCost : this.canalCostsForAllVesselClasses)
+			for (VesselClass vc : scenario.getFleetModel().getVesselClasses())
+				addCanal(vc, canalCost);
 
 		return scenario;
+	}
+
+	public VesselClassCost createCanalCost(final String canalName, final Port portA, final Port portB, final int distanceAToB, final int distanceBToA, final int canalLadenCost,
+			final int canalUnladenCost, final int canalTransitFuelDays, final int canalTransitTime) {
+
+		if (!scenario.getPortModel().getPorts().contains(portA))
+			scenario.getPortModel().getPorts().add(portA);
+		if (!scenario.getPortModel().getPorts().contains(portB))
+			scenario.getPortModel().getPorts().add(portB);
+
+		final Canal canal = PortFactory.eINSTANCE.createCanal();
+		canal.setName(canalName);
+		final DistanceModel canalDistances = PortFactory.eINSTANCE.createDistanceModel();
+		canal.setDistanceModel(canalDistances);
+		// add distance lines, as for the main distance model:
+		final DistanceLine atob = PortFactory.eINSTANCE.createDistanceLine();
+		atob.setFromPort(portA);
+		atob.setToPort(portB);
+		atob.setDistance(distanceAToB);
+
+		final DistanceLine btoa = PortFactory.eINSTANCE.createDistanceLine();
+		btoa.setFromPort(portB);
+		btoa.setToPort(portA);
+		btoa.setDistance(distanceBToA);
+
+		canalDistances.getDistances().add(atob);
+		canalDistances.getDistances().add(btoa);
+
+		// next do canal costs
+		final VesselClassCost canalCost = FleetFactory.eINSTANCE.createVesselClassCost();
+		canalCost.setCanal(canal);
+		canalCost.setLadenCost(canalLadenCost); // cost in dollars for a laden vessel
+		canalCost.setUnladenCost(canalUnladenCost); // cost in dollars for a ballast vessel
+		canalCost.setTransitFuel(canalTransitFuelDays); // MT of base fuel / day used when in transit
+		canalCost.setTransitTime(canalTransitTime); // transit time in hours
+
+		// add the canal cost to the scenario.
+		scenario.getCanalModel().getCanals().add(canalCost.getCanal());
+
+		return canalCost;
 	}
 }
