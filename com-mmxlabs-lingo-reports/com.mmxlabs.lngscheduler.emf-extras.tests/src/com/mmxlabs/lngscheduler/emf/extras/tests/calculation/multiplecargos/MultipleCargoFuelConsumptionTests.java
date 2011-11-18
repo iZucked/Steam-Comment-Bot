@@ -26,6 +26,8 @@ import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
 import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
 
 /**
+ * <a href="https://mmxlabs.fogbugz.com/default.asp?259">Case 259: Scenario with several cargoes</a>
+ * 
  * @author Adam Semenenko
  * 
  */
