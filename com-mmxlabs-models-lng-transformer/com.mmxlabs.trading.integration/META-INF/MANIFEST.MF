@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Trading RCP Integration
+Bundle-SymbolicName: com.mmxlabs.trading.integration;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.mmxlabs.trading.integration.Activator
+Bundle-Vendor: MMXLABS
+Require-Bundle: org.eclipse.core.runtime,
+ com.mmxlabs.lngscheduler.emf-extras;bundle-version="1.0.0",
+ com.mmxlabs.lngscheduler.emf;bundle-version="1.0.0",
+ com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-version="1.0.0",
+ com.mmxlabs.common.util;bundle-version="1.0.0",
+ com.mmxlabs.optimiser.core;bundle-version="1.0.0",
+ org.slf4j.api;bundle-version="1.6.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
