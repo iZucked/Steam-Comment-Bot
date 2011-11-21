@@ -8,7 +8,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 /**
  * Default implementation of {@link IXYPort}
@@ -23,8 +23,8 @@ public final class XYPort extends IndexedObject implements IXYPort {
 	/**
 	 * A calculator used to determine the price of cooldown LNG here.
 	 */
-	private ISimpleLoadPriceCalculator cooldownPriceCalculator;
-	
+	private IShippingPriceCalculator<?> cooldownPriceCalculator;
+
 	private float x;
 
 	private float y;
@@ -34,7 +34,7 @@ public final class XYPort extends IndexedObject implements IXYPort {
 	public XYPort(final IIndexingContext context) {
 		super(context);
 	}
-	
+
 	public XYPort(final IIndexingContext context, final String name, final float x, final float y) {
 		super(context);
 		this.name = name;
@@ -95,18 +95,17 @@ public final class XYPort extends IndexedObject implements IXYPort {
 	public boolean shouldVesselsArriveCold() {
 		return arriveCold;
 	}
-	
+
 	public void setShouldVesselsArriveCold(final boolean arriveCold) {
 		this.arriveCold = arriveCold;
 	}
-	
+
 	@Override
-	public ISimpleLoadPriceCalculator getCooldownPriceCalculator() {
+	public IShippingPriceCalculator<?> getCooldownPriceCalculator() {
 		return cooldownPriceCalculator;
 	}
 
-	public void setCooldownPriceCalculator(
-			ISimpleLoadPriceCalculator cooldownPriceCalculator) {
+	public void setCooldownPriceCalculator(IShippingPriceCalculator<?> cooldownPriceCalculator) {
 		this.cooldownPriceCalculator = cooldownPriceCalculator;
 	}
 }

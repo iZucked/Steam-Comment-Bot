@@ -4,11 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -23,7 +23,7 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 
 	private long maxDischargeVolume;
 
-	private ICurve salesPriceCurve;
+	private IShippingPriceCalculator<?> priceCalculator;
 
 	public DischargeSlot() {
 		setPortType(PortType.Discharge);
@@ -31,11 +31,12 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 
 	public DischargeSlot(final String id, final IPort port,
 			final ITimeWindow timwWindow, final long minDischargeVolume,
-			final long maxDischargeVolume, final ICurve salesPriceCurve) {
+ final long maxDischargeVolume,
+			final IShippingPriceCalculator<?> priceCalculator) {
 		super(id, port, timwWindow);
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;
-		this.salesPriceCurve = salesPriceCurve;
+		this.priceCalculator = priceCalculator;
 	}
 
 	@Override
@@ -57,11 +58,6 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 	}
 
 	@Override
-	public int getSalesPriceAtTime(final int time) {
-		return (int) salesPriceCurve.getValueAtPoint(time);
-	}
-
-	@Override
 	public boolean equals(final Object obj) {
 		if (obj instanceof DischargeSlot) {
 			final DischargeSlot slot = (DischargeSlot) obj;
@@ -72,7 +68,7 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 			if (minDischargeVolume != slot.minDischargeVolume) {
 				return false;
 			}
-			if (salesPriceCurve != slot.salesPriceCurve) {
+			if (priceCalculator != slot.priceCalculator) {
 				return false;
 			}
 
@@ -84,11 +80,12 @@ public final class DischargeSlot extends PortSlot implements IDischargeSlot {
 	/**
 	 * @param salesPriceCurve
 	 */
-	public void setSalesPriceCurve(final ICurve salesPriceCurve) {
-		this.salesPriceCurve = salesPriceCurve;
+	public void setDischargePriceCalculator(final IShippingPriceCalculator priceCalculator) {
+		this.priceCalculator = priceCalculator;
 	}
 
-	public final ICurve getSalesPriceCurve() {
-		return salesPriceCurve;
+	@Override
+	public final <T> IShippingPriceCalculator<T> getDischargePriceCalculator() {
+		return (IShippingPriceCalculator<T>) priceCalculator;
 	}
 }

@@ -8,7 +8,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 /**
  * Default implementation of {@link IPort}
@@ -28,7 +28,7 @@ public final class Port extends IndexedObject implements IPort {
 	/**
 	 * A calculator used to determine the price of cooldown LNG here.
 	 */
-	private ISimpleLoadPriceCalculator cooldownPriceCalculator;
+	private IShippingPriceCalculator<?> cooldownPriceCalculator;
 
 	public Port(final IIndexingContext context) {
 		super(context);
@@ -58,6 +58,10 @@ public final class Port extends IndexedObject implements IPort {
 			if (!Equality.isEqual(name, p.getName())) {
 				return false;
 			}
+
+			if (!Equality.isEqual(cooldownPriceCalculator, p.getCooldownPriceCalculator())) {
+				return false;
+			}
 			return true;
 		}
 
@@ -74,12 +78,12 @@ public final class Port extends IndexedObject implements IPort {
 	}
 
 	@Override
-	public ISimpleLoadPriceCalculator getCooldownPriceCalculator() {
+	public IShippingPriceCalculator<?> getCooldownPriceCalculator() {
 		return cooldownPriceCalculator;
 	}
 
 	public void setCooldownPriceCalculator(
-			ISimpleLoadPriceCalculator cooldownPriceCalculator) {
+IShippingPriceCalculator<?> cooldownPriceCalculator) {
 		this.cooldownPriceCalculator = cooldownPriceCalculator;
 	}
 }

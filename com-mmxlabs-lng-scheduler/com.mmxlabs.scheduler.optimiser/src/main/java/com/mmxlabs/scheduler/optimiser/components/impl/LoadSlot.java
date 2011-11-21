@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -24,7 +24,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 
 //	private ICurve purchasePriceCurve;
 
-	private ILoadPriceCalculator loadPriceCalculator;
+	private ILoadPriceCalculator2 loadPriceCalculator;
 	
 	private int cargoCVValue;
 
@@ -38,7 +38,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 
 	public LoadSlot(final String id, final IPort port,
 			final ITimeWindow timwWindow, final long minLoadVolume,
-			final long maxLoadVolume, final ILoadPriceCalculator loadPriceCalculator,
+ final long maxLoadVolume, final ILoadPriceCalculator2 loadPriceCalculator,
 			final int cargoCVValue, final boolean cooldownSet, final boolean cooldownForbidden) {
 		super(id, port, timwWindow);
 		this.minLoadVolume = minLoadVolume;
@@ -67,7 +67,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 		this.maxLoadVolume = maxLoadVolume;
 	}
 
-	public void setLoadPriceCalculator(final ILoadPriceCalculator loadPriceCalculator) {
+	public void setLoadPriceCalculator(final ILoadPriceCalculator2 loadPriceCalculator) {
 		this.loadPriceCalculator = loadPriceCalculator;
 	}
 
@@ -121,10 +121,11 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 	}
 
 	@Override
-	public ILoadPriceCalculator getLoadPriceCalculator() {
+	public ILoadPriceCalculator2 getLoadPriceCalculator() {
 		return loadPriceCalculator;
 	}
 
+	@Override
 	public final boolean isCooldownSet() {
 		return cooldownSet;
 	}
@@ -133,6 +134,7 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 		this.cooldownSet = cooldownSet;
 	}
 
+	@Override
 	public final boolean isCooldownForbidden() {
 		return cooldownForbidden;
 	}
