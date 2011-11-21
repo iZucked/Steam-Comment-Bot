@@ -9,6 +9,7 @@ import java.util.Collection;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
 
 /**
@@ -34,21 +35,21 @@ public final class CargoSchedulerFitnessCoreFactory implements
 
 	public static final String ROUTE_PRICE_COMPONENT_NAME = "cargo-scheduler-canal-cost";
 
-	public static final String CARGO_ALLOCATION_COMPONENT_NAME = "cargo-scheduler-volume-allocation";
+	// public static final String CARGO_ALLOCATION_COMPONENT_NAME = "cargo-scheduler-volume-allocation";
 
 	public static final String CHARTER_REVENUE_COMPONENT_NAME = "cargo-scheduler-charter-revenue";
 
 	public static final String COST_COOLDOWN_COMPONENT_NAME = "cargo-scheduler-cost-cooldown";
 
+	public static final String PROFIT_COMPONENT_NAME = "cargo-scheduler-group-profit";
+
 	/* default scheduler factory creates default GA scheduler */
 	// TODO: Make static class
-	private ISchedulerFactory schedulerFactory = new ISchedulerFactory() {
-
+	private ISchedulerFactory<ISequenceElement> schedulerFactory = new ISchedulerFactory<ISequenceElement>() {
 		@Override
-		public ISequenceScheduler createScheduler(IOptimisationData data,
-				Collection components) {
-			return SchedulerUtils.createDirectRandomSequenceScheduler(data,
-					components);
+		public ISequenceScheduler<ISequenceElement> createScheduler(IOptimisationData<ISequenceElement> data, Collection<ICargoSchedulerFitnessComponent<ISequenceElement>> schedulerComponents,
+				Collection<ICargoAllocationFitnessComponent<ISequenceElement>> allocationComponents) {
+			return SchedulerUtils.createDirectRandomSequenceScheduler(data, schedulerComponents, allocationComponents);
 			// return SchedulerUtils.createRelaxingSequenceScheduler(data,
 			// components);
 		}
@@ -59,8 +60,9 @@ public final class CargoSchedulerFitnessCoreFactory implements
 		return CollectionsUtil.makeArrayList(DISTANCE_COMPONENT_NAME,
 				LATENESS_COMPONENT_NAME, COST_BASE_COMPONENT_NAME,
 				COST_LNG_COMPONENT_NAME, CHARTER_COST_COMPONENT_NAME,
-				ROUTE_PRICE_COMPONENT_NAME, CARGO_ALLOCATION_COMPONENT_NAME,
-				CHARTER_REVENUE_COMPONENT_NAME);
+				ROUTE_PRICE_COMPONENT_NAME,
+ COST_COOLDOWN_COMPONENT_NAME,
+ CHARTER_REVENUE_COMPONENT_NAME, PROFIT_COMPONENT_NAME);
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public final class CargoSchedulerFitnessCoreFactory implements
 	@Override
 	public <T> CargoSchedulerFitnessCore<T> instantiate() {
 		CargoSchedulerFitnessCore<T> core = new CargoSchedulerFitnessCore<T>();
-		core.setSchedulerFactory(schedulerFactory);
+		core.setSchedulerFactory((ISchedulerFactory<T>) schedulerFactory);
 		return core;
 	}
 
