@@ -25,6 +25,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	private int loadM3Price;
 	private int dischargeM3Price;
 
+	@Override
 	public long getDischargeVolume() {
 		return dischargeVolume;
 	}
@@ -32,18 +33,21 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		this.dischargeVolume = dischargeVolume;
 	}
 	
+	@Override
 	public ILoadSlot getLoadSlot() {
 		return loadSlot;
 	}
 	public void setLoadSlot(ILoadSlot loadSlot) {
 		this.loadSlot = loadSlot;
 	}
+	@Override
 	public IDischargeSlot getDischargeSlot() {
 		return dischargeSlot;
 	}
 	public void setDischargeSlot(IDischargeSlot dischargeSlot) {
 		this.dischargeSlot = dischargeSlot;
 	}
+	@Override
 	public long getFuelVolume() {
 		return fuelVolume;
 	}
@@ -83,5 +87,8 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		this.dischargeM3Price = dischargeM3Price;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return loadSlot.getId() + " to " + dischargeSlot.getId() + ", loaded " + getLoadVolume() + ", used " + getFuelVolume() + " for fuel, discharged " + getDischargeVolume();
+	}
 }
