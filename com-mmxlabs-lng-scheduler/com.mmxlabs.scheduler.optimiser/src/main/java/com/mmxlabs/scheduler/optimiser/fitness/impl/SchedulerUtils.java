@@ -13,12 +13,16 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.FastCargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.RelaxingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
+import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -184,38 +188,6 @@ public final class SchedulerUtils {
 		scheduler.setVesselProvider(vesselProvider);
 	}
 
-	/**
-	 * Create an {@link EnumeratingSequenceScheduler}, which enumerates all
-	 * feasible arrival time combinations.
-	 * 
-	 * @param <T>
-	 * @param data
-	 * @param fitnessComponents
-	 * @param vpoCacheSize
-	 * @return
-	 */
-	public static <T> EnumeratingSequenceScheduler<T> createEnumeratingSequenceScheduler(
-			final IOptimisationData<T> data,
-			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents,
-			final int vpoCacheSize) {
-		final EnumeratingSequenceScheduler<T> scheduler = new EnumeratingSequenceScheduler<T>();
-		// final EnumeratingSequenceScheduler<T> scheduler = new
-		// DirectRandomSequenceScheduler<T>();
-		// final EnumeratingSequenceScheduler<T> scheduler =
-		// new RandomSeparatedSequenceScheduler<T>();
-		final ScheduleEvaluator<T> evaluator = new ScheduleEvaluator<T>();
-
-		// set up scheduler
-		setDataComponentProviders(data, scheduler);
-		scheduler.setVoyagePlanOptimiser(createVPO(
-				data, vpoCacheSize));
-		scheduler.setScheduleEvaluator(evaluator);
-
-		evaluator.setFitnessComponents(fitnessComponents);
-
-		return scheduler;
-	}
-
 	// public static <T> RandomSeparatedSequenceScheduler<T>
 	// createRandomSeparatedSequenceScheduler(
 	// final IOptimisationData<T> data,
@@ -486,15 +458,7 @@ public final class SchedulerUtils {
 	// DEFAULT_VPO_CACHE_SIZE);
 	// }
 
-	public static <T> ISequenceScheduler<T> createEnumeratingSequenceScheduler(
-			IOptimisationData<T> data,
-			Collection<ICargoSchedulerFitnessComponent<T>> components) {
-		return createEnumeratingSequenceScheduler(data, components,
-				DEFAULT_VPO_CACHE_SIZE);
-	}
-
-	public static <T> DirectRandomSequenceScheduler<T> createDirectRandomSequenceScheduler(
-			IOptimisationData<T> data, Collection components, int vpoCacheSize) {
+	public static <T> DirectRandomSequenceScheduler<T> createDirectRandomSequenceScheduler(IOptimisationData<T> data, Collection components, Collection components2, int vpoCacheSize) {
 
 		final DirectRandomSequenceScheduler<T> scheduler = new DirectRandomSequenceScheduler<T>();
 		final ScheduleEvaluator<T> evaluator = new ScheduleEvaluator<T>();
@@ -505,40 +469,32 @@ public final class SchedulerUtils {
 				data, vpoCacheSize));
 		scheduler.setScheduleEvaluator(evaluator);
 
-		evaluator.setFitnessComponents(components);
+		// create cargo allocator
+
+		final ITotalVolumeLimitProvider<T> tvlp = data.getDataComponentProvider(SchedulerConstants.DCP_totalVolumeLimitProvider, ITotalVolumeLimitProvider.class);
+
+		ICargoAllocator<T> allocator;
+		if (tvlp.isEmpty()) {
+			allocator = new UnconstrainedCargoAllocator<T>();
+		} else {
+			allocator = new FastCargoAllocator<T>();
+		}
+
+		allocator.setVesselProvider(data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
+		allocator.setTotalVolumeLimitProvider(tvlp);
+		allocator.init();
+
+		evaluator.setFitnessComponents(components, components2);
+		evaluator.setLoadPriceCalculators(data.getDataComponentProvider(SchedulerConstants.DCP_calculatorProvider, ICalculatorProvider.class).getLoadPriceCalculators());
+		evaluator.setCargoAllocator(allocator);
 
 		return scheduler;
 	}
 
 	public static DirectRandomSequenceScheduler<ISequenceElement> createDirectRandomSequenceScheduler(
 			IOptimisationData<ISequenceElement> data,
-			Collection<ICargoSchedulerFitnessComponent<ISequenceElement>> components) {
-		return createDirectRandomSequenceScheduler(data, components,
+			Collection<ICargoSchedulerFitnessComponent<ISequenceElement>> components, Collection<ICargoAllocationFitnessComponent<ISequenceElement>> components2) {
+		return createDirectRandomSequenceScheduler(data, components, components2,
 				DEFAULT_VPO_CACHE_SIZE);
 	}
-
-	public static <T> RelaxingSequenceScheduler<T> createRelaxingSequenceScheduler(
-			IOptimisationData<T> data, Collection components, int vpoCacheSize) {
-
-		final RelaxingSequenceScheduler<T> scheduler = new RelaxingSequenceScheduler<T>();
-		final ScheduleEvaluator<T> evaluator = new ScheduleEvaluator<T>();
-
-		// set up scheduler
-		setDataComponentProviders(data, scheduler);
-		scheduler.setVoyagePlanOptimiser(createVPO(
-				data, vpoCacheSize));
-		scheduler.setScheduleEvaluator(evaluator);
-
-		evaluator.setFitnessComponents(components);
-
-		return scheduler;
-	}
-
-	public static RelaxingSequenceScheduler<ISequenceElement> createRelaxingSequenceScheduler(
-			IOptimisationData<ISequenceElement> data,
-			Collection<ICargoSchedulerFitnessComponent<ISequenceElement>> components) {
-		return createRelaxingSequenceScheduler(data, components,
-				DEFAULT_VPO_CACHE_SIZE);
-	}
-
 }
