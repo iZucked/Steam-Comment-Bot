@@ -8,7 +8,6 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -24,17 +23,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @param <T>
  *            Sequence element type
  */
-public interface ICargoSchedulerFitnessComponent<T> extends
-		IFitnessComponent<T> {
-
-	/**
-	 * Initialise the fitness component and obtain any data required from the
-	 * {@link IOptimisationData} object.
-	 * 
-	 * @param data
-	 */
-	void init(IOptimisationData<T> data);
-
+public interface ICargoSchedulerFitnessComponent<T> extends ICargoFitnessComponent<T> {
 	/**
 	 * Start evaluating a solution
 	 */
@@ -113,20 +102,4 @@ public interface ICargoSchedulerFitnessComponent<T> extends
 	 * @param solution
 	 */
 	void endEvaluationAndAnnotate(IAnnotatedSolution<T> solution);
-
-	/**
-	 * Reject the last evaluation (relates to
-	 * {@link IFitnessComponent#getFitness()}
-	 */
-	void rejectLastEvaluation();
-
-	/**
-	 * Accept the last evaluation (for {@link IFitnessComponent#getFitness()}
-	 */
-	void acceptLastEvaluation();
-
-	/**
-	 * Clean up references as this component is no longer required.
-	 */
-	void dispose();
 }
