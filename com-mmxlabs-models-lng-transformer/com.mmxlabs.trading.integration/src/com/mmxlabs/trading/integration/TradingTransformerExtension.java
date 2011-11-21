@@ -66,8 +66,8 @@ public class TradingTransformerExtension implements ITransformerExtension {
 		for (final Cargo c : scenario.getCargoModel().getCargoes()) {
 			final IPortSlot load = entities.getOptimiserObject(c.getLoadSlot(), IPortSlot.class);
 			final IPortSlot dis = entities.getOptimiserObject(c.getDischargeSlot(), IPortSlot.class);
-			final IEntity loadEntity = entities.getOptimiserObject(c.getLoadSlot().getContract().getEntity(), IEntity.class);
-			final IEntity dischargeEntity = entities.getOptimiserObject(c.getDischargeSlot().getContract().getEntity(), IEntity.class);
+			final IEntity loadEntity = entities.getOptimiserObject(c.getLoadSlot().getSlotOrPortContract(scenario).getEntity(), IEntity.class);
+			final IEntity dischargeEntity = entities.getOptimiserObject(c.getDischargeSlot().getSlotOrPortContract(scenario).getEntity(), IEntity.class);
 			tradingBuilder.setEntityForSlot(loadEntity, load);
 			tradingBuilder.setEntityForSlot(dischargeEntity, dis);
 		}
