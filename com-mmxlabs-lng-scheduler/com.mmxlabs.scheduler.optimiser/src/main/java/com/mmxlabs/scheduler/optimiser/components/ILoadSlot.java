@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 
 /**
  * Interface representing a particular load slot defined by a port, time window
@@ -53,7 +53,7 @@ public interface ILoadSlot extends IPortSlot {
 	 * 
 	 * @return
 	 */
-	ILoadPriceCalculator getLoadPriceCalculator();
+	ILoadPriceCalculator2 getLoadPriceCalculator();
 
 	/**
 	 * If true, {@link #isCooldownRequired()} returns true if a cooldown is to

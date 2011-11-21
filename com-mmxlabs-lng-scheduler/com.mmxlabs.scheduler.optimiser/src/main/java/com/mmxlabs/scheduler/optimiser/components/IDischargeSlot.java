@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 /**
  * Interface representing a particular discharge slot defined by a port, time
@@ -29,10 +30,5 @@ public interface IDischargeSlot extends IPortSlot {
 	 */
 	long getMaxDischargeVolume();
 
-	/**
-	 * Returns sales price per unit.
-	 * 
-	 * @return
-	 */
-	int getSalesPriceAtTime(int time);
+	<T> IShippingPriceCalculator<T> getDischargePriceCalculator();
 }
