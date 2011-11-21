@@ -26,8 +26,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
@@ -37,6 +37,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * 
  */
 public interface ISchedulerBuilder {
+
+	/**
+	 * Add an {@link IBuilderExtension} to this builder. The extension ought to be added before any other builder methods are used.
+	 * 
+	 * @param extension
+	 */
+	void addBuilderExtension(IBuilderExtension extension);
 
 	/**
 	 * Finalise build process and return an {@link IOptimisationData} instance. The builder should not be used after calling this method.
@@ -201,7 +208,7 @@ public interface ISchedulerBuilder {
 	 * @param name
 	 * @return
 	 */
-	IPort createPort(String name, boolean arriveCold, final ISimpleLoadPriceCalculator cooldownPriceCalculator);
+	IPort createPort(String name, boolean arriveCold, final IShippingPriceCalculator<ISequenceElement> cooldownPriceCalculator);
 
 	/**
 	 * Create a port with an x/y co-ordinate.
@@ -211,7 +218,7 @@ public interface ISchedulerBuilder {
 	 * @param y
 	 * @return
 	 */
-	IXYPort createPort(String name, boolean arriveCold, final ISimpleLoadPriceCalculator cooldownPriceCalculator, float x, float y);
+	IXYPort createPort(String name, boolean arriveCold, final IShippingPriceCalculator<ISequenceElement> cooldownPriceCalculator, float x, float y);
 
 	/**
 	 * Create a cargo with the specific from and to ports and associated time windows.
@@ -221,7 +228,7 @@ public interface ISchedulerBuilder {
 	 * @param dischargeSlot
 	 * @return
 	 */
-	ICargo createCargo(String id, ILoadSlot loadSlot, IDischargeSlot dischargeSlot);
+	ICargo createCargo(String id, ILoadSlot loadSlot, IDischargeSlot dischargeSlot, boolean allowRewiring);
 
 	/**
 	 * Restrict the set of vessels which can carry this cargo to those in the second argument.
@@ -314,7 +321,8 @@ public interface ISchedulerBuilder {
 	 *            Scaled conversion factor to convert from M3 to MMBTU of LNG
 	 * @return
 	 */
-	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours, boolean cooldownSet,
+	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator2 priceCalculator, int cargoCVValue, int durationHours,
+			boolean cooldownSet,
 			boolean cooldownForbidden);
 
 	/**
@@ -331,7 +339,7 @@ public interface ISchedulerBuilder {
 	 *            Scaled sales price in $/MMBTu
 	 * @return
 	 */
-	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ICurve unitPrice, int durationHours);
+	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, IShippingPriceCalculator<ISequenceElement> priceCalculator, int durationHours);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these
@@ -379,14 +387,6 @@ public interface ISchedulerBuilder {
 	 *            The time window within which the limit applies.
 	 */
 	void addTotalVolumeConstraint(Set<IPort> ports, boolean loads, boolean discharges, long maximumTotalVolume, ITimeWindow timeWindow);
-
-	ILoadPriceCalculator createFixedPriceContract(int pricePerMMBTU);
-
-	ILoadPriceCalculator createMarketPriceContract(ICurve index);
-
-	ILoadPriceCalculator createProfitSharingContract(ICurve actualMarket, ICurve referenceMarket, int alpha, int beta, int gamma);
-
-	ILoadPriceCalculator createNetbackContract(int buyersMargin);
 
 	/**
 	 * Constrains the given slot to lie only on the given vessels.
