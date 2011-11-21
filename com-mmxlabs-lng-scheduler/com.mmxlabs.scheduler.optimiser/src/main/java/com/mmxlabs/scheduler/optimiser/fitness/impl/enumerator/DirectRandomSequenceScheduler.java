@@ -24,10 +24,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
  * @param <T>
  */
 public class DirectRandomSequenceScheduler<T> extends EnumeratingSequenceScheduler<T> {
-	/**
-	 * 
-	 */
-	private static final int RETRY_COUNT = 0;
 	private final int seed = 0;
 	private Random random;
 	private static final Logger log = LoggerFactory.getLogger(DirectRandomSequenceScheduler.class);

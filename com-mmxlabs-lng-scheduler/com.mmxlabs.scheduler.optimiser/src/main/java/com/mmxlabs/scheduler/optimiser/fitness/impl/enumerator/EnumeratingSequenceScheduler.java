@@ -488,7 +488,6 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 			scheduledSequences.set(index, sequence);
 		}
 
-		// TODO modify evaluator to understand the fact that only some sequences will change.
 		lastValue = evaluator.evaluateSchedule(scheduledSequences, changedSequences);
 
 		logValue(lastValue);
