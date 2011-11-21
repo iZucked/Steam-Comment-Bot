@@ -17,29 +17,23 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * A voyage plan optimiser which acts as a caching proxy for a real VPO, passed
- * in through the constructor
+ * A voyage plan optimiser which acts as a caching proxy for a real VPO, passed in through the constructor
  * 
  * @author hinton
  * 
  * @param <T>
  */
-public final class CachingVoyagePlanOptimiser<T> implements
-		IVoyagePlanOptimiser<T> {
+public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 	/**
-	 * The class which keys into the cache (
-	 * {@link CachingVoyagePlanOptimiser#cache}). NOTE: the cache key may not be
-	 * completely stable, for speed reasons; specifically, the sequence and
-	 * arrivalTimes are <em>not cloned</em> from input, and so are likely to be
-	 * invalid once the cache entry for the key has been computed.
+	 * The class which keys into the cache ( {@link CachingVoyagePlanOptimiser#cache}). NOTE: the cache key may not be completely stable, for speed reasons; specifically, the sequence and arrivalTimes
+	 * are <em>not cloned</em> from input, and so are likely to be invalid once the cache entry for the key has been computed.
 	 * 
 	 * @author hinton
 	 * 
@@ -50,15 +44,12 @@ public final class CachingVoyagePlanOptimiser<T> implements
 		private final IPortSlot[] slots;
 		private final List<Object> sequence;
 		private final List<IVoyagePlanChoice> choices;
-		private final ILoadPriceCalculator loadPriceCalculator;
 
 		private final int dischargePrice;
 
 		protected List<Integer> arrivalTimes;
 
-		public CacheKey(final IVessel vessel, final List<Object> sequence,
-				final List<Integer> arrivalTimes,
-				final List<IVoyagePlanChoice> choices) {
+		public CacheKey(final IVessel vessel, final List<Object> sequence, final List<Integer> arrivalTimes, final List<IVoyagePlanChoice> choices) {
 			super();
 			this.vessel = vessel;
 			final int sz = sequence.size();
@@ -68,15 +59,12 @@ public final class CachingVoyagePlanOptimiser<T> implements
 			int timeix = 0;
 
 			int loadix = -1, dischargeix = -1;
-			ILoadPriceCalculator lpc = null;
 			for (final Object o : sequence) {
 				if (o instanceof PortDetails) {
 					slots[slotix] = ((PortDetails) o).getPortSlot();
 					if (loadix == -1 && slots[slotix] instanceof ILoadSlot) {
 						loadix = slotix;
-						lpc = ((ILoadSlot)slots[slotix]).getLoadPriceCalculator();
-					} else if (dischargeix == -1
-							&& slots[slotix] instanceof IDischargeSlot) {
+					} else if (dischargeix == -1 && slots[slotix] instanceof IDischargeSlot) {
 						dischargeix = slotix;
 					}
 					slotix++;
@@ -93,14 +81,11 @@ public final class CachingVoyagePlanOptimiser<T> implements
 				// loadPrice =
 				// ((ILoadSlot)
 				// slots[loadix]).getPurchasePriceAtTime(arrivalTimes.get(loadix));
-				dischargePrice = ((IDischargeSlot) slots[dischargeix])
-						.getSalesPriceAtTime(arrivalTimes.get(dischargeix));
+				dischargePrice = ((IDischargeSlot) slots[dischargeix]).getDischargePriceCalculator().calculateUnitPrice(slots[dischargeix], arrivalTimes.get(dischargeix));
 			} else {
 				// loadPrice =
 				dischargePrice = -1;
 			}
-
-			this.loadPriceCalculator = lpc;
 		}
 
 		@Override
@@ -114,20 +99,14 @@ public final class CachingVoyagePlanOptimiser<T> implements
 			// result = prime * result + loadPrice;
 			result = prime * result + dischargePrice;
 
-			result = prime * result
-					+ ((vessel == null) ? 0 : vessel.hashCode());
+			result = prime * result + ((vessel == null) ? 0 : vessel.hashCode());
 
-			result = prime
-					* result
-					+ ((loadPriceCalculator == null) ? 0 : loadPriceCalculator
-							.hashCode());
 			return result;
 		}
 
 		/**
-		 * This equals method almost certainly doesn't fulfil the normal
-		 * equality contract; however it should be fast, and because this class
-		 * is final and private it ought not end up getting used wrongly.
+		 * This equals method almost certainly doesn't fulfil the normal equality contract; however it should be fast, and because this class is final and private it ought not end up getting used
+		 * wrongly.
 		 */
 		@Override
 		public final boolean equals(final Object obj) {
@@ -139,10 +118,8 @@ public final class CachingVoyagePlanOptimiser<T> implements
 			// if (!getOuterType().equals(other.getOuterType()))
 			// return false;
 
-			return Equality.shallowEquals(slots, other.slots)
-					&& (vessel == other.vessel)
-					&& Arrays.equals(times, other.times) &&
-					// loadPrice == other.loadPrice &&
+			return Equality.shallowEquals(slots, other.slots) && (vessel == other.vessel) && Arrays.equals(times, other.times) &&
+			// loadPrice == other.loadPrice &&
 					dischargePrice == other.dischargePrice;
 		}
 	}
@@ -162,15 +139,13 @@ public final class CachingVoyagePlanOptimiser<T> implements
 
 	private List<Integer> arrivalTimes;
 
-	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser<T> delegate,
-			final int cacheSize) {
+	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser<T> delegate, final int cacheSize) {
 		super();
 		this.delegate = delegate;
 		final IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>> evaluator = new IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>>() {
 
 			@Override
-			final public Pair<CacheKey, Pair<VoyagePlan, Long>> evaluate(
-					final CacheKey arg) {
+			final public Pair<CacheKey, Pair<VoyagePlan, Long>> evaluate(final CacheKey arg) {
 				final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
 
 				delegate.reset();
@@ -191,16 +166,13 @@ public final class CachingVoyagePlanOptimiser<T> implements
 																				// key
 			}
 		};
-		this.cache = new LHMCache<CacheKey, Pair<VoyagePlan, Long>>("VPO",
-				evaluator, cacheSize);
+		this.cache = new LHMCache<CacheKey, Pair<VoyagePlan, Long>>("VPO", evaluator, cacheSize);
 	}
 
 	@Override
 	public VoyagePlan optimise() {
-		
-		
-		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel,
-				basicSequence, arrivalTimes, choices));
+
+		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel, basicSequence, arrivalTimes, choices));
 
 		// bestPlan = (VoyagePlan) best.getFirst().clone();
 		bestPlan = best.getFirst();
@@ -267,8 +239,7 @@ public final class CachingVoyagePlanOptimiser<T> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser#
-	 * setArrivalTimes(java.util.List)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser# setArrivalTimes(java.util.List)
 	 */
 	@Override
 	public void setArrivalTimes(final List<Integer> arrivalTimes) {
