@@ -8,6 +8,7 @@ package scenario.schedule;
 
 import java.util.Date;
 
+import scenario.Detail;
 import org.eclipse.emf.common.util.EList;
 
 import scenario.ScenarioObject;
@@ -22,8 +23,9 @@ import scenario.contract.Entity;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.schedule.BookedRevenue#getDate <em>Date</em>}</li>
- *   <li>{@link scenario.schedule.BookedRevenue#getLineItems <em>Line Items</em>}</li>
  *   <li>{@link scenario.schedule.BookedRevenue#getEntity <em>Entity</em>}</li>
+ *   <li>{@link scenario.schedule.BookedRevenue#getValue <em>Value</em>}</li>
+ *   <li>{@link scenario.schedule.BookedRevenue#getDetails <em>Details</em>}</li>
  * </ul>
  * </p>
  *
@@ -59,6 +61,58 @@ public interface BookedRevenue extends ScenarioObject {
 	void setEntity(Entity value);
 
 	/**
+	 * Returns the value of the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Value</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Value</em>' attribute.
+	 * @see #setValue(int)
+	 * @see scenario.schedule.SchedulePackage#getBookedRevenue_Value()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getValue();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.BookedRevenue#getValue <em>Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Value</em>' attribute.
+	 * @see #getValue()
+	 * @generated
+	 */
+	void setValue(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Details</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Details</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Details</em>' containment reference.
+	 * @see #setDetails(Detail)
+	 * @see scenario.schedule.SchedulePackage#getBookedRevenue_Details()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	Detail getDetails();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.BookedRevenue#getDetails <em>Details</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Details</em>' containment reference.
+	 * @see #getDetails()
+	 * @generated
+	 */
+	void setDetails(Detail value);
+
+	/**
 	 * Returns the value of the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -83,85 +137,6 @@ public interface BookedRevenue extends ScenarioObject {
 	 * @generated
 	 */
 	void setDate(Date value);
-
-	/**
-	 * Returns the value of the '<em><b>Line Items</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.schedule.LineItem}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Line Items</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Line Items</em>' containment reference list.
-	 * @see scenario.schedule.SchedulePackage#getBookedRevenue_LineItems()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	EList<LineItem> getLineItems();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Returns the total untaxed revenue (or if it's a net loss, a negative revenue) which the associated cargo
-	 * has produced for the associated entity.
-	 * 
-	 * This is just the sum of the revenue associated with each line item.
-	 * <!-- end-model-doc -->
-	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='int untaxedRevenue = 0;\n\nfor (final LineItem item : getLineItems()) {\n\tuntaxedRevenue += item.getValue();\n}\n\nreturn untaxedRevenue;'"
-	 * @generated
-	 */
-	int getUntaxedValue();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Returns the total revenue after tax associated with this line item.
-	 * <!-- end-model-doc -->
-	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final int untaxedRevenue = getUntaxedValue();\n\nif (untaxedRevenue <= 0) {\n\treturn untaxedRevenue;\n} else {\n         return (int) (untaxedRevenue * (1.0 - getEntity().getTaxRate()));\n}'"
-	 * @generated
-	 */
-	int getTaxedValue();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Returns the total revenue before tax associated with this line item.
-	 * <!-- end-model-doc -->
-	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='int untaxedRevenue = 0;\n\nfor (final LineItem item : getLineItems()) {\n\tif (item.getValue() > 0)\n\t\tuntaxedRevenue += item.getValue();\n}\n\nreturn untaxedRevenue;'"
-	 * @generated
-	 */
-	int getUntaxedRevenues();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Returns the total costs before tax associated with this revenue
-	 * <!-- end-model-doc -->
-	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='int untaxedRevenue = 0;\n\nfor (final LineItem item : getLineItems()) {\n\tif (item.getValue() < 0)\n\tuntaxedRevenue += item.getValue();\n}\n\nreturn untaxedRevenue;'"
-	 * @generated
-	 */
-	int getUntaxedCosts();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Returns the total amount of tax paid on this revenue
-	 * <!-- end-model-doc -->
-	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getUntaxedValue() - getTaxedValue();'"
-	 * @generated
-	 */
-	int getTaxCost();
 
 	/**
 	 * <!-- begin-user-doc -->

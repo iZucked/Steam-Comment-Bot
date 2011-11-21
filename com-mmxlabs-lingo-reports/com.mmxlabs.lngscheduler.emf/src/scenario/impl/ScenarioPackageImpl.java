@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import scenario.AnnotatedObject;
+import scenario.Detail;
 import scenario.NamedObject;
 import scenario.Scenario;
 import scenario.ScenarioFactory;
@@ -85,6 +86,13 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * @generated
 	 */
 	private EClass annotatedObjectEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass detailEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -414,6 +422,42 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getDetail() {
+		return detailEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDetail_Name() {
+		return (EAttribute)detailEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDetail_Children() {
+		return (EReference)detailEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDetail_Value() {
+		return (EAttribute)detailEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getDateAndOptionalTime() {
 		return dateAndOptionalTimeEDataType;
 	}
@@ -483,6 +527,11 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 
 		annotatedObjectEClass = createEClass(ANNOTATED_OBJECT);
 		createEAttribute(annotatedObjectEClass, ANNOTATED_OBJECT__NOTES);
+
+		detailEClass = createEClass(DETAIL);
+		createEAttribute(detailEClass, DETAIL__NAME);
+		createEReference(detailEClass, DETAIL__CHILDREN);
+		createEAttribute(detailEClass, DETAIL__VALUE);
 
 		// Create data types
 		dateAndOptionalTimeEDataType = createEDataType(DATE_AND_OPTIONAL_TIME);
@@ -571,6 +620,11 @@ public class ScenarioPackageImpl extends EPackageImpl implements ScenarioPackage
 
 		initEClass(annotatedObjectEClass, AnnotatedObject.class, "AnnotatedObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAnnotatedObject_Notes(), ecorePackage.getEString(), "notes", "", 1, 1, AnnotatedObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(detailEClass, Detail.class, "Detail", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDetail_Name(), ecorePackage.getEString(), "name", null, 1, 1, Detail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDetail_Children(), this.getDetail(), null, "children", null, 0, -1, Detail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDetail_Value(), ecorePackage.getEString(), "value", null, 1, 1, Detail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(dateAndOptionalTimeEDataType, DateAndOptionalTime.class, "DateAndOptionalTime", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

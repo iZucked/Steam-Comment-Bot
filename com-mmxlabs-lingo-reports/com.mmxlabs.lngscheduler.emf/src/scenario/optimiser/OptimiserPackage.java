@@ -145,13 +145,22 @@ public interface OptimiserPackage extends EPackage {
 	int OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Allow Rewiring By Default</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_SETTINGS__ALLOW_REWIRING_BY_DEFAULT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Optimisation Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_SETTINGS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+	int OPTIMISATION_SETTINGS_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -513,6 +522,17 @@ public interface OptimiserPackage extends EPackage {
 	EReference getOptimisationSettings_DefaultDiscountCurve();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.optimiser.OptimisationSettings#isAllowRewiringByDefault <em>Allow Rewiring By Default</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Allow Rewiring By Default</em>'.
+	 * @see scenario.optimiser.OptimisationSettings#isAllowRewiringByDefault()
+	 * @see #getOptimisationSettings()
+	 * @generated
+	 */
+	EAttribute getOptimisationSettings_AllowRewiringByDefault();
+
+	/**
 	 * Returns the meta object for the attribute '{@link scenario.optimiser.OptimisationSettings#getFreezeDaysFromStart <em>Freeze Days From Start</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -755,6 +775,14 @@ public interface OptimiserPackage extends EPackage {
 		 * @generated
 		 */
 		EReference OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE = eINSTANCE.getOptimisationSettings_DefaultDiscountCurve();
+
+		/**
+		 * The meta object literal for the '<em><b>Allow Rewiring By Default</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIMISATION_SETTINGS__ALLOW_REWIRING_BY_DEFAULT = eINSTANCE.getOptimisationSettings_AllowRewiringByDefault();
 
 		/**
 		 * The meta object literal for the '<em><b>Freeze Days From Start</b></em>' attribute feature.

@@ -62,6 +62,12 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral=""/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Detail">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Detail" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
   <eSubpackages name="fleet" nsURI="http://com.mmxlabs.lng.emf2/fleet" nsPrefix="com.mmxlabs.lng.emf.fleet">
     <eClassifiers xsi:type="ecore:EClass" name="FleetModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="fleet" upperBound="-1"
@@ -350,60 +356,16 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="LineItem" eSuperTypes="#//NamedObject">
-      <eOperations name="isCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="return getValue() &lt; 0;"/>
-        </eAnnotations>
-      </eOperations>
-      <eOperations name="isRevenue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="return !isCost();"/>
-        </eAnnotations>
-      </eOperations>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="party" lowerBound="1"
-          eType="#//contract/Entity"/>
-    </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="BookedRevenue" eSuperTypes="#//ScenarioObject">
-      <eOperations name="getUntaxedValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="int untaxedRevenue = 0;&#xA;&#xA;for (final LineItem item : getLineItems()) {&#xA;&#x9;untaxedRevenue += item.getValue();&#xA;}&#xA;&#xA;return untaxedRevenue;"/>
-          <details key="documentation" value="Returns the total untaxed revenue (or if it's a net loss, a negative revenue) which the associated cargo&#xA;has produced for the associated entity.&#xA;&#xA;This is just the sum of the revenue associated with each line item."/>
-        </eAnnotations>
-      </eOperations>
-      <eOperations name="getTaxedValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="final int untaxedRevenue = getUntaxedValue();&#xA;&#xA;if (untaxedRevenue &lt;= 0) {&#xA;&#x9;return untaxedRevenue;&#xA;} else {&#xA;         return (int) (untaxedRevenue * (1.0 - getEntity().getTaxRate()));&#xA;}"/>
-          <details key="documentation" value="Returns the total revenue after tax associated with this line item."/>
-        </eAnnotations>
-      </eOperations>
-      <eOperations name="getUntaxedRevenues" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Returns the total revenue before tax associated with this line item."/>
-          <details key="body" value="int untaxedRevenue = 0;&#xA;&#xA;for (final LineItem item : getLineItems()) {&#xA;&#x9;if (item.getValue() > 0)&#xA;&#x9;&#x9;untaxedRevenue += item.getValue();&#xA;}&#xA;&#xA;return untaxedRevenue;"/>
-        </eAnnotations>
-      </eOperations>
-      <eOperations name="getUntaxedCosts" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Returns the total costs before tax associated with this revenue"/>
-          <details key="body" value="int untaxedRevenue = 0;&#xA;&#xA;for (final LineItem item : getLineItems()) {&#xA;&#x9;if (item.getValue() &lt; 0)&#xA;&#x9;untaxedRevenue += item.getValue();&#xA;}&#xA;&#xA;return untaxedRevenue;"/>
-        </eAnnotations>
-      </eOperations>
-      <eOperations name="getTaxCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="return getUntaxedValue() - getTaxedValue();"/>
-          <details key="documentation" value="Returns the total amount of tax paid on this revenue"/>
-        </eAnnotations>
-      </eOperations>
       <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="lineItems" upperBound="-1"
-          eType="#//schedule/LineItem" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
           eType="#//contract/Entity"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="details" eType="#//Detail"
+          containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CargoRevenue" eSuperTypes="#//schedule/BookedRevenue">
       <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
@@ -414,14 +376,14 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" lowerBound="1"
           eType="#//schedule/CargoAllocation"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="CharterOutRevenue" eSuperTypes="#//schedule/BookedRevenue">
+    <eClassifiers xsi:type="ecore:EClass" name="VesselEventRevenue" eSuperTypes="#//schedule/BookedRevenue">
       <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="return getCharterOut().getCharterOut().getId();"/>
+          <details key="body" value="return getVesselEventVisit().getVesselEvent().getId();"/>
         </eAnnotations>
       </eOperations>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="charterOut" lowerBound="1"
-          eType="#//schedule/events/CharterOutVisit"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEventVisit" lowerBound="1"
+          eType="#//schedule/events/VesselEventVisit"/>
     </eClassifiers>
     <eSubpackages name="events" nsURI="http://com.mmxlabs.lng.emf2/schedule/events"
         nsPrefix="com.mmxlabs.lng.emf.schedule.events">
@@ -596,12 +558,12 @@
         </eOperations>
         <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" lowerBound="1"
             eType="#//fleet/VesselEvent"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="revenue" lowerBound="1"
+            eType="#//schedule/VesselEventRevenue"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="CharterOutVisit" eSuperTypes="#//schedule/events/VesselEventVisit">
         <eStructuralFeatures xsi:type="ecore:EReference" name="charterOut" lowerBound="1"
             eType="#//fleet/CharterOut"/>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="revenue" lowerBound="1"
-            eType="#//schedule/CharterOutRevenue"/>
       </eClassifiers>
     </eSubpackages>
     <eSubpackages name="fleetallocation" nsURI="http://com.mmxlabs.lng.emf2/schedule/fleetallocation"
@@ -700,6 +662,9 @@
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoType" lowerBound="1"
           eType="#//cargo/CargoType" defaultValueLiteral="Fleet"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowRewiring" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          unsettable="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Slot">
       <eOperations name="getLocalWindowStart" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
@@ -796,7 +761,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="entities" upperBound="-1"
           eType="#//contract/Entity" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="shippingEntity" lowerBound="1"
-          eType="#//contract/Entity" containment="true"/>
+          eType="#//contract/GroupEntity" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="purchaseContracts" upperBound="-1"
           eType="#//contract/PurchaseContract" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="salesContracts" upperBound="-1"
@@ -813,12 +778,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="repeating" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//NamedObject">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="taxRate" lowerBound="1"
-          eType="#//Percentage"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ownership" lowerBound="1"
-          eType="#//Percentage" defaultValueLiteral="1"/>
-    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//NamedObject"/>
     <eClassifiers xsi:type="ecore:EClass" name="Contract" abstract="true" eSuperTypes="#//NamedObject">
       <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
           eType="#//contract/Entity"/>
@@ -868,6 +828,14 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="cooldownPorts" upperBound="-1"
           eType="#//port/Port"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GroupEntity" eSuperTypes="#//contract/Entity">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="taxRate" lowerBound="1"
+          eType="#//Percentage"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ownership" lowerBound="1"
+          eType="#//Percentage"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="transferOffset" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </eClassifiers>
   </eSubpackages>
   <eSubpackages name="market" nsURI="http://com.mmxlabs.lng.emf2/market" nsPrefix="com.mmxlabs.lng.emf.market">
     <eClassifiers xsi:type="ecore:EClass" name="Index" eSuperTypes="#//NamedObject">
@@ -916,6 +884,8 @@
           <details key="documentation" value="A discount curve which will be applied to all this optimisation's objectives which don't themselves have a discount curve set. If unset, no discounts will be applied."/>
         </eAnnotations>
       </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowRewiringByDefault"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Optimisation">
       <eStructuralFeatures xsi:type="ecore:EReference" name="allSettings" upperBound="-1"

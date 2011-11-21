@@ -74,10 +74,9 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.SEQUENCE: return createSequence();
 			case SchedulePackage.CARGO_ALLOCATION: return createCargoAllocation();
 			case SchedulePackage.SCHEDULE_FITNESS: return createScheduleFitness();
-			case SchedulePackage.LINE_ITEM: return createLineItem();
 			case SchedulePackage.BOOKED_REVENUE: return createBookedRevenue();
 			case SchedulePackage.CARGO_REVENUE: return createCargoRevenue();
-			case SchedulePackage.CHARTER_OUT_REVENUE: return createCharterOutRevenue();
+			case SchedulePackage.VESSEL_EVENT_REVENUE: return createVesselEventRevenue();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -138,16 +137,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LineItem createLineItem() {
-		LineItemImpl lineItem = new LineItemImpl();
-		return lineItem;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public BookedRevenue createBookedRevenue() {
 		BookedRevenueImpl bookedRevenue = new BookedRevenueImpl();
 		return bookedRevenue;
@@ -168,9 +157,9 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterOutRevenue createCharterOutRevenue() {
-		CharterOutRevenueImpl charterOutRevenue = new CharterOutRevenueImpl();
-		return charterOutRevenue;
+	public VesselEventRevenue createVesselEventRevenue() {
+		VesselEventRevenueImpl vesselEventRevenue = new VesselEventRevenueImpl();
+		return vesselEventRevenue;
 	}
 
 	/**

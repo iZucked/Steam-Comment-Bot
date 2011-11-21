@@ -661,15 +661,6 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCharterOutVisit_Revenue() {
-		return (EReference)charterOutVisitEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getVesselEventVisit() {
 		return vesselEventVisitEClass;
 	}
@@ -681,6 +672,15 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 	 */
 	public EReference getVesselEventVisit_VesselEvent() {
 		return (EReference)vesselEventVisitEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getVesselEventVisit_Revenue() {
+		return (EReference)vesselEventVisitEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -819,13 +819,13 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 
 		vesselEventVisitEClass = createEClass(VESSEL_EVENT_VISIT);
 		createEReference(vesselEventVisitEClass, VESSEL_EVENT_VISIT__VESSEL_EVENT);
+		createEReference(vesselEventVisitEClass, VESSEL_EVENT_VISIT__REVENUE);
 		createEOperation(vesselEventVisitEClass, VESSEL_EVENT_VISIT___GET_ID);
 		createEOperation(vesselEventVisitEClass, VESSEL_EVENT_VISIT___GET_NAME);
 		createEOperation(vesselEventVisitEClass, VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME);
 
 		charterOutVisitEClass = createEClass(CHARTER_OUT_VISIT);
 		createEReference(charterOutVisitEClass, CHARTER_OUT_VISIT__CHARTER_OUT);
-		createEReference(charterOutVisitEClass, CHARTER_OUT_VISIT__REVENUE);
 
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
@@ -951,6 +951,7 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 
 		initEClass(vesselEventVisitEClass, VesselEventVisit.class, "VesselEventVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVesselEventVisit_VesselEvent(), theFleetPackage.getVesselEvent(), null, "vesselEvent", null, 1, 1, VesselEventVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselEventVisit_Revenue(), theSchedulePackage.getVesselEventRevenue(), null, "revenue", null, 1, 1, VesselEventVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getVesselEventVisit__GetId(), ecorePackage.getEString(), "getId", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -960,7 +961,6 @@ public class EventsPackageImpl extends EPackageImpl implements EventsPackage {
 
 		initEClass(charterOutVisitEClass, CharterOutVisit.class, "CharterOutVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterOutVisit_CharterOut(), theFleetPackage.getCharterOut(), null, "charterOut", null, 1, 1, CharterOutVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCharterOutVisit_Revenue(), theSchedulePackage.getCharterOutRevenue(), null, "revenue", null, 1, 1, CharterOutVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");

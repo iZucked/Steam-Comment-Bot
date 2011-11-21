@@ -394,6 +394,61 @@ public interface ScenarioPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link scenario.impl.DetailImpl <em>Detail</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.impl.DetailImpl
+	 * @see scenario.impl.ScenarioPackageImpl#getDetail()
+	 * @generated
+	 */
+	int DETAIL = 5;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAIL__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAIL__CHILDREN = 1;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAIL__VALUE = 2;
+
+	/**
+	 * The number of structural features of the '<em>Detail</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAIL_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Detail</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAIL_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '<em>Date And Optional Time</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -401,7 +456,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @see scenario.impl.ScenarioPackageImpl#getDateAndOptionalTime()
 	 * @generated
 	 */
-	int DATE_AND_OPTIONAL_TIME = 5;
+	int DATE_AND_OPTIONAL_TIME = 6;
 
 	/**
 	 * The meta object id for the '<em>Percentage</em>' data type.
@@ -411,7 +466,7 @@ public interface ScenarioPackage extends EPackage {
 	 * @see scenario.impl.ScenarioPackageImpl#getPercentage()
 	 * @generated
 	 */
-	int PERCENTAGE = 6;
+	int PERCENTAGE = 7;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.Scenario <em>Scenario</em>}'.
@@ -669,6 +724,49 @@ public interface ScenarioPackage extends EPackage {
 	EAttribute getAnnotatedObject_Notes();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.Detail <em>Detail</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Detail</em>'.
+	 * @see scenario.Detail
+	 * @generated
+	 */
+	EClass getDetail();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.Detail#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see scenario.Detail#getName()
+	 * @see #getDetail()
+	 * @generated
+	 */
+	EAttribute getDetail_Name();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.Detail#getChildren <em>Children</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Children</em>'.
+	 * @see scenario.Detail#getChildren()
+	 * @see #getDetail()
+	 * @generated
+	 */
+	EReference getDetail_Children();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.Detail#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see scenario.Detail#getValue()
+	 * @see #getDetail()
+	 * @generated
+	 */
+	EAttribute getDetail_Value();
+
+	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime <em>Date And Optional Time</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -914,6 +1012,40 @@ public interface ScenarioPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ANNOTATED_OBJECT__NOTES = eINSTANCE.getAnnotatedObject_Notes();
+
+		/**
+		 * The meta object literal for the '{@link scenario.impl.DetailImpl <em>Detail</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.impl.DetailImpl
+		 * @see scenario.impl.ScenarioPackageImpl#getDetail()
+		 * @generated
+		 */
+		EClass DETAIL = eINSTANCE.getDetail();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DETAIL__NAME = eINSTANCE.getDetail_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Children</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DETAIL__CHILDREN = eINSTANCE.getDetail_Children();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DETAIL__VALUE = eINSTANCE.getDetail_Value();
 
 		/**
 		 * The meta object literal for the '<em>Date And Optional Time</em>' data type.

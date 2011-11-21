@@ -1116,8 +1116,9 @@ public class ScenarioImpl extends AnnotatedObjectImpl implements Scenario {
 
 
 
+	@Override
 	public Scenario getSelfContainedCopy() {
-		final Scenario scenario = EcoreUtil.copy(this);
+		final Scenario scenario = this;
 		final List<EObject> toCopy = new ArrayList<EObject>();
 		toCopy.add(scenario);
 		for (final EReference reference : scenario.eClass().getEAllReferences()) {

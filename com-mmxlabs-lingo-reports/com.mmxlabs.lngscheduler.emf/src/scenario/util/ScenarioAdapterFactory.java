@@ -95,6 +95,10 @@ public class ScenarioAdapterFactory extends AdapterFactoryImpl {
 				return createAnnotatedObjectAdapter();
 			}
 			@Override
+			public Adapter caseDetail(Detail object) {
+				return createDetailAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -181,6 +185,20 @@ public class ScenarioAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAnnotatedObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.Detail <em>Detail</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.Detail
+	 * @generated
+	 */
+	public Adapter createDetailAdapter() {
 		return null;
 	}
 

@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.fleet.CharterOut;
+import scenario.schedule.VesselEventRevenue;
 import scenario.schedule.CharterOutRevenue;
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsPackage;
@@ -24,7 +25,6 @@ import scenario.schedule.events.EventsPackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.schedule.events.impl.CharterOutVisitImpl#getCharterOut <em>Charter Out</em>}</li>
- *   <li>{@link scenario.schedule.events.impl.CharterOutVisitImpl#getRevenue <em>Revenue</em>}</li>
  * </ul>
  * </p>
  *
@@ -40,16 +40,6 @@ public class CharterOutVisitImpl extends VesselEventVisitImpl implements Charter
 	 * @ordered
 	 */
 	protected CharterOut charterOut;
-
-	/**
-	 * The cached value of the '{@link #getRevenue() <em>Revenue</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRevenue()
-	 * @generated
-	 * @ordered
-	 */
-	protected CharterOutRevenue revenue;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -113,53 +103,12 @@ public class CharterOutVisitImpl extends VesselEventVisitImpl implements Charter
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterOutRevenue getRevenue() {
-		if (revenue != null && revenue.eIsProxy()) {
-			InternalEObject oldRevenue = (InternalEObject)revenue;
-			revenue = (CharterOutRevenue)eResolveProxy(oldRevenue);
-			if (revenue != oldRevenue) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, EventsPackage.CHARTER_OUT_VISIT__REVENUE, oldRevenue, revenue));
-			}
-		}
-		return revenue;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CharterOutRevenue basicGetRevenue() {
-		return revenue;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setRevenue(CharterOutRevenue newRevenue) {
-		CharterOutRevenue oldRevenue = revenue;
-		revenue = newRevenue;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.CHARTER_OUT_VISIT__REVENUE, oldRevenue, revenue));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
 				if (resolve) return getCharterOut();
 				return basicGetCharterOut();
-			case EventsPackage.CHARTER_OUT_VISIT__REVENUE:
-				if (resolve) return getRevenue();
-				return basicGetRevenue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -174,9 +123,6 @@ public class CharterOutVisitImpl extends VesselEventVisitImpl implements Charter
 		switch (featureID) {
 			case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
 				setCharterOut((CharterOut)newValue);
-				return;
-			case EventsPackage.CHARTER_OUT_VISIT__REVENUE:
-				setRevenue((CharterOutRevenue)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -193,9 +139,6 @@ public class CharterOutVisitImpl extends VesselEventVisitImpl implements Charter
 			case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
 				setCharterOut((CharterOut)null);
 				return;
-			case EventsPackage.CHARTER_OUT_VISIT__REVENUE:
-				setRevenue((CharterOutRevenue)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -210,8 +153,6 @@ public class CharterOutVisitImpl extends VesselEventVisitImpl implements Charter
 		switch (featureID) {
 			case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
 				return charterOut != null;
-			case EventsPackage.CHARTER_OUT_VISIT__REVENUE:
-				return revenue != null;
 		}
 		return super.eIsSet(featureID);
 	}

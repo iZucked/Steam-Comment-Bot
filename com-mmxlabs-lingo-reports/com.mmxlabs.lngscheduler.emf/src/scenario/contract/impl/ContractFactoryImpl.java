@@ -76,6 +76,7 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 			case ContractPackage.INDEX_PRICE_PURCHASE_CONTRACT: return createIndexPricePurchaseContract();
 			case ContractPackage.NETBACK_PURCHASE_CONTRACT: return createNetbackPurchaseContract();
 			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT: return createProfitSharingPurchaseContract();
+			case ContractPackage.GROUP_ENTITY: return createGroupEntity();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -159,6 +160,16 @@ public class ContractFactoryImpl extends EFactoryImpl implements ContractFactory
 	public ProfitSharingPurchaseContract createProfitSharingPurchaseContract() {
 		ProfitSharingPurchaseContractImpl profitSharingPurchaseContract = new ProfitSharingPurchaseContractImpl();
 		return profitSharingPurchaseContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GroupEntity createGroupEntity() {
+		GroupEntityImpl groupEntity = new GroupEntityImpl();
+		return groupEntity;
 	}
 
 	/**
