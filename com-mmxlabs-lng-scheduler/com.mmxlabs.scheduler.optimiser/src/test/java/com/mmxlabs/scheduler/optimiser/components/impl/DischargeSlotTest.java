@@ -65,7 +65,7 @@ public class DischargeSlotTest {
 		final ICurve curve = context.mock(ICurve.class);
 		final DischargeSlot slot = new DischargeSlot();
 		Assert.assertNull(slot.getSalesPriceCurve());
-		slot.setSalesPriceCurve(curve);
+		slot.setDischargePriceCalculator(curve);
 		Assert.assertSame(curve, slot.getSalesPriceCurve());
 	}
 
@@ -74,7 +74,7 @@ public class DischargeSlotTest {
 		final DischargeSlot slot = new DischargeSlot();
 
 		final ICurve curve = context.mock(ICurve.class);
-		slot.setSalesPriceCurve(curve);
+		slot.setDischargePriceCalculator(curve);
 
 		final int time = 1234;
 

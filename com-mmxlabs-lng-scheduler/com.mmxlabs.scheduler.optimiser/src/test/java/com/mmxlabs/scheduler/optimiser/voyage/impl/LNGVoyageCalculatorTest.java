@@ -961,7 +961,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeDetails.setPortSlot(dischargeSlot);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(-1));
-		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(-1.0));
+		dischargeSlot.setDischargePriceCalculator(new ConstantValueCurve(-1.0));
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 		final VoyageOptions options = new VoyageOptions();
@@ -1026,7 +1026,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeSlot.setMaxDischargeVolume(30000l);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
-		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(1000.0));
+		dischargeSlot.setDischargePriceCalculator(new ConstantValueCurve(1000.0));
 		loadSlot.setCargoCVValue(2000);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
@@ -1198,7 +1198,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeSlot.setMaxDischargeVolume(3000000l);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
-		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(1000.0));
+		dischargeSlot.setDischargePriceCalculator(new ConstantValueCurve(1000.0));
 
 		loadSlot.setCargoCVValue(2000);
 
@@ -1321,7 +1321,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeSlot.setMaxDischargeVolume(30l);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
-		dischargeSlot.setSalesPriceCurve(new ConstantValueCurve(1000.0));
+		dischargeSlot.setDischargePriceCalculator(new ConstantValueCurve(1000.0));
 
 		final VoyageDetails<Object> details1 = new VoyageDetails<Object>();
 		final VoyageOptions options1 = new VoyageOptions();

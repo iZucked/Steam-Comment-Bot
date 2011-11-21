@@ -106,6 +106,7 @@ public class LatenessComponentTest {
 
 		Assert.fail("TODO: Fix me");
 
+
 		// c.prepare();
 		//
 		// c.beginIterating(resource);
