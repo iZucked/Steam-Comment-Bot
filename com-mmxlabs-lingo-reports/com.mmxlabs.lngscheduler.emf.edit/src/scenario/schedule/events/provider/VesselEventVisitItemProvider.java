@@ -61,6 +61,7 @@ public class VesselEventVisitItemProvider
 			super.getPropertyDescriptors(object);
 
 			addVesselEventPropertyDescriptor(object);
+			addRevenuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -79,6 +80,28 @@ public class VesselEventVisitItemProvider
 				 getString("_UI_VesselEventVisit_vesselEvent_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEventVisit_vesselEvent_feature", "_UI_VesselEventVisit_type"),
 				 EventsPackage.Literals.VESSEL_EVENT_VISIT__VESSEL_EVENT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Revenue feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRevenuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselEventVisit_revenue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEventVisit_revenue_feature", "_UI_VesselEventVisit_type"),
+				 EventsPackage.Literals.VESSEL_EVENT_VISIT__REVENUE,
 				 true,
 				 false,
 				 true,

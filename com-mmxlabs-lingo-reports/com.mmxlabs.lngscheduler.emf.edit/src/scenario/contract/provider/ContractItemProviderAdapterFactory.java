@@ -260,6 +260,29 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.contract.GroupEntity} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected GroupEntityItemProvider groupEntityItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.contract.GroupEntity}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createGroupEntityAdapter() {
+		if (groupEntityItemProvider == null) {
+			groupEntityItemProvider = new GroupEntityItemProvider(this);
+		}
+
+		return groupEntityItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -366,6 +389,7 @@ public class ContractItemProviderAdapterFactory extends ContractAdapterFactory i
 		if (indexPricePurchaseContractItemProvider != null) indexPricePurchaseContractItemProvider.dispose();
 		if (netbackPurchaseContractItemProvider != null) netbackPurchaseContractItemProvider.dispose();
 		if (profitSharingPurchaseContractItemProvider != null) profitSharingPurchaseContractItemProvider.dispose();
+		if (groupEntityItemProvider != null) groupEntityItemProvider.dispose();
 	}
 
 }

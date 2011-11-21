@@ -222,7 +222,7 @@ public class ScheduleItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__REVENUE,
-				 ScheduleFactory.eINSTANCE.createCharterOutRevenue()));
+				 ScheduleFactory.eINSTANCE.createVesselEventRevenue()));
 
 		newChildDescriptors.add
 			(createChildParameter

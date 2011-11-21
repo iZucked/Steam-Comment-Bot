@@ -73,6 +73,7 @@ public class CargoItemProvider
 			addIdPropertyDescriptor(object);
 			addAllowedVesselsPropertyDescriptor(object);
 			addCargoTypePropertyDescriptor(object);
+			addAllowRewiringPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -139,6 +140,28 @@ public class CargoItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Allow Rewiring feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowRewiringPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Cargo_allowRewiring_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Cargo_allowRewiring_feature", "_UI_Cargo_type"),
+				 CargoPackage.Literals.CARGO__ALLOW_REWIRING,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -213,6 +236,7 @@ public class CargoItemProvider
 		switch (notification.getFeatureID(Cargo.class)) {
 			case CargoPackage.CARGO__ID:
 			case CargoPackage.CARGO__CARGO_TYPE:
+			case CargoPackage.CARGO__ALLOW_REWIRING:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.CARGO__LOAD_SLOT:

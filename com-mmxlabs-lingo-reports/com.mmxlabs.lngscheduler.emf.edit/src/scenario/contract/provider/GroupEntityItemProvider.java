@@ -4,7 +4,7 @@
  *
  * $Id$
  */
-package scenario.schedule.provider;
+package scenario.contract.provider;
 
 
 import java.util.Collection;
@@ -12,8 +12,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -25,20 +23,17 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import scenario.provider.LngEditPlugin;
-import scenario.provider.NamedObjectItemProvider;
-
-import scenario.schedule.LineItem;
-import scenario.schedule.SchedulePackage;
+import scenario.contract.ContractPackage;
+import scenario.contract.GroupEntity;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.LineItem} object.
+ * This is the item provider adapter for a {@link scenario.contract.GroupEntity} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class LineItemItemProvider
-	extends NamedObjectItemProvider
+public class GroupEntityItemProvider
+	extends EntityItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -51,7 +46,7 @@ public class LineItemItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LineItemItemProvider(AdapterFactory adapterFactory) {
+	public GroupEntityItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -66,65 +61,88 @@ public class LineItemItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addValuePropertyDescriptor(object);
-			addPartyPropertyDescriptor(object);
+			addTaxRatePropertyDescriptor(object);
+			addOwnershipPropertyDescriptor(object);
+			addTransferOffsetPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Value feature.
+	 * This adds a property descriptor for the Tax Rate feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addValuePropertyDescriptor(Object object) {
+	protected void addTaxRatePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LineItem_value_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LineItem_value_feature", "_UI_LineItem_type"),
-				 SchedulePackage.Literals.LINE_ITEM__VALUE,
+				 getString("_UI_GroupEntity_taxRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GroupEntity_taxRate_feature", "_UI_GroupEntity_type"),
+				 ContractPackage.Literals.GROUP_ENTITY__TAX_RATE,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Party feature.
+	 * This adds a property descriptor for the Ownership feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPartyPropertyDescriptor(Object object) {
+	protected void addOwnershipPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LineItem_party_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LineItem_party_feature", "_UI_LineItem_type"),
-				 SchedulePackage.Literals.LINE_ITEM__PARTY,
+				 getString("_UI_GroupEntity_ownership_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GroupEntity_ownership_feature", "_UI_GroupEntity_type"),
+				 ContractPackage.Literals.GROUP_ENTITY__OWNERSHIP,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This returns LineItem.gif.
+	 * This adds a property descriptor for the Transfer Offset feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTransferOffsetPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_GroupEntity_transferOffset_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GroupEntity_transferOffset_feature", "_UI_GroupEntity_type"),
+				 ContractPackage.Literals.GROUP_ENTITY__TRANSFER_OFFSET,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This returns GroupEntity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/LineItem"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/GroupEntity"));
 	}
 
 	/**
@@ -135,10 +153,10 @@ public class LineItemItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LineItem)object).getName();
+		String label = ((GroupEntity)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_LineItem_type") :
-			getString("_UI_LineItem_type") + " " + label;
+			getString("_UI_GroupEntity_type") :
+			getString("_UI_GroupEntity_type") + " " + label;
 	}
 
 	/**
@@ -152,8 +170,10 @@ public class LineItemItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(LineItem.class)) {
-			case SchedulePackage.LINE_ITEM__VALUE:
+		switch (notification.getFeatureID(GroupEntity.class)) {
+			case ContractPackage.GROUP_ENTITY__TAX_RATE:
+			case ContractPackage.GROUP_ENTITY__OWNERSHIP:
+			case ContractPackage.GROUP_ENTITY__TRANSFER_OFFSET:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
@@ -170,17 +190,6 @@ public class LineItemItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return LngEditPlugin.INSTANCE;
 	}
 
 }

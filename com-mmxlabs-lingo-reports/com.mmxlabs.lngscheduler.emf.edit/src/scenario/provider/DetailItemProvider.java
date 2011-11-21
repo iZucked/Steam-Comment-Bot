@@ -4,11 +4,10 @@
  *
  * $Id$
  */
-package scenario.schedule.provider;
+package scenario.provider;
 
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -26,24 +25,21 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import scenario.Detail;
 import scenario.ScenarioFactory;
-import scenario.provider.LngEditPlugin;
-import scenario.provider.ScenarioObjectItemProvider;
-
-import scenario.schedule.BookedRevenue;
-import scenario.schedule.ScheduleFactory;
-import scenario.schedule.SchedulePackage;
+import scenario.ScenarioPackage;
 
 /**
- * This is the item provider adapter for a {@link scenario.schedule.BookedRevenue} object.
+ * This is the item provider adapter for a {@link scenario.Detail} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class BookedRevenueItemProvider
-	extends ScenarioObjectItemProvider
+public class DetailItemProvider
+	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -56,7 +52,7 @@ public class BookedRevenueItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public BookedRevenueItemProvider(AdapterFactory adapterFactory) {
+	public DetailItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -71,31 +67,30 @@ public class BookedRevenueItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addDatePropertyDescriptor(object);
-			addEntityPropertyDescriptor(object);
+			addNamePropertyDescriptor(object);
 			addValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Entity feature.
+	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addEntityPropertyDescriptor(Object object) {
+	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_BookedRevenue_entity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BookedRevenue_entity_feature", "_UI_BookedRevenue_type"),
-				 SchedulePackage.Literals.BOOKED_REVENUE__ENTITY,
+				 getString("_UI_Detail_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Detail_name_feature", "_UI_Detail_type"),
+				 ScenarioPackage.Literals.DETAIL__NAME,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -111,13 +106,13 @@ public class BookedRevenueItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_BookedRevenue_value_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BookedRevenue_value_feature", "_UI_BookedRevenue_type"),
-				 SchedulePackage.Literals.BOOKED_REVENUE__VALUE,
+				 getString("_UI_Detail_value_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Detail_value_feature", "_UI_Detail_type"),
+				 ScenarioPackage.Literals.DETAIL__VALUE,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -134,7 +129,7 @@ public class BookedRevenueItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.BOOKED_REVENUE__DETAILS);
+			childrenFeatures.add(ScenarioPackage.Literals.DETAIL__CHILDREN);
 		}
 		return childrenFeatures;
 	}
@@ -153,36 +148,14 @@ public class BookedRevenueItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Date feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_BookedRevenue_date_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BookedRevenue_date_feature", "_UI_BookedRevenue_type"),
-				 SchedulePackage.Literals.BOOKED_REVENUE__DATE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns BookedRevenue.gif.
+	 * This returns Detail.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/BookedRevenue"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Detail"));
 	}
 
 	/**
@@ -193,11 +166,10 @@ public class BookedRevenueItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((BookedRevenue)object).getDate();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((Detail)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_BookedRevenue_type") :
-			getString("_UI_BookedRevenue_type") + " " + label;
+			getString("_UI_Detail_type") :
+			getString("_UI_Detail_type") + " " + label;
 	}
 
 	/**
@@ -211,12 +183,12 @@ public class BookedRevenueItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(BookedRevenue.class)) {
-			case SchedulePackage.BOOKED_REVENUE__DATE:
-			case SchedulePackage.BOOKED_REVENUE__VALUE:
+		switch (notification.getFeatureID(Detail.class)) {
+			case ScenarioPackage.DETAIL__NAME:
+			case ScenarioPackage.DETAIL__VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case SchedulePackage.BOOKED_REVENUE__DETAILS:
+			case ScenarioPackage.DETAIL__CHILDREN:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -236,7 +208,7 @@ public class BookedRevenueItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.BOOKED_REVENUE__DETAILS,
+				(ScenarioPackage.Literals.DETAIL__CHILDREN,
 				 ScenarioFactory.eINSTANCE.createDetail()));
 	}
 

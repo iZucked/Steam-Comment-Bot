@@ -173,8 +173,13 @@ public class ContractModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(ContractPackage.Literals.CONTRACT_MODEL__ENTITIES,
+				 ContractFactory.eINSTANCE.createGroupEntity()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(ContractPackage.Literals.CONTRACT_MODEL__SHIPPING_ENTITY,
-				 ContractFactory.eINSTANCE.createEntity()));
+				 ContractFactory.eINSTANCE.createGroupEntity()));
 
 		newChildDescriptors.add
 			(createChildParameter

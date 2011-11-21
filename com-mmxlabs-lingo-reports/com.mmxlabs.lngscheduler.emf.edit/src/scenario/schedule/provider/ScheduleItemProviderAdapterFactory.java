@@ -191,29 +191,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.schedule.LineItem} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected LineItemItemProvider lineItemItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link scenario.schedule.LineItem}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createLineItemAdapter() {
-		if (lineItemItemProvider == null) {
-			lineItemItemProvider = new LineItemItemProvider(this);
-		}
-
-		return lineItemItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link scenario.schedule.BookedRevenue} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -260,26 +237,26 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.schedule.CharterOutRevenue} instances.
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.VesselEventRevenue} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CharterOutRevenueItemProvider charterOutRevenueItemProvider;
+	protected VesselEventRevenueItemProvider vesselEventRevenueItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link scenario.schedule.CharterOutRevenue}.
+	 * This creates an adapter for a {@link scenario.schedule.VesselEventRevenue}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createCharterOutRevenueAdapter() {
-		if (charterOutRevenueItemProvider == null) {
-			charterOutRevenueItemProvider = new CharterOutRevenueItemProvider(this);
+	public Adapter createVesselEventRevenueAdapter() {
+		if (vesselEventRevenueItemProvider == null) {
+			vesselEventRevenueItemProvider = new VesselEventRevenueItemProvider(this);
 		}
 
-		return charterOutRevenueItemProvider;
+		return vesselEventRevenueItemProvider;
 	}
 
 	/**
@@ -386,10 +363,9 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
 		if (cargoAllocationItemProvider != null) cargoAllocationItemProvider.dispose();
 		if (scheduleFitnessItemProvider != null) scheduleFitnessItemProvider.dispose();
-		if (lineItemItemProvider != null) lineItemItemProvider.dispose();
 		if (bookedRevenueItemProvider != null) bookedRevenueItemProvider.dispose();
 		if (cargoRevenueItemProvider != null) cargoRevenueItemProvider.dispose();
-		if (charterOutRevenueItemProvider != null) charterOutRevenueItemProvider.dispose();
+		if (vesselEventRevenueItemProvider != null) vesselEventRevenueItemProvider.dispose();
 	}
 
 }
