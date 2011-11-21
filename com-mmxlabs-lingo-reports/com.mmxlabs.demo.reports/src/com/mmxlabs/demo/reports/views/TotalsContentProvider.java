@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 import scenario.Scenario;
 import scenario.contract.Entity;
+import scenario.contract.GroupEntity;
 import scenario.schedule.BookedRevenue;
 import scenario.schedule.Schedule;
 import scenario.schedule.Sequence;
@@ -34,8 +35,7 @@ import scenario.schedule.events.ScheduledEvent;
 public class TotalsContentProvider implements IStructuredContentProvider {
 
 	public static class RowData {
-		public RowData(String scheduleName, String component, boolean isCost,
-				long fitness) {
+		public RowData(String scheduleName, String component, boolean isCost, long fitness) {
 			super();
 			this.scheduleName = scheduleName;
 			this.component = component;
@@ -57,14 +57,11 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		return rowData;
 	}
 
-	private void createRowData(final Schedule schedule,
-			final List<RowData> output) {
+	private void createRowData(final Schedule schedule, final List<RowData> output) {
 		/**
-		 * Stores the total fuel costs for each type of fuel - this may not be
-		 * the detailed output we want, I don't know
+		 * Stores the total fuel costs for each type of fuel - this may not be the detailed output we want, I don't know
 		 */
-		final EnumMap<FuelType, Long> totalFuelCosts = new EnumMap<FuelType, Long>(
-				FuelType.class);
+		final EnumMap<FuelType, Long> totalFuelCosts = new EnumMap<FuelType, Long>(FuelType.class);
 
 		for (final FuelType t : FuelType.values()) {
 			totalFuelCosts.put(t, 0l);
@@ -83,10 +80,8 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 					final FuelMixture mix = (FuelMixture) evt;
 					// add up fuel components from mixture
 					for (final FuelQuantity fq : mix.getFuelUsage()) {
-						final long sumSoFar = totalFuelCosts.get(fq
-								.getFuelType());
-						totalFuelCosts.put(fq.getFuelType(),
-								sumSoFar + fq.getTotalPrice());
+						final long sumSoFar = totalFuelCosts.get(fq.getFuelType());
+						totalFuelCosts.put(fq.getFuelType(), sumSoFar + fq.getTotalPrice());
 						totalCost += fq.getTotalPrice();
 					}
 				}
@@ -99,12 +94,11 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-		Scenario s = (Scenario)schedule.eContainer().eContainer();
-		final String scheduleName = 		s.getName();
+		Scenario s = (Scenario) schedule.eContainer().eContainer();
+		final String scheduleName = s.getName();
 
 		for (final Entry<FuelType, Long> entry : totalFuelCosts.entrySet()) {
-			output.add(new RowData(scheduleName, entry.getKey().toString(),
-					true, entry.getValue()));
+			output.add(new RowData(scheduleName, entry.getKey().toString(), true, entry.getValue()));
 		}
 
 		output.add(new RowData(scheduleName, "Canal Fees", true, canals));
@@ -118,12 +112,12 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		final Map<Entity, Long> totalRevenue = new HashMap<Entity, Long>();
 
 		for (final BookedRevenue revenue : schedule.getRevenue()) {
-			if (revenue.getEntity()==null) continue;
-			if (revenue.getEntity().getOwnership() == 0)
+			if (revenue.getEntity() == null)
+				continue;
+			if (revenue.getEntity() instanceof GroupEntity == false)
 				continue;
 			final Long l = totalRevenue.get(revenue.getEntity());
-			totalRevenue.put(revenue.getEntity(), (l == null ? 0 : l.longValue())
-					+ revenue.getTaxedValue());
+			totalRevenue.put(revenue.getEntity(), (l == null ? 0 : l.longValue()) + revenue.getValue());
 		}
 
 		long totalTotalRevenue = 0;
@@ -131,14 +125,13 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 			output.add(new RowData(scheduleName, sum.getKey().getName(), false, sum.getValue()));
 			totalTotalRevenue += sum.getValue();
 		}
-		
+
 		output.add(new RowData(scheduleName, "Total Profit", false, totalTotalRevenue));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized void inputChanged(final Viewer viewer,
-			final Object oldInput, final Object newInput) {
+	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		rowData = new RowData[0];
 		if (newInput instanceof Iterable) {
 			final ArrayList<RowData> rowDataList = new ArrayList<RowData>();

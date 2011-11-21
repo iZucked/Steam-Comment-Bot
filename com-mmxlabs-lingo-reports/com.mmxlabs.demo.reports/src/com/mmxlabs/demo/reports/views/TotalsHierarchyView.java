@@ -38,8 +38,8 @@ import org.eclipse.ui.part.ViewPart;
 
 import scenario.Scenario;
 import scenario.contract.Entity;
+import scenario.contract.GroupEntity;
 import scenario.schedule.BookedRevenue;
-import scenario.schedule.LineItem;
 import scenario.schedule.Schedule;
 import scenario.schedule.Sequence;
 import scenario.schedule.events.FuelMixture;
@@ -203,7 +203,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		if (schedule != null) {
 			for (final BookedRevenue revenue : schedule.getRevenue()) {
 				final Entity e = revenue.getEntity();
-				if (e == null || e.getOwnership() == 0)
+				if (e == null || !(e instanceof GroupEntity))
 					continue;
 
 				TreeData td = byEntity.get(e);
@@ -213,18 +213,18 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 					byEntity.put(e, td);
 				}
 
-				final TreeData rd = new TreeData(revenue.getName());
+				final TreeData rd = new TreeData(revenue.getName(), revenue.getValue());
 
 				td.addChild(rd);
 
-				for (final LineItem item : revenue.getLineItems()) {
-					final TreeData li = new TreeData(item.getName(),
-							item.getValue());
-					rd.addChild(li);
-				}
+				// for (final LineItem item : revenue.getLineItems()) {
+				// final TreeData li = new TreeData(item.getName(),
+				// item.getValue());
+				// rd.addChild(li);
+				// }
 
-				rd.addChild(new TreeData("Tax", -revenue.getTaxCost()));
-				assert (rd.getCost() == revenue.getTaxedValue());
+				// rd.addChild(new TreeData("Tax", -revenue.getTaxCost()));
+				// assert (rd.getCost() == revenue.getTaxedValue());
 				// TODO this does not take account of ownership proportion
 			}
 		}

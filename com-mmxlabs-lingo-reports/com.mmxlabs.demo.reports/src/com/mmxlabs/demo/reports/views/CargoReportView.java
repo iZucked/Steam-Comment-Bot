@@ -19,6 +19,7 @@ import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.contract.Entity;
+import scenario.contract.GroupEntity;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
@@ -210,7 +211,7 @@ public class CargoReportView extends EMFReportView {
 	}
 
 	private void addEntityColumn(final Entity entity) {
-		if (entity == null || entity.getOwnership() == 0)
+		if (!(entity instanceof GroupEntity))
 			return;
 		final String title = "Profit to " + entity.getName();
 		entityColumnNames.add(title);
@@ -221,22 +222,14 @@ public class CargoReportView extends EMFReportView {
 					// display P&L
 					int value = 0;
 					final CargoAllocation allocation = (CargoAllocation) object;
-					if (allocation.getLoadRevenue() != null
-							&& entity.equals(allocation.getLoadRevenue()
-									.getEntity())) {
-						value += allocation.getLoadRevenue().getTaxedValue();
+					if (allocation.getLoadRevenue() != null && entity.equals(allocation.getLoadRevenue().getEntity())) {
+						value += allocation.getLoadRevenue().getValue();
 					}
-					if (allocation.getShippingRevenue() != null
-							&& entity.equals(allocation.getShippingRevenue()
-									.getEntity())) {
-						value += allocation.getShippingRevenue()
-								.getTaxedValue();
+					if (allocation.getShippingRevenue() != null && entity.equals(allocation.getShippingRevenue().getEntity())) {
+						value += allocation.getShippingRevenue().getValue();
 					}
-					if (allocation.getDischargeRevenue() != null
-							&& entity.equals(allocation.getDischargeRevenue()
-									.getEntity())) {
-						value += allocation.getDischargeRevenue()
-								.getTaxedValue();
+					if (allocation.getDischargeRevenue() != null && entity.equals(allocation.getDischargeRevenue().getEntity())) {
+						value += allocation.getDischargeRevenue().getValue();
 					}
 					return value;
 				}
