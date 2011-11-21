@@ -5,13 +5,17 @@
 package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * Just an arraylist containing some {@link ScheduledSequence}s, and a convenience method for adding one ({@link #addScheduledSequence(IResource, int, List)}).
+ * Represents a solution undergoing evaluation as a list of lists of voyageplans, start times, resources etc.
+ * 
+ * Also stores information about cargo allocations and load prices, once they have been filled in and updated.
  * 
  * @author hinton
  * 
@@ -19,6 +23,16 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public final class ScheduledSequences extends ArrayList<ScheduledSequence>  {
 	private static final long serialVersionUID = 1L;
 	
+	private Collection<IAllocationAnnotation> allocations = null;
+
+	public final Collection<IAllocationAnnotation> getAllocations() {
+		return allocations;
+	}
+
+	public final void setAllocations(Collection<IAllocationAnnotation> allocations) {
+		this.allocations = allocations;
+	}
+
 	public void addScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans) {
 		add(new ScheduledSequence(resource, startTime, voyagePlans));
 	}
