@@ -69,9 +69,10 @@ public class ScenarioUtils {
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1));
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.DISTANCE_COMPONENT_NAME, 0));
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME, 1));
-			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CARGO_ALLOCATION_COMPONENT_NAME, 1));
 
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, 1));
+
+			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, 1));
 		}
 
 		settings.setNumberOfSteps(200000);
