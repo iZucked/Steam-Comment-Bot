@@ -10,10 +10,10 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.impl.DischargeEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.JourneyEventImpl;
@@ -87,18 +87,18 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 				final PortVisitEventImpl<T> visit;
 				if (currentPortSlot instanceof ILoadSlot) {
 					final LoadEventImpl<T> load = new LoadEventImpl<T>();
-					load.setLoadVolume(plan.getLoadVolume());
+					// load.setLoadVolume(plan.getLoadVolume());
 					// TODO: Check unit vs. actual
-					load.setPurchasePrice(plan.getPurchaseCost());
+					// load.setPurchasePrice(plan.getPurchaseCost());
 
 					visit = load;
 				} else if (currentPortSlot instanceof IDischargeSlot) {
 					final DischargeEventImpl<T> discharge = new DischargeEventImpl<T>();
 
-					discharge.setDischargeVolume(plan.getDischargeVolume());
+					// discharge.setDischargeVolume(plan.getDischargeVolume());
 
 					// TODO: Check unit vs. actual
-					discharge.setSalesPrice(plan.getSalesRevenue());
+					// discharge.setSalesPrice(plan.getSalesRevenue());
 
 					visit = discharge;
 

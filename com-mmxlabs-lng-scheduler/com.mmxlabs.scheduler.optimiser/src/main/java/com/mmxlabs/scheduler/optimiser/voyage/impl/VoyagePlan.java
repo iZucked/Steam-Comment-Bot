@@ -19,43 +19,37 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 public final class VoyagePlan implements Cloneable {
 
 	private Object[] sequence;
-	private long dischargeVolume;
-	private long loadVolume;
-	private long salesRevenue;
-	private long purchaseCost;
+
+	// private long loadVolume;
+	// private long salesRevenue;
+	// private long purchaseCost;
 
 	private final LongFastEnumMap<FuelComponent> fuelConsumptions;
 	private final LongFastEnumMap<FuelComponent> fuelCosts;
 	private long lngFuelVolume;
 
 	public VoyagePlan() {
-		fuelConsumptions = new LongFastEnumMap<FuelComponent>(
-				FuelComponent.values().length);
-		fuelCosts = new LongFastEnumMap<FuelComponent>(
-				FuelComponent.values().length);
+		fuelConsumptions = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
+		fuelCosts = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 	}
 
-	protected VoyagePlan(final Object[] sequence, final long dischargeVolume,
-			final long loadVolume, final long salesRevenue,
-			final long purchaseCost,
-			final LongFastEnumMap<FuelComponent> fuelConsumptions,
+	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions,
 			final LongFastEnumMap<FuelComponent> fuelCosts) {
 		super();
 		this.sequence = sequence;
-		this.dischargeVolume = dischargeVolume;
-		this.loadVolume = loadVolume;
-		this.salesRevenue = salesRevenue;
-		this.purchaseCost = purchaseCost;
+		// this.loadVolume = loadVolume;
+		// this.salesRevenue = salesRevenue;
+		// this.purchaseCost = purchaseCost;
 		this.fuelConsumptions = fuelConsumptions;
 		this.fuelCosts = fuelCosts;
+		this.lngFuelVolume = fuelVolume;
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel) {
 		return fuelConsumptions.get(fuel);
 	}
 
-	public final void setFuelConsumption(final FuelComponent fuel,
-			final long consumption) {
+	public final void setFuelConsumption(final FuelComponent fuel, final long consumption) {
 		fuelConsumptions.put(fuel, consumption);
 	}
 
@@ -67,37 +61,6 @@ public final class VoyagePlan implements Cloneable {
 		fuelCosts.put(fuel, cost);
 	}
 
-	public final long getDischargeVolume() {
-		return dischargeVolume;
-	}
-
-	public final void setDischargeVolume(final long dischargeVolume) {
-		this.dischargeVolume = dischargeVolume;
-	}
-
-	public final long getLoadVolume() {
-		return loadVolume;
-	}
-
-	public final void setLoadVolume(final long loadVolume) {
-		this.loadVolume = loadVolume;
-	}
-
-	public final long getSalesRevenue() {
-		return salesRevenue;
-	}
-
-	public final void setSalesRevenue(final long salesRevenue) {
-		this.salesRevenue = salesRevenue;
-	}
-
-	public final long getPurchaseCost() {
-		return purchaseCost;
-	}
-
-	public final void setPurchaseCost(final long purchaseCost) {
-		this.purchaseCost = purchaseCost;
-	}
 
 	public final Object[] getSequence() {
 		return sequence;
@@ -113,16 +76,7 @@ public final class VoyagePlan implements Cloneable {
 		if (obj instanceof VoyagePlan) {
 			final VoyagePlan p = (VoyagePlan) obj;
 
-			if (dischargeVolume != p.dischargeVolume) {
-				return false;
-			}
-			if (loadVolume != p.loadVolume) {
-				return false;
-			}
-			if (purchaseCost != p.purchaseCost) {
-				return false;
-			}
-			if (salesRevenue != p.salesRevenue) {
+			if (p.lngFuelVolume != lngFuelVolume) {
 				return false;
 			}
 
@@ -143,11 +97,8 @@ public final class VoyagePlan implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "VoyagePlan [sequence=" + Arrays.toString(sequence)
-				+ ", dischargeVolume=" + dischargeVolume + ", loadVolume="
-				+ loadVolume + ", salesRevenue=" + salesRevenue
-				+ ", purchaseCost=" + purchaseCost + ", fuelConsumptions="
-				+ fuelConsumptions + ", fuelCosts=" + fuelCosts + "]";
+		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", fuelConsumptions=" + fuelConsumptions + ", fuelCosts="
+				+ fuelCosts + "]";
 	}
 
 	@Override
@@ -163,8 +114,7 @@ public final class VoyagePlan implements Cloneable {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, dischargeVolume, loadVolume,
-				salesRevenue, purchaseCost, fuelConsumptions, fuelCosts);
+		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, fuelCosts);
 	}
 
 	/**
