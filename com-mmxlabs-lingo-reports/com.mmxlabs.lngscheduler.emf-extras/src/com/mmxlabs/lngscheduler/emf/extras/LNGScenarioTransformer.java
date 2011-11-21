@@ -6,10 +6,13 @@ package com.mmxlabs.lngscheduler.emf.extras;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +21,10 @@ import java.util.TreeMap;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -33,12 +39,10 @@ import scenario.cargo.Cargo;
 import scenario.cargo.CargoType;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
-import scenario.contract.FixedPricePurchaseContract;
-import scenario.contract.IndexPricePurchaseContract;
-import scenario.contract.NetbackPurchaseContract;
-import scenario.contract.ProfitSharingPurchaseContract;
+import scenario.contract.Contract;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.contract.SimplePurchaseContract;
 import scenario.contract.TotalVolumeLimit;
 import scenario.fleet.CharterOut;
 import scenario.fleet.FuelConsumptionLine;
@@ -73,7 +77,9 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.InterpolatingDiscountCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
+import com.mmxlabs.lngscheduler.emf.extras.contracts.IContractTransformer;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -93,9 +99,10 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Wrapper for an EMF LNG Scheduling {@link scenario.Scenario}, providing utility methods to coSnvert it into an optimization job. Typical usage is to construct an LNGScenarioTransformer with a given
@@ -149,6 +156,68 @@ public class LNGScenarioTransformer {
 	 * @throws IncompleteScenarioException
 	 */
 	public IOptimisationData<ISequenceElement> createOptimisationData(final ModelEntityMap entities) throws IncompleteScenarioException {
+		// Create any transformer extensions
+		/**
+		 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
+		 */
+		final Map<EClass, IContractTransformer> contractTransformersByEClass = new LinkedHashMap<EClass, IContractTransformer>();
+
+		final Set<IContractTransformer> contractTransformers = new LinkedHashSet<IContractTransformer>();
+
+		final Set<ITransformerExtension> allTransformerExtensions = new LinkedHashSet<ITransformerExtension>();
+
+		{
+			final String EXTENSION_ID = "com.mmxlabs.lngscheduler.transformer";
+
+			final IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID);
+
+			final Map<String, EClass> contracts = new HashMap<String, EClass>();
+
+			for (final Contract c : scenario.getContractModel().getSalesContracts()) {
+				contracts.put(c.eClass().getInstanceClass().getCanonicalName(), c.eClass());
+			}
+
+			for (final Contract c : scenario.getContractModel().getPurchaseContracts()) {
+				contracts.put(c.eClass().getInstanceClass().getCanonicalName(), c.eClass());
+			}
+
+			for (final IConfigurationElement e : config) {
+				final HashSet<String> modelClasses = new HashSet<String>();
+				for (final IConfigurationElement mc : e.getChildren("modelclass")) {
+					final String s = mc.getAttribute("class");
+					modelClasses.add(s);
+				}
+
+				log.debug("Extension provides " + modelClasses);
+
+				modelClasses.retainAll(contracts.keySet());
+
+				log.debug("Scenario requires " + modelClasses);
+
+				// if (modelClasses.isEmpty() == false) {
+				try {
+					final Object object = e.createExecutableExtension("transformer");
+					if (object instanceof ITransformerExtension) {
+						allTransformerExtensions.add((ITransformerExtension) object);
+						log.debug(object.getClass().getCanonicalName() + " added to transformer extensions");
+					}
+
+					if (object instanceof IContractTransformer) {
+						contractTransformers.add((IContractTransformer) object);
+
+						log.debug("Instantiated a contract transformer: " + object.getClass().getCanonicalName());
+						for (final String mc : modelClasses) {
+							log.debug(object.getClass().getCanonicalName() + " handling " + mc);
+							contractTransformersByEClass.put(contracts.get(mc), (IContractTransformer) object);
+						}
+					}
+				} catch (final Exception ex) {
+
+				}
+				// }
+			}
+		}
+
 		/*
 		 * Set reference for hour 0
 		 */
@@ -163,10 +232,30 @@ public class LNGScenarioTransformer {
 		for (final Index index : scenario.getMarketModel().getIndices()) {
 			final StepwiseIntegerCurve curve = createCurveForIndex(index, 1.0f);
 
+			entities.addModelObject(index, curve);
+
 			indexAssociation.add(index, curve);
 		}
 
 		SchedulerBuilder builder = new SchedulerBuilder();
+
+		// set up the contract transformers
+		for (final ITransformerExtension extension : allTransformerExtensions) {
+			extension.startTransforming(scenario, entities, builder);
+		}
+
+		for (final PurchaseContract c : scenario.getContractModel().getPurchaseContracts()) {
+			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
+			final ILoadPriceCalculator2 calculator = transformer.transformPurchaseContract(c);
+			entities.addModelObject(c, calculator);
+		}
+
+		for (final SalesContract c : scenario.getContractModel().getSalesContracts()) {
+			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
+			final IShippingPriceCalculator<ISequenceElement> calculator = transformer.transformSalesContract(c);
+			entities.addModelObject(c, calculator);
+		}
+
 		/**
 		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the builder.
 		 */
@@ -181,36 +270,13 @@ public class LNGScenarioTransformer {
 		Map<IPort, Integer> portIndices = new HashMap<IPort, Integer>();
 
 		/*
-		 * Create the contract logic models
-		 */
-
-		final Association<PurchaseContract, ILoadPriceCalculator> purchaseContractAssociation = new Association<PurchaseContract, ILoadPriceCalculator>();
-
-		for (final PurchaseContract c : scenario.getContractModel().getPurchaseContracts()) {
-			final ILoadPriceCalculator calculator;
-			if (c instanceof FixedPricePurchaseContract) {
-				calculator = builder.createFixedPriceContract(Calculator.scaleToInt(((FixedPricePurchaseContract) c).getUnitPrice()));
-			} else if (c instanceof IndexPricePurchaseContract) {
-				calculator = builder.createMarketPriceContract(indexAssociation.lookup(((IndexPricePurchaseContract) c).getIndex()));
-			} else if (c instanceof ProfitSharingPurchaseContract) {
-				final ProfitSharingPurchaseContract p = (ProfitSharingPurchaseContract) c;
-				calculator = builder.createProfitSharingContract(indexAssociation.lookup(p.getIndex()), indexAssociation.lookup(p.getReferenceIndex()), Calculator.scaleToInt(p.getAlpha()),
-						Calculator.scaleToInt(p.getBeta()), Calculator.scaleToInt(p.getGamma()));
-			} else if (c instanceof NetbackPurchaseContract) {
-				calculator = builder.createNetbackContract(Calculator.scaleToInt(((NetbackPurchaseContract) c).getBuyersMargin()));
-			} else {
-				throw new RuntimeException("Unknown class of contract : " + c.eClass().getName());
-			}
-
-			purchaseContractAssociation.add(c, calculator);
-		}
-
-		/*
 		 * Construct ports for each port in the scenario port model, and keep them in a two-way lookup table (the two-way lookup is needed to do things like setting distances later).
 		 */
 		for (Port ePort : scenario.getPortModel().getPorts()) {
-			IPort port = builder.createPort(ePort.getName(), ePort.isShouldArriveCold(),
-					(ISimpleLoadPriceCalculator) purchaseContractAssociation.lookup(scenario.getContractModel().getCooldownContract(ePort)));
+			final SimplePurchaseContract cooldownContract = scenario.getContractModel().getCooldownContract(ePort);
+			@SuppressWarnings("unchecked")
+			final IShippingPriceCalculator<ISequenceElement> cooldownCalculator = entities.getOptimiserObject(cooldownContract, IShippingPriceCalculator.class);
+			IPort port = builder.createPort(ePort.getName(), ePort.isShouldArriveCold(), cooldownCalculator);
 			portAssociation.add(ePort, port);
 			portIndices.put(port, allPorts.size());
 			allPorts.add(port);
@@ -222,7 +288,7 @@ public class LNGScenarioTransformer {
 
 		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getFirst());
 
-		buildCargoes(builder, portAssociation, indexAssociation, vesselAssociations.getSecond(), entities, purchaseContractAssociation);
+		buildCargoes(builder, portAssociation, indexAssociation, vesselAssociations.getSecond(), contractTransformers, entities, getOptimisationSettings().isAllowRewiringByDefault());
 
 		buildVesselEvents(builder, portAssociation, vesselAssociations.getFirst(), vesselAssociations.getSecond(), entities);
 
@@ -231,6 +297,10 @@ public class LNGScenarioTransformer {
 		buildDiscountCurves(builder);
 
 		freezeStartSequences(builder, entities);
+
+		for (final ITransformerExtension extension : allTransformerExtensions) {
+			extension.finishTransforming();
+		}
 
 		return builder.getOptimisationData();
 	}
@@ -383,11 +453,12 @@ public class LNGScenarioTransformer {
 	 * @param builder
 	 *            current builder. should already have ports/distances/vessels built
 	 * @param indexAssociation
+	 * @param contractTransformers
 	 * @param entities
-	 * @param purchaseContractAssociation
+	 * @param defaultRewiring
 	 */
 	private void buildCargoes(final SchedulerBuilder builder, final Association<Port, IPort> ports, final Association<Index, ICurve> indexAssociation,
-			final Association<Vessel, IVessel> vesselAssociation, final ModelEntityMap entities, final Association<PurchaseContract, ILoadPriceCalculator> purchaseContractAssociation) {
+			final Association<Vessel, IVessel> vesselAssociation, Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, boolean defaultRewiring) {
 
 		final Date latestDate = scenario.getOptimisation().getCurrentSettings().isSetIgnoreElementsAfter() ? scenario.getOptimisation().getCurrentSettings().getIgnoreElementsAfter() : latestTime;
 		for (final Cargo eCargo : scenario.getCargoModel().getCargoes()) {
@@ -405,18 +476,25 @@ public class LNGScenarioTransformer {
 			// TODO check units again
 			final ITimeWindow loadWindow = builder.createTimeWindow(loadStart, loadStart + loadSlot.getWindowDuration());
 
-			final ILoadPriceCalculator loadPriceCalculator;
+			final ILoadPriceCalculator2 loadPriceCalculator;
 			if (loadSlot.isSetFixedPrice()) {
-				loadPriceCalculator = new ILoadPriceCalculator() {
+				final int fixedPrice = Calculator.scaleToInt(loadSlot.getFixedPrice());
+
+				loadPriceCalculator = new ILoadPriceCalculator2() {
 					@Override
-					public int calculateLoadUnitPrice(int loadTime, long loadVolume, int dischargeTime, int actualSalesPrice, int cvValue, VoyageDetails ladenLeg, VoyageDetails ballastLeg,
-							IVesselClass vesselClass) {
-						return Calculator.scaleToInt(loadSlot.getFixedPrice());
+					public void prepareEvaluation(ScheduledSequences sequences) {
+
+					}
+
+					@Override
+					public int calculateLoadUnitPrice(ILoadSlot aloadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePrice, int loadVolume, IVesselClass vesselClass,
+							VoyagePlan plan) {
+						return fixedPrice;
 					}
 				};
 			} else {
 				final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot.getSlotOrPortContract(scenario));
-				loadPriceCalculator = purchaseContractAssociation.lookup(purchaseContract);
+				loadPriceCalculator = entities.getOptimiserObject(purchaseContract, ILoadPriceCalculator2.class);
 			}
 
 			final ILoadSlot load = builder.createLoadSlot(loadSlot.getId(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity(scenario)),
@@ -426,29 +504,37 @@ public class LNGScenarioTransformer {
 			final Slot dischargeSlot = eCargo.getDischargeSlot();
 			final int dischargeStart = convertTime(earliestTime, dischargeSlot.getWindowStart(), dischargeSlot.getPort());
 			final ITimeWindow dischargeWindow = builder.createTimeWindow(dischargeStart, dischargeStart + dischargeSlot.getWindowDuration());
-			final ICurve dischargeCurve;
+			final IShippingPriceCalculator<ISequenceElement> dischargePriceCalculator;
 
 			if (dischargeSlot.isSetFixedPrice()) {
-				dischargeCurve = new ConstantValueCurve(Calculator.scaleToInt(dischargeSlot.getFixedPrice()));
-			} else {
-				final Index dischargeIndex = ((SalesContract) dischargeSlot.getSlotOrPortContract(scenario)).getIndex();
+				final int fixedPrice = Calculator.scaleToInt(dischargeSlot.getFixedPrice());
+				dischargePriceCalculator = new IShippingPriceCalculator<ISequenceElement>() {
+					@Override
+					public void prepareEvaluation(ISequences<ISequenceElement> sequences) {
+					}
 
-				final double regasEfficiency = (dischargeSlot.getPort()).getRegasEfficiency();
-				if (regasEfficiency != 1.0) {
-					dischargeCurve = createCurveForIndex(dischargeIndex, (float) regasEfficiency);
-				} else {
-					dischargeCurve = indexAssociation.lookup(dischargeIndex);
-				}
+					@Override
+					public int calculateUnitPrice(IPortSlot slot, int time) {
+						return fixedPrice;
+					}
+				};
+			} else {
+				dischargePriceCalculator = entities.getOptimiserObject(dischargeSlot.getSlotOrPortContract(scenario), IShippingPriceCalculator.class);
 			}
 
 			final IDischargeSlot discharge = builder.createDischargeSlot(dischargeSlot.getId(), ports.lookup(dischargeSlot.getPort()), dischargeWindow,
-					Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity(scenario)), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity(scenario)), dischargeCurve,
+					Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity(scenario)), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity(scenario)), dischargePriceCalculator,
 					dischargeSlot.getSlotOrPortDuration());
 
 			entities.addModelObject(loadSlot, load);
 			entities.addModelObject(dischargeSlot, discharge);
 
-			final ICargo cargo = builder.createCargo(eCargo.getId(), load, discharge);
+			for (final IContractTransformer contractTransformer : contractTransformers) {
+				contractTransformer.slotTransformed(loadSlot, load);
+				contractTransformer.slotTransformed(dischargeSlot, discharge);
+			}
+
+			final ICargo cargo = builder.createCargo(eCargo.getId(), load, discharge, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
 
 			if (!eCargo.getAllowedVessels().isEmpty()) {
 				HashSet<IVessel> vesselsForCargo = new HashSet<IVessel>();
@@ -581,7 +667,9 @@ public class LNGScenarioTransformer {
 		// precision
 
 		for (VesselClass eVc : scenario.getFleetModel().getVesselClasses()) {
-			IVesselClass vc = builder.createVesselClass(eVc.getName(), Calculator.scaleToInt(eVc.getMinSpeed()), Calculator.scaleToInt(eVc.getMaxSpeed()),
+			IVesselClass vc = builder.createVesselClass(eVc.getName(),
+					Calculator.scaleToInt(eVc.getMinSpeed()),
+					Calculator.scaleToInt(eVc.getMaxSpeed()),
 					Calculator.scale((int) (eVc.getFillCapacity() * eVc.getCapacity())), // TODO is
 					// capacity mean
 					// to be scaled?
