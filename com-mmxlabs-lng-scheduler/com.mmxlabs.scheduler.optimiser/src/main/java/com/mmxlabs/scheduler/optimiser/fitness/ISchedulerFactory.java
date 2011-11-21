@@ -10,5 +10,6 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public interface ISchedulerFactory<T> {
 	public ISequenceScheduler<T> createScheduler(IOptimisationData<T> data, 
-			Collection<ICargoSchedulerFitnessComponent<T>> components);
+ Collection<ICargoSchedulerFitnessComponent<T>> schedulerComponents,
+			Collection<ICargoAllocationFitnessComponent<T>> allocationComponents);
 }
