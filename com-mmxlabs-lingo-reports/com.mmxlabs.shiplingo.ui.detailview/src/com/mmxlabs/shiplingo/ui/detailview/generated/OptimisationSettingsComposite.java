@@ -81,6 +81,7 @@ public  class OptimisationSettingsComposite extends AbstractDetailComposite {
     createConstraintsEditor(composite, mainGroup);
     createObjectivesEditor(composite, mainGroup);
     createDefaultDiscountCurveEditor(composite, mainGroup);
+    createAllowRewiringByDefaultEditor(composite, mainGroup);
   }
 
 		
@@ -156,5 +157,15 @@ public  class OptimisationSettingsComposite extends AbstractDetailComposite {
         true));
     sub.setPath(new CompiledEMFPath(composite.getInputPath(), OptimiserPackage.eINSTANCE.getOptimisationSettings_DefaultDiscountCurve()));
     composite.addSubEditor(sub);
+  }
+
+  /**
+   * Create an editor for the allowRewiringByDefault feature on OptimisationSettings
+   * @generated
+   */
+  protected static void createAllowRewiringByDefaultEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(OptimiserPackage.eINSTANCE.getOptimisationSettings_AllowRewiringByDefault()),
+      "Allow Rewiring By Default");
   }
 }

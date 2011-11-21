@@ -10,29 +10,29 @@ import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 
 /**
- * A composite containing a form for editing CargoRevenue instances. The EClass hierarchy is implemented
+ * A composite containing a form for editing VesselEventRevenue instances. The EClass hierarchy is implemented
  * by the static methods at the bottom of the class, and is not mirrored in the java class hierarchy for the composites,
  * because ECore supports multiple inheritance but java does not.
  *
  * @generated
  */
-public  class CargoRevenueComposite extends AbstractDetailComposite {
+public  class VesselEventRevenueComposite extends AbstractDetailComposite {
 	private final String mainGroupTitle;
 	/**
 	 * Call superclass constructor
      * @generated
 	 */
-	public CargoRevenueComposite(final Composite container, final int style, final String mainGroupTitle, final boolean validate) {
+	public VesselEventRevenueComposite(final Composite container, final int style, final String mainGroupTitle, final boolean validate) {
     super(container, style, validate);
     this.mainGroupTitle = mainGroupTitle;
   }
 
-	public CargoRevenueComposite(final Composite container, final int style, final boolean validate) {
-		this(container, style, "Cargo Revenue", validate);
+	public VesselEventRevenueComposite(final Composite container, final int style, final boolean validate) {
+		this(container, style, "Vessel Event Revenue", validate);
 	}
 
-	public CargoRevenueComposite(final Composite container, final int style) {
-		this(container, style, "Cargo Revenue", true);
+	public VesselEventRevenueComposite(final Composite container, final int style) {
+		this(container, style, "Vessel Event Revenue", true);
 	}
 
 	/**
@@ -58,11 +58,11 @@ public  class CargoRevenueComposite extends AbstractDetailComposite {
 	 */
 	protected static void createFields(final AbstractDetailComposite composite, final Composite mainGroup) {
     createFieldsFromSupers(composite, mainGroup);
-    createCargoRevenueFields(composite, mainGroup);
+    createVesselEventRevenueFields(composite, mainGroup);
   }
 
 	/**
-	 * Create fields belonging to all the supertypes of CargoRevenue.
+	 * Create fields belonging to all the supertypes of VesselEventRevenue.
 	 * @generated
 	 */
 	protected static void createFieldsFromSupers(final AbstractDetailComposite composite, final Composite mainGroup) {
@@ -70,21 +70,21 @@ public  class CargoRevenueComposite extends AbstractDetailComposite {
   }
 
 	/**
-	 * Create fields belonging directly to CargoRevenue
+	 * Create fields belonging directly to VesselEventRevenue
 	 * @generated
 	 */
-	protected static void createCargoRevenueFields(final AbstractDetailComposite composite, final Composite mainGroup) {
-    createCargoEditor(composite, mainGroup);
+	protected static void createVesselEventRevenueFields(final AbstractDetailComposite composite, final Composite mainGroup) {
+    createVesselEventVisitEditor(composite, mainGroup);
   }
 
 		
 	/**
-	 * Create an editor for the cargo feature on CargoRevenue
+	 * Create an editor for the vesselEventVisit feature on VesselEventRevenue
 	 * @generated
 	 */
-	protected static void createCargoEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+	protected static void createVesselEventVisitEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
     composite.createEditorControl(mainGroup,
-      composite.createEditor(SchedulePackage.eINSTANCE.getCargoRevenue_Cargo()),
-      "Cargo");
+      composite.createEditor(SchedulePackage.eINSTANCE.getVesselEventRevenue_VesselEventVisit()),
+      "Vessel Event Visit");
   }
 }

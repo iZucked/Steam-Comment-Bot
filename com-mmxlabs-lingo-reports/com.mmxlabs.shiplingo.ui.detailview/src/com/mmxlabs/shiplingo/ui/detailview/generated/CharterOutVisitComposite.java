@@ -75,7 +75,6 @@ public  class CharterOutVisitComposite extends AbstractDetailComposite {
 	 */
 	protected static void createCharterOutVisitFields(final AbstractDetailComposite composite, final Composite mainGroup) {
     createCharterOutEditor(composite, mainGroup);
-    createRevenueEditor(composite, mainGroup);
   }
 
 		
@@ -87,15 +86,5 @@ public  class CharterOutVisitComposite extends AbstractDetailComposite {
     composite.createEditorControl(mainGroup,
       composite.createEditor(EventsPackage.eINSTANCE.getCharterOutVisit_CharterOut()),
       "Charter Out");
-  }
-		
-	/**
-	 * Create an editor for the revenue feature on CharterOutVisit
-	 * @generated
-	 */
-	protected static void createRevenueEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(EventsPackage.eINSTANCE.getCharterOutVisit_Revenue()),
-      "Revenue");
   }
 }
