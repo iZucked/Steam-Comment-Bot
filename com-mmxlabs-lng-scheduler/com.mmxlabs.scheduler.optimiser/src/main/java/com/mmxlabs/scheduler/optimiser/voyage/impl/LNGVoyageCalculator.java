@@ -15,7 +15,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
@@ -377,8 +376,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			// Store unit prices for later on
 			// loadUnitPrice = loadSlot
 			// .getPurchasePriceAtTime(arrivalTimes[loadIdx / 2]);
-			dischargeUnitPrice = dischargeSlot.getSalesPriceAtTime(arrivalTimes[dischargeIdx / 2]);
-
+			dischargeUnitPrice = dischargeSlot.getDischargePriceCalculator().calculateUnitPrice(dischargeSlot, arrivalTimes[dischargeIdx / 2]);
 			// Store cargoCVValue
 			cargoCVValue = loadSlot.getCargoCVValue();
 
@@ -496,7 +494,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 					// TODO double check how/if this affects caching
 					// decisions
-					final int cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateSimpleLoadUnitPrice(cooldownTime);
+					final int cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateUnitPrice(details.getOptions().getToPortSlot(), cooldownTime);
 
 					// TODO is this how cooldown gas ought to be priced?
 					final int cooldownPricePerM3 = (int) Calculator.multiply(cooldownPricePerMMBTU, ((ILoadSlot) details.getOptions().getToPortSlot()).getCargoCVValue());
@@ -540,33 +538,33 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 		voyagePlan.setLNGFuelVolume(lngConsumed);
 
-		// TODO remove this, after checking it's OK
-		voyagePlan.setLoadVolume(loadVolumeInM3);
-
-		// compute load price after everything else, because it needs to know
-		// about
-		// the previous fields
-		if (loadIdx != -1 && dischargeIdx != -1) {
-			final ILoadPriceCalculator loadPriceCalculator = ((ILoadSlot) ((PortDetails) sequence[loadIdx]).getPortSlot()).getLoadPriceCalculator();
-			loadUnitPrice = loadPriceCalculator.calculateLoadUnitPrice(arrivalTimes[loadIdx / 2], loadVolumeInM3, arrivalTimes[dischargeIdx / 2], dischargeUnitPrice, cargoCVValue,
-					(VoyageDetails) sequence[loadIdx + 1],
-
-					(dischargeIdx + 1 < sequence.length) ?
-
-					(VoyageDetails) sequence[dischargeIdx + 1] : null,
-
-					vesselClass);
-			// .calculateLoadUnitPrice(voyagePlan, arrivalTimes[loadIdx / 2],
-			// arrivalTimes[dischargeIdx / 2]);
-			loadM3Price = (int) Calculator.multiply(loadUnitPrice, cargoCVValue);
-		}
-
-		long purchaseCost = Calculator.multiply(loadM3Price, loadVolumeInM3);
-		voyagePlan.setPurchaseCost(purchaseCost);
-
-		voyagePlan.setDischargeVolume(dischargeVolumeInM3);
-		long salesRevenue = Calculator.multiply(dischargeM3Price, dischargeVolumeInM3);
-		voyagePlan.setSalesRevenue(salesRevenue);
+		// // TODO remove this, after checking it's OK
+		// voyagePlan.setLoadVolume(loadVolumeInM3);
+		//
+		// // compute load price after everything else, because it needs to know
+		// // about
+		// // the previous fields
+		// if (loadIdx != -1 && dischargeIdx != -1) {
+		// final ILoadPriceCalculator loadPriceCalculator = ((ILoadSlot) ((PortDetails) sequence[loadIdx]).getPortSlot()).getLoadPriceCalculator();
+		// loadUnitPrice = loadPriceCalculator.calculateLoadUnitPrice(arrivalTimes[loadIdx / 2], loadVolumeInM3, arrivalTimes[dischargeIdx / 2], dischargeUnitPrice, cargoCVValue,
+		// (VoyageDetails) sequence[loadIdx + 1],
+		//
+		// (dischargeIdx + 1 < sequence.length) ?
+		//
+		// (VoyageDetails) sequence[dischargeIdx + 1] : null,
+		//
+		// vesselClass);
+		// // .calculateLoadUnitPrice(voyagePlan, arrivalTimes[loadIdx / 2],
+		// // arrivalTimes[dischargeIdx / 2]);
+		// loadM3Price = (int) Calculator.multiply(loadUnitPrice, cargoCVValue);
+		// }
+		//
+		// long purchaseCost = Calculator.multiply(loadM3Price, loadVolumeInM3);
+		// voyagePlan.setPurchaseCost(purchaseCost);
+		//
+		// voyagePlan.setDischargeVolume(dischargeVolumeInM3);
+		// long salesRevenue = Calculator.multiply(dischargeM3Price, dischargeVolumeInM3);
+		// voyagePlan.setSalesRevenue(salesRevenue);
 
 		voyagePlan.setTotalRouteCost(routeCostAccumulator);
 
