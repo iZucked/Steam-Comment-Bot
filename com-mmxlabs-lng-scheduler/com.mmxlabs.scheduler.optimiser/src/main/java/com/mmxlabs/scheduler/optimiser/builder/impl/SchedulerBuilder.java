@@ -31,7 +31,9 @@ import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedElementDurat
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOrderedSequenceElementsEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedTimeWindowEditor;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.Resource;
+import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -41,6 +43,7 @@ import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvide
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
@@ -73,12 +76,8 @@ import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.NetbackContract;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.ProfitSharingContract;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListCargoAllocationEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
@@ -99,6 +98,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapReturnElementProvid
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEditor;
@@ -110,6 +110,8 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEdi
  * 
  */
 public final class SchedulerBuilder implements ISchedulerBuilder {
+
+	private final List<IBuilderExtension> extensions = new LinkedList<IBuilderExtension>();
 
 	private final IXYPortDistanceCalculator distanceProvider = new XYPortEuclideanDistanceCalculator();
 
@@ -211,6 +213,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	private final Map<IPortSlot, IPortSlot> reverseAdjacencyConstraints = new HashMap<IPortSlot, IPortSlot>();
 
+	/**
+	 * Keeps track of calculators
+	 */
+	private final HashSetCalculatorProviderEditor<ISequenceElement> calculatorProvider;
+
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
 		indexingContext.registerType(Port.class);
@@ -263,13 +270,23 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		routeCostProvider = new HashMapRouteCostProviderEditor(SchedulerConstants.DCP_routePriceProvider, IMultiMatrixProvider.Default_Key);
 
-		// Create the anywhere port
-		ANYWHERE = createPort("ANYWHERE", false, new FixedPriceContract(0));
+		calculatorProvider = new HashSetCalculatorProviderEditor<ISequenceElement>(SchedulerConstants.DCP_calculatorProvider);
 
+		// Create the anywhere port
+		ANYWHERE = createPort("ANYWHERE", false, new IShippingPriceCalculator<ISequenceElement>() {
+			@Override
+			public void prepareEvaluation(ISequences<ISequenceElement> sequences) {
+			}
+
+			@Override
+			public int calculateUnitPrice(IPortSlot slot, int time) {
+				return 0;
+			}
+		});
 	}
 
 	@Override
-	public ILoadSlot createLoadSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ILoadPriceCalculator loadContract,
+	public ILoadSlot createLoadSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ILoadPriceCalculator2 loadContract,
 			final int cargoCVValue, final int durationHours, boolean cooldownSet, boolean cooldownForbidden) {
 
 		if (!ports.contains(port)) {
@@ -313,11 +330,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		addSlotToVolumeConstraints(slot);
 
+		calculatorProvider.addLoadPriceCalculator(loadContract);
+
 		return slot;
 	}
 
 	@Override
-	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ICurve pricePerMMBTu,
+	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
+			final IShippingPriceCalculator<ISequenceElement> pricePerMMBTu,
 			final int durationHours) {
 
 		if (!ports.contains(port)) {
@@ -333,7 +353,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slot.setTimeWindow(window);
 		slot.setMinDischargeVolume(minVolumeInM3);
 		slot.setMaxDischargeVolume(maxVolumeInM3);
-		slot.setSalesPriceCurve(pricePerMMBTu);
+		slot.setDischargePriceCalculator(pricePerMMBTu);
 
 		dischargeSlots.add(slot);
 
@@ -357,11 +377,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		addSlotToVolumeConstraints(slot);
 
+		calculatorProvider.addShippingPriceCalculator(pricePerMMBTu);
+
 		return slot;
 	}
 
 	@Override
-	public ICargo createCargo(final String id, final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot) {
+	public ICargo createCargo(final String id, final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final boolean allowRewiring) {
 
 		if (!loadSlots.contains(loadSlot)) {
 			throw new IllegalArgumentException("ILoadSlot was not created by this builder");
@@ -380,8 +402,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final ISequenceElement loadElement = portSlotsProvider.getElement(loadSlot);
 		final ISequenceElement dischargeElement = portSlotsProvider.getElement(dischargeSlot);
 
-		constrainSlotAdjacency(loadSlot, dischargeSlot);
-
+		if (!allowRewiring) {
+			constrainSlotAdjacency(loadSlot, dischargeSlot);
+		}
 		// // Set fixed visit order
 		// orderedSequenceElementsEditor.setElementOrder(loadElement,
 		// dischargeElement);
@@ -390,7 +413,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IPort createPort(final String name, final boolean arriveCold, final ISimpleLoadPriceCalculator cooldownPriceCalculator) {
+	public IPort createPort(final String name, final boolean arriveCold, final IShippingPriceCalculator<ISequenceElement> cooldownPriceCalculator) {
 
 		final Port port = new Port(indexingContext);
 		port.setName(name);
@@ -413,6 +436,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		this.setPortToPortDistance(port, port, IMultiMatrixProvider.Default_Key, 0);
 
 		// create the return elements to return to this port using the ELSM
+
+		calculatorProvider.addShippingPriceCalculator(cooldownPriceCalculator);
 
 		return port;
 	}
@@ -465,7 +490,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IXYPort createPort(final String name, final boolean arriveCold, final ISimpleLoadPriceCalculator cooldownPriceCalculator, final float x, final float y) {
+	public IXYPort createPort(final String name, final boolean arriveCold, final IShippingPriceCalculator<ISequenceElement> cooldownPriceCalculator, final float x, final float y) {
 
 		final XYPort port = new XYPort(indexingContext);
 		port.setName(name);
@@ -479,6 +504,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			setPortToPortDistance(port, ANYWHERE, IMultiMatrixProvider.Default_Key, 0);
 			setPortToPortDistance(ANYWHERE, port, IMultiMatrixProvider.Default_Key, 0);
 		}
+
+		calculatorProvider.addShippingPriceCalculator(cooldownPriceCalculator);
 
 		return port;
 	}
@@ -791,6 +818,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_totalVolumeLimitProvider, totalVolumeLimits);
 
+		data.addDataComponentProvider(SchedulerConstants.DCP_calculatorProvider, calculatorProvider);
+
 		if (true) {
 			for (final IPort from : ports) {
 				if (!(from instanceof IXYPort)) {
@@ -809,6 +838,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			}
 		}
 
+		for (final IBuilderExtension extension : extensions) {
+			for (final Pair<String, IDataComponentProvider> provider : extension.createDataComponentProviders(data))
+				data.addDataComponentProvider(provider.getFirst(), provider.getSecond());
+		}
+
+		for (final IBuilderExtension extension : extensions) {
+			extension.finishBuilding(data);
+		}
+
 		return data;
 	}
 
@@ -823,6 +861,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		cargoes.clear();
 		ports.clear();
 
+		for (final IBuilderExtension extension : extensions) {
+			extension.dispose();
+		}
+
+		extensions.clear();
 		// TODO: Null provider refs
 	}
 
@@ -1139,26 +1182,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ILoadPriceCalculator createFixedPriceContract(int pricePerMMBTU) {
-		return new FixedPriceContract(pricePerMMBTU);
-	}
-
-	@Override
-	public ILoadPriceCalculator createMarketPriceContract(ICurve index) {
-		return new MarketPriceContract(index);
-	}
-
-	@Override
-	public ILoadPriceCalculator createProfitSharingContract(ICurve actualMarket, ICurve referenceMarket, int alpha, int beta, int gamma) {
-		return new ProfitSharingContract(actualMarket, referenceMarket, alpha, beta, gamma);
-	}
-
-	@Override
-	public ILoadPriceCalculator createNetbackContract(int buyersMargin) {
-		return new NetbackContract(buyersMargin, portDistanceProvider);
-	}
-
-	@Override
 	/**
 	 * Set a discount curve for the given fitness component name
 	 * 
@@ -1254,5 +1277,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			forwardAdjacencyConstraints.put(firstSlot, secondSlot);
 			reverseAdjacencyConstraints.put(secondSlot, firstSlot);
 		}
+	}
+
+	@Override
+	public void addBuilderExtension(IBuilderExtension extension) {
+		extensions.add(extension);
 	}
 }
