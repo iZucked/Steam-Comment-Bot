@@ -28,6 +28,7 @@ public final class SchedulerConstants {
 	public static final String DCP_routePriceProvider = "provider-route-prices";
 	public static final String DCP_totalVolumeLimitProvider = "provider-total-volume";
 	public static final String DCP_discountCurveProvider = "provider-discount-curve";
+	public static final String DCP_calculatorProvider = "provider-calculators";
 	
 	// Additional Info keys
 	public static final String AI_idleInfo = "info-idle";
