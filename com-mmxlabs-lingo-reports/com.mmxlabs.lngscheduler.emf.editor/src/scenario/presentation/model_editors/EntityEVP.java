@@ -18,18 +18,18 @@ import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.Scenario;
 import scenario.contract.ContractPackage;
+import scenario.contract.GroupEntity;
 import scenario.presentation.ScenarioEditor;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.shiplingo.importer.importers.ExportCSVAction;
 import com.mmxlabs.shiplingo.importer.importers.ImportCSVAction;
-import com.mmxlabs.shiplingo.ui.tableview.PercentageAttributeManipulator;
 
 /**
  * EVP for entities
  * 
  * @author Tom Hinton
- *
+ * 
  */
 public class EntityEVP extends NamedObjectEVP {
 	public EntityEVP(IWorkbenchPage page, ScenarioEditor part) {
@@ -39,31 +39,30 @@ public class EntityEVP extends NamedObjectEVP {
 	@Override
 	public void init(List<EReference> path, AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-		addTypicalColumn(
-				"Tax Rate",
-				new PercentageAttributeManipulator(ContractPackage.eINSTANCE
-						.getEntity_TaxRate(), part.getEditingDomain()));
 
-		addTypicalColumn(
-				"Ownership",
-				new PercentageAttributeManipulator(ContractPackage.eINSTANCE
-						.getEntity_Ownership(), part.getEditingDomain()));
+		// add
+		//
+		// addTypicalColumn(
+		// "Tax Rate",
+		// new PercentageAttributeManipulator(ContractPackage.eINSTANCE
+		// .getEntity_TaxRate(), part.getEditingDomain()));
+		//
+		// addTypicalColumn(
+		// "Ownership",
+		// new PercentageAttributeManipulator(ContractPackage.eINSTANCE
+		// .getEntity_Ownership(), part.getEditingDomain()));
 
 	}
-	
+
 	@Override
-	protected Action createExportAction(TableViewer viewer,
-			EMFPath ePath) {
-		final ExportCSVAction delegate = (ExportCSVAction) super
-				.createExportAction(viewer, ePath);
+	protected Action createExportAction(TableViewer viewer, EMFPath ePath) {
+		final ExportCSVAction delegate = (ExportCSVAction) super.createExportAction(viewer, ePath);
 		return new ExportCSVAction() {
 			@Override
 			public List<EObject> getObjectsToExport() {
-				final List<EObject> export = delegate
-						.getObjectsToExport();
+				final List<EObject> export = delegate.getObjectsToExport();
 
-				export.add(part.getScenario().getContractModel()
-						.getShippingEntity());
+				export.add(part.getScenario().getContractModel().getShippingEntity());
 
 				return export;
 			}
@@ -76,10 +75,8 @@ public class EntityEVP extends NamedObjectEVP {
 	}
 
 	@Override
-	protected Action createImportAction(TableViewer viewer,
-			EditingDomain editingDomain, EMFPath ePath) {
-		final ImportCSVAction delegate = (ImportCSVAction) super
-				.createImportAction(viewer, editingDomain, ePath);
+	protected Action createImportAction(TableViewer viewer, EditingDomain editingDomain, EMFPath ePath) {
+		final ImportCSVAction delegate = (ImportCSVAction) super.createImportAction(viewer, editingDomain, ePath);
 		return new ImportCSVAction() {
 			@Override
 			protected EObject getToplevelObject() {
@@ -95,11 +92,7 @@ public class EntityEVP extends NamedObjectEVP {
 			public void addObjects(Collection<EObject> newObjects) {
 				delegate.addObjects(newObjects);
 				final Scenario scenario = part.getScenario();
-				scenario.getContractModel().setShippingEntity(
-						scenario.getContractModel()
-								.getEntities()
-								.get(scenario.getContractModel()
-										.getEntities().size() - 1));
+				scenario.getContractModel().setShippingEntity((GroupEntity) scenario.getContractModel().getEntities().get(scenario.getContractModel().getEntities().size() - 1));
 			}
 		};
 	}
