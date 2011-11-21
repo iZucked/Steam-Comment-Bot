@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -153,7 +152,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 			travelTimeChecker.setMaxLateness(INITIAL_MAX_LATENESS);
 
 		// stick together elements which must be stuck together
-		Map<T, Set<T>> followerCache = new HashMap<T, Set<T>>();
+		Map<T, Set<T>> followerCache = new LinkedHashMap<T, Set<T>>();
 		Set<T> heads = new LinkedHashSet<T>();
 		Set<T> tails = new LinkedHashSet<T>();
 
@@ -169,7 +168,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 		log.info("Elements remaining to be sequenced: " + unsequencedElements);
 
 		for (T element1 : unsequencedElements) {
-			Set<T> after1 = new HashSet<T>();
+			Set<T> after1 = new LinkedHashSet<T>();
 			followerCache.put(element1, after1);
 			for (T element2 : data.getSequenceElements()) {
 				if (element1 == element2)
@@ -216,7 +215,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 			});
 		}
 
-		final Map<IResource, SequenceChunk<T>> endChunks = new HashMap<IResource, SequenceChunk<T>>();
+		final Map<IResource, SequenceChunk<T>> endChunks = new LinkedHashMap<IResource, SequenceChunk<T>>();
 
 		final IResourceAllocationConstraintDataComponentProvider racdcp = data.getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider,
 				IResourceAllocationConstraintDataComponentProvider.class);
@@ -359,10 +358,11 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 			}
 		};
 
+
 		Collections.sort(chunks, comparator);
 
 		final ChunkChecker<T> chunkChecker = new ChunkChecker<T>(checker);
-		Map<IResource, List<SequenceChunk<T>>> sequences = new HashMap<IResource, List<SequenceChunk<T>>>();
+		Map<IResource, List<SequenceChunk<T>>> sequences = new LinkedHashMap<IResource, List<SequenceChunk<T>>>();
 
 		if (suggestion == null) {
 			log.info("No suggested start solution - constructing one");
