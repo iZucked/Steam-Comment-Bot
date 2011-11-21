@@ -5,8 +5,10 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -14,9 +16,13 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -73,6 +79,7 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 	private long[] allocation;
 
 	private long profit;
+	private IVesselProvider vesselProvider;
 
 	public BaseCargoAllocator() {
 		super();
@@ -90,6 +97,12 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 		if (cargoAllocationProvider == null) {
 			throw new RuntimeException("Cargo allocation provider must be set");
 		}
+	}
+
+
+	@Override
+	public void setVesselProvider(IVesselProvider dataComponentProvider) {
+		this.vesselProvider = dataComponentProvider;
 	}
 
 	/*
@@ -115,16 +128,64 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 		dischargePrices.clear();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator
-	 * #addCargo(com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails,
-	 * com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails, int, int, long,
-	 * long)
-	 */
 	@Override
+	public Collection<IAllocationAnnotation> allocate(final ScheduledSequences sequences) {
+		reset();
+		
+		final VoyagePlanIterator<T> planIterator = new VoyagePlanIterator<T>();
+		for (final ScheduledSequence sequence : sequences) {
+			planIterator.setVoyagePlans(sequence.getVoyagePlans(), sequence.getStartTime());
+			final IVesselClass vesselClass = vesselProvider.getVessel(sequence.getResource()).getVesselClass();
+
+			PortDetails loadDetails = null;
+			PortDetails dischargeDetails = null;
+			VoyageDetails ladenVoyage = null;
+			VoyageDetails ballastVoyage = null;
+			VoyagePlan plan = null;
+
+			int loadTime = 0, dischargeTime = 0;
+
+			while (planIterator.hasNextObject()) {
+				final Object object;
+				if (planIterator.nextObjectIsStartOfPlan()) {
+					object = planIterator.nextObject();
+					plan = planIterator.getCurrentPlan();
+				} else {
+					object = planIterator.nextObject();
+				}
+				if (object instanceof PortDetails) {
+					final PortDetails pd = (PortDetails) object;
+					if (pd.getPortSlot() instanceof ILoadSlot) {
+						loadDetails = pd;
+						loadTime = planIterator.getCurrentTime();
+					} else if (pd.getPortSlot() instanceof IDischargeSlot) {
+						dischargeDetails = pd;
+						dischargeTime = planIterator.getCurrentTime();
+					}
+				} else if (object instanceof VoyageDetails) {
+					if (dischargeDetails == null && loadDetails != null) {
+						ladenVoyage = (VoyageDetails) object;
+					} else if (dischargeDetails != null && loadDetails != null) {
+						ballastVoyage = (VoyageDetails) object;
+						addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vesselClass);
+						loadDetails = null;
+						dischargeDetails = null;
+					}
+				}
+			}
+		}
+		solve();
+		final LinkedList<IAllocationAnnotation> result = new LinkedList<IAllocationAnnotation>();
+		for (final IAllocationAnnotation aa : getAllocations())
+			result.add(aa);
+		return result;
+	}
+
+	@Override
+	public void dispose() {
+		reset();
+	}
+
 	public void addCargo(final VoyagePlan plan, final PortDetails loadDetails,
 			final VoyageDetails ladenLeg, final PortDetails dischargeDetails,
 			final VoyageDetails ballastLeg, final int loadTime,
@@ -155,8 +216,7 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 
 		// compute purchase price from contract
 		// this is not ideal.
-		final int dischargeCVPrice = dischargeSlot
-				.getSalesPriceAtTime(dischargeTime);
+		final int dischargeCVPrice = dischargeSlot.getDischargePriceCalculator().calculateUnitPrice(dischargeSlot, dischargeTime);
 		final long maximumDischargeVolume = Math.min(vesselCapacity
 				- requiredLoadVolume, loadSlot.getMaxLoadVolume()
 				- requiredLoadVolume);
@@ -165,10 +225,9 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 		// the load CV price is the notional maximum price
 		// if we load less, it might actually be worth less
 
-		final int loadCVPrice = loadSlot.getLoadPriceCalculator()
-				.calculateLoadUnitPrice(loadTime, (int) maximumDischargeVolume,
-						dischargeTime, dischargeCVPrice, cargoCVValue,
-						ladenLeg, ballastLeg, vesselClass);
+		final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargeCVPrice, (int) maximumDischargeVolume,
+				vesselClass, plan
+				);
 
 		final int dischargeM3Price = (int) Calculator.multiply(
 				dischargeCVPrice, cargoCVValue);
@@ -224,7 +283,6 @@ public abstract class BaseCargoAllocator<T> implements ICargoAllocator<T> {
 		cargoAllocationProvider = tvlp;
 	}
 
-	@Override
 	public Iterable<IAllocationAnnotation> getAllocations() {
 		return new Iterable<IAllocationAnnotation>() {
 			@Override
