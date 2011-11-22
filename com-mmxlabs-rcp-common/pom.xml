@@ -17,6 +17,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>mmxlabs-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
+		<relativePath />
 	</parent>
 
 	<issueManagement>
@@ -37,7 +38,7 @@
 
 	<properties>
 		<!-- Tycho version to use -->
-		<tycho.version>0.13.0-SNAPSHOT</tycho.version>
+		<tycho.version>0.13.0</tycho.version>
 
 		<!-- Continue even when tests fail -->
 		<maven.test.failure.ignore>true</maven.test.failure.ignore>
@@ -49,13 +50,7 @@
 	</properties>
 
 	<modules>
-		<!-- Platform target file - disabled as we use the repositories section 
-			below to allow local mirrors of p2 repositories -->
-		<!-- <module>target-definition</module> -->
-
 		<module>com.mmxlabs.rcp.common</module>
-		<module>com.mmxlabs.rcp.common.p2</module>
-
 		<!-- Test Plugins -->
 		<module>com.mmxlabs.rcp.common.tests</module>
 	</modules>
@@ -74,28 +69,6 @@
 				<extensions>true</extensions>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven.compiler.plugin.version}</version>
-				<!-- Build code for java 1.6 -->
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-
-			<!-- Tycho uses it's own compiler, so we need to set the compliance levels 
-				differently here. -->
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-compiler-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
 
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -112,9 +85,6 @@
 						<version>0.0.1-SNAPSHOT</version> <classifier>shiplingo</classifier> </artifact> 
 						</target> -->
 
-					<!-- List of target environments. However, Tycho seems to only be able 
-						to build one at a time and complains if the product definition contains the 
-						other launcher fragments. -->
 					<environments>
 
 						<environment>
@@ -136,11 +106,6 @@
 							<os>win32</os>
 							<ws>win32</ws>
 							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>carbon</ws>
-							<arch>x86</arch>
 						</environment>
 						<environment>
 							<os>macosx</os>
@@ -167,42 +132,18 @@
 					<argLine>${ui.test.vmargs}</argLine>
 				</configuration>
 			</plugin>
-
-			<!-- Install plugin into the OBR metadata -->
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>${maven.bundle.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>install-bundle</id>
-						<phase>install</phase>
-						<goals>
-							<goal>install</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<supportedProjectTypes>
-						<supportedProjectType>eclipse-plugin</supportedProjectType>
-					</supportedProjectTypes>
-
-				</configuration>
-			</plugin>
-
 		</plugins>
 	</build>
-
 
 	<profiles>
 		<profile>
 			<id>macosx</id>
-				<activation>
-					<os>
-						<name>mac os x</name>
-						<family>mac</family>
-					</os>
-				</activation>
+			<activation>
+				<os>
+					<name>mac os x</name>
+					<family>mac</family>
+				</os>
+			</activation>
 			<properties>
 				<ui.test.vmargs>-Xmx512m -XstartOnFirstThread</ui.test.vmargs>
 			</properties>
@@ -212,7 +153,7 @@
 			<activation>
 				<os>
 					<name>not-mac</name>
-          				<family>!mac</family>
+					<family>!mac</family>
 				</os>
 			</activation>
 			<properties>
@@ -235,6 +176,12 @@
 		<repository>
 			<id>eclipse-3.7</id>
 			<url>http://download.eclipse.org/eclipse/updates/3.7</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
+			<id>mmxlabs-p2-snapshots</id>
+			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-p2-snapshots/</url>
 			<layout>p2</layout>
 		</repository>
 
