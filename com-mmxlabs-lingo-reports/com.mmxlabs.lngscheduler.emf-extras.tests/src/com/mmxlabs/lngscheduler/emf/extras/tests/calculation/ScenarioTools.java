@@ -19,6 +19,7 @@ import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.contract.ContractFactory;
 import scenario.contract.Entity;
+import scenario.contract.GroupEntity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 import scenario.fleet.CharterOut;
@@ -321,7 +322,7 @@ public class ScenarioTools {
 
 		final Entity e = ContractFactory.eINSTANCE.createEntity();
 		scenario.getContractModel().getEntities().add(e);
-		final Entity s = ContractFactory.eINSTANCE.createEntity();
+		final GroupEntity s = ContractFactory.eINSTANCE.createGroupEntity();
 		scenario.getContractModel().setShippingEntity(s);
 
 		e.setName("Other");
@@ -512,7 +513,7 @@ public class ScenarioTools {
 
 		final Entity e = ContractFactory.eINSTANCE.createEntity();
 		scenario.getContractModel().getEntities().add(e);
-		final Entity s = ContractFactory.eINSTANCE.createEntity();
+		final GroupEntity s = ContractFactory.eINSTANCE.createGroupEntity();
 		scenario.getContractModel().setShippingEntity(s);
 
 		e.setName("Other");
