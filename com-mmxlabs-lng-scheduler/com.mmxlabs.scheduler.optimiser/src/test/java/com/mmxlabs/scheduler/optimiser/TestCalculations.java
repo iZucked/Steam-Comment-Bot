@@ -13,7 +13,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
@@ -126,11 +125,9 @@ public class TestCalculations {
 				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
-				"discharge-1", port3, dischargeWindow, 0, 150000000, new ConstantValueCurve(5000), 1);
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, new FixedPriceContract(5000), 1);
 
-		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot,
-				dischargeSlot);
+		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
 
 		builder.setPortToPortDistance(port1, port2,
 				IMultiMatrixProvider.Default_Key, 12 * 24);
@@ -738,11 +735,9 @@ public class TestCalculations {
 				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
-				"discharge-1", port3, dischargeWindow, 0, 150000000, new ConstantValueCurve(5000), 1);
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, new FixedPriceContract(5000), 1);
 
-		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot,
-				dischargeSlot);
+		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
 
 		builder.setPortToPortDistance(port1, port2,
 				IMultiMatrixProvider.Default_Key, 12 * 25);
@@ -1352,11 +1347,9 @@ public class TestCalculations {
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot(
-				"discharge-1", port3, dischargeWindow, 0, 150000000, new ConstantValueCurve(200000), 1);
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, new FixedPriceContract(200000), 1);
 
-		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot,
-				dischargeSlot);
+		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
 
 		builder.setPortToPortDistance(port1, port2,
 				IMultiMatrixProvider.Default_Key, 12 * 25);
