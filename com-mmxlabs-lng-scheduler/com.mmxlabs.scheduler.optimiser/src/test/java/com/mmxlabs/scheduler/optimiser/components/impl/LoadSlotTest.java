@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -12,10 +11,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 
 @RunWith(JMock.class)
 public class LoadSlotTest {
@@ -30,7 +28,7 @@ public class LoadSlotTest {
 		final long minLoadVolume = 10l;
 		final long maxLoadVolume = 20l;
 		final int cargoCVValue = 40;
-		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator2 contract = context.mock(ILoadPriceCalculator2.class);
 
 		final LoadSlot slot = new LoadSlot(id, port, tw, minLoadVolume,
 				maxLoadVolume, contract, cargoCVValue, false, true);
@@ -67,7 +65,7 @@ public class LoadSlotTest {
 
 	@Test
 	public void testGetSetPurchasePriceCurve() {
-		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator2 contract = context.mock(ILoadPriceCalculator2.class);
 		final LoadSlot slot = new LoadSlot();
 		Assert.assertNull(slot.getLoadPriceCalculator());
 		slot.setLoadPriceCalculator(contract);
@@ -93,8 +91,8 @@ public class LoadSlotTest {
 		final ITimeWindow tw1 = context.mock(ITimeWindow.class, "tw1");
 		final ITimeWindow tw2 = context.mock(ITimeWindow.class, "tw2");
 
-		final ILoadPriceCalculator curve1 = context.mock(ILoadPriceCalculator.class, "curve1");
-		final ILoadPriceCalculator curve2 = context.mock(ILoadPriceCalculator.class, "curve2");
+		final ILoadPriceCalculator2 curve1 = context.mock(ILoadPriceCalculator2.class, "curve1");
+		final ILoadPriceCalculator2 curve2 = context.mock(ILoadPriceCalculator2.class, "curve2");
 
 		final LoadSlot slot1 = new LoadSlot(id1, port1, tw1, 10l, 20l, curve1,
 				40, false, false);

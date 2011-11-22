@@ -578,11 +578,6 @@ public final class AbstractSequenceSchedulerTest {
 				expectedVoyageDetails2, expectedPortDetails3 };
 		testVoyagePlan.setSequence(testSequence);
 
-		testVoyagePlan.setDischargeVolume(1000l);
-		testVoyagePlan.setLoadVolume(1000l);
-		testVoyagePlan.setPurchaseCost(1000l);
-		testVoyagePlan.setSalesRevenue(1000l);
-
 		testVoyagePlan.setTotalFuelCost(FuelComponent.Base, 100);
 		testVoyagePlan.setTotalFuelCost(FuelComponent.Base_Supplemental, 100);
 		testVoyagePlan.setTotalFuelCost(FuelComponent.NBO, 100);

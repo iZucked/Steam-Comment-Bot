@@ -12,12 +12,14 @@ import org.junit.Test;
 
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author Tom Hinton
@@ -34,8 +36,8 @@ public class TestNetbackContract {
 		final IPort A = context.mock(IPort.class, "Port A");
 		final IPort B = context.mock(IPort.class, "Port B");
 
-		final IPortSlot slotA = context.mock(IPortSlot.class, "Slot A");
-		final IPortSlot slotB = context.mock(IPortSlot.class, "Slot B");
+		final ILoadSlot slotA = context.mock(ILoadSlot.class, "Slot A");
+		final IDischargeSlot slotB = context.mock(IDischargeSlot.class, "Slot B");
 		
 		final VoyageDetails ladenLeg = new VoyageDetails();
 
@@ -57,6 +59,10 @@ public class TestNetbackContract {
 		
 		context.checking(new Expectations() {
 			{
+
+				atLeast(1).of(slotA).getCargoCVValue();
+				will(returnValue(24000));
+
 				atLeast(1).of(distanceProvider).getMaximumValue(B, A);
 				will(returnValue(1000)); // 1000 nautical miles
 				atLeast(1).of(vesselClass).getMaxSpeed();
@@ -85,9 +91,10 @@ public class TestNetbackContract {
 
 		final NetbackContract nbc = new NetbackContract(1234, distanceProvider);
 
-		final int loadPrice = nbc.calculateLoadUnitPrice(0, 2000000, 0, 7500,
-				24000, ladenLeg, ballastLeg, vesselClass);
-		System.err.println(loadPrice);
+		final VoyagePlan plan = new VoyagePlan();
+		plan.setSequence(new Object[] { null, ladenLeg, null, ballastLeg, null });
+		final int loadPrice = nbc.calculateLoadUnitPrice(slotA, slotB, 0, 0, 7500, 2000000, vesselClass, plan);
+
 		context.assertIsSatisfied();
 		Assert.assertEquals(6263, loadPrice);
 	}

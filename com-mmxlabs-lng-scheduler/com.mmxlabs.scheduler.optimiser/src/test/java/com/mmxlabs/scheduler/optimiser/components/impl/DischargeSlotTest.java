@@ -12,9 +12,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 @RunWith(JMock.class)
 public class DischargeSlotTest {
@@ -28,17 +29,17 @@ public class DischargeSlotTest {
 		final ITimeWindow tw = context.mock(ITimeWindow.class);
 		final long minDischargeVolume = 10l;
 		final long maxDischargeVolume = 20l;
-		final ICurve priceCurve = context.mock(ICurve.class);
+		final IShippingPriceCalculator<ISequenceElement> calculator = context.mock(IShippingPriceCalculator.class);
 
 		final DischargeSlot slot = new DischargeSlot(id, port, tw,
-				minDischargeVolume, maxDischargeVolume, priceCurve);
+ minDischargeVolume, maxDischargeVolume, calculator);
 		Assert.assertSame(id, slot.getId());
 		Assert.assertSame(port, slot.getPort());
 		Assert.assertSame(tw, slot.getTimeWindow());
 
 		Assert.assertEquals(minDischargeVolume, slot.getMinDischargeVolume());
 		Assert.assertEquals(maxDischargeVolume, slot.getMaxDischargeVolume());
-		Assert.assertSame(priceCurve, slot.getSalesPriceCurve());
+		Assert.assertSame(calculator, slot.getDischargePriceCalculator());
 
 	}
 
@@ -62,29 +63,29 @@ public class DischargeSlotTest {
 
 	@Test
 	public void testGetSetSalesPriceCurve() {
-		final ICurve curve = context.mock(ICurve.class);
+		final IShippingPriceCalculator<ISequenceElement> curve = context.mock(IShippingPriceCalculator.class);
 		final DischargeSlot slot = new DischargeSlot();
-		Assert.assertNull(slot.getSalesPriceCurve());
+		Assert.assertNull(slot.getDischargePriceCalculator());
 		slot.setDischargePriceCalculator(curve);
-		Assert.assertSame(curve, slot.getSalesPriceCurve());
+		Assert.assertSame(curve, slot.getDischargePriceCalculator());
 	}
 
 	@Test
 	public void testGetSetSalesPriceCurveAtTime() {
 		final DischargeSlot slot = new DischargeSlot();
 
-		final ICurve curve = context.mock(ICurve.class);
+		final IShippingPriceCalculator<ISequenceElement> curve = context.mock(IShippingPriceCalculator.class);
 		slot.setDischargePriceCalculator(curve);
 
 		final int time = 1234;
 
 		context.checking(new Expectations() {
 			{
-				one(curve).getValueAtPoint(time);
+				one(curve).calculateUnitPrice(slot, 1234);
 			}
 		});
 
-		slot.getSalesPriceAtTime(time);
+		slot.getDischargePriceCalculator().calculateUnitPrice(slot, time);
 
 		context.assertIsSatisfied();
 	}
@@ -98,8 +99,8 @@ public class DischargeSlotTest {
 		final IPort port2 = context.mock(IPort.class, "port2");
 		final ITimeWindow tw1 = context.mock(ITimeWindow.class, "tw1");
 		final ITimeWindow tw2 = context.mock(ITimeWindow.class, "tw2");
-		final ICurve curve1 = context.mock(ICurve.class, "curve1");
-		final ICurve curve2 = context.mock(ICurve.class, "curve2");
+		final IShippingPriceCalculator<ISequenceElement> curve1 = context.mock(IShippingPriceCalculator.class, "curve1");
+		final IShippingPriceCalculator<ISequenceElement> curve2 = context.mock(IShippingPriceCalculator.class, "curve2");
 
 		final DischargeSlot slot1 = new DischargeSlot(id1, port1, tw1, 10l,
 				20l, curve1);

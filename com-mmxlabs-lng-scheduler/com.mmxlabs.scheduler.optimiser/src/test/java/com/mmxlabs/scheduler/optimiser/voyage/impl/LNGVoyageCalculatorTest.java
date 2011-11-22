@@ -16,7 +16,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -961,7 +960,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeDetails.setPortSlot(dischargeSlot);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(-1));
-		dischargeSlot.setDischargePriceCalculator(new ConstantValueCurve(-1.0));
+		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(-1));
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
 		final VoyageOptions options = new VoyageOptions();
@@ -1026,7 +1025,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeSlot.setMaxDischargeVolume(30000l);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
-		dischargeSlot.setDischargePriceCalculator(new ConstantValueCurve(1000.0));
+		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(1000));
 		loadSlot.setCargoCVValue(2000);
 
 		final VoyageDetails<Object> details = new VoyageDetails<Object>();
@@ -1091,13 +1090,6 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 120000);
 		expectedPlan.setTotalFuelCost(FuelComponent.PilotLight, 140000);
 		expectedPlan.setTotalFuelCost(FuelComponent.IdlePilotLight, 160000);
-
-		// TODO: Check
-		expectedPlan.setDischargeVolume(30000l);
-		expectedPlan.setLoadVolume(150000);
-
-		expectedPlan.setSalesRevenue(60000l);
-		expectedPlan.setPurchaseCost(300000);
 
 		Assert.assertEquals(expectedPlan, plan);
 
@@ -1198,7 +1190,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeSlot.setMaxDischargeVolume(3000000l);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
-		dischargeSlot.setDischargePriceCalculator(new ConstantValueCurve(1000.0));
+		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(1000));
 
 		loadSlot.setCargoCVValue(2000);
 
@@ -1287,11 +1279,6 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setTotalFuelCost(FuelComponent.PilotLight, 400000);
 		expectedPlan.setTotalFuelCost(FuelComponent.IdlePilotLight, 440000);
 
-		expectedPlan.setDischargeVolume(3000000l);
-		expectedPlan.setLoadVolume(3420000l);
-		expectedPlan.setPurchaseCost(6840000l);
-		expectedPlan.setSalesRevenue(6000000l);
-
 		Assert.assertEquals(expectedPlan, plan);
 
 		context.assertIsSatisfied();
@@ -1321,7 +1308,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeSlot.setMaxDischargeVolume(30l);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
-		dischargeSlot.setDischargePriceCalculator(new ConstantValueCurve(1000.0));
+		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(1000));
 
 		final VoyageDetails<Object> details1 = new VoyageDetails<Object>();
 		final VoyageOptions options1 = new VoyageOptions();
@@ -1369,11 +1356,6 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setTotalFuelCost(FuelComponent.FBO, 0);
 		expectedPlan.setTotalFuelCost(FuelComponent.IdleNBO, 0);
 		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 0);
-
-		expectedPlan.setLoadVolume(0);
-		expectedPlan.setDischargeVolume(0);
-		expectedPlan.setPurchaseCost(0);
-		expectedPlan.setSalesRevenue(0);
 
 		context.assertIsSatisfied();
 	}

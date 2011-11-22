@@ -200,11 +200,6 @@ public class VoyagePlanAnnotatorTest {
 		plans.add(plan1);
 		plans.add(plan2);
 
-		plan1.setLoadVolume(400);
-		plan1.setDischargeVolume(300);
-		plan2.setLoadVolume(200);
-		plan2.setDischargeVolume(100);
-
 		final IResource resource = context.mock(IResource.class);
 
 		final AnnotatedSolution<Object> annotatedSolution = new AnnotatedSolution<Object>();

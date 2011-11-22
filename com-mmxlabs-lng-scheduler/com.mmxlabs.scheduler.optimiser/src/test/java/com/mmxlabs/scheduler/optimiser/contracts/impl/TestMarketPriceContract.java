@@ -28,8 +28,7 @@ public class TestMarketPriceContract {
 		final MarketPriceContract mpc = new MarketPriceContract(market);
 		for (int i = 0; i<1000; i++) {
 			final int date = random.nextInt();
-			Assert.assertEquals(mpc.calculateLoadUnitPrice(date, 0, 0, 0, 0, null, null, null), 
-					(int)market.getValueAtPoint(date));
+			Assert.assertEquals(mpc.calculateLoadUnitPrice(null, null, date, date, 0, 0, null, null), (int) market.getValueAtPoint(date));
 		}
 	}
 }

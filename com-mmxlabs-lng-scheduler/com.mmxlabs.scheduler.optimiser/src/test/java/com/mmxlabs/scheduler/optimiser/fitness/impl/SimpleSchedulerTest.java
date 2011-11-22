@@ -12,8 +12,6 @@ import java.util.TreeMap;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.common.curves.ConstantValueCurve;
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
@@ -43,7 +41,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
@@ -111,8 +110,8 @@ public class SimpleSchedulerTest {
 
 		final ITimeWindow tw7 = builder.createTimeWindow(35, 36);
 
-		final ILoadPriceCalculator purchaseCurve = new FixedPriceContract(5);
-		final ICurve salesCurve = new ConstantValueCurve(200000);
+		final ILoadPriceCalculator2 purchaseCurve = new FixedPriceContract(5);
+		final IShippingPriceCalculator<ISequenceElement> salesCurve = new FixedPriceContract(200000);
 
 		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0,
 				150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false);
@@ -151,13 +150,13 @@ public class SimpleSchedulerTest {
 				"discharge7", port6, tw7, 0, 100000 * Calculator.ScaleFactor,
 				salesCurve, 24);
 
-		builder.createCargo("cargo1", load1, discharge1);
-		builder.createCargo("cargo2", load2, discharge2);
-		builder.createCargo("cargo3", load3, discharge3);
-		builder.createCargo("cargo4", load4, discharge4);
-		builder.createCargo("cargo5", load5, discharge5);
-		builder.createCargo("cargo6", load6, discharge6);
-		builder.createCargo("cargo7", load7, discharge7);
+		builder.createCargo("cargo1", load1, discharge1, false);
+		builder.createCargo("cargo2", load2, discharge2, false);
+		builder.createCargo("cargo3", load3, discharge3, false);
+		builder.createCargo("cargo4", load4, discharge4, false);
+		builder.createCargo("cargo5", load5, discharge5, false);
+		builder.createCargo("cargo6", load6, discharge6, false);
+		builder.createCargo("cargo7", load7, discharge7, false);
 
 		// TODO: Set port durations
 

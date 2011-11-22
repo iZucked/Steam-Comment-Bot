@@ -32,42 +32,6 @@ public class VoyagePlanTest {
 	}
 
 	@Test
-	public void testGetSetDischargeVolume() {
-		final long value = 100l;
-		final VoyagePlan plan = new VoyagePlan();
-		Assert.assertEquals(0, plan.getDischargeVolume());
-		plan.setDischargeVolume(value);
-		Assert.assertEquals(value, plan.getDischargeVolume());
-	}
-
-	@Test
-	public void testGetSetLoadVolume() {
-		final long value = 100l;
-		final VoyagePlan plan = new VoyagePlan();
-		Assert.assertEquals(0, plan.getLoadVolume());
-		plan.setLoadVolume(value);
-		Assert.assertEquals(value, plan.getLoadVolume());
-	}
-
-	@Test
-	public void testGetSetSalesRevenue() {
-		final long value = 100l;
-		final VoyagePlan plan = new VoyagePlan();
-		Assert.assertEquals(0, plan.getSalesRevenue());
-		plan.setSalesRevenue(value);
-		Assert.assertEquals(value, plan.getSalesRevenue());
-	}
-
-	@Test
-	public void testGetSetPurchaseCost() {
-		final long value = 100l;
-		final VoyagePlan plan = new VoyagePlan();
-		Assert.assertEquals(0, plan.getPurchaseCost());
-		plan.setPurchaseCost(value);
-		Assert.assertEquals(value, plan.getPurchaseCost());
-	}
-
-	@Test
 	public void testGetSetSequence() {
 		final Object[] value = new Object[0];
 		final VoyagePlan plan = new VoyagePlan();
@@ -133,10 +97,6 @@ public class VoyagePlanTest {
 		VoyagePlan p = new VoyagePlan();
 
 		p.setSequence(sequence);
-		p.setDischargeVolume(dischargeVolume);
-		p.setLoadVolume(loadVolume);
-		p.setSalesRevenue(salesRevenue);
-		p.setPurchaseCost(purchaseCost);
 		p.setFuelConsumption(fuel1, consumption);
 		p.setTotalFuelCost(fuel2, cost);
 

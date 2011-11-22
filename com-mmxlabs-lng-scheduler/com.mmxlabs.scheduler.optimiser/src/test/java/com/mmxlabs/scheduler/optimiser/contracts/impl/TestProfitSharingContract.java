@@ -32,7 +32,7 @@ public class TestProfitSharingContract {
 		final Random random = new Random();
 		for (int i = 0; i<100; i++) {
 			final int p = random.nextInt();
-			final int price = psc.calculateLoadUnitPrice(0, 0, 0, p, 0, null, null, null);
+			final int price = psc.calculateLoadUnitPrice(null, null, 0, 0, p, 0, null, null);
 			Assert.assertEquals(
 					1.234 - 0.1 - 0.2 * (p/1000.0) - 0.3 * (p/ 1000.0 - 3.421),
 					price / 1000.0, 1);
