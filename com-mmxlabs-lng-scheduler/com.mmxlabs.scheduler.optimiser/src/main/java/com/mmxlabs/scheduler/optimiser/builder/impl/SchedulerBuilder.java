@@ -119,6 +119,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final List<ISequenceElement> sequenceElements = new ArrayList<ISequenceElement>();
 
+	/**
+	 * A list of all the sequence elements which have been marked as optional. Elements in this list are allowed to be left out of any of the sequences in a solution and placed in the spare elements
+	 * bag
+	 */
+	private final List<ISequenceElement> optionalElements = new ArrayList<ISequenceElement>();
+
 	private final List<IVesselClass> vesselClasses = new LinkedList<IVesselClass>();
 
 	private final List<IVessel> vessels = new LinkedList<IVessel>();
@@ -287,7 +293,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ILoadPriceCalculator2 loadContract,
-			final int cargoCVValue, final int durationHours, boolean cooldownSet, boolean cooldownForbidden) {
+			final int cargoCVValue, final int durationHours, boolean cooldownSet, boolean cooldownForbidden, boolean optional) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException("IPort was not created by this builder");
@@ -315,6 +321,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		element.setName(id + "-" + port.getName());
 		element.setPortSlot(slot);
 
+		if (optional) {
+			optionalElements.add(element);
+		}
+
 		sequenceElements.add(element);
 
 		// Register the port with the element
@@ -337,8 +347,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
-			final IShippingPriceCalculator<ISequenceElement> pricePerMMBTu,
-			final int durationHours) {
+			final IShippingPriceCalculator<ISequenceElement> pricePerMMBTu, final int durationHours, boolean optional) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException("IPort was not created by this builder");
@@ -361,6 +370,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final SequenceElement element = new SequenceElement(indexingContext);
 		element.setPortSlot(slot);
 		element.setName(id + "-" + port.getName());
+
+		if (optional) {
+			optionalElements.add(element);
+		}
 
 		sequenceElements.add(element);
 

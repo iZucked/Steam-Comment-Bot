@@ -323,7 +323,7 @@ public interface ISchedulerBuilder {
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator2 priceCalculator, int cargoCVValue, int durationHours,
 			boolean cooldownSet,
-			boolean cooldownForbidden);
+ boolean cooldownForbidden, boolean slotIsOptional);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
@@ -339,7 +339,8 @@ public interface ISchedulerBuilder {
 	 *            Scaled sales price in $/MMBTu
 	 * @return
 	 */
-	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, IShippingPriceCalculator<ISequenceElement> priceCalculator, int durationHours);
+	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, IShippingPriceCalculator<ISequenceElement> priceCalculator, int durationHours,
+			boolean slotIsOptional);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these
