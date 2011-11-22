@@ -17,6 +17,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>mmxlabs-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
+		<relativePath/>
 	</parent>
 
 	<issueManagement>
@@ -37,7 +38,7 @@
 
 	<properties>
 		<!-- Tycho version to use -->
-		<tycho.version>0.12.0</tycho.version>
+		<tycho.version>0.13.0</tycho.version>
 
 		<!-- Continue even when tests fail -->
 		<maven.test.failure.ignore>true</maven.test.failure.ignore>
@@ -196,27 +197,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- Install plugin into the OBR metadata -->
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>install-bundle</id>
-						<phase>install</phase>
-						<goals>
-							<goal>install</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<supportedProjectTypes>
-						<supportedProjectType>eclipse-plugin</supportedProjectType>
-					</supportedProjectTypes>
-
-				</configuration>
-			</plugin>
-
 		</plugins>
 	</build>
 
@@ -275,14 +255,6 @@
 			<!--  This replaces the old cope update site, as cope is now EDapt -->
 			<id>edapt-updates</id>
 			<url>http://download.eclipse.org/edapt/update-site/</url>
-			<layout>p2</layout>
-		</repository>
-		
-		<!-- This is an old style update site and not directly consumable by tycho -->
-		<repository>
-			<id>cope-updates</id>
-<!-- 			<url>http://cope.in.tum.de/update-site/</url> -->
-			<url>https://server1.mmxlabs.com/static/mirrors/cope/</url>
 			<layout>p2</layout>
 		</repository>
 		

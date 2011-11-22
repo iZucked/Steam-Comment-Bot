@@ -4,10 +4,15 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.junit.Test;
 
 import scenario.fleet.VesselClass;
@@ -31,11 +36,6 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.ShipFillPercentageConstrai
  * 
  */
 public class ShipFillPercentageConstraintTest {
-
-	// Create a mockery to mock up all the objects involved in a test
-	private final Mockery context = new Mockery();
-	// the fill that is defined as sensible in ShipFillPercentageConstraint.
-	private static final double sensiblefill = 0.8;
 
 	/**
 	 * Test that a fill of 0.9 is reasonable.
@@ -134,38 +134,36 @@ public class ShipFillPercentageConstraintTest {
 		final ShipFillPercentageConstraint constraint = new ShipFillPercentageConstraint();
 
 		// mock a vessel class
-		final VesselClass vesselClass = context.mock(VesselClass.class);
+		final VesselClass vesselClass = mock(VesselClass.class);
+		final IValidationContext validationContext = mock(IValidationContext.class);
+		final IConstraintStatus resultStatus = mock(IConstraintStatus.class);
 
-		final IValidationContext validationContext = context.mock(IValidationContext.class);
+		when(vesselClass.getName()).thenReturn("vc");
+		when(vesselClass.getFillCapacity()).thenReturn(fill);
+		// what's the target?
+		when(validationContext.getTarget()).thenReturn(vesselClass);
+		when(validationContext.getCurrentConstraintId()).thenReturn(id);
 
-		final IConstraintStatus failureStatus = context.mock(IConstraintStatus.class);
+		if (expectSuccess)
+			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
+		else
+			when(validationContext.createFailureStatus(any(), any(), any())).thenReturn(resultStatus);
 
-		context.checking(new Expectations() {
-			{
-				atMost(1).of(vesselClass).getName();
-				will(returnValue("vc"));
-				
-				atMost(3).of(vesselClass).getFillCapacity();
-				will(returnValue(fill));
-
-				// what's the target?
-				atMost(1).of(validationContext).getTarget();
-				will(returnValue(vesselClass));
-
-				atMost(2).of(validationContext).getCurrentConstraintId();
-				will(returnValue(id));
-
-				if (expectSuccess) {
-					atMost(1).of(validationContext).createSuccessStatus();
-				} else {
-					atMost(1).of(validationContext).createFailureStatus("vc", fill * 100, sensiblefill * 100);
-					will(returnValue(failureStatus));
-				}
-			}
-		});
-
+		// validate the constraint
 		constraint.validate(validationContext);
 
-		context.assertIsSatisfied();
+		// verify the mocked methods are called
+		verify(vesselClass, atLeast(0)).getName();
+		verify(vesselClass, atLeast(1)).getFillCapacity();
+		verify(validationContext).getTarget();
+		verify(validationContext, atLeast(1)).getCurrentConstraintId();
+		if (expectSuccess)
+			verify(validationContext).createSuccessStatus();
+		else
+			verify(validationContext).createFailureStatus(any(), any(), any());
+		// verify that only the methods above are called.
+		verifyNoMoreInteractions(vesselClass);
+		verifyNoMoreInteractions(validationContext);
+
 	}
 }

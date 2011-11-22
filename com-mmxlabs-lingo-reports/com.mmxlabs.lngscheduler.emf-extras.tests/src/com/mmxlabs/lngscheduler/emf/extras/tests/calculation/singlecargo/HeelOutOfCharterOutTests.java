@@ -2,12 +2,13 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
+package com.mmxlabs.lngscheduler.emf.extras.tests.calculation.singlecargo;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
 
 import scenario.Scenario;
 import scenario.schedule.Schedule;

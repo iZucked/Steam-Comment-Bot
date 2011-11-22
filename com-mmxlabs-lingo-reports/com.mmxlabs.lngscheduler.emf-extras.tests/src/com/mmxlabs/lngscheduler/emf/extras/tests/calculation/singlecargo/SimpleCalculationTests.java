@@ -2,12 +2,14 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
+package com.mmxlabs.lngscheduler.emf.extras.tests.calculation.singlecargo;
 
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
 
 import scenario.Scenario;
 import scenario.schedule.CargoAllocation;
@@ -52,7 +54,7 @@ public class SimpleCalculationTests {
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
-		ScenarioTools.printScenario("testLNGSelection", a);
+		ScenarioTools.printCargoAllocation("testLNGSelection", a);
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
@@ -81,7 +83,7 @@ public class SimpleCalculationTests {
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);
-		ScenarioTools.printScenario("testBaseSelection", a);
+		ScenarioTools.printCargoAllocation("testBaseSelection", a);
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
