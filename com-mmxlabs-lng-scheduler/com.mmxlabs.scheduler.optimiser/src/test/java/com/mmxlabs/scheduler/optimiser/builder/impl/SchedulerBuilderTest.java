@@ -14,13 +14,14 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 @RunWith(JMock.class)
 public class SchedulerBuilderTest {
@@ -52,7 +53,7 @@ public class SchedulerBuilderTest {
 		final IPort port = context.mock(IPort.class);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator2 contract = context.mock(ILoadPriceCalculator2.class);
 
 		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false);
 	}
@@ -65,7 +66,7 @@ public class SchedulerBuilderTest {
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = context.mock(ITimeWindow.class);
 
-		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator2 contract = context.mock(ILoadPriceCalculator2.class);
 
 		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false);
 	}
@@ -84,7 +85,7 @@ public class SchedulerBuilderTest {
 		final IPort port = context.mock(IPort.class);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		final ICurve curve = context.mock(ICurve.class);
+		final IShippingPriceCalculator<ISequenceElement> curve = context.mock(IShippingPriceCalculator.class);
 
 		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
 	}
@@ -97,7 +98,7 @@ public class SchedulerBuilderTest {
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = context.mock(ITimeWindow.class);
 
-		final ICurve curve = context.mock(ICurve.class);
+		final IShippingPriceCalculator<ISequenceElement> curve = context.mock(IShippingPriceCalculator.class);
 
 		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
 	}
@@ -116,13 +117,13 @@ public class SchedulerBuilderTest {
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		final ICurve curve = context.mock(ICurve.class);
+		final IShippingPriceCalculator<ISequenceElement> curve = context.mock(IShippingPriceCalculator.class);
 
 		final ILoadSlot loadSlot = context.mock(ILoadSlot.class);
 
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
 
-		builder.createCargo("id", loadSlot, dischargeSlot);
+		builder.createCargo("id", loadSlot, dischargeSlot, false);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -132,12 +133,12 @@ public class SchedulerBuilderTest {
 
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
-		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator2 contract = context.mock(ILoadPriceCalculator2.class);
 
 		final ILoadSlot loadSlot = builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false);
 		final IDischargeSlot dischargeSlot = context.mock(IDischargeSlot.class);
 
-		builder.createCargo("id", loadSlot, dischargeSlot);
+		builder.createCargo("id", loadSlot, dischargeSlot, false);
 	}
 
 	@Ignore
