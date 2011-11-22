@@ -91,10 +91,7 @@ public class ScenarioRunner {
 		
 		optimiser.init();
 
-		optimiser.start(context);
-
-		intialSchedule = exportSchedule(optimiser.getBestSolution(true));
-
+		intialSchedule = exportSchedule(optimiser.start(context));
 	}
 
 	public void run() {
@@ -105,6 +102,7 @@ public class ScenarioRunner {
 	private Schedule exportSchedule(
 			final IAnnotatedSolution<ISequenceElement> solution) {
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario,
 				entities, solution);
 
