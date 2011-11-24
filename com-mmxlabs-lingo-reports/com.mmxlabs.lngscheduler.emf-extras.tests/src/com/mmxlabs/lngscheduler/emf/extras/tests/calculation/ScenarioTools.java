@@ -720,6 +720,17 @@ public class ScenarioTools {
 		for (final FuelQuantity fq : fuelQuantities)
 			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
 	}
+	
+	public static void printSequences(final Schedule result) {
+
+		int i = 1;
+		for (final Sequence seq : result.getSequences()) {
+			System.err.println("*** Sequence number " + i++ + ":");
+			ScenarioTools.printSequence(seq);
+		}
+
+		
+	}
 
 	public static void printSequence(final Sequence seq) {
 
