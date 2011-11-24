@@ -19,6 +19,7 @@ import scenario.contract.ContractFactory;
 import scenario.contract.Entity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.fleet.CharterOut;
 import scenario.fleet.Drydock;
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FuelConsumptionLine;
@@ -39,6 +40,7 @@ import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortFactory;
 
+import com.mmxlabs.demo.app.Activator;
 import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 import com.mmxlabs.lngscheduler.emf.extras.ScenarioUtils;
 
@@ -352,6 +354,8 @@ public class CustomScenarioCreator {
 	/**
 	 * Adds a dry dock. Useful for preventing excess ballast idle time.
 	 * 
+	 * TODO Does this work for all vessels? How can you add it to just one specific vessel?
+	 * 
 	 * @param startPort
 	 *            The port the dry dock will start at.
 	 * @param date
@@ -373,6 +377,28 @@ public class CustomScenarioCreator {
 		// set the date to be after the discharge date
 		dryDock.setStartDate(date);
 		dryDock.setEndDate(date);
+	}
+
+	public void addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays,
+			final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
+		
+		final CharterOut charterOut = FleetFactory.eINSTANCE.createCharterOut();
+		
+		// the start and end of the charter out starting-window is 0, for simplicity.
+		charterOut.setStartDate(startCharterOut);
+		charterOut.setEndDate(startCharterOut);
+		// same start and end port.
+		charterOut.setStartPort(startPort);
+		charterOut.setEndPort(endPort);
+		charterOut.setId(id);
+		charterOut.setHeelLimit(heelLimit);
+		charterOut.setDuration(charterOutDurationDays);
+		charterOut.setHeelCVValue(cvValue);
+		charterOut.setHeelUnitPrice(dischargePrice);
+		charterOut.setDailyCharterOutPrice(dailyCharterOutPrice);
+		charterOut.setRepositioningFee(repositioningFee);
+		// add to the scenario's fleet model
+		scenario.getFleetModel().getVesselEvents().add(charterOut);
 	}
 
 	/**
