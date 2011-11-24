@@ -83,7 +83,7 @@ public class HeelOutOfCharterOutTests {
 
 		final float baseFuelUnitPrice = 1f;
 
-		// discharge price makes LNG slightly cheaper than BF.
+		// discharge price makes LNG slightly more expensive than BF.
 		final float dischargePrice = 1.01f;
 		final float cvValue = 1;
 		// set charter out details.
