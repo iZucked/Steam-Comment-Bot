@@ -747,6 +747,7 @@ public class ScenarioTools {
 
 				final CharterOutVisit cov = (CharterOutVisit) e;
 				System.err.println("Charter Out:");
+				System.err.println("\tID: " + cov.getId() + ", end port: " + cov.getPort().getName());
 				System.err.println("\tDuration: " + cov.getEventDuration());
 
 			} else if (e instanceof VesselEventVisit) {
