@@ -9,6 +9,9 @@ import java.util.Date;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import scenario.Scenario;
 import scenario.ScenarioFactory;
 import scenario.cargo.Cargo;
@@ -307,11 +310,19 @@ public class CustomScenarioCreator {
 			final int travelTime) {
 
 		if (!scenario.getPortModel().getPorts().contains(loadPort)) {
-			System.err.println("Warning: scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.");
+			Activator
+			.getDefault()
+			.getLog()
+			.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+					"Scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
 			scenario.getPortModel().getPorts().add(loadPort);
 		}
 		if (!scenario.getPortModel().getPorts().contains(dischargePort)) {
-			System.err.println("Warning: scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.");
+			Activator
+			.getDefault()
+			.getLog()
+			.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+					"Scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
 			scenario.getPortModel().getPorts().add(dischargePort);
 		}
 
@@ -365,7 +376,11 @@ public class CustomScenarioCreator {
 	public void addDryDock(final Port startPort, final Date date) {
 
 		if (!scenario.getPortModel().getPorts().contains(startPort)) {
-			System.err.println("Warning: scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.");
+			Activator
+					.getDefault()
+					.getLog()
+					.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+							"Scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
 			scenario.getPortModel().getPorts().add(startPort);
 		}
 
@@ -380,11 +395,11 @@ public class CustomScenarioCreator {
 		dryDock.setEndDate(date);
 	}
 
-	public void addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays,
-			final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
-		
+	public void addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays, final float cvValue,
+			final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
+
 		final CharterOut charterOut = FleetFactory.eINSTANCE.createCharterOut();
-		
+
 		// the start and end of the charter out starting-window is 0, for simplicity.
 		charterOut.setStartDate(startCharterOut);
 		charterOut.setEndDate(startCharterOut);
