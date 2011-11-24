@@ -22,6 +22,7 @@ import scenario.schedule.events.ScheduledEvent;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
+import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
 
 /**
@@ -33,7 +34,6 @@ public class CharterOutTests {
 
 	// discharge price makes LNG slightly cheaper than BF.
 	private static final float dischargePrice = 0.99f;
-	private static final int loadPrice = 1;
 
 	/**
 	 * There are two charter outs in a row. The first has heel available, the second does not. Check that the first uses heel and the second doesn't.
@@ -100,7 +100,7 @@ public class CharterOutTests {
 			for (final ScheduledEvent e : seq.getEvents()) {
 				if (e instanceof Journey) {
 					Journey j = (Journey) e;
-					
+
 					if (j.getToPort().equals(portB)) {
 						// first journey, so check that heel is used.
 						// get the amount of heel used
@@ -111,10 +111,9 @@ public class CharterOutTests {
 						}
 
 						Assert.assertTrue("Heel not exceeded", LNGUsed <= firstCOHeelLimit);
-						
-						assertBaseFuelNotUsed(j);
-					}
-					else if (j.getToPort().equals(portC)) {
+
+						FuelUsageAssertions.assertBaseFuelNotUsed(j);
+					} else if (j.getToPort().equals(portC)) {
 						// second journey, check heel is NOT used.
 						// get the amount of heel used
 						long LNGUsed = 0;
@@ -124,46 +123,12 @@ public class CharterOutTests {
 						}
 
 						Assert.assertTrue("Heel not exceeded", LNGUsed == secondCOHeelLimit);
-						
-						assertLNGNotUsed(j);
-					}
-					else
+
+						FuelUsageAssertions.assertLNGNotUsed(j);
+					} else
 						Assert.fail("Journey not to a recognised port?");
 				}
 			}
-		}
-	}
-
-	/**
-	 * Assert that during a given journey base fuel is not used, but NBO and FBO are
-	 * 
-	 * @param j
-	 */
-	private void assertBaseFuelNotUsed(Journey j) {
-
-		for (FuelQuantity fq : j.getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL)
-				Assert.assertTrue("Base fuel not used", fq.getQuantity() == 0);
-			else if (fq.getFuelType() == FuelType.NBO)
-				Assert.assertTrue("NBO used", fq.getQuantity() > 0);
-			else if (fq.getFuelType() == FuelType.FBO)
-				Assert.assertTrue("FBO used", fq.getQuantity() > 0);
-		}
-	}
-	/**
-	 * Assert that during a given journey NBO and FBO are not used and base fuel is.
-	 * 
-	 * @param j
-	 */
-	private void assertLNGNotUsed(Journey j) {
-
-		for (FuelQuantity fq : j.getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO)
-				Assert.assertTrue("NBO not used", fq.getQuantity() == 0);
-			else if (fq.getFuelType() == FuelType.FBO)
-				Assert.assertTrue("FBO not used", fq.getQuantity() == 0);
-			else if (fq.getFuelType() == FuelType.BASE_FUEL)
-				Assert.assertTrue("Base fuel used", fq.getQuantity() > 0);
 		}
 	}
 }
