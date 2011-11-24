@@ -61,7 +61,6 @@ public class CharterOutVisitItemProvider
 			super.getPropertyDescriptors(object);
 
 			addCharterOutPropertyDescriptor(object);
-			addRevenuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -80,28 +79,6 @@ public class CharterOutVisitItemProvider
 				 getString("_UI_CharterOutVisit_charterOut_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutVisit_charterOut_feature", "_UI_CharterOutVisit_type"),
 				 EventsPackage.Literals.CHARTER_OUT_VISIT__CHARTER_OUT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Revenue feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRevenuePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CharterOutVisit_revenue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutVisit_revenue_feature", "_UI_CharterOutVisit_type"),
-				 EventsPackage.Literals.CHARTER_OUT_VISIT__REVENUE,
 				 true,
 				 false,
 				 true,

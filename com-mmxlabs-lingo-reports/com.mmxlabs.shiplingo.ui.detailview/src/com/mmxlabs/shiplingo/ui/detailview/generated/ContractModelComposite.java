@@ -106,8 +106,8 @@ public  class ContractModelComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	protected static void createShippingEntityEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    final EntityComposite sub = 
-      new EntityComposite(composite, composite.getStyle(), 
+    final GroupEntityComposite sub = 
+      new GroupEntityComposite(composite, composite.getStyle(), 
         "Shipping Entity", false);
     sub.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
         true));

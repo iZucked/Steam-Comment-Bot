@@ -20,12 +20,12 @@ import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
 import scenario.contract.Entity;
+import scenario.contract.GroupEntity;
 import scenario.port.PortPackage;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.Sequence;
-import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.FuelMixture;
 import scenario.schedule.events.FuelQuantity;
@@ -33,6 +33,7 @@ import scenario.schedule.events.FuelType;
 import scenario.schedule.events.Journey;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
+import scenario.schedule.events.VesselEventVisit;
 import scenario.schedule.fleetallocation.FleetallocationPackage;
 
 /**
@@ -306,7 +307,7 @@ public class PortRotationReportView extends EMFReportView {
 	}
 
 	private void addEntityColumn(final Entity entity) {
-		if (entity == null || entity.getOwnership() == 0)
+		if (!(entity instanceof GroupEntity))
 			return;
 		final String title = "Profit to " + entity.getName();
 		entityColumnNames.add(title);
@@ -328,27 +329,27 @@ public class PortRotationReportView extends EMFReportView {
 						if (entity.equals(allocation.getLoadRevenue()
 								.getEntity())) {
 							value += allocation.getLoadRevenue()
-									.getTaxedValue();
+.getValue();
 						}
 						if (entity.equals(allocation.getShippingRevenue()
 								.getEntity())) {
 							value += allocation.getShippingRevenue()
-									.getTaxedValue();
+.getValue();
 						}
 						if (entity.equals(allocation.getDischargeRevenue()
 								.getEntity())) {
 							value += allocation.getDischargeRevenue()
-									.getTaxedValue();
+.getValue();
 						}
 						return value;
 					}
-				} else if (object instanceof CharterOutVisit) {
-					final CharterOutVisit cov = (CharterOutVisit) object;
+				} else if (object instanceof VesselEventVisit) {
+					final VesselEventVisit cov = (VesselEventVisit) object;
 					if (cov.getRevenue() == null) {
 						return null;
 					}
 					if (entity.equals(cov.getRevenue().getEntity())) {
-						return cov.getRevenue().getTaxedValue();
+						return cov.getRevenue().getValue();
 					}
 				}
 				return null;

@@ -40,6 +40,7 @@ import scenario.schedule.ScheduleFitness;
 import scenario.schedule.ScheduleModel;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.Sequence;
+import scenario.schedule.VesselEventRevenue;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.impl.EventsPackageImpl;
 import scenario.schedule.fleetallocation.FleetallocationPackage;
@@ -92,13 +93,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass lineItemEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass bookedRevenueEClass = null;
 
 	/**
@@ -113,7 +107,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass charterOutRevenueEClass = null;
+	private EClass vesselEventRevenueEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -582,51 +576,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getLineItem() {
-		return lineItemEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getLineItem_Value() {
-		return (EAttribute)lineItemEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getLineItem_Party() {
-		return (EReference)lineItemEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getLineItem__IsCost() {
-		return lineItemEClass.getEOperations().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getLineItem__IsRevenue() {
-		return lineItemEClass.getEOperations().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getBookedRevenue() {
 		return bookedRevenueEClass;
 	}
@@ -637,7 +586,25 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	public EReference getBookedRevenue_Entity() {
-		return (EReference)bookedRevenueEClass.getEStructuralFeatures().get(2);
+		return (EReference)bookedRevenueEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBookedRevenue_Value() {
+		return (EAttribute)bookedRevenueEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBookedRevenue_Details() {
+		return (EReference)bookedRevenueEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -654,62 +621,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBookedRevenue_LineItems() {
-		return (EReference)bookedRevenueEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getBookedRevenue__GetUntaxedValue() {
-		return bookedRevenueEClass.getEOperations().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getBookedRevenue__GetTaxedValue() {
-		return bookedRevenueEClass.getEOperations().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getBookedRevenue__GetUntaxedRevenues() {
-		return bookedRevenueEClass.getEOperations().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getBookedRevenue__GetUntaxedCosts() {
-		return bookedRevenueEClass.getEOperations().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getBookedRevenue__GetTaxCost() {
-		return bookedRevenueEClass.getEOperations().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EOperation getBookedRevenue__GetName() {
-		return bookedRevenueEClass.getEOperations().get(5);
+		return bookedRevenueEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -744,8 +657,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getCharterOutRevenue() {
-		return charterOutRevenueEClass;
+	public EClass getVesselEventRevenue() {
+		return vesselEventRevenueEClass;
 	}
 
 	/**
@@ -753,8 +666,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCharterOutRevenue_CharterOut() {
-		return (EReference)charterOutRevenueEClass.getEStructuralFeatures().get(0);
+	public EReference getVesselEventRevenue_VesselEventVisit() {
+		return (EReference)vesselEventRevenueEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -762,8 +675,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getCharterOutRevenue__GetName() {
-		return charterOutRevenueEClass.getEOperations().get(0);
+	public EOperation getVesselEventRevenue__GetName() {
+		return vesselEventRevenueEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -840,30 +753,20 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(scheduleFitnessEClass, SCHEDULE_FITNESS__NAME);
 		createEAttribute(scheduleFitnessEClass, SCHEDULE_FITNESS__VALUE);
 
-		lineItemEClass = createEClass(LINE_ITEM);
-		createEAttribute(lineItemEClass, LINE_ITEM__VALUE);
-		createEReference(lineItemEClass, LINE_ITEM__PARTY);
-		createEOperation(lineItemEClass, LINE_ITEM___IS_COST);
-		createEOperation(lineItemEClass, LINE_ITEM___IS_REVENUE);
-
 		bookedRevenueEClass = createEClass(BOOKED_REVENUE);
 		createEAttribute(bookedRevenueEClass, BOOKED_REVENUE__DATE);
-		createEReference(bookedRevenueEClass, BOOKED_REVENUE__LINE_ITEMS);
 		createEReference(bookedRevenueEClass, BOOKED_REVENUE__ENTITY);
-		createEOperation(bookedRevenueEClass, BOOKED_REVENUE___GET_UNTAXED_VALUE);
-		createEOperation(bookedRevenueEClass, BOOKED_REVENUE___GET_TAXED_VALUE);
-		createEOperation(bookedRevenueEClass, BOOKED_REVENUE___GET_UNTAXED_REVENUES);
-		createEOperation(bookedRevenueEClass, BOOKED_REVENUE___GET_UNTAXED_COSTS);
-		createEOperation(bookedRevenueEClass, BOOKED_REVENUE___GET_TAX_COST);
+		createEAttribute(bookedRevenueEClass, BOOKED_REVENUE__VALUE);
+		createEReference(bookedRevenueEClass, BOOKED_REVENUE__DETAILS);
 		createEOperation(bookedRevenueEClass, BOOKED_REVENUE___GET_NAME);
 
 		cargoRevenueEClass = createEClass(CARGO_REVENUE);
 		createEReference(cargoRevenueEClass, CARGO_REVENUE__CARGO);
 		createEOperation(cargoRevenueEClass, CARGO_REVENUE___GET_NAME);
 
-		charterOutRevenueEClass = createEClass(CHARTER_OUT_REVENUE);
-		createEReference(charterOutRevenueEClass, CHARTER_OUT_REVENUE__CHARTER_OUT);
-		createEOperation(charterOutRevenueEClass, CHARTER_OUT_REVENUE___GET_NAME);
+		vesselEventRevenueEClass = createEClass(VESSEL_EVENT_REVENUE);
+		createEReference(vesselEventRevenueEClass, VESSEL_EVENT_REVENUE__VESSEL_EVENT_VISIT);
+		createEOperation(vesselEventRevenueEClass, VESSEL_EVENT_REVENUE___GET_NAME);
 	}
 
 	/**
@@ -905,10 +808,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		lineItemEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
 		bookedRevenueEClass.getESuperTypes().add(theScenarioPackage.getScenarioObject());
 		cargoRevenueEClass.getESuperTypes().add(this.getBookedRevenue());
-		charterOutRevenueEClass.getESuperTypes().add(this.getBookedRevenue());
+		vesselEventRevenueEClass.getESuperTypes().add(this.getBookedRevenue());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -962,28 +864,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getScheduleFitness_Name(), ecorePackage.getEString(), "name", null, 1, 1, ScheduleFitness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScheduleFitness_Value(), ecorePackage.getELong(), "value", null, 1, 1, ScheduleFitness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(lineItemEClass, LineItem.class, "LineItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getLineItem_Value(), ecorePackage.getEInt(), "value", null, 1, 1, LineItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLineItem_Party(), theContractPackage.getEntity(), null, "party", null, 1, 1, LineItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEOperation(getLineItem__IsCost(), ecorePackage.getEBoolean(), "isCost", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getLineItem__IsRevenue(), ecorePackage.getEBoolean(), "isRevenue", 1, 1, IS_UNIQUE, IS_ORDERED);
-
 		initEClass(bookedRevenueEClass, BookedRevenue.class, "BookedRevenue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBookedRevenue_Date(), ecorePackage.getEDate(), "date", null, 1, 1, BookedRevenue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBookedRevenue_LineItems(), this.getLineItem(), null, "lineItems", null, 0, -1, BookedRevenue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBookedRevenue_Entity(), theContractPackage.getEntity(), null, "entity", null, 1, 1, BookedRevenue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEOperation(getBookedRevenue__GetUntaxedValue(), ecorePackage.getEInt(), "getUntaxedValue", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getBookedRevenue__GetTaxedValue(), ecorePackage.getEInt(), "getTaxedValue", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getBookedRevenue__GetUntaxedRevenues(), ecorePackage.getEInt(), "getUntaxedRevenues", 0, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getBookedRevenue__GetUntaxedCosts(), ecorePackage.getEInt(), "getUntaxedCosts", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getBookedRevenue__GetTaxCost(), ecorePackage.getEInt(), "getTaxCost", 1, 1, IS_UNIQUE, IS_ORDERED);
+		initEAttribute(getBookedRevenue_Value(), ecorePackage.getEInt(), "value", null, 1, 1, BookedRevenue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBookedRevenue_Details(), theScenarioPackage.getDetail(), null, "details", null, 0, 1, BookedRevenue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getBookedRevenue__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -992,10 +877,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEOperation(getCargoRevenue__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEClass(charterOutRevenueEClass, CharterOutRevenue.class, "CharterOutRevenue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCharterOutRevenue_CharterOut(), theEventsPackage.getCharterOutVisit(), null, "charterOut", null, 1, 1, CharterOutRevenue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(vesselEventRevenueEClass, VesselEventRevenue.class, "VesselEventRevenue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVesselEventRevenue_VesselEventVisit(), theEventsPackage.getVesselEventVisit(), null, "vesselEventVisit", null, 1, 1, VesselEventRevenue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEOperation(getCharterOutRevenue__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getVesselEventRevenue__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 	}
 
 } //SchedulePackageImpl

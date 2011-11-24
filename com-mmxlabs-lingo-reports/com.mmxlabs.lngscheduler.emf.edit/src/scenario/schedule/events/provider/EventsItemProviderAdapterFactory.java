@@ -12,7 +12,6 @@ import java.util.Collection;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.edit.provider.ChangeNotifier;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -237,29 +236,6 @@ public class EventsItemProviderAdapterFactory extends EventsAdapterFactory imple
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.CharterOutVisit} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CharterOutVisitItemProvider charterOutVisitItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link scenario.schedule.events.CharterOutVisit}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCharterOutVisitAdapter() {
-		if (charterOutVisitItemProvider == null) {
-			charterOutVisitItemProvider = new CharterOutVisitItemProvider(this);
-		}
-
-		return charterOutVisitItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.VesselEventVisit} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -283,11 +259,35 @@ public class EventsItemProviderAdapterFactory extends EventsAdapterFactory imple
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.schedule.events.CharterOutVisit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterOutVisitItemProvider charterOutVisitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.schedule.events.CharterOutVisit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterOutVisitAdapter() {
+		if (charterOutVisitItemProvider == null) {
+			charterOutVisitItemProvider = new CharterOutVisitItemProvider(this);
+		}
+
+		return charterOutVisitItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ComposeableAdapterFactory getRootAdapterFactory() {
 		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
 	}
@@ -298,6 +298,7 @@ public class EventsItemProviderAdapterFactory extends EventsAdapterFactory imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory) {
 		this.parentAdapterFactory = parentAdapterFactory;
 	}
@@ -346,6 +347,7 @@ public class EventsItemProviderAdapterFactory extends EventsAdapterFactory imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void addListener(INotifyChangedListener notifyChangedListener) {
 		changeNotifier.addListener(notifyChangedListener);
 	}
@@ -356,6 +358,7 @@ public class EventsItemProviderAdapterFactory extends EventsAdapterFactory imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void removeListener(INotifyChangedListener notifyChangedListener) {
 		changeNotifier.removeListener(notifyChangedListener);
 	}
@@ -366,6 +369,7 @@ public class EventsItemProviderAdapterFactory extends EventsAdapterFactory imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void fireNotifyChanged(Notification notification) {
 		changeNotifier.fireNotifyChanged(notification);
 
@@ -380,6 +384,7 @@ public class EventsItemProviderAdapterFactory extends EventsAdapterFactory imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void dispose() {
 		if (fuelMixtureItemProvider != null) fuelMixtureItemProvider.dispose();
 		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();

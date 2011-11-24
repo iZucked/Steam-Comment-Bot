@@ -17,6 +17,7 @@ import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.contract.ContractFactory;
 import scenario.contract.Entity;
+import scenario.contract.GroupEntity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 import scenario.fleet.CharterOut;
@@ -60,7 +61,7 @@ public class CustomScenarioCreator {
 	final PurchaseContract pc;
 
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
-	private ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
+	private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
 
 	public CustomScenarioCreator(final float dischargePrice) {
 
@@ -69,7 +70,7 @@ public class CustomScenarioCreator {
 
 		final Entity e = ContractFactory.eINSTANCE.createEntity();
 		scenario.getContractModel().getEntities().add(e);
-		final Entity s = ContractFactory.eINSTANCE.createEntity();
+		final GroupEntity s = ContractFactory.eINSTANCE.createGroupEntity();
 		scenario.getContractModel().setShippingEntity(s);
 
 		e.setName("Other");

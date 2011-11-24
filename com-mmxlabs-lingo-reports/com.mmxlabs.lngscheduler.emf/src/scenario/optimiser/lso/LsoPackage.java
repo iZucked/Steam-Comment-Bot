@@ -145,6 +145,15 @@ public interface LsoPackage extends EPackage {
 	int LSO_SETTINGS__DEFAULT_DISCOUNT_CURVE = OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE;
 
 	/**
+	 * The feature id for the '<em><b>Allow Rewiring By Default</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LSO_SETTINGS__ALLOW_REWIRING_BY_DEFAULT = OptimiserPackage.OPTIMISATION_SETTINGS__ALLOW_REWIRING_BY_DEFAULT;
+
+	/**
 	 * The feature id for the '<em><b>Number Of Steps</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

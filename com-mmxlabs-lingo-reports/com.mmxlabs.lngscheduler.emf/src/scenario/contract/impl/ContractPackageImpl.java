@@ -22,6 +22,7 @@ import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
 import scenario.contract.FixedPricePurchaseContract;
+import scenario.contract.GroupEntity;
 import scenario.contract.IndexPricePurchaseContract;
 import scenario.contract.NetbackPurchaseContract;
 import scenario.contract.ProfitSharingPurchaseContract;
@@ -123,6 +124,13 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * @generated
 	 */
 	private EClass simplePurchaseContractEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass groupEntityEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -400,24 +408,6 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getEntity_TaxRate() {
-		return (EAttribute)entityEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getEntity_Ownership() {
-		return (EAttribute)entityEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getFixedPricePurchaseContract() {
 		return fixedPricePurchaseContractEClass;
 	}
@@ -519,6 +509,42 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 	 */
 	public EReference getSimplePurchaseContract_CooldownPorts() {
 		return (EReference)simplePurchaseContractEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getGroupEntity() {
+		return groupEntityEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGroupEntity_TaxRate() {
+		return (EAttribute)groupEntityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGroupEntity_Ownership() {
+		return (EAttribute)groupEntityEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGroupEntity_TransferOffset() {
+		return (EAttribute)groupEntityEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -638,8 +664,6 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		createEAttribute(totalVolumeLimitEClass, TOTAL_VOLUME_LIMIT__REPEATING);
 
 		entityEClass = createEClass(ENTITY);
-		createEAttribute(entityEClass, ENTITY__TAX_RATE);
-		createEAttribute(entityEClass, ENTITY__OWNERSHIP);
 
 		contractEClass = createEClass(CONTRACT);
 		createEReference(contractEClass, CONTRACT__ENTITY);
@@ -672,6 +696,11 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 
 		simplePurchaseContractEClass = createEClass(SIMPLE_PURCHASE_CONTRACT);
 		createEReference(simplePurchaseContractEClass, SIMPLE_PURCHASE_CONTRACT__COOLDOWN_PORTS);
+
+		groupEntityEClass = createEClass(GROUP_ENTITY);
+		createEAttribute(groupEntityEClass, GROUP_ENTITY__TAX_RATE);
+		createEAttribute(groupEntityEClass, GROUP_ENTITY__OWNERSHIP);
+		createEAttribute(groupEntityEClass, GROUP_ENTITY__TRANSFER_OFFSET);
 	}
 
 	/**
@@ -716,12 +745,13 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		netbackPurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
 		profitSharingPurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
 		simplePurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
+		groupEntityEClass.getESuperTypes().add(this.getEntity());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(contractModelEClass, ContractModel.class, "ContractModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContractModel_VolumeConstraints(), this.getTotalVolumeLimit(), null, "volumeConstraints", null, 0, -1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContractModel_Entities(), this.getEntity(), null, "entities", null, 0, -1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getContractModel_ShippingEntity(), this.getEntity(), null, "shippingEntity", null, 1, 1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContractModel_ShippingEntity(), this.getGroupEntity(), null, "shippingEntity", null, 1, 1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContractModel_PurchaseContracts(), this.getPurchaseContract(), null, "purchaseContracts", null, 0, -1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContractModel_SalesContracts(), this.getSalesContract(), null, "salesContracts", null, 0, -1, ContractModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -739,8 +769,6 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 		initEAttribute(getTotalVolumeLimit_Repeating(), ecorePackage.getEBoolean(), "repeating", null, 1, 1, TotalVolumeLimit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(entityEClass, Entity.class, "Entity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEntity_TaxRate(), theScenarioPackage.getPercentage(), "taxRate", null, 1, 1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getEntity_Ownership(), theScenarioPackage.getPercentage(), "ownership", "1", 1, 1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(contractEClass, Contract.class, "Contract", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContract_Entity(), this.getEntity(), null, "entity", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -773,6 +801,11 @@ public class ContractPackageImpl extends EPackageImpl implements ContractPackage
 
 		initEClass(simplePurchaseContractEClass, SimplePurchaseContract.class, "SimplePurchaseContract", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSimplePurchaseContract_CooldownPorts(), thePortPackage.getPort(), null, "cooldownPorts", null, 0, -1, SimplePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(groupEntityEClass, GroupEntity.class, "GroupEntity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getGroupEntity_TaxRate(), theScenarioPackage.getPercentage(), "taxRate", null, 1, 1, GroupEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGroupEntity_Ownership(), theScenarioPackage.getPercentage(), "ownership", null, 1, 1, GroupEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGroupEntity_TransferOffset(), ecorePackage.getEFloat(), "transferOffset", null, 1, 1, GroupEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //ContractPackageImpl

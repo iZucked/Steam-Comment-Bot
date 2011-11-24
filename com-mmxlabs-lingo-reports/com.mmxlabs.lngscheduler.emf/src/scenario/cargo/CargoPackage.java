@@ -183,13 +183,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO__CARGO_TYPE = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Allow Rewiring</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__ALLOW_REWIRING = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 5;
+	int CARGO_FEATURE_COUNT = ScenarioPackage.ANNOTATED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of operations of the '<em>Cargo</em>' class.
@@ -673,6 +682,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCargo_CargoType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Allow Rewiring</em>'.
+	 * @see scenario.cargo.Cargo#isAllowRewiring()
+	 * @see #getCargo()
+	 * @generated
+	 */
+	EAttribute getCargo_AllowRewiring();
+
+	/**
 	 * Returns the meta object for class '{@link scenario.cargo.Slot <em>Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1009,6 +1029,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CARGO__CARGO_TYPE = eINSTANCE.getCargo_CargoType();
+
+		/**
+		 * The meta object literal for the '<em><b>Allow Rewiring</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CARGO__ALLOW_REWIRING = eINSTANCE.getCargo_AllowRewiring();
 
 		/**
 		 * The meta object literal for the '{@link scenario.cargo.impl.SlotImpl <em>Slot</em>}' class.

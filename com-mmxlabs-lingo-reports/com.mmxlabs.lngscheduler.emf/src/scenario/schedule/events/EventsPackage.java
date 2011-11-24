@@ -982,13 +982,22 @@ public interface EventsPackage extends EPackage {
 	int VESSEL_EVENT_VISIT__VESSEL_EVENT = PORT_VISIT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__REVENUE = PORT_VISIT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 1;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -1118,6 +1127,15 @@ public interface EventsPackage extends EPackage {
 	int CHARTER_OUT_VISIT__VESSEL_EVENT = VESSEL_EVENT_VISIT__VESSEL_EVENT;
 
 	/**
+	 * The feature id for the '<em><b>Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_VISIT__REVENUE = VESSEL_EVENT_VISIT__REVENUE;
+
+	/**
 	 * The feature id for the '<em><b>Charter Out</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1127,22 +1145,13 @@ public interface EventsPackage extends EPackage {
 	int CHARTER_OUT_VISIT__CHARTER_OUT = VESSEL_EVENT_VISIT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Revenue</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_OUT_VISIT__REVENUE = VESSEL_EVENT_VISIT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>Charter Out Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_VISIT_FEATURE_COUNT = VESSEL_EVENT_VISIT_FEATURE_COUNT + 2;
+	int CHARTER_OUT_VISIT_FEATURE_COUNT = VESSEL_EVENT_VISIT_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -1748,17 +1757,6 @@ public interface EventsPackage extends EPackage {
 	EReference getCharterOutVisit_CharterOut();
 
 	/**
-	 * Returns the meta object for the reference '{@link scenario.schedule.events.CharterOutVisit#getRevenue <em>Revenue</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Revenue</em>'.
-	 * @see scenario.schedule.events.CharterOutVisit#getRevenue()
-	 * @see #getCharterOutVisit()
-	 * @generated
-	 */
-	EReference getCharterOutVisit_Revenue();
-
-	/**
 	 * Returns the meta object for class '{@link scenario.schedule.events.VesselEventVisit <em>Vessel Event Visit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1778,6 +1776,17 @@ public interface EventsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVesselEventVisit_VesselEvent();
+
+	/**
+	 * Returns the meta object for the reference '{@link scenario.schedule.events.VesselEventVisit#getRevenue <em>Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Revenue</em>'.
+	 * @see scenario.schedule.events.VesselEventVisit#getRevenue()
+	 * @see #getVesselEventVisit()
+	 * @generated
+	 */
+	EReference getVesselEventVisit_Revenue();
 
 	/**
 	 * Returns the meta object for the '{@link scenario.schedule.events.VesselEventVisit#getId() <em>Get Id</em>}' operation.
@@ -2255,14 +2264,6 @@ public interface EventsPackage extends EPackage {
 		EReference CHARTER_OUT_VISIT__CHARTER_OUT = eINSTANCE.getCharterOutVisit_CharterOut();
 
 		/**
-		 * The meta object literal for the '<em><b>Revenue</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHARTER_OUT_VISIT__REVENUE = eINSTANCE.getCharterOutVisit_Revenue();
-
-		/**
 		 * The meta object literal for the '{@link scenario.schedule.events.impl.VesselEventVisitImpl <em>Vessel Event Visit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2279,6 +2280,14 @@ public interface EventsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_EVENT_VISIT__VESSEL_EVENT = eINSTANCE.getVesselEventVisit_VesselEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Revenue</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT_VISIT__REVENUE = eINSTANCE.getVesselEventVisit_Revenue();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Id</b></em>' operation.

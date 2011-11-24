@@ -4,8 +4,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
-import scenario.contract.ContractPackage;
-
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 
@@ -74,28 +72,5 @@ public  class EntityComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	protected static void createEntityFields(final AbstractDetailComposite composite, final Composite mainGroup) {
-    createTaxRateEditor(composite, mainGroup);
-    createOwnershipEditor(composite, mainGroup);
-  }
-
-		
-	/**
-	 * Create an editor for the taxRate feature on Entity
-	 * @generated
-	 */
-	protected static void createTaxRateEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(ContractPackage.eINSTANCE.getEntity_TaxRate()),
-      "Tax Rate");
-  }
-		
-	/**
-	 * Create an editor for the ownership feature on Entity
-	 * @generated
-	 */
-	protected static void createOwnershipEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(ContractPackage.eINSTANCE.getEntity_Ownership()),
-      "Ownership");
   }
 }

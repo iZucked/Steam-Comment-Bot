@@ -71,15 +71,6 @@ public interface ScheduleFactory extends EFactory {
 	ScheduleFitness createScheduleFitness();
 
 	/**
-	 * Returns a new object of class '<em>Line Item</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Line Item</em>'.
-	 * @generated
-	 */
-	LineItem createLineItem();
-
-	/**
 	 * Returns a new object of class '<em>Booked Revenue</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -98,13 +89,13 @@ public interface ScheduleFactory extends EFactory {
 	CargoRevenue createCargoRevenue();
 
 	/**
-	 * Returns a new object of class '<em>Charter Out Revenue</em>'.
+	 * Returns a new object of class '<em>Vessel Event Revenue</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Charter Out Revenue</em>'.
+	 * @return a new object of class '<em>Vessel Event Revenue</em>'.
 	 * @generated
 	 */
-	CharterOutRevenue createCharterOutRevenue();
+	VesselEventRevenue createVesselEventRevenue();
 
 	/**
 	 * Returns the package supported by this factory.

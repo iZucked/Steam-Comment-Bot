@@ -111,14 +111,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.LINE_ITEM: {
-				LineItem lineItem = (LineItem)theEObject;
-				T result = caseLineItem(lineItem);
-				if (result == null) result = caseNamedObject(lineItem);
-				if (result == null) result = caseScenarioObject(lineItem);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case SchedulePackage.BOOKED_REVENUE: {
 				BookedRevenue bookedRevenue = (BookedRevenue)theEObject;
 				T result = caseBookedRevenue(bookedRevenue);
@@ -134,11 +126,11 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.CHARTER_OUT_REVENUE: {
-				CharterOutRevenue charterOutRevenue = (CharterOutRevenue)theEObject;
-				T result = caseCharterOutRevenue(charterOutRevenue);
-				if (result == null) result = caseBookedRevenue(charterOutRevenue);
-				if (result == null) result = caseScenarioObject(charterOutRevenue);
+			case SchedulePackage.VESSEL_EVENT_REVENUE: {
+				VesselEventRevenue vesselEventRevenue = (VesselEventRevenue)theEObject;
+				T result = caseVesselEventRevenue(vesselEventRevenue);
+				if (result == null) result = caseBookedRevenue(vesselEventRevenue);
+				if (result == null) result = caseScenarioObject(vesselEventRevenue);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -222,21 +214,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Line Item</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Line Item</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseLineItem(LineItem object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Booked Revenue</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -267,17 +244,17 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Charter Out Revenue</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Event Revenue</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Charter Out Revenue</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Event Revenue</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCharterOutRevenue(CharterOutRevenue object) {
+	public T caseVesselEventRevenue(VesselEventRevenue object) {
 		return null;
 	}
 
@@ -293,21 +270,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseScenarioObject(ScenarioObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Named Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Named Object</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseNamedObject(NamedObject object) {
 		return null;
 	}
 

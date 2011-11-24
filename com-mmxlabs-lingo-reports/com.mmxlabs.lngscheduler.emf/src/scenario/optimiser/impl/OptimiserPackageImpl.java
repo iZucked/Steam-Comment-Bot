@@ -242,6 +242,15 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getOptimisationSettings_AllowRewiringByDefault() {
+		return (EAttribute)optimisationSettingsEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getOptimisationSettings_FreezeDaysFromStart() {
 		return (EAttribute)optimisationSettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -417,6 +426,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__CONSTRAINTS);
 		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__OBJECTIVES);
 		createEReference(optimisationSettingsEClass, OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE);
+		createEAttribute(optimisationSettingsEClass, OPTIMISATION_SETTINGS__ALLOW_REWIRING_BY_DEFAULT);
 
 		optimisationEClass = createEClass(OPTIMISATION);
 		createEReference(optimisationEClass, OPTIMISATION__ALL_SETTINGS);
@@ -488,6 +498,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		initEReference(getOptimisationSettings_Constraints(), this.getConstraint(), null, "constraints", null, 0, -1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisationSettings_Objectives(), this.getObjective(), null, "objectives", null, 0, -1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimisationSettings_DefaultDiscountCurve(), this.getDiscountCurve(), null, "defaultDiscountCurve", null, 1, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOptimisationSettings_AllowRewiringByDefault(), ecorePackage.getEBoolean(), "allowRewiringByDefault", null, 1, 1, OptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(optimisationEClass, Optimisation.class, "Optimisation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOptimisation_AllSettings(), this.getOptimisationSettings(), null, "allSettings", null, 0, -1, Optimisation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

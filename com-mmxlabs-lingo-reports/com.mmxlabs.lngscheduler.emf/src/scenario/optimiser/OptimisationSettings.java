@@ -28,6 +28,7 @@ import scenario.schedule.Schedule;
  *   <li>{@link scenario.optimiser.OptimisationSettings#getConstraints <em>Constraints</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getObjectives <em>Objectives</em>}</li>
  *   <li>{@link scenario.optimiser.OptimisationSettings#getDefaultDiscountCurve <em>Default Discount Curve</em>}</li>
+ *   <li>{@link scenario.optimiser.OptimisationSettings#isAllowRewiringByDefault <em>Allow Rewiring By Default</em>}</li>
  * </ul>
  * </p>
  *
@@ -171,6 +172,32 @@ public interface OptimisationSettings extends NamedObject {
 	 * @generated
 	 */
 	boolean isSetDefaultDiscountCurve();
+
+	/**
+	 * Returns the value of the '<em><b>Allow Rewiring By Default</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Allow Rewiring By Default</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allow Rewiring By Default</em>' attribute.
+	 * @see #setAllowRewiringByDefault(boolean)
+	 * @see scenario.optimiser.OptimiserPackage#getOptimisationSettings_AllowRewiringByDefault()
+	 * @model required="true"
+	 * @generated
+	 */
+	boolean isAllowRewiringByDefault();
+
+	/**
+	 * Sets the value of the '{@link scenario.optimiser.OptimisationSettings#isAllowRewiringByDefault <em>Allow Rewiring By Default</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Allow Rewiring By Default</em>' attribute.
+	 * @see #isAllowRewiringByDefault()
+	 * @generated
+	 */
+	void setAllowRewiringByDefault(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Freeze Days From Start</b></em>' attribute.

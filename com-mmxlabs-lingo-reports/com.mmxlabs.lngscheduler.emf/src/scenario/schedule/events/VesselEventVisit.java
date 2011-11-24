@@ -7,6 +7,7 @@
 package scenario.schedule.events;
 
 import scenario.fleet.VesselEvent;
+import scenario.schedule.VesselEventRevenue;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,6 +18,7 @@ import scenario.fleet.VesselEvent;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.schedule.events.VesselEventVisit#getVesselEvent <em>Vessel Event</em>}</li>
+ *   <li>{@link scenario.schedule.events.VesselEventVisit#getRevenue <em>Revenue</em>}</li>
  * </ul>
  * </p>
  *
@@ -50,6 +52,32 @@ public interface VesselEventVisit extends PortVisit {
 	 * @generated
 	 */
 	void setVesselEvent(VesselEvent value);
+
+	/**
+	 * Returns the value of the '<em><b>Revenue</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Revenue</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Revenue</em>' reference.
+	 * @see #setRevenue(VesselEventRevenue)
+	 * @see scenario.schedule.events.EventsPackage#getVesselEventVisit_Revenue()
+	 * @model required="true"
+	 * @generated
+	 */
+	VesselEventRevenue getRevenue();
+
+	/**
+	 * Sets the value of the '{@link scenario.schedule.events.VesselEventVisit#getRevenue <em>Revenue</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Revenue</em>' reference.
+	 * @see #getRevenue()
+	 * @generated
+	 */
+	void setRevenue(VesselEventRevenue value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -42,7 +42,6 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.lso.CounterCharterOutMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -84,9 +83,9 @@ public class LSOConstructor {
 		final IMoveGenerator<T> normalMoveGenerator = createMoveGenerator(context);
 
 		final CompoundMoveGenerator<T> moveGenerator = new CompoundMoveGenerator<T>();
-		final CounterCharterOutMoveGenerator<T> removeCharterOuts = new CounterCharterOutMoveGenerator<T>();
+		// final CounterCharterOutMoveGenerator<T> removeCharterOuts = new CounterCharterOutMoveGenerator<T>();
 		
-		removeCharterOuts.setRandom(getRandom());
+		// removeCharterOuts.setRandom(getRandom());
 		final HashSet<IResource> badResource = new HashSet<IResource>();
 		final IVesselProvider vesselProvider = context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		for (final IResource resource : context.getOptimisationData().getResources()) {
@@ -94,10 +93,10 @@ public class LSOConstructor {
 				badResource.add(resource);
 			}
 		}
-		removeCharterOuts.setBadResources(badResource);
+		// removeCharterOuts.setBadResources(badResource);
 
-		moveGenerator.addGenerator(normalMoveGenerator, 95);
-		moveGenerator.addGenerator(removeCharterOuts, 5);
+		moveGenerator.addGenerator(normalMoveGenerator, 1);
+		// moveGenerator.addGenerator(removeCharterOuts, 5);
 		moveGenerator.setRandom(getRandom());
 
 		final InstrumentingMoveGenerator<T> instrumentingMoveGenerator = instrumenting ? new InstrumentingMoveGenerator<T>(moveGenerator, true // profile moves (true) or just rate

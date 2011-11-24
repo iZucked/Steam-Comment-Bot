@@ -25,6 +25,7 @@ import scenario.fleet.Vessel;
  *   <li>{@link scenario.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link scenario.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link scenario.cargo.Cargo#getCargoType <em>Cargo Type</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}</li>
  * </ul>
  * </p>
  *
@@ -156,5 +157,58 @@ public interface Cargo extends AnnotatedObject {
 	 * @generated
 	 */
 	void setCargoType(CargoType value);
+
+	/**
+	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Allow Rewiring</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allow Rewiring</em>' attribute.
+	 * @see #isSetAllowRewiring()
+	 * @see #unsetAllowRewiring()
+	 * @see #setAllowRewiring(boolean)
+	 * @see scenario.cargo.CargoPackage#getCargo_AllowRewiring()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	boolean isAllowRewiring();
+
+	/**
+	 * Sets the value of the '{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Allow Rewiring</em>' attribute.
+	 * @see #isSetAllowRewiring()
+	 * @see #unsetAllowRewiring()
+	 * @see #isAllowRewiring()
+	 * @generated
+	 */
+	void setAllowRewiring(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetAllowRewiring()
+	 * @see #isAllowRewiring()
+	 * @see #setAllowRewiring(boolean)
+	 * @generated
+	 */
+	void unsetAllowRewiring();
+
+	/**
+	 * Returns whether the value of the '{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Allow Rewiring</em>' attribute is set.
+	 * @see #unsetAllowRewiring()
+	 * @see #isAllowRewiring()
+	 * @see #setAllowRewiring(boolean)
+	 * @generated
+	 */
+	boolean isSetAllowRewiring();
 
 } // Cargo

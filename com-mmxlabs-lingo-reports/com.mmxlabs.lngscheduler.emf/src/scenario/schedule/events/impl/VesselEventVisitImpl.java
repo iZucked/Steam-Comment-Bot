@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.fleet.VesselEvent;
+import scenario.schedule.VesselEventRevenue;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
@@ -28,6 +29,7 @@ import scenario.schedule.events.VesselEventVisit;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.schedule.events.impl.VesselEventVisitImpl#getVesselEvent <em>Vessel Event</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.VesselEventVisitImpl#getRevenue <em>Revenue</em>}</li>
  * </ul>
  * </p>
  *
@@ -43,6 +45,16 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 	 * @ordered
 	 */
 	protected VesselEvent vesselEvent;
+
+	/**
+	 * The cached value of the '{@link #getRevenue() <em>Revenue</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected VesselEventRevenue revenue;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -106,6 +118,44 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public VesselEventRevenue getRevenue() {
+		if (revenue != null && revenue.eIsProxy()) {
+			InternalEObject oldRevenue = (InternalEObject)revenue;
+			revenue = (VesselEventRevenue)eResolveProxy(oldRevenue);
+			if (revenue != oldRevenue) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, EventsPackage.VESSEL_EVENT_VISIT__REVENUE, oldRevenue, revenue));
+			}
+		}
+		return revenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselEventRevenue basicGetRevenue() {
+		return revenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRevenue(VesselEventRevenue newRevenue) {
+		VesselEventRevenue oldRevenue = revenue;
+		revenue = newRevenue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.VESSEL_EVENT_VISIT__REVENUE, oldRevenue, revenue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getId() {
 		return getVesselEvent().getId();
 	}
@@ -139,6 +189,9 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 			case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				if (resolve) return getVesselEvent();
 				return basicGetVesselEvent();
+			case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
+				if (resolve) return getRevenue();
+				return basicGetRevenue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -153,6 +206,9 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 		switch (featureID) {
 			case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				setVesselEvent((VesselEvent)newValue);
+				return;
+			case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
+				setRevenue((VesselEventRevenue)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -169,6 +225,9 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 			case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				setVesselEvent((VesselEvent)null);
 				return;
+			case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
+				setRevenue((VesselEventRevenue)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -183,6 +242,8 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 		switch (featureID) {
 			case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				return vesselEvent != null;
+			case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
+				return revenue != null;
 		}
 		return super.eIsSet(featureID);
 	}

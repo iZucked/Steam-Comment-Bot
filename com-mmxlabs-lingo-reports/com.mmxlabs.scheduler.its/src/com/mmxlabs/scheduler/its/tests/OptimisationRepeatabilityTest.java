@@ -48,7 +48,7 @@ public class OptimisationRepeatabilityTest {
 	public void testScenario() throws IOException, InterruptedException,
 			IncompleteScenarioException {
 
-		final URL url = getClass().getResource("/hand-tweaked.scenario");
+		final URL url = getClass().getResource("/test.scenario");
 
 		testScenario(url, 5);
 	}

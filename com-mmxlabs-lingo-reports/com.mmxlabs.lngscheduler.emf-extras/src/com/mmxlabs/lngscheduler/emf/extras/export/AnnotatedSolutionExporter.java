@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 
 import scenario.Scenario;
@@ -40,7 +42,6 @@ import scenario.schedule.fleetallocation.FleetVessel;
 import scenario.schedule.fleetallocation.SpotVessel;
 
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
-import com.mmxlabs.lngscheduler.emf.extras.pandl.ProfitAndLossCalculator;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
@@ -84,6 +85,24 @@ public class AnnotatedSolutionExporter {
 	}
 
 	public Schedule exportAnnotatedSolution(final Scenario inputScenario, final ModelEntityMap entities, final IAnnotatedSolution<ISequenceElement> annotatedSolution) {
+		final List<IExporterExtension> extensions = new LinkedList<IExporterExtension>();
+		{
+			final String EXTENSION_ID = "com.mmxlabs.lngscheduler.exporter";
+
+			final IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID);
+
+			for (final IConfigurationElement e : config) {
+				try {
+					final Object object = e.createExecutableExtension("exporter");
+					if (object instanceof IExporterExtension) {
+						extensions.add((IExporterExtension) object);
+					}
+				} catch (final Exception ex) {
+
+				}
+			}
+		}
+
 		final IOptimisationData<ISequenceElement> data = annotatedSolution.getContext().getOptimisationData();
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IAnnotations<ISequenceElement> elementAnnotations = annotatedSolution.getElementAnnotations();
@@ -92,6 +111,10 @@ public class AnnotatedSolutionExporter {
 
 		// go through the annotated solution and build stuff for the EMF;
 		entities.setScenario(inputScenario);
+
+		for (final IExporterExtension extension : extensions) {
+			extension.startExporting(inputScenario, output, entities, annotatedSolution);
+		}
 
 		// prepare exporters
 		for (final IAnnotationExporter exporter : exporters) {
@@ -336,9 +359,13 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
-		final ProfitAndLossCalculator pAndL = new ProfitAndLossCalculator();
-
-		pAndL.addProfitAndLoss(inputScenario, output, entities);
+		for (final IExporterExtension extension : extensions) {
+			extension.finishExporting();
+		}
+		//
+		// final ProfitAndLossCalculator pAndL = new ProfitAndLossCalculator();
+		//
+		// pAndL.addProfitAndLoss(inputScenario, output, entities);
 
 		return output;
 	}

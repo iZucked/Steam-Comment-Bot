@@ -33,6 +33,7 @@ import scenario.cargo.Slot;
 import scenario.contract.ContractFactory;
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
+import scenario.contract.GroupEntity;
 import scenario.contract.IndexPricePurchaseContract;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
@@ -259,7 +260,7 @@ public class RandomScenarioUtils {
 		final ContractFactory contractFactory = ContractPackage.eINSTANCE.getContractFactory();
 
 		final Entity loadEntity = contractFactory.createEntity();
-		final Entity shipEntity = contractFactory.createEntity();
+		final GroupEntity shipEntity = contractFactory.createGroupEntity();
 		final Entity dischargeEntity = contractFactory.createEntity();
 
 		loadEntity.setName("load entity");

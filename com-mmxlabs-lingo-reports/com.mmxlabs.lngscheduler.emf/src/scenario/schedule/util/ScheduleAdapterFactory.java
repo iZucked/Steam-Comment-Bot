@@ -102,10 +102,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createScheduleFitnessAdapter();
 			}
 			@Override
-			public Adapter caseLineItem(LineItem object) {
-				return createLineItemAdapter();
-			}
-			@Override
 			public Adapter caseBookedRevenue(BookedRevenue object) {
 				return createBookedRevenueAdapter();
 			}
@@ -114,16 +110,12 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createCargoRevenueAdapter();
 			}
 			@Override
-			public Adapter caseCharterOutRevenue(CharterOutRevenue object) {
-				return createCharterOutRevenueAdapter();
+			public Adapter caseVesselEventRevenue(VesselEventRevenue object) {
+				return createVesselEventRevenueAdapter();
 			}
 			@Override
 			public Adapter caseScenarioObject(ScenarioObject object) {
 				return createScenarioObjectAdapter();
-			}
-			@Override
-			public Adapter caseNamedObject(NamedObject object) {
-				return createNamedObjectAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -216,20 +208,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link scenario.schedule.LineItem <em>Line Item</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see scenario.schedule.LineItem
-	 * @generated
-	 */
-	public Adapter createLineItemAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link scenario.schedule.BookedRevenue <em>Booked Revenue</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -258,16 +236,16 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link scenario.schedule.CharterOutRevenue <em>Charter Out Revenue</em>}'.
+	 * Creates a new adapter for an object of class '{@link scenario.schedule.VesselEventRevenue <em>Vessel Event Revenue</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see scenario.schedule.CharterOutRevenue
+	 * @see scenario.schedule.VesselEventRevenue
 	 * @generated
 	 */
-	public Adapter createCharterOutRevenueAdapter() {
+	public Adapter createVesselEventRevenueAdapter() {
 		return null;
 	}
 
@@ -282,20 +260,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createScenarioObjectAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link scenario.NamedObject <em>Named Object</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see scenario.NamedObject
-	 * @generated
-	 */
-	public Adapter createNamedObjectAdapter() {
 		return null;
 	}
 

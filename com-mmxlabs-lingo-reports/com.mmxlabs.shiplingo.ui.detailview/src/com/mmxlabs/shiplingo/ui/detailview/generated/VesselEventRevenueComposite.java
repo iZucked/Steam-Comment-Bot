@@ -10,29 +10,29 @@ import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 
 /**
- * A composite containing a form for editing CharterOutRevenue instances. The EClass hierarchy is implemented
+ * A composite containing a form for editing VesselEventRevenue instances. The EClass hierarchy is implemented
  * by the static methods at the bottom of the class, and is not mirrored in the java class hierarchy for the composites,
  * because ECore supports multiple inheritance but java does not.
  *
  * @generated
  */
-public  class CharterOutRevenueComposite extends AbstractDetailComposite {
+public  class VesselEventRevenueComposite extends AbstractDetailComposite {
 	private final String mainGroupTitle;
 	/**
 	 * Call superclass constructor
      * @generated
 	 */
-	public CharterOutRevenueComposite(final Composite container, final int style, final String mainGroupTitle, final boolean validate) {
+	public VesselEventRevenueComposite(final Composite container, final int style, final String mainGroupTitle, final boolean validate) {
     super(container, style, validate);
     this.mainGroupTitle = mainGroupTitle;
   }
 
-	public CharterOutRevenueComposite(final Composite container, final int style, final boolean validate) {
-		this(container, style, "Charter Out Revenue", validate);
+	public VesselEventRevenueComposite(final Composite container, final int style, final boolean validate) {
+		this(container, style, "Vessel Event Revenue", validate);
 	}
 
-	public CharterOutRevenueComposite(final Composite container, final int style) {
-		this(container, style, "Charter Out Revenue", true);
+	public VesselEventRevenueComposite(final Composite container, final int style) {
+		this(container, style, "Vessel Event Revenue", true);
 	}
 
 	/**
@@ -58,11 +58,11 @@ public  class CharterOutRevenueComposite extends AbstractDetailComposite {
 	 */
 	protected static void createFields(final AbstractDetailComposite composite, final Composite mainGroup) {
     createFieldsFromSupers(composite, mainGroup);
-    createCharterOutRevenueFields(composite, mainGroup);
+    createVesselEventRevenueFields(composite, mainGroup);
   }
 
 	/**
-	 * Create fields belonging to all the supertypes of CharterOutRevenue.
+	 * Create fields belonging to all the supertypes of VesselEventRevenue.
 	 * @generated
 	 */
 	protected static void createFieldsFromSupers(final AbstractDetailComposite composite, final Composite mainGroup) {
@@ -70,21 +70,21 @@ public  class CharterOutRevenueComposite extends AbstractDetailComposite {
   }
 
 	/**
-	 * Create fields belonging directly to CharterOutRevenue
+	 * Create fields belonging directly to VesselEventRevenue
 	 * @generated
 	 */
-	protected static void createCharterOutRevenueFields(final AbstractDetailComposite composite, final Composite mainGroup) {
-    createCharterOutEditor(composite, mainGroup);
+	protected static void createVesselEventRevenueFields(final AbstractDetailComposite composite, final Composite mainGroup) {
+    createVesselEventVisitEditor(composite, mainGroup);
   }
 
 		
 	/**
-	 * Create an editor for the charterOut feature on CharterOutRevenue
+	 * Create an editor for the vesselEventVisit feature on VesselEventRevenue
 	 * @generated
 	 */
-	protected static void createCharterOutEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+	protected static void createVesselEventVisitEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
     composite.createEditorControl(mainGroup,
-      composite.createEditor(SchedulePackage.eINSTANCE.getCharterOutRevenue_CharterOut()),
-      "Charter Out");
+      composite.createEditor(SchedulePackage.eINSTANCE.getVesselEventRevenue_VesselEventVisit()),
+      "Vessel Event Visit");
   }
 }

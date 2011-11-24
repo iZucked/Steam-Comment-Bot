@@ -123,12 +123,12 @@ public interface ContractModel extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Shipping Entity</em>' containment reference.
-	 * @see #setShippingEntity(Entity)
+	 * @see #setShippingEntity(GroupEntity)
 	 * @see scenario.contract.ContractPackage#getContractModel_ShippingEntity()
 	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
-	Entity getShippingEntity();
+	GroupEntity getShippingEntity();
 
 	/**
 	 * Sets the value of the '{@link scenario.contract.ContractModel#getShippingEntity <em>Shipping Entity</em>}' containment reference.
@@ -138,6 +138,6 @@ public interface ContractModel extends EObject {
 	 * @see #getShippingEntity()
 	 * @generated
 	 */
-	void setShippingEntity(Entity value);
+	void setShippingEntity(GroupEntity value);
 
 } // ContractModel

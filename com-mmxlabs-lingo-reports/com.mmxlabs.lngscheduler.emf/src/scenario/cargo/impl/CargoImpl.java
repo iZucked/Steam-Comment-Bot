@@ -37,6 +37,7 @@ import scenario.impl.AnnotatedObjectImpl;
  *   <li>{@link scenario.cargo.impl.CargoImpl#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link scenario.cargo.impl.CargoImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link scenario.cargo.impl.CargoImpl#getCargoType <em>Cargo Type</em>}</li>
+ *   <li>{@link scenario.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
  * </ul>
  * </p>
  *
@@ -112,6 +113,35 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	 * @ordered
 	 */
 	protected CargoType cargoType = CARGO_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isAllowRewiring() <em>Allow Rewiring</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAllowRewiring()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ALLOW_REWIRING_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isAllowRewiring() <em>Allow Rewiring</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAllowRewiring()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean allowRewiring = ALLOW_REWIRING_EDEFAULT;
+
+	/**
+	 * This is true if the Allow Rewiring attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean allowRewiringESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -323,6 +353,52 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isAllowRewiring() {
+		return allowRewiring;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAllowRewiring(boolean newAllowRewiring) {
+		boolean oldAllowRewiring = allowRewiring;
+		allowRewiring = newAllowRewiring;
+		boolean oldAllowRewiringESet = allowRewiringESet;
+		allowRewiringESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__ALLOW_REWIRING, oldAllowRewiring, allowRewiring, !oldAllowRewiringESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetAllowRewiring() {
+		boolean oldAllowRewiring = allowRewiring;
+		boolean oldAllowRewiringESet = allowRewiringESet;
+		allowRewiring = ALLOW_REWIRING_EDEFAULT;
+		allowRewiringESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.CARGO__ALLOW_REWIRING, oldAllowRewiring, ALLOW_REWIRING_EDEFAULT, oldAllowRewiringESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetAllowRewiring() {
+		return allowRewiringESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -354,6 +430,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 				return basicGetDischargeSlot();
 			case CargoPackage.CARGO__CARGO_TYPE:
 				return getCargoType();
+			case CargoPackage.CARGO__ALLOW_REWIRING:
+				return isAllowRewiring();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -383,6 +461,9 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 			case CargoPackage.CARGO__CARGO_TYPE:
 				setCargoType((CargoType)newValue);
 				return;
+			case CargoPackage.CARGO__ALLOW_REWIRING:
+				setAllowRewiring((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -410,6 +491,9 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 			case CargoPackage.CARGO__CARGO_TYPE:
 				setCargoType(CARGO_TYPE_EDEFAULT);
 				return;
+			case CargoPackage.CARGO__ALLOW_REWIRING:
+				unsetAllowRewiring();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -432,6 +516,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 				return dischargeSlot != null;
 			case CargoPackage.CARGO__CARGO_TYPE:
 				return cargoType != CARGO_TYPE_EDEFAULT;
+			case CargoPackage.CARGO__ALLOW_REWIRING:
+				return isSetAllowRewiring();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -450,6 +536,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 		result.append(id);
 		result.append(", cargoType: ");
 		result.append(cargoType);
+		result.append(", allowRewiring: ");
+		if (allowRewiringESet) result.append(allowRewiring); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

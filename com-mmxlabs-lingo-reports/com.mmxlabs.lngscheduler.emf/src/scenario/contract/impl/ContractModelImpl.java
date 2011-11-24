@@ -23,6 +23,7 @@ import scenario.contract.Contract;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
+import scenario.contract.GroupEntity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 import scenario.contract.SimplePurchaseContract;
@@ -75,7 +76,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * @generated
 	 * @ordered
 	 */
-	protected Entity shippingEntity;
+	protected GroupEntity shippingEntity;
 
 	/**
 	 * The cached value of the '{@link #getPurchaseContracts() <em>Purchase Contracts</em>}' containment reference list.
@@ -203,10 +204,10 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Entity getShippingEntity() {
+	public GroupEntity getShippingEntity() {
 		if (shippingEntity != null && shippingEntity.eIsProxy()) {
 			InternalEObject oldShippingEntity = (InternalEObject)shippingEntity;
-			shippingEntity = (Entity)eResolveProxy(oldShippingEntity);
+			shippingEntity = (GroupEntity)eResolveProxy(oldShippingEntity);
 			if (shippingEntity != oldShippingEntity) {
 				InternalEObject newShippingEntity = (InternalEObject)shippingEntity;
 				NotificationChain msgs = oldShippingEntity.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY, null, null);
@@ -226,7 +227,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Entity basicGetShippingEntity() {
+	public GroupEntity basicGetShippingEntity() {
 		return shippingEntity;
 	}
 
@@ -235,8 +236,8 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetShippingEntity(Entity newShippingEntity, NotificationChain msgs) {
-		Entity oldShippingEntity = shippingEntity;
+	public NotificationChain basicSetShippingEntity(GroupEntity newShippingEntity, NotificationChain msgs) {
+		GroupEntity oldShippingEntity = shippingEntity;
 		shippingEntity = newShippingEntity;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY, oldShippingEntity, newShippingEntity);
@@ -250,7 +251,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setShippingEntity(Entity newShippingEntity) {
+	public void setShippingEntity(GroupEntity newShippingEntity) {
 		if (newShippingEntity != shippingEntity) {
 			NotificationChain msgs = null;
 			if (shippingEntity != null)
@@ -327,7 +328,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 				getEntities().addAll((Collection<? extends Entity>)newValue);
 				return;
 			case ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY:
-				setShippingEntity((Entity)newValue);
+				setShippingEntity((GroupEntity)newValue);
 				return;
 			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
 				getPurchaseContracts().clear();
@@ -356,7 +357,7 @@ public class ContractModelImpl extends EObjectImpl implements ContractModel {
 				getEntities().clear();
 				return;
 			case ContractPackage.CONTRACT_MODEL__SHIPPING_ENTITY:
-				setShippingEntity((Entity)null);
+				setShippingEntity((GroupEntity)null);
 				return;
 			case ContractPackage.CONTRACT_MODEL__PURCHASE_CONTRACTS:
 				getPurchaseContracts().clear();

@@ -28,6 +28,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import scenario.ScenarioFactory;
 import scenario.provider.LngEditPlugin;
 import scenario.provider.ScenarioObjectItemProvider;
 
@@ -72,6 +73,7 @@ public class BookedRevenueItemProvider
 
 			addDatePropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
+			addValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -99,6 +101,58 @@ public class BookedRevenueItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BookedRevenue_value_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BookedRevenue_value_feature", "_UI_BookedRevenue_type"),
+				 SchedulePackage.Literals.BOOKED_REVENUE__VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(SchedulePackage.Literals.BOOKED_REVENUE__DETAILS);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
+	}
+
+	/**
 	 * This adds a property descriptor for the Date feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -118,36 +172,6 @@ public class BookedRevenueItemProvider
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
-	}
-
-	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.BOOKED_REVENUE__LINE_ITEMS);
-		}
-		return childrenFeatures;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
 	}
 
 	/**
@@ -189,9 +213,10 @@ public class BookedRevenueItemProvider
 
 		switch (notification.getFeatureID(BookedRevenue.class)) {
 			case SchedulePackage.BOOKED_REVENUE__DATE:
+			case SchedulePackage.BOOKED_REVENUE__VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case SchedulePackage.BOOKED_REVENUE__LINE_ITEMS:
+			case SchedulePackage.BOOKED_REVENUE__DETAILS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -211,8 +236,8 @@ public class BookedRevenueItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.BOOKED_REVENUE__LINE_ITEMS,
-				 ScheduleFactory.eINSTANCE.createLineItem()));
+				(SchedulePackage.Literals.BOOKED_REVENUE__DETAILS,
+				 ScenarioFactory.eINSTANCE.createDetail()));
 	}
 
 	/**

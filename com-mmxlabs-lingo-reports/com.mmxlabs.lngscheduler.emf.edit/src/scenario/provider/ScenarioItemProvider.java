@@ -299,6 +299,11 @@ public class ScenarioItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ScenarioFactory.eINSTANCE.createDetail()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
 				 FleetFactory.eINSTANCE.createFleetModel()));
 
 		newChildDescriptors.add
@@ -389,11 +394,6 @@ public class ScenarioItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
-				 ScheduleFactory.eINSTANCE.createLineItem()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
 				 ScheduleFactory.eINSTANCE.createBookedRevenue()));
 
 		newChildDescriptors.add
@@ -404,7 +404,7 @@ public class ScenarioItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
-				 ScheduleFactory.eINSTANCE.createCharterOutRevenue()));
+				 ScheduleFactory.eINSTANCE.createVesselEventRevenue()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -555,6 +555,11 @@ public class ScenarioItemProvider
 			(createChildParameter
 				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
 				 ContractFactory.eINSTANCE.createProfitSharingPurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 ContractFactory.eINSTANCE.createGroupEntity()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -40,6 +40,7 @@ import scenario.schedule.Schedule;
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getConstraints <em>Constraints</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getObjectives <em>Objectives</em>}</li>
  *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#getDefaultDiscountCurve <em>Default Discount Curve</em>}</li>
+ *   <li>{@link scenario.optimiser.impl.OptimisationSettingsImpl#isAllowRewiringByDefault <em>Allow Rewiring By Default</em>}</li>
  * </ul>
  * </p>
  *
@@ -163,6 +164,26 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * @ordered
 	 */
 	protected boolean defaultDiscountCurveESet;
+
+	/**
+	 * The default value of the '{@link #isAllowRewiringByDefault() <em>Allow Rewiring By Default</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAllowRewiringByDefault()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ALLOW_REWIRING_BY_DEFAULT_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isAllowRewiringByDefault() <em>Allow Rewiring By Default</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAllowRewiringByDefault()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean allowRewiringByDefault = ALLOW_REWIRING_BY_DEFAULT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -389,6 +410,27 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isAllowRewiringByDefault() {
+		return allowRewiringByDefault;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAllowRewiringByDefault(boolean newAllowRewiringByDefault) {
+		boolean oldAllowRewiringByDefault = allowRewiringByDefault;
+		allowRewiringByDefault = newAllowRewiringByDefault;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISATION_SETTINGS__ALLOW_REWIRING_BY_DEFAULT, oldAllowRewiringByDefault, allowRewiringByDefault));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getFreezeDaysFromStart() {
 		return freezeDaysFromStart;
 	}
@@ -493,6 +535,8 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
 				if (resolve) return getDefaultDiscountCurve();
 				return basicGetDefaultDiscountCurve();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__ALLOW_REWIRING_BY_DEFAULT:
+				return isAllowRewiringByDefault();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -529,6 +573,9 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
 				setDefaultDiscountCurve((DiscountCurve)newValue);
 				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__ALLOW_REWIRING_BY_DEFAULT:
+				setAllowRewiringByDefault((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -562,6 +609,9 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
 				unsetDefaultDiscountCurve();
 				return;
+			case OptimiserPackage.OPTIMISATION_SETTINGS__ALLOW_REWIRING_BY_DEFAULT:
+				setAllowRewiringByDefault(ALLOW_REWIRING_BY_DEFAULT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -588,6 +638,8 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 				return objectives != null && !objectives.isEmpty();
 			case OptimiserPackage.OPTIMISATION_SETTINGS__DEFAULT_DISCOUNT_CURVE:
 				return isSetDefaultDiscountCurve();
+			case OptimiserPackage.OPTIMISATION_SETTINGS__ALLOW_REWIRING_BY_DEFAULT:
+				return allowRewiringByDefault != ALLOW_REWIRING_BY_DEFAULT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -608,6 +660,8 @@ public class OptimisationSettingsImpl extends NamedObjectImpl implements Optimis
 		result.append(freezeDaysFromStart);
 		result.append(", ignoreElementsAfter: ");
 		if (ignoreElementsAfterESet) result.append(ignoreElementsAfter); else result.append("<unset>");
+		result.append(", allowRewiringByDefault: ");
+		result.append(allowRewiringByDefault);
 		result.append(')');
 		return result.toString();
 	}

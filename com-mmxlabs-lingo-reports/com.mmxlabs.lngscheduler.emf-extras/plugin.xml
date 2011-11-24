@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="com.mmxlabs.lngscheduler.transformer" name="transformers" schema="schema/com.mmxlabs.lngscheduler.contracts.exsd"/>
+   <extension-point id="com.mmxlabs.lngscheduler.exporter" name="exporters" schema="schema/com.mmxlabs.lngscheduler.exporter.exsd"/>
    <extension
          point="org.eclipse.emf.validation.constraintProviders">
       <category
@@ -480,5 +482,27 @@
             class="com.mmxlabs.lngscheduler.emf.extras.XMIUpgradingResourceFactory"
             type="scenario">
       </parser>
+   </extension>
+   <extension
+         id="com.mmxlabs.lngscheduler.emf-extras.contracts"
+         point="com.mmxlabs.lngscheduler.transformer">
+      <Transformer
+            transformer="com.mmxlabs.lngscheduler.emf.extras.contracts.SimpleContractTransformer">
+         <modelclass
+               class="scenario.contract.SalesContract">
+         </modelclass>
+         <modelclass
+               class="scenario.contract.NetbackPurchaseContract">
+         </modelclass>
+         <modelclass
+               class="scenario.contract.FixedPricePurchaseContract">
+         </modelclass>
+         <modelclass
+               class="scenario.contract.IndexPricePurchaseContract">
+         </modelclass>
+         <modelclass
+               class="scenario.contract.ProfitSharingPurchaseContract">
+         </modelclass>
+      </Transformer>
    </extension> 
 </plugin>

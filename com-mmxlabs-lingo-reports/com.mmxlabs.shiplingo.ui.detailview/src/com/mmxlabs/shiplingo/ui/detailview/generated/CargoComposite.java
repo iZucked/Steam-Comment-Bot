@@ -80,6 +80,7 @@ public  class CargoComposite extends AbstractDetailComposite {
     createLoadSlotEditor(composite, mainGroup);
     createDischargeSlotEditor(composite, mainGroup);
     createCargoTypeEditor(composite, mainGroup);
+    createAllowRewiringEditor(composite, mainGroup);
   }
 
 		
@@ -139,5 +140,15 @@ public  class CargoComposite extends AbstractDetailComposite {
     composite.createEditorControl(mainGroup,
       composite.createEditor(CargoPackage.eINSTANCE.getCargo_CargoType()),
       "Cargo Type");
+  }
+
+  /**
+   * Create an editor for the allowRewiring feature on Cargo
+   * @generated
+   */
+  protected static void createAllowRewiringEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(CargoPackage.eINSTANCE.getCargo_AllowRewiring()),
+      "Allow Rewiring");
   }
 }

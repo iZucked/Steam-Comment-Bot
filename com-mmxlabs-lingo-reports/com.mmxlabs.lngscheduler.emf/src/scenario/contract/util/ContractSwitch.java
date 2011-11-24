@@ -180,6 +180,15 @@ public class ContractSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ContractPackage.GROUP_ENTITY: {
+				GroupEntity groupEntity = (GroupEntity)theEObject;
+				T result = caseGroupEntity(groupEntity);
+				if (result == null) result = caseEntity(groupEntity);
+				if (result == null) result = caseNamedObject(groupEntity);
+				if (result == null) result = caseScenarioObject(groupEntity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -331,6 +340,21 @@ public class ContractSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSimplePurchaseContract(SimplePurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Group Entity</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Group Entity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGroupEntity(GroupEntity object) {
 		return null;
 	}
 

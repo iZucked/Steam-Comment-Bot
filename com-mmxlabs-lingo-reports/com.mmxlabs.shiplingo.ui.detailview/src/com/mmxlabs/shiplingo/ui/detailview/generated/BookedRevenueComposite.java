@@ -75,8 +75,8 @@ public  class BookedRevenueComposite extends AbstractDetailComposite {
 	 */
 	protected static void createBookedRevenueFields(final AbstractDetailComposite composite, final Composite mainGroup) {
     createDateEditor(composite, mainGroup);
-    createLineItemsEditor(composite, mainGroup);
     createEntityEditor(composite, mainGroup);
+    createValueEditor(composite, mainGroup);
   }
 
 		
@@ -91,16 +91,6 @@ public  class BookedRevenueComposite extends AbstractDetailComposite {
   }
 		
 	/**
-	 * Create an editor for the lineItems feature on BookedRevenue
-	 * @generated
-	 */
-	protected static void createLineItemsEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(SchedulePackage.eINSTANCE.getBookedRevenue_LineItems()),
-      "Line Items");
-  }
-		
-	/**
 	 * Create an editor for the entity feature on BookedRevenue
 	 * @generated
 	 */
@@ -108,5 +98,15 @@ public  class BookedRevenueComposite extends AbstractDetailComposite {
     composite.createEditorControl(mainGroup,
       composite.createEditor(SchedulePackage.eINSTANCE.getBookedRevenue_Entity()),
       "Entity");
+  }
+		
+	/**
+	 * Create an editor for the value feature on BookedRevenue
+	 * @generated
+	 */
+	protected static void createValueEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(SchedulePackage.eINSTANCE.getBookedRevenue_Value()),
+      "Value");
   }
 }

@@ -74,6 +74,7 @@ public class OptimisationSettingsItemProvider
 			addFreezeDaysFromStartPropertyDescriptor(object);
 			addIgnoreElementsAfterPropertyDescriptor(object);
 			addDefaultDiscountCurvePropertyDescriptor(object);
+			addAllowRewiringByDefaultPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -140,6 +141,28 @@ public class OptimisationSettingsItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Allow Rewiring By Default feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowRewiringByDefaultPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptimisationSettings_allowRewiringByDefault_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptimisationSettings_allowRewiringByDefault_feature", "_UI_OptimisationSettings_type"),
+				 OptimiserPackage.Literals.OPTIMISATION_SETTINGS__ALLOW_REWIRING_BY_DEFAULT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -259,6 +282,7 @@ public class OptimisationSettingsItemProvider
 			case OptimiserPackage.OPTIMISATION_SETTINGS__RANDOM_SEED:
 			case OptimiserPackage.OPTIMISATION_SETTINGS__FREEZE_DAYS_FROM_START:
 			case OptimiserPackage.OPTIMISATION_SETTINGS__IGNORE_ELEMENTS_AFTER:
+			case OptimiserPackage.OPTIMISATION_SETTINGS__ALLOW_REWIRING_BY_DEFAULT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case OptimiserPackage.OPTIMISATION_SETTINGS__CONSTRAINTS:

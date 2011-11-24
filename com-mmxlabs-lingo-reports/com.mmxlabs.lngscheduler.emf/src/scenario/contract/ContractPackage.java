@@ -277,31 +277,13 @@ public interface ContractPackage extends EPackage {
 	int ENTITY__NAME = ScenarioPackage.NAMED_OBJECT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Tax Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTITY__TAX_RATE = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Ownership</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTITY__OWNERSHIP = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>Entity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENTITY_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int ENTITY_FEATURE_COUNT = ScenarioPackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Get Container</em>' operation.
@@ -1075,6 +1057,80 @@ public interface ContractPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link scenario.contract.impl.GroupEntityImpl <em>Group Entity</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.contract.impl.GroupEntityImpl
+	 * @see scenario.contract.impl.ContractPackageImpl#getGroupEntity()
+	 * @generated
+	 */
+	int GROUP_ENTITY = 11;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_ENTITY__NAME = ENTITY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Tax Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_ENTITY__TAX_RATE = ENTITY_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Ownership</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_ENTITY__OWNERSHIP = ENTITY_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Transfer Offset</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_ENTITY__TRANSFER_OFFSET = ENTITY_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Group Entity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_ENTITY_FEATURE_COUNT = ENTITY_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_ENTITY___GET_CONTAINER = ENTITY___GET_CONTAINER;
+
+	/**
+	 * The number of operations of the '<em>Group Entity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_ENTITY_OPERATION_COUNT = ENTITY_OPERATION_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link scenario.contract.ContractModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1277,28 +1333,6 @@ public interface ContractPackage extends EPackage {
 	EClass getEntity();
 
 	/**
-	 * Returns the meta object for the attribute '{@link scenario.contract.Entity#getTaxRate <em>Tax Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Tax Rate</em>'.
-	 * @see scenario.contract.Entity#getTaxRate()
-	 * @see #getEntity()
-	 * @generated
-	 */
-	EAttribute getEntity_TaxRate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.contract.Entity#getOwnership <em>Ownership</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Ownership</em>'.
-	 * @see scenario.contract.Entity#getOwnership()
-	 * @see #getEntity()
-	 * @generated
-	 */
-	EAttribute getEntity_Ownership();
-
-	/**
 	 * Returns the meta object for class '{@link scenario.contract.FixedPricePurchaseContract <em>Fixed Price Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1424,6 +1458,49 @@ public interface ContractPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSimplePurchaseContract_CooldownPorts();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.contract.GroupEntity <em>Group Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Group Entity</em>'.
+	 * @see scenario.contract.GroupEntity
+	 * @generated
+	 */
+	EClass getGroupEntity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.GroupEntity#getTaxRate <em>Tax Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Tax Rate</em>'.
+	 * @see scenario.contract.GroupEntity#getTaxRate()
+	 * @see #getGroupEntity()
+	 * @generated
+	 */
+	EAttribute getGroupEntity_TaxRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.GroupEntity#getOwnership <em>Ownership</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ownership</em>'.
+	 * @see scenario.contract.GroupEntity#getOwnership()
+	 * @see #getGroupEntity()
+	 * @generated
+	 */
+	EAttribute getGroupEntity_Ownership();
+
+	/**
+	 * Returns the meta object for the attribute '{@link scenario.contract.GroupEntity#getTransferOffset <em>Transfer Offset</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Transfer Offset</em>'.
+	 * @see scenario.contract.GroupEntity#getTransferOffset()
+	 * @see #getGroupEntity()
+	 * @generated
+	 */
+	EAttribute getGroupEntity_TransferOffset();
 
 	/**
 	 * Returns the meta object for the attribute '{@link scenario.contract.ProfitSharingPurchaseContract#getAlpha <em>Alpha</em>}'.
@@ -1698,22 +1775,6 @@ public interface ContractPackage extends EPackage {
 		EClass ENTITY = eINSTANCE.getEntity();
 
 		/**
-		 * The meta object literal for the '<em><b>Tax Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ENTITY__TAX_RATE = eINSTANCE.getEntity_TaxRate();
-
-		/**
-		 * The meta object literal for the '<em><b>Ownership</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ENTITY__OWNERSHIP = eINSTANCE.getEntity_Ownership();
-
-		/**
 		 * The meta object literal for the '{@link scenario.contract.impl.FixedPricePurchaseContractImpl <em>Fixed Price Purchase Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1818,6 +1879,40 @@ public interface ContractPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SIMPLE_PURCHASE_CONTRACT__COOLDOWN_PORTS = eINSTANCE.getSimplePurchaseContract_CooldownPorts();
+
+		/**
+		 * The meta object literal for the '{@link scenario.contract.impl.GroupEntityImpl <em>Group Entity</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.contract.impl.GroupEntityImpl
+		 * @see scenario.contract.impl.ContractPackageImpl#getGroupEntity()
+		 * @generated
+		 */
+		EClass GROUP_ENTITY = eINSTANCE.getGroupEntity();
+
+		/**
+		 * The meta object literal for the '<em><b>Tax Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUP_ENTITY__TAX_RATE = eINSTANCE.getGroupEntity_TaxRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Ownership</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUP_ENTITY__OWNERSHIP = eINSTANCE.getGroupEntity_Ownership();
+
+		/**
+		 * The meta object literal for the '<em><b>Transfer Offset</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUP_ENTITY__TRANSFER_OFFSET = eINSTANCE.getGroupEntity_TransferOffset();
 
 		/**
 		 * The meta object literal for the '<em><b>Alpha</b></em>' attribute feature.

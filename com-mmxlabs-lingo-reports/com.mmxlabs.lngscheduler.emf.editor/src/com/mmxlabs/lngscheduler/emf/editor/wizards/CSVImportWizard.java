@@ -57,6 +57,7 @@ import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
+import scenario.contract.GroupEntity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 import scenario.fleet.FleetPackage;
@@ -321,7 +322,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 
 		// copy shipping entity from last entity.
 		if (scenario.getContractModel().getEntities().isEmpty() == false)
-			scenario.getContractModel().setShippingEntity(scenario.getContractModel().getEntities().get(scenario.getContractModel().getEntities().size() - 1));
+			scenario.getContractModel().setShippingEntity((GroupEntity) scenario.getContractModel().getEntities().get(scenario.getContractModel().getEntities().size() - 1));
 	}
 
 	/**

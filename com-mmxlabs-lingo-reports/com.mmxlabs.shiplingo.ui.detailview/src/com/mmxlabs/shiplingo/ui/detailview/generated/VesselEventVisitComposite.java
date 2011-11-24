@@ -75,6 +75,7 @@ public  class VesselEventVisitComposite extends AbstractDetailComposite {
 	 */
 	protected static void createVesselEventVisitFields(final AbstractDetailComposite composite, final Composite mainGroup) {
     createVesselEventEditor(composite, mainGroup);
+    createRevenueEditor(composite, mainGroup);
   }
 
 		
@@ -86,5 +87,15 @@ public  class VesselEventVisitComposite extends AbstractDetailComposite {
     composite.createEditorControl(mainGroup,
       composite.createEditor(EventsPackage.eINSTANCE.getVesselEventVisit_VesselEvent()),
       "Vessel Event");
+  }
+
+  /**
+   * Create an editor for the revenue feature on VesselEventVisit
+   * @generated
+   */
+  protected static void createRevenueEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(EventsPackage.eINSTANCE.getVesselEventVisit_Revenue()),
+      "Revenue");
   }
 }

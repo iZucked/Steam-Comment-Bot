@@ -88,6 +88,10 @@ public class OptimisationTransformer {
 		IFitnessFunctionRegistry componentRegistry = createFitnessFunctionRegistry();
 		List<String> checkers = getEnabledConstraintNames();
 		List<String> components = getEnabledFitnessFunctionNames();
+		log.debug("Desired components: " + components);
+		components.retainAll(componentRegistry.getFitnessComponentNames());
+		log.debug("Available components: " + components);
+		checkers.retainAll(checkerRegistry.getConstraintCheckerNames());
 		return new OptimisationContext<ISequenceElement>(data, sequences,
 				components, componentRegistry, checkers, checkerRegistry);
 	}
