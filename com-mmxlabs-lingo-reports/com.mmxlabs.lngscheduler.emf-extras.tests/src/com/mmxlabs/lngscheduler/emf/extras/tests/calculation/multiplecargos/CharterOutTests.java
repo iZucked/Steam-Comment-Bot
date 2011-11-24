@@ -32,9 +32,6 @@ import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
  */
 public class CharterOutTests {
 
-	// discharge price makes LNG slightly cheaper than BF.
-	private static final float dischargePrice = 0.99f;
-
 	/**
 	 * There are two charter outs in a row. The first has heel available, the second does not. Check that the first uses heel and the second doesn't.
 	 * 
@@ -43,6 +40,9 @@ public class CharterOutTests {
 	 */
 	@Test
 	public void twoCharterOutHeelUseageTest() {
+
+		// discharge price makes LNG slightly cheaper than BF.
+		final float dischargePrice = 0.99f;
 
 		CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
