@@ -362,7 +362,7 @@ public class CustomScenarioCreator {
 
 		scenario.getCargoModel().getCargoes().add(cargo);
 	}
-
+	
 	/**
 	 * Adds a dry dock. Useful for preventing excess ballast idle time.
 	 * 
@@ -374,6 +374,10 @@ public class CustomScenarioCreator {
 	 *            The date the dry dock will start (and end, instantaneously).
 	 */
 	public void addDryDock(final Port startPort, final Date date) {
+		addDryDock(startPort, date, date);
+	}
+
+	public void addDryDock(final Port startPort, final Date start, final Date end) {
 
 		if (!scenario.getPortModel().getPorts().contains(startPort)) {
 			Activator
@@ -391,8 +395,8 @@ public class CustomScenarioCreator {
 		// add to scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(dryDock);
 		// set the date to be after the discharge date
-		dryDock.setStartDate(date);
-		dryDock.setEndDate(date);
+		dryDock.setStartDate(start);
+		dryDock.setEndDate(end);
 	}
 
 	public void addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays, final float cvValue,
