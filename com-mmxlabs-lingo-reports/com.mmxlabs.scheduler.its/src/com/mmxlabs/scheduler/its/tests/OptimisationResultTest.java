@@ -36,7 +36,7 @@ public class OptimisationResultTest {
 	/**
 	 * Toggle between printing a map of fitness names to fitness values to testing the map against the fitnesses generated at runtime.
 	 */
-	private static final boolean printFitnessMap = true;
+	private static final boolean printFitnessMap = false;
 	
 	private static final String originalFitnessesMapName = "originalFitnesses";
 	private static final String endFitnessesMapName = "endFitnesses";
@@ -49,12 +49,11 @@ public class OptimisationResultTest {
 	 * @throws IncompleteScenarioException
 	 * @throws InterruptedException
 	 */
-	@Ignore("Currently broken.")
 	@Test
 	public void testFitnessRepeatability() throws IOException, IncompleteScenarioException, InterruptedException {
 
 		// Load the scenaio to test
-		final URL url = getClass().getResource("/optimisationResultTest.scenario");
+		final URL url = getClass().getResource("/test.scenario");
 		final Resource resource = new XMIResourceImpl(URI.createURI(url.toString()));
 		resource.load(Collections.emptyMap());
 
@@ -90,23 +89,24 @@ public class OptimisationResultTest {
 		else {
 			// ↓ ↓ PASTE PRINTED MAP HERE ↓ ↓ //
 			final HashMap<String, Long> originalFitnesses = new HashMap<String, Long>();
-			originalFitnesses.put("cargo-scheduler-canal-cost", 9315000L);
-			originalFitnesses.put("cargo-scheduler-volume-allocation", 0L);
-			originalFitnesses.put("cargo-scheduler-cost-cooldown", 29076840L);
+			originalFitnesses.put("cargo-scheduler-canal-cost", 8955000L);
+			originalFitnesses.put("cargo-scheduler-group-profit", 0L);
+			originalFitnesses.put("cargo-scheduler-cost-cooldown", 30692220L);
 			originalFitnesses.put("cargo-scheduler-charter-revenue", 0L);
-			originalFitnesses.put("cargo-scheduler-lateness", 538000000L);
-			originalFitnesses.put("cargo-scheduler-cost-base", 51417391L);
-			originalFitnesses.put("cargo-scheduler-cost-lng", 253328260L);
+			originalFitnesses.put("cargo-scheduler-lateness", 726000000L);
+			originalFitnesses.put("cargo-scheduler-cost-base", 44356934L);
+			originalFitnesses.put("cargo-scheduler-cost-lng", 257071922L);
 			originalFitnesses.put("cargo-scheduler-charter-cost", 0L);
+
 
 			final HashMap<String, Long> endFitnesses = new HashMap<String, Long>();
 			endFitnesses.put("cargo-scheduler-canal-cost", 690000L);
-			endFitnesses.put("cargo-scheduler-volume-allocation", 0L);
+			endFitnesses.put("cargo-scheduler-group-profit", 0L);
 			endFitnesses.put("cargo-scheduler-cost-cooldown", 30692220L);
 			endFitnesses.put("cargo-scheduler-charter-revenue", 0L);
 			endFitnesses.put("cargo-scheduler-lateness", 0L);
-			endFitnesses.put("cargo-scheduler-cost-base", 25372620L);
-			endFitnesses.put("cargo-scheduler-cost-lng", 213198070L);
+			endFitnesses.put("cargo-scheduler-cost-base", 27356201L);
+			endFitnesses.put("cargo-scheduler-cost-lng", 213722761L);
 			endFitnesses.put("cargo-scheduler-charter-cost", 0L);
 			// ↑ ↑ PASTE PRINTED MAP HERE ↑ ↑ //
 			
