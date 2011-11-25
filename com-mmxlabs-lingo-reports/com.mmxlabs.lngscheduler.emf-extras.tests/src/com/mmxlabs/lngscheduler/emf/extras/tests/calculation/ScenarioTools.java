@@ -196,9 +196,6 @@ public class ScenarioTools {
 		// final int minHeelVolume = 0;
 		final int spotCharterCount = 0;
 		final double fillCapacity = 1.0;
-		// ports
-		// final int distanceFromAToB = distanceBetweenPorts;
-		// final int distanceFromBToA = distanceBetweenPorts;
 		// load and discharge prices and quantities
 		final int loadPrice = 1000;
 		final int loadMaxQuantity = 100000;
