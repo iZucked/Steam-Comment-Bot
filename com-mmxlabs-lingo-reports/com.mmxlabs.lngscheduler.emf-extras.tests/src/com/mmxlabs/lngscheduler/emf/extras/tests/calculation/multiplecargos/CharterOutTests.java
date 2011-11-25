@@ -46,7 +46,7 @@ public class CharterOutTests {
 
 		CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
-		// We want a leg between ports A and B to take 10 hours (9 hours travel, 1 hour idle).
+		//a leg between ports A and B will take 100 hours.
 		final long legDurationHours = 100;
 
 		final Port portA = PortFactory.eINSTANCE.createPort();
