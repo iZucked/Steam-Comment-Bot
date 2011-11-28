@@ -20,6 +20,7 @@ import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
+import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
@@ -28,6 +29,7 @@ import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsData
 import com.mmxlabs.optimiser.common.dcproviders.impl.ResourceAllocationConstraintProvider;
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedElementDurationEditor;
+import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOptionalElementsEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOrderedSequenceElementsEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedTimeWindowEditor;
 import com.mmxlabs.optimiser.core.IResource;
@@ -118,12 +120,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final List<IResource> resources = new ArrayList<IResource>();
 
 	private final List<ISequenceElement> sequenceElements = new ArrayList<ISequenceElement>();
-
-	/**
-	 * A list of all the sequence elements which have been marked as optional. Elements in this list are allowed to be left out of any of the sequences in a solution and placed in the spare elements
-	 * bag
-	 */
-	private final List<ISequenceElement> optionalElements = new ArrayList<ISequenceElement>();
 
 	private final List<IVesselClass> vesselClasses = new LinkedList<IVesselClass>();
 
@@ -224,6 +220,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	private final HashSetCalculatorProviderEditor<ISequenceElement> calculatorProvider;
 
+	private final IOptionalElementsProviderEditor<ISequenceElement> optionalElements = new IndexedOptionalElementsEditor<ISequenceElement>(SchedulerConstants.DCP_optionalElementsProvider);
+
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
 		indexingContext.registerType(Port.class);
@@ -321,9 +319,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		element.setName(id + "-" + port.getName());
 		element.setPortSlot(slot);
 
-		if (optional) {
-			optionalElements.add(element);
-		}
+		optionalElements.setOptional(element, optional);
 
 		sequenceElements.add(element);
 
@@ -371,10 +367,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		element.setPortSlot(slot);
 		element.setName(id + "-" + port.getName());
 
-		if (optional) {
-			optionalElements.add(element);
-		}
-
+		optionalElements.setOptional(element, optional);
 		sequenceElements.add(element);
 
 		// Register the port with the element
@@ -800,7 +793,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// }
 		// }
 
-
+		// Tell the optional element provider about non-optional elements it may not have seen
+		// if this seems a bit ridiculous, yes, it is.
+		// TODO think about how this connects with return elements - they aren't optional
+		// but they also aren't all required.
+		for (final ISequenceElement element : sequenceElements) {
+			optionalElements.setOptional(element, optionalElements.isElementOptional(element));
+		}
 
 		final OptimisationData<ISequenceElement> data = new OptimisationData<ISequenceElement>();
 
@@ -832,6 +831,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		data.addDataComponentProvider(SchedulerConstants.DCP_totalVolumeLimitProvider, totalVolumeLimits);
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_calculatorProvider, calculatorProvider);
+
+		data.addDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, optionalElements);
 
 		if (true) {
 			for (final IPort from : ports) {
