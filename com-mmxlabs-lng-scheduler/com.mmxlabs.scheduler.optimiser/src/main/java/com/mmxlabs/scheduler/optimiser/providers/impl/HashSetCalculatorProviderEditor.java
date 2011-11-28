@@ -14,7 +14,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 
 /**
  * @author hinton
- *
+ * 
  */
 public class HashSetCalculatorProviderEditor<T> implements ICalculatorProviderEditor<T> {
 	private final String name;
@@ -24,14 +24,15 @@ public class HashSetCalculatorProviderEditor<T> implements ICalculatorProviderEd
 	public HashSetCalculatorProviderEditor(final String name) {
 		this.name = name;
 	}
-	
-	
+
 	@Override
 	public Collection<ILoadPriceCalculator2> getLoadPriceCalculators() {
 		return Collections.unmodifiableSet(loadPriceCalculators);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider#getShippingPriceCalculators()
 	 */
 	@Override
@@ -39,7 +40,9 @@ public class HashSetCalculatorProviderEditor<T> implements ICalculatorProviderEd
 		return Collections.unmodifiableSet(shippingPriceCalculators);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.optimiser.core.scenario.IDataComponentProvider#getName()
 	 */
 	@Override
@@ -53,21 +56,26 @@ public class HashSetCalculatorProviderEditor<T> implements ICalculatorProviderEd
 		shippingPriceCalculators.clear();
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor#addLoadPriceCalculator(com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2)
 	 */
 	@Override
 	public void addLoadPriceCalculator(ILoadPriceCalculator2 calculator) {
-		loadPriceCalculators.add(calculator);
+		if (calculator != null)
+			loadPriceCalculators.add(calculator);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor#addShippingPriceCalculator(com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator)
 	 */
 	@Override
 	public void addShippingPriceCalculator(IShippingPriceCalculator<T> calculator) {
-		shippingPriceCalculators.add(calculator);
+		if (calculator != null)
+			shippingPriceCalculators.add(calculator);
 	}
 
 }
