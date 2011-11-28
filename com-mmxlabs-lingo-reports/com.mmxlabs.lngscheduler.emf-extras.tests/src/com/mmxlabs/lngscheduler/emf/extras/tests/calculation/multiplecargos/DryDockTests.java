@@ -19,6 +19,7 @@ import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
 import scenario.schedule.events.Journey;
 import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.events.VesselEventVisit;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
@@ -29,7 +30,7 @@ import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
  * Class for tests to do with multiple dry docks.
  * 
  * @author Adam
- *
+ * 
  */
 public class DryDockTests {
 
@@ -67,15 +68,15 @@ public class DryDockTests {
 		final int minHeelVolume = 1000;
 		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume);
 
-		final int dryDockDurationDays = 1;
-		final float cvValue = 1;
+		final int dryDockDurationDays = 10;
+		// final float cvValue = 1;
 
 		final Date startFirstDryDock = new Date();
 		final Date endFirstDryDock = new Date(startFirstDryDock.getTime() + TimeUnit.DAYS.toMillis(dryDockDurationDays));
 		final Date startSecondDryDock = new Date(endFirstDryDock.getTime() + TimeUnit.HOURS.toMillis(legDurationHours));
 		final Date endSecondDryDock = new Date(startSecondDryDock.getTime() + TimeUnit.DAYS.toMillis(dryDockDurationDays));
 		final Date startThirdDryDock = new Date(endSecondDryDock.getTime() + TimeUnit.HOURS.toMillis(legDurationHours));
-		final Date endThirdDryDock = new Date(startThirdDryDock.getTime() + TimeUnit.DAYS.toMillis(dryDockDurationDays));
+		// final Date endThirdDryDock = new Date(startThirdDryDock.getTime() + TimeUnit.DAYS.toMillis(dryDockDurationDays));
 
 		csc.addDryDock(portA, startFirstDryDock, dryDockDurationDays);
 		csc.addDryDock(portB, startSecondDryDock, dryDockDurationDays);
@@ -92,8 +93,17 @@ public class DryDockTests {
 			for (final ScheduledEvent e : seq.getEvents()) {
 				if (e instanceof Journey) {
 					Journey j = (Journey) e;
-					
+
 					FuelUsageAssertions.assertLNGNotUsed(j);
+
+					for (FuelQuantity fq : j.getFuelUsage()) {
+						if (fq.getFuelType() == FuelType.BASE_FUEL)
+							Assert.assertEquals("100MT of basefuel used", 100, fq.getQuantity());
+					}
+				} else if (e instanceof VesselEventVisit) {
+					VesselEventVisit vev = (VesselEventVisit) e;
+
+					Assert.assertEquals("Duration of dry dock matches expected", TimeUnit.DAYS.toHours(dryDockDurationDays), vev.getEventDuration());
 				}
 			}
 		}
