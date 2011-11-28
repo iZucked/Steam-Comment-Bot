@@ -157,7 +157,7 @@ public final class ModifiableSequences<T> implements IModifiableSequences<T> {
 	public boolean equals(Object obj) {
 
 		if (obj instanceof ModifiableSequences) {
-			return sequenceMap.equals(((ModifiableSequences) obj).sequenceMap);
+			return sequenceMap.equals(((ModifiableSequences) obj).sequenceMap) && unusedElements.equals(((ModifiableSequences) obj).unusedElements);
 		} else if (obj instanceof ISequences) {
 			ISequences seq = (ISequences) obj;
 			if (size() != seq.size()) {
@@ -167,10 +167,28 @@ public final class ModifiableSequences<T> implements IModifiableSequences<T> {
 			if (!seq.getSequences().equals(seq.getSequences())) {
 				return false;
 			}
+
+			if (!seq.getUnusedElements().equals(seq.getUnusedElements())) {
+				// TODO this is suggesting order is important, which it shouldn't be.
+				return false;
+			}
+
 			return true;
 
 		}
 
 		return false;
+	}
+
+	final List<T> unusedElements = new ArrayList<T>();
+
+	@Override
+	public List<T> getUnusedElements() {
+		return Collections.unmodifiableList(unusedElements);
+	}
+
+	@Override
+	public List<T> getModifiableUnusedElements() {
+		return unusedElements;
 	}
 }

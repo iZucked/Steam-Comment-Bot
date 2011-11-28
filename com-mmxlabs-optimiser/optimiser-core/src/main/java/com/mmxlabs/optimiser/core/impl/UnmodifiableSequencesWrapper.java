@@ -78,4 +78,9 @@ public final class UnmodifiableSequencesWrapper<T> implements ISequences<T> {
 
 		return wrapped.size();
 	}
+
+	@Override
+	public List<T> getUnusedElements() {
+		return wrapped.getUnusedElements();
+	}
 }

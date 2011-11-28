@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,4 +38,9 @@ public interface IModifiableSequences<T> extends ISequences<T> {
 	 * @return
 	 */
 	Map<IResource, IModifiableSequence<T>> getModifiableSequences();
+
+	/**
+	 * @return a modifiable list of unused elements.
+	 */
+	List<T> getModifiableUnusedElements();
 }

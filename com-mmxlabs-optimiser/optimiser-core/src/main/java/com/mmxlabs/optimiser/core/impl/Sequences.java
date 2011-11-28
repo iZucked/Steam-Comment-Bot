@@ -143,4 +143,11 @@ public final class Sequences<T> implements ISequences<T> {
 	public int hashCode() {
 		return sequenceMap.hashCode();
 	}
+
+	final List<T> unusedElements = new ArrayList<T>();
+
+	@Override
+	public List<T> getUnusedElements() {
+		return Collections.unmodifiableList(unusedElements);
+	}
 }

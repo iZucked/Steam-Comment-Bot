@@ -42,6 +42,13 @@ public interface ISequences<T> {
 	Map<IResource, ISequence<T>> getSequences();
 
 	/**
+	 * Getter for the elements in the solution which are not used anywhere
+	 * 
+	 * @return
+	 */
+	List<T> getUnusedElements();
+
+	/**
 	 * Returns an indexed list of resources for which resources are keyed off.
 	 * The index of each resource can be passed to the {@link #getSequence(int)}
 	 * method.

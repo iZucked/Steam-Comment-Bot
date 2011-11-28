@@ -27,8 +27,6 @@ public interface IOptimisationData<T> {
 	 */
 	List<T> getSequenceElements();
 
-	// Collection<IResourceType> getResourceTypes();
-
 	/**
 	 * Returns a list of all the {@link IResource}s in the optimisation.
 	 */
