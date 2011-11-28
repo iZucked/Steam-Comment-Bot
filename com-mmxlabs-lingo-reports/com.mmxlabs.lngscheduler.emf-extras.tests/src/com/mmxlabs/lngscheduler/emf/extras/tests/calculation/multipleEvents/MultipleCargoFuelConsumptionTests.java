@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.lngscheduler.emf.extras.tests.calculation.multiplecargos;
+package com.mmxlabs.lngscheduler.emf.extras.tests.calculation.multipleEvents;
 
 import java.util.Date;
 
