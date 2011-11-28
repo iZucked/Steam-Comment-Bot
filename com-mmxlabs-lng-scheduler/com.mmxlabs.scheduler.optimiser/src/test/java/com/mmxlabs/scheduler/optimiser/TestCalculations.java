@@ -122,10 +122,10 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false);
+ loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, new FixedPriceContract(5000), 1);
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, new FixedPriceContract(5000), 1, false);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
 
@@ -727,20 +727,17 @@ public class TestCalculations {
 		final IStartEndRequirement endRequirement = builder
 				.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0,
- startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0, startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
-		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2,
-				loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false);
+		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, new FixedPriceContract(5000), 1);
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, new FixedPriceContract(5000), 1, false);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
 
-		builder.setPortToPortDistance(port1, port2,
-				IMultiMatrixProvider.Default_Key, 12 * 25);
+		builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 25);
 		builder.setPortToPortDistance(port2, port3,
 				IMultiMatrixProvider.Default_Key, 12 * 25);
 		builder.setPortToPortDistance(port3, port4,
@@ -1344,10 +1341,10 @@ public class TestCalculations {
 		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0, startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
-		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false);
+		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, new FixedPriceContract(200000), 1);
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, new FixedPriceContract(200000), 1, false);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
 
