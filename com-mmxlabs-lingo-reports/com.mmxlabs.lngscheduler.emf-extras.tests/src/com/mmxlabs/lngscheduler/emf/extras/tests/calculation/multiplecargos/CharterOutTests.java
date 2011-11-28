@@ -75,6 +75,7 @@ public class CharterOutTests {
 		final int firstCOHeelLimit = 1000;
 		final int secondCOHeelLimit = 0;
 		final int charterOutDurationDays = 10;
+		final int dryDockDurationDays = 0;
 		final float cvValue = 1;
 
 		final Date startFirstCharterOut = new Date();
@@ -85,9 +86,9 @@ public class CharterOutTests {
 		final Date startSecondDryDock = new Date(endSecondCharterOut.getTime() + TimeUnit.HOURS.toMillis(legDurationHours));
 
 		csc.addCharterOut(firstCharterOutID, portA, portA, startFirstCharterOut, firstCOHeelLimit, charterOutDurationDays, cvValue, dischargePrice, 0, 0);
-		csc.addDryDock(portB, startFirstDryDock);
+		csc.addDryDock(portB, startFirstDryDock, dryDockDurationDays);
 		csc.addCharterOut(secondCharterOutID, portB, portB, startSecondCharterOut, secondCOHeelLimit, charterOutDurationDays, cvValue, dischargePrice, 0, 0);
-		csc.addDryDock(portC, startSecondDryDock);
+		csc.addDryDock(portC, startSecondDryDock, dryDockDurationDays);
 
 		final Scenario scenario = csc.buildScenario();
 
