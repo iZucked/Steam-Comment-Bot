@@ -11,7 +11,7 @@ org.eclipse.pde.build.append.startlevels=false
 properties.1.name=org.eclipse.equinox.p2.type.category
 properties.1.value=false
 
-## Need to add twice for both types 0 and 1
+## Need to add twice for both types (metadata and artifacts)
 instructions.configure=\
 org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:https${#58}//server1.mmxlabs.com/static/p2/com.mmxlabs.shiplingo.demo/nightly/,name:ShipLingo Nightly);\
 org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:https${#58}//server1.mmxlabs.com/static/p2/com.mmxlabs.shiplingo.demo/nightly/,name:ShipLingo Nightly);
