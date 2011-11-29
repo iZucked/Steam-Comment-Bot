@@ -121,19 +121,19 @@ public class CustomScenarioCreator {
 	 * @param minHeelVolume
 	 *            The minimum heel volume
 	 */
-	public void addVesselSimple(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final int speed, final int capacity, final int consumption,
+	public Vessel[] addVesselSimple(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final int speed, final int capacity, final int consumption,
 			final int NBORate, final int pilotLightRate, final int minHeelVolume) {
 
 		final float equivalenceFactor = 1;
 
-		addVessel(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption, NBORate, NBORate, speed,
+		return addVessel(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption, NBORate, NBORate, speed,
 				consumption, speed, consumption, consumption, NBORate, NBORate, pilotLightRate, minHeelVolume);
 	}
 
 	/**
 	 * Creates a vessel class and adds the specified number of vessels of the created class to the scenario. The attributes of the vessel class and vessel are set using the arguments.
 	 */
-	public void addVessel(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final float equivalenceFactor, final int minSpeed, final int maxSpeed,
+	public Vessel[] addVessel(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final float equivalenceFactor, final int minSpeed, final int maxSpeed,
 			final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed, final int ballastMaxConsumption, int ballastIdleConsumptionRate,
 			final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption,
 			int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume) {
@@ -207,6 +207,9 @@ public class CustomScenarioCreator {
 		ballast.setIdleNBORate(ballastIdleNBORate);
 		ballast.setNboRate(ballastNBORate);
 
+		// return a list of all vessels created.
+		Vessel created[] = new Vessel[numOfVesselsToCreate];
+		
 		// now create vessels of this class
 		for (int i = 0; i < numOfVesselsToCreate; i++) {
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
@@ -220,7 +223,10 @@ public class CustomScenarioCreator {
 			vessel.setEndRequirement(end);
 
 			scenario.getFleetModel().getFleet().add(vessel);
+			created[i] = vessel;
 		}
+		
+		return created;
 	}
 
 	/**
