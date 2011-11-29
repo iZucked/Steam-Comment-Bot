@@ -362,22 +362,8 @@ public class CustomScenarioCreator {
 
 		scenario.getCargoModel().getCargoes().add(cargo);
 	}
-	
-	/**
-	 * Adds a dry dock. Useful for preventing excess ballast idle time.
-	 * 
-	 * TODO Does this work for all vessels? How can you add it to just one specific vessel?
-	 * 
-	 * @param startPort
-	 *            The port the dry dock will start at.
-	 * @param date
-	 *            The date the dry dock will start (and end, instantaneously).
-	 */
-	public void addDryDock(final Port startPort, final Date date) {
-		addDryDock(startPort, date, date);
-	}
 
-	public void addDryDock(final Port startPort, final Date start, final Date end) {
+	public void addDryDock(final Port startPort, final Date start, final int durationDays) {
 
 		if (!scenario.getPortModel().getPorts().contains(startPort)) {
 			Activator
@@ -390,13 +376,14 @@ public class CustomScenarioCreator {
 
 		// Set up dry dock.
 		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
-		dryDock.setDuration(0);
+		dryDock.setDuration(durationDays);
 		dryDock.setStartPort(startPort);
 		// add to scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(dryDock);
-		// set the date to be after the discharge date
+		
+		// define the start and end time 
 		dryDock.setStartDate(start);
-		dryDock.setEndDate(end);
+		dryDock.setEndDate(start);
 	}
 
 	public void addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays, final float cvValue,

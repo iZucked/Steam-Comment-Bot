@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.lngscheduler.emf.extras.tests.calculation.singlecargo;
+package com.mmxlabs.lngscheduler.emf.extras.tests.calculation.singleEvent;
 
 import org.junit.Assert;
 import org.junit.Test;
