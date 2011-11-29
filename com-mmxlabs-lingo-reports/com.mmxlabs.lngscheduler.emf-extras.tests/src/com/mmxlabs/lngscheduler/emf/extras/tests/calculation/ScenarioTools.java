@@ -776,4 +776,17 @@ public class ScenarioTools {
 			}
 		}
 	}
+	
+	/**
+	 * Create a port using {@link PortFactory#eINSTANCE#createPort()} and give it a name.
+	 * @param name The name to give port.
+	 * @return The created port.
+	 */
+	public static Port createPort(final String name) {
+
+		final Port port = PortFactory.eINSTANCE.createPort();
+		port.setName(name);
+		
+		return port;
+	}
 }
