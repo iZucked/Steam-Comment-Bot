@@ -190,9 +190,10 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 				reverseLookup.get(sequence.get(j)).setBoth(i, j);
 			}
 		}
-
+		int x = 0;
 		for (final T element : sequences.getUnusedElements()) {
-			reverseLookup.get(element).setBoth(null, null);
+			reverseLookup.get(element).setBoth(null, x);
+			x++;
 		}
 
 		sequencesMoveGenerator.setSequences(sequences);
