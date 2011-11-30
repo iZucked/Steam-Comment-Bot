@@ -42,7 +42,7 @@ public interface ISequences<T> {
 	Map<IResource, ISequence<T>> getSequences();
 
 	/**
-	 * Getter for the elements in the solution which are not used anywhere
+	 * Returns the elements in the solution which are not used anywhere
 	 * 
 	 * @return
 	 */
