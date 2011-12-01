@@ -35,10 +35,15 @@ public class VesselExistenceCheck {
 
 	/**
 	 * TODO Add other vessels (time charter spot charter).
+	 * 
+	 * Create a load of vessels of varying classes and store them in an ArrayList. Create a load of ports with varying distances. Create a load of cargos to different ports and with different
+	 * durations. Check that the output contains all of the vessels in the ArrayList. <br>
+	 * There are many more vessels than required (so a lot will be idle) to try and trip up the optimiser and ensure it doesn't remove vessels that aren't used.
 	 */
 	@Test
 	public void test() {
 
+		// this is the list of vessels to check against the output.
 		final ArrayList<Vessel> inputVessels = new ArrayList<Vessel>();
 
 		final int dischargePrice = 1;
@@ -47,24 +52,26 @@ public class VesselExistenceCheck {
 
 		csc = new CustomScenarioCreator(dischargePrice);
 
+		// a list of ports to use in the scenario
 		final Port[] ports = new Port[] { ScenarioTools.createPort("portA"), ScenarioTools.createPort("portB"), ScenarioTools.createPort("portC"), ScenarioTools.createPort("portD"),
 				ScenarioTools.createPort("portE"), ScenarioTools.createPort("portF") };
 
 		// Add the ports, and set the distances.
 		setPortDistances(ports);
-		
+
 		// create a few vessels and add them to the list of vessels created.
 		final int numOfClassOne = 3;
 		final int numOfClassTwo = 7;
 		final int numOfClassThree = 4;
 		final int numOfClassFour = 6;
 		final int numOfInputVessels = numOfClassOne + numOfClassTwo + numOfClassThree + numOfClassFour;
-		
-		inputVessels.addAll(Arrays.asList(createVessels("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500)));
-		inputVessels.addAll(Arrays.asList(createVessels("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0)));
-		inputVessels.addAll(Arrays.asList(createVessels("classThree", numOfClassThree, 20, 25, 10000, 17, 14, 10, 1000)));
-		inputVessels.addAll(Arrays.asList(createVessels("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000)));
-		
+
+		// createVessels creates and adds the vessesl to the scenario.
+		// Add the created vessels to the list of input vessels.
+		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500)));
+		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0)));
+		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 20, 25, 10000, 17, 14, 10, 1000)));
+		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000)));
 
 		// create some cargos.
 		addCargos(ports, loadPrice, dischargePrice, cvValue);
@@ -78,23 +85,17 @@ public class VesselExistenceCheck {
 		for (CargoAllocation ca : result.getCargoAllocations())
 			ScenarioTools.printCargoAllocation(ca.getName(), ca);
 
+		// print each vessel's sequence
 		ScenarioTools.printSequences(result);
-
-		int numOfVesselsInOutput = 0;
-		for (AllocatedVessel av : result.getFleet()) {
-			if (av instanceof FleetVessel) {
-				FleetVessel fv = (FleetVessel) av;
-
-				Assert.assertTrue("Input vessel exists in output", inputVessels.contains(fv.getVessel()));
-
-				if (inputVessels.contains(fv.getVessel()))
-					numOfVesselsInOutput++;
-			}
-		}
 		
-		Assert.assertEquals("Number of vessels in input same as number of vessels in output", numOfInputVessels, numOfVesselsInOutput);
+		// check the output
+		checkVesselExistence(result, inputVessels, numOfInputVessels);
 	}
 
+	/**
+	 * Set the distance between the given ports in a random-ish manner.
+	 * @param ports
+	 */
 	private void setPortDistances(Port[] ports) {
 
 		int distance = 10;
@@ -113,16 +114,14 @@ public class VesselExistenceCheck {
 			}
 		}
 	}
-
-	private Vessel[] createVessels(final String vesselClassOne, final int numOfClassOne, final float baseFuelUnitPriceClassOne, final int speedClassOne, final int capacityClassOne,
-			final int consumptionClassOne, final int NBORateClassOne, final int pilotLightRateClassOne, final int minHeelVolumeClassOne) {
-
-		final Vessel[] vesselsOfClassOne = csc.addVesselSimple(vesselClassOne, numOfClassOne, baseFuelUnitPriceClassOne, speedClassOne, capacityClassOne, consumptionClassOne, NBORateClassOne,
-				pilotLightRateClassOne, minHeelVolumeClassOne);
-
-		return vesselsOfClassOne;
-	}
-
+	
+	/**
+	 * Add a number of cargos to the scenario in a random-ish manner.
+	 * @param ports The ports to add cargos to.
+	 * @param loadPrice
+	 * @param dischargePrice
+	 * @param cvValue
+	 */
 	private void addCargos(Port[] ports, final int loadPrice, final float dischargePrice, final float cvValue) {
 
 		Date cargoStart = new Date(System.currentTimeMillis());
@@ -143,6 +142,27 @@ public class VesselExistenceCheck {
 				}
 			}
 		}
+	}
+	
+	private void checkVesselExistence(final Schedule result, final ArrayList<Vessel> inputVessels, final int numOfInputVessels) {
 
+		// Check all vessels in the input exist in the output.
+		int numOfVesselsInOutput = 0;
+		for (AllocatedVessel av : result.getFleet()) {
+			if (av instanceof FleetVessel) {
+				FleetVessel fv = (FleetVessel) av;
+
+				Assert.assertTrue("Input vessel exists in output", inputVessels.contains(fv.getVessel()));
+				// remove the vessel - it should only exist once.
+				inputVessels.remove(fv.getVessel());
+
+				// count the number of vessels in the output
+				numOfVesselsInOutput++;
+			}
+		}
+
+		Assert.assertEquals("Number of vessels in input same as number of vessels in output", numOfInputVessels, numOfVesselsInOutput);
+		Assert.assertEquals("All vessels were in the output", inputVessels.size(), 0);
+		
 	}
 }
