@@ -144,7 +144,13 @@ public class VesselExistenceCheck {
 		}
 	}
 	
-	private void checkVesselExistence(final Schedule result, final ArrayList<Vessel> inputVessels, final int numOfInputVessels) {
+	/**
+	 * Checks the output to make sure that the vessels from the input exist.
+	 * @param result
+	 * @param inputVessels
+	 * @param expectedNumOfVessels
+	 */
+	private void checkVesselExistence(final Schedule result, final ArrayList<Vessel> inputVessels, final int expectedNumOfVessels) {
 
 		// Check all vessels in the input exist in the output.
 		int numOfVesselsInOutput = 0;
@@ -161,8 +167,8 @@ public class VesselExistenceCheck {
 			}
 		}
 
-		Assert.assertEquals("Number of vessels in input same as number of vessels in output", numOfInputVessels, numOfVesselsInOutput);
-		Assert.assertEquals("All vessels were in the output", inputVessels.size(), 0);
+		Assert.assertEquals("Number of vessels in input same as number of vessels in output", expectedNumOfVessels, numOfVesselsInOutput);
+		Assert.assertEquals("All vessels were used in the output", inputVessels.size(), 0);
 		
 	}
 }
