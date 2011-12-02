@@ -126,8 +126,8 @@ public class CustomScenarioCreator {
 
 		final float equivalenceFactor = 1;
 
-		return addVessel(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption, NBORate, NBORate, speed,
-				consumption, speed, consumption, consumption, NBORate, NBORate, pilotLightRate, minHeelVolume);
+		return addVessel(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption, NBORate, NBORate,
+				speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLightRate, minHeelVolume);
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class CustomScenarioCreator {
 
 		// return a list of all vessels created.
 		Vessel created[] = new Vessel[numOfVesselsToCreate];
-		
+
 		// now create vessels of this class
 		for (int i = 0; i < numOfVesselsToCreate; i++) {
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
@@ -225,7 +225,7 @@ public class CustomScenarioCreator {
 			scenario.getFleetModel().getFleet().add(vessel);
 			created[i] = vessel;
 		}
-		
+
 		return created;
 	}
 
@@ -317,18 +317,18 @@ public class CustomScenarioCreator {
 
 		if (!scenario.getPortModel().getPorts().contains(loadPort)) {
 			Activator
-			.getDefault()
-			.getLog()
-			.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
-					"Scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
+					.getDefault()
+					.getLog()
+					.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+							"Scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
 			scenario.getPortModel().getPorts().add(loadPort);
 		}
 		if (!scenario.getPortModel().getPorts().contains(dischargePort)) {
 			Activator
-			.getDefault()
-			.getLog()
-			.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
-					"Scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
+					.getDefault()
+					.getLog()
+					.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+							"Scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
 			scenario.getPortModel().getPorts().add(dischargePort);
 		}
 
@@ -367,7 +367,7 @@ public class CustomScenarioCreator {
 		cargo.setId(cargoID);
 
 		scenario.getCargoModel().getCargoes().add(cargo);
-		
+
 		return cargo;
 	}
 
@@ -388,8 +388,8 @@ public class CustomScenarioCreator {
 		dryDock.setStartPort(startPort);
 		// add to scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(dryDock);
-		
-		// define the start and end time 
+
+		// define the start and end time
 		dryDock.setStartDate(start);
 		dryDock.setEndDate(start);
 	}
