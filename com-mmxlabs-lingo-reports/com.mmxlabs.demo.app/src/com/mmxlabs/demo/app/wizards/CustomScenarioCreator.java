@@ -312,7 +312,7 @@ public class CustomScenarioCreator {
 	 * Add a cargo to the scenario. <br>
 	 * Both the load and discharge ports must be added using {@link #addPorts(Port, Port, int[], int[])} to correctly set up distances.
 	 */
-	public void addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
+	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
 			final int travelTime) {
 
 		if (!scenario.getPortModel().getPorts().contains(loadPort)) {
@@ -367,6 +367,8 @@ public class CustomScenarioCreator {
 		cargo.setId(cargoID);
 
 		scenario.getCargoModel().getCargoes().add(cargo);
+		
+		return cargo;
 	}
 
 	public void addDryDock(final Port startPort, final Date start, final int durationDays) {
