@@ -6,8 +6,6 @@ package com.mmxlabs.scheduler.its.tests.sanityChecks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -55,7 +53,7 @@ public class VesselExistenceCheck {
 				ScenarioTools.createPort("portE"), ScenarioTools.createPort("portF") };
 
 		// Add the ports, and set the distances.
-		setPortDistances(ports);
+		SanityCheckTools.setPortDistances(csc, ports);
 
 		// create a few vessels and add them to the list of vessels created.
 		final int numOfClassOne = 3;
@@ -72,7 +70,7 @@ public class VesselExistenceCheck {
 		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000)));
 
 		// create some cargos.
-		addCargos(ports, loadPrice, dischargePrice, cvValue);
+		SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
 
 		final Scenario scenario = csc.buildScenario();
 
@@ -88,58 +86,6 @@ public class VesselExistenceCheck {
 		
 		// check the output
 		checkVesselExistence(result, inputVessels, numOfInputVessels);
-	}
-
-	/**
-	 * Set the distance between the given ports in a random-ish manner.
-	 * @param ports
-	 */
-	private void setPortDistances(Port[] ports) {
-
-		int distance = 10;
-
-		for (Port portX : ports) {
-			for (Port portY : ports) {
-				if (!portX.equals(portY)) {
-
-					csc.addPorts(portX, portY, distance);
-
-					distance += 10;
-				} else {
-
-					distance -= distance / 2;
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Add a number of cargos to the scenario in a random-ish manner.
-	 * @param ports The ports to add cargos to.
-	 * @param loadPrice
-	 * @param dischargePrice
-	 * @param cvValue
-	 */
-	private void addCargos(Port[] ports, final int loadPrice, final float dischargePrice, final float cvValue) {
-
-		Date cargoStart = new Date(System.currentTimeMillis());
-		int duration = 50;
-
-		for (Port portX : ports) {
-			for (Port portY : ports) {
-				if (!portX.equals(portY)) {
-
-					csc.addCargo(portX.getName() + " to " + portY.getName() + " in " + duration + ".", portX, portY, loadPrice, dischargePrice, cvValue, cargoStart, duration);
-
-					duration += 25;
-					cargoStart.setTime(cargoStart.getTime() + TimeUnit.DAYS.toMillis(1));
-
-				} else {
-
-					duration -= duration / 2;
-				}
-			}
-		}
 	}
 	
 	/**
