@@ -22,6 +22,14 @@ import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
 import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
 
 /**
+ * <a href="https://mmxlabs.fogbugz.com/default.asp?253">BugzID: 253 Check all cargoes in input exist in output (unless spot/optional)</a><br>
+ * 
+ * Check that, when a scenario is evaluated:<br>
+ * <br>
+ * 1. The resulting schedule has a cargo allocation for every cargo in the input.<br>
+ * 2. The schedule's sequences contain the load and discharge slots for each cargo somewhere.<br>
+ * 3. Make sure that the SlotVisit events for each cargo happen in the right order.<br>
+ * 
  * @author Adam
  * 
  */
@@ -114,7 +122,7 @@ public class CargoExistenceCheck {
 
 		// For each port there is a cargo from every other port (i.e. no cargo goes from one port to the same port).
 		// This gives the number of cargos below.
-		final int numOfCargos = ports.length * (ports.length -1);// - ports.length;
+		final int numOfCargos = ports.length * (ports.length - 1);// - ports.length;
 		Cargo[] inputCargos = new Cargo[numOfCargos];
 		int i = 0;
 
@@ -143,7 +151,8 @@ public class CargoExistenceCheck {
 	}
 
 	/**
-	 * Check all the cargos in output are 
+	 * Check all the cargos in output are
+	 * 
 	 * @param result
 	 * @param inputCargos
 	 */
