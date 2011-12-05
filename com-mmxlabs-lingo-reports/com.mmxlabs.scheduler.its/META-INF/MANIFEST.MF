@@ -21,3 +21,4 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  com.mmxlabs.lngscheduler.ui;bundle-version="1.0.0"
 Bundle-ClassPath: data/,
  .
+Import-Package: com.mmxlabs.demo.app.wizards

@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="data" sourcepath="data"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.mmxlabs.scheduler.emf-extras.tests"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.lngscheduler.emf.extras.tests.calculation.sanityChecks;
+package com.mmxlabs.scheduler.its.tests.sanityChecks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
