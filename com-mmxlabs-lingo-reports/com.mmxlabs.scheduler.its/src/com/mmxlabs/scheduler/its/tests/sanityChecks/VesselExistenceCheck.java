@@ -31,7 +31,8 @@ import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
  */
 public class VesselExistenceCheck {
 
-	private CustomScenarioCreator csc;
+	private static final int dischargePrice = 1;
+	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 	/**
 	 * TODO Add other vessels (time charter spot charter).
@@ -46,11 +47,8 @@ public class VesselExistenceCheck {
 		// this is the list of vessels to check against the output.
 		final ArrayList<Vessel> inputVessels = new ArrayList<Vessel>();
 
-		final int dischargePrice = 1;
 		final int loadPrice = 1;
 		final int cvValue = 10;
-
-		csc = new CustomScenarioCreator(dischargePrice);
 
 		// a list of ports to use in the scenario
 		final Port[] ports = new Port[] { ScenarioTools.createPort("portA"), ScenarioTools.createPort("portB"), ScenarioTools.createPort("portC"), ScenarioTools.createPort("portD"),

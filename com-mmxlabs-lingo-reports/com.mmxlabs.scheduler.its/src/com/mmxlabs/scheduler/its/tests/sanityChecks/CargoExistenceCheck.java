@@ -35,8 +35,9 @@ import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
  */
 public class CargoExistenceCheck {
 
-	private CustomScenarioCreator csc;
-
+	private static final int dischargePrice = 1;
+	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+	
 	/**
 	 * Check that all cargos added to the scenario are in the output.
 	 */
@@ -46,11 +47,8 @@ public class CargoExistenceCheck {
 		// A list to hold all cargos that are input.
 		final ArrayList<Cargo> inputCargos = new ArrayList<Cargo>();
 
-		final int dischargePrice = 1;
 		final int loadPrice = 1;
 		final int cvValue = 10;
-
-		csc = new CustomScenarioCreator(dischargePrice);
 
 		// a list of ports to use in the scenario
 		final Port[] ports = new Port[] { ScenarioTools.createPort("portA"), ScenarioTools.createPort("portB"), ScenarioTools.createPort("portC"), ScenarioTools.createPort("portD"),
