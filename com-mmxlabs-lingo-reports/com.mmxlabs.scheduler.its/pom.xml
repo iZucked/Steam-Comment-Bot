@@ -36,4 +36,14 @@
 		</profile>
 	</profiles>
 
+	<dependencies>
+		<dependency>
+			<groupId>com.mmxlabs.lngscheduler.emf-extras.tests</groupId>
+			<artifactId>
+				com.mmxlabs.lngscheduler.emf-extras.tests
+			</artifactId>
+			<version>1.0.0.qualifier</version>
+			<type>eclipse-test-plugin</type>
+		</dependency>
+	</dependencies>
 </project>
