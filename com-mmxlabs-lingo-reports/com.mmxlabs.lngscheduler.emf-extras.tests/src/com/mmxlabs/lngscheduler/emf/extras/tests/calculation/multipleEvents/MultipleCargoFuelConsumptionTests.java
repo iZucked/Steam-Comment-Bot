@@ -61,7 +61,7 @@ public class MultipleCargoFuelConsumptionTests {
 		final int NBORate = TimeUnitConvert.convertPerHourToPerDay(10);
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
-		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume);
+		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume, false);
 
 		// Set up start dates and durations.
 		final Date cargoAStart = new Date(System.currentTimeMillis());
@@ -165,7 +165,7 @@ public class MultipleCargoFuelConsumptionTests {
 		final int NBORate = TimeUnitConvert.convertPerHourToPerDay(10);
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
-		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume);
+		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume, false);
 
 		// Set up start dates and durations.
 		final Date cargoAStart = new Date(System.currentTimeMillis());

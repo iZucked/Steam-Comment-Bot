@@ -57,10 +57,12 @@ public class CargoExistenceCheck {
 
 		// create a few vessels and add them to the scenario
 		final int numOfClassOne = 2;
-		final int numOfClassTwo = 3;
+		final int numOfClassTwo = 2;
+		final int numOfClassThree = 1;
 
-		csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500);
-		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0);
+		csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500, false);
+		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false);
+		csc.addVesselSimple("classThree", numOfClassThree, 11, 12, 500000, 13, 15, 15, 0, true);
 
 		// create some cargos.
 		inputCargos.addAll(Arrays.asList(SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue)));

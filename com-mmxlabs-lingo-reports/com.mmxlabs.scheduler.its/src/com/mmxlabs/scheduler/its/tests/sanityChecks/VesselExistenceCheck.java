@@ -64,10 +64,10 @@ public class VesselExistenceCheck {
 
 		// createVessels creates and adds the vessesl to the scenario.
 		// Add the created vessels to the list of input vessels.
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500)));
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0)));
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 20, 25, 10000, 17, 14, 10, 1000)));
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000)));
+		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500, false)));
+		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false)));
+		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 20, 25, 10000, 17, 14, 10, 1000, false)));
+		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
 
 		// create some cargos.
 		SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);

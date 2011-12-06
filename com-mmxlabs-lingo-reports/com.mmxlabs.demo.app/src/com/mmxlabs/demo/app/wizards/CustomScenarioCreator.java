@@ -122,12 +122,12 @@ public class CustomScenarioCreator {
 	 *            The minimum heel volume
 	 */
 	public Vessel[] addVesselSimple(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final int speed, final int capacity, final int consumption,
-			final int NBORate, final int pilotLightRate, final int minHeelVolume) {
+			final int NBORate, final int pilotLightRate, final int minHeelVolume, final boolean isTimeChartered) {
 
 		final float equivalenceFactor = 1;
 
 		return addVessel(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption, NBORate, NBORate,
-				speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLightRate, minHeelVolume);
+				speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLightRate, minHeelVolume, isTimeChartered);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class CustomScenarioCreator {
 	public Vessel[] addVessel(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final float equivalenceFactor, final int minSpeed, final int maxSpeed,
 			final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed, final int ballastMaxConsumption, int ballastIdleConsumptionRate,
 			final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption,
-			int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume) {
+			int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume, final boolean isTimeChartered) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -215,6 +215,11 @@ public class CustomScenarioCreator {
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 			vessel.setClass(vc);
 			vessel.setName(i + " (class " + vesselClassName + ")");
+			
+			vessel.setTimeChartered(isTimeChartered);
+			
+			// TODO Does setting this set the vessel to be a spot charter?
+			//vessel.setDailyCharterOutPrice(charterOutPrice);
 
 			final PortTimeAndHeel start = FleetFactory.eINSTANCE.createPortTimeAndHeel();
 			final PortAndTime end = FleetFactory.eINSTANCE.createPortAndTime();

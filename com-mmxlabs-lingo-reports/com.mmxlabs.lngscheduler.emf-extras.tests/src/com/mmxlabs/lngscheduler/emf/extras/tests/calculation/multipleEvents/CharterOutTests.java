@@ -68,7 +68,7 @@ public class CharterOutTests {
 		final int NBORate = TimeUnitConvert.convertPerHourToPerDay(5);
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 1000;
-		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume);
+		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume, false);
 
 		final String firstCharterOutID = "first charter out";
 		final String secondCharterOutID = "second charter out";
