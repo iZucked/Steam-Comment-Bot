@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 @RunWith(JMock.class)
 public class SequenceElementTest {
@@ -24,21 +23,9 @@ public class SequenceElementTest {
 	public void testSequenceElementStringIPortICargo() {
 
 		final String name = "name";
-		final IPortSlot slot = context.mock(IPortSlot.class);
-		final SequenceElement element = new SequenceElement(index, name, slot);
+		final SequenceElement element = new SequenceElement(index, name);
 
 		Assert.assertSame(name, element.getName());
-		Assert.assertSame(slot, element.getPortSlot());
-	}
-
-	@Test
-	public void testGetSetPortSlot() {
-
-		final SequenceElement element = new SequenceElement(index);
-		Assert.assertNull(element.getPortSlot());
-		final IPortSlot slot = context.mock(IPortSlot.class);
-		element.setPortSlot(slot);
-		Assert.assertSame(slot, element.getPortSlot());
 	}
 
 	@Test

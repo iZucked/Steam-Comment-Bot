@@ -123,13 +123,13 @@ public final class AbstractSequenceSchedulerTest {
 		cargo2.setDischargeSlot(dischargeSlot2);
 
 		final ISequenceElement element1 = new SequenceElement(index,
-				"element1", loadSlot1);
+				"element1");
 		final ISequenceElement element2 = new SequenceElement(index,
-				"element2", dischargeSlot1);
+				"element2");
 		final ISequenceElement element3 = new SequenceElement(index,
-				"element3", loadSlot2);
+				"element3");
 		final ISequenceElement element4 = new SequenceElement(index,
-				"element4", dischargeSlot2);
+				"element4");
 
 		final ITimeWindowDataComponentProviderEditor<ISequenceElement> timeWindowProvider = new TimeWindowDataComponentProvider<ISequenceElement>(
 				SchedulerConstants.DCP_timeWindowProvider);
@@ -425,11 +425,11 @@ public final class AbstractSequenceSchedulerTest {
 		loadSlot2.setTimeWindow(timeWindow3);
 
 		final ISequenceElement element1 = new SequenceElement(index,
-				"element1", loadSlot1);
+				"element1");
 		final ISequenceElement element2 = new SequenceElement(index,
-				"element2", dischargeSlot1);
+				"element2");
 		final ISequenceElement element3 = new SequenceElement(index,
-				"element3", loadSlot2);
+				"element3");
 
 		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
 				SchedulerConstants.DCP_timeWindowProvider);

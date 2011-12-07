@@ -9,10 +9,8 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
 /**
- * The {@link ISequenceElement} is the object manipulated in the sequences
- * passed to the optimiser. It represents a single visit to a particular port.
- * {@link IDataComponentProvider}s will provide additional information for these
- * elements such as {@link ITimeWindow}s.
+ * The {@link ISequenceElement} is the object manipulated in the sequences passed to the optimiser. It represents a unique element in the sequences and is used as the key to many
+ * {@link IDataComponentProvider}s implementations. {@link IDataComponentProvider}s provide additional information for these elements such as {@link ITimeWindow}s.
  * 
  * @author Simon Goodall
  * 
@@ -25,11 +23,4 @@ public interface ISequenceElement extends IIndexedObject {
 	 * @return
 	 */
 	String getName();
-
-	/**
-	 * Returns the {@link IPortSlot} associated with this element.
-	 * 
-	 * @return
-	 */
-	IPortSlot getPortSlot();
 }

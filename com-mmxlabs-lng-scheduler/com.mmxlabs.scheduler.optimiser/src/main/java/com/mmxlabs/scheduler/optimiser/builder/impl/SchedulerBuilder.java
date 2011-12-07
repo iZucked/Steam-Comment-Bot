@@ -313,7 +313,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Create a sequence element against this load slot
 		final SequenceElement element = new SequenceElement(indexingContext);
 		element.setName(id + "-" + port.getName());
-		element.setPortSlot(slot);
 
 		sequenceElements.add(element);
 
@@ -359,7 +358,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// Create a sequence element against this discharge slot
 		final SequenceElement element = new SequenceElement(indexingContext);
-		element.setPortSlot(slot);
 		element.setName(id + "-" + port.getName());
 
 		sequenceElements.add(element);
@@ -456,7 +454,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private ISequenceElement createReturnElement(final IResource resource, final IPort port) {
 		final String name = "return-to-" + port.getName();
 		final EndPortSlot slot = new EndPortSlot(name, port, null);
-		final SequenceElement element = new SequenceElement(indexingContext, "return-to-" + port.getName(), slot);
+		final SequenceElement element = new SequenceElement(indexingContext, "return-to-" + port.getName());
 
 		// set element duration to 1 hour, just so it's visible on the chart
 		elementDurationsProvider.setElementDuration(element, 1);
@@ -635,9 +633,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		startElement.setName(startSlot.getId() + "-" + startSlot.getPort().getName());
 		endElement.setName(endSlot.getId() + "-" + endSlot.getPort().getName());
-
-		startElement.setPortSlot(startSlot);
-		endElement.setPortSlot(endSlot);
 
 		portProvider.setPortForElement(startSlot.getPort(), startElement);
 		portProvider.setPortForElement(endSlot.getPort(), endElement);
@@ -1012,7 +1007,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		for (final IVesselEventPortSlot slot : vesselEvents) {
 			final IVesselEvent vesselEvent = slot.getVesselEvent();
 
-			final SequenceElement endElement = new SequenceElement(indexingContext, slot.getId(), slot);
+			final SequenceElement endElement = new SequenceElement(indexingContext, slot.getId());
 
 			if (vesselEvent.getStartPort() != vesselEvent.getEndPort()) {
 				// We insert two extra elements and slots, so that we go
@@ -1026,8 +1021,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				startSlot.setPortType(PortType.Waypoint);
 				redirectSlot.setPortType(PortType.Virtual);
 
-				final SequenceElement startElement = new SequenceElement(indexingContext, startSlot.getId(), startSlot);
-				final SequenceElement redirectElement = new SequenceElement(indexingContext, redirectSlot.getId(), redirectSlot);
+				final SequenceElement startElement = new SequenceElement(indexingContext, startSlot.getId());
+				final SequenceElement redirectElement = new SequenceElement(indexingContext, redirectSlot.getId());
 
 				orderedSequenceElementsEditor.setElementOrder(startElement, redirectElement);
 				orderedSequenceElementsEditor.setElementOrder(redirectElement, endElement);
