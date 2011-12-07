@@ -13,8 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 @RunWith(JMock.class)

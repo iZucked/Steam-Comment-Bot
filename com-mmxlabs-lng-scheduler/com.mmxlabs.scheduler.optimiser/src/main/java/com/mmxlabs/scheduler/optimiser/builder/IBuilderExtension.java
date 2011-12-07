@@ -9,7 +9,7 @@ import java.util.Collection;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 
 /**
  * Extension to the scheduler builder interface, which {@link ISchedulerBuilder} instances should tie into the build process at appropriate times.

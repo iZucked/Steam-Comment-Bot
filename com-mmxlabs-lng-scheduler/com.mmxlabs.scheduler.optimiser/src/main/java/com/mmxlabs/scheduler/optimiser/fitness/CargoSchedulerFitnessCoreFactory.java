@@ -9,7 +9,7 @@ import java.util.Collection;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
 
 /**
