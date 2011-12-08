@@ -184,12 +184,15 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 	public void setSequences(final ISequences<T> sequences) {
 		this.sequences = sequences;
 
+		// build table for elements in conventional sequences
 		for (int i = 0; i < sequences.size(); i++) {
 			final ISequence<T> sequence = sequences.getSequence(i);
 			for (int j = 0; j < sequence.size(); j++) {
 				reverseLookup.get(sequence.get(j)).setBoth(i, j);
 			}
 		}
+
+		// build table for excluded elements
 		int x = 0;
 		for (final T element : sequences.getUnusedElements()) {
 			reverseLookup.get(element).setBoth(null, x);

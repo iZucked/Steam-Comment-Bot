@@ -8,6 +8,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -17,9 +18,7 @@ import com.mmxlabs.scheduler.optimiser.lso.moves.RemoveOptionalElement;
 import com.mmxlabs.scheduler.optimiser.lso.moves.SwapOptionalElements;
 
 /**
- * A module for the {@link ConstrainedMoveGenerator} which handles moves around optional slots and logical cargoes.
- * 
- * (backfill and so on)
+ * A module for the {@link ConstrainedMoveGenerator} which handles moves around optional slots.
  * 
  * @author hinton
  * 
@@ -68,9 +67,30 @@ public class OptionalConstrainedMoveGeneratorUnit<T> implements IConstrainedMove
 			return new RemoveOptionalElement<T>(owner.sequences.getResources().get(location.getFirst()), location.getSecond());
 		} else {
 			// we need to do something to make the solution valid after removing this element
-			// either we can pop in another unused element, or we can patch something else in instead.
+			// either we can pop in another unused element, or we can patch something else in instead,
+			// or we can remove another element as well.
 			// for now let's assume that we need to patch an element from elsewhere
 			// 1. try and find another optional element which is in use
+
+			// first check whether either neighbour is optional, and if so whether we can
+			// take it out as well and get a good answer
+
+			if (optionalElementsProvider.isElementOptional(beforeElement)) {
+				// check whether we can skip out both
+				final T beforeBeforeElement = owner.sequences.getSequence(location.getFirst()).get(location.getSecond() - 2);
+				if (owner.validFollowers.get(beforeBeforeElement).contains(afterElement)) {
+					// remove both
+					// TODO MOVE HERE
+				}
+			}
+
+			if (optionalElementsProvider.isElementOptional(afterElement)) {
+				final T afterAfterElement = owner.sequences.getSequence(location.getFirst()).get(location.getSecond() + 2);
+				if (owner.validFollowers.get(beforeElement).contains(afterAfterElement)) {
+					// remove both
+					// TODO MOVE HERE
+				}
+			}
 
 			final T another = RandomHelper.chooseElementFrom(owner.random, optionalElementsProvider.getOptionalElements());
 			final Pair<Integer, Integer> location2 = owner.reverseLookup.get(another);
@@ -129,11 +149,38 @@ public class OptionalConstrainedMoveGeneratorUnit<T> implements IConstrainedMove
 					// and (b) has unused in its follower set
 					for (final T candidate : beforeFollowerFollowers) {
 						final Pair<Integer, Integer> candidatePosition = owner.reverseLookup.get(candidate);
-						if (candidatePosition.getFirst() == null && owner.validFollowers.get(candidate).contains(unused)) {
-							// excellent, we have a solution
-							// solution should contain
-							// [beforeFollower, candidate, unused, follower]
-							return new InsertOptionalElements<T>(owner.getSequences().getResources().get(sequence), position - 1, new int[] { unusedIndex, candidatePosition.getSecond() });
+						if (owner.validFollowers.get(candidate).contains(unused)) {
+							if (candidatePosition.getFirst() == null) {
+								// candidate is currently spare, and can go between beforeFollower and unused, so we have
+								// [... beforeFollower, +candidate, +unused, follower]
+								return new InsertOptionalElements<T>(owner.getSequences().getResources().get(sequence), position - 1, new int[] { unusedIndex, candidatePosition.getSecond() });
+							} else {
+								// candidate already exists somewhere else in the solution; we should try and move it and backfill thus:
+								// before move:
+								// S1 : [beforeCandidate, candidate, afterCandidate]
+								// S2 : [beforeFollower, follower]
+								// spares : unused, filler
+								// =>
+								// S1: [beforeCandidate, +filler, afterCandidate]
+								// S2: [beforeFollower, +candidate, +unused, follower]
+								// need to find filler element
+								final ISequence<T> candidateSequence = owner.sequences.getSequence(candidatePosition.getFirst());
+								final T beforeCandidate = candidateSequence.get(candidatePosition.getSecond() - 1);
+								final T afterCandidate = candidateSequence.get(candidatePosition.getSecond() + 1);
+								if (owner.validFollowers.get(beforeCandidate).contains(afterCandidate)) {
+									// we can just cut out candidate
+									// TODO MOVE HERE
+								} else {
+									final ConstrainedMoveGenerator<T>.Followers<T> beforeFollowers = owner.validFollowers.get(beforeCandidate);
+									for (final T spare : owner.sequences.getUnusedElements()) {
+										// TODO this loop could be a hashset intersection; not sure what's faster.
+										if (beforeFollowers.contains(spare) && owner.validFollowers.get(spare).contains(afterCandidate)) {
+											// we have a working filler element to do the move above.
+											// TODO MOVE HERE
+										}
+									}
+								}
+							}
 						}
 					}
 				}
