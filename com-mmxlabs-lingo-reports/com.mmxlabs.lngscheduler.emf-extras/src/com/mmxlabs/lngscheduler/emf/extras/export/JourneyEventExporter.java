@@ -11,9 +11,9 @@ import scenario.port.Port;
 import scenario.schedule.events.Journey;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
+import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 

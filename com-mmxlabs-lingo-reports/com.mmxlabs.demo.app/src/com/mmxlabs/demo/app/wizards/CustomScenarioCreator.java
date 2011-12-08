@@ -9,6 +9,9 @@ import java.util.Date;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import scenario.Scenario;
 import scenario.ScenarioFactory;
 import scenario.cargo.Cargo;
@@ -20,6 +23,7 @@ import scenario.contract.Entity;
 import scenario.contract.GroupEntity;
 import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
+import scenario.fleet.CharterOut;
 import scenario.fleet.Drydock;
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FuelConsumptionLine;
@@ -40,6 +44,7 @@ import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortFactory;
 
+import com.mmxlabs.demo.app.Activator;
 import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 import com.mmxlabs.lngscheduler.emf.extras.ScenarioUtils;
 
@@ -116,22 +121,22 @@ public class CustomScenarioCreator {
 	 * @param minHeelVolume
 	 *            The minimum heel volume
 	 */
-	public void addVesselSimple(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final int speed, final int capacity, final int consumption,
-			final int NBORate, final int pilotLightRate, final int minHeelVolume) {
+	public Vessel[] addVesselSimple(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final int speed, final int capacity, final int consumption,
+			final int NBORate, final int pilotLightRate, final int minHeelVolume, final boolean isTimeChartered) {
 
 		final float equivalenceFactor = 1;
 
-		addVessel(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption, NBORate, NBORate, speed,
-				consumption, speed, consumption, consumption, NBORate, NBORate, pilotLightRate, minHeelVolume);
+		return addVessel(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption, NBORate, NBORate,
+				speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLightRate, minHeelVolume, isTimeChartered);
 	}
 
 	/**
 	 * Creates a vessel class and adds the specified number of vessels of the created class to the scenario. The attributes of the vessel class and vessel are set using the arguments.
 	 */
-	public void addVessel(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final float equivalenceFactor, final int minSpeed, final int maxSpeed,
+	public Vessel[] addVessel(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final float equivalenceFactor, final int minSpeed, final int maxSpeed,
 			final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed, final int ballastMaxConsumption, int ballastIdleConsumptionRate,
 			final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption,
-			int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume) {
+			int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume, final boolean isTimeChartered) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -202,11 +207,19 @@ public class CustomScenarioCreator {
 		ballast.setIdleNBORate(ballastIdleNBORate);
 		ballast.setNboRate(ballastNBORate);
 
+		// return a list of all vessels created.
+		Vessel created[] = new Vessel[numOfVesselsToCreate];
+
 		// now create vessels of this class
 		for (int i = 0; i < numOfVesselsToCreate; i++) {
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 			vessel.setClass(vc);
 			vessel.setName(i + " (class " + vesselClassName + ")");
+			
+			vessel.setTimeChartered(isTimeChartered);
+			
+			// TODO Does setting this set the vessel to be a spot charter?
+			//vessel.setDailyCharterOutPrice(charterOutPrice);
 
 			final PortTimeAndHeel start = FleetFactory.eINSTANCE.createPortTimeAndHeel();
 			final PortAndTime end = FleetFactory.eINSTANCE.createPortAndTime();
@@ -215,7 +228,10 @@ public class CustomScenarioCreator {
 			vessel.setEndRequirement(end);
 
 			scenario.getFleetModel().getFleet().add(vessel);
+			created[i] = vessel;
 		}
+
+		return created;
 	}
 
 	/**
@@ -301,15 +317,23 @@ public class CustomScenarioCreator {
 	 * Add a cargo to the scenario. <br>
 	 * Both the load and discharge ports must be added using {@link #addPorts(Port, Port, int[], int[])} to correctly set up distances.
 	 */
-	public void addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
+	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
 			final int travelTime) {
 
 		if (!scenario.getPortModel().getPorts().contains(loadPort)) {
-			System.err.println("Warning: scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.");
+			Activator
+					.getDefault()
+					.getLog()
+					.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+							"Scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
 			scenario.getPortModel().getPorts().add(loadPort);
 		}
 		if (!scenario.getPortModel().getPorts().contains(dischargePort)) {
-			System.err.println("Warning: scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.");
+			Activator
+					.getDefault()
+					.getLog()
+					.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+							"Scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
 			scenario.getPortModel().getPorts().add(dischargePort);
 		}
 
@@ -348,32 +372,53 @@ public class CustomScenarioCreator {
 		cargo.setId(cargoID);
 
 		scenario.getCargoModel().getCargoes().add(cargo);
+
+		return cargo;
 	}
 
-	/**
-	 * Adds a dry dock. Useful for preventing excess ballast idle time.
-	 * 
-	 * @param startPort
-	 *            The port the dry dock will start at.
-	 * @param date
-	 *            The date the dry dock will start (and end, instantaneously).
-	 */
-	public void addDryDock(final Port startPort, final Date date) {
+	public void addDryDock(final Port startPort, final Date start, final int durationDays) {
 
 		if (!scenario.getPortModel().getPorts().contains(startPort)) {
-			System.err.println("Warning: scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.");
+			Activator
+					.getDefault()
+					.getLog()
+					.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+							"Scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
 			scenario.getPortModel().getPorts().add(startPort);
 		}
 
 		// Set up dry dock.
 		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
-		dryDock.setDuration(0);
+		dryDock.setDuration(durationDays);
 		dryDock.setStartPort(startPort);
 		// add to scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(dryDock);
-		// set the date to be after the discharge date
-		dryDock.setStartDate(date);
-		dryDock.setEndDate(date);
+
+		// define the start and end time
+		dryDock.setStartDate(start);
+		dryDock.setEndDate(start);
+	}
+
+	public void addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays, final float cvValue,
+			final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
+
+		final CharterOut charterOut = FleetFactory.eINSTANCE.createCharterOut();
+
+		// the start and end of the charter out starting-window is 0, for simplicity.
+		charterOut.setStartDate(startCharterOut);
+		charterOut.setEndDate(startCharterOut);
+		// same start and end port.
+		charterOut.setStartPort(startPort);
+		charterOut.setEndPort(endPort);
+		charterOut.setId(id);
+		charterOut.setHeelLimit(heelLimit);
+		charterOut.setDuration(charterOutDurationDays);
+		charterOut.setHeelCVValue(cvValue);
+		charterOut.setHeelUnitPrice(dischargePrice);
+		charterOut.setDailyCharterOutPrice(dailyCharterOutPrice);
+		charterOut.setRepositioningFee(repositioningFee);
+		// add to the scenario's fleet model
+		scenario.getFleetModel().getVesselEvents().add(charterOut);
 	}
 
 	/**

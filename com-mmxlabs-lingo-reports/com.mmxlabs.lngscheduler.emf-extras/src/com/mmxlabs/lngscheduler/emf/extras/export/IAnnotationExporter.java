@@ -13,7 +13,7 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
 
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 
 /**
  * An interface for classes which export the information contained

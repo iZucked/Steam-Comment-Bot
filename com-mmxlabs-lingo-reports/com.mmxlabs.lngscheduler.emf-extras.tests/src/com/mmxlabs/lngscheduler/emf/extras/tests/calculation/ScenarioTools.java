@@ -66,10 +66,10 @@ import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 /**
  * Methods for printing and creating a scenario where a ship travels from port A to port B then back to port A.
@@ -196,9 +196,6 @@ public class ScenarioTools {
 		// final int minHeelVolume = 0;
 		final int spotCharterCount = 0;
 		final double fillCapacity = 1.0;
-		// ports
-		// final int distanceFromAToB = distanceBetweenPorts;
-		// final int distanceFromBToA = distanceBetweenPorts;
 		// load and discharge prices and quantities
 		final int loadPrice = 1000;
 		final int loadMaxQuantity = 100000;
@@ -721,6 +718,17 @@ public class ScenarioTools {
 		for (final FuelQuantity fq : fuelQuantities)
 			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
 	}
+	
+	public static void printSequences(final Schedule result) {
+
+		int i = 1;
+		for (final Sequence seq : result.getSequences()) {
+			System.err.println("*** Sequence number " + i++ + ":");
+			ScenarioTools.printSequence(seq);
+		}
+
+		
+	}
 
 	public static void printSequence(final Sequence seq) {
 
@@ -737,6 +745,7 @@ public class ScenarioTools {
 
 				final CharterOutVisit cov = (CharterOutVisit) e;
 				System.err.println("Charter Out:");
+				System.err.println("\tID: " + cov.getId() + ", end port: " + cov.getPort().getName());
 				System.err.println("\tDuration: " + cov.getEventDuration());
 
 			} else if (e instanceof VesselEventVisit) {
@@ -766,5 +775,18 @@ public class ScenarioTools {
 				System.err.println("\t" + e.getClass());
 			}
 		}
+	}
+	
+	/**
+	 * Create a port using {@link PortFactory#eINSTANCE#createPort()} and give it a name.
+	 * @param name The name to give port.
+	 * @return The created port.
+	 */
+	public static Port createPort(final String name) {
+
+		final Port port = PortFactory.eINSTANCE.createPort();
+		port.setName(name);
+		
+		return port;
 	}
 }
