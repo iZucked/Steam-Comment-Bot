@@ -109,8 +109,8 @@ public final class AbstractSequenceSchedulerTest {
 
 		final Cargo cargo1 = new Cargo();
 		cargo1.setId("cargo1");
-		cargo1.setLoadSlot(loadSlot1);
-		cargo1.setDischargeSlot(dischargeSlot1);
+		cargo1.setLoadOption(loadSlot1);
+		cargo1.setDischargeOption(dischargeSlot1);
 
 		dischargeSlot1.setId("discharge-slot-1");
 
@@ -129,8 +129,8 @@ public final class AbstractSequenceSchedulerTest {
 
 		final Cargo cargo2 = new Cargo();
 		cargo2.setId("cargo2");
-		cargo2.setLoadSlot(loadSlot2);
-		cargo2.setDischargeSlot(dischargeSlot2);
+		cargo2.setLoadOption(loadSlot2);
+		cargo2.setDischargeOption(dischargeSlot2);
 
 		final ISequenceElement element1 = new SequenceElement(index,
 				"element1", loadSlot1);
@@ -438,8 +438,8 @@ public final class AbstractSequenceSchedulerTest {
 
 		final Cargo cargo1 = new Cargo();
 		cargo1.setId("cargo1");
-		cargo1.setLoadSlot(loadSlot1);
-		cargo1.setDischargeSlot(dischargeSlot1);
+		cargo1.setLoadOption(loadSlot1);
+		cargo1.setDischargeOption(dischargeSlot1);
 
 		final LoadSlot loadSlot2 = new LoadSlot();
 		loadSlot2.setPort(port3);
