@@ -82,4 +82,16 @@ public enum FuelComponent {
 	public static FuelComponent[] getIdleFuelComponents() {
 		return idleFuelComponents;
 	}
+
+	private static final FuelComponent[] baseFuelComponents = new FuelComponent[] { Base, Base_Supplemental, IdleBase, PilotLight, IdlePilotLight };
+
+	public static FuelComponent[] getBaseFuelComponents() {
+		return baseFuelComponents;
+	}
+
+	private static final FuelComponent[] lngFuelComponents = new FuelComponent[] { NBO, FBO, IdleNBO };
+
+	public static FuelComponent[] getLNGFuelComponents() {
+		return lngFuelComponents;
+	}
 }
