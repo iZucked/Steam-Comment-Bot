@@ -1,0 +1,44 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * All rights reserved.
+ */
+package com.mmxlabs.scheduler.optimiser.constraints.impl;
+
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+
+/**
+ * {@link IConstraintCheckerFactory} implementation to create {@link VirtualVesselConstraintChecker} instances.
+ * 
+ * @author Tom Hinton
+ * 
+ */
+public final class VirtualVesselConstraintCheckerFactory implements
+		IConstraintCheckerFactory {
+
+	public static final String NAME = "VirtualVesselConstraintChecker";
+
+	private final String vesselProviderKey;
+
+	/**
+	 * Constructor taking the keys to use in {@link IOptimisationData} to find the {@link IVesselProvider}.
+	 * 
+	 * @param key
+	 */
+	public VirtualVesselConstraintCheckerFactory(
+			final String vesselKey) {
+		this.vesselProviderKey = vesselKey;
+	}
+
+	@Override
+	public String getName() {
+		return NAME;
+	}
+
+	@Override
+	public <T> IConstraintChecker<T> instantiate() {
+		return new VirtualVesselConstraintChecker<T>(NAME, vesselProviderKey);
+	}
+}
