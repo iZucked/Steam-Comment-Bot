@@ -499,7 +499,7 @@ public class LNGScenarioTransformer {
 
 			final ILoadSlot load = builder.createLoadSlot(loadSlot.getId(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity(scenario)),
 					Calculator.scale(loadSlot.getSlotOrContractMaxQuantity(scenario)), loadPriceCalculator, (int) Calculator.scale(loadSlot.getCargoOrPortCVValue()), loadSlot.getSlotOrPortDuration(),
-					loadSlot.isSetArriveCold(), loadSlot.isArriveCold());
+					loadSlot.isSetArriveCold(), loadSlot.isArriveCold(), false);
 
 			final Slot dischargeSlot = eCargo.getDischargeSlot();
 			final int dischargeStart = convertTime(earliestTime, dischargeSlot.getWindowStart(), dischargeSlot.getPort());
@@ -524,7 +524,7 @@ public class LNGScenarioTransformer {
 
 			final IDischargeSlot discharge = builder.createDischargeSlot(dischargeSlot.getId(), ports.lookup(dischargeSlot.getPort()), dischargeWindow,
 					Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity(scenario)), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity(scenario)), dischargePriceCalculator,
-					dischargeSlot.getSlotOrPortDuration());
+					dischargeSlot.getSlotOrPortDuration(), false);
 
 			entities.addModelObject(loadSlot, load);
 			entities.addModelObject(dischargeSlot, discharge);
