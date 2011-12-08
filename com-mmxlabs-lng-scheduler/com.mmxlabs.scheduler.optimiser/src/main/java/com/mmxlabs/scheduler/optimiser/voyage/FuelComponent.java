@@ -5,11 +5,9 @@
 package com.mmxlabs.scheduler.optimiser.voyage;
 
 /**
- * Enum describing the possible breakdowns of fuel components. Each component
- * represents a specific calculation required in a voyage calculation.
+ * Enum describing the possible breakdowns of fuel components. Each component represents a specific calculation required in a voyage calculation.
  * 
- * @author Simon Goodall
- * TODO: Unit for NBO etc could also be MMBTu - especially for discharge pricing!
+ * @author Simon Goodall TODO: Unit for NBO etc could also be MMBTu - especially for discharge pricing!
  */
 public enum FuelComponent {
 
@@ -44,17 +42,15 @@ public enum FuelComponent {
 	IdleBase(FuelUnit.MT),
 
 	/**
-	 * Some vessels require a pilot light when running on base fuel only. This
-	 * tracks use during travel times.
+	 * Some vessels require a pilot light when running on base fuel only. This tracks use during travel times.
 	 */
 	PilotLight(FuelUnit.MT),
 
 	/**
-	 * Some vessels require a pilot light when running on base fuel only. This
-	 * tracks use during idle times.
+	 * Some vessels require a pilot light when running on base fuel only. This tracks use during idle times.
 	 */
-	IdlePilotLight(FuelUnit.MT), 
-	
+	IdlePilotLight(FuelUnit.MT),
+
 	/**
 	 * Gas was purchased from the port for cooldown.
 	 */
@@ -68,23 +64,21 @@ public enum FuelComponent {
 
 	/**
 	 * Returns the default unit of measure for this {@link FuelComponent}.
+	 * 
 	 * @return
 	 */
 	public final FuelUnit getDefaultFuelUnit() {
 		return fuelUnit;
 	}
-	
-	private static final FuelComponent[] travelFuelComponents = new FuelComponent[] {
-			Base, NBO,
- Base_Supplemental, FBO, FuelComponent.PilotLight };
-	
+
+	private static final FuelComponent[] travelFuelComponents = new FuelComponent[] { Base, NBO, Base_Supplemental, FBO, FuelComponent.PilotLight };
+
 	public static FuelComponent[] getTravelFuelComponents() {
 		return travelFuelComponents;
 	}
-	
-	private static final FuelComponent[] idleFuelComponents = new FuelComponent[] {
- FuelComponent.IdleBase, FuelComponent.IdleNBO, FuelComponent.Cooldown, FuelComponent.IdlePilotLight };
-	
+
+	private static final FuelComponent[] idleFuelComponents = new FuelComponent[] { FuelComponent.IdleBase, FuelComponent.IdleNBO, FuelComponent.Cooldown, FuelComponent.IdlePilotLight };
+
 	public static FuelComponent[] getIdleFuelComponents() {
 		return idleFuelComponents;
 	}
