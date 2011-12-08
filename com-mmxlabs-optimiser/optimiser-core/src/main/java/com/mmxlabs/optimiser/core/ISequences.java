@@ -64,5 +64,4 @@ public interface ISequences<T> {
 	 * @return
 	 */
 	int size();
-
 }
