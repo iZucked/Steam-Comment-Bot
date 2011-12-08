@@ -16,17 +16,8 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @author Simon Goodall
  * 
  */
-public final class LoadSlot extends PortSlot implements ILoadSlot {
+public final class LoadSlot extends LoadOption implements ILoadSlot {
 
-	private long minLoadVolume;
-
-	private long maxLoadVolume;
-
-//	private ICurve purchasePriceCurve;
-
-	private ILoadPriceCalculator2 loadPriceCalculator;
-	
-	private int cargoCVValue;
 
 	private boolean cooldownSet;
 	
@@ -36,39 +27,11 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 		setPortType(PortType.Load);
 	}
 
-	public LoadSlot(final String id, final IPort port,
-			final ITimeWindow timwWindow, final long minLoadVolume,
- final long maxLoadVolume, final ILoadPriceCalculator2 loadPriceCalculator,
+	public LoadSlot(final String id, final IPort port, final ITimeWindow timwWindow, final long minLoadVolume, final long maxLoadVolume, final ILoadPriceCalculator2 loadPriceCalculator,
 			final int cargoCVValue, final boolean cooldownSet, final boolean cooldownForbidden) {
-		super(id, port, timwWindow);
-		this.minLoadVolume = minLoadVolume;
-		this.maxLoadVolume = maxLoadVolume;
-		this.loadPriceCalculator = loadPriceCalculator;
-		this.cargoCVValue = cargoCVValue;
+		super(id, port, timwWindow, minLoadVolume, maxLoadVolume, loadPriceCalculator, cargoCVValue);
 		this.cooldownSet = cooldownSet;
 		this.cooldownForbidden = cooldownForbidden;
-	}
-
-	@Override
-	public long getMinLoadVolume() {
-		return minLoadVolume;
-	}
-
-	public void setMinLoadVolume(final long minLoadVolume) {
-		this.minLoadVolume = minLoadVolume;
-	}
-
-	@Override
-	public long getMaxLoadVolume() {
-		return maxLoadVolume;
-	}
-
-	public void setMaxLoadVolume(final long maxLoadVolume) {
-		this.maxLoadVolume = maxLoadVolume;
-	}
-
-	public void setLoadPriceCalculator(final ILoadPriceCalculator2 loadPriceCalculator) {
-		this.loadPriceCalculator = loadPriceCalculator;
 	}
 
 //	@Override
@@ -82,21 +45,6 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 		if (obj instanceof LoadSlot) {
 			final LoadSlot slot = (LoadSlot) obj;
 
-			if (minLoadVolume != slot.minLoadVolume) {
-				return false;
-			}
-
-			if (maxLoadVolume != slot.maxLoadVolume) {
-				return false;
-			}
-
-			if (loadPriceCalculator != slot.loadPriceCalculator) {
-				return false;
-			}
-
-			if (cargoCVValue != slot.cargoCVValue) {
-				return false;
-			}
 			
 			if (cooldownSet != slot.cooldownSet) {
 				return false;
@@ -111,19 +59,6 @@ public final class LoadSlot extends PortSlot implements ILoadSlot {
 		return false;
 	}
 
-	@Override
-	public int getCargoCVValue() {
-		return cargoCVValue;
-	}
-
-	public void setCargoCVValue(final int cargoCVValue) {
-		this.cargoCVValue = cargoCVValue;
-	}
-
-	@Override
-	public ILoadPriceCalculator2 getLoadPriceCalculator() {
-		return loadPriceCalculator;
-	}
 
 	@Override
 	public final boolean isCooldownSet() {

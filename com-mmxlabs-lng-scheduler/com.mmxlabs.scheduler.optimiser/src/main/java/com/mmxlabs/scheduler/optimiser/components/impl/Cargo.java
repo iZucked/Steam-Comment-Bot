@@ -5,8 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 
 /**
  * Default implementation of {@link ICargo}.
@@ -16,28 +16,28 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
  */
 public final class Cargo implements ICargo {
 
-	private ILoadSlot loadSlot;
+	private ILoadOption loadSlot;
 
-	private IDischargeSlot dischargeSlot;
+	private IDischargeOption dischargeSlot;
 
 	private String id;
 
 	@Override
-	public ILoadSlot getLoadSlot() {
+	public ILoadOption getLoadOption() {
 		return loadSlot;
 	}
 
-	public void setLoadSlot(final ILoadSlot loadSlot) {
-		this.loadSlot = loadSlot;
+	public void setLoadOption(final ILoadOption loadOption) {
+		this.loadSlot = loadOption;
 	}
 
 	@Override
-	public IDischargeSlot getDischargeSlot() {
+	public IDischargeOption getDischargeOption() {
 		return dischargeSlot;
 	}
 
-	public void setDischargeSlot(final IDischargeSlot dischargeSlot) {
-		this.dischargeSlot = dischargeSlot;
+	public void setDischargeOption(final IDischargeOption dischargeOption) {
+		this.dischargeSlot = dischargeOption;
 	}
 
 	@Override

@@ -14,7 +14,9 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -224,11 +226,11 @@ public interface ISchedulerBuilder {
 	 * Create a cargo with the specific from and to ports and associated time windows.
 	 * 
 	 * @param id
-	 * @param loadSlot
-	 * @param dischargeSlot
+	 * @param loadOption
+	 * @param dischargeOption
 	 * @return
 	 */
-	ICargo createCargo(String id, ILoadSlot loadSlot, IDischargeSlot dischargeSlot, boolean allowRewiring);
+	ICargo createCargo(String id, ILoadOption loadOption, IDischargeOption dischargeOption, boolean allowRewiring);
 
 	/**
 	 * Restrict the set of vessels which can carry this cargo to those in the second argument.
@@ -322,8 +324,9 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator2 priceCalculator, int cargoCVValue, int durationHours,
-			boolean cooldownSet,
- boolean cooldownForbidden, boolean slotIsOptional);
+			boolean cooldownSet, boolean cooldownForbidden, boolean slotIsOptional);
+
+	ILoadOption createVirtualLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator2 priceCalculator, int cargoCVValue, boolean slotIsOptional);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
@@ -340,6 +343,9 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, IShippingPriceCalculator<ISequenceElement> priceCalculator, int durationHours,
+			boolean slotIsOptional);
+
+	IDischargeOption createVirtualDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, IShippingPriceCalculator<ISequenceElement> priceCalculator,
 			boolean slotIsOptional);
 
 	/**

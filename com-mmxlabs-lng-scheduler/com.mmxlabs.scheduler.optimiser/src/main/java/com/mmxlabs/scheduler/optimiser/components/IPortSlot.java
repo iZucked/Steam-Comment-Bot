@@ -22,5 +22,4 @@ public interface IPortSlot {
 	ITimeWindow getTimeWindow();
 	
 	PortType getPortType();
-
 }
