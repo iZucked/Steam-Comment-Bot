@@ -18,6 +18,7 @@ import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.cargo.CargoPackage;
 import scenario.presentation.ScenarioEditor;
+import scenario.presentation.cargoeditor.handlers.ReplicateCargoAction;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
 import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
 
@@ -120,12 +121,14 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 	}
 	
 	final SwapDischargeSlotsAction swapAction = new SwapDischargeSlotsAction();
+	final ReplicateCargoAction replicateAction = new ReplicateCargoAction();
 
 	@Override
 	public EObjectTableViewer createViewer(final Composite parent) {
 		final EObjectTableViewer v = super.createViewer(parent);
 
 		getToolBarManager().appendToGroup("edit", swapAction);
+		getToolBarManager().appendToGroup("edit", replicateAction);
 		getToolBarManager().update(true);
 
 		v.addSelectionChangedListener(swapAction);
