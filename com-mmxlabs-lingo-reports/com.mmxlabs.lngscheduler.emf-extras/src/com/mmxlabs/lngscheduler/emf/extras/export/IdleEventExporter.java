@@ -12,8 +12,8 @@ import scenario.schedule.events.Idle;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
+import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 

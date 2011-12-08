@@ -9,7 +9,7 @@ import scenario.schedule.Schedule;
 
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
+import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 
 /**
  * Extension interface for exporting to EMF.

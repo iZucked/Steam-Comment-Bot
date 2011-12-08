@@ -66,10 +66,10 @@ import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 /**
  * Methods for printing and creating a scenario where a ship travels from port A to port B then back to port A.

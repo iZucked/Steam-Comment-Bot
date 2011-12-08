@@ -18,8 +18,8 @@ import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 /**
  * Check that a scenario has a feasible initial solution by doing an evaluation
