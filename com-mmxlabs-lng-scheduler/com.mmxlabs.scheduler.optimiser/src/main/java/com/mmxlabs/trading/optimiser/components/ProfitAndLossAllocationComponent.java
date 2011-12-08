@@ -74,7 +74,8 @@ public class ProfitAndLossAllocationComponent<T> implements ICargoAllocationFitn
 		this.entityProvider = data.getDataComponentProvider(entityProviderKey, IEntityProvider.class);
 		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
 		this.slotProvider = data.getDataComponentProvider(slotProviderKey, IPortSlotProvider.class);
-		this.shippingEntity = entityProvider.getShippingEntity();
+		if (entityProvider != null)
+			this.shippingEntity = entityProvider.getShippingEntity();
 	}
 
 	@Override

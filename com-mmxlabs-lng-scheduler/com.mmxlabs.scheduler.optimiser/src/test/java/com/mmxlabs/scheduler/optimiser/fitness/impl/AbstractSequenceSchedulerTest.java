@@ -33,12 +33,12 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
+import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
@@ -133,13 +133,13 @@ public final class AbstractSequenceSchedulerTest {
 		cargo2.setDischargeOption(dischargeSlot2);
 
 		final ISequenceElement element1 = new SequenceElement(index,
-				"element1", loadSlot1);
+				"element1");
 		final ISequenceElement element2 = new SequenceElement(index,
-				"element2", dischargeSlot1);
+				"element2");
 		final ISequenceElement element3 = new SequenceElement(index,
-				"element3", loadSlot2);
+				"element3");
 		final ISequenceElement element4 = new SequenceElement(index,
-				"element4", dischargeSlot2);
+				"element4");
 
 		final ITimeWindowDataComponentProviderEditor<ISequenceElement> timeWindowProvider = new TimeWindowDataComponentProvider<ISequenceElement>(
 				SchedulerConstants.DCP_timeWindowProvider);
