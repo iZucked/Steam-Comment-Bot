@@ -20,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.events.impl.JourneyEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.LoadEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -43,6 +44,13 @@ public final class VoyagePlanAnnotator<T> implements IVoyagePlanAnnotator<T> {
 			.getIdleFuelComponents();
 	private final FuelComponent[] travelFuelComponents = FuelComponent
 			.getTravelFuelComponents();
+
+	public void annotateFromScheduledSequences(final ScheduledSequences scheduledSequences, final IAnnotatedSolution<T> solution) {
+		for (final ScheduledSequence s : scheduledSequences) {
+			annotateFromScheduledSequence(s, solution);
+		}
+		// add volume annotations
+	}
 
 	public void annotateFromScheduledSequence(
 			final ScheduledSequence scheduledSequence,
