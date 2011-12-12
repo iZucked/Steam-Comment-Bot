@@ -5,30 +5,29 @@
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
 import com.mmxlabs.common.indexedobjects.IIndexMap;
-import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
-public final class IndexedOrderedSequenceElementsEditor<T extends IIndexedObject> implements
-		IOrderedSequenceElementsDataComponentProviderEditor<T> {
+public final class IndexedOrderedSequenceElementsEditor implements IOrderedSequenceElementsDataComponentProviderEditor {
 
-	private final IIndexMap<T, T> successors = new ArrayIndexMap<T,T>();
-	private final IIndexMap<T, T> predecessors = new ArrayIndexMap<T,T>();
-	
+	private final IIndexMap<ISequenceElement, ISequenceElement> successors = new ArrayIndexMap<ISequenceElement, ISequenceElement>();
+	private final IIndexMap<ISequenceElement, ISequenceElement> predecessors = new ArrayIndexMap<ISequenceElement, ISequenceElement>();
+
 	private final String name;
-	
+
 	public IndexedOrderedSequenceElementsEditor(final String name) {
 		super();
 		this.name = name;
 	}
 
 	@Override
-	public final T getNextElement(final T previousElement) {
+	public final ISequenceElement getNextElement(final ISequenceElement previousElement) {
 		return successors.maybeGet(previousElement);
 	}
 
 	@Override
-	public final T getPreviousElement(final T nextElement) {
+	public final ISequenceElement getPreviousElement(final ISequenceElement nextElement) {
 		return predecessors.maybeGet(nextElement);
 	}
 
@@ -44,7 +43,7 @@ public final class IndexedOrderedSequenceElementsEditor<T extends IIndexedObject
 	}
 
 	@Override
-	public void setElementOrder(final T previousElement, final T nextElement) {
+	public void setElementOrder(final ISequenceElement previousElement, final ISequenceElement nextElement) {
 		successors.set(previousElement, nextElement);
 		predecessors.set(nextElement, previousElement);
 	}

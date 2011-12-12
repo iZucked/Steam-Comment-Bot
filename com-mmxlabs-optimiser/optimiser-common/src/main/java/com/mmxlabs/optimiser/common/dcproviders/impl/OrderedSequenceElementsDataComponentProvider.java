@@ -8,37 +8,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * Implementation of {@link IOrderedSequenceElementsDataComponentProviderEditor}
- * using {@link HashMap} as the backing implementation.
+ * Implementation of {@link IOrderedSequenceElementsDataComponentProviderEditor} using {@link HashMap} as the backing implementation.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type.
  */
-public final class OrderedSequenceElementsDataComponentProvider<T> implements
-		IOrderedSequenceElementsDataComponentProviderEditor<T> {
+public final class OrderedSequenceElementsDataComponentProvider implements IOrderedSequenceElementsDataComponentProviderEditor {
 
 	private final String name;
-	private final Map<T, T> nextElements;
-	private final Map<T, T> previousElements;
+	private final Map<ISequenceElement, ISequenceElement> nextElements;
+	private final Map<ISequenceElement, ISequenceElement> previousElements;
 
 	public OrderedSequenceElementsDataComponentProvider(final String name) {
 		this.name = name;
-		this.nextElements = new HashMap<T, T>();
-		this.previousElements = new HashMap<T, T>();
+		this.nextElements = new HashMap<ISequenceElement, ISequenceElement>();
+		this.previousElements = new HashMap<ISequenceElement, ISequenceElement>();
 	}
 
 	@Override
-	public void setElementOrder(final T previousElement, final T nextElement) {
+	public void setElementOrder(final ISequenceElement previousElement, final ISequenceElement nextElement) {
 		nextElements.put(previousElement, nextElement);
 		previousElements.put(nextElement, previousElement);
 	}
 
 	@Override
-	public T getNextElement(final T previousElement) {
+	public ISequenceElement getNextElement(final ISequenceElement previousElement) {
 		if (nextElements.containsKey(previousElement)) {
 			return nextElements.get(previousElement);
 		}
@@ -46,7 +43,7 @@ public final class OrderedSequenceElementsDataComponentProvider<T> implements
 	}
 
 	@Override
-	public T getPreviousElement(final T nextElement) {
+	public ISequenceElement getPreviousElement(final ISequenceElement nextElement) {
 		if (previousElements.containsKey(nextElement)) {
 			return previousElements.get(nextElement);
 		}

@@ -30,11 +30,9 @@ public final class SortingFitnessFactory implements IFitnessCoreFactory {
 	}
 
 	@Override
-	public <T> IFitnessCore<T> instantiate() {
+	public IFitnessCore instantiate() {
 	
-		// TODO: NEED TO somehow only allow integer instantiations 
-		
-		return new SortingFitnessCore<T>();
+		return new SortingFitnessCore();
 	}
 
 }

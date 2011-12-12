@@ -24,16 +24,14 @@ public class RandomMoveGeneratorTest {
 
 	Mockery context = new JUnit4Mockery();
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testGenerateMove() {
 
 		final Random random = new Random(1);
 
-		final RandomMoveGenerator<Object> moveGenerator = new RandomMoveGenerator<Object>();
+		final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 
-		final IRandomMoveGeneratorUnit<Object> unit = context
-				.mock(IRandomMoveGeneratorUnit.class);
+		final IRandomMoveGeneratorUnit unit = context.mock(IRandomMoveGeneratorUnit.class);
 
 		moveGenerator.setRandom(random);
 		moveGenerator.addMoveGeneratorUnit(unit);
@@ -52,13 +50,13 @@ public class RandomMoveGeneratorTest {
 
 	@Test
 	public void testInit() {
-//		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
 
 	@Test
 	public void testRandomAccessors() {
 
-		RandomMoveGenerator<Object> moveGenerator = new RandomMoveGenerator<Object>();
+		RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 
 		// Initially should be null
 		Assert.assertNull(moveGenerator.getRandom());
@@ -69,16 +67,15 @@ public class RandomMoveGeneratorTest {
 		Assert.assertSame(random, moveGenerator.getRandom());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testSequencesAccessors() {
 
-		RandomMoveGenerator<Object> moveGenerator = new RandomMoveGenerator<Object>();
+		RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 
 		// Initially should be null
 		Assert.assertNull(moveGenerator.getSequences());
 
-		ISequences<Object> sequences = context.mock(ISequences.class);
+		ISequences sequences = context.mock(ISequences.class);
 
 		moveGenerator.setSequences(sequences);
 		Assert.assertSame(sequences, moveGenerator.getSequences());
@@ -87,11 +84,11 @@ public class RandomMoveGeneratorTest {
 	@Test
 	public void testGenerateBreakPoint() {
 
-		RandomMoveGenerator<Integer> moveGenerator = new RandomMoveGenerator<Integer>();
+		RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 		moveGenerator.setRandom(new Random());
 
-		ISequence<Integer> sequence = OptimiserTestUtil.makeSequence(1, 2, 3);
-		
+		ISequence sequence = OptimiserTestUtil.makeSequence(new IntegerElement(1), new IntegerElement(2), new IntegerElement(3));
+
 		// Run it a few times to let rng take its course
 		for (int i = 0; i < 10; ++i) {
 			int bp = moveGenerator.generateBreakPoint(sequence);
@@ -103,6 +100,6 @@ public class RandomMoveGeneratorTest {
 
 	@Test
 	public void testGenerateSortedBreakPoints() {
-//		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
 }

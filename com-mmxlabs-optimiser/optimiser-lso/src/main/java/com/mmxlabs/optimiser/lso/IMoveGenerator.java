@@ -7,39 +7,33 @@ package com.mmxlabs.optimiser.lso;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
- * Interface defining an object which can generate {@link IMove} instances to be
- * used within a Local Search Optimisation. In typical use, the caller will use
- * {@code setSequences(...)} to specify the sequences associated with the current state,
- * and then {@code generateMove()} some number of times to get some moves to alter
- * the state; once a move has been applied, the caller will probably call {@code setSequences(...)}
- * again, and so on.
+ * Interface defining an object which can generate {@link IMove} instances to be used within a Local Search Optimisation. In typical use, the caller will use {@code setSequences(...)} to specify the
+ * sequences associated with the current state, and then {@code generateMove()} some number of times to get some moves to alter the state; once a move has been applied, the caller will probably call
+ * {@code setSequences(...)} again, and so on.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IMoveGenerator<T> {
+public interface IMoveGenerator {
 
 	/**
 	 * Returns a {@link IMove} object to change the current solution state.
 	 * 
 	 * @return
 	 */
-	IMove<T> generateMove();
+	IMove generateMove();
 
 	/**
 	 * Returns {@link ISequences} used to generate moves
 	 * 
 	 * @return
 	 */
-	ISequences<T> getSequences();
+	ISequences getSequences();
 
 	/**
-	 * Set the {@link ISequences} used to generate moves. This should be
-	 * whenever the {@link ISequences} have changed.
+	 * Set the {@link ISequences} used to generate moves. This should be whenever the {@link ISequences} have changed.
 	 * 
 	 * @param sequences
 	 */
-	void setSequences(ISequences<T> sequences);
+	void setSequences(ISequences sequences);
 }

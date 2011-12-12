@@ -7,29 +7,35 @@ package com.mmxlabs.optimiser.common.dcproviders.impl;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.common.dcproviders.impl.ResourceAllocationConstraintProvider;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
+@RunWith(JMock.class)
 public class ResourceAllocationConstraintProviderTest {
+
+	Mockery context = new JUnit4Mockery();
 
 	@Test
 	public void testResourceAllocationConstraintProvider() {
 
 		final String name = "name";
-		final ResourceAllocationConstraintProvider<Object> provider = new ResourceAllocationConstraintProvider<Object>(
-				name);
+		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider(name);
 		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testGetAllowedResources() {
-		final ResourceAllocationConstraintProvider<Object> provider = new ResourceAllocationConstraintProvider<Object>(
-				"name");
+		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider("name");
 
-		final Object obj1 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
 
 		Assert.assertNull(provider.getAllowedResources(obj1));
 
@@ -44,9 +50,9 @@ public class ResourceAllocationConstraintProviderTest {
 	@Test
 	public void testDispose() {
 
-		final ResourceAllocationConstraintProvider<Object> provider = new ResourceAllocationConstraintProvider<Object>(
-				"name");
-		final Object obj1 = new Object();
+		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider("name");
+
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
 
 		Assert.assertNull(provider.getAllowedResources(obj1));
 

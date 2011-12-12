@@ -4,30 +4,36 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders.impl;
 
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
+@RunWith(JMock.class)
 public class OrderedSequenceElementsDataComponentProviderTest {
+
+	Mockery context = new JUnit4Mockery();
 
 	@Test
 	public void testOrderedSequenceElementsDataComponentProvider() {
 
 		final String name = "name";
-		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
-				name);
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider(name);
 		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testElementOrder() {
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
 
-		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
-				"name");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("name");
 
 		Assert.assertNull(provider.getNextElement(obj1));
 		Assert.assertNull(provider.getPreviousElement(obj1));
@@ -47,11 +53,10 @@ public class OrderedSequenceElementsDataComponentProviderTest {
 	@Test
 	public void testDispose() {
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
 
-		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
-				"name");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("name");
 
 		Assert.assertNull(provider.getNextElement(obj1));
 		Assert.assertNull(provider.getPreviousElement(obj1));

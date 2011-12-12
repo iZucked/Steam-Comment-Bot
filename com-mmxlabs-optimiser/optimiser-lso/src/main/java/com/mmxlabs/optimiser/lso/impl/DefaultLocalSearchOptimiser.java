@@ -23,28 +23,26 @@ import com.mmxlabs.optimiser.lso.IMove;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
-	private IOptimisationData<T> data;
+public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
+	private IOptimisationData data;
 
-	IFitnessEvaluator<T> fitnessEvaluator;
+	IFitnessEvaluator fitnessEvaluator;
 
-	private List<IConstraintChecker<T>> constraintCheckers;
+	private List<IConstraintChecker> constraintCheckers;
 
-	private ISequencesManipulator<T> manipulator;
+	private ISequencesManipulator manipulator;
 
 	private int numberOfMovesTried;
 
 	private int numberOfMovesAccepted;
 
-	private ModifiableSequences<T> currentRawSequences;
+	private ModifiableSequences currentRawSequences;
 
-	private ModifiableSequences<T> potentialRawSequences;
+	private ModifiableSequences potentialRawSequences;
 
-	public IAnnotatedSolution<T> start(
-			final IOptimisationContext<T> optimiserContext) {
+	public IAnnotatedSolution start(
+			final IOptimisationContext optimiserContext) {
 		setCurrentContext(optimiserContext);
 		data = optimiserContext.getOptimisationData();
 		fitnessEvaluator = getFitnessEvaluator();
@@ -53,10 +51,10 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		numberOfMovesTried = 0;
 		numberOfMovesAccepted = 0;
 
-		final ISequences<T> initialSequences = optimiserContext
+		final ISequences initialSequences = optimiserContext
 				.getInitialSequences();
-		currentRawSequences = new ModifiableSequences<T>(initialSequences);
-		potentialRawSequences = new ModifiableSequences<T>(
+		currentRawSequences = new ModifiableSequences(initialSequences);
+		potentialRawSequences = new ModifiableSequences(
 				currentRawSequences.getResources());
 		updateSequences(currentRawSequences, potentialRawSequences,
 				currentRawSequences.getResources());
@@ -64,7 +62,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		// Evaluate initial sequences
 		{
 			// Apply sequence manipulators
-			final IModifiableSequences<T> fullSequences = new ModifiableSequences<T>(
+			final IModifiableSequences fullSequences = new ModifiableSequences(
 					currentRawSequences);
 			manipulator.manipulate(fullSequences);
 
@@ -76,7 +74,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
 
-		final IAnnotatedSolution<T> annotatedBestSolution = fitnessEvaluator
+		final IAnnotatedSolution annotatedBestSolution = fitnessEvaluator
 				.getBestAnnotatedSolution(optimiserContext, false);
 		// fitnessEvaluator.getBestSequences()
 
@@ -100,7 +98,7 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			++numberOfMovesTried;
 
 			// Generate a new move
-			final IMove<T> move = getMoveGenerator().generateMove();
+			final IMove move = getMoveGenerator().generateMove();
 
 			// Make sure the generator was able to generate a move
 			if (move == null) {
@@ -116,12 +114,12 @@ public class DefaultLocalSearchOptimiser<T> extends LocalSearchOptimiser<T> {
 			move.apply(potentialRawSequences);
 
 			// Apply sequence manipulators
-			final IModifiableSequences<T> potentialFullSequences = new ModifiableSequences<T>(
+			final IModifiableSequences potentialFullSequences = new ModifiableSequences(
 					potentialRawSequences);
 			manipulator.manipulate(potentialFullSequences);
 
 			// Apply hard constraint checkers
-			for (final IConstraintChecker<T> checker : constraintCheckers) {
+			for (final IConstraintChecker checker : constraintCheckers) {
 				if (checker.checkConstraints(potentialFullSequences) == false) {
 					// Reject Move
 					updateSequences(currentRawSequences, potentialRawSequences,

@@ -16,14 +16,11 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * Implementation of {@link IOptimisationContext}.
  * 
  * @author Simon Goodall
- * 
- * @param <T>
- *            Sequence element type
  */
-public final class OptimisationContext<T> implements IOptimisationContext<T> {
+public final class OptimisationContext implements IOptimisationContext {
 
-	private final IOptimisationData<T> optimisationData;
-	private final ISequences<T> initialSequences;
+	private final IOptimisationData optimisationData;
+	private final ISequences initialSequences;
 
 	private final List<String> fitnessComponents;
 
@@ -33,12 +30,8 @@ public final class OptimisationContext<T> implements IOptimisationContext<T> {
 
 	private final IConstraintCheckerRegistry constraintCheckerRegistry;
 
-	public OptimisationContext(final IOptimisationData<T> optimisationData,
-			final ISequences<T> initialSequences,
-			final List<String> fitnessComponents,
-			final IFitnessFunctionRegistry fitnessFunctionRegistry,
-			final List<String> constraintCheckers,
-			final IConstraintCheckerRegistry constraintCheckerRegistry) {
+	public OptimisationContext(final IOptimisationData optimisationData, final ISequences initialSequences, final List<String> fitnessComponents,
+			final IFitnessFunctionRegistry fitnessFunctionRegistry, final List<String> constraintCheckers, final IConstraintCheckerRegistry constraintCheckerRegistry) {
 		this.optimisationData = optimisationData;
 		this.initialSequences = initialSequences;
 		this.fitnessComponents = fitnessComponents;
@@ -53,12 +46,12 @@ public final class OptimisationContext<T> implements IOptimisationContext<T> {
 	}
 
 	@Override
-	public ISequences<T> getInitialSequences() {
+	public ISequences getInitialSequences() {
 		return initialSequences;
 	}
 
 	@Override
-	public IOptimisationData<T> getOptimisationData() {
+	public IOptimisationData getOptimisationData() {
 		return optimisationData;
 	}
 

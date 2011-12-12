@@ -26,14 +26,13 @@ import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 @RunWith(JMock.class)
-@SuppressWarnings("unchecked")
 public class FitnessHelperTest {
 
-	static class CoreWrapper<T> implements IFitnessComponent<T> {
+	static class CoreWrapper implements IFitnessComponent {
 
-		private final IFitnessCore<T> core;
+		private final IFitnessCore core;
 
-		public CoreWrapper(final IFitnessCore<T> core) {
+		public CoreWrapper(final IFitnessCore core) {
 			this.core = core;
 		}
 
@@ -44,7 +43,7 @@ public class FitnessHelperTest {
 		}
 
 		@Override
-		public IFitnessCore<T> getFitnessCore() {
+		public IFitnessCore getFitnessCore() {
 			return core;
 		}
 
@@ -60,25 +59,16 @@ public class FitnessHelperTest {
 
 	@Test
 	public void testEvaluateSequencesFromComponentsISequencesOfTCollectionOfIFitnessComponentOfT() {
-		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
+		final FitnessHelper helper = new FitnessHelper();
 
-		final ISequences<Object> sequences = context.mock(ISequences.class);
+		final ISequences sequences = context.mock(ISequences.class);
 
-		final IFitnessCore<Object> core1 = context.mock(IFitnessCore.class,
-				"core-1");
-		final IFitnessCore<Object> core2 = context.mock(IFitnessCore.class,
-				"core-2");
-		final IFitnessCore<Object> core3 = context.mock(IFitnessCore.class,
-				"core-3");
+		final IFitnessCore core1 = context.mock(IFitnessCore.class, "core-1");
+		final IFitnessCore core2 = context.mock(IFitnessCore.class, "core-2");
+		final IFitnessCore core3 = context.mock(IFitnessCore.class, "core-3");
 
-		final List<IFitnessComponent<Object>> components = CollectionsUtil
-				.makeArrayList(
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core1),
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core2),
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core3));
+		final List<IFitnessComponent> components = CollectionsUtil.makeArrayList((IFitnessComponent) new CoreWrapper(core1), (IFitnessComponent) new CoreWrapper(core2),
+				(IFitnessComponent) new CoreWrapper(core3));
 
 		context.checking(new Expectations() {
 			{
@@ -99,19 +89,15 @@ public class FitnessHelperTest {
 
 	@Test
 	public void testEvaluateSequencesFromCoresISequencesOfTCollectionOfIFitnessCoreOfT() {
-		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
+		final FitnessHelper helper = new FitnessHelper();
 
-		final ISequences<Object> sequences = context.mock(ISequences.class);
+		final ISequences sequences = context.mock(ISequences.class);
 
-		final IFitnessCore<Object> core1 = context.mock(IFitnessCore.class,
-				"core-1");
-		final IFitnessCore<Object> core2 = context.mock(IFitnessCore.class,
-				"core-2");
-		final IFitnessCore<Object> core3 = context.mock(IFitnessCore.class,
-				"core-3");
+		final IFitnessCore core1 = context.mock(IFitnessCore.class, "core-1");
+		final IFitnessCore core2 = context.mock(IFitnessCore.class, "core-2");
+		final IFitnessCore core3 = context.mock(IFitnessCore.class, "core-3");
 
-		final List<IFitnessCore<Object>> cores = CollectionsUtil.makeArrayList(
-				core1, core2, core3);
+		final List<IFitnessCore> cores = CollectionsUtil.makeArrayList(core1, core2, core3);
 
 		context.checking(new Expectations() {
 			{
@@ -131,26 +117,17 @@ public class FitnessHelperTest {
 
 	@Test
 	public void testEvaluateSequencesFromComponentsISequencesOfTCollectionOfIFitnessComponentOfTListOfIResource() {
-		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
+		final FitnessHelper helper = new FitnessHelper();
 		final Collection<IResource> resources = Collections.emptyList();
 
-		final ISequences<Object> sequences = context.mock(ISequences.class);
+		final ISequences sequences = context.mock(ISequences.class);
 
-		final IFitnessCore<Object> core1 = context.mock(IFitnessCore.class,
-				"core-1");
-		final IFitnessCore<Object> core2 = context.mock(IFitnessCore.class,
-				"core-2");
-		final IFitnessCore<Object> core3 = context.mock(IFitnessCore.class,
-				"core-3");
+		final IFitnessCore core1 = context.mock(IFitnessCore.class, "core-1");
+		final IFitnessCore core2 = context.mock(IFitnessCore.class, "core-2");
+		final IFitnessCore core3 = context.mock(IFitnessCore.class, "core-3");
 
-		final List<IFitnessComponent<Object>> components = CollectionsUtil
-				.makeArrayList(
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core1),
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core2),
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core3));
+		final List<IFitnessComponent> components = CollectionsUtil.makeArrayList((IFitnessComponent) new CoreWrapper(core1), (IFitnessComponent) new CoreWrapper(core2),
+				(IFitnessComponent) new CoreWrapper(core3));
 
 		context.checking(new Expectations() {
 			{
@@ -163,29 +140,23 @@ public class FitnessHelperTest {
 			}
 		});
 
-		helper
-				.evaluateSequencesFromComponents(sequences, components,
-						resources);
+		helper.evaluateSequencesFromComponents(sequences, components, resources);
 
 		context.assertIsSatisfied();
 	}
 
 	@Test
 	public void testEvaluateSequencesFromCoresISequencesOfTCollectionOfIFitnessCoreOfTListOfIResource() {
-		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
+		final FitnessHelper helper = new FitnessHelper();
 		final Collection<IResource> resources = Collections.emptyList();
 
-		final ISequences<Object> sequences = context.mock(ISequences.class);
+		final ISequences sequences = context.mock(ISequences.class);
 
-		final IFitnessCore<Object> core1 = context.mock(IFitnessCore.class,
-				"core-1");
-		final IFitnessCore<Object> core2 = context.mock(IFitnessCore.class,
-				"core-2");
-		final IFitnessCore<Object> core3 = context.mock(IFitnessCore.class,
-				"core-3");
+		final IFitnessCore core1 = context.mock(IFitnessCore.class, "core-1");
+		final IFitnessCore core2 = context.mock(IFitnessCore.class, "core-2");
+		final IFitnessCore core3 = context.mock(IFitnessCore.class, "core-3");
 
-		final List<IFitnessCore<Object>> cores = CollectionsUtil.makeArrayList(
-				core1, core2, core3);
+		final List<IFitnessCore> cores = CollectionsUtil.makeArrayList(core1, core2, core3);
 
 		context.checking(new Expectations() {
 			{
@@ -206,20 +177,15 @@ public class FitnessHelperTest {
 	@Test
 	public void testInitFitnessCores() {
 
-		final IOptimisationData<Object> data= context
-				.mock(IOptimisationData.class);
+		final IOptimisationData data = context.mock(IOptimisationData.class);
 
-		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
+		final FitnessHelper helper = new FitnessHelper();
 
-		final IFitnessCore<Object> core1 = context.mock(IFitnessCore.class,
-				"core-1");
-		final IFitnessCore<Object> core2 = context.mock(IFitnessCore.class,
-				"core-2");
-		final IFitnessCore<Object> core3 = context.mock(IFitnessCore.class,
-				"core-3");
+		final IFitnessCore core1 = context.mock(IFitnessCore.class, "core-1");
+		final IFitnessCore core2 = context.mock(IFitnessCore.class, "core-2");
+		final IFitnessCore core3 = context.mock(IFitnessCore.class, "core-3");
 
-		final List<IFitnessCore<Object>> cores = CollectionsUtil.makeArrayList(
-				core1, core2, core3);
+		final List<IFitnessCore> cores = CollectionsUtil.makeArrayList(core1, core2, core3);
 
 		context.checking(new Expectations() {
 			{
@@ -237,26 +203,16 @@ public class FitnessHelperTest {
 	@Test
 	public void testInitFitnessComponents() {
 
-		final IOptimisationData<Object> data = context
-				.mock(IOptimisationData.class);
+		final IOptimisationData data = context.mock(IOptimisationData.class);
 
-		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
+		final FitnessHelper helper = new FitnessHelper();
 
-		final IFitnessCore<Object> core1 = context.mock(IFitnessCore.class,
-				"core-1");
-		final IFitnessCore<Object> core2 = context.mock(IFitnessCore.class,
-				"core-2");
-		final IFitnessCore<Object> core3 = context.mock(IFitnessCore.class,
-				"core-3");
+		final IFitnessCore core1 = context.mock(IFitnessCore.class, "core-1");
+		final IFitnessCore core2 = context.mock(IFitnessCore.class, "core-2");
+		final IFitnessCore core3 = context.mock(IFitnessCore.class, "core-3");
 
-		final List<IFitnessComponent<Object>> components = CollectionsUtil
-				.makeArrayList(
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core1),
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core2),
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core3));
+		final List<IFitnessComponent> components = CollectionsUtil.makeArrayList((IFitnessComponent) new CoreWrapper(core1), (IFitnessComponent) new CoreWrapper(core2),
+				(IFitnessComponent) new CoreWrapper(core3));
 
 		context.checking(new Expectations() {
 			{
@@ -270,32 +226,22 @@ public class FitnessHelperTest {
 
 		context.assertIsSatisfied();
 	}
-	
-	
+
 	@Test
 	public void testAcceptFromComponents() {
 
-		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
+		final FitnessHelper helper = new FitnessHelper();
 
-		final IFitnessCore<Object> core1 = context.mock(IFitnessCore.class,
-				"core-1");
-		final IFitnessCore<Object> core2 = context.mock(IFitnessCore.class,
-				"core-2");
-		final IFitnessCore<Object> core3 = context.mock(IFitnessCore.class,
-				"core-3");
+		final IFitnessCore core1 = context.mock(IFitnessCore.class, "core-1");
+		final IFitnessCore core2 = context.mock(IFitnessCore.class, "core-2");
+		final IFitnessCore core3 = context.mock(IFitnessCore.class, "core-3");
 
-		final List<IFitnessComponent<Object>> components = CollectionsUtil
-				.makeArrayList(
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core1),
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core2),
-						(IFitnessComponent<Object>) new CoreWrapper<Object>(
-								core3));
+		final List<IFitnessComponent> components = CollectionsUtil.makeArrayList((IFitnessComponent) new CoreWrapper(core1), (IFitnessComponent) new CoreWrapper(core2),
+				(IFitnessComponent) new CoreWrapper(core3));
 
 		final ISequences sequences = context.mock(ISequences.class);
 		final Collection<IResource> affectedResources = Collections.emptyList();
-		
+
 		context.checking(new Expectations() {
 			{
 				one(core1).accepted(sequences, affectedResources);
@@ -308,26 +254,21 @@ public class FitnessHelperTest {
 
 		context.assertIsSatisfied();
 	}
-	
 
 	@Test
 	public void testAcceptFromCores() {
 
-		final FitnessHelper<Object> helper = new FitnessHelper<Object>();
+		final FitnessHelper helper = new FitnessHelper();
 
-		final IFitnessCore<Object> core1 = context.mock(IFitnessCore.class,
-				"core-1");
-		final IFitnessCore<Object> core2 = context.mock(IFitnessCore.class,
-				"core-2");
-		final IFitnessCore<Object> core3 = context.mock(IFitnessCore.class,
-				"core-3");
+		final IFitnessCore core1 = context.mock(IFitnessCore.class, "core-1");
+		final IFitnessCore core2 = context.mock(IFitnessCore.class, "core-2");
+		final IFitnessCore core3 = context.mock(IFitnessCore.class, "core-3");
 
-		final List<IFitnessCore<Object>> cores = CollectionsUtil
-				.makeArrayList(core1, core2, core3);
+		final List<IFitnessCore> cores = CollectionsUtil.makeArrayList(core1, core2, core3);
 
 		final ISequences sequences = context.mock(ISequences.class);
 		final Collection<IResource> affectedResources = Collections.emptyList();
-		
+
 		context.checking(new Expectations() {
 			{
 				one(core1).accepted(sequences, affectedResources);

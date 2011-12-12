@@ -43,7 +43,7 @@ public class DefaultLocalSearchOptimiserTest {
 				checkerRegistry.getConstraintCheckerNames());
 		// final ConstraintCheckerInstantiator constraintCheckerInstantiator =
 		// new ConstraintCheckerInstantiator();
-		// final List<IConstraintChecker<Integer>> constraintCheckers =
+		// final List<IConstraintChecker> constraintCheckers =
 		// constraintCheckerInstantiator
 		// .instantiateConstraintCheckers(checkerRegistry,
 		// constraintCheckerNames);
@@ -52,22 +52,22 @@ public class DefaultLocalSearchOptimiserTest {
 				fitnessRegistry.getFitnessComponentNames());
 		// final FitnessComponentInstantiator fitnessComponentInstantiator = new
 		// FitnessComponentInstantiator();
-		// final List<IFitnessComponent<Integer>> fitnessComponents =
+		// final List<IFitnessComponent> fitnessComponents =
 		// fitnessComponentInstantiator
 		// .instantiateFitnesses(fitnessRegistry, fitnessComponentNames);
 		//
-		// final LinearSimulatedAnnealingFitnessEvaluator<Integer>
+		// final LinearSimulatedAnnealingFitnessEvaluator
 		// fitnessEvaluator = TestUtils
 		// .createLinearSAFitnessEvaluator(1, numberOfIterations,
 		// fitnessComponents);
-		// final IMoveGenerator<Integer> moveGenerator = TestUtils
+		// final IMoveGenerator moveGenerator = TestUtils
 		// .createRandomMoveGenerator(random);
 		//
-		// final DefaultLocalSearchOptimiser<Integer> lso = new
-		// DefaultLocalSearchOptimiser<Integer>();
+		// final DefaultLocalSearchOptimiser lso = new
+		// DefaultLocalSearchOptimiser();
 
 		// lso.setNumberOfIterations(numberOfIterations);
-		// lso.setSequenceManipulator(new NullSequencesManipulator<Integer>());
+		// lso.setSequenceManipulator(new NullSequencesManipulator());
 		// lso.setMoveGenerator(moveGenerator);
 		// lso.setFitnessEvaluator(fitnessEvaluator);
 		// lso.setConstraintCheckers(constraintCheckers);
@@ -77,22 +77,22 @@ public class DefaultLocalSearchOptimiserTest {
 		final IResource r1 = OptimiserTestUtil.makeResource();
 		final IResource r2 = OptimiserTestUtil.makeResource();
 
-		final Map<IResource, IModifiableSequence<Integer>> map = CollectionsUtil
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil
 				.makeHashMap(r1, OptimiserTestUtil.makeSequence(1, 3, 2, 4),
 						r2, OptimiserTestUtil.makeSequence(5, 8, 7, 6));
 
-		final IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
+		final IModifiableSequences sequences = new ModifiableSequences(
 				CollectionsUtil.makeArrayList(r1, r2), map);
 
-		final OptimisationData<Integer> data = new OptimisationData<Integer>();
+		final OptimisationData data = new OptimisationData();
 
-		final OptimisationContext<Integer> context = new OptimisationContext<Integer>(
+		final OptimisationContext context = new OptimisationContext(
 				data, sequences, fitnessComponentNames, fitnessRegistry,
 				constraintCheckerNames, checkerRegistry);
 
-		final IOptimiserProgressMonitor<Integer> monitor = new SystemOutProgressMonitor();
+		final IOptimiserProgressMonitor monitor = new SystemOutProgressMonitor();
 
-		final LocalSearchOptimiser<Integer> lso = GeneralTestUtils.buildOptimiser(
+		final LocalSearchOptimiser lso = GeneralTestUtils.buildOptimiser(
 				context, random, numberOfIterations, 1, monitor);
 
 		// Perform the optimisation

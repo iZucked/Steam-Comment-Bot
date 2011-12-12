@@ -7,27 +7,33 @@ package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
+@RunWith(JMock.class)
 public class TimeWindowDataComponentProviderTest {
+
+	Mockery context = new JUnit4Mockery();
 
 	@Test
 	public void testTimeWindowDataComponentProvider() {
 		final String name = "name";
-		final TimeWindowDataComponentProvider<MockIndexedObject> provider = new TimeWindowDataComponentProvider<MockIndexedObject>(
-				name);
+		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(name);
 		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testGetTimeWindows() {
-		final TimeWindowDataComponentProvider<MockIndexedObject> provider = new TimeWindowDataComponentProvider<MockIndexedObject>(
-				"name");
-		final MockIndexedObject obj1 = new MockIndexedObject(1);
+		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider("name");
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
 
 		final List<ITimeWindow> timeWindows = provider.getTimeWindows(obj1);
 		Assert.assertNotNull(timeWindows);
@@ -43,9 +49,8 @@ public class TimeWindowDataComponentProviderTest {
 
 	@Test
 	public void testDispose() {
-		final TimeWindowDataComponentProvider<MockIndexedObject> provider = new TimeWindowDataComponentProvider<MockIndexedObject>(
-				"name");
-		final MockIndexedObject obj1 = new MockIndexedObject(1);
+		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider("name");
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
 
 		final List<ITimeWindow> timeWindows = provider.getTimeWindows(obj1);
 		Assert.assertNotNull(timeWindows);

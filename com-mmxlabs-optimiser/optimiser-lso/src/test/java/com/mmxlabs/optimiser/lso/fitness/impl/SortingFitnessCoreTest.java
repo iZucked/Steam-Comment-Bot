@@ -23,8 +23,8 @@ import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
 
 public class SortingFitnessCoreTest {
 
-	private IFitnessComponent<Integer> component;
-	private IFitnessCore<Integer> core;
+	private IFitnessComponent component;
+	private IFitnessCore core;
 
 	@Before
 	public void initPieces() {
@@ -32,7 +32,7 @@ public class SortingFitnessCoreTest {
 		final SortingFitnessFactory factory = new SortingFitnessFactory();
 		core = factory.instantiate();
 		core.init(null);
-		final Collection<IFitnessComponent<Integer>> fitnessComponents = core
+		final Collection<IFitnessComponent> fitnessComponents = core
 				.getFitnessComponents();
 
 		Assert.assertEquals(1, fitnessComponents.size());
@@ -41,7 +41,7 @@ public class SortingFitnessCoreTest {
 
 	@Test
 	public void testSortingFitnessCore1() {
-		final ISequences<Integer> sequences = OptimiserTestUtil.makeSequences(
+		final ISequences sequences = OptimiserTestUtil.makeSequences(
 				OptimiserTestUtil.makeResource(), 1, 2, 3, 4);
 
 		core.evaluate(sequences);
@@ -52,7 +52,7 @@ public class SortingFitnessCoreTest {
 	@Test
 	public void testSortingFitnessCore2() {
 
-		final ISequences<Integer> sequences = OptimiserTestUtil.makeSequences(
+		final ISequences sequences = OptimiserTestUtil.makeSequences(
 				OptimiserTestUtil.makeResource(), 1, 2, 4, 3);
 
 		core.evaluate(sequences);
@@ -63,7 +63,7 @@ public class SortingFitnessCoreTest {
 	@Test
 	public void testSortingFitnessCore3() {
 
-		final ISequences<Integer> sequences = OptimiserTestUtil.makeSequences(
+		final ISequences sequences = OptimiserTestUtil.makeSequences(
 				OptimiserTestUtil.makeResource(), 4, 3, 2, 1);
 
 		core.evaluate(sequences);
@@ -74,8 +74,8 @@ public class SortingFitnessCoreTest {
 	@Test
 	public void testSortingFitnessCore4() {
 
-		final ISequences<Integer> sequences = OptimiserTestUtil.makeSequences(
-				OptimiserTestUtil.makeResource(), new Integer[0]);
+		final ISequences sequences = OptimiserTestUtil.makeSequences(
+				OptimiserTestUtil.makeResource(), new int[0]);
 
 		core.evaluate(sequences);
 
@@ -88,11 +88,11 @@ public class SortingFitnessCoreTest {
 		final IResource r1 = OptimiserTestUtil.makeResource();
 		final IResource r2 = OptimiserTestUtil.makeResource();
 
-		final Map<IResource, IModifiableSequence<Integer>> map = CollectionsUtil
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil
 				.makeHashMap(r1, OptimiserTestUtil.makeSequence(1, 3, 2, 4),
 						r2, OptimiserTestUtil.makeSequence(5, 8, 7, 6));
 
-		final IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
+		final IModifiableSequences sequences = new ModifiableSequences(
 				CollectionsUtil.makeArrayList(r1, r2), map);
 
 		core.evaluate(sequences);

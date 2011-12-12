@@ -22,8 +22,7 @@ public interface IFitnessCoreFactory {
 	String getFitnessCoreName();
 
 	/**
-	 * Returns a {@link Collection} of names for the {@link IFitnessComponent}s
-	 * the {@link IFitnessCore} represents.
+	 * Returns a {@link Collection} of names for the {@link IFitnessComponent}s the {@link IFitnessCore} represents.
 	 * 
 	 * @return
 	 */
@@ -32,8 +31,7 @@ public interface IFitnessCoreFactory {
 	/**
 	 * Instantiate a new {@link IFitnessCore} instance.
 	 * 
-	 * @param <T>
 	 * @return
 	 */
-	<T> IFitnessCore<T> instantiate();
+	IFitnessCore instantiate();
 }

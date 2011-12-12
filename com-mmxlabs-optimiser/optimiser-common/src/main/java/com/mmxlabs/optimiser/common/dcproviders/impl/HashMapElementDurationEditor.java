@@ -9,51 +9,47 @@ import java.util.Map;
 
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * Implementation of {@link IElementDurationProviderEditor} using
- * {@link HashMap}s as backing implementation.
+ * Implementation of {@link IElementDurationProviderEditor} using {@link HashMap}s as backing implementation.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class HashMapElementDurationEditor<T> implements
-		IElementDurationProviderEditor<T> {
+public final class HashMapElementDurationEditor implements IElementDurationProviderEditor {
 
 	private final String name;
 
-	private final Map<IResource, Map<T, Integer>> durations;
+	private final Map<IResource, Map<ISequenceElement, Integer>> durations;
 
-	private final Map<T, Integer> nonResourceDurations;
-	
+	private final Map<ISequenceElement, Integer> nonResourceDurations;
+
 	private int defaultValue;
 
 	public HashMapElementDurationEditor(final String name) {
 		this.name = name;
-		this.durations = new HashMap<IResource, Map<T, Integer>>();
-		this.nonResourceDurations = new HashMap<T, Integer>();
+		this.durations = new HashMap<IResource, Map<ISequenceElement, Integer>>();
+		this.nonResourceDurations = new HashMap<ISequenceElement, Integer>();
 		this.defaultValue = 0;
 	}
 
 	@Override
-	public void setElementDuration(final T element, final IResource resource,
-			final int duration) {
-		final Map<T, Integer> map;
+	public void setElementDuration(final ISequenceElement element, final IResource resource, final int duration) {
+		final Map<ISequenceElement, Integer> map;
 		if (durations.containsKey(resource)) {
 			map = durations.get(resource);
 		} else {
-			map = new HashMap<T, Integer>();
+			map = new HashMap<ISequenceElement, Integer>();
 			durations.put(resource, map);
 		}
 		map.put(element, duration);
 	}
 
 	@Override
-	public int getElementDuration(final T element, final IResource resource) {
+	public int getElementDuration(final ISequenceElement element, final IResource resource) {
 		if (durations.containsKey(resource)) {
-			final Map<T, Integer> map = durations.get(resource);
+			final Map<ISequenceElement, Integer> map = durations.get(resource);
 			if (map.containsKey(element)) {
 				return map.get(element);
 			}
@@ -78,12 +74,12 @@ public final class HashMapElementDurationEditor<T> implements
 	}
 
 	@Override
-	public void setDefaultValue(int defaultValue) {
+	public void setDefaultValue(final int defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 
 	@Override
-	public void setElementDuration(T element, int durationHours) {
+	public void setElementDuration(final ISequenceElement element, final int durationHours) {
 		nonResourceDurations.put(element, durationHours);
 	}
 }

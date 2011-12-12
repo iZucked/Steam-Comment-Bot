@@ -21,6 +21,7 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 
@@ -28,29 +29,23 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 public class MoveSnakeTest {
 	Mockery context = new JUnit4Mockery();
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testApply() {
 
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 		final IResource resource2 = context.mock(IResource.class, "resource2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
 
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
-		final MoveSnake<Object> move = new MoveSnake<Object>();
+		final MoveSnake move = new MoveSnake();
 
 		final int resource1Start = 0;
 		final int resource1End = 2;
@@ -58,19 +53,13 @@ public class MoveSnakeTest {
 		final int resource2Start = 1;
 		final int resource2End = 3;
 
-		move.setFromResources(CollectionsUtil.makeArrayList(resource1,
-				resource2));
-		move
-				.setToResources(CollectionsUtil.makeArrayList(resource2,
-						resource1));
+		move.setFromResources(CollectionsUtil.makeArrayList(resource1, resource2));
+		move.setToResources(CollectionsUtil.makeArrayList(resource2, resource1));
 
-		move.setSegmentStarts(CollectionsUtil.makeArrayList(resource1Start,
-				resource2Start));
-		move.setSegmentEnds(CollectionsUtil.makeArrayList(resource1End,
-				resource2End));
+		move.setSegmentStarts(CollectionsUtil.makeArrayList(resource1Start, resource2Start));
+		move.setSegmentEnds(CollectionsUtil.makeArrayList(resource1End, resource2End));
 
-		move.setInsertionPositions(CollectionsUtil.makeArrayList(
-				resource2Start, resource1Start));
+		move.setInsertionPositions(CollectionsUtil.makeArrayList(resource2Start, resource1Start));
 
 		context.checking(new Expectations() {
 			{
@@ -95,24 +84,17 @@ public class MoveSnakeTest {
 		final IResource resource2 = context.mock(IResource.class, "resource2");
 		final IResource resource3 = context.mock(IResource.class, "resource3");
 
-		final IModifiableSequence<Integer> sequence1 = new ListModifiableSequence<Integer>(
-				CollectionsUtil.makeArrayList(1, 2, 3, 4, 5));
-		final IModifiableSequence<Integer> sequence2 = new ListModifiableSequence<Integer>(
-				CollectionsUtil.makeArrayList(6, 7, 8, 9, 10));
-		final IModifiableSequence<Integer> sequence3 = new ListModifiableSequence<Integer>(
-				CollectionsUtil.makeArrayList(11, 12, 13, 14, 15));
+		final IModifiableSequence sequence1 = OptimiserTestUtil.makeSequence(1, 2, 3, 4, 5);
+		final IModifiableSequence sequence2 = OptimiserTestUtil.makeSequence(6, 7, 8, 9, 10);
+		final IModifiableSequence sequence3 = OptimiserTestUtil.makeSequence(11, 12, 13, 14, 15);
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2, resource3);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2, resource3);
 
-		final Map<IResource, IModifiableSequence<Integer>> sequenceMap = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2,
-						resource3, sequence3);
+		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2, resource3, sequence3);
 
-		final IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
-				resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
-		final MoveSnake<Integer> move = new MoveSnake<Integer>();
+		final MoveSnake move = new MoveSnake();
 
 		final int resource1Start = 0;
 		final int resource1End = 2;
@@ -123,27 +105,19 @@ public class MoveSnakeTest {
 		final int resource3Start = 2;
 		final int resource3End = 4;
 
-		move.setFromResources(CollectionsUtil.makeArrayList(resource1,
-				resource2, resource3));
-		move.setToResources(CollectionsUtil.makeArrayList(resource2, resource3,
-				resource1));
+		move.setFromResources(CollectionsUtil.makeArrayList(resource1, resource2, resource3));
+		move.setToResources(CollectionsUtil.makeArrayList(resource2, resource3, resource1));
 
-		move.setSegmentStarts(CollectionsUtil.makeArrayList(resource1Start,
-				resource2Start, resource3Start));
-		move.setSegmentEnds(CollectionsUtil.makeArrayList(resource1End,
-				resource2End, resource3End));
+		move.setSegmentStarts(CollectionsUtil.makeArrayList(resource1Start, resource2Start, resource3Start));
+		move.setSegmentEnds(CollectionsUtil.makeArrayList(resource1End, resource2End, resource3End));
 
-		move.setInsertionPositions(CollectionsUtil.makeArrayList(
-				resource2Start, resource3Start, resource1Start));
+		move.setInsertionPositions(CollectionsUtil.makeArrayList(resource2Start, resource3Start, resource1Start));
 
 		move.apply(sequences);
 
-		final List<Integer> expectedSequence1 = CollectionsUtil.makeArrayList(
-				13, 14, 3, 4, 5);
-		final List<Integer> expectedSequence2 = CollectionsUtil.makeArrayList(
-				6, 1, 2, 9, 10);
-		final List<Integer> expectedSequence3 = CollectionsUtil.makeArrayList(
-				11, 12, 7, 8, 15);
+		final List<ISequenceElement> expectedSequence1 = OptimiserTestUtil.makeList(13, 14, 3, 4, 5);
+		final List<ISequenceElement> expectedSequence2 = OptimiserTestUtil.makeList(6, 1, 2, 9, 10);
+		final List<ISequenceElement> expectedSequence3 = OptimiserTestUtil.makeList(11, 12, 7, 8, 15);
 
 		Assert.assertEquals(expectedSequence1.size(), sequence1.size());
 		for (int i = 0; i < expectedSequence1.size(); ++i) {
@@ -167,24 +141,17 @@ public class MoveSnakeTest {
 		final IResource resource2 = context.mock(IResource.class, "resource2");
 		final IResource resource3 = context.mock(IResource.class, "resource3");
 
-		final IModifiableSequence<Integer> sequence1 = new ListModifiableSequence<Integer>(
-				CollectionsUtil.makeArrayList(1, 2, 3, 4, 5));
-		final IModifiableSequence<Integer> sequence2 = new ListModifiableSequence<Integer>(
-				CollectionsUtil.makeArrayList(6, 7, 8, 9, 10));
-		final IModifiableSequence<Integer> sequence3 = new ListModifiableSequence<Integer>(
-				CollectionsUtil.makeArrayList(11, 12, 13, 14, 15));
+		final IModifiableSequence sequence1 = OptimiserTestUtil.makeSequence(1, 2, 3, 4, 5);
+		final IModifiableSequence sequence2 = OptimiserTestUtil.makeSequence(6, 7, 8, 9, 10);
+		final IModifiableSequence sequence3 = OptimiserTestUtil.makeSequence(11, 12, 13, 14, 15);
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2, resource3);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2, resource3);
 
-		final Map<IResource, IModifiableSequence<Integer>> sequenceMap = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2,
-						resource3, sequence3);
+		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2, resource3, sequence3);
 
-		final IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
-				resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
-		final MoveSnake<Integer> move = new MoveSnake<Integer>();
+		final MoveSnake move = new MoveSnake();
 
 		final int resource1Start = 0;
 		final int resource1End = 2;
@@ -197,20 +164,15 @@ public class MoveSnakeTest {
 
 		// This should check the null pointer checks in validate
 
-		move.setFromResources(CollectionsUtil.makeArrayList(resource1,
-				resource2, resource3));
+		move.setFromResources(CollectionsUtil.makeArrayList(resource1, resource2, resource3));
 
-		move.setToResources(CollectionsUtil.makeArrayList(resource2, resource3,
-				resource1));
+		move.setToResources(CollectionsUtil.makeArrayList(resource2, resource3, resource1));
 
-		move.setSegmentStarts(CollectionsUtil.makeArrayList(resource1Start,
-				resource2Start, resource3Start));
+		move.setSegmentStarts(CollectionsUtil.makeArrayList(resource1Start, resource2Start, resource3Start));
 
-		move.setSegmentEnds(CollectionsUtil.makeArrayList(resource1End,
-				resource2End, resource3End));
+		move.setSegmentEnds(CollectionsUtil.makeArrayList(resource1End, resource2End, resource3End));
 
-		move.setInsertionPositions(CollectionsUtil.makeArrayList(
-				resource2Start, resource3Start, resource1Start));
+		move.setInsertionPositions(CollectionsUtil.makeArrayList(resource2Start, resource3Start, resource1Start));
 
 		Assert.assertTrue(move.validate(sequences));
 
@@ -252,16 +214,14 @@ public class MoveSnakeTest {
 		// Duplicate froms
 		{
 			final List<IResource> oldFroms = move.getFromResources();
-			move.setFromResources(CollectionsUtil.makeArrayList(resource1,
-					resource1));
+			move.setFromResources(CollectionsUtil.makeArrayList(resource1, resource1));
 			Assert.assertFalse(move.validate(sequences));
 			move.setFromResources(oldFroms);
 		}
 		// Duplicate tos
 		{
 			final List<IResource> oldTos = move.getToResources();
-			move.setToResources(CollectionsUtil.makeArrayList(resource1,
-					resource1));
+			move.setToResources(CollectionsUtil.makeArrayList(resource1, resource1));
 			Assert.assertFalse(move.validate(sequences));
 			move.setToResources(oldTos);
 		}
@@ -307,7 +267,7 @@ public class MoveSnakeTest {
 	@Test
 	public void testGetSetFromResources() {
 
-		final MoveSnake<Object> move = new MoveSnake<Object>();
+		final MoveSnake move = new MoveSnake();
 		Assert.assertNull(move.getFromResources());
 		final List<IResource> fromResources = Collections.emptyList();
 		move.setFromResources(fromResources);
@@ -317,7 +277,7 @@ public class MoveSnakeTest {
 	@Test
 	public void testGetSetToResources() {
 
-		final MoveSnake<Object> move = new MoveSnake<Object>();
+		final MoveSnake move = new MoveSnake();
 		Assert.assertNull(move.getToResources());
 		final List<IResource> toResources = Collections.emptyList();
 		move.setToResources(toResources);
@@ -327,7 +287,7 @@ public class MoveSnakeTest {
 	@Test
 	public void testGetSetSegmentStarts() {
 
-		final MoveSnake<Object> move = new MoveSnake<Object>();
+		final MoveSnake move = new MoveSnake();
 		Assert.assertNull(move.getSegmentStarts());
 		final List<Integer> starts = Collections.emptyList();
 		move.setSegmentStarts(starts);
@@ -337,7 +297,7 @@ public class MoveSnakeTest {
 	@Test
 	public void testGetSetSegmentEnds() {
 
-		final MoveSnake<Object> move = new MoveSnake<Object>();
+		final MoveSnake move = new MoveSnake();
 		Assert.assertNull(move.getSegmentEnds());
 		final List<Integer> ends = Collections.emptyList();
 		move.setSegmentEnds(ends);
@@ -347,7 +307,7 @@ public class MoveSnakeTest {
 	@Test
 	public void testGetSetInsertionPositions() {
 
-		final MoveSnake<Object> move = new MoveSnake<Object>();
+		final MoveSnake move = new MoveSnake();
 		Assert.assertNull(move.getInsertionPositions());
 		final List<Integer> inserts = Collections.emptyList();
 		move.setInsertionPositions(inserts);
@@ -359,7 +319,7 @@ public class MoveSnakeTest {
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 		final IResource resource2 = context.mock(IResource.class, "resource2");
 
-		final MoveSnake<Integer> move = new MoveSnake<Integer>();
+		final MoveSnake move = new MoveSnake();
 
 		move.setFromResources(CollectionsUtil.makeArrayList(resource1));
 

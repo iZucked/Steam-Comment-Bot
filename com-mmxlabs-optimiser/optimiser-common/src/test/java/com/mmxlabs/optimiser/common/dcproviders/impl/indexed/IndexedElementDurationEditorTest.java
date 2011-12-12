@@ -20,121 +20,98 @@ public class IndexedElementDurationEditorTest {
 
 		final String name = "name";
 
-		final IndexedElementDurationEditor<MockIndexedObject> provider = new IndexedElementDurationEditor<MockIndexedObject>(
-				name);
+		final IndexedElementDurationEditor provider = new IndexedElementDurationEditor(name);
 
 		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testGetSetElementDuration() {
-		final IndexedElementDurationEditor<MockIndexedObject> provider = new IndexedElementDurationEditor<MockIndexedObject>(
-				"name");
+		final IndexedElementDurationEditor provider = new IndexedElementDurationEditor("name");
 
 		final Resource r1 = new Resource(index);
 		final Resource r2 = new Resource(index);
-		final MockIndexedObject obj = new MockIndexedObject(1);
+		final MockSequenceElement obj = new MockSequenceElement(1);
 
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj, r1));
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj, r2));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r1));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
 
 		provider.setElementDuration(obj, r1, 10);
 
 		Assert.assertEquals(10, provider.getElementDuration(obj, r1));
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj, r2));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
 	}
 
 	@Test
 	public void testGetSetElementDuration2() {
-		final IndexedElementDurationEditor<MockIndexedObject> provider = new IndexedElementDurationEditor<MockIndexedObject>(
-				"name");
+		final IndexedElementDurationEditor provider = new IndexedElementDurationEditor("name");
 
 		final Resource r1 = new Resource(index);
 		final Resource r2 = new Resource(index);
-		final MockIndexedObject obj1 = new MockIndexedObject(1);
-		final MockIndexedObject obj2 = new MockIndexedObject(2);
+		final MockSequenceElement obj1 = new MockSequenceElement(1);
+		final MockSequenceElement obj2 = new MockSequenceElement(2);
 
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj1, r1));
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj1, r2));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r1));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r2));
 
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj2, r1));
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj2, r2));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r1));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r2));
 
 		provider.setElementDuration(obj1, r1, 10);
 		provider.setElementDuration(obj2, r1, 20);
 
 		Assert.assertEquals(10, provider.getElementDuration(obj1, r1));
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj1, r2));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r2));
 		Assert.assertEquals(20, provider.getElementDuration(obj2, r1));
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj2, r2));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r2));
 	}
 
 	@Test
 	public void testGetSetElementDuration3() {
-		final IndexedElementDurationEditor<MockIndexedObject> provider = new IndexedElementDurationEditor<MockIndexedObject>(
-				"name");
+		final IndexedElementDurationEditor provider = new IndexedElementDurationEditor("name");
 
 		final Resource r1 = new Resource(index);
-		final MockIndexedObject obj1 = new MockIndexedObject(1);
-		final MockIndexedObject obj2 = new MockIndexedObject(2);
+		final MockSequenceElement obj1 = new MockSequenceElement(1);
+		final MockSequenceElement obj2 = new MockSequenceElement(2);
 
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj1, r1));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r1));
 
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj2, r1));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r1));
 
 		provider.setElementDuration(obj1, r1, 10);
 
 		Assert.assertEquals(10, provider.getElementDuration(obj1, r1));
 
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj2, r1));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r1));
 
 	}
 
 	@Test
 	public void testDispose() {
-		final IndexedElementDurationEditor<MockIndexedObject> provider = new IndexedElementDurationEditor<MockIndexedObject>(
-				"name");
+		final IndexedElementDurationEditor provider = new IndexedElementDurationEditor("name");
 
 		final Resource r1 = new Resource(index);
 		final Resource r2 = new Resource(index);
-		final MockIndexedObject obj = new MockIndexedObject(1);
+		final MockSequenceElement obj = new MockSequenceElement(1);
 
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj, r1));
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj, r2));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r1));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
 		provider.setElementDuration(obj, r1, 10);
 
 		Assert.assertEquals(10, provider.getElementDuration(obj, r1));
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj, r2));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
 
 		provider.dispose();
 
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj, r1));
-		Assert.assertEquals(provider.getDefaultValue(),
-				provider.getElementDuration(obj, r2));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r1));
+		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
 
 	}
 
 	@Test
 	public void testGetSetDefaultValue() {
 
-		final IndexedElementDurationEditor<MockIndexedObject> provider = new IndexedElementDurationEditor<MockIndexedObject>(
-				"name");
+		final IndexedElementDurationEditor provider = new IndexedElementDurationEditor("name");
 
 		Assert.assertEquals(0, provider.getDefaultValue());
 

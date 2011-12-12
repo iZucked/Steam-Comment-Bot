@@ -20,11 +20,9 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * implemented as a Fitness Function.
  * 
  * @author Simon Goodall
- * 
- * @param <T>
- *            Sequence element type
- */
-public interface IConstraintChecker<T> {
+ *
+ */ 
+public interface IConstraintChecker {
 
 	/**
 	 * Returns the name uniquely identifying this constraint checker.
@@ -41,7 +39,7 @@ public interface IConstraintChecker<T> {
 	 * @param sequences
 	 * @return Returns true if all constraints are satisfied.
 	 */
-	boolean checkConstraints(ISequences<T> sequences);
+	boolean checkConstraints(ISequences sequences);
 
 	/**
 	 * Check the {@link ISequences} object for constraint violations. Returns
@@ -55,7 +53,7 @@ public interface IConstraintChecker<T> {
 	 *            List which may be used to store constraint violation messages.
 	 * @return Returns true if all constraints are satisfied.
 	 */
-	boolean checkConstraints(ISequences<T> sequences, List<String> messages);
+	boolean checkConstraints(ISequences sequences, List<String> messages);
 
 	/**
 	 * Provide the {@link IConstraintChecker} with the {@link IOptimisationData}
@@ -63,5 +61,5 @@ public interface IConstraintChecker<T> {
 	 * 
 	 * @param optimisationData
 	 */
-	void setOptimisationData(IOptimisationData<T> optimisationData);
+	void setOptimisationData(IOptimisationData optimisationData);
 }

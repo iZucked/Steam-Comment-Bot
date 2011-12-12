@@ -17,34 +17,32 @@ import com.mmxlabs.optimiser.core.ISequences;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class AnnotatedSolution<T> implements IAnnotatedSolution<T> {
+public final class AnnotatedSolution implements IAnnotatedSolution {
 
-	private ISequences<T> sequences;
+	private ISequences sequences;
 
-	private IOptimisationContext<T> context;
+	private IOptimisationContext context;
 
-	private IAnnotations<T> elementAnnotations = new HashMapAnnotations<T>();
+	private IAnnotations elementAnnotations = new HashMapAnnotations();
 	
 	private Map<String, Object> generalAnnotations = new HashMap<String, Object>();
 	
 	@Override
-	public ISequences<T> getSequences() {
+	public ISequences getSequences() {
 		return sequences;
 	}
 
-	public void setSequences(final ISequences<T> sequences) {
+	public void setSequences(final ISequences sequences) {
 		this.sequences = sequences;
 	}
 
 	@Override
-	public IOptimisationContext<T> getContext() {
+	public IOptimisationContext getContext() {
 		return context;
 	}
 
-	public void setContext(final IOptimisationContext<T> context) {
+	public void setContext(final IOptimisationContext context) {
 		this.context = context;
 	}
 
@@ -57,7 +55,7 @@ public final class AnnotatedSolution<T> implements IAnnotatedSolution<T> {
 	}
 
 	@Override
-	public IAnnotations<T> getElementAnnotations() {
+	public IAnnotations getElementAnnotations() {
 		return elementAnnotations;
 	}
 	

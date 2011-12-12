@@ -5,8 +5,7 @@
 package com.mmxlabs.optimiser.core.constraints;
 
 /**
- * Interface defining a factory for creating {@link IConstraintChecker}
- * instances.
+ * Interface defining a factory for creating {@link IConstraintChecker} instances.
  * 
  * @author Simon Goodall
  * 
@@ -14,19 +13,16 @@ package com.mmxlabs.optimiser.core.constraints;
 public interface IConstraintCheckerFactory {
 
 	/**
-	 * Returns the name of the {@link IConstraintChecker}. This is expected to
-	 * be the same as {@link IConstraintChecker#getName()}
+	 * Returns the name of the {@link IConstraintChecker}. This is expected to be the same as {@link IConstraintChecker#getName()}
 	 * 
 	 * @return
 	 */
 	String getName();
 
 	/**
-	 * Instantiate an instance of the {@link IConstraintChecker} this factory
-	 * creates.
+	 * Instantiate an instance of the {@link IConstraintChecker} this factory creates.
 	 * 
-	 * @param <T>
 	 * @return
 	 */
-	<T> IConstraintChecker<T> instantiate();
+	IConstraintChecker instantiate();
 }

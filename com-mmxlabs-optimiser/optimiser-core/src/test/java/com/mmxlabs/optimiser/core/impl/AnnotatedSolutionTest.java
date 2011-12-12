@@ -16,7 +16,6 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 
 @RunWith(JMock.class)
-@SuppressWarnings({ "unchecked", "rawtypes" })
 public class AnnotatedSolutionTest {
 
 	Mockery context = new JUnit4Mockery();

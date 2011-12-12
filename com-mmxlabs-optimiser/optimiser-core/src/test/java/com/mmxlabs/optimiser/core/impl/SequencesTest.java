@@ -18,10 +18,8 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.impl.Sequences;
 
 @RunWith(JMock.class)
-@SuppressWarnings("unchecked")
 public class SequencesTest {
 
 	Mockery context = new JUnit4Mockery();
@@ -38,7 +36,7 @@ public class SequencesTest {
 		final List<IResource> resources = CollectionsUtil.makeArrayList(
 				resource1, resource2);
 
-		final Sequences<Object> sequences = new Sequences<Object>(resources);
+		final Sequences sequences = new Sequences(resources);
 
 		Assert.assertEquals(2, sequences.size());
 
@@ -65,18 +63,18 @@ public class SequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final ISequence<Object> sequence1 = context.mock(ISequence.class,
+		final ISequence sequence1 = context.mock(ISequence.class,
 				"sequence1");
-		final ISequence<Object> sequence2 = context.mock(ISequence.class,
+		final ISequence sequence2 = context.mock(ISequence.class,
 				"sequence2");
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(
 				resource1, resource2);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+		final Map<IResource, ISequence> map = CollectionsUtil
 				.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences<Object> sequences = new Sequences<Object>(resources,
+		final Sequences sequences = new Sequences(resources,
 				map);
 
 		Assert.assertEquals(2, sequences.size());
@@ -100,18 +98,18 @@ public class SequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final ISequence<Object> sequence1 = context.mock(ISequence.class,
+		final ISequence sequence1 = context.mock(ISequence.class,
 				"sequence1");
-		final ISequence<Object> sequence2 = context.mock(ISequence.class,
+		final ISequence sequence2 = context.mock(ISequence.class,
 				"sequence2");
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(
 				resource1, resource2);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+		final Map<IResource, ISequence> map = CollectionsUtil
 				.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences<Object> initialSequences = new Sequences<Object>(
+		final Sequences initialSequences = new Sequences(
 				resources, map);
 
 		context.checking(new Expectations() {
@@ -120,7 +118,7 @@ public class SequencesTest {
 				allowing(sequence2);
 			}
 		});
-		final Sequences<Object> sequences = new Sequences<Object>(
+		final Sequences sequences = new Sequences(
 				initialSequences);
 
 		Assert.assertEquals(2, sequences.size());
@@ -152,7 +150,7 @@ public class SequencesTest {
 		final List<IResource> resources = CollectionsUtil.makeArrayList(
 				resource1, resource2);
 
-		final Sequences<Object> sequences = new Sequences<Object>(resources);
+		final Sequences sequences = new Sequences(resources);
 
 		Assert.assertEquals(2, sequences.size());
 
@@ -170,18 +168,18 @@ public class SequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final ISequence<Object> sequence1 = context.mock(ISequence.class,
+		final ISequence sequence1 = context.mock(ISequence.class,
 				"sequence1");
-		final ISequence<Object> sequence2 = context.mock(ISequence.class,
+		final ISequence sequence2 = context.mock(ISequence.class,
 				"sequence2");
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(
 				resource1, resource2);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+		final Map<IResource, ISequence> map = CollectionsUtil
 				.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences<Object> sequences = new Sequences<Object>(resources,
+		final Sequences sequences = new Sequences(resources,
 				map);
 
 		Assert.assertEquals(2, sequences.size());
@@ -200,18 +198,18 @@ public class SequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final ISequence<Object> sequence1 = context.mock(ISequence.class,
+		final ISequence sequence1 = context.mock(ISequence.class,
 				"sequence1");
-		final ISequence<Object> sequence2 = context.mock(ISequence.class,
+		final ISequence sequence2 = context.mock(ISequence.class,
 				"sequence2");
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(
 				resource1, resource2);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+		final Map<IResource, ISequence> map = CollectionsUtil
 				.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences<Object> sequences = new Sequences<Object>(resources,
+		final Sequences sequences = new Sequences(resources,
 				map);
 
 		Assert.assertEquals(2, sequences.size());
@@ -230,23 +228,23 @@ public class SequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final ISequence<Object> sequence1 = context.mock(ISequence.class,
+		final ISequence sequence1 = context.mock(ISequence.class,
 				"sequence1");
-		final ISequence<Object> sequence2 = context.mock(ISequence.class,
+		final ISequence sequence2 = context.mock(ISequence.class,
 				"sequence2");
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(
 				resource1, resource2);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+		final Map<IResource, ISequence> map = CollectionsUtil
 				.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences<Object> sequences = new Sequences<Object>(resources,
+		final Sequences sequences = new Sequences(resources,
 				map);
 
 		Assert.assertEquals(2, sequences.size());
 
-		Map<IResource, ISequence<Object>> sequencesMap = sequences
+		Map<IResource, ISequence> sequencesMap = sequences
 				.getSequences();
 
 		Assert.assertTrue(sequencesMap.containsKey(resource1));
@@ -264,18 +262,18 @@ public class SequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final ISequence<Object> sequence1 = context.mock(ISequence.class,
+		final ISequence sequence1 = context.mock(ISequence.class,
 				"sequence1");
-		final ISequence<Object> sequence2 = context.mock(ISequence.class,
+		final ISequence sequence2 = context.mock(ISequence.class,
 				"sequence2");
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(
 				resource1, resource2);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
+		final Map<IResource, ISequence> map = CollectionsUtil
 				.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences<Object> sequences = new Sequences<Object>(resources,
+		final Sequences sequences = new Sequences(resources,
 				map);
 
 		Assert.assertEquals(2, sequences.size());

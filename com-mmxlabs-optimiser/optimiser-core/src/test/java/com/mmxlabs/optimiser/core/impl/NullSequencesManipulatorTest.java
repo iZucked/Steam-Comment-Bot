@@ -18,14 +18,13 @@ import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 public class NullSequencesManipulatorTest {
 
 	Mockery context = new JUnit4Mockery();
-	
-	@SuppressWarnings("unchecked")
+
 	@Test
 	public void testManipulate() {
-		final IModifiableSequences<Object> sequences = context.mock(IModifiableSequences.class);
-		
-		final NullSequencesManipulator<Object> manipulator = new NullSequencesManipulator<Object>();
-		
+		final IModifiableSequences sequences = context.mock(IModifiableSequences.class);
+
+		final NullSequencesManipulator manipulator = new NullSequencesManipulator();
+
 		context.checking(new Expectations() {
 			{
 				// Expect nothing to happen
@@ -33,7 +32,7 @@ public class NullSequencesManipulatorTest {
 		});
 
 		manipulator.manipulate(sequences);
-		
+
 		context.assertIsSatisfied();
 	}
 }

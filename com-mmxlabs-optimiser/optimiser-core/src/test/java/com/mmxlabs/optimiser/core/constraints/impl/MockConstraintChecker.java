@@ -10,7 +10,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
-public class MockConstraintChecker<T> implements IConstraintChecker<T> {
+public class MockConstraintChecker implements IConstraintChecker {
 
 	private final String name;
 
@@ -19,13 +19,12 @@ public class MockConstraintChecker<T> implements IConstraintChecker<T> {
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences<T> sequences) {
+	public boolean checkConstraints(final ISequences sequences) {
 		return true;
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences<T> sequences,
-			final List<String> messages) {
+	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
 		return true;
 	}
 
@@ -35,7 +34,7 @@ public class MockConstraintChecker<T> implements IConstraintChecker<T> {
 	}
 
 	@Override
-	public void setOptimisationData(final IOptimisationData<T> optimisationData) {
+	public void setOptimisationData(final IOptimisationData optimisationData) {
 
 	}
 }

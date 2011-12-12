@@ -23,43 +23,36 @@ import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 /**
- * Main class implementing a Local Search Optimiser. While the actual
- * optimisation loop is left to sub-classes, this class provides the bulk of the
- * implementation to simplify such loops.
+ * Main class implementing a Local Search Optimiser. While the actual optimisation loop is left to sub-classes, this class provides the bulk of the implementation to simplify such loops.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence Element Type
  */
-public abstract class LocalSearchOptimiser<T> implements
-		ILocalSearchOptimiser<T> {
+public abstract class LocalSearchOptimiser implements ILocalSearchOptimiser {
 
-	private IMoveGenerator<T> moveGenerator;
+	private IMoveGenerator moveGenerator;
 
 	private int numberOfIterations;
 
 	private int numberOfIterationsCompleted;
-	
-	private List<IConstraintChecker<T>> constraintCheckers;
 
-	private IFitnessEvaluator<T> fitnessEvaluator;
+	private List<IConstraintChecker> constraintCheckers;
 
-	private ISequencesManipulator<T> sequenceManipulator;
+	private IFitnessEvaluator fitnessEvaluator;
 
-	private IOptimiserProgressMonitor<T> progressMonitor;
+	private ISequencesManipulator sequenceManipulator;
+
+	private IOptimiserProgressMonitor progressMonitor;
 
 	private int reportInterval = -1;
-	
-	private IOptimisationContext<T> currentContext;
+
+	private IOptimisationContext currentContext;
 
 	private long startTime;
-	
+
 	/**
-	 * Initialise method checking the object has all the correct pieces of data
-	 * to be able to perform the
-	 * {@link #optimise(IOptimisationContext, Collection, Object)} method.
-	 * Throws an {@link IllegalStateException} on error.
+	 * Initialise method checking the object has all the correct pieces of data to be able to perform the {@link #optimise(IOptimisationContext, Collection, Object)} method. Throws an
+	 * {@link IllegalStateException} on error.
 	 */
 	public void init() {
 		if (moveGenerator == null) {
@@ -67,13 +60,11 @@ public abstract class LocalSearchOptimiser<T> implements
 		}
 
 		if (numberOfIterations < 1) {
-			throw new IllegalStateException(
-					"Number of iterations is less than 1");
+			throw new IllegalStateException("Number of iterations is less than 1");
 		}
 
 		if (constraintCheckers == null) {
-			throw new IllegalStateException(
-					"Constraint Checkers list is not set");
+			throw new IllegalStateException("Constraint Checkers list is not set");
 		}
 
 		if (fitnessEvaluator == null) {
@@ -92,84 +83,67 @@ public abstract class LocalSearchOptimiser<T> implements
 			throw new IllegalStateException("Report interval is not set");
 		}
 	}
-	
+
 	/**
-	 * A default optimisation loop, which calls start() and then step() until
-	 * done, and notifies the progress monitor. Subclasses will need to
-	 * implement these.
+	 * A default optimisation loop, which calls start() and then step() until done, and notifies the progress monitor. Subclasses will need to implement these.
 	 */
 	@Override
-	public void optimise(final IOptimisationContext<T> optimiserContext) {
-		final IAnnotatedSolution<T> startSolution = start(optimiserContext);
-		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(),
-				startSolution);
-		final int percentage = (100 * getReportInterval())
-				/ getNumberOfIterations();
+	public void optimise(final IOptimisationContext optimiserContext) {
+		final IAnnotatedSolution startSolution = start(optimiserContext);
+		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(), startSolution);
+		final int percentage = (100 * getReportInterval()) / getNumberOfIterations();
 
 		numberOfIterationsCompleted = 0;
 
 		while (getNumberOfIterationsCompleted() < getNumberOfIterations()) {
 			step(percentage);
-			getProgressMonitor().report(this, getNumberOfIterationsCompleted(),
-					fitnessEvaluator.getCurrentFitness(),
-					fitnessEvaluator.getBestFitness(), getCurrentSolution(false),
+			getProgressMonitor().report(this, getNumberOfIterationsCompleted(), fitnessEvaluator.getCurrentFitness(), fitnessEvaluator.getBestFitness(), getCurrentSolution(false),
 					getBestSolution(false));
 		}
 
-		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(),
-				getBestSolution(true));
+		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(), getBestSolution(true));
 	}
-	
-	public IAnnotatedSolution<T> getBestSolution(final boolean forExport) {
-		final IAnnotatedSolution<T> annotatedSolution = fitnessEvaluator
-				.getBestAnnotatedSolution(currentContext, forExport);
+
+	public IAnnotatedSolution getBestSolution(final boolean forExport) {
+		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getBestAnnotatedSolution(currentContext, forExport);
 		final long clock = System.currentTimeMillis() - getStartTime();
 
-		annotatedSolution.setGeneralAnnotation(
-				OptimiserConstants.G_AI_iterations, getNumberOfIterationsCompleted());
-		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime,
-				clock);
+		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, getNumberOfIterationsCompleted());
+		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, clock);
 
 		return annotatedSolution;
 	}
 
-	public IAnnotatedSolution<T> getCurrentSolution(final boolean forExport) {
-		final IAnnotatedSolution<T> annotatedSolution = fitnessEvaluator
-				.getCurrentAnnotatedSolution(currentContext, forExport);
+	public IAnnotatedSolution getCurrentSolution(final boolean forExport) {
+		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getCurrentAnnotatedSolution(currentContext, forExport);
 		final long clock = System.currentTimeMillis() - getStartTime();
 
-		annotatedSolution.setGeneralAnnotation(
-				OptimiserConstants.G_AI_iterations, getNumberOfIterationsCompleted());
-		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime,
-				clock);
+		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, getNumberOfIterationsCompleted());
+		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, clock);
 
 		return annotatedSolution;
 	}
-	
+
 	public boolean isFinished() {
 		return getNumberOfIterationsCompleted() >= getNumberOfIterations();
 	}
 
 	/**
-	 * Copy the {@link ISequences} for the specified {@link IResource}s from the
-	 * source sequences to the destination sequences.
+	 * Copy the {@link ISequences} for the specified {@link IResource}s from the source sequences to the destination sequences.
 	 * 
 	 * @param source
 	 * @param destination
 	 * @param affectedResources
 	 */
-	protected void updateSequences(final ISequences<T> source,
-			final IModifiableSequences<T> destination,
-			final Collection<IResource> affectedResources) {
+	protected void updateSequences(final ISequences source, final IModifiableSequences destination, final Collection<IResource> affectedResources) {
 
 		for (final IResource resource : affectedResources) {
 			// Get source sequence
-			final ISequence<T> sourceSequence = source.getSequence(resource);
+			final ISequence sourceSequence = source.getSequence(resource);
 			assert sourceSequence != null;
 
 			// Get destination sequence
-			final IModifiableSequence<T> destinationSequence = destination
-					.getModifiableSequence(resource);
+			final IModifiableSequence destinationSequence = destination.getModifiableSequence(resource);
 			assert destinationSequence != null;
 
 			// Replace all entries in the destination with those in the source
@@ -177,12 +151,12 @@ public abstract class LocalSearchOptimiser<T> implements
 		}
 	}
 
-	public final void setMoveGenerator(final IMoveGenerator<T> moveGenerator) {
+	public final void setMoveGenerator(final IMoveGenerator moveGenerator) {
 		this.moveGenerator = moveGenerator;
 	}
 
 	@Override
-	public final IMoveGenerator<T> getMoveGenerator() {
+	public final IMoveGenerator getMoveGenerator() {
 		return moveGenerator;
 	}
 
@@ -195,42 +169,38 @@ public abstract class LocalSearchOptimiser<T> implements
 		return numberOfIterations;
 	}
 
-	public final void setConstraintCheckers(
-			final List<IConstraintChecker<T>> constraintCheckers) {
+	public final void setConstraintCheckers(final List<IConstraintChecker> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
 	}
 
 	@Override
-	public final List<IConstraintChecker<T>> getConstraintCheckers() {
+	public final List<IConstraintChecker> getConstraintCheckers() {
 		return constraintCheckers;
 	}
 
-	public final void setFitnessEvaluator(
-			final IFitnessEvaluator<T> fitnessEvaluator) {
+	public final void setFitnessEvaluator(final IFitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
 	}
 
 	@Override
-	public final IFitnessEvaluator<T> getFitnessEvaluator() {
+	public final IFitnessEvaluator getFitnessEvaluator() {
 		return fitnessEvaluator;
 	}
 
-	public final void setSequenceManipulator(
-			final ISequencesManipulator<T> sequenceManipulator) {
+	public final void setSequenceManipulator(final ISequencesManipulator sequenceManipulator) {
 		this.sequenceManipulator = sequenceManipulator;
 	}
 
 	@Override
-	public final ISequencesManipulator<T> getSequenceManipulator() {
+	public final ISequencesManipulator getSequenceManipulator() {
 		return sequenceManipulator;
 	}
 
-	public final IOptimiserProgressMonitor<T> getProgressMonitor() {
+	public final IOptimiserProgressMonitor getProgressMonitor() {
 		return progressMonitor;
 	}
 
-	public final void setProgressMonitor(
-			IOptimiserProgressMonitor<T> progressMonitor) {
+	public final void setProgressMonitor(final IOptimiserProgressMonitor progressMonitor) {
 		this.progressMonitor = progressMonitor;
 	}
 
@@ -238,23 +208,23 @@ public abstract class LocalSearchOptimiser<T> implements
 		return reportInterval;
 	}
 
-	public final void setReportInterval(int reportInterval) {
+	public final void setReportInterval(final int reportInterval) {
 		this.reportInterval = reportInterval;
 	}
-	
+
 	public int getNumberOfIterationsCompleted() {
 		return numberOfIterationsCompleted;
 	}
 
-	public void setNumberOfIterationsCompleted(int numberOfIterationsCompleted) {
+	public void setNumberOfIterationsCompleted(final int numberOfIterationsCompleted) {
 		this.numberOfIterationsCompleted = numberOfIterationsCompleted;
 	}
-	
-	protected IOptimisationContext<T> getCurrentContext() {
+
+	protected IOptimisationContext getCurrentContext() {
 		return currentContext;
 	}
 
-	protected void setCurrentContext(IOptimisationContext<T> currentContext) {
+	protected void setCurrentContext(final IOptimisationContext currentContext) {
 		this.currentContext = currentContext;
 	}
 
@@ -262,7 +232,7 @@ public abstract class LocalSearchOptimiser<T> implements
 		return startTime;
 	}
 
-	protected void setStartTime(long startTime) {
+	protected void setStartTime(final long startTime) {
 		this.startTime = startTime;
 	}
 

@@ -5,21 +5,19 @@
 package com.mmxlabs.optimiser.common.dcproviders;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
  * Editor version of the {@link IElementDurationProvider} interface.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IElementDurationProviderEditor<T> extends
-		IElementDurationProvider<T> {
+public interface IElementDurationProviderEditor extends IElementDurationProvider {
 
-	void setElementDuration(T element, IResource resource, int duration);
+	void setElementDuration(ISequenceElement element, IResource resource, int duration);
 
 	void setDefaultValue(int defaultValue);
 
-	void setElementDuration(T element, int durationHours);
+	void setElementDuration(ISequenceElement element, int durationHours);
 }

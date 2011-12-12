@@ -13,13 +13,10 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.impl.Move4over2;
 
-public final class Move4over2GeneratorUnit<T> implements
-		IRandomMoveGeneratorUnit<T> {
+public final class Move4over2GeneratorUnit implements IRandomMoveGeneratorUnit {
 
 	@Override
-	public IMove<T> generateRandomMove(
-			final RandomMoveGenerator<T> moveGenerator,
-			final ISequences<T> sequences) {
+	public IMove generateRandomMove(final RandomMoveGenerator moveGenerator, final ISequences sequences) {
 
 		final Random random = moveGenerator.getRandom();
 
@@ -40,8 +37,8 @@ public final class Move4over2GeneratorUnit<T> implements
 			resource2 = random.nextInt(numResources);
 		}
 
-		final ISequence<T> sequence1 = sequences.getSequence(resource1);
-		final ISequence<T> sequence2 = sequences.getSequence(resource2);
+		final ISequence sequence1 = sequences.getSequence(resource1);
+		final ISequence sequence2 = sequences.getSequence(resource2);
 
 		final int[] resource1StartEnd = new int[2];
 		moveGenerator.generateSortedBreakPoints(sequence1, resource1StartEnd);
@@ -50,7 +47,7 @@ public final class Move4over2GeneratorUnit<T> implements
 		moveGenerator.generateSortedBreakPoints(sequence2, resource2StartEnd);
 
 		// Create new move
-		final Move4over2<T> move = new Move4over2<T>();
+		final Move4over2 move = new Move4over2();
 
 		// Set resources
 		move.setResource1(resources.get(resource1));

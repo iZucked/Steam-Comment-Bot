@@ -26,7 +26,6 @@ public class LinearFitnessCombinerTest {
 		Assert.assertSame(weights, combiner.getFitnessComponentWeights());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testCalculateFitness() {
 
@@ -36,23 +35,19 @@ public class LinearFitnessCombinerTest {
 		final LinearFitnessCombiner combiner = new LinearFitnessCombiner();
 		Assert.assertNull(combiner.getFitnessComponentWeights());
 
-		final Map<String, Double> weights = CollectionsUtil.makeHashMap(c1Name,
-				2.0, c2Name, 1.0);
+		final Map<String, Double> weights = CollectionsUtil.makeHashMap(c1Name, 2.0, c2Name, 1.0);
 		combiner.setFitnessComponentWeights(weights);
 		Assert.assertSame(weights, combiner.getFitnessComponentWeights());
 
-		final IFitnessComponent<Object> c1 = new MockFitnessComponent(c1Name,
-				500);
-		final IFitnessComponent<Object> c2 = new MockFitnessComponent(c2Name,
-				1000);
+		final IFitnessComponent c1 = new MockFitnessComponent(c1Name, 500);
+		final IFitnessComponent c2 = new MockFitnessComponent(c2Name, 1000);
 
-		final long f = combiner.calculateFitness(CollectionsUtil.makeArrayList(
-				c1, c2));
+		final long f = combiner.calculateFitness(CollectionsUtil.makeArrayList(c1, c2));
 
 		Assert.assertEquals(2000l, f);
 	}
 
-	private static class MockFitnessComponent implements IFitnessComponent<Object> {
+	private static class MockFitnessComponent implements IFitnessComponent {
 
 		private final String name;
 
@@ -74,7 +69,7 @@ public class LinearFitnessCombinerTest {
 		}
 
 		@Override
-		public IFitnessCore<Object> getFitnessCore() {
+		public IFitnessCore getFitnessCore() {
 			throw new UnsupportedOperationException("Unexpected invocation");
 		}
 

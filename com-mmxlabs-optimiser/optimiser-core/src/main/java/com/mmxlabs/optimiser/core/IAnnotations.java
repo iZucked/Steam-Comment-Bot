@@ -6,11 +6,12 @@ package com.mmxlabs.optimiser.core;
 
 import java.util.Map;
 
+
 /**
  * @author hinton
- *
+ * 
  */
-public interface IAnnotations<T> {
+public interface IAnnotations {
 	/**
 	 * Store an annotation object for the specified element under the given key.
 	 * 
@@ -18,7 +19,7 @@ public interface IAnnotations<T> {
 	 * @param key
 	 * @param value
 	 */
-	void setAnnotation(T element, String key, Object value);
+	void setAnnotation(ISequenceElement element, String key, Object value);
 
 	/**
 	 * Return an additional data object tied to the given sequence element.
@@ -28,7 +29,7 @@ public interface IAnnotations<T> {
 	 * @param clz
 	 * @return
 	 */
-	<U> U getAnnotation(T element, String key, Class<U> clz);
+	<U> U getAnnotation(ISequenceElement element, String key, Class<U> clz);
 
 	/**
 	 * Returns true if the given element has an annotation under the given key.
@@ -37,16 +38,15 @@ public interface IAnnotations<T> {
 	 * @param key
 	 * @return
 	 */
-	boolean hasAnnotation(T element, String key);
+	boolean hasAnnotation(ISequenceElement element, String key);
 
 	/**
-	 * Returns an iterable over all the keys for which the given element
-	 * has an annotation set.
+	 * Returns an {@link Iterable} over all the keys for which the given element has an annotation set.
 	 * 
 	 * @param element
 	 * @return
 	 */
-	Iterable<String> getAnnotationNames(T element);
-	
-	Map<String, Object> getAnnotations(T element);
+	Iterable<String> getAnnotationNames(ISequenceElement element);
+
+	Map<String, Object> getAnnotations(ISequenceElement element);
 }

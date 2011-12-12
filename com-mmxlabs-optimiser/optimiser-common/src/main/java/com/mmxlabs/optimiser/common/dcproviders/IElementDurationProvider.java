@@ -5,6 +5,7 @@
 package com.mmxlabs.optimiser.common.dcproviders;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
 /**
@@ -12,10 +13,8 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IElementDurationProvider<T> extends IDataComponentProvider {
+public interface IElementDurationProvider extends IDataComponentProvider {
 
 	/**
 	 * Return the duration set for the given element for the {@link IResource}
@@ -26,7 +25,7 @@ public interface IElementDurationProvider<T> extends IDataComponentProvider {
 	 * @param resource
 	 * @return
 	 */
-	int getElementDuration(T element, IResource resource);
+	int getElementDuration(ISequenceElement element, IResource resource);
 
 	/**
 	 * The default element duration.

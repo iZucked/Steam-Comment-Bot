@@ -22,26 +22,20 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * Basic implementation of {@link IFitnessHelper}.
  * 
  * @author Simon Goodall
- * 
- * @param <T>
- *            Sequence element type
  */
-public final class FitnessHelper<T> implements IFitnessHelper<T> {
+public final class FitnessHelper implements IFitnessHelper {
 
 	@Override
-	public boolean evaluateSequencesFromComponents(
-			final ISequences<T> sequences,
-			final Collection<IFitnessComponent<T>> fitnessComponents) {
-		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
+	public boolean evaluateSequencesFromComponents(final ISequences sequences, final Collection<IFitnessComponent> fitnessComponents) {
+		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 
 		return evaluateSequencesFromCores(sequences, fitnessCores);
 	}
 
 	@Override
-	public boolean evaluateSequencesFromCores(final ISequences<T> sequences,
-			final Collection<IFitnessCore<T>> fitnessCores) {
+	public boolean evaluateSequencesFromCores(final ISequences sequences, final Collection<IFitnessCore> fitnessCores) {
 
-		for (final IFitnessCore<T> core : fitnessCores) {
+		for (final IFitnessCore core : fitnessCores) {
 			if (!core.evaluate(sequences)) {
 				return false;
 			}
@@ -50,22 +44,16 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 	}
 
 	@Override
-	public boolean evaluateSequencesFromComponents(
-			final ISequences<T> sequences,
-			final Collection<IFitnessComponent<T>> fitnessComponents,
-			final Collection<IResource> affectedResources) {
-		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
+	public boolean evaluateSequencesFromComponents(final ISequences sequences, final Collection<IFitnessComponent> fitnessComponents, final Collection<IResource> affectedResources) {
+		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 
-		return evaluateSequencesFromCores(sequences, fitnessCores,
-				affectedResources);
+		return evaluateSequencesFromCores(sequences, fitnessCores, affectedResources);
 
 	}
 
 	@Override
-	public boolean evaluateSequencesFromCores(final ISequences<T> sequences,
-			final Collection<IFitnessCore<T>> fitnessCores,
-			final Collection<IResource> affectedResources) {
-		for (final IFitnessCore<T> core : fitnessCores) {
+	public boolean evaluateSequencesFromCores(final ISequences sequences, final Collection<IFitnessCore> fitnessCores, final Collection<IResource> affectedResources) {
+		for (final IFitnessCore core : fitnessCores) {
 			if (!core.evaluate(sequences, affectedResources))
 				return false;
 		}
@@ -73,64 +61,52 @@ public final class FitnessHelper<T> implements IFitnessHelper<T> {
 	}
 
 	@Override
-	public void initFitnessComponents(
-			final Collection<IFitnessComponent<T>> fitnessComponents,
-			final IOptimisationData<T> data) {
-		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
+	public void initFitnessComponents(final Collection<IFitnessComponent> fitnessComponents, final IOptimisationData data) {
+		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 		initFitnessCores(fitnessCores, data);
 
 	}
 
 	@Override
-	public Set<IFitnessCore<T>> getFitnessCores(
-			final Collection<IFitnessComponent<T>> fitnessComponents) {
-		final Set<IFitnessCore<T>> fitnessCores = new HashSet<IFitnessCore<T>>();
-		for (final IFitnessComponent<T> component : fitnessComponents) {
+	public Set<IFitnessCore> getFitnessCores(final Collection<IFitnessComponent> fitnessComponents) {
+		final Set<IFitnessCore> fitnessCores = new HashSet<IFitnessCore>();
+		for (final IFitnessComponent component : fitnessComponents) {
 			fitnessCores.add(component.getFitnessCore());
 		}
 		return fitnessCores;
 	}
 
 	@Override
-	public void initFitnessCores(
-			final Collection<IFitnessCore<T>> fitnessCores,
-			final IOptimisationData<T> data) {
-		for (final IFitnessCore<T> core : fitnessCores) {
+	public void initFitnessCores(final Collection<IFitnessCore> fitnessCores, final IOptimisationData data) {
+		for (final IFitnessCore core : fitnessCores) {
 			core.init(data);
 		}
 	}
 
 	@Override
-	public void acceptFromComponents(
-			final Collection<IFitnessComponent<T>> fitnessComponents,
-			final ISequences<T> sequences,
-			final Collection<IResource> affectedResources) {
-		final Set<IFitnessCore<T>> fitnessCores = getFitnessCores(fitnessComponents);
+	public void acceptFromComponents(final Collection<IFitnessComponent> fitnessComponents, final ISequences sequences, final Collection<IResource> affectedResources) {
+		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 		acceptFromCores(fitnessCores, sequences, affectedResources);
 	}
 
 	@Override
-	public void acceptFromCores(final Collection<IFitnessCore<T>> fitnessCores,
-			final ISequences<T> sequences,
-			final Collection<IResource> affectedResources) {
-		for (final IFitnessCore<T> core : fitnessCores) {
+	public void acceptFromCores(final Collection<IFitnessCore> fitnessCores, final ISequences sequences, final Collection<IResource> affectedResources) {
+		for (final IFitnessCore core : fitnessCores) {
 			core.accepted(sequences, affectedResources);
 		}
 	}
 
 	@Override
-	public IAnnotatedSolution<T> buildAnnotatedSolution(
-			final IOptimisationContext<T> context, final ISequences<T> state,
-			final Collection<IFitnessComponent<T>> fitnessComponents,
+	public IAnnotatedSolution buildAnnotatedSolution(final IOptimisationContext context, final ISequences state, final Collection<IFitnessComponent> fitnessComponents,
 			final boolean forExport) {
 
-		final Set<IFitnessCore<T>> cores = getFitnessCores(fitnessComponents);
+		final Set<IFitnessCore> cores = getFitnessCores(fitnessComponents);
 
-		final AnnotatedSolution<T> result = new AnnotatedSolution<T>();
+		final AnnotatedSolution result = new AnnotatedSolution();
 		result.setSequences(state);
 		result.setContext(context);
 
-		for (final IFitnessCore<T> core : cores) {
+		for (final IFitnessCore core : cores) {
 			core.annotate(state, result, forExport);
 		}
 

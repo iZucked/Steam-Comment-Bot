@@ -7,27 +7,32 @@ package com.mmxlabs.optimiser.common.dcproviders.impl;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
+@RunWith(JMock.class)
 public class TimeWindowDataComponentProviderTest {
+
+	Mockery context = new JUnit4Mockery();
 
 	@Test
 	public void testTimeWindowDataComponentProvider() {
 		final String name = "name";
-		final TimeWindowDataComponentProvider<Object> provider = new TimeWindowDataComponentProvider<Object>(
-				name);
+		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(name);
 		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testGetTimeWindows() {
-		final TimeWindowDataComponentProvider<Object> provider = new TimeWindowDataComponentProvider<Object>(
-				"name");
-		final Object obj1 = new Object();
+		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider("name");
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
 
 		final List<ITimeWindow> timeWindows = provider.getTimeWindows(obj1);
 		Assert.assertNotNull(timeWindows);
@@ -43,9 +48,8 @@ public class TimeWindowDataComponentProviderTest {
 
 	@Test
 	public void testDispose() {
-		final TimeWindowDataComponentProvider<Object> provider = new TimeWindowDataComponentProvider<Object>(
-				"name");
-		final Object obj1 = new Object();
+		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider("name");
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
 
 		final List<ITimeWindow> timeWindows = provider.getTimeWindows(obj1);
 		Assert.assertNotNull(timeWindows);

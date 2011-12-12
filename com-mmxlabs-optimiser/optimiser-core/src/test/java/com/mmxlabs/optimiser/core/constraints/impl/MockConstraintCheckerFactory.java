@@ -11,8 +11,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 
 /**
- * Mock implementation of an {@link IFitnessCoreFactory} which just return the
- * core name and a {@link Collection} of component names.
+ * Mock implementation of an {@link IFitnessCoreFactory} which just return the core name and a {@link Collection} of component names.
  * 
  * @author Simon Goodall
  * 
@@ -26,8 +25,8 @@ public class MockConstraintCheckerFactory implements IConstraintCheckerFactory {
 	}
 
 	@Override
-	public <T> IConstraintChecker<T> instantiate() {
-		return new MockConstraintChecker<T>(checkerName);
+	public IConstraintChecker instantiate() {
+		return new MockConstraintChecker(checkerName);
 	}
 
 	@Override

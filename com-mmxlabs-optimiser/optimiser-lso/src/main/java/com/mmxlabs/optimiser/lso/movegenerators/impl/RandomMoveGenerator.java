@@ -16,24 +16,20 @@ import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 /**
- * Move generator to randomly generate moves with an equal probability
- * distribution. This class uses registered {@link IRandomMoveGeneratorUnit}
- * implementations to determine how each type of move is created. This separates
- * the {@link RandomMoveGenerator} from any move implementations.
+ * Move generator to randomly generate moves with an equal probability distribution. This class uses registered {@link IRandomMoveGeneratorUnit} implementations to determine how each type of move is
+ * created. This separates the {@link RandomMoveGenerator} from any move implementations.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
 
-public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
+public final class RandomMoveGenerator implements IMoveGenerator {
 
 	private Random random;
 
-	private ISequences<T> sequences;
+	private ISequences sequences;
 
-	private final List<IRandomMoveGeneratorUnit<T>> units = new ArrayList<IRandomMoveGeneratorUnit<T>>();
+	private final List<IRandomMoveGeneratorUnit> units = new ArrayList<IRandomMoveGeneratorUnit>();
 
 	private final List<Double> weights = new ArrayList<Double>();
 
@@ -44,7 +40,7 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	}
 
 	@Override
-	public IMove<T> generateMove() {
+	public IMove generateMove() {
 		double newMove = random.nextDouble() * totalWeight;
 		for (int i = 0; i < units.size(); i++) {
 			final double weight = weights.get(i);
@@ -76,12 +72,12 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	}
 
 	@Override
-	public void setSequences(final ISequences<T> sequences) {
+	public void setSequences(final ISequences sequences) {
 		this.sequences = sequences;
 	}
 
 	@Override
-	public ISequences<T> getSequences() {
+	public ISequences getSequences() {
 		return sequences;
 	}
 
@@ -91,12 +87,12 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	 * @param sequence
 	 * @return
 	 */
-	public int generateBreakPoint(final ISequence<T> sequence) {
+	public int generateBreakPoint(final ISequence sequence) {
 		final int breakPoint;
-		
+
 		if (true) {
 			// Skip start/end as breakpoint options
-			breakPoint = random.nextInt(sequence.size() - 1) + 1 ;
+			breakPoint = random.nextInt(sequence.size() - 1) + 1;
 		} else {
 			breakPoint = random.nextInt(1 + sequence.size());
 		}
@@ -104,20 +100,18 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 		// Validate break point -- should it include start/end elements?
 
 		assert breakPoint > 0;
-		assert breakPoint < sequence.size() ;
-		
+		assert breakPoint < sequence.size();
+
 		return breakPoint;
 	}
 
 	/**
-	 * Generate a list of break points in linear order. The number of break
-	 * points is defined by the size of the input array.
+	 * Generate a list of break points in linear order. The number of break points is defined by the size of the input array.
 	 * 
 	 * @param sequence
 	 * @param breakPoints
 	 */
-	public void generateSortedBreakPoints(final ISequence<T> sequence,
-			final int[] breakPoints) {
+	public void generateSortedBreakPoints(final ISequence sequence, final int[] breakPoints) {
 
 		// Generate the break points
 		for (int i = 0; i < breakPoints.length; ++i) {
@@ -129,18 +123,17 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	}
 
 	/**
-	 * Register a {@link IRandomMoveGeneratorUnit} so a new {@link IMove} type
-	 * can be created.
+	 * Register a {@link IRandomMoveGeneratorUnit} so a new {@link IMove} type can be created.
 	 * 
 	 * @param unit
 	 */
-	public void addMoveGeneratorUnit(final IRandomMoveGeneratorUnit<T> unit, final double weight) {
+	public void addMoveGeneratorUnit(final IRandomMoveGeneratorUnit unit, final double weight) {
 		totalWeight += weight;
 		weights.add(weight);
 		units.add(unit);
 	}
 
-	public void addMoveGeneratorUnit(final IRandomMoveGeneratorUnit<T> unit) {
+	public void addMoveGeneratorUnit(final IRandomMoveGeneratorUnit unit) {
 		this.addMoveGeneratorUnit(unit, 1);
 	}
 
@@ -149,7 +142,7 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	 * 
 	 * @param unit
 	 */
-	public void removeMoveGeneratorUnit(final IRandomMoveGeneratorUnit<T> unit) {
+	public void removeMoveGeneratorUnit(final IRandomMoveGeneratorUnit unit) {
 		final int i = units.indexOf(unit);
 		if (i != -1) {
 			totalWeight -= weights.get(i);
@@ -159,13 +152,11 @@ public final class RandomMoveGenerator<T> implements IMoveGenerator<T> {
 	}
 
 	/**
-	 *Setter to register a {@link Collection} of
-	 * {@link IRandomMoveGeneratorUnit} objects.
+	 * Setter to register a {@link Collection} of {@link IRandomMoveGeneratorUnit} objects.
 	 * 
 	 * @param units
 	 */
-	public void setMoveGeneratorUnits(
-			final Collection<IRandomMoveGeneratorUnit<T>> units) {
+	public void setMoveGeneratorUnits(final Collection<IRandomMoveGeneratorUnit> units) {
 		this.units.addAll(units);
 	}
 }

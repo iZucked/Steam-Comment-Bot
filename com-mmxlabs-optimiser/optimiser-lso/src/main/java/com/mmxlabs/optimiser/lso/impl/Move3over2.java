@@ -17,38 +17,32 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
 /**
- * The {@link Move3over2} move type moves a segment from one {@link ISequence}
- * into another {@link ISequence}.
+ * The {@link Move3over2} move type moves a segment from one {@link ISequence} into another {@link ISequence}.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public class Move3over2<T> implements IMove<T> {
+public class Move3over2 implements IMove {
 
 	private IResource resource1;
 
 	private IResource resource2;
 
 	private int resource1Start = -1;
-	
+
 	private int resource1End = -1;
 
 	private int resource2Position = -1;
 
 	@Override
-	public final void apply(final IModifiableSequences<T> sequences) {
+	public final void apply(final IModifiableSequences sequences) {
 
 		// Get sequences
-		final IModifiableSequence<T> sequence1 = sequences
-				.getModifiableSequence(resource1);
-		final IModifiableSequence<T> sequence2 = sequences
-				.getModifiableSequence(resource2);
+		final IModifiableSequence sequence1 = sequences.getModifiableSequence(resource1);
+		final IModifiableSequence sequence2 = sequences.getModifiableSequence(resource2);
 
 		// Get the moving segments
-		final ISegment<T> segment1 = sequence1.getSegment(resource1Start,
-				resource1End);
+		final ISegment segment1 = sequence1.getSegment(resource1Start, resource1End);
 
 		// Insert the segments in the other sequence
 		sequence2.insert(resource2Position, segment1);
@@ -63,7 +57,7 @@ public class Move3over2<T> implements IMove<T> {
 	}
 
 	@Override
-	public final boolean validate(final ISequences<T> sequences) {
+	public final boolean validate(final ISequences sequences) {
 
 		// Validate basic parameters
 		if (resource1 == null) {
@@ -86,8 +80,7 @@ public class Move3over2<T> implements IMove<T> {
 		}
 
 		// Validate parameters against sequences object
-		final Map<IResource, ISequence<T>> sequenceMap = sequences
-				.getSequences();
+		final Map<IResource, ISequence> sequenceMap = sequences.getSequences();
 
 		// Make sure resources exist
 		if (sequenceMap.containsKey(resource1) == false) {
@@ -99,12 +92,12 @@ public class Move3over2<T> implements IMove<T> {
 
 		// Make sure end is within range. This implies start would also be
 		// within range due to previous checks.
-		final ISequence<T> sequence1 = sequenceMap.get(resource1);
+		final ISequence sequence1 = sequenceMap.get(resource1);
 		if (resource1End > sequence1.size()) {
 			return false;
 		}
 
-		final ISequence<T> sequence2 = sequenceMap.get(resource2);
+		final ISequence sequence2 = sequenceMap.get(resource2);
 		if (resource2Position > sequence2.size()) {
 			return false;
 		}
@@ -149,8 +142,9 @@ public class Move3over2<T> implements IMove<T> {
 	}
 
 	/**
-	 * Set the position at which the segment from resource 1's sequence will be inserted into resource 2's sequence.
-	 * The insert is inclusive, so to insert a segment between elements A and B, pass the position of B into this method.
+	 * Set the position at which the segment from resource 1's sequence will be inserted into resource 2's sequence. The insert is inclusive, so to insert a segment between elements A and B, pass the
+	 * position of B into this method.
+	 * 
 	 * @param resource2Position
 	 */
 	public final void setResource2Position(final int resource2Position) {
@@ -159,8 +153,6 @@ public class Move3over2<T> implements IMove<T> {
 
 	@Override
 	public final String toString() {
-		return String.format("r1 (%s) [%d -> %d], r2 (%s) [%d]",
-				getResource1(), getResource1Start(), getResource1End(),
-				getResource2(), getResource2Position());
+		return String.format("r1 (%s) [%d -> %d], r2 (%s) [%d]", getResource1(), getResource1Start(), getResource1End(), getResource2(), getResource2Position());
 	}
 }

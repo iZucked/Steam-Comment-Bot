@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComp
 import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.impl.Sequences;
@@ -35,14 +36,13 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public class OrderedSequenceElementsConstraintCheckerTest {
 
 	IIndexingContext index = new SimpleIndexingContext();
-	
+
 	Mockery context = new JUnit4Mockery();
 
 	@Test
 	public void testOrderedSequenceElementsConstraintChecker() {
 
-		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
-				"name", "key");
+		final OrderedSequenceElementsConstraintChecker checker = new OrderedSequenceElementsConstraintChecker("name", "key");
 
 		Assert.assertEquals("name", checker.getName());
 	}
@@ -50,34 +50,28 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT() {
 
-		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
-				"key");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("key");
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-		final Object obj3 = new Object();
-		final Object obj4 = new Object();
-		final Object obj5 = new Object();
-		final Object obj6 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement obj3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement obj4 = context.mock(ISequenceElement.class, "4");
+		final ISequenceElement obj5 = context.mock(ISequenceElement.class, "5");
+		final ISequenceElement obj6 = context.mock(ISequenceElement.class, "6");
 
 		provider.setElementOrder(obj1, obj2);
 		provider.setElementOrder(obj3, obj4);
 		provider.setElementOrder(obj4, obj5);
 
-		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
-				"name", "key");
+		final OrderedSequenceElementsConstraintChecker checker = new OrderedSequenceElementsConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj5,
-						obj6));
+		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj5, obj6));
 		final IResource r = new Resource(index);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
-				.makeHashMap(r, seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(
-				Collections.singletonList(r), map);
+		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
+		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
 		Assert.assertTrue(checker.checkConstraints(sequences));
 	}
@@ -85,34 +79,28 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT2() {
 
-		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
-				"key");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("key");
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-		final Object obj3 = new Object();
-		final Object obj4 = new Object();
-		final Object obj5 = new Object();
-		final Object obj6 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement obj3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement obj4 = context.mock(ISequenceElement.class, "4");
+		final ISequenceElement obj5 = context.mock(ISequenceElement.class, "5");
+		final ISequenceElement obj6 = context.mock(ISequenceElement.class, "6");
 
 		provider.setElementOrder(obj1, obj2);
 		provider.setElementOrder(obj3, obj4);
 		provider.setElementOrder(obj4, obj5);
 
-		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
-				"name", "key");
+		final OrderedSequenceElementsConstraintChecker checker = new OrderedSequenceElementsConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj1, obj6, obj2, obj3, obj4,
-						obj5));
+		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj6, obj2, obj3, obj4, obj5));
 		final IResource r = new Resource(index);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
-				.makeHashMap(r, seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(
-				Collections.singletonList(r), map);
+		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
+		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
 		Assert.assertFalse(checker.checkConstraints(sequences));
 	}
@@ -120,34 +108,28 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT3() {
 
-		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
-				"key");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("key");
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-		final Object obj3 = new Object();
-		final Object obj4 = new Object();
-		final Object obj5 = new Object();
-		final Object obj6 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement obj3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement obj4 = context.mock(ISequenceElement.class, "4");
+		final ISequenceElement obj5 = context.mock(ISequenceElement.class, "5");
+		final ISequenceElement obj6 = context.mock(ISequenceElement.class, "6");
 
 		provider.setElementOrder(obj1, obj2);
 		provider.setElementOrder(obj3, obj4);
 		provider.setElementOrder(obj4, obj5);
 
-		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
-				"name", "key");
+		final OrderedSequenceElementsConstraintChecker checker = new OrderedSequenceElementsConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj6,
-						obj5));
+		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj6, obj5));
 		final IResource r = new Resource(index);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
-				.makeHashMap(r, seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(
-				Collections.singletonList(r), map);
+		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
+		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
 		Assert.assertFalse(checker.checkConstraints(sequences));
 	}
@@ -155,34 +137,28 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString() {
 
-		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
-				"key");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("key");
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-		final Object obj3 = new Object();
-		final Object obj4 = new Object();
-		final Object obj5 = new Object();
-		final Object obj6 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement obj3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement obj4 = context.mock(ISequenceElement.class, "4");
+		final ISequenceElement obj5 = context.mock(ISequenceElement.class, "5");
+		final ISequenceElement obj6 = context.mock(ISequenceElement.class, "6");
 
 		provider.setElementOrder(obj1, obj2);
 		provider.setElementOrder(obj3, obj4);
 		provider.setElementOrder(obj4, obj5);
 
-		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
-				"name", "key");
+		final OrderedSequenceElementsConstraintChecker checker = new OrderedSequenceElementsConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj5,
-						obj6));
+		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj5, obj6));
 		final IResource r = new Resource(index);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
-				.makeHashMap(r, seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(
-				Collections.singletonList(r), map);
+		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
+		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
 		final List<String> messages = new LinkedList<String>();
 
@@ -194,34 +170,28 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString2() {
 
-		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
-				"key");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("key");
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-		final Object obj3 = new Object();
-		final Object obj4 = new Object();
-		final Object obj5 = new Object();
-		final Object obj6 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement obj3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement obj4 = context.mock(ISequenceElement.class, "4");
+		final ISequenceElement obj5 = context.mock(ISequenceElement.class, "5");
+		final ISequenceElement obj6 = context.mock(ISequenceElement.class, "6");
 
 		provider.setElementOrder(obj1, obj2);
 		provider.setElementOrder(obj3, obj4);
 		provider.setElementOrder(obj4, obj5);
 
-		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
-				"name", "key");
+		final OrderedSequenceElementsConstraintChecker checker = new OrderedSequenceElementsConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj6,
-						obj5));
+		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj6, obj5));
 		final IResource r = new Resource(index);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
-				.makeHashMap(r, seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(
-				Collections.singletonList(r), map);
+		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
+		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
 		final List<String> messages = new LinkedList<String>();
 
@@ -237,27 +207,22 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString3() {
 
-		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
-				"key");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("key");
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
 
 		provider.setElementOrder(obj1, obj2);
 
-		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
-				"name", "key");
+		final OrderedSequenceElementsConstraintChecker checker = new OrderedSequenceElementsConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj1));
+		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1));
 		final IResource r = new Resource(index);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
-				.makeHashMap(r, seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(
-				Collections.singletonList(r), map);
+		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
+		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
 		final List<String> messages = new LinkedList<String>();
 
@@ -273,47 +238,38 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT4() {
 
-		final OrderedSequenceElementsDataComponentProvider<Object> provider = new OrderedSequenceElementsDataComponentProvider<Object>(
-				"key");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("key");
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
 
 		provider.setElementOrder(obj1, obj2);
 
-		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
-				"name", "key");
+		final OrderedSequenceElementsConstraintChecker checker = new OrderedSequenceElementsConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj2));
+		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj2));
 		final IResource r = new Resource(index);
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
-				.makeHashMap(r, seq1);
-		final Sequences<Object> sequences = new Sequences<Object>(
-				Collections.singletonList(r), map);
+		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
+		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
 
 		Assert.assertTrue(checker.checkConstraints(sequences));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetSetProvider() {
 
-		final IOrderedSequenceElementsDataComponentProvider<Object> provider = context
-				.mock(IOrderedSequenceElementsDataComponentProvider.class);
+		final IOrderedSequenceElementsDataComponentProvider provider = context.mock(IOrderedSequenceElementsDataComponentProvider.class);
 
-		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
-				"name", "key");
+		final OrderedSequenceElementsConstraintChecker checker = new OrderedSequenceElementsConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
 		Assert.assertSame(provider, checker.getProvider());
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testSetOptimisationData() {
 
@@ -324,13 +280,11 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		final String key = "key";
 
-		final OrderedSequenceElementsConstraintChecker<Object> checker = new OrderedSequenceElementsConstraintChecker<Object>(
-				"name", key);
+		final OrderedSequenceElementsConstraintChecker checker = new OrderedSequenceElementsConstraintChecker("name", key);
 
 		context.checking(new Expectations() {
 			{
-				one(data).getDataComponentProvider(key,
-						IOrderedSequenceElementsDataComponentProvider.class);
+				one(data).getDataComponentProvider(key, IOrderedSequenceElementsDataComponentProvider.class);
 			}
 		});
 

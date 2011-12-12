@@ -7,6 +7,7 @@ package com.mmxlabs.optimiser.common.dcproviders;
 import java.util.Collection;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
 /**
@@ -16,7 +17,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * @author Simon Goodall
  * 
  */
-public interface IResourceAllocationConstraintDataComponentProvider<T> extends
+public interface IResourceAllocationConstraintDataComponentProvider extends
 		IDataComponentProvider {
 
 	/**
@@ -27,6 +28,6 @@ public interface IResourceAllocationConstraintDataComponentProvider<T> extends
 	 * @param element
 	 * @return
 	 */
-	Collection<IResource> getAllowedResources(final T element);
+	Collection<IResource> getAllowedResources(final ISequenceElement element);
 
 }

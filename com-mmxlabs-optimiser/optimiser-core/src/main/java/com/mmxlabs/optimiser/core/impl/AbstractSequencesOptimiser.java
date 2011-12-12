@@ -21,23 +21,23 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 
-public abstract class AbstractSequencesOptimiser<T> implements ISequencesOptimiser<T> {
+public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser {
 
 	private int numberOfIterations;
 
 	private int numberOfIterationsCompleted;
 
-	private List<IConstraintChecker<T>> constraintCheckers;
+	private List<IConstraintChecker> constraintCheckers;
 
-	private IFitnessEvaluator<T> fitnessEvaluator;
+	private IFitnessEvaluator fitnessEvaluator;
 
-	private ISequencesManipulator<T> sequenceManipulator;
+	private ISequencesManipulator sequenceManipulator;
 
-	private IOptimiserProgressMonitor<T> progressMonitor;
+	private IOptimiserProgressMonitor progressMonitor;
 
 	private int reportInterval = -1;
 
-	private IOptimisationContext<T> currentContext;
+	private IOptimisationContext currentContext;
 
 	private long startTime;
 
@@ -82,8 +82,8 @@ public abstract class AbstractSequencesOptimiser<T> implements ISequencesOptimis
 	 * implement these.
 	 */
 	@Override
-	public final void optimise(final IOptimisationContext<T> optimiserContext) {
-		final IAnnotatedSolution<T> startSolution = start(optimiserContext);
+	public final void optimise(final IOptimisationContext optimiserContext) {
+		final IAnnotatedSolution startSolution = start(optimiserContext);
 		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(),
 				startSolution);
 		final int percentage = (100 * getReportInterval())
@@ -104,8 +104,8 @@ public abstract class AbstractSequencesOptimiser<T> implements ISequencesOptimis
 	}
 
 	@Override
-	public final IAnnotatedSolution<T> getBestSolution(final boolean forExport) {
-		final IAnnotatedSolution<T> annotatedSolution = fitnessEvaluator
+	public final IAnnotatedSolution getBestSolution(final boolean forExport) {
+		final IAnnotatedSolution annotatedSolution = fitnessEvaluator
 				.getBestAnnotatedSolution(currentContext, forExport);
 		final long clock = System.currentTimeMillis() - getStartTime();
 
@@ -119,8 +119,8 @@ public abstract class AbstractSequencesOptimiser<T> implements ISequencesOptimis
 	}
 
 	@Override
-	public final IAnnotatedSolution<T> getCurrentSolution(final boolean forExport) {
-		final IAnnotatedSolution<T> annotatedSolution = fitnessEvaluator
+	public final IAnnotatedSolution getCurrentSolution(final boolean forExport) {
+		final IAnnotatedSolution annotatedSolution = fitnessEvaluator
 				.getCurrentAnnotatedSolution(currentContext, forExport);
 		final long clock = System.currentTimeMillis() - getStartTime();
 
@@ -146,17 +146,17 @@ public abstract class AbstractSequencesOptimiser<T> implements ISequencesOptimis
 	 * @param destination
 	 * @param affectedResources
 	 */
-	protected final void updateSequences(final ISequences<T> source,
-			final IModifiableSequences<T> destination,
+	protected final void updateSequences(final ISequences source,
+			final IModifiableSequences destination,
 			final Collection<IResource> affectedResources) {
 
 		for (final IResource resource : affectedResources) {
 			// Get source sequence
-			final ISequence<T> sourceSequence = source.getSequence(resource);
+			final ISequence sourceSequence = source.getSequence(resource);
 			assert sourceSequence != null;
 
 			// Get destination sequence
-			final IModifiableSequence<T> destinationSequence = destination
+			final IModifiableSequence destinationSequence = destination
 					.getModifiableSequence(resource);
 			assert destinationSequence != null;
 
@@ -175,41 +175,41 @@ public abstract class AbstractSequencesOptimiser<T> implements ISequencesOptimis
 	}
 
 	public final void setConstraintCheckers(
-			final List<IConstraintChecker<T>> constraintCheckers) {
+			final List<IConstraintChecker> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
 	}
 
 	@Override
-	public final List<IConstraintChecker<T>> getConstraintCheckers() {
+	public final List<IConstraintChecker> getConstraintCheckers() {
 		return constraintCheckers;
 	}
 
 	public final void setFitnessEvaluator(
-			final IFitnessEvaluator<T> fitnessEvaluator) {
+			final IFitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
 	}
 
 	@Override
-	public final IFitnessEvaluator<T> getFitnessEvaluator() {
+	public final IFitnessEvaluator getFitnessEvaluator() {
 		return fitnessEvaluator;
 	}
 
 	public final void setSequenceManipulator(
-			final ISequencesManipulator<T> sequenceManipulator) {
+			final ISequencesManipulator sequenceManipulator) {
 		this.sequenceManipulator = sequenceManipulator;
 	}
 
 	@Override
-	public final ISequencesManipulator<T> getSequenceManipulator() {
+	public final ISequencesManipulator getSequenceManipulator() {
 		return sequenceManipulator;
 	}
 
-	public final IOptimiserProgressMonitor<T> getProgressMonitor() {
+	public final IOptimiserProgressMonitor getProgressMonitor() {
 		return progressMonitor;
 	}
 
 	public final void setProgressMonitor(
-			final IOptimiserProgressMonitor<T> progressMonitor) {
+			final IOptimiserProgressMonitor progressMonitor) {
 		this.progressMonitor = progressMonitor;
 	}
 
@@ -230,12 +230,12 @@ public abstract class AbstractSequencesOptimiser<T> implements ISequencesOptimis
 		this.numberOfIterationsCompleted = numberOfIterationsCompleted;
 	}
 
-	protected final IOptimisationContext<T> getCurrentContext() {
+	protected final IOptimisationContext getCurrentContext() {
 		return currentContext;
 	}
 
 	protected final void setCurrentContext(
-			final IOptimisationContext<T> currentContext) {
+			final IOptimisationContext currentContext) {
 		this.currentContext = currentContext;
 	}
 

@@ -19,17 +19,15 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IOptimisationContext<T> {
+public interface IOptimisationContext {
 
 	/**
 	 * Return static input data to the optimisation.
 	 * 
 	 * @return
 	 */
-	IOptimisationData<T> getOptimisationData();
+	IOptimisationData getOptimisationData();
 
 	/**
 	 * Returns the initial sequences state - i.e. the starting point of the
@@ -37,7 +35,7 @@ public interface IOptimisationContext<T> {
 	 * 
 	 * @return
 	 */
-	ISequences<T> getInitialSequences();
+	ISequences getInitialSequences();
 
 	/**
 	 * Returns the {@link IFitnessFunctionRegistry} instance to be used to

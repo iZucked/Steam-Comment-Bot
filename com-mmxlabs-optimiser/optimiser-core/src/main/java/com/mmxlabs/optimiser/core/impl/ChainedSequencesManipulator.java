@@ -11,31 +11,28 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 
 /**
- * A sequences manipulator which applies a sequence of other sequences
- * manipulators. Use the {@code addDelegate(..)} method to add another
- * manipulator to the list of delegates.
+ * A sequences manipulator which applies a sequence of other sequences manipulators. Use the {@code addDelegate(..)} method to add another manipulator to the list of delegates.
  * 
  * @author hinton
  * 
- * @param <T>
  */
-public class ChainedSequencesManipulator<T> implements ISequencesManipulator<T> {
-	List<ISequencesManipulator<T>> delegates = new ArrayList<ISequencesManipulator<T>>();
+public class ChainedSequencesManipulator implements ISequencesManipulator {
+	List<ISequencesManipulator> delegates = new ArrayList<ISequencesManipulator>();
 
-	public void addDelegate(ISequencesManipulator<T> delegate) {
+	public void addDelegate(final ISequencesManipulator delegate) {
 		delegates.add(delegate);
 	}
 
 	@Override
-	public void manipulate(IModifiableSequences<T> sequences) {
-		for (ISequencesManipulator<T> manipulator : delegates) {
+	public void manipulate(final IModifiableSequences sequences) {
+		for (final ISequencesManipulator manipulator : delegates) {
 			manipulator.manipulate(sequences);
 		}
 	}
 
 	@Override
 	public void dispose() {
-		for (ISequencesManipulator<T> manipulator : delegates) {
+		for (final ISequencesManipulator manipulator : delegates) {
 			manipulator.dispose();
 		}
 		delegates.clear();

@@ -18,21 +18,21 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
  * @author hinton
  * 
  */
-public class CompoundMoveGenerator<T> implements IMoveGenerator<T> {
+public class CompoundMoveGenerator implements IMoveGenerator {
 	private final List<Double> weights = new LinkedList<Double>();
-	private final List<IMoveGenerator<T>> generators = new LinkedList<IMoveGenerator<T>>();
+	private final List<IMoveGenerator> generators = new LinkedList<IMoveGenerator>();
 	private double totalWeight = 0;
-	private ISequences<T> sequences;
+	private ISequences sequences;
 	private Random random;
 
-	public void addGenerator(final IMoveGenerator<T> generator, final double weight) {
+	public void addGenerator(final IMoveGenerator generator, final double weight) {
 		weights.add(weight);
 		generators.add(generator);
 		totalWeight += weight;
 	}
 
 	@Override
-	public IMove<T> generateMove() {
+	public IMove generateMove() {
 		double d = random.nextDouble() * totalWeight;
 		for (int i = 0; i < weights.size(); i++) {
 			final double w = weights.get(i);
@@ -45,13 +45,13 @@ public class CompoundMoveGenerator<T> implements IMoveGenerator<T> {
 	}
 
 	@Override
-	public ISequences<T> getSequences() {
+	public ISequences getSequences() {
 		return sequences;
 	}
 
 	@Override
-	public void setSequences(final ISequences<T> sequences) {
-		for (final IMoveGenerator<T> generator : generators) {
+	public void setSequences(final ISequences sequences) {
+		for (final IMoveGenerator generator : generators) {
 			generator.setSequences(sequences);
 		}
 		this.sequences = sequences;

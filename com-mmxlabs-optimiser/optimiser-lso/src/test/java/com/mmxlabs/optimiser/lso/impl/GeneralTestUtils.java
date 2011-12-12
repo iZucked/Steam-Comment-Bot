@@ -39,18 +39,17 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
  */
 public final class GeneralTestUtils {
 
-	public static <T> IMoveGenerator<T> createRandomMoveGenerator(
-			final Random random) {
-		final RandomMoveGenerator<T> moveGenerator = new RandomMoveGenerator<T>();
+	public static IMoveGenerator createRandomMoveGenerator(final Random random) {
+		final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 		moveGenerator.setRandom(random);
 
 		// Register RNG move generator units
-		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new Move2over2GeneratorUnit<T>());
-		moveGenerator.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit<T>());
-		// moveGenerator.addMoveGeneratorUnit(new MoveHydraGeneratorUnit<T>());
+		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit());
+		moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit());
+		moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit());
+		moveGenerator.addMoveGeneratorUnit(new Move2over2GeneratorUnit());
+		moveGenerator.addMoveGeneratorUnit(new MoveSnakeGeneratorUnit());
+		// moveGenerator.addMoveGeneratorUnit(new MoveHydraGeneratorUnit());
 
 		return moveGenerator;
 	}
@@ -70,18 +69,16 @@ public final class GeneralTestUtils {
 		return registry;
 	}
 
-	public static <T> LinearSimulatedAnnealingFitnessEvaluator<T> createLinearSAFitnessEvaluator(
-			final int stepSize, final int numIterations,
-			final List<IFitnessComponent<T>> fitnessComponents) {
-		final FitnessHelper<T> fitnessHelper = new FitnessHelper<T>();
+	public static LinearSimulatedAnnealingFitnessEvaluator createLinearSAFitnessEvaluator(final int stepSize, final int numIterations, final List<IFitnessComponent> fitnessComponents) {
+		final FitnessHelper fitnessHelper = new FitnessHelper();
 
-		final LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator<T>();
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator();
 
 		fitnessEvaluator.setFitnessComponents(fitnessComponents);
 		fitnessEvaluator.setFitnessHelper(fitnessHelper);
 
 		final Map<String, Double> weightsMap = new HashMap<String, Double>();
-		for (final IFitnessComponent<T> component : fitnessComponents) {
+		for (final IFitnessComponent component : fitnessComponents) {
 			weightsMap.put(component.getName(), 1.0);
 		}
 
@@ -104,39 +101,32 @@ public final class GeneralTestUtils {
 		return fitnessEvaluator;
 	}
 
-	public static <T> LocalSearchOptimiser<T> buildOptimiser(
-			final IOptimisationContext<T> context, final Random random,
-			final int numberOfIterations, final int stepSize, IOptimiserProgressMonitor<T> monitor) {
-		
+	public static LocalSearchOptimiser buildOptimiser(final IOptimisationContext context, final Random random, final int numberOfIterations, final int stepSize, final IOptimiserProgressMonitor monitor) {
+
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
-		final List<IConstraintChecker<T>> constraintCheckers = constraintCheckerInstantiator
-				.instantiateConstraintCheckers(context.getConstraintCheckerRegistry(),
-						context.getConstraintCheckers(), context.getOptimisationData());
-		
+		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(context.getConstraintCheckerRegistry(), context.getConstraintCheckers(),
+				context.getOptimisationData());
+
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
-		final List<IFitnessComponent<T>> fitnessComponents = fitnessComponentInstantiator
-				.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
+		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
 
-		final LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = GeneralTestUtils
-				.createLinearSAFitnessEvaluator(stepSize, numberOfIterations,
-						fitnessComponents);
-		final IMoveGenerator<T> moveGenerator = GeneralTestUtils
-				.createRandomMoveGenerator(random);
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents);
+		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator(random);
 
-		final DefaultLocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
+		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
 
 		lso.setNumberOfIterations(numberOfIterations);
-		lso.setSequenceManipulator(new NullSequencesManipulator<T>());
+		lso.setSequenceManipulator(new NullSequencesManipulator());
 		lso.setMoveGenerator(moveGenerator);
 		lso.setFitnessEvaluator(fitnessEvaluator);
 		lso.setConstraintCheckers(constraintCheckers);
 
 		lso.setProgressMonitor(monitor);
-		
+
 		lso.setReportInterval(Math.max(10, numberOfIterations / 100));
-		
+
 		lso.init();
-		
+
 		return lso;
 	}
 

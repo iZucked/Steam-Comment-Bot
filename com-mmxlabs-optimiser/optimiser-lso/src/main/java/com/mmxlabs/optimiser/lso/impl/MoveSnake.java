@@ -19,17 +19,13 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
 /**
- * The {@link MoveSnake} implements a snake-like move wherein {@link ISegment}s
- * move between multiple {@link ISequence}s. E.g. a segment is moved from
- * sequence A to sequence B, from sequence B to sequence C and from sequence C
- * to sequence A.
+ * The {@link MoveSnake} implements a snake-like move wherein {@link ISegment}s move between multiple {@link ISequence}s. E.g. a segment is moved from sequence A to sequence B, from sequence B to
+ * sequence C and from sequence C to sequence A.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type.
  */
-public final class MoveSnake<T> implements IMove<T> {
+public final class MoveSnake implements IMove {
 
 	private List<IResource> fromResources;
 
@@ -42,20 +38,17 @@ public final class MoveSnake<T> implements IMove<T> {
 	private List<Integer> insertionPositions;
 
 	@Override
-	public void apply(final IModifiableSequences<T> sequences) {
+	public void apply(final IModifiableSequences sequences) {
 
 		final int numChanges = fromResources.size();
 
-		final List<ISegment<T>> segments = new ArrayList<ISegment<T>>(
-				numChanges);
+		final List<ISegment> segments = new ArrayList<ISegment>(numChanges);
 
 		// Generate all the segments
 		for (int i = 0; i < numChanges; ++i) {
 			final IResource from = fromResources.get(i);
-			final IModifiableSequence<T> fromSequence = sequences
-					.getModifiableSequence(from);
-			final ISegment<T> segment = fromSequence.getSegment(segmentStarts
-					.get(i), segmentEnds.get(i));
+			final IModifiableSequence fromSequence = sequences.getModifiableSequence(from);
+			final ISegment segment = fromSequence.getSegment(segmentStarts.get(i), segmentEnds.get(i));
 			segments.add(i, segment);
 		}
 
@@ -63,16 +56,14 @@ public final class MoveSnake<T> implements IMove<T> {
 		// Generate all the segments
 		for (int i = 0; i < numChanges; ++i) {
 			final IResource to = toResources.get(i);
-			final IModifiableSequence<T> toSequence = sequences
-					.getModifiableSequence(to);
+			final IModifiableSequence toSequence = sequences.getModifiableSequence(to);
 			toSequence.insert(insertionPositions.get(i), segments.get(i));
 		}
 
 		// Remove segments from old sequences
 		for (int i = 0; i < numChanges; ++i) {
 			final IResource from = fromResources.get(i);
-			final IModifiableSequence<T> fromSequence = sequences
-					.getModifiableSequence(from);
+			final IModifiableSequence fromSequence = sequences.getModifiableSequence(from);
 
 			fromSequence.remove(segments.get(i));
 		}
@@ -88,39 +79,39 @@ public final class MoveSnake<T> implements IMove<T> {
 	}
 
 	@Override
-	public boolean validate(final ISequences<T> sequences) {
+	public boolean validate(final ISequences sequences) {
 
 		if (fromResources == null) {
 			return false;
 		}
-		
+
 		if (toResources == null) {
 			return false;
 		}
-		
+
 		if (insertionPositions == null) {
 			return false;
 		}
-		
+
 		if (segmentStarts == null) {
 			return false;
 		}
-		
+
 		if (segmentEnds == null) {
 			return false;
 		}
-		
+
 		// Check unique froms
-		Set<IResource> froms = new HashSet<IResource>();
-		for (IResource from : fromResources) {
+		final Set<IResource> froms = new HashSet<IResource>();
+		for (final IResource from : fromResources) {
 			if (froms.add(from) == false) {
 				return false;
 			}
 		}
 
 		// Check unique tos
-		Set<IResource> tos = new HashSet<IResource>();
-		for (IResource to : toResources) {
+		final Set<IResource> tos = new HashSet<IResource>();
+		for (final IResource to : toResources) {
 			if (tos.add(to) == false) {
 				return false;
 			}
@@ -136,15 +127,15 @@ public final class MoveSnake<T> implements IMove<T> {
 			if (segmentEnds.get(i) < 0) {
 				return false;
 			}
-			
+
 			if (insertionPositions.get(i) < 0) {
 				return false;
 			}
-			
+
 			if (segmentEnds.get(i) < segmentStarts.get(i)) {
 				return false;
 			}
-			
+
 			if (segmentEnds.get(i) > sequences.getSequence(i).size()) {
 				return false;
 			}

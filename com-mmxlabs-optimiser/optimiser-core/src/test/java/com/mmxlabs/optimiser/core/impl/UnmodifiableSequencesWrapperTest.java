@@ -19,11 +19,7 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.impl.UnmodifiableSequenceWrapper;
-import com.mmxlabs.optimiser.core.impl.UnmodifiableSequencesWrapper;
 
-@SuppressWarnings("unchecked")
 @RunWith(JMock.class)
 public class UnmodifiableSequencesWrapperTest {
 
@@ -34,22 +30,16 @@ public class UnmodifiableSequencesWrapperTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
-		final UnmodifiableSequencesWrapper<Object> wrapper = new UnmodifiableSequencesWrapper<Object>(
-				sequences);
+		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 
 		final List<IResource> resources2 = wrapper.getResources();
 		Assert.assertEquals(2, resources2.size());
@@ -62,30 +52,22 @@ public class UnmodifiableSequencesWrapperTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
-		final UnmodifiableSequencesWrapper<Object> wrapper = new UnmodifiableSequencesWrapper<Object>(
-				sequences);
+		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 
 		// Assert.assertSame(sequence1, wrapper.getSequence(resource1));
 		// Assert.assertSame(sequence2, wrapper.getSequence(resource2));
 
-		Assert
-				.assertTrue(wrapper.getSequence(resource1) instanceof UnmodifiableSequenceWrapper);
-		Assert
-				.assertTrue(wrapper.getSequence(resource2) instanceof UnmodifiableSequenceWrapper);
+		Assert.assertTrue(wrapper.getSequence(resource1) instanceof UnmodifiableSequenceWrapper);
+		Assert.assertTrue(wrapper.getSequence(resource2) instanceof UnmodifiableSequenceWrapper);
 
 		context.checking(new Expectations() {
 			{
@@ -110,27 +92,19 @@ public class UnmodifiableSequencesWrapperTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
-		final UnmodifiableSequencesWrapper<Object> wrapper = new UnmodifiableSequencesWrapper<Object>(
-				sequences);
+		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 
-		Assert
-				.assertTrue(wrapper.getSequence(0) instanceof UnmodifiableSequenceWrapper);
-		Assert
-				.assertTrue(wrapper.getSequence(1) instanceof UnmodifiableSequenceWrapper);
+		Assert.assertTrue(wrapper.getSequence(0) instanceof UnmodifiableSequenceWrapper);
+		Assert.assertTrue(wrapper.getSequence(1) instanceof UnmodifiableSequenceWrapper);
 
 		context.checking(new Expectations() {
 			{
@@ -156,25 +130,18 @@ public class UnmodifiableSequencesWrapperTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
-		final UnmodifiableSequencesWrapper<Object> wrapper = new UnmodifiableSequencesWrapper<Object>(
-				sequences);
+		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 
-		final Map<IResource, ISequence<Object>> sequencesMap = wrapper
-				.getSequences();
+		final Map<IResource, ISequence> sequencesMap = wrapper.getSequences();
 
 		Assert.assertTrue(sequencesMap.containsKey(resource1));
 		Assert.assertTrue(sequencesMap.containsKey(resource2));
@@ -203,36 +170,25 @@ public class UnmodifiableSequencesWrapperTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources1 = CollectionsUtil
-				.makeArrayList(resource1);
+		final List<IResource> resources1 = CollectionsUtil.makeArrayList(resource1);
 
-		final List<IResource> resources2 = CollectionsUtil
-				.makeArrayList(resource2);
+		final List<IResource> resources2 = CollectionsUtil.makeArrayList(resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map1 = CollectionsUtil
-				.makeHashMap(resource1, sequence1);
+		final Map<IResource, IModifiableSequence> map1 = CollectionsUtil.makeHashMap(resource1, sequence1);
 
-		final Map<IResource, IModifiableSequence<Object>> map2 = CollectionsUtil
-				.makeHashMap(resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map2 = CollectionsUtil.makeHashMap(resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences1 = new ModifiableSequences<Object>(
-				resources1, map1);
+		final ModifiableSequences sequences1 = new ModifiableSequences(resources1, map1);
 
-		final ModifiableSequences<Object> sequences2 = new ModifiableSequences<Object>(
-				resources2, map2);
+		final ModifiableSequences sequences2 = new ModifiableSequences(resources2, map2);
 
-		final UnmodifiableSequencesWrapper<Object> wrapper = new UnmodifiableSequencesWrapper<Object>(
-				sequences1);
+		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences1);
 
-		Assert
-				.assertTrue(wrapper.getSequence(0) instanceof UnmodifiableSequenceWrapper);
-		Assert
-				.assertTrue(wrapper.getSequence(resource1) instanceof UnmodifiableSequenceWrapper);
+		Assert.assertTrue(wrapper.getSequence(0) instanceof UnmodifiableSequenceWrapper);
+		Assert.assertTrue(wrapper.getSequence(resource1) instanceof UnmodifiableSequenceWrapper);
 
 		context.checking(new Expectations() {
 			{
@@ -259,22 +215,16 @@ public class UnmodifiableSequencesWrapperTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
-		final UnmodifiableSequencesWrapper<Object> wrapper = new UnmodifiableSequencesWrapper<Object>(
-				sequences);
+		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 		Assert.assertEquals(2, wrapper.size());
 	}
 }

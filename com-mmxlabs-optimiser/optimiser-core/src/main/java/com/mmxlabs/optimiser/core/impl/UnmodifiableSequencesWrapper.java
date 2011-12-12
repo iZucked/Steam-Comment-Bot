@@ -10,26 +10,23 @@ import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
- * Generate a {@link ISequences} implementation which wraps another
- * {@link ISequences} implementation and creates
- * {@link UnmodifiableSequenceWrapper} for each {@link ISequence} in the wrapped
+ * Generate a {@link ISequences} implementation which wraps another {@link ISequences} implementation and creates {@link UnmodifiableSequenceWrapper} for each {@link ISequence} in the wrapped
  * sequences.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class UnmodifiableSequencesWrapper<T> implements ISequences<T> {
+public final class UnmodifiableSequencesWrapper implements ISequences {
 
-	private final Map<IResource, ISequence<T>> wrappedSequences = new HashMap<IResource, ISequence<T>>();
+	private final Map<IResource, ISequence> wrappedSequences = new HashMap<IResource, ISequence>();
 
-	private ISequences<T> wrapped;
+	private ISequences wrapped;
 
-	public UnmodifiableSequencesWrapper(final ISequences<T> wrapped) {
+	public UnmodifiableSequencesWrapper(final ISequences wrapped) {
 		setSequences(wrapped);
 	}
 
@@ -39,37 +36,34 @@ public final class UnmodifiableSequencesWrapper<T> implements ISequences<T> {
 	}
 
 	@Override
-	public ISequence<T> getSequence(final IResource resource) {
+	public ISequence getSequence(final IResource resource) {
 		return wrappedSequences.get(resource);
 	}
 
 	@Override
-	public ISequence<T> getSequence(final int index) {
+	public ISequence getSequence(final int index) {
 		return wrappedSequences.get(getResources().get(index));
 	}
 
 	@Override
-	public Map<IResource, ISequence<T>> getSequences() {
+	public Map<IResource, ISequence> getSequences() {
 		return wrappedSequences;
 	}
 
 	/**
-	 * Generate a new map of {@link UnmodifiableSequenceWrapper} objects based
-	 * on the given {@link ISequences} object.
+	 * Generate a new map of {@link UnmodifiableSequenceWrapper} objects based on the given {@link ISequences} object.
 	 * 
 	 * @param wrapped
 	 */
-	public void setSequences(final ISequences<T> wrapped) {
+	public void setSequences(final ISequences wrapped) {
 		this.wrapped = wrapped;
 		wrappedSequences.clear();
-		final Map<IResource, ISequence<T>> sequences = wrapped.getSequences();
-		for (final Map.Entry<IResource, ISequence<T>> entry : sequences
-				.entrySet()) {
+		final Map<IResource, ISequence> sequences = wrapped.getSequences();
+		for (final Map.Entry<IResource, ISequence> entry : sequences.entrySet()) {
 			final IResource resource = entry.getKey();
-			final ISequence<T> sequence = entry.getValue();
+			final ISequence sequence = entry.getValue();
 
-			wrappedSequences.put(resource, new UnmodifiableSequenceWrapper<T>(
-					sequence));
+			wrappedSequences.put(resource, new UnmodifiableSequenceWrapper(sequence));
 		}
 	}
 
@@ -80,7 +74,7 @@ public final class UnmodifiableSequencesWrapper<T> implements ISequences<T> {
 	}
 
 	@Override
-	public List<T> getUnusedElements() {
+	public List<ISequenceElement> getUnusedElements() {
 		return wrapped.getUnusedElements();
 	}
 }

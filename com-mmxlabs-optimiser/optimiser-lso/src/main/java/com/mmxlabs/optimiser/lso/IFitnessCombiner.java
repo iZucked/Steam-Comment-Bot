@@ -9,8 +9,7 @@ import java.util.Collection;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 
 /**
- * {@link IFitnessCombiner} implementations are used to combine the raw fitness
- * values from {@link IFitnessComponent}s into a single fitness value
+ * {@link IFitnessCombiner} implementations are used to combine the raw fitness values from {@link IFitnessComponent}s into a single fitness value
  * 
  * @author Simon Goodall
  * 
@@ -18,14 +17,11 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 public interface IFitnessCombiner {
 
 	/**
-	 * Combine the previously evaluated fitnesses in the given
-	 * {@link IFitnessComponent}s into a single fitness value.
+	 * Combine the previously evaluated fitnesses in the given {@link IFitnessComponent}s into a single fitness value.
 	 * 
-	 * @param <T>
-	 *            Sequence element type
 	 * @param fitnessComponents
 	 * @return
 	 */
-	<T> long calculateFitness(Collection<IFitnessComponent<T>> fitnessComponents);
+	long calculateFitness(Collection<IFitnessComponent> fitnessComponents);
 
 }

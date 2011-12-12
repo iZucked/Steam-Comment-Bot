@@ -5,16 +5,12 @@
 package com.mmxlabs.optimiser.core;
 
 /**
- * A callback interface to monitor progress of an optimisation. An
- * {@link IOptimiser} instance will report the initial and ending states and
- * report back updates during the optimisation process.
+ * A callback interface to monitor progress of an optimisation. An {@link IOptimiser} instance will report the initial and ending states and report back updates during the optimisation process.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type.
  */
-public interface IOptimiserProgressMonitor<T> {
+public interface IOptimiserProgressMonitor {
 
 	/**
 	 * Notify that the optimisation is starting with the given initial state.
@@ -23,13 +19,10 @@ public interface IOptimiserProgressMonitor<T> {
 	 * @param initialFitness
 	 * @param initialState
 	 */
-	void begin(IOptimiser<T> optimiser, long initialFitness,
-			IAnnotatedSolution<T> annotatedSolution);
+	void begin(IOptimiser optimiser, long initialFitness, IAnnotatedSolution annotatedSolution);
 
 	/**
-	 * Report back the current and best state found at the given iteration
-	 * number. This method will be called from the main optimisation loop so
-	 * implementations should return as quickly as possible.
+	 * Report back the current and best state found at the given iteration number. This method will be called from the main optimisation loop so implementations should return as quickly as possible.
 	 * 
 	 * @param optimiser
 	 * @param iteration
@@ -38,18 +31,14 @@ public interface IOptimiserProgressMonitor<T> {
 	 * @param currentState
 	 * @param bestState
 	 */
-	void report(IOptimiser<T> optimiser, int iteration, long currentFitness,
-			long bestFitness, IAnnotatedSolution<T> currentSolution,
-			IAnnotatedSolution<T> bestSolution);
+	void report(IOptimiser optimiser, int iteration, long currentFitness, long bestFitness, IAnnotatedSolution currentSolution, IAnnotatedSolution bestSolution);
 
 	/**
-	 * Notify the optimisation has finished with the given solution as the best
-	 * found.
+	 * Notify the optimisation has finished with the given solution as the best found.
 	 * 
 	 * @param optimiser
 	 * @param bestFitness
 	 * @param bestState
 	 */
-	void done(IOptimiser<T> optimiser, long bestFitness,
-			IAnnotatedSolution<T> annotatedSolution);
+	void done(IOptimiser optimiser, long bestFitness, IAnnotatedSolution annotatedSolution);
 }

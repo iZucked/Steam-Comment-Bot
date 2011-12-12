@@ -4,16 +4,15 @@
  */
 package com.mmxlabs.optimiser.core;
 
+
 /**
  * This interface defines an immutable sequence of elements. It is assumed that
  * each element appears only once in a given sequence.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface ISequence<T> extends Iterable<T> {
+public interface ISequence extends Iterable<ISequenceElement> {
 
 	/**
 	 * Returns the number of elements in this sequence.
@@ -29,7 +28,7 @@ public interface ISequence<T> extends Iterable<T> {
 	 * @param index
 	 * @return
 	 */
-	T get(int index);
+	ISequenceElement get(int index);
 
 	/**
 	 * Return a {@link ISegment} instance from a subset of the sequence using
@@ -43,17 +42,17 @@ public interface ISequence<T> extends Iterable<T> {
 	 *            Range end (exclusive)
 	 * @return
 	 */
-	ISegment<T> getSegment(int start, int end);
+	ISegment getSegment(int start, int end);
 
 	/**
 	 * Get the element at the end of this sequence
 	 * @return last element
 	 */
-	T last();
+	ISequenceElement last();
 	
 	/**
 	 * Get the element at the start of this sequence
 	 * @return first element
 	 */
-	T first();
+	ISequenceElement first();
 }

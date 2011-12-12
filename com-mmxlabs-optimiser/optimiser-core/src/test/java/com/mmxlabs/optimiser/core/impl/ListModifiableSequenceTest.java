@@ -11,30 +11,35 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.ISegment;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * Test the {@link ListModifiableSequence} against the documented API. Most of
- * this test case should be reusable against other {@link IModifiableSequence}
- * implementations.
+ * Test the {@link ListModifiableSequence} against the documented API. Most of this test case should be reusable against other {@link IModifiableSequence} implementations.
  * 
  * @author Simon Goodall
  * 
  */
+@RunWith(JMock.class)
 public class ListModifiableSequenceTest {
+	Mockery context = new JUnit4Mockery();
 
-	private ListModifiableSequence<Object> sequence;
+	private ListModifiableSequence sequence;
 
 	@Before
 	public void setUp() throws Exception {
-		sequence = new ListModifiableSequence<Object>(new ArrayList<Object>(10));
+		sequence = new ListModifiableSequence(new ArrayList<ISequenceElement>(10));
 	}
 
 	@After
@@ -47,13 +52,13 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testIterator() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
 		sequence.add(object1);
 		sequence.add(object2);
 
-		final Iterator<Object> iterator = sequence.iterator();
+		final Iterator<ISequenceElement> iterator = sequence.iterator();
 		Assert.assertTrue(iterator.hasNext());
 		final Object iterObject1 = iterator.next();
 		Assert.assertSame(object1, iterObject1);
@@ -73,7 +78,7 @@ public class ListModifiableSequenceTest {
 	public void testAdd() {
 
 		Assert.assertEquals(0, sequence.size());
-		final Object element = new Object();
+		final ISequenceElement element = context.mock(ISequenceElement.class, "1");
 		sequence.add(element);
 		Assert.assertEquals(1, sequence.size());
 		Assert.assertEquals(element, sequence.get(0));
@@ -82,10 +87,10 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testInsertIntT() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
-		final Object object3 = new Object();
+		final ISequenceElement object3 = context.mock(ISequenceElement.class, "3");
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -102,10 +107,10 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testInsertIntT_2() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
-		final Object object3 = new Object();
+		final ISequenceElement object3 = context.mock(ISequenceElement.class, "3");
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -116,10 +121,10 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testInsertIntT_3() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
-		final Object object3 = new Object();
+		final ISequenceElement object3 = context.mock(ISequenceElement.class, "3");
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -129,20 +134,19 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testInsertIntISegmentOfT() {
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
-		final Object object3 = new Object();
-		final Object object4 = new Object();
+		final ISequenceElement object3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement object4 = context.mock(ISequenceElement.class, "4");
 
 		sequence.add(object1);
 		sequence.add(object2);
 
-		final List<Object> segmentList = new LinkedList<Object>();
+		final List<ISequenceElement> segmentList = new LinkedList<ISequenceElement>();
 		segmentList.add(object3);
 		segmentList.add(object4);
-		final ISegment<Object> segment = new ListSegment<Object>(segmentList,
-				sequence, 0, 1);
+		final ISegment segment = new ListSegment(segmentList, sequence, 0, 1);
 
 		sequence.insert(1, segment);
 
@@ -157,20 +161,19 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testInsertIntISegmentOfT_2() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
-		final Object object3 = new Object();
-		final Object object4 = new Object();
+		final ISequenceElement object3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement object4 = context.mock(ISequenceElement.class, "4");
 
 		sequence.add(object1);
 		sequence.add(object2);
 
-		final List<Object> segmentList = new LinkedList<Object>();
+		final List<ISequenceElement> segmentList = new LinkedList<ISequenceElement>();
 		segmentList.add(object3);
 		segmentList.add(object4);
-		final ISegment<Object> segment = new ListSegment<Object>(segmentList,
-				sequence, 0, 1);
+		final ISegment segment = new ListSegment(segmentList, sequence, 0, 1);
 
 		sequence.insert(-1, segment);
 	}
@@ -178,20 +181,19 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testInsertIntISegmentOfT_3() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
-		final Object object3 = new Object();
-		final Object object4 = new Object();
+		final ISequenceElement object3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement object4 = context.mock(ISequenceElement.class, "4");
 
 		sequence.add(object1);
 		sequence.add(object2);
 
-		final List<Object> segmentList = new LinkedList<Object>();
+		final List<ISequenceElement> segmentList = new LinkedList<ISequenceElement>();
 		segmentList.add(object3);
 		segmentList.add(object4);
-		final ISegment<Object> segment = new ListSegment<Object>(segmentList,
-				sequence, 0, 1);
+		final ISegment segment = new ListSegment(segmentList, sequence, 0, 1);
 
 		sequence.insert(3, segment);
 	}
@@ -199,8 +201,8 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testRemoveInt() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -213,8 +215,8 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testRemoveT() {
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -228,8 +230,8 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testRemoveT_2() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
 		sequence.add(object1);
 
@@ -242,22 +244,20 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testRemoveISegmentOfT() {
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
-		final Object object3 = new Object();
-		final Object object4 = new Object();
-
+		final ISequenceElement object3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement object4 = context.mock(ISequenceElement.class, "4");
 		sequence.add(object1);
 		sequence.add(object2);
 		sequence.add(object3);
 		sequence.add(object4);
 
-		final List<Object> segmentList = new LinkedList<Object>();
+		final List<ISequenceElement> segmentList = new LinkedList<ISequenceElement>();
 		segmentList.add(object2);
 		segmentList.add(object3);
-		final ISegment<Object> segment = new ListSegment<Object>(segmentList,
-				sequence, 1, 3);
+		final ISegment segment = new ListSegment(segmentList, sequence, 1, 3);
 
 		sequence.remove(segment);
 
@@ -271,20 +271,19 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testRemoveISegmentOfT_2() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
-		final Object object3 = new Object();
-		final Object object4 = new Object();
+		final ISequenceElement object3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement object4 = context.mock(ISequenceElement.class, "4");
 
 		sequence.add(object1);
 		sequence.add(object4);
 
-		final List<Object> segmentList = new LinkedList<Object>();
+		final List<ISequenceElement> segmentList = new LinkedList<ISequenceElement>();
 		segmentList.add(object2);
 		segmentList.add(object3);
-		final ISegment<Object> segment = new ListSegment<Object>(segmentList,
-				sequence, 1, 3);
+		final ISegment segment = new ListSegment(segmentList, sequence, 1, 3);
 
 		// TODO: Backing list implementation returns a boolean to indicate
 		// success.
@@ -297,8 +296,8 @@ public class ListModifiableSequenceTest {
 
 	@Test
 	public void testRemoveIntInt() {
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -312,8 +311,8 @@ public class ListModifiableSequenceTest {
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testRemoveIntInt_2() {
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -323,8 +322,8 @@ public class ListModifiableSequenceTest {
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testRemoveIntInt_3() {
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -335,12 +334,14 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testSet() {
 		Assert.assertEquals(0, sequence.size());
-		final Object element = new Object();
+		final ISequenceElement element = context.mock(ISequenceElement.class, "1");
+
 		sequence.add(element);
 		Assert.assertEquals(1, sequence.size());
 		Assert.assertEquals(element, sequence.get(0));
 
-		final Object element2 = new Object();
+		final ISequenceElement element2 = context.mock(ISequenceElement.class, "2");
+
 		sequence.set(0, element2);
 
 		Assert.assertEquals(element2, sequence.get(0));
@@ -350,19 +351,24 @@ public class ListModifiableSequenceTest {
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testSet_2() {
-		sequence.set(1, new Object());
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+
+		sequence.set(1, object1);
 	}
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testSet_3() {
-		sequence.set(-1, new Object());
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+
+		sequence.set(-1, object1);
 	}
 
 	@Test()
 	public void testGet() {
 
 		Assert.assertEquals(0, sequence.size());
-		final Object element = new Object();
+		final ISequenceElement element = context.mock(ISequenceElement.class, "1");
+
 		sequence.add(element);
 		Assert.assertEquals(1, sequence.size());
 		Assert.assertEquals(element, sequence.get(0));
@@ -382,13 +388,13 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testGetSegment() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
 		sequence.add(object1);
 		sequence.add(object2);
 
-		final ISegment<Object> segment = sequence.getSegment(0, 2);
+		final ISegment segment = sequence.getSegment(0, 2);
 
 		Assert.assertEquals(2, segment.size());
 
@@ -400,7 +406,7 @@ public class ListModifiableSequenceTest {
 		Assert.assertSame(object1, segment.get(0));
 		Assert.assertSame(object2, segment.get(1));
 
-		final Iterator<Object> iterator = segment.iterator();
+		final Iterator<ISequenceElement> iterator = segment.iterator();
 
 		Assert.assertTrue(iterator.hasNext());
 		final Object iterObject1 = iterator.next();
@@ -424,8 +430,8 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGetSegment_2() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -436,8 +442,8 @@ public class ListModifiableSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGetSegment_3() {
 
-		final Object object1 = new Object();
-		final Object object2 = new Object();
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement object2 = context.mock(ISequenceElement.class, "2");
 
 		sequence.add(object1);
 		sequence.add(object2);
@@ -449,7 +455,9 @@ public class ListModifiableSequenceTest {
 	public void testSize() {
 		Assert.assertEquals(0, sequence.size());
 
-		sequence.add(new Object());
+		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
+		
+		sequence.add(object1);
 
 		Assert.assertEquals(1, sequence.size());
 	}
@@ -457,12 +465,12 @@ public class ListModifiableSequenceTest {
 	@Test
 	public void testReplaceAll() {
 
-		final Object o1 = new Object();
-		final Object o2 = new Object();
-		final Object o3 = new Object();
-		final Object o4 = new Object();
-		final Object o5 = new Object();
-		final Object o6 = new Object();
+		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement o3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement o4 = context.mock(ISequenceElement.class, "4");
+		final ISequenceElement o5 = context.mock(ISequenceElement.class, "5");
+		final ISequenceElement o6 = context.mock(ISequenceElement.class, "6");
 
 		sequence.add(o1);
 		sequence.add(o2);
@@ -474,8 +482,7 @@ public class ListModifiableSequenceTest {
 		Assert.assertSame(o2, sequence.get(1));
 		Assert.assertSame(o3, sequence.get(2));
 
-		final ListModifiableSequence<Object> sequence2 = new ListModifiableSequence<Object>(
-				new ArrayList<Object>(10));
+		final ListModifiableSequence sequence2 = new ListModifiableSequence(new ArrayList<ISequenceElement>(10));
 
 		sequence2.add(o4);
 		sequence2.add(o5);

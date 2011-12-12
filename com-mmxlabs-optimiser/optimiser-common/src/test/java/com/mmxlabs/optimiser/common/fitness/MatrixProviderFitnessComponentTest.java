@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.optimiser.common.fitness;
 
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,17 +14,15 @@ public class MatrixProviderFitnessComponentTest {
 
 		final String name = "name";
 		final String key = "key";
-		final MatrixProviderFitnessCore<Object> core = new MatrixProviderFitnessCore<Object>(
-				name, key);
-		final MatrixProviderFitnessComponent<Object> component = new MatrixProviderFitnessComponent<Object>(
-				name, core);
+		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(name, key);
+		final MatrixProviderFitnessComponent component = new MatrixProviderFitnessComponent(name, core);
 
 		Assert.assertSame(name, component.getName());
 		Assert.assertSame(core, component.getFitnessCore());
 	}
 
-	//@Test
+	// @Test
 	public void testGetFitness() {
-		 // TODO: Can't easily test this.
+		// TODO: Can't easily test this.
 	}
 }

@@ -21,7 +21,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 
@@ -30,29 +30,23 @@ public class Move4over2Test {
 
 	Mockery context = new JUnit4Mockery();
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testApply() {
 
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 		final IResource resource2 = context.mock(IResource.class, "resource2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
 
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
-		final Move4over2<Object> move = new Move4over2<Object>();
+		final Move4over2 move = new Move4over2();
 
 		final int resource1Start = 0;
 		final int resource1End = 2;
@@ -91,21 +85,16 @@ public class Move4over2Test {
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 		final IResource resource2 = context.mock(IResource.class, "resource2");
 
-		final IModifiableSequence<Integer> sequence1 = new ListModifiableSequence<Integer>(
-				CollectionsUtil.makeArrayList(1, 2, 3, 4, 5));
-		final IModifiableSequence<Integer> sequence2 = new ListModifiableSequence<Integer>(
-				CollectionsUtil.makeArrayList(6, 7, 8, 9, 10));
+		final IModifiableSequence sequence1 = OptimiserTestUtil.makeSequence(1, 2, 3, 4, 5);
+		final IModifiableSequence sequence2 = OptimiserTestUtil.makeSequence(6, 7, 8, 9, 10);
 
-		List<IResource> resources = CollectionsUtil.makeArrayList(resource1,
-				resource2);
+		List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		Map<IResource, IModifiableSequence<Integer>> sequenceMap = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
-				resources, sequenceMap);
+		IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
-		final Move4over2<Integer> move = new Move4over2<Integer>();
+		final Move4over2 move = new Move4over2();
 
 		final int resource1Start = 0;
 		final int resource1End = 2;
@@ -124,10 +113,8 @@ public class Move4over2Test {
 
 		move.apply(sequences);
 
-		List<Integer> expectedSequence1 = CollectionsUtil.makeArrayList(7, 8,
-				3, 4, 5);
-		List<Integer> expectedSequence2 = CollectionsUtil.makeArrayList(6, 1,
-				2, 9, 10);
+		List<ISequenceElement> expectedSequence1 = OptimiserTestUtil.makeList(7, 8, 3, 4, 5);
+		List<ISequenceElement> expectedSequence2 = OptimiserTestUtil.makeList(6, 1, 2, 9, 10);
 
 		Assert.assertEquals(expectedSequence1.size(), sequence1.size());
 		for (int i = 0; i < expectedSequence1.size(); ++i) {
@@ -146,21 +133,16 @@ public class Move4over2Test {
 		final IResource resource2 = context.mock(IResource.class, "resource2");
 		final IResource resource3 = context.mock(IResource.class, "resource3");
 
-		final IModifiableSequence<Integer> sequence1 = new ListModifiableSequence<Integer>(
-				CollectionsUtil.makeArrayList(1, 2, 3, 4, 5));
-		final IModifiableSequence<Integer> sequence2 = new ListModifiableSequence<Integer>(
-				CollectionsUtil.makeArrayList(6, 7, 8, 9, 10));
+		final IModifiableSequence sequence1 = OptimiserTestUtil.makeSequence(1, 2, 3, 4, 5);
+		final IModifiableSequence sequence2 = OptimiserTestUtil.makeSequence(6, 7, 8, 9, 10);
 
-		List<IResource> resources = CollectionsUtil.makeArrayList(resource1,
-				resource2);
+		List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		Map<IResource, IModifiableSequence<Integer>> sequenceMap = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		IModifiableSequences<Integer> sequences = new ModifiableSequences<Integer>(
-				resources, sequenceMap);
+		IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
-		final Move4over2<Integer> move = new Move4over2<Integer>();
+		final Move4over2 move = new Move4over2();
 
 		final int resource1Start = 0;
 		final int resource1End = 2;
@@ -189,15 +171,11 @@ public class Move4over2Test {
 
 		Assert.assertTrue(move.validate(sequences));
 
-		final Map<IResource, ISequence<Integer>> sequenceMap_r1 = CollectionsUtil
-				.makeHashMap(resource1, sequence1);
-		final Map<IResource, ISequence<Integer>> sequenceMap_r2 = CollectionsUtil
-				.makeHashMap(resource2, sequence2);
+		final Map<IResource, ISequence> sequenceMap_r1 = CollectionsUtil.makeHashMap(resource1, sequence1);
+		final Map<IResource, ISequence> sequenceMap_r2 = CollectionsUtil.makeHashMap(resource2, sequence2);
 
-		Assert.assertFalse(move.validate(new Sequences<Integer>(Collections
-				.singletonList(resource2), sequenceMap_r2)));
-		Assert.assertFalse(move.validate(new Sequences<Integer>(Collections
-				.singletonList(resource1), sequenceMap_r1)));
+		Assert.assertFalse(move.validate(new Sequences(Collections.singletonList(resource2), sequenceMap_r2)));
+		Assert.assertFalse(move.validate(new Sequences(Collections.singletonList(resource1), sequenceMap_r1)));
 
 		move.setResource1End(100);
 		Assert.assertFalse(move.validate(sequences));
@@ -234,7 +212,7 @@ public class Move4over2Test {
 		move.setResource1(resource3);
 		Assert.assertFalse(move.validate(sequences));
 		move.setResource1(resource1);
-		
+
 		move.setResource2(resource3);
 		Assert.assertFalse(move.validate(sequences));
 		move.setResource2(resource2);
@@ -243,7 +221,7 @@ public class Move4over2Test {
 	@Test
 	public void testGetSetResource1() {
 
-		final Move4over2<Integer> move = new Move4over2<Integer>();
+		final Move4over2 move = new Move4over2();
 
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 
@@ -255,7 +233,7 @@ public class Move4over2Test {
 	@Test
 	public void testGetSetResource2() {
 
-		final Move4over2<Integer> move = new Move4over2<Integer>();
+		final Move4over2 move = new Move4over2();
 
 		final IResource resource2 = context.mock(IResource.class, "resource2");
 
@@ -267,7 +245,7 @@ public class Move4over2Test {
 	@Test
 	public void testGetSetResource1Start() {
 
-		final Move4over2<Integer> move = new Move4over2<Integer>();
+		final Move4over2 move = new Move4over2();
 
 		Assert.assertEquals(-1, move.getResource1Start());
 		final int pos = 10;
@@ -278,7 +256,7 @@ public class Move4over2Test {
 	@Test
 	public void testGetSetResource1End() {
 
-		final Move4over2<Integer> move = new Move4over2<Integer>();
+		final Move4over2 move = new Move4over2();
 
 		Assert.assertEquals(-1, move.getResource1End());
 		final int pos = 10;
@@ -289,7 +267,7 @@ public class Move4over2Test {
 	@Test
 	public void testGetSetResource2Start() {
 
-		final Move4over2<Integer> move = new Move4over2<Integer>();
+		final Move4over2 move = new Move4over2();
 
 		Assert.assertEquals(-1, move.getResource2Start());
 		final int pos = 10;
@@ -300,7 +278,7 @@ public class Move4over2Test {
 	@Test
 	public void testGetSetResource2End() {
 
-		final Move4over2<Integer> move = new Move4over2<Integer>();
+		final Move4over2 move = new Move4over2();
 
 		Assert.assertEquals(-1, move.getResource2End());
 		final int pos = 10;

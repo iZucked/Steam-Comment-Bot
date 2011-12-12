@@ -14,17 +14,15 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
 /**
- * The {@link MoveHydra} allows multiple {@link ISegment}s from a single
- * {@link ISequence} to be moved to multiple other {@link ISequence}s.
+ * The {@link MoveHydra} allows multiple {@link ISegment}s from a single {@link ISequence} to be moved to multiple other {@link ISequence}s.
  * 
  * @author Simon Goodall
  * 
- * @param <T> Sequence element type.
  */
-public class MoveHydra<T> implements IMove<T> {
+public class MoveHydra implements IMove {
 
 	@Override
-	public void apply(IModifiableSequences<T> sequences) {
+	public void apply(final IModifiableSequences sequences) {
 		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 
@@ -34,7 +32,7 @@ public class MoveHydra<T> implements IMove<T> {
 	}
 
 	@Override
-	public boolean validate(ISequences<T> sequences) {
+	public boolean validate(final ISequences sequences) {
 		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 

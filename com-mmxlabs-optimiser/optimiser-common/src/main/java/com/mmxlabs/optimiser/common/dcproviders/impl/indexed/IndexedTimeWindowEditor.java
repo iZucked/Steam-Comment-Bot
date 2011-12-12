@@ -8,27 +8,25 @@ import java.util.Collections;
 import java.util.List;
 
 import com.mmxlabs.common.indexedobjects.IIndexMap;
-import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
-public class IndexedTimeWindowEditor<T extends IIndexedObject> implements
-		ITimeWindowDataComponentProviderEditor<T> {
+public class IndexedTimeWindowEditor implements ITimeWindowDataComponentProviderEditor {
 
-	private final IIndexMap<T, List<ITimeWindow>> timeWindowsByElement = new ArrayIndexMap<T, List<ITimeWindow>>();
+	private final IIndexMap<ISequenceElement, List<ITimeWindow>> timeWindowsByElement = new ArrayIndexMap<ISequenceElement, List<ITimeWindow>>();
 
 	private final String name;
 
-	public IndexedTimeWindowEditor(String name) {
+	public IndexedTimeWindowEditor(final String name) {
 		super();
 		this.name = name;
 	}
 
 	@Override
-	public List<ITimeWindow> getTimeWindows(final T element) {
-		final List<ITimeWindow> windows = timeWindowsByElement
-				.maybeGet(element);
+	public List<ITimeWindow> getTimeWindows(final ISequenceElement element) {
+		final List<ITimeWindow> windows = timeWindowsByElement.maybeGet(element);
 		if (windows == null) {
 			return Collections.emptyList();
 		} else {
@@ -47,8 +45,7 @@ public class IndexedTimeWindowEditor<T extends IIndexedObject> implements
 	}
 
 	@Override
-	public void setTimeWindows(final T element,
-			final List<ITimeWindow> timeWindows) {
+	public void setTimeWindows(final ISequenceElement element, final List<ITimeWindow> timeWindows) {
 		timeWindowsByElement.set(element, timeWindows);
 	}
 

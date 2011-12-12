@@ -13,10 +13,8 @@ import java.util.Map;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface ISequences<T> {
+public interface ISequences {
 
 	/**
 	 * Returns the {@link ISequence} for the given {@link IResource}.
@@ -24,7 +22,7 @@ public interface ISequences<T> {
 	 * @param resource
 	 * @return
 	 */
-	ISequence<T> getSequence(IResource resource);
+	ISequence getSequence(IResource resource);
 
 	/**
 	 * Returns the {@link ISequence} for the given resource index.
@@ -32,21 +30,21 @@ public interface ISequences<T> {
 	 * @param index
 	 * @return
 	 */
-	ISequence<T> getSequence(int index);
+	ISequence getSequence(int index);
 
 	/**
 	 * Return
 	 * 
 	 * @return
 	 */
-	Map<IResource, ISequence<T>> getSequences();
+	Map<IResource, ISequence> getSequences();
 
 	/**
 	 * Returns the elements in the solution which are not used anywhere
 	 * 
 	 * @return
 	 */
-	List<T> getUnusedElements();
+	List<ISequenceElement> getUnusedElements();
 
 	/**
 	 * Returns an indexed list of resources for which resources are keyed off.

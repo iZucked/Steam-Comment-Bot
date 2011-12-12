@@ -13,29 +13,22 @@ import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class NullOptimiserProgressMonitor<T> implements
-		IOptimiserProgressMonitor<T> {
+public final class NullOptimiserProgressMonitor implements IOptimiserProgressMonitor {
 
 	@Override
-	public void begin(IOptimiser<T> optimiser, long initialFitness,
-			IAnnotatedSolution<T> annotatedSolution) {
+	public void begin(final IOptimiser optimiser, final long initialFitness, final IAnnotatedSolution annotatedSolution) {
 
 	}
 
 	@Override
-	public void report(IOptimiser<T> optimiser, int iteration,
-			long currentFitness, long bestFitness,
-			IAnnotatedSolution<T> currentSolution,
-			IAnnotatedSolution<T> annotatedSolution) {
+	public void report(final IOptimiser optimiser, final int iteration, final long currentFitness, final long bestFitness, final IAnnotatedSolution currentSolution,
+			final IAnnotatedSolution annotatedSolution) {
 
 	}
 
 	@Override
-	public void done(IOptimiser<T> optimiser, long bestFitness,
-			IAnnotatedSolution<T> annotatedSolution) {
+	public void done(final IOptimiser optimiser, final long bestFitness, final IAnnotatedSolution annotatedSolution) {
 
 	}
 }

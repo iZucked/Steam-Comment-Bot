@@ -9,22 +9,19 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
- * {@link IConstraintCheckerFactory} implementation to create
- * {@link OrderedSequenceElementsConstraintChecker} instances.
+ * {@link IConstraintCheckerFactory} implementation to create {@link OrderedSequenceElementsConstraintChecker} instances.
  * 
  * @author Simon Goodall
  * 
  */
-public final class OrderedSequenceElementsConstraintCheckerFactory implements
-		IConstraintCheckerFactory {
+public final class OrderedSequenceElementsConstraintCheckerFactory implements IConstraintCheckerFactory {
 
 	public static final String NAME = "OrderedSequenceElementsConstraintChecker";
 
 	private final String key;
 
 	/**
-	 * Constructor taking the key to use in {@link IOptimisationData} to find
-	 * the {@link IOrderedSequenceElementsDataComponentProvider}.
+	 * Constructor taking the key to use in {@link IOptimisationData} to find the {@link IOrderedSequenceElementsDataComponentProvider}.
 	 * 
 	 * @param key
 	 */
@@ -38,8 +35,8 @@ public final class OrderedSequenceElementsConstraintCheckerFactory implements
 	}
 
 	@Override
-	public <T> OrderedSequenceElementsConstraintChecker<T> instantiate() {
-		return new OrderedSequenceElementsConstraintChecker<T>(NAME, key);
+	public OrderedSequenceElementsConstraintChecker instantiate() {
+		return new OrderedSequenceElementsConstraintChecker(NAME, key);
 	}
 
 }

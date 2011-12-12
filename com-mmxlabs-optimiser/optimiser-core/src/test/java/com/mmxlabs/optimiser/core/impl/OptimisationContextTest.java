@@ -15,11 +15,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 @RunWith(JMock.class)
@@ -27,36 +24,24 @@ public class OptimisationContextTest {
 
 	Mockery context = new JUnit4Mockery();
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testOptimisationContext() {
 
-		final IOptimisationData optimisationData = context
-				.mock(IOptimisationData.class);
+		final IOptimisationData optimisationData = context.mock(IOptimisationData.class);
 		final ISequences initialSequences = context.mock(ISequences.class);
 
-		final List<IFitnessComponent> fitnessComponents = Collections
-				.emptyList();
-		final IFitnessFunctionRegistry fitnessFunctionRegistry = context
-				.mock(IFitnessFunctionRegistry.class);
-		final List<IConstraintChecker> constraintCheckers = Collections
-				.emptyList();
-		final IConstraintCheckerRegistry constraintCheckerRegistry = context
-				.mock(IConstraintCheckerRegistry.class);
+		final List<String> fitnessComponents = Collections.emptyList();
+		final IFitnessFunctionRegistry fitnessFunctionRegistry = context.mock(IFitnessFunctionRegistry.class);
+		final List<String> constraintCheckers = Collections.emptyList();
+		final IConstraintCheckerRegistry constraintCheckerRegistry = context.mock(IConstraintCheckerRegistry.class);
 
-		final OptimisationContext optContext = new OptimisationContext(
-				optimisationData, initialSequences, fitnessComponents,
-				fitnessFunctionRegistry, constraintCheckers,
-				constraintCheckerRegistry);
+		final OptimisationContext optContext = new OptimisationContext(optimisationData, initialSequences, fitnessComponents, fitnessFunctionRegistry, constraintCheckers, constraintCheckerRegistry);
 
 		Assert.assertSame(optimisationData, optContext.getOptimisationData());
 		Assert.assertSame(initialSequences, optContext.getInitialSequences());
 		Assert.assertSame(fitnessComponents, optContext.getFitnessComponents());
-		Assert.assertSame(fitnessFunctionRegistry, optContext
-				.getFitnessFunctionRegistry());
-		Assert.assertSame(constraintCheckers, optContext
-				.getConstraintCheckers());
-		Assert.assertSame(constraintCheckerRegistry, optContext
-				.getConstraintCheckerRegistry());
+		Assert.assertSame(fitnessFunctionRegistry, optContext.getFitnessFunctionRegistry());
+		Assert.assertSame(constraintCheckers, optContext.getConstraintCheckers());
+		Assert.assertSame(constraintCheckerRegistry, optContext.getConstraintCheckerRegistry());
 	}
 }

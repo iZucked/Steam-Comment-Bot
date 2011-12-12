@@ -10,48 +10,43 @@ import java.util.List;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
- * A {@link IConstraintChecker} implementation which enforces allocation of
- * sequence elements to permitted {@link IResource}s. This implements an early
- * break-out, meaning only the first violation of this constraint is logged.
+ * A {@link IConstraintChecker} implementation which enforces allocation of sequence elements to permitted {@link IResource}s. This implements an early break-out, meaning only the first violation of
+ * this constraint is logged.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class ResourceAllocationConstraintChecker<T> implements
-		IPairwiseConstraintChecker<T> {
+public final class ResourceAllocationConstraintChecker implements IPairwiseConstraintChecker {
 
 	private final String name;
 
 	private final String dataProviderKey;
 
-	private IResourceAllocationConstraintDataComponentProvider<T> resourceAllocationConstraintDataComponentProvider;
+	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
 
-	public ResourceAllocationConstraintChecker(final String name,
-			final String dataProviderKey) {
+	public ResourceAllocationConstraintChecker(final String name, final String dataProviderKey) {
 		this.name = name;
 		this.dataProviderKey = dataProviderKey;
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences<T> sequences) {
+	public boolean checkConstraints(final ISequences sequences) {
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences<T> sequences,
-			final List<String> messages) {
+	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
 
 		final List<IResource> resources = sequences.getResources();
 		for (final IResource resource : resources) {
-			final ISequence<T> sequence = sequences.getSequence(resource);
+			final ISequence sequence = sequences.getSequence(resource);
 			final boolean ok = checkSequence(resource, sequence, messages);
 			if (!ok) {
 				return false;
@@ -62,24 +57,19 @@ public final class ResourceAllocationConstraintChecker<T> implements
 	}
 
 	/**
-	 * Loop through sequence checking the resource is a permitted resource for
-	 * the sequence element.
+	 * Loop through sequence checking the resource is a permitted resource for the sequence element.
 	 * 
 	 * @param resource
 	 * @param sequence
 	 * @param messages
 	 * @return
 	 */
-	private boolean checkSequence(final IResource resource,
-			final ISequence<T> sequence, final List<String> messages) {
+	private boolean checkSequence(final IResource resource, final ISequence sequence, final List<String> messages) {
 
-		for (final T t : sequence) {
+		for (final ISequenceElement t : sequence) {
 			if (!checkElement(t, resource)) {
 				if (messages != null) {
-					final String msg = String
-							.format(
-									"Element (%s) is not permitted to be allocated to resource (%s)",
-									t, resource);
+					final String msg = String.format("Element (%s) is not permitted to be allocated to resource (%s)", t, resource);
 					messages.add(msg);
 				}
 				return false;
@@ -89,22 +79,17 @@ public final class ResourceAllocationConstraintChecker<T> implements
 		return true;
 	}
 
-	public void setProvider(
-			final IResourceAllocationConstraintDataComponentProvider<T> resourceAllocationConstraintDataComponentProvider) {
+	public void setProvider(final IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider) {
 		this.resourceAllocationConstraintDataComponentProvider = resourceAllocationConstraintDataComponentProvider;
 	}
 
-	public IResourceAllocationConstraintDataComponentProvider<T> getProvider() {
+	public IResourceAllocationConstraintDataComponentProvider getProvider() {
 		return resourceAllocationConstraintDataComponentProvider;
 	}
 
 	@Override
-	public void setOptimisationData(final IOptimisationData<T> optimisationData) {
-		@SuppressWarnings("unchecked")
-		final IResourceAllocationConstraintDataComponentProvider<T> provider = optimisationData
-				.getDataComponentProvider(
-						dataProviderKey,
-						IResourceAllocationConstraintDataComponentProvider.class);
+	public void setOptimisationData(final IOptimisationData optimisationData) {
+		final IResourceAllocationConstraintDataComponentProvider provider = optimisationData.getDataComponentProvider(dataProviderKey, IResourceAllocationConstraintDataComponentProvider.class);
 		setProvider(provider);
 	}
 
@@ -114,19 +99,18 @@ public final class ResourceAllocationConstraintChecker<T> implements
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(final T first, final T second, final IResource resource) {
+	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		return checkElement(first, resource) && checkElement(second, resource);
 	}
-	
-	private final boolean checkElement(final T element, final IResource resource) {
+
+	private final boolean checkElement(final ISequenceElement element, final IResource resource) {
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
 		return (resources == null || resources.contains(resource));
 	}
 
 	@Override
-	public String explain(final T first, final T second, final IResource resource) {
+	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(first);
-		return "Resource: " + resource.getName() + ", first in " + resources + ", second in " +
-			resourceAllocationConstraintDataComponentProvider.getAllowedResources(second);
+		return "Resource: " + resource.getName() + ", first in " + resources + ", second in " + resourceAllocationConstraintDataComponentProvider.getAllowedResources(second);
 	}
 }

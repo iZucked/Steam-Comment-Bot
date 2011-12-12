@@ -7,13 +7,13 @@ package com.mmxlabs.optimiser.core.fitness.impl;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 
-public final class MockFitnessComponent<T> implements IFitnessComponent<T> {
+public final class MockFitnessComponent implements IFitnessComponent {
 
 	private final String name;
 
-	private final IFitnessCore<T> core;
+	private final IFitnessCore core;
 
-	public MockFitnessComponent(final String name, final IFitnessCore<T> core) {
+	public MockFitnessComponent(final String name, final IFitnessCore core) {
 		this.name = name;
 		this.core = core;
 	}
@@ -24,7 +24,7 @@ public final class MockFitnessComponent<T> implements IFitnessComponent<T> {
 	}
 
 	@Override
-	public IFitnessCore<T> getFitnessCore() {
+	public IFitnessCore getFitnessCore() {
 		return core;
 	}
 

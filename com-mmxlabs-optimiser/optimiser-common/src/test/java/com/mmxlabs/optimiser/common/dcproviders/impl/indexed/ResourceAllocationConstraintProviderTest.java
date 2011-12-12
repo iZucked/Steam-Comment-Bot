@@ -19,17 +19,15 @@ public class ResourceAllocationConstraintProviderTest {
 	public void testResourceAllocationConstraintProvider() {
 
 		final String name = "name";
-		final ResourceAllocationConstraintProvider<MockIndexedObject> provider = new ResourceAllocationConstraintProvider<MockIndexedObject>(
-				name);
+		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider(name);
 		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testGetAllowedResources() {
-		final ResourceAllocationConstraintProvider<MockIndexedObject> provider = new ResourceAllocationConstraintProvider<MockIndexedObject>(
-				"name");
+		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider("name");
 
-		final MockIndexedObject obj1 = new MockIndexedObject(1);
+		final MockSequenceElement obj1 = new MockSequenceElement(1);
 
 		Assert.assertNull(provider.getAllowedResources(obj1));
 
@@ -44,9 +42,8 @@ public class ResourceAllocationConstraintProviderTest {
 	@Test
 	public void testDispose() {
 
-		final ResourceAllocationConstraintProvider<MockIndexedObject> provider = new ResourceAllocationConstraintProvider<MockIndexedObject>(
-				"name");
-		final MockIndexedObject obj1 = new MockIndexedObject(1);
+		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider("name");
+		final MockSequenceElement obj1 = new MockSequenceElement(1);
 
 		Assert.assertNull(provider.getAllowedResources(obj1));
 

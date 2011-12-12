@@ -15,19 +15,17 @@ public class OrderedSequenceElementsDataComponentProviderTest {
 	public void testOrderedSequenceElementsDataComponentProvider() {
 
 		final String name = "name";
-		final OrderedSequenceElementsDataComponentProvider<MockIndexedObject> provider = new OrderedSequenceElementsDataComponentProvider<MockIndexedObject>(
-				name);
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider(name);
 		Assert.assertSame(name, provider.getName());
 	}
 
 	@Test
 	public void testElementOrder() {
 
-		final MockIndexedObject obj1 = new MockIndexedObject(1);
-		final MockIndexedObject obj2 = new MockIndexedObject(2);
+		final MockSequenceElement obj1 = new MockSequenceElement(1);
+		final MockSequenceElement obj2 = new MockSequenceElement(2);
 
-		final OrderedSequenceElementsDataComponentProvider<MockIndexedObject> provider = new OrderedSequenceElementsDataComponentProvider<MockIndexedObject>(
-				"name");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("name");
 
 		Assert.assertNull(provider.getNextElement(obj1));
 		Assert.assertNull(provider.getPreviousElement(obj1));
@@ -47,11 +45,10 @@ public class OrderedSequenceElementsDataComponentProviderTest {
 	@Test
 	public void testDispose() {
 
-		final MockIndexedObject obj1 = new MockIndexedObject(1);
-		final MockIndexedObject obj2 = new MockIndexedObject(2);
+		final MockSequenceElement obj1 = new MockSequenceElement(1);
+		final MockSequenceElement obj2 = new MockSequenceElement(2);
 
-		final OrderedSequenceElementsDataComponentProvider<MockIndexedObject> provider = new OrderedSequenceElementsDataComponentProvider<MockIndexedObject>(
-				"name");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("name");
 
 		Assert.assertNull(provider.getNextElement(obj1));
 		Assert.assertNull(provider.getPreviousElement(obj1));

@@ -8,19 +8,15 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 
 /**
- * The Null {@link ISequencesManipulator} implementation. This implementation
- * does nothing.
+ * The Null {@link ISequencesManipulator} implementation. This implementation does nothing.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class NullSequencesManipulator<T> implements
-		ISequencesManipulator<T> {
+public final class NullSequencesManipulator implements ISequencesManipulator {
 
 	@Override
-	public void manipulate(final IModifiableSequences<T> sequence) {
+	public void manipulate(final IModifiableSequences sequence) {
 		// Do nothing
 	}
 

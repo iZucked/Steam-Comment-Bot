@@ -8,10 +8,8 @@ package com.mmxlabs.optimiser.core;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface ISegment<T> extends Iterable<T> {
+public interface ISegment extends Iterable<ISequenceElement> {
 
 	/**
 	 * Return size of segment
@@ -26,7 +24,7 @@ public interface ISegment<T> extends Iterable<T> {
 	 * @param index
 	 * @return
 	 */
-	T get(int index);
+	ISequenceElement get(int index);
 
 	/**
 	 * Return segment start index in originating sequence
@@ -47,6 +45,6 @@ public interface ISegment<T> extends Iterable<T> {
 	 * 
 	 * @return
 	 */
-	ISequence<T> getSequence();
+	ISequence getSequence();
 
 }

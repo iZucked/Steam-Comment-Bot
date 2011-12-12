@@ -4,17 +4,16 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders;
 
-public interface IOrderedSequenceElementsDataComponentProviderEditor<T> extends
-		IOrderedSequenceElementsDataComponentProvider<T> {
+import com.mmxlabs.optimiser.core.ISequenceElement;
+
+public interface IOrderedSequenceElementsDataComponentProviderEditor extends IOrderedSequenceElementsDataComponentProvider {
 
 	/**
-	 * Define a pair of elements which must be together. An element may have
-	 * only one next element assigned to it. An element may have only one
-	 * previous element assigned to it.
+	 * Define a pair of elements which must be together. An element may have only one next element assigned to it. An element may have only one previous element assigned to it.
 	 * 
 	 * @param previousElement
 	 * @param nextElement
 	 */
-	void setElementOrder(T previousElement, T nextElement);
+	void setElementOrder(ISequenceElement previousElement, ISequenceElement nextElement);
 
 }

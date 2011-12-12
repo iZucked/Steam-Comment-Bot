@@ -10,52 +10,52 @@ import java.util.Collections;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.lso.impl.IntegerElement;
 
-public final class SortingFitnessCore<T> implements IFitnessCore<T> {
+public final class SortingFitnessCore implements IFitnessCore {
 	public static final String CORE_NAME = "Sorting Fitness Core";
 
 	private long fitness;
 
-	private final SortingFitnessComponent<T> component;
+	private final SortingFitnessComponent component;
 
 	public SortingFitnessCore() {
-		component = new SortingFitnessComponent<T>(this);
+		component = new SortingFitnessComponent(this);
 	}
 
 	@Override
-	public void accepted(final ISequences<T> sequences,
-			final Collection<IResource> affectedResources) {
+	public void accepted(final ISequences sequences, final Collection<IResource> affectedResources) {
 
 		// Nothing to do here, no state is recorded
 	}
 
 	@Override
-	public boolean evaluate(final ISequences<T> sequences) {
+	public boolean evaluate(final ISequences sequences) {
 
 		fitness = evaluateSequences(sequences);
 		return true;
 	}
 
 	@Override
-	public boolean evaluate(final ISequences<T> sequences,
-			final Collection<IResource> affectedResources) {
+	public boolean evaluate(final ISequences sequences, final Collection<IResource> affectedResources) {
 
 		fitness = evaluateSequences(sequences);
 		return true;
 	}
 
 	@Override
-	public Collection<IFitnessComponent<T>> getFitnessComponents() {
+	public Collection<IFitnessComponent> getFitnessComponents() {
 
-		return Collections.singleton((IFitnessComponent<T>) component);
+		return Collections.singleton((IFitnessComponent) component);
 	}
 
 	@Override
-	public void init(IOptimisationData<T> data) {
+	public void init(final IOptimisationData data) {
 		fitness = Long.MAX_VALUE;
 	}
 
@@ -64,39 +64,39 @@ public final class SortingFitnessCore<T> implements IFitnessCore<T> {
 		return fitness;
 	}
 
-	private long evaluateSequences(final ISequences<T> sequences) {
+	private long evaluateSequences(final ISequences sequences) {
 		long fitness = 0;
 
 		final int numSequences = sequences.size();
 
 		for (int i = 0; i < numSequences; ++i) {
-			final ISequence<T> sequence = sequences.getSequence(i);
+			final ISequence sequence = sequences.getSequence(i);
 
 			final int numElements = sequence.size();
 			for (int j = 1; j < numElements; ++j) {
-				final T a = sequence.get(j - 1);
-				final T b = sequence.get(j);
+				final ISequenceElement a = sequence.get(j - 1);
+				final ISequenceElement b = sequence.get(j);
 
 				// TODO: Check element type.
 
-				final Integer ia = (Integer) a;
-				final Integer ib = (Integer) b;
+				final IntegerElement ia = (IntegerElement) a;
+				final IntegerElement ib = (IntegerElement) b;
 
-				if (ia.intValue() > ib.intValue()) {
+				if (ia.getIndex() > ib.getIndex()) {
 					++fitness;
 				}
 			}
 		}
 		return fitness;
 	}
-	
+
 	@Override
 	public void dispose() {
-		
+
 	}
 
 	@Override
-	public void annotate(ISequences<T> sequences, IAnnotatedSolution<T> solution, final boolean forExport) {
-		
+	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
+
 	}
 }

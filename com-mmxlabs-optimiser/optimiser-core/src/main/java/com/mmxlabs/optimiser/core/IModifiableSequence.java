@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.core;
 
+
 /**
  * The {@link IModifiableSequence} interface extends the {@link ISequence}
  * interface to allow sequence contents to be modified. It is expected that the
@@ -12,10 +13,8 @@ package com.mmxlabs.optimiser.core;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IModifiableSequence<T> extends ISequence<T> {
+public interface IModifiableSequence extends ISequence {
 
 	/**
 	 * Replace the element at the specified index with the given element.
@@ -23,7 +22,7 @@ public interface IModifiableSequence<T> extends ISequence<T> {
 	 * @param index
 	 * @param element
 	 */
-	void set(int index, T element);
+	void set(int index, ISequenceElement element);
 
 	/**
 	 * Remove the element at the specified index
@@ -38,7 +37,7 @@ public interface IModifiableSequence<T> extends ISequence<T> {
 	 * 
 	 * @param element
 	 */
-	boolean remove(T element);
+	boolean remove(ISequenceElement element);
 
 	/**
 	 * Insert the given element at the specified index.
@@ -46,21 +45,21 @@ public interface IModifiableSequence<T> extends ISequence<T> {
 	 * @param index
 	 * @param element
 	 */
-	void insert(int index, T element);
+	void insert(int index, ISequenceElement element);
 
 	/**
 	 * Add the given element to the end of the sequence.
 	 * 
 	 * @param element
 	 */
-	void add(T element);
+	void add(ISequenceElement element);
 
 	/**
 	 * Remove a range of elements specified in the given {@link ISegment}
 	 * 
 	 * @param segment
 	 */
-	void remove(ISegment<T> segment);
+	void remove(ISegment segment);
 
 	/**
 	 * Remove a range of elements from the start index to the end index.
@@ -81,7 +80,7 @@ public interface IModifiableSequence<T> extends ISequence<T> {
 	 * @param index
 	 * @param segment
 	 */
-	void insert(int index, ISegment<T> segment);
+	void insert(int index, ISegment segment);
 
 	/**
 	 * Replaces all entries in the current sequence with those in the specified
@@ -89,5 +88,5 @@ public interface IModifiableSequence<T> extends ISequence<T> {
 	 * 
 	 * @param sequence
 	 */
-	void replaceAll(ISequence<T> sequence);
+	void replaceAll(ISequence sequence);
 }

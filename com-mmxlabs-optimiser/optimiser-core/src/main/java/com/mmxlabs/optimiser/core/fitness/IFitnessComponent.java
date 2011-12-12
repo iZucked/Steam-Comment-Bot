@@ -12,10 +12,8 @@ package com.mmxlabs.optimiser.core.fitness;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IFitnessComponent<T> {
+public interface IFitnessComponent {
 
 	/**
 	 * Returns the name of the {@link IFitnessComponent}
@@ -41,5 +39,5 @@ public interface IFitnessComponent<T> {
 	 * 
 	 * @return
 	 */
-	IFitnessCore<T> getFitnessCore();
+	IFitnessCore getFitnessCore();
 }

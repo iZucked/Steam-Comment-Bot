@@ -10,17 +10,15 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IOptimiser<T> {
+public interface IOptimiser {
 
 	/**
 	 * Perform an optimisation using the given {@link IOptimisationContext}
 	 * 
 	 * @param optimisationContext
 	 */
-	void optimise(IOptimisationContext<T> optimisationContext);
+	void optimise(IOptimisationContext optimisationContext);
 
 	/**
 	 * Returns the {@link IFitnessEvaluator} instance used within the
@@ -28,7 +26,7 @@ public interface IOptimiser<T> {
 	 * 
 	 * @return
 	 */
-	IFitnessEvaluator<T> getFitnessEvaluator();
+	IFitnessEvaluator getFitnessEvaluator();
 
 	void dispose();
 }

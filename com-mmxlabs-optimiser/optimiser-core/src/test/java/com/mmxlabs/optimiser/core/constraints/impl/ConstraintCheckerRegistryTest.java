@@ -20,34 +20,27 @@ public class ConstraintCheckerRegistryTest {
 	public void testRegisterConstraintCheckerFactory() {
 
 		final ConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
-		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory(
-				"factory1");
+		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory("factory1");
 
-		Assert.assertFalse(registry.getConstraintCheckerNames().contains(
-				"factory1"));
+		Assert.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
 
 		registry.registerConstraintCheckerFactory(factory1);
 
-		Assert.assertTrue(registry.getConstraintCheckerNames().contains(
-				"factory1"));
+		Assert.assertTrue(registry.getConstraintCheckerNames().contains("factory1"));
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void testRegisterConstraintCheckerFactory2() {
 
 		final ConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
-		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory(
-				"factory1");
-		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory(
-				"factory1");
+		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory("factory1");
+		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory("factory1");
 
-		Assert.assertFalse(registry.getConstraintCheckerNames().contains(
-				"factory1"));
+		Assert.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
 
 		registry.registerConstraintCheckerFactory(factory1);
 
-		Assert.assertTrue(registry.getConstraintCheckerNames().contains(
-				"factory1"));
+		Assert.assertTrue(registry.getConstraintCheckerNames().contains("factory1"));
 
 		registry.registerConstraintCheckerFactory(factory2);
 	}
@@ -57,19 +50,15 @@ public class ConstraintCheckerRegistryTest {
 
 		final ConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
 
-		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory(
-				"factory1");
-		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory(
-				"factory2");
-		final IConstraintCheckerFactory factory3 = new MockConstraintCheckerFactory(
-				"factory3");
+		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory("factory1");
+		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory("factory2");
+		final IConstraintCheckerFactory factory3 = new MockConstraintCheckerFactory("factory3");
 
 		registry.registerConstraintCheckerFactory(factory1);
 		registry.registerConstraintCheckerFactory(factory2);
 		registry.registerConstraintCheckerFactory(factory3);
 
-		final Collection<IConstraintCheckerFactory> constraintCheckerFactories = registry
-				.getConstraintCheckerFactories();
+		final Collection<IConstraintCheckerFactory> constraintCheckerFactories = registry.getConstraintCheckerFactories();
 
 		Assert.assertEquals(3, constraintCheckerFactories.size());
 
@@ -83,22 +72,17 @@ public class ConstraintCheckerRegistryTest {
 
 		final ConstraintCheckerRegistry registery = new ConstraintCheckerRegistry();
 
-		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory(
-				"factory1");
-		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory(
-				"factory2");
-		final IConstraintCheckerFactory factory3 = new MockConstraintCheckerFactory(
-				"factory3");
+		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory("factory1");
+		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory("factory2");
+		final IConstraintCheckerFactory factory3 = new MockConstraintCheckerFactory("factory3");
 
 		registery.registerConstraintCheckerFactory(factory1);
 		registery.registerConstraintCheckerFactory(factory2);
 		registery.registerConstraintCheckerFactory(factory3);
 
-		final List<String> names = CollectionsUtil.makeArrayList("factory3",
-				"factory2");
+		final List<String> names = CollectionsUtil.makeArrayList("factory3", "factory2");
 
-		final Collection<IConstraintCheckerFactory> constraintCheckersFactories = registery
-				.getConstraintCheckerFactories(names);
+		final Collection<IConstraintCheckerFactory> constraintCheckersFactories = registery.getConstraintCheckerFactories(names);
 		Assert.assertEquals(2, constraintCheckersFactories.size());
 
 		Assert.assertTrue(constraintCheckersFactories.contains(factory3));
@@ -110,22 +94,17 @@ public class ConstraintCheckerRegistryTest {
 
 		final ConstraintCheckerRegistry registery = new ConstraintCheckerRegistry();
 
-		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory(
-				"factory1");
-		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory(
-				"factory2");
-		final IConstraintCheckerFactory factory3 = new MockConstraintCheckerFactory(
-				"factory3");
+		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory("factory1");
+		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory("factory2");
+		final IConstraintCheckerFactory factory3 = new MockConstraintCheckerFactory("factory3");
 
 		registery.registerConstraintCheckerFactory(factory1);
 		registery.registerConstraintCheckerFactory(factory2);
 		registery.registerConstraintCheckerFactory(factory3);
 
-		final List<String> names = CollectionsUtil.makeArrayList("factory3",
-				"factory3");
+		final List<String> names = CollectionsUtil.makeArrayList("factory3", "factory3");
 
-		final Collection<IConstraintCheckerFactory> constraintCheckerFactories = registery
-				.getConstraintCheckerFactories(names);
+		final Collection<IConstraintCheckerFactory> constraintCheckerFactories = registery.getConstraintCheckerFactories(names);
 		Assert.assertEquals(1, constraintCheckerFactories.size());
 
 		Assert.assertTrue(constraintCheckerFactories.contains(factory3));
@@ -136,22 +115,17 @@ public class ConstraintCheckerRegistryTest {
 
 		final ConstraintCheckerRegistry registery = new ConstraintCheckerRegistry();
 
-		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory(
-				"factory1");
-		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory(
-				"factory2");
-		final IConstraintCheckerFactory factory3 = new MockConstraintCheckerFactory(
-				"factory3");
+		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory("factory1");
+		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory("factory2");
+		final IConstraintCheckerFactory factory3 = new MockConstraintCheckerFactory("factory3");
 
 		registery.registerConstraintCheckerFactory(factory1);
 		registery.registerConstraintCheckerFactory(factory2);
 		registery.registerConstraintCheckerFactory(factory3);
 
-		final List<String> names = CollectionsUtil.makeArrayList("factory3",
-				"unknown", "factory1");
+		final List<String> names = CollectionsUtil.makeArrayList("factory3", "unknown", "factory1");
 
-		final Collection<IConstraintCheckerFactory> constraintFactories = registery
-				.getConstraintCheckerFactories(names);
+		final Collection<IConstraintCheckerFactory> constraintFactories = registery.getConstraintCheckerFactories(names);
 
 		Assert.assertEquals(2, constraintFactories.size());
 
@@ -164,21 +138,16 @@ public class ConstraintCheckerRegistryTest {
 
 		final ConstraintCheckerRegistry registery = new ConstraintCheckerRegistry();
 
-		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory(
-				"factory1");
-		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory(
-				"factory2");
-		final IConstraintCheckerFactory factory3 = new MockConstraintCheckerFactory(
-				"factory3");
+		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory("factory1");
+		final IConstraintCheckerFactory factory2 = new MockConstraintCheckerFactory("factory2");
+		final IConstraintCheckerFactory factory3 = new MockConstraintCheckerFactory("factory3");
 
-		final List<IConstraintCheckerFactory> factoryList = CollectionsUtil
-				.makeArrayList(factory2, factory3);
+		final List<IConstraintCheckerFactory> factoryList = CollectionsUtil.makeArrayList(factory2, factory3);
 
 		registery.registerConstraintCheckerFactory(factory1);
 		registery.setConstraintCheckerFactories(factoryList);
 
-		final Collection<IConstraintCheckerFactory> constraintCheckerFactories = registery
-				.getConstraintCheckerFactories();
+		final Collection<IConstraintCheckerFactory> constraintCheckerFactories = registery.getConstraintCheckerFactories();
 
 		Assert.assertEquals(3, constraintCheckerFactories.size());
 

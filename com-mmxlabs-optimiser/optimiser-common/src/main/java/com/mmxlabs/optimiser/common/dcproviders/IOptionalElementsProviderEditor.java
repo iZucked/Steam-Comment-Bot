@@ -4,13 +4,15 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders;
 
+import com.mmxlabs.optimiser.core.ISequenceElement;
+
 /**
  * Editor interface for optional elements provider
  * 
  * @author hinton
  * 
  */
-public interface IOptionalElementsProviderEditor<T> extends IOptionalElementsProvider<T> {
+public interface IOptionalElementsProviderEditor extends IOptionalElementsProvider {
 	/**
 	 * Set whether the given element is optional (true if it is, false if it is required).
 	 * 
@@ -21,5 +23,5 @@ public interface IOptionalElementsProviderEditor<T> extends IOptionalElementsPro
 	 * @param element
 	 * @param isOptional
 	 */
-	void setOptional(T element, boolean isOptional);
+	void setOptional(ISequenceElement element, boolean isOptional);
 }

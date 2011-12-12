@@ -20,7 +20,6 @@ import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 
-@SuppressWarnings("unchecked")
 @RunWith(JMock.class)
 public class ModifiableSequencesTest {
 
@@ -35,11 +34,9 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources);
+		final ModifiableSequences sequences = new ModifiableSequences(resources);
 
 		Assert.assertEquals(2, sequences.size());
 
@@ -66,19 +63,14 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
 		Assert.assertEquals(2, sequences.size());
 
@@ -101,19 +93,14 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> initialSequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences initialSequences = new ModifiableSequences(resources, map);
 
 		context.checking(new Expectations() {
 			{
@@ -121,8 +108,7 @@ public class ModifiableSequencesTest {
 				allowing(sequence2);
 			}
 		});
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				initialSequences);
+		final ModifiableSequences sequences = new ModifiableSequences(initialSequences);
 
 		Assert.assertEquals(2, sequences.size());
 
@@ -150,11 +136,9 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources);
+		final ModifiableSequences sequences = new ModifiableSequences(resources);
 
 		Assert.assertEquals(2, sequences.size());
 
@@ -172,19 +156,14 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
 		Assert.assertEquals(2, sequences.size());
 
@@ -202,19 +181,14 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
 		Assert.assertEquals(2, sequences.size());
 
@@ -232,24 +206,18 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
 		Assert.assertEquals(2, sequences.size());
 
-		final Map<IResource, ISequence<Object>> sequencesMap = sequences
-				.getSequences();
+		final Map<IResource, ISequence> sequencesMap = sequences.getSequences();
 
 		Assert.assertTrue(sequencesMap.containsKey(resource1));
 		Assert.assertTrue(sequencesMap.containsKey(resource2));
@@ -266,24 +234,18 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
 		Assert.assertEquals(2, sequences.size());
 
-		final Map<IResource, IModifiableSequence<Object>> sequencesMap = sequences
-				.getModifiableSequences();
+		final Map<IResource, IModifiableSequence> sequencesMap = sequences.getModifiableSequences();
 
 		Assert.assertTrue(sequencesMap.containsKey(resource1));
 		Assert.assertTrue(sequencesMap.containsKey(resource2));
@@ -300,19 +262,14 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
 		Assert.assertEquals(2, sequences.size());
 	}
@@ -325,19 +282,14 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
 		Assert.assertEquals(2, sequences.size());
 
@@ -355,19 +307,14 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences<Object> sequences = new ModifiableSequences<Object>(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
 		Assert.assertEquals(2, sequences.size());
 
@@ -381,48 +328,31 @@ public class ModifiableSequencesTest {
 		final IResource resource1 = context.mock(IResource.class, "resource-1");
 		final IResource resource2 = context.mock(IResource.class, "resource-2");
 
-		final IModifiableSequence<Object> sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
-		final IModifiableSequence<Object> sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources1 = CollectionsUtil.makeArrayList(
-				resource1, resource2);
-		final List<IResource> resources2 = CollectionsUtil.makeArrayList(
-				resource1, resource2);
-		final List<IResource> resources3 = CollectionsUtil
-				.makeArrayList(resource1);
-		final List<IResource> resources4 = CollectionsUtil
-				.makeArrayList(resource2);
+		final List<IResource> resources1 = CollectionsUtil.makeArrayList(resource1, resource2);
+		final List<IResource> resources2 = CollectionsUtil.makeArrayList(resource1, resource2);
+		final List<IResource> resources3 = CollectionsUtil.makeArrayList(resource1);
+		final List<IResource> resources4 = CollectionsUtil.makeArrayList(resource2);
 
-		final Map<IResource, IModifiableSequence<Object>> map1 = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map1 = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Map<IResource, IModifiableSequence<Object>> map2 = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map2 = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Map<IResource, IModifiableSequence<Object>> map3 = CollectionsUtil
-				.makeHashMap(resource1, sequence1);
-		final Map<IResource, IModifiableSequence<Object>> map4 = CollectionsUtil
-				.makeHashMap(resource1, sequence1);
+		final Map<IResource, IModifiableSequence> map3 = CollectionsUtil.makeHashMap(resource1, sequence1);
+		final Map<IResource, IModifiableSequence> map4 = CollectionsUtil.makeHashMap(resource1, sequence1);
 
-		final Map<IResource, IModifiableSequence<Object>> map5 = CollectionsUtil
-				.makeHashMap(resource1, sequence2, resource2, sequence1);
+		final Map<IResource, IModifiableSequence> map5 = CollectionsUtil.makeHashMap(resource1, sequence2, resource2, sequence1);
 
-		final ModifiableSequences<Object> s1 = new ModifiableSequences<Object>(
-				resources1, map1);
-		final ModifiableSequences<Object> s2 = new ModifiableSequences<Object>(
-				resources1, map1);
-		final ModifiableSequences<Object> s3 = new ModifiableSequences<Object>(
-				resources2, map2);
+		final ModifiableSequences s1 = new ModifiableSequences(resources1, map1);
+		final ModifiableSequences s2 = new ModifiableSequences(resources1, map1);
+		final ModifiableSequences s3 = new ModifiableSequences(resources2, map2);
 
-		final ModifiableSequences<Object> s4 = new ModifiableSequences<Object>(
-				resources3, map3);
-		final ModifiableSequences<Object> s5 = new ModifiableSequences<Object>(
-				resources4, map4);
+		final ModifiableSequences s4 = new ModifiableSequences(resources3, map3);
+		final ModifiableSequences s5 = new ModifiableSequences(resources4, map4);
 
-		final ModifiableSequences<Object> s6 = new ModifiableSequences<Object>(
-				resources1, map5);
+		final ModifiableSequences s6 = new ModifiableSequences(resources1, map5);
 
 		Assert.assertTrue(s1.equals(s1));
 		Assert.assertTrue(s1.equals(s2));

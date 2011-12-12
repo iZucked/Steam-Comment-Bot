@@ -12,16 +12,13 @@ import com.mmxlabs.optimiser.core.ISequencesOptimiser;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface ILocalSearchOptimiser<T> extends ISequencesOptimiser<T> {
+public interface ILocalSearchOptimiser extends ISequencesOptimiser {
 
 	/**
-	 * Returns the {@link IMoveGenerator} used by this
-	 * {@link ILocalSearchOptimiser} to generate a {@link IMove} each iteration.
+	 * Returns the {@link IMoveGenerator} used by this {@link ILocalSearchOptimiser} to generate a {@link IMove} each iteration.
 	 * 
 	 * @return
 	 */
-	IMoveGenerator<T> getMoveGenerator();
+	IMoveGenerator getMoveGenerator();
 }

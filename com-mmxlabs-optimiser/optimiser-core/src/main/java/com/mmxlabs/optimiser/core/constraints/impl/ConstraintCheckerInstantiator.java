@@ -17,26 +17,20 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
- * Class used to obtain {@link IConstraintChecker}s from the
- * {@link IConstraintCheckerRegistry}
+ * Class used to obtain {@link IConstraintChecker}s from the {@link IConstraintCheckerRegistry}
  * 
  * @author Simon Goodall
  * 
  */
-public final class ConstraintCheckerInstantiator implements
-		IConstraintCheckerInstantiator {
+public final class ConstraintCheckerInstantiator implements IConstraintCheckerInstantiator {
 
 	@Override
-	public <T> List<IConstraintChecker<T>> instantiateConstraintCheckers(
-			final IConstraintCheckerRegistry registry,
-			final IOptimisationData<T> optimisationData) {
+	public List<IConstraintChecker> instantiateConstraintCheckers(final IConstraintCheckerRegistry registry, final IOptimisationData optimisationData) {
 
-		final Collection<IConstraintCheckerFactory> factories = registry
-				.getConstraintCheckerFactories();
-		final List<IConstraintChecker<T>> checkers = new ArrayList<IConstraintChecker<T>>(
-				factories.size());
+		final Collection<IConstraintCheckerFactory> factories = registry.getConstraintCheckerFactories();
+		final List<IConstraintChecker> checkers = new ArrayList<IConstraintChecker>(factories.size());
 		for (final IConstraintCheckerFactory factory : factories) {
-			final IConstraintChecker<T> checker = factory.instantiate();
+			final IConstraintChecker checker = factory.instantiate();
 
 			checkers.add(checker);
 			checker.setOptimisationData(optimisationData);
@@ -45,27 +39,22 @@ public final class ConstraintCheckerInstantiator implements
 	}
 
 	@Override
-	public <T> List<IConstraintChecker<T>> instantiateConstraintCheckers(
-			final IConstraintCheckerRegistry registry,
-			final List<String> constraintNames,
-			final IOptimisationData<T> optimisationData) {
+	public List<IConstraintChecker> instantiateConstraintCheckers(final IConstraintCheckerRegistry registry, final List<String> constraintNames, final IOptimisationData optimisationData) {
 
-		final List<IConstraintChecker<T>> checkers = new ArrayList<IConstraintChecker<T>>(
-				constraintNames.size());
+		final List<IConstraintChecker> checkers = new ArrayList<IConstraintChecker>(constraintNames.size());
 
 		// Mapping between constraint checker name and instance
-		final Map<String, IConstraintChecker<T>> constraintCheckerMap = new HashMap<String, IConstraintChecker<T>>();
+		final Map<String, IConstraintChecker> constraintCheckerMap = new HashMap<String, IConstraintChecker>();
 
 		// Get Collection of relevant factories.
-		final Collection<IConstraintCheckerFactory> factories = registry
-				.getConstraintCheckerFactories(constraintNames);
+		final Collection<IConstraintCheckerFactory> factories = registry.getConstraintCheckerFactories(constraintNames);
 
 		// Process factories instantiating constraint checkers and add to the
 		// map.
 		for (final IConstraintCheckerFactory factory : factories) {
 
 			final String name = factory.getName();
-			final IConstraintChecker<T> checker = factory.instantiate();
+			final IConstraintChecker checker = factory.instantiate();
 			checker.setOptimisationData(optimisationData);
 			constraintCheckerMap.put(name, checker);
 		}
@@ -73,7 +62,7 @@ public final class ConstraintCheckerInstantiator implements
 		// Generate the ordered list of constraint checkers.
 		for (final String name : constraintNames) {
 
-			final IConstraintChecker<T> checker;
+			final IConstraintChecker checker;
 			if (constraintCheckerMap.containsKey(name)) {
 				checker = constraintCheckerMap.get(name);
 			} else {

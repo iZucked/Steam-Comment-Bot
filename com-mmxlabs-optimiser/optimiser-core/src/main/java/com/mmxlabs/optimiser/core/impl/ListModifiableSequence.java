@@ -11,43 +11,41 @@ import java.util.List;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * Implementation of {@link IModifiableSequence} which uses a {@link List} as
- * the backing implementation.
+ * Implementation of {@link IModifiableSequence} which uses a {@link List} as the backing implementation.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
+public final class ListModifiableSequence implements IModifiableSequence {
 
-	private final List<T> list;
+	private final List<ISequenceElement> list;
 
-	public ListModifiableSequence(final List<T> list) {
+	public ListModifiableSequence(final List<ISequenceElement> list) {
 		this.list = list;
 	}
 
 	@Override
-	public Iterator<T> iterator() {
+	public Iterator<ISequenceElement> iterator() {
 		return list.iterator();
 	}
 
 	@Override
-	public void add(final T element) {
+	public void add(final ISequenceElement  element) {
 		list.add(element);
 	}
 
 	@Override
-	public void insert(final int index, final T element) {
+	public void insert(final int index, final ISequenceElement element) {
 		list.add(index, element);
 	}
 
 	@Override
-	public void insert(final int index, final ISegment<T> segment) {
+	public void insert(final int index, final ISegment segment) {
 		int idx = index;
-		for (final T e : segment) {
+		for (final ISequenceElement e : segment) {
 			list.add(idx++, e);
 		}
 	}
@@ -58,13 +56,13 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 	}
 
 	@Override
-	public boolean remove(final T element) {
+	public boolean remove(final ISequenceElement element) {
 		return list.remove(element);
 	}
 
 	@Override
-	public void remove(final ISegment<T> segment) {
-		for (final T e : segment) {
+	public void remove(final ISegment segment) {
+		for (final ISequenceElement e : segment) {
 			list.remove(e);
 		}
 	}
@@ -75,22 +73,21 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 	}
 
 	@Override
-	public void set(final int index, final T element) {
+	public void set(final int index, final ISequenceElement element) {
 		list.set(index, element);
 
 	}
 
 	@Override
-	public T get(final int index) {
+	public ISequenceElement get(final int index) {
 		return list.get(index);
 	}
 
 	@Override
-	public ISegment<T> getSegment(final int start, final int end) {
+	public ISegment getSegment(final int start, final int end) {
 
 		// Copy of the sublist to make segment independent from sequence.
-		return new ListSegment<T>(new ArrayList<T>(list.subList(start, end)),
-				this, start, end);
+		return new ListSegment(new ArrayList<ISequenceElement>(list.subList(start, end)), this, start, end);
 	}
 
 	@Override
@@ -99,26 +96,24 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 	}
 
 	@Override
-	public void replaceAll(final ISequence<T> sequence) {
+	public void replaceAll(final ISequence sequence) {
 		list.clear();
 
-		for (final T t : sequence) {
+		for (final ISequenceElement t : sequence) {
 			list.add(t);
 		}
 	}
 
 	@Override
-	public final T last() {
+	public final ISequenceElement last() {
 		return get(size() - 1);
 	}
 
 	@Override
-	public T first() {
+	public ISequenceElement first() {
 		return get(0);
 	}
-	
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(final Object obj) {
 
@@ -127,10 +122,10 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 		} else if (!(obj instanceof ISequence)) {
 			return false;
 		} else {
-			final Iterator<T> e1 = iterator();
-			final Iterator e2 = ((ISequence) obj).iterator();
+			final Iterator<ISequenceElement> e1 = iterator();
+			final Iterator<ISequenceElement> e2 = ((ISequence) obj).iterator();
 			while (e1.hasNext() && e2.hasNext()) {
-				final T o1 = e1.next();
+				final ISequenceElement o1 = e1.next();
 				final Object o2 = e2.next();
 				if (!(o1 == null ? o2 == null : o1.equals(o2))) {
 					return false;
@@ -143,9 +138,9 @@ public final class ListModifiableSequence<T> implements IModifiableSequence<T> {
 	@Override
 	public int hashCode() {
 		int hashCode = 1;
-		final Iterator<T> i = iterator();
+		final Iterator<ISequenceElement> i = iterator();
 		while (i.hasNext()) {
-			final T obj = i.next();
+			final ISequenceElement obj = i.next();
 			hashCode = 31 * hashCode + (obj == null ? 0 : obj.hashCode());
 		}
 		return hashCode;

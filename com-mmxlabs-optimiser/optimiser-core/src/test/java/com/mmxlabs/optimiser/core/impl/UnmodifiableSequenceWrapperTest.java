@@ -15,25 +15,23 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.UnmodifiableSequenceWrapper;
 
 /**
- * Ensure the {@link UnmodifiableSequenceWrapper} correctly invokes methods on
- * the target object.
+ * Ensure the {@link UnmodifiableSequenceWrapper} correctly invokes methods on the target object.
  */
 @RunWith(JMock.class)
 public class UnmodifiableSequenceWrapperTest {
 
 	Mockery context = new JUnit4Mockery();
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testGet() {
 
 		final ISequence target = context.mock(ISequence.class);
 
-		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
-				target);
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(target);
 
 		context.checking(new Expectations() {
 			{
@@ -47,14 +45,12 @@ public class UnmodifiableSequenceWrapperTest {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testIterator() {
 
 		final ISequence target = context.mock(ISequence.class);
 
-		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
-				target);
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(target);
 
 		context.checking(new Expectations() {
 			{
@@ -72,12 +68,13 @@ public class UnmodifiableSequenceWrapperTest {
 	@Test
 	public void testIterator2() {
 
-		final Iterator target = context.mock(Iterator.class);
+		final ISequenceElement element = context.mock(ISequenceElement.class);
+		final Iterator<ISequenceElement> target = context.mock(Iterator.class);
 
 		final ISequence sequence = new ISequence() {
 
 			@Override
-			public Object get(int index) {
+			public ISequenceElement get(int index) {
 				return null;
 			}
 
@@ -92,28 +89,29 @@ public class UnmodifiableSequenceWrapperTest {
 			}
 
 			@Override
-			public Iterator iterator() {
+			public Iterator<ISequenceElement> iterator() {
 				return target;
 			}
 
 			@Override
-			public final Object last() {
+			public final ISequenceElement last() {
 				return get(size() - 1);
 			}
 
 			@Override
-			public Object first() {
+			public ISequenceElement first() {
 				return get(0);
 			}
 		};
 
-		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
-				sequence);
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(sequence);
 
-		Iterator wrappedItr = wrapped.iterator();
+		Iterator<ISequenceElement> wrappedItr = wrapped.iterator();
 		context.checking(new Expectations() {
 			{
 				oneOf(target).next();
+				returnValue(element);
+				
 			}
 		});
 
@@ -127,12 +125,12 @@ public class UnmodifiableSequenceWrapperTest {
 	@Test
 	public void testIterator3() {
 
-		final Iterator target = context.mock(Iterator.class);
+		final Iterator<ISequenceElement> target = context.mock(Iterator.class);
 
 		final ISequence sequence = new ISequence() {
 
 			@Override
-			public Object get(int index) {
+			public ISequenceElement get(int index) {
 				return null;
 			}
 
@@ -147,25 +145,24 @@ public class UnmodifiableSequenceWrapperTest {
 			}
 
 			@Override
-			public Iterator iterator() {
+			public Iterator<ISequenceElement> iterator() {
 				return target;
 			}
 
 			@Override
-			public final Object last() {
+			public final ISequenceElement last() {
 				return get(size() - 1);
 			}
 
 			@Override
-			public Object first() {
+			public ISequenceElement first() {
 				return get(0);
 			}
 		};
 
-		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
-				sequence);
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(sequence);
 
-		Iterator wrappedItr = wrapped.iterator();
+		Iterator<ISequenceElement> wrappedItr = wrapped.iterator();
 		context.checking(new Expectations() {
 			{
 				oneOf(target).hasNext();
@@ -182,12 +179,12 @@ public class UnmodifiableSequenceWrapperTest {
 	@Test(expected = UnsupportedOperationException.class)
 	public void testIterator4() {
 
-		final Iterator target = context.mock(Iterator.class);
+		final Iterator<ISequenceElement> target = context.mock(Iterator.class);
 
 		final ISequence sequence = new ISequence() {
 
 			@Override
-			public Object get(int index) {
+			public ISequenceElement get(int index) {
 				return null;
 			}
 
@@ -202,25 +199,24 @@ public class UnmodifiableSequenceWrapperTest {
 			}
 
 			@Override
-			public Iterator iterator() {
+			public Iterator<ISequenceElement> iterator() {
 				return target;
 			}
 
 			@Override
-			public final Object last() {
+			public final ISequenceElement last() {
 				return get(size() - 1);
 			}
 
 			@Override
-			public Object first() {
+			public ISequenceElement first() {
 				return get(0);
 			}
 		};
 
-		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
-				sequence);
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(sequence);
 
-		Iterator wrappedItr = wrapped.iterator();
+		Iterator<ISequenceElement> wrappedItr = wrapped.iterator();
 		context.checking(new Expectations() {
 			{
 				// Exception should be thrown
@@ -233,14 +229,12 @@ public class UnmodifiableSequenceWrapperTest {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetSegment() {
 
 		final ISequence target = context.mock(ISequence.class);
 
-		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(
-				target);
+		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(target);
 
 		final int start = 10;
 		final int end = 15;

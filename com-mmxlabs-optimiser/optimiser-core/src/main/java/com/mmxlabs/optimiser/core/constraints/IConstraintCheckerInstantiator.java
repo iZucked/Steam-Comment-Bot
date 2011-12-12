@@ -12,33 +12,22 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public interface IConstraintCheckerInstantiator {
 
 	/**
-	 * Return new instances of all {@link IConstraintChecker}s the
-	 * {@link IConstraintCheckerRegistry} knows about.
+	 * Return new instances of all {@link IConstraintChecker}s the {@link IConstraintCheckerRegistry} knows about.
 	 * 
-	 * @param <T>
 	 * @param registry
 	 * @return
 	 */
 
-	<T> List<IConstraintChecker<T>> instantiateConstraintCheckers(
-			IConstraintCheckerRegistry registry,
-			IOptimisationData<T> optimisationData);
+	List<IConstraintChecker> instantiateConstraintCheckers(IConstraintCheckerRegistry registry, IOptimisationData optimisationData);
 
 	/**
-	 * Return new instances of all {@link IConstraintChecker}s the
-	 * {@link IFitnessFunctionRegistry} knows about. The returned list will
-	 * contain {@link IConstraintChecker}s in the same order as the input list.
-	 * Missing {@link IConstraintChecker}s will be replaced with a null entry in
-	 * the list.
+	 * Return new instances of all {@link IConstraintChecker}s the {@link IFitnessFunctionRegistry} knows about. The returned list will contain {@link IConstraintChecker}s in the same order as the
+	 * input list. Missing {@link IConstraintChecker}s will be replaced with a null entry in the list.
 	 * 
-	 * @param <T>
 	 * @param registry
 	 * @param constraintCheckerNames
 	 * @return
 	 */
-	<T> List<IConstraintChecker<T>> instantiateConstraintCheckers(
-			IConstraintCheckerRegistry registry,
-			List<String> constraintCheckerNames,
-			IOptimisationData<T> optimisationData);
+	List<IConstraintChecker> instantiateConstraintCheckers(IConstraintCheckerRegistry registry, List<String> constraintCheckerNames, IOptimisationData optimisationData);
 
 }

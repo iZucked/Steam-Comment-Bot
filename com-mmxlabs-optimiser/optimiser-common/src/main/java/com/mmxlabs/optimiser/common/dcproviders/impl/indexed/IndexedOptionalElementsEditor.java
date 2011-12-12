@@ -9,9 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.mmxlabs.common.indexedobjects.IIndexBits;
-import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexBits;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProviderEditor;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
  * Optional elements editor for indexed elements.
@@ -19,13 +19,13 @@ import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProviderEditor;
  * @author hinton
  * 
  */
-public class IndexedOptionalElementsEditor<T extends IIndexedObject> implements IOptionalElementsProviderEditor<T> {
+public class IndexedOptionalElementsEditor implements IOptionalElementsProviderEditor {
 	private final String name;
-	private final ArrayList<T> optionalList = new ArrayList<T>();
-	private final ArrayList<T> requiredList = new ArrayList<T>();
-	IIndexBits<T> optionalElements = new ArrayIndexBits<T>();
+	private final ArrayList<ISequenceElement> optionalList = new ArrayList<ISequenceElement>();
+	private final ArrayList<ISequenceElement> requiredList = new ArrayList<ISequenceElement>();
+	IIndexBits<ISequenceElement> optionalElements = new ArrayIndexBits<ISequenceElement>();
 
-	public IndexedOptionalElementsEditor(String name) {
+	public IndexedOptionalElementsEditor(final String name) {
 		super();
 		this.name = name;
 	}
@@ -45,30 +45,30 @@ public class IndexedOptionalElementsEditor<T extends IIndexedObject> implements 
 
 
 	@Override
-	public boolean isElementOptional(T element) {
+	public boolean isElementOptional(final ISequenceElement element) {
 		return optionalElements.isSet(element);
 	}
 
 
 	@Override
-	public boolean isElementRequired(T element) {
+	public boolean isElementRequired(final ISequenceElement element) {
 		return !isElementOptional(element);
 	}
 
 
 	@Override
-	public List<T> getOptionalElements() {
+	public List<ISequenceElement> getOptionalElements() {
 		return Collections.unmodifiableList(optionalList);
 	}
 
 
 	@Override
-	public List<T> getRequiredElements() {
+	public List<ISequenceElement> getRequiredElements() {
 		return Collections.unmodifiableList(requiredList);
 	}
 
 	@Override
-	public void setOptional(T element, boolean isOptional) {
+	public void setOptional(final ISequenceElement element, final boolean isOptional) {
 		if (isOptional) {
 			optionalElements.set(element);
 		} else {

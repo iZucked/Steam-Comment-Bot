@@ -15,23 +15,16 @@ public class OrderedSequenceElementsConstraintCheckerFactoryTest {
 	@Test
 	public void testGetName() {
 
-		final OrderedSequenceElementsConstraintCheckerFactory factory = new OrderedSequenceElementsConstraintCheckerFactory(
-				"key");
-		Assert.assertEquals(
-				OrderedSequenceElementsConstraintCheckerFactory.NAME, factory
-						.getName());
+		final OrderedSequenceElementsConstraintCheckerFactory factory = new OrderedSequenceElementsConstraintCheckerFactory("key");
+		Assert.assertEquals(OrderedSequenceElementsConstraintCheckerFactory.NAME, factory.getName());
 	}
 
 	@Test
 	public void testInstantiate() {
-		final OrderedSequenceElementsConstraintCheckerFactory factory = new OrderedSequenceElementsConstraintCheckerFactory(
-				"key");
-		final OrderedSequenceElementsConstraintChecker<?> checker = factory
-				.instantiate();
+		final OrderedSequenceElementsConstraintCheckerFactory factory = new OrderedSequenceElementsConstraintCheckerFactory("key");
+		final OrderedSequenceElementsConstraintChecker checker = factory.instantiate();
 		Assert.assertNotNull(checker);
-		Assert.assertEquals(
-				OrderedSequenceElementsConstraintCheckerFactory.NAME, checker
-						.getName());
+		Assert.assertEquals(OrderedSequenceElementsConstraintCheckerFactory.NAME, checker.getName());
 	}
 
 }

@@ -21,10 +21,8 @@ import com.mmxlabs.optimiser.lso.IMove;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class Move4over2<T> implements IMove<T> {
+public final class Move4over2 implements IMove {
 
 	private IResource resource1;
 
@@ -35,19 +33,15 @@ public final class Move4over2<T> implements IMove<T> {
 	private int resource2Start = -1, resource2End = -1;
 
 	@Override
-	public final void apply(final IModifiableSequences<T> sequences) {
+	public final void apply(final IModifiableSequences sequences) {
 
 		// Get sequences
-		final IModifiableSequence<T> sequence1 = sequences
-				.getModifiableSequence(resource1);
-		final IModifiableSequence<T> sequence2 = sequences
-				.getModifiableSequence(resource2);
+		final IModifiableSequence sequence1 = sequences.getModifiableSequence(resource1);
+		final IModifiableSequence sequence2 = sequences.getModifiableSequence(resource2);
 
 		// Get the moving segments
-		final ISegment<T> segment1 = sequence1.getSegment(resource1Start,
-				resource1End);
-		final ISegment<T> segment2 = sequence2.getSegment(resource2Start,
-				resource2End);
+		final ISegment segment1 = sequence1.getSegment(resource1Start, resource1End);
+		final ISegment segment2 = sequence2.getSegment(resource2Start, resource2End);
 
 		// Insert the segments in the other sequence
 		sequence1.insert(resource1Start, segment2);
@@ -64,7 +58,7 @@ public final class Move4over2<T> implements IMove<T> {
 	}
 
 	@Override
-	public final boolean validate(final ISequences<T> sequences) {
+	public final boolean validate(final ISequences sequences) {
 
 		// Validate basic parameters
 		if (resource1 == null) {
@@ -90,8 +84,7 @@ public final class Move4over2<T> implements IMove<T> {
 		}
 
 		// Validate parameters against sequences object
-		final Map<IResource, ISequence<T>> sequenceMap = sequences
-				.getSequences();
+		final Map<IResource, ISequence> sequenceMap = sequences.getSequences();
 
 		// Make sure resources exist
 		if (sequenceMap.containsKey(resource1) == false) {
@@ -103,12 +96,12 @@ public final class Move4over2<T> implements IMove<T> {
 
 		// Make sure end is within range. This implies start would also be
 		// within range due to previous checks.
-		final ISequence<T> sequence1 = sequenceMap.get(resource1);
+		final ISequence sequence1 = sequenceMap.get(resource1);
 		if (resource1End > sequence1.size()) {
 			return false;
 		}
 
-		final ISequence<T> sequence2 = sequenceMap.get(resource2);
+		final ISequence sequence2 = sequenceMap.get(resource2);
 		if (resource2End > sequence2.size()) {
 			return false;
 		}
@@ -166,8 +159,6 @@ public final class Move4over2<T> implements IMove<T> {
 
 	@Override
 	public final String toString() {
-		return String.format("r1 (%s) [%d -> %d], r2 (%s) [%d -> %d]",
-				getResource1(), getResource1Start(), getResource1End(),
-				getResource2(), getResource2Start(), getResource2End());
+		return String.format("r1 (%s) [%d -> %d], r2 (%s) [%d -> %d]", getResource1(), getResource1Start(), getResource1End(), getResource2(), getResource2Start(), getResource2End());
 	}
 }

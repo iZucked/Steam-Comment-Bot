@@ -20,16 +20,14 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IFitnessCore<T> {
+public interface IFitnessCore {
 
 	/**
 	 * Initialise or re-initialise the fitness core. This will reset the state
 	 * associated with the {@link #evaluate(ISequences, List)} method.
 	 */
-	void init(IOptimisationData<T> data);
+	void init(IOptimisationData data);
 
 	/**
 	 * Return a {@link Collection} of {@link IFitnessComponent} instances that
@@ -37,7 +35,7 @@ public interface IFitnessCore<T> {
 	 * 
 	 * @return
 	 */
-	Collection<IFitnessComponent<T>> getFitnessComponents();
+	Collection<IFitnessComponent> getFitnessComponents();
 
 	/**
 	 * Evaluates the full fitness of the given sequences. If this returns false,
@@ -45,7 +43,7 @@ public interface IFitnessCore<T> {
 	 * 
 	 * @param sequences
 	 */
-	boolean evaluate(ISequences<T> sequences);
+	boolean evaluate(ISequences sequences);
 
 	/**
 	 * Evaluates the fitness of the given sequence. This method takes a list of
@@ -58,7 +56,7 @@ public interface IFitnessCore<T> {
 	 * 
 	 * @param sequences
 	 */
-	boolean evaluate(ISequences<T> sequences,
+	boolean evaluate(ISequences sequences,
 			Collection<IResource> affectedResources);
 
 	/**
@@ -69,7 +67,7 @@ public interface IFitnessCore<T> {
 	 * @param sequences
 	 * @param affectedResources
 	 */
-	void accepted(ISequences<T> sequences,
+	void accepted(ISequences sequences,
 			Collection<IResource> affectedResources);
 
 	/**
@@ -84,5 +82,5 @@ public interface IFitnessCore<T> {
 	 * @param sequences sequences to evaluate
 	 * @param solution annotated solution for these sequences
 	 */
-	void annotate(final ISequences<T> sequences, final IAnnotatedSolution<T> solution, final boolean forExport);
+	void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport);
 }

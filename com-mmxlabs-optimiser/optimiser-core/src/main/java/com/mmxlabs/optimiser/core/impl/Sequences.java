@@ -13,6 +13,7 @@ import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
@@ -22,15 +23,15 @@ import com.mmxlabs.optimiser.core.ISequences;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class Sequences<T> implements ISequences<T> {
+public final class Sequences implements ISequences {
 
 	private final List<IResource> resources;
 
-	private final Map<IResource, ISequence<T>> sequenceMap;
+	private final Map<IResource, ISequence> sequenceMap;
 
+	final List<ISequenceElement> unusedElements = new ArrayList<ISequenceElement>();
+	
 	/**
 	 * Constructor taking a list of {@link IResource} instances. The
 	 * {@link ISequence} instances will be created automatically. The resources
@@ -41,9 +42,9 @@ public final class Sequences<T> implements ISequences<T> {
 	public Sequences(final List<IResource> resources) {
 		// Copy the list as we do not track changes
 		this.resources = new ArrayList<IResource>(resources);
-		sequenceMap = new HashMap<IResource, ISequence<T>>();
+		sequenceMap = new HashMap<IResource, ISequence>();
 		for (final IResource resource : resources) {
-			sequenceMap.put(resource, new ListSequence<T>(new LinkedList<T>()));
+			sequenceMap.put(resource, new ListSequence(new LinkedList<ISequenceElement>()));
 		}
 	}
 
@@ -56,7 +57,7 @@ public final class Sequences<T> implements ISequences<T> {
 	 * @param sequenceMap
 	 */
 	public Sequences(final List<IResource> resources,
-			final Map<IResource, ISequence<T>> sequenceMap) {
+			final Map<IResource, ISequence> sequenceMap) {
 		this.resources = resources;
 		this.sequenceMap = sequenceMap;
 	}
@@ -69,17 +70,17 @@ public final class Sequences<T> implements ISequences<T> {
 	 * @param sequences
 	 *            Source {@link ISequences} object
 	 */
-	public Sequences(final ISequences<T> sequences) {
+	public Sequences(final ISequences sequences) {
 
 		this.resources = new ArrayList<IResource>(sequences.getResources());
 
-		this.sequenceMap = new HashMap<IResource, ISequence<T>>();
+		this.sequenceMap = new HashMap<IResource, ISequence>();
 		for (final IResource r : resources) {
 			// Get original sequence
-			final ISequence<T> seq = sequences.getSequence(r);
+			final ISequence seq = sequences.getSequence(r);
 
 			// Create a copied sequence object
-			final ListSequence<T> sequence = new ListSequence<T>(seq);
+			final ListSequence sequence = new ListSequence(seq);
 
 			// store the new object
 			sequenceMap.put(r, sequence);
@@ -92,21 +93,21 @@ public final class Sequences<T> implements ISequences<T> {
 	}
 
 	@Override
-	public ISequence<T> getSequence(final IResource resource) {
+	public ISequence getSequence(final IResource resource) {
 		return sequenceMap.get(resource);
 	}
 
 	@Override
-	public ISequence<T> getSequence(final int index) {
+	public ISequence getSequence(final int index) {
 		return sequenceMap.get(resources.get(index));
 	}
 
 	@Override
-	public Map<IResource, ISequence<T>> getSequences() {
+	public Map<IResource, ISequence> getSequences() {
 
 		// Create a copy so external modification does not affect internal
 		// state.
-		final Map<IResource, ISequence<T>> map = Collections
+		final Map<IResource, ISequence> map = Collections
 				.unmodifiableMap(sequenceMap);
 		return map;
 	}
@@ -117,7 +118,6 @@ public final class Sequences<T> implements ISequences<T> {
 		return sequenceMap.size();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(final Object obj) {
 
@@ -144,10 +144,8 @@ public final class Sequences<T> implements ISequences<T> {
 		return sequenceMap.hashCode();
 	}
 
-	final List<T> unusedElements = new ArrayList<T>();
-
 	@Override
-	public List<T> getUnusedElements() {
+	public List<ISequenceElement> getUnusedElements() {
 		return Collections.unmodifiableList(unusedElements);
 	}
 }

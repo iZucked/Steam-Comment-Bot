@@ -7,6 +7,7 @@ package com.mmxlabs.optimiser.common.dcproviders;
 import java.util.List;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
 /**
@@ -16,7 +17,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * @author Simon Goodall
  * 
  */
-public interface ITimeWindowDataComponentProvider<T> extends
+public interface ITimeWindowDataComponentProvider extends
 		IDataComponentProvider {
 
 	/**
@@ -26,6 +27,6 @@ public interface ITimeWindowDataComponentProvider<T> extends
 	 * @param element
 	 * @return
 	 */
-	List<ITimeWindow> getTimeWindows(T element);
+	List<ITimeWindow> getTimeWindows(ISequenceElement element);
 
 }

@@ -13,14 +13,13 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.impl.Move4over1;
 
-public final class Move4over1GeneratorUnit<T> implements IRandomMoveGeneratorUnit<T> {
+public final class Move4over1GeneratorUnit implements IRandomMoveGeneratorUnit {
 
 	@Override
-	public IMove<T> generateRandomMove(RandomMoveGenerator<T> moveGenerator,
-			ISequences<T> sequences) {
+	public IMove generateRandomMove(final RandomMoveGenerator moveGenerator, final ISequences sequences) {
 
-		Random random = moveGenerator.getRandom();
-		
+		final Random random = moveGenerator.getRandom();
+
 		final List<IResource> resources = sequences.getResources();
 
 		final int numResources = resources.size();
@@ -31,13 +30,13 @@ public final class Move4over1GeneratorUnit<T> implements IRandomMoveGeneratorUni
 
 		final int resource = random.nextInt(numResources);
 
-		final ISequence<T> sequence = sequences.getSequence(resource);
+		final ISequence sequence = sequences.getSequence(resource);
 
-		final int[] segmentBreakPoints= new int[4];
+		final int[] segmentBreakPoints = new int[4];
 		moveGenerator.generateSortedBreakPoints(sequence, segmentBreakPoints);
 
 		// Create new move
-		final Move4over1<T> move = new Move4over1<T>();
+		final Move4over1 move = new Move4over1();
 
 		// Set resources
 		move.setResource(resources.get(resource));

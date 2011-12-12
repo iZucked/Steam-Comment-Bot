@@ -7,14 +7,12 @@ package com.mmxlabs.optimiser.common.constraints;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 
 /**
- * {@link IConstraintCheckerFactory} implementation to construct
- * {@link ResourceAllocationConstraintChecker} instances.
+ * {@link IConstraintCheckerFactory} implementation to construct {@link ResourceAllocationConstraintChecker} instances.
  * 
  * @author Simon Goodall
  * 
  */
-public final class ResourceAllocationConstraintCheckerFactory implements
-		IConstraintCheckerFactory {
+public final class ResourceAllocationConstraintCheckerFactory implements IConstraintCheckerFactory {
 
 	public static final String NAME = "ResourceAllocationConstraintChecker";
 
@@ -30,8 +28,8 @@ public final class ResourceAllocationConstraintCheckerFactory implements
 	}
 
 	@Override
-	public <T> ResourceAllocationConstraintChecker<T> instantiate() {
-		return new ResourceAllocationConstraintChecker<T>(NAME, key);
+	public ResourceAllocationConstraintChecker instantiate() {
+		return new ResourceAllocationConstraintChecker(NAME, key);
 	}
 
 }

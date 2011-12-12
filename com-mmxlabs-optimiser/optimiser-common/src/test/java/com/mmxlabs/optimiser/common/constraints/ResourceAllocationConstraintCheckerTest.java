@@ -10,25 +10,28 @@ import java.util.Map;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
-import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.ResourceAllocationConstraintProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
+@RunWith(JMock.class)
 public class ResourceAllocationConstraintCheckerTest {
 
 	IIndexingContext index = new SimpleIndexingContext();
@@ -37,8 +40,7 @@ public class ResourceAllocationConstraintCheckerTest {
 	@Test
 	public void testResourceAllocationConstraintChecker() {
 
-		final ResourceAllocationConstraintChecker<Object> checker = new ResourceAllocationConstraintChecker<Object>(
-				"name", "key");
+		final ResourceAllocationConstraintChecker checker = new ResourceAllocationConstraintChecker("name", "key");
 
 		Assert.assertEquals("name", checker.getName());
 	}
@@ -46,37 +48,30 @@ public class ResourceAllocationConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT() {
 
-		final IResourceAllocationConstraintDataComponentProviderEditor<Object> provider = new ResourceAllocationConstraintProvider<Object>(
-				"key");
+		final IResourceAllocationConstraintDataComponentProviderEditor provider = new ResourceAllocationConstraintProvider("key");
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-		final Object obj3 = new Object();
-		final Object obj4 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement obj3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement obj4 = context.mock(ISequenceElement.class, "4");
 
 		final IResource r1 = new Resource(index);
 		final IResource r2 = new Resource(index);
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
-		provider.setAllowedResources(obj2, CollectionsUtil
-				.makeArrayList(r1, r2));
+		provider.setAllowedResources(obj2, CollectionsUtil.makeArrayList(r1, r2));
 		provider.setAllowedResources(obj3, CollectionsUtil.makeArrayList(r2));
 
-		final ResourceAllocationConstraintChecker<Object> checker = new ResourceAllocationConstraintChecker<Object>(
-				"name", "key");
+		final ResourceAllocationConstraintChecker checker = new ResourceAllocationConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj1, obj2));
+		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2));
 
-		final ListSequence<Object> seq2 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj2, obj3, obj4));
+		final ListSequence seq2 = new ListSequence(CollectionsUtil.makeArrayList(obj2, obj3, obj4));
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
-				.makeHashMap(r1, seq1, r2, seq2);
-		final Sequences<Object> sequences = new Sequences<Object>(
-				CollectionsUtil.makeArrayList(r1, r2), map);
+		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
 
 		Assert.assertTrue(checker.checkConstraints(sequences));
 	}
@@ -84,37 +79,30 @@ public class ResourceAllocationConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT2() {
 
-		final IResourceAllocationConstraintDataComponentProviderEditor<Object> provider = new ResourceAllocationConstraintProvider<Object>(
-				"key");
+		final IResourceAllocationConstraintDataComponentProviderEditor provider = new ResourceAllocationConstraintProvider("key");
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-		final Object obj3 = new Object();
-		final Object obj4 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement obj3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement obj4 = context.mock(ISequenceElement.class, "4");
 
 		final IResource r1 = new Resource(index);
 		final IResource r2 = new Resource(index);
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
-		provider.setAllowedResources(obj2, CollectionsUtil
-				.makeArrayList(r1, r2));
+		provider.setAllowedResources(obj2, CollectionsUtil.makeArrayList(r1, r2));
 		provider.setAllowedResources(obj3, CollectionsUtil.makeArrayList(r2));
 
-		final ResourceAllocationConstraintChecker<Object> checker = new ResourceAllocationConstraintChecker<Object>(
-				"name", "key");
+		final ResourceAllocationConstraintChecker checker = new ResourceAllocationConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj3, obj2));
+		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj3, obj2));
 
-		final ListSequence<Object> seq2 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj2, obj4));
+		final ListSequence seq2 = new ListSequence(CollectionsUtil.makeArrayList(obj2, obj4));
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
-				.makeHashMap(r1, seq1, r2, seq2);
-		final Sequences<Object> sequences = new Sequences<Object>(
-				CollectionsUtil.makeArrayList(r1, r2), map);
+		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
 
 		Assert.assertFalse(checker.checkConstraints(sequences));
 	}
@@ -122,37 +110,30 @@ public class ResourceAllocationConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString() {
 
-		final IResourceAllocationConstraintDataComponentProviderEditor<Object> provider = new ResourceAllocationConstraintProvider<Object>(
-				"key");
+		final IResourceAllocationConstraintDataComponentProviderEditor provider = new ResourceAllocationConstraintProvider("key");
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-		final Object obj3 = new Object();
-		final Object obj4 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement obj3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement obj4 = context.mock(ISequenceElement.class, "4");
 
 		final IResource r1 = new Resource(index);
 		final IResource r2 = new Resource(index);
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
-		provider.setAllowedResources(obj2, CollectionsUtil
-				.makeArrayList(r1, r2));
+		provider.setAllowedResources(obj2, CollectionsUtil.makeArrayList(r1, r2));
 		provider.setAllowedResources(obj3, CollectionsUtil.makeArrayList(r2));
 
-		final ResourceAllocationConstraintChecker<Object> checker = new ResourceAllocationConstraintChecker<Object>(
-				"name", "key");
+		final ResourceAllocationConstraintChecker checker = new ResourceAllocationConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj1, obj2));
+		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2));
 
-		final ListSequence<Object> seq2 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj2, obj3, obj4));
+		final ListSequence seq2 = new ListSequence(CollectionsUtil.makeArrayList(obj2, obj3, obj4));
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
-				.makeHashMap(r1, seq1, r2, seq2);
-		final Sequences<Object> sequences = new Sequences<Object>(
-				CollectionsUtil.makeArrayList(r1, r2), map);
+		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
 
 		final List<String> messages = new LinkedList<String>();
 
@@ -164,37 +145,30 @@ public class ResourceAllocationConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString2() {
 
-		final IResourceAllocationConstraintDataComponentProviderEditor<Object> provider = new ResourceAllocationConstraintProvider<Object>(
-				"key");
+		final IResourceAllocationConstraintDataComponentProviderEditor provider = new ResourceAllocationConstraintProvider("key");
 
-		final Object obj1 = new Object();
-		final Object obj2 = new Object();
-		final Object obj3 = new Object();
-		final Object obj4 = new Object();
+		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement obj3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement obj4 = context.mock(ISequenceElement.class, "4");
 
 		final IResource r1 = new Resource(index);
 		final IResource r2 = new Resource(index);
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
-		provider.setAllowedResources(obj2, CollectionsUtil
-				.makeArrayList(r1, r2));
+		provider.setAllowedResources(obj2, CollectionsUtil.makeArrayList(r1, r2));
 		provider.setAllowedResources(obj3, CollectionsUtil.makeArrayList(r2));
 
-		final ResourceAllocationConstraintChecker<Object> checker = new ResourceAllocationConstraintChecker<Object>(
-				"name", "key");
+		final ResourceAllocationConstraintChecker checker = new ResourceAllocationConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
-		final ListSequence<Object> seq1 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj3, obj2));
+		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj3, obj2));
 
-		final ListSequence<Object> seq2 = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(obj2, obj4));
+		final ListSequence seq2 = new ListSequence(CollectionsUtil.makeArrayList(obj2, obj4));
 
-		final Map<IResource, ISequence<Object>> map = CollectionsUtil
-				.makeHashMap(r1, seq1, r2, seq2);
-		final Sequences<Object> sequences = new Sequences<Object>(
-				CollectionsUtil.makeArrayList(r1, r2), map);
+		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
 
 		final List<String> messages = new LinkedList<String>();
 
@@ -207,38 +181,30 @@ public class ResourceAllocationConstraintCheckerTest {
 	@Test
 	public void testGetSetProvider() {
 
-		@SuppressWarnings("unchecked")
-		final IResourceAllocationConstraintDataComponentProvider<Object> provider = context
-				.mock(IResourceAllocationConstraintDataComponentProvider.class);
+		final IResourceAllocationConstraintDataComponentProvider provider = context.mock(IResourceAllocationConstraintDataComponentProvider.class);
 
-		final ResourceAllocationConstraintChecker<Object> checker = new ResourceAllocationConstraintChecker<Object>(
-				"name", "key");
+		final ResourceAllocationConstraintChecker checker = new ResourceAllocationConstraintChecker("name", "key");
 
 		checker.setProvider(provider);
 
 		Assert.assertSame(provider, checker.getProvider());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testSetOptimisationData() {
 
 		// Tell the context to return null, rather than try to create a sample
 		// object of this type as it causes a class cast exception.
 		context.setDefaultResultForType(IDataComponentProvider.class, null);
-		final IOptimisationData<Object> data = context.mock(IOptimisationData.class);
+		final IOptimisationData data = context.mock(IOptimisationData.class);
 
 		final String key = "key";
 
-		final ResourceAllocationConstraintChecker<Object> checker = new ResourceAllocationConstraintChecker<Object>(
-				"name", key);
+		final ResourceAllocationConstraintChecker checker = new ResourceAllocationConstraintChecker("name", key);
 
 		context.checking(new Expectations() {
 			{
-				one(data)
-						.getDataComponentProvider(
-								key,
-								IResourceAllocationConstraintDataComponentProvider.class);
+				one(data).getDataComponentProvider(key, IResourceAllocationConstraintDataComponentProvider.class);
 			}
 		});
 

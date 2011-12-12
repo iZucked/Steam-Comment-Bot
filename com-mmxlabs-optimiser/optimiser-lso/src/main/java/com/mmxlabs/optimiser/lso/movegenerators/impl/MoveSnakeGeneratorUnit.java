@@ -15,13 +15,13 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.impl.MoveSnake;
 
-public final class MoveSnakeGeneratorUnit<T> implements
-		IRandomMoveGeneratorUnit<T> {
+public final class MoveSnakeGeneratorUnit implements
+		IRandomMoveGeneratorUnit {
 
 	@Override
-	public IMove<T> generateRandomMove(
-			final RandomMoveGenerator<T> moveGenerator,
-			final ISequences<T> sequences) {
+	public IMove generateRandomMove(
+			final RandomMoveGenerator moveGenerator,
+			final ISequences sequences) {
 
 		final Random random = moveGenerator.getRandom();
 
@@ -69,7 +69,7 @@ public final class MoveSnakeGeneratorUnit<T> implements
 		// Generate outgoing segment
 		final int[] breakPoints = new int[3];
 		for (int i = 0; i < numChangedResources; ++i) {
-			final ISequence<T> sequence = sequences.getSequence(froms.get(i));
+			final ISequence sequence = sequences.getSequence(froms.get(i));
 			moveGenerator.generateSortedBreakPoints(sequence, breakPoints);
 
 			// Randomly pick the insertion point as first or last break point
@@ -88,7 +88,7 @@ public final class MoveSnakeGeneratorUnit<T> implements
 		}
 
 		// Create new move
-		final MoveSnake<T> move = new MoveSnake<T>();
+		final MoveSnake move = new MoveSnake();
 
 		// Set resources
 		move.setFromResources(froms);

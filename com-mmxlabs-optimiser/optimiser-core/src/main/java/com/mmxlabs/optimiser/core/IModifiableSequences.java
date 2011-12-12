@@ -14,17 +14,15 @@ import java.util.Map;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IModifiableSequences<T> extends ISequences<T> {
+public interface IModifiableSequences extends ISequences {
 	/**
 	 * Returns the {@link IModifiableSequence} for the given {@link IResource}.
 	 * 
 	 * @param resource
 	 * @return
 	 */
-	IModifiableSequence<T> getModifiableSequence(IResource resource);
+	IModifiableSequence getModifiableSequence(IResource resource);
 
 	/**
 	 * Returns the {@link IModifiableSequence} for the given resource index.
@@ -32,15 +30,15 @@ public interface IModifiableSequences<T> extends ISequences<T> {
 	 * @param index
 	 * @return
 	 */
-	IModifiableSequence<T> getModifiableSequence(int index);
+	IModifiableSequence getModifiableSequence(int index);
 	
 	/**
 	 * @return
 	 */
-	Map<IResource, IModifiableSequence<T>> getModifiableSequences();
+	Map<IResource, IModifiableSequence> getModifiableSequences();
 
 	/**
 	 * @return a modifiable list of unused elements.
 	 */
-	List<T> getModifiableUnusedElements();
+	List<ISequenceElement> getModifiableUnusedElements();
 }

@@ -15,18 +15,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
-public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
+public class InstrumentingMoveGenerator implements IMoveGenerator {
 	private static final Logger log = LoggerFactory.getLogger(InstrumentingMoveGenerator.class);
 	
 	private static final int HIT_COUNT = 10000;
 
 	private final boolean collectStats;
 
-	private final IMoveGenerator<T> delegate;
+	private final IMoveGenerator delegate;
 
 	int nulls = 0;
 	int hits = 0;
@@ -39,17 +40,17 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 
 	private final class AllMoves implements IMove {
 		@Override
-		public Collection getAffectedResources() {
+		public Collection<IResource> getAffectedResources() {
 			return null;
 		}
 
 		@Override
-		public void apply(IModifiableSequences sequences) {
+		public void apply(final IModifiableSequences sequences) {
 
 		}
 
 		@Override
-		public boolean validate(ISequences sequences) {
+		public boolean validate(final ISequences sequences) {
 			return false;
 		}
 	}
@@ -73,18 +74,18 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 
 		private int generatedCount = 0;
 
-		public Stats(Class<? extends IMove> moveClass, long delta,
-				boolean accepted) {
+		public Stats(final Class<? extends IMove> moveClass, final long delta,
+				final boolean accepted) {
 			this.moveClass = moveClass;
 			addSample(delta, accepted);
 		}
 
-		public Stats(Class<? extends IMove> lastMoveClass) {
+		public Stats(final Class<? extends IMove> lastMoveClass) {
 			this.moveClass = lastMoveClass;
 
 		}
 
-		public void addSample(long delta, boolean accepted) {
+		public void addSample(final long delta, final boolean accepted) {
 			moveCount++;
 			if (accepted) {
 				acceptCount++;
@@ -118,8 +119,8 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 		}
 	}
 
-	public InstrumentingMoveGenerator(IMoveGenerator<T> delegate,
-			boolean collectStats, boolean logToFile) {
+	public InstrumentingMoveGenerator(final IMoveGenerator delegate,
+			final boolean collectStats, final boolean logToFile) {
 		super();
 		this.collectStats = collectStats;
 		this.delegate = delegate;
@@ -129,7 +130,7 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 				final String s =System.currentTimeMillis() + "-moves.log";
 				log.debug("logging moves to " + s);
 				output2 = new BufferedWriter(new FileWriter(s));
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				output2 = null;
 			}
 			output = output2;
@@ -150,8 +151,8 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 	}
 
 	@Override
-	public IMove<T> generateMove() {
-		final IMove<T> move = delegate.generateMove();
+	public IMove generateMove() {
+		final IMove move = delegate.generateMove();
 		total++;
 		if (move != null) {
 			if (collectStats) {
@@ -178,23 +179,23 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 		if (output != null) {
 			try {
 				output.write("MOVE: " +  (move == null ? "null" : move.toString()) + "\n");
-			} catch (IOException e) {
+			} catch (final IOException e) {
 			}
 		}
 		return move;
 	}
 
 	@Override
-	public ISequences<T> getSequences() {
+	public ISequences getSequences() {
 		return delegate.getSequences();
 	}
 
 	@Override
-	public void setSequences(ISequences<T> sequences) {
+	public void setSequences(final ISequences sequences) {
 		delegate.setSequences(sequences);
 	}
 
-	public void notifyOfThresholderDecision(long delta, boolean answer) {
+	public void notifyOfThresholderDecision(final long delta, final boolean answer) {
 		if (answer)
 			totalAccepted++;
 		if (collectStats) {
@@ -211,14 +212,14 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 		if (output != null) {
 			try {
 				output.write("RESULT: " + delta + ", " + answer + "\n");
-			} catch (IOException e) {
+			} catch (final IOException e) {
 			}
 		}
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 
 		sb.append("Move generation stats:\n");
 
@@ -226,7 +227,7 @@ public class InstrumentingMoveGenerator<T> implements IMoveGenerator<T> {
 
 		sb.append("Timing: " + 1000 * HIT_COUNT / (double) lastBatchTime + " moves/second\n");
 
-		for (Stats stat : stats.values()) {
+		for (final Stats stat : stats.values()) {
 			sb.append("\t" + stat.toString() + "\n");
 		}
 

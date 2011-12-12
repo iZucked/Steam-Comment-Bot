@@ -9,37 +9,26 @@ import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 
 /**
- * Simple {@link IOptimiserProgressMonitor} implementation using
- * {@link System#out} to report progress.
+ * Simple {@link IOptimiserProgressMonitor} implementation using {@link System#out} to report progress.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class SystemOutProgressMonitor<T> implements
-		IOptimiserProgressMonitor<T> {
+public final class SystemOutProgressMonitor implements IOptimiserProgressMonitor {
 
 	@Override
-	public final void begin(final IOptimiser<T> optimiser,
-			final long initialFitness,
-			final IAnnotatedSolution<T> annotatedSolution) {
+	public final void begin(final IOptimiser optimiser, final long initialFitness, final IAnnotatedSolution annotatedSolution) {
 		System.out.println("Initial Fitness: " + initialFitness);
 	}
 
 	@Override
-	public final void report(final IOptimiser<T> optimiser,
-			final int iteration, final long currentFitness,
-			final long bestFitness,
-			final IAnnotatedSolution<T> currentSolution,
-			final IAnnotatedSolution<T> annotatedSolution) {
+	public final void report(final IOptimiser optimiser, final int iteration, final long currentFitness, final long bestFitness, final IAnnotatedSolution currentSolution,
+			final IAnnotatedSolution annotatedSolution) {
 		System.out.println("Iter: " + iteration + " Fitness: " + bestFitness);
 	}
 
 	@Override
-	public final void done(final IOptimiser<T> optimiser,
-			final long bestFitness,
-			final IAnnotatedSolution<T> annotatedSolution) {
+	public final void done(final IOptimiser optimiser, final long bestFitness, final IAnnotatedSolution annotatedSolution) {
 		System.out.println("Final Fitness: " + bestFitness);
 	}
 }

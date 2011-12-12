@@ -8,22 +8,17 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 
 /**
- * Simple {@link IFitnessComponent} implementation for a
- * {@link MatrixProviderFitnessCore}.
+ * Simple {@link IFitnessComponent} implementation for a {@link MatrixProviderFitnessCore}.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class MatrixProviderFitnessComponent<T> implements
-		IFitnessComponent<T> {
+public final class MatrixProviderFitnessComponent implements IFitnessComponent {
 
 	private final String name;
-	private final MatrixProviderFitnessCore<T> core;
+	private final MatrixProviderFitnessCore core;
 
-	public MatrixProviderFitnessComponent(final String name,
-			final MatrixProviderFitnessCore<T> core) {
+	public MatrixProviderFitnessComponent(final String name, final MatrixProviderFitnessCore core) {
 		this.name = name;
 		this.core = core;
 	}
@@ -34,7 +29,7 @@ public final class MatrixProviderFitnessComponent<T> implements
 	}
 
 	@Override
-	public IFitnessCore<T> getFitnessCore() {
+	public IFitnessCore getFitnessCore() {
 		return core;
 	}
 

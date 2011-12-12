@@ -11,17 +11,14 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
  * {@link IFitnessComponent} for the {@link SortingFitnessCore}
  * 
  * @author Simon Goodall
- * 
- * @param <T>
- *            Sequence element type
  */
-public final class SortingFitnessComponent<T> implements IFitnessComponent<T> {
+public final class SortingFitnessComponent implements IFitnessComponent {
 
 	public static final String COMPONENT_NAME = "Sorting Fitness";
 
-	private final SortingFitnessCore<T> core;
+	private final SortingFitnessCore core;
 
-	public SortingFitnessComponent(final SortingFitnessCore<T> core) {
+	public SortingFitnessComponent(final SortingFitnessCore core) {
 		this.core = core;
 	}
 
@@ -32,7 +29,7 @@ public final class SortingFitnessComponent<T> implements IFitnessComponent<T> {
 	}
 
 	@Override
-	public IFitnessCore<T> getFitnessCore() {
+	public IFitnessCore getFitnessCore() {
 
 		return core;
 	}

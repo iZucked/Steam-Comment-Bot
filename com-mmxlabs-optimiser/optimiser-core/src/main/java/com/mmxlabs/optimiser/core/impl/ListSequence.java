@@ -10,21 +10,19 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * Implementation of {@link ISequence} which uses a {@link List} as the backing
- * implementation.
+ * Implementation of {@link ISequence} which uses a {@link List} as the backing implementation.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class ListSequence<T> implements ISequence<T> {
+public final class ListSequence implements ISequence {
 
-	private final List<T> list;
+	private final List<ISequenceElement> list;
 
-	public ListSequence(final List<T> list) {
+	public ListSequence(final List<ISequenceElement> list) {
 		this.list = list;
 	}
 
@@ -33,17 +31,17 @@ public final class ListSequence<T> implements ISequence<T> {
 	 * 
 	 * @param sequence
 	 */
-	public ListSequence(final ISequence<T> sequence) {
-		list = new ArrayList<T>(sequence.size());
-		for (final T t : sequence) {
+	public ListSequence(final ISequence sequence) {
+		list = new ArrayList<ISequenceElement>(sequence.size());
+		for (final ISequenceElement t : sequence) {
 			list.add(t);
 		}
 	}
 
 	@Override
-	public Iterator<T> iterator() {
-		return new Iterator<T>() {
-			private final Iterator<? extends T> i = list.iterator();
+	public Iterator<ISequenceElement> iterator() {
+		return new Iterator<ISequenceElement>() {
+			private final Iterator<ISequenceElement> i = list.iterator();
 
 			@Override
 			public final boolean hasNext() {
@@ -51,7 +49,7 @@ public final class ListSequence<T> implements ISequence<T> {
 			}
 
 			@Override
-			public final T next() {
+			public final ISequenceElement next() {
 				return i.next();
 			}
 
@@ -63,16 +61,15 @@ public final class ListSequence<T> implements ISequence<T> {
 	}
 
 	@Override
-	public T get(final int index) {
+	public ISequenceElement get(final int index) {
 		return list.get(index);
 	}
 
 	@Override
-	public ISegment<T> getSegment(final int start, final int end) {
+	public ISegment getSegment(final int start, final int end) {
 
 		// Copy of the sublist to make segment independent from sequence.
-		return new ListSegment<T>(new ArrayList<T>(list.subList(start, end)),
-				this, start, end);
+		return new ListSegment(new ArrayList<ISequenceElement>(list.subList(start, end)), this, start, end);
 	}
 
 	@Override
@@ -86,16 +83,15 @@ public final class ListSequence<T> implements ISequence<T> {
 	}
 
 	@Override
-	public final T last() {
+	public final ISequenceElement last() {
 		return get(size() - 1);
 	}
 
 	@Override
-	public T first() {
+	public ISequenceElement first() {
 		return get(0);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(final Object obj) {
 
@@ -104,11 +100,11 @@ public final class ListSequence<T> implements ISequence<T> {
 		} else if (!(obj instanceof ISequence)) {
 			return false;
 		} else {
-			final Iterator<T> e1 = iterator();
-			final Iterator e2 = ((ISequence) obj).iterator();
+			final Iterator<ISequenceElement> e1 = iterator();
+			final Iterator<ISequenceElement> e2 = ((ISequence) obj).iterator();
 			while (e1.hasNext() && e2.hasNext()) {
-				final T o1 = e1.next();
-				final Object o2 = e2.next();
+				final ISequenceElement o1 = e1.next();
+				final ISequenceElement o2 = e2.next();
 				if (!(o1 == null ? o2 == null : o1.equals(o2))) {
 					return false;
 				}
@@ -120,9 +116,9 @@ public final class ListSequence<T> implements ISequence<T> {
 	@Override
 	public int hashCode() {
 		int hashCode = 1;
-		final Iterator<T> i = iterator();
+		final Iterator<ISequenceElement> i = iterator();
 		while (i.hasNext()) {
-			final T obj = i.next();
+			final ISequenceElement obj = i.next();
 			hashCode = 31 * hashCode + (obj == null ? 0 : obj.hashCode());
 		}
 		return hashCode;

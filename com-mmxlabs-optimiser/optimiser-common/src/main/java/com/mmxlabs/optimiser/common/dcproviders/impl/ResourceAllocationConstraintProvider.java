@@ -10,25 +10,24 @@ import java.util.Map;
 
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
 /**
- * {@link IDataComponentProvider} implementation to provide {@link IResource}
- * allocation constraints for sequence elements.
+ * {@link IDataComponentProvider} implementation to provide {@link IResource} allocation constraints for sequence elements.
  * 
  * @author Simon Goodall
  * 
  */
-public final class ResourceAllocationConstraintProvider<T> implements
-		IResourceAllocationConstraintDataComponentProviderEditor<T> {
+public final class ResourceAllocationConstraintProvider implements IResourceAllocationConstraintDataComponentProviderEditor {
 
 	private final String name;
 
-	private final Map<Object, Collection<IResource>> allowedResourceMap;
+	private final Map<ISequenceElement, Collection<IResource>> allowedResourceMap;
 
 	public ResourceAllocationConstraintProvider(final String name) {
 		this.name = name;
-		this.allowedResourceMap = new HashMap<Object, Collection<IResource>>();
+		this.allowedResourceMap = new HashMap<ISequenceElement, Collection<IResource>>();
 	}
 
 	@Override
@@ -37,7 +36,7 @@ public final class ResourceAllocationConstraintProvider<T> implements
 	}
 
 	@Override
-	public Collection<IResource> getAllowedResources(final T element) {
+	public Collection<IResource> getAllowedResources(final ISequenceElement element) {
 
 		if (allowedResourceMap.containsKey(element)) {
 			return allowedResourceMap.get(element);
@@ -47,8 +46,7 @@ public final class ResourceAllocationConstraintProvider<T> implements
 	}
 
 	@Override
-	public void setAllowedResources(final T element,
-			final Collection<IResource> resources) {
+	public void setAllowedResources(final ISequenceElement element, final Collection<IResource> resources) {
 		allowedResourceMap.put(element, resources);
 	}
 

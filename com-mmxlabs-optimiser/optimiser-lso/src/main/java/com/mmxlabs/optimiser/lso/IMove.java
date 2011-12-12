@@ -15,10 +15,8 @@ import com.mmxlabs.optimiser.core.ISequences;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IMove<T> {
+public interface IMove {
 
 	/**
 	 * Returns the collection of {@link IResource}s this move affects.
@@ -28,18 +26,16 @@ public interface IMove<T> {
 	Collection<IResource> getAffectedResources();
 
 	/**
-	 * Apply the move to the {@link IResources} listed in
-	 * {@link #getAffectedResources()}.
+	 * Apply the move to the {@link IResources} listed in {@link #getAffectedResources()}.
 	 * 
 	 * @param sequences
 	 */
-	void apply(IModifiableSequences<T> sequences);
+	void apply(IModifiableSequences sequences);
 
 	/**
-	 * Validate the move parameters are valid for the given {@link ISequences}
-	 * object.
+	 * Validate the move parameters are valid for the given {@link ISequences} object.
 	 * 
 	 * @return True on valid parameters.
 	 */
-	boolean validate(ISequences<T> sequences);
+	boolean validate(ISequences sequences);
 }

@@ -12,6 +12,7 @@ import java.util.Map;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
@@ -23,19 +24,16 @@ import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
+public final class MatrixProviderFitnessCore implements IFitnessCore {
 
 	/**
 	 * The source matrix data (x/from, y/to)
 	 */
-	private IMatrixProvider<T, Number> matrix;
+	private IMatrixProvider<ISequenceElement, Number> matrix;
 
 	/**
-	 * Map containing proposed fitness value for each {@link IResource} for
-	 * current {@link ISequences}
+	 * Map containing proposed fitness value for each {@link IResource} for current {@link ISequences}
 	 */
 	private Map<IResource, Long> newFitnessByResource;
 
@@ -59,23 +57,20 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 	 */
 	private long oldFitness;
 
-	private final IFitnessComponent<T> component;
+	private final IFitnessComponent component;
 
 	/**
-	 * The key used to obtain the matrix from an {@link IOptimisationData}
-	 * instance.
+	 * The key used to obtain the matrix from an {@link IOptimisationData} instance.
 	 */
 	private final String matrixProviderKey;
 
-	public MatrixProviderFitnessCore(final String componentName,
-			final String matrixProviderKey) {
-		component = new MatrixProviderFitnessComponent<T>(componentName, this);
+	public MatrixProviderFitnessCore(final String componentName, final String matrixProviderKey) {
+		component = new MatrixProviderFitnessComponent(componentName, this);
 		this.matrixProviderKey = matrixProviderKey;
 	}
 
 	@Override
-	public void accepted(final ISequences<T> sequences,
-			final Collection<IResource> affectedResources) {
+	public void accepted(final ISequences sequences, final Collection<IResource> affectedResources) {
 
 		// Copy across proposed values into accepted values
 		oldFitness = newFitness;
@@ -88,13 +83,13 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	@Override
-	public boolean evaluate(final ISequences<T> sequences) {
+	public boolean evaluate(final ISequences sequences) {
 
 		// Perform a full evaluation
 		oldFitness = 0;
 
 		for (final IResource resource : sequences.getResources()) {
-			final ISequence<T> sequence = sequences.getSequence(resource);
+			final ISequence sequence = sequences.getSequence(resource);
 			final long value = evaluateSequence(sequence);
 			oldFitnessByResource.put(resource, value);
 			oldFitness += value;
@@ -106,8 +101,7 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	@Override
-	public boolean evaluate(final ISequences<T> sequences,
-			final Collection<IResource> affectedResources) {
+	public boolean evaluate(final ISequences sequences, final Collection<IResource> affectedResources) {
 
 		// Reset this value
 		newFitness = oldFitness;
@@ -118,7 +112,7 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 			newFitness -= oldValue;
 
 			// Calculate new resource fitness
-			final ISequence<T> sequence = sequences.getSequence(resource);
+			final ISequence sequence = sequences.getSequence(resource);
 			final long value = evaluateSequence(sequence);
 
 			// Save resource fitness
@@ -131,26 +125,25 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	@Override
-	public Collection<IFitnessComponent<T>> getFitnessComponents() {
+	public Collection<IFitnessComponent> getFitnessComponents() {
 		return Collections.singleton(component);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void init(final IOptimisationData<T> data) {
+	public void init(final IOptimisationData data) {
 		oldFitnessByResource = new HashMap<IResource, Long>();
 		newFitnessByResource = new HashMap<IResource, Long>();
-		setMatrix(data.getDataComponentProvider(matrixProviderKey,
-				IMatrixProvider.class));
+		setMatrix(data.getDataComponentProvider(matrixProviderKey, IMatrixProvider.class));
 	}
 
-	private long evaluateSequence(final ISequence<T> sequence) {
+	private long evaluateSequence(final ISequence sequence) {
 
 		// loop over sequence accumulating value
 		double totalValue = 0.0;
 
-		T prev = null;
-		for (final T e : sequence) {
+		ISequenceElement prev = null;
+		for (final ISequenceElement e : sequence) {
 			if (prev != null) {
 				totalValue += matrix.get(prev, e).doubleValue();
 			}
@@ -166,8 +159,7 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	/**
-	 * Set the fitness scale factor. A full evaluation needs to be performed
-	 * after calling this method.
+	 * Set the fitness scale factor. A full evaluation needs to be performed after calling this method.
 	 * 
 	 * @param scaleFactor
 	 */
@@ -175,11 +167,11 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 		this.scaleFactor = scaleFactor;
 	}
 
-	public IMatrixProvider<T, Number> getMatrix() {
+	public IMatrixProvider<ISequenceElement, Number> getMatrix() {
 		return matrix;
 	}
 
-	public void setMatrix(final IMatrixProvider<T, Number> matrix) {
+	public void setMatrix(final IMatrixProvider<ISequenceElement, Number> matrix) {
 		this.matrix = matrix;
 	}
 
@@ -196,8 +188,7 @@ public final class MatrixProviderFitnessCore<T> implements IFitnessCore<T> {
 	}
 
 	@Override
-	public void annotate(final ISequences<T> sequences,
-			final IAnnotatedSolution<T> solution, final boolean forExport) {
+	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
 		evaluate(sequences);
 		// Would annotate here
 	}

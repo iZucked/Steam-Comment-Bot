@@ -23,13 +23,10 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * the {@link #setFitnessComponents(List)} will be used to evaluate fitnesses.
  * As such they should not be used while using this instance.
  * 
- * @param <T>
- *            Sequence element type
- * 
  * @author Simon Goodall
  * 
  */
-public interface IFitnessEvaluator<T> {
+public interface IFitnessEvaluator {
 
 	/**
 	 * Returns the {@link List} of {@link IFitnessComponent}s used by this
@@ -37,7 +34,7 @@ public interface IFitnessEvaluator<T> {
 	 * 
 	 * @return
 	 */
-	List<IFitnessComponent<T>> getFitnessComponents();
+	List<IFitnessComponent> getFitnessComponents();
 
 	/**
 	 * Set the list of {@link IFitnessComponent}s to be used by this
@@ -46,7 +43,7 @@ public interface IFitnessEvaluator<T> {
 	 * 
 	 * @param fitnessComponents
 	 */
-	void setFitnessComponents(List<IFitnessComponent<T>> fitnessComponents);
+	void setFitnessComponents(List<IFitnessComponent> fitnessComponents);
 
 	/**
 	 * Returns the {@link IFitnessHelper} used to evaluate {@link ISequences}
@@ -55,7 +52,7 @@ public interface IFitnessEvaluator<T> {
 	 * 
 	 * @return
 	 */
-	IFitnessHelper<T> getFitnessHelper();
+	IFitnessHelper getFitnessHelper();
 
 	/**
 	 * Set the {@link IFitnessHelper} used to evaluate {@link ISequences} using
@@ -63,7 +60,7 @@ public interface IFitnessEvaluator<T> {
 	 * {@link #setFitnessComponents(List)} method.
 	 * 
 	 */
-	void setFitnessHelper(IFitnessHelper<T> fitnessHelper);
+	void setFitnessHelper(IFitnessHelper fitnessHelper);
 
 	/**
 	 * Initialise {@link IFitnessEvaluator} and ensure all the relevant setters
@@ -78,7 +75,7 @@ public interface IFitnessEvaluator<T> {
 	 * 
 	 * @param data
 	 */
-	void setOptimisationData(IOptimisationData<T> data);
+	void setOptimisationData(IOptimisationData data);
 
 	/**
 	 * Set the initial sequences. These should have had any manipulation from
@@ -86,7 +83,7 @@ public interface IFitnessEvaluator<T> {
 	 * 
 	 * @param sequences
 	 */
-	void setInitialSequences(ISequences<T> sequences);
+	void setInitialSequences(ISequences sequences);
 
 	/**
 	 * Evaluate the given {@link ISequences} to determine whether or not they
@@ -98,7 +95,7 @@ public interface IFitnessEvaluator<T> {
 	 * @param sequences
 	 * @return
 	 */
-	boolean evaluateSequences(ISequences<T> sequences,
+	boolean evaluateSequences(ISequences sequences,
 			Collection<IResource> affectedResources);
 
 	/**
@@ -108,7 +105,7 @@ public interface IFitnessEvaluator<T> {
 	 * 
 	 * @return
 	 */
-	ISequences<T> getBestSequences();
+	ISequences getBestSequences();
 
 	/**
 	 * Returns the fitness value of the best {@link ISequences} instance
@@ -124,7 +121,7 @@ public interface IFitnessEvaluator<T> {
 	 * 
 	 * @return
 	 */
-	ISequences<T> getCurrentSequences();
+	ISequences getCurrentSequences();
 
 	/**
 	 * Returns the fitness value of the current {@link ISequences} instance
@@ -141,11 +138,11 @@ public interface IFitnessEvaluator<T> {
 	 * @param context
 	 * @return
 	 */
-	IAnnotatedSolution<T> getBestAnnotatedSolution(final IOptimisationContext<T> context, final boolean forExport);
+	IAnnotatedSolution getBestAnnotatedSolution(final IOptimisationContext context, final boolean forExport);
 	/**
 	 * Returns an annotated solution for the current sequences.
 	 * @param context
 	 * @return
 	 */
-	IAnnotatedSolution<T> getCurrentAnnotatedSolution(final IOptimisationContext<T> context, final boolean forExport);
+	IAnnotatedSolution getCurrentAnnotatedSolution(final IOptimisationContext context, final boolean forExport);
 }

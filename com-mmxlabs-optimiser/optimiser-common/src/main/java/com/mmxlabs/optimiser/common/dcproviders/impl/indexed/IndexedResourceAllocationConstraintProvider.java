@@ -7,18 +7,16 @@ package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 import java.util.Collection;
 
 import com.mmxlabs.common.indexedobjects.IIndexMap;
-import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
-public final class IndexedResourceAllocationConstraintProvider<T extends IIndexedObject> implements
-		IResourceAllocationConstraintDataComponentProviderEditor<T> {
+public final class IndexedResourceAllocationConstraintProvider implements IResourceAllocationConstraintDataComponentProviderEditor {
 
 	private final String name;
 
-	private final IIndexMap<T, Collection<IResource>> allowedResources = 
-		new ArrayIndexMap<T, Collection<IResource>>();
+	private final IIndexMap<ISequenceElement, Collection<IResource>> allowedResources = new ArrayIndexMap<ISequenceElement, Collection<IResource>>();
 
 	public IndexedResourceAllocationConstraintProvider(String name) {
 		super();
@@ -26,7 +24,7 @@ public final class IndexedResourceAllocationConstraintProvider<T extends IIndexe
 	}
 
 	@Override
-	public Collection<IResource> getAllowedResources(final T element) {
+	public Collection<IResource> getAllowedResources(final ISequenceElement element) {
 		return allowedResources.maybeGet(element);
 	}
 
@@ -41,8 +39,7 @@ public final class IndexedResourceAllocationConstraintProvider<T extends IIndexe
 	}
 
 	@Override
-	public void setAllowedResources(final T element,
-			final Collection<IResource> resources) {
+	public void setAllowedResources(final ISequenceElement element, final Collection<IResource> resources) {
 		allowedResources.set(element, resources);
 	}
 }

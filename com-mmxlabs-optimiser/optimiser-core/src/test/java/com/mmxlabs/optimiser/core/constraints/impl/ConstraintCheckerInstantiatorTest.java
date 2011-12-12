@@ -22,8 +22,7 @@ public class ConstraintCheckerInstantiatorTest {
 
 		final IConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
-		final List<IConstraintChecker<Object>> checkers = inst
-				.instantiateConstraintCheckers(registry, null);
+		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, null);
 
 		Assert.assertTrue(checkers.isEmpty());
 	}
@@ -32,30 +31,24 @@ public class ConstraintCheckerInstantiatorTest {
 	public void testInstantiateConstraintCheckersIConstraintCheckerRegistry2() {
 
 		final IConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
-		registry
-				.registerConstraintCheckerFactory(new MockConstraintCheckerFactory(
-						"Checker"));
+		registry.registerConstraintCheckerFactory(new MockConstraintCheckerFactory("Checker"));
 
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
-		final List<IConstraintChecker<Object>> checkers = inst
-				.instantiateConstraintCheckers(registry, null);
+		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, null);
 
 		Assert.assertEquals(1, checkers.size());
 
-		Assert.assertTrue(checkers.get(0) instanceof MockConstraintChecker<?>);
+		Assert.assertTrue(checkers.get(0) instanceof MockConstraintChecker);
 	}
 
 	@Test
 	public void testInstantiateConstraintCheckersIConstraintCheckerRegistryListOfString() {
 		final IConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
-		registry
-				.registerConstraintCheckerFactory(new MockConstraintCheckerFactory(
-						"Checker"));
+		registry.registerConstraintCheckerFactory(new MockConstraintCheckerFactory("Checker"));
 
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
 		final List<String> names = Collections.emptyList();
-		final List<IConstraintChecker<Object>> checkers = inst
-				.instantiateConstraintCheckers(registry, names, null);
+		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, names, null);
 
 		Assert.assertTrue(checkers.isEmpty());
 	}
@@ -63,14 +56,10 @@ public class ConstraintCheckerInstantiatorTest {
 	@Test
 	public void testInstantiateConstraintCheckersIConstraintCheckerRegistryListOfString2() {
 		final IConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
-		registry
-				.registerConstraintCheckerFactory(new MockConstraintCheckerFactory(
-						"Checker"));
+		registry.registerConstraintCheckerFactory(new MockConstraintCheckerFactory("Checker"));
 
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
-		final List<IConstraintChecker<Object>> checkers = inst
-				.instantiateConstraintCheckers(registry, Collections
-						.singletonList("Unknown"), null);
+		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, Collections.singletonList("Unknown"), null);
 
 		Assert.assertEquals(1, checkers.size());
 
@@ -81,17 +70,13 @@ public class ConstraintCheckerInstantiatorTest {
 	@Test
 	public void testInstantiateConstraintCheckersIConstraintCheckerRegistryListOfString3() {
 		final IConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
-		registry
-				.registerConstraintCheckerFactory(new MockConstraintCheckerFactory(
-						"Checker"));
+		registry.registerConstraintCheckerFactory(new MockConstraintCheckerFactory("Checker"));
 
 		final ConstraintCheckerInstantiator inst = new ConstraintCheckerInstantiator();
-		final List<IConstraintChecker<Object>> checkers = inst
-				.instantiateConstraintCheckers(registry, Collections
-						.singletonList("Checker"), null);
+		final List<IConstraintChecker> checkers = inst.instantiateConstraintCheckers(registry, Collections.singletonList("Checker"), null);
 
 		Assert.assertEquals(1, checkers.size());
 
-		Assert.assertTrue(checkers.get(0) instanceof MockConstraintChecker<?>);
+		Assert.assertTrue(checkers.get(0) instanceof MockConstraintChecker);
 	}
 }

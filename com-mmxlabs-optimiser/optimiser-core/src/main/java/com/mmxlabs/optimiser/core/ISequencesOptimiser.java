@@ -13,10 +13,8 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface ISequencesOptimiser<T> extends IOptimiser<T> {
+public interface ISequencesOptimiser extends IOptimiser {
 
 	/**
 	 * Returns the number of iterations, moves to try, in this optimisation
@@ -31,7 +29,7 @@ public interface ISequencesOptimiser<T> extends IOptimiser<T> {
 	 * 
 	 * @return
 	 */
-	List<IConstraintChecker<T>> getConstraintCheckers();
+	List<IConstraintChecker> getConstraintCheckers();
 
 	/**
 	 * Returns the {@link ISequencesManipulator} used to transform
@@ -40,13 +38,13 @@ public interface ISequencesOptimiser<T> extends IOptimiser<T> {
 	 * 
 	 * @return
 	 */
-	ISequencesManipulator<T> getSequenceManipulator();
+	ISequencesManipulator getSequenceManipulator();
 
-	IAnnotatedSolution<T> start(IOptimisationContext<T> context);
+	IAnnotatedSolution start(IOptimisationContext context);
 
-	IAnnotatedSolution<T> getBestSolution(final boolean b);
+	IAnnotatedSolution getBestSolution(final boolean b);
 
-	IAnnotatedSolution<T> getCurrentSolution(final boolean b);
+	IAnnotatedSolution getCurrentSolution(final boolean b);
 
 	int step(int percentage);
 

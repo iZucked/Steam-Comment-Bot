@@ -17,8 +17,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
  * @author Simon Goodall
  * 
  */
-public final class MatrixProviderFitnessCoreFactory implements
-		IFitnessCoreFactory {
+public final class MatrixProviderFitnessCoreFactory implements IFitnessCoreFactory {
 
 	private final String fitnessCoreName;
 
@@ -26,8 +25,7 @@ public final class MatrixProviderFitnessCoreFactory implements
 
 	private final String dataProviderKey;
 
-	public MatrixProviderFitnessCoreFactory(final String fitnessCoreName,
-			final String fitnessComponentName, final String dataProviderKey) {
+	public MatrixProviderFitnessCoreFactory(final String fitnessCoreName, final String fitnessComponentName, final String dataProviderKey) {
 		this.fitnessCoreName = fitnessCoreName;
 		this.fitnessComponentName = fitnessComponentName;
 		this.dataProviderKey = dataProviderKey;
@@ -44,8 +42,7 @@ public final class MatrixProviderFitnessCoreFactory implements
 	}
 
 	@Override
-	public <T> IFitnessCore<T> instantiate() {
-		return new MatrixProviderFitnessCore<T>(fitnessComponentName,
-				dataProviderKey);
+	public IFitnessCore instantiate() {
+		return new MatrixProviderFitnessCore(fitnessComponentName, dataProviderKey);
 	}
 }

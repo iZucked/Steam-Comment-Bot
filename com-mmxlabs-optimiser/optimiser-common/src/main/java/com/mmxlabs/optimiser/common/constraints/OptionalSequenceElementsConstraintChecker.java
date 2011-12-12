@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -20,11 +21,11 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * @author hinton
  * 
  */
-public class OptionalSequenceElementsConstraintChecker<T> implements IConstraintChecker<T> {
+public class OptionalSequenceElementsConstraintChecker implements IConstraintChecker {
 	private final String key, name;
-	private IOptionalElementsProvider<T> optionalElementsProvider;
+	private IOptionalElementsProvider optionalElementsProvider;
 
-	public OptionalSequenceElementsConstraintChecker(String key, String name) {
+	public OptionalSequenceElementsConstraintChecker(final String key, final String name) {
 		super();
 		this.key = key;
 		this.name = name;
@@ -36,13 +37,13 @@ public class OptionalSequenceElementsConstraintChecker<T> implements IConstraint
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences<T> sequences) {
+	public boolean checkConstraints(final ISequences sequences) {
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(ISequences<T> sequences, List<String> messages) {
-		for (final T element : sequences.getUnusedElements()) {
+	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			if (optionalElementsProvider.isElementRequired(element)) {
 				if (messages != null)
 					messages.add("Element " + element + " is required, but is in the unused set");
@@ -66,7 +67,7 @@ public class OptionalSequenceElementsConstraintChecker<T> implements IConstraint
 	}
 
 	@Override
-	public void setOptimisationData(IOptimisationData<T> optimisationData) {
+	public void setOptimisationData(final IOptimisationData optimisationData) {
 		optionalElementsProvider = optimisationData.getDataComponentProvider(key, IOptionalElementsProvider.class);
 	}
 

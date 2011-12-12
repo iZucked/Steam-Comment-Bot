@@ -9,36 +9,32 @@ import java.util.Iterator;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * Wraps an {@link ISequence} instance with this object. This class is intended
- * to be used with {@link IModifiableSequence} objects to force them to be
- * treated as read-only. As such there is a read-only iterator and a setter, but
- * no getter for the wrapped object.
+ * Wraps an {@link ISequence} instance with this object. This class is intended to be used with {@link IModifiableSequence} objects to force them to be treated as read-only. As such there is a
+ * read-only iterator and a setter, but no getter for the wrapped object.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
+public final class UnmodifiableSequenceWrapper implements ISequence {
 
-	private final ISequence<T> wrapped;
+	private final ISequence wrapped;
 
-	public UnmodifiableSequenceWrapper(final ISequence<T> wrapped) {
+	public UnmodifiableSequenceWrapper(final ISequence wrapped) {
 
 		this.wrapped = wrapped;
 	}
 
 	@Override
-	public final Iterator<T> iterator() {
+	public final Iterator<ISequenceElement> iterator() {
 
 		/**
-		 * A new anonymous Iterator wrapping iterator from the 'wrapped'
-		 * ISequence to forbid calls to #remove()
+		 * A new anonymous Iterator wrapping iterator from the 'wrapped' ISequence to forbid calls to #remove()
 		 */
-		return new Iterator<T>() {
-			private final Iterator<? extends T> i = wrapped.iterator();
+		return new Iterator<ISequenceElement>() {
+			private final Iterator<ISequenceElement> i = wrapped.iterator();
 
 			@Override
 			public final boolean hasNext() {
@@ -46,7 +42,7 @@ public final class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 			}
 
 			@Override
-			public final T next() {
+			public final ISequenceElement next() {
 				return i.next();
 			}
 
@@ -58,12 +54,12 @@ public final class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 	}
 
 	@Override
-	public final T get(final int index) {
+	public final ISequenceElement get(final int index) {
 		return wrapped.get(index);
 	}
 
 	@Override
-	public final ISegment<T> getSegment(final int start, final int end) {
+	public final ISegment getSegment(final int start, final int end) {
 		return wrapped.getSegment(start, end);
 	}
 
@@ -73,12 +69,12 @@ public final class UnmodifiableSequenceWrapper<T> implements ISequence<T> {
 	}
 
 	@Override
-	public final T last() {
+	public final ISequenceElement last() {
 		return wrapped.last();
 	}
 
 	@Override
-	public final T first() {
+	public final ISequenceElement first() {
 		return wrapped.first();
 	}
 }

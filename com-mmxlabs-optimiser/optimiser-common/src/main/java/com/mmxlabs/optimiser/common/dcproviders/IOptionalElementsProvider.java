@@ -6,6 +6,7 @@ package com.mmxlabs.optimiser.common.dcproviders;
 
 import java.util.List;
 
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
@@ -15,7 +16,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * @author hinton
  * 
  */
-public interface IOptionalElementsProvider<T> extends IDataComponentProvider {
+public interface IOptionalElementsProvider extends IDataComponentProvider {
 	/**
 	 * Returns true if the given element is allowed to be missing from sequences in a solution.
 	 * 
@@ -24,7 +25,7 @@ public interface IOptionalElementsProvider<T> extends IDataComponentProvider {
 	 * @param element
 	 * @return
 	 */
-	boolean isElementOptional(T element);
+	boolean isElementOptional(ISequenceElement element);
 
 	/**
 	 * Equivalent to !{@link #isElementOptional(Object)}.
@@ -34,7 +35,7 @@ public interface IOptionalElementsProvider<T> extends IDataComponentProvider {
 	 * @param element
 	 * @return
 	 */
-	boolean isElementRequired(T element);
+	boolean isElementRequired(ISequenceElement element);
 
 	/**
 	 * Get all the elements which are optional in the {@link IOptimisationData}.
@@ -43,7 +44,7 @@ public interface IOptionalElementsProvider<T> extends IDataComponentProvider {
 	 * 
 	 * @return
 	 */
-	List<T> getOptionalElements();
+	List<ISequenceElement> getOptionalElements();
 
 	/**
 	 * Get all the elements which aren't optional in the {@link IOptimisationData}
@@ -52,5 +53,5 @@ public interface IOptionalElementsProvider<T> extends IDataComponentProvider {
 	 * 
 	 * @return
 	 */
-	List<T> getRequiredElements();
+	List<ISequenceElement> getRequiredElements();
 }

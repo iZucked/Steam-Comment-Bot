@@ -5,23 +5,29 @@
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * Mock implementation of {@link IIndexedObject} for use in unit tests.
+ * Mock implementation of {@link ISequenceElement} for use in unit tests.
  * 
  * @author Simon Goodall
  * 
  */
-class MockIndexedObject implements IIndexedObject {
+class MockSequenceElement implements ISequenceElement {
 
 	private final int index;
 
-	public MockIndexedObject(final int index) {
+	public MockSequenceElement(final int index) {
 		this.index = index;
 	}
 
 	@Override
 	public int getIndex() {
 		return index;
+	}
+
+	@Override
+	public String getName() {
+		return "" + index;
 	}
 }

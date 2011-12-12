@@ -9,26 +9,25 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * Default implementation of {@link ISegment} which uses a {@link List} as the
- * backing implementation.
+ * Default implementation of {@link ISegment} which uses a {@link List} as the backing implementation.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
  */
-public final class ListSegment<T> implements ISegment<T> {
+public final class ListSegment implements ISegment {
 
 	/**
 	 * List of segment items
 	 */
-	private final List<T> l;
+	private final List<ISequenceElement> l;
 
 	/**
 	 * {@link ISegment} instance this segment originates from
 	 */
-	private final ISequence<T> sequence;
+	private final ISequence sequence;
 
 	/**
 	 * Start index of segment in parent sequence
@@ -39,8 +38,7 @@ public final class ListSegment<T> implements ISegment<T> {
 	 */
 	private final int end;
 
-	public ListSegment(final List<T> segment, final ISequence<T> sequence,
-			final int start, final int end) {
+	public ListSegment(final List<ISequenceElement> segment, final ISequence sequence, final int start, final int end) {
 		this.l = segment;
 		this.sequence = sequence;
 		this.start = start;
@@ -48,12 +46,12 @@ public final class ListSegment<T> implements ISegment<T> {
 	}
 
 	@Override
-	public T get(final int index) {
+	public ISequenceElement get(final int index) {
 		return l.get(index);
 	}
 
 	@Override
-	public ISequence<T> getSequence() {
+	public ISequence getSequence() {
 		return sequence;
 	}
 
@@ -73,7 +71,7 @@ public final class ListSegment<T> implements ISegment<T> {
 	}
 
 	@Override
-	public Iterator<T> iterator() {
+	public Iterator<ISequenceElement> iterator() {
 		return l.iterator();
 	}
 }
