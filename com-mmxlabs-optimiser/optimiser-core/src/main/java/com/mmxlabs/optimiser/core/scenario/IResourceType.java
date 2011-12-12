@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.optimiser.core.scenario;
 
+import com.mmxlabs.optimiser.core.IResource;
+
 /**
- * The type of an IResource .
+ * The type of an {@link IResource}.
  * 
  * @author proshun
  *
