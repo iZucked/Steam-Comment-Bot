@@ -100,9 +100,25 @@ public final class CollectionsUtil {
 	}
 
 	/**
-	 * Create a new {@link HashMap} from the list of elements. This method
-	 * assumes an even number of elements in the form of { key1, value1, key2,
-	 * value2,...}
+	 * Create a {@link ArrayList} of objects from an unbounded list.
+	 * 
+	 * @param <T>
+	 * @param sequences
+	 * @return
+	 */
+	public static <T> List<T> makeArrayList2(Class<T> cls, final T... elements) {
+
+		final List<T> collection = new ArrayList<T>(elements.length);
+
+		for (final T e : elements) {
+			collection.add(e);
+		}
+
+		return collection;
+	}
+
+	/**
+	 * Create a new {@link HashMap} from the list of elements. This method assumes an even number of elements in the form of { key1, value1, key2, value2,...}
 	 * 
 	 * @param <K>
 	 * @param <V>
