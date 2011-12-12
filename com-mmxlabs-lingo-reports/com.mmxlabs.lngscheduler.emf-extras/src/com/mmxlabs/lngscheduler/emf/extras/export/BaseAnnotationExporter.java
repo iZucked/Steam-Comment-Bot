@@ -21,7 +21,6 @@ import scenario.schedule.events.FuelType;
 
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
@@ -33,7 +32,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * 
  */
 public abstract class BaseAnnotationExporter implements IAnnotationExporter {
-	protected IAnnotatedSolution<ISequenceElement> annotatedSolution;
+	protected IAnnotatedSolution annotatedSolution;
 	protected Scenario inputScenario;
 	protected Schedule output;
 	protected ModelEntityMap entities;
@@ -78,22 +77,22 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	}
 
 	@Override
-	public void setAnnotatedSolution(IAnnotatedSolution<ISequenceElement> annotatedSolution) {
+	public void setAnnotatedSolution(final IAnnotatedSolution annotatedSolution) {
 		this.annotatedSolution = annotatedSolution;
 	}
 
 	@Override
-	public void setOutput(Schedule output) {
+	public void setOutput(final Schedule output) {
 		this.output = output;
 	}
 
 	@Override
-	public void setScenario(Scenario inputScenario) {
+	public void setScenario(final Scenario inputScenario) {
 		this.inputScenario = inputScenario;
 	}
 
 	@Override
-	public void setModelEntityMap(ModelEntityMap entities) {
+	public void setModelEntityMap(final ModelEntityMap entities) {
 		this.entities = entities;
 	}
 

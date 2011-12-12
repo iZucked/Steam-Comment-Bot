@@ -27,7 +27,6 @@ import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 
@@ -45,7 +44,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 	private final ModelEntityMap entities = new ResourcelessModelEntityMap();
 
-	private LocalSearchOptimiser<ISequenceElement> optimiser;
+	private LocalSearchOptimiser optimiser;
 
 	private long startTimeMillis;
 
@@ -68,7 +67,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 
-		IOptimisationData<ISequenceElement> data;
+		IOptimisationData data;
 		try {
 			data = lst.createOptimisationData(entities);
 		} catch (final IncompleteScenarioException e) {
@@ -76,22 +75,22 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			throw new RuntimeException(e);
 		}
 
-		final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot.createOptimiserAndContext(data, entities);
+		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
-		final IOptimisationContext<ISequenceElement> context = optAndContext.getFirst();
+		final IOptimisationContext context = optAndContext.getFirst();
 		optimiser = optAndContext.getSecond();
 
 		// because we are driving the optimiser ourself, so we can be paused, we
 		// don't actually get progress callbacks.
-		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
+		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 
 		optimiser.init();
-		final IAnnotatedSolution<ISequenceElement> startSolution = optimiser.start(context);
+		final IAnnotatedSolution startSolution = optimiser.start(context);
 
 		saveSolution("start state", startSolution);
 	}
 
-	private Schedule saveSolution(final String name, final IAnnotatedSolution<ISequenceElement> solution) {
+	private Schedule saveSolution(final String name, final IAnnotatedSolution solution) {
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
 

@@ -18,7 +18,6 @@ import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 
 /**
@@ -32,9 +31,7 @@ public class InitialStateFeasibilityConstraint extends AbstractModelConstraint {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse
-	 * .emf.validation.IValidationContext)
+	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
 	 */
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
@@ -45,17 +42,14 @@ public class InitialStateFeasibilityConstraint extends AbstractModelConstraint {
 			final ModelEntityMap entities = new ResourcelessModelEntityMap();
 			entities.setScenario(scenario);
 
-			final LNGScenarioTransformer lst = new LNGScenarioTransformer(
-					scenario);
+			final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
 
-			final OptimisationTransformer ot = new OptimisationTransformer(
-					lst.getOptimisationSettings());
+			final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 
-			IOptimisationData<ISequenceElement> data;
+			IOptimisationData data;
 			try {
 				data = lst.createOptimisationData(entities);
-				final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot
-						.createOptimiserAndContext(data, entities);
+				final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 				if (optAndContext.getFirst().getInitialSequences() == null) {
 					return ctx.createFailureStatus(scenario.getName(), "no initial solution could be constructed");
 				}

@@ -9,7 +9,6 @@ import scenario.schedule.Schedule;
 
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 
 /**
  * Extension interface for exporting to EMF.
@@ -26,7 +25,7 @@ public interface IExporterExtension {
 	 * @param entities
 	 * @param annotatedSolution
 	 */
-	void startExporting(final Scenario inputScenario, Schedule output, final ModelEntityMap entities, final IAnnotatedSolution<ISequenceElement> annotatedSolution);
+	void startExporting(final Scenario inputScenario, Schedule output, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Called after the main export has happened, and after any other prior export steps have happened.

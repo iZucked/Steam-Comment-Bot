@@ -85,7 +85,6 @@ import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.shiplingo.importer.importers.CSVReader;
@@ -250,22 +249,22 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 							final ModelEntityMap entities = new ResourcelessModelEntityMap();
 							entities.setScenario(scenario);
-							IOptimisationData<ISequenceElement> data;
+							IOptimisationData data;
 							data = lst.createOptimisationData(entities);
 							monitor.worked(1);
 
-							final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot.createOptimiserAndContext(data, entities);
+							final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
-							final IOptimisationContext<ISequenceElement> context = optAndContext.getFirst();
-							LocalSearchOptimiser<ISequenceElement> optimiser = optAndContext.getSecond();
+							final IOptimisationContext context = optAndContext.getFirst();
+							LocalSearchOptimiser optimiser = optAndContext.getSecond();
 
 							// because we are driving the optimiser ourself, so
 							// we can be paused, we
 							// don't actually get progress callbacks.
-							optimiser.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
+							optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 
 							optimiser.init();
-							IAnnotatedSolution<ISequenceElement> startSolution = optimiser.start(context);
+							IAnnotatedSolution startSolution = optimiser.start(context);
 							monitor.worked(1);
 							final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 							final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);

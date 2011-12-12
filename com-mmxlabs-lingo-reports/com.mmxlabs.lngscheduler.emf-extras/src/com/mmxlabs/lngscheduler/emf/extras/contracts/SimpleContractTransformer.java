@@ -16,7 +16,6 @@ import scenario.contract.SalesContract;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -32,16 +31,16 @@ import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 public class SimpleContractTransformer implements IContractTransformer {
 
 	private ISchedulerBuilder builder;
-	private SimpleContractBuilder<ISequenceElement> contractBuilder;
+	private SimpleContractBuilder contractBuilder;
 	private ModelEntityMap map;
 	private Scenario scenario;
 
 	@Override
-	public void startTransforming(Scenario scenario, ModelEntityMap map, ISchedulerBuilder builder) {
+	public void startTransforming(final Scenario scenario, final ModelEntityMap map, final ISchedulerBuilder builder) {
 		this.scenario = scenario;
 		this.map = map;
 		this.builder = builder;
-		this.contractBuilder = new SimpleContractBuilder<ISequenceElement>();
+		this.contractBuilder = new SimpleContractBuilder();
 		builder.addBuilderExtension(contractBuilder);
 	}
 
@@ -54,24 +53,24 @@ public class SimpleContractTransformer implements IContractTransformer {
 	}
 
 	@Override
-	public IShippingPriceCalculator<ISequenceElement> transformSalesContract(SalesContract sc) {
+	public IShippingPriceCalculator transformSalesContract(final SalesContract sc) {
 		final ICurve index = map.getOptimiserObject(sc.getIndex(), ICurve.class);
 
-		return new IShippingPriceCalculator<ISequenceElement>() {
+		return new IShippingPriceCalculator() {
 			@Override
-			public void prepareEvaluation(final ISequences<ISequenceElement> sequences) {
+			public void prepareEvaluation(final ISequences sequences) {
 
 			}
 
 			@Override
-			public int calculateUnitPrice(final IPortSlot slot, int time) {
+			public int calculateUnitPrice(final IPortSlot slot, final int time) {
 				return (int) index.getValueAtPoint(time);
 			}
 		};
 	}
 
 	@Override
-	public ILoadPriceCalculator2 transformPurchaseContract(PurchaseContract pc) {
+	public ILoadPriceCalculator2 transformPurchaseContract(final PurchaseContract pc) {
 		if (pc instanceof FixedPricePurchaseContract) {
 			return contractBuilder.createFixedPriceContract(Calculator.scaleToInt(((FixedPricePurchaseContract) pc).getUnitPrice()));
 		} else if (pc instanceof IndexPricePurchaseContract) {
@@ -91,7 +90,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 	}
 
 	@Override
-	public void slotTransformed(Slot modelSlot, IPortSlot optimiserSlot) {
+	public void slotTransformed(final Slot modelSlot, final IPortSlot optimiserSlot) {
 
 	}
 }
