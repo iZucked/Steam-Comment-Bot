@@ -7,17 +7,14 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 
-public class PortExclusionConstraintCheckerFactory implements
-		IConstraintCheckerFactory {
+public class PortExclusionConstraintCheckerFactory implements IConstraintCheckerFactory {
 
 	public static final String NAME = "PortExclusionConstraintChecker";
 	private final String exclusionProviderKey;
 	private final String vesselProviderKey;
 	private final String portProviderKey;
 
-	public PortExclusionConstraintCheckerFactory(
-			final String exclusionProviderKey, final String vesselProviderKey,
-			final String portProviderKey) {
+	public PortExclusionConstraintCheckerFactory(final String exclusionProviderKey, final String vesselProviderKey, final String portProviderKey) {
 		super();
 		this.exclusionProviderKey = exclusionProviderKey;
 		this.vesselProviderKey = vesselProviderKey;
@@ -30,8 +27,7 @@ public class PortExclusionConstraintCheckerFactory implements
 	}
 
 	@Override
-	public <T> IConstraintChecker<T> instantiate() {
-		return new PortExclusionConstraintChecker<T>(NAME,
-				exclusionProviderKey, vesselProviderKey, portProviderKey);
+	public IConstraintChecker instantiate() {
+		return new PortExclusionConstraintChecker(NAME, exclusionProviderKey, vesselProviderKey, portProviderKey);
 	}
 }

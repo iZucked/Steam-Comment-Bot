@@ -12,7 +12,7 @@ public class DischargeEventImplTest {
 	@Test
 	public void testGetDischargeVolume() {
 		final long value = 100l;
-		final DischargeEventImpl<Object> event = new DischargeEventImpl<Object>();
+		final DischargeEventImpl event = new DischargeEventImpl();
 		Assert.assertEquals(0, event.getDischargeVolume());
 		event.setDischargeVolume(value);
 		Assert.assertEquals(value, event.getDischargeVolume());
@@ -21,7 +21,7 @@ public class DischargeEventImplTest {
 	@Test
 	public void testGetSalesPrice() {
 		final long value = 100l;
-		final DischargeEventImpl<Object> event = new DischargeEventImpl<Object>();
+		final DischargeEventImpl event = new DischargeEventImpl();
 		Assert.assertEquals(0, event.getSalesPrice());
 		event.setSalesPrice(value);
 		Assert.assertEquals(value, event.getSalesPrice());

@@ -4,12 +4,12 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
@@ -20,8 +20,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * {@link IConstraintChecker} implementation to enforce correct ordering of port
- * types. Specifically:
+ * {@link IConstraintChecker} implementation to enforce correct ordering of port types. Specifically:
  * 
  * <pre>
  *  * {@link PortType#Start} can only occur at the start of a {@link ISequence}
@@ -32,23 +31,20 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  *  * {@link PortType#Waypoint} can occur anywhere in the sequence, including between {@link PortType#Load} and {@link PortType#Discharge}.
  *  * {@link PortType#DryDock} and {@link PortType#Other} cannot occur between a {@link PortType#Load} and a {@link PortType#Discharge}.
  *  * {@link PortType#Unknown} should not be seen
- *   
+ * 
  * @author Simon Goodall
  * 
- * @param <T> Sequence element type
  */
-public final class PortTypeConstraintChecker<T> implements
-		IPairwiseConstraintChecker<T> {
+public final class PortTypeConstraintChecker implements IPairwiseConstraintChecker {
 
 	private final String name;
 
 	private final String key, vesselKey;
 
-	private IPortTypeProvider<T> portTypeProvider;
+	private IPortTypeProvider portTypeProvider;
 	private IVesselProvider vesselProvider;
 
-	public PortTypeConstraintChecker(final String name, final String key,
-			final String vesselKey) {
+	public PortTypeConstraintChecker(final String name, final String key, final String vesselKey) {
 		this.name = name;
 		this.key = key;
 		this.vesselKey = vesselKey;
@@ -60,27 +56,21 @@ public final class PortTypeConstraintChecker<T> implements
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences<T> sequences) {
+	public boolean checkConstraints(final ISequences sequences) {
 
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences<T> sequences,
-			final List<String> messages) {
+	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
 
 		if (portTypeProvider == null) {
 			// Cannot check port if there is no port type provider
 			return true;
 		}
 
-		final Collection<ISequence<T>> sequencesCollection = sequences
-				.getSequences().values();
-
-		for (final Map.Entry<IResource, ISequence<T>> entry : sequences
-				.getSequences().entrySet()) {
-			if (!checkSequence(entry.getValue(), messages,
-			vesselProvider.getVessel(entry.getKey()).getVesselInstanceType())) {
+		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
+			if (!checkSequence(entry.getValue(), messages, vesselProvider.getVessel(entry.getKey()).getVesselInstanceType())) {
 				return false;
 			}
 		}
@@ -88,15 +78,12 @@ public final class PortTypeConstraintChecker<T> implements
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void setOptimisationData(final IOptimisationData<T> optimisationData) {
+	public void setOptimisationData(final IOptimisationData optimisationData) {
 
-		setPortTypeProvider(optimisationData.getDataComponentProvider(key,
-				IPortTypeProvider.class));
+		setPortTypeProvider(optimisationData.getDataComponentProvider(key, IPortTypeProvider.class));
 
-		setVesselProvider(optimisationData.getDataComponentProvider(vesselKey,
-				IVesselProvider.class));
+		setVesselProvider(optimisationData.getDataComponentProvider(vesselKey, IVesselProvider.class));
 	}
 
 	/**
@@ -106,15 +93,14 @@ public final class PortTypeConstraintChecker<T> implements
 	 * @param messages
 	 * @return
 	 */
-	public final boolean checkSequence(final ISequence<T> sequence,
-			final List<String> messages, VesselInstanceType instanceType) {
+	public final boolean checkSequence(final ISequence sequence, final List<String> messages, final VesselInstanceType instanceType) {
 
 		boolean seenLoad = false;
 		boolean seenDischarge = false;
 
-		T previous = null;
+		ISequenceElement previous = null;
 		PortType previousType = null;
-		for (final T t : sequence) {
+		for (final ISequenceElement t : sequence) {
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
 				if (!((type == PortType.Start && instanceType != VesselInstanceType.SPOT_CHARTER) || (instanceType == VesselInstanceType.SPOT_CHARTER && (type == PortType.Load || type == PortType.End)))) {
@@ -122,11 +108,7 @@ public final class PortTypeConstraintChecker<T> implements
 					// or must start with a load or an End and be a spot charter
 
 					if (messages != null)
-						messages.add("Sequence must begin with PortType.Start or, if charter, End or Load, but actually begins with "
-								+ type
-								+ " (for instance type "
-								+ instanceType
-								+ ")");
+						messages.add("Sequence must begin with PortType.Start or, if charter, End or Load, but actually begins with " + type + " (for instance type " + instanceType + ")");
 					return false;
 				}
 			} else {
@@ -182,9 +164,7 @@ public final class PortTypeConstraintChecker<T> implements
 				if (seenLoad) {
 					// Cannot insert between load and discharge
 					if (messages != null)
-						messages.add("Cannot insert "
-								+ type
-								+ " between PortType.Load and PortType.Discharge");
+						messages.add("Cannot insert " + type + " between PortType.Load and PortType.Discharge");
 					return false;
 				}
 				break;
@@ -212,11 +192,11 @@ public final class PortTypeConstraintChecker<T> implements
 		return true;
 	}
 
-	public IPortTypeProvider<T> getPortTypeProvider() {
+	public IPortTypeProvider getPortTypeProvider() {
 		return portTypeProvider;
 	}
 
-	public void setPortTypeProvider(IPortTypeProvider<T> portTypeProvider) {
+	public void setPortTypeProvider(final IPortTypeProvider portTypeProvider) {
 		this.portTypeProvider = portTypeProvider;
 	}
 
@@ -224,41 +204,38 @@ public final class PortTypeConstraintChecker<T> implements
 		return vesselProvider;
 	}
 
-	public void setVesselProvider(IVesselProvider vesselProvider) {
+	public void setVesselProvider(final IVesselProvider vesselProvider) {
 		this.vesselProvider = vesselProvider;
 	}
-	
+
 	@Override
-	public boolean checkPairwiseConstraint(T first, T second, IResource resource) {
+	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
-		
+
 		// check the legality of this sequencing decision
 		// End can't come before anything and Start can't come after anything
 		if (firstType.equals(PortType.End) || secondType.equals(PortType.Start))
 			return false;
 
-		if (firstType.equals(PortType.Start)
-				&& secondType.equals(PortType.Discharge))
+		if (firstType.equals(PortType.Start) && secondType.equals(PortType.Discharge))
 			return false; // first port should be a load slot (TODO is this
 							// true?)
 
 		// load must precede discharge or waypoint, but nothing else
 		if (firstType.equals(PortType.Load))
-			return (secondType.equals(PortType.Discharge) || secondType
-					.equals(PortType.Waypoint));
+			return (secondType.equals(PortType.Discharge) || secondType.equals(PortType.Waypoint));
 
 		// discharge may precede anything but Discharge (and start, but we
 		// already did that)
-		if (firstType.equals(PortType.Discharge)
-				&& secondType.equals(PortType.Discharge))
+		if (firstType.equals(PortType.Discharge) && secondType.equals(PortType.Discharge))
 			return false;
 
 		return true;
 	}
 
 	@Override
-	public String explain(T first, T second, IResource resource) {
+	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		// TODO Auto-generated method stub
 		return null;
 	}

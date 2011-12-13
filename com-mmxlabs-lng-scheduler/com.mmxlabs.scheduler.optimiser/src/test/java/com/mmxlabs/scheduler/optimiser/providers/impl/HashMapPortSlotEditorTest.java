@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 @RunWith(JMock.class)
@@ -22,8 +23,7 @@ public class HashMapPortSlotEditorTest {
 	public void testHashMapPortSlotEditor() {
 
 		final String name = "name";
-		final HashMapPortSlotEditor<Object> editor = new HashMapPortSlotEditor<Object>(
-				name);
+		final HashMapPortSlotEditor editor = new HashMapPortSlotEditor(name);
 		Assert.assertSame(name, editor.getName());
 	}
 
@@ -31,9 +31,8 @@ public class HashMapPortSlotEditorTest {
 	public void testGetSetPortSlot() {
 
 		final String name = "name";
-		final HashMapPortSlotEditor<Object> editor = new HashMapPortSlotEditor<Object>(
-				name);
-		final Object element = new Object();
+		final HashMapPortSlotEditor editor = new HashMapPortSlotEditor(name);
+		final ISequenceElement element = context.mock(ISequenceElement.class);
 		final IPortSlot portSlot = context.mock(IPortSlot.class);
 
 		Assert.assertNull(editor.getPortSlot(element));
@@ -50,9 +49,8 @@ public class HashMapPortSlotEditorTest {
 	public void testDispose() {
 
 		final String name = "name";
-		final HashMapPortSlotEditor<Object> editor = new HashMapPortSlotEditor<Object>(
-				name);
-		final Object element = new Object();
+		final HashMapPortSlotEditor editor = new HashMapPortSlotEditor(name);
+		final ISequenceElement element = context.mock(ISequenceElement.class);
 		final IPortSlot portSlot = context.mock(IPortSlot.class);
 
 		Assert.assertNull(editor.getPortSlot(element));
@@ -62,7 +60,7 @@ public class HashMapPortSlotEditorTest {
 
 		Assert.assertSame(portSlot, editor.getPortSlot(element));
 		Assert.assertSame(element, editor.getElement(portSlot));
-		
+
 		editor.dispose();
 
 		Assert.assertNull(editor.getPortSlot(element));

@@ -28,7 +28,7 @@ public final class Port extends IndexedObject implements IPort {
 	/**
 	 * A calculator used to determine the price of cooldown LNG here.
 	 */
-	private IShippingPriceCalculator<?> cooldownPriceCalculator;
+	private IShippingPriceCalculator cooldownPriceCalculator;
 
 	public Port(final IIndexingContext context) {
 		super(context);
@@ -47,8 +47,6 @@ public final class Port extends IndexedObject implements IPort {
 	public void setName(final String name) {
 		this.name = name;
 	}
-	
-	
 
 	@Override
 	public boolean equals(final Object obj) {
@@ -72,18 +70,17 @@ public final class Port extends IndexedObject implements IPort {
 	public boolean shouldVesselsArriveCold() {
 		return arriveCold;
 	}
-	
+
 	public void setShouldVesselsArriveCold(final boolean arriveCold) {
 		this.arriveCold = arriveCold;
 	}
 
 	@Override
-	public IShippingPriceCalculator<?> getCooldownPriceCalculator() {
+	public IShippingPriceCalculator getCooldownPriceCalculator() {
 		return cooldownPriceCalculator;
 	}
 
-	public void setCooldownPriceCalculator(
-IShippingPriceCalculator<?> cooldownPriceCalculator) {
+	public void setCooldownPriceCalculator(IShippingPriceCalculator cooldownPriceCalculator) {
 		this.cooldownPriceCalculator = cooldownPriceCalculator;
 	}
 }

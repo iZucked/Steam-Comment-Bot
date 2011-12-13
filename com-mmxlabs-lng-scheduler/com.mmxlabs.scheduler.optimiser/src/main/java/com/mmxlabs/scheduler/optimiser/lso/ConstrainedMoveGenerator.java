@@ -18,6 +18,7 @@ import java.util.Set;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
@@ -28,13 +29,10 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * <p>
- * A move generator which tries to create moves that respect timed constraints,
- * to avoid wasting too many cycles testing clearly impossible moves. Suggested
- * in ticket #9.
+ * A move generator which tries to create moves that respect timed constraints, to avoid wasting too many cycles testing clearly impossible moves. Suggested in ticket #9.
  * </p>
  * <ol>
- * The moves generated should try to respect the following aspects, where
- * possible.
+ * The moves generated should try to respect the following aspects, where possible.
  * <li>Time Windows + Voyage Durations</li>
  * <li>Port visit durations</li>
  * <li>Port restrictions</li>
@@ -46,40 +44,36 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  * @author hinton
  * 
- * @param <T>
+ * @param
  */
-public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
+public class ConstrainedMoveGenerator implements IMoveGenerator {
 	/**
-	 * A structure caching the output of the {@link LegalSequencingChecker}. If
-	 * an element x is in the set mapped to by key y, x can legally follow y
-	 * under some circumstance
+	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
 	 */
-	protected final Map<T, Followers<T>> validFollowers = new HashMap<T, Followers<T>>();
+	protected final Map<ISequenceElement, Followers<ISequenceElement>> validFollowers = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
 
 	/**
 	 * A reverse lookup table from elements to positions
 	 */
-	protected final Map<T, Pair<Integer, Integer>> reverseLookup = new HashMap<T, Pair<Integer, Integer>>();
+	protected final Map<ISequenceElement, Pair<Integer, Integer>> reverseLookup = new HashMap<ISequenceElement, Pair<Integer, Integer>>();
 
 	/**
-	 * A reference to the current set of sequences, which will be used in
-	 * generating moves
+	 * A reference to the current set of sequences, which will be used in generating moves
 	 */
-	protected ISequences<T> sequences = null;
+	protected ISequences sequences = null;
 
 	protected Random random;
 
 	int breakableVertexCount = 0;
 
 	int breakpointCount = 0;
-	// private IOptimisationContext<T> context;
+	// private IOptimisationContext context;
 
 	/**
-	 * A list containing all the valid edges which could exist in a solution, expressed as pairs
-	 * whose first element is the start of the edge and second the end.
+	 * A list containing all the valid edges which could exist in a solution, expressed as pairs whose first element is the start of the edge and second the end.
 	 */
-	final protected ArrayList<Pair<T, T>> validBreaks = new ArrayList<Pair<T, T>>();
-	
+	final protected ArrayList<Pair<ISequenceElement, ISequenceElement>> validBreaks = new ArrayList<Pair<ISequenceElement, ISequenceElement>>();
+
 	final protected class Followers<Q> implements Iterable<Q> {
 		/**
 		 * @param followers
@@ -88,26 +82,30 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 			backingList.addAll(followers);
 			containsSet.addAll(followers);
 		}
+
 		private final List<Q> backingList = new ArrayList<Q>();
 		private final Set<Q> containsSet = new HashSet<Q>();
+
 		/**
 		 * @return
 		 */
 		public int size() {
 			return backingList.size();
 		}
+
 		/**
 		 * @param nextInt
 		 * @return
 		 */
-		public Q get(int nextInt) {
+		public Q get(final int nextInt) {
 			return backingList.get(nextInt);
 		}
+
 		/**
 		 * @param firstElementInSegment
 		 * @return
 		 */
-		public boolean contains(Q firstElementInSegment) {
+		public boolean contains(final Q firstElementInSegment) {
 			return containsSet.contains(firstElementInSegment);
 		}
 
@@ -117,76 +115,69 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 		}
 	}
 
+	private final LegalSequencingChecker checker;
 
+	private final SequencesConstrainedMoveGeneratorUnit sequencesMoveGenerator;
 
-	private final LegalSequencingChecker<T> checker;
+	protected final IOptimisationContext context;
 
-	private final SequencesConstrainedMoveGeneratorUnit<T> sequencesMoveGenerator;
-
-	protected final IOptimisationContext<T> context;
-
-	public ConstrainedMoveGenerator(final IOptimisationContext<T> context) {
+	public ConstrainedMoveGenerator(final IOptimisationContext context) {
 		this.context = context;
-		this.checker = new LegalSequencingChecker<T>(context);
+		this.checker = new LegalSequencingChecker(context);
 		checker.disallowLateness();
-		final IOptimisationData<T> data = context.getOptimisationData();
+		final IOptimisationData data = context.getOptimisationData();
 
-		@SuppressWarnings("unchecked")
-		final IPortTypeProvider<T> portTypeProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_portTypeProvider,
-						IPortTypeProvider.class);
+		final IPortTypeProvider portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 
 		// create a massive lookup table, caching all legal sequencing decisions
 		// this might be a terrible idea, we could just keep the checker instead
 		// also need to fix the resource binding now
-		for (final T e1 : data.getSequenceElements()) {
+		for (final ISequenceElement e1 : data.getSequenceElements()) {
 			if (!portTypeProvider.getPortType(e1).equals(PortType.End)) {
 				breakableVertexCount++;
 			}
 
 			reverseLookup.put(e1, new Pair<Integer, Integer>(0, 0));
 
-			final LinkedHashSet<T> followers = new LinkedHashSet<T>();
+			final LinkedHashSet<ISequenceElement> followers = new LinkedHashSet<ISequenceElement>();
 
-			for (final T e2 : data.getSequenceElements()) {
+			for (final ISequenceElement e2 : data.getSequenceElements()) {
 				if (e1 == e2)
 					continue;
 				if (checker.allowSequence(e1, e2)) {
 					if (followers.size() == 1) {
-						validBreaks.add(new Pair<T, T>(e1, followers.iterator()
-								.next()));
+						validBreaks.add(new Pair<ISequenceElement, ISequenceElement>(e1, followers.iterator().next()));
 					}
 					followers.add(e2);
 					if (followers.size() > 1) {
-						validBreaks.add(new Pair<T, T>(e1, e2));
+						validBreaks.add(new Pair<ISequenceElement, ISequenceElement>(e1, e2));
 					}
 				}
 			}
-			
-			validFollowers.put(e1, new Followers<T>(followers));
+
+			validFollowers.put(e1, new Followers<ISequenceElement>(followers));
 		}
 
-		this.sequencesMoveGenerator = new SequencesConstrainedMoveGeneratorUnit<T>(this);
+		this.sequencesMoveGenerator = new SequencesConstrainedMoveGeneratorUnit(this);
 	}
-	
+
 	@Override
-	public IMove<T> generateMove() {
+	public IMove generateMove() {
 		return sequencesMoveGenerator.generateMove();
 	}
 
 	@Override
-	public ISequences<T> getSequences() {
+	public ISequences getSequences() {
 		return sequences;
 	}
 
 	@Override
-	public void setSequences(final ISequences<T> sequences) {
+	public void setSequences(final ISequences sequences) {
 		this.sequences = sequences;
 
 		// build table for elements in conventional sequences
 		for (int i = 0; i < sequences.size(); i++) {
-			final ISequence<T> sequence = sequences.getSequence(i);
+			final ISequence sequence = sequences.getSequence(i);
 			for (int j = 0; j < sequence.size(); j++) {
 				reverseLookup.get(sequence.get(j)).setBoth(i, j);
 			}
@@ -194,7 +185,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 
 		// build table for excluded elements
 		int x = 0;
-		for (final T element : sequences.getUnusedElements()) {
+		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			reverseLookup.get(element).setBoth(null, x);
 			x++;
 		}
@@ -212,8 +203,7 @@ public class ConstrainedMoveGenerator<T> implements IMoveGenerator<T> {
 
 	public void init() {
 		if (random == null) {
-			throw new IllegalStateException(
-					"Random number generator has not been set");
+			throw new IllegalStateException("Random number generator has not been set");
 		}
 	}
 }

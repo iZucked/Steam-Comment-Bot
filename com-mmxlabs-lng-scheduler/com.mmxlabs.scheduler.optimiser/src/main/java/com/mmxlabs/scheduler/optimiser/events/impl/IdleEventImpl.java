@@ -16,22 +16,16 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * Implementation of {@link IIdleEvent}.
  * 
  * @author Simon Goodall
- * 
- * @param <T>
- *            Sequence element type.
  */
-public final class IdleEventImpl<T> extends AbstractScheduledEventImpl<T>
-		implements IIdleEvent<T> {
+public final class IdleEventImpl extends AbstractScheduledEventImpl implements IIdleEvent {
 
 	private IPort port;
 
 	private VesselState vesselState;
 
-	private final EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption = new EnumMap<FuelComponent, EnumMap<FuelUnit, Long>>(
-			FuelComponent.class);
+	private final EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption = new EnumMap<FuelComponent, EnumMap<FuelUnit, Long>>(FuelComponent.class);
 
-	private final EnumMap<FuelComponent, Long> fuelCost = new EnumMap<FuelComponent, Long>(
-			FuelComponent.class);
+	private final EnumMap<FuelComponent, Long> fuelCost = new EnumMap<FuelComponent, Long>(FuelComponent.class);
 
 	@Override
 	public IPort getPort() {
@@ -52,8 +46,7 @@ public final class IdleEventImpl<T> extends AbstractScheduledEventImpl<T>
 	}
 
 	@Override
-	public long getFuelConsumption(final FuelComponent fuel,
-			final FuelUnit fuelUnit) {
+	public long getFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit) {
 
 		if (fuelConsumption.containsKey(fuel)) {
 
@@ -65,8 +58,7 @@ public final class IdleEventImpl<T> extends AbstractScheduledEventImpl<T>
 		return 0l;
 	}
 
-	public void setFuelConsumption(final FuelComponent fuel,
-			final FuelUnit fuelUnit, final long consumption) {
+	public void setFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit, final long consumption) {
 		final EnumMap<FuelUnit, Long> map;
 		if (fuelConsumption.containsKey(fuel)) {
 			map = fuelConsumption.get(fuel);

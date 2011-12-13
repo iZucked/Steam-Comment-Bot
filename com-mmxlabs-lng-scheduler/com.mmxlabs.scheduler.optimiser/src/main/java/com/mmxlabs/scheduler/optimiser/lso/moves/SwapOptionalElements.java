@@ -9,6 +9,7 @@ import java.util.Collections;
 
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
@@ -18,12 +19,12 @@ import com.mmxlabs.optimiser.lso.IMove;
  * @author hinton
  * 
  */
-public class SwapOptionalElements<T> implements IMove<T> {
+public class SwapOptionalElements implements IMove {
 	final IResource resource;
 	final int usedElementIndex;
 	final int unusedElementIndex;
 
-	public SwapOptionalElements(IResource resource, int usedElementIndex, int unusedElementIndex) {
+	public SwapOptionalElements(final IResource resource, final int usedElementIndex, final int unusedElementIndex) {
 		super();
 		this.resource = resource;
 		this.usedElementIndex = usedElementIndex;
@@ -42,9 +43,9 @@ public class SwapOptionalElements<T> implements IMove<T> {
 	 * @see com.mmxlabs.optimiser.lso.IMove#apply(com.mmxlabs.optimiser.core.IModifiableSequences)
 	 */
 	@Override
-	public void apply(final IModifiableSequences<T> sequences) {
-		final T liveElement = sequences.getSequence(resource).get(usedElementIndex);
-		final T deadElement = sequences.getUnusedElements().get(unusedElementIndex);
+	public void apply(final IModifiableSequences sequences) {
+		final ISequenceElement liveElement = sequences.getSequence(resource).get(usedElementIndex);
+		final ISequenceElement deadElement = sequences.getUnusedElements().get(unusedElementIndex);
 		sequences.getModifiableSequence(resource).set(usedElementIndex, deadElement);
 		sequences.getModifiableUnusedElements().set(unusedElementIndex, liveElement);
 	}
@@ -53,7 +54,7 @@ public class SwapOptionalElements<T> implements IMove<T> {
 	 * @see com.mmxlabs.optimiser.lso.IMove#validate(com.mmxlabs.optimiser.core.ISequences)
 	 */
 	@Override
-	public boolean validate(ISequences<T> sequences) {
+	public boolean validate(final ISequences sequences) {
 		return true;
 	}
 

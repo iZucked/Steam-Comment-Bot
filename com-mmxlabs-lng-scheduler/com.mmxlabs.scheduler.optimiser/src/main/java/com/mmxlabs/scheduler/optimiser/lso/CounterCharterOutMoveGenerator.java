@@ -24,21 +24,21 @@ import com.mmxlabs.optimiser.lso.impl.Move3over2;
  * @author hinton
  * 
  */
-public class CounterCharterOutMoveGenerator<T> implements IMoveGenerator<T> {
-	private ISequences<T> sequences;
+public class CounterCharterOutMoveGenerator implements IMoveGenerator {
+	private ISequences sequences;
 	private Set<IResource> badResources;
-	final List<Map.Entry<IResource, ISequence<T>>> nonEmptyBadSequences = new ArrayList<Map.Entry<IResource, ISequence<T>>>();
-	final List<Map.Entry<IResource, ISequence<T>>> goodSequences = new ArrayList<Map.Entry<IResource, ISequence<T>>>();
+	final List<Map.Entry<IResource, ISequence>> nonEmptyBadSequences = new ArrayList<Map.Entry<IResource, ISequence>>();
+	final List<Map.Entry<IResource, ISequence>> goodSequences = new ArrayList<Map.Entry<IResource, ISequence>>();
 	private Random random;
 	
-	private class RemoveCharterOut<T> extends Move3over2<T> {
+	private class RemoveCharterOut extends Move3over2 {
 
 	}
 
 	@Override
-	public IMove<T> generateMove() {
-		Move3over2<T> result = null;
-		for (final Map.Entry<IResource, ISequence<T>> entry : sequences.getSequences().entrySet()) {
+	public IMove generateMove() {
+		Move3over2 result = null;
+		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
 			if (badResources.contains(entry.getKey())) {
 				if (entry.getValue().size() > 2) {
 					nonEmptyBadSequences.add(entry);
@@ -50,10 +50,10 @@ public class CounterCharterOutMoveGenerator<T> implements IMoveGenerator<T> {
 
 		
 		if (nonEmptyBadSequences.size() > 0) {
-			final Map.Entry<IResource, ISequence<T>> bad = RandomHelper.chooseElementFrom(random, nonEmptyBadSequences);
-			final Map.Entry<IResource, ISequence<T>> good = RandomHelper.chooseElementFrom(random, goodSequences);
+			final Map.Entry<IResource, ISequence> bad = RandomHelper.chooseElementFrom(random, nonEmptyBadSequences);
+			final Map.Entry<IResource, ISequence> good = RandomHelper.chooseElementFrom(random, goodSequences);
 
-			result = new RemoveCharterOut<T>();
+			result = new RemoveCharterOut();
 			result.setResource1(bad.getKey());
 			result.setResource2(good.getKey());
 			result.setResource1Start(1);
@@ -68,12 +68,12 @@ public class CounterCharterOutMoveGenerator<T> implements IMoveGenerator<T> {
 	}
 
 	@Override
-	public ISequences<T> getSequences() {
+	public ISequences getSequences() {
 		return sequences;
 	}
 
 	@Override
-	public void setSequences(final ISequences<T> sequences) {
+	public void setSequences(final ISequences sequences) {
 		this.sequences = sequences;
 	}
 

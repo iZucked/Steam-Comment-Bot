@@ -11,14 +11,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
- * {@link IConstraintCheckerFactory} implementation to create
- * {@link PortTypeConstraintChecker} instances.
+ * {@link IConstraintCheckerFactory} implementation to create {@link PortTypeConstraintChecker} instances.
  * 
  * @author Simon Goodall
  * 
  */
-public final class PortTypeConstraintCheckerFactory implements
-		IConstraintCheckerFactory {
+public final class PortTypeConstraintCheckerFactory implements IConstraintCheckerFactory {
 
 	public static final String NAME = "PortTypeConstraintChecker";
 
@@ -27,13 +25,11 @@ public final class PortTypeConstraintCheckerFactory implements
 	private String vesselKey;
 
 	/**
-	 * Constructor taking the keys to use in {@link IOptimisationData} to find
-	 * the {@link IPortTypeProvider} and {@link IVesselProvider}.
+	 * Constructor taking the keys to use in {@link IOptimisationData} to find the {@link IPortTypeProvider} and {@link IVesselProvider}.
 	 * 
 	 * @param key
 	 */
-	public PortTypeConstraintCheckerFactory(final String key,
-			final String vesselKey) {
+	public PortTypeConstraintCheckerFactory(final String key, final String vesselKey) {
 		this.key = key;
 		this.vesselKey = vesselKey;
 	}
@@ -44,7 +40,7 @@ public final class PortTypeConstraintCheckerFactory implements
 	}
 
 	@Override
-	public <T> IConstraintChecker<T> instantiate() {
-		return new PortTypeConstraintChecker<T>(NAME, key, vesselKey);
+	public IConstraintChecker instantiate() {
+		return new PortTypeConstraintChecker(NAME, key, vesselKey);
 	}
 }

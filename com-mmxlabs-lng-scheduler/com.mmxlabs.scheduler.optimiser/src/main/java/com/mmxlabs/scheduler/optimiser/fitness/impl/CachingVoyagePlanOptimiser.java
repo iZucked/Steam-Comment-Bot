@@ -27,9 +27,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @author hinton
  * 
- * @param <T>
+ * @param 
  */
-public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
+public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	/**
 	 * The class which keys into the cache ( {@link CachingVoyagePlanOptimiser#cache}). NOTE: the cache key may not be completely stable, for speed reasons; specifically, the sequence and arrivalTimes
@@ -110,7 +110,6 @@ public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser
 		 */
 		@Override
 		public final boolean equals(final Object obj) {
-			@SuppressWarnings("unchecked")
 			final CacheKey other = (CacheKey) obj;
 			// if (getClass() != obj.getClass())
 			// return false;
@@ -124,7 +123,7 @@ public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser
 		}
 	}
 
-	private final IVoyagePlanOptimiser<T> delegate;
+	private final IVoyagePlanOptimiser delegate;
 
 	// private final ConcurrentMap<CacheKey, Pair<VoyagePlan, Long>> cache;// =
 	// null;
@@ -139,7 +138,7 @@ public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser
 
 	private List<Integer> arrivalTimes;
 
-	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser<T> delegate, final int cacheSize) {
+	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser delegate, final int cacheSize) {
 		super();
 		this.delegate = delegate;
 		final IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>> evaluator = new IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>>() {
@@ -227,7 +226,7 @@ public final class CachingVoyagePlanOptimiser<T> implements IVoyagePlanOptimiser
 	}
 
 	@Override
-	public ILNGVoyageCalculator<T> getVoyageCalculator() {
+	public ILNGVoyageCalculator getVoyageCalculator() {
 		return delegate.getVoyageCalculator();
 	}
 

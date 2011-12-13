@@ -4,18 +4,16 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 /**
- * {@link IDataComponentProvider} interface to provide {@link IPortSlot}
- * information for the given sequence elements.
+ * {@link IDataComponentProvider} interface to provide {@link IPortSlot} information for the given sequence elements.
  * 
  * @author Simon Goodall
- * @param <T>
- *            Sequence element type
  */
-public interface IPortSlotProvider<T> extends IDataComponentProvider {
+public interface IPortSlotProvider extends IDataComponentProvider {
 
 	/**
 	 * Returns the {@link IPortSlot} for the given element.
@@ -23,7 +21,7 @@ public interface IPortSlotProvider<T> extends IDataComponentProvider {
 	 * @param element
 	 * @return
 	 */
-	IPortSlot getPortSlot(T element);
+	IPortSlot getPortSlot(ISequenceElement element);
 
 	/**
 	 * Returns the sequence element for the given {@link IPortSlot}.
@@ -31,5 +29,5 @@ public interface IPortSlotProvider<T> extends IDataComponentProvider {
 	 * @param portSlot
 	 * @return
 	 */
-	T getElement(IPortSlot portSlot);
+	ISequenceElement getElement(IPortSlot portSlot);
 }

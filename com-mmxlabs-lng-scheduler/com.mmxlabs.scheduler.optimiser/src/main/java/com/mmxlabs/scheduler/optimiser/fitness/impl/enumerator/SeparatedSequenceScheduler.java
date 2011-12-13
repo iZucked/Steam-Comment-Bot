@@ -20,8 +20,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public abstract class SeparatedSequenceScheduler<T> extends
-		EnumeratingSequenceScheduler<T> {
+public abstract class SeparatedSequenceScheduler extends
+		EnumeratingSequenceScheduler {
 
 	// public SeparatedSequenceScheduler() {
 	// super();
@@ -29,7 +29,7 @@ public abstract class SeparatedSequenceScheduler<T> extends
 	//
 	// @Override
 	// public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
-	// final ISequence<T> sequence) {
+	// final ISequence sequence) {
 	// setResourceAndSequence(resource, sequence);
 	// resetBest();
 	// prepare(0);

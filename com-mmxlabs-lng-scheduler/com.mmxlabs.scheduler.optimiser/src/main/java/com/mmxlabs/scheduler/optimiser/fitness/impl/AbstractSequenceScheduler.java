@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
@@ -47,23 +48,23 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author Simon Goodall
  * 
  */
-public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler<T> {
+public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
-	private IElementDurationProvider<T> durationsProvider;
+	private IElementDurationProvider durationsProvider;
 
-	private ITimeWindowDataComponentProvider<T> timeWindowProvider;
+	private ITimeWindowDataComponentProvider timeWindowProvider;
 
-	private IPortProvider<T> portProvider;
+	private IPortProvider portProvider;
 
-	private IPortSlotProvider<T> portSlotProvider;
+	private IPortSlotProvider portSlotProvider;
 
-	private IPortTypeProvider<T> portTypeProvider;
+	private IPortTypeProvider portTypeProvider;
 
 	private IVesselProvider vesselProvider;
 
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
-	private IVoyagePlanOptimiser<T> voyagePlanOptimiser;
+	private IVoyagePlanOptimiser voyagePlanOptimiser;
 
 	protected IRouteCostProvider routeCostProvider;
 
@@ -71,17 +72,17 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 		return routeCostProvider;
 	}
 
-	public void setRouteCostProvider(IRouteCostProvider routeCostProvider) {
+	public void setRouteCostProvider(final IRouteCostProvider routeCostProvider) {
 		this.routeCostProvider = routeCostProvider;
 	}
 
-	public ScheduledSequences schedule(final ISequences<T> sequences, final int[][] arrivalTimes) {
+	public ScheduledSequences schedule(final ISequences sequences, final int[][] arrivalTimes) {
 		final ScheduledSequences result = new ScheduledSequences();
 
 		final List<IResource> resources = sequences.getResources();
 
 		for (int i = 0; i < sequences.size(); i++) {
-			final ISequence<T> sequence = sequences.getSequence(i);
+			final ISequence sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
 			final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
 			if (scheduledSequence == null)
@@ -102,7 +103,7 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 	 * @param arrivalTimes
 	 * @return
 	 */
-	public ScheduledSequence schedule(final IResource resource, final ISequence<T> sequence, final int[] arrivalTimes) {
+	public ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
 		// Get start time
@@ -122,9 +123,9 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 		boolean useNBO = false;
 
 		int prevVisitDuration = 0;
-		final Iterator<T> itr = sequence.iterator();
+		final Iterator<ISequenceElement> itr = sequence.iterator();
 		for (int idx = 0; itr.hasNext(); ++idx) {
-			final T element = itr.next();
+			final ISequenceElement element = itr.next();
 
 			final IPort thisPort = portProvider.getPortForElement(element);
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
@@ -293,7 +294,7 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 		return new ScheduledSequence(resource, startTime, voyagePlans);
 	}
 
-	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser<T> optimiser) {
+	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser) {
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(currentSequence);
 		optimiser.setArrivalTimes(currentTimes);
@@ -304,8 +305,7 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 		for (int i = 0; i < sequence.length; ++i) {
 			final Object obj = sequence[i];
 			if (obj instanceof VoyageDetails) {
-				@SuppressWarnings("unchecked")
-				final VoyageDetails<T> details = (VoyageDetails<T>) obj;
+				final VoyageDetails details = (VoyageDetails) obj;
 				final int availableTime = details.getOptions().getAvailableTime();
 
 				// Take voyage details time as this can be larger than
@@ -328,43 +328,43 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 		return true;
 	}
 
-	public final IPortSlotProvider<T> getPortSlotProvider() {
+	public final IPortSlotProvider getPortSlotProvider() {
 		return portSlotProvider;
 	}
 
-	public final void setPortSlotProvider(final IPortSlotProvider<T> portSlotProvider) {
+	public final void setPortSlotProvider(final IPortSlotProvider portSlotProvider) {
 		this.portSlotProvider = portSlotProvider;
 	}
 
-	public final IPortTypeProvider<T> getPortTypeProvider() {
+	public final IPortTypeProvider getPortTypeProvider() {
 		return portTypeProvider;
 	}
 
-	public final void setPortTypeProvider(final IPortTypeProvider<T> portTypeProvider) {
+	public final void setPortTypeProvider(final IPortTypeProvider portTypeProvider) {
 		this.portTypeProvider = portTypeProvider;
 	}
 
-	public final IElementDurationProvider<T> getDurationsProvider() {
+	public final IElementDurationProvider getDurationsProvider() {
 		return durationsProvider;
 	}
 
-	public final void setDurationsProvider(final IElementDurationProvider<T> durationsProvider) {
+	public final void setDurationsProvider(final IElementDurationProvider durationsProvider) {
 		this.durationsProvider = durationsProvider;
 	}
 
-	public final ITimeWindowDataComponentProvider<T> getTimeWindowProvider() {
+	public final ITimeWindowDataComponentProvider getTimeWindowProvider() {
 		return timeWindowProvider;
 	}
 
-	public final void setTimeWindowProvider(final ITimeWindowDataComponentProvider<T> timeWindowProvider) {
+	public final void setTimeWindowProvider(final ITimeWindowDataComponentProvider timeWindowProvider) {
 		this.timeWindowProvider = timeWindowProvider;
 	}
 
-	public final IPortProvider<T> getPortProvider() {
+	public final IPortProvider getPortProvider() {
 		return portProvider;
 	}
 
-	public final void setPortProvider(final IPortProvider<T> portProvider) {
+	public final void setPortProvider(final IPortProvider portProvider) {
 		this.portProvider = portProvider;
 	}
 
@@ -384,11 +384,11 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 		this.vesselProvider = vesselProvider;
 	}
 
-	public IVoyagePlanOptimiser<T> getVoyagePlanOptimiser() {
+	public IVoyagePlanOptimiser getVoyagePlanOptimiser() {
 		return voyagePlanOptimiser;
 	}
 
-	public void setVoyagePlanOptimiser(final IVoyagePlanOptimiser<T> voyagePlanOptimiser) {
+	public void setVoyagePlanOptimiser(final IVoyagePlanOptimiser voyagePlanOptimiser) {
 		this.voyagePlanOptimiser = voyagePlanOptimiser;
 	}
 
@@ -430,7 +430,7 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 	private BufferedWriter logWriter;
 	private static boolean loggingEnabled = false;
 
-	public static void setLoggingEnabled(boolean loggingEnabled) {
+	public static void setLoggingEnabled(final boolean loggingEnabled) {
 		AbstractSequenceScheduler.loggingEnabled = loggingEnabled;
 	}
 
@@ -449,7 +449,7 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 			logWriter = new BufferedWriter(new FileWriter(f));
 
 			System.err.println("Created scheduler log " + f.getAbsolutePath());
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 		}
 	}
 
@@ -458,7 +458,7 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 			return;
 		try {
 			logWriter.write("Schedule(" + sequenceSize + ",[");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 
 		}
 	}
@@ -468,7 +468,7 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 			return;
 		try {
 			logWriter.write(fitness + ", ");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 	}
 
@@ -478,7 +478,7 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 		try {
 			logWriter.write("])\n");
 			logWriter.flush();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 	}
 
@@ -488,7 +488,7 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 		try {
 			logWriter.flush();
 			logWriter.close();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 		logWriter = null;
 	}

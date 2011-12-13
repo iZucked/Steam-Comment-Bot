@@ -4,10 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
-public interface IPortProvider<T> extends IDataComponentProvider {
+public interface IPortProvider extends IDataComponentProvider {
 
-	IPort getPortForElement(T element);
+	IPort getPortForElement(ISequenceElement element);
 }

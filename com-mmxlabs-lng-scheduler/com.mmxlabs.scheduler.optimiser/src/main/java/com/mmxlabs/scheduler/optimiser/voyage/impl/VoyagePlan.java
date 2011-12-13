@@ -33,8 +33,7 @@ public final class VoyagePlan implements Cloneable {
 		fuelCosts = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 	}
 
-	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions,
-			final LongFastEnumMap<FuelComponent> fuelCosts) {
+	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> fuelCosts) {
 		super();
 		this.sequence = sequence;
 		// this.loadVolume = loadVolume;
@@ -60,7 +59,6 @@ public final class VoyagePlan implements Cloneable {
 	public final void setTotalFuelCost(final FuelComponent fuel, final long cost) {
 		fuelCosts.put(fuel, cost);
 	}
-
 
 	public final Object[] getSequence() {
 		return sequence;
@@ -97,8 +95,7 @@ public final class VoyagePlan implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", fuelConsumptions=" + fuelConsumptions + ", fuelCosts="
-				+ fuelCosts + "]";
+		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", fuelConsumptions=" + fuelConsumptions + ", fuelCosts=" + fuelCosts + "]";
 	}
 
 	@Override
@@ -107,7 +104,7 @@ public final class VoyagePlan implements Cloneable {
 		int k = 0;
 		for (final Object o : sequence) {
 			if (o instanceof VoyageDetails) {
-				clonedSequence[k++] = ((VoyageDetails<?>) o).clone();
+				clonedSequence[k++] = ((VoyageDetails) o).clone();
 			} else if (o instanceof PortDetails) {
 				clonedSequence[k++] = ((PortDetails) o).clone();
 			} else {

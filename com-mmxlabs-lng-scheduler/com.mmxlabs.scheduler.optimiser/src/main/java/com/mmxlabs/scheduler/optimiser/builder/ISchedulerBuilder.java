@@ -10,8 +10,8 @@ import java.util.Set;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
@@ -52,7 +52,7 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @return
 	 */
-	IOptimisationData<ISequenceElement> getOptimisationData();
+	IOptimisationData getOptimisationData();
 
 	/**
 	 * Like the other {@link createVesselClass}, but with an hourly charter price specified (defaults to zero otherwise);
@@ -75,8 +75,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
-			int hourlyCharterPrice,
-			int warmupTimeInHours, int cooldownTimeInHours, int cooldownVolumeInM3);
+			int hourlyCharterPrice, int warmupTimeInHours, int cooldownTimeInHours, int cooldownVolumeInM3);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
@@ -210,7 +209,7 @@ public interface ISchedulerBuilder {
 	 * @param name
 	 * @return
 	 */
-	IPort createPort(String name, boolean arriveCold, final IShippingPriceCalculator<ISequenceElement> cooldownPriceCalculator);
+	IPort createPort(String name, boolean arriveCold, final IShippingPriceCalculator cooldownPriceCalculator);
 
 	/**
 	 * Create a port with an x/y co-ordinate.
@@ -220,7 +219,7 @@ public interface ISchedulerBuilder {
 	 * @param y
 	 * @return
 	 */
-	IXYPort createPort(String name, boolean arriveCold, final IShippingPriceCalculator<ISequenceElement> cooldownPriceCalculator, float x, float y);
+	IXYPort createPort(String name, boolean arriveCold, final IShippingPriceCalculator cooldownPriceCalculator, float x, float y);
 
 	/**
 	 * Create a cargo with the specific from and to ports and associated time windows.
@@ -342,11 +341,9 @@ public interface ISchedulerBuilder {
 	 *            Scaled sales price in $/MMBTu
 	 * @return
 	 */
-	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, IShippingPriceCalculator<ISequenceElement> priceCalculator, int durationHours,
-			boolean slotIsOptional);
+	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, IShippingPriceCalculator priceCalculator, int durationHours, boolean slotIsOptional);
 
-	IDischargeOption createVirtualDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, IShippingPriceCalculator<ISequenceElement> priceCalculator,
-			boolean slotIsOptional);
+	IDischargeOption createVirtualDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, IShippingPriceCalculator priceCalculator, boolean slotIsOptional);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these

@@ -9,7 +9,6 @@ import java.util.Collection;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 
 /**
  * Extension to the scheduler builder interface, which {@link ISchedulerBuilder} instances should tie into the build process at appropriate times.
@@ -26,7 +25,7 @@ public interface IBuilderExtension {
 	 *            the data being created
 	 * @return a collection of key / dcp pairs to be added.
 	 */
-	Collection<Pair<String, IDataComponentProvider>> createDataComponentProviders(IOptimisationData<ISequenceElement> optimisationData);
+	Collection<Pair<String, IDataComponentProvider>> createDataComponentProviders(IOptimisationData optimisationData);
 
 	void dispose();
 
@@ -37,5 +36,5 @@ public interface IBuilderExtension {
 	 * 
 	 * @param optimisationData
 	 */
-	void finishBuilding(IOptimisationData<ISequenceElement> optimisationData);
+	void finishBuilding(IOptimisationData optimisationData);
 }

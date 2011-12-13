@@ -4,18 +4,16 @@
  */
 package com.mmxlabs.scheduler.optimiser.events.impl;
 
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.events.IScheduledEvent;
 
 /**
- * Abstract implementation of {@link IScheduledEvent} intended for use as a base
- * class for {@link IScheduledEvent} based implementations.
+ * Abstract implementation of {@link IScheduledEvent} intended for use as a base class for {@link IScheduledEvent} based implementations.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public abstract class AbstractScheduledEventImpl<T> implements IScheduledEvent<T> {
+public abstract class AbstractScheduledEventImpl implements IScheduledEvent {
 
 	private String name;
 
@@ -25,7 +23,7 @@ public abstract class AbstractScheduledEventImpl<T> implements IScheduledEvent<T
 
 	private int endTime;
 
-	private T element;
+	private ISequenceElement element;
 
 	protected AbstractScheduledEventImpl() {
 
@@ -47,7 +45,7 @@ public abstract class AbstractScheduledEventImpl<T> implements IScheduledEvent<T
 	}
 
 	@Override
-	public T getSequenceElement() {
+	public ISequenceElement getSequenceElement() {
 		return element;
 	}
 
@@ -72,7 +70,7 @@ public abstract class AbstractScheduledEventImpl<T> implements IScheduledEvent<T
 		this.endTime = endTime;
 	}
 
-	public void setSequenceElement(final T element) {
+	public void setSequenceElement(final ISequenceElement element) {
 		this.element = element;
 	}
 }

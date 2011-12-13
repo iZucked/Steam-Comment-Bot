@@ -12,6 +12,7 @@ import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
@@ -35,7 +36,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @author hinton
  * 
  */
-public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T> {
+public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	/**
 	 * How long to let empty time windows be. Since these mostly happen at the end of sequences we make this zero.
 	 */
@@ -97,7 +98,7 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 	// ArrayList<Integer>();
 
 	// private ITimeWindowDataComponentProvider timeWindowProvider;
-	// private IElementDurationProvider<T> durationProvider;
+	// private IElementDurationProvider durationProvider;
 	// private IVesselProvider vesselProvider;
 	// private IMultiMatrixProvider<T, Integer> distanceProvider;
 	//
@@ -105,7 +106,7 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 	/**
 	 * Resize one of the integer buffers above
 	 */
-	private final void resize(int[][] arrays, int arrayIndex, int size) {
+	private final void resize(final int[][] arrays, final int arrayIndex, final int size) {
 		if (arrays[arrayIndex] == null || arrays[arrayIndex].length < (size)) {
 			arrays[arrayIndex] = new int[(size)];
 		}
@@ -114,7 +115,7 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 	/**
 	 * Resize one of the boolean buffers above.
 	 */
-	private void resize(boolean[][] arrays, int arrayIndex, int size) {
+	private void resize(final boolean[][] arrays, final int arrayIndex, final int size) {
 		if (arrays[arrayIndex] == null || arrays[arrayIndex].length < (size)) {
 			arrays[arrayIndex] = new boolean[(size)];
 		}
@@ -126,7 +127,7 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 	 * @param arrayIndex
 	 * @param size
 	 */
-	private final void resizeAll(int sequenceIndex, int size) {
+	private final void resizeAll(final int sequenceIndex, final int size) {
 		resize(arrivalTimes, sequenceIndex, size);
 		resize(windowStartTime, sequenceIndex, size);
 		resize(windowEndTime, sequenceIndex, size);
@@ -141,9 +142,9 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 	/**
 	 * The sequences being evaluated at the moment
 	 */
-	private ISequences<T> sequences;
+	private ISequences sequences;
 
-	private ScheduleEvaluator<T> evaluator;
+	private ScheduleEvaluator evaluator;
 
 	/**
 	 * the fitness of the best result in the cycle
@@ -176,12 +177,12 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 	}
 
 	@Override
-	public ScheduledSequences schedule(final ISequences<T> sequences, final boolean forExport) {
+	public ScheduledSequences schedule(final ISequences sequences, final boolean forExport) {
 		return schedule(sequences, sequences.getResources(), forExport);
 	}
 
 	@Override
-	public ScheduledSequences schedule(final ISequences<T> sequences, final Collection<IResource> affectedResources, final boolean forExport) {
+	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
 		setSequences(sequences);
 		resetBest();
 
@@ -198,7 +199,7 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 	 * @param affectedResources
 	 * @return
 	 */
-	protected int[] getResourceIndices(ISequences<T> sequences, Collection<IResource> affectedResources) {
+	protected int[] getResourceIndices(final ISequences sequences, final Collection<IResource> affectedResources) {
 		final List<IResource> resources = sequences.getResources();
 
 		final int[] affectedIndices = new int[affectedResources.size()];
@@ -230,7 +231,7 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 		count = 0;
 	}
 
-	protected final void setSequences(final ISequences<T> sequences) {
+	protected final void setSequences(final ISequences sequences) {
 		this.sequences = sequences;
 	}
 
@@ -242,7 +243,7 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 			return;
 		}
 
-		for (int i : indices) {
+		for (final int i : indices) {
 			// for (int i = 0; i < size; i++) {
 			prepare(i);
 		}
@@ -278,9 +279,8 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 	 * @param sequence
 	 * @return
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected final void prepare(final int sequenceIndex) {
-		final ISequence<T> sequence = sequences.getSequence(sequenceIndex);
+		final ISequence sequence = sequences.getSequence(sequenceIndex);
 		final IResource resource = sequences.getResources().get(sequenceIndex);
 
 		final int size = sequence.size();
@@ -293,24 +293,24 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 		final int[] maxTimeToNextElement = this.maxTimeToNextElement[sequenceIndex];
 		final boolean[] isVirtual = this.isVirtual[sequenceIndex];
 
-		final IPortTypeProvider<T> portTypeProvider = super.getPortTypeProvider();
+		final IPortTypeProvider portTypeProvider = super.getPortTypeProvider();
 		final IVesselProvider vesselProvider = super.getVesselProvider();
 
 		final ITimeWindowDataComponentProvider timeWindowProvider = super.getTimeWindowProvider();
 		final IPortProvider portProvider = super.getPortProvider();
 		final IMultiMatrixProvider<IPort, Integer> distanceProvider = super.getDistanceProvider();
-		final IElementDurationProvider<T> durationProvider = super.getDurationsProvider();
+		final IElementDurationProvider durationProvider = super.getDurationsProvider();
 
 		final int maxSpeed = vesselProvider.getVessel(resource).getVesselClass().getMaxSpeed();
 
 		final int minSpeed = vesselProvider.getVessel(resource).getVesselClass().getMinSpeed();
 
 		int index = 0;
-		T lastElement = null;
+		ISequenceElement lastElement = null;
 
 		// first pass, collecting start time windows
-		for (final T element : sequence) {
-			List<ITimeWindow> windows = timeWindowProvider.getTimeWindows(element);
+		for (final ISequenceElement element : sequence) {
+			final List<ITimeWindow> windows = timeWindowProvider.getTimeWindows(element);
 
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
 
@@ -480,7 +480,7 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 			}
 		}
 
-		for (int index : changedSequences) {
+		for (final int index : changedSequences) {
 			final ScheduledSequence sequence = super.schedule(resources.get(index), sequences.getSequence(index), arrivalTimes[index]);
 			if (sequence == null) {
 				return false; // break out now, something bad has happened
@@ -554,11 +554,11 @@ public class EnumeratingSequenceScheduler<T> extends AbstractSequenceScheduler<T
 		}
 	}
 
-	public ScheduleEvaluator<T> getScheduleEvaluator() {
+	public ScheduleEvaluator getScheduleEvaluator() {
 		return evaluator;
 	}
 
-	public void setScheduleEvaluator(ScheduleEvaluator<T> evaluator) {
+	public void setScheduleEvaluator(final ScheduleEvaluator evaluator) {
 		this.evaluator = evaluator;
 	}
 

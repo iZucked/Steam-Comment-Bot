@@ -13,18 +13,18 @@ import com.mmxlabs.optimiser.lso.IMove;
  * @author hinton
  * 
  */
-public interface IConstrainedMoveGeneratorUnit<T> {
+public interface IConstrainedMoveGeneratorUnit {
 	/**
 	 * Called when the parent MG has the same named method called, after any lookup tables are built.
 	 * 
 	 * @param sequences
 	 */
-	void setSequences(ISequences<T> sequences);
+	void setSequences(ISequences sequences);
 
 	/**
 	 * Try to generate a move
 	 * 
 	 * @return
 	 */
-	IMove<T> generateMove();
+	IMove generateMove();
 }

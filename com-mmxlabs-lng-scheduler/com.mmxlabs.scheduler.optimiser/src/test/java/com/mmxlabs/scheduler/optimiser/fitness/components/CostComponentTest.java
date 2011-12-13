@@ -31,12 +31,12 @@ public class CostComponentTest {
 	@Test
 	public void testInit() {
 		final String name = "name";
-		final CargoSchedulerFitnessCore<Object> core = null;
+		final CargoSchedulerFitnessCore core = null;
 		final List<FuelComponent> fuelComponents = Collections.emptyList();
-		final CostComponent<Object> c = new CostComponent<Object>(name, fuelComponents, core);
+		final CostComponent c = new CostComponent(name, fuelComponents, core);
 
 		@SuppressWarnings("unchecked")
-		final IOptimisationData<Object> data = context.mock(IOptimisationData.class);
+		final IOptimisationData data = context.mock(IOptimisationData.class);
 
 		final String key = "provider-discount-curve";
 		final String componentName = "name";
@@ -76,16 +76,16 @@ public class CostComponentTest {
 		final long FBOUnit = 7 * Calculator.ScaleFactor;
 
 		final String name = "name";
-		final CargoSchedulerFitnessCore<Object> core = null;
+		final CargoSchedulerFitnessCore core = null;
 		// the list of fuels that will be used.
 		final List<FuelComponent> fuelComponents = new ArrayList<FuelComponent>();
 		fuelComponents.add(FuelComponent.Base);
 		fuelComponents.add(FuelComponent.NBO);
 		fuelComponents.add(FuelComponent.FBO);
-		final CostComponent<Object> c = new CostComponent<Object>(name, fuelComponents, core);
+		final CostComponent c = new CostComponent(name, fuelComponents, core);
 		c.init(null);
 
-		final VoyageDetails<Object> voyage = new VoyageDetails<Object>();
+		final VoyageDetails voyage = new VoyageDetails();
 		// set consumptions
 		voyage.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), baseConsumption);
 		voyage.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), NBOConsumption);
@@ -124,9 +124,9 @@ public class CostComponentTest {
 	@Test
 	public void testCostComponent() {
 		final String name = "name";
-		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
+		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore();
 		final List<FuelComponent> fuelComponents = Collections.emptyList();
-		final CostComponent<Object> c = new CostComponent<Object>(name, fuelComponents, core);
+		final CostComponent c = new CostComponent(name, fuelComponents, core);
 
 		Assert.assertSame(name, c.getName());
 		Assert.assertSame(core, c.getFitnessCore());

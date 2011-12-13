@@ -13,28 +13,23 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
  * 
- * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness
- * based on lateness.
+ * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness based on lateness.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class LatenessComponent<T> extends
-		AbstractPerRouteSchedulerFitnessComponent<T> implements
-		IFitnessComponent<T> {
-	
+public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
+
 	private static final int PENALTY = 1000000;
 	private long accumulator = 0;
 
-	public LatenessComponent(final String name,
-			final CargoSchedulerFitnessCore<T> core) {
+	public LatenessComponent(final String name, final CargoSchedulerFitnessCore core) {
 		super(name, core);
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyStartSequence(com.mmxlabs.optimiser.core.IResource)
 	 */
 	@Override
@@ -43,24 +38,28 @@ public final class LatenessComponent<T> extends
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyEvaluateObject(java.lang.Object, int)
 	 */
 	@Override
-	protected boolean reallyEvaluateObject(Object object, int time) {
+	protected boolean reallyEvaluateObject(final Object object, final int time) {
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
 			final ITimeWindow tw = detail.getPortSlot().getTimeWindow();
-			
+
 			if (tw != null && time > tw.getEnd()) {
-//				addDiscountedValue(time, 1000000*(time - tw.getEnd()));
-				accumulator  += getDiscountedValue(time, (long)PENALTY * (time - tw.getEnd()));
+				// addDiscountedValue(time, 1000000*(time - tw.getEnd()));
+				accumulator += getDiscountedValue(time, (long) PENALTY * (time - tw.getEnd()));
 			}
 		}
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#endSequenceAndGetCost()
 	 */
 	@Override

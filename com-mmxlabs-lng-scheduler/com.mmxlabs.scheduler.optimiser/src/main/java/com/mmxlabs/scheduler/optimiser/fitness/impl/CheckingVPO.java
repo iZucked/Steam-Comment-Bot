@@ -10,11 +10,10 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-public class CheckingVPO<T> implements IVoyagePlanOptimiser<T> {
-	final private IVoyagePlanOptimiser<T> reference, delegate;
-	
-	public CheckingVPO(IVoyagePlanOptimiser<T> reference,
-			IVoyagePlanOptimiser<T> delegate) {
+public class CheckingVPO implements IVoyagePlanOptimiser {
+	final private IVoyagePlanOptimiser reference, delegate;
+
+	public CheckingVPO(final IVoyagePlanOptimiser reference, final IVoyagePlanOptimiser delegate) {
 		super();
 		this.reference = reference;
 		this.delegate = delegate;
@@ -43,7 +42,7 @@ public class CheckingVPO<T> implements IVoyagePlanOptimiser<T> {
 		final VoyagePlan ref = reference.optimise();
 		final VoyagePlan res = delegate.optimise();
 		// FIXME: Use check if logging is enabled
-		if (ref.toString().equals(res.toString())  == false) {
+		if (ref.toString().equals(res.toString()) == false) {
 			// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
 			System.err.println("Checking VPO Error: (plans are different)");
 			System.err.println("   reference value:" + ref.toString());
@@ -54,7 +53,7 @@ public class CheckingVPO<T> implements IVoyagePlanOptimiser<T> {
 			System.err.println("    reference cost:" + reference.getBestCost());
 			System.err.println("     delegate cost:" + delegate.getBestCost());
 		}
-		
+
 		return res;
 	}
 
@@ -64,7 +63,7 @@ public class CheckingVPO<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	@Override
-	public void setBasicSequence(List<Object> basicSequence) {
+	public void setBasicSequence(final List<Object> basicSequence) {
 		delegate.setBasicSequence(basicSequence);
 		reference.setBasicSequence(basicSequence);
 	}
@@ -75,7 +74,7 @@ public class CheckingVPO<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	@Override
-	public void setVessel(IVessel vessel) {
+	public void setVessel(final IVessel vessel) {
 		delegate.setVessel(vessel);
 		reference.setVessel(vessel);
 	}
@@ -91,22 +90,24 @@ public class CheckingVPO<T> implements IVoyagePlanOptimiser<T> {
 	}
 
 	@Override
-	public ILNGVoyageCalculator<T> getVoyageCalculator() {
+	public ILNGVoyageCalculator getVoyageCalculator() {
 		return delegate.getVoyageCalculator();
 	}
 
 	@Override
-	public void addChoice(IVoyagePlanChoice choice) {
+	public void addChoice(final IVoyagePlanChoice choice) {
 		reference.addChoice(choice);
 		delegate.addChoice(choice);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser#setArrivalTimes(java.util.List)
 	 */
 	@Override
-	public void setArrivalTimes(List<Integer> currentTimes) {
+	public void setArrivalTimes(final List<Integer> currentTimes) {
 		reference.setArrivalTimes(currentTimes);
-		delegate.setArrivalTimes(currentTimes);	
+		delegate.setArrivalTimes(currentTimes);
 	}
 }

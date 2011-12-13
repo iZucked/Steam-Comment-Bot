@@ -15,19 +15,17 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolum
  * @author hinton
  * 
  */
-public class ArrayListCargoAllocationEditor<T> implements
-		ITotalVolumeLimitEditor<T> {
+public class ArrayListCargoAllocationEditor implements ITotalVolumeLimitEditor {
 
-	public ArrayListCargoAllocationEditor(String name) {
+	public ArrayListCargoAllocationEditor(final String name) {
 		super();
 		this.name = name;
 	}
 
 	private final String name;
-	
-	private ArrayList<ITotalVolumeLimit> totalVolumeLimits = 
-		new ArrayList<ITotalVolumeLimit>();
-	
+
+	private ArrayList<ITotalVolumeLimit> totalVolumeLimits = new ArrayList<ITotalVolumeLimit>();
+
 	@Override
 	public Iterable<ITotalVolumeLimit> getTotalVolumeLimits() {
 		return totalVolumeLimits;
@@ -48,7 +46,9 @@ public class ArrayListCargoAllocationEditor<T> implements
 		totalVolumeLimits = null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider#isEmpty()
 	 */
 	@Override

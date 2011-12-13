@@ -5,9 +5,9 @@
 package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
-public interface IReturnElementProviderEditor<T> extends
-		IReturnElementProvider<T> {
-	public void setReturnElement(IResource resource, IPort port, T element);
+public interface IReturnElementProviderEditor extends IReturnElementProvider {
+	public void setReturnElement(IResource resource, IPort port, ISequenceElement element);
 }

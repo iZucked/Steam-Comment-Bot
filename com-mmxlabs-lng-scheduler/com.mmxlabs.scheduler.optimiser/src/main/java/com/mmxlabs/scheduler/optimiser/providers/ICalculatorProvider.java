@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
  * @author hinton
  * 
  */
-public interface ICalculatorProvider<T> extends IDataComponentProvider {
+public interface ICalculatorProvider extends IDataComponentProvider {
 	/**
 	 * @return A collection of all the load price calculators used in this problem
 	 */
@@ -25,5 +25,5 @@ public interface ICalculatorProvider<T> extends IDataComponentProvider {
 	/**
 	 * @return A collection of all shipping price calculators used in this scenario.
 	 */
-	Collection<IShippingPriceCalculator<T>> getShippingPriceCalculators();
+	Collection<IShippingPriceCalculator> getShippingPriceCalculators();
 }

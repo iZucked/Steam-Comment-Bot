@@ -13,8 +13,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
  * @author hinton
  * 
  */
-public interface ICalculatorProviderEditor<T> extends ICalculatorProvider<T> {
+public interface ICalculatorProviderEditor extends ICalculatorProvider {
 	void addLoadPriceCalculator(ILoadPriceCalculator2 calculator);
 
-	void addShippingPriceCalculator(IShippingPriceCalculator<T> calculator);
+	void addShippingPriceCalculator(IShippingPriceCalculator calculator);
 }

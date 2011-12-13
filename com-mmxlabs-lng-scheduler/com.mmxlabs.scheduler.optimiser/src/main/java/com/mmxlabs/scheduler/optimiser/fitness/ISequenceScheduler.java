@@ -11,15 +11,12 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
- * This class contains the logic required to schedule a {@link ISequence}. This
- * will determine arrival times and additional information.
+ * This class contains the logic required to schedule a {@link ISequence}. This will determine arrival times and additional information.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface ISequenceScheduler<T> {
+public interface ISequenceScheduler {
 
 	/**
 	 * Schedule the given set of sequences, returning a {@link ScheduledSequences}.
@@ -30,7 +27,7 @@ public interface ISequenceScheduler<T> {
 	 * 
 	 * @return
 	 */
-	ScheduledSequences schedule(ISequences<T> sequences, final Collection<IResource> affectedResources, boolean forExport);
+	ScheduledSequences schedule(ISequences sequences, final Collection<IResource> affectedResources, boolean forExport);
 
 	/**
 	 * Like {@link #schedule(ISequences, Collection, boolean)}, but with all resources needing evaluation.
@@ -39,7 +36,7 @@ public interface ISequenceScheduler<T> {
 	 * @param forExport
 	 * @return
 	 */
-	ScheduledSequences schedule(ISequences<T> sequences, boolean forExport);
+	ScheduledSequences schedule(ISequences sequences, boolean forExport);
 
 	/**
 	 * The caller can use this to avoid full evaluation on the next cycle if a schedule is accepted.

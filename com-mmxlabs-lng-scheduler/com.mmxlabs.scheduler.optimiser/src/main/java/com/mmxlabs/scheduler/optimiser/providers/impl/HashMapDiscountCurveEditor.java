@@ -12,29 +12,32 @@ import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 
 /**
  * @author Tom Hinton
- *
+ * 
  */
 public class HashMapDiscountCurveEditor implements IDiscountCurveProviderEditor {
 	private final HashMap<String, ICurve> map = new HashMap<String, ICurve>();
 	private final ICurve unit = new ConstantValueCurve(1);
 	final String name;
-	
-	
-	public HashMapDiscountCurveEditor(String name) {
+
+	public HashMapDiscountCurveEditor(final String name) {
 		super();
 		this.name = name;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider#getDiscountCurve(java.lang.String)
 	 */
 	@Override
-	public ICurve getDiscountCurve(String componentName) {
+	public ICurve getDiscountCurve(final String componentName) {
 		final ICurve c = map.get(componentName);
 		return c == null ? unit : c;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.optimiser.core.scenario.IDataComponentProvider#getName()
 	 */
 	@Override
@@ -42,7 +45,9 @@ public class HashMapDiscountCurveEditor implements IDiscountCurveProviderEditor 
 		return name;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.optimiser.core.scenario.IDataComponentProvider#dispose()
 	 */
 	@Override
@@ -51,11 +56,13 @@ public class HashMapDiscountCurveEditor implements IDiscountCurveProviderEditor 
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor#setDiscountCurve(java.lang.String, com.mmxlabs.common.curves.ICurve)
 	 */
 	@Override
-	public void setDiscountCurve(String componentName, ICurve discountCurve) {
+	public void setDiscountCurve(final String componentName, final ICurve discountCurve) {
 		map.put(componentName, discountCurve == null ? unit : discountCurve);
 	}
 

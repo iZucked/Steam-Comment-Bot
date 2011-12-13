@@ -21,7 +21,7 @@ public class PortVisitEventImplTest {
 	@Test
 	public void testGetSetPort() {
 
-		final PortVisitEventImpl<Object> event = new PortVisitEventImpl<Object>();
+		final PortVisitEventImpl event = new PortVisitEventImpl();
 		Assert.assertNull(event.getPortSlot());
 		final IPortSlot portSlot = context.mock(IPortSlot.class);
 		event.setPortSlot(portSlot);

@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
@@ -49,9 +50,9 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  * @author hinton
  * 
- * @param <T>
+ * @param
  */
-public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBuilder<T> {
+public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilder {
 
 	private static final Logger log = LoggerFactory.getLogger(ConstrainedInitialSequenceBuilder.class);
 
@@ -60,36 +61,36 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 	 */
 	private static final int INITIAL_MAX_LATENESS = 48;
 
-	private final List<IPairwiseConstraintChecker<T>> pairwiseCheckers;
-	private TravelTimeConstraintChecker<T> travelTimeChecker;
+	private final List<IPairwiseConstraintChecker> pairwiseCheckers;
+	private TravelTimeConstraintChecker travelTimeChecker;
 
-	class ChunkChecker<T> {
-		private final LegalSequencingChecker<T> checker;
+	class ChunkChecker {
+		private final LegalSequencingChecker checker;
 
-		public ChunkChecker(LegalSequencingChecker<T> realChecker) {
+		public ChunkChecker(final LegalSequencingChecker realChecker) {
 			this.checker = realChecker;
 		}
 
-		public boolean canFollow(SequenceChunk<T> chunk1, SequenceChunk<T> chunk2, IResource resource) {
-			final T tail1 = chunk1.last();
-			final T head2 = chunk2.first();
+		public boolean canFollow(final SequenceChunk chunk1, final SequenceChunk chunk2, final IResource resource) {
+			final ISequenceElement tail1 = chunk1.last();
+			final ISequenceElement head2 = chunk2.first();
 			return checker.allowSequence(tail1, head2, resource);
 		}
 
-		public boolean canInsert(SequenceChunk<T> before, SequenceChunk<T> added, SequenceChunk<T> after, IResource resource) {
+		public boolean canInsert(final SequenceChunk before, final SequenceChunk added, final SequenceChunk after, final IResource resource) {
 			return canFollow(before, added, resource) && canFollow(added, after, resource);
 		}
 	}
 
-	class SequenceChunk<T> extends ArrayList<T> {
+	class SequenceChunk extends ArrayList<ISequenceElement> {
 		int resourceCount;
 		private boolean endElement;
 
-		public T first() {
+		public ISequenceElement first() {
 			return get(0);
 		}
 
-		public T last() {
+		public ISequenceElement last() {
 			return get(size() - 1);
 		}
 
@@ -97,11 +98,11 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 			return resourceCount;
 		}
 
-		public void setResourceCount(int resourceCount) {
+		public void setResourceCount(final int resourceCount) {
 			this.resourceCount = resourceCount;
 		}
 
-		public void setEndElement(boolean b) {
+		public void setEndElement(final boolean b) {
 			this.endElement = b;
 		}
 
@@ -110,45 +111,40 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 		}
 	}
 
-	public ConstrainedInitialSequenceBuilder(Collection<IConstraintCheckerFactory> factories) {
-		this.pairwiseCheckers = new ArrayList<IPairwiseConstraintChecker<T>>();
-		for (IConstraintCheckerFactory factory : factories) {
-			IConstraintChecker<T> checker = factory.instantiate();
+	public ConstrainedInitialSequenceBuilder(final Collection<IConstraintCheckerFactory> factories) {
+		this.pairwiseCheckers = new ArrayList<IPairwiseConstraintChecker>();
+		for (final IConstraintCheckerFactory factory : factories) {
+			final IConstraintChecker checker = factory.instantiate();
 			if (checker instanceof IPairwiseConstraintChecker) {
-				pairwiseCheckers.add((IPairwiseConstraintChecker<T>) checker);
+				pairwiseCheckers.add((IPairwiseConstraintChecker) checker);
 			}
 			if (checker instanceof TravelTimeConstraintChecker) {
-				this.travelTimeChecker = (TravelTimeConstraintChecker<T>) checker;
+				this.travelTimeChecker = (TravelTimeConstraintChecker) checker;
 			}
 		}
 	}
 
-	public ConstrainedInitialSequenceBuilder(List<IPairwiseConstraintChecker<T>> pairwiseCheckers) {
+	public ConstrainedInitialSequenceBuilder(final List<IPairwiseConstraintChecker> pairwiseCheckers) {
 		this.pairwiseCheckers = pairwiseCheckers;
 	}
 
 	@Override
-	public ISequences<T> createInitialSequences(final IOptimisationData<T> data, final ISequences<T> suggestion, Map<T, IResource> resourceSuggestion) {
+	public ISequences createInitialSequences(final IOptimisationData data, final ISequences suggestion, Map<ISequenceElement, IResource> resourceSuggestion) {
 
 		if (resourceSuggestion == null)
 			resourceSuggestion = Collections.emptyMap();
 
-		@SuppressWarnings("unchecked")
-		final IPortTypeProvider<T> portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
+		final IPortTypeProvider portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 
-		@SuppressWarnings("unchecked")
-		final IPortSlotProvider<T> portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+		final IPortSlotProvider portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 
-		@SuppressWarnings("unchecked")
-		final IStartEndRequirementProvider<T> startEndRequirementProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
+		final IStartEndRequirementProvider startEndRequirementProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
 
-		@SuppressWarnings("unchecked")
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 
-		@SuppressWarnings("unchecked")
-		final IOptionalElementsProvider<T> optionalElements = data.getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, IOptionalElementsProvider.class);
+		final IOptionalElementsProvider optionalElements = data.getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, IOptionalElementsProvider.class);
 
-		LegalSequencingChecker<T> checker = new LegalSequencingChecker<T>(data, pairwiseCheckers);
+		final LegalSequencingChecker checker = new LegalSequencingChecker(data, pairwiseCheckers);
 
 		final int initialMaxLateness = (travelTimeChecker == null) ? 0 : travelTimeChecker.getMaxLateness();
 
@@ -156,30 +152,30 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 			travelTimeChecker.setMaxLateness(INITIAL_MAX_LATENESS);
 
 		// stick together elements which must be stuck together
-		Map<T, Set<T>> followerCache = new LinkedHashMap<T, Set<T>>();
-		Set<T> heads = new LinkedHashSet<T>();
-		Set<T> tails = new LinkedHashSet<T>();
+		final Map<ISequenceElement, Set<ISequenceElement>> followerCache = new LinkedHashMap<ISequenceElement, Set<ISequenceElement>>();
+		final Set<ISequenceElement> heads = new LinkedHashSet<ISequenceElement>();
+		final Set<ISequenceElement> tails = new LinkedHashSet<ISequenceElement>();
 
-		final Set<T> unsequencedElements = new LinkedHashSet<T>();
+		final Set<ISequenceElement> unsequencedElements = new LinkedHashSet<ISequenceElement>();
 		unsequencedElements.addAll(data.getSequenceElements());
 		if (suggestion != null) {
-			for (final ISequence<T> seq : suggestion.getSequences().values()) {
-				for (final T element : seq)
+			for (final ISequence seq : suggestion.getSequences().values()) {
+				for (final ISequenceElement element : seq)
 					unsequencedElements.remove(element);
 			}
 		}
 
-		final List<T> unusedElements = new ArrayList<T>();
+		final List<ISequenceElement> unusedElements = new ArrayList<ISequenceElement>();
 		unusedElements.addAll(optionalElements.getOptionalElements());
 		unusedElements.retainAll(unsequencedElements);
 		unsequencedElements.removeAll(optionalElements.getOptionalElements());
 
 		log.info("Elements remaining to be sequenced: " + unsequencedElements);
 
-		for (T element1 : unsequencedElements) {
-			Set<T> after1 = new LinkedHashSet<T>();
+		for (final ISequenceElement element1 : unsequencedElements) {
+			final Set<ISequenceElement> after1 = new LinkedHashSet<ISequenceElement>();
 			followerCache.put(element1, after1);
-			for (T element2 : data.getSequenceElements()) {
+			for (final ISequenceElement element2 : data.getSequenceElements()) {
 				if (element1 == element2)
 					continue;
 				if (checker.allowSequence(element1, element2)) {
@@ -191,7 +187,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 				if (!tails.contains(element1)) {
 					heads.add(element1);
 				}
-				final T tail = after1.iterator().next();
+				final ISequenceElement tail = after1.iterator().next();
 				tails.add(tail);
 				heads.remove(tail);
 			}
@@ -199,7 +195,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 
 		// Heads now contains the head of every chunk that has to go together.
 		// We need to pull out all the chunks and sort out their rules
-		List<IResource> resources = new ArrayList<IResource>(data.getResources());
+		final List<IResource> resources = new ArrayList<IResource>(data.getResources());
 		{
 			Collections.sort(resources, new Comparator<IResource>() {
 				@Override
@@ -224,14 +220,14 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 			});
 		}
 
-		final Map<IResource, SequenceChunk<T>> endChunks = new LinkedHashMap<IResource, SequenceChunk<T>>();
+		final Map<IResource, SequenceChunk> endChunks = new LinkedHashMap<IResource, SequenceChunk>();
 
 		final IResourceAllocationConstraintDataComponentProvider racdcp = data.getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider,
 				IResourceAllocationConstraintDataComponentProvider.class);
 
-		List<SequenceChunk<T>> chunks = new LinkedList<SequenceChunk<T>>();
-		for (T head : heads) {
-			SequenceChunk<T> chunk = new SequenceChunk<T>();
+		final List<SequenceChunk> chunks = new LinkedList<SequenceChunk>();
+		for (ISequenceElement head : heads) {
+			final SequenceChunk chunk = new SequenceChunk();
 			if (portTypeProvider.getPortType(head) == PortType.End) {
 				chunk.setEndElement(true);
 				final Collection<IResource> c = racdcp.getAllowedResources(head);
@@ -255,7 +251,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 
 			// get resource count for chunk
 			int rc = 0;
-			for (IResource resource : resources) {
+			for (final IResource resource : resources) {
 				boolean ok = true;
 				for (int c = 0; c < chunk.size() - 1; c++) {
 					if (checker.allowSequence(chunk.get(c), chunk.get(c + 1), resource) == false) {
@@ -271,17 +267,19 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 
 		// now add chunks for things with only one element
 
-		for (Map.Entry<T, Set<T>> entry : followerCache.entrySet()) {
-			final T place = entry.getKey();
+		for (final Map.Entry<ISequenceElement, Set<ISequenceElement>> entry : followerCache.entrySet()) {
+			final ISequenceElement place = entry.getKey();
 			final PortType portType = portTypeProvider.getPortType(place);
-			if (portType.equals(PortType.Start))
+			if (portType.equals(PortType.Start)) {
 				continue;
+			}
 
-			if (tails.contains(place))
+			if (tails.contains(place)) {
 				continue;
+			}
 
 			if (portType.equals(PortType.End)) {
-				SequenceChunk<T> guy = new SequenceChunk<T>();
+				final SequenceChunk guy = new SequenceChunk();
 				guy.add(place);
 				guy.setEndElement(true);
 				chunks.add(guy);
@@ -289,7 +287,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 				assert c.size() == 1;
 				endChunks.put(c.iterator().next(), guy);
 			} else if (entry.getValue().size() > 1) {
-				SequenceChunk<T> guy = new SequenceChunk<T>();
+				final SequenceChunk guy = new SequenceChunk();
 				guy.add(place);
 				final Collection<IResource> c = racdcp.getAllowedResources(place);
 				guy.setResourceCount(c == null ? resources.size() : c.size());
@@ -306,9 +304,9 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 		// most constrained stuff will get done first, etc
 		// at the end we can try a final insertion pass for leftover chunks.
 
-		final Comparator<SequenceChunk<T>> comparator = new Comparator<SequenceChunk<T>>() {
+		final Comparator<SequenceChunk> comparator = new Comparator<SequenceChunk>() {
 			@Override
-			public int compare(SequenceChunk<T> chunk1, SequenceChunk<T> chunk2) {
+			public int compare(final SequenceChunk chunk1, final SequenceChunk chunk2) {
 				// check if either chunk is optional
 
 				// end elements go at the end
@@ -331,11 +329,11 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 					}
 				}
 
-				final T o1 = chunk1.get(0);
-				final T o2 = chunk2.get(0);
+				final ISequenceElement o1 = chunk1.get(0);
+				final ISequenceElement o2 = chunk2.get(0);
 
-				final T e1 = chunk1.get(chunk1.size() - 1);
-				final T e2 = chunk2.get(chunk2.size() - 1);
+				final ISequenceElement e1 = chunk1.get(chunk1.size() - 1);
+				final ISequenceElement e2 = chunk2.get(chunk2.size() - 1);
 
 				final IPortSlot slot1 = portSlotProvider.getPortSlot(o1);
 				final IPortSlot slot2 = portSlotProvider.getPortSlot(o2);
@@ -369,35 +367,34 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 			}
 		};
 
-
 		Collections.sort(chunks, comparator);
 
-		final ChunkChecker<T> chunkChecker = new ChunkChecker<T>(checker);
-		Map<IResource, List<SequenceChunk<T>>> sequences = new LinkedHashMap<IResource, List<SequenceChunk<T>>>();
+		final ChunkChecker chunkChecker = new ChunkChecker(checker);
+		final Map<IResource, List<SequenceChunk>> sequences = new LinkedHashMap<IResource, List<SequenceChunk>>();
 
 		if (suggestion == null) {
 			log.info("No suggested start solution - constructing one");
-			for (IResource resource : resources) {
-				final SequenceChunk<T> end = endChunks.get(resource);
+			for (final IResource resource : resources) {
+				final SequenceChunk end = endChunks.get(resource);
 
 				log.info("Scheduling elements for resource " + resource);
-				List<SequenceChunk<T>> sequence = new ArrayList<SequenceChunk<T>>();
+				final List<SequenceChunk> sequence = new ArrayList<SequenceChunk>();
 				sequences.put(resource, sequence);
 
 				// try and schedule chunks
 				// first put in the start element
-				SequenceChunk<T> start = new SequenceChunk<T>();
+				final SequenceChunk start = new SequenceChunk();
 				start.add(startEndRequirementProvider.getStartElement(resource));
 				sequence.add(start);
 				// now assign any chunks which we can to follow it
-				Iterator<SequenceChunk<T>> iterator = chunks.iterator();
-				SequenceChunk<T> here = start;
+				final Iterator<SequenceChunk> iterator = chunks.iterator();
+				SequenceChunk here = start;
 				INITIAL_SEQUENCING_LOOP: while (iterator.hasNext()) {
-					final SequenceChunk<T> there = iterator.next();
+					final SequenceChunk there = iterator.next();
 					// check that there can come after here, and that end can come after there.
 					if (chunkChecker.canFollow(here, there, resource) && ((there == end) || chunkChecker.canFollow(there, end, resource))) {
 						// now check for resource advice
-						for (final T element : there) {
+						for (final ISequenceElement element : there) {
 							final IResource suggestedResource = resourceSuggestion.get(element);
 							if (suggestedResource != null && suggestedResource != resource)
 								continue INITIAL_SEQUENCING_LOOP; // process
@@ -417,12 +414,12 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 			// copy suggestion state into one-element chunks.
 			log.info("Starting with suggested solution");
 			for (final IResource resource : suggestion.getResources()) {
-				List<SequenceChunk<T>> sequence = new ArrayList<SequenceChunk<T>>();
+				final List<SequenceChunk> sequence = new ArrayList<SequenceChunk>();
 				sequences.put(resource, sequence);
 
-				final ISequence<T> seq = suggestion.getSequence(resource);
-				for (final T element : seq) {
-					final SequenceChunk<T> chunk = new SequenceChunk<T>();
+				final ISequence seq = suggestion.getSequence(resource);
+				for (final ISequenceElement element : seq) {
+					final SequenceChunk chunk = new SequenceChunk();
 					chunk.add(element);
 					sequence.add(chunk);
 				}
@@ -432,16 +429,16 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 					// elsewhere)
 					// end element should be handled by the next step,
 					// hopefully.
-					SequenceChunk<T> start = new SequenceChunk<T>();
+					final SequenceChunk start = new SequenceChunk();
 					start.add(startEndRequirementProvider.getStartElement(resource));
 					sequence.add(start);
 					// spam in any elements which will fit
-					Iterator<SequenceChunk<T>> iterator = chunks.iterator();
-					SequenceChunk<T> here = start;
+					final Iterator<SequenceChunk> iterator = chunks.iterator();
+					SequenceChunk here = start;
 					SECOND_INSERT_LOOP: while (iterator.hasNext()) {
-						final SequenceChunk<T> there = iterator.next();
+						final SequenceChunk there = iterator.next();
 
-						for (final T element : there) {
+						for (final ISequenceElement element : there) {
 							final IResource suggestedResource = resourceSuggestion.get(resource);
 							if (suggestedResource != null && suggestedResource != resource)
 								continue SECOND_INSERT_LOOP;
@@ -465,14 +462,14 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 		// inserting any leftovers
 		log.info("Trying to insert " + chunks.size() + " unscheduled elements into solution (" + chunks + ")");
 		while (!chunks.isEmpty()) {
-			final Iterator<SequenceChunk<T>> iterator = chunks.iterator();
+			final Iterator<SequenceChunk> iterator = chunks.iterator();
 			while (iterator.hasNext()) {
 				top: {
-					final SequenceChunk<T> here = iterator.next();
+					final SequenceChunk here = iterator.next();
 
 					// first check for suggested resource
 					IResource suggestedResource = null;
-					for (final T element : here) {
+					for (final ISequenceElement element : here) {
 						final IResource suggestionForElement = resourceSuggestion.get(element);
 						if (suggestionForElement != null && suggestedResource != null && suggestionForElement != suggestedResource) {
 							suggestedResource = null;
@@ -484,15 +481,15 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 					if (suggestedResource != null) {
 						// try inserting on suggested resource first
 
-						final List<SequenceChunk<T>> sequence = sequences.get(suggestedResource);
+						final List<SequenceChunk> sequence = sequences.get(suggestedResource);
 
 						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, suggestedResource))
 							break top;
 					}
 
-					for (Map.Entry<IResource, List<SequenceChunk<T>>> entry : sequences.entrySet()) {
+					for (final Map.Entry<IResource, List<SequenceChunk>> entry : sequences.entrySet()) {
 						final IResource res = entry.getKey();
-						final List<SequenceChunk<T>> sequence = entry.getValue();
+						final List<SequenceChunk> sequence = entry.getValue();
 						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, res))
 							break top;
 					}
@@ -519,12 +516,12 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 		// OK, we have done our best, now build the modifiablesequences
 		// from the intermediate gack
 
-		IModifiableSequences<T> result = new ModifiableSequences<T>(resources);
+		final IModifiableSequences result = new ModifiableSequences(resources);
 		for (final IResource resource : resources) {
-			IModifiableSequence<T> realseq = result.getModifiableSequence(resource);
-			final List<SequenceChunk<T>> seq = sequences.get(resource);
-			for (SequenceChunk<T> chunk : seq) {
-				for (T element : chunk) {
+			final IModifiableSequence realseq = result.getModifiableSequence(resource);
+			final List<SequenceChunk> seq = sequences.get(resource);
+			for (final SequenceChunk chunk : seq) {
+				for (final ISequenceElement element : chunk) {
 					realseq.add(element);
 				}
 			}
@@ -536,8 +533,7 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 		return result;
 	}
 
-	private boolean tryInsertingChunk(final ChunkChecker<T> chunkChecker, final Iterator<SequenceChunk<T>> iterator, final SequenceChunk<T> here, final List<SequenceChunk<T>> sequence,
-			final IResource res) {
+	private boolean tryInsertingChunk(final ChunkChecker chunkChecker, final Iterator<SequenceChunk> iterator, final SequenceChunk here, final List<SequenceChunk> sequence, final IResource res) {
 		if (here.isEndElement()) {
 			if (chunkChecker.canFollow(sequence.get(sequence.size() - 1), here, res)) {
 				sequence.add(here);

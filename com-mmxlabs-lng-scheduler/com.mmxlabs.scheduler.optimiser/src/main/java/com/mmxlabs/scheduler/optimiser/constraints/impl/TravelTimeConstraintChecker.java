@@ -12,6 +12,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -25,31 +26,28 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
- * A constraint checker which tests whether the ports in a sequence can be
- * reached from one another presuming the vessel travels at its maximum speed
- * all the way and spends a minimum amount of time at each point. Allows
- * a certain quantity of lateness.
+ * A constraint checker which tests whether the ports in a sequence can be reached from one another presuming the vessel travels at its maximum speed all the way and spends a minimum amount of time at
+ * each point. Allows a certain quantity of lateness.
  * 
  * 
  * @author hinton
  * 
- * @param <T>
+ * @param
  */
-public class TravelTimeConstraintChecker<T> implements
-		IPairwiseConstraintChecker<T> {
+public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 	/**
 	 * The maximum amount of lateness which will even be considered (20 days)
 	 */
 	private int maxLateness = 1000 * 24;
 	private final String name;
-	private IOptimisationData<T> data;
-	private IPortSlotProvider<T> portSlotProvider;
+	private IOptimisationData data;
+	private IPortSlotProvider portSlotProvider;
 	private IVesselProvider vesselProvider;
-	private IElementDurationProvider<T> elementDurationProvider;
+	private IElementDurationProvider elementDurationProvider;
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
-	public TravelTimeConstraintChecker(String name) {
+	public TravelTimeConstraintChecker(final String name) {
 		this.name = name;
 	}
 
@@ -59,23 +57,22 @@ public class TravelTimeConstraintChecker<T> implements
 	}
 
 	@Override
-	public boolean checkConstraints(ISequences<T> sequences) {
-		for (Map.Entry<IResource, ISequence<T>> entry : sequences
-				.getSequences().entrySet()) {
+	public boolean checkConstraints(final ISequences sequences) {
+		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
 			if (!checkSequence(entry.getValue(), entry.getKey()))
 				return false;
 		}
 		return true;
 	}
 
-	private boolean checkSequence(ISequence<T> sequence, IResource resource) {
-		Iterator<T> iter = sequence.iterator();
-		T prev, cur;
+	private boolean checkSequence(final ISequence sequence, final IResource resource) {
+		final Iterator<ISequenceElement> iter = sequence.iterator();
+		ISequenceElement prev, cur;
 		prev = cur = null;
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
-		
+
 		while (iter.hasNext()) {
 			prev = cur;
 			cur = iter.next();
@@ -88,26 +85,17 @@ public class TravelTimeConstraintChecker<T> implements
 	}
 
 	@Override
-	public boolean checkConstraints(ISequences<T> sequences,
-			List<String> messages) {
+	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
 		return checkConstraints(sequences);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void setOptimisationData(IOptimisationData<T> optimisationData) {
+	public void setOptimisationData(final IOptimisationData optimisationData) {
 		this.data = optimisationData;
-		this.portSlotProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_portSlotsProvider,
-				IPortSlotProvider.class);
-		this.vesselProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		this.elementDurationProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_elementDurationsProvider,
-				IElementDurationProvider.class);
-		this.distanceProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_portDistanceProvider,
-				IMultiMatrixProvider.class);
+		this.portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+		this.vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+		this.elementDurationProvider = data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProvider.class);
+		this.distanceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class);
 	}
 
 	@Override
@@ -120,72 +108,59 @@ public class TravelTimeConstraintChecker<T> implements
 	 * @param resource the vessel in question
 	 * @return
 	 */
-	public boolean checkPairwiseConstraint(T first, T second, IResource resource) {
+	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
-		return checkPairwiseConstraint(first, second, resource, vessel
-				.getVesselClass().getMaxSpeed());
+		return checkPairwiseConstraint(first, second, resource, vessel.getVesselClass().getMaxSpeed());
 	}
 
-	public boolean checkPairwiseConstraint(final T first, final T second,
-			final IResource resource, final int resourceMaxSpeed) {
-		
+	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, final int resourceMaxSpeed) {
+
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 
-		final int distance = distanceProvider.getMinimumValue(slot1.getPort(), slot2.getPort()); 
-			
-		if (distance == Integer.MAX_VALUE) return false;
-		
-		final int travelTime = Calculator.getTimeFromSpeedDistance(
-				resourceMaxSpeed,
-				distance);
+		final int distance = distanceProvider.getMinimumValue(slot1.getPort(), slot2.getPort());
+
+		if (distance == Integer.MAX_VALUE)
+			return false;
+
+		final int travelTime = Calculator.getTimeFromSpeedDistance(resourceMaxSpeed, distance);
 		final ITimeWindow tw1 = slot1.getTimeWindow();
 		final ITimeWindow tw2 = slot2.getTimeWindow();
-		
-		if (tw1 == null || tw2 == null) return true; //if the time windows are null, there is no effective constraint
-		
-		final int earliestArrivalTime = tw1.getStart()
-				+ elementDurationProvider.getElementDuration(first, resource)
-				+ travelTime;
 
-		final int latestAllowableTime = tw2.getEnd()
-			+ maxLateness;
+		if (tw1 == null || tw2 == null)
+			return true; // if the time windows are null, there is no effective constraint
+
+		final int earliestArrivalTime = tw1.getStart() + elementDurationProvider.getElementDuration(first, resource) + travelTime;
+
+		final int latestAllowableTime = tw2.getEnd() + maxLateness;
 
 		return earliestArrivalTime < latestAllowableTime;
 	}
 
 	@Override
-	public String explain(T first, T second, IResource resource) {
+	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
-		final int distance = distanceProvider.get(IMultiMatrixProvider.Default_Key)
-			.get(slot1.getPort(), slot2.getPort());
-		if (distance == Integer.MAX_VALUE) return "No edge connecting ports";
-		final int travelTime = Calculator.getTimeFromSpeedDistance(
-				vesselProvider.getVessel(resource).getVesselClass().getMaxSpeed(),
-				distance);
+		final int distance = distanceProvider.get(IMultiMatrixProvider.Default_Key).get(slot1.getPort(), slot2.getPort());
+		if (distance == Integer.MAX_VALUE)
+			return "No edge connecting ports";
+		final int travelTime = Calculator.getTimeFromSpeedDistance(vesselProvider.getVessel(resource).getVesselClass().getMaxSpeed(), distance);
 		final ITimeWindow tw1 = slot1.getTimeWindow();
 		final ITimeWindow tw2 = slot2.getTimeWindow();
-		final int earliestArrivalTime = tw1.getStart()
-		+ elementDurationProvider.getElementDuration(first, resource)
-		+ travelTime;
+		final int earliestArrivalTime = tw1.getStart() + elementDurationProvider.getElementDuration(first, resource) + travelTime;
 
-		final int latestAllowableTime = tw2.getEnd()
-			+ maxLateness;
-		return "Excessive lateness : "
-			+ slot1.getPort().getName() +" to " + slot2.getPort().getName() + " = " + distance + ", but "+
-			" start of first tw = " + tw1.getStart() + " and end of second = " + tw2.getEnd();
+		final int latestAllowableTime = tw2.getEnd() + maxLateness;
+		return "Excessive lateness : " + slot1.getPort().getName() + " to " + slot2.getPort().getName() + " = " + distance + ", but " + " start of first tw = " + tw1.getStart()
+				+ " and end of second = " + tw2.getEnd();
 	}
 
 	public int getMaxLateness() {
 		return maxLateness;
 	}
 
-	public void setMaxLateness(int maxLateness) {
+	public void setMaxLateness(final int maxLateness) {
 		this.maxLateness = maxLateness;
 	}
-	
-	
 
 }

@@ -11,11 +11,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  * {@link IScheduledEvent} defining a visit to a {@link IPort}.
  * 
  * @author Simon Goodall
- * 
- * @param <T>
- *            Sequence element type
  */
-public interface IPortVisitEvent<T> extends IScheduledEvent<T> {
+public interface IPortVisitEvent extends IScheduledEvent {
 
 	/**
 	 * Returns the {@link IPortSlot} being visited.

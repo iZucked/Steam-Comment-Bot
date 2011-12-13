@@ -20,9 +20,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 /**
  * Computes sales price with netbacks.
  * 
- * Netback purchase price = actual sales price - (real transportation costs from
- * laden leg + notional transport cost from return ballast leg) - margin per
- * mmbtu
+ * Netback purchase price = actual sales price - (real transportation costs from laden leg + notional transport cost from return ballast leg) - margin per mmbtu
  * 
  * @author hinton
  * 
@@ -48,8 +46,7 @@ public class NetbackContract implements ILoadPriceCalculator2 {
 		this.distanceProvider = distanceProvider;
 	}
 
-	public NetbackContract(int marginScaled,
-			final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
+	public NetbackContract(int marginScaled, final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
 		super();
 		setMarginScaled(marginScaled);
 		setDistanceProvider(distanceProvider);
@@ -72,11 +69,10 @@ public class NetbackContract implements ILoadPriceCalculator2 {
 
 	}
 
-
 	@Override
 	public int calculateLoadUnitPrice(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int salesPrice, int loadVolume, IVesselClass vesselClass, VoyagePlan plan) {
-		final VoyageDetails<?> ladenLeg = (VoyageDetails<?>) plan.getSequence()[1];
-		final VoyageDetails<?> ballastLeg = (VoyageDetails<?>) plan.getSequence()[3];
+		final VoyageDetails ladenLeg = (VoyageDetails) plan.getSequence()[1];
+//		final VoyageDetails ballastLeg = (VoyageDetails) plan.getSequence()[3];
 
 		// get transportation costs
 		// suez cost

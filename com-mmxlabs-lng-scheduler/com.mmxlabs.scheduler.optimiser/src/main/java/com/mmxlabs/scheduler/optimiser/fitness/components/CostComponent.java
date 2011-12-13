@@ -19,33 +19,26 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
 /**
  * 
- * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness
- * based on lateness.
+ * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness based on lateness.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class CostComponent<T> extends
-		AbstractPerRouteSchedulerFitnessComponent<T> implements
-		IFitnessComponent<T> {
+public final class CostComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
 
 	// private final List<FuelComponent> fuelComponents;
 	private final FuelComponent[] fuelComponents;
 	private final FuelUnit[] defaultUnits;
 	private final int fuelComponentCount;
 
-	public CostComponent(final String name,
-			final List<FuelComponent> fuelComponents,
-			final CargoSchedulerFitnessCore<T> core) {
+	public CostComponent(final String name, final List<FuelComponent> fuelComponents, final CargoSchedulerFitnessCore core) {
 		super(name, core);
 		// this.fuelComponents = fuelComponents;
 		this.fuelComponentCount = fuelComponents.size();
 		this.fuelComponents = new FuelComponent[fuelComponentCount];
 		this.defaultUnits = new FuelUnit[fuelComponentCount];
 		int i = 0;
-		for (FuelComponent fc : fuelComponents) {
+		for (final FuelComponent fc : fuelComponents) {
 			this.fuelComponents[i] = fc;
 			this.defaultUnits[i++] = fc.getDefaultFuelUnit();
 		}
@@ -56,8 +49,10 @@ public final class CostComponent<T> extends
 	}
 
 	private long accumulator;
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyStartSequence(com.mmxlabs.optimiser.core.IResource)
 	 */
 	@Override
@@ -66,31 +61,32 @@ public final class CostComponent<T> extends
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyEvaluateObject(java.lang.Object, int)
 	 */
 	@Override
-	protected boolean reallyEvaluateObject(Object object, int time) {
+	protected boolean reallyEvaluateObject(final Object object, final int time) {
 		if (object instanceof VoyageDetails) {
-			@SuppressWarnings("unchecked")
-			final VoyageDetails<T> detail = (VoyageDetails<T>) object;
+			final VoyageDetails detail = (VoyageDetails) object;
 
 			for (int i = 0; i < fuelComponentCount; i++) {
 				final FuelComponent fuel = fuelComponents[i];
 				final FuelUnit defaultFuelUnit = defaultUnits[i];
-				final long consumption = detail.getFuelConsumption(fuel,
-						defaultFuelUnit);
-				final long fuelCost = Calculator.costFromConsumption(
-						consumption, detail.getFuelUnitPrice(fuel));
+				final long consumption = detail.getFuelConsumption(fuel, defaultFuelUnit);
+				final long fuelCost = Calculator.costFromConsumption(consumption, detail.getFuelUnitPrice(fuel));
 
-//				addDiscountedValue(time, fuelCost);
+				// addDiscountedValue(time, fuelCost);
 				accumulator += getDiscountedValue(time, fuelCost);
 			}
 		}
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#endSequenceAndGetCost()
 	 */
 	@Override

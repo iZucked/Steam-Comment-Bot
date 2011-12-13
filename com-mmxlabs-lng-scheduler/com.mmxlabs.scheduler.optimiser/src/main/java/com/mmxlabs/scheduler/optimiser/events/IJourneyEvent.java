@@ -14,10 +14,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IJourneyEvent<T> extends IScheduledEvent<T> {
+public interface IJourneyEvent extends IScheduledEvent {
 
 	/**
 	 * Returns the originating {@link IPort} for this journey.

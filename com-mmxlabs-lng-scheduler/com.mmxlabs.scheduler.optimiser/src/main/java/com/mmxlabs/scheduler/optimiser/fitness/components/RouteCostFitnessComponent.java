@@ -14,36 +14,30 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
-public class RouteCostFitnessComponent<T> extends
-		AbstractPerRouteSchedulerFitnessComponent<T> {
+public class RouteCostFitnessComponent extends AbstractPerRouteSchedulerFitnessComponent {
 
 	private IRouteCostProvider routeCostProvider;
 	private IVesselProvider vesselProvider;
 	private final String routePriceProviderKey;
 	private final String vesselProviderKey;
 
-	public RouteCostFitnessComponent(
-			final String name, 
-			final String routePriceProviderKey, final String vesselProviderKey,
-			final CargoSchedulerFitnessCore<T> core) {
+	public RouteCostFitnessComponent(final String name, final String routePriceProviderKey, final String vesselProviderKey, final CargoSchedulerFitnessCore core) {
 		super(name, core);
 		this.routePriceProviderKey = routePriceProviderKey;
 		this.vesselProviderKey = vesselProviderKey;
 	}
 
 	@Override
-	public void init(IOptimisationData<T> data) {
-		setRouteCostProvider(data.getDataComponentProvider(
-				routePriceProviderKey, IRouteCostProvider.class));
-		setVesselProvider(data.getDataComponentProvider(vesselProviderKey,
-				IVesselProvider.class));
+	public void init(final IOptimisationData data) {
+		setRouteCostProvider(data.getDataComponentProvider(routePriceProviderKey, IRouteCostProvider.class));
+		setVesselProvider(data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class));
 	}
 
 	public IRouteCostProvider getRouteCostProvider() {
 		return routeCostProvider;
 	}
 
-	public void setRouteCostProvider(IRouteCostProvider routePriceProvider) {
+	public void setRouteCostProvider(final IRouteCostProvider routePriceProvider) {
 		this.routeCostProvider = routePriceProvider;
 	}
 
@@ -51,14 +45,16 @@ public class RouteCostFitnessComponent<T> extends
 		return vesselProvider;
 	}
 
-	public void setVesselProvider(IVesselProvider vesselProvider) {
+	public void setVesselProvider(final IVesselProvider vesselProvider) {
 		this.vesselProvider = vesselProvider;
 	}
-	
+
 	private IVesselClass vesselClass;
 	private long accumulator = 0;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyStartSequence(com.mmxlabs.optimiser.core.IResource)
 	 */
 	@Override
@@ -68,25 +64,27 @@ public class RouteCostFitnessComponent<T> extends
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyEvaluateObject(java.lang.Object, int)
 	 */
 	@Override
 	protected boolean reallyEvaluateObject(final Object obj, final int time) {
 		if (obj instanceof VoyageDetails) {
-			@SuppressWarnings("unchecked")
-			final VoyageDetails<T> details = (VoyageDetails<T>) obj;
+			final VoyageDetails details = (VoyageDetails) obj;
 			final String route = details.getOptions().getRoute();
-			final VesselState vesselState = details.getOptions()
-					.getVesselState();
-//			addDiscountedValue(startTime, 
-//					routeCostProvider.getRouteCost(route, vesselClass, vesselState));
-			accumulator += getDiscountedValue(time,routeCostProvider.getRouteCost(route, vesselClass, vesselState));
+			final VesselState vesselState = details.getOptions().getVesselState();
+			// addDiscountedValue(startTime,
+			// routeCostProvider.getRouteCost(route, vesselClass, vesselState));
+			accumulator += getDiscountedValue(time, routeCostProvider.getRouteCost(route, vesselClass, vesselState));
 		}
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#endSequenceAndGetCost()
 	 */
 	@Override

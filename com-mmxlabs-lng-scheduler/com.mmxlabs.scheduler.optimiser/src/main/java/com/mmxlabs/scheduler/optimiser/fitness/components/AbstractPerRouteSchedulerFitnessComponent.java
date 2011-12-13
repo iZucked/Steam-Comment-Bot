@@ -18,18 +18,18 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public abstract class AbstractPerRouteSchedulerFitnessComponent<T> extends
-		AbstractSchedulerFitnessComponent<T> implements
-		ICargoSchedulerFitnessComponent<T> {
-	private Map<IResource, Long> evaluatedFitnesses = new HashMap<IResource, Long>();
+public abstract class AbstractPerRouteSchedulerFitnessComponent extends
+		AbstractSchedulerFitnessComponent implements
+		ICargoSchedulerFitnessComponent {
+	private final Map<IResource, Long> evaluatedFitnesses = new HashMap<IResource, Long>();
 
-	private Map<IResource, Long> acceptedFitnesses = new HashMap<IResource, Long>();
+	private final Map<IResource, Long> acceptedFitnesses = new HashMap<IResource, Long>();
 
 	private IResource currentResource;
 	private long accumulator = 0;
 
 	public AbstractPerRouteSchedulerFitnessComponent(final String name,
-			final IFitnessCore<T> core) {
+			final IFitnessCore core) {
 		super(name, core);
 	}
 
@@ -63,7 +63,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent<T> extends
 	}
 
 	@Override
-	public boolean nextVoyagePlan(VoyagePlan voyagePlan, int time) {
+	public boolean nextVoyagePlan(final VoyagePlan voyagePlan, final int time) {
 		if (currentResource != null) {
 			return reallyEvaluateVoyagePlan(voyagePlan, time);
 		} else {
@@ -79,7 +79,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent<T> extends
 	 * @param time
 	 * @return
 	 */
-	protected boolean reallyEvaluateVoyagePlan(VoyagePlan voyagePlan, int time) {
+	protected boolean reallyEvaluateVoyagePlan(final VoyagePlan voyagePlan, final int time) {
 		return true;
 	}
 
@@ -158,7 +158,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent<T> extends
 	 * {@link SchedulerConstants#G_AI_fitnessPerRoute}
 	 */
 	@Override
-	public void endEvaluationAndAnnotate(final IAnnotatedSolution<T> solution) {
+	public void endEvaluationAndAnnotate(final IAnnotatedSolution solution) {
 		super.endEvaluationAndAnnotate(solution);
 		setLastEvaluatedFitness(accumulator);
 		@SuppressWarnings("unchecked")

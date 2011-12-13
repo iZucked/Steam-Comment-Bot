@@ -11,11 +11,9 @@ import com.mmxlabs.scheduler.optimiser.events.IDischargeEvent;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class DischargeEventImpl<T> extends PortVisitEventImpl<T> implements
-		IDischargeEvent<T> {
+public final class DischargeEventImpl extends PortVisitEventImpl implements
+		IDischargeEvent {
 
 	private long dischargeVolume;
 	private long salesPrice;

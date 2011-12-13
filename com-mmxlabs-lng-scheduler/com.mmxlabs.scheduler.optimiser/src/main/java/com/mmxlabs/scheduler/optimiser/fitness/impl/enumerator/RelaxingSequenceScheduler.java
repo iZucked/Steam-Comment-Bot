@@ -21,17 +21,14 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
  * 
  * @author hinton
  * 
- * @param <T>
  */
-public class RelaxingSequenceScheduler<T> extends
-		EnumeratingSequenceScheduler<T> {
-	private static final Logger log = LoggerFactory
-			.getLogger(RelaxingSequenceScheduler.class);
+public class RelaxingSequenceScheduler extends EnumeratingSequenceScheduler {
+	private static final Logger log = LoggerFactory.getLogger(RelaxingSequenceScheduler.class);
 
 	final int steps = 20;
-	
+
 	@Override
-	public ScheduledSequences schedule(final ISequences<T> sequences, final boolean forExport) {
+	public ScheduledSequences schedule(final ISequences sequences, final boolean forExport) {
 		setSequences(sequences);
 		resetBest();
 		prepare2();
@@ -49,11 +46,11 @@ public class RelaxingSequenceScheduler<T> extends
 	private void relax(final int seq, final int pos) {
 		final int min = arrivalTimes[seq][pos];
 		final int max = getMaxArrivalTime(seq, pos);
-//		log.debug("relax(" + seq + ", " + pos + "), time between " + min
-//				+ ",  " + max);
+		// log.debug("relax(" + seq + ", " + pos + "), time between " + min
+		// + ",  " + max);
 		int lastArrivalTime;
 		for (int step = 0; step < steps; step++) {
-			final int i = min + 1 + (step * (max - min+1))/steps;
+			final int i = min + 1 + (step * (max - min + 1)) / steps;
 			lastArrivalTime = arrivalTimes[seq][pos];
 			arrivalTimes[seq][pos] = i;
 			int next;
@@ -69,12 +66,11 @@ public class RelaxingSequenceScheduler<T> extends
 			if (prevValue <= getLastValue() && prevValue != Long.MAX_VALUE) {
 				// roll back change
 				arrivalTimes[seq][pos] = lastArrivalTime;
-				for (int fix = pos; fix < next
-						&& fix < arrivalTimes[seq].length; fix++) {
+				for (int fix = pos; fix < next && fix < arrivalTimes[seq].length; fix++) {
 					arrivalTimes[seq][fix] = getMinArrivalTime(seq, fix);
 				}
 				evaluate();
-//				log.debug("relaxed to " + (i - 1));
+				// log.debug("relaxed to " + (i - 1));
 				return;
 			}
 		}

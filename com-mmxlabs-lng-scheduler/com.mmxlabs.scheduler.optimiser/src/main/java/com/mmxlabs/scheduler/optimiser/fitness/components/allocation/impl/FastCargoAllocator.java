@@ -39,7 +39,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public class FastCargoAllocator<T> extends BaseCargoAllocator<T> {
+public class FastCargoAllocator extends BaseCargoAllocator {
 	final Map<IPortSlot, Integer> volumeConstraintMap = new HashMap<IPortSlot, Integer>();
 	final ArrayList<Long> initialConstraintValues = new ArrayList<Long>();
 
@@ -55,9 +55,9 @@ public class FastCargoAllocator<T> extends BaseCargoAllocator<T> {
 	}
 
 	@Override
-	public void addCargo(final VoyagePlan plan, PortDetails loadDetails, VoyageDetails ladenLeg,
-			PortDetails dischargeDetails, VoyageDetails ballastLeg, int loadTime, int dischargeTime,
-			long requiredLoadVolume, IVesselClass vesselClass) {
+	public void addCargo(final VoyagePlan plan, final PortDetails loadDetails, final VoyageDetails ladenLeg,
+			final PortDetails dischargeDetails, final VoyageDetails ballastLeg, final int loadTime, final int dischargeTime,
+			final long requiredLoadVolume, final IVesselClass vesselClass) {
 		super.addCargo(plan, loadDetails, ladenLeg, dischargeDetails, ballastLeg, loadTime, dischargeTime,
 				requiredLoadVolume, vesselClass);
 
@@ -78,7 +78,7 @@ public class FastCargoAllocator<T> extends BaseCargoAllocator<T> {
 			variables[i] = i;
 		final Comparator<Integer> comparator = new Comparator<Integer>() {
 			@Override
-			public int compare(Integer arg0, Integer arg1) {
+			public int compare(final Integer arg0, final Integer arg1) {
 				final double d0 = unitPrices.get(arg0);
 				final double d1 = unitPrices.get(arg1);
 

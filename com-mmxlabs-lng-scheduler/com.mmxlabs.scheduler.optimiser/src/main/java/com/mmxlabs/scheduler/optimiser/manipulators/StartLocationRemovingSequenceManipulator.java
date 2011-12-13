@@ -14,29 +14,25 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 
 /**
- * A sequence manipulator for removing the dummy start location from spot charter vessels.
- * Needs to be told which resources should have their start locations removed.
+ * A sequence manipulator for removing the dummy start location from spot charter vessels. Needs to be told which resources should have their start locations removed.
  * 
  * @author hinton
- *
- * @param <T>
+ * 
+ * @param
  */
-public class StartLocationRemovingSequenceManipulator<T> implements
-		ISequencesManipulator<T> {
-	
-	private final Set<IResource> resourcesToManipulate = 
-		new HashSet<IResource>();
-	
+public class StartLocationRemovingSequenceManipulator implements ISequencesManipulator {
+
+	private final Set<IResource> resourcesToManipulate = new HashSet<IResource>();
+
 	@Override
-	public void manipulate(IModifiableSequences<T> sequences) {
+	public void manipulate(final IModifiableSequences sequences) {
 		// Loop through each sequence in turn and manipulate
-		for (final Map.Entry<IResource, IModifiableSequence<T>> entry : sequences
-				.getModifiableSequences().entrySet()) {
+		for (final Map.Entry<IResource, IModifiableSequence> entry : sequences.getModifiableSequences().entrySet()) {
 			manipulate(entry.getKey(), entry.getValue());
 		}
 	}
 
-	private void manipulate(IResource resource, IModifiableSequence<T> sequence) {
+	private void manipulate(final IResource resource, final IModifiableSequence sequence) {
 		if (getShouldRemoveStartLocation(resource)) {
 			sequence.remove(0);
 		}
@@ -48,20 +44,19 @@ public class StartLocationRemovingSequenceManipulator<T> implements
 	}
 
 	/**
-	 * Set whether the given resource should have its start element removed (typically
-	 * this will be if it is a spot charter vessel).
+	 * Set whether the given resource should have its start element removed (typically this will be if it is a spot charter vessel).
 	 * 
 	 * @param resource
-	 * @param shouldRemoveStartLocation if true, start location will be removed, otherwise not.
+	 * @param shouldRemoveStartLocation
+	 *            if true, start location will be removed, otherwise not.
 	 */
-	public void setShouldRemoveStartLocation(final IResource resource,
-			final boolean shouldRemoveStartLocation) {
+	public void setShouldRemoveStartLocation(final IResource resource, final boolean shouldRemoveStartLocation) {
 		if (shouldRemoveStartLocation)
 			resourcesToManipulate.add(resource);
 		else
 			resourcesToManipulate.remove(resource);
 	}
-	
+
 	public boolean getShouldRemoveStartLocation(final IResource resource) {
 		return resourcesToManipulate.contains(resource);
 	}

@@ -25,8 +25,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public final class RandomSeparatedSequenceScheduler<T> extends
-		SeparatedSequenceScheduler<T> {
+public final class RandomSeparatedSequenceScheduler extends
+		SeparatedSequenceScheduler {
 	// private long randomSeed = 1;
 	// private int maxSamples = 1024;
 	// private int minSamples = 256;
@@ -70,7 +70,7 @@ public final class RandomSeparatedSequenceScheduler<T> extends
 	//
 	// @Override
 	// public Pair<Integer, List<VoyagePlan>> schedule(IResource resource,
-	// ISequence<T> sequence) {
+	// ISequence sequence) {
 	// // reset random seed
 	// random.setSeed(randomSeed);
 	//

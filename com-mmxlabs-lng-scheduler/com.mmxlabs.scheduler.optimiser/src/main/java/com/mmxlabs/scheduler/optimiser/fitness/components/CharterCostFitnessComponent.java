@@ -15,25 +15,20 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
-public class CharterCostFitnessComponent<T> extends
-		AbstractPerRouteSchedulerFitnessComponent<T> implements
-		IFitnessComponent<T> {
+public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
 
 	private IVesselProvider vesselProvider;
 
 	final String vesselProviderKey;
 
-	public CharterCostFitnessComponent(final String name,
-			final String vesselProviderKey,
-			final CargoSchedulerFitnessCore<T> core) {
+	public CharterCostFitnessComponent(final String name, final String vesselProviderKey, final CargoSchedulerFitnessCore core) {
 		super(name, core);
 		this.vesselProviderKey = vesselProviderKey;
 	}
 
 	@Override
-	public void init(final IOptimisationData<T> data) {
-		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey,
-				IVesselProvider.class);
+	public void init(final IOptimisationData data) {
+		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
 	}
 
 	int firstLoadTime = -1;
@@ -44,24 +39,18 @@ public class CharterCostFitnessComponent<T> extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.
-	 * AbstractPerRouteSchedulerFitnessComponent
-	 * #reallyStartSequence(com.mmxlabs.optimiser.core.IResource)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components. AbstractPerRouteSchedulerFitnessComponent #reallyStartSequence(com.mmxlabs.optimiser.core.IResource)
 	 */
 	@Override
 	protected boolean reallyStartSequence(final IResource resource) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
-		if (vessel.getVesselInstanceType().equals(
-				VesselInstanceType.SPOT_CHARTER)
-				|| vessel.getVesselInstanceType().equals(
-						VesselInstanceType.TIME_CHARTER)) {
+		if (vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER) || vessel.getVesselInstanceType().equals(VesselInstanceType.TIME_CHARTER)) {
 			charterPrice = vessel.getVesselClass().getHourlyCharterInPrice();
 			firstLoadTime = -1;
 			lastTime = -1;
 
-			if (vessel.getVesselInstanceType().equals(
-					VesselInstanceType.SPOT_CHARTER)) {
+			if (vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
 				loadPortType = PortType.Load;
 			} else {
 				loadPortType = PortType.Start;
@@ -77,9 +66,7 @@ public class CharterCostFitnessComponent<T> extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.
-	 * AbstractPerRouteSchedulerFitnessComponent
-	 * #reallyEvaluateObject(java.lang.Object, int)
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components. AbstractPerRouteSchedulerFitnessComponent #reallyEvaluateObject(java.lang.Object, int)
 	 */
 	@Override
 	protected boolean reallyEvaluateObject(final Object object, final int time) {
@@ -97,16 +84,13 @@ public class CharterCostFitnessComponent<T> extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.
-	 * AbstractPerRouteSchedulerFitnessComponent#endSequenceAndGetCost()
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components. AbstractPerRouteSchedulerFitnessComponent#endSequenceAndGetCost()
 	 */
 	@Override
 	protected long endSequenceAndGetCost() {
 		// addDiscountedValue(firstLoadTime,
 		// Calculator.multiply(lastTime - firstLoadTime, charterPrice));
 
-		return (firstLoadTime == -1 || lastTime == -1) ? 0
-				: getDiscountedValue(firstLoadTime, Calculator.multiply(
-						lastTime - firstLoadTime, charterPrice));
+		return (firstLoadTime == -1 || lastTime == -1) ? 0 : getDiscountedValue(firstLoadTime, Calculator.multiply(lastTime - firstLoadTime, charterPrice));
 	}
 }

@@ -18,45 +18,33 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 
 /**
- * Class to construct an {@link IOptimisationContext} and
- * {@link ILocalSearchOptimiser} using Spring to wire together various beans.
+ * Class to construct an {@link IOptimisationContext} and {@link ILocalSearchOptimiser} using Spring to wire together various beans.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public class SpringOptimisationCreator<T> {
+public class SpringOptimisationCreator {
 
 	private ClassPathXmlApplicationContext context;
 
-	public SpringOptimisationCreator(
-			final IOptimisationData<T> optimisationData,
-			final Properties props, final Map<String, Double> fitnessWeights,
-			final List<String> constraintCheckers,
-			final IOptimiserProgressMonitor<T> monitor) {
+	public SpringOptimisationCreator(final IOptimisationData optimisationData, final Properties props, final Map<String, Double> fitnessWeights, final List<String> constraintCheckers,
+			final IOptimiserProgressMonitor monitor) {
 
 		// Create a parent application context containing the common beans
 		final ClassPathXmlApplicationContext c = new ClassPathXmlApplicationContext();
 		c.setClassLoader(SpringOptimisationCreator.class.getClassLoader());
-		c.setConfigLocations(new String[] { "/constraint-registry.xml",
-				"/fitness-registry.xml" });
+		c.setConfigLocations(new String[] { "/constraint-registry.xml", "/fitness-registry.xml" });
 
 		c.refresh();
 
 		// Create another app context in which we can register our provided
 		// "singletons"
-		final StaticApplicationContext staticContext = new StaticApplicationContext(
-				c);
+		final StaticApplicationContext staticContext = new StaticApplicationContext(c);
 		staticContext.refresh();
-		staticContext.getBeanFactory().registerSingleton("optimisationData",
-				optimisationData);
-		staticContext.getBeanFactory().registerSingleton("fitnessWeights",
-				fitnessWeights);
-		staticContext.getBeanFactory().registerSingleton(
-				"constraintCheckerNames", constraintCheckers);
-		staticContext.getBeanFactory().registerSingleton("progressMonitor",
-				monitor);
+		staticContext.getBeanFactory().registerSingleton("optimisationData", optimisationData);
+		staticContext.getBeanFactory().registerSingleton("fitnessWeights", fitnessWeights);
+		staticContext.getBeanFactory().registerSingleton("constraintCheckerNames", constraintCheckers);
+		staticContext.getBeanFactory().registerSingleton("progressMonitor", monitor);
 
 		// Create final context to instantiate optimisation context and
 		// optimisation itself.
@@ -67,8 +55,7 @@ public class SpringOptimisationCreator<T> {
 		cfg.setProperties(props);
 		context.addBeanFactoryPostProcessor(cfg);
 
-		context.setConfigLocations(new String[] { "/optimiser-context.xml",
-				"/local-search-optimiser.xml" });
+		context.setConfigLocations(new String[] { "/optimiser-context.xml", "/local-search-optimiser.xml" });
 
 		context.refresh();
 	}
@@ -81,20 +68,16 @@ public class SpringOptimisationCreator<T> {
 		// TODO: Destroy other parent contexts too?
 	}
 
-	public ILocalSearchOptimiser<T> getOptimiser() {
+	public ILocalSearchOptimiser getOptimiser() {
 
-		@SuppressWarnings("unchecked")
-		final ILocalSearchOptimiser<T> optimiser = context.getBean("optimiser",
-				ILocalSearchOptimiser.class);
+		final ILocalSearchOptimiser optimiser = context.getBean("optimiser", ILocalSearchOptimiser.class);
 
 		return optimiser;
 	}
 
-	public IOptimisationContext<T> getOptimisationContext() {
+	public IOptimisationContext getOptimisationContext() {
 
-		@SuppressWarnings("unchecked")
-		final IOptimisationContext<T> optContext = context.getBean(
-				"optimisationContext", IOptimisationContext.class);
+		final IOptimisationContext optContext = context.getBean("optimisationContext", IOptimisationContext.class);
 
 		return optContext;
 	}

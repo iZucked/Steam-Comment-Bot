@@ -11,6 +11,7 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
@@ -20,7 +21,7 @@ import com.mmxlabs.optimiser.lso.IMove;
  * @author hinton
  * 
  */
-public class RemoveAndFill<T> implements IMove<T> {
+public class RemoveAndFill implements IMove {
 	final IResource resource1;
 	final IResource resource2;
 
@@ -60,17 +61,17 @@ public class RemoveAndFill<T> implements IMove<T> {
 	 * @see com.mmxlabs.optimiser.lso.IMove#apply(com.mmxlabs.optimiser.core.IModifiableSequences)
 	 */
 	@Override
-	public void apply(final IModifiableSequences<T> sequences) {
+	public void apply(final IModifiableSequences sequences) {
 		// we are going to kill elements 1 and 2
 		// and then put the element before 2 where 1 was
 		// so 2 is the "discharge" and 1 is the "load"
 
-		final IModifiableSequence<T> seq1 = sequences.getModifiableSequence(resource1);
-		final IModifiableSequence<T> seq2 = sequences.getModifiableSequence(resource2);
-		final List<T> spare = sequences.getModifiableUnusedElements();
+		final IModifiableSequence seq1 = sequences.getModifiableSequence(resource1);
+		final IModifiableSequence seq2 = sequences.getModifiableSequence(resource2);
+		final List<ISequenceElement> spare = sequences.getModifiableUnusedElements();
 
-		final T e1 = seq1.get(element1);
-		final T e2 = seq2.get(element2);
+		final ISequenceElement e1 = seq1.get(element1);
+		final ISequenceElement e2 = seq2.get(element2);
 
 		spare.add(e1);
 		spare.add(e2);
@@ -84,7 +85,7 @@ public class RemoveAndFill<T> implements IMove<T> {
 	 * @see com.mmxlabs.optimiser.lso.IMove#validate(com.mmxlabs.optimiser.core.ISequences)
 	 */
 	@Override
-	public boolean validate(ISequences<T> sequences) {
+	public boolean validate(ISequences sequences) {
 		// TODO Auto-generated method stub
 		return false;
 	}

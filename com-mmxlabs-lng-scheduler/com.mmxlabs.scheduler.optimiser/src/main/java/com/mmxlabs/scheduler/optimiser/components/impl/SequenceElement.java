@@ -6,7 +6,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
  * Default implementation of {@link ISequenceElement}.

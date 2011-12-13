@@ -11,25 +11,20 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * A {@link IVoyagePlanAnnotator} uses {@link VoyagePlan}s to annotate
- * {@link IAnnotatedSequence} objects.
+ * A {@link IVoyagePlanAnnotator} uses {@link VoyagePlan}s to annotate {@link IAnnotatedSequence} objects.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IVoyagePlanAnnotator<T> {
+public interface IVoyagePlanAnnotator {
 
 	/**
-	 * Annotate the {@link IAnnotatedSequence} from the list of
-	 * {@link VoyagePlan} objects.
+	 * Annotate the {@link IAnnotatedSequence} from the list of {@link VoyagePlan} objects.
 	 * 
 	 * @param resource
 	 * @param plans
 	 * @param annotatedSequence
 	 */
-	void annotateFromVoyagePlan(IResource resource, List<VoyagePlan> plans, int startTime,
-			IAnnotatedSolution<T> annotatedSolution);
+	void annotateFromVoyagePlan(IResource resource, List<VoyagePlan> plans, int startTime, IAnnotatedSolution annotatedSolution);
 
 }

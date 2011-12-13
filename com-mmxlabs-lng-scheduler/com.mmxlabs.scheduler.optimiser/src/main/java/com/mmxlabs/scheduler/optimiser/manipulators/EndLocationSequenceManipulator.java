@@ -10,6 +10,7 @@ import java.util.Map;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
@@ -18,22 +19,16 @@ import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * The {@link EndLocationSequenceManipulator} replaces the end location with
- * another location in two possible ways; either the vessel's end location is
- * adjust to be the same as its first load port, or the same as its last load
- * port. These two cases are intended for spot and fleet vessels respectively.
+ * The {@link EndLocationSequenceManipulator} replaces the end location with another location in two possible ways; either the vessel's end location is adjust to be the same as its first load port, or
+ * the same as its last load port. These two cases are intended for spot and fleet vessels respectively.
  * 
- * This class uses an {@link IReturnElementProvider} to get a unique new
- * sequence element for each vessel / port combination. The end element is then
- * swapped out for an appropriate one of these elements.
+ * This class uses an {@link IReturnElementProvider} to get a unique new sequence element for each vessel / port combination. The end element is then swapped out for an appropriate one of these
+ * elements.
  * 
  * @author Simon Goodall, significantly modified by Tom Hinton
  * 
- * @param <T>
- *            Sequence element type.
  */
-public final class EndLocationSequenceManipulator<T> implements
-		ISequencesManipulator<T> {
+public final class EndLocationSequenceManipulator implements ISequencesManipulator {
 	/**
 	 * An enum of the different end location rules that can be applied.
 	 * 
@@ -57,31 +52,29 @@ public final class EndLocationSequenceManipulator<T> implements
 		RETURN_TO_LAST_LOAD,
 	}
 
-	private IPortTypeProvider<T> portTypeProvider;
+	private IPortTypeProvider portTypeProvider;
 
-	private IPortProvider<T> portProvider;
+	private IPortProvider portProvider;
 
 	private final Map<IResource, EndLocationRule> ruleMap = new HashMap<IResource, EndLocationSequenceManipulator.EndLocationRule>();
 
-	private IReturnElementProvider<T> returnElementProvider;
+	private IReturnElementProvider returnElementProvider;
 
 	public EndLocationSequenceManipulator() {
 
 	}
 
 	@Override
-	public void manipulate(final IModifiableSequences<T> sequences) {
+	public void manipulate(final IModifiableSequences sequences) {
 		assert portTypeProvider != null;
 
 		// Loop through each sequence in turn and manipulate
-		for (final Map.Entry<IResource, IModifiableSequence<T>> entry : sequences
-				.getModifiableSequences().entrySet()) {
+		for (final Map.Entry<IResource, IModifiableSequence> entry : sequences.getModifiableSequences().entrySet()) {
 			manipulate(entry.getKey(), entry.getValue());
 		}
 	}
 
-	public void manipulate(final IResource resource,
-			final IModifiableSequence<T> sequence) {
+	public void manipulate(final IResource resource, final IModifiableSequence sequence) {
 
 		final EndLocationRule rule = ruleMap.get(resource);
 		if (rule == null)
@@ -99,17 +92,16 @@ public final class EndLocationSequenceManipulator<T> implements
 	}
 
 	/**
-	 * Find and return the last element in the sequence with {@link PortType}
-	 * PortType.Load
+	 * Find and return the last element in the sequence with {@link PortType} PortType.Load
 	 * 
 	 * @param sequence
 	 */
-	public T getLastLoadElement(final IModifiableSequence<T> sequence) {
+	public ISequenceElement getLastLoadElement(final IModifiableSequence sequence) {
 		/*
 		 * Search for the last load port
 		 */
-		T t = null;
-		for (final T element : sequence) {
+		ISequenceElement t = null;
+		for (final ISequenceElement element : sequence) {
 			final PortType type = portTypeProvider.getPortType(element);
 			// Record last load port
 			if (type == PortType.Load) {
@@ -121,21 +113,18 @@ public final class EndLocationSequenceManipulator<T> implements
 	}
 
 	/**
-	 * Swap the dummy element in for the given sequence, and set its location to
-	 * the given port.
+	 * Swap the dummy element in for the given sequence, and set its location to the given port.
 	 * 
 	 * @param resource
 	 * 
 	 * @param sequence
 	 * @param location
 	 */
-	private final void adjustLastElement(final IResource resource,
-			final IModifiableSequence<T> sequence, final T returnElement) {
+	private final void adjustLastElement(final IResource resource, final IModifiableSequence sequence, final ISequenceElement returnElement) {
 		if (returnElement == null)
 			return;
 		/*
-		 * Look up the port we are returning to, and then set that as the port
-		 * for the dummy element.
+		 * Look up the port we are returning to, and then set that as the port for the dummy element.
 		 */
 		final IPort returnPort = portProvider.getPortForElement(returnElement);
 
@@ -144,19 +133,17 @@ public final class EndLocationSequenceManipulator<T> implements
 		 * 
 		 * TODO consider merging this with the start-end-requirement stuff
 		 */
-		sequence.set(sequence.size() - 1,
-				returnElementProvider.getReturnElement(resource, returnPort));
+		sequence.set(sequence.size() - 1, returnElementProvider.getReturnElement(resource, returnPort));
 	}
 
 	/**
-	 * Find and return the first element in the sequence with {@link PortType}
-	 * PortType.Load
+	 * Find and return the first element in the sequence with {@link PortType} PortType.Load
 	 * 
 	 * @param sequence
 	 */
-	public T getFirstLoadElement(final IModifiableSequence<T> sequence) {
-		T t = null;
-		for (final T element : sequence) {
+	public ISequenceElement getFirstLoadElement(final IModifiableSequence sequence) {
+		ISequenceElement t = null;
+		for (final ISequenceElement element : sequence) {
 			final PortType type = portTypeProvider.getPortType(element);
 			// Record first load port
 			if (type == PortType.Load) {
@@ -167,11 +154,11 @@ public final class EndLocationSequenceManipulator<T> implements
 		return t;
 	}
 
-	public IPortTypeProvider<T> getPortTypeProvider() {
+	public IPortTypeProvider getPortTypeProvider() {
 		return portTypeProvider;
 	}
 
-	public void setPortTypeProvider(final IPortTypeProvider<T> portTypeProvider) {
+	public void setPortTypeProvider(final IPortTypeProvider portTypeProvider) {
 		this.portTypeProvider = portTypeProvider;
 	}
 
@@ -183,12 +170,11 @@ public final class EndLocationSequenceManipulator<T> implements
 		this.portProvider = portProvider;
 	}
 
-	public IReturnElementProvider<T> getReturnElementProvider() {
+	public IReturnElementProvider getReturnElementProvider() {
 		return returnElementProvider;
 	}
 
-	public void setReturnElementProvider(
-			IReturnElementProvider<T> returnElementProvider) {
+	public void setReturnElementProvider(IReturnElementProvider returnElementProvider) {
 		this.returnElementProvider = returnElementProvider;
 	}
 
@@ -198,14 +184,12 @@ public final class EndLocationSequenceManipulator<T> implements
 	 * @param resource
 	 * @param rule
 	 */
-	public void setEndLocationRule(final IResource resource,
-			final EndLocationRule rule) {
+	public void setEndLocationRule(final IResource resource, final EndLocationRule rule) {
 		ruleMap.put(resource, rule);
 	}
 
 	/**
-	 * Returns the {@link EndLocationRule} set for this {@link IResource}.
-	 * Returns {@link EndLocationRule#NONE} if nothing has been set.
+	 * Returns the {@link EndLocationRule} set for this {@link IResource}. Returns {@link EndLocationRule#NONE} if nothing has been set.
 	 * 
 	 * @param resource
 	 * @return

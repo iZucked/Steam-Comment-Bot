@@ -25,5 +25,5 @@ public interface IDischargeOption extends IPortSlot {
 	 */
 	long getMaxDischargeVolume();
 
-	<T> IShippingPriceCalculator<T> getDischargePriceCalculator();
+	IShippingPriceCalculator getDischargePriceCalculator();
 }

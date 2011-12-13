@@ -7,60 +7,54 @@ package com.mmxlabs.scheduler.optimiser.lso;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
- * A utility class for testing whether pairs of sequence elements can be scheduled next to one another.
- * Typical usage is to construct it with some context and then call {@code allowSequence(e1, e2)} to determine if e1 can follow e2.
+ * A utility class for testing whether pairs of sequence elements can be scheduled next to one another. Typical usage is to construct it with some context and then call {@code allowSequence(e1, e2)}
+ * to determine if e1 can follow e2.
+ * 
  * @author hinton
- *
+ * 
  */
-public class LegalSequencingChecker<T> {
-	private List<IPairwiseConstraintChecker<T>> pairwiseCheckers;
-	private List<IResource> resources;
-	
-	public LegalSequencingChecker(IOptimisationContext<T> context) {
-		this(context.getOptimisationData(), createPairwiseCheckers(context));			
+public class LegalSequencingChecker {
+	private final List<IPairwiseConstraintChecker> pairwiseCheckers;
+	private final List<IResource> resources;
+
+	public LegalSequencingChecker(final IOptimisationContext context) {
+		this(context.getOptimisationData(), createPairwiseCheckers(context));
 	}
-	
+
 	/**
 	 * Utility method to get the pairwise checkers which are enabled in the given context
-	 * @param <T>
+	 * 
+	 * @param
 	 * @param context
 	 * @return
 	 */
-	private static <T> List<IPairwiseConstraintChecker<T>> createPairwiseCheckers(
-			IOptimisationContext<T> context) {
-		
-		ArrayList<IPairwiseConstraintChecker<T>> pairwiseCheckers = new ArrayList<IPairwiseConstraintChecker<T>>();
-		
-		for (final IConstraintCheckerFactory factory : context.getConstraintCheckerRegistry().
-				getConstraintCheckerFactories(context.getConstraintCheckers())) {
-			IConstraintChecker<T> checker = factory.instantiate();
+	private static List<IPairwiseConstraintChecker> createPairwiseCheckers(final IOptimisationContext context) {
+
+		final ArrayList<IPairwiseConstraintChecker> pairwiseCheckers = new ArrayList<IPairwiseConstraintChecker>();
+
+		for (final IConstraintCheckerFactory factory : context.getConstraintCheckerRegistry().getConstraintCheckerFactories(context.getConstraintCheckers())) {
+			final IConstraintChecker checker = factory.instantiate();
 			if (checker instanceof IPairwiseConstraintChecker) {
-				pairwiseCheckers.add((IPairwiseConstraintChecker<T>) checker);
+				pairwiseCheckers.add((IPairwiseConstraintChecker) checker);
 			}
 		}
-		
+
 		return pairwiseCheckers;
 	}
 
-	@SuppressWarnings("unchecked")
-	public LegalSequencingChecker(IOptimisationData<T> data, List<IPairwiseConstraintChecker<T>> pairwiseCheckers) {
+	public LegalSequencingChecker(final IOptimisationData data, final List<IPairwiseConstraintChecker> pairwiseCheckers) {
 		this.pairwiseCheckers = pairwiseCheckers;
-		for (IPairwiseConstraintChecker<T> pairwiseChecker : pairwiseCheckers) {
+		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			pairwiseChecker.setOptimisationData(data);
 		}
 		this.resources = data.getResources();
@@ -68,45 +62,47 @@ public class LegalSequencingChecker<T> {
 
 	/**
 	 * Compute whether element1 should ever be sequenced preceding element2
+	 * 
 	 * @param e1
 	 * @param e2
 	 * @return
 	 */
-	public boolean allowSequence(T e1, T e2, IResource resource) {
+	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
 		// Check with hard constraints like resource allocation and ordered elements
-		for (IPairwiseConstraintChecker<T> pairwiseChecker : pairwiseCheckers) {
+		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource)) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
-	public List<String> getSequencingProblems(T e1, T e2, IResource resource) {
-		List<String> result = new ArrayList<String>();
-		
-		for (IPairwiseConstraintChecker<T> pairwiseChecker : pairwiseCheckers) {
+
+	public List<String> getSequencingProblems(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
+		final List<String> result = new ArrayList<String>();
+
+		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource)) {
 				result.add(pairwiseChecker.getName() + " says " + pairwiseChecker.explain(e1, e2, resource));
 			}
 		}
-		
+
 		return result;
 	}
 
-	public boolean allowSequence(T e1, T e2) {
-		for (IResource r : resources) {
-			if (allowSequence(e1, e2, r)) return true;
+	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2) {
+		for (final IResource r : resources) {
+			if (allowSequence(e1, e2, r))
+				return true;
 		}
 		return false;
 	}
-	
+
 	// TODO quick hack to try something
 	public void disallowLateness() {
-		for (final IPairwiseConstraintChecker<T> checker : pairwiseCheckers) {
+		for (final IPairwiseConstraintChecker checker : pairwiseCheckers) {
 			if (checker instanceof TravelTimeConstraintChecker) {
-				final TravelTimeConstraintChecker<T> tt = (TravelTimeConstraintChecker<T>) checker;
+				final TravelTimeConstraintChecker tt = (TravelTimeConstraintChecker) checker;
 				tt.setMaxLateness(0);
 			}
 		}

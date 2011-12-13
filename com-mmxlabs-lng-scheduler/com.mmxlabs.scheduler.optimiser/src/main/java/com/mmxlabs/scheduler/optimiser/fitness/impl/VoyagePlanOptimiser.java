@@ -28,10 +28,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
+public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private static final Logger log = LoggerFactory.getLogger(VoyagePlanOptimiser.class);
 
@@ -50,9 +48,9 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	 */
 	private boolean bestPlanFitsInAvailableTime = false;
 
-	private final ILNGVoyageCalculator<T> voyageCalculator;
+	private final ILNGVoyageCalculator voyageCalculator;
 
-	public VoyagePlanOptimiser(final ILNGVoyageCalculator<T> voyageCalculator) {
+	public VoyagePlanOptimiser(final ILNGVoyageCalculator voyageCalculator) {
 		this.voyageCalculator = voyageCalculator;
 	}
 
@@ -198,7 +196,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 
 					long currentCost = evaluatePlan(currentPlan);
 
-					long hireCost = Calculator.multiply(hireRate, lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
+					final long hireCost = Calculator.multiply(hireRate, lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
 					currentCost += hireCost;
 
 					if (currentCost < bestLastLegCost) {
@@ -242,7 +240,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		} else {
 			for (final Object obj : currentPlan.getSequence()) {
 				if (obj instanceof VoyageDetails) {
-					final VoyageDetails<T> details = (VoyageDetails<T>) obj;
+					final VoyageDetails details = (VoyageDetails) obj;
 
 					if ((details.getTravelTime() + details.getIdleTime()) > details.getOptions().getAvailableTime()) {
 						// this plan is bad. If the old plan was not bad, we
@@ -260,7 +258,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 		if (currentPlan != null &&
 		// this plan is valid, but the other is not, who cares about cost
 				((currentPlanFitsInAvailableTime && !bestPlanFitsInAvailableTime) ||
-		// this plan is valid, or the other is not, and it's cheaper
+				// this plan is valid, or the other is not, and it's cheaper
 				((currentPlanFitsInAvailableTime || !bestPlanFitsInAvailableTime) && (cost < bestCost)))) {
 			bestPlanFitsInAvailableTime = currentPlanFitsInAvailableTime;
 			bestCost = cost;
@@ -272,8 +270,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			// cloned ones.
 			for (final Object obj : bestPlan.getSequence()) {
 				if (obj instanceof VoyageDetails) {
-					@SuppressWarnings("unchecked")
-					final VoyageDetails<T> details = (VoyageDetails<T>) obj;
+					final VoyageDetails details = (VoyageDetails) obj;
 					// Skip cast check as we created the object in the first
 					// place
 					final VoyageOptions options = details.getOptions();
@@ -341,7 +338,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 			if (element instanceof VoyageOptions) {
 				final VoyageOptions options = (VoyageOptions) element;
 
-				final VoyageDetails<T> voyageDetails = new VoyageDetails<T>();
+				final VoyageDetails voyageDetails = new VoyageDetails();
 				voyageDetails.setOptions(options);
 				// Calculate voyage cost
 				voyageCalculator.calculateVoyageFuelRequirements(options, voyageDetails);
@@ -437,7 +434,7 @@ public final class VoyagePlanOptimiser<T> implements IVoyagePlanOptimiser<T> {
 	 * @return
 	 */
 	@Override
-	public ILNGVoyageCalculator<T> getVoyageCalculator() {
+	public ILNGVoyageCalculator getVoyageCalculator() {
 		return voyageCalculator;
 	}
 

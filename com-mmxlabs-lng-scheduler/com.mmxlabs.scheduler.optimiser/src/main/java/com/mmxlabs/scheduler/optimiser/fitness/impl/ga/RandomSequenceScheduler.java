@@ -28,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  *
  * @param <T>
  */
-public class RandomSequenceScheduler<T>  { //extends AbstractSequenceScheduler<T> {
+public class RandomSequenceScheduler  { //extends AbstractSequenceScheduler {
 //	/**
 //	 * For every byte in the individual, we will sample this many random cases
 //	 */

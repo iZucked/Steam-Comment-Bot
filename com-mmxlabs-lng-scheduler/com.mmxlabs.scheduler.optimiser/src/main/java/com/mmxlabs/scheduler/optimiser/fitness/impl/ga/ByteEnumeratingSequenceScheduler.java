@@ -19,23 +19,23 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @author hinton
  *
- * @param <T>
+ * @param 
  */
-public class ByteEnumeratingSequenceScheduler<T> { //extends AbstractSequenceScheduler<T> {
+public class ByteEnumeratingSequenceScheduler { //extends AbstractSequenceScheduler {
 //
-//	IndividualEvaluator<T> individualEvaluator;
+//	IndividualEvaluator individualEvaluator;
 //	
-//	public IndividualEvaluator<T> getIndividualEvaluator() {
+//	public IndividualEvaluator getIndividualEvaluator() {
 //		return individualEvaluator;
 //	}
 //
-//	public void setIndividualEvaluator(IndividualEvaluator<T> individualEvaluator) {
+//	public void setIndividualEvaluator(IndividualEvaluator individualEvaluator) {
 //		this.individualEvaluator = individualEvaluator;
 //	}
 //
 //	@Override
 //	public Pair<Integer, List<VoyagePlan>> schedule(IResource resource,
-//			ISequence<T> sequence) {
+//			ISequence sequence) {
 //		final int bytes = individualEvaluator.setup(resource, sequence);
 //		
 //		byte[] array = new byte[bytes];

@@ -16,10 +16,10 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
  * @author hinton
  * 
  */
-public class HashSetCalculatorProviderEditor<T> implements ICalculatorProviderEditor<T> {
+public class HashSetCalculatorProviderEditor implements ICalculatorProviderEditor {
 	private final String name;
 	private final LinkedHashSet<ILoadPriceCalculator2> loadPriceCalculators = new LinkedHashSet<ILoadPriceCalculator2>();
-	private final LinkedHashSet<IShippingPriceCalculator<T>> shippingPriceCalculators = new LinkedHashSet<IShippingPriceCalculator<T>>();
+	private final LinkedHashSet<IShippingPriceCalculator> shippingPriceCalculators = new LinkedHashSet<IShippingPriceCalculator>();
 
 	public HashSetCalculatorProviderEditor(final String name) {
 		this.name = name;
@@ -36,7 +36,7 @@ public class HashSetCalculatorProviderEditor<T> implements ICalculatorProviderEd
 	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider#getShippingPriceCalculators()
 	 */
 	@Override
-	public Collection<IShippingPriceCalculator<T>> getShippingPriceCalculators() {
+	public Collection<IShippingPriceCalculator> getShippingPriceCalculators() {
 		return Collections.unmodifiableSet(shippingPriceCalculators);
 	}
 
@@ -62,7 +62,7 @@ public class HashSetCalculatorProviderEditor<T> implements ICalculatorProviderEd
 	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor#addLoadPriceCalculator(com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2)
 	 */
 	@Override
-	public void addLoadPriceCalculator(ILoadPriceCalculator2 calculator) {
+	public void addLoadPriceCalculator(final ILoadPriceCalculator2 calculator) {
 		if (calculator != null)
 			loadPriceCalculators.add(calculator);
 	}
@@ -73,7 +73,7 @@ public class HashSetCalculatorProviderEditor<T> implements ICalculatorProviderEd
 	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor#addShippingPriceCalculator(com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator)
 	 */
 	@Override
-	public void addShippingPriceCalculator(IShippingPriceCalculator<T> calculator) {
+	public void addShippingPriceCalculator(final IShippingPriceCalculator calculator) {
 		if (calculator != null)
 			shippingPriceCalculators.add(calculator);
 	}

@@ -23,7 +23,7 @@ public class IdleEventImplTest {
 	@Test
 	public void testGetSetPort() {
 
-		final IdleEventImpl<Object> event = new IdleEventImpl<Object>();
+		final IdleEventImpl event = new IdleEventImpl();
 		Assert.assertNull(event.getPort());
 		final IPort port = context.mock(IPort.class);
 		event.setPort(port);
@@ -38,7 +38,7 @@ public class IdleEventImplTest {
 		final FuelUnit u2 = FuelUnit.M3;
 
 		final long value = 100l;
-		final IdleEventImpl<Object> details = new IdleEventImpl<Object>();
+		final IdleEventImpl details = new IdleEventImpl();
 		Assert.assertEquals(0, details.getFuelConsumption(c, u));
 		Assert.assertEquals(0, details.getFuelConsumption(c, u2));
 		details.setFuelConsumption(c, u, value);
@@ -51,7 +51,7 @@ public class IdleEventImplTest {
 
 		final FuelComponent c = FuelComponent.Base;
 		final long value = 100l;
-		final IdleEventImpl<Object> details = new IdleEventImpl<Object>();
+		final IdleEventImpl details = new IdleEventImpl();
 		Assert.assertEquals(0, details.getFuelCost(c));
 		details.setFuelCost(c, value);
 		Assert.assertEquals(value, details.getFuelCost(c));

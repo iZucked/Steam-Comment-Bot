@@ -27,7 +27,7 @@ public class VoyageDetailsTest {
 		final FuelUnit u2 = FuelUnit.M3;
 
 		final long value = 100l;
-		final VoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails details = new VoyageDetails();
 		Assert.assertEquals(0, details.getFuelConsumption(c, u));
 		Assert.assertEquals(0, details.getFuelConsumption(c, u2));
 		details.setFuelConsumption(c, u, value);
@@ -38,7 +38,7 @@ public class VoyageDetailsTest {
 	@Test
 	public void testGetSetIdleTime() {
 		final int value = 100;
-		final VoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails details = new VoyageDetails();
 		Assert.assertEquals(0, details.getIdleTime());
 		details.setIdleTime(value);
 		Assert.assertEquals(value, details.getIdleTime());
@@ -49,7 +49,7 @@ public class VoyageDetailsTest {
 
 		final VoyageOptions options = new VoyageOptions();
 
-		final VoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails details = new VoyageDetails();
 		Assert.assertNull(details.getOptions());
 		details.setOptions(options);
 		Assert.assertSame(options, details.getOptions());
@@ -58,7 +58,7 @@ public class VoyageDetailsTest {
 	@Test
 	public void testGetSetSpeed() {
 		final int value = 100;
-		final VoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails details = new VoyageDetails();
 		Assert.assertEquals(0, details.getSpeed());
 		details.setSpeed(value);
 		Assert.assertEquals(value, details.getSpeed());
@@ -67,7 +67,7 @@ public class VoyageDetailsTest {
 	@Test
 	public void testGetSetTravelTime() {
 		final int value = 100;
-		final VoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails details = new VoyageDetails();
 		Assert.assertEquals(0, details.getTravelTime());
 		details.setTravelTime(value);
 		Assert.assertEquals(value, details.getTravelTime());
@@ -80,13 +80,12 @@ public class VoyageDetailsTest {
 
 		final FuelComponent c = FuelComponent.Base;
 		final int value = 100;
-		final VoyageDetails<Object> details = new VoyageDetails<Object>();
+		final VoyageDetails details = new VoyageDetails();
 		Assert.assertEquals(0, details.getFuelUnitPrice(c));
 		details.setFuelUnitPrice(c, value);
 		Assert.assertEquals(value, details.getFuelUnitPrice(c));
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Test
 	public void testEquals() {
 
@@ -140,12 +139,12 @@ public class VoyageDetailsTest {
 		Assert.assertFalse(details1.equals(new Object()));
 	}
 
-	<T> VoyageDetails<T> make(final int idleTime, final int travelTime,
+	 VoyageDetails make(final int idleTime, final int travelTime,
 			final int speed,  final VoyageOptions options,
 			final FuelComponent fuel, final FuelUnit unit,
 			final long consumption, final int unitPrice) {
 
-		final VoyageDetails<T> d = new VoyageDetails<T>();
+		final VoyageDetails d = new VoyageDetails();
 
 		d.setIdleTime(idleTime);
 		d.setTravelTime(travelTime);

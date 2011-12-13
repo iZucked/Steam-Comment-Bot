@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -85,7 +84,7 @@ public class SchedulerBuilderTest {
 		final IPort port = context.mock(IPort.class);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		final IShippingPriceCalculator<ISequenceElement> curve = context.mock(IShippingPriceCalculator.class);
+		final IShippingPriceCalculator curve = context.mock(IShippingPriceCalculator.class);
 
 		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0, false);
 	}
@@ -98,7 +97,7 @@ public class SchedulerBuilderTest {
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = context.mock(ITimeWindow.class);
 
-		final IShippingPriceCalculator<ISequenceElement> curve = context.mock(IShippingPriceCalculator.class);
+		final IShippingPriceCalculator curve = context.mock(IShippingPriceCalculator.class);
 
 		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0, false);
 	}
@@ -117,7 +116,7 @@ public class SchedulerBuilderTest {
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		final IShippingPriceCalculator<ISequenceElement> curve = context.mock(IShippingPriceCalculator.class);
+		final IShippingPriceCalculator curve = context.mock(IShippingPriceCalculator.class);
 
 		final ILoadSlot loadSlot = context.mock(ILoadSlot.class);
 

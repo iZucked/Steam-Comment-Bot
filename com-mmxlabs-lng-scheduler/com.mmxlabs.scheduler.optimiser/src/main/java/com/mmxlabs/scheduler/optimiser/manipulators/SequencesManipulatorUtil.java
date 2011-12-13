@@ -24,77 +24,52 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  */
 public class SequencesManipulatorUtil {
 	/**
-	 * Create the default set of sequence manipulators for the given
-	 * optimisation data
+	 * Create the default set of sequence manipulators for the given optimisation data
 	 * 
 	 * @return
 	 */
-	public static <T> ChainedSequencesManipulator<T> createDefaultSequenceManipulators(
-			final IOptimisationData<T> data) {
+	public static ChainedSequencesManipulator createDefaultSequenceManipulators(final IOptimisationData data) {
 
 		/**
-		 * A chained manipulator, because we need two sequence manipulators by
-		 * default
+		 * A chained manipulator, because we need two sequence manipulators by default
 		 */
-		final ChainedSequencesManipulator<T> chainedManipulator = new ChainedSequencesManipulator<T>();
+		final ChainedSequencesManipulator chainedManipulator = new ChainedSequencesManipulator();
 
 		/**
-		 * A start location removing manipulator, to take out spot charter dummy
-		 * start locations
+		 * A start location removing manipulator, to take out spot charter dummy start locations
 		 */
-		final StartLocationRemovingSequenceManipulator<T> startLocationRemover = new StartLocationRemovingSequenceManipulator<T>();
+		final StartLocationRemovingSequenceManipulator startLocationRemover = new StartLocationRemovingSequenceManipulator();
 
 		/**
-		 * An end location sequence manipulator, to return spot charters to
-		 * their first load port
+		 * An end location sequence manipulator, to return spot charters to their first load port
 		 */
-		final EndLocationSequenceManipulator<T> endLocationManipulator = new EndLocationSequenceManipulator<T>();
+		final EndLocationSequenceManipulator endLocationManipulator = new EndLocationSequenceManipulator();
 
 		/*
-		 * Set the various DCPs. Some of these are editors, which is dodgy, but
-		 * I can see no other simple way to do this. The alternative is some
-		 * significant adjustment of the mechanism.
+		 * Set the various DCPs. Some of these are editors, which is dodgy, but I can see no other simple way to do this. The alternative is some significant adjustment of the mechanism.
 		 */
 
-		@SuppressWarnings("unchecked")
-		final IPortTypeProvider<T> portTypeProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_portTypeProvider,
-						IPortTypeProvider.class);
+		final IPortTypeProvider portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 
-		final IPortProvider portProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_portProvider, IPortProvider.class);
+		final IPortProvider portProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portProvider, IPortProvider.class);
 
-		@SuppressWarnings("unchecked")
-		final IReturnElementProvider<T> returnElementProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_returnElementProvider,
-						IReturnElementProvider.class);
+		final IReturnElementProvider returnElementProvider = data.getDataComponentProvider(SchedulerConstants.DCP_returnElementProvider, IReturnElementProvider.class);
 
-		@SuppressWarnings("unchecked")
-		final IStartEndRequirementProvider<T> startEndProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_startEndRequirementProvider,
-						IStartEndRequirementProvider.class);
+		final IStartEndRequirementProvider startEndProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
 
 		endLocationManipulator.setPortTypeProvider(portTypeProvider);
 		endLocationManipulator.setReturnElementProvider(returnElementProvider);
 		endLocationManipulator.setPortProvider(portProvider);
 
 		/*
-		 * Set end location rules; charter in vessels return to their first load
-		 * port. Fleet vessels return to their last visited load port.
+		 * Set end location rules; charter in vessels return to their first load port. Fleet vessels return to their last visited load port.
 		 */
-		final IVesselProvider vesselProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 
 		for (final IResource resource : data.getResources()) {
-			if (vesselProvider.getVessel(resource).getVesselInstanceType()
-					.equals(VesselInstanceType.SPOT_CHARTER)) {
-				startLocationRemover.setShouldRemoveStartLocation(resource,
-						true);
-				endLocationManipulator.setEndLocationRule(resource,
-						EndLocationRule.RETURN_TO_FIRST_LOAD);
+			if (vesselProvider.getVessel(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
+				startLocationRemover.setShouldRemoveStartLocation(resource, true);
+				endLocationManipulator.setEndLocationRule(resource, EndLocationRule.RETURN_TO_FIRST_LOAD);
 			} else {
 				// Some fleet vessels will have an existing end location
 				// requirement;
@@ -102,10 +77,8 @@ public class SequencesManipulatorUtil {
 				// however, fleet vessels which do not have an end location requirement
 				// should return to their last load port.
 
-				if (!startEndProvider.getEndRequirement(resource)
-						.hasPortRequirement())
-					endLocationManipulator.setEndLocationRule(resource,
-							EndLocationRule.RETURN_TO_LAST_LOAD);
+				if (!startEndProvider.getEndRequirement(resource).hasPortRequirement())
+					endLocationManipulator.setEndLocationRule(resource, EndLocationRule.RETURN_TO_LAST_LOAD);
 			}
 		}
 

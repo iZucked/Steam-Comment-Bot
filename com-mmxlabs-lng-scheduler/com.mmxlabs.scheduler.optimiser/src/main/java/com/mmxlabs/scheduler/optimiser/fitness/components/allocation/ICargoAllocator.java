@@ -14,15 +14,14 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * 
  * @author hinton
  * 
- * @param <T>
  */
-public interface ICargoAllocator<T> {
+public interface ICargoAllocator {
 	/**
 	 * Set the {@link ITotalVolumeLimitProvider} which informs the allocator of any global constraints on load/discharge volumes
 	 * 
 	 * @param tvlp
 	 */
-	public void setTotalVolumeLimitProvider(ITotalVolumeLimitProvider<T> tvlp);
+	public void setTotalVolumeLimitProvider(ITotalVolumeLimitProvider tvlp);
 
 	public void init();
 

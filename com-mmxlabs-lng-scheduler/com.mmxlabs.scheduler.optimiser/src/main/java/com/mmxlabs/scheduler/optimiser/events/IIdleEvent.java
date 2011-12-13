@@ -14,10 +14,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * 
  * l@author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IIdleEvent<T> extends IScheduledEvent<T> {
+public interface IIdleEvent extends IScheduledEvent {
 
 	/**
 	 * Returns the {@link IPort} at which this idle event occurs.
@@ -42,9 +40,7 @@ public interface IIdleEvent<T> extends IScheduledEvent<T> {
 	long getFuelConsumption(FuelComponent fuel, FuelUnit unit);
 
 	/**
-	 * Returns the total cost of the fuel consumed per {@link FuelComponent}
-	 * during this event.
-	 * TODO: What about making this the unit cost?
+	 * Returns the total cost of the fuel consumed per {@link FuelComponent} during this event. TODO: What about making this the unit cost?
 	 * 
 	 * @param fuel
 	 * @return

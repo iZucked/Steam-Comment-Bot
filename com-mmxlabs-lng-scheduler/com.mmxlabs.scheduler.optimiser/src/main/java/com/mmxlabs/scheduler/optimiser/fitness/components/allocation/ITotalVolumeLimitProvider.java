@@ -14,7 +14,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.BaseCa
  * @author hinton
  * 
  */
-public interface ITotalVolumeLimitProvider<T> extends IDataComponentProvider {
+public interface ITotalVolumeLimitProvider extends IDataComponentProvider {
 	/**
 	 * @return an iterable over the total volume limits in this problem
 	 */

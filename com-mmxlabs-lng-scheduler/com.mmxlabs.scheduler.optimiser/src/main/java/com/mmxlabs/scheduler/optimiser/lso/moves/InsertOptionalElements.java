@@ -12,6 +12,7 @@ import java.util.List;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
@@ -21,12 +22,12 @@ import com.mmxlabs.optimiser.lso.IMove;
  * @author hinton
  * 
  */
-public class InsertOptionalElements<T> implements IMove<T> {
+public class InsertOptionalElements implements IMove {
 	final IResource resource;
 	final int beforeInsertionPoint;
 	final int[] insertedElements;
 
-	public InsertOptionalElements(IResource resource, int beforeInsertionPoint, int[] insertedElements) {
+	public InsertOptionalElements(final IResource resource, final int beforeInsertionPoint, final int[] insertedElements) {
 		super();
 		this.resource = resource;
 		this.beforeInsertionPoint = beforeInsertionPoint;
@@ -39,25 +40,25 @@ public class InsertOptionalElements<T> implements IMove<T> {
 	}
 
 	@Override
-	public void apply(final IModifiableSequences<T> sequences) {
-		final IModifiableSequence<T> sequence = sequences.getModifiableSequence(resource);
-		final List<T> unused = sequences.getModifiableUnusedElements();
+	public void apply(final IModifiableSequences sequences) {
+		final IModifiableSequence sequence = sequences.getModifiableSequence(resource);
+		final List<ISequenceElement> unused = sequences.getModifiableUnusedElements();
 		int k = 1;
-		for (int i : insertedElements) {
+		for (final int i : insertedElements) {
 			sequence.insert(beforeInsertionPoint + k, unused.get(i));
 			k++;
 		}
 
 		Arrays.sort(insertedElements);
 		k = 0;
-		for (int i : insertedElements) {
+		for (final int i : insertedElements) {
 			unused.remove(i - k);
 			k++;
 		}
 	}
 
 	@Override
-	public boolean validate(ISequences<T> sequences) {
+	public boolean validate(final ISequences sequences) {
 		return true;
 	}
 

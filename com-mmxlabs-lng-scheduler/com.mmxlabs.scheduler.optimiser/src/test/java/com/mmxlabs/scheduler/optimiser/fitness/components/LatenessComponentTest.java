@@ -28,8 +28,8 @@ public class LatenessComponentTest {
 	@Test
 	public void testLatenessComponent() {
 		final String name = "name";
-		final CargoSchedulerFitnessCore<Object> core = new CargoSchedulerFitnessCore<Object>();
-		final LatenessComponent<Object> c = new LatenessComponent<Object>(name, core);
+		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore();
+		final LatenessComponent c = new LatenessComponent(name, core);
 
 		Assert.assertSame(name, c.getName());
 		Assert.assertSame(core, c.getFitnessCore());
@@ -39,11 +39,10 @@ public class LatenessComponentTest {
 	public void testInit() {
 
 		final String name = "name";
-		final CargoSchedulerFitnessCore<Object> core = null;
-		final LatenessComponent<Object> c = new LatenessComponent<Object>(name, core);
+		final CargoSchedulerFitnessCore core = null;
+		final LatenessComponent c = new LatenessComponent(name, core);
 
-		@SuppressWarnings("unchecked")
-		final IOptimisationData<Object> data = context.mock(IOptimisationData.class);
+		final IOptimisationData data = context.mock(IOptimisationData.class);
 
 		final String key = "provider-discount-curve";
 		final String componentName = "name";
@@ -85,8 +84,8 @@ public class LatenessComponentTest {
 		final int dischargeLateTime = 1;
 		
 		final String name = "name";
-		final CargoSchedulerFitnessCore<Object> core = null;
-		final LatenessComponent<Object> c = new LatenessComponent<Object>(name, core);
+		final CargoSchedulerFitnessCore core = null;
+		final LatenessComponent c = new LatenessComponent(name, core);
 		c.init(null);
 		
 		// set up time windows from load/discharge end/start times above

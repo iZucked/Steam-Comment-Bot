@@ -17,30 +17,23 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
 /**
- * A fitness component which computes the revenue from charter-outs, and also
- * can generate potential charter-out opportunities if it's configured to do so.
+ * A fitness component which computes the revenue from charter-outs, and also can generate potential charter-out opportunities if it's configured to do so.
  * 
- * TODO Consider details of the charter market; the spot charters might also
- * benefit from this.
+ * TODO Consider details of the charter market; the spot charters might also benefit from this.
  * 
- * TODO export potential charter outs, and hook the settings up to the interface
- * somewhere.
+ * TODO export potential charter outs, and hook the settings up to the interface somewhere.
  * 
  * @author hinton
  * 
  */
-public class CharterOutFitnessComponent<T> extends
-		AbstractPerRouteSchedulerFitnessComponent<T> implements
-		IFitnessComponent<T> {
+public class CharterOutFitnessComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
 	/**
-	 * If true, look for large blocks of idle time where charter-outs could go,
-	 * and assign some value to them. Otherwise do nothing.
+	 * If true, look for large blocks of idle time where charter-outs could go, and assign some value to them. Otherwise do nothing.
 	 */
-	private boolean generateOpportunities = false;
+	private final boolean generateOpportunities = false;
 
 	/**
-	 * Vessel provider, for finding out whether a resource corresponds to a
-	 * fleet vessel
+	 * Vessel provider, for finding out whether a resource corresponds to a fleet vessel
 	 */
 	private IVesselProvider vesselProvider;
 	/**
@@ -52,13 +45,11 @@ public class CharterOutFitnessComponent<T> extends
 	 */
 	private int charterOutPrice;
 	/**
-	 * The minimum idle time which we should consider feasible as a potential
-	 * charter-out
+	 * The minimum idle time which we should consider feasible as a potential charter-out
 	 */
 	private int idleTimeThreshold;
 	/**
-	 * The proportion of the charter out price which we should assign to
-	 * "potential" charter outs (as opposed to confirmed ones)
+	 * The proportion of the charter out price which we should assign to "potential" charter outs (as opposed to confirmed ones)
 	 */
 	private double generatedDiscountFactor;
 
@@ -67,21 +58,19 @@ public class CharterOutFitnessComponent<T> extends
 	 */
 	private long fitnessAccumulator;
 
-	public CharterOutFitnessComponent(final String name,
-			final String vesselProviderKey, final IFitnessCore<T> core) {
+	public CharterOutFitnessComponent(final String name, final String vesselProviderKey, final IFitnessCore core) {
 		super(name, core);
 		this.vesselProviderKey = vesselProviderKey;
 	}
 
 	@Override
-	public void init(IOptimisationData<T> data) {
-		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey,
-				IVesselProvider.class);
+	public void init(final IOptimisationData data) {
+		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
 		super.init(data);
 	}
 
 	@Override
-	protected boolean reallyStartSequence(IResource resource) {
+	protected boolean reallyStartSequence(final IResource resource) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		fitnessAccumulator = 0;
 
@@ -97,28 +86,21 @@ public class CharterOutFitnessComponent<T> extends
 	@Override
 	protected boolean reallyEvaluateObject(final Object object, final int time) {
 		if (object instanceof VoyageDetails) {
-			@SuppressWarnings("unchecked")
-			final VoyageDetails<T> voyageDetails = (VoyageDetails<T>) object;
+			final VoyageDetails voyageDetails = (VoyageDetails) object;
 			// check idle time is quite long, so a charter out is not ridiculous
-			if (generateOpportunities
-					&& voyageDetails.getIdleTime() > idleTimeThreshold) {
+			if (generateOpportunities && voyageDetails.getIdleTime() > idleTimeThreshold) {
 				// TODO this is where a market model would slot in (or maybe
 				// above)
 
 				// TODO the discount factor probably shouldn't be a double, but
 				// it's not used at the moment.
 
-				fitnessAccumulator += getDiscountedValue(time,
-						Calculator.multiply(voyageDetails.getIdleTime(),
-								charterOutPrice * generatedDiscountFactor));
+				fitnessAccumulator += getDiscountedValue(time, Calculator.multiply(voyageDetails.getIdleTime(), charterOutPrice * generatedDiscountFactor));
 			}
 		} else if (object instanceof PortDetails) {
 			final PortDetails portDetails = (PortDetails) object;
-			if (portDetails.getPortSlot().getPortType()
-					.equals(PortType.CharterOut)) 
-				fitnessAccumulator += getDiscountedValue(time,
-						Calculator.multiply(portDetails.getVisitDuration(),
-								charterOutPrice));
+			if (portDetails.getPortSlot().getPortType().equals(PortType.CharterOut))
+				fitnessAccumulator += getDiscountedValue(time, Calculator.multiply(portDetails.getVisitDuration(), charterOutPrice));
 		}
 		return true;
 	}

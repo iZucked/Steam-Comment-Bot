@@ -7,31 +7,31 @@ package com.mmxlabs.scheduler.optimiser.providers.impl;
 import java.util.HashMap;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 
-public class HashMapStartEndRequirementEditor<T> implements
-		IStartEndRequirementProviderEditor<T> {
+public class HashMapStartEndRequirementEditor implements IStartEndRequirementProviderEditor {
 
 	protected HashMap<IResource, IStartEndRequirement> startRequirements = new HashMap<IResource, IStartEndRequirement>();
 	protected HashMap<IResource, IStartEndRequirement> endRequirements = new HashMap<IResource, IStartEndRequirement>();
-	
-	protected HashMap<IResource, T> startElements = new HashMap<IResource, T>();
-	protected HashMap<IResource, T> endElements = new HashMap<IResource, T>();
-	
+
+	protected HashMap<IResource, ISequenceElement> startElements = new HashMap<IResource, ISequenceElement>();
+	protected HashMap<IResource, ISequenceElement> endElements = new HashMap<IResource, ISequenceElement>();
+
 	private final String name;
-	
-	public HashMapStartEndRequirementEditor(String name) {
+
+	public HashMapStartEndRequirementEditor(final String name) {
 		this.name = name;
 	}
-	
+
 	@Override
-	public IStartEndRequirement getStartRequirement(IResource resource) {
+	public IStartEndRequirement getStartRequirement(final IResource resource) {
 		return startRequirements.get(resource);
 	}
 
 	@Override
-	public IStartEndRequirement getEndRequirement(IResource resource) {
+	public IStartEndRequirement getEndRequirement(final IResource resource) {
 		return endRequirements.get(resource);
 	}
 
@@ -44,31 +44,29 @@ public class HashMapStartEndRequirementEditor<T> implements
 	public void dispose() {
 		startRequirements.clear();
 		endRequirements.clear();
-		
+
 		startElements.clear();
 		endElements.clear();
 	}
 
 	@Override
-	public void setStartEndRequirements(IResource resource,
-			IStartEndRequirement startRequirement,
-			IStartEndRequirement endRequirement) {
+	public void setStartEndRequirements(final IResource resource, final IStartEndRequirement startRequirement, final IStartEndRequirement endRequirement) {
 		startRequirements.put(resource, startRequirement);
 		endRequirements.put(resource, endRequirement);
 	}
 
 	@Override
-	public T getEndElement(IResource resource) {
+	public ISequenceElement getEndElement(final IResource resource) {
 		return endElements.get(resource);
 	}
 
 	@Override
-	public T getStartElement(IResource resource) {
+	public ISequenceElement getStartElement(final IResource resource) {
 		return startElements.get(resource);
 	}
-	
+
 	@Override
-	public void setStartEndElements(IResource resource, T startElement, T endElement) {
+	public void setStartEndElements(final IResource resource, final ISequenceElement startElement, final ISequenceElement endElement) {
 		startElements.put(resource, startElement);
 		endElements.put(resource, endElement);
 	}

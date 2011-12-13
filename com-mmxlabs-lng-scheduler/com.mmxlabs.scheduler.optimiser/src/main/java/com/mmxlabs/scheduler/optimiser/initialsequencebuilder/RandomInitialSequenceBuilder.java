@@ -14,6 +14,7 @@ import java.util.Random;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -24,17 +25,15 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * A simple {@link IInitialSequenceBuilder} which just creates a random schedule
- * for its input.
+ * A simple {@link IInitialSequenceBuilder} which just creates a random schedule for its input.
  * 
  * @author hinton
  * 
  */
-public class RandomInitialSequenceBuilder<T> implements
-		IInitialSequenceBuilder<T> {
-	private Random random;
+public class RandomInitialSequenceBuilder implements IInitialSequenceBuilder {
+	private final Random random;
 
-	public RandomInitialSequenceBuilder(Random random) {
+	public RandomInitialSequenceBuilder(final Random random) {
 		this.random = random;
 	}
 
@@ -43,54 +42,45 @@ public class RandomInitialSequenceBuilder<T> implements
 	}
 
 	@Override
-	public ISequences<T> createInitialSequences(
-			final IOptimisationData<T> data, final ISequences<T> suggestion,
-			final Map<T, IResource> resourceSuggestion) {
+	public ISequences createInitialSequences(final IOptimisationData data, final ISequences suggestion, final Map<ISequenceElement, IResource> resourceSuggestion) {
 
-		List<T> sequenceElements = new ArrayList<T>(data.getSequenceElements());
+		final List<ISequenceElement> sequenceElements = new ArrayList<ISequenceElement>(data.getSequenceElements());
 
 		// TODO fix type parameterisation here, or disable warning
-		final IPortSlotProvider<T> slotProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_portSlotsProvider,
-						IPortSlotProvider.class);
+		final IPortSlotProvider slotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 
 		// sort sequence elements by their load time
-		Collections.sort(sequenceElements, new Comparator<T>() {
+		Collections.sort(sequenceElements, new Comparator<ISequenceElement>() {
 			@Override
-			public int compare(T o1, T o2) {
-				final int s1 = slotProvider.getPortSlot(o1).getTimeWindow()
-						.getStart();
-				final int s2 = slotProvider.getPortSlot(o2).getTimeWindow()
-						.getStart();
-				if (s1 < s2)
+			public int compare(final ISequenceElement o1, final ISequenceElement o2) {
+				final int s1 = slotProvider.getPortSlot(o1).getTimeWindow().getStart();
+				final int s2 = slotProvider.getPortSlot(o2).getTimeWindow().getStart();
+				if (s1 < s2) {
 					return -1;
-				else if (s1 > s2)
+				} else if (s1 > s2) {
 					return 1;
+				}
 				return 0;
 			}
 		});
 
 		final List<IResource> resources = data.getResources();
 
-		final IModifiableSequences<T> sequences = new ModifiableSequences<T>(
-				resources);
+		final IModifiableSequences sequences = new ModifiableSequences(resources);
 
-		IPortTypeProvider<T> portTypeProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_portTypeProvider,
-				IPortTypeProvider.class);
+		final IPortTypeProvider portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 
 		// Add each sequence element to a sequence; at the moment just rotate
 		// through the sequences
 		// one at a time. Perhaps it would be better to randomise, or do
 		// something even more fancy.
 		int seq = 0;
-		for (T elt : sequenceElements) {
+		for (final ISequenceElement elt : sequenceElements) {
 			// Skip start and end points
 			final PortType portType = portTypeProvider.getPortType(elt);
-			if (portType.equals(portType.Start)
-					|| portType.equals(portType.End))
+			if (portType.equals(PortType.Start) || portType.equals(PortType.End)) {
 				continue;
+			}
 			// add stuff to sequences in rotating order
 			// TODO consider time windows
 			sequences.getModifiableSequence(seq).add(elt);
@@ -98,17 +88,13 @@ public class RandomInitialSequenceBuilder<T> implements
 		}
 
 		// Handle start/end requirements.
-		IStartEndRequirementProvider<T> startEndProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_startEndRequirementProvider,
-						IStartEndRequirementProvider.class);
+		final IStartEndRequirementProvider startEndProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
 
-		for (IResource resource : resources) {
-			final IModifiableSequence<T> sequence = sequences
-					.getModifiableSequence(resource);
+		for (final IResource resource : resources) {
+			final IModifiableSequence sequence = sequences.getModifiableSequence(resource);
 
-			T startLocation = startEndProvider.getStartElement(resource);
-			T endLocation = startEndProvider.getEndElement(resource);
+			final ISequenceElement startLocation = startEndProvider.getStartElement(resource);
+			final ISequenceElement endLocation = startEndProvider.getEndElement(resource);
 
 			sequence.insert(0, startLocation);
 			sequence.add(endLocation);

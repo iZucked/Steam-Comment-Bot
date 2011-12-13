@@ -24,17 +24,18 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
  * 
  * @author hinton
  * 
- * @param <T>
+ * @param
  */
-public class ScheduleEvaluator<T> {
-	private final VoyagePlanIterator<T> vpIterator = new VoyagePlanIterator<T>();
+public class ScheduleEvaluator {
+	
+	private final VoyagePlanIterator vpIterator = new VoyagePlanIterator();
 
-	private ICargoAllocator<T> cargoAllocator;
+	private ICargoAllocator cargoAllocator;
 
 	private Collection<ILoadPriceCalculator2> loadPriceCalculators;
-	private Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents;
+	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
 
-	private Collection<ICargoAllocationFitnessComponent<T>> allocationComponents;
+	private Collection<ICargoAllocationFitnessComponent> allocationComponents;
 
 	private long[] fitnesses;
 
@@ -50,7 +51,7 @@ public class ScheduleEvaluator<T> {
 		}
 
 		long total = 0;
-		for (long l : fitnesses) {
+		for (final long l : fitnesses) {
 			if (l == Long.MAX_VALUE)
 				return Long.MAX_VALUE;
 			total += l;
@@ -65,11 +66,11 @@ public class ScheduleEvaluator<T> {
 		}
 
 		// Compute load volumes and prices
-		Collection<IAllocationAnnotation> allocations = cargoAllocator.allocate(scheduledSequences);
+		final Collection<IAllocationAnnotation> allocations = cargoAllocator.allocate(scheduledSequences);
 		scheduledSequences.setAllocations(allocations);
 		// Finally evaluate whole-solution components, like P&L.
 
-		for (final ICargoAllocationFitnessComponent<T> component : allocationComponents) {
+		for (final ICargoAllocationFitnessComponent component : allocationComponents) {
 			final long l = component.evaluate(scheduledSequences, allocations);
 			if (l == Long.MAX_VALUE)
 				return Long.MAX_VALUE;
@@ -79,21 +80,21 @@ public class ScheduleEvaluator<T> {
 		return total;
 	}
 
-	public Collection<ICargoSchedulerFitnessComponent<T>> getFitnessComponents() {
+	public Collection<ICargoSchedulerFitnessComponent> getFitnessComponents() {
 		return fitnessComponents;
 	}
 
-	public void setCargoAllocator(final ICargoAllocator<T> cargoAllocator) {
+	public void setCargoAllocator(final ICargoAllocator cargoAllocator) {
 		this.cargoAllocator = cargoAllocator;
 	}
 
-	public void setFitnessComponents(Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents, Collection<ICargoAllocationFitnessComponent<T>> allocationComponents) {
+	public void setFitnessComponents(final Collection<ICargoSchedulerFitnessComponent> fitnessComponents, final Collection<ICargoAllocationFitnessComponent> allocationComponents) {
 		this.fitnessComponents = fitnessComponents;
 		this.fitnesses = new long[fitnessComponents.size()];
 		this.allocationComponents = allocationComponents;
 	}
 
-	public void setLoadPriceCalculators(Collection<ILoadPriceCalculator2> loadPriceCalculators) {
+	public void setLoadPriceCalculators(final Collection<ILoadPriceCalculator2> loadPriceCalculators) {
 		this.loadPriceCalculators = loadPriceCalculators;
 	}
 

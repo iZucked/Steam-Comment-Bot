@@ -30,10 +30,10 @@ import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEdito
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
@@ -75,18 +75,15 @@ public final class AbstractSequenceSchedulerTest {
 	Mockery context = new JUnit4Mockery();
 
 	/**
-	 * Test high level inputs for a a two {@link VoyagePlan} sequence. Outputs
-	 * cannot easily be tested with e JMock'd {@link IVoyagePlanOptimiser} so we
-	 * just expect something to come out.
+	 * Test high level inputs for a a two {@link VoyagePlan} sequence. Outputs cannot easily be tested with e JMock'd {@link IVoyagePlanOptimiser} so we just expect something to come out.
 	 * 
 	 * @throws CloneNotSupportedException
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testSchedule_1() throws CloneNotSupportedException {
 		final IIndexingContext index = new SimpleIndexingContext();
-		final MockSequenceScheduler<ISequenceElement> scheduler = new MockSequenceScheduler<ISequenceElement>();
+		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
 
 		final Port port1 = new Port(index, "port1");
 		final Port port2 = new Port(index, "port2");
@@ -132,34 +129,22 @@ public final class AbstractSequenceSchedulerTest {
 		cargo2.setLoadOption(loadSlot2);
 		cargo2.setDischargeOption(dischargeSlot2);
 
-		final ISequenceElement element1 = new SequenceElement(index,
-				"element1");
-		final ISequenceElement element2 = new SequenceElement(index,
-				"element2");
-		final ISequenceElement element3 = new SequenceElement(index,
-				"element3");
-		final ISequenceElement element4 = new SequenceElement(index,
-				"element4");
+		final ISequenceElement element1 = new SequenceElement(index, "element1");
+		final ISequenceElement element2 = new SequenceElement(index, "element2");
+		final ISequenceElement element3 = new SequenceElement(index, "element3");
+		final ISequenceElement element4 = new SequenceElement(index, "element4");
 
-		final ITimeWindowDataComponentProviderEditor<ISequenceElement> timeWindowProvider = new TimeWindowDataComponentProvider<ISequenceElement>(
-				SchedulerConstants.DCP_timeWindowProvider);
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider);
 
-		timeWindowProvider.setTimeWindows(element1,
-				Collections.singletonList(timeWindow1));
-		timeWindowProvider.setTimeWindows(element2,
-				Collections.singletonList(timeWindow2));
-		timeWindowProvider.setTimeWindows(element3,
-				Collections.singletonList(timeWindow3));
-		timeWindowProvider.setTimeWindows(element4,
-				Collections.singletonList(timeWindow4));
+		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(timeWindow1));
+		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(timeWindow2));
+		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(timeWindow3));
+		timeWindowProvider.setTimeWindows(element4, Collections.singletonList(timeWindow4));
 
-		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(
-				SchedulerConstants.DCP_portDistanceProvider);
+		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider);
 
-		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
-				SchedulerConstants.DCP_portDistanceProvider);
-		distanceProvider.set(IMultiMatrixProvider.Default_Key,
-				defaultDistanceProvider);
+		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider);
+		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
 		defaultDistanceProvider.set(port1, port2, 400);
@@ -167,26 +152,22 @@ public final class AbstractSequenceSchedulerTest {
 		defaultDistanceProvider.set(port3, port4, 400);
 
 		final int duration = 1;
-		final IElementDurationProviderEditor<ISequenceElement> durationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
-				SchedulerConstants.DCP_elementDurationsProvider);
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor(SchedulerConstants.DCP_elementDurationsProvider);
 		durationsProvider.setDefaultValue(duration);
 
-		final IPortProviderEditor<ISequenceElement> portProvider = new HashMapPortEditor(
-				SchedulerConstants.DCP_portProvider);
+		final IPortProviderEditor portProvider = new HashMapPortEditor(SchedulerConstants.DCP_portProvider);
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
 		portProvider.setPortForElement(port3, element3);
 		portProvider.setPortForElement(port4, element4);
 
-		final IPortSlotProviderEditor<ISequenceElement> portSlotProvider = new HashMapPortSlotEditor<ISequenceElement>(
-				SchedulerConstants.DCP_portSlotsProvider);
+		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor(SchedulerConstants.DCP_portSlotsProvider);
 		portSlotProvider.setPortSlot(element1, loadSlot1);
 		portSlotProvider.setPortSlot(element2, dischargeSlot1);
 		portSlotProvider.setPortSlot(element3, loadSlot2);
 		portSlotProvider.setPortSlot(element4, dischargeSlot2);
 
-		final IPortTypeProviderEditor<ISequenceElement> portTypeProvider = new HashMapPortTypeEditor<ISequenceElement>(
-				SchedulerConstants.DCP_portTypeProvider);
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor(SchedulerConstants.DCP_portTypeProvider);
 		portTypeProvider.setPortType(element1, PortType.Load);
 		portTypeProvider.setPortType(element2, PortType.Discharge);
 		portTypeProvider.setPortType(element3, PortType.Load);
@@ -209,22 +190,17 @@ public final class AbstractSequenceSchedulerTest {
 
 		vessel.setVesselClass(vesselClass);
 
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(
-				SchedulerConstants.DCP_vesselProvider);
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(SchedulerConstants.DCP_vesselProvider);
 		vesselProvider.setVesselResource(resource, vessel);
 		scheduler.setVesselProvider(vesselProvider);
 
-		final List<ISequenceElement> elements = CollectionsUtil.makeArrayList(
-				element1, element2, element3, element4);
-		final ISequence<ISequenceElement> sequence = new ListSequence<ISequenceElement>(
-				elements);
+		final List elements = CollectionsUtil.makeArrayList(element1, element2, element3, element4);
+		final ISequence sequence = new ListSequence(elements);
 
-		final IVoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = context
-				.mock(IVoyagePlanOptimiser.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
-		final IRouteCostProvider routeCostProvider = context
-				.mock(IRouteCostProvider.class);
+		final IRouteCostProvider routeCostProvider = context.mock(IRouteCostProvider.class);
 		scheduler.setRouteCostProvider(routeCostProvider);
 
 		// Init scheduler and ensure all required components are in place
@@ -296,19 +272,19 @@ public final class AbstractSequenceSchedulerTest {
 		expectedPortDetails4.setPortSlot(dischargeSlot2);
 		expectedPortDetails4.setVisitDuration(1);
 
-		final VoyageDetails<ISequenceElement> expectedVoyageDetails1 = new VoyageDetails<ISequenceElement>();
+		final VoyageDetails expectedVoyageDetails1 = new VoyageDetails();
 		expectedVoyageDetails1.setOptions(expectedOptions1);
-//		expectedVoyageDetails1.setStartTime(6);
+		// expectedVoyageDetails1.setStartTime(6);
 		expectedVoyageDetails1.setTravelTime(4);
 
-		final VoyageDetails<ISequenceElement> expectedVoyageDetails2 = new VoyageDetails<ISequenceElement>();
+		final VoyageDetails expectedVoyageDetails2 = new VoyageDetails();
 		expectedVoyageDetails2.setOptions(expectedOptions2);
-//		expectedVoyageDetails2.setStartTime(11);
+		// expectedVoyageDetails2.setStartTime(11);
 		expectedVoyageDetails2.setTravelTime(4);
 
-		final VoyageDetails<ISequenceElement> expectedVoyageDetails3 = new VoyageDetails<ISequenceElement>();
+		final VoyageDetails expectedVoyageDetails3 = new VoyageDetails();
 		expectedVoyageDetails3.setOptions(expectedOptions3);
-//		expectedVoyageDetails3.setStartTime(16);
+		// expectedVoyageDetails3.setStartTime(16);
 		expectedVoyageDetails3.setTravelTime(4);
 
 		final List<Object> expectedBasicSequence1 = new LinkedList<Object>();
@@ -344,39 +320,23 @@ public final class AbstractSequenceSchedulerTest {
 				one(voyagePlanOptimiser).setVessel(vessel);
 
 				// Set expected list of VPO choices
-				one(voyagePlanOptimiser).addChoice(
-						with(equal(new FBOVoyagePlanChoice(expectedOptions1))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions1))));
 
-				one(voyagePlanOptimiser)
-						.addChoice(
-								with(equal(new IdleNBOVoyagePlanChoice(
-										expectedOptions1))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions1))));
 
-				one(voyagePlanOptimiser).addChoice(
-						with(equal(new NBOTravelVoyagePlanChoice(
-								expectedOptions1a, expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new NBOTravelVoyagePlanChoice(expectedOptions1a, expectedOptions2))));
 
-				one(voyagePlanOptimiser).addChoice(
-						with(equal(new FBOVoyagePlanChoice(expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions2))));
 
-				one(voyagePlanOptimiser)
-						.addChoice(
-								with(equal(new IdleNBOVoyagePlanChoice(
-										expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions2))));
 
-				one(voyagePlanOptimiser).addChoice(
-						with(equal(new FBOVoyagePlanChoice(expectedOptions3))));
-				one(voyagePlanOptimiser)
-						.addChoice(
-								with(equal(new IdleNBOVoyagePlanChoice(
-										expectedOptions3))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions3))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions3))));
 
 				// Expect two runs of the VPO
-				one(voyagePlanOptimiser).setBasicSequence(
-						with(equal(expectedBasicSequence1)));
+				one(voyagePlanOptimiser).setBasicSequence(with(equal(expectedBasicSequence1)));
 
-				one(voyagePlanOptimiser).setBasicSequence(
-						with(equal(expectedBasicSequence2)));
+				one(voyagePlanOptimiser).setBasicSequence(with(equal(expectedBasicSequence2)));
 
 				one(voyagePlanOptimiser).init();
 				one(voyagePlanOptimiser).optimise();
@@ -385,20 +345,13 @@ public final class AbstractSequenceSchedulerTest {
 				one(voyagePlanOptimiser).optimise();
 				one(voyagePlanOptimiser).reset();
 
-				one(voyagePlanOptimiser)
-						.setArrivalTimes(
-								with(equal(CollectionsUtil
-										.toArrayList(arrivalTimes1))));
-				one(voyagePlanOptimiser)
-						.setArrivalTimes(
-								with(equal(CollectionsUtil
-										.toArrayList(arrivalTimes2))));
+				one(voyagePlanOptimiser).setArrivalTimes(with(equal(CollectionsUtil.toArrayList(arrivalTimes1))));
+				one(voyagePlanOptimiser).setArrivalTimes(with(equal(CollectionsUtil.toArrayList(arrivalTimes2))));
 			}
 		});
 
 		// Schedule sequence
-		final ScheduledSequence plans = scheduler.schedule(resource, sequence,
-				arrivalTimes);
+		final ScheduledSequence plans = scheduler.schedule(resource, sequence, arrivalTimes);
 
 		Assert.assertNotNull(plans);
 		Assert.assertEquals(2, plans.getVoyagePlans().size());
@@ -415,7 +368,7 @@ public final class AbstractSequenceSchedulerTest {
 	@Test
 	public void testSchedule_2() throws CloneNotSupportedException {
 		final IIndexingContext index = new SimpleIndexingContext();
-		final MockSequenceScheduler<ISequenceElement> scheduler = new MockSequenceScheduler<ISequenceElement>();
+		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
 
 		final Port port1 = new Port(index, "port1");
 		final Port port2 = new Port(index, "port2");
@@ -475,7 +428,7 @@ public final class AbstractSequenceSchedulerTest {
 		defaultDistanceProvider.set(port2, port3, 400);
 
 		final int duration = 1;
-		final IElementDurationProviderEditor<ISequenceElement> durationsProvider = new HashMapElementDurationEditor<ISequenceElement>(
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor(
 				SchedulerConstants.DCP_elementDurationsProvider);
 		durationsProvider.setDefaultValue(duration);
 
@@ -485,13 +438,13 @@ public final class AbstractSequenceSchedulerTest {
 		portProvider.setPortForElement(port2, element2);
 		portProvider.setPortForElement(port3, element3);
 
-		final IPortSlotProviderEditor<ISequenceElement> portSlotProvider = new HashMapPortSlotEditor<ISequenceElement>(
+		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor(
 				SchedulerConstants.DCP_portSlotsProvider);
 		portSlotProvider.setPortSlot(element1, loadSlot1);
 		portSlotProvider.setPortSlot(element2, dischargeSlot1);
 		portSlotProvider.setPortSlot(element3, loadSlot2);
 
-		final IPortTypeProviderEditor<ISequenceElement> portTypeProvider = new HashMapPortTypeEditor<ISequenceElement>(
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor(
 				SchedulerConstants.DCP_portTypeProvider);
 		portTypeProvider.setPortType(element1, PortType.Load);
 		portTypeProvider.setPortType(element2, PortType.Discharge);
@@ -513,22 +466,17 @@ public final class AbstractSequenceSchedulerTest {
 		vesselClass.setCargoCapacity(100000);
 		vessel.setVesselClass(vesselClass);
 
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(
-				SchedulerConstants.DCP_vesselProvider);
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(SchedulerConstants.DCP_vesselProvider);
 		vesselProvider.setVesselResource(resource, vessel);
 		scheduler.setVesselProvider(vesselProvider);
 
-		final List<ISequenceElement> elements = CollectionsUtil.makeArrayList(
-				element1, element2, element3);
-		final ISequence<ISequenceElement> sequence = new ListSequence<ISequenceElement>(
-				elements);
+		final List elements = CollectionsUtil.makeArrayList(element1, element2, element3);
+		final ISequence sequence = new ListSequence(elements);
 
-		final IVoyagePlanOptimiser<ISequenceElement> voyagePlanOptimiser = context
-				.mock(IVoyagePlanOptimiser.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
-		final IRouteCostProvider routeCostProvider = context
-				.mock(IRouteCostProvider.class);
+		final IRouteCostProvider routeCostProvider = context.mock(IRouteCostProvider.class);
 		scheduler.setRouteCostProvider(routeCostProvider);
 
 		// Init scheduler and ensure all required components are in place
@@ -580,14 +528,14 @@ public final class AbstractSequenceSchedulerTest {
 		expectedPortDetails3.setPortSlot(loadSlot2);
 		expectedPortDetails3.setVisitDuration(1);
 
-		final VoyageDetails<ISequenceElement> expectedVoyageDetails1 = new VoyageDetails<ISequenceElement>();
+		final VoyageDetails expectedVoyageDetails1 = new VoyageDetails();
 		expectedVoyageDetails1.setOptions(expectedOptions1);
-//		expectedVoyageDetails1.setStartTime(6);
+		// expectedVoyageDetails1.setStartTime(6);
 		expectedVoyageDetails1.setTravelTime(4);
 
-		final VoyageDetails<ISequenceElement> expectedVoyageDetails2 = new VoyageDetails<ISequenceElement>();
+		final VoyageDetails expectedVoyageDetails2 = new VoyageDetails();
 		expectedVoyageDetails2.setOptions(expectedOptions2);
-//		expectedVoyageDetails2.setStartTime(11);
+		// expectedVoyageDetails2.setStartTime(11);
 		expectedVoyageDetails2.setTravelTime(4);
 
 		final List<Object> expectedBasicSequence1 = new LinkedList<Object>();
@@ -598,9 +546,7 @@ public final class AbstractSequenceSchedulerTest {
 		expectedBasicSequence1.add(expectedPortDetails3);
 
 		final VoyagePlan testVoyagePlan = new VoyagePlan();
-		final Object[] testSequence = new Object[] { expectedPortDetails1,
-				expectedVoyageDetails1, expectedPortDetails2,
-				expectedVoyageDetails2, expectedPortDetails3 };
+		final Object[] testSequence = new Object[] { expectedPortDetails1, expectedVoyageDetails1, expectedPortDetails2, expectedVoyageDetails2, expectedPortDetails3 };
 		testVoyagePlan.setSequence(testSequence);
 
 		testVoyagePlan.setTotalFuelCost(FuelComponent.Base, 100);
@@ -620,42 +566,29 @@ public final class AbstractSequenceSchedulerTest {
 				one(voyagePlanOptimiser).setVessel(vessel);
 
 				// Set expected list of VPO choices
-				one(voyagePlanOptimiser).addChoice(
-						with(equal(new FBOVoyagePlanChoice(expectedOptions1))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions1))));
 
-				one(voyagePlanOptimiser)
-						.addChoice(
-								with(equal(new IdleNBOVoyagePlanChoice(
-										expectedOptions1))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions1))));
 
-				one(voyagePlanOptimiser).addChoice(
-						with(equal(new NBOTravelVoyagePlanChoice(
-								expectedOptions1a, expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new NBOTravelVoyagePlanChoice(expectedOptions1a, expectedOptions2))));
 
-				one(voyagePlanOptimiser).addChoice(
-						with(equal(new FBOVoyagePlanChoice(expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions2))));
 
-				one(voyagePlanOptimiser)
-						.addChoice(
-								with(equal(new IdleNBOVoyagePlanChoice(
-										expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions2))));
 
 				// Expect two runs of the VPO
-				one(voyagePlanOptimiser).setBasicSequence(
-						with(equal(expectedBasicSequence1)));
+				one(voyagePlanOptimiser).setBasicSequence(with(equal(expectedBasicSequence1)));
 
 				one(voyagePlanOptimiser).init();
 				one(voyagePlanOptimiser).optimise();
 				one(voyagePlanOptimiser).reset();
 
-				one(voyagePlanOptimiser).setArrivalTimes(
-						with(equal(CollectionsUtil.toArrayList(arrivalTimes))));
+				one(voyagePlanOptimiser).setArrivalTimes(with(equal(CollectionsUtil.toArrayList(arrivalTimes))));
 			}
 		});
 
 		// Schedule sequence
-		final ScheduledSequence plansAndTime = scheduler.schedule(resource,
-				sequence, arrivalTimes);
+		final ScheduledSequence plansAndTime = scheduler.schedule(resource, sequence, arrivalTimes);
 
 		Assert.assertNotNull(plansAndTime);
 		final List<VoyagePlan> plans = plansAndTime.getVoyagePlans();
@@ -674,20 +607,17 @@ public final class AbstractSequenceSchedulerTest {
 
 		// Assert.assertEquals(5,
 		// ((PortDetails) outputSequence[0]).getStartTime());
-		Assert.assertEquals(1,
-				((PortDetails) outputSequence[0]).getVisitDuration());
-//		Assert.assertEquals(6,
-//				((VoyageDetails) outputSequence[1]).getStartTime());
+		Assert.assertEquals(1, ((PortDetails) outputSequence[0]).getVisitDuration());
+		// Assert.assertEquals(6,
+		// ((VoyageDetails) outputSequence[1]).getStartTime());
 		// Assert.assertEquals(10,
 		// ((PortDetails) outputSequence[2]).getStartTime());
-		Assert.assertEquals(1,
-				((PortDetails) outputSequence[2]).getVisitDuration());
-//		Assert.assertEquals(11,
-//				((VoyageDetails) outputSequence[3]).getStartTime());
+		Assert.assertEquals(1, ((PortDetails) outputSequence[2]).getVisitDuration());
+		// Assert.assertEquals(11,
+		// ((VoyageDetails) outputSequence[3]).getStartTime());
 		// Assert.assertEquals(15,
 		// ((PortDetails) outputSequence[4]).getStartTime());
-		Assert.assertEquals(1,
-				((PortDetails) outputSequence[4]).getVisitDuration());
+		Assert.assertEquals(1, ((PortDetails) outputSequence[4]).getVisitDuration());
 
 		context.assertIsSatisfied();
 	}
@@ -697,23 +627,15 @@ public final class AbstractSequenceSchedulerTest {
 	public void testDispose() {
 
 		// Mock objects
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		final IPortProvider portProvider = context.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = context
-				.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = context
-				.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = context
-				.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = context
-				.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = context
-				.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = context
-				.mock(IVoyagePlanOptimiser.class);
-		final IRouteCostProvider routeCostProvider = context
-				.mock(IRouteCostProvider.class);
+		final IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
+		final IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
+		final IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
+		final IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
+		final ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
+		final IRouteCostProvider routeCostProvider = context.mock(IRouteCostProvider.class);
 
 		// Set on SSS
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
@@ -749,24 +671,16 @@ public final class AbstractSequenceSchedulerTest {
 	public void testInit1() {
 
 		// Mock objects
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		final IPortProvider portProvider = context.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = context
-				.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = context
-				.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = context
-				.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = context
-				.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = context
-				.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = context
-				.mock(IVoyagePlanOptimiser.class);
+		final IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
+		final IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
+		final IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
+		final IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
+		final ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 		final IRouteCostProvider routeCostProvider = context.mock(IRouteCostProvider.class);
 
-		
 		// Set on SSS
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
 
@@ -783,26 +697,19 @@ public final class AbstractSequenceSchedulerTest {
 		scheduler.init();
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test(expected = IllegalStateException.class)
 	public void testInit2() {
 
 		// Mock objects
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		final IPortProvider portProvider = context.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = context
-				.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = context
-				.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = context
-				.mock(IElementDurationProvider.class);
+		final IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
+		final IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
+		final IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 		// IMatrixProvider distanceProvider =
 		// context.mock(IMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = context
-				.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = context
-				.mock(IVoyagePlanOptimiser.class);
+		final ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 
 		// Set on SSS
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
@@ -824,21 +731,15 @@ public final class AbstractSequenceSchedulerTest {
 	public void testInit3() {
 
 		// Mock objects
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		final IPortProvider portProvider = context.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = context
-				.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = context
-				.mock(IPortTypeProvider.class);
+		final IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
+		final IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
 		// IElementDurationProvider durationsProvider =
 		// context.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = context
-				.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = context
-				.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = context
-				.mock(IVoyagePlanOptimiser.class);
+		final IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
+		final ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 
 		// Set on SSS
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
@@ -860,21 +761,14 @@ public final class AbstractSequenceSchedulerTest {
 	public void testInit4() {
 
 		// Mock objects
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		// IPortProvider portProvider = context.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = context
-				.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = context
-				.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = context
-				.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = context
-				.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = context
-				.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = context
-				.mock(IVoyagePlanOptimiser.class);
+		final IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
+		final IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
+		final IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
+		final IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
+		final ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 
 		// Set on SSS
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
@@ -896,21 +790,15 @@ public final class AbstractSequenceSchedulerTest {
 	public void testInit5() {
 
 		// Mock objects
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		final IPortProvider portProvider = context.mock(IPortProvider.class);
 		// IPortSlotProvider portSlotProvider =
 		// context.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = context
-				.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = context
-				.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = context
-				.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = context
-				.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = context
-				.mock(IVoyagePlanOptimiser.class);
+		final IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
+		final IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
+		final IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
+		final ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 
 		// Set on SSS
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
@@ -932,21 +820,15 @@ public final class AbstractSequenceSchedulerTest {
 	public void testInit7() {
 
 		// Mock objects
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		final IPortProvider portProvider = context.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = context
-				.mock(IPortSlotProvider.class);
+		final IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
 		// IPortTypeProvider portTypeProvider =
 		// context.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = context
-				.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = context
-				.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = context
-				.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = context
-				.mock(IVoyagePlanOptimiser.class);
+		final IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
+		final IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
+		final ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 
 		// Set on SSS
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
@@ -968,21 +850,15 @@ public final class AbstractSequenceSchedulerTest {
 	public void testInit8() {
 
 		// Mock objects
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		final IPortProvider portProvider = context.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = context
-				.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = context
-				.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = context
-				.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = context
-				.mock(IMultiMatrixProvider.class);
+		final IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
+		final IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
+		final IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
+		final IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
 		// ITimeWindowDataComponentProvider timeWindowProvider =
 		// context.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = context
-				.mock(IVoyagePlanOptimiser.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 
 		// Set on SSS
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
@@ -1006,18 +882,12 @@ public final class AbstractSequenceSchedulerTest {
 		// Mock objects
 		// IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		final IPortProvider portProvider = context.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = context
-				.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = context
-				.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = context
-				.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = context
-				.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = context
-				.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = context
-				.mock(IVoyagePlanOptimiser.class);
+		final IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
+		final IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
+		final IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
+		final IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
+		final ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);
 
 		// Set on SSS
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
@@ -1039,19 +909,13 @@ public final class AbstractSequenceSchedulerTest {
 	public void testInit10() {
 
 		// Mock objects
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		final IPortProvider portProvider = context.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = context
-				.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = context
-				.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = context
-				.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = context
-				.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = context
-				.mock(ITimeWindowDataComponentProvider.class);
+		final IPortSlotProvider portSlotProvider = context.mock(IPortSlotProvider.class);
+		final IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
+		final IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
+		final IMultiMatrixProvider distanceProvider = context.mock(IMultiMatrixProvider.class);
+		final ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
 		// IVoyagePlanOptimiser voyagePlanOptimiser =
 		// context.mock(IVoyagePlanOptimiser.class);
 
@@ -1071,25 +935,21 @@ public final class AbstractSequenceSchedulerTest {
 	}
 
 	/**
-	 * Mock implementation of {@link AbstractSequenceScheduler} to allow use of
-	 * abstract class in tests
+	 * Mock implementation of {@link AbstractSequenceScheduler} to allow use of abstract class in tests
 	 * 
 	 * @author Simon Goodall
 	 * 
-	 * @param <T>
 	 */
-	private static class MockSequenceScheduler<T> extends
-			AbstractSequenceScheduler<T> {
+	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
 
 		@Override
-		public ScheduledSequences schedule(ISequences<T> sequences, boolean b) {
-			throw new UnsupportedOperationException(
-					"Method invocation is not part of the tests!");
+		public ScheduledSequences schedule(ISequences sequences, boolean b) {
+			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 
 		}
 
 		@Override
-		public ScheduledSequences schedule(ISequences<T> sequences, Collection<IResource> affectedResources, boolean forExport) {
+		public ScheduledSequences schedule(ISequences sequences, Collection<IResource> affectedResources, boolean forExport) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 

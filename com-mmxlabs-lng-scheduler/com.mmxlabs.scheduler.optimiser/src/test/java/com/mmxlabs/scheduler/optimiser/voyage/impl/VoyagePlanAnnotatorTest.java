@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -34,14 +34,13 @@ public class VoyagePlanAnnotatorTest {
 
 	Mockery context = new JUnit4Mockery();
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testAnnotateFromVoyagePlans() {
 
-		final Object element1 = new Object();
-		final Object element2 = new Object();
-		final Object element3 = new Object();
-		final Object element4 = new Object();
+		final ISequenceElement element1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement element2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement element3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement element4 = context.mock(ISequenceElement.class, "4");
 
 		final IPort port1 = context.mock(IPort.class, "port-1");
 		final IPort port2 = context.mock(IPort.class, "port-2");
@@ -62,8 +61,7 @@ public class VoyagePlanAnnotatorTest {
 		dischargeSlot2.setPort(port2);
 		dischargeSlot2.setMaxDischargeVolume(50000);
 
-		final IPortSlotProviderEditor<Object> portSlotEditor = new HashMapPortSlotEditor<Object>(
-				"name");
+		final IPortSlotProviderEditor portSlotEditor = new HashMapPortSlotEditor("name");
 		portSlotEditor.setPortSlot(element1, loadSlot1);
 		portSlotEditor.setPortSlot(element2, dischargeSlot1);
 		portSlotEditor.setPortSlot(element3, loadSlot2);
@@ -71,27 +69,22 @@ public class VoyagePlanAnnotatorTest {
 
 		final PortDetails loadDetails1 = new PortDetails();
 		loadDetails1.setPortSlot(loadSlot1);
-		
+
 		loadDetails1.setVisitDuration(10);
-		
-		
-		
+
 		final PortDetails dischargeDetails1 = new PortDetails();
 		dischargeDetails1.setPortSlot(dischargeSlot1);
 		dischargeDetails1.setVisitDuration(20);
-		
 
 		final PortDetails loadDetails2 = new PortDetails();
 		loadDetails2.setPortSlot(loadSlot2);
 		loadDetails2.setVisitDuration(30);
-		
 
 		final PortDetails dischargeDetails2 = new PortDetails();
 		dischargeDetails2.setPortSlot(dischargeSlot2);
 		dischargeDetails2.setVisitDuration(40);
-		
 
-		final VoyageDetails<Object> voyageDetails1 = new VoyageDetails<Object>();
+		final VoyageDetails voyageDetails1 = new VoyageDetails();
 		final VoyageOptions options1 = new VoyageOptions();
 		options1.setFromPortSlot(loadSlot1);
 		options1.setToPortSlot(dischargeSlot1);
@@ -109,20 +102,18 @@ public class VoyagePlanAnnotatorTest {
 		voyageDetails1.setOptions(options1);
 
 		voyageDetails1.setSpeed(15000);
-//		voyageDetails1.setStartTime(110);
+		// voyageDetails1.setStartTime(110);
 		voyageDetails1.setTravelTime(50);
 		voyageDetails1.setIdleTime(40);
 
 		voyageDetails1.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 1000l);
-		voyageDetails1.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 
-				2000l);
+		voyageDetails1.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 2000l);
 		voyageDetails1.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 3000l);
 		voyageDetails1.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 4000l);
 		voyageDetails1.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 5000l);
 		voyageDetails1.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 6000l);
 
-		
-		final VoyageDetails<Object> voyageDetails2 = new VoyageDetails<Object>();
+		final VoyageDetails voyageDetails2 = new VoyageDetails();
 		final VoyageOptions options2 = new VoyageOptions();
 		options2.setFromPortSlot(dischargeSlot1);
 		options2.setToPortSlot(loadSlot2);
@@ -140,20 +131,18 @@ public class VoyagePlanAnnotatorTest {
 		voyageDetails2.setOptions(options2);
 
 		voyageDetails2.setSpeed(16000);
-//		voyageDetails2.setStartTime(220);
+		// voyageDetails2.setStartTime(220);
 		voyageDetails2.setTravelTime(50);
 		voyageDetails2.setIdleTime(30);
-		
-		
+
 		voyageDetails2.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 1100l);
-		voyageDetails2.setFuelConsumption(FuelComponent.Base_Supplemental,FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 
-				2100l);
+		voyageDetails2.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 2100l);
 		voyageDetails2.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 3100l);
 		voyageDetails2.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 4100l);
 		voyageDetails2.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 5100l);
 		voyageDetails2.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 6100l);
 
-		final VoyageDetails<Object> voyageDetails3 = new VoyageDetails<Object>();
+		final VoyageDetails voyageDetails3 = new VoyageDetails();
 		final VoyageOptions options3 = new VoyageOptions();
 		options3.setFromPortSlot(loadSlot2);
 		options3.setToPortSlot(dischargeSlot2);
@@ -171,28 +160,25 @@ public class VoyagePlanAnnotatorTest {
 		voyageDetails3.setOptions(options3);
 
 		voyageDetails3.setSpeed(17000);
-//		voyageDetails3.setStartTime(330);
+		// voyageDetails3.setStartTime(330);
 		voyageDetails3.setTravelTime(50);
 		voyageDetails3.setIdleTime(20);
 
 		voyageDetails3.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 1200l);
-		voyageDetails3.setFuelConsumption(FuelComponent.Base_Supplemental,FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 
-				2200l);
+		voyageDetails3.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 2200l);
 		voyageDetails3.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 3200l);
 		voyageDetails3.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 4200l);
 		voyageDetails3.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 5200l);
 		voyageDetails3.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 6200l);
 
-		final VoyagePlanAnnotator<Object> annotator = new VoyagePlanAnnotator<Object>();
+		final VoyagePlanAnnotator annotator = new VoyagePlanAnnotator();
 		annotator.setPortSlotProvider(portSlotEditor);
 
 		final VoyagePlan plan1 = new VoyagePlan();
-		plan1.setSequence(new Object[] { loadDetails1, voyageDetails1,
-				dischargeDetails1, voyageDetails2, loadDetails2 });
+		plan1.setSequence(new Object[] { loadDetails1, voyageDetails1, dischargeDetails1, voyageDetails2, loadDetails2 });
 
 		final VoyagePlan plan2 = new VoyagePlan();
-		plan2.setSequence(new Object[] { loadDetails2, voyageDetails3,
-				dischargeDetails2 });
+		plan2.setSequence(new Object[] { loadDetails2, voyageDetails3, dischargeDetails2 });
 
 		final List<VoyagePlan> plans = new LinkedList<VoyagePlan>();
 		plans.add(plan1);
@@ -200,22 +186,17 @@ public class VoyagePlanAnnotatorTest {
 
 		final IResource resource = context.mock(IResource.class);
 
-		final AnnotatedSolution<Object> annotatedSolution = new AnnotatedSolution<Object>();
+		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
 		annotator.annotateFromVoyagePlan(resource, plans, 0, annotatedSolution);
 
 		{
-			final IJourneyEvent<Object> journey = annotatedSolution
-					.getElementAnnotations().getAnnotation(element1, SchedulerConstants.AI_journeyInfo,
-							IJourneyEvent.class);
+			final IJourneyEvent journey = annotatedSolution.getElementAnnotations().getAnnotation(element1, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
 			Assert.assertNull(journey);
 
-			final IIdleEvent<Object> idle = annotatedSolution.getElementAnnotations().getAnnotation(
-					element1, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
+			final IIdleEvent idle = annotatedSolution.getElementAnnotations().getAnnotation(element1, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
 			Assert.assertNull(idle);
 
-			final IPortVisitEvent<Object> portVisit = annotatedSolution.getElementAnnotations()
-					.getAnnotation(element1, SchedulerConstants.AI_visitInfo,
-							IPortVisitEvent.class);
+			final IPortVisitEvent portVisit = annotatedSolution.getElementAnnotations().getAnnotation(element1, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
 			Assert.assertNotNull(portVisit);
 			Assert.assertSame(element1, portVisit.getSequenceElement());
 			Assert.assertSame(loadSlot1, portVisit.getPortSlot());
@@ -228,7 +209,7 @@ public class VoyagePlanAnnotatorTest {
 			// Assert.assertEquals(400, loadEvent.getLoadVolume());
 		}
 		{
-			final IJourneyEvent<Object> journey = annotatedSolution.getElementAnnotations()
+			final IJourneyEvent journey = annotatedSolution.getElementAnnotations()
 					.getAnnotation(element2, SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
 			Assert.assertNotNull(journey);
@@ -241,23 +222,16 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(50, journey.getDuration());
 			Assert.assertEquals(500, journey.getDistance());
 
-			Assert.assertEquals(1000l,
-					journey.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-			Assert.assertEquals(2000l,
-					journey.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-			Assert.assertEquals(3000l,
-					journey.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-			Assert.assertEquals(4000l,
-					journey.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
+			Assert.assertEquals(1000l, journey.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
+			Assert.assertEquals(2000l, journey.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+			Assert.assertEquals(3000l, journey.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
+			Assert.assertEquals(4000l, journey.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
-			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+			Assert.assertEquals(0l, journey.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
+			Assert.assertEquals(0l, journey.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(1000l, journey.getFuelCost(FuelComponent.Base));
-			Assert.assertEquals(4000l,
-					journey.getFuelCost(FuelComponent.Base_Supplemental));
+			Assert.assertEquals(4000l, journey.getFuelCost(FuelComponent.Base_Supplemental));
 			Assert.assertEquals(9000l, journey.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(16000l, journey.getFuelCost(FuelComponent.FBO));
 
@@ -266,8 +240,7 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertEquals(VesselState.Laden, journey.getVesselState());
 
-			final IIdleEvent<Object> idle = annotatedSolution.getElementAnnotations().getAnnotation(
-					element2, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
+			final IIdleEvent idle = annotatedSolution.getElementAnnotations().getAnnotation(element2, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
 			Assert.assertNotNull(idle);
 
 			Assert.assertSame(element2, idle.getSequenceElement());
@@ -279,28 +252,22 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(VesselState.Laden, idle.getVesselState());
 
 			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-			Assert.assertEquals(0,
-					idle.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
-			Assert.assertEquals(5000l,
-					idle.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-			Assert.assertEquals(6000l,
-					idle.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+			Assert.assertEquals(5000l, idle.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
+			Assert.assertEquals(6000l, idle.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.Base));
-			Assert.assertEquals(0,
-					idle.getFuelCost(FuelComponent.Base_Supplemental));
+			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.Base_Supplemental));
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.FBO));
 
 			Assert.assertEquals(25000l, idle.getFuelCost(FuelComponent.IdleBase));
 			Assert.assertEquals(36000l, idle.getFuelCost(FuelComponent.IdleNBO));
 
-			final IPortVisitEvent<Object> portVisit = annotatedSolution.getElementAnnotations()
-					.getAnnotation(element2, SchedulerConstants.AI_visitInfo,
-							IPortVisitEvent.class);
+			final IPortVisitEvent portVisit = annotatedSolution.getElementAnnotations().getAnnotation(element2, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
 			Assert.assertNotNull(portVisit);
 			Assert.assertSame(element2, portVisit.getSequenceElement());
 			Assert.assertSame(dischargeSlot1, portVisit.getPortSlot());
@@ -314,7 +281,7 @@ public class VoyagePlanAnnotatorTest {
 		}
 
 		{
-			final IJourneyEvent<Object> journey = annotatedSolution.getElementAnnotations()
+			final IJourneyEvent journey = annotatedSolution.getElementAnnotations()
 					.getAnnotation(element3, SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
 			Assert.assertNotNull(journey);
@@ -327,23 +294,16 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(50, journey.getDuration());
 			Assert.assertEquals(1000, journey.getDistance());
 
-			Assert.assertEquals(1100l,
-					journey.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-			Assert.assertEquals(2100l,
-					journey.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-			Assert.assertEquals(3100l,
-					journey.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-			Assert.assertEquals(4100l,
-					journey.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
+			Assert.assertEquals(1100l, journey.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
+			Assert.assertEquals(2100l, journey.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+			Assert.assertEquals(3100l, journey.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
+			Assert.assertEquals(4100l, journey.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
-			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+			Assert.assertEquals(0l, journey.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
+			Assert.assertEquals(0l, journey.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(1210l, journey.getFuelCost(FuelComponent.Base));
-			Assert.assertEquals(4410l,
-					journey.getFuelCost(FuelComponent.Base_Supplemental));
+			Assert.assertEquals(4410l, journey.getFuelCost(FuelComponent.Base_Supplemental));
 			Assert.assertEquals(9610l, journey.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(16810l, journey.getFuelCost(FuelComponent.FBO));
 
@@ -352,8 +312,7 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertEquals(VesselState.Ballast, journey.getVesselState());
 
-			final IIdleEvent<Object> idle = annotatedSolution.getElementAnnotations().getAnnotation(
-					element3, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
+			final IIdleEvent idle = annotatedSolution.getElementAnnotations().getAnnotation(element3, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
 			Assert.assertNotNull(idle);
 
 			Assert.assertSame(element3, idle.getSequenceElement());
@@ -365,28 +324,22 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(VesselState.Ballast, idle.getVesselState());
 
 			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-			Assert.assertEquals(0,
-					idle.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
-			Assert.assertEquals(5100l,
-					idle.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-			Assert.assertEquals(6100l,
-					idle.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+			Assert.assertEquals(5100l, idle.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
+			Assert.assertEquals(6100l, idle.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.Base));
-			Assert.assertEquals(0,
-					idle.getFuelCost(FuelComponent.Base_Supplemental));
+			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.Base_Supplemental));
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.FBO));
 
 			Assert.assertEquals(26010l, idle.getFuelCost(FuelComponent.IdleBase));
 			Assert.assertEquals(37210l, idle.getFuelCost(FuelComponent.IdleNBO));
 
-			final IPortVisitEvent<Object> portVisit = annotatedSolution.getElementAnnotations()
-					.getAnnotation(element3, SchedulerConstants.AI_visitInfo,
-							IPortVisitEvent.class);
+			final IPortVisitEvent portVisit = annotatedSolution.getElementAnnotations().getAnnotation(element3, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
 			Assert.assertNotNull(portVisit);
 			Assert.assertSame(element3, portVisit.getSequenceElement());
 			Assert.assertSame(loadSlot2, portVisit.getPortSlot());
@@ -400,7 +353,7 @@ public class VoyagePlanAnnotatorTest {
 		}
 
 		{
-			final IJourneyEvent<Object> journey = annotatedSolution.getElementAnnotations()
+			final IJourneyEvent journey = annotatedSolution.getElementAnnotations()
 					.getAnnotation(element4, SchedulerConstants.AI_journeyInfo,
 							IJourneyEvent.class);
 			Assert.assertNotNull(journey);
@@ -413,23 +366,16 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(50, journey.getDuration());
 			Assert.assertEquals(1500, journey.getDistance());
 
-			Assert.assertEquals(1200l,
-					journey.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-			Assert.assertEquals(2200l,
-					journey.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-			Assert.assertEquals(3200l,
-					journey.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
-			Assert.assertEquals(4200l,
-					journey.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
+			Assert.assertEquals(1200l, journey.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
+			Assert.assertEquals(2200l, journey.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+			Assert.assertEquals(3200l, journey.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
+			Assert.assertEquals(4200l, journey.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
-			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-			Assert.assertEquals(0l,
-					journey.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+			Assert.assertEquals(0l, journey.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
+			Assert.assertEquals(0l, journey.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(1440l, journey.getFuelCost(FuelComponent.Base));
-			Assert.assertEquals(4840l,
-					journey.getFuelCost(FuelComponent.Base_Supplemental));
+			Assert.assertEquals(4840l, journey.getFuelCost(FuelComponent.Base_Supplemental));
 			Assert.assertEquals(10240l, journey.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(17640l, journey.getFuelCost(FuelComponent.FBO));
 
@@ -438,8 +384,7 @@ public class VoyagePlanAnnotatorTest {
 
 			Assert.assertEquals(VesselState.Laden, journey.getVesselState());
 
-			final IIdleEvent<Object> idle = annotatedSolution.getElementAnnotations().getAnnotation(
-					element4, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
+			final IIdleEvent idle = annotatedSolution.getElementAnnotations().getAnnotation(element4, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
 			Assert.assertNotNull(idle);
 
 			Assert.assertSame(element4, idle.getSequenceElement());
@@ -451,28 +396,22 @@ public class VoyagePlanAnnotatorTest {
 			Assert.assertEquals(VesselState.Laden, idle.getVesselState());
 
 			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
-			Assert.assertEquals(0,
-					idle.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 			Assert.assertEquals(0, idle.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
-			Assert.assertEquals(5200l,
-					idle.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-			Assert.assertEquals(6200l,
-					idle.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+			Assert.assertEquals(5200l, idle.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
+			Assert.assertEquals(6200l, idle.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.Base));
-			Assert.assertEquals(0,
-					idle.getFuelCost(FuelComponent.Base_Supplemental));
+			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.Base_Supplemental));
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(0, idle.getFuelCost(FuelComponent.FBO));
 
 			Assert.assertEquals(27040l, idle.getFuelCost(FuelComponent.IdleBase));
 			Assert.assertEquals(38440l, idle.getFuelCost(FuelComponent.IdleNBO));
 
-			final IPortVisitEvent<Object> portVisit = annotatedSolution.getElementAnnotations()
-					.getAnnotation(element4, SchedulerConstants.AI_visitInfo,
-							IPortVisitEvent.class);
+			final IPortVisitEvent portVisit = annotatedSolution.getElementAnnotations().getAnnotation(element4, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
 			Assert.assertNotNull(portVisit);
 			Assert.assertSame(element4, portVisit.getSequenceElement());
 			Assert.assertSame(dischargeSlot2, portVisit.getPortSlot());

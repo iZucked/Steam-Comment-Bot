@@ -4,15 +4,15 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import com.mmxlabs.optimiser.core.ISequenceElement;
+
 /**
  * Extended {@link IPortTypeProvider} interface providing setter capabilities.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IPortTypeProviderEditor<T> extends IPortTypeProvider<T> {
+public interface IPortTypeProviderEditor extends IPortTypeProvider {
 
 	/**
 	 * Set the {@link PortType} for this sequence element
@@ -20,5 +20,5 @@ public interface IPortTypeProviderEditor<T> extends IPortTypeProvider<T> {
 	 * @param sequenceElement
 	 * @param portType
 	 */
-	void setPortType(T sequenceElement, PortType portType);
+	void setPortType(ISequenceElement sequenceElement, PortType portType);
 }

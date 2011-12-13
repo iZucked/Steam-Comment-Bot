@@ -16,41 +16,37 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * @author hinton
  * 
  */
-public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
-	private final FastCargoAllocator<T> fastAllocator = new FastCargoAllocator<T>();
-	private final SimplexCargoAllocator<T> simplexAllocator = new SimplexCargoAllocator<T>();
+public class ComparingCargoAllocator implements ICargoAllocator {
+	private final FastCargoAllocator fastAllocator = new FastCargoAllocator();
+
+	// private final SimplexCargoAllocator simplexAllocator = new SimplexCargoAllocator();
 
 	@Override
-	public void setTotalVolumeLimitProvider(
-			final ITotalVolumeLimitProvider<T> tvlp) {
+	public void setTotalVolumeLimitProvider(final ITotalVolumeLimitProvider tvlp) {
 		fastAllocator.setTotalVolumeLimitProvider(tvlp);
-//		simplexAllocator.setTotalVolumeLimitProvider(tvlp);
+		// simplexAllocator.setTotalVolumeLimitProvider(tvlp);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator
-	 * #init()
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator #init()
 	 */
 	@Override
 	public void init() {
 		fastAllocator.init();
-//		simplexAllocator.init();
+		// simplexAllocator.init();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator
-	 * #reset()
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator #reset()
 	 */
 	@Override
 	public void reset() {
 		fastAllocator.reset();
-//		simplexAllocator.reset();
+		// simplexAllocator.reset();
 	}
 
 	/*
@@ -59,7 +55,7 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#allocate(com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences)
 	 */
 	@Override
-	public Collection<IAllocationAnnotation> allocate(ScheduledSequences sequences) {
+	public Collection<IAllocationAnnotation> allocate(final ScheduledSequences sequences) {
 		// TODO Auto-generated method stub
 		return fastAllocator.allocate(sequences);
 	}
@@ -81,7 +77,7 @@ public class ComparingCargoAllocator<T> implements ICargoAllocator<T> {
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#setVesselProvider(com.mmxlabs.scheduler.optimiser.providers.IVesselProvider)
 	 */
 	@Override
-	public void setVesselProvider(IVesselProvider dataComponentProvider) {
+	public void setVesselProvider(final IVesselProvider dataComponentProvider) {
 		// TODO Auto-generated method stub
 
 	}

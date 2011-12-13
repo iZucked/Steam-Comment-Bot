@@ -14,6 +14,7 @@ import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.impl.Move2over2;
@@ -27,25 +28,24 @@ import com.mmxlabs.optimiser.lso.impl.Move4over2;
  * doesn't make that much difference.
  * 
  * @author hinton
- * @param <T>
  * 
  */
-public class SequencesConstrainedMoveGeneratorUnit<T> implements IConstrainedMoveGeneratorUnit<T> {
-	final ConstrainedMoveGenerator<T> owner;
+public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGeneratorUnit {
+	final ConstrainedMoveGenerator owner;
 
-	class Move2over2A extends Move2over2<T> {
-
-	}
-
-	class Move2over2B extends Move2over2<T> {
+	class Move2over2A extends Move2over2 {
 
 	}
 
-	class Move2over2C extends Move2over2<T> {
+	class Move2over2B extends Move2over2 {
 
 	}
 
-	class NullMove implements IMove<T> {
+	class Move2over2C extends Move2over2 {
+
+	}
+
+	class NullMove implements IMove {
 
 		@Override
 		public Collection<IResource> getAffectedResources() {
@@ -54,12 +54,12 @@ public class SequencesConstrainedMoveGeneratorUnit<T> implements IConstrainedMov
 		}
 
 		@Override
-		public void apply(final IModifiableSequences<T> sequences) {
+		public void apply(final IModifiableSequences sequences) {
 
 		}
 
 		@Override
-		public boolean validate(final ISequences<T> sequences) {
+		public boolean validate(final ISequences sequences) {
 			return true;
 		}
 
@@ -85,21 +85,21 @@ public class SequencesConstrainedMoveGeneratorUnit<T> implements IConstrainedMov
 	NullMove nullMoveC = new NullMoveC();
 	NullMove nullMoveD = new NullMoveD();
 
-	public SequencesConstrainedMoveGeneratorUnit(final ConstrainedMoveGenerator<T> owner) {
+	public SequencesConstrainedMoveGeneratorUnit(final ConstrainedMoveGenerator owner) {
 		super();
 		this.owner = owner;
 
 	}
 
 	@Override
-	public void setSequences(ISequences<T> sequences) {
+	public void setSequences(final ISequences sequences) {
 
 	}
 
 
 	@Override
-	public IMove<T> generateMove() {
-		final Pair<T, T> newPair = RandomHelper.chooseElementFrom(owner.random, owner.validBreaks);
+	public IMove generateMove() {
+		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(owner.random, owner.validBreaks);
 		final Pair<Integer, Integer> pos1 = owner.reverseLookup.get(newPair.getFirst());
 		final Pair<Integer, Integer> pos2 = owner.reverseLookup.get(newPair.getSecond());
 
@@ -126,22 +126,22 @@ public class SequencesConstrainedMoveGeneratorUnit<T> implements IConstrainedMov
 			// I think 3opt2 is worth looking for first, as more requirements =>
 			// less feasible.
 
-			final ISequence<T> sequence = owner.sequences.getSequence(sequence1);
+			final ISequence sequence = owner.sequences.getSequence(sequence1);
 			final int beforeFirstCut = Math.min(position1, position2);
 			final int beforeSecondCut = Math.max(position1, position2) - 1;
-			final T firstElementInSegment = sequence.get(beforeFirstCut + 1);
-			final T lastElementInSegment = sequence.get(beforeSecondCut);
+			final ISequenceElement firstElementInSegment = sequence.get(beforeFirstCut + 1);
+			final ISequenceElement lastElementInSegment = sequence.get(beforeSecondCut);
 
 			// Collect the elements which can go after the segment we are cutting out
-			final ConstrainedMoveGenerator<T>.Followers<T> followers = owner.validFollowers.get(lastElementInSegment);
+			final ConstrainedMoveGenerator.Followers<ISequenceElement> followers = owner.validFollowers.get(lastElementInSegment);
 
 			// Pick one of these followers and find where it is at the moment
-			final T precursor = followers.get(owner.random.nextInt(followers.size()));
+			final ISequenceElement precursor = followers.get(owner.random.nextInt(followers.size()));
 			final Pair<Integer, Integer> posPrecursor = owner.reverseLookup.get(precursor);
 
 			// now check whether the element before the precursor can precede
 			// the first element in the segment
-			final T beforeInsert = owner.sequences.getSequence(posPrecursor.getFirst()).get(posPrecursor.getSecond() - 1);
+			final ISequenceElement beforeInsert = owner.sequences.getSequence(posPrecursor.getFirst()).get(posPrecursor.getSecond() - 1);
 			if (owner.validFollowers.get(beforeInsert).contains(firstElementInSegment)) {
 				// we have a legal 3opt2, so do that. It might be a 3opt1
 				// really, but that's OK
@@ -154,7 +154,7 @@ public class SequencesConstrainedMoveGeneratorUnit<T> implements IConstrainedMov
 					}
 				}
 
-				final Move3over2<T> result = new Move3over2<T>();
+				final Move3over2 result = new Move3over2();
 				result.setResource1(resources.get(sequence1));
 				result.setResource1Start(beforeFirstCut + 1);
 				result.setResource1End(beforeSecondCut);
@@ -179,8 +179,8 @@ public class SequencesConstrainedMoveGeneratorUnit<T> implements IConstrainedMov
 
 			// check if it'd be a legal 2opt2
 
-			final ISequence<T> seq1 = owner.sequences.getSequence(sequence1);
-			final ISequence<T> seq2 = owner.sequences.getSequence(sequence2);
+			final ISequence seq1 = owner.sequences.getSequence(sequence1);
+			final ISequence seq2 = owner.sequences.getSequence(sequence2);
 
 			boolean valid2opt2 = owner.validFollowers.get(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 
@@ -194,7 +194,7 @@ public class SequencesConstrainedMoveGeneratorUnit<T> implements IConstrainedMov
 			// if it would be, maybe do it
 			if (valid2opt2 && owner.random.nextDouble() < 0.05) {
 				// make 2opt2
-				final Move2over2<T> result = new Move2over2A();
+				final Move2over2 result = new Move2over2A();
 				result.setResource1(resources.get(sequence1));
 				result.setResource2(resources.get(sequence2));
 				// add 1 because the positions are inclusive, and we need to cut
@@ -211,14 +211,14 @@ public class SequencesConstrainedMoveGeneratorUnit<T> implements IConstrainedMov
 				 * we want to iterate over the elements following B and see if any of them can precede anything in S1 after or including A.
 				 */
 
-				final ConstrainedMoveGenerator<T>.Followers<T> followersOfSecondElementsPredecessor = owner.validFollowers.get(seq2.get(position2 - 1));
+				final ConstrainedMoveGenerator.Followers<ISequenceElement> followersOfSecondElementsPredecessor = owner.validFollowers.get(seq2.get(position2 - 1));
 
 				final List<Pair<Integer, Integer>> viableSecondBreaks = new ArrayList<Pair<Integer, Integer>>();
 				for (int i = position2 + 1; i < seq2.size() - 1; i++) { // ignore
 																		// last
 																		// element
-					final T here = seq2.get(i);
-					for (final T elt : owner.validFollowers.get(here)) {
+					final ISequenceElement here = seq2.get(i);
+					for (final ISequenceElement elt : owner.validFollowers.get(here)) {
 						final Pair<Integer, Integer> loc = owner.reverseLookup.get(elt);
 						if (loc.getFirst().intValue() == sequence1) {
 							// it can be adjacent to something in sequence 1,
@@ -250,7 +250,7 @@ public class SequencesConstrainedMoveGeneratorUnit<T> implements IConstrainedMov
 
 				if (viableSecondBreaks.isEmpty()) {
 					if (valid2opt2) {
-						final Move2over2<T> result = new Move2over2B();
+						final Move2over2 result = new Move2over2B();
 						result.setResource1(resources.get(sequence1));
 						result.setResource2(resources.get(sequence2));
 						// add 1 because the positions are inclusive, and we
@@ -281,7 +281,7 @@ public class SequencesConstrainedMoveGeneratorUnit<T> implements IConstrainedMov
 
 				if (secondPosition1 == position1 + 1) {
 					// 3opt2
-					final Move3over2<T> result = new Move3over2<T>();
+					final Move3over2 result = new Move3over2();
 
 					result.setResource2(resources.get(sequence1));
 					result.setResource2Position(position1 + 1);
@@ -293,7 +293,7 @@ public class SequencesConstrainedMoveGeneratorUnit<T> implements IConstrainedMov
 					return result;
 				} else {
 					// 4opt2
-					final Move4over2<T> result = new Move4over2<T>();
+					final Move4over2 result = new Move4over2();
 
 					result.setResource1(resources.get(sequence1));
 					result.setResource2(resources.get(sequence2));

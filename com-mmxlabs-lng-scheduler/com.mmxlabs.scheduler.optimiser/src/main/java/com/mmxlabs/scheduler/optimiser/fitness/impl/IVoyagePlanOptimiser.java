@@ -13,16 +13,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * The {@link IVoyagePlanOptimiser} optimises the choices in a
- * {@link VoyagePlan} based on {@link IVoyagePlanChoice} implementations. These
- * are provided in a set order and they can edit the voyage plan objects.
+ * The {@link IVoyagePlanOptimiser} optimises the choices in a {@link VoyagePlan} based on {@link IVoyagePlanChoice} implementations. These are provided in a set order and they can edit the voyage
+ * plan objects.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IVoyagePlanOptimiser<T> {
+public interface IVoyagePlanOptimiser {
 
 	/**
 	 * Check internal state is valid (i.e. all setters have been called).
@@ -54,17 +51,15 @@ public interface IVoyagePlanOptimiser<T> {
 	List<Object> getBasicSequence();
 
 	/**
-	 * Sets the basic voyage plan sequence. This should be {@link IPortSlot}
-	 * instances separated by {@link VoyageOptions} instances implementing
-	 * {@link Cloneable}. The {@link VoyageOptions} objects will be modified
-	 * during optimisation.
+	 * Sets the basic voyage plan sequence. This should be {@link IPortSlot} instances separated by {@link VoyageOptions} instances implementing {@link Cloneable}. The {@link VoyageOptions} objects
+	 * will be modified during optimisation.
 	 * 
 	 * @param basicSequence
 	 */
 	void setBasicSequence(final List<Object> basicSequence);
 
 	void setArrivalTimes(final List<Integer> currentTimes);
-	
+
 	/**
 	 * Get the {@link IVessel} to evaluate voyages against.
 	 * 
@@ -94,17 +89,14 @@ public interface IVoyagePlanOptimiser<T> {
 	VoyagePlan getBestPlan();
 
 	/**
-	 * Returns the {@link ILNGVoyageCalculator} used in the
-	 * {@link VoyagePlanOptimiser}.
+	 * Returns the {@link ILNGVoyageCalculator} used in the {@link VoyagePlanOptimiser}.
 	 * 
 	 * @return
 	 */
-	ILNGVoyageCalculator<T> getVoyageCalculator();
+	ILNGVoyageCalculator getVoyageCalculator();
 
 	/**
-	 * Add a new choice to the ordered stack of choices. If this choice depends
-	 * upon the choice of another {@link IVoyagePlanChoice}, then that object
-	 * should have already been added.
+	 * Add a new choice to the ordered stack of choices. If this choice depends upon the choice of another {@link IVoyagePlanChoice}, then that object should have already been added.
 	 * 
 	 * @param choice
 	 */

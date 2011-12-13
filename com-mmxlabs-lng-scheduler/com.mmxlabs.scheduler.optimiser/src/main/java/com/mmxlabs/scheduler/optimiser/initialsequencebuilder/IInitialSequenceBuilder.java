@@ -7,20 +7,18 @@ package com.mmxlabs.scheduler.optimiser.initialsequencebuilder;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
- * Implementations should be able to create some sensible initial sequences from
- * a given {@link IOptimisationData}. In future, the interface should be
- * extended to include "advice" from the scenario, so that the schedule can be
- * partially specified already.
+ * Implementations should be able to create some sensible initial sequences from a given {@link IOptimisationData}. In future, the interface should be extended to include "advice" from the scenario,
+ * so that the schedule can be partially specified already.
  * 
  * @author hinton
  * 
- * @param <T>
  */
-public interface IInitialSequenceBuilder<T> {
+public interface IInitialSequenceBuilder {
 	/**
 	 * Create some initial sequences
 	 * 
@@ -29,11 +27,8 @@ public interface IInitialSequenceBuilder<T> {
 	 * @param sequenceSuggestion
 	 *            a suggested (possibly incomplete) start state. May be null
 	 * @param resourceSuggestion
-	 *            a suggested set of resources to put elements on; this is only
-	 *            considered for elements not in sequenceSuggestion.
+	 *            a suggested set of resources to put elements on; this is only considered for elements not in sequenceSuggestion.
 	 * @return
 	 */
-	public ISequences<T> createInitialSequences(IOptimisationData<T> data,
-			ISequences<T> sequenceSuggestion,
-			Map<T, IResource> resourceSuggestion);
+	public ISequences createInitialSequences(IOptimisationData data, ISequences sequenceSuggestion, Map<ISequenceElement, IResource> resourceSuggestion);
 }

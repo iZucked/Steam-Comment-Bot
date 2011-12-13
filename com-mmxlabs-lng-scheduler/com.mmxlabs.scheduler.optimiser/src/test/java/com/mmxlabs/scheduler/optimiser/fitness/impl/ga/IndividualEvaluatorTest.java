@@ -31,6 +31,7 @@ import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEdito
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
@@ -51,26 +52,23 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 
 @RunWith(JMock.class)
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class IndividualEvaluatorTest {
 
 	/**
 	 * Mock implementation of {@link AbstractSequenceScheduler} to allow use of abstract class in tests
 	 * 
 	 * @author Simon Goodall
-	 * 
-	 * @param <T>
 	 */
-	private static class MockSequenceScheduler<T> extends AbstractSequenceScheduler<T> {
+	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
 
 		@Override
-		public ScheduledSequences schedule(ISequences<T> sequences, boolean b) {
+		public ScheduledSequences schedule(ISequences sequences, boolean b) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 
 		}
 
 		@Override
-		public ScheduledSequences schedule(ISequences<T> sequences, Collection<IResource> affectedResources, boolean forExport) {
+		public ScheduledSequences schedule(ISequences sequences, Collection<IResource> affectedResources, boolean forExport) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 
@@ -84,14 +82,14 @@ public class IndividualEvaluatorTest {
 
 	@Test
 	public void testInit1() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 		createFullyInitialisedEvaluator(evaluator);
 		evaluator.init();
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit2() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 		createFullyInitialisedEvaluator(evaluator);
 
 		evaluator.setDistanceProvider(null);
@@ -101,7 +99,7 @@ public class IndividualEvaluatorTest {
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit3() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 		createFullyInitialisedEvaluator(evaluator);
 
 		evaluator.setDurationsProvider(null);
@@ -111,7 +109,7 @@ public class IndividualEvaluatorTest {
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit4() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 		createFullyInitialisedEvaluator(evaluator);
 
 		evaluator.setFitnessComponents(null);
@@ -123,8 +121,8 @@ public class IndividualEvaluatorTest {
 	// public void testInit5() {
 	// Assert.fail("Not implemented");
 	//
-	// final IndividualEvaluator<Object> evaluator = new
-	// IndividualEvaluator<Object>();
+	// final IndividualEvaluator evaluator = new
+	// IndividualEvaluator();
 	// createFullyInitialisedEvaluator(evaluator);
 	//
 	// evaluator.setFitnessComponentWeights(null);
@@ -134,7 +132,7 @@ public class IndividualEvaluatorTest {
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit6() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 		createFullyInitialisedEvaluator(evaluator);
 
 		evaluator.setPortProvider(null);
@@ -144,7 +142,7 @@ public class IndividualEvaluatorTest {
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit7() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 		createFullyInitialisedEvaluator(evaluator);
 
 		evaluator.setSequenceScheduler(null);
@@ -154,7 +152,7 @@ public class IndividualEvaluatorTest {
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit8() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 		createFullyInitialisedEvaluator(evaluator);
 
 		evaluator.setTimeWindowProvider(null);
@@ -164,7 +162,7 @@ public class IndividualEvaluatorTest {
 
 	@Test(expected = IllegalStateException.class)
 	public void testInit9() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 		createFullyInitialisedEvaluator(evaluator);
 
 		evaluator.setVesselProvider(null);
@@ -173,50 +171,42 @@ public class IndividualEvaluatorTest {
 	}
 
 	/**
-	 * For use in initXXX() tests. Add in all required elements for init().
-	 * initXXX() tests should null one entry to test failure.
+	 * For use in initXXX() tests. Add in all required elements for init(). initXXX() tests should null one entry to test failure.
 	 * 
 	 * @param evaluator
 	 */
-	private void createFullyInitialisedEvaluator(
-			final IndividualEvaluator<Object> evaluator) {
+	private void createFullyInitialisedEvaluator(final IndividualEvaluator evaluator) {
 
-		final AbstractSequenceScheduler<Object> scheduler = new MockSequenceScheduler();
+		final AbstractSequenceScheduler scheduler = new MockSequenceScheduler();
 		evaluator.setSequenceScheduler(scheduler);
 
-		final Collection<ICargoSchedulerFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final Collection<ICargoSchedulerFitnessComponent> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
-		final Map<String, Double> fitnessComponentWeights = Collections
-				.emptyMap();
+		final Map<String, Double> fitnessComponentWeights = Collections.emptyMap();
 		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
 
-		final IMultiMatrixProvider<IPort, Integer> distanceProvider = context
-				.mock(IMultiMatrixProvider.class);
+		final IMultiMatrixProvider<IPort, Integer> distanceProvider = context.mock(IMultiMatrixProvider.class);
 		evaluator.setDistanceProvider(distanceProvider);
 
-		final IElementDurationProvider<Object> durationsProvider = context
-				.mock(IElementDurationProvider.class);
+		final IElementDurationProvider durationsProvider = context.mock(IElementDurationProvider.class);
 		evaluator.setDurationsProvider(durationsProvider);
 
 		final IPortProvider portProvider = context.mock(IPortProvider.class);
 		evaluator.setPortProvider(portProvider);
 
-		final ITimeWindowDataComponentProvider timeWindowProvider = context
-				.mock(ITimeWindowDataComponentProvider.class);
+		final ITimeWindowDataComponentProvider timeWindowProvider = context.mock(ITimeWindowDataComponentProvider.class);
 		evaluator.setTimeWindowProvider(timeWindowProvider);
 
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		evaluator.setVesselProvider(vesselProvider);
 	}
 
 	@Test
 	public void testGetSetSequenceScheduler() {
 
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
-		final AbstractSequenceScheduler<Object> value = new MockSequenceScheduler();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
+		final AbstractSequenceScheduler value = new MockSequenceScheduler();
 
 		Assert.assertNull(evaluator.getSequenceScheduler());
 		evaluator.setSequenceScheduler(value);
@@ -226,9 +216,8 @@ public class IndividualEvaluatorTest {
 
 	@Test
 	public void testGetSetTimeWindowProvider() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
-		final ITimeWindowDataComponentProvider value = context
-				.mock(ITimeWindowDataComponentProvider.class);
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
+		final ITimeWindowDataComponentProvider value = context.mock(ITimeWindowDataComponentProvider.class);
 		Assert.assertNull(evaluator.getTimeWindowProvider());
 		evaluator.setTimeWindowProvider(value);
 		Assert.assertSame(value, evaluator.getTimeWindowProvider());
@@ -239,9 +228,8 @@ public class IndividualEvaluatorTest {
 
 	@Test
 	public void testGetSetFitnessComponents() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
-		final Collection<ICargoSchedulerFitnessComponent<Object>> value = Collections
-				.emptyList();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
+		final Collection<ICargoSchedulerFitnessComponent> value = Collections.emptyList();
 		Assert.assertNull(evaluator.getFitnessComponents());
 		evaluator.setFitnessComponents(value);
 		Assert.assertSame(value, evaluator.getFitnessComponents());
@@ -253,13 +241,11 @@ public class IndividualEvaluatorTest {
 
 	@Test()
 	public void testGetSetFitnessComponentWeights() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 		Assert.assertNull(evaluator.getFitnessComponentWeights());
-		final Map<String, Double> fitnessComponentWeights = Collections
-				.emptyMap();
+		final Map<String, Double> fitnessComponentWeights = Collections.emptyMap();
 		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
-		Assert.assertSame(fitnessComponentWeights,
-				evaluator.getFitnessComponentWeights());
+		Assert.assertSame(fitnessComponentWeights, evaluator.getFitnessComponentWeights());
 		evaluator.dispose();
 		Assert.assertNull(evaluator.getFitnessComponentWeights());
 
@@ -267,7 +253,7 @@ public class IndividualEvaluatorTest {
 
 	@Test
 	public void testGetSetVesselProvider() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 		final IVesselProvider value = context.mock(IVesselProvider.class);
 		Assert.assertNull(evaluator.getVesselProvider());
 		evaluator.setVesselProvider(value);
@@ -279,7 +265,7 @@ public class IndividualEvaluatorTest {
 
 	@Test
 	public void testGetSetPortProvider() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 		final IPortProvider value = context.mock(IPortProvider.class);
 		Assert.assertNull(evaluator.getPortProvider());
 		evaluator.setPortProvider(value);
@@ -291,9 +277,8 @@ public class IndividualEvaluatorTest {
 
 	@Test
 	public void testGetSetDistanceProvider() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
-		final IMultiMatrixProvider<IPort, Integer> value = context
-				.mock(IMultiMatrixProvider.class);
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
+		final IMultiMatrixProvider<IPort, Integer> value = context.mock(IMultiMatrixProvider.class);
 		Assert.assertNull(evaluator.getDistanceProvider());
 		evaluator.setDistanceProvider(value);
 		Assert.assertSame(value, evaluator.getDistanceProvider());
@@ -304,9 +289,8 @@ public class IndividualEvaluatorTest {
 
 	@Test
 	public void testGetSetDurationsProvider() {
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
-		final IElementDurationProvider<Object> value = context
-				.mock(IElementDurationProvider.class);
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
+		final IElementDurationProvider value = context.mock(IElementDurationProvider.class);
 		Assert.assertNull(evaluator.getDurationsProvider());
 		evaluator.setDurationsProvider(value);
 		Assert.assertSame(value, evaluator.getDurationsProvider());
@@ -321,12 +305,10 @@ public class IndividualEvaluatorTest {
 	@Test
 	public void testSetup1() {
 
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 
-		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>(
-				"default");
-		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
-				"distanceProvider");
+		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>("default");
+		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("distanceProvider");
 		distanceProvider.set(IMultiMatrixEditor.Default_Key, matrix);
 		evaluator.setDistanceProvider(distanceProvider);
 
@@ -335,12 +317,10 @@ public class IndividualEvaluatorTest {
 		vesselClass.setMaxSpeed(20000);
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
 
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor(
-				"portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = context.mock(IPort.class, "port-1");
@@ -348,17 +328,16 @@ public class IndividualEvaluatorTest {
 		final IPort port3 = context.mock(IPort.class, "port-3");
 		final IPort port4 = context.mock(IPort.class, "port-4");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
-				"timeWindowProvider");
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider("timeWindowProvider");
 		evaluator.setTimeWindowProvider(timeWindowProvider);
-		final IElementDurationProviderEditor<Object> durationsProvider = new HashMapElementDurationEditor<Object>(
-				"durationsProvider");
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor("durationsProvider");
 		evaluator.setDurationsProvider(durationsProvider);
 
-		final Object element1 = new Object();
-		final Object element2 = new Object();
-		final Object element3 = new Object();
-		final Object element4 = new Object();
+		final ISequenceElement element1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement element2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement element3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement element4 = context.mock(ISequenceElement.class, "4");
+
 
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
@@ -375,19 +354,15 @@ public class IndividualEvaluatorTest {
 		matrix.set(port3, port4, 400);
 
 		evaluator.setSequenceScheduler(new MockSequenceScheduler());
-		final Collection<ICargoSchedulerFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final Collection<ICargoSchedulerFitnessComponent> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
-		final Map<String, Double> fitnessComponentWeights = Collections
-				.emptyMap();
+		final Map<String, Double> fitnessComponentWeights = Collections.emptyMap();
 		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
 
 		evaluator.init();
 
-		final ISequence<Object> sequence = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(element1, element2, element3,
-						element4));
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(element1, element2, element3, element4));
 
 		context.checking(new Expectations() {
 			{
@@ -427,12 +402,10 @@ public class IndividualEvaluatorTest {
 	@Test
 	public void testSetup2() {
 
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 
-		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>(
-				"default");
-		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
-				"distanceProvider");
+		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>("default");
+		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("distanceProvider");
 		distanceProvider.set(IMultiMatrixEditor.Default_Key, matrix);
 		evaluator.setDistanceProvider(distanceProvider);
 
@@ -441,12 +414,10 @@ public class IndividualEvaluatorTest {
 		vesselClass.setMaxSpeed(20000);
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
 
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor(
-				"portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = context.mock(IPort.class, "port-1");
@@ -454,17 +425,15 @@ public class IndividualEvaluatorTest {
 		final IPort port3 = context.mock(IPort.class, "port-3");
 		final IPort port4 = context.mock(IPort.class, "port-4");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
-				"timeWindowProvider");
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider("timeWindowProvider");
 		evaluator.setTimeWindowProvider(timeWindowProvider);
-		final IElementDurationProviderEditor<Object> durationsProvider = new HashMapElementDurationEditor<Object>(
-				"durationsProvider");
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor("durationsProvider");
 		evaluator.setDurationsProvider(durationsProvider);
 
-		final Object element1 = new Object();
-		final Object element2 = new Object();
-		final Object element3 = new Object();
-		final Object element4 = new Object();
+		final ISequenceElement element1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement element2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement element3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement element4 = context.mock(ISequenceElement.class, "4");
 
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
@@ -485,29 +454,21 @@ public class IndividualEvaluatorTest {
 		final ITimeWindow tw3 = new TimeWindow(10, 15);
 		final ITimeWindow tw4 = new TimeWindow(20, 25);
 
-		timeWindowProvider.setTimeWindows(element1,
-				Collections.singletonList(tw1));
-		timeWindowProvider.setTimeWindows(element2,
-				Collections.singletonList(tw2));
-		timeWindowProvider.setTimeWindows(element3,
-				Collections.singletonList(tw3));
-		timeWindowProvider.setTimeWindows(element4,
-				Collections.singletonList(tw4));
+		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(tw1));
+		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(tw2));
+		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(tw3));
+		timeWindowProvider.setTimeWindows(element4, Collections.singletonList(tw4));
 
 		evaluator.setSequenceScheduler(new MockSequenceScheduler());
-		final Collection<ICargoSchedulerFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final Collection<ICargoSchedulerFitnessComponent> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
-		final Map<String, Double> fitnessComponentWeights = Collections
-				.emptyMap();
+		final Map<String, Double> fitnessComponentWeights = Collections.emptyMap();
 		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
 
 		evaluator.init();
 
-		final ISequence<Object> sequence = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(element1, element2, element3,
-						element4));
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(element1, element2, element3, element4));
 
 		context.checking(new Expectations() {
 			{
@@ -545,12 +506,10 @@ public class IndividualEvaluatorTest {
 	@Test
 	public void testSetup3() {
 
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 
-		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>(
-				"default");
-		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
-				"distanceProvider");
+		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>("default");
+		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("distanceProvider");
 		distanceProvider.set(IMultiMatrixEditor.Default_Key, matrix);
 		evaluator.setDistanceProvider(distanceProvider);
 
@@ -559,12 +518,10 @@ public class IndividualEvaluatorTest {
 		vesselClass.setMaxSpeed(20000);
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
 
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor(
-				"portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = context.mock(IPort.class, "port-1");
@@ -572,17 +529,16 @@ public class IndividualEvaluatorTest {
 		final IPort port3 = context.mock(IPort.class, "port-3");
 		final IPort port4 = context.mock(IPort.class, "port-4");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
-				"timeWindowProvider");
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider("timeWindowProvider");
 		evaluator.setTimeWindowProvider(timeWindowProvider);
-		final IElementDurationProviderEditor<Object> durationsProvider = new HashMapElementDurationEditor<Object>(
-				"durationsProvider");
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor("durationsProvider");
 		evaluator.setDurationsProvider(durationsProvider);
 
-		final Object element1 = new Object();
-		final Object element2 = new Object();
-		final Object element3 = new Object();
-		final Object element4 = new Object();
+		final ISequenceElement element1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement element2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement element3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement element4 = context.mock(ISequenceElement.class, "4");
+
 
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
@@ -603,29 +559,21 @@ public class IndividualEvaluatorTest {
 		final ITimeWindow tw3 = new TimeWindow(10, 15);
 		final ITimeWindow tw4 = new TimeWindow(20, 25);
 
-		timeWindowProvider.setTimeWindows(element1,
-				Collections.singletonList(tw1));
-		timeWindowProvider.setTimeWindows(element2,
-				Collections.singletonList(tw2));
-		timeWindowProvider.setTimeWindows(element3,
-				Collections.singletonList(tw3));
-		timeWindowProvider.setTimeWindows(element4,
-				Collections.singletonList(tw4));
+		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(tw1));
+		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(tw2));
+		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(tw3));
+		timeWindowProvider.setTimeWindows(element4, Collections.singletonList(tw4));
 
 		evaluator.setSequenceScheduler(new MockSequenceScheduler());
-		final Collection<ICargoSchedulerFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final Collection<ICargoSchedulerFitnessComponent> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
-		final Map<String, Double> fitnessComponentWeights = Collections
-				.emptyMap();
+		final Map<String, Double> fitnessComponentWeights = Collections.emptyMap();
 		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
 
 		evaluator.init();
 
-		final ISequence<Object> sequence = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(element1, element2, element3,
-						element4));
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(element1, element2, element3, element4));
 
 		context.checking(new Expectations() {
 			{
@@ -667,12 +615,10 @@ public class IndividualEvaluatorTest {
 	@Test
 	public void testSetup4() {
 
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 
-		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>(
-				"default");
-		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
-				"distanceProvider");
+		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>("default");
+		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("distanceProvider");
 		distanceProvider.set(IMultiMatrixEditor.Default_Key, matrix);
 		evaluator.setDistanceProvider(distanceProvider);
 
@@ -681,12 +627,10 @@ public class IndividualEvaluatorTest {
 		vesselClass.setMaxSpeed(20000);
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
 
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor(
-				"portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = context.mock(IPort.class, "port-1");
@@ -694,17 +638,15 @@ public class IndividualEvaluatorTest {
 		final IPort port3 = context.mock(IPort.class, "port-3");
 		final IPort port4 = context.mock(IPort.class, "port-4");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
-				"timeWindowProvider");
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider("timeWindowProvider");
 		evaluator.setTimeWindowProvider(timeWindowProvider);
-		final IElementDurationProviderEditor<Object> durationsProvider = new HashMapElementDurationEditor<Object>(
-				"durationsProvider");
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor("durationsProvider");
 		evaluator.setDurationsProvider(durationsProvider);
 
-		final Object element1 = new Object();
-		final Object element2 = new Object();
-		final Object element3 = new Object();
-		final Object element4 = new Object();
+		final ISequenceElement element1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement element2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement element3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement element4 = context.mock(ISequenceElement.class, "4");
 
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
@@ -725,29 +667,21 @@ public class IndividualEvaluatorTest {
 		final ITimeWindow tw3 = new TimeWindow(10, 15);
 		final ITimeWindow tw4 = new TimeWindow(18, 19);
 
-		timeWindowProvider.setTimeWindows(element1,
-				Collections.singletonList(tw1));
-		timeWindowProvider.setTimeWindows(element2,
-				Collections.singletonList(tw2));
-		timeWindowProvider.setTimeWindows(element3,
-				Collections.singletonList(tw3));
-		timeWindowProvider.setTimeWindows(element4,
-				Collections.singletonList(tw4));
+		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(tw1));
+		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(tw2));
+		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(tw3));
+		timeWindowProvider.setTimeWindows(element4, Collections.singletonList(tw4));
 
 		evaluator.setSequenceScheduler(new MockSequenceScheduler());
-		final Collection<ICargoSchedulerFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final Collection<ICargoSchedulerFitnessComponent> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
-		final Map<String, Double> fitnessComponentWeights = Collections
-				.emptyMap();
+		final Map<String, Double> fitnessComponentWeights = Collections.emptyMap();
 		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
 
 		evaluator.init();
 
-		final ISequence<Object> sequence = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(element1, element2, element3,
-						element4));
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(element1, element2, element3, element4));
 
 		context.checking(new Expectations() {
 			{
@@ -785,12 +719,10 @@ public class IndividualEvaluatorTest {
 	@Test
 	public void testDecode() {
 
-		final IndividualEvaluator<Object> evaluator = new IndividualEvaluator<Object>();
+		final IndividualEvaluator evaluator = new IndividualEvaluator();
 
-		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>(
-				"default");
-		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
-				"distanceProvider");
+		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>("default");
+		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("distanceProvider");
 		distanceProvider.set(IMultiMatrixEditor.Default_Key, matrix);
 		evaluator.setDistanceProvider(distanceProvider);
 
@@ -799,12 +731,10 @@ public class IndividualEvaluatorTest {
 		vesselClass.setMaxSpeed(20000);
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
 
-		final IVesselProvider vesselProvider = context
-				.mock(IVesselProvider.class);
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor(
-				"portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = context.mock(IPort.class, "port-1");
@@ -812,17 +742,15 @@ public class IndividualEvaluatorTest {
 		final IPort port3 = context.mock(IPort.class, "port-3");
 		final IPort port4 = context.mock(IPort.class, "port-4");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
-				"timeWindowProvider");
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider("timeWindowProvider");
 		evaluator.setTimeWindowProvider(timeWindowProvider);
-		final IElementDurationProviderEditor<Object> durationsProvider = new HashMapElementDurationEditor<Object>(
-				"durationsProvider");
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor("durationsProvider");
 		evaluator.setDurationsProvider(durationsProvider);
 
-		final Object element1 = new Object();
-		final Object element2 = new Object();
-		final Object element3 = new Object();
-		final Object element4 = new Object();
+		final ISequenceElement element1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement element2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement element3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement element4 = context.mock(ISequenceElement.class, "4");
 
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
@@ -843,29 +771,21 @@ public class IndividualEvaluatorTest {
 		final ITimeWindow tw3 = new TimeWindow(10, 15);
 		final ITimeWindow tw4 = new TimeWindow(20, 25);
 
-		timeWindowProvider.setTimeWindows(element1,
-				Collections.singletonList(tw1));
-		timeWindowProvider.setTimeWindows(element2,
-				Collections.singletonList(tw2));
-		timeWindowProvider.setTimeWindows(element3,
-				Collections.singletonList(tw3));
-		timeWindowProvider.setTimeWindows(element4,
-				Collections.singletonList(tw4));
+		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(tw1));
+		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(tw2));
+		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(tw3));
+		timeWindowProvider.setTimeWindows(element4, Collections.singletonList(tw4));
 
 		evaluator.setSequenceScheduler(new MockSequenceScheduler());
-		final Collection<ICargoSchedulerFitnessComponent<Object>> fitnessComponents = Collections
-				.emptyList();
+		final Collection<ICargoSchedulerFitnessComponent> fitnessComponents = Collections.emptyList();
 		evaluator.setFitnessComponents(fitnessComponents);
 
-		final Map<String, Double> fitnessComponentWeights = Collections
-				.emptyMap();
+		final Map<String, Double> fitnessComponentWeights = Collections.emptyMap();
 		evaluator.setFitnessComponentWeights(fitnessComponentWeights);
 
 		evaluator.init();
 
-		final ISequence<Object> sequence = new ListSequence<Object>(
-				CollectionsUtil.makeArrayList(element1, element2, element3,
-						element4));
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(element1, element2, element3, element4));
 
 		context.checking(new Expectations() {
 			{

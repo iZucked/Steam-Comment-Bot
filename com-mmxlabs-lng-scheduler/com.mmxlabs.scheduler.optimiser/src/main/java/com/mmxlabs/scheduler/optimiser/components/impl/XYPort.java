@@ -23,7 +23,7 @@ public final class XYPort extends IndexedObject implements IXYPort {
 	/**
 	 * A calculator used to determine the price of cooldown LNG here.
 	 */
-	private IShippingPriceCalculator<?> cooldownPriceCalculator;
+	private IShippingPriceCalculator cooldownPriceCalculator;
 
 	private float x;
 
@@ -101,11 +101,11 @@ public final class XYPort extends IndexedObject implements IXYPort {
 	}
 
 	@Override
-	public IShippingPriceCalculator<?> getCooldownPriceCalculator() {
+	public IShippingPriceCalculator getCooldownPriceCalculator() {
 		return cooldownPriceCalculator;
 	}
 
-	public void setCooldownPriceCalculator(IShippingPriceCalculator<?> cooldownPriceCalculator) {
+	public void setCooldownPriceCalculator(IShippingPriceCalculator cooldownPriceCalculator) {
 		this.cooldownPriceCalculator = cooldownPriceCalculator;
 	}
 }

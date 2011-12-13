@@ -16,27 +16,19 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 
 /**
- * {@link IOptimisationConstructor} build an {@link IOptimisationConstructor}
- * and {@link ILocalSearchOptimiser} to run an optimisation from the given
- * {@link IOptimisationData}. A list of enabled {@link IConstraintChecker}s and
- * a {@link Map} of {@link IFitnessComponent} to weight. Additional properties
- * are provided through a {@link Properties} object.
+ * {@link IOptimisationConstructor} build an {@link IOptimisationConstructor} and {@link ILocalSearchOptimiser} to run an optimisation from the given {@link IOptimisationData}. A list of enabled
+ * {@link IConstraintChecker}s and a {@link Map} of {@link IFitnessComponent} to weight. Additional properties are provided through a {@link Properties} object.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface IOptimisationConstructor<T> {
+public interface IOptimisationConstructor {
 
-	void init(IOptimisationData<T> optimisationData, Properties properties,
-			Map<String, Double> fitnessWeights,
-			List<String> constraintCheckers,
-			IOptimiserProgressMonitor<T> monitor);
+	void init(IOptimisationData optimisationData, Properties properties, Map<String, Double> fitnessWeights, List<String> constraintCheckers, IOptimiserProgressMonitor monitor);
 
 	void dispose();
 
-	ILocalSearchOptimiser<T> getOptimiser();
+	ILocalSearchOptimiser getOptimiser();
 
-	IOptimisationContext<T> getOptimisationContext();
+	IOptimisationContext getOptimisationContext();
 }

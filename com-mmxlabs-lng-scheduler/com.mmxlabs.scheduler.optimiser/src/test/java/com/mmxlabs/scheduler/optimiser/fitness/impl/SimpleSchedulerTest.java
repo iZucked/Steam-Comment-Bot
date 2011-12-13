@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
@@ -27,7 +28,6 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.GeneralTestUtils;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
@@ -49,16 +49,14 @@ import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitial
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 
 /**
- * Test class to run a "system" test of the LSO to optimise a sequence of
- * elements based upon distance. I.e. find minimum travel distance for each
- * resource.
+ * Test class to run a "system" test of the LSO to optimise a sequence of elements based upon distance. I.e. find minimum travel distance for each resource.
  * 
  * @author Simon Goodall
  * 
  */
 public class SimpleSchedulerTest {
 
-	IOptimisationData<ISequenceElement> createProblem() {
+	IOptimisationData createProblem() {
 
 		final SchedulerBuilder builder = new SchedulerBuilder();
 
@@ -81,18 +79,12 @@ public class SimpleSchedulerTest {
 		keypoints.put(18000, 18000l);
 		keypoints.put(19000, 19000l);
 		keypoints.put(20000, 20000l);
-		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(
-				keypoints);
+		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, 0, Integer.MAX_VALUE, 0, 0);
 
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden,
-				150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor,
-				10 * Calculator.ScaleFactor, consumptionCalculator, 15000);
-		builder.setVesselClassStateParamaters(vesselClass1,
-				VesselState.Ballast, 150 * Calculator.ScaleFactor,
-				100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor,
-				consumptionCalculator, 15000);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, consumptionCalculator, 15000);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, consumptionCalculator, 15000);
 
 		// TODO: Setup start/end ports correctly
 		builder.createVessel("vessel-1", vesselClass1, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
@@ -111,7 +103,7 @@ public class SimpleSchedulerTest {
 		final ITimeWindow tw7 = builder.createTimeWindow(35, 36);
 
 		final ILoadPriceCalculator2 purchaseCurve = new FixedPriceContract(5);
-		final IShippingPriceCalculator<ISequenceElement> salesCurve = new FixedPriceContract(200000);
+		final IShippingPriceCalculator salesCurve = new FixedPriceContract(200000);
 
 		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0, 150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false, false);
 		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0, 150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false, false);
@@ -142,8 +134,7 @@ public class SimpleSchedulerTest {
 		// ....
 
 		// Generate the optimisation data
-		final IOptimisationData<ISequenceElement> data = builder
-				.getOptimisationData();
+		final IOptimisationData data = builder.getOptimisationData();
 
 		builder.dispose();
 
@@ -156,63 +147,45 @@ public class SimpleSchedulerTest {
 		final long seed = 1;
 
 		// Build opt data
-		final IOptimisationData<ISequenceElement> data = createProblem();
+		final IOptimisationData data = createProblem();
 
 		final IFitnessFunctionRegistry fitnessRegistry = createFitnessRegistry();
 		final IConstraintCheckerRegistry constraintRegistry = createConstraintRegistry();
 
 		// Generate initial state
-		final IInitialSequenceBuilder<ISequenceElement> sequenceBuilder = new ConstrainedInitialSequenceBuilder<ISequenceElement>(
-				constraintRegistry.getConstraintCheckerFactories());
-		final ISequences<ISequenceElement> initialSequences = sequenceBuilder
-				.createInitialSequences(data, null, null);
+		final IInitialSequenceBuilder sequenceBuilder = new ConstrainedInitialSequenceBuilder(constraintRegistry.getConstraintCheckerFactories());
+		final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null);
 
-		final OptimisationContext<ISequenceElement> context = new OptimisationContext<ISequenceElement>(
-				data, initialSequences, new ArrayList<String>(
-						fitnessRegistry.getFitnessComponentNames()),
-				fitnessRegistry, new ArrayList<String>(
-						constraintRegistry.getConstraintCheckerNames()),
-				constraintRegistry);
+		final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()),
+				fitnessRegistry, new ArrayList<String>(constraintRegistry.getConstraintCheckerNames()), constraintRegistry);
 
-		final IOptimiserProgressMonitor<ISequenceElement> monitor = new IOptimiserProgressMonitor<ISequenceElement>() {
+		final IOptimiserProgressMonitor monitor = new IOptimiserProgressMonitor() {
 
 			@Override
-			public void begin(final IOptimiser<ISequenceElement> optimiser,
-					final long initialFitness,
-					IAnnotatedSolution<ISequenceElement> initialState) {
+			public void begin(final IOptimiser optimiser, final long initialFitness, IAnnotatedSolution initialState) {
 				System.out.println("Initial Fitness: " + initialFitness);
 			}
 
 			@Override
-			public void report(final IOptimiser<ISequenceElement> optimiser,
-					final int iteration, final long currentFitness,
-					final long bestFitness,
-					final IAnnotatedSolution<ISequenceElement> currentState,
-					final IAnnotatedSolution<ISequenceElement> bestState) {
-				System.out.println("Iter: " + iteration + " Fitness: "
-						+ bestFitness);
+			public void report(final IOptimiser optimiser, final int iteration, final long currentFitness, final long bestFitness,
+					final IAnnotatedSolution currentState, final IAnnotatedSolution bestState) {
+				System.out.println("Iter: " + iteration + " Fitness: " + bestFitness);
 			}
 
 			@Override
-			public void done(final IOptimiser<ISequenceElement> optimiser,
-					final long bestFitness,
-					final IAnnotatedSolution<ISequenceElement> bestState) {
+			public void done(final IOptimiser optimiser, final long bestFitness, final IAnnotatedSolution bestState) {
 				System.out.println("Final Fitness: " + bestFitness);
 			}
 		};
 
-		final ILocalSearchOptimiser<ISequenceElement> optimiser = GeneralTestUtils
-				.buildOptimiser(context, new Random(seed), 1000, 5, monitor);
+		final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(context, new Random(seed), 1000, 5, monitor);
 
-		final IFitnessEvaluator<ISequenceElement> fitnessEvaluator = optimiser
-				.getFitnessEvaluator();
+		final IFitnessEvaluator fitnessEvaluator = optimiser.getFitnessEvaluator();
 
-		final LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement> linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator<ISequenceElement>) fitnessEvaluator;
+		final LinearSimulatedAnnealingFitnessEvaluator linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator) fitnessEvaluator;
 
-		linearFitnessEvaluator.setOptimisationData(context
-				.getOptimisationData());
-		linearFitnessEvaluator.setInitialSequences(context
-				.getInitialSequences());
+		linearFitnessEvaluator.setOptimisationData(context.getOptimisationData());
+		linearFitnessEvaluator.setInitialSequences(context.getInitialSequences());
 
 		printSequences(context.getInitialSequences());
 
@@ -235,17 +208,13 @@ public class SimpleSchedulerTest {
 	private IConstraintCheckerRegistry createConstraintRegistry() {
 		final IConstraintCheckerRegistry constraintRegistry = new ConstraintCheckerRegistry();
 
-		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(
-				SchedulerConstants.DCP_orderedElementsProvider);
+		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider);
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory);
 
-		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory(
-				SchedulerConstants.DCP_resourceAllocationProvider);
+		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider);
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory2);
 
-		final PortTypeConstraintCheckerFactory constraintFactory3 = new PortTypeConstraintCheckerFactory(
-				SchedulerConstants.DCP_portTypeProvider,
-				SchedulerConstants.DCP_vesselProvider);
+		final PortTypeConstraintCheckerFactory constraintFactory3 = new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_vesselProvider);
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory3);
 
 		return constraintRegistry;
@@ -260,15 +229,14 @@ public class SimpleSchedulerTest {
 		return fitnessRegistry;
 	}
 
-	void printSequences(final Collection<ISequences<ISequenceElement>> sequences) {
-		for (final ISequences<ISequenceElement> s : sequences) {
+	void printSequences(final Collection<ISequences> sequences) {
+		for (final ISequences s : sequences) {
 			printSequences(s);
 		}
 	}
 
-	void printSequences(final ISequences<ISequenceElement> sequences) {
-		for (final ISequence<ISequenceElement> seq : sequences.getSequences()
-				.values()) {
+	void printSequences(final ISequences sequences) {
+		for (final ISequence seq : sequences.getSequences().values()) {
 			System.out.print("[");
 			for (final ISequenceElement t : seq) {
 				System.out.print(t.getName());

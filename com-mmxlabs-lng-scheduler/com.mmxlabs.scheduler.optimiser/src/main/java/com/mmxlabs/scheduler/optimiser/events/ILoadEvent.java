@@ -7,15 +7,12 @@ package com.mmxlabs.scheduler.optimiser.events;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
- * A {@link ILoadEvent} represents a {@link IPortVisitEvent} where LNG is loaded
- * onto a {@link IVessel}.
+ * A {@link ILoadEvent} represents a {@link IPortVisitEvent} where LNG is loaded onto a {@link IVessel}.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface ILoadEvent<T> extends IPortVisitEvent<T> {
+public interface ILoadEvent extends IPortVisitEvent {
 
 	/**
 	 * Returns the volume loaded at this event.

@@ -20,10 +20,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
  * it will randomly pick an arrival time from the feasible range
  * 
  * @author hinton
- * 
- * @param <T>
+ * @param 
  */
-public class DirectRandomSequenceScheduler<T> extends EnumeratingSequenceScheduler<T> {
+public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler {
 	private final int seed = 0;
 	private Random random;
 	private static final Logger log = LoggerFactory.getLogger(DirectRandomSequenceScheduler.class);
@@ -38,14 +37,14 @@ public class DirectRandomSequenceScheduler<T> extends EnumeratingSequenceSchedul
 	private int samplingUpperBound = 1;
 
 	@Override
-	public ScheduledSequences schedule(final ISequences<T> sequences, final boolean forExport) {
+	public ScheduledSequences schedule(final ISequences sequences, final boolean forExport) {
 		return schedule(sequences, sequences.getResources(), forExport);
 	}
 
 	// private final HashSet<IResource> lastAffectedResources = new HashSet<IResource>();
 
 	@Override
-	public ScheduledSequences schedule(final ISequences<T> sequences, final Collection<IResource> affectedResources, boolean forExport) {
+	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, boolean forExport) {
 		random = new Random(seed);
 
 		setSequences(sequences);

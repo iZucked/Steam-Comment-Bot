@@ -5,26 +5,26 @@
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 
 /**
  * Hash map implementation of {@link IReturnElementProviderEditor}
+ * 
  * @author hinton
- *
- * @param <T>
+ * 
  */
-public class HashMapReturnElementProviderEditor<T> implements
-		IReturnElementProviderEditor<T> {
+public class HashMapReturnElementProviderEditor implements IReturnElementProviderEditor {
 
-	final private HashMap<IPort, HashMap<IResource, T>> returnElements = 
-		new HashMap<IPort, HashMap<IResource, T>>();
-	
+	final private HashMap<IPort, Map<IResource, ISequenceElement>> returnElements = new HashMap<IPort, Map<IResource, ISequenceElement>>();
+
 	private final String name;
-	
-	public HashMapReturnElementProviderEditor(String name) {
+
+	public HashMapReturnElementProviderEditor(final String name) {
 		super();
 		this.name = name;
 	}
@@ -40,16 +40,16 @@ public class HashMapReturnElementProviderEditor<T> implements
 	}
 
 	@Override
-	public T getReturnElement(final IResource resource, final IPort port) {
-		final HashMap<IResource, T> byResource = returnElements.get(port);
+	public ISequenceElement getReturnElement(final IResource resource, final IPort port) {
+		final Map<IResource, ISequenceElement> byResource = returnElements.get(port);
 		return byResource == null ? null : byResource.get(resource);
 	}
 
 	@Override
-	public void setReturnElement(final IResource resource, final IPort port, final T element) {
-		HashMap<IResource, T> byResource = returnElements.get(port);
+	public void setReturnElement(final IResource resource, final IPort port, final ISequenceElement element) {
+		Map<IResource, ISequenceElement> byResource = returnElements.get(port);
 		if (byResource == null) {
-			byResource = new HashMap<IResource, T>();
+			byResource = new HashMap<IResource, ISequenceElement>();
 			returnElements.put(port, byResource);
 		}
 		byResource.put(resource, element);

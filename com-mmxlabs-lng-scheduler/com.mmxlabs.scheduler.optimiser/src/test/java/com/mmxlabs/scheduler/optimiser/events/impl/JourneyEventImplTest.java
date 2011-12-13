@@ -23,7 +23,7 @@ public class JourneyEventImplTest {
 	@Test
 	public void testGetSetToPort() {
 
-		final JourneyEventImpl<Object> event = new JourneyEventImpl<Object>();
+		final JourneyEventImpl event = new JourneyEventImpl();
 		Assert.assertNull(event.getToPort());
 		final IPort port = context.mock(IPort.class);
 		event.setToPort(port);
@@ -33,7 +33,7 @@ public class JourneyEventImplTest {
 	@Test
 	public void testGetSetFromPort() {
 
-		final JourneyEventImpl<Object> event = new JourneyEventImpl<Object>();
+		final JourneyEventImpl event = new JourneyEventImpl();
 		Assert.assertNull(event.getFromPort());
 		final IPort port = context.mock(IPort.class);
 		event.setFromPort(port);
@@ -42,7 +42,7 @@ public class JourneyEventImplTest {
 
 	@Test
 	public void testGetSetDistance() {
-		final JourneyEventImpl<Object> event = new JourneyEventImpl<Object>();
+		final JourneyEventImpl event = new JourneyEventImpl();
 		Assert.assertEquals(0, event.getDistance());
 		event.setDistance(10);
 		Assert.assertEquals(10, event.getDistance());
@@ -50,7 +50,7 @@ public class JourneyEventImplTest {
 
 	@Test
 	public void testGetSetSpeed() {
-		final JourneyEventImpl<Object> event = new JourneyEventImpl<Object>();
+		final JourneyEventImpl event = new JourneyEventImpl();
 		Assert.assertEquals(0, event.getSpeed());
 		event.setSpeed(10);
 		Assert.assertEquals(10, event.getSpeed());
@@ -64,7 +64,7 @@ public class JourneyEventImplTest {
 		final FuelUnit u2 = FuelUnit.M3;
 
 		final long value = 100l;
-		final JourneyEventImpl<Object> details = new JourneyEventImpl<Object>();
+		final JourneyEventImpl details = new JourneyEventImpl();
 		Assert.assertEquals(0, details.getFuelConsumption(c, u));
 		Assert.assertEquals(0, details.getFuelConsumption(c, u2));
 		details.setFuelConsumption(c, u, value);
@@ -77,7 +77,7 @@ public class JourneyEventImplTest {
 
 		final FuelComponent c = FuelComponent.Base;
 		final long value = 100l;
-		final JourneyEventImpl<Object> details = new JourneyEventImpl<Object>();
+		final JourneyEventImpl details = new JourneyEventImpl();
 		Assert.assertEquals(0, details.getFuelCost(c));
 		details.setFuelCost(c, value);
 		Assert.assertEquals(value, details.getFuelCost(c));
@@ -86,7 +86,7 @@ public class JourneyEventImplTest {
 	@Test
 	public void testGetSetRoute() {
 
-		final JourneyEventImpl<Object> event = new JourneyEventImpl<Object>();
+		final JourneyEventImpl event = new JourneyEventImpl();
 		Assert.assertNull(event.getRoute());
 		final String route = "route";
 		event.setRoute(route);

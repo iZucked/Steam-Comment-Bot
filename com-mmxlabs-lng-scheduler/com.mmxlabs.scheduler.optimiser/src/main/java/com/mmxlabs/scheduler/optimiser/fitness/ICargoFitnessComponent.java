@@ -13,13 +13,13 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * @author hinton
  * 
  */
-public interface ICargoFitnessComponent<T> extends IFitnessComponent<T> {
+public interface ICargoFitnessComponent extends IFitnessComponent {
 	/**
 	 * Initialise the fitness component and obtain any data required from the {@link IOptimisationData} object.
 	 * 
 	 * @param data
 	 */
-	void init(IOptimisationData<T> data);
+	void init(IOptimisationData data);
 
 	/**
 	 * Reject the last evaluation (relates to {@link IFitnessComponent#getFitness()}

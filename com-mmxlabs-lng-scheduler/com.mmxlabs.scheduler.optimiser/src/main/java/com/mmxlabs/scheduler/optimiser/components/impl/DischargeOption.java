@@ -20,14 +20,14 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 
 	private long maxDischargeVolume;
 
-	private IShippingPriceCalculator<?> priceCalculator;
+	private IShippingPriceCalculator priceCalculator;
 
 	public DischargeOption() {
 		setPortType(PortType.Discharge);
 	}
 
 	public DischargeOption(final String id, final IPort port, final ITimeWindow timwWindow, final long minDischargeVolume, final long maxDischargeVolume,
-			final IShippingPriceCalculator<?> priceCalculator) {
+			final IShippingPriceCalculator priceCalculator) {
 		super(id, port, timwWindow);
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;
@@ -80,8 +80,8 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	}
 
 	@Override
-	public final <T> IShippingPriceCalculator<T> getDischargePriceCalculator() {
-		return (IShippingPriceCalculator<T>) priceCalculator;
+	public final IShippingPriceCalculator getDischargePriceCalculator() {
+		return priceCalculator;
 	}
 
 }

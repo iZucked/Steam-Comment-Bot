@@ -18,7 +18,7 @@ import com.mmxlabs.optimiser.lso.IMove;
  * @author hinton
  * 
  */
-public class RemoveOptionalElement<T> implements IMove<T> {
+public class RemoveOptionalElement implements IMove {
 	final IResource resource;
 	final int elementIndex;
 
@@ -37,7 +37,7 @@ public class RemoveOptionalElement<T> implements IMove<T> {
 	 * @see com.mmxlabs.optimiser.lso.IMove#apply(com.mmxlabs.optimiser.core.IModifiableSequences)
 	 */
 	@Override
-	public void apply(IModifiableSequences<T> sequences) {
+	public void apply(IModifiableSequences sequences) {
 		sequences.getModifiableUnusedElements().add(sequences.getSequence(resource).get(elementIndex));
 		sequences.getModifiableSequence(resource).remove(elementIndex);
 	}
@@ -46,7 +46,7 @@ public class RemoveOptionalElement<T> implements IMove<T> {
 	 * @see com.mmxlabs.optimiser.lso.IMove#validate(com.mmxlabs.optimiser.core.ISequences)
 	 */
 	@Override
-	public boolean validate(ISequences<T> sequences) {
+	public boolean validate(ISequences sequences) {
 		return true;
 	}
 

@@ -14,13 +14,13 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  * @author hinton
  * 
  */
-public interface IShippingPriceCalculator<T> extends ICalculator {
+public interface IShippingPriceCalculator extends ICalculator {
 	/**
 	 * This method will be called once before any of the slots in the argument are evaluated using {@link #calculateUnitPrice(IPortSlot, int)}, to allow for shared pre-computation.
 	 * 
 	 * @param sequences
 	 */
-	public void prepareEvaluation(ISequences<T> sequences);
+	public void prepareEvaluation(ISequences sequences);
 
 	/**
 	 * Find the unit price in dollars per cubic metre for gas at the given slot, at the given time.

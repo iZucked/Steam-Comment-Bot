@@ -8,8 +8,8 @@ import com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit;
 
 /**
  * @author hinton
- *
+ * 
  */
-public interface ITotalVolumeLimitEditor<T> extends ITotalVolumeLimitProvider<T> {
+public interface ITotalVolumeLimitEditor extends ITotalVolumeLimitProvider {
 	public void addTotalVolumeLimit(final ITotalVolumeLimit limit);
 }

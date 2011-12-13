@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -47,8 +48,8 @@ import com.mmxlabs.trading.optimiser.providers.IEntityProvider;
  * @author hinton
  * 
  */
-public class ProfitAndLossAllocationComponent<T> implements ICargoAllocationFitnessComponent<T> {
-	private final CargoSchedulerFitnessCore<T> core;
+public class ProfitAndLossAllocationComponent implements ICargoAllocationFitnessComponent {
+	private final CargoSchedulerFitnessCore core;
 	private final String entityProviderKey;
 	private final String slotProviderKey;
 	private final String vesselProviderKey;
@@ -58,10 +59,10 @@ public class ProfitAndLossAllocationComponent<T> implements ICargoAllocationFitn
 
 	private long lastEvaluation, lastAcceptance;
 	private IVesselProvider vesselProvider;
-	private IPortSlotProvider<T> slotProvider;
+	private IPortSlotProvider slotProvider;
 
-	public ProfitAndLossAllocationComponent(String profitComponentName, String dcpEntityprovider, String vesselProviderKey, String slotProviderKey,
-			CargoSchedulerFitnessCore<T> cargoSchedulerFitnessCore) {
+	public ProfitAndLossAllocationComponent(final String profitComponentName, final String dcpEntityprovider, final String vesselProviderKey, final String slotProviderKey,
+			final CargoSchedulerFitnessCore cargoSchedulerFitnessCore) {
 		this.name = profitComponentName;
 		this.entityProviderKey = dcpEntityprovider;
 		this.vesselProviderKey = vesselProviderKey;
@@ -70,7 +71,7 @@ public class ProfitAndLossAllocationComponent<T> implements ICargoAllocationFitn
 	}
 
 	@Override
-	public void init(final IOptimisationData<T> data) {
+	public void init(final IOptimisationData data) {
 		this.entityProvider = data.getDataComponentProvider(entityProviderKey, IEntityProvider.class);
 		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
 		this.slotProvider = data.getDataComponentProvider(slotProviderKey, IPortSlotProvider.class);
@@ -103,16 +104,16 @@ public class ProfitAndLossAllocationComponent<T> implements ICargoAllocationFitn
 	}
 
 	@Override
-	public IFitnessCore<T> getFitnessCore() {
+	public IFitnessCore getFitnessCore() {
 		return core;
 	}
 
 	@Override
-	public long evaluate(ScheduledSequences solution, Collection<IAllocationAnnotation> allocations) {
+	public long evaluate(final ScheduledSequences solution, final Collection<IAllocationAnnotation> allocations) {
 		return evaluateAndMaybeAnnotate(solution, allocations, null);
 	}
 
-	private long evaluateAndMaybeAnnotate(ScheduledSequences solution, Collection<IAllocationAnnotation> allocations, IAnnotatedSolution<T> annotatedSolution) {
+	private long evaluateAndMaybeAnnotate(final ScheduledSequences solution, final Collection<IAllocationAnnotation> allocations, final IAnnotatedSolution annotatedSolution) {
 		if (entityProvider == null)
 			return 0;
 		final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
@@ -153,7 +154,7 @@ public class ProfitAndLossAllocationComponent<T> implements ICargoAllocationFitn
 	 * @param currentAllocation
 	 * @return
 	 */
-	private long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, IVessel vessel, final IAnnotatedSolution<T> annotatedSolution) {
+	private long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final IAnnotatedSolution annotatedSolution) {
 		// get each entity
 		final IEntity downstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getDischargeSlot());
 		final IEntity upstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getLoadSlot());
@@ -231,7 +232,7 @@ public class ProfitAndLossAllocationComponent<T> implements ICargoAllocationFitn
 			// add entry for each entity
 
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(currentAllocation.getDischargeTime(), entries);
-			final T element = slotProvider.getElement(currentAllocation.getLoadSlot());
+			final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadSlot());
 			annotatedSolution.getElementAnnotations().setAnnotation(element, TradingConstants.AI_profitAndLoss, annotation);
 		}
 
@@ -248,7 +249,7 @@ public class ProfitAndLossAllocationComponent<T> implements ICargoAllocationFitn
 		if (vessel.getVesselInstanceType() == VesselInstanceType.FLEET) {
 			hireCosts = 0;
 		} else {
-			long planDuration = getPartialPlanDuration(plan, 1); // skip off the last port details, as we don't pay for that here.
+			final long planDuration = getPartialPlanDuration(plan, 1); // skip off the last port details, as we don't pay for that here.
 			hireCosts = vessel.getVesselClass().getHourlyCharterInPrice() * planDuration;
 		}
 
@@ -278,7 +279,7 @@ public class ProfitAndLossAllocationComponent<T> implements ICargoAllocationFitn
 	 * @param plan
 	 * @return
 	 */
-	private long evaluate(final VoyagePlan plan, final IVessel vessel, final int time, final IAnnotatedSolution<T> annotatedSolution) {
+	private long evaluate(final VoyagePlan plan, final IVessel vessel, final int time, final IAnnotatedSolution annotatedSolution) {
 		final long shippingCost = getCosts(plan, vessel, true);
 		final long revenue;
 		final PortDetails portDetails = (PortDetails) plan.getSequence()[0];
@@ -302,7 +303,7 @@ public class ProfitAndLossAllocationComponent<T> implements ICargoAllocationFitn
 
 			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, value, details);
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(time, Collections.singleton(entry));
-			final T element = slotProvider.getElement(((PortDetails) plan.getSequence()[0]).getPortSlot());
+			final ISequenceElement element = slotProvider.getElement(((PortDetails) plan.getSequence()[0]).getPortSlot());
 			annotatedSolution.getElementAnnotations().setAnnotation(element, TradingConstants.AI_profitAndLoss, annotation);
 		}
 
@@ -310,7 +311,7 @@ public class ProfitAndLossAllocationComponent<T> implements ICargoAllocationFitn
 	}
 
 	@Override
-	public void annotate(ScheduledSequences solution, IAnnotatedSolution<T> annotatedSolution) {
+	public void annotate(final ScheduledSequences solution, final IAnnotatedSolution annotatedSolution) {
 		if (entityProvider == null)
 			return;
 		evaluateAndMaybeAnnotate(solution, solution.getAllocations(), annotatedSolution);

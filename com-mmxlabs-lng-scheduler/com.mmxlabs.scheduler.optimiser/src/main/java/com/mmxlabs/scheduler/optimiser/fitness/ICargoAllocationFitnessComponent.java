@@ -15,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
  * @author hinton
  * 
  */
-public interface ICargoAllocationFitnessComponent<T> extends ICargoFitnessComponent<T> {
+public interface ICargoAllocationFitnessComponent extends ICargoFitnessComponent {
 	/**
 	 * Called to evaluate the given solution.
 	 * 
@@ -31,5 +31,5 @@ public interface ICargoAllocationFitnessComponent<T> extends ICargoFitnessCompon
 	 * @param solution
 	 * @param annotatedSolution
 	 */
-	public void annotate(ScheduledSequences solution, IAnnotatedSolution<T> annotatedSolution);
+	public void annotate(ScheduledSequences solution, IAnnotatedSolution annotatedSolution);
 }

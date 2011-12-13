@@ -22,13 +22,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * @author hinton
  * 
  */
-public class VirtualVesselConstraintChecker<T> implements IConstraintChecker<T> {
+public class VirtualVesselConstraintChecker implements IConstraintChecker {
 	private final String name;
 	private final String vesselProviderKey;
 
 	private IVesselProvider vesselProvider;
 
-	public VirtualVesselConstraintChecker(String name, String vesselProviderKey) {
+	public VirtualVesselConstraintChecker(final String name, final String vesselProviderKey) {
 		super();
 		this.name = name;
 		this.vesselProviderKey = vesselProviderKey;
@@ -40,12 +40,12 @@ public class VirtualVesselConstraintChecker<T> implements IConstraintChecker<T> 
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences<T> sequences) {
+	public boolean checkConstraints(final ISequences sequences) {
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(ISequences<T> sequences, List<String> messages) {
+	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
 		for (final IResource resource : sequences.getResources()) {
 			final IVessel vessel = vesselProvider.getVessel(resource);
 			if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
@@ -63,7 +63,7 @@ public class VirtualVesselConstraintChecker<T> implements IConstraintChecker<T> 
 	 *            - a sequence which should be on a virtual vessel (vessel instance type is VIRTUAL)
 	 * @return true if there is a problem with this sequence, false if the sequence is OK.
 	 */
-	private boolean isInvalid(final ISequence<T> sequence) {
+	private boolean isInvalid(final ISequence sequence) {
 		if (sequence.size() > 4)
 			return true;
 
@@ -73,7 +73,7 @@ public class VirtualVesselConstraintChecker<T> implements IConstraintChecker<T> 
 	}
 
 	@Override
-	public void setOptimisationData(IOptimisationData<T> optimisationData) {
+	public void setOptimisationData(final IOptimisationData optimisationData) {
 		vesselProvider = optimisationData.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
 	}
 }

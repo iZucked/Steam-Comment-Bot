@@ -14,6 +14,7 @@ import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
 import com.mmxlabs.optimiser.ga.IIndividualEvaluator;
@@ -29,45 +30,37 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
- * The {@link IndividualEvaluator} evaluates a GA {@link Individual} using the
- * {@link ICargoSchedulerFitnessComponent} implementation to evaluate the
- * fitness of a scheduled {@link ISequence}. This bitstring represents offsets
- * in time from the start of each sequence element's {@link ITimeWindow} up
- * until the end of the window. The bitstring decodes each of these offsets and
- * generates a set of arrival times at each element. The
- * {@link IndividualEvaluator} also takes into account the time it takes to
- * travel between elements and will ensure that the arrival times are not too
- * close together so that it would be impossible to travel there in time.
+ * The {@link IndividualEvaluator} evaluates a GA {@link Individual} using the {@link ICargoSchedulerFitnessComponent} implementation to evaluate the fitness of a scheduled {@link ISequence}. This
+ * bitstring represents offsets in time from the start of each sequence element's {@link ITimeWindow} up until the end of the window. The bitstring decodes each of these offsets and generates a set of
+ * arrival times at each element. The {@link IndividualEvaluator} also takes into account the time it takes to travel between elements and will ensure that the arrival times are not too close together
+ * so that it would be impossible to travel there in time.
  * 
  * 
  * 
- * TODO: This implementation assumes that a {@link ITimeWindow} exists for each
- * element in the schedule.
+ * TODO: This implementation assumes that a {@link ITimeWindow} exists for each element in the schedule.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type.
  */
-public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteArrayIndividual> {
+public final class IndividualEvaluator implements IIndividualEvaluator<ByteArrayIndividual> {
 
-	private AbstractSequenceScheduler<T> sequenceScheduler;
+	private AbstractSequenceScheduler sequenceScheduler;
 
-	private ITimeWindowDataComponentProvider<T> timeWindowProvider;
+	private ITimeWindowDataComponentProvider timeWindowProvider;
 
-	private IElementDurationProvider<T> durationsProvider;
+	private IElementDurationProvider durationsProvider;
 
 	private IVesselProvider vesselProvider;
 
-	private IPortProvider<T> portProvider;
+	private IPortProvider portProvider;
 
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
-	private Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents;
+	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
 
 	private Map<String, Double> fitnessComponentWeights;
 
-	private ISequence<T> sequence;
+	private ISequence sequence;
 
 	private IResource resource;
 
@@ -77,8 +70,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 	private int[] ranges;
 
 	/**
-	 * Minimum time between elements. Including visit duration and travel time
-	 * at maximum speed. Indexes as time to get to the sequence element.
+	 * Minimum time between elements. Including visit duration and travel time at maximum speed. Indexes as time to get to the sequence element.
 	 */
 	private int[] travelTimes;
 
@@ -92,53 +84,53 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 	 */
 	private int[] windowStarts;
 
-	private VoyagePlanIterator<T> voyagePlanIterator = new VoyagePlanIterator<T>();
-	private ICargoSchedulerFitnessComponent<T>[] iteratingComponents;
+	private VoyagePlanIterator voyagePlanIterator = new VoyagePlanIterator();
+	private ICargoSchedulerFitnessComponent[] iteratingComponents;
 
-	// private List<ICargoSchedulerFitnessComponent<T>> iteratingComponents =
-	// new ArrayList<ICargoSchedulerFitnessComponent<T>>();
+	// private List<ICargoSchedulerFitnessComponent> iteratingComponents =
+	// new ArrayList<ICargoSchedulerFitnessComponent>();
 
 	public IndividualEvaluator() {
 
 	}
 
 	public final long evaluate(final int[] arrivalTimes) {
-//		// Use the sequence schedule to evaluate the arrival time profile.
-////		final Pair<Integer, List<VoyagePlan>> voyagePlans = sequenceScheduler
-////				.schedule(resource, sequence, arrivalTimes);
-//
-//		// Was the set of arrival times valid?
-//		if (voyagePlans == null) {
-//			// Bad set of times
-//			return Long.MAX_VALUE;
-//		}
-//
-//		// Evaluate fitness
+		// // Use the sequence schedule to evaluate the arrival time profile.
+		// // final Pair<Integer, List<VoyagePlan>> voyagePlans = sequenceScheduler
+		// // .schedule(resource, sequence, arrivalTimes);
+		//
+		// // Was the set of arrival times valid?
+		// if (voyagePlans == null) {
+		// // Bad set of times
+		// return Long.MAX_VALUE;
+		// }
+		//
+		// // Evaluate fitness
 		long totalFitness = 0;
-//
-////		voyagePlanIterator.iterateComponents(voyagePlans.getSecond(),
-////				voyagePlans.getFirst().intValue(), resource,
-////				iteratingComponents);
-//
-//		for (final ICargoSchedulerFitnessComponent<T> component : fitnessComponents) {
-////			final long rawFitness = component.rawEvaluateSequence(resource,
-////					sequence, voyagePlans.getSecond(), voyagePlans.getFirst());
-//
-//			// Enable this block once weights are set
-//			if (false) {
-//				final String componentName = component.getName();
-//				if (fitnessComponentWeights.containsKey(componentName)) {
-//					final double weight = fitnessComponentWeights
-//							.get(componentName);
-//					final long fitness = Math.round(weight
-//							* (double) rawFitness);
-//					totalFitness += fitness;
-//				}
-//			} else {
-//				// Current just use the raw fitness value
-//				totalFitness += rawFitness;
-//			}
-//		}
+		//
+		// // voyagePlanIterator.iterateComponents(voyagePlans.getSecond(),
+		// // voyagePlans.getFirst().intValue(), resource,
+		// // iteratingComponents);
+		//
+		// for (final ICargoSchedulerFitnessComponent component : fitnessComponents) {
+		// // final long rawFitness = component.rawEvaluateSequence(resource,
+		// // sequence, voyagePlans.getSecond(), voyagePlans.getFirst());
+		//
+		// // Enable this block once weights are set
+		// if (false) {
+		// final String componentName = component.getName();
+		// if (fitnessComponentWeights.containsKey(componentName)) {
+		// final double weight = fitnessComponentWeights
+		// .get(componentName);
+		// final long fitness = Math.round(weight
+		// * (double) rawFitness);
+		// totalFitness += fitness;
+		// }
+		// } else {
+		// // Current just use the raw fitness value
+		// totalFitness += rawFitness;
+		// }
+		// }
 		return totalFitness;
 	}
 
@@ -151,15 +143,13 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 	}
 
 	/**
-	 * Decode an {@link Individual} into an array of arrival times for each
-	 * sequence element. This method uses the {@link #travelTimes} array to
-	 * ensure the time between each arrival is at least the travel time.
+	 * Decode an {@link Individual} into an array of arrival times for each sequence element. This method uses the {@link #travelTimes} array to ensure the time between each arrival is at least the
+	 * travel time.
 	 * 
 	 * @param individual
 	 * @param arrivalTimes
 	 */
-	public final void decode(final ByteArrayIndividual individual,
-			final int[] arrivalTimes) {
+	public final void decode(final ByteArrayIndividual individual, final int[] arrivalTimes) {
 
 		// TODO: Currently the byte array can be under utilised. E.g. a 6 hour
 		// window only requires 3 bits out of the byte, leaving 5 bits unused.
@@ -215,8 +205,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 
 					// TODO: We are not handling values outside of the range! -
 					// lets just wrap!
-					arrivalTimes[i] = windowStarts[i]
-							+ (offset * multiplier[i]) % range;
+					arrivalTimes[i] = windowStarts[i] + (offset * multiplier[i]) % range;
 				}
 			} else {
 				// No time window, so do nothing here. Let evaluator work out
@@ -248,7 +237,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 	 * @param sequence
 	 * @return
 	 */
-	public final int setup(final IResource resource, final ISequence<T> sequence) {
+	public final int setup(final IResource resource, final ISequence sequence) {
 
 		this.resource = resource;
 		this.sequence = sequence;
@@ -267,13 +256,12 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 
 		// Loop through sequence, extract time windows and determine number of
 		// bite required to represent them.
-		T prevT = null;
-		final Iterator<T> itr = sequence.iterator();
+		ISequenceElement prevT = null;
+		final Iterator<ISequenceElement> itr = sequence.iterator();
 		for (int idx = 0; itr.hasNext(); ++idx) {
-			final T t = itr.next();
+			final ISequenceElement t = itr.next();
 
-			final List<ITimeWindow> timeWindows = timeWindowProvider
-					.getTimeWindows(t);
+			final List<ITimeWindow> timeWindows = timeWindowProvider.getTimeWindows(t);
 
 			// TODO: Multiple time windows can be handled by combining the all
 			// time window ranges into a single value. Then use a step function
@@ -286,13 +274,11 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 			// of vastly differing ranges (e.g. 6 hours versus 6 days).
 			assert timeWindows.size() <= 1;
 
-			final ITimeWindow tw = timeWindows.isEmpty() ? null : timeWindows
-					.get(0);
+			final ITimeWindow tw = timeWindows.isEmpty() ? null : timeWindows.get(0);
 
 			if (idx < travelTimes.length - 1) {
 				// Add Visit duration to "travel" time between elements
-				final int duration = durationsProvider.getElementDuration(t,
-						resource);
+				final int duration = durationsProvider.getElementDuration(t, resource);
 				travelTimes[idx + 1] = duration;
 			}
 
@@ -302,16 +288,14 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 				final IPort to = portProvider.getPortForElement(t);
 
 				// Find the quickest route between the ports
-				final Collection<MatrixEntry<IPort, Integer>> distances = distanceProvider
-						.getValues(from, to);
+				final Collection<MatrixEntry<IPort, Integer>> distances = distanceProvider.getValues(from, to);
 				int distance = Integer.MAX_VALUE;
 				for (final MatrixEntry<IPort, Integer> d : distances) {
 					distance = Math.min(distance, d.getValue());
 				}
 
 				// Determine minimum travel time between ports
-				final int minTime = Calculator.getTimeFromSpeedDistance(
-						maxSpeed, distance);
+				final int minTime = Calculator.getTimeFromSpeedDistance(maxSpeed, distance);
 				travelTimes[idx] += minTime;
 			}
 
@@ -457,8 +441,7 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 	}
 
 	/**
-	 * Ensures all required data items are present, otherwise an
-	 * {@link IllegalStateException} will be thrown.
+	 * Ensures all required data items are present, otherwise an {@link IllegalStateException} will be thrown.
 	 */
 	public void init() {
 
@@ -489,41 +472,37 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 		}
 	}
 
-	public final AbstractSequenceScheduler<T> getSequenceScheduler() {
+	public final AbstractSequenceScheduler getSequenceScheduler() {
 		return sequenceScheduler;
 	}
 
-	public final void setSequenceScheduler(
-			final AbstractSequenceScheduler<T> sequenceScheduler) {
+	public final void setSequenceScheduler(final AbstractSequenceScheduler sequenceScheduler) {
 		this.sequenceScheduler = sequenceScheduler;
 	}
 
-	public final ITimeWindowDataComponentProvider<T> getTimeWindowProvider() {
+	public final ITimeWindowDataComponentProvider getTimeWindowProvider() {
 		return timeWindowProvider;
 	}
 
-	public final void setTimeWindowProvider(
-			final ITimeWindowDataComponentProvider<T> timeWindowProvider) {
+	public final void setTimeWindowProvider(final ITimeWindowDataComponentProvider timeWindowProvider) {
 		this.timeWindowProvider = timeWindowProvider;
 	}
 
-	public final Collection<ICargoSchedulerFitnessComponent<T>> getFitnessComponents() {
+	public final Collection<ICargoSchedulerFitnessComponent> getFitnessComponents() {
 		return fitnessComponents;
 	}
 
-	public final void setFitnessComponents(
-			final Collection<ICargoSchedulerFitnessComponent<T>> fitnessComponents) {
+	public final void setFitnessComponents(final Collection<ICargoSchedulerFitnessComponent> fitnessComponents) {
 		this.fitnessComponents = fitnessComponents;
-//		iteratingComponents = VoyagePlanIterator
-//				.filterIteratingComponents(fitnessComponents);
+		// iteratingComponents = VoyagePlanIterator
+		// .filterIteratingComponents(fitnessComponents);
 	}
 
 	public final Map<String, Double> getFitnessComponentWeights() {
 		return fitnessComponentWeights;
 	}
 
-	public final void setFitnessComponentWeights(
-			final Map<String, Double> fitnessComponentWeights) {
+	public final void setFitnessComponentWeights(final Map<String, Double> fitnessComponentWeights) {
 		this.fitnessComponentWeights = fitnessComponentWeights;
 	}
 
@@ -556,11 +535,11 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 		this.vesselProvider = vesselProvider;
 	}
 
-	public IPortProvider<T> getPortProvider() {
+	public IPortProvider getPortProvider() {
 		return portProvider;
 	}
 
-	public void setPortProvider(final IPortProvider<T> portProvider) {
+	public void setPortProvider(final IPortProvider portProvider) {
 		this.portProvider = portProvider;
 	}
 
@@ -568,25 +547,23 @@ public final class IndividualEvaluator<T> implements IIndividualEvaluator<ByteAr
 		return distanceProvider;
 	}
 
-	public void setDistanceProvider(
-			final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
+	public void setDistanceProvider(final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
 		this.distanceProvider = distanceProvider;
 	}
 
-	public IElementDurationProvider<T> getDurationsProvider() {
+	public IElementDurationProvider getDurationsProvider() {
 		return durationsProvider;
 	}
 
-	public void setDurationsProvider(
-			final IElementDurationProvider<T> durationsProvider) {
+	public void setDurationsProvider(final IElementDurationProvider durationsProvider) {
 		this.durationsProvider = durationsProvider;
 	}
 
-	public final ISequence<T> getSequence() {
+	public final ISequence getSequence() {
 		return sequence;
 	}
 
-	public final void setSequence(final ISequence<T> sequence) {
+	public final void setSequence(final ISequence sequence) {
 		this.sequence = sequence;
 	}
 

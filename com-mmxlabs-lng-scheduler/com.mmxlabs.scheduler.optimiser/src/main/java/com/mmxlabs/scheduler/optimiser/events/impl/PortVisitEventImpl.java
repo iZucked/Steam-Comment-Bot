@@ -12,11 +12,8 @@ import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type.
  */
-public class PortVisitEventImpl<T> extends AbstractScheduledEventImpl<T>
-		implements IPortVisitEvent<T> {
+public class PortVisitEventImpl extends AbstractScheduledEventImpl implements IPortVisitEvent {
 
 	private IPortSlot portSlot;
 

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
-
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -12,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 @RunWith(JMock.class)
@@ -33,7 +33,7 @@ public class HashMapPortEditorTest {
 		final HashMapPortEditor editor = new HashMapPortEditor(name);
 
 		final IPort port = context.mock(IPort.class);
-		final Object element = new Object();
+		final ISequenceElement element = context.mock(ISequenceElement.class);
 
 		Assert.assertNull(editor.getPortForElement(element));
 
@@ -49,7 +49,7 @@ public class HashMapPortEditorTest {
 		final HashMapPortEditor editor = new HashMapPortEditor(name);
 
 		final IPort port = context.mock(IPort.class);
-		final Object element = new Object();
+		final ISequenceElement element = context.mock(ISequenceElement.class);
 
 		Assert.assertNull(editor.getPortForElement(element));
 

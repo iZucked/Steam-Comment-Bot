@@ -25,10 +25,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type.
  */
-public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
+public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 	private IRouteCostProvider routeCostProvider;
 
@@ -49,7 +47,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 	 * @param output
 	 */
 	@Override
-	public final void calculateVoyageFuelRequirements(final VoyageOptions options, final VoyageDetails<T> output) {
+	public final void calculateVoyageFuelRequirements(final VoyageOptions options, final VoyageDetails output) {
 		output.setOptions(options);
 
 		final IVessel vessel = options.getVessel();
@@ -74,7 +72,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		// Calculate speed
 		// cast to int. as if long is required, then what are we doing?
 		int speed = availableTimeInHours == 0 ? 0 : Calculator.speedFromDistanceTime(distance, availableTimeInHours);
-		
+
 		// speed calculation is not always correct - with a linear consumption
 		// curve on base fuel for example, the best option is always either maximum speed
 		// or minimum speed.
@@ -128,7 +126,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 		// Calculate fuel requirements
 		if (options.useNBOForTravel()) {
-			long nboRateInM3PerHour = vesselClass.getNBORate(vesselState);
+			final long nboRateInM3PerHour = vesselClass.getNBORate(vesselState);
 			/**
 			 * The total quantity of LNG inevitably boiled off in this journey, in M3
 			 */
@@ -298,7 +296,6 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		 */
 		int routeCostAccumulator = 0;
 
-		
 		for (int i = 0; i < sequence.length; ++i) {
 			if (i % 2 == 0) {
 				// Port Slot
@@ -319,10 +316,10 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 				for (final FuelComponent fc : FuelComponent.values()) {
 					fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc);
 				}
-				
+
 			} else {
 				// Voyage
-				final VoyageDetails<?> details = (VoyageDetails<?>) sequence[i];
+				final VoyageDetails details = (VoyageDetails) sequence[i];
 				// add route cost
 				routeCostAccumulator += details.getRouteCost();
 				for (final FuelComponent fc : FuelComponent.values()) {
@@ -358,10 +355,10 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		long loadVolumeInM3 = 0;
 		long dischargeVolumeInM3 = 0;
 
-		int loadUnitPrice = 0;
+		final int loadUnitPrice = 0;
 		int dischargeUnitPrice = 0;
 
-		int loadM3Price = 0;
+		final int loadM3Price = 0;
 		int dischargeM3Price = 0;
 
 		int cargoCVValue = 0;
@@ -384,16 +381,16 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 			lngConsumed = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
 
-			long cargoCapacity = vesselClass.getCargoCapacity();
+			final long cargoCapacity = vesselClass.getCargoCapacity();
 
-			long minLoadVolume = loadSlot.getMinLoadVolume();
-			long maxLoadVolume = loadSlot.getMaxLoadVolume();
-			long minDischargeVolume = dischargeSlot.getMinDischargeVolume();
-			long maxDischargeVolume = dischargeSlot.getMaxDischargeVolume();
+			final long minLoadVolume = loadSlot.getMinLoadVolume();
+			final long maxLoadVolume = loadSlot.getMaxLoadVolume();
+			final long minDischargeVolume = dischargeSlot.getMinDischargeVolume();
+			final long maxDischargeVolume = dischargeSlot.getMaxDischargeVolume();
 
 			// We cannot load more than is available or which would exceed
 			// vessel capacity.
-			long upperLoadLimit = Math.min(cargoCapacity, maxLoadVolume);
+			final long upperLoadLimit = Math.min(cargoCapacity, maxLoadVolume);
 
 			// Now find the amount of leeway we have between limits. By
 			// subtracting lngConsumed from the load limits, we bring the load
@@ -405,8 +402,8 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 
 			if (dischargeVolumeInM3 < 0) {
 				throw new RuntimeException("Capacity violation on cargo " + loadSlot.getId() + "-" + dischargeSlot.getId() + " : discharge volume = " + dischargeVolumeInM3 + ", but " + lngConsumed
-						+ " LNG used for fuel, max load volume = " + upperLoadLimit
-						+ "(capacity = " + cargoCapacity + ", slot max load = " + maxLoadVolume + ") and slot max discharge = " + maxDischargeVolume);
+						+ " LNG used for fuel, max load volume = " + upperLoadLimit + "(capacity = " + cargoCapacity + ", slot max load = " + maxLoadVolume + ") and slot max discharge = "
+						+ maxDischargeVolume);
 			}
 			loadVolumeInM3 = dischargeVolumeInM3 + lngConsumed;
 
@@ -448,8 +445,6 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 		// Can this be moved into the scheduler? If so, we need to ensure the
 		// same price is used in all valid voyage legs.
 
-
-
 		final boolean setLNGPrice;
 		if (dischargeIdx != -1) {
 			setLNGPrice = true;
@@ -476,7 +471,7 @@ public final class LNGVoyageCalculator<T> implements ILNGVoyageCalculator<T> {
 			if ((i & 1) == 1) {
 				assert sequence[i] instanceof VoyageDetails;
 
-				final VoyageDetails<?> details = (VoyageDetails<?>) sequence[i];
+				final VoyageDetails details = (VoyageDetails) sequence[i];
 				if (setLNGPrice || dischargeIdx != -1) {
 					details.setFuelUnitPrice(FuelComponent.NBO, dischargeM3Price);
 					details.setFuelUnitPrice(FuelComponent.FBO, dischargeM3Price);

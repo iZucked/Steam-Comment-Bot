@@ -14,21 +14,18 @@ import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 
 /**
- * Base class for cargo scheduler fitness components. Provides a name, a
- * reference to the core, evaluated & accepted fitness tracking, and a discount
- * curve usable via {@link #getDiscountedValue(int, long)}.
+ * Base class for cargo scheduler fitness components. Provides a name, a reference to the core, evaluated & accepted fitness tracking, and a discount curve usable via
+ * {@link #getDiscountedValue(int, long)}.
  * 
  * @author hinton
  * 
  */
-public abstract class AbstractSchedulerFitnessComponent<T> implements
-		ICargoSchedulerFitnessComponent<T> {
-	private final IFitnessCore<T> core;
+public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedulerFitnessComponent {
+	private final IFitnessCore core;
 	private final String name;
 	private ICurve discountCurve = new ConstantValueCurve(1);
 
-	protected AbstractSchedulerFitnessComponent(final String name,
-			final IFitnessCore<T> core) {
+	protected AbstractSchedulerFitnessComponent(final String name, final IFitnessCore core) {
 		super();
 		this.core = core;
 		this.name = name;
@@ -48,7 +45,7 @@ public abstract class AbstractSchedulerFitnessComponent<T> implements
 	}
 
 	@Override
-	public final IFitnessCore<T> getFitnessCore() {
+	public final IFitnessCore getFitnessCore() {
 		return core;
 	}
 
@@ -56,8 +53,7 @@ public abstract class AbstractSchedulerFitnessComponent<T> implements
 	private long lastAcceptedFitness;
 
 	/**
-	 * Convenience method for subclasses to set the fitness and return its
-	 * value.
+	 * Convenience method for subclasses to set the fitness and return its value.
 	 * 
 	 * @param lastEvaluatedFitness
 	 * @return
@@ -87,21 +83,18 @@ public abstract class AbstractSchedulerFitnessComponent<T> implements
 	}
 
 	@Override
-	public void init(final IOptimisationData<T> data) {
+	public void init(final IOptimisationData data) {
 		if (data != null)
-			discountCurve = data.getDataComponentProvider(
-					SchedulerConstants.DCP_discountCurveProvider,
-					IDiscountCurveProvider.class).getDiscountCurve(getName());
+			discountCurve = data.getDataComponentProvider(SchedulerConstants.DCP_discountCurveProvider, IDiscountCurveProvider.class).getDiscountCurve(getName());
 	}
 
 	@Override
-	public boolean annotateNextObject(final Object object, final int time,
-			final IAnnotatedSolution<T> solution) {
+	public boolean annotateNextObject(final Object object, final int time, final IAnnotatedSolution solution) {
 		return nextObject(object, time);
 	}
 
 	@Override
-	public void endEvaluationAndAnnotate(IAnnotatedSolution<T> solution) {
+	public void endEvaluationAndAnnotate(final IAnnotatedSolution solution) {
 
 	}
 }

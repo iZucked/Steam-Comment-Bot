@@ -15,10 +15,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type.
  */
-public final class VoyageDetails<T> implements Cloneable {
+public final class VoyageDetails implements Cloneable {
 
 	private VoyageOptions options;
 
@@ -35,20 +33,12 @@ public final class VoyageDetails<T> implements Cloneable {
 	private int startTime;
 
 	public VoyageDetails() {
-		fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(
-				FuelComponent.values().length, FuelUnit.values().length);
-		fuelUnitPrices = new LongFastEnumMap<FuelComponent>(
-				FuelComponent.values().length);
+		fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
+		fuelUnitPrices = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 	}
 
-	public VoyageDetails(
-			final int idleTime2,
-			final int travelTime2,
-			final int speed2,
-			final int startTime2,
-			final VoyageOptions options,
-			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2,
-			final LongFastEnumMap<FuelComponent> fuelUnitPrices2) {
+	public VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final VoyageOptions options,
+			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final LongFastEnumMap<FuelComponent> fuelUnitPrices2) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
@@ -59,13 +49,11 @@ public final class VoyageDetails<T> implements Cloneable {
 	}
 
 	@Override
-	public VoyageDetails<T> clone() {
-		return new VoyageDetails<T>(idleTime, travelTime, speed, startTime,
-				new VoyageOptions(options), fuelConsumption, fuelUnitPrices);
+	public VoyageDetails clone() {
+		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, fuelUnitPrices);
 	}
 
-	public final long getFuelConsumption(final FuelComponent fuel,
-			final FuelUnit fuelUnit) {
+	public final long getFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit) {
 
 		return fuelConsumption.get(fuel, fuelUnit);
 	}
@@ -86,8 +74,7 @@ public final class VoyageDetails<T> implements Cloneable {
 		return travelTime;
 	}
 
-	public final void setFuelConsumption(final FuelComponent fuel,
-			final FuelUnit fuelUnit, final long consumption) {
+	public final void setFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit, final long consumption) {
 		fuelConsumption.put(fuel, fuelUnit, consumption);
 	}
 
@@ -107,13 +94,13 @@ public final class VoyageDetails<T> implements Cloneable {
 		this.travelTime = travelTime;
 	}
 
-//	public final int getStartTime() {
-//		return startTime;
-//	}
-//
-//	public final void setStartTime(final int startTime) {
-//		this.startTime = startTime;
-//	}
+	// public final int getStartTime() {
+	// return startTime;
+	// }
+	//
+	// public final void setStartTime(final int startTime) {
+	// this.startTime = startTime;
+	// }
 
 	public final int getFuelUnitPrice(final FuelComponent fuel) {
 
@@ -124,8 +111,7 @@ public final class VoyageDetails<T> implements Cloneable {
 		// }
 	}
 
-	public final void setFuelUnitPrice(final FuelComponent fuel,
-			final int unitPrice) {
+	public final void setFuelUnitPrice(final FuelComponent fuel, final int unitPrice) {
 		fuelUnitPrices.put(fuel, unitPrice);
 	}
 
@@ -133,7 +119,6 @@ public final class VoyageDetails<T> implements Cloneable {
 	public final boolean equals(final Object obj) {
 
 		if (obj instanceof VoyageDetails) {
-			@SuppressWarnings("rawtypes")
 			final VoyageDetails d = (VoyageDetails) obj;
 
 			// Ensure all fields are present here
@@ -168,11 +153,8 @@ public final class VoyageDetails<T> implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "VoyageDetails [options=" + options + ", fuelConsumption="
-				+ fuelConsumption + ", fuelUnitPrices=" + fuelUnitPrices
-				+ ", idleTime=" + idleTime + ", travelTime=" + travelTime
-				+ ", speed=" + speed + ", startTime=" + startTime
-				+ ", route cost = " + routeCost + "]";
+		return "VoyageDetails [options=" + options + ", fuelConsumption=" + fuelConsumption + ", fuelUnitPrices=" + fuelUnitPrices + ", idleTime=" + idleTime + ", travelTime=" + travelTime
+				+ ", speed=" + speed + ", startTime=" + startTime + ", route cost = " + routeCost + "]";
 	}
 
 	private long routeCost = 0;

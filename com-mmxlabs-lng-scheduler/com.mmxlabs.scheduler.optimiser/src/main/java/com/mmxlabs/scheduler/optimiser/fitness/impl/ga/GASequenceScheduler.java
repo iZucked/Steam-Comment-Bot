@@ -26,8 +26,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author Simon Goodall
  * 
  */
-public final class GASequenceScheduler<T> {//{ extends
-//		AbstractSequenceScheduler<T> {
+public final class GASequenceScheduler {//{ extends
+//		AbstractSequenceScheduler {
 //	
 //	public GASequenceScheduler() {
 //		createLog();
@@ -35,7 +35,7 @@ public final class GASequenceScheduler<T> {//{ extends
 //
 //	private long randomSeed;
 //
-//	private CachingIndividualEvaluator<T> cachingIndividualEvaluator;
+//	private CachingIndividualEvaluator cachingIndividualEvaluator;
 //
 //	private float mutateThreshold;
 //
@@ -46,17 +46,17 @@ public final class GASequenceScheduler<T> {//{ extends
 //	
 //	private int topN;
 //
-//	private IndividualEvaluator<T> individualEvaluator;
+//	private IndividualEvaluator individualEvaluator;
 //
 //	public void setIndividualEvaluator(
-//			final IndividualEvaluator<T> individualEvaluator) {
+//			final IndividualEvaluator individualEvaluator) {
 //		this.individualEvaluator = individualEvaluator;
 //		this.cachingIndividualEvaluator = null;
 //	}
 //
 //	@Override
 //	public Pair<Integer, List<VoyagePlan>> schedule(final IResource resource,
-//			final ISequence<T> sequence) {
+//			final ISequence sequence) {
 //
 //		final int numBytes = individualEvaluator.setup(resource, sequence);
 //
@@ -64,13 +64,13 @@ public final class GASequenceScheduler<T> {//{ extends
 //		Random random = new Random(randomSeed);
 //		
 //		if (cachingIndividualEvaluator == null) {
-//			cachingIndividualEvaluator = new CachingIndividualEvaluator<T>(
+//			cachingIndividualEvaluator = new CachingIndividualEvaluator(
 //					individualEvaluator, populationSize * 10);
 //		} else {
 //			cachingIndividualEvaluator.clearCache();
 //		}
 //		// Run the GA
-//		final GAAlgorithm<T> algorithm = new GAAlgorithm<T>(random,
+//		final GAAlgorithm algorithm = new GAAlgorithm(random,
 //
 //				cachingIndividualEvaluator,
 ////				individualEvaluator,
@@ -167,7 +167,7 @@ public final class GASequenceScheduler<T> {//{ extends
 //		this.topN = topN;
 //	}
 //
-//	public final IndividualEvaluator<T> getIndividualEvaluator() {
+//	public final IndividualEvaluator getIndividualEvaluator() {
 //		return individualEvaluator;
 //	}
 //

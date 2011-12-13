@@ -11,7 +11,6 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.trading.optimiser.IEntity;
@@ -37,7 +36,7 @@ public class TradingBuilderExtension implements IBuilderExtension {
 		return new OtherEntity(name);
 	}
 
-	public IEntity createGroupEntity(String name, int ownership, ICurve taxCurve, int offset) {
+	public IEntity createGroupEntity(final String name, final int ownership, final ICurve taxCurve, final int offset) {
 		return new SimpleEntity(name, ownership, taxCurve, offset);
 	}
 
@@ -50,7 +49,7 @@ public class TradingBuilderExtension implements IBuilderExtension {
 	}
 
 	@Override
-	public Collection<Pair<String, IDataComponentProvider>> createDataComponentProviders(IOptimisationData<ISequenceElement> optimisationData) {
+	public Collection<Pair<String, IDataComponentProvider>> createDataComponentProviders(IOptimisationData optimisationData) {
 		return Collections.singleton(new Pair<String, IDataComponentProvider>(entityProvider.getName(), entityProvider));
 	}
 
@@ -60,7 +59,7 @@ public class TradingBuilderExtension implements IBuilderExtension {
 	}
 
 	@Override
-	public void finishBuilding(IOptimisationData<ISequenceElement> optimisationData) {
+	public void finishBuilding(IOptimisationData optimisationData) {
 
 	}
 }

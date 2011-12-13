@@ -10,12 +10,8 @@ import com.mmxlabs.scheduler.optimiser.events.ILoadEvent;
  * Implementation of {@link ILoadEvent} extending {@link PortVisitEventImpl}.
  * 
  * @author Simon Goodall
- * 
- * @param <T>
- *            Sequence element type
  */
-public final class LoadEventImpl<T> extends PortVisitEventImpl<T> implements
-		ILoadEvent<T> {
+public final class LoadEventImpl extends PortVisitEventImpl implements ILoadEvent {
 
 	private long loadVolume;
 	private long purchasePrice;

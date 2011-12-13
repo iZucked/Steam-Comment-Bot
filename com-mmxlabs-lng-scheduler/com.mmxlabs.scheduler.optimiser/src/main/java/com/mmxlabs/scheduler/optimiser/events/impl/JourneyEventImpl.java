@@ -17,11 +17,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type.
  */
-public final class JourneyEventImpl<T> extends AbstractScheduledEventImpl<T>
-		implements IJourneyEvent<T> {
+public final class JourneyEventImpl extends AbstractScheduledEventImpl implements IJourneyEvent {
 
 	private int distance;
 
@@ -33,16 +30,14 @@ public final class JourneyEventImpl<T> extends AbstractScheduledEventImpl<T>
 
 	private int speed;
 
-	private final EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption = new EnumMap<FuelComponent, EnumMap<FuelUnit, Long>>(
-			FuelComponent.class);
+	private final EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption = new EnumMap<FuelComponent, EnumMap<FuelUnit, Long>>(FuelComponent.class);
 
-	private final EnumMap<FuelComponent, Long> fuelCost = new EnumMap<FuelComponent, Long>(
-			FuelComponent.class);
+	private final EnumMap<FuelComponent, Long> fuelCost = new EnumMap<FuelComponent, Long>(FuelComponent.class);
 
 	private String route;
-	
+
 	private long routeCost;
-	
+
 	@Override
 	public int getDistance() {
 		return distance;
@@ -80,8 +75,7 @@ public final class JourneyEventImpl<T> extends AbstractScheduledEventImpl<T>
 	}
 
 	@Override
-	public long getFuelConsumption(final FuelComponent fuel,
-			final FuelUnit fuelUnit) {
+	public long getFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit) {
 
 		if (fuelConsumption.containsKey(fuel)) {
 
@@ -93,8 +87,7 @@ public final class JourneyEventImpl<T> extends AbstractScheduledEventImpl<T>
 		return 0l;
 	}
 
-	public void setFuelConsumption(final FuelComponent fuel,
-			final FuelUnit fuelUnit, final long consumption) {
+	public void setFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit, final long consumption) {
 		final EnumMap<FuelUnit, Long> map;
 		if (fuelConsumption.containsKey(fuel)) {
 			map = fuelConsumption.get(fuel);
@@ -141,7 +134,7 @@ public final class JourneyEventImpl<T> extends AbstractScheduledEventImpl<T>
 	public long getRouteCost() {
 		return routeCost;
 	}
-	
+
 	public void setRouteCost(final long routeCost) {
 		this.routeCost = routeCost;
 	}

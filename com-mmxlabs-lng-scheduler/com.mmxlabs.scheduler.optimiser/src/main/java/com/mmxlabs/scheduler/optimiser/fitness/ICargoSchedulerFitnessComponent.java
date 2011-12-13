@@ -20,10 +20,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            Sequence element type
  */
-public interface ICargoSchedulerFitnessComponent<T> extends ICargoFitnessComponent<T> {
+public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent {
 	/**
 	 * Start evaluating a solution
 	 */
@@ -78,7 +76,7 @@ public interface ICargoSchedulerFitnessComponent<T> extends ICargoFitnessCompone
 	 * @return
 	 */
 	boolean annotateNextObject(final Object object, final int time,
-			final IAnnotatedSolution<T> annotatedSolution);
+			final IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Indicates the end of the current sequence
@@ -101,5 +99,5 @@ public interface ICargoSchedulerFitnessComponent<T> extends ICargoFitnessCompone
 	 * 
 	 * @param solution
 	 */
-	void endEvaluationAndAnnotate(IAnnotatedSolution<T> solution);
+	void endEvaluationAndAnnotate(IAnnotatedSolution solution);
 }

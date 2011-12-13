@@ -38,7 +38,7 @@ public final class VirtualVesselConstraintCheckerFactory implements
 	}
 
 	@Override
-	public <T> IConstraintChecker<T> instantiate() {
-		return new VirtualVesselConstraintChecker<T>(NAME, vesselProviderKey);
+	public IConstraintChecker instantiate() {
+		return new VirtualVesselConstraintChecker(NAME, vesselProviderKey);
 	}
 }

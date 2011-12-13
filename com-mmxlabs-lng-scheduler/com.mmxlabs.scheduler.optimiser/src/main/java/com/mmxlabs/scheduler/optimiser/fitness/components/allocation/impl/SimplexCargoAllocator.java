@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit;
  * @author hinton
  * 
  */
-public class SimplexCargoAllocator<T> {// extends BaseCargoAllocator<T> {
+public class SimplexCargoAllocator {// extends BaseCargoAllocator {
 //	final LinearOptimizer optimizer = new SimplexSolver();
 //	{
 //		optimizer.setMaxIterations(1000);

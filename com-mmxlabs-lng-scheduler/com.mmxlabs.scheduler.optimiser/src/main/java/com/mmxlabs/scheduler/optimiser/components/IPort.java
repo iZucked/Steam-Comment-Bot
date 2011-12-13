@@ -39,5 +39,5 @@ public interface IPort extends IIndexedObject {
 	 * 
 	 * @return
 	 */
-	<T> IShippingPriceCalculator<T> getCooldownPriceCalculator();
+	IShippingPriceCalculator getCooldownPriceCalculator();
 }
