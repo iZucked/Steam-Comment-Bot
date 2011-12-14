@@ -45,6 +45,7 @@ import com.mmxlabs.shiplingo.ui.detailview.editors.NumberInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ReferenceInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.TextInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ValueListInlineEditor;
+import com.mmxlabs.shiplingo.ui.detailview.generated.VesselStateAttributesComposite;
 
 /**
  * A base class for all the object editing composites generated with Acceleo.
@@ -361,8 +362,8 @@ public abstract class AbstractDetailComposite extends Composite {
 	 * @param composite
 	 */
 	public void addSubEditor(final AbstractDetailComposite composite) {
-		subEditors.add(composite);
-		myLayout.numColumns = subEditors.size() + 1;
+		addSubEditor(composite, true);
+
 	}
 
 	/**
@@ -451,5 +452,11 @@ public abstract class AbstractDetailComposite extends Composite {
 
 	public EMFPath getInputPath() {
 		return inputPath;
+	}
+
+	public void addSubEditor(AbstractDetailComposite composite, boolean expandColumns) {
+		subEditors.add(composite);
+		if (expandColumns)
+			myLayout.numColumns++;// = subEditors.size() + 1;
 	}
 }
