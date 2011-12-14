@@ -45,7 +45,6 @@
 				<extensions>true</extensions>
 			</plugin>
 
-
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
@@ -86,8 +85,6 @@
 					</environments>
 				</configuration>
 			</plugin>
-
-
 
 		</plugins>
 	</build>
