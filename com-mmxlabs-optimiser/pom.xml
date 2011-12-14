@@ -7,6 +7,7 @@
 	<packaging>pom</packaging>
 	<name>Optimiser - Parent</name>
 	<version>1.0-SNAPSHOT</version>
+	<description>Parent maven project for core optimisation projects</description>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
@@ -22,19 +23,4 @@
 		<module>optimiser-ga</module>
 	</modules>
 
-	<description>Parent maven project for core optimisation projects</description>
-	<issueManagement>
-		<system>CodebaseHQ</system>
-		<url>https://mmxlabs.codebasehq.com/repositories/tickets</url>
-	</issueManagement>
-	<inceptionYear>2010</inceptionYear>
-	<scm>
-		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-optimiser.hg</connection>
-		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-optimiser.hg</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-optimiser/</url>
-	</scm>
-	<organization>
-		<name>Minimax Labs</name>
-		<url>http://www.minimaxlabs.com/</url>
-	</organization>
 </project>
