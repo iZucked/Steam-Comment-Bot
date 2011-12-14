@@ -15,11 +15,6 @@
 	</parent>
 
 	<description>Project containing commonly used classes and utility functions.</description>
-	<issueManagement>
-		<system>CodebaseHQ</system>
-		<url>https://mmxlabs.codebasehq.com/repositories/tickets</url>
-	</issueManagement>
-	<inceptionYear>2010</inceptionYear>
 
 	<scm>
 		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-common-util.hg</connection>
@@ -27,11 +22,10 @@
 		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-common-util/</url>
 	</scm>
 
-	<organization>
-		<name>Minimax Labs</name>
-		<url>http://www.minimaxlabs.com/</url>
-	</organization>
-
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.common.util/</url>
+	</ciManagement>
 
 	<build>
 		<plugins>
@@ -66,7 +60,6 @@
 
 	<dependencies>
 
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -78,7 +71,6 @@
 			<artifactId>jmock-junit4</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
