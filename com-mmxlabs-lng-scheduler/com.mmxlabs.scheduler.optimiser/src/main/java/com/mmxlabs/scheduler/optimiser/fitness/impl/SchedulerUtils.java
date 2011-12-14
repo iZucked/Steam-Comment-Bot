@@ -43,82 +43,56 @@ public final class SchedulerUtils {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> ISequenceScheduler<T> createSimpleSequenceScheduler(
-			final IOptimisationData<T> data) {
+	public static <T> ISequenceScheduler<T> createSimpleSequenceScheduler(final IOptimisationData<T> data) {
 
 		final SimpleSequenceScheduler<T> scheduler = new SimpleSequenceScheduler<T>();
 
-		scheduler.setDistanceProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portDistanceProvider,
-				IMultiMatrixProvider.class));
-		scheduler.setDurationsProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_elementDurationsProvider,
-				IElementDurationProvider.class));
-		scheduler.setPortProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portProvider, IPortProvider.class));
-		scheduler.setTimeWindowProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_timeWindowProvider,
-				ITimeWindowDataComponentProvider.class));
-		scheduler.setPortSlotProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portSlotsProvider,
-				IPortSlotProvider.class));
-		scheduler.setPortTypeProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portTypeProvider,
-				IPortTypeProvider.class));
+		scheduler.setDistanceProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class));
+		scheduler.setDurationsProvider(data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProvider.class));
+		scheduler.setPortProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portProvider, IPortProvider.class));
+		scheduler.setTimeWindowProvider(data.getDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, ITimeWindowDataComponentProvider.class));
+		scheduler.setPortSlotProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class));
+		scheduler.setPortTypeProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class));
 
-		scheduler.setVesselProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
+		scheduler.setVesselProvider(data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
 
-		scheduler.setVoyagePlanOptimiser(createVPO(
-				data, DEFAULT_VPO_CACHE_SIZE));
+		scheduler.setVoyagePlanOptimiser(createVPO(data, DEFAULT_VPO_CACHE_SIZE));
 
 		scheduler.init();
 
 		return scheduler;
 	}
 
-	public static <T> IVoyagePlanOptimiser<T> createVoyagePlanOptimiser(
-			final IOptimisationData<T> data) {
+	public static <T> IVoyagePlanOptimiser<T> createVoyagePlanOptimiser(final IOptimisationData<T> data) {
 		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
 
-		voyageCalculator.setRouteCostDataComponentProvider(data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_routePriceProvider,
-						IRouteCostProvider.class));
+		voyageCalculator.setRouteCostDataComponentProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
 
 		voyageCalculator.init();
 
-		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>(
-				voyageCalculator);
+		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>(voyageCalculator);
 		return voyagePlanOptimiser;
 	}
 
-	public static <T> IVoyagePlanOptimiser<T> createCachingVoyagePlanOptimiser(
-			final IOptimisationData<T> data, final int cacheSize) {
+	public static <T> IVoyagePlanOptimiser<T> createCachingVoyagePlanOptimiser(final IOptimisationData<T> data, final int cacheSize) {
 		// duplicate code due to type erasure
 
 		final LNGVoyageCalculator<T> voyageCalculator = new LNGVoyageCalculator<T>();
 
-		voyageCalculator.setRouteCostDataComponentProvider(data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_routePriceProvider,
-						IRouteCostProvider.class));
+		voyageCalculator.setRouteCostDataComponentProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
 
 		voyageCalculator.init();
 
-		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>(
-				voyageCalculator);
+		final VoyagePlanOptimiser<T> voyagePlanOptimiser = new VoyagePlanOptimiser<T>(voyageCalculator);
 
 		if (cacheSize == 0) {
 			return voyagePlanOptimiser;
 		} else {
-			return new CachingVoyagePlanOptimiser<T>(voyagePlanOptimiser,
-					cacheSize);
+			return new CachingVoyagePlanOptimiser<T>(voyagePlanOptimiser, cacheSize);
 		}
 	}
 
-	public static <T> IVoyagePlanOptimiser<T> createVPO(
-			final IOptimisationData<T> data, final int vpoCacheSize) {
+	public static <T> IVoyagePlanOptimiser<T> createVPO(final IOptimisationData<T> data, final int vpoCacheSize) {
 		// return createVoyagePlanOptimiser();
 		return createCachingVoyagePlanOptimiser(data, vpoCacheSize);
 		// return new CheckingVPO<T>(
@@ -142,49 +116,29 @@ public final class SchedulerUtils {
 	 * @param scheduler
 	 */
 	@SuppressWarnings("unchecked")
-	private static <T> void setDataComponentProviders(
-			final IOptimisationData<T> data,
-			final AbstractSequenceScheduler<T> scheduler) {
-		final IMultiMatrixProvider<IPort, Integer> distanceProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_portDistanceProvider,
-						IMultiMatrixProvider.class);
+	private static <T> void setDataComponentProviders(final IOptimisationData<T> data, final AbstractSequenceScheduler<T> scheduler) {
+		final IMultiMatrixProvider<IPort, Integer> distanceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class);
 
 		scheduler.setDistanceProvider(distanceProvider);
 
-		final IElementDurationProvider<T> durationsProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_elementDurationsProvider,
-						IElementDurationProvider.class);
+		final IElementDurationProvider<T> durationsProvider = data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProvider.class);
 		scheduler.setDurationsProvider(durationsProvider);
 
-		final IPortProvider portProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_portProvider, IPortProvider.class);
+		final IPortProvider portProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portProvider, IPortProvider.class);
 		scheduler.setPortProvider(portProvider);
 
-		scheduler.setRouteCostProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_routePriceProvider,
-				IRouteCostProvider.class));
+		scheduler.setRouteCostProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
 
-		final ITimeWindowDataComponentProvider timeWindowProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_timeWindowProvider,
-						ITimeWindowDataComponentProvider.class);
+		final ITimeWindowDataComponentProvider timeWindowProvider = data.getDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, ITimeWindowDataComponentProvider.class);
 		scheduler.setTimeWindowProvider(timeWindowProvider);
 
-		final IPortSlotProvider<T> portSlotProvider = data
-				.getDataComponentProvider(
-						SchedulerConstants.DCP_portSlotsProvider,
-						IPortSlotProvider.class);
+		final IPortSlotProvider<T> portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 
 		scheduler.setPortSlotProvider(portSlotProvider);
 
-		scheduler.setPortTypeProvider(data.getDataComponentProvider(
-				SchedulerConstants.DCP_portTypeProvider,
-				IPortTypeProvider.class));
+		scheduler.setPortTypeProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class));
 
-		final IVesselProvider vesselProvider = data.getDataComponentProvider(
-				SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		scheduler.setVesselProvider(vesselProvider);
 	}
 
@@ -465,8 +419,7 @@ public final class SchedulerUtils {
 
 		// set up scheduler
 		setDataComponentProviders(data, scheduler);
-		scheduler.setVoyagePlanOptimiser(createVPO(
-				data, vpoCacheSize));
+		scheduler.setVoyagePlanOptimiser(createVPO(data, vpoCacheSize));
 		scheduler.setScheduleEvaluator(evaluator);
 
 		// create cargo allocator
@@ -491,10 +444,8 @@ public final class SchedulerUtils {
 		return scheduler;
 	}
 
-	public static DirectRandomSequenceScheduler<ISequenceElement> createDirectRandomSequenceScheduler(
-			IOptimisationData<ISequenceElement> data,
+	public static DirectRandomSequenceScheduler<ISequenceElement> createDirectRandomSequenceScheduler(IOptimisationData<ISequenceElement> data,
 			Collection<ICargoSchedulerFitnessComponent<ISequenceElement>> components, Collection<ICargoAllocationFitnessComponent<ISequenceElement>> components2) {
-		return createDirectRandomSequenceScheduler(data, components, components2,
-				DEFAULT_VPO_CACHE_SIZE);
+		return createDirectRandomSequenceScheduler(data, components, components2, DEFAULT_VPO_CACHE_SIZE);
 	}
 }
