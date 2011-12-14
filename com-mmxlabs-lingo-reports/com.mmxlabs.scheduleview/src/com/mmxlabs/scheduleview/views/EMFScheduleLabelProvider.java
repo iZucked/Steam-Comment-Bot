@@ -86,7 +86,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 			if (element instanceof PortVisit) {
 				final PortVisit visit = (PortVisit) element;
 
-				sb.append("Port: " + visit.getPort().getName() + "\n");
+				if (visit.getPort() != null)
+					sb.append("Port: " + visit.getPort().getName() + "\n");
 				if (element instanceof SlotVisit) {
 					final SlotVisit svisit = (SlotVisit) element;
 					sb.append("Window Start Time: "
@@ -100,8 +101,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 				}
 			} else if (element instanceof Journey) {
 				final Journey journey = (Journey) element;
-				sb.append("From: " + journey.getFromPort().getName() + "\n");
-				sb.append("To: " + journey.getToPort().getName() + "\n");
+				if (journey.getFromPort() != null)
+					sb.append("From: " + journey.getFromPort().getName() + "\n");
+				if (journey.getToPort() != null)
+					sb.append("To: " + journey.getToPort().getName() + "\n");
 				sb.append("Vessel State: " + journey.getVesselState().getName()
 						+ "\n");
 				sb.append("Route: " + journey.getRoute() + "\n");

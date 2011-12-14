@@ -8,6 +8,7 @@ package com.mmxlabs.scheduleview.views;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -17,6 +18,8 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
@@ -31,6 +34,9 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
+
+import scenario.cargo.Slot;
+import scenario.schedule.events.SlotVisit;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
@@ -155,6 +161,23 @@ public class SchedulerView extends ViewPart {
 		viewer.setComparator(viewerComparator);
 
 		viewer.setInput(getViewSite());
+
+
+
+		viewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(final DoubleClickEvent event) {
+				final Object selection = event.getSelection();
+				// find what we have double-clicked
+				if (selection instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) selection;
+					final Slot slot = slotVisit.getSlot();
+					// TODO factor out to somewhere useful:
+					final EObject c = slot.eContainer();
+
+				}
+			}
+		});
 
 		// Create the help context id for the viewer's control. This is in the
 		// format of pluginid.contextId
