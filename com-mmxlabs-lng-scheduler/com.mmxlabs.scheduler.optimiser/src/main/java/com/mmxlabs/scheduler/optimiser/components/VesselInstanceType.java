@@ -35,5 +35,10 @@ public enum VesselInstanceType {
 	 * Short term charter to deal with one or two cargoes. Start and end time
 	 * and port needs to be determined by optimiser.
 	 */
-	SPOT_CHARTER
+	SPOT_CHARTER,
+
+	/**
+	 * Not a real vessel, but one which handles logical cargoes.
+	 */
+	VIRTUAL
 }

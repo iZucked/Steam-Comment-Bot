@@ -55,7 +55,7 @@ public class SchedulerBuilderTest {
 
 		final ILoadPriceCalculator2 contract = context.mock(ILoadPriceCalculator2.class);
 
-		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false);
+		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, false);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -68,7 +68,7 @@ public class SchedulerBuilderTest {
 
 		final ILoadPriceCalculator2 contract = context.mock(ILoadPriceCalculator2.class);
 
-		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false);
+		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, false);
 	}
 
 	@Ignore
@@ -87,7 +87,7 @@ public class SchedulerBuilderTest {
 
 		final IShippingPriceCalculator<ISequenceElement> curve = context.mock(IShippingPriceCalculator.class);
 
-		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
+		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0, false);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -100,7 +100,7 @@ public class SchedulerBuilderTest {
 
 		final IShippingPriceCalculator<ISequenceElement> curve = context.mock(IShippingPriceCalculator.class);
 
-		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
+		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0, false);
 	}
 
 	@Ignore
@@ -121,7 +121,7 @@ public class SchedulerBuilderTest {
 
 		final ILoadSlot loadSlot = context.mock(ILoadSlot.class);
 
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("id", port, window, 0, 0, curve, 0);
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("id", port, window, 0, 0, curve, 0, false);
 
 		builder.createCargo("id", loadSlot, dischargeSlot, false);
 	}
@@ -135,7 +135,7 @@ public class SchedulerBuilderTest {
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 		final ILoadPriceCalculator2 contract = context.mock(ILoadPriceCalculator2.class);
 
-		final ILoadSlot loadSlot = builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false);
+		final ILoadSlot loadSlot = builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, false);
 		final IDischargeSlot dischargeSlot = context.mock(IDischargeSlot.class);
 
 		builder.createCargo("id", loadSlot, dischargeSlot, false);

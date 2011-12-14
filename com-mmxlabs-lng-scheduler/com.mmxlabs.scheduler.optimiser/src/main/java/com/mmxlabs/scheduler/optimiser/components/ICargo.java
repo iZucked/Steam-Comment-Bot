@@ -20,7 +20,7 @@ public interface ICargo {
 	 */
 	String getId();
 
-	ILoadSlot getLoadSlot();
+	ILoadOption getLoadOption();
 	
-	IDischargeSlot getDischargeSlot();
+	IDischargeOption getDischargeOption();
 }

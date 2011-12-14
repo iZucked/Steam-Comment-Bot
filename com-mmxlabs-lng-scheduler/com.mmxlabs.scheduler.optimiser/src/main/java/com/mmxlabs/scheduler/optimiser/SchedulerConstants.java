@@ -42,4 +42,5 @@ public final class SchedulerConstants {
 	 * Each element in the map should map fitness function names to fitness values.
 	 */
 	public static final String G_AI_fitnessPerRoute = "general-info-fitness-per-route";
+	public static final String DCP_optionalElementsProvider = "provider-optional-elements";
 }

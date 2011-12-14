@@ -33,19 +33,19 @@ public class CargoTest {
 	public void testGetSetLoadSlot() {
 
 		final Cargo cargo = new Cargo();
-		Assert.assertNull(cargo.getLoadSlot());
+		Assert.assertNull(cargo.getLoadOption());
 		final ILoadSlot slot = context.mock(ILoadSlot.class);
-		cargo.setLoadSlot(slot);
-		Assert.assertSame(slot, cargo.getLoadSlot());
+		cargo.setLoadOption(slot);
+		Assert.assertSame(slot, cargo.getLoadOption());
 	}
 
 	@Test
 	public void testGetSetDischargeSlot() {
 
 		final Cargo cargo = new Cargo();
-		Assert.assertNull(cargo.getDischargeSlot());
+		Assert.assertNull(cargo.getDischargeOption());
 		final IDischargeSlot slot = context.mock(IDischargeSlot.class);
-		cargo.setDischargeSlot(slot);
-		Assert.assertSame(slot, cargo.getDischargeSlot());
+		cargo.setDischargeOption(slot);
+		Assert.assertSame(slot, cargo.getDischargeOption());
 	}
 }

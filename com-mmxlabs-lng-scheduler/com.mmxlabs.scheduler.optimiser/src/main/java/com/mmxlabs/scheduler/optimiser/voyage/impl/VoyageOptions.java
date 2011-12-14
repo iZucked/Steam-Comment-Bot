@@ -174,6 +174,11 @@ public final class VoyageOptions implements Cloneable {
 		this.cooldown = cooldown;
 	}
 
+	/**
+	 * If true, the vessel should be cold at the end of this voyage, possibly by triggering a cooldown.
+	 * 
+	 * @return
+	 */
 	public final boolean shouldBeCold() {
 		return shouldBeCold;
 	}
@@ -257,7 +262,8 @@ public final class VoyageOptions implements Cloneable {
 	@Override
 	public String toString() {
 		return "VoyageOptions [availableTime=" + availableTime + ", distance=" + distance + ", vessel=" + vessel + ", fromPortSlot=" + fromPortSlot + ", toPortSlot=" + toPortSlot + ", nboSpeed="
-				+ nboSpeed + ", useNBOForIdle=" + useNBOForIdle + ", useNBOForTravel=" + useNBOForTravel + ", useFBOForSupplement=" + useFBOForSupplement + ", route=" + route + ", vesselState="
-				+ vesselState + "]";
+				+ nboSpeed + ", useNBOForIdle=" + useNBOForIdle + ", useNBOForTravel=" + useNBOForTravel + ", useFBOForSupplement=" + useFBOForSupplement + ", availableLNG=" + availableLNG
+				+ ", cooldown=" + cooldown + ", shouldBeCold=" + shouldBeCold + ", startWarm=" + startWarm + ", route=" + route + ", vesselState=" + vesselState + "]";
 	}
+
 }

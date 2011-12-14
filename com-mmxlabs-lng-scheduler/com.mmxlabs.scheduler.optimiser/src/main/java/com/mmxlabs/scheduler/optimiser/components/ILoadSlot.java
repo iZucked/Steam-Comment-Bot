@@ -4,57 +4,14 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 
 /**
- * Interface representing a particular load slot defined by a port, time window
- * and load volumes.
+ * Interface representing a physical load slot commitment, with the features of an {@link ILoadOption} together with physical specific rules around cooldown.
  * 
  * @author Simon Goodall
  * 
  */
-public interface ILoadSlot extends IPortSlot {
-
-	/**
-	 * Returns the minimum quantity that can be loaded. A value of zero is
-	 * equivalent to no minimum bound. Units are M3.
-	 * 
-	 * @return
-	 */
-	long getMinLoadVolume();
-
-	/**
-	 * Returns the maximum quantity that can be loaded. A value of
-	 * {@link Long#MAX_VALUE} is equivalent to no maximum bound. Units are M3.
-	 * 
-	 * @return
-	 */
-	long getMaxLoadVolume();
-
-	/**
-	 * Returns the purchase price per MMBTu of LNG.
-	 * 
-	 * @return
-	 */
-	// int getPurchasePriceAtTime(int time);
-
-	/**
-	 * Returns the CV of the cargo loaded from this slot. This will be used to
-	 * convert between M3 and MMBTu of LNG.
-	 * 
-	 * @return
-	 */
-	int getCargoCVValue();
-
-	/**
-	 * Returns the
-	 * {@link com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator}
-	 * which should be used to determine the unit cost of LNG at this slot.
-	 * 
-	 * @return
-	 */
-	ILoadPriceCalculator2 getLoadPriceCalculator();
-
+public interface ILoadSlot extends ILoadOption {
 	/**
 	 * If true, {@link #isCooldownRequired()} returns true if a cooldown is to
 	 * be performed at this slot if the vessel warms up, and false if a cooldown

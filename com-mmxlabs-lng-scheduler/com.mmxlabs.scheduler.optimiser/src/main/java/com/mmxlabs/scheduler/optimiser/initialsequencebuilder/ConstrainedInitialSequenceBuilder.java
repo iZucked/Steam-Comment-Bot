@@ -19,6 +19,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -144,6 +145,9 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 		@SuppressWarnings("unchecked")
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 
+		@SuppressWarnings("unchecked")
+		final IOptionalElementsProvider<T> optionalElements = data.getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, IOptionalElementsProvider.class);
+
 		LegalSequencingChecker<T> checker = new LegalSequencingChecker<T>(data, pairwiseCheckers);
 
 		final int initialMaxLateness = (travelTimeChecker == null) ? 0 : travelTimeChecker.getMaxLateness();
@@ -164,6 +168,11 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 					unsequencedElements.remove(element);
 			}
 		}
+
+		final List<T> unusedElements = new ArrayList<T>();
+		unusedElements.addAll(optionalElements.getOptionalElements());
+		unusedElements.retainAll(unsequencedElements);
+		unsequencedElements.removeAll(optionalElements.getOptionalElements());
 
 		log.info("Elements remaining to be sequenced: " + unsequencedElements);
 
@@ -300,6 +309,8 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 		final Comparator<SequenceChunk<T>> comparator = new Comparator<SequenceChunk<T>>() {
 			@Override
 			public int compare(SequenceChunk<T> chunk1, SequenceChunk<T> chunk2) {
+				// check if either chunk is optional
+
 				// end elements go at the end
 				if (chunk2.isEndElement()) {
 					return -1;
@@ -518,6 +529,9 @@ public class ConstrainedInitialSequenceBuilder<T> implements IInitialSequenceBui
 				}
 			}
 		}
+
+		result.getModifiableUnusedElements().clear();
+		result.getModifiableUnusedElements().addAll(unusedElements);
 
 		return result;
 	}

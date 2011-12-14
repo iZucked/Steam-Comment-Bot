@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 /**
  * Interface representing a particular discharge slot defined by a port, time
@@ -13,22 +12,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
  * @author Simon Goodall
  * 
  */
-public interface IDischargeSlot extends IPortSlot {
-	/**
-	 * Returns the minimum quantity that can be discharged. A value of zero is
-	 * equivalent to no minimum bound.
-	 * 
-	 * @return
-	 */
-	long getMinDischargeVolume();
+public interface IDischargeSlot extends IDischargeOption {
 
-	/**
-	 * Returns the maximum quantity that can be discharged. A value of
-	 * {@link Long#MAX_VALUE} is equivalent to no maximum bound.
-	 * 
-	 * @return
-	 */
-	long getMaxDischargeVolume();
-
-	<T> IShippingPriceCalculator<T> getDischargePriceCalculator();
 }

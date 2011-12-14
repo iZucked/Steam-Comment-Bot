@@ -175,22 +175,6 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 				options.setUseFBOForSupplement(false);
 				options.setUseNBOForIdle(false);
 
-				// Enable choices only if NBO could be available.
-				if (useNBO) {
-					// Note ordering of choices is important = NBO must be set
-					// before FBO and Idle choices, otherwise if NBO choice is
-					// false, FBO and IdleNBO may still be true if set before
-					// NBO
-
-					if (vesselState == VesselState.Ballast) {
-						voyagePlanOptimiser.addChoice(new NBOTravelVoyagePlanChoice(previousOptions, options));
-					}
-
-					voyagePlanOptimiser.addChoice(new FBOVoyagePlanChoice(options));
-
-					voyagePlanOptimiser.addChoice(new IdleNBOVoyagePlanChoice(options));
-				}
-
 				if (thisPortSlot.getPortType() == PortType.Load) {
 					options.setShouldBeCold(true);
 					final ILoadSlot thisLoadSlot = (ILoadSlot) thisPortSlot;
@@ -221,6 +205,22 @@ public abstract class AbstractSequenceScheduler<T> implements ISequenceScheduler
 					}
 				} else {
 					options.setShouldBeCold(false);
+				}
+
+				// Enable choices only if NBO could be available.
+				if (useNBO) {
+					// Note ordering of choices is important = NBO must be set
+					// before FBO and Idle choices, otherwise if NBO choice is
+					// false, FBO and IdleNBO may still be true if set before
+					// NBO
+
+					if (vesselState == VesselState.Ballast) {
+						voyagePlanOptimiser.addChoice(new NBOTravelVoyagePlanChoice(previousOptions, options));
+					}
+
+					voyagePlanOptimiser.addChoice(new FBOVoyagePlanChoice(options));
+
+					voyagePlanOptimiser.addChoice(new IdleNBOVoyagePlanChoice(options));
 				}
 
 				final List<MatrixEntry<IPort, Integer>> distances = new ArrayList<IMultiMatrixProvider.MatrixEntry<IPort, Integer>>(distanceProvider.getValues(prevPort, thisPort));

@@ -105,22 +105,32 @@ public final class AbstractSequenceSchedulerTest {
 		dischargeSlot1.setPort(port2);
 		dischargeSlot1.setTimeWindow(timeWindow2);
 
+		loadSlot1.setId("load-slot-1");
+
 		final Cargo cargo1 = new Cargo();
 		cargo1.setId("cargo1");
-		cargo1.setLoadSlot(loadSlot1);
-		cargo1.setDischargeSlot(dischargeSlot1);
+		cargo1.setLoadOption(loadSlot1);
+		cargo1.setDischargeOption(dischargeSlot1);
+
+		dischargeSlot1.setId("discharge-slot-1");
 
 		final LoadSlot loadSlot2 = new LoadSlot();
 		loadSlot2.setPort(port3);
 		loadSlot2.setTimeWindow(timeWindow3);
+		loadSlot2.setId("load-slot-2");
 		final DischargeSlot dischargeSlot2 = new DischargeSlot();
 		dischargeSlot2.setPort(port4);
 		dischargeSlot2.setTimeWindow(timeWindow4);
 
+		dischargeSlot2.setId("discharge-slot-2");
+
+		loadSlot2.setCooldownForbidden(true);
+		loadSlot2.setCooldownSet(true);
+
 		final Cargo cargo2 = new Cargo();
 		cargo2.setId("cargo2");
-		cargo2.setLoadSlot(loadSlot2);
-		cargo2.setDischargeSlot(dischargeSlot2);
+		cargo2.setLoadOption(loadSlot2);
+		cargo2.setDischargeOption(dischargeSlot2);
 
 		final ISequenceElement element1 = new SequenceElement(index,
 				"element1");
@@ -195,6 +205,8 @@ public final class AbstractSequenceSchedulerTest {
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setMinNBOSpeed(VesselState.Laden, 15000);
 		vesselClass.setMinNBOSpeed(VesselState.Ballast, 15000);
+		vesselClass.setCargoCapacity(1000000);
+
 		vessel.setVesselClass(vesselClass);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(
@@ -228,6 +240,7 @@ public final class AbstractSequenceSchedulerTest {
 		expectedOptions1.setVessel(vessel);
 		expectedOptions1.setVesselState(VesselState.Laden);
 		expectedOptions1.setNBOSpeed(15000);
+		expectedOptions1.setAvailableLNG(vesselClass.getCargoCapacity());
 
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
@@ -245,6 +258,8 @@ public final class AbstractSequenceSchedulerTest {
 		expectedOptions2.setVessel(vessel);
 		expectedOptions2.setVesselState(VesselState.Ballast);
 		expectedOptions2.setNBOSpeed(15000);
+		expectedOptions2.setAvailableLNG(vesselClass.getCargoCapacity());
+		expectedOptions2.setShouldBeCold(true);
 		final VoyageOptions expectedOptions2a = expectedOptions2.clone();
 		expectedOptions2a.setRoute(IMultiMatrixProvider.Default_Key);
 		expectedOptions2a.setDistance(400);
@@ -259,6 +274,8 @@ public final class AbstractSequenceSchedulerTest {
 		expectedOptions3.setVessel(vessel);
 		expectedOptions3.setVesselState(VesselState.Laden);
 		expectedOptions3.setNBOSpeed(15000);
+		expectedOptions3.setAvailableLNG(vesselClass.getCargoCapacity());
+
 		final VoyageOptions expectedOptions3a = expectedOptions3.clone();
 		expectedOptions3a.setRoute(IMultiMatrixProvider.Default_Key);
 		expectedOptions3a.setDistance(400);
@@ -411,25 +428,29 @@ public final class AbstractSequenceSchedulerTest {
 		final LoadSlot loadSlot1 = new LoadSlot();
 		loadSlot1.setPort(port1);
 		loadSlot1.setTimeWindow(timeWindow1);
+
+		loadSlot1.setCooldownForbidden(true);
+		loadSlot1.setCooldownSet(true);
+
 		final DischargeSlot dischargeSlot1 = new DischargeSlot();
 		dischargeSlot1.setPort(port2);
 		dischargeSlot1.setTimeWindow(timeWindow2);
 
 		final Cargo cargo1 = new Cargo();
 		cargo1.setId("cargo1");
-		cargo1.setLoadSlot(loadSlot1);
-		cargo1.setDischargeSlot(dischargeSlot1);
+		cargo1.setLoadOption(loadSlot1);
+		cargo1.setDischargeOption(dischargeSlot1);
 
 		final LoadSlot loadSlot2 = new LoadSlot();
 		loadSlot2.setPort(port3);
 		loadSlot2.setTimeWindow(timeWindow3);
 
-		final ISequenceElement element1 = new SequenceElement(index,
-				"element1");
-		final ISequenceElement element2 = new SequenceElement(index,
-				"element2");
-		final ISequenceElement element3 = new SequenceElement(index,
-				"element3");
+		loadSlot2.setCooldownForbidden(true);
+		loadSlot2.setCooldownSet(true);
+
+		final ISequenceElement element1 = new SequenceElement(index, "element1");
+		final ISequenceElement element2 = new SequenceElement(index, "element2");
+		final ISequenceElement element3 = new SequenceElement(index, "element3");
 
 		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
 				SchedulerConstants.DCP_timeWindowProvider);
@@ -489,6 +510,7 @@ public final class AbstractSequenceSchedulerTest {
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setMinNBOSpeed(VesselState.Laden, 15000);
 		vesselClass.setMinNBOSpeed(VesselState.Ballast, 15000);
+		vesselClass.setCargoCapacity(100000);
 		vessel.setVesselClass(vesselClass);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(
@@ -522,6 +544,7 @@ public final class AbstractSequenceSchedulerTest {
 		expectedOptions1.setVessel(vessel);
 		expectedOptions1.setVesselState(VesselState.Laden);
 		expectedOptions1.setNBOSpeed(15000);
+		expectedOptions1.setAvailableLNG(vesselClass.getCargoCapacity());
 
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
@@ -539,6 +562,8 @@ public final class AbstractSequenceSchedulerTest {
 		expectedOptions2.setVessel(vessel);
 		expectedOptions2.setVesselState(VesselState.Ballast);
 		expectedOptions2.setNBOSpeed(15000);
+		expectedOptions2.setAvailableLNG(vesselClass.getCargoCapacity());
+		expectedOptions2.setShouldBeCold(true);
 		final VoyageOptions expectedOptions2a = expectedOptions2.clone();
 		expectedOptions2a.setRoute(IMultiMatrixProvider.Default_Key);
 		expectedOptions2a.setDistance(400);
