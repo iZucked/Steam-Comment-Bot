@@ -448,12 +448,9 @@ public final class AbstractSequenceSchedulerTest {
 		loadSlot2.setCooldownForbidden(true);
 		loadSlot2.setCooldownSet(true);
 
-		final ISequenceElement element1 = new SequenceElement(index,
-				"element1", loadSlot1);
-		final ISequenceElement element2 = new SequenceElement(index,
-				"element2", dischargeSlot1);
-		final ISequenceElement element3 = new SequenceElement(index,
-				"element3", loadSlot2);
+		final ISequenceElement element1 = new SequenceElement(index, "element1");
+		final ISequenceElement element2 = new SequenceElement(index, "element2");
+		final ISequenceElement element3 = new SequenceElement(index, "element3");
 
 		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
 				SchedulerConstants.DCP_timeWindowProvider);
