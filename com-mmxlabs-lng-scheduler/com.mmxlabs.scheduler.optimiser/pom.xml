@@ -21,7 +21,10 @@
 		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-lng-scheduler/</url>
 	</scm>
 
-
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.lng.scheduler/</url>
+	</ciManagement>
 
 	<dependencies>
 
