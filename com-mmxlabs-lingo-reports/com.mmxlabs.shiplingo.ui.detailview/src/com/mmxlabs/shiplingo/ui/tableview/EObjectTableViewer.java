@@ -35,11 +35,18 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
+import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -47,12 +54,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,18 +77,18 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
  * @author Tom Hinton
  * 
  */
-public class EObjectTableViewer extends TableViewer {
+public class EObjectTableViewer extends GridTableViewer {
 	private final static Logger log = LoggerFactory.getLogger(EObjectTableViewer.class);
 	private static final String COLUMN_RENDERER = "COLUMN_RENDERER";
 	private static final String COLUMN_PATH = "COLUMN_PATH";
 
-	private final ArrayList<TableColumn> columnSortOrder = new ArrayList<TableColumn>();
+	private final ArrayList<GridColumn> columnSortOrder = new ArrayList<GridColumn>();
 	private boolean sortDescending = false;
 
 	private final LinkedList<Pair<EMFPath, ICellRenderer>> cellRenderers = new LinkedList<Pair<EMFPath, ICellRenderer>>();
 
-	private boolean shouldEditCell = false;
-
+//	private boolean shouldEditCell = false;
+	
 	/**
 	 * A set containing the elements currently being displayed, which is used by
 	 * #adapter to determine which row to refresh when a notification comes in
@@ -111,8 +117,14 @@ public class EObjectTableViewer extends TableViewer {
 
 	public void init(final AdapterFactory adapterFactory,
 			final EReference... path) {
-		final TableViewer viewer = this;
-		final Table table = viewer.getTable();
+		final GridTableViewer viewer = this;
+		final Grid table = viewer.getGrid();
+		
+
+		
+		table.setRowHeaderVisible(true);
+		
+		
 		setContentProvider(new IStructuredContentProvider() {
 			@Override
 			public void inputChanged(Viewer viewer, Object oldInput,
@@ -133,14 +145,6 @@ public class EObjectTableViewer extends TableViewer {
 			}
 		});
 
-		final Listener mouseDownListener = new Listener() {
-			@Override
-			public void handleEvent(final Event event) {
-				// alernatively, check here whether click lies in the selected
-				// row.
-				setShouldEdit(false);
-			}
-		};
 
 		final Listener measureListener = new Listener() {
 			@Override
@@ -149,38 +153,14 @@ public class EObjectTableViewer extends TableViewer {
 			}
 		};
 
-		final Listener doubleClickListener = new Listener() {
-			@Override
-			public void handleEvent(final Event event) {
-				setShouldEdit(true);
-				final TableItem[] selection = table.getSelection();
 
-				if (selection.length != 1) {
-					return;
-				}
-
-				final TableItem item = table.getSelection()[0];
-
-				for (int i = 0; i < table.getColumnCount(); i++) {
-					if (item.getBounds(i).contains(event.x, event.y)) {
-						viewer.editElement(item.getData(), i);
-						setShouldEdit(false);
-						break;
-					}
-				}
-			}
-		};
-
-		table.addListener(SWT.MouseDown, mouseDownListener);
+		
 		table.addListener(SWT.MeasureItem, measureListener);
-		table.addListener(SWT.MouseDoubleClick, doubleClickListener);
 
 		table.addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(final DisposeEvent e) {
-				table.removeListener(SWT.MouseDown, mouseDownListener);
 				table.removeListener(SWT.MeasureItem, measureListener);
-				table.removeListener(SWT.MouseDoubleClick, doubleClickListener);
 				dispose();
 			}
 		});
@@ -214,6 +194,25 @@ public class EObjectTableViewer extends TableViewer {
 					return new Object[] { o };
 				}
 				return new Object[] {};
+			}
+		});
+		
+		viewer.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+				final Iterator<GridColumn> iterator = columnSortOrder.iterator();
+				int comparison = 0;
+				while (iterator.hasNext() && comparison == 0) {
+					final GridColumn column = iterator.next();
+					final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
+					final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
+
+					final Object v1 = path.get((EObject) e1);
+					final Object v2 = path.get((EObject) e2);
+
+					comparison = renderer.getComparable(v1).compareTo(renderer.getComparable(v2));
+				}
+				return sortDescending ? -comparison : comparison;
 			}
 		});
 	}
@@ -391,38 +390,41 @@ public class EObjectTableViewer extends TableViewer {
 		}
 	}
 
-	/**
-	 * A hack to prevent single click editing, which is really annoying and
-	 * silly.
-	 * 
-	 * @return
-	 */
-	protected boolean getShouldEditCell() {
-		return shouldEditCell;
-	}
-
-	protected void setShouldEdit(final boolean b) {
-		shouldEditCell = b;
-	}
-
 	public void addColumn(final String columnName,
 			final ICellRenderer renderer, final ICellManipulator manipulator,
 			final Object... pathObjects) {
 		// create a column
-		final TableViewer viewer = this;
+		final GridTableViewer viewer = this;
 		final EMFPath path = new CompiledEMFPath(true, pathObjects);
 		cellRenderers.add(new Pair<EMFPath, ICellRenderer>(path, renderer));
 
-		final TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
-		final TableColumn tColumn = column.getColumn();
+		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+		final GridColumn tColumn = column.getColumn();
+		
+		tColumn.setMoveable(true);
 		tColumn.setText(columnName);
 		tColumn.pack();
-		tColumn.setResizable(true);
+//		tColumn.setResizable(true);
 
 		// store the renderer here, so that we can use it in sorting later.
 		tColumn.setData(COLUMN_RENDERER, renderer);
 		tColumn.setData(COLUMN_PATH, path);
 
+		GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer)
+		{
+
+			/* (non-Javadoc)
+			 * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
+			 */
+			@Override
+			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
+				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION
+						|| (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && event.keyCode == SWT.F2);
+			}
+			
+		}
+		, GridViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | GridViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
+		
 		columnSortOrder.add(tColumn);
 
 		column.setLabelProvider(new ColumnLabelProvider() {
@@ -500,15 +502,14 @@ public class EObjectTableViewer extends TableViewer {
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
 				final CellEditor result = manipulator.getCellEditor(
-						viewer.getTable(), path.get((EObject) element));
+						viewer.getGrid(), path.get((EObject) element));
 				return result;
 			}
 
 			@Override
 			protected boolean canEdit(final Object element) {
 				// intercept mouse listener here
-				return getShouldEditCell()
-						&& manipulator.canEdit(path.get((EObject) element));
+				return manipulator.canEdit(path.get((EObject) element));
 			}
 		});
 
@@ -519,12 +520,11 @@ public class EObjectTableViewer extends TableViewer {
 					sortDescending = !sortDescending;
 				} else {
 					sortDescending = false;
+					columnSortOrder.get(0).setSort(SWT.NONE);
 					columnSortOrder.remove(tColumn);
 					columnSortOrder.add(0, tColumn);
 				}
-				viewer.getTable().setSortColumn(tColumn);
-				viewer.getTable().setSortDirection(
-						sortDescending ? SWT.DOWN : SWT.UP);
+				tColumn.setSort(sortDescending ? SWT.UP : SWT.DOWN);
 				viewer.refresh(false);
 			}
 
@@ -532,6 +532,8 @@ public class EObjectTableViewer extends TableViewer {
 			public void widgetDefaultSelected(final SelectionEvent e) {
 			}
 		});
+		
+		
 	}
 
 	public void dispose() {
@@ -540,5 +542,12 @@ public class EObjectTableViewer extends TableViewer {
 
 		currentElements.clear();
 		columnSortOrder.clear();
+	}
+
+	/**
+	 * @return
+	 */
+	public Control getControl() {
+		return getGrid();
 	}
 }
