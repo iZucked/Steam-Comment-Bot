@@ -38,14 +38,13 @@ import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
@@ -56,8 +55,7 @@ import scenario.presentation.cargoeditor.handlers.AddAction;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
-import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
-import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.importer.importers.ExportCSVAction;
 import com.mmxlabs.shiplingo.importer.importers.ImportCSVAction;
 import com.mmxlabs.shiplingo.importer.importers.ImportUI;
@@ -85,7 +83,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public EObjectTableViewer createViewer(final Composite parent) {
-		viewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI) {
+		viewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
 			@Override
 			protected boolean refreshOrGiveUp() {
 				if (ImportUI.isImporting()) {
@@ -104,19 +102,22 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		getToolBarManager().add(new GroupMarker("exporters"));
 		getToolBarManager().add(new GroupMarker("copy"));
 		{
-			final Action a = new PackTableColumnsAction(viewer);
+			final Action a = new PackGridTableColumnsAction(viewer);
 			getToolBarManager().appendToGroup("pack", a);
 		}
 		{
-			final Action a = new CopyTableToClipboardAction(viewer.getTable());
-			getToolBarManager().appendToGroup("copy", a);
+//			final Action a = new CopyTableToClipboardAction(viewer.getTable());
+//			getToolBarManager().appendToGroup("copy", a);
 		}
 
 		getToolBarManager().update(true);
+		
+		
+		
 		return viewer;
 	}
 
-	protected Action createDeleteAction(final TableViewer viewer,
+	protected Action createDeleteAction(final GridTableViewer viewer,
 			final EditingDomain editingDomain) {
 		return new scenario.presentation.cargoeditor.handlers.DeleteAction(
 				editingDomain) {
@@ -141,7 +142,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	 * @param e
 	 * @return
 	 */
-	protected Action createAddAction(final TableViewer viewer,
+	protected Action createAddAction(final GridTableViewer viewer,
 			final EditingDomain editingDomain, final EMFPath contentPath) {
 		return new AddAction(editingDomain, contentPath.getTargetType()
 				.getName()) {
@@ -225,9 +226,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	public void init(final List<EReference> path,
 			final AdapterFactory adapterFactory) {
 		viewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
-		final Table table = viewer.getTable();
-		final TableLayout layout = new TableLayout();
-		table.setLayout(layout);
+		final Grid table = viewer.getGrid();
+		
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
@@ -272,7 +272,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	 * @param editingDomain
 	 * @return
 	 */
-	protected Action createExportAction(final TableViewer viewer,
+	protected Action createExportAction(final GridTableViewer viewer,
 			final EMFPath ePath) {
 		return new ExportCSVAction() {
 			@Override
@@ -302,7 +302,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	 * @param ePath
 	 * @return
 	 */
-	protected Action createImportAction(final TableViewer viewer,
+	protected Action createImportAction(final GridTableViewer viewer,
 			final EditingDomain editingDomain, final EMFPath ePath) {
 		return new ImportCSVAction() {
 
@@ -543,7 +543,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	}
 
 	@Override
-	public TableViewer getViewer() {
+	public GridTableViewer getViewer() {
 		return viewer;
 	}
 

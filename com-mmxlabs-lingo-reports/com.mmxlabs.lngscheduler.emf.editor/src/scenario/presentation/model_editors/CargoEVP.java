@@ -131,7 +131,7 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 		getToolBarManager().appendToGroup("edit", replicateAction);
 		getToolBarManager().update(true);
 
-		v.addSelectionChangedListener(swapAction);
+//		v.addSelectionChangedListener(swapAction);
 
 		v.getControl().addKeyListener(new KeyListener() {
 			@Override
@@ -142,7 +142,6 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 			public void keyReleased(final KeyEvent e) {
 
 				if (e.keyCode == ' ') {
-
 					final ISelection selection = v.getSelection();
 					if (selection instanceof IStructuredSelection) {
 						final IStructuredSelection ssel = (IStructuredSelection) selection;

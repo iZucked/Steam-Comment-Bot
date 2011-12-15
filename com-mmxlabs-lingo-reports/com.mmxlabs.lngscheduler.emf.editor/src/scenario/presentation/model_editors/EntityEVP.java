@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.Scenario;
@@ -55,7 +55,7 @@ public class EntityEVP extends NamedObjectEVP {
 	}
 
 	@Override
-	protected Action createExportAction(TableViewer viewer, EMFPath ePath) {
+	protected Action createExportAction(GridTableViewer viewer, EMFPath ePath) {
 		final ExportCSVAction delegate = (ExportCSVAction) super.createExportAction(viewer, ePath);
 		return new ExportCSVAction() {
 			@Override
@@ -75,7 +75,7 @@ public class EntityEVP extends NamedObjectEVP {
 	}
 
 	@Override
-	protected Action createImportAction(TableViewer viewer, EditingDomain editingDomain, EMFPath ePath) {
+	protected Action createImportAction(GridTableViewer viewer, EditingDomain editingDomain, EMFPath ePath) {
 		final ImportCSVAction delegate = (ImportCSVAction) super.createImportAction(viewer, editingDomain, ePath);
 		return new ImportCSVAction() {
 			@Override

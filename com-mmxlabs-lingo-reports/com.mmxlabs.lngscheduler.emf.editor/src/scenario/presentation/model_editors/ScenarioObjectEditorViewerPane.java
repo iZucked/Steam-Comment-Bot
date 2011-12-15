@@ -16,8 +16,8 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
@@ -77,7 +77,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 	 * create the object, but adds in an editor dialog.
 	 */
 	@Override
-	protected Action createAddAction(final TableViewer viewer,
+	protected Action createAddAction(final GridTableViewer viewer,
 			final EditingDomain editingDomain, final EMFPath contentPath) {
 		final AddAction delegate = (AddAction) super.createAddAction(viewer,
 				editingDomain, contentPath);
@@ -130,6 +130,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 	 */
 	public EObjectTableViewer createViewer(final Composite parent) {
 		final EObjectTableViewer v = super.createViewer(parent);
+		v.getGrid().setCellSelectionEnabled(true);
 		v.getControl().addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(final org.eclipse.swt.events.KeyEvent e) {
@@ -139,10 +140,9 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 			@Override
 			public void keyPressed(final org.eclipse.swt.events.KeyEvent e) {
 				// TODO: Wrap up in a command with keybindings
+				if (v.isCellEditorActive()) return;
+				final ISelection selection = getViewer().getSelection();
 				if (e.keyCode == '\r') {
-					if (v.isCellEditorActive())
-						return;
-					final ISelection selection = getViewer().getSelection();
 					if (selection instanceof IStructuredSelection) {
 						final IStructuredSelection ssel = (IStructuredSelection) selection;
 						final List l = Arrays.asList(ssel.toArray());
@@ -152,29 +152,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 									v.getControl().getShell(),
 									part,
 									part.getEditingDomain());
-							
-//							final EObjectMultiDialog multiDialog = new EObjectMultiDialog(
-//									new IShellProvider() {
-//										@Override
-//										public Shell getShell() {
-//											return v.getControl().getShell();
-//										}
-//									});
-//							part.setupDetailViewContainer(multiDialog);
-//							multiDialog.setEditorFactoryForFeature(
-//									CargoPackage.eINSTANCE.getCargo_Id(), null);
-//							multiDialog.setEditorFactoryForFeature(
-//									ScenarioPackage.eINSTANCE
-//											.getNamedObject_Name(), null);
-//
-//							multiDialog.setEditorFactoryForFeature(
-//									FleetPackage.eINSTANCE.getVesselEvent_Id(),
-//									null);
-//							if (multiDialog.open(l, part.getEditingDomain()) == Dialog.OK) {
-//								part.getEditingDomain().getCommandStack()
-//										.execute(multiDialog.createCommand());
-//							}
-							
+														
 							if (multiDialog.open(l) == Window.OK) {
 								getViewer().refresh();
 							}
@@ -192,7 +170,6 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 						}
 					}
 				}
-
 			}
 		});
 		return v;
