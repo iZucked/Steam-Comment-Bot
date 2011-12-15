@@ -55,6 +55,7 @@ import scenario.presentation.cargoeditor.handlers.AddAction;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.importer.importers.ExportCSVAction;
 import com.mmxlabs.shiplingo.importer.importers.ImportCSVAction;
@@ -106,8 +107,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			getToolBarManager().appendToGroup("pack", a);
 		}
 		{
-//			final Action a = new CopyTableToClipboardAction(viewer.getTable());
-//			getToolBarManager().appendToGroup("copy", a);
+			final Action a = new CopyGridToClipboardAction(viewer.getGrid());
+			getToolBarManager().appendToGroup("copy", a);
 		}
 
 		getToolBarManager().update(true);
