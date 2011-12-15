@@ -259,6 +259,12 @@
 		</repository>
 		
 		<repository>
+			<id>nebula-main-snapshots</id>
+			<url>http://download.eclipse.org/technology/nebula/snapshot</url>
+			<layout>p2</layout>
+		</repository>
+		
+		<repository>
 			<id>mmxlabs-p2-snapshots</id>
 			<url>https://s3-proxy.appspot.com/p2-repo/repositories/mmxlabs-p2-snapshots/</url>
 			<!--<url>https://server1.mmxlabs.com/static/p2/mmxlabs-p2-snapshots/</url>-->
