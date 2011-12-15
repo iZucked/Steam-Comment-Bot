@@ -13,6 +13,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.window.IShellProvider;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -64,7 +65,7 @@ public class CanalCostsDialog extends Dialog {
 
 		tableViewer.init(adapterFactory, containment);
 
-		final Table table = tableViewer.getTable();
+		final Grid table = tableViewer.getGrid();
 		final TableLayout layout = new TableLayout();
 		table.setLayout(layout);
 		table.setHeaderVisible(true);
