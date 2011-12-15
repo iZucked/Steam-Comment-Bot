@@ -28,6 +28,9 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -53,6 +56,7 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
+import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
 /**
@@ -89,8 +93,8 @@ public abstract class EMFReportView extends ViewPart implements
 			this.title = title;
 		}
 
-		public TableViewerColumn createColumn(final TableViewer viewer) {
-			final TableViewerColumn column = new TableViewerColumn(viewer,
+		public GridViewerColumn createColumn(final GridTableViewer viewer) {
+			final GridViewerColumn column = new GridViewerColumn(viewer,
 					SWT.NONE);
 			column.getColumn().setText(title);
 			column.setLabelProvider(new ColumnLabelProvider() {
@@ -100,9 +104,10 @@ public abstract class EMFReportView extends ViewPart implements
 				}
 			});
 
-			final TableColumn tc = column.getColumn();
+			final GridColumn tc = column.getColumn();
 			tc.setData(COLUMN_HANDLER, this);
 			tc.addSelectionListener(new SelectionAdapter() {
+				GridColumn lastColumn = null;
 				{
 					final SelectionListener sl = this;
 					tc.addDisposeListener(new DisposeListener() {
@@ -116,11 +121,11 @@ public abstract class EMFReportView extends ViewPart implements
 
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
+					if (lastColumn != null) lastColumn.setSort(SWT.NONE);
 					// update sort order
 					makeSortColumn((ColumnHandler) tc.getData(COLUMN_HANDLER));
-					viewer.getTable().setSortColumn(tc);
-					viewer.getTable().setSortDirection(
-							sortDescending ? SWT.DOWN : SWT.UP);
+					tc.setSort(sortDescending ? SWT.UP : SWT.DOWN);
+					lastColumn = tc;
 				}
 			});
 
@@ -263,7 +268,7 @@ public abstract class EMFReportView extends ViewPart implements
 		}
 	};
 
-	private TableViewer viewer;
+	private GridTableViewer viewer;
 
 	private Action packColumnsAction;
 
@@ -288,7 +293,7 @@ public abstract class EMFReportView extends ViewPart implements
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
+		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.FULL_SELECTION) {
 			@Override
 			protected void inputChanged(final Object input, final Object oldInput) {
@@ -308,8 +313,8 @@ public abstract class EMFReportView extends ViewPart implements
 
 		viewer.setContentProvider(getContentProvider());
 
-		viewer.getTable().setHeaderVisible(true);
-		viewer.getTable().setLinesVisible(true);
+		viewer.getGrid().setHeaderVisible(true);
+		viewer.getGrid().setLinesVisible(true);
 
 		viewer.setComparator(new ViewerComparator() {
 			@Override
@@ -390,19 +395,19 @@ public abstract class EMFReportView extends ViewPart implements
 		manager.add(new GroupMarker("exporters"));
 
 		manager.appendToGroup("pack", packColumnsAction);
-		manager.appendToGroup("copy", copyTableAction);
+//		manager.appendToGroup("copy", copyTableAction);
 	}
 
 	private void makeActions() {
-		packColumnsAction = new PackTableColumnsAction(viewer);
-		copyTableAction = new CopyTableToClipboardAction(viewer.getTable());
+		packColumnsAction = new PackGridTableColumnsAction(viewer);
+//		copyTableAction = new CopyTableToClipboardAction(viewer.getTable());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 
 	@Override
 	public void setFocus() {
-		if (!viewer.getTable().isDisposed()) {
-			viewer.getTable().setFocus();
+		if (!viewer.getGrid().isDisposed()) {
+			viewer.getGrid().setFocus();
 		}
 	}
 
@@ -439,7 +444,7 @@ public abstract class EMFReportView extends ViewPart implements
 				break;
 			}
 		}
-		for (final TableColumn column : viewer.getTable().getColumns()) {
+		for (final GridColumn column : viewer.getGrid().getColumns()) {
 			if (column.getText().equals(title))
 				// TODO this might be pretty wrong.
 				// TODO: This is how I usually do it - SG

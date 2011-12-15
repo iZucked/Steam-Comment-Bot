@@ -325,11 +325,9 @@ public class PortRotationReportView extends EMFReportView {
 						if (allocation == null) {
 							return null;
 						}
-						
-						if (entity.equals(allocation.getLoadRevenue()
-								.getEntity())) {
-							value += allocation.getLoadRevenue()
-.getValue();
+
+						if (entity.equals(allocation.getLoadRevenue().getEntity())) {
+							value += allocation.getLoadRevenue().getValue();
 						}
 						if (entity.equals(allocation.getShippingRevenue()
 								.getEntity())) {
