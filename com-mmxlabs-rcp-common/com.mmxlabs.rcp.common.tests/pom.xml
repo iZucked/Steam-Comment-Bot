@@ -30,7 +30,7 @@
 							<artifactId>org.eclipse.sdk.ide</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-					 </dependencies>
+					</dependencies>
 
 				</configuration>
 			</plugin>
