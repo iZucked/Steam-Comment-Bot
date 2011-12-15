@@ -122,6 +122,11 @@ public class SchedulerView extends ViewPart {
 			public int getNumberOfDaysToAppendForEndOfDay() {
 				return 0;
 			}
+
+			@Override
+			public boolean allowBlankAreaVerticalDragAndDropToMoveChart() {
+				return true;
+			}
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL
