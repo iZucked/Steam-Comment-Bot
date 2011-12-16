@@ -55,6 +55,7 @@ import scenario.Scenario;
 import scenario.ScenarioFactory;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
+import scenario.contract.ContractFactory;
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
 import scenario.contract.GroupEntity;
@@ -321,8 +322,21 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		ScenarioUtils.addDefaultSettings(scenario);
 
 		// copy shipping entity from last entity.
-		if (scenario.getContractModel().getEntities().isEmpty() == false)
-			scenario.getContractModel().setShippingEntity((GroupEntity) scenario.getContractModel().getEntities().get(scenario.getContractModel().getEntities().size() - 1));
+		if (scenario.getContractModel().getEntities().isEmpty() == false) {
+			final Entity possiblyGroupEntity = scenario.getContractModel().getEntities().get(scenario.getContractModel().getEntities().size()-1);
+			if (possiblyGroupEntity instanceof GroupEntity) {
+				final GroupEntity groupEntity = (GroupEntity) possiblyGroupEntity;
+				scenario.getContractModel().setShippingEntity(groupEntity);
+			} else {
+				final GroupEntity groupEntity = ContractFactory.eINSTANCE.createGroupEntity();
+				groupEntity.setName(possiblyGroupEntity.getName());
+				groupEntity.setOwnership(1.0);
+				groupEntity.setTaxRate(0.0);
+				groupEntity.setTransferOffset(0.0f);
+				scenario.getContractModel().getEntities().remove(possiblyGroupEntity);
+				scenario.getContractModel().setShippingEntity(groupEntity);
+			}
+		}
 	}
 
 	/**
