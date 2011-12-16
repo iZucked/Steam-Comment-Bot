@@ -26,7 +26,7 @@ import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.export.DetailTreeExporter;
 import com.mmxlabs.lngscheduler.emf.extras.export.IExporterExtension;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -47,11 +47,11 @@ public class TradingExporterExtension implements IExporterExtension {
 	private final static Logger log = LoggerFactory.getLogger(TradingExporterExtension.class);
 	private Scenario scenario;
 	private ModelEntityMap entities;
-	private IAnnotatedSolution<ISequenceElement> annotatedSolution;
+	private IAnnotatedSolution annotatedSolution;
 	private Schedule outputSchedule;
 
 	@Override
-	public void startExporting(Scenario inputScenario, Schedule outputSchedule, ModelEntityMap entities, IAnnotatedSolution<ISequenceElement> annotatedSolution) {
+	public void startExporting(Scenario inputScenario, Schedule outputSchedule, ModelEntityMap entities, IAnnotatedSolution annotatedSolution) {
 		this.scenario = inputScenario;
 		this.entities = entities;
 		this.annotatedSolution = annotatedSolution;
@@ -61,7 +61,7 @@ public class TradingExporterExtension implements IExporterExtension {
 	@Override
 	public void finishExporting() {
 		final EList<BookedRevenue> revenues = outputSchedule.getRevenue();
-		final IPortSlotProvider<ISequenceElement> slotProvider = annotatedSolution.getContext().getOptimisationData()
+		final IPortSlotProvider slotProvider = annotatedSolution.getContext().getOptimisationData()
 				.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
 			final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, TradingConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
