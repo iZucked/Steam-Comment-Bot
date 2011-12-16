@@ -38,8 +38,6 @@ public class CargoReportView extends EMFReportView {
 	public static final String ID = "com.mmxlabs.demo.reports.views.CargoReportView";
 
 	public CargoReportView() {
-		
-		
 		super("com.mmxlabs.demo.reports.CargoReportView");
 		
 		final CargoPackage c = CargoPackage.eINSTANCE;
@@ -135,6 +133,16 @@ public class CargoReportView extends EMFReportView {
 		// addColumn(f[1] + " taxed value", integerFormatter, f[0],
 		// s.getBookedRevenue__GetTaxedValue());
 		// }
+	}
+
+	@Override
+	protected boolean handleSelections() {
+		return true;
+	}
+
+	@Override
+	protected Class<?> getSelectionAdaptionClass() {
+		return CargoAllocation.class;
 	}
 
 	@Override

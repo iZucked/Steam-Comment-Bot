@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -24,6 +26,8 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -352,6 +356,12 @@ public abstract class EMFReportView extends ViewPart implements
 		jobManagerListener = ScheduleAdapter
 				.registerView(viewer);
 
+		// register to cause selections
+		// TODO: register an adapter to adapt things one way and another.
+		
+		getSite().setSelectionProvider(viewer);
+		if (handleSelections())
+			getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
 	}
 
 	private void hookContextMenu() {
@@ -422,14 +432,33 @@ public abstract class EMFReportView extends ViewPart implements
 	@Override
 	public void selectionChanged(final IWorkbenchPart part,
 			final ISelection selection) {
-
-//		final List<Schedule> schedules = ScheduleAdapter
-//				.getSchedules(selection);
-//		if (schedules.isEmpty()) {
-//			setInput(null);
-//		} else {
-//			setInput(schedules);
-//		}
+		// if the selection is adaptable to one of the things we contain then we win..?
+		// or what?
+		if (part == this) {
+			return;
+		}
+		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
+			final Class<?> adaptTo = getSelectionAdaptionClass();
+			final IAdapterManager adapterManager = Platform.getAdapterManager();
+			final List<Object> adaptedSelection = new ArrayList<Object>(((IStructuredSelection)selection).size());
+			for (final Object object : ((IStructuredSelection) selection).toList()) {
+				final Object adaptedObject = adapterManager.getAdapter(object, adaptTo);
+				if (adaptedObject != null) {
+					adaptedSelection.add(adaptedObject);
+				}
+			}
+			
+			handleAdaptedSelection(adaptedSelection);
+		}
+	}
+	protected void handleAdaptedSelection(final List<Object> adaptedSelection) {
+		viewer.setSelection(new StructuredSelection(adaptedSelection), true);
+	}
+	protected boolean handleSelections() {
+		return false;
+	}
+	protected Class<?> getSelectionAdaptionClass() {
+		return null;
 	}
 
 	public void removeColumn(final String title) {
