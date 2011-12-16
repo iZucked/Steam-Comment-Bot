@@ -41,6 +41,7 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
@@ -144,16 +145,13 @@ public class EObjectTableViewer extends GridTableViewer {
 				return ((List) inputElement).toArray();
 			}
 		});
-
-
+		
 		final Listener measureListener = new Listener() {
 			@Override
 			public void handleEvent(final Event event) {
 				event.height = 18;
 			}
 		};
-
-
 		
 		table.addListener(SWT.MeasureItem, measureListener);
 
