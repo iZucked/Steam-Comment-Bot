@@ -66,7 +66,6 @@ import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
@@ -633,7 +632,7 @@ public class ScenarioTools {
 		final ModelEntityMap entities = new ResourcelessModelEntityMap();
 		final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 
-		IOptimisationData<ISequenceElement> data;
+		IOptimisationData data;
 		try {
 			data = lst.createOptimisationData(entities);
 		} catch (final IncompleteScenarioException e) {
@@ -641,15 +640,15 @@ public class ScenarioTools {
 			throw new RuntimeException(e);
 		}
 
-		final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot.createOptimiserAndContext(data, entities);
+		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
-		final IOptimisationContext<ISequenceElement> context = optAndContext.getFirst();
-		final LocalSearchOptimiser<ISequenceElement> optimiser = optAndContext.getSecond();
+		final IOptimisationContext context = optAndContext.getFirst();
+		final LocalSearchOptimiser optimiser = optAndContext.getSecond();
 
-		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
+		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 
 		optimiser.init();
-		final IAnnotatedSolution<ISequenceElement> startSolution = optimiser.start(context);
+		final IAnnotatedSolution startSolution = optimiser.start(context);
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);

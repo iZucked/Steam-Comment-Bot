@@ -123,12 +123,6 @@
 			allow local mirrors to be specified in settings.xml -->
 
 		<repository>
-			<id>nebula-snapshots</id>
-			<url>http://download.eclipse.org/technology/nebula/snapshot</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
 			<id>indigo</id>
 			<url>http://download.eclipse.org/releases/indigo</url>
 			<layout>p2</layout>
@@ -149,6 +143,12 @@
 		<repository>
 			<id>edapt-updates</id>
 			<url>http://download.eclipse.org/edapt/update-site/</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
+			<id>nebula-main-snapshots</id>
+			<url>http://download.eclipse.org/technology/nebula/snapshot</url>
 			<layout>p2</layout>
 		</repository>
 

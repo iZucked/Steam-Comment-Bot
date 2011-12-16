@@ -9,7 +9,6 @@ import scenario.contract.PurchaseContract;
 import scenario.contract.SalesContract;
 
 import com.mmxlabs.lngscheduler.emf.extras.ITransformerExtension;
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
@@ -28,7 +27,7 @@ public interface IContractTransformer extends ITransformerExtension {
 	 * @param sc
 	 * @return
 	 */
-	public IShippingPriceCalculator<ISequenceElement> transformSalesContract(SalesContract sc);
+	public IShippingPriceCalculator transformSalesContract(SalesContract sc);
 
 	/**
 	 * Create an {@link ILoadPriceCalculator2} from a {@link PurchaseContract}

@@ -12,7 +12,7 @@ import scenario.schedule.events.Idle;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -41,12 +41,12 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 
 	@Override
 	public ScheduledEvent export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel v) {
-		@SuppressWarnings("unchecked")
-		final IIdleEvent<ISequenceElement> event = (IIdleEvent<ISequenceElement>) annotations.get(SchedulerConstants.AI_idleInfo);
+		final IIdleEvent event = (IIdleEvent) annotations.get(SchedulerConstants.AI_idleInfo);
 
-		if (event == null)
+		if (event == null) {
 			return null;
-
+		}
+			
 		Port ePort = entities.getModelObject(event.getPort(), Port.class);
 
 		// TODO this is a bit of a kludge; the ANYWHERE port does not

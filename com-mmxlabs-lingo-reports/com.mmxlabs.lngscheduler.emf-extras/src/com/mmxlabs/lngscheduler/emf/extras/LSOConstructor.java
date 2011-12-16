@@ -61,30 +61,22 @@ public class LSOConstructor {
 	/**
 	 * Build an LSO according to the LSO settings passed in
 	 * 
-	 * @param <T>
 	 * @param context
 	 * @return
 	 */
-	public <T> LocalSearchOptimiser<T> buildOptimiser(
-			final IOptimisationContext<T> context,
-			final ISequencesManipulator<T> manipulator) {
+	public LocalSearchOptimiser buildOptimiser(final IOptimisationContext context, final ISequencesManipulator manipulator) {
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
-		final List<IConstraintChecker<T>> constraintCheckers = constraintCheckerInstantiator
-				.instantiateConstraintCheckers(
-						context.getConstraintCheckerRegistry(),
-						context.getConstraintCheckers(),
-						context.getOptimisationData());
+		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(context.getConstraintCheckerRegistry(), context.getConstraintCheckers(),
+				context.getOptimisationData());
 
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
-		final List<IFitnessComponent<T>> fitnessComponents = fitnessComponentInstantiator
-				.instantiateFitnesses(context.getFitnessFunctionRegistry(),
-						context.getFitnessComponents());
+		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
 
-		final IMoveGenerator<T> normalMoveGenerator = createMoveGenerator(context);
+		final IMoveGenerator normalMoveGenerator = createMoveGenerator(context);
 
-		final CompoundMoveGenerator<T> moveGenerator = new CompoundMoveGenerator<T>();
-		// final CounterCharterOutMoveGenerator<T> removeCharterOuts = new CounterCharterOutMoveGenerator<T>();
-		
+		final CompoundMoveGenerator moveGenerator = new CompoundMoveGenerator();
+		// final CounterCharterOutMoveGenerator removeCharterOuts = new CounterCharterOutMoveGenerator();
+
 		// removeCharterOuts.setRandom(getRandom());
 		final HashSet<IResource> badResource = new HashSet<IResource>();
 		final IVesselProvider vesselProvider = context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
@@ -99,21 +91,20 @@ public class LSOConstructor {
 		// moveGenerator.addGenerator(removeCharterOuts, 5);
 		moveGenerator.setRandom(getRandom());
 
-		final InstrumentingMoveGenerator<T> instrumentingMoveGenerator = instrumenting ? new InstrumentingMoveGenerator<T>(moveGenerator, true // profile moves (true) or just rate
-																																				// (false)
+		final InstrumentingMoveGenerator instrumentingMoveGenerator = instrumenting ? new InstrumentingMoveGenerator(moveGenerator, true // profile moves (true) or just rate
+																																			// (false)
 				, false // don't log moves to file
 		)
 				: null;
 
-		final IFitnessEvaluator<T> fitnessEvaluator = createFitnessEvaluator(fitnessComponents, instrumentingMoveGenerator);
+		final IFitnessEvaluator fitnessEvaluator = createFitnessEvaluator(fitnessComponents, instrumentingMoveGenerator);
 
-		final DefaultLocalSearchOptimiser<T> lso = new DefaultLocalSearchOptimiser<T>();
+		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
 
 		lso.setNumberOfIterations(getNumberOfIterations());
 		lso.setSequenceManipulator(manipulator);
 
-		lso.setMoveGenerator(instrumenting ? instrumentingMoveGenerator
-				: moveGenerator);
+		lso.setMoveGenerator(instrumenting ? instrumentingMoveGenerator : moveGenerator);
 		lso.setFitnessEvaluator(fitnessEvaluator);
 		lso.setConstraintCheckers(constraintCheckers);
 
@@ -125,46 +116,40 @@ public class LSOConstructor {
 		return lso;
 	}
 
-	private <T> IMoveGenerator<T> createMoveGenerator(
-			IOptimisationContext<T> context) {
-		final MoveGeneratorSettings generatorSettings = settings
-				.getMoveGeneratorSettings();
-		if (generatorSettings != null
-				&& generatorSettings instanceof RandomMoveGeneratorSettings) {
+	private IMoveGenerator createMoveGenerator(IOptimisationContext context) {
+		final MoveGeneratorSettings generatorSettings = settings.getMoveGeneratorSettings();
+		if (generatorSettings != null && generatorSettings instanceof RandomMoveGeneratorSettings) {
 			// Ideally this code should go in the EMF classes, to be honest.
 			final RandomMoveGeneratorSettings rmgs = (RandomMoveGeneratorSettings) generatorSettings;
-			final RandomMoveGenerator<T> moveGenerator = new RandomMoveGenerator<T>();
+			final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 
 			moveGenerator.setRandom(getRandom());
 
-			moveGenerator.addMoveGeneratorUnit(new Move2over2GeneratorUnit<T>(), rmgs.getWeightFor2opt2());
-			moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit<T>(), rmgs.getWeightFor3opt2());
-			moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit<T>(), rmgs.getWeightFor4opt2());
-			moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit<T>(), rmgs.getWeightFor4opt1());
+			moveGenerator.addMoveGeneratorUnit(new Move2over2GeneratorUnit(), rmgs.getWeightFor2opt2());
+			moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit(), rmgs.getWeightFor3opt2());
+			moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit(), rmgs.getWeightFor4opt2());
+			moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit(), rmgs.getWeightFor4opt1());
 
 			return moveGenerator;
 		} else {
-			final ConstrainedMoveGenerator<T> cmg = new ConstrainedMoveGenerator<T>(
-					context);
+			final ConstrainedMoveGenerator cmg = new ConstrainedMoveGenerator(context);
 			cmg.setRandom(getRandom());
 			return cmg;
 		}
 	}
 
-	private <T> IFitnessEvaluator<T> createFitnessEvaluator(
-			List<IFitnessComponent<T>> fitnessComponents,
-			InstrumentingMoveGenerator<T> img) {
+	private IFitnessEvaluator createFitnessEvaluator(List<IFitnessComponent> fitnessComponents, InstrumentingMoveGenerator img) {
 		// create a linear FE for now.
 
-		final FitnessHelper<T> fitnessHelper = new FitnessHelper<T>();
+		final FitnessHelper fitnessHelper = new FitnessHelper();
 
-		final LinearSimulatedAnnealingFitnessEvaluator<T> fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator<T>();
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator();
 
 		fitnessEvaluator.setFitnessComponents(fitnessComponents);
 		fitnessEvaluator.setFitnessHelper(fitnessHelper);
 
 		final Map<String, Double> weightsMap = new HashMap<String, Double>();
-		for (final IFitnessComponent<T> component : fitnessComponents) {
+		for (final IFitnessComponent component : fitnessComponents) {
 			weightsMap.put(component.getName(), 1.0);
 		}
 
@@ -173,8 +158,7 @@ public class LSOConstructor {
 
 		fitnessEvaluator.setFitnessCombiner(combiner);
 
-		final IThresholder thresholder = instrumenting ? new InstrumentingThresholder(
-				getThresholder(), img) : getThresholder();
+		final IThresholder thresholder = instrumenting ? new InstrumentingThresholder(getThresholder(), img) : getThresholder();
 
 		fitnessEvaluator.setThresholder(thresholder);
 

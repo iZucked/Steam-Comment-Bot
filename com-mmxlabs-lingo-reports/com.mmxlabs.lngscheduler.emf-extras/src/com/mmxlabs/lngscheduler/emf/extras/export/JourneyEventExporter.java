@@ -11,7 +11,7 @@ import scenario.port.Port;
 import scenario.schedule.events.Journey;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
-import com.mmxlabs.optimiser.core.scenario.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
@@ -30,8 +30,7 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 	@Override
 	public Journey export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel v) {
 
-		@SuppressWarnings("unchecked")
-		final IJourneyEvent<ISequenceElement> event = (IJourneyEvent<ISequenceElement>) annotations.get(SchedulerConstants.AI_journeyInfo);
+		final IJourneyEvent event = (IJourneyEvent) annotations.get(SchedulerConstants.AI_journeyInfo);
 
 		if (event == null)
 			return null;
