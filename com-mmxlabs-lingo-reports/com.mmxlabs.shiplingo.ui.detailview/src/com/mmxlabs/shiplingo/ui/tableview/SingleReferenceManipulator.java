@@ -62,7 +62,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	@Override
 	public String render(final Object object) {
 		final Object value = super.getValue(object);
-		if (value instanceof EObject) {
+		if (value instanceof EObject || value == null) {
 			return valueProvider.getName((EObject) object, (EReference) field,
 					(EObject) value);
 		} else {
