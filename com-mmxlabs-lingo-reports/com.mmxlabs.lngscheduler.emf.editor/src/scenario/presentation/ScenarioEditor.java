@@ -1326,6 +1326,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	@Override
 	public void createPages() {
+
+		((CTabFolder)getContainer()).setTabPosition(SWT.TOP);
 		// Creates the model from the editor input
 		//
 		createModel();
