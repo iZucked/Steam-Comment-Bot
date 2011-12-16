@@ -5,6 +5,8 @@
 package com.mmxlabs.demo.reports.views;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,16 +49,17 @@ public class PortRotationReportView extends EMFReportView {
 	public static final String ID = "com.mmxlabs.demo.reports.views.PortRotationReportView";
 
 	public PortRotationReportView() {
-		
+
 		super("com.mmxlabs.demo.reports.PortRotationReportView");
-		
+
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 		final EventsPackage ep = EventsPackage.eINSTANCE;
 		final CargoPackage cp = CargoPackage.eINSTANCE;
 		final PortPackage pp = PortPackage.eINSTANCE;
 
-		final EStructuralFeature name = ScenarioPackage.eINSTANCE.getNamedObject_Name();
-		
+		final EStructuralFeature name = ScenarioPackage.eINSTANCE
+				.getNamedObject_Name();
+
 		addColumn("Schedule", containingScheduleFormatter);
 
 		final ColumnHandler vesselColumn = addColumn("Vessel", objectFormatter,
@@ -64,44 +67,46 @@ public class PortRotationReportView extends EMFReportView {
 				sp.getSequence_Vessel(),
 				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
 
-		addColumn("Type", objectFormatter, ep.getScheduledEvent__GetDisplayTypeName());
+		addColumn("Type", objectFormatter,
+				ep.getScheduledEvent__GetDisplayTypeName());
 
-		addColumn("ID", objectFormatter,
-				ep.getScheduledEvent__GetName()
-		);
-//				objectFormatter, 
-//				ep.getSlotVisit_CargoAllocation(),
-//				sp.getCargoAllocation__GetName()
-//		);
+		addColumn("ID", objectFormatter, ep.getScheduledEvent__GetName());
+		// objectFormatter,
+		// ep.getSlotVisit_CargoAllocation(),
+		// sp.getCargoAllocation__GetName()
+		// );
 
-		final ColumnHandler dateColumn = addColumn("Start Date", datePartFormatter, ep.getScheduledEvent__GetLocalStartTime());
-		addColumn("Start Time", timePartFormatter, ep.getScheduledEvent__GetLocalStartTime());
+		final ColumnHandler dateColumn = addColumn("Start Date",
+				datePartFormatter, ep.getScheduledEvent__GetLocalStartTime());
+		addColumn("Start Time", timePartFormatter,
+				ep.getScheduledEvent__GetLocalStartTime());
 
-		addColumn("End Date", datePartFormatter, ep.getScheduledEvent__GetLocalEndTime());
-		addColumn("End Time", timePartFormatter, ep.getScheduledEvent__GetLocalEndTime());
+		addColumn("End Date", datePartFormatter,
+				ep.getScheduledEvent__GetLocalEndTime());
+		addColumn("End Time", timePartFormatter,
+				ep.getScheduledEvent__GetLocalEndTime());
 
-		final ColumnHandler durationColumn = addColumn("Duration (DD:HH)", new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				final ScheduledEvent se = (ScheduledEvent) object;
-				final int duration = se.getEventDuration();
-				return String.format("%02d:%02d", duration / 24, duration % 24);
-			}
+		final ColumnHandler durationColumn = addColumn("Duration (DD:HH)",
+				new BaseFormatter() {
+					@Override
+					public String format(final Object object) {
+						final ScheduledEvent se = (ScheduledEvent) object;
+						final int duration = se.getEventDuration();
+						return String.format("%02d:%02d", duration / 24,
+								duration % 24);
+					}
 
-			@Override
-			public Comparable getComparable(final Object object) {
-				return ((ScheduledEvent) object).getEventDuration();
-			}
+					@Override
+					public Comparable getComparable(final Object object) {
+						return ((ScheduledEvent) object).getEventDuration();
+					}
 
-		});
+				});
 		addColumn("Speed", objectFormatter, ep.getJourney_Speed());
 		addColumn("Distance", integerFormatter, ep.getJourney_Distance());
-		addColumn("From Port", objectFormatter, ep.getJourney_FromPort(),
-				name);
-		addColumn("To Port", objectFormatter, ep.getJourney_ToPort(),
-				name);
-		addColumn("At Port", objectFormatter, ep.getPortVisit_Port(),
-				name);
+		addColumn("From Port", objectFormatter, ep.getJourney_FromPort(), name);
+		addColumn("To Port", objectFormatter, ep.getJourney_ToPort(), name);
+		addColumn("At Port", objectFormatter, ep.getPortVisit_Port(), name);
 		addColumn("Route", objectFormatter, ep.getJourney_Route());
 
 		addColumn("Load Volume", new IntegerFormatter() {
@@ -161,7 +166,8 @@ public class PortRotationReportView extends EMFReportView {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof FuelMixture) {
-						for (final FuelQuantity q : ((FuelMixture) object).getFuelUsage()) {
+						for (final FuelQuantity q : ((FuelMixture) object)
+								.getFuelUsage()) {
 							if (q.getFuelType().equals(ft)) {
 								return (int) q.getUnitPrice();
 							}
@@ -230,6 +236,13 @@ public class PortRotationReportView extends EMFReportView {
 
 	private final List<String> entityColumnNames = new ArrayList<String>();
 
+	
+	
+	@Override
+	protected boolean handleSelections() {
+		return true;
+	}
+
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
@@ -237,43 +250,43 @@ public class PortRotationReportView extends EMFReportView {
 			@Override
 			public void inputChanged(final Viewer viewer, Object oldInput,
 					final Object newInput) {
-				Display.getCurrent().asyncExec(
-						new Runnable() {
-							@Override
-							public void run() {
-								if (viewer.getControl().isDisposed()) {
-									return;
-								}
-								final Set<Scenario> scenarios = new HashSet<Scenario>();
-								if (newInput instanceof Iterable) {
-									for (final Object element : ((Iterable) newInput)) {
-										if (element instanceof Schedule) {
-											// find all referenced entities
-											for (final String s : entityColumnNames) {
-												removeColumn(s);
-											}
-											entityColumnNames.clear();
+				Display.getCurrent().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						if (viewer.getControl().isDisposed()) {
+							return;
+						}
+						final Set<Scenario> scenarios = new HashSet<Scenario>();
+						if (newInput instanceof Iterable) {
+							for (final Object element : ((Iterable) newInput)) {
+								if (element instanceof Schedule) {
+									// find all referenced entities
+									for (final String s : entityColumnNames) {
+										removeColumn(s);
+									}
+									entityColumnNames.clear();
 
-											EObject o = (EObject) element;
-											while (o != null && !(o instanceof Scenario)) {
-												o = o.eContainer();
-											}
-
-											if (o != null) {
-												scenarios.add((Scenario) o);
-											}
-										}
+									EObject o = (EObject) element;
+									while (o != null
+											&& !(o instanceof Scenario)) {
+										o = o.eContainer();
 									}
 
+									if (o != null) {
+										scenarios.add((Scenario) o);
+									}
 								}
-								for (final Scenario scenario : scenarios) {
-									addEntityColumns(scenario);
-								}
-								viewer.refresh();
 							}
-							
-						});
-				
+
+						}
+						for (final Scenario scenario : scenarios) {
+							addEntityColumns(scenario);
+						}
+						viewer.refresh();
+					}
+
+				});
+
 			}
 
 			@Override
@@ -284,6 +297,7 @@ public class PortRotationReportView extends EMFReportView {
 			@Override
 			public Object[] getElements(final Object object) {
 				final ArrayList<ScheduledEvent> allEvents = new ArrayList<ScheduledEvent>();
+				clearInputEquivalents();
 				if (object instanceof Iterable) {
 					for (final Object o : ((Iterable) object)) {
 						if (o instanceof Schedule) {
@@ -292,6 +306,17 @@ public class PortRotationReportView extends EMFReportView {
 								allEvents.addAll(seq.getEvents());
 							}
 						}
+					}
+				}
+				for (final ScheduledEvent event : allEvents) {
+					if (event instanceof SlotVisit) {
+						setInputEquivalents(event, 
+								Arrays.asList(
+										new Object[] {
+											((SlotVisit) event).getCargoAllocation()	
+										}));
+					} else {
+						setInputEquivalents(event, Collections.emptyList());
 					}
 				}
 				return allEvents.toArray();
@@ -321,7 +346,7 @@ public class PortRotationReportView extends EMFReportView {
 						int value = 0;
 						final CargoAllocation allocation = slotVisit
 								.getCargoAllocation();
-						
+
 						if (allocation == null) {
 							return null;
 						}
