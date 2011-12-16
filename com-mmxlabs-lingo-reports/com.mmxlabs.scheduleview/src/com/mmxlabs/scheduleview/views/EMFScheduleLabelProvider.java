@@ -9,6 +9,9 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -24,6 +27,7 @@ import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
 
+import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 
@@ -37,6 +41,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<IScheduleViewColourScheme>();
 
 	private IScheduleViewColourScheme currentScheme = null;
+
+	private GanttChartViewer viewer;
+
+	public EMFScheduleLabelProvider(final GanttChartViewer viewer) {
+		this.viewer = viewer;
+	}
 
 	@Override
 	public Image getImage(final Object element) {
@@ -160,7 +170,23 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 	@Override
 	public Color getBackground(final Object element) {
 		if (currentScheme != null) {
-			return currentScheme.getBackground(element);
+
+			final Color color = currentScheme.getBackground(element);
+//			if (viewer.getSelection().isEmpty() == false) {
+//				final ISelection selection = viewer.getSelection();
+//				if (selection instanceof IStructuredSelection) {
+//					if (((IStructuredSelection) selection).toList().contains(
+//							element)) {
+//						// darken selection
+//						final float scaf = 0.8f;
+//						return ColorCache.getColor(
+//								(int) (color.getRed() * scaf),
+//								(int) (color.getGreen() * scaf),
+//								(int) (color.getBlue() * scaf));
+//					}
+//				}
+//			}
+			return color;
 		}
 		return null;
 	}
