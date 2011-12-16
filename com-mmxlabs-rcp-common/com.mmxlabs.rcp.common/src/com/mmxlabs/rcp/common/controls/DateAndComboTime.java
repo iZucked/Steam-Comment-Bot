@@ -58,7 +58,7 @@ public class DateAndComboTime extends Composite {
 		}
 		setLayout(layout);
 		date = new DateTime(this, (bigDate ? SWT.CALENDAR | SWT.BORDER
-				: SWT.DATE | SWT.MEDIUM) | style);
+				: SWT.DATE | SWT.MEDIUM) | SWT.BORDER | style);
 
 		if (optionalTime) {
 			setTime = new Button(this, SWT.CHECK);
