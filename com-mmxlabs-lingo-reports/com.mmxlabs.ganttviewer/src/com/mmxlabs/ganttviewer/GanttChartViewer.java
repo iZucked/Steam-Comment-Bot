@@ -219,6 +219,12 @@ public class GanttChartViewer extends StructuredViewer {
 			selectedEvents = new ArrayList<GanttEvent>(0);
 		}
 		ganttChart.getGanttComposite().setSelection(selectedEvents);
+		if (selectedEvents.isEmpty() == false) {
+			final GanttEvent sel = selectedEvents.get(0);
+			if (!ganttChart.getGanttComposite().isEventVisible(sel, ganttChart.getGanttComposite().getBounds()))
+				ganttChart.getGanttComposite().showEvent(sel, SWT.CENTER);
+//			ganttChart.getGanttComposite().redraw();
+		}
 	}
 
 	@Override
@@ -311,7 +317,7 @@ public class GanttChartViewer extends StructuredViewer {
 						if (toolTip != null) {
 							event.setAdvancedTooltip(toolTip);
 						}
-
+						
 						// Standard parameters
 						event.setMoveable(false);
 						event.setResizable(false);
