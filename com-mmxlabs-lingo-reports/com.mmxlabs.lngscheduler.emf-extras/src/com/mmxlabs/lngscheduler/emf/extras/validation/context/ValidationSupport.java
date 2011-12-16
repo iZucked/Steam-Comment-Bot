@@ -60,7 +60,7 @@ public class ValidationSupport {
 
 			final Pair<EObject, EReference> container = getContainer(r);
 
-			setContainers(Collections.singleton(r), container.getFirst(), container.getSecond());
+			setContainers(Collections.singleton(c), container.getFirst(), container.getSecond());
 		}
 		ignoreObjects(real);
 	}
