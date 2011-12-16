@@ -131,7 +131,7 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 		getToolBarManager().appendToGroup("edit", replicateAction);
 		getToolBarManager().update(true);
 
-//		v.addSelectionChangedListener(swapAction);
+		v.addSelectionChangedListener(swapAction);
 
 		v.getControl().addKeyListener(new KeyListener() {
 			@Override
