@@ -24,8 +24,8 @@ public class ReplicateCargoAction extends Action implements ISelectionChangedLis
 
 	public ReplicateCargoAction() {
 		setImageDescriptor(LngEditorPlugin.Implementation.imageDescriptorFromPlugin(LngEditorPlugin.getPlugin().getSymbolicName(), "/icons/repeat.gif"));
-		setToolTipText("Generate cargoes by replicating the selected cargoes a given number of times at a specified interval");
-		setText("Replicate cargoes");
+		setToolTipText("Offset cargoes by a given time interval, or repeat cargoes with a given time interval");
+		setText("Replicate/offset cargoes");
 	}
 
 	@Override

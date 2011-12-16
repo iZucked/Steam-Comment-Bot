@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Spinner;
  *
  */
 public class ReplicateCargoDialog extends Dialog {
-	private int numberOfRepetitions = 1;
+	private int numberOfRepetitions = 0;
 	private int interval = 1;
 	private int intervalType = 0;
 
@@ -61,7 +61,9 @@ public class ReplicateCargoDialog extends Dialog {
 				numberOfRepetitions = spinner.getSelection();
 			}
 		});
-		spinner.setMinimum(1);
+		spinner.setMinimum(0);
+		spinner.setToolTipText("Set to zero (0) to offset selected cargoes rather than replicating them");
+		
 		new Label(container, SWT.NONE);
 
 		Label lblRepeatEvery = new Label(container, SWT.NONE);
@@ -135,8 +137,8 @@ public class ReplicateCargoDialog extends Dialog {
 		} else {
 			calendarInterval = Calendar.DATE;
 		}
-
-		for (int i = 0; i < numberOfRepetitions; i++) {
+		final int count = isReplicating() ? numberOfRepetitions : 1;
+		for (int i = 0; i < count; i++) {
 			final List<Calendar> output = new ArrayList<Calendar>(input.size());
 			for (final Calendar in : input) {
 				final Calendar out = (Calendar) in.clone();
@@ -149,5 +151,9 @@ public class ReplicateCargoDialog extends Dialog {
 		}
 
 		return result;
+	}
+
+	public boolean isReplicating() {
+		return numberOfRepetitions > 0;
 	}
 }

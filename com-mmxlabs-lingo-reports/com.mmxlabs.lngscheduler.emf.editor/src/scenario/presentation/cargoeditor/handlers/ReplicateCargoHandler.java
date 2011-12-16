@@ -16,6 +16,7 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -26,6 +27,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import scenario.cargo.Cargo;
+import scenario.cargo.CargoPackage;
 
 import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 
@@ -75,21 +77,38 @@ public class ReplicateCargoHandler extends AbstractHandler implements IHandler {
 				int counter = 1;
 				final CompoundCommand cc = new CompoundCommand();
 
-				for (final List<Calendar> replica : newCalendars) {
-					final Iterator<Calendar> it = replica.iterator();
+				if (dialog.isReplicating()) {
+					for (final List<Calendar> replica : newCalendars) {
+						final Iterator<Calendar> it = replica.iterator();
+						for (final Object object : selectedObjects) {
+							if (object instanceof Cargo) {
+								final Cargo orig = (Cargo) object;
+								final Cargo copy = EcoreUtil.copy(orig);
+								copy.getLoadSlot().setWindowStart(new DateAndOptionalTime(it.next().getTime(), orig.getLoadSlot().getWindowStart().isOnlyDate()));
+								copy.getLoadSlot().setId(copy.getLoadSlot().getId() + "-replica-" + counter);
+								copy.getDischargeSlot().setWindowStart(new DateAndOptionalTime(it.next().getTime(), orig.getDischargeSlot().getWindowStart().isOnlyDate()));
+								copy.getDischargeSlot().setId(copy.getDischargeSlot().getId() + "-replica-" + counter);
+								copy.setId(copy.getId() + "-replica-" + counter);
+								cc.append(AddCommand.create(editingDomain, orig.eContainer(), orig.eContainingFeature(), copy));
+							}
+						}
+						counter++;
+					}
+				} else {
+					assert newCalendars.size() == 1;
+					final List<Calendar> replica = newCalendars.get(0);
+					final Iterator<Calendar> iterator = replica.iterator();
 					for (final Object object : selectedObjects) {
 						if (object instanceof Cargo) {
-							final Cargo orig = (Cargo) object;
-							final Cargo copy = EcoreUtil.copy(orig);
-							copy.getLoadSlot().setWindowStart(new DateAndOptionalTime(it.next().getTime(), orig.getLoadSlot().getWindowStart().isOnlyDate()));
-							copy.getLoadSlot().setId(copy.getLoadSlot().getId() + "-replica-" + counter);
-							copy.getDischargeSlot().setWindowStart(new DateAndOptionalTime(it.next().getTime(), orig.getDischargeSlot().getWindowStart().isOnlyDate()));
-							copy.getDischargeSlot().setId(copy.getDischargeSlot().getId() + "-replica-" + counter);
-							copy.setId(copy.getId() + "-replica-" + counter);
-							cc.append(AddCommand.create(editingDomain, orig.eContainer(), orig.eContainingFeature(), copy));
+							final Cargo cargo = (Cargo) object;
+							cc.append(SetCommand.create(editingDomain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), new DateAndOptionalTime(iterator.next().getTime(), cargo
+									.getLoadSlot().getWindowStart().isOnlyDate())
+
+							));
+							cc.append(SetCommand.create(editingDomain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), new DateAndOptionalTime(iterator.next().getTime(), cargo
+									.getDischargeSlot().getWindowStart().isOnlyDate())));
 						}
 					}
-					counter++;
 				}
 				editingDomain.getCommandStack().execute(cc);
 			}
