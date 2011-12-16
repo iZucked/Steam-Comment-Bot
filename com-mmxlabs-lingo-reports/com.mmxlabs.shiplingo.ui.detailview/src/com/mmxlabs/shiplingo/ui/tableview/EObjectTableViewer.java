@@ -412,14 +412,18 @@ public class EObjectTableViewer extends GridTableViewer {
 
 		GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer)
 		{
-
+			long timer = 0;
 			/* (non-Javadoc)
 			 * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
 			 */
 			@Override
 			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
-				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION
-						|| (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && event.keyCode == SWT.F2);
+				long fireTime = System.currentTimeMillis();
+				boolean activate = event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION
+						|| event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && event.keyCode == SWT.F2
+						&& (fireTime - timer) > 500; // this is a hack; for some reason without this we get loads of keydown events.
+				timer = fireTime;
+				return activate;
 			}
 			
 		}

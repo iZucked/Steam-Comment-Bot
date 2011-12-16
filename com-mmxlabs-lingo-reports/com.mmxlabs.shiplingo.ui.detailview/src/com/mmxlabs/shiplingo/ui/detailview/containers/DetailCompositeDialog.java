@@ -264,8 +264,6 @@ public class DetailCompositeDialog extends Dialog {
 			for (final EObject original : objects) {
 				final EObject duplicate = EcoreUtil.copy(original);
 				duplicates.add(duplicate);
-				objectValidity[objectIndex++] = validator.validate(duplicate)
-						.isOK();
 				
 				// add autocorrector adapters.
 				for (final Object adapter : original.eAdapters()) {
@@ -281,6 +279,11 @@ public class DetailCompositeDialog extends Dialog {
 			// duplicates
 
 			ValidationSupport.getInstance().startEditingObjects(objects, duplicates);
+			
+			for (int i = 0; i<duplicates.size(); i++) {
+				objectValidity[i] = validator.validate(duplicates.get(i))
+						.isOK();
+			}
 
 			final int value = open();
 			if (value == OK) {
