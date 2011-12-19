@@ -256,7 +256,7 @@ public class PortRotationReportView extends EMFReportView {
 						}
 						final Set<Scenario> scenarios = new HashSet<Scenario>();
 						if (newInput instanceof Iterable) {
-							for (final Object element : ((Iterable) newInput)) {
+							for (final Object element : ((Iterable<?>) newInput)) {
 								if (element instanceof Schedule) {
 									// find all referenced entities
 									for (final String s : entityColumnNames) {
@@ -297,7 +297,7 @@ public class PortRotationReportView extends EMFReportView {
 				final ArrayList<ScheduledEvent> allEvents = new ArrayList<ScheduledEvent>();
 				clearInputEquivalents();
 				if (object instanceof Iterable) {
-					for (final Object o : ((Iterable) object)) {
+					for (final Object o : ((Iterable<?>) object)) {
 						if (o instanceof Schedule) {
 							for (final Sequence seq : ((Schedule) o)
 									.getSequences()) {
