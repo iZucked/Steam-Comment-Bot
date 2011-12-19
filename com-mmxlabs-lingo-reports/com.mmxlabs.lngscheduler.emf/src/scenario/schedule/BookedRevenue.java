@@ -9,8 +9,6 @@ package scenario.schedule;
 import java.util.Date;
 
 import scenario.Detail;
-import org.eclipse.emf.common.util.EList;
-
 import scenario.ScenarioObject;
 import scenario.contract.Entity;
 

@@ -12,8 +12,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.fleet.CharterOut;
-import scenario.schedule.VesselEventRevenue;
-import scenario.schedule.CharterOutRevenue;
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsPackage;
 

@@ -7,7 +7,6 @@ import org.eclipse.swt.widgets.Composite;
 import scenario.ScenarioPackage;
 
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
-import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.shiplingo.ui.detailview.editors.TextInlineEditor;
 
 /**

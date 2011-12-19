@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellLabelProvider;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -21,8 +20,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
-
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselClassCost;
@@ -31,7 +28,6 @@ import scenario.port.CanalModel;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
-import com.mmxlabs.shiplingo.ui.tableview.NonEditableColumn;
 import com.mmxlabs.shiplingo.ui.tableview.NumericAttributeManipulator;
 
 /**

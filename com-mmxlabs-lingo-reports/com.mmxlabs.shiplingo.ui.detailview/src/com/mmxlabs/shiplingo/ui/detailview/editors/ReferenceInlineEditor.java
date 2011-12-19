@@ -8,12 +8,9 @@
 package com.mmxlabs.shiplingo.ui.detailview.editors;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
