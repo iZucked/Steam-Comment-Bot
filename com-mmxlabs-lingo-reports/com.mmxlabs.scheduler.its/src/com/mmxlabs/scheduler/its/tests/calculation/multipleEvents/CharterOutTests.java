@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.lngscheduler.emf.extras.tests.calculation.multipleEvents;
+package com.mmxlabs.scheduler.its.tests.calculation.multipleEvents;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -22,8 +22,8 @@ import scenario.schedule.events.ScheduledEvent;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
-import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.FuelUsageAssertions;
-import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
+import com.mmxlabs.scheduler.its.tests.calculation.FuelUsageAssertions;
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?259">Case 259: Scenario with several cargoes</a>

@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.lngscheduler.emf.extras.tests.calculation.singleEvent;
+package com.mmxlabs.scheduler.its.tests.calculation.singleEvent;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,8 +17,8 @@ import scenario.schedule.events.Journey;
 import scenario.schedule.events.ScheduledEvent;
 
 import com.mmxlabs.common.TimeUnitConvert;
-import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.FuelUsageAssertions;
-import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
+import com.mmxlabs.scheduler.its.tests.calculation.FuelUsageAssertions;
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?186">Case 186: Heel out of charter out</a>
