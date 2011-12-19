@@ -276,13 +276,11 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NO
 	 */
 	@Override
 	public String getName() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		return "Operations";
 	}
 
 	/**
