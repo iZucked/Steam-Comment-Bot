@@ -1502,7 +1502,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			purchasePane.getViewer().setInput(input);
 		}
 
-		setPageText(addPage(sash), "Contracts / Entities");
+		setPageText(addPage(sash), "Commercial");
 	}
 
 	private void createEventsEditor() {
@@ -1628,7 +1628,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final IReferenceValueProvider dischargeContractProvider) {
 		// Create a page for the cargo editor
 		{
-
 			final CargoEVP cargoPane = new CargoEVP(getSite().getPage(),
 					ScenarioEditor.this);
 
@@ -1643,11 +1642,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
 
-			// createContextMenuFor(cargoPane.getViewer());
-
 			final int pageIndex = addPage(cargoPane.getControl());
-			setPageText(pageIndex, "Cargoes"); // TODO localize this
-												// string or whatever
+			setPageText(pageIndex, "Cargoes");
 		}
 	}
 

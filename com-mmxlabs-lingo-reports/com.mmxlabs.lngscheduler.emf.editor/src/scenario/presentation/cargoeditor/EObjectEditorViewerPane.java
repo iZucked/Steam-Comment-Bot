@@ -42,9 +42,11 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
@@ -84,6 +86,11 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public EObjectTableViewer createViewer(final Composite parent) {
+//		final Composite box = new Composite(parent, SWT.NONE);
+//		box.setLayout(new RowLayout(SWT.HORIZONTAL));
+//		
+//		final Text filterText = new Text(box, SWT.SEARCH);
+		
 		viewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
 			@Override
 			protected boolean refreshOrGiveUp() {
