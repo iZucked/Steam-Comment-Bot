@@ -701,19 +701,19 @@
         <eParameters name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eOperations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//port/Port"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" eType="#//DateAndOptionalTime"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contract" eType="#//contract/Contract"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fixedPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+          unsettable="true"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
           unsettable="true"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
           defaultValueLiteral="2147483647" unsettable="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//port/Port"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" eType="#//DateAndOptionalTime"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
           defaultValueLiteral="24"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
           defaultValueLiteral="6" unsettable="true"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fixedPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
-          unsettable="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="contract" eType="#//contract/Contract"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="LoadSlot" eSuperTypes="#//cargo/Slot">
       <eOperations name="getCargoOrPortCVValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat">
