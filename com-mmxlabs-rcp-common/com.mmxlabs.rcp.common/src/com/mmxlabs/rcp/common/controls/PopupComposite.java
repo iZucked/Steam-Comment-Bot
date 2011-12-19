@@ -462,7 +462,7 @@ public abstract class PopupComposite extends Composite {
 			createPopup();
 		}
 
-		Point size = getSize();
+//		Point size = getSize();
 //		int itemCount = list.getItemCount();
 //		itemCount = (itemCount == 0) ? visibleItemCount : Math.min(
 //				visibleItemCount, itemCount);
