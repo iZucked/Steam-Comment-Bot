@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Tests
 Bundle-SymbolicName: com.mmxlabs.lngscheduler.emf-extras.tests
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.mmxlabs.lngscheduler.emf.extras.tests.Activator
 Bundle-Vendor: MMXLABS
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
