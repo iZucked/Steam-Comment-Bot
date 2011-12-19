@@ -117,8 +117,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 					sb.append("To: " + journey.getToPort().getName() + "\n");
 				sb.append("Vessel State: " + journey.getVesselState().getName()
 						+ "\n");
-				sb.append("Route: " + journey.getRoute() + "\n");
-				sb.append("Speed: " + journey.getSpeed() + "\n");
+				sb.append("Route: " + journey.getRoute().replace("default", "Direct") + "\n");
+				sb.append(
+						String.format("Speed: %.1f\n", journey.getSpeed()));
 				sb.append("Distance: " + journey.getDistance() + "\n");
 			}
 
@@ -129,7 +130,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 						sb.append(fq.getFuelType().getName() + ": ");
 						sb.append(fq.getQuantity() + " "
 								+ fq.getFuelUnit().getName());
-						sb.append(String.format(", cost $%,.2f\n",
+						sb.append(String.format(", cost $%,.0f\n",
 								(double) fq.getTotalPrice()));
 					}
 				}
