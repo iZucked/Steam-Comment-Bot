@@ -74,14 +74,14 @@ public  class SlotComposite extends AbstractDetailComposite {
 	 */
 	protected static void createSlotFields(final AbstractDetailComposite composite, final Composite mainGroup) {
     createIdEditor(composite, mainGroup);
-    createMinQuantityEditor(composite, mainGroup);
-    createMaxQuantityEditor(composite, mainGroup);
     createPortEditor(composite, mainGroup);
     createWindowStartEditor(composite, mainGroup);
+    createContractEditor(composite, mainGroup);
+    createFixedPriceEditor(composite, mainGroup);
+    createMinQuantityEditor(composite, mainGroup);
+    createMaxQuantityEditor(composite, mainGroup);
     createWindowDurationEditor(composite, mainGroup);
     createSlotDurationEditor(composite, mainGroup);
-    createFixedPriceEditor(composite, mainGroup);
-    createContractEditor(composite, mainGroup);
   }
 
 		
