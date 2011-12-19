@@ -318,7 +318,6 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {

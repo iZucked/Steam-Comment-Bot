@@ -463,7 +463,6 @@ public class VesselImpl extends NamedObjectImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
