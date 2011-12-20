@@ -6,7 +6,6 @@ package com.mmxlabs.shiplingo.ui.tableview;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -602,5 +602,22 @@ public class EObjectTableViewer extends GridTableViewer {
 		}
 		
 		return ms;
+	}
+
+	public Set<String> getDistinctValues(String columnName) {
+		final TreeSet<String> result = new TreeSet<String>();
+
+		for (final GridColumn column : getGrid().getColumns()) {
+			if (column.getText().equals(columnName)) {
+				final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
+				final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
+				for (final EObject element : currentElements) {
+					result.add(renderer.render(path.get(element)));
+				}
+				return result;
+			}
+		}
+		
+		return result;
 	}
 }
