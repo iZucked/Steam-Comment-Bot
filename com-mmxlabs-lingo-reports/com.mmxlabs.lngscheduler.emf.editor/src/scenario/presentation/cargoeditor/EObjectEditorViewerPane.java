@@ -75,7 +75,7 @@ import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
  */
 public class EObjectEditorViewerPane extends ViewerPane {
 	protected final ScenarioEditor part;
-	private EObjectTableViewer eObjectTableViewer;
+	protected EObjectTableViewer eObjectTableViewer;
 
 
 	public EObjectEditorViewerPane(final IWorkbenchPage page,
