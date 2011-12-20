@@ -83,9 +83,9 @@ public class FilterProposalProvider implements IContentProposalProvider {
 		int index = 0;
 		for (final String s : values) {
 			if (needsEscaping(s)) {
-				result[index++] = new ContentProposal("\"" + s.replaceAll("\"", "\\\"") + "\"", s, "Match " + columnName + " to " + s);
+				result[index++] = new ContentProposal("\"" + s.replaceAll("\"", "\\\"") + "\" ", s, "Match " + columnName + " to " + s);
 			} else {
-				result[index++] = new ContentProposal(s, s, "Match " + columnName + " to " + s);
+				result[index++] = new ContentProposal(s + " ", s, "Match " + columnName + " to " + s);
 			}
 		}
 		
