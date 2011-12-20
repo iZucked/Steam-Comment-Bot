@@ -104,6 +104,7 @@ public abstract class LocalSearchOptimiser implements ILocalSearchOptimiser {
 		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(), getBestSolution(true));
 	}
 
+	@Override
 	public IAnnotatedSolution getBestSolution(final boolean forExport) {
 		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getBestAnnotatedSolution(currentContext, forExport);
 		final long clock = System.currentTimeMillis() - getStartTime();
@@ -114,6 +115,7 @@ public abstract class LocalSearchOptimiser implements ILocalSearchOptimiser {
 		return annotatedSolution;
 	}
 
+	@Override
 	public IAnnotatedSolution getCurrentSolution(final boolean forExport) {
 		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getCurrentAnnotatedSolution(currentContext, forExport);
 		final long clock = System.currentTimeMillis() - getStartTime();
@@ -124,6 +126,7 @@ public abstract class LocalSearchOptimiser implements ILocalSearchOptimiser {
 		return annotatedSolution;
 	}
 
+	@Override
 	public boolean isFinished() {
 		return getNumberOfIterationsCompleted() >= getNumberOfIterations();
 	}

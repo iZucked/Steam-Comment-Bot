@@ -41,6 +41,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	private ModifiableSequences potentialRawSequences;
 
+	@Override
 	public IAnnotatedSolution start(
 			final IOptimisationContext optimiserContext) {
 		setCurrentContext(optimiserContext);
@@ -90,6 +91,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return annotatedBestSolution;
 	}
 
+	@Override
 	public int step(final int percentage) {
 		final int iterationsThisStep = Math.min(
 				Math.max(1, getNumberOfIterations() * percentage / 100),

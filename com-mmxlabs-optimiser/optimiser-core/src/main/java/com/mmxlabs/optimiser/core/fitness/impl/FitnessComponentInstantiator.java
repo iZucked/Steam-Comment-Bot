@@ -31,6 +31,7 @@ public final class FitnessComponentInstantiator implements IFitnessComponentInst
 	 * 
 	 * @see com.mmxlabs.optimiser.fitness.impl.IFitnessComponentInstantiator#instantiateFitnesses(com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry)
 	 */
+	@Override
 	public List<IFitnessComponent> instantiateFitnesses(final IFitnessFunctionRegistry registry) {
 
 		final List<IFitnessComponent> components = new ArrayList<IFitnessComponent>();
@@ -49,6 +50,7 @@ public final class FitnessComponentInstantiator implements IFitnessComponentInst
 	 * 
 	 * @see com.mmxlabs.optimiser.fitness.impl.IFitnessComponentInstantiator#instantiateFitnesses(com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry, java.util.List)
 	 */
+	@Override
 	public List<IFitnessComponent> instantiateFitnesses(final IFitnessFunctionRegistry registry, final List<String> componentNames) {
 
 		final List<IFitnessComponent> components = new ArrayList<IFitnessComponent>(componentNames.size());
