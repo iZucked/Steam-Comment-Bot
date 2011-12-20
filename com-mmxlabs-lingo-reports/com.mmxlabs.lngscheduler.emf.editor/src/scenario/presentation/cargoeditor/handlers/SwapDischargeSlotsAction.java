@@ -24,11 +24,7 @@ public class SwapDischargeSlotsAction extends Action implements
 						.getSymbolicName(), "/icons/swap.gif"));
 		setToolTipText("Swap discharge slots");
 		setText("Swap discharge slots");
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return super.isEnabled();
+		setEnabled(false);
 	}
 
 	@Override
