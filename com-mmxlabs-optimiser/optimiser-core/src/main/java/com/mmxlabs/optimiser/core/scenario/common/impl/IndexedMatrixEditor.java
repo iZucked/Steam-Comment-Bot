@@ -14,6 +14,7 @@ public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrix
 	
 	private int maxIndex = -1;
 	
+	@SuppressWarnings("unchecked")
 	public IndexedMatrixEditor(String name, final U defaultValue) {
 		super();
 		this.defaultValue = defaultValue;
@@ -63,6 +64,7 @@ public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrix
 	private void resize(final int newMax) {
 		maxIndex = newMax;
 		
+		@SuppressWarnings("unchecked")
 		U[][] newMatrix = (U[][]) new Object[newMax + 1][newMax + 1];
 		
 		//copy old matrix contents
