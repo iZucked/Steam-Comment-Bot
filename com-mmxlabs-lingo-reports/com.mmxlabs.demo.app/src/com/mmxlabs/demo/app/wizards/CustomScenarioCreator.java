@@ -443,7 +443,25 @@ public class CustomScenarioCreator {
 			for (VesselClass vc : scenario.getFleetModel().getVesselClasses())
 				addCanal(vc, canalCost);
 
+		fixUUIDMisMatches(scenario);
+		
 		return scenario;
+	}
+	
+	/**
+	 * When copying a scenario the UUIDs are not copied correctly unless the getter method is called. The method checks whether there is a value and makes a new one if there isn't
+	 * @param scenario The scenario to fix.
+	 */
+	private static void fixUUIDMisMatches(final Scenario scenario) {
+
+		TreeIterator<EObject> iterator = scenario.eAllContents();
+		while (iterator.hasNext())
+		{
+			EObject obj = iterator.next();
+			
+			if (obj instanceof UUIDObject)
+				((UUIDObject) obj).getUUID();
+		}
 	}
 
 	public VesselClassCost createCanalCost(final String canalName, final Port portA, final Port portB, final int distanceAToB, final int distanceBToA, final int canalLadenCost,
