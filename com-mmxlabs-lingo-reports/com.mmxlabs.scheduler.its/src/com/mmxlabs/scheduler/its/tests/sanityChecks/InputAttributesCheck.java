@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.its.tests.sanityChecks;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import junit.framework.Assert;
@@ -19,7 +18,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Test;
 
 import scenario.Scenario;
-import scenario.fleet.Vessel;
 import scenario.port.Port;
 
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
@@ -43,13 +41,11 @@ public class InputAttributesCheck {
 	/**
 	 * Check that the scenario doesn't change after being evaluated. The scenario being tested is a simple one.
 	 * 
-	 * @throws InterruptedException Thrown by the method that checks the original and evaluated scenarios are the same
+	 * @throws InterruptedException
+	 *             Thrown by the method that checks the original and evaluated scenarios are the same
 	 */
 	@Test
 	public void test() throws InterruptedException {
-
-		// this is the list of vessels to check against the output.
-		final ArrayList<Vessel> inputVessels = new ArrayList<Vessel>();
 
 		final int loadPrice = 1;
 		final int cvValue = 10;
@@ -69,10 +65,10 @@ public class InputAttributesCheck {
 
 		// createVessels creates and adds the vessesl to the scenario.
 		// Add the created vessels to the list of input vessels.
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500, false)));
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false)));
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 20, 25, 10000, 17, 14, 10, 1000, false)));
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
+		Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500, false));
+		Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false));
+		Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 20, 25, 10000, 17, 14, 10, 1000, false));
+		Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true));
 
 		// create some cargos.
 		SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
@@ -88,9 +84,12 @@ public class InputAttributesCheck {
 	/**
 	 * Check that there are no differences between the two given scenarios.
 	 * 
-	 * @param assertionMessage A message for the assertion ({@link Assert#assertTrue(String, boolean)}).
-	 * @param originalScenario The original scenario
-	 * @param otherScenario Another scenario
+	 * @param assertionMessage
+	 *            A message for the assertion ({@link Assert#assertTrue(String, boolean)}).
+	 * @param originalScenario
+	 *            The original scenario
+	 * @param otherScenario
+	 *            Another scenario
 	 * @throws InterruptedException
 	 */
 	private void assertScenariosEqual(final String assertionMessage, final Scenario originalScenario, final Scenario otherScenario) throws InterruptedException {
@@ -102,7 +101,7 @@ public class InputAttributesCheck {
 		for (final DiffElement d : differences) {
 			System.err.println(d.toString());
 		}
-		
+
 		Assert.assertTrue(assertionMessage, differences.isEmpty());
 	}
 }
