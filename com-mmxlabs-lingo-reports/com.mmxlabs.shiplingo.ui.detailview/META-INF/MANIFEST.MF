@@ -25,4 +25,5 @@ Export-Package: com.mmxlabs.shiplingo.ui.autocorrector,
  com.mmxlabs.shiplingo.ui.detailview.containers,
  com.mmxlabs.shiplingo.ui.detailview.editors,
  com.mmxlabs.shiplingo.ui.detailview.editors.dialogs,
- com.mmxlabs.shiplingo.ui.tableview
+ com.mmxlabs.shiplingo.ui.tableview,
+ com.mmxlabs.shiplingo.ui.tableview.filter
