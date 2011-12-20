@@ -186,7 +186,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 			proposals = new FilterProposalProvider();
 
 			ContentProposalAdapter adapter = new ContentProposalAdapter(filterText, new TextContentAdapter(), proposals, null, null);
-			adapter.setAutoActivationDelay(1000);
+			adapter.setAutoActivationDelay(700);
 			adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_IGNORE);
 			adapter.addContentProposalListener(new IContentProposalListener() {
 				@Override
@@ -335,6 +335,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 		
 		if (proposals != null) {
 			proposals.setProposals(v.getColumnMnemonics());
+			proposals.setViewer(eObjectTableViewer);
 		}
 		
 		return v;
@@ -349,6 +350,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 		super.addColumn(columnName, renderer, manipulator, pathObjects);
 		if (proposals != null) {
 			proposals.setProposals(eObjectTableViewer.getColumnMnemonics());
+			proposals.setViewer(eObjectTableViewer);
 		}
 	}
 	
