@@ -6,6 +6,7 @@ package scenario.presentation;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,8 +43,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -1268,6 +1272,35 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		URI resourceURI = EditUIUtil.getURI(getEditorInput());
 		Exception exception = null;
 		Resource resource = null;
+		
+		{
+			final ResourceSet resourceSet = editingDomain.getResourceSet();
+			resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
+			resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, 
+					new XMLResource.ResourceHandler() {
+
+						@Override
+						public void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
+							if (resource instanceof ResourceImpl) {
+								((ResourceImpl)resource).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
+							}
+						}
+
+						@Override
+						public void postLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
+							if (resource instanceof ResourceImpl) {
+								((ResourceImpl)resource).setIntrinsicIDToEObjectMap(null);
+							}
+						}
+
+						@Override
+						public void preSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {}
+
+						@Override
+						public void postSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {}
+			});
+		}
+		
 		try {
 			// Load the resource through the editing domain.
 			//
