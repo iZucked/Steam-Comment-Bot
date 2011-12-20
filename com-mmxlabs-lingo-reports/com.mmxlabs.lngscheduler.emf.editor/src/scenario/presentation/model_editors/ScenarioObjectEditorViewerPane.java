@@ -168,7 +168,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 
 	      final Composite inner = new Composite(control, SWT.NONE);
 		  
-	      filterText = new Text(inner, SWT.NONE);
+	      filterText = new Text(inner, SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 	      filterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	      filterText.setVisible(false);
 	      ((GridData)filterText.getLayoutData()).exclude = true;
