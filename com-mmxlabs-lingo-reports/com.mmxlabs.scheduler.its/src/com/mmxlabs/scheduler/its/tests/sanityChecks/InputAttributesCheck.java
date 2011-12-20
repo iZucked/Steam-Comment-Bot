@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.its.tests.sanityChecks;
 
-import java.util.Arrays;
-
 import junit.framework.Assert;
 
 import org.eclipse.emf.common.util.EList;
