@@ -106,10 +106,11 @@ public class OptimisationDataTest {
 		Assert.assertTrue(data.hasDataComponentProvider("test"));
 
 		final class A implements IDataComponentProvider {
+			@Override
 			public String getName() {
 				return null;
 			}
-
+			@Override
 			public void dispose() {
 			}
 		}
