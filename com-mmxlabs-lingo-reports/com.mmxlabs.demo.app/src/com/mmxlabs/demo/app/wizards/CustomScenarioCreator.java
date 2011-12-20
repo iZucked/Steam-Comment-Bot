@@ -6,14 +6,18 @@ package com.mmxlabs.demo.app.wizards;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.management.timer.Timer;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EObject;
 
 import scenario.Scenario;
 import scenario.ScenarioFactory;
+import scenario.UUIDObject;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoFactory;
 import scenario.cargo.LoadSlot;
@@ -66,6 +70,8 @@ public class CustomScenarioCreator {
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
 
+	private static final String timeZone = TimeZone.getDefault().getID();
+	
 	public CustomScenarioCreator(final float dischargePrice) {
 
 		scenario = ScenarioFactory.eINSTANCE.createScenario();
@@ -215,11 +221,11 @@ public class CustomScenarioCreator {
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 			vessel.setClass(vc);
 			vessel.setName(i + " (class " + vesselClassName + ")");
-			
+
 			vessel.setTimeChartered(isTimeChartered);
-			
+
 			// TODO Does setting this set the vessel to be a spot charter?
-			//vessel.setDailyCharterOutPrice(charterOutPrice);
+			// vessel.setDailyCharterOutPrice(charterOutPrice);
 
 			final PortTimeAndHeel start = FleetFactory.eINSTANCE.createPortTimeAndHeel();
 			final PortAndTime end = FleetFactory.eINSTANCE.createPortAndTime();
@@ -291,10 +297,14 @@ public class CustomScenarioCreator {
 	 *            A list of distances from port B to port A
 	 */
 	public void addPorts(final Port portA, final Port portB, final int[] AtoBDistances, final int[] BtoADistances) {
-		if (!scenario.getPortModel().getPorts().contains(portA))
+		if (!scenario.getPortModel().getPorts().contains(portA)) {
 			scenario.getPortModel().getPorts().add(portA);
-		if (!scenario.getPortModel().getPorts().contains(portB))
+			portA.setTimeZone(timeZone);
+		}
+		if (!scenario.getPortModel().getPorts().contains(portB)) {
 			scenario.getPortModel().getPorts().add(portB);
+			portB.setTimeZone(timeZone);
+		}
 
 		for (int distance : AtoBDistances) {
 			final DistanceLine distanceLine = PortFactory.eINSTANCE.createDistanceLine();
