@@ -8,23 +8,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.jface.action.ControlContribution;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.cargo.CargoPackage;
@@ -40,6 +31,7 @@ import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
 import com.mmxlabs.shiplingo.ui.tableview.EnumAttributeManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.MultipleReferenceManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.SingleReferenceManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.filter.FilterControlContribution;
 
 /**
  * EVP for cargoes
@@ -136,46 +128,6 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 	public EObjectTableViewer createViewer(final Composite parent) {
 		final EObjectTableViewer v = super.createViewer(parent);
 
-//		getToolBarManager().appendToGroup("edit", new ControlContribution("com.mmxlabs.cargoviewer.filter") {
-//			@Override
-//			protected Control createControl(final Composite parent) {
-//				final Text t = new Text(parent, SWT.SEARCH);
-//				t.addModifyListener(new ModifyListener() {
-//					@Override
-//					public void modifyText(ModifyEvent e) {
-//						v.refresh(false);
-//					}
-//				});
-//				v.addFilter(new ViewerFilter() {
-//					@Override
-//					public boolean select(Viewer viewer, Object parentElement, Object element) {
-//						final String filterText = t.getText();
-//						if (filterText.isEmpty()) return true;
-//						if (element instanceof EObject) {
-//							if (filter((EObject) element, filterText)) return true;
-//							final TreeIterator<EObject> iterator = ((EObject)element).eAllContents();
-//							while (iterator.hasNext()) {
-//								if (filter(iterator.next(), filterText)) return true;
-//							}
-//							return false;
-//						}
-//						
-//						return true;
-//					}
-//
-//					private boolean filter(EObject element, String text) {
-//						for (final EAttribute attribute : element.eClass().getEAllAttributes()) {
-//							final String s = "" + element.eGet(attribute);
-//							if (s.toLowerCase().contains(text.toLowerCase())) return true;
-//						}
-//
-//						return false;
-//					}});
-//				
-//				return t;
-//			}
-//		});
-		
 		getToolBarManager().appendToGroup("edit", swapAction);
 		getToolBarManager().appendToGroup("edit", replicateAction);
 		getToolBarManager().update(true);
