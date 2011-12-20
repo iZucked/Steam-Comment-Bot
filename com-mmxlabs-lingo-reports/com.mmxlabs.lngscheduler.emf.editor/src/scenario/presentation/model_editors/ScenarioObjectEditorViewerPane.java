@@ -17,6 +17,14 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.bindings.keys.ParseException;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.IContentProposal;
+import org.eclipse.jface.fieldassist.IContentProposalListener;
+import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -51,6 +59,8 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 import com.mmxlabs.shiplingo.ui.detailview.containers.DetailCompositeDialog;
 import com.mmxlabs.shiplingo.ui.detailview.containers.MultiDetailDialog;
 import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
+import com.mmxlabs.shiplingo.ui.tableview.ICellManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
 
 /**
  * This extension of {@link EObjectEditorViewerPane} adds the following
@@ -141,6 +151,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 	}
 	
 	private Text filterText;
+	private FilterProposalProvider proposals;
 	
 	public void createControl(Composite parent) 
 	  {
@@ -171,6 +182,19 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 	      filterText = new Text(inner, SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 	      filterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	      filterText.setVisible(false);
+
+			proposals = new FilterProposalProvider();
+
+			ContentProposalAdapter adapter = new ContentProposalAdapter(filterText, new TextContentAdapter(), proposals, null, null);
+			adapter.setAutoActivationDelay(1000);
+			adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_IGNORE);
+			adapter.addContentProposalListener(new IContentProposalListener() {
+				@Override
+				public void proposalAccepted(IContentProposal proposal) {
+					filterText.insert(proposal.getContent());
+				}
+			});
+
 	      ((GridData)filterText.getLayoutData()).exclude = true;
 	      final GridLayout layout = new GridLayout(1, false);
 	      layout.marginHeight = 0;
@@ -309,6 +333,24 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 			}
 		});
 		
+		if (proposals != null) {
+			proposals.setProposals(v.getColumnMnemonics());
+		}
+		
 		return v;
 	}
+
+	/* (non-Javadoc)
+	 * @see scenario.presentation.cargoeditor.EObjectEditorViewerPane#addColumn(java.lang.String, com.mmxlabs.shiplingo.ui.tableview.ICellRenderer, com.mmxlabs.shiplingo.ui.tableview.ICellManipulator, java.lang.Object[])
+	 */
+	@Override
+	public void addColumn(String columnName, ICellRenderer renderer, ICellManipulator manipulator, Object... pathObjects) {
+		
+		super.addColumn(columnName, renderer, manipulator, pathObjects);
+		if (proposals != null) {
+			proposals.setProposals(eObjectTableViewer.getColumnMnemonics());
+		}
+	}
+	
+	
 }
