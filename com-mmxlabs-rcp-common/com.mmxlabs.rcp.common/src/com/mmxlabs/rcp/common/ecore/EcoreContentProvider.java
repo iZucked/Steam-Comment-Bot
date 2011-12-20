@@ -5,7 +5,11 @@
 package com.mmxlabs.rcp.common.ecore;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -18,8 +22,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 
 import com.mmxlabs.rcp.common.Activator;
@@ -41,7 +49,33 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 	 * the resource listener is not - will we reload the model multiple times?
 	 */
 	private static ResourceSetImpl resourceSet = new ResourceSetImpl();
+	static {
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap());
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, 
+				new XMLResource.ResourceHandler() {
+					@Override
+					public void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
+						if (resource instanceof ResourceImpl) {
+							((ResourceImpl)resource).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
+						}
+					}
 
+					@Override
+					public void postLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
+						if (resource instanceof ResourceImpl) {
+							((ResourceImpl)resource).setIntrinsicIDToEObjectMap(null);
+						}
+					}
+
+					@Override
+					public void preSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {}
+
+					@Override
+					public void postSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {}
+		});
+	}
 	private final Collection<String> fileExtensions;
 
 	public EcoreContentProvider(final Collection<String> fileExtensions) {
