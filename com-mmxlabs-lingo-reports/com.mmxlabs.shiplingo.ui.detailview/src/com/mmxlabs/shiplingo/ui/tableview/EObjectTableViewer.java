@@ -6,6 +6,7 @@ package com.mmxlabs.shiplingo.ui.tableview;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -58,7 +60,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -587,5 +588,19 @@ public class EObjectTableViewer extends GridTableViewer {
 			if (n != null)
 				n.eAdapters().add(externalAdapter);
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	public Map<String, List<String>> getColumnMnemonics() {
+		final Map<String, List<String>> ms = new TreeMap<String, List<String>>();
+
+		for (final GridColumn column : getGrid().getColumns()) {
+			final List<String> mnemonics = (List<String>) column.getData(COLUMN_MNEMONICS);
+			ms.put(column.getText(), mnemonics);
+		}
+		
+		return ms;
 	}
 }
