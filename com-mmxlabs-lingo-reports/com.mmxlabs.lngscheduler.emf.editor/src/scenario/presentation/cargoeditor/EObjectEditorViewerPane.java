@@ -75,7 +75,7 @@ import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
  */
 public class EObjectEditorViewerPane extends ViewerPane {
 	protected final ScenarioEditor part;
-	private EObjectTableViewer viewer;
+	private EObjectTableViewer eObjectTableViewer;
 
 
 	public EObjectEditorViewerPane(final IWorkbenchPage page,
@@ -86,22 +86,18 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public EObjectTableViewer createViewer(final Composite parent) {
-//		final Composite box = new Composite(parent, SWT.NONE);
-//		box.setLayout(new RowLayout(SWT.HORIZONTAL));
-//		
-//		final Text filterText = new Text(box, SWT.SEARCH);
-		
-		viewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
+		eObjectTableViewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
 			@Override
 			protected boolean refreshOrGiveUp() {
 				if (ImportUI.isImporting()) {
-					ImportUI.refreshLater(viewer);
+					ImportUI.refreshLater(eObjectTableViewer);
 					return true;
 				}
 				return false;
 			}
 		};
 
+		getToolBarManager().add(new GroupMarker("filter"));
 		getToolBarManager().add(new GroupMarker("pack"));
 		getToolBarManager().add(new GroupMarker("additions"));
 		getToolBarManager().add(new GroupMarker("edit"));
@@ -110,19 +106,17 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		getToolBarManager().add(new GroupMarker("exporters"));
 		getToolBarManager().add(new GroupMarker("copy"));
 		{
-			final Action a = new PackGridTableColumnsAction(viewer);
+			final Action a = new PackGridTableColumnsAction(eObjectTableViewer);
 			getToolBarManager().appendToGroup("pack", a);
 		}
 		{
-			final Action a = new CopyGridToClipboardAction(viewer.getGrid());
+			final Action a = new CopyGridToClipboardAction(eObjectTableViewer.getGrid());
 			getToolBarManager().appendToGroup("copy", a);
 		}
 
 		getToolBarManager().update(true);
-		
-		
-		
-		return viewer;
+
+		return eObjectTableViewer;
 	}
 
 	protected Action createDeleteAction(final GridTableViewer viewer,
@@ -228,13 +222,13 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	public void addColumn(final String columnName,
 			final ICellRenderer renderer, final ICellManipulator manipulator,
 			final Object... pathObjects) {
-		viewer.addColumn(columnName, renderer, manipulator, pathObjects);
+		eObjectTableViewer.addColumn(columnName, renderer, manipulator, pathObjects);
 	}
 
 	public void init(final List<EReference> path,
 			final AdapterFactory adapterFactory) {
-		viewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
-		final Grid table = viewer.getGrid();
+		eObjectTableViewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
+		final Grid table = eObjectTableViewer.getGrid();
 		
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -243,27 +237,27 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final ToolBarManager x = getToolBarManager();
 			final EMFPath ePath = new EMFPath(true, path);
 			{
-				final Action a = createAddAction(viewer,
+				final Action a = createAddAction(eObjectTableViewer,
 						part.getEditingDomain(), ePath);
 				if (a != null) {
 					x.appendToGroup("edit", a);
 				}
 			}
 			{
-				final Action b = createDeleteAction(viewer,
+				final Action b = createDeleteAction(eObjectTableViewer,
 						part.getEditingDomain());
 				if (b != null) {
 					x.appendToGroup("edit", b);
 				}
 			}
 			{
-				final Action a = createImportAction(viewer,
+				final Action a = createImportAction(eObjectTableViewer,
 						part.getEditingDomain(), ePath);
 				if (a != null)
 					x.appendToGroup("importers", a);
 			}
 			{
-				final Action a = createExportAction(viewer, ePath);
+				final Action a = createExportAction(eObjectTableViewer, ePath);
 				if (a != null)
 					x.appendToGroup("exporters", a);
 			}
@@ -520,14 +514,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public void dispose() {
-		viewer.dispose();
+		eObjectTableViewer.dispose();
 
 		super.dispose();
 	}
 
 	@Override
 	protected void requestActivation() {
-		final Control c = viewer.getControl();
+		final Control c = eObjectTableViewer.getControl();
 		if (c.isDisposed() || c.getDisplay() == null)
 			return;
 		super.requestActivation();
@@ -536,7 +530,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public void showFocus(boolean inFocus) {
-		final Control c = viewer.getControl();
+		final Control c = eObjectTableViewer.getControl();
 		if (c.isDisposed() || c.getDisplay() == null)
 			return;
 		super.showFocus(inFocus);
@@ -544,7 +538,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public void setFocus() {
-		final Control c = viewer.getControl();
+		final Control c = eObjectTableViewer.getControl();
 		if (c.isDisposed() || c.getDisplay() == null)
 			return;
 		super.setFocus();
@@ -552,7 +546,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public GridTableViewer getViewer() {
-		return viewer;
+		return eObjectTableViewer;
 	}
 
 	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(
@@ -563,10 +557,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	}
 
 	public void refresh() {
-		if (viewer != null) {
-			if (viewer.getControl() != null
-					&& viewer.getControl().isDisposed() == false) {
-				viewer.refresh();
+		if (eObjectTableViewer != null) {
+			if (eObjectTableViewer.getControl() != null
+					&& eObjectTableViewer.getControl().isDisposed() == false) {
+				eObjectTableViewer.refresh();
 			}
 		}
 	}
