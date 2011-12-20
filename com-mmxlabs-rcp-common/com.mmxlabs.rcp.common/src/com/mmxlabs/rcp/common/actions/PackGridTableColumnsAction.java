@@ -8,7 +8,6 @@ package com.mmxlabs.rcp.common.actions;
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.swt.widgets.TableColumn;
 
 import com.mmxlabs.rcp.common.Activator;
 
