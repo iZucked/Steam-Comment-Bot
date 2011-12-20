@@ -45,7 +45,6 @@ import com.mmxlabs.shiplingo.ui.detailview.editors.NumberInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ReferenceInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.TextInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ValueListInlineEditor;
-import com.mmxlabs.shiplingo.ui.detailview.generated.VesselStateAttributesComposite;
 
 /**
  * A base class for all the object editing composites generated with Acceleo.

@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.util.Switch;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
-import scenario.market.*;
 import scenario.market.Index;
 import scenario.market.MarketModel;
 import scenario.market.MarketPackage;

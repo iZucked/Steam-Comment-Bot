@@ -7,7 +7,6 @@
 package scenario.schedule.impl;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -17,14 +16,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import scenario.Detail;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-
 import scenario.contract.Entity;
-import scenario.contract.GroupEntity;
 import scenario.impl.ScenarioObjectImpl;
 import scenario.schedule.BookedRevenue;
-import scenario.schedule.LineItem;
 import scenario.schedule.SchedulePackage;
 
 /**
@@ -276,13 +270,11 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NO
 	 */
 	@Override
 	public String getName() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		return "Operations";
 	}
 
 	/**
@@ -326,7 +318,6 @@ public class BookedRevenueImpl extends ScenarioObjectImpl implements BookedReven
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {

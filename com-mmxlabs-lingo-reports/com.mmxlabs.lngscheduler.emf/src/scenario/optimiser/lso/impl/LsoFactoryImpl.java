@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.optimiser.lso.*;
 import scenario.optimiser.lso.ConstrainedMoveGeneratorSettings;
 import scenario.optimiser.lso.LSOSettings;
 import scenario.optimiser.lso.LsoFactory;

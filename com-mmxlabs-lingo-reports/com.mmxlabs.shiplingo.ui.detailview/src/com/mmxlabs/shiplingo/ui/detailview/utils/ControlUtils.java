@@ -5,7 +5,6 @@ package com.mmxlabs.shiplingo.ui.detailview.utils;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 
 /**
  * Utility methods for doing things to controls

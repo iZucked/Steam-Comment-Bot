@@ -19,7 +19,7 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetVessel;
 
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
-import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?252">Case 252: Check vessels in input exist in output.</a>

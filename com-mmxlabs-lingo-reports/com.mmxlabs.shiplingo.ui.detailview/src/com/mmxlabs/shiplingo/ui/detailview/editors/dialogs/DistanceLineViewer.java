@@ -22,21 +22,13 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.grid.IRenderer;
-import org.eclipse.nebula.widgets.grid.internal.DefaultRowHeaderRenderer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 
 import scenario.Scenario;
@@ -47,7 +39,6 @@ import scenario.port.PortFactory;
 import scenario.port.PortPackage;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
 
 /**
  * Set the input to a distance model, and this will let you edit it

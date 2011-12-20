@@ -9,9 +9,6 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -117,8 +114,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 					sb.append("To: " + journey.getToPort().getName() + "\n");
 				sb.append("Vessel State: " + journey.getVesselState().getName()
 						+ "\n");
-				sb.append("Route: " + journey.getRoute() + "\n");
-				sb.append("Speed: " + journey.getSpeed() + "\n");
+				sb.append("Route: " + journey.getRoute().replace("default", "Direct") + "\n");
+				sb.append(
+						String.format("Speed: %.1f\n", journey.getSpeed()));
 				sb.append("Distance: " + journey.getDistance() + "\n");
 			}
 
@@ -129,7 +127,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 						sb.append(fq.getFuelType().getName() + ": ");
 						sb.append(fq.getQuantity() + " "
 								+ fq.getFuelUnit().getName());
-						sb.append(String.format(", cost $%,.2f\n",
+						sb.append(String.format(", cost $%,.0f\n",
 								(double) fq.getTotalPrice()));
 					}
 				}

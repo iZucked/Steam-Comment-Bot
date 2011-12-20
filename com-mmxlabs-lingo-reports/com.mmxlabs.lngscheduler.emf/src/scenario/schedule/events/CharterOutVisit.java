@@ -7,8 +7,6 @@
 package scenario.schedule.events;
 
 import scenario.fleet.CharterOut;
-import scenario.schedule.VesselEventRevenue;
-import scenario.schedule.CharterOutRevenue;
 
 /**
  * <!-- begin-user-doc -->

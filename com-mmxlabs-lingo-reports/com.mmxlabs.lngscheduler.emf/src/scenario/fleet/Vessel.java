@@ -6,8 +6,6 @@
  */
 package scenario.fleet;
 
-import org.eclipse.emf.common.util.EList;
-
 import scenario.AnnotatedObject;
 import scenario.NamedObject;
 

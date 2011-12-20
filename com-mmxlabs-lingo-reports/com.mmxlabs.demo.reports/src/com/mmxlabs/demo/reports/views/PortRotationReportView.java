@@ -19,11 +19,9 @@ import org.eclipse.swt.widgets.Display;
 
 import scenario.Scenario;
 import scenario.ScenarioPackage;
-import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
 import scenario.contract.Entity;
 import scenario.contract.GroupEntity;
-import scenario.port.PortPackage;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
@@ -54,8 +52,8 @@ public class PortRotationReportView extends EMFReportView {
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 		final EventsPackage ep = EventsPackage.eINSTANCE;
-		final CargoPackage cp = CargoPackage.eINSTANCE;
-		final PortPackage pp = PortPackage.eINSTANCE;
+//		final CargoPackage cp = CargoPackage.eINSTANCE;
+//		final PortPackage pp = PortPackage.eINSTANCE;
 
 		final EStructuralFeature name = ScenarioPackage.eINSTANCE
 				.getNamedObject_Name();
@@ -258,7 +256,7 @@ public class PortRotationReportView extends EMFReportView {
 						}
 						final Set<Scenario> scenarios = new HashSet<Scenario>();
 						if (newInput instanceof Iterable) {
-							for (final Object element : ((Iterable) newInput)) {
+							for (final Object element : ((Iterable<?>) newInput)) {
 								if (element instanceof Schedule) {
 									// find all referenced entities
 									for (final String s : entityColumnNames) {
@@ -299,7 +297,7 @@ public class PortRotationReportView extends EMFReportView {
 				final ArrayList<ScheduledEvent> allEvents = new ArrayList<ScheduledEvent>();
 				clearInputEquivalents();
 				if (object instanceof Iterable) {
-					for (final Object o : ((Iterable) object)) {
+					for (final Object o : ((Iterable<?>) object)) {
 						if (o instanceof Schedule) {
 							for (final Sequence seq : ((Schedule) o)
 									.getSequences()) {
