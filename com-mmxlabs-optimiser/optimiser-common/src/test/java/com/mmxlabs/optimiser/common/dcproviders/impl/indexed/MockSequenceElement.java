@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
-import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
