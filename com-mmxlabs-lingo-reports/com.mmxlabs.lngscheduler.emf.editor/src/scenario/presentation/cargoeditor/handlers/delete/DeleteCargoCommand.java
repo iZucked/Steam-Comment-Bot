@@ -74,6 +74,7 @@ public class DeleteCargoCommand extends Deleter {
 							referer).getObjectsToDelete());
 				} else if (referer instanceof CargoAllocation) {
 					final CargoAllocation ca = (CargoAllocation) referer;
+					
 					t.addAll(DeleteHelper.createDeleter(domain,
 							(ca.getBallastIdle())).getObjectsToDelete());
 					t.addAll(DeleteHelper.createDeleter(domain,
