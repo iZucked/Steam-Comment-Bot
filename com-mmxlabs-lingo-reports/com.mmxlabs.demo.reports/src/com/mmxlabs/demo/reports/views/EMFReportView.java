@@ -8,13 +8,14 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -23,22 +24,16 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
@@ -53,15 +48,22 @@ import scenario.Scenario;
 import scenario.schedule.Schedule;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
+import com.mmxlabs.shiplingo.ui.tableview.ICellManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
+import com.mmxlabs.shiplingo.ui.tableview.filter.FilterField;
 
 /**
  * Base class for views which show things from the EMF output model.
+ * 
+ * This shares a lot of function with EObjectTableViewer
  * 
  * @author hinton
  * 
@@ -70,6 +72,7 @@ public abstract class EMFReportView extends ViewPart implements
 		ISelectionListener {
 	private final List<ColumnHandler> handlers = new ArrayList<ColumnHandler>();
 	private final List<ColumnHandler> handlersInOrder = new ArrayList<ColumnHandler>();
+	private FilterField filterField;
 	boolean sortDescending = false;
 
 	protected EMFReportView() {
@@ -80,11 +83,34 @@ public abstract class EMFReportView extends ViewPart implements
 		this.helpContextId = helpContextId;
 	}
 
+	private final ICellManipulator noEditing = new ICellManipulator() {
+		@Override
+		public void setValue(Object object, Object value) {
+			
+		}
+		
+		@Override
+		public Object getValue(Object object) {
+			return null;
+		}
+		
+		@Override
+		public CellEditor getCellEditor(Composite parent, Object object) {
+			return null;
+		}
+		
+		@Override
+		public boolean canEdit(Object object) {
+			return false;
+		}
+	};
+	
 	protected class ColumnHandler {
 		private static final String COLUMN_HANDLER = "COLUMN_HANDLER";
 		private final IFormatter formatter;
 		private final EMFPath path;
 		private final String title;
+		public GridViewerColumn column;
 
 		public ColumnHandler(final IFormatter formatter,
 				final Object[] features, final String title) {
@@ -94,63 +120,32 @@ public abstract class EMFReportView extends ViewPart implements
 			this.title = title;
 		}
 
-		public GridViewerColumn createColumn(final GridTableViewer viewer) {
-			final GridViewerColumn column = new GridViewerColumn(viewer,
-					SWT.NONE);
-			column.getColumn().setText(title);
-			column.setLabelProvider(new ColumnLabelProvider() {
-				@Override
-				public String getText(final Object element) {
-					return formatter.format(path.get((EObject) element));
-				}
-			});
+		public GridViewerColumn createColumn(final EObjectTableViewer viewer) {
+			final GridViewerColumn column = viewer.addColumn(title, 
+					new ICellRenderer() {
+						@Override
+						public String render(Object object) {
+							return formatter.format(object);
+						}
+						
+						@Override
+						public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+							// TODO fix this
+							return Collections.emptySet();
+						}
+						
+						@Override
+						public Comparable getComparable(Object object) {
+							return formatter.getComparable(object);
+						}
+					}
+					, noEditing, path);
 
 			final GridColumn tc = column.getColumn();
 			tc.setData(COLUMN_HANDLER, this);
-			tc.addSelectionListener(new SelectionAdapter() {
-				GridColumn lastColumn = null;
-				{
-					final SelectionListener sl = this;
-					tc.addDisposeListener(new DisposeListener() {
-						@Override
-						public void widgetDisposed(final DisposeEvent e) {
-							tc.removeSelectionListener(sl);
-						}
-
-					});
-				}
-
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					if (lastColumn != null)
-						lastColumn.setSort(SWT.NONE);
-					// update sort order
-					makeSortColumn((ColumnHandler) tc.getData(COLUMN_HANDLER));
-					tc.setSort(sortDescending ? SWT.UP : SWT.DOWN);
-					lastColumn = tc;
-				}
-			});
-
+			this.column = column;
 			return column;
 		}
-
-		public int compare(final EObject one, final EObject two) {
-			final Comparable c1 = formatter.getComparable(path.get(one));
-			final Comparable c2 = formatter.getComparable(path.get(two));
-			return c1.compareTo(c2);
-		}
-	}
-
-	protected void makeSortColumn(final ColumnHandler handler) {
-		if (handlers.get(0).equals(handler)) {
-			sortDescending = !sortDescending;
-		} else {
-			sortDescending = false;
-			handlers.remove(handler);
-			handlers.add(0, handler);
-		}
-		if (viewer != null)
-			viewer.refresh();
 	}
 
 	protected interface IFormatter {
@@ -168,11 +163,6 @@ public abstract class EMFReportView extends ViewPart implements
 				}
 			}
 			if (object instanceof Schedule) {
-
-				// TODO fix this, it's not correct nor is it reliable
-				// once a schedule has been replaced it's removed from
-				// container.
-				// bad.
 				Scenario s = (Scenario) ((Schedule) object).eContainer()
 						.eContainer();
 				return s.getName();
@@ -278,7 +268,7 @@ public abstract class EMFReportView extends ViewPart implements
 		}
 	};
 
-	private GridTableViewer viewer;
+	private EObjectTableViewer viewer;
 
 	private Action packColumnsAction;
 
@@ -319,7 +309,13 @@ public abstract class EMFReportView extends ViewPart implements
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL
+		final Composite container = new Composite(parent, SWT.NONE);
+		filterField = new FilterField(container);
+		final GridLayout layout = new GridLayout(1, false);
+		layout.marginHeight = layout.marginWidth = 0;
+		container.setLayout(layout);
+		
+		viewer = new EObjectTableViewer(container, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.FULL_SELECTION) {
 			@Override
 			protected void inputChanged(final Object input,
@@ -334,14 +330,21 @@ public abstract class EMFReportView extends ViewPart implements
 								.isEmpty());
 
 				if (inputEmpty != oldInputEmpty) {
-
-					if (packColumnsAction != null) {
-						packColumnsAction.run();
-					}
+//					Disabled because running this takes up 50% of the runtime when displaying a new schedule (!)
+//					if (packColumnsAction != null) {
+//						packColumnsAction.run();
+//					}
 				}
 			};
 		};
+		
+		filterField.setViewer(viewer);
+		
+		viewer.getGrid().setLayoutData(new GridData(GridData.FILL_BOTH));
 
+		// this is very slow on refresh
+		viewer.setDisplayValidationErrors(false);
+		
 		if (handleSelections()) {
 			viewer.setComparer(new IElementComparer() {
 				@Override
@@ -362,23 +365,8 @@ public abstract class EMFReportView extends ViewPart implements
 			});
 		}
 
-		viewer.setContentProvider(getContentProvider());
 		viewer.getGrid().setHeaderVisible(true);
 		viewer.getGrid().setLinesVisible(true);
-
-		viewer.setComparator(new ViewerComparator() {
-			@Override
-			public int compare(final Viewer viewer, final Object e1,
-					final Object e2) {
-				final Iterator<ColumnHandler> iterator = handlers.iterator();
-				int comparison = 0;
-				while (iterator.hasNext() && comparison == 0) {
-					comparison = iterator.next().compare((EObject) e1,
-							(EObject) e2);
-				}
-				return sortDescending ? -comparison : comparison;
-			}
-		});
 
 		for (final ColumnHandler handler : handlersInOrder) {
 			handler.createColumn(viewer).getColumn().pack();
@@ -393,25 +381,14 @@ public abstract class EMFReportView extends ViewPart implements
 		hookContextMenu();
 		contributeToActionBars();
 
-		// getSite().getWorkbenchWindow().getSelectionService()
-		// .addSelectionListener("com.mmxlabs.rcp.navigator", this);
-		//
-		// final ISelection selection = getSite().getWorkbenchWindow()
-		// .getSelectionService()
-		// .getSelection("com.mmxlabs.rcp.navigator");
-
-		// // Trigger initial view selection
-		// selectionChanged(null, selection);
-
-		jobManagerListener = ScheduleAdapter.registerView(viewer);
-
-		// register to cause selections
-		// TODO: register an adapter to adapt things one way and another.
+		viewer.init(getContentProvider());
 
 		getSite().setSelectionProvider(viewer);
 		if (handleSelections())
 			getSite().getWorkbenchWindow().getSelectionService()
 					.addPostSelectionListener(this);
+		
+		jobManagerListener = ScheduleAdapter.registerView(viewer);
 	}
 
 	private void hookContextMenu() {
@@ -443,6 +420,7 @@ public abstract class EMFReportView extends ViewPart implements
 	}
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
+		manager.add(new GroupMarker("filter"));
 		manager.add(new GroupMarker("pack"));
 		manager.add(new GroupMarker("additions"));
 		manager.add(new GroupMarker("edit"));
@@ -450,8 +428,9 @@ public abstract class EMFReportView extends ViewPart implements
 		manager.add(new GroupMarker("importers"));
 		manager.add(new GroupMarker("exporters"));
 
+		manager.appendToGroup("filter", filterField.getContribution());
 		manager.appendToGroup("pack", packColumnsAction);
-		// manager.appendToGroup("copy", copyTableAction);
+		manager.appendToGroup("copy", copyTableAction);
 	}
 
 	private void makeActions() {
@@ -483,29 +462,9 @@ public abstract class EMFReportView extends ViewPart implements
 	@Override
 	public void selectionChanged(final IWorkbenchPart part,
 			final ISelection selection) {
-		// if the selection is adaptable to one of the things we contain then we
-		// win..?
-		// or what?
 		if (part == this) {
 			return;
 		}
-		// if (!selection.isEmpty() && selection instanceof
-		// IStructuredSelection) {
-		// final Class<?> adaptTo = getSelectionAdaptionClass();
-		// final IAdapterManager adapterManager = Platform.getAdapterManager();
-		// final List<Object> adaptedSelection = new
-		// ArrayList<Object>(((IStructuredSelection)selection).size());
-		// for (final Object object : ((IStructuredSelection)
-		// selection).toList()) {
-		// final Object adaptedObject = adapterManager.getAdapter(object,
-		// adaptTo);
-		// if (adaptedObject != null) {
-		// adaptedSelection.add(adaptedObject);
-		// }
-		// }
-		//
-		// handleAdaptedSelection(adaptedSelection);
-		// }
 
 		viewer.setSelection(selection, true);
 	}
@@ -525,25 +484,17 @@ public abstract class EMFReportView extends ViewPart implements
 	public void removeColumn(final String title) {
 		for (final ColumnHandler h : handlers) {
 			if (h.title.equals(title)) {
+				viewer.removeColumn(h.column);
 				handlers.remove(h);
 				handlersInOrder.remove(h);
 				break;
 			}
 		}
-		for (final GridColumn column : viewer.getGrid().getColumns()) {
-			if (column.getText().equals(title))
-				// TODO this might be pretty wrong.
-				// TODO: This is how I usually do it - SG
-				column.dispose();
-		}
-		// viewer.getTable().pack(true);
+
 	}
 
 	@Override
 	public void dispose() {
-		// getSite().getPage().removeSelectionListener(
-		// "com.mmxlabs.rcp.navigator", this);
-
 		ScheduleAdapter.deregisterView(jobManagerListener);
 
 		super.dispose();

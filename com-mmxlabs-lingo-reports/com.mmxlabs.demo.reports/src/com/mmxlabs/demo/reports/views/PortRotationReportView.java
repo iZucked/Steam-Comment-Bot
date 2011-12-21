@@ -15,7 +15,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+
+import com.mmxlabs.demo.reports.views.EMFReportView.ColumnHandler;
 
 import scenario.Scenario;
 import scenario.ScenarioPackage;
@@ -45,6 +49,9 @@ public class PortRotationReportView extends EMFReportView {
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.demo.reports.views.PortRotationReportView";
+	private ColumnHandler dateColumn;
+	private ColumnHandler vesselColumn;
+	private ColumnHandler durationColumn;
 
 	public PortRotationReportView() {
 
@@ -60,7 +67,7 @@ public class PortRotationReportView extends EMFReportView {
 
 		addColumn("Schedule", containingScheduleFormatter);
 
-		final ColumnHandler vesselColumn = addColumn("Vessel", objectFormatter,
+		 vesselColumn = addColumn("Vessel", objectFormatter,
 				ScenarioPackage.eINSTANCE.getScenarioObject__GetContainer(),
 				sp.getSequence_Vessel(),
 				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
@@ -74,7 +81,7 @@ public class PortRotationReportView extends EMFReportView {
 		// sp.getCargoAllocation__GetName()
 		// );
 
-		final ColumnHandler dateColumn = addColumn("Start Date",
+		 dateColumn = addColumn("Start Date",
 				datePartFormatter, ep.getScheduledEvent__GetLocalStartTime());
 		addColumn("Start Time", timePartFormatter,
 				ep.getScheduledEvent__GetLocalStartTime());
@@ -84,7 +91,7 @@ public class PortRotationReportView extends EMFReportView {
 		addColumn("End Time", timePartFormatter,
 				ep.getScheduledEvent__GetLocalEndTime());
 
-		final ColumnHandler durationColumn = addColumn("Duration (DD:HH)",
+		 durationColumn = addColumn("Duration (DD:HH)",
 				new BaseFormatter() {
 					@Override
 					public String format(final Object object) {
@@ -227,15 +234,19 @@ public class PortRotationReportView extends EMFReportView {
 				return (int) total;
 			}
 		});
-		makeSortColumn(durationColumn);
-		makeSortColumn(dateColumn);
-		makeSortColumn(vesselColumn);
 	}
 
 	private final List<String> entityColumnNames = new ArrayList<String>();
 
 	
-	
+	@Override
+	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+		durationColumn.column.getColumn().notifyListeners(SWT.Selection, null);
+		dateColumn.column.getColumn().notifyListeners(SWT.Selection, null);
+		vesselColumn.column.getColumn().notifyListeners(SWT.Selection, null);
+	}
+
 	@Override
 	protected boolean handleSelections() {
 		return true;

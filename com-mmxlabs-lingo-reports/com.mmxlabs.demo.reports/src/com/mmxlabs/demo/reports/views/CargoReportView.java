@@ -158,10 +158,7 @@ public class CargoReportView extends EMFReportView {
 						addEntityColumns(scenario);
 					}
 					viewer.refresh();
-//					viewer.getControl().getParent().layout();
 				}});
-					
-				
 			}
 
 			@Override
