@@ -9,21 +9,15 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.ui.CommonUIPlugin;
-import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.bindings.keys.KeyStroke;
-import org.eclipse.jface.bindings.keys.ParseException;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
-import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalListener;
-import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -40,13 +34,11 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 
 import scenario.ScenarioPackage;
 import scenario.presentation.LngEditorPlugin;
@@ -61,6 +53,8 @@ import com.mmxlabs.shiplingo.ui.detailview.containers.MultiDetailDialog;
 import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
 import com.mmxlabs.shiplingo.ui.tableview.ICellManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
+import com.mmxlabs.shiplingo.ui.tableview.filter.FilterField;
+import com.mmxlabs.shiplingo.ui.tableview.filter.FilterProposalProvider;
 
 /**
  * This extension of {@link EObjectEditorViewerPane} adds the following
@@ -150,8 +144,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 		return result;
 	}
 	
-	private Text filterText;
-	private FilterProposalProvider proposals;
+	private FilterField filterField;
 	
 	public void createControl(Composite parent) 
 	  {
@@ -178,24 +171,8 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 	      createTitleBar();
 
 	      final Composite inner = new Composite(control, SWT.NONE);
-		  
-	      filterText = new Text(inner, SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
-	      filterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	      filterText.setVisible(false);
-
-			proposals = new FilterProposalProvider();
-
-			ContentProposalAdapter adapter = new ContentProposalAdapter(filterText, new TextContentAdapter(), proposals, null, null);
-			adapter.setAutoActivationDelay(700);
-			adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_IGNORE);
-			adapter.addContentProposalListener(new IContentProposalListener() {
-				@Override
-				public void proposalAccepted(IContentProposal proposal) {
-					filterText.insert(proposal.getContent());
-				}
-			});
-
-	      ((GridData)filterText.getLayoutData()).exclude = true;
+		  filterField = new FilterField(inner);
+	    
 	      final GridLayout layout = new GridLayout(1, false);
 	      layout.marginHeight = 0;
 	      layout.marginWidth = 0;
@@ -220,75 +197,9 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 	public EObjectTableViewer createViewer(final Composite parent) {
 		final EObjectTableViewer v = super.createViewer(parent);
 		
-		final ActionContributionItem filter = new ActionContributionItem(
-				new Action() {
-					{
-						setChecked(false);
-						setText("Filter table");
-						setImageDescriptor(LngEditorPlugin.Implementation
-								.imageDescriptorFromPlugin(LngEditorPlugin.getPlugin()
-										.getSymbolicName(), "/icons/filter.gif"));
-					}
-					@Override
-					public void run() {
-						filterText.setVisible(!filterText.getVisible());
-						((GridData) filterText.getLayoutData()).exclude = !filterText.getVisible();
-						filterText.getParent().layout(true);
-						if (filterText.isVisible() == false) {
-							v.setFilterString("");
-						} else {
-							filterText.setFocus();
-						}
-						setChecked(filterText.isVisible());
-					}
-					
-				}
-				);
+		final ActionContributionItem filter = filterField.getContribution();
 		
 		getToolBarManager().appendToGroup("filter", filter);
-		
-		filterText.addModifyListener(new ModifyListener() {
-			{
-				final ModifyListener self = this;
-				filterText.addDisposeListener(new DisposeListener() {
-					@Override
-					public void widgetDisposed(DisposeEvent e) {
-						filterText.removeModifyListener(self);
-					}
-				});
-			}
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (filterText.isVisible()) {
-					v.setFilterString(filterText.getText());
-				} else {
-					v.setFilterString("");
-				}
-			}
-		});
-		
-		filterText.addKeyListener(new KeyAdapter() {
-			{
-				final KeyAdapter self = this;
-				filterText.addDisposeListener(new DisposeListener() {
-					@Override
-					public void widgetDisposed(DisposeEvent e) {
-						filterText.removeKeyListener(self);
-					}
-				});
-			}
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (e.keyCode == SWT.ESC) {
-					if (filterText.getText().length() > 0) {
-						filterText.setText("");
-					} else {
-						// hide filter if esc is pressed twice
-						filter.getWidget().notifyListeners(SWT.Selection, new Event());
-					}
-				}
-			}
-		});
 		
 		v.getGrid().setCellSelectionEnabled(true);
 		v.getControl().addKeyListener(new KeyListener() {
@@ -333,26 +244,8 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 			}
 		});
 		
-		if (proposals != null) {
-			proposals.setProposals(v.getColumnMnemonics());
-			proposals.setViewer(eObjectTableViewer);
-		}
+		filterField.setViewer(v);
 		
 		return v;
-	}
-
-	/* (non-Javadoc)
-	 * @see scenario.presentation.cargoeditor.EObjectEditorViewerPane#addColumn(java.lang.String, com.mmxlabs.shiplingo.ui.tableview.ICellRenderer, com.mmxlabs.shiplingo.ui.tableview.ICellManipulator, java.lang.Object[])
-	 */
-	@Override
-	public void addColumn(String columnName, ICellRenderer renderer, ICellManipulator manipulator, Object... pathObjects) {
-		
-		super.addColumn(columnName, renderer, manipulator, pathObjects);
-		if (proposals != null) {
-			proposals.setProposals(eObjectTableViewer.getColumnMnemonics());
-			proposals.setViewer(eObjectTableViewer);
-		}
-	}
-	
-	
+	}	
 }
