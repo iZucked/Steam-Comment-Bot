@@ -54,9 +54,11 @@
 		<module>com.mmxlabs.shiplingo.ui.detailview</module>
 		<module>com.mmxlabs.shiplingo.importer</module>
 
+		<!-- Documentation -->
+		<module>com.mmxlabs.demo.doc</module>
+
 		<!-- Test Plugins -->
 		<module>com.mmxlabs.scheduler.its</module>
-		<module>com.mmxlabs.demo.doc</module>
 	</modules>
 
 	<build>
