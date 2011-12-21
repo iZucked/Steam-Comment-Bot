@@ -34,6 +34,14 @@ public interface ICellRenderer {
 	 * @return comparable for sorting object by this cell.
 	 */
 	Comparable getComparable(Object object);
+	
+	/**
+	 * Get a representation useful for filtering.
+	 * 
+	 * @param object
+	 * @return
+	 */
+	Object getFilterValue(Object object);
 
 	/**
 	 * Get any non-contained notifiers which should be listened to for

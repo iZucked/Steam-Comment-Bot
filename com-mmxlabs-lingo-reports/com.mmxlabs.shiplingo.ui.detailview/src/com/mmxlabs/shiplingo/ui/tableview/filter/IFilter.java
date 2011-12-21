@@ -6,6 +6,8 @@ package com.mmxlabs.shiplingo.ui.tableview.filter;
 
 import java.util.Map;
 
+import com.mmxlabs.common.Pair;
+
 /**
  * generic interface for a filter on a bunch of key-value pairs
  * 
@@ -13,7 +15,7 @@ import java.util.Map;
  *
  */
 public interface IFilter {
-	public boolean matches(final Map<String, ?> properties);
+	public boolean matches(final Map<String, Pair<?,?>> properties);
 	/**
 	 * 
 	 * @return something identical to this filter, but possible more efficient

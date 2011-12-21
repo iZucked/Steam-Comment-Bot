@@ -143,6 +143,7 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 			public void keyReleased(final KeyEvent e) {
 
 				if (e.keyCode == ' ') {
+					if (isLockedForEditing()) return;
 					final ISelection selection = v.getSelection();
 					if (selection instanceof IStructuredSelection) {
 						final IStructuredSelection ssel = (IStructuredSelection) selection;

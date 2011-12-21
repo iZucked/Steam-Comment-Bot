@@ -70,6 +70,11 @@ public class BasicAttributeManipulator implements ICellManipulator,
 		return reallyGetValue(object);
 	}
 	
+	@Override
+	public Object getFilterValue(Object object) {
+		return getComparable(object);
+	}
+
 	private Object reallyGetValue(Object object) {
 		if (object == null) return "";
 		final Object result = ((EObject) object).eGet(field);

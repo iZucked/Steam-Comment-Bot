@@ -178,6 +178,22 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	private IFilter filter = null;
 
+	private boolean lockedForEditing = false;
+	
+	/**
+	 * @return True if editing is currently disabled on this table.
+	 */
+	public boolean isLockedForEditing() {
+		return lockedForEditing;
+	}
+
+	/**
+	 * @param Set to true if editing should be disabled on this table.
+	 */
+	public void setLockedForEditing(boolean lockedForEditing) {
+		this.lockedForEditing = lockedForEditing;
+	}
+
 	private boolean displayValidationErrors = true;
 
 	public boolean isDisplayValidationErrors() {
@@ -324,8 +340,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		column.setEditingSupport(new EditingSupport(viewer) {
 			@Override
 			protected boolean canEdit(final Object element) {
-				// intercept mouse listener here
-				return manipulator.canEdit(path.get((EObject) element));
+				return lockedForEditing == false && manipulator.canEdit(path.get((EObject) element));
 			}
 
 			@Override
@@ -343,6 +358,7 @@ public class EObjectTableViewer extends GridTableViewer {
 			protected void setValue(final Object element, final Object value) {
 				// a value has come out of the celleditor and is being set on
 				// the element.
+				if (lockedForEditing) return;
 				manipulator.setValue(path.get((EObject) element), value);
 				refresh();
 			}
@@ -464,20 +480,26 @@ public class EObjectTableViewer extends GridTableViewer {
 				if (filter == null)
 					return true;
 
-				final Map<String, Object> attributes = new HashMap<String, Object>();
-
+				/**
+				 * This map contains representations of each column for this object, both the real value and the display value.
+				 */
+				final Map<String, Pair<?,?>> attributes = new HashMap<String, Pair<?,?>>();
 				// this could probably be much faster
 				for (final GridColumn column : getGrid().getColumns()) {
 					final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
 					final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
-					final Object value = renderer.getComparable(path.get((EObject) element));
+					final Object fieldValue = path.get((EObject) element);
+					final Object filterValue = renderer.getFilterValue(fieldValue);
+					final Object renderValue = renderer.render(fieldValue);
 
 					final List<String> mnemonics = (List<String>) column.getData(COLUMN_MNEMONICS);
-					for (final String m : mnemonics)
-						attributes.put(m, value);
+					for (final String m : mnemonics) {
+						attributes.put(m, new Pair<Object, Object>(filterValue, renderValue));
+					}
 				}
 
 				return filter.matches(attributes);
+
 			}
 		});
 	}
@@ -599,7 +621,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	/**
-	 * @return
+	 * @return names that can be used in the filter (see {@link #setFilterString(String)})
 	 */
 	public Map<String, List<String>> getColumnMnemonics() {
 		final Map<String, List<String>> ms = new TreeMap<String, List<String>>();
@@ -612,6 +634,11 @@ public class EObjectTableViewer extends GridTableViewer {
 		return ms;
 	}
 
+	/**
+	 * Get possible (unfiltered) values for the column with the given name
+	 * @param columnName
+	 * @return
+	 */
 	public Set<String> getDistinctValues(String columnName) {
 		final TreeSet<String> result = new TreeSet<String>();
 

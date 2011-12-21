@@ -211,7 +211,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 			@Override
 			public void keyPressed(final org.eclipse.swt.events.KeyEvent e) {
 				// TODO: Wrap up in a command with keybindings
-				if (v.isCellEditorActive()) return;
+				if (v.isCellEditorActive() || isLockedForEditing()) return;
 				final ISelection selection = getViewer().getSelection();
 				if (e.keyCode == '\r') {
 					if (selection instanceof IStructuredSelection) {
@@ -247,5 +247,10 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 		filterField.setViewer(v);
 		
 		return v;
-	}	
+	}
+
+	@Override
+	public void setLockedForEditing(boolean lockedForEditing) {
+		super.setLockedForEditing(lockedForEditing);
+	}
 }

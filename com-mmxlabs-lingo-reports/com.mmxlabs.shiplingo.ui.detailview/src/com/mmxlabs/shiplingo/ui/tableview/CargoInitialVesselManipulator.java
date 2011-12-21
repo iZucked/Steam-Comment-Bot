@@ -54,7 +54,6 @@ import com.mmxlabs.common.Pair;
  */
 public class CargoInitialVesselManipulator implements ICellManipulator,
 		ICellRenderer {
-
 	private ComboBoxCellEditor editor;
 	private final EditingDomain editingDomain;
 
@@ -165,6 +164,11 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 		return render(object);
 	}
 
+	@Override
+	public Object getFilterValue(Object object) {
+		return getComparable(object);
+	}
+	
 	@Override
 	public CellEditor getCellEditor(final Composite parent, final Object object) {
 		editor = new ComboBoxCellEditor(parent, new String[0], SWT.READ_ONLY);

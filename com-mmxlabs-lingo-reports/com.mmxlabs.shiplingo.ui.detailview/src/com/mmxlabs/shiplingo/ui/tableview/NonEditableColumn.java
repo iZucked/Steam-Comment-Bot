@@ -45,4 +45,14 @@ public abstract class NonEditableColumn implements ICellManipulator, ICellRender
 			Object object) {
 		return Collections.emptySet();
 	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.shiplingo.ui.tableview.ICellRenderer#getFilterValue(java.lang.Object)
+	 */
+	@Override
+	public Object getFilterValue(Object object) {
+		return getComparable(object);
+	}
+	
+	
 }

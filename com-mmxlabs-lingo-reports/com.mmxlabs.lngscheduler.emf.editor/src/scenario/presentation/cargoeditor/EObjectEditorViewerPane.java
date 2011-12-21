@@ -42,14 +42,14 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.NamedObject;
 import scenario.presentation.ScenarioEditor;
@@ -76,14 +76,32 @@ import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
 public class EObjectEditorViewerPane extends ViewerPane {
 	protected final ScenarioEditor part;
 	protected EObjectTableViewer eObjectTableViewer;
+	
+	private static final Logger log = LoggerFactory.getLogger(EObjectEditorViewerPane.class);
 
-
+	private boolean lockedForEditing;
+	
 	public EObjectEditorViewerPane(final IWorkbenchPage page,
 			final ScenarioEditor part) {
 		super(page, part);
 		this.part = part;
 	}
+	
+	/**
+	 * @return True if edit operations in this editor are disabled
+	 */
+	public boolean isLockedForEditing() {
+		return lockedForEditing;
+	}
 
+	/**
+	 * @param pass true to disable editing, false to re-enable it.
+	 */
+	public void setLockedForEditing(boolean lockedForEditing) {
+		this.lockedForEditing = lockedForEditing;
+		eObjectTableViewer.setLockedForEditing(isLockedForEditing());
+	}
+	
 	@Override
 	public EObjectTableViewer createViewer(final Composite parent) {
 		eObjectTableViewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
@@ -355,10 +373,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 								Collections.singleton(newObject));
 
 						if (replace.canExecute() == false) {
-							// FIXME: Use e.g. log.error(xxx, new RuntimeException());
-							System.err
-									.println("Cannot execute replace command from "
-											+ oldObject + " to " + newObject);
+							log.error("Cannot execute replace command from "
+									+ oldObject + " to " + newObject, new RuntimeException("Replace command not executable!"));
 						}
 						cc.append(replace);
 					} else {
@@ -369,9 +385,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				}
 
 				if (cc.canExecute() == false) {
-					// FIXME: Use e.g. log.error(xxx, new RuntimeException());
-					System.err
-							.println("Warning: cannot evaluate import command");
+					log.error("Cannot execute import command", new RuntimeException("Import command not executable!"));
 				}
 
 				editingDomain.getCommandStack().execute(cc);

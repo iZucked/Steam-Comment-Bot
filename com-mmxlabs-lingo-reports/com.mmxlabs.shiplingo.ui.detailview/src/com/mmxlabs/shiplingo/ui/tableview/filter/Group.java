@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.mmxlabs.common.Pair;
+
 /**
  * Matches a conjunction or disjunction of things
  * @author hinton
@@ -23,7 +25,7 @@ class Group implements IFilter {
 	}
 
 	@Override
-	public boolean matches(final Map<String, ?> properties) {
+	public boolean matches(final Map<String, Pair<?,?>> properties) {
 		for (final IFilter filter : filters) {
 			final boolean match = filter.matches(properties);
 			if (isConjunction && !match) return false;

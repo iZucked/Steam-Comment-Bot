@@ -9,6 +9,8 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.util.HashMap;
 
+import com.mmxlabs.common.Pair;
+
 /**
  * Utility class containing filter parser for a particular, made up grammar
  * 
@@ -147,10 +149,10 @@ public class FilterUtils {
 		FilterUtils fu = new FilterUtils();
 		final IFilter filter = fu.parseFilterString(args[0]);
 		System.out.println(filter);
-		final HashMap<String, String> values = new HashMap<String, String>();
+		final HashMap<String, Pair<?, ?>> values = new HashMap<String, Pair<?, ?>>();
 		
 		for (int i = 1; i<args.length; i+=2) {
-			values.put(args[i], args[i+1]);
+			values.put(args[i], new Pair<String, String>(args[i+1], args[i+1]));
 		}
 		
 		System.out.println(filter.matches(values));
