@@ -4,7 +4,7 @@ Bundle-Name: Ganttviewer
 Bundle-SymbolicName: com.mmxlabs.ganttviewer
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.mmxlabs.ganttviewer.Activator
-Bundle-Vendor: MMXLABS
+Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.nebula.widgets.ganttchart;bundle-version="1.0.0";visibility:=reexport
