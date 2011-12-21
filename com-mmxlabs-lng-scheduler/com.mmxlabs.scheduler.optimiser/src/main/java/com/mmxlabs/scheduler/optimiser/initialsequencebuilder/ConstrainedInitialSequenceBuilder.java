@@ -183,7 +183,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				}
 			}
 			// part of a chain
-			if (after1.size() == 1) {
+			if (after1.size() == 1 && portTypeProvider.getPortType(element1) != PortType.Start) {
 				if (!tails.contains(element1)) {
 					heads.add(element1);
 				}
