@@ -40,6 +40,7 @@ class Match implements IFilter {
 	private final String key;
 	private final String value;
 	private String lowerValue;
+	private Double numberValue;
 	
 	public Match(final String value) {
 		this(Operation.LIKE, value);
@@ -54,6 +55,11 @@ class Match implements IFilter {
 		this.key = key;
 		this.value = value;
 		this.lowerValue = value.toLowerCase();
+		try {
+			numberValue = Double.parseDouble(value);
+		} catch (NumberFormatException e) {
+			numberValue = null;
+		}
 	}
 	
 	
@@ -75,6 +81,26 @@ class Match implements IFilter {
 			return ("" + value).toLowerCase().contains(lowerValue);
 		case EQUAL:
 			return (""+value).equals(this.value);
+		case NOTEQUAL: // more NOTLIKE to be honest
+			return !(("" + value).toLowerCase().contains(lowerValue));
+		case GREATER:
+			if (value instanceof Number) {
+				if (numberValue != null) {
+					return ((Number) value).doubleValue() > numberValue.doubleValue();
+				}
+			} else if (value instanceof Calendar) {
+				
+			}
+			return (""+value).toLowerCase().compareTo(lowerValue) >= 0;
+		case LESS:
+			if (value instanceof Number) {
+				if (numberValue != null) {
+					return ((Number) value).doubleValue() < numberValue.doubleValue();
+				}
+			} else if (value instanceof Calendar) {
+				// date related stuff
+			}
+			return (""+value).toLowerCase().compareTo(lowerValue) <= 0;
 		}
 		return false;
 	}
