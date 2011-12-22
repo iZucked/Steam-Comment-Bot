@@ -34,7 +34,10 @@ import org.eclipse.emf.edit.command.ReplaceCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -99,7 +102,17 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	 */
 	public void setLockedForEditing(boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
-		eObjectTableViewer.setLockedForEditing(isLockedForEditing());
+		if (eObjectTableViewer != null)
+			eObjectTableViewer.setLockedForEditing(isLockedForEditing());
+		
+		for (final IContributionItem item : getToolBarManager().getItems()) {
+			if (item instanceof ActionContributionItem) {
+				final IAction action = (IAction) ((ActionContributionItem) item).getAction();
+				if (action instanceof LockableAction) {
+					((LockableAction) action).setLockedForEditing(lockedForEditing);
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -134,6 +147,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 		getToolBarManager().update(true);
 
+		eObjectTableViewer.setLockedForEditing(isLockedForEditing());
+		
 		return eObjectTableViewer;
 	}
 
@@ -242,7 +257,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final Object... pathObjects) {
 		eObjectTableViewer.addColumn(columnName, renderer, manipulator, pathObjects);
 	}
-
+	
 	public void init(final List<EReference> path,
 			final AdapterFactory adapterFactory) {
 		eObjectTableViewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
@@ -255,24 +270,26 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final ToolBarManager x = getToolBarManager();
 			final EMFPath ePath = new EMFPath(true, path);
 			{
-				final Action a = createAddAction(eObjectTableViewer,
+				Action addAction = createAddAction(eObjectTableViewer,
 						part.getEditingDomain(), ePath);
-				if (a != null) {
-					x.appendToGroup("edit", a);
+				if (addAction != null) {
+					x.appendToGroup("edit", LockableAction.wrap(addAction));
 				}
 			}
 			{
-				final Action b = createDeleteAction(eObjectTableViewer,
+				Action deleteAction = createDeleteAction(eObjectTableViewer,
 						part.getEditingDomain());
-				if (b != null) {
-					x.appendToGroup("edit", b);
+				if (deleteAction != null) {
+					x.appendToGroup("edit", LockableAction.wrap(deleteAction));
+					
 				}
 			}
 			{
-				final Action a = createImportAction(eObjectTableViewer,
+				Action importAction = createImportAction(eObjectTableViewer,
 						part.getEditingDomain(), ePath);
-				if (a != null)
-					x.appendToGroup("importers", a);
+				if (importAction != null) {	
+					x.appendToGroup("importers", LockableAction.wrap(importAction));
+				}
 			}
 			{
 				final Action a = createExportAction(eObjectTableViewer, ePath);
