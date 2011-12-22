@@ -151,11 +151,6 @@
    
       <command
             categoryId="com.mmxlabs.lngscheduler.ui.commands.category"
-            id="com.mmxlabs.lngscheduler.ui.commands.exportTrace"
-            name="Export Fitness Trace">
-      </command>
-      <command
-            categoryId="com.mmxlabs.lngscheduler.ui.commands.category"
             id="com.mmxlabs.lngscheduler.ui.commands.SaveOptimisationJob"
             name="Save Optimisation Job">
       </command>
@@ -164,20 +159,6 @@
    <extension
          id="toolbar:com.mmxlabs.jobcontroller.views.JobManager"
          point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               id="com.mmxlabs.lngscheduler.ui.menus.sampleMenu"
-               label="Optimisation"
-               mnemonic="M">
-            
-            <command
-                  commandId="com.mmxlabs.lngscheduler.ui.commands.exportTrace"
-                  id="com.mmxlabs.lngscheduler.ui.menus.exportTrace"
-                  mnemonic="E">
-            </command>
-         </menu>
-      </menuContribution>
       <menuContribution
             allPopups="false"
             locationURI="toolbar:com.mmxlabs.jobcontroller.views.JobManager">
@@ -226,6 +207,13 @@
                class="com.mmxlabs.lngscheduler.ui.adapterfactories.LNGJobControlAdapterFactory">
             <adapter
                   type="com.mmxlabs.jobmanager.jobs.IJobControl">
+            </adapter>
+         </factory>
+         <factory
+               adaptableType="org.eclipse.core.resources.IResource"
+               class="com.mmxlabs.lngscheduler.ui.adapterfactories.ScenarioValidationStatusAdapterFactory">
+            <adapter
+                  type="org.eclipse.core.runtime.IStatus">
             </adapter>
          </factory>
       </extension>

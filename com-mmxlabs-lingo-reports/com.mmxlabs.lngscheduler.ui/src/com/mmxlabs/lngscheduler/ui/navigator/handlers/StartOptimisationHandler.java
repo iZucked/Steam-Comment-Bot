@@ -72,7 +72,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 								new Status(Status.ERROR, Activator.PLUGIN_ID, "Validation errors were found in the resource " + resource.getName())
 								);
 						try {
-							MarkerUtil.createMarkers(status);
+							MarkerUtil.updateMarkers(status);
 							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(
 									"org.eclipse.ui.views.ProblemView" //TODO find where this lives
 									, null, IWorkbenchPage.VIEW_VISIBLE);
