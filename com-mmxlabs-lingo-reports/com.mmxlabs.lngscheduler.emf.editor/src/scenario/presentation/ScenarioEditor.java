@@ -20,13 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.eclipse.core.internal.runtime.AdapterManager;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -69,7 +65,6 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
-import org.eclipse.emf.validation.marker.MarkerUtil;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -110,7 +105,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -164,6 +158,13 @@ import scenario.schedule.fleetallocation.provider.FleetallocationItemProviderAda
 import scenario.schedule.provider.ScheduleItemProviderAdapterFactory;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlListener;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.shiplingo.ui.autocorrector.AutoCorrector;
 import com.mmxlabs.shiplingo.ui.autocorrector.DateLocalisingCorrector;
 import com.mmxlabs.shiplingo.ui.autocorrector.SlotIdCorrector;
@@ -173,25 +174,17 @@ import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
 import com.mmxlabs.shiplingo.ui.detailview.containers.DetailCompositePropertySheetPage;
 
 /**
- * k EObjectEditorViewerPane}, which displays general-purpose reflectively
- * created editing tables for the contents of ELists, and the
- * {@link EObjectDetailPropertySheetPage}, which displays a custom property
- * sheet page for editing those values which are not shown in a table column.
- * The separate editors are displayed in tabs and constructed in the
- * {@link #createPages()} method.
+ * k EObjectEditorViewerPane}, which displays general-purpose reflectively created editing tables for the contents of ELists, and the {@link EObjectDetailPropertySheetPage}, which displays a custom
+ * property sheet page for editing those values which are not shown in a table column. The separate editors are displayed in tabs and constructed in the {@link #createPages()} method.
  * 
  * @generated NO
  */
-public class ScenarioEditor extends MultiPageEditorPart implements
-		IEditingDomainProvider, ISelectionProvider, IMenuListener,
-		IViewerProvider, IValueProviderProvider {
+public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IValueProviderProvider, IEclipseJobManagerListener,
+		IJobControlListener {
 
-	final static EAttribute namedObjectName = ScenarioPackage.eINSTANCE
-			.getNamedObject_Name();
+	final static EAttribute namedObjectName = ScenarioPackage.eINSTANCE.getNamedObject_Name();
 
-	final ScenarioRVP scheduleProvider = new SimpleRVP(
-			SchedulePackage.eINSTANCE.getScheduleModel_Schedules(),
-			SchedulePackage.eINSTANCE.getSchedule_Name()) {
+	final ScenarioRVP scheduleProvider = new SimpleRVP(SchedulePackage.eINSTANCE.getScheduleModel_Schedules(), SchedulePackage.eINSTANCE.getSchedule_Name()) {
 
 		@Override
 		protected void install() {
@@ -199,8 +192,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 
 		@Override
-		public String getName(final EObject referer,
-				final EReference reference, final EObject target) {
+		public String getName(final EObject referer, final EReference reference, final EObject target) {
 			if (target == null)
 				return "none";
 			return ((Schedule) target).getName();
@@ -217,8 +209,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	};
 
-	final ScenarioRVP fuelProvider = new SimpleRVP(
-			FleetPackage.eINSTANCE.getFleetModel_Fuels()) {
+	final ScenarioRVP fuelProvider = new SimpleRVP(FleetPackage.eINSTANCE.getFleetModel_Fuels()) {
 		@Override
 		protected void install() {
 			getScenario().getFleetModel().eAdapters().add(this);
@@ -230,8 +221,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	};
 
-	final ScenarioRVP vesselProvider = new SimpleRVP(
-			FleetPackage.eINSTANCE.getFleetModel_Fleet()) {
+	final ScenarioRVP vesselProvider = new SimpleRVP(FleetPackage.eINSTANCE.getFleetModel_Fleet()) {
 		@Override
 		protected void install() {
 			getScenario().getFleetModel().eAdapters().add(this);
@@ -243,8 +233,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	};
 
-	final ScenarioRVP vesselClassProvider = new SimpleRVP(
-			FleetPackage.eINSTANCE.getFleetModel_VesselClasses()) {
+	final ScenarioRVP vesselClassProvider = new SimpleRVP(FleetPackage.eINSTANCE.getFleetModel_VesselClasses()) {
 		@Override
 		protected void install() {
 			getScenario().getFleetModel().eAdapters().add(this);
@@ -256,8 +245,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	};
 
-	final ScenarioRVP entityProvider = new SimpleRVP(
-			ContractPackage.eINSTANCE.getContractModel_Entities()) {
+	final ScenarioRVP entityProvider = new SimpleRVP(ContractPackage.eINSTANCE.getContractModel_Entities()) {
 		@Override
 		protected void install() {
 			getScenario().getContractModel().eAdapters().add(this);
@@ -269,8 +257,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	};
 
-	final ScenarioRVP portProvider = new SimpleRVP(
-			PortPackage.eINSTANCE.getPortModel_Ports()) {
+	final ScenarioRVP portProvider = new SimpleRVP(PortPackage.eINSTANCE.getPortModel_Ports()) {
 		@Override
 		protected void install() {
 			getScenario().getPortModel().eAdapters().add(this);
@@ -282,8 +269,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 	};
 
-	final ScenarioRVP indexProvider = new SimpleRVP(
-			MarketPackage.eINSTANCE.getMarketModel_Indices()) {
+	final ScenarioRVP indexProvider = new SimpleRVP(MarketPackage.eINSTANCE.getMarketModel_Indices()) {
 		@Override
 		protected void install() {
 			getScenario().getMarketModel().eAdapters().add(this);
@@ -305,8 +291,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 
 		@Override
-		public List<Pair<String, EObject>> getAllowedValues(
-				final EObject target, final EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
 			final Scenario scenario = getScenario();
 
 			if (purchaseContracts == null) {
@@ -316,13 +301,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			if (scenario != null) {
 				if (target instanceof LoadSlot) {
-					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>(
-							purchaseContracts);
+					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>(purchaseContracts);
 					result.get(0).setFirst(getName(target, null, null));
 					return result;
 				} else if (target instanceof Slot) {
-					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>(
-							salesContracts);
+					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>(salesContracts);
 
 					result.get(0).setFirst(getName(target, null, null));
 					return result;
@@ -331,13 +314,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				}
 			}
 
-			return Collections.singletonList(new Pair<String, EObject>("empty",
-					null));
+			return Collections.singletonList(new Pair<String, EObject>("empty", null));
 		}
 
 		@Override
-		public String getName(EObject referer, EReference reference,
-				EObject target) {
+		public String getName(EObject referer, EReference reference, EObject target) {
 			if (target == null) {
 				if (referer instanceof Slot) {
 					final Port port = ((Slot) referer).getPort();
@@ -351,8 +332,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 
 					if (portContract != null) {
-						return portContract.getName() + " [from "
-								+ port.getName() + "]";
+						return portContract.getName() + " [from " + port.getName() + "]";
 					} else {
 						return "empty";
 					}
@@ -367,12 +347,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		@Override
 		protected void cacheValues() {
 			final Scenario scenario = getScenario();
-			salesContracts = getSortedNames(scenario.getContractModel()
-					.getSalesContracts(), nameAttribute);
-			purchaseContracts = getSortedNames(scenario.getContractModel()
-					.getPurchaseContracts(), nameAttribute);
-			allContracts = getSortedNames(scenario.getContractModel()
-					.getSalesContracts(), nameAttribute);
+			salesContracts = getSortedNames(scenario.getContractModel().getSalesContracts(), nameAttribute);
+			purchaseContracts = getSortedNames(scenario.getContractModel().getPurchaseContracts(), nameAttribute);
+			allContracts = getSortedNames(scenario.getContractModel().getSalesContracts(), nameAttribute);
 			allContracts.addAll(purchaseContracts);
 			allContracts.add(0, new Pair<String, EObject>("empty", null));
 			salesContracts.add(0, new Pair<String, EObject>("empty", null));
@@ -381,11 +358,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		@Override
 		protected boolean isRelevantTarget(Object target, Object feature) {
-			return (feature == nameAttribute && target instanceof Contract)
-					|| feature == ContractPackage.eINSTANCE
-							.getContractModel_PurchaseContracts()
-					|| feature == ContractPackage.eINSTANCE
-							.getContractModel_SalesContracts();
+			return (feature == nameAttribute && target instanceof Contract) || feature == ContractPackage.eINSTANCE.getContractModel_PurchaseContracts()
+					|| feature == ContractPackage.eINSTANCE.getContractModel_SalesContracts();
 		}
 
 		@Override
@@ -394,8 +368,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		}
 
 		@Override
-		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(
-				EObject referer, EReference feature, EObject referenceValue) {
+		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(EObject referer, EReference feature, EObject referenceValue) {
 			if (referenceValue == null && referer instanceof Slot) {
 				final Port port = ((Slot) referer).getPort();
 				if (port == null)
@@ -407,46 +380,37 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					final ContractModel cm = s.getContractModel();
 					if (cm != null) {
 						final List<Object> features = new LinkedList<Object>();
-						features.add(ContractPackage.eINSTANCE
-								.getContract_DefaultPorts());
+						features.add(ContractPackage.eINSTANCE.getContract_DefaultPorts());
 						features.add(namedObjectName);
 						for (final Contract c : cm.getPurchaseContracts()) {
-							notifiers.add(new Pair<Notifier, List<Object>>(c,
-									features));
+							notifiers.add(new Pair<Notifier, List<Object>>(c, features));
 						}
 						for (final Contract c : cm.getSalesContracts()) {
-							notifiers.add(new Pair<Notifier, List<Object>>(c,
-									features));
+							notifiers.add(new Pair<Notifier, List<Object>>(c, features));
 						}
 					}
 				}
-				notifiers.add(new Pair<Notifier, List<Object>>(port,
-						Collections.singletonList((Object) namedObjectName)));
+				notifiers.add(new Pair<Notifier, List<Object>>(port, Collections.singletonList((Object) namedObjectName)));
 
 				return notifiers;
 			}
 			return super.getNotifiers(referer, feature, referenceValue);
 		}
 	};
-	
-	/**
-	 * The filters for file extensions supported by the editor. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	public static final List<String> FILE_EXTENSION_FILTERS = prefixExtensions(
-			ScenarioModelWizard.FILE_EXTENSIONS, "*.");
 
 	/**
-	 * Returns a new unmodifiable list containing prefixed versions of the
-	 * extensions in the given list. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	 * The filters for file extensions supported by the editor. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
-	private static List<String> prefixExtensions(List<String> extensions,
-			String prefix) {
+	public static final List<String> FILE_EXTENSION_FILTERS = prefixExtensions(ScenarioModelWizard.FILE_EXTENSIONS, "*.");
+
+	/**
+	 * Returns a new unmodifiable list containing prefixed versions of the extensions in the given list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	private static List<String> prefixExtensions(List<String> extensions, String prefix) {
 		List<String> result = new ArrayList<String>();
 		for (String extension : extensions) {
 			result.add(prefix + extension);
@@ -455,24 +419,21 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This keeps track of the editing domain that is used to track all changes
-	 * to the model. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This keeps track of the editing domain that is used to track all changes to the model. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected AdapterFactoryEditingDomain editingDomain;
 
 	/**
-	 * This is the one adapter factory used for providing views of the model.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This is the one adapter factory used for providing views of the model. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected ComposedAdapterFactory adapterFactory;
 
 	/**
-	 * This is the content outline page. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * This is the content outline page. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -486,75 +447,63 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	protected IStatusLineManager contentOutlineStatusLineManager;
 
 	/**
-	 * This is the content outline page's viewer. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * This is the content outline page's viewer. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected TreeViewer contentOutlineViewer;
 
 	/**
-	 * This is the property sheet page. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * This is the property sheet page. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected PropertySheetPage propertySheetPage;
 
 	/**
-	 * This is the viewer that shadows the selection in the content outline. The
-	 * parent relation must be correctly defined for this to work. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This is the viewer that shadows the selection in the content outline. The parent relation must be correctly defined for this to work. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected TreeViewer selectionViewer;
 
 	/**
-	 * This keeps track of the active viewer pane, in the book. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This keeps track of the active viewer pane, in the book. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected ViewerPane currentViewerPane;
 
 	/**
-	 * This keeps track of the active content viewer, which may be either one of
-	 * the viewers in the pages or the content outline viewer. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This keeps track of the active content viewer, which may be either one of the viewers in the pages or the content outline viewer. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected Viewer currentViewer;
 
 	/**
-	 * This listens to which ever viewer is active. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * This listens to which ever viewer is active. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected ISelectionChangedListener selectionChangedListener;
 
 	/**
-	 * This keeps track of all the
-	 * {@link org.eclipse.jface.viewers.ISelectionChangedListener}s that are
-	 * listening to this editor. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This keeps track of all the {@link org.eclipse.jface.viewers.ISelectionChangedListener}s that are listening to this editor. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
 
 	/**
-	 * This keeps track of the selection of the editor as a whole. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This keeps track of the selection of the editor as a whole. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected ISelection editorSelection = StructuredSelection.EMPTY;
 
 	/**
-	 * This listens for when the outline becomes active <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This listens for when the outline becomes active <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -562,15 +511,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		public void partActivated(IWorkbenchPart p) {
 			if (p instanceof ContentOutline) {
 				if (((ContentOutline) p).getCurrentPage() == contentOutlinePage) {
-					getActionBarContributor().setActiveEditor(
-							ScenarioEditor.this);
+					getActionBarContributor().setActiveEditor(ScenarioEditor.this);
 
 					setCurrentViewer(contentOutlineViewer);
 				}
 			} else if (p instanceof PropertySheet) {
 				if (((PropertySheet) p).getCurrentPage() == propertySheetPage) {
-					getActionBarContributor().setActiveEditor(
-							ScenarioEditor.this);
+					getActionBarContributor().setActiveEditor(ScenarioEditor.this);
 					handleActivate();
 				}
 			} else if (p == ScenarioEditor.this) {
@@ -596,48 +543,42 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	};
 
 	/**
-	 * Resources that have been removed since last activation. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * Resources that have been removed since last activation. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected Collection<Resource> removedResources = new ArrayList<Resource>();
 
 	/**
-	 * Resources that have been changed since last activation. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * Resources that have been changed since last activation. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected Collection<Resource> changedResources = new ArrayList<Resource>();
 
 	/**
-	 * Resources that have been saved. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	 * Resources that have been saved. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected Collection<Resource> savedResources = new ArrayList<Resource>();
 
 	/**
-	 * Map to store the diagnostic associated with a resource. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * Map to store the diagnostic associated with a resource. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected Map<Resource, Diagnostic> resourceToDiagnosticMap = new LinkedHashMap<Resource, Diagnostic>();
 
 	/**
-	 * Controls whether the problem indication should be updated. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * Controls whether the problem indication should be updated. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected boolean updateProblemIndication = true;
 
 	/**
-	 * Adapter used to update the problem indication when resources are demanded
-	 * loaded. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Adapter used to update the problem indication when resources are demanded loaded. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -650,8 +591,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				case Resource.RESOURCE__ERRORS:
 				case Resource.RESOURCE__WARNINGS: {
 					Resource resource = (Resource) notification.getNotifier();
-					Diagnostic diagnostic = analyzeResourceProblems(resource,
-							null);
+					Diagnostic diagnostic = analyzeResourceProblems(resource, null);
 					if (diagnostic.getSeverity() != Diagnostic.OK) {
 						resourceToDiagnosticMap.put(resource, diagnostic);
 					} else {
@@ -659,12 +599,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					}
 
 					if (updateProblemIndication) {
-						getSite().getShell().getDisplay()
-								.asyncExec(new Runnable() {
-									public void run() {
-										updateProblemIndication();
-									}
-								});
+						getSite().getShell().getDisplay().asyncExec(new Runnable() {
+							public void run() {
+								updateProblemIndication();
+							}
+						});
 					}
 					break;
 				}
@@ -708,8 +647,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	private EntityEVP entityEditorViewerPane;
 
 	/**
-	 * Handles activation of the editor or it's associated views. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * Handles activation of the editor or it's associated views. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -741,17 +679,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * Handles what to do with changed resources on activation. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * Handles what to do with changed resources on activation. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected void handleChangedResources() {
-		if (!changedResources.isEmpty()
-				&& (!isDirty() || handleDirtyConflict())) {
+		if (!changedResources.isEmpty() && (!isDirty() || handleDirtyConflict())) {
 			if (isDirty()) {
-				changedResources.addAll(editingDomain.getResourceSet()
-						.getResources());
+				changedResources.addAll(editingDomain.getResourceSet().getResources());
 			}
 			editingDomain.getCommandStack().flush();
 
@@ -763,10 +698,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 						resource.load(Collections.EMPTY_MAP);
 					} catch (IOException exception) {
 						if (!resourceToDiagnosticMap.containsKey(resource)) {
-							resourceToDiagnosticMap
-									.put(resource,
-											analyzeResourceProblems(resource,
-													exception));
+							resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
 						}
 					}
 				}
@@ -782,16 +714,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * Updates the problems indication with the information described in the
-	 * specified diagnostic. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Updates the problems indication with the information described in the specified diagnostic. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected void updateProblemIndication() {
 		if (updateProblemIndication) {
-			BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK,
-					"com.mmxlabs.lngscheduler.emf.editor", 0, null,
-					new Object[] { editingDomain.getResourceSet() });
+			BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK, "com.mmxlabs.lngscheduler.emf.editor", 0, null, new Object[] { editingDomain.getResourceSet() });
 			for (Diagnostic childDiagnostic : resourceToDiagnosticMap.values()) {
 				if (childDiagnostic.getSeverity() != Diagnostic.OK) {
 					diagnostic.add(childDiagnostic);
@@ -799,10 +728,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			}
 
 			int lastEditorPage = getPageCount() - 1;
-			if (lastEditorPage >= 0
-					&& getEditor(lastEditorPage) instanceof ProblemEditorPart) {
-				((ProblemEditorPart) getEditor(lastEditorPage))
-						.setDiagnostic(diagnostic);
+			if (lastEditorPage >= 0 && getEditor(lastEditorPage) instanceof ProblemEditorPart) {
+				((ProblemEditorPart) getEditor(lastEditorPage)).setDiagnostic(diagnostic);
 				if (diagnostic.getSeverity() != Diagnostic.OK) {
 					setActivePage(lastEditorPage);
 				}
@@ -810,8 +737,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				ProblemEditorPart problemEditorPart = new ProblemEditorPart();
 				problemEditorPart.setDiagnostic(diagnostic);
 				try {
-					addPage(++lastEditorPage, problemEditorPart,
-							getEditorInput());
+					addPage(++lastEditorPage, problemEditorPart, getEditorInput());
 					setPageText(lastEditorPage, problemEditorPart.getPartName());
 					setActivePage(lastEditorPage);
 					showTabs();
@@ -823,20 +749,16 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * Shows a dialog that asks if conflicting changes should be discarded. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * Shows a dialog that asks if conflicting changes should be discarded. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected boolean handleDirtyConflict() {
-		return MessageDialog.openQuestion(getSite().getShell(),
-				getString("_UI_FileConflict_label"),
-				getString("_WARN_FileConflict"));
+		return MessageDialog.openQuestion(getSite().getShell(), getString("_UI_FileConflict_label"), getString("_WARN_FileConflict"));
 	}
 
 	/**
-	 * This creates a model editor. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	 * This creates a model editor. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -846,39 +768,28 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This sets up the editing domain for the model editor. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	 * This sets up the editing domain for the model editor. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected void initializeEditingDomain() {
 		// Create an adapter factory that yields item providers.
 		//
-		adapterFactory = new ComposedAdapterFactory(
-				ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 
-		adapterFactory
-				.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		adapterFactory
-				.addAdapterFactory(new ScenarioItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ScenarioItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new FleetItemProviderAdapterFactory());
-		adapterFactory
-				.addAdapterFactory(new ScheduleItemProviderAdapterFactory());
-		adapterFactory
-				.addAdapterFactory(new EventsItemProviderAdapterFactory());
-		adapterFactory
-				.addAdapterFactory(new FleetallocationItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ScheduleItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new EventsItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new FleetallocationItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new PortItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new CargoItemProviderAdapterFactory());
-		adapterFactory
-				.addAdapterFactory(new ContractItemProviderAdapterFactory());
-		adapterFactory
-				.addAdapterFactory(new MarketItemProviderAdapterFactory());
-		adapterFactory
-				.addAdapterFactory(new OptimiserItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ContractItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new MarketItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new OptimiserItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new LsoItemProviderAdapterFactory());
-		adapterFactory
-				.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
 		// Create the command stack that will notify this editor as commands are
 		// executed.
@@ -896,14 +807,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 						// Try to select the affected objects.
 						//
-						Command mostRecentCommand = ((CommandStack) event
-								.getSource()).getMostRecentCommand();
+						Command mostRecentCommand = ((CommandStack) event.getSource()).getMostRecentCommand();
 						if (mostRecentCommand != null) {
-							setSelectionToViewer(mostRecentCommand
-									.getAffectedObjects());
+							setSelectionToViewer(mostRecentCommand.getAffectedObjects());
 						}
-						if (propertySheetPage != null
-								&& !propertySheetPage.getControl().isDisposed()) {
+						if (propertySheetPage != null && !propertySheetPage.getControl().isDisposed()) {
 							propertySheetPage.refresh();
 						}
 					}
@@ -913,13 +821,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		// Create the editing domain with a special command stack.
 		//
-		editingDomain = new AdapterFactoryEditingDomain(adapterFactory,
-				commandStack, new HashMap<Resource, Boolean>());
+		editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
 	}
 
 	/**
-	 * This is here for the listener to be able to call it. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	 * This is here for the listener to be able to call it. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -929,8 +835,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This sets the selection into whichever viewer is active. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This sets the selection into whichever viewer is active. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -945,8 +850,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					// the editor.
 					//
 					if (currentViewer != null) {
-						currentViewer.setSelection(new StructuredSelection(
-								theSelection.toArray()), true);
+						currentViewer.setSelection(new StructuredSelection(theSelection.toArray()), true);
 					}
 				}
 			};
@@ -955,11 +859,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This returns the editing domain as required by the
-	 * {@link IEditingDomainProvider} interface. This is important for
-	 * implementing the static methods of {@link AdapterFactoryEditingDomain}
-	 * and for supporting {@link org.eclipse.emf.edit.ui.action.CommandAction}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This returns the editing domain as required by the {@link IEditingDomainProvider} interface. This is important for implementing the static methods of {@link AdapterFactoryEditingDomain} and for
+	 * supporting {@link org.eclipse.emf.edit.ui.action.CommandAction}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -973,15 +874,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * 
 	 * @generated
 	 */
-	public class ReverseAdapterFactoryContentProvider extends
-			AdapterFactoryContentProvider {
+	public class ReverseAdapterFactoryContentProvider extends AdapterFactoryContentProvider {
 		/**
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * 
 		 * @generated
 		 */
-		public ReverseAdapterFactoryContentProvider(
-				AdapterFactory adapterFactory) {
+		public ReverseAdapterFactoryContentProvider(AdapterFactory adapterFactory) {
 			super(adapterFactory);
 		}
 
@@ -993,8 +892,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		@Override
 		public Object[] getElements(Object object) {
 			Object parent = super.getParent(object);
-			return (parent == null ? Collections.EMPTY_SET : Collections
-					.singleton(parent)).toArray();
+			return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
 		}
 
 		/**
@@ -1005,8 +903,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		@Override
 		public Object[] getChildren(Object object) {
 			Object parent = super.getParent(object);
-			return (parent == null ? Collections.EMPTY_SET : Collections
-					.singleton(parent)).toArray();
+			return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
 		}
 
 		/**
@@ -1047,9 +944,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This makes sure that one content viewer, either for the current page or
-	 * the outline view, if it has focus, is the current one. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This makes sure that one content viewer, either for the current page or the outline view, if it has focus, is the current one. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -1064,8 +959,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 					// This just notifies those things that are affected by the
 					// section.
 					//
-					public void selectionChanged(
-							SelectionChangedEvent selectionChangedEvent) {
+					public void selectionChanged(SelectionChangedEvent selectionChangedEvent) {
 						setSelection(selectionChangedEvent.getSelection());
 					}
 				};
@@ -1074,8 +968,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			// Stop listening to the old one.
 			//
 			if (currentViewer != null) {
-				currentViewer
-						.removeSelectionChangedListener(selectionChangedListener);
+				currentViewer.removeSelectionChangedListener(selectionChangedListener);
 			}
 
 			// Start listening to the new one.
@@ -1091,14 +984,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			// Set the editors selection based on the current viewer's
 			// selection.
 			//
-			setSelection(currentViewer == null ? StructuredSelection.EMPTY
-					: currentViewer.getSelection());
+			setSelection(currentViewer == null ? StructuredSelection.EMPTY : currentViewer.getSelection());
 		}
 	}
 
 	/**
-	 * This returns the viewer as required by the {@link IViewerProvider}
-	 * interface. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This returns the viewer as required by the {@link IViewerProvider} interface. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -1108,9 +999,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This creates a context menu for the viewer and adds a listener as well
-	 * registering the menu for extension. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * This creates a context menu for the viewer and adds a listener as well registering the menu for extension. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -1121,117 +1010,109 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		contextMenu.addMenuListener(this);
 		Menu menu = contextMenu.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
-		getSite().registerContextMenu(contextMenu,
-				new UnwrappingSelectionProvider(viewer));
+		getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
 
 		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
 		Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance() };
-		viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(
-				viewer));
-		viewer.addDropSupport(dndOperations, transfers,
-				new EditingDomainViewerDropAdapter(editingDomain, viewer));
+		viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(viewer));
+		viewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(editingDomain, viewer));
 	}
 
 	/**
-	 * This is the method called to load a resource into the editing domain's
-	 * resource set based on the editor's input. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * This is the method called to load a resource into the editing domain's resource set based on the editor's input. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	public void createModel() {
 		URI resourceURI = EditUIUtil.getURI(getEditorInput());
+		
+		final IEclipseJobManager manager = LngEditorPlugin.getPlugin().getJobManager();
+		for (final IJobDescriptor descriptor : manager.getJobs()) {
+			if (URI.createPlatformResourceURI(manager.findResourceForJob(descriptor).getFullPath().toString(), true).equals(resourceURI)) {
+				final IJobControl control = manager.getControlForJob(descriptor);
+				control.addListener(this);
+				jobControl = control;
+				this.jobStateChanged(jobControl, EJobState.CREATED, jobControl.getJobState());
+				break;
+			}
+		}
+		manager.addEclipseJobManagerListener(this);
+		
 		Exception exception = null;
 		Resource resource = null;
-		
+
 		{
 			final ResourceSet resourceSet = editingDomain.getResourceSet();
 			resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
-			resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, 
-					new XMLResource.ResourceHandler() {
+			resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, new XMLResource.ResourceHandler() {
 
-						@Override
-						public void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
-							if (resource instanceof ResourceImpl) {
-								((ResourceImpl)resource).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
-							}
-						}
+				@Override
+				public void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
+					if (resource instanceof ResourceImpl) {
+						((ResourceImpl) resource).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
+					}
+				}
 
-						@Override
-						public void postLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
-							if (resource instanceof ResourceImpl) {
-								((ResourceImpl)resource).setIntrinsicIDToEObjectMap(null);
-							}
-						}
+				@Override
+				public void postLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
+					if (resource instanceof ResourceImpl) {
+						((ResourceImpl) resource).setIntrinsicIDToEObjectMap(null);
+					}
+				}
 
-						@Override
-						public void preSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {}
+				@Override
+				public void preSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {
+				}
 
-						@Override
-						public void postSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {}
+				@Override
+				public void postSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {
+				}
 			});
 		}
-		
+
 		try {
 			// Load the resource through the editing domain.
 			//
-			resource = editingDomain.getResourceSet().getResource(resourceURI,
-					true);
+			resource = editingDomain.getResourceSet().getResource(resourceURI, true);
 		} catch (Exception e) {
 			exception = e;
-			resource = editingDomain.getResourceSet().getResource(resourceURI,
-					false);
+			resource = editingDomain.getResourceSet().getResource(resourceURI, false);
 		}
 
 		Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
 		if (diagnostic.getSeverity() != Diagnostic.OK) {
-			resourceToDiagnosticMap.put(resource,
-					analyzeResourceProblems(resource, exception));
+			resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
 		}
-		editingDomain.getResourceSet().eAdapters()
-				.add(problemIndicationAdapter);
+		editingDomain.getResourceSet().eAdapters().add(problemIndicationAdapter);
 	}
 
 	/**
-	 * Returns a diagnostic describing the errors and warnings listed in the
-	 * resource and the specified exception (if any). <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns a diagnostic describing the errors and warnings listed in the resource and the specified exception (if any). <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
-	public Diagnostic analyzeResourceProblems(Resource resource,
-			Exception exception) {
-		if (!resource.getErrors().isEmpty()
-				|| !resource.getWarnings().isEmpty()) {
-			BasicDiagnostic basicDiagnostic = new BasicDiagnostic(
-					Diagnostic.ERROR,
-					"com.mmxlabs.lngscheduler.emf.editor",
-					0,
-					getString("_UI_CreateModelError_message", resource.getURI()),
-					new Object[] { exception == null ? (Object) resource
-							: exception });
+	public Diagnostic analyzeResourceProblems(Resource resource, Exception exception) {
+		if (!resource.getErrors().isEmpty() || !resource.getWarnings().isEmpty()) {
+			BasicDiagnostic basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR, "com.mmxlabs.lngscheduler.emf.editor", 0, getString("_UI_CreateModelError_message", resource.getURI()),
+					new Object[] { exception == null ? (Object) resource : exception });
 			basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
 			return basicDiagnostic;
 		} else if (exception != null) {
-			return new BasicDiagnostic(Diagnostic.ERROR,
-					"com.mmxlabs.lngscheduler.emf.editor", 0, getString(
-							"_UI_CreateModelError_message", resource.getURI()),
-					new Object[] { exception });
+			return new BasicDiagnostic(Diagnostic.ERROR, "com.mmxlabs.lngscheduler.emf.editor", 0, getString("_UI_CreateModelError_message", resource.getURI()), new Object[] { exception });
 		} else {
 			return Diagnostic.OK_INSTANCE;
 		}
 	}
 
 	/**
-	 * This is the method used by the framework to install your own controls.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This is the method used by the framework to install your own controls. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated not any more
 	 */
 	@Override
 	public void createPages() {
 
-		((CTabFolder)getContainer()).setTabPosition(SWT.TOP);
+		((CTabFolder) getContainer()).setTabPosition(SWT.TOP);
 		// Creates the model from the editor input
 		//
 		createModel();
@@ -1241,8 +1122,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		if (!getEditingDomain().getResourceSet().getResources().isEmpty()) {
 			final Scenario scenario = getScenario();
 			if (scenario.getCargoModel() != null)
-				createCargoEditor(portProvider, contractProvider,
-						contractProvider);
+				createCargoEditor(portProvider, contractProvider, contractProvider);
 
 			if (scenario.getFleetModel() != null) {
 				createFleetEditor(vesselClassProvider, portProvider);
@@ -1268,8 +1148,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			autoCorrector.addCorrector(new DateLocalisingCorrector());
 			autoCorrector.addCorrector(new SlotIdCorrector());
 
-			final Scenario s = ((Scenario) (editingDomain.getResourceSet()
-					.getResources().get(0).getContents().get(0)));
+			final Scenario s = ((Scenario) (editingDomain.getResourceSet().getResources().get(0).getContents().get(0)));
 
 			s.eAdapters().add(autoCorrector); // TODO dispose listener
 
@@ -1354,6 +1233,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				updateProblemIndication();
 			}
 		});
+		
+		setLockedForEditing(isLockedForEditing());
 	}
 
 	/**
@@ -1364,47 +1245,35 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	private void createContractEditor() {
-		final Object input = editingDomain.getResourceSet().getResources()
-				.get(0).getContents().get(0);
+		final Object input = editingDomain.getResourceSet().getResources().get(0).getContents().get(0);
 
 		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
 		{
-			entityEditorViewerPane = new EntityEVP(getSite().getPage(),
-					ScenarioEditor.this);
+			entityEditorViewerPane = new EntityEVP(getSite().getPage(), ScenarioEditor.this);
 
 			entityEditorViewerPane.createControl(sash);
 
-			entityEditorViewerPane.init(getAdapterFactory(),
-					ScenarioPackage.eINSTANCE.getScenario_ContractModel(),
-					ContractPackage.eINSTANCE.getContractModel_Entities());
+			entityEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_ContractModel(), ContractPackage.eINSTANCE.getContractModel_Entities());
 
 			entityEditorViewerPane.setTitle("Entities", getTitleImage());
 			entityEditorViewerPane.getViewer().setInput(input);
 		}
 		{
-			salesContractEditorViewerPane = new SalesContractEVP(getSite()
-					.getPage(), ScenarioEditor.this);
+			salesContractEditorViewerPane = new SalesContractEVP(getSite().getPage(), ScenarioEditor.this);
 
 			salesContractEditorViewerPane.createControl(sash);
 
-			salesContractEditorViewerPane
-					.init(getAdapterFactory(), ScenarioPackage.eINSTANCE
-							.getScenario_ContractModel(),
-							ContractPackage.eINSTANCE
-									.getContractModel_SalesContracts());
+			salesContractEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_ContractModel(), ContractPackage.eINSTANCE.getContractModel_SalesContracts());
 
 			salesContractEditorViewerPane.setTitle("Sales Contracts", getTitleImage());
 			salesContractEditorViewerPane.getViewer().setInput(input);
 		}
 		{
-			purchaseContractEditorViewerPane = new PurchaseContractEVP(
-					getSite().getPage(), ScenarioEditor.this);
+			purchaseContractEditorViewerPane = new PurchaseContractEVP(getSite().getPage(), ScenarioEditor.this);
 
 			purchaseContractEditorViewerPane.createControl(sash);
 
-			purchaseContractEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE
-					.getScenario_ContractModel(), ContractPackage.eINSTANCE
-					.getContractModel_PurchaseContracts());
+			purchaseContractEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_ContractModel(), ContractPackage.eINSTANCE.getContractModel_PurchaseContracts());
 
 			purchaseContractEditorViewerPane.setTitle("Purchase Contracts", getTitleImage());
 			purchaseContractEditorViewerPane.getViewer().setInput(input);
@@ -1414,19 +1283,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	private void createEventsEditor() {
-		vesselEventEditorViewerPane = new VesselEventEVP(getSite()
-				.getPage(), ScenarioEditor.this);
+		vesselEventEditorViewerPane = new VesselEventEVP(getSite().getPage(), ScenarioEditor.this);
 
 		vesselEventEditorViewerPane.createControl(getContainer());
 		vesselEventEditorViewerPane.setTitle("Events", getTitleImage());
 
-		vesselEventEditorViewerPane.init(getAdapterFactory(),
-				ScenarioPackage.eINSTANCE.getScenario_FleetModel(),
-				FleetPackage.eINSTANCE.getFleetModel_VesselEvents());
+		vesselEventEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselEvents());
 
-		vesselEventEditorViewerPane.getViewer().setInput(
-				editingDomain.getResourceSet().getResources().get(0)
-						.getContents().get(0));
+		vesselEventEditorViewerPane.getViewer().setInput(editingDomain.getResourceSet().getResources().get(0).getContents().get(0));
 
 		// TODO should this really be here?
 		createContextMenuFor(vesselEventEditorViewerPane.getViewer());
@@ -1436,27 +1300,21 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	private void createIndexEditor() {
-		final SashForm sash = new SashForm(getContainer(), SWT.SMOOTH
-				| SWT.HORIZONTAL);
+		final SashForm sash = new SashForm(getContainer(), SWT.SMOOTH | SWT.HORIZONTAL);
 
 		indexEditorViewerPane = new IndexEVP(getSite().getPage(), this);
 
 		indexEditorViewerPane.createControl(sash);
 		indexEditorViewerPane.setTitle("Indices", getTitleImage());
 
-		indexEditorViewerPane.init(getAdapterFactory(),
-				ScenarioPackage.eINSTANCE.getScenario_MarketModel(),
-				MarketPackage.eINSTANCE.getMarketModel_Indices());
+		indexEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_MarketModel(), MarketPackage.eINSTANCE.getMarketModel_Indices());
 
-		indexEditorViewerPane.getViewer().setInput(
-				editingDomain.getResourceSet().getResources().get(0)
-						.getContents().get(0));
+		indexEditorViewerPane.getViewer().setInput(editingDomain.getResourceSet().getResources().get(0).getContents().get(0));
 
 		final ChartViewer chart = new ChartViewer(sash);
 
 		// TODO this is a hack
-		final MarketModel mm = ((Scenario) (editingDomain.getResourceSet()
-				.getResources().get(0).getContents().get(0))).getMarketModel();
+		final MarketModel mm = ((Scenario) (editingDomain.getResourceSet().getResources().get(0).getContents().get(0))).getMarketModel();
 
 		mm.eAdapters().add(new EContentAdapter() {
 			{
@@ -1485,8 +1343,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			@Override
 			public double[] getYSeries(final int i) {
-				final StepwisePriceCurve curve = mm.getIndices().get(i)
-						.getPriceCurve();
+				final StepwisePriceCurve curve = mm.getIndices().get(i).getPriceCurve();
 				final double[] answer = new double[curve.getPrices().size()];
 				for (int j = 0; j < answer.length; j++) {
 					answer[j] = curve.getPrices().get(j).getPriceFromDate();
@@ -1512,8 +1369,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			@Override
 			public Date[] getDateXSeries(final int i) {
-				final StepwisePriceCurve curve = mm.getIndices().get(i)
-						.getPriceCurve();
+				final StepwisePriceCurve curve = mm.getIndices().get(i).getPriceCurve();
 				final Date[] answer = new Date[curve.getPrices().size()];
 				for (int j = 0; j < curve.getPrices().size(); j++) {
 					answer[j] = curve.getPrices().get(j).getDate();
@@ -1527,37 +1383,27 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	public Scenario getScenario() {
-		return (Scenario) editingDomain.getResourceSet().getResources().get(0)
-				.getContents().get(0);
+		return (Scenario) editingDomain.getResourceSet().getResources().get(0).getContents().get(0);
 	}
 
-	private void createCargoEditor(final IReferenceValueProvider portProvider,
-			final IReferenceValueProvider loadContractProvider,
-			final IReferenceValueProvider dischargeContractProvider) {
+	private void createCargoEditor(final IReferenceValueProvider portProvider, final IReferenceValueProvider loadContractProvider, final IReferenceValueProvider dischargeContractProvider) {
 		// Create a page for the cargo editor
 		{
-			cargoEditorViewerPane = new CargoEVP(getSite().getPage(),
-					ScenarioEditor.this);
+			cargoEditorViewerPane = new CargoEVP(getSite().getPage(), ScenarioEditor.this);
 
 			cargoEditorViewerPane.createControl(getContainer());
 			cargoEditorViewerPane.setTitle("Cargoes", getTitleImage());
 
-			cargoEditorViewerPane.init(getAdapterFactory(),
-					ScenarioPackage.eINSTANCE.getScenario_CargoModel(),
-					CargoPackage.eINSTANCE.getCargoModel_Cargoes());
+			cargoEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_CargoModel(), CargoPackage.eINSTANCE.getCargoModel_Cargoes());
 
-			cargoEditorViewerPane.getViewer().setInput(
-					editingDomain.getResourceSet().getResources().get(0)
-							.getContents().get(0));
+			cargoEditorViewerPane.getViewer().setInput(editingDomain.getResourceSet().getResources().get(0).getContents().get(0));
 
 			final int pageIndex = addPage(cargoEditorViewerPane.getControl());
 			setPageText(pageIndex, "Cargoes");
 		}
 	}
 
-	private void createPortEditor(
-			final IReferenceValueProvider everyContractProvider,
-			final IReferenceValueProvider marketProvider) {
+	private void createPortEditor(final IReferenceValueProvider everyContractProvider, final IReferenceValueProvider marketProvider) {
 		portEditorViewerPane = new PortEVP(getSite().getPage(), this);
 
 		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
@@ -1571,12 +1417,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		portEditorViewerPane.setTitle("Ports", getTitleImage());
 
-		portEditorViewerPane.init(getAdapterFactory(),
-				ScenarioPackage.eINSTANCE.getScenario_PortModel(),
-				PortPackage.eINSTANCE.getPortModel_Ports());
-		portEditorViewerPane.getViewer().setInput(
-				editingDomain.getResourceSet().getResources().get(0)
-						.getContents().get(0));
+		portEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_PortModel(), PortPackage.eINSTANCE.getPortModel_Ports());
+		portEditorViewerPane.getViewer().setInput(editingDomain.getResourceSet().getResources().get(0).getContents().get(0));
 
 		// createContextMenuFor(portEditor.getViewer());
 
@@ -1585,9 +1427,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		canalEditorViewerPane.createControl(sash);
 		canalEditorViewerPane.setTitle("Canals", getTitleImage());
 
-		canalEditorViewerPane.init(getAdapterFactory(),
-				ScenarioPackage.eINSTANCE.getScenario_CanalModel(),
-				PortPackage.eINSTANCE.getCanalModel_Canals());
+		canalEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_CanalModel(), PortPackage.eINSTANCE.getCanalModel_Canals());
 
 		canalEditorViewerPane.getViewer().setInput(getScenario());
 		// createContextMenuFor(canalEVP.getViewer());
@@ -1597,24 +1437,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	}
 
-	private void createFleetEditor(
-			final IReferenceValueProvider vesselClassProvider,
-			final IReferenceValueProvider portProvider) {
+	private void createFleetEditor(final IReferenceValueProvider vesselClassProvider, final IReferenceValueProvider portProvider) {
 		{
 			final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
 
-			vesselClassEditorViewerPane = new VesselClassEVP(getSite()
-					.getPage(), this);
+			vesselClassEditorViewerPane = new VesselClassEVP(getSite().getPage(), this);
 
 			vesselClassEditorViewerPane.createControl(sash);
 
-			vesselClassEditorViewerPane.init(getAdapterFactory(),
-					ScenarioPackage.eINSTANCE.getScenario_FleetModel(),
-					FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
+			vesselClassEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
 
-			vesselClassEditorViewerPane.getViewer().setInput(
-					editingDomain.getResourceSet().getResources().get(0)
-							.getContents().get(0));
+			vesselClassEditorViewerPane.getViewer().setInput(editingDomain.getResourceSet().getResources().get(0).getContents().get(0));
 
 			vesselClassEditorViewerPane.setTitle("Vessel Classes", getTitleImage());
 
@@ -1624,15 +1457,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			vesselEditorViewerPane.createControl(sash);
 
-			vesselEditorViewerPane.init(getAdapterFactory(),
-					ScenarioPackage.eINSTANCE.getScenario_FleetModel(),
-					FleetPackage.eINSTANCE.getFleetModel_Fleet());
+			vesselEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_Fleet());
 
 			vesselEditorViewerPane.setTitle("Vessels", getTitleImage());
 
-			vesselEditorViewerPane.getViewer().setInput(
-					editingDomain.getResourceSet().getResources().get(0)
-							.getContents().get(0));
+			vesselEditorViewerPane.getViewer().setInput(editingDomain.getResourceSet().getResources().get(0).getContents().get(0));
 
 			// createContextMenuFor(fleetPane.getViewer());
 
@@ -1642,8 +1471,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * If there is just one page in the multi-page editor part, this hides the
-	 * single tab at the bottom. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * If there is just one page in the multi-page editor part, this hides the single tab at the bottom. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -1659,8 +1487,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * If there is more than one page in the multi-page editor part, this shows
-	 * the tabs at the bottom. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * If there is more than one page in the multi-page editor part, this shows the tabs at the bottom. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -1676,8 +1503,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This is used to track the active viewer. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * This is used to track the active viewer. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -1691,8 +1517,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This is how the framework determines which interfaces we implement. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This is how the framework determines which interfaces we implement. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -1709,8 +1534,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This accesses a cached version of the content outliner. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This accesses a cached version of the content outliner. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -1727,44 +1551,31 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 					// Set up the tree viewer.
 					//
-					contentOutlineViewer
-							.setContentProvider(new AdapterFactoryContentProvider(
-									adapterFactory));
-					contentOutlineViewer
-							.setLabelProvider(new AdapterFactoryLabelProvider(
-									adapterFactory));
-					contentOutlineViewer.setInput(editingDomain
-							.getResourceSet());
+					contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
+					contentOutlineViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+					contentOutlineViewer.setInput(editingDomain.getResourceSet());
 
 					// Make sure our popups work.
 					//
 					createContextMenuFor(contentOutlineViewer);
 
-					if (!editingDomain.getResourceSet().getResources()
-							.isEmpty()) {
+					if (!editingDomain.getResourceSet().getResources().isEmpty()) {
 						// Select the root object in the view.
 						//
-						contentOutlineViewer
-								.setSelection(new StructuredSelection(
-										editingDomain.getResourceSet()
-												.getResources().get(0)), true);
+						contentOutlineViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
 					}
 				}
 
 				@Override
-				public void makeContributions(IMenuManager menuManager,
-						IToolBarManager toolBarManager,
-						IStatusLineManager statusLineManager) {
-					super.makeContributions(menuManager, toolBarManager,
-							statusLineManager);
+				public void makeContributions(IMenuManager menuManager, IToolBarManager toolBarManager, IStatusLineManager statusLineManager) {
+					super.makeContributions(menuManager, toolBarManager, statusLineManager);
 					contentOutlineStatusLineManager = statusLineManager;
 				}
 
 				@Override
 				public void setActionBars(IActionBars actionBars) {
 					super.setActionBars(actionBars);
-					getActionBarContributor().shareGlobalActions(this,
-							actionBars);
+					getActionBarContributor().shareGlobalActions(this, actionBars);
 				}
 			}
 
@@ -1772,40 +1583,35 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			// Listen to selection so that we can handle it is a special way.
 			//
-			contentOutlinePage
-					.addSelectionChangedListener(new ISelectionChangedListener() {
-						// This ensures that we handle selections correctly.
-						//
-						public void selectionChanged(SelectionChangedEvent event) {
-							handleContentOutlineSelection(event.getSelection());
-						}
-					});
+			contentOutlinePage.addSelectionChangedListener(new ISelectionChangedListener() {
+				// This ensures that we handle selections correctly.
+				//
+				public void selectionChanged(SelectionChangedEvent event) {
+					handleContentOutlineSelection(event.getSelection());
+				}
+			});
 		}
 
 		return contentOutlinePage;
 	}
 
-	private WeakHashMap<DetailCompositePropertySheetPage, Boolean> propertySheetPages = 
-			new WeakHashMap<DetailCompositePropertySheetPage, Boolean>();
-	
+	private WeakHashMap<DetailCompositePropertySheetPage, Boolean> propertySheetPages = new WeakHashMap<DetailCompositePropertySheetPage, Boolean>();
+
 	/**
-	 * This accesses a cached version of the property sheet. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	 * This accesses a cached version of the property sheet. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NO
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		final DetailCompositePropertySheetPage page = new DetailCompositePropertySheetPage(
-				getEditingDomain(), this);
-
+		final DetailCompositePropertySheetPage page = new DetailCompositePropertySheetPage(getEditingDomain(), this);
+		page.setLockedForEditing(isLockedForEditing());
 		propertySheetPages.put(page, true);
-		
+
 		return page;
 	}
-	
+
 	@Override
-	public IReferenceValueProvider getValueProvider(
-			final EClass c) {
+	public IReferenceValueProvider getValueProvider(final EClass c) {
 		if (c == PortPackage.eINSTANCE.getPort()) {
 			return getPortProvider();
 		} else if (c == FleetPackage.eINSTANCE.getVessel()) {
@@ -1826,16 +1632,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This deals with how we want selection in the outliner to affect the other
-	 * views. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This deals with how we want selection in the outliner to affect the other views. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	public void handleContentOutlineSelection(ISelection selection) {
-		if (currentViewerPane != null && !selection.isEmpty()
-				&& selection instanceof IStructuredSelection) {
-			Iterator<?> selectedElements = ((IStructuredSelection) selection)
-					.iterator();
+		if (currentViewerPane != null && !selection.isEmpty() && selection instanceof IStructuredSelection) {
+			Iterator<?> selectedElements = ((IStructuredSelection) selection).iterator();
 			if (selectedElements.hasNext()) {
 				// Get the first selected element.
 				//
@@ -1853,8 +1656,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 					// Set the selection to the widget.
 					//
-					selectionViewer.setSelection(new StructuredSelection(
-							selectionList));
+					selectionViewer.setSelection(new StructuredSelection(selectionList));
 				} else {
 					// Set the input to the widget.
 					//
@@ -1868,66 +1670,67 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This is for implementing {@link IEditorPart} and simply tests the command
-	 * stack. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This is for implementing {@link IEditorPart} and simply tests the command stack. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean isDirty() {
-		return ((BasicCommandStack) editingDomain.getCommandStack())
-				.isSaveNeeded();
+		return ((BasicCommandStack) editingDomain.getCommandStack()).isSaveNeeded();
 	}
 
 	private boolean lockedForEditing = false;
-	
+
 	public boolean isLockedForEditing() {
 		return lockedForEditing;
 	}
 
-	public void setLockedForEditing(boolean lockedForEditing) {
+	public void setLockedForEditing(final boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
-		cargoEditorViewerPane.setLockedForEditing(lockedForEditing);
-		vesselClassEditorViewerPane.setLockedForEditing(lockedForEditing);
-		vesselEditorViewerPane.setLockedForEditing(lockedForEditing);
-		purchaseContractEditorViewerPane.setLockedForEditing(lockedForEditing);
-		salesContractEditorViewerPane.setLockedForEditing(lockedForEditing);
-		entityEditorViewerPane.setLockedForEditing(lockedForEditing);
-		indexEditorViewerPane.setLockedForEditing(lockedForEditing);
-		for (final DetailCompositePropertySheetPage page : propertySheetPages.keySet()) {
-			page.setLockedForEditing(lockedForEditing);
-		}
+		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				if (cargoEditorViewerPane != null) cargoEditorViewerPane.setLockedForEditing(lockedForEditing);
+				if (vesselClassEditorViewerPane != null) vesselClassEditorViewerPane.setLockedForEditing(lockedForEditing);
+				if (vesselEditorViewerPane != null) vesselEditorViewerPane.setLockedForEditing(lockedForEditing);
+				if (purchaseContractEditorViewerPane != null) purchaseContractEditorViewerPane.setLockedForEditing(lockedForEditing);
+				if (salesContractEditorViewerPane != null) salesContractEditorViewerPane.setLockedForEditing(lockedForEditing);
+				if (entityEditorViewerPane != null) entityEditorViewerPane.setLockedForEditing(lockedForEditing);
+				if (indexEditorViewerPane != null) indexEditorViewerPane.setLockedForEditing(lockedForEditing);
+				for (final DetailCompositePropertySheetPage page : propertySheetPages.keySet()) {
+					page.setLockedForEditing(lockedForEditing);
+				}
+			}
+		});
 	}
 
 	/**
-	 * This is for implementing {@link IEditorPart} and simply saves the model
-	 * file. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This is for implementing {@link IEditorPart} and simply saves the model file. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NO
 	 */
 	@Override
 	public void doSave(IProgressMonitor progressMonitor) {
-//		// run validation on save
+		// // run validation on save
 		// TODO fix this - doesn't work, presumably because of resource mismatch
-//		final IStatus status = (IStatus) Platform.getAdapterManager().getAdapter(getScenario().eResource(), IStatus.class);
-//
-//		try {
-//			MarkerUtil.updateMarkers(status);
-//			
-//			if (status.matches(Status.ERROR)) {
-//				// activate problems view
-//				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
-//						, null, IWorkbenchPage.VIEW_VISIBLE);
-//			}
-//		} catch (Exception ex) {
-//
-//		}
+		// final IStatus status = (IStatus) Platform.getAdapterManager().getAdapter(getScenario().eResource(), IStatus.class);
+		//
+		// try {
+		// MarkerUtil.updateMarkers(status);
+		//
+		// if (status.matches(Status.ERROR)) {
+		// // activate problems view
+		// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
+		// , null, IWorkbenchPage.VIEW_VISIBLE);
+		// }
+		// } catch (Exception ex) {
+		//
+		// }
 
 		// Save only resources that have actually changed.
 		//
 		final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
-		saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED,
-				Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
+		saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
 
 		// Do the work within an operation because this is a long running
 		// activity that modifies the workbench.
@@ -1939,10 +1742,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				// Save the resources to the file system.
 				//
 				boolean first = true;
-				for (Resource resource : editingDomain.getResourceSet()
-						.getResources()) {
-					if ((first || !resource.getContents().isEmpty() || isPersisted(resource))
-							&& !editingDomain.isReadOnly(resource)) {
+				for (Resource resource : editingDomain.getResourceSet().getResources()) {
+					if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !editingDomain.isReadOnly(resource)) {
 						try {
 							long timeStamp = resource.getTimeStamp();
 							resource.save(saveOptions);
@@ -1950,23 +1751,24 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 								savedResources.add(resource);
 							}
 						} catch (Exception exception) {
-							resourceToDiagnosticMap
-									.put(resource,
-											analyzeResourceProblems(resource,
-													exception));
+							resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
 						}
 						first = false;
 					}
 				}
 			}
 		};
+		
+		if (jobControl != null && jobControl.getJobState() == EJobState.COMPLETED) {
+			// nuke job as we have to start again
+			jobControl.cancel();
+		}
 
 		updateProblemIndication = false;
 		try {
 			// This runs the options, and shows progress.
 			//
-			new ProgressMonitorDialog(getSite().getShell()).run(true, false,
-					operation);
+			new ProgressMonitorDialog(getSite().getShell()).run(true, false, operation);
 
 			// Refresh the necessary state.
 			//
@@ -1982,18 +1784,15 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This returns whether something has been persisted to the URI of the
-	 * specified resource. The implementation uses the URI converter from the
-	 * editor's resource set to try to open an input stream. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	 * This returns whether something has been persisted to the URI of the specified resource. The implementation uses the URI converter from the editor's resource set to try to open an input stream.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	protected boolean isPersisted(Resource resource) {
 		boolean result = false;
 		try {
-			InputStream stream = editingDomain.getResourceSet()
-					.getURIConverter().createInputStream(resource.getURI());
+			InputStream stream = editingDomain.getResourceSet().getURIConverter().createInputStream(resource.getURI());
 			if (stream != null) {
 				result = true;
 				stream.close();
@@ -2005,8 +1804,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This always returns true because it is not currently supported. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This always returns true because it is not currently supported. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -2016,17 +1814,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This also changes the editor's input. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * This also changes the editor's input. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	@Override
 	public void doSaveAs() {
-		String[] filters = FILE_EXTENSION_FILTERS
-				.toArray(new String[FILE_EXTENSION_FILTERS.size()]);
-		String[] files = LngEditorAdvisor.openFilePathDialog(getSite()
-				.getShell(), SWT.SAVE, filters);
+		String[] filters = FILE_EXTENSION_FILTERS.toArray(new String[FILE_EXTENSION_FILTERS.size()]);
+		String[] files = LngEditorAdvisor.openFilePathDialog(getSite().getShell(), SWT.SAVE, filters);
 		if (files.length > 0) {
 			URI uri = URI.createFileURI(files[0]);
 			doSaveAs(uri, new URIEditorInput(uri));
@@ -2042,16 +1837,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		(editingDomain.getResourceSet().getResources().get(0)).setURI(uri);
 		setInputWithNotify(editorInput);
 		setPartName(editorInput.getName());
-		IProgressMonitor progressMonitor = getActionBars()
-				.getStatusLineManager() != null ? getActionBars()
-				.getStatusLineManager().getProgressMonitor()
-				: new NullProgressMonitor();
+		IProgressMonitor progressMonitor = getActionBars().getStatusLineManager() != null ? getActionBars().getStatusLineManager().getProgressMonitor() : new NullProgressMonitor();
 		doSave(progressMonitor);
 	}
 
 	/**
-	 * This is called during startup. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	 * This is called during startup. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -2079,8 +1870,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -2090,21 +1880,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	@Override
-	public void removeSelectionChangedListener(
-			ISelectionChangedListener listener) {
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
 		selectionChangedListeners.remove(listener);
 	}
 
 	/**
-	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider} to
-	 * return this editor's overall selection. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider} to return this editor's overall selection. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -2114,9 +1900,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider} to
-	 * set this editor's overall selection. Calling this result will notify the
-	 * listeners. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider} to set this editor's overall selection. Calling this result will notify the listeners. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -2136,32 +1921,23 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	public void setStatusLineManager(ISelection selection) {
-		IStatusLineManager statusLineManager = currentViewer != null
-				&& currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager
-				: getActionBars().getStatusLineManager();
+		IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager : getActionBars().getStatusLineManager();
 
 		if (statusLineManager != null) {
 			if (selection instanceof IStructuredSelection) {
-				Collection<?> collection = ((IStructuredSelection) selection)
-						.toList();
+				Collection<?> collection = ((IStructuredSelection) selection).toList();
 				switch (collection.size()) {
 				case 0: {
-					statusLineManager
-							.setMessage(getString("_UI_NoObjectSelected"));
+					statusLineManager.setMessage(getString("_UI_NoObjectSelected"));
 					break;
 				}
 				case 1: {
-					String text = new AdapterFactoryItemDelegator(
-							adapterFactory).getText(collection.iterator()
-							.next());
-					statusLineManager.setMessage(getString(
-							"_UI_SingleObjectSelected", text));
+					String text = new AdapterFactoryItemDelegator(adapterFactory).getText(collection.iterator().next());
+					statusLineManager.setMessage(getString("_UI_SingleObjectSelected", text));
 					break;
 				}
 				default: {
-					statusLineManager.setMessage(getString(
-							"_UI_MultiObjectSelected",
-							Integer.toString(collection.size())));
+					statusLineManager.setMessage(getString("_UI_MultiObjectSelected", Integer.toString(collection.size())));
 					break;
 				}
 				}
@@ -2172,8 +1948,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This looks up a string in the plugin's plugin.properties file. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This looks up a string in the plugin's plugin.properties file. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -2182,8 +1957,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This looks up a string in plugin.properties, making a substitution. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This looks up a string in plugin.properties, making a substitution. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -2192,16 +1966,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * This implements {@link org.eclipse.jface.action.IMenuListener} to help
-	 * fill the context menus with contributions from the Edit menu. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This implements {@link org.eclipse.jface.action.IMenuListener} to help fill the context menus with contributions from the Edit menu. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	@Override
 	public void menuAboutToShow(IMenuManager menuManager) {
-		((IMenuListener) getEditorSite().getActionBarContributor())
-				.menuAboutToShow(menuManager);
+		((IMenuListener) getEditorSite().getActionBarContributor()).menuAboutToShow(menuManager);
 	}
 
 	/**
@@ -2210,8 +1981,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	public EditingDomainActionBarContributor getActionBarContributor() {
-		return (EditingDomainActionBarContributor) getEditorSite()
-				.getActionBarContributor();
+		return (EditingDomainActionBarContributor) getEditorSite().getActionBarContributor();
 	}
 
 	/**
@@ -2239,6 +2009,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 */
 	@Override
 	public void dispose() {
+		final IEclipseJobManager manager = LngEditorPlugin.getPlugin().getJobManager();
+		manager.removeEclipseJobManagerListener(this);
+		
+		if (jobControl != null) jobControl.removeListener(this);
+		
 		updateProblemIndication = false;
 
 		getSite().getPage().removePartListener(partListener);
@@ -2261,8 +2036,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * Returns whether the outline view should be presented to the user. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * Returns whether the outline view should be presented to the user. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -2321,5 +2095,66 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	@Override
 	public EObject getModel() {
 		return getScenario();
+	}
+
+	private IJobControl jobControl = null;
+	
+	@Override
+	public void jobAdded(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, IResource resource) {
+		final URI uri = EditUIUtil.getURI(getEditorInput());
+		final URI resourceURI = URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
+		if (jobControl != null)
+			jobControl.removeListener(this);
+		if (uri.equals(resourceURI)) {
+			control.addListener(this);
+			jobControl = control;
+		}
+	}
+
+	@Override
+	public void jobRemoved(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, IResource resource) {
+		if (control == jobControl) {
+			control.removeListener(this);
+			jobControl = null;
+		}
+	}
+
+	@Override
+	public void jobSelected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, IResource resource) {
+
+	}
+
+	@Override
+	public void jobDeselected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, IResource resource) {
+
+	}
+
+	@Override
+	public void jobManagerAdded(IEclipseJobManager eclipseJobManager, IJobManager jobManager) {
+
+	}
+
+	@Override
+	public void jobManagerRemoved(IEclipseJobManager eclipseJobManager, IJobManager jobManager) {
+
+	}
+
+	@Override
+	public boolean jobStateChanged(IJobControl job, EJobState oldState, EJobState newState) {
+		switch (newState) {
+		case INITIALISING:
+		case INITIALISED:
+		case RUNNING:
+			setLockedForEditing(true);
+			break;
+		default:
+			setLockedForEditing(false);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean jobProgressUpdated(IJobControl job, int progressDelta) {
+		return true;
 	}
 }
