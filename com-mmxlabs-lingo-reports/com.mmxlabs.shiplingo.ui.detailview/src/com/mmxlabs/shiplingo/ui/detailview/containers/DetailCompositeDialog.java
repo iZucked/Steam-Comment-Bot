@@ -112,8 +112,15 @@ public class DetailCompositeDialog extends Dialog {
 				for (final IStatus s : globalValidity.getChildren()) {
 					if (s.matches(Status.ERROR) == false) continue;
 					if (s instanceof DetailConstraintStatusDecorator) {
-						for (final EObject o : ((DetailConstraintStatusDecorator) s).getObjects()) {
-							objectValidity[duplicates.indexOf(o)] = false;
+						for (EObject o : ((DetailConstraintStatusDecorator) s).getObjects()) {
+							int index = duplicates.indexOf(o);
+							while (index <0) {
+								index = duplicates.indexOf(o);
+								o = o.eContainer();
+								if (o == null) break;
+							}
+							if (index>=0)
+								objectValidity[index] = false;
 						}
 					}
 				}
