@@ -179,6 +179,10 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 	public void addCargo(final VoyagePlan plan, final PortDetails loadDetails, final VoyageDetails ladenLeg, final PortDetails dischargeDetails, final VoyageDetails ballastLeg, final int loadTime,
 			final int dischargeTime, final long requiredLoadVolume, final IVesselClass vesselClass) {
+//		if (requiredLoadVolume > vesselClass.getCargoCapacity() / 10) {
+//			System.err.println("Using a whole lot of gas for fuel here");
+//		}
+		
 		final long vesselCapacity = vesselClass.getCargoCapacity();
 		final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getPortSlot();
 		final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getPortSlot();
