@@ -89,6 +89,6 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	
 	@Override
 	public String toString() {
-		return loadSlot.getId() + " to " + dischargeSlot.getId() + ", loaded " + getLoadVolume() + ", used " + getFuelVolume() + " for fuel, discharged " + getDischargeVolume();
+		return loadSlot.getId() + "@" + loadTime + " to " + dischargeSlot.getId() + "@"+dischargeTime+", loaded " + getLoadVolume() + ", used " + getFuelVolume() + " for fuel, discharged " + getDischargeVolume();
 	}
 }
