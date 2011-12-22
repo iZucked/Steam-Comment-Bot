@@ -5,13 +5,13 @@
 package scenario.presentation.cargoeditor.handlers;
 
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 
 import scenario.presentation.LngEditorPlugin;
+import scenario.presentation.cargoeditor.LockableAction;
 
 /**
  * Action for replicating a template cargo over a range of times
@@ -19,7 +19,7 @@ import scenario.presentation.LngEditorPlugin;
  * @author hinton
  * 
  */
-public class ReplicateCargoAction extends Action implements ISelectionChangedListener {
+public class ReplicateCargoAction extends LockableAction implements ISelectionChangedListener {
 	final ReplicateCargoHandler handler = new ReplicateCargoHandler();
 
 	public ReplicateCargoAction() {
