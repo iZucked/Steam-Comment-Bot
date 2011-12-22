@@ -22,7 +22,6 @@ public class LNGJobDescriptorAdapterFactory implements IAdapterFactory {
 
 	@Override
 	public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
-
 		Scenario scenario = null;
 		IResource resource = null;
 		if (adaptableObject instanceof IResource) {
