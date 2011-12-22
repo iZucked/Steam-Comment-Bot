@@ -133,6 +133,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			public boolean allowBlankAreaVerticalDragAndDropToMoveChart() {
 				return true;
 			}
+			
+			@Override
+			public boolean lockHeaderOnVerticalScroll() {
+				return true;
+			}
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL
