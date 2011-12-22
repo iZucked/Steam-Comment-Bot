@@ -211,14 +211,14 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 			@Override
 			public void keyPressed(final org.eclipse.swt.events.KeyEvent e) {
 				// TODO: Wrap up in a command with keybindings
-				if (v.isCellEditorActive() || isLockedForEditing()) return;
+				if (v.isCellEditorActive()) return;
 				final ISelection selection = getViewer().getSelection();
 				if (e.keyCode == '\r') {
 					if (selection instanceof IStructuredSelection) {
 						final IStructuredSelection ssel = (IStructuredSelection) selection;
 						final List l = Arrays.asList(ssel.toArray());
 
-						if (l.size() > 1 && (e.stateMask & SWT.CONTROL) == 0) {
+						if (!isLockedForEditing() && (l.size() > 1 && (e.stateMask & SWT.CONTROL) == 0)) {
 							final MultiDetailDialog multiDialog = new MultiDetailDialog(
 									v.getControl().getShell(),
 									part,
@@ -234,8 +234,8 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 							final DetailCompositeDialog dcd = new DetailCompositeDialog(
 									v.getControl().getShell(), part,
 									part.getEditingDomain());
-
-							if (dcd.open(l) == Window.OK) {
+							
+							if (dcd.open(l, isLockedForEditing()) == Window.OK) {
 								getViewer().refresh();
 							}
 						}
