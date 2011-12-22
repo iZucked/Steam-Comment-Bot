@@ -19,7 +19,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.cargo.CargoPackage;
+import scenario.presentation.LngEditorPlugin;
 import scenario.presentation.ScenarioEditor;
+import scenario.presentation.cargoeditor.LockableAction;
+import scenario.presentation.cargoeditor.handlers.PerturbCargoesAction;
 import scenario.presentation.cargoeditor.handlers.ReplicateCargoAction;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
 import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
@@ -130,6 +133,13 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 
 		getToolBarManager().appendToGroup("edit", swapAction);
 		getToolBarManager().appendToGroup("edit", replicateAction);
+		
+		if (LngEditorPlugin.DEBUG_UI_ENABLED) {
+			PerturbCargoesAction perturb = new PerturbCargoesAction();
+			getToolBarManager().appendToGroup("edit", perturb);
+			v.addSelectionChangedListener(perturb);
+		}
+		
 		getToolBarManager().update(true);
 
 		v.addSelectionChangedListener(swapAction);
