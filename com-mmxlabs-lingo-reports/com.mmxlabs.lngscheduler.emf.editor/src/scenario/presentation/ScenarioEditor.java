@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -77,11 +77,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -93,7 +91,11 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
@@ -144,6 +146,8 @@ import scenario.presentation.model_editors.SalesContractEVP;
 import scenario.presentation.model_editors.VesselClassEVP;
 import scenario.presentation.model_editors.VesselEVP;
 import scenario.presentation.model_editors.VesselEventEVP;
+import scenario.presentation.rvps.ScenarioRVP;
+import scenario.presentation.rvps.SimpleRVP;
 import scenario.provider.ScenarioItemProviderAdapterFactory;
 import scenario.schedule.Schedule;
 import scenario.schedule.SchedulePackage;
@@ -176,127 +180,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 	final static EAttribute namedObjectName = ScenarioPackage.eINSTANCE
 			.getNamedObject_Name();
-
-	private abstract class ScenarioRVP extends EContentAdapter implements
-			IReferenceValueProvider {
-		final EAttribute nameAttribute;
-		
-		@Override
-		public boolean updateOnChangeToFeature(Object changedFeature) {
-			return false;
-		}
-
-		public ScenarioRVP(EAttribute nameAttribute) {
-			super();
-			this.nameAttribute = nameAttribute;
-		}
-
-		protected ArrayList<Pair<String, EObject>> getSortedNames(
-				final EList<? extends EObject> objects,
-				final EAttribute nameAttribute) {
-			final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
-
-			for (final EObject object : objects) {
-				result.add(new Pair<String, EObject>(object.eGet(nameAttribute)
-						.toString(), object));
-			}
-
-			Collections.sort(result, new Comparator<Pair<String, ?>>() {
-				@Override
-				public int compare(final Pair<String, ?> o1,
-						final Pair<String, ?> o2) {
-					return o1.getFirst().compareTo(o2.getFirst());
-				}
-			});
-
-			return result;
-		}
-
-		@Override
-		public String getName(final EObject referer,
-				final EReference reference, final EObject target) {
-			if (target == null)
-				return "empty";
-			return (String) target.eGet(nameAttribute);
-		}
-
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			if (!notification.isTouch()
-					&& isRelevantTarget(notification.getNotifier(),
-							notification.getFeature())) {
-				cacheValues();
-			}
-		}
-
-		protected boolean isRelevantTarget(final Object target,
-				final Object feature) {
-			return feature.equals(nameAttribute);
-		}
-
-		protected abstract void cacheValues();
-
-		@Override
-		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(
-				EObject referer, EReference feature, EObject referenceValue) {
-			if (referenceValue == null)
-				return Collections.emptySet();
-			return Collections.singleton(new Pair<Notifier, List<Object>>(
-					referenceValue, Collections
-							.singletonList((Object) nameAttribute)));
-		}
-	}
-
-	private abstract class SimpleRVP extends ScenarioRVP {
-		private List<Pair<String, EObject>> cachedValues = null;
-		private final EReference containingReference;
-
-		public SimpleRVP(final EReference containingReference) {
-			super(namedObjectName);
-			this.containingReference = containingReference;
-		}
-
-		public SimpleRVP(final EReference containingReference,
-				final EAttribute name) {
-			super(name);
-			this.containingReference = containingReference;
-		}
-
-		@Override
-		public List<Pair<String, EObject>> getAllowedValues(EObject target,
-				EStructuralFeature field) {
-			if (cachedValues == null) {
-				install();
-				cacheValues();
-			}
-			return cachedValues;
-		}
-
-		protected abstract void install();
-
-		@Override
-		protected boolean isRelevantTarget(Object target, Object feature) {
-			return (super.isRelevantTarget(target, feature) && (containingReference
-					.getEReferenceType().isSuperTypeOf(((EObject) target)
-					.eClass())))
-					|| feature == containingReference;
-		}
-
-		@Override
-		protected void cacheValues() {
-			cachedValues = getSortedNames(getObjects(), nameAttribute);
-			final Pair<String, EObject> none = getEmptyObject();
-			if (none != null)
-				cachedValues.add(0, none);
-		}
-
-		protected Pair<String, EObject> getEmptyObject() {
-			return null;
-		}
-
-		protected abstract EList<? extends EObject> getObjects();
-	}
 
 	final ScenarioRVP scheduleProvider = new SimpleRVP(
 			SchedulePackage.eINSTANCE.getScheduleModel_Schedules(),
@@ -537,7 +420,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			return super.getNotifiers(referer, feature, referenceValue);
 		}
 	};
-
+	
 	/**
 	 * The filters for file extensions supported by the editor. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -618,46 +501,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated
 	 */
 	protected TreeViewer selectionViewer;
-
-	/**
-	 * This inverts the roll of parent and child in the content provider and
-	 * show parents as a tree. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	protected TreeViewer parentViewer;
-
-	/**
-	 * This shows how a tree view works. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	protected TreeViewer treeViewer;
-
-	/**
-	 * This shows how a list view works. A list viewer doesn't support icons.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	protected ListViewer listViewer;
-
-	/**
-	 * This shows how a table view works. A table can be used as a list with
-	 * icons. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	protected TableViewer tableViewer;
-
-	/**
-	 * This shows how a tree view with columns works. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	protected TreeViewer treeViewerWithColumns;
 
 	/**
 	 * This keeps track of the active viewer pane, in the book. <!--
@@ -835,6 +678,26 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	};
 
 	private AutoCorrector autoCorrector;
+
+	private VesselClassEVP vesselClassEditorViewerPane;
+
+	private VesselEVP vesselEditorViewerPane;
+
+	private PortEVP portEditorViewerPane;
+
+	private CanalEVP canalEditorViewerPane;
+
+	private CargoEVP cargoEditorViewerPane;
+
+	private IndexEVP indexEditorViewerPane;
+
+	private VesselEventEVP vesselEventEditorViewerPane;
+
+	private PurchaseContractEVP purchaseContractEditorViewerPane;
+
+	private SalesContractEVP salesContractEditorViewerPane;
+
+	private EntityEVP entityEditorViewerPane;
 
 	/**
 	 * Handles activation of the editor or it's associated views. <!--
@@ -1375,9 +1238,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			if (scenario.getFleetModel() != null) {
 				createFleetEditor(vesselClassProvider, portProvider);
-
-				// TODO events shouldn't be in the fleet model but in another
-				// model really
 				createEventsEditor();
 			}
 
@@ -1407,6 +1267,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			// Create a page for the selection tree view.
 			//
+			if (false) {
 			{
 				final ViewerPane viewerPane = new ViewerPane(getSite()
 						.getPage(), ScenarioEditor.this) {
@@ -1447,6 +1308,22 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 				setPageText(pageIndex, getString("_UI_SelectionPage_label"));
 			}
 
+			// create a debug page
+				final Composite debugPage = new Composite(getContainer(), SWT.NONE);
+				debugPage.setLayout(new GridLayout());
+				final Button lockButton = new Button(debugPage, SWT.TOGGLE);
+				lockButton.setText("Locked for editing");
+				
+				lockButton.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(final SelectionEvent e) {
+						setLockedForEditing(lockButton.getSelection());
+					}
+				});
+				
+				
+				setPageText(addPage(debugPage),"Debug");
+			}
 			
 
 			getSite().getShell().getDisplay().asyncExec(new Runnable() {
@@ -1494,69 +1371,69 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
 		{
-			final EntityEVP entitiesPane = new EntityEVP(getSite().getPage(),
+			entityEditorViewerPane = new EntityEVP(getSite().getPage(),
 					ScenarioEditor.this);
 
-			entitiesPane.createControl(sash);
+			entityEditorViewerPane.createControl(sash);
 
-			entitiesPane.init(getAdapterFactory(),
+			entityEditorViewerPane.init(getAdapterFactory(),
 					ScenarioPackage.eINSTANCE.getScenario_ContractModel(),
 					ContractPackage.eINSTANCE.getContractModel_Entities());
 
-			entitiesPane.setTitle("Entities", getTitleImage());
-			entitiesPane.getViewer().setInput(input);
+			entityEditorViewerPane.setTitle("Entities", getTitleImage());
+			entityEditorViewerPane.getViewer().setInput(input);
 		}
 		{
-			final SalesContractEVP salesPane = new SalesContractEVP(getSite()
+			salesContractEditorViewerPane = new SalesContractEVP(getSite()
 					.getPage(), ScenarioEditor.this);
 
-			salesPane.createControl(sash);
+			salesContractEditorViewerPane.createControl(sash);
 
-			salesPane
+			salesContractEditorViewerPane
 					.init(getAdapterFactory(), ScenarioPackage.eINSTANCE
 							.getScenario_ContractModel(),
 							ContractPackage.eINSTANCE
 									.getContractModel_SalesContracts());
 
-			salesPane.setTitle("Sales Contracts", getTitleImage());
-			salesPane.getViewer().setInput(input);
+			salesContractEditorViewerPane.setTitle("Sales Contracts", getTitleImage());
+			salesContractEditorViewerPane.getViewer().setInput(input);
 		}
 		{
-			final PurchaseContractEVP purchasePane = new PurchaseContractEVP(
+			purchaseContractEditorViewerPane = new PurchaseContractEVP(
 					getSite().getPage(), ScenarioEditor.this);
 
-			purchasePane.createControl(sash);
+			purchaseContractEditorViewerPane.createControl(sash);
 
-			purchasePane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE
+			purchaseContractEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE
 					.getScenario_ContractModel(), ContractPackage.eINSTANCE
 					.getContractModel_PurchaseContracts());
 
-			purchasePane.setTitle("Purchase Contracts", getTitleImage());
-			purchasePane.getViewer().setInput(input);
+			purchaseContractEditorViewerPane.setTitle("Purchase Contracts", getTitleImage());
+			purchaseContractEditorViewerPane.getViewer().setInput(input);
 		}
 
 		setPageText(addPage(sash), "Commercial");
 	}
 
 	private void createEventsEditor() {
-		final VesselEventEVP eventsPane = new VesselEventEVP(getSite()
+		vesselEventEditorViewerPane = new VesselEventEVP(getSite()
 				.getPage(), ScenarioEditor.this);
 
-		eventsPane.createControl(getContainer());
-		eventsPane.setTitle("Events", getTitleImage());
+		vesselEventEditorViewerPane.createControl(getContainer());
+		vesselEventEditorViewerPane.setTitle("Events", getTitleImage());
 
-		eventsPane.init(getAdapterFactory(),
+		vesselEventEditorViewerPane.init(getAdapterFactory(),
 				ScenarioPackage.eINSTANCE.getScenario_FleetModel(),
 				FleetPackage.eINSTANCE.getFleetModel_VesselEvents());
 
-		eventsPane.getViewer().setInput(
+		vesselEventEditorViewerPane.getViewer().setInput(
 				editingDomain.getResourceSet().getResources().get(0)
 						.getContents().get(0));
 
 		// TODO should this really be here?
-		createContextMenuFor(eventsPane.getViewer());
+		createContextMenuFor(vesselEventEditorViewerPane.getViewer());
 
-		final int pageIndex = addPage(eventsPane.getControl());
+		final int pageIndex = addPage(vesselEventEditorViewerPane.getControl());
 		setPageText(pageIndex, "Events");
 	}
 
@@ -1564,16 +1441,16 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		final SashForm sash = new SashForm(getContainer(), SWT.SMOOTH
 				| SWT.HORIZONTAL);
 
-		final IndexEVP indices = new IndexEVP(getSite().getPage(), this);
+		indexEditorViewerPane = new IndexEVP(getSite().getPage(), this);
 
-		indices.createControl(sash);
-		indices.setTitle("Indices", getTitleImage());
+		indexEditorViewerPane.createControl(sash);
+		indexEditorViewerPane.setTitle("Indices", getTitleImage());
 
-		indices.init(getAdapterFactory(),
+		indexEditorViewerPane.init(getAdapterFactory(),
 				ScenarioPackage.eINSTANCE.getScenario_MarketModel(),
 				MarketPackage.eINSTANCE.getMarketModel_Indices());
 
-		indices.getViewer().setInput(
+		indexEditorViewerPane.getViewer().setInput(
 				editingDomain.getResourceSet().getResources().get(0)
 						.getContents().get(0));
 
@@ -1661,21 +1538,21 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			final IReferenceValueProvider dischargeContractProvider) {
 		// Create a page for the cargo editor
 		{
-			final CargoEVP cargoPane = new CargoEVP(getSite().getPage(),
+			cargoEditorViewerPane = new CargoEVP(getSite().getPage(),
 					ScenarioEditor.this);
 
-			cargoPane.createControl(getContainer());
-			cargoPane.setTitle("Cargoes", getTitleImage());
+			cargoEditorViewerPane.createControl(getContainer());
+			cargoEditorViewerPane.setTitle("Cargoes", getTitleImage());
 
-			cargoPane.init(getAdapterFactory(),
+			cargoEditorViewerPane.init(getAdapterFactory(),
 					ScenarioPackage.eINSTANCE.getScenario_CargoModel(),
 					CargoPackage.eINSTANCE.getCargoModel_Cargoes());
 
-			cargoPane.getViewer().setInput(
+			cargoEditorViewerPane.getViewer().setInput(
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
 
-			final int pageIndex = addPage(cargoPane.getControl());
+			final int pageIndex = addPage(cargoEditorViewerPane.getControl());
 			setPageText(pageIndex, "Cargoes");
 		}
 	}
@@ -1683,38 +1560,38 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	private void createPortEditor(
 			final IReferenceValueProvider everyContractProvider,
 			final IReferenceValueProvider marketProvider) {
-		final PortEVP portEditor = new PortEVP(getSite().getPage(), this);
+		portEditorViewerPane = new PortEVP(getSite().getPage(), this);
 
 		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
 
-		portEditor.createControl(sash);
+		portEditorViewerPane.createControl(sash);
 
 		final List<EReference> path = new LinkedList<EReference>();
 
 		path.add(ScenarioPackage.eINSTANCE.getScenario_PortModel());
 		path.add(PortPackage.eINSTANCE.getPortModel_Ports());
 
-		portEditor.setTitle("Ports", getTitleImage());
+		portEditorViewerPane.setTitle("Ports", getTitleImage());
 
-		portEditor.init(getAdapterFactory(),
+		portEditorViewerPane.init(getAdapterFactory(),
 				ScenarioPackage.eINSTANCE.getScenario_PortModel(),
 				PortPackage.eINSTANCE.getPortModel_Ports());
-		portEditor.getViewer().setInput(
+		portEditorViewerPane.getViewer().setInput(
 				editingDomain.getResourceSet().getResources().get(0)
 						.getContents().get(0));
 
 		// createContextMenuFor(portEditor.getViewer());
 
-		final CanalEVP canalEVP = new CanalEVP(getSite().getPage(), this);
+		canalEditorViewerPane = new CanalEVP(getSite().getPage(), this);
 
-		canalEVP.createControl(sash);
-		canalEVP.setTitle("Canals", getTitleImage());
+		canalEditorViewerPane.createControl(sash);
+		canalEditorViewerPane.setTitle("Canals", getTitleImage());
 
-		canalEVP.init(getAdapterFactory(),
+		canalEditorViewerPane.init(getAdapterFactory(),
 				ScenarioPackage.eINSTANCE.getScenario_CanalModel(),
 				PortPackage.eINSTANCE.getCanalModel_Canals());
 
-		canalEVP.getViewer().setInput(getScenario());
+		canalEditorViewerPane.getViewer().setInput(getScenario());
 		// createContextMenuFor(canalEVP.getViewer());
 
 		final int pageIndex = addPage(sash);
@@ -1728,34 +1605,34 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		{
 			final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
 
-			final VesselClassEVP vcePane = new VesselClassEVP(getSite()
+			vesselClassEditorViewerPane = new VesselClassEVP(getSite()
 					.getPage(), this);
 
-			vcePane.createControl(sash);
+			vesselClassEditorViewerPane.createControl(sash);
 
-			vcePane.init(getAdapterFactory(),
+			vesselClassEditorViewerPane.init(getAdapterFactory(),
 					ScenarioPackage.eINSTANCE.getScenario_FleetModel(),
 					FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
 
-			vcePane.getViewer().setInput(
+			vesselClassEditorViewerPane.getViewer().setInput(
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
 
-			vcePane.setTitle("Vessel Classes", getTitleImage());
+			vesselClassEditorViewerPane.setTitle("Vessel Classes", getTitleImage());
 
 			// createContextMenuFor(vcePane.getViewer());
 
-			final VesselEVP fleetPane = new VesselEVP(getSite().getPage(), this);
+			vesselEditorViewerPane = new VesselEVP(getSite().getPage(), this);
 
-			fleetPane.createControl(sash);
+			vesselEditorViewerPane.createControl(sash);
 
-			fleetPane.init(getAdapterFactory(),
+			vesselEditorViewerPane.init(getAdapterFactory(),
 					ScenarioPackage.eINSTANCE.getScenario_FleetModel(),
 					FleetPackage.eINSTANCE.getFleetModel_Fleet());
 
-			fleetPane.setTitle("Vessels", getTitleImage());
+			vesselEditorViewerPane.setTitle("Vessels", getTitleImage());
 
-			fleetPane.getViewer().setInput(
+			vesselEditorViewerPane.getViewer().setInput(
 					editingDomain.getResourceSet().getResources().get(0)
 							.getContents().get(0));
 
@@ -1910,6 +1787,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		return contentOutlinePage;
 	}
 
+	private WeakHashMap<DetailCompositePropertySheetPage, Boolean> propertySheetPages = 
+			new WeakHashMap<DetailCompositePropertySheetPage, Boolean>();
+	
 	/**
 	 * This accesses a cached version of the property sheet. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
@@ -1917,14 +1797,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * @generated NO
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		// final EObjectDetailPropertySheetPage page = new
-		// EObjectDetailPropertySheetPage(
-		// getEditingDomain());
-		// setupDetailViewContainer(page);
-
 		final DetailCompositePropertySheetPage page = new DetailCompositePropertySheetPage(
 				getEditingDomain(), this);
 
+		propertySheetPages.put(page, true);
+		
 		return page;
 	}
 	
@@ -2002,6 +1879,26 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	public boolean isDirty() {
 		return ((BasicCommandStack) editingDomain.getCommandStack())
 				.isSaveNeeded();
+	}
+
+	private boolean lockedForEditing = false;
+	
+	public boolean isLockedForEditing() {
+		return lockedForEditing;
+	}
+
+	public void setLockedForEditing(boolean lockedForEditing) {
+		this.lockedForEditing = lockedForEditing;
+		cargoEditorViewerPane.setLockedForEditing(lockedForEditing);
+		vesselClassEditorViewerPane.setLockedForEditing(lockedForEditing);
+		vesselEditorViewerPane.setLockedForEditing(lockedForEditing);
+		purchaseContractEditorViewerPane.setLockedForEditing(lockedForEditing);
+		salesContractEditorViewerPane.setLockedForEditing(lockedForEditing);
+		entityEditorViewerPane.setLockedForEditing(lockedForEditing);
+		indexEditorViewerPane.setLockedForEditing(lockedForEditing);
+		for (final DetailCompositePropertySheetPage page : propertySheetPages.keySet()) {
+			page.setLockedForEditing(lockedForEditing);
+		}
 	}
 
 	/**
@@ -2407,9 +2304,6 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 		return entityProvider;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider#getModel(org.eclipse.emf.ecore.EClass)
-	 */
 	@Override
 	public EObject getModel() {
 		return getScenario();
