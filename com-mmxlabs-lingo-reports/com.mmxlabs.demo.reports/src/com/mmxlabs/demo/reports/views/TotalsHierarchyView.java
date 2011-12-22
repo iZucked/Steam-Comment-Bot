@@ -36,6 +36,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import scenario.Detail;
 import scenario.Scenario;
 import scenario.contract.Entity;
 import scenario.contract.GroupEntity;
@@ -109,11 +110,17 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		final long cost;
 		final List<TreeData> children = new ArrayList<TreeData>();
 		private TreeData parent;
+		private String label = "";
 
 		public TreeData(final String name, final boolean nonValued) {
 			this.name = name;
 			this.nonValued = nonValued;
 			this.cost = 0;
+		}
+		
+		public TreeData(final String name, final String misc) {
+			this(name, true);
+			this.label  = misc;
 		}
 
 		public TreeData(final String name) {
@@ -160,7 +167,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		public String renderCost() {
 			if (nonValued)
-				return "";
+				return label;
 			return myFormat.format(getCost());
 		}
 	}
@@ -214,8 +221,11 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 				}
 
 				final TreeData rd = new TreeData(revenue.getName(), revenue.getValue());
-
 				td.addChild(rd);
+				for (final Detail d : revenue.getDetails().getChildren()) {
+					rd.addChild(createDetailTreeData(d));
+				}
+				
 
 				// for (final LineItem item : revenue.getLineItems()) {
 				// final TreeData li = new TreeData(item.getName(),
@@ -227,6 +237,18 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 				// assert (rd.getCost() == revenue.getTaxedValue());
 				// TODO this does not take account of ownership proportion
 			}
+		}
+		return top;
+	}
+
+	/**
+	 * @param details
+	 * @return
+	 */
+	private TreeData createDetailTreeData(Detail details) {
+		final TreeData top = new TreeData(details.getName(),details.getValue());
+		for (final Detail d : details.getChildren()) {
+			top.addChild(createDetailTreeData(d));
 		}
 		return top;
 	}

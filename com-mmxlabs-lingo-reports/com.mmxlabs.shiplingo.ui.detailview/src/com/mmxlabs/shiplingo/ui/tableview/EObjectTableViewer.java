@@ -316,8 +316,9 @@ public class EObjectTableViewer extends GridTableViewer {
 				final Resource r = object.eResource();
 				if (r == null)
 					return false;
-				final IFile containingFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(r.getURI().toPlatformString(true)));
 				try {
+					if (r.getURI().isPlatform() == false) return false;
+					final IFile containingFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(r.getURI().toPlatformString(true)));
 					final IMarker[] markers = containingFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 					for (final IMarker marker : markers) {
 						final String uri = marker.getAttribute(EValidator.URI_ATTRIBUTE, null);
@@ -329,7 +330,6 @@ public class EObjectTableViewer extends GridTableViewer {
 						}
 					}
 				} catch (final CoreException e) {
-					e.printStackTrace();
 				}
 
 				return false;

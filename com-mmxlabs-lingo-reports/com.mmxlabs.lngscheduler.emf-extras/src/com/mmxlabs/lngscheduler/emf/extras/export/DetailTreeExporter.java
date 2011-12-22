@@ -8,6 +8,7 @@ import scenario.Detail;
 import scenario.ScenarioFactory;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
  * Utility for exporting detail trees.
@@ -23,7 +24,13 @@ public class DetailTreeExporter {
 			return null;
 		final Detail result = ScenarioFactory.eINSTANCE.createDetail();
 		result.setName(detail.getKey());
-		result.setValue("" + detail.getValue());
+		if (detail.getValue() instanceof Long) {
+			result.setValue(String.format("%,d", ((Long) detail.getValue()) / Calculator.ScaleFactor));
+		} else if (detail.getValue() instanceof Integer) {
+			result.setValue(String.format("%,f", ((Integer) detail.getValue()) / (float)Calculator.ScaleFactor));
+		} else {
+			result.setValue("" + detail.getValue());
+		}
 		for (final IDetailTree child : detail.getChildren()) {
 			final Detail cd = exportDetail(child);
 			if (cd != null)
