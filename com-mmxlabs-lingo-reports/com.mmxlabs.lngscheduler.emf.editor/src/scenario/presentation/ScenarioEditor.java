@@ -20,8 +20,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.eclipse.core.internal.runtime.AdapterManager;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -64,6 +69,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
+import org.eclipse.emf.validation.marker.MarkerUtil;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -104,8 +110,10 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
@@ -1895,10 +1903,26 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 	 * This is for implementing {@link IEditorPart} and simply saves the model
 	 * file. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
+	 * @generated NO
 	 */
 	@Override
 	public void doSave(IProgressMonitor progressMonitor) {
+//		// run validation on save
+		// TODO fix this - doesn't work, presumably because of resource mismatch
+//		final IStatus status = (IStatus) Platform.getAdapterManager().getAdapter(getScenario().eResource(), IStatus.class);
+//
+//		try {
+//			MarkerUtil.updateMarkers(status);
+//			
+//			if (status.matches(Status.ERROR)) {
+//				// activate problems view
+//				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
+//						, null, IWorkbenchPage.VIEW_VISIBLE);
+//			}
+//		} catch (Exception ex) {
+//
+//		}
+
 		// Save only resources that have actually changed.
 		//
 		final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
