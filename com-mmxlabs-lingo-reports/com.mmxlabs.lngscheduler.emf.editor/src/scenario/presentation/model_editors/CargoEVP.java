@@ -22,6 +22,7 @@ import scenario.cargo.CargoPackage;
 import scenario.presentation.LngEditorPlugin;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.LockableAction;
+import scenario.presentation.cargoeditor.handlers.FixNamesAction;
 import scenario.presentation.cargoeditor.handlers.PerturbCargoesAction;
 import scenario.presentation.cargoeditor.handlers.ReplicateCargoAction;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
@@ -138,6 +139,10 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 			PerturbCargoesAction perturb = new PerturbCargoesAction();
 			getToolBarManager().appendToGroup("edit", perturb);
 			v.addSelectionChangedListener(perturb);
+			
+			FixNamesAction fixNames = new FixNamesAction();
+			getToolBarManager().appendToGroup("edit", fixNames);
+			v.addSelectionChangedListener(fixNames);
 		}
 		
 		getToolBarManager().update(true);
