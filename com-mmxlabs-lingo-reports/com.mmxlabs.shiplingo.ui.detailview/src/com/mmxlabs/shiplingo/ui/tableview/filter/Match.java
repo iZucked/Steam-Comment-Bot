@@ -4,14 +4,11 @@
  */
 package com.mmxlabs.shiplingo.ui.tableview.filter;
 
-import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.Map;
-import java.util.TimeZone;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.shiplingo.importer.importers.DateTimeParser;
 
 /**
  * @author hinton
@@ -21,10 +18,6 @@ class Match implements IFilter {
 	public enum Operation {
 		LIKE, EQUAL, NOTEQUAL, LESS, GREATER;
 
-		/**
-		 * @param matchOp
-		 * @return
-		 */
 		public static Operation fromToken(int matchOp) {
 			switch (matchOp) {
 			case '=':
