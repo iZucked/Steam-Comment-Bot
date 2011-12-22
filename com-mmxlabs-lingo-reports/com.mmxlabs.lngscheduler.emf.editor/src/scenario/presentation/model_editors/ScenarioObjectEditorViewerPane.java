@@ -14,16 +14,34 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.IContentProposal;
+import org.eclipse.jface.fieldassist.IContentProposalListener;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ViewForm;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.ScenarioPackage;
+import scenario.presentation.LngEditorPlugin;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.EObjectEditorViewerPane;
 import scenario.presentation.cargoeditor.handlers.AddAction;
@@ -33,6 +51,10 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 import com.mmxlabs.shiplingo.ui.detailview.containers.DetailCompositeDialog;
 import com.mmxlabs.shiplingo.ui.detailview.containers.MultiDetailDialog;
 import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
+import com.mmxlabs.shiplingo.ui.tableview.ICellManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
+import com.mmxlabs.shiplingo.ui.tableview.filter.FilterField;
+import com.mmxlabs.shiplingo.ui.tableview.filter.FilterProposalProvider;
 
 /**
  * This extension of {@link EObjectEditorViewerPane} adds the following
@@ -77,7 +99,7 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 	 * create the object, but adds in an editor dialog.
 	 */
 	@Override
-	protected Action createAddAction(final TableViewer viewer,
+	protected Action createAddAction(final GridTableViewer viewer,
 			final EditingDomain editingDomain, final EMFPath contentPath) {
 		final AddAction delegate = (AddAction) super.createAddAction(viewer,
 				editingDomain, contentPath);
@@ -121,15 +143,65 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 		};
 		return result;
 	}
+	
+	private FilterField filterField;
+	
+	public void createControl(Composite parent) 
+	  {
+	    if (getControl() == null)
+	    {
+	      container = parent;
 
+	      // Create view form.    
+	      //control = new ViewForm(parent, getStyle());
+	      control = new ViewForm(parent, SWT.NONE);
+	      control.addDisposeListener
+	        (new DisposeListener()
+	         {
+	           public void widgetDisposed(DisposeEvent event)
+	           {
+	             dispose();
+	           }
+	         });
+	      
+	      control.marginWidth = 0;
+	      control.marginHeight = 0;
+
+	      // Create a title bar.
+	      createTitleBar();
+
+	      final Composite inner = new Composite(control, SWT.NONE);
+		  filterField = new FilterField(inner);
+	    
+	      final GridLayout layout = new GridLayout(1, false);
+	      layout.marginHeight = 0;
+	      layout.marginWidth = 0;
+	      inner.setLayout(layout);
+	      
+	      viewer = createViewer(inner);
+	      
+	      viewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+	      
+	      control.setContent(inner);
+
+	      control.setTabList(new Control [] { inner });
+	      
+	      // When the pane or any child gains focus, notify the workbench.
+	      control.addListener(SWT.Activate, this);
+	      hookFocus(control);
+	      hookFocus(viewer.getControl());
+	    }
+	  }
+	
 	@Override
-	/**
-	 * Hook a key listener to the viewer to pick up return and display an editor.
-	 * 
-	 * TODO cache editors for efficiency.
-	 */
 	public EObjectTableViewer createViewer(final Composite parent) {
 		final EObjectTableViewer v = super.createViewer(parent);
+		
+		final ActionContributionItem filter = filterField.getContribution();
+		
+		getToolBarManager().appendToGroup("filter", filter);
+		
+		v.getGrid().setCellSelectionEnabled(true);
 		v.getControl().addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(final org.eclipse.swt.events.KeyEvent e) {
@@ -139,42 +211,19 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 			@Override
 			public void keyPressed(final org.eclipse.swt.events.KeyEvent e) {
 				// TODO: Wrap up in a command with keybindings
+				if (v.isCellEditorActive()) return;
+				final ISelection selection = getViewer().getSelection();
 				if (e.keyCode == '\r') {
-					if (v.isCellEditorActive())
-						return;
-					final ISelection selection = getViewer().getSelection();
 					if (selection instanceof IStructuredSelection) {
 						final IStructuredSelection ssel = (IStructuredSelection) selection;
 						final List l = Arrays.asList(ssel.toArray());
 
-						if (l.size() > 1 && (e.stateMask & SWT.CONTROL) == 0) {
+						if (!isLockedForEditing() && (l.size() > 1 && (e.stateMask & SWT.CONTROL) == 0)) {
 							final MultiDetailDialog multiDialog = new MultiDetailDialog(
 									v.getControl().getShell(),
 									part,
 									part.getEditingDomain());
-							
-//							final EObjectMultiDialog multiDialog = new EObjectMultiDialog(
-//									new IShellProvider() {
-//										@Override
-//										public Shell getShell() {
-//											return v.getControl().getShell();
-//										}
-//									});
-//							part.setupDetailViewContainer(multiDialog);
-//							multiDialog.setEditorFactoryForFeature(
-//									CargoPackage.eINSTANCE.getCargo_Id(), null);
-//							multiDialog.setEditorFactoryForFeature(
-//									ScenarioPackage.eINSTANCE
-//											.getNamedObject_Name(), null);
-//
-//							multiDialog.setEditorFactoryForFeature(
-//									FleetPackage.eINSTANCE.getVesselEvent_Id(),
-//									null);
-//							if (multiDialog.open(l, part.getEditingDomain()) == Dialog.OK) {
-//								part.getEditingDomain().getCommandStack()
-//										.execute(multiDialog.createCommand());
-//							}
-							
+														
 							if (multiDialog.open(l) == Window.OK) {
 								getViewer().refresh();
 							}
@@ -185,16 +234,23 @@ public class ScenarioObjectEditorViewerPane extends EObjectEditorViewerPane {
 							final DetailCompositeDialog dcd = new DetailCompositeDialog(
 									v.getControl().getShell(), part,
 									part.getEditingDomain());
-
-							if (dcd.open(l) == Window.OK) {
+							
+							if (dcd.open(l, isLockedForEditing()) == Window.OK) {
 								getViewer().refresh();
 							}
 						}
 					}
 				}
-
 			}
 		});
+		
+		filterField.setViewer(v);
+		
 		return v;
+	}
+
+	@Override
+	public void setLockedForEditing(boolean lockedForEditing) {
+		super.setLockedForEditing(lockedForEditing);
 	}
 }

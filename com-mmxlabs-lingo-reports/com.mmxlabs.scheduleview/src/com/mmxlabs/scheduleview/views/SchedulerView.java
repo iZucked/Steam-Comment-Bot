@@ -4,10 +4,11 @@
  */
 package com.mmxlabs.scheduleview.views;
 
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -17,6 +18,11 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
@@ -25,12 +31,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
+
+import scenario.cargo.Slot;
+import scenario.schedule.CargoAllocation;
+import scenario.schedule.events.SlotVisit;
 
 import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
@@ -47,7 +59,7 @@ import com.mmxlabs.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 import com.mmxlabs.scheduleview.views.colourschemes.RouteChoiceColourScheme;
 import com.mmxlabs.scheduleview.views.colourschemes.VesselStateColourScheme;
 
-public class SchedulerView extends ViewPart {
+public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -60,12 +72,12 @@ public class SchedulerView extends ViewPart {
 
 	private Action toggleColourSchemeAction;
 
-//	private ISelectionListener selectionListener;
+	// private ISelectionListener selectionListener;
 
 	private PackAction packAction;
 
 	private SaveFullImageAction saveFullImageAction;
-	
+
 	private Action sortModeAction;
 
 	private final ScenarioViewerComparator viewerComparator = new ScenarioViewerComparator();
@@ -116,6 +128,16 @@ public class SchedulerView extends ViewPart {
 			public int getNumberOfDaysToAppendForEndOfDay() {
 				return 0;
 			}
+
+			@Override
+			public boolean allowBlankAreaVerticalDragAndDropToMoveChart() {
+				return true;
+			}
+			
+			@Override
+			public boolean lockHeaderOnVerticalScroll() {
+				return true;
+			}
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL
@@ -124,10 +146,14 @@ public class SchedulerView extends ViewPart {
 			protected synchronized void inputChanged(final Object input,
 					final Object oldInput) {
 				super.inputChanged(input, oldInput);
-				
-				final boolean inputEmpty = input == null || (input instanceof Collection && ((Collection<?>)input).isEmpty());
-				final boolean oldInputEmpty = oldInput == null || (oldInput instanceof Collection && ((Collection<?>)oldInput).isEmpty());
-				
+
+				final boolean inputEmpty = input == null
+						|| (input instanceof Collection && ((Collection<?>) input)
+								.isEmpty());
+				final boolean oldInputEmpty = oldInput == null
+						|| (oldInput instanceof Collection && ((Collection<?>) oldInput)
+								.isEmpty());
+
 				if (inputEmpty != oldInputEmpty) {
 
 					if (packAction != null) {
@@ -140,14 +166,14 @@ public class SchedulerView extends ViewPart {
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
 
 		viewer.setContentProvider(new EMFScheduleContentProvider());
-		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider();
+		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(
+				viewer);
 		labelProvider.addColourScheme(new VesselStateColourScheme());
 		labelProvider.addColourScheme(new FuelChoiceColourScheme());
 		labelProvider.addColourScheme(new RouteChoiceColourScheme());
 		labelProvider.addColourScheme(new HighSpeedColourScheme());
 		labelProvider.addColourScheme(new CooldownColourScheme());
 		viewer.setLabelProvider(labelProvider);
-
 		// TODO: Hook up action to alter sort behaviour
 		// Then refresh
 		// E.g. mode?
@@ -155,6 +181,21 @@ public class SchedulerView extends ViewPart {
 		viewer.setComparator(viewerComparator);
 
 		viewer.setInput(getViewSite());
+
+		viewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(final DoubleClickEvent event) {
+				final Object selection = event.getSelection();
+				// find what we have double-clicked
+				if (selection instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) selection;
+					final Slot slot = slotVisit.getSlot();
+					// TODO factor out to somewhere useful:
+					final EObject c = slot.eContainer();
+
+				}
+			}
+		});
 
 		// Create the help context id for the viewer's control. This is in the
 		// format of pluginid.contextId
@@ -168,57 +209,57 @@ public class SchedulerView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-//		/*
-//		 * Add selection listener. may need tidying up.
-//		 */
-//
-//		selectionListener = new ISelectionListener() {
-//
-//			@Override
-//			public void selectionChanged(final IWorkbenchPart part,
-//					final ISelection selection) {
-//
-//				final List<Schedule> schedules = ScheduleAdapter
-//						.getSchedules(selection);
-//				if (!schedules.isEmpty()) {
-//					final boolean needFit = viewer.getInput() == null;
-//					setInput(schedules);
-//					if (needFit) {
-//						Display.getDefault().asyncExec(new Runnable() {
-//
-//							@Override
-//							public void run() {
-//								packAction.run();
-//							}
-//						});
-//					}
-//				} else {
-//					setInput(null);
-//				}
-//			}
-//		};
-
+		// /*
+		// * Add selection listener. may need tidying up.
+		// */
+		//
+		// selectionListener = new ISelectionListener() {
+		//
+		// @Override
+		// public void selectionChanged(final IWorkbenchPart part,
+		// final ISelection selection) {
+		//
+		// final List<Schedule> schedules = ScheduleAdapter
+		// .getSchedules(selection);
+		// if (!schedules.isEmpty()) {
+		// final boolean needFit = viewer.getInput() == null;
+		// setInput(schedules);
+		// if (needFit) {
+		// Display.getDefault().asyncExec(new Runnable() {
+		//
+		// @Override
+		// public void run() {
+		// packAction.run();
+		// }
+		// });
+		// }
+		// } else {
+		// setInput(null);
+		// }
+		// }
+		// };
 
 		getSite().setSelectionProvider(viewer);
-
+		getSite().getWorkbenchWindow().getSelectionService()
+				.addPostSelectionListener(this);
 		jobManagerListener = ScheduleAdapter.registerView(viewer);
 
-//		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-//				selectionListener);
-		
-//		// Update view from current selection
-//		final ISelection selection = getSite().getWorkbenchWindow()
-//				.getSelectionService()
-//				.getSelection("com.mmxlabs.rcp.navigator");
-//		selectionListener.selectionChanged(null, selection);
+		// getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+		// selectionListener);
+
+		// // Update view from current selection
+		// final ISelection selection = getSite().getWorkbenchWindow()
+		// .getSelectionService()
+		// .getSelection("com.mmxlabs.rcp.navigator");
+		// selectionListener.selectionChanged(null, selection);
 	}
 
 	@Override
 	public void dispose() {
-		
+
 		ScheduleAdapter.deregisterView(jobManagerListener);
-//		getSite().getPage().removeSelectionListener(
-//				"com.mmxlabs.rcp.navigator", selectionListener);
+		// getSite().getPage().removeSelectionListener(
+		// "com.mmxlabs.rcp.navigator", selectionListener);
 
 		super.dispose();
 	}
@@ -278,10 +319,11 @@ public class SchedulerView extends ViewPart {
 		sortModeAction = new SortModeAction(viewerComparator);
 
 		packAction = new PackAction(viewer.getGanttChart());
-		
+
 		saveFullImageAction = new SaveFullImageAction(viewer.getGanttChart());
-		
-		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.SAVE_AS.getId(), saveFullImageAction);
+
+		getViewSite().getActionBars().setGlobalActionHandler(
+				ActionFactory.SAVE_AS.getId(), saveFullImageAction);
 	}
 
 	/**
@@ -325,11 +367,11 @@ public class SchedulerView extends ViewPart {
 			@Override
 			public void run() {
 				if (!viewer.getControl().isDisposed()) {
-					
+
 					final boolean needFit = viewer.getInput() == null;
-					
+
 					viewer.setInput(input);
-					
+
 					if (input != null && needFit) {
 						packAction.run();
 					}
@@ -379,8 +421,10 @@ public class SchedulerView extends ViewPart {
 		@Override
 		public void run() {
 
-			final List<IScheduleViewColourScheme> colourSchemes = lp.getColourSchemes();
-			final IScheduleViewColourScheme currentScheme = lp.getCurrentScheme();
+			final List<IScheduleViewColourScheme> colourSchemes = lp
+					.getColourSchemes();
+			final IScheduleViewColourScheme currentScheme = lp
+					.getCurrentScheme();
 			int nextIdx = -1;
 			if (currentScheme != null) {
 				nextIdx = colourSchemes.indexOf(currentScheme);
@@ -425,8 +469,9 @@ public class SchedulerView extends ViewPart {
 
 		private void createMenuItems(final Menu menu) {
 
-			final List<IScheduleViewColourScheme> colourSchemes = lp.getColourSchemes();
-			
+			final List<IScheduleViewColourScheme> colourSchemes = lp
+					.getColourSchemes();
+
 			for (final IScheduleViewColourScheme scheme : colourSchemes) {
 
 				final Action a = new Action(scheme.getName(),
@@ -478,7 +523,8 @@ public class SchedulerView extends ViewPart {
 
 			// Step through modes
 			ScenarioViewerComparator.Mode mode = comparator.getMode();
-			final int nextMode = (mode.ordinal() + 1) % ScenarioViewerComparator.Mode.values().length;
+			final int nextMode = (mode.ordinal() + 1)
+					% ScenarioViewerComparator.Mode.values().length;
 			mode = ScenarioViewerComparator.Mode.values()[nextMode];
 			comparator.setMode(mode);
 
@@ -546,6 +592,33 @@ public class SchedulerView extends ViewPart {
 				lastMenu = null;
 			}
 		}
-	};
+	}
 
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		// TODO make selection more obvious - the gantt selection box is small
+		// TODO this seems hard, having taken a look.
+		if (part == this)
+			return;
+		if (selection instanceof IStructuredSelection) {
+			final IStructuredSelection sel = (IStructuredSelection) selection;
+			final List<Object> objects = new ArrayList<Object>(sel.toList()
+					.size());
+			for (final Object o : sel.toList()) {
+				if (o instanceof CargoAllocation) {
+					final CargoAllocation allocation = (CargoAllocation) o;
+					objects.add(allocation.getLoadSlotVisit());
+					objects.add(allocation.getLadenLeg());
+					objects.add(allocation.getLadenIdle());
+					objects.add(allocation.getDischargeSlotVisit());
+					objects.add(allocation.getBallastLeg());
+					objects.add(allocation.getBallastIdle());
+				} else {
+					objects.add(o);
+				}
+			}
+			selection = new StructuredSelection(objects);
+		}
+		viewer.setSelection(selection);
+	}
 }

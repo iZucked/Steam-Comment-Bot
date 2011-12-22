@@ -1,13 +1,10 @@
 package com.mmxlabs.shiplingo.ui.detailview.generated;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import scenario.cargo.CargoPackage;
 
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
-import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 
 /**
  * A composite containing a form for editing Slot instances. The EClass hierarchy is implemented
@@ -74,14 +71,14 @@ public  class SlotComposite extends AbstractDetailComposite {
 	 */
 	protected static void createSlotFields(final AbstractDetailComposite composite, final Composite mainGroup) {
     createIdEditor(composite, mainGroup);
-    createMinQuantityEditor(composite, mainGroup);
-    createMaxQuantityEditor(composite, mainGroup);
     createPortEditor(composite, mainGroup);
     createWindowStartEditor(composite, mainGroup);
+    createContractEditor(composite, mainGroup);
+    createFixedPriceEditor(composite, mainGroup);
+    createMinQuantityEditor(composite, mainGroup);
+    createMaxQuantityEditor(composite, mainGroup);
     createWindowDurationEditor(composite, mainGroup);
     createSlotDurationEditor(composite, mainGroup);
-    createFixedPriceEditor(composite, mainGroup);
-    createContractEditor(composite, mainGroup);
   }
 
 		

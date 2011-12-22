@@ -8,46 +8,23 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<!-- Tycho requires maven 3.0 -->
-	<prerequisites>
-		<maven>3.0</maven>
-	</prerequisites>
-
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
-		<artifactId>mmxlabs-parent</artifactId>
-		<version>1.0-SNAPSHOT</version>
-		<relativePath/>
+		<artifactId>tycho-parent</artifactId>
+		<version>1</version>
+		<relativePath />
 	</parent>
 
-	<issueManagement>
-		<system>CodebaseHQ</system>
-		<url>https://mmxlabs.codebasehq.com/repositories/tickets</url>
-	</issueManagement>
-	<inceptionYear>2010</inceptionYear>
 	<scm>
 		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-demo.hg</connection>
 		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-demo.hg</developerConnection>
 		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-shiplingo-demo</url>
 	</scm>
-	<organization>
-		<name>Minimax Labs</name>
-		<url>http://www.minimaxlabs.com/</url>
-	</organization>
 
-
-	<properties>
-		<!-- Tycho version to use -->
-		<tycho.version>0.13.0</tycho.version>
-
-		<!-- Continue even when tests fail -->
-		<maven.test.failure.ignore>true</maven.test.failure.ignore>
-
-		<!-- Avoid platform dependent build warning -->
-		<!-- Code files should also be in UTF-8 -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-	</properties>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.shiplingo.demo/</url>
+	</ciManagement>
 
 	<modules>
 		<!-- Platform target file - disabled as we use the repositories section 
@@ -69,7 +46,7 @@
 		<module>com.mmxlabs.lngscheduler.emf.edit</module>
 		<module>com.mmxlabs.lngscheduler.emf.editor</module>
 		<module>com.mmxlabs.lngscheduler.ui</module>
-		
+
 		<module>com.mmxlabs.demo.reports</module>
 		<module>com.mmxlabs.ganttviewer</module>
 		<module>com.mmxlabs.scheduleview</module>
@@ -77,23 +54,12 @@
 		<module>com.mmxlabs.shiplingo.ui.detailview</module>
 		<module>com.mmxlabs.shiplingo.importer</module>
 
+		<!-- Documentation -->
+		<module>com.mmxlabs.demo.doc</module>
+
 		<!-- Test Plugins -->
 		<module>com.mmxlabs.scheduler.its</module>
-		<module>com.mmxlabs.demo.doc</module>
 	</modules>
-
-	<!-- Pom dependencies to "consider". These need to be OSGi bundles for the 
-		P2 resolver to correctly pick them up. Ideally these would be installed in 
-		a p2 repository which can be specified in the target definition. -->
-	<!-- Tycho-570 (https://issues.sonatype.org/browse/TYCHO-570) means these 
-		are not correctly being used. -->
-	<dependencies>
-
-		<!-- Now in mmx 3rd Part Repo -->
-		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-math</artifactId> 
-			<version>2.1</version> <scope>compile</scope> </dependency> -->
-
-	</dependencies>
 
 	<build>
 		<!-- Required for some tycho workaround - may no longer be needed -->
@@ -104,51 +70,15 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
-				<version>${tycho.version}</version>
 				<!-- Enable tycho packaging types -->
 				<extensions>true</extensions>
 			</plugin>
 
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<!-- Build code for java 1.6 -->
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-
-			<!-- Tycho uses it's own compiler, so we need to set the compliance levels 
-				differently here. -->
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-compiler-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho.version}</version>
 				<configuration>
-					<!-- Tell the resolver to look at POM dependencies for additional bundles -->
-					<pomDependencies>consider</pomDependencies>
 
-					<resolver>p2</resolver>
-
-					<!-- Where to find the target definition -->
-					<!-- <target> <artifact> <groupId>com.mmxlabs.shiplingo</groupId> <artifactId>target-definition</artifactId> 
-						<version>0.0.1-SNAPSHOT</version> <classifier>shiplingo</classifier> </artifact> 
-						</target> -->
-
-					<!-- List of target environments. However, Tycho seems to only be able 
-						to build one at a time and complains if the product definition contains the 
-						other launcher fragments. -->
 					<environments>
 
 						<environment>
@@ -185,48 +115,9 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<configuration>
-					<!-- Increase max heap size and enable a debug connection to port 8998 -->
-					<!-- <argLine>-Xmx512m -Xdebug -Xrunjdwp:transport=dt_socket,address=8998,server=y,suspend=n</argLine> -->
-					<!-- bug in recent tycho snapshots only allow a single argument here -->
-					<argLine>${ui.test.vmargs}</argLine>
-				</configuration>
-			</plugin>
-
 		</plugins>
 	</build>
 
-
-	<profiles>
-		<profile>
-			<id>macosx</id>
-				<activation>
-					<os>
-						<name>mac os x</name>
-						<family>mac</family>
-					</os>
-				</activation>
-			<properties>
-				<ui.test.vmargs>-Xmx512m -XstartOnFirstThread</ui.test.vmargs>
-			</properties>
-		</profile>
-		<profile>
-			<id>other-os</id>
-			<activation>
-				<os>
-					<name>not-mac</name>
-          				<family>!mac</family>
-				</os>
-			</activation>
-			<properties>
-				<ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m</ui.test.vmargs>
-			</properties>
-		</profile>
-	</profiles>
 
 	<repositories>
 
@@ -250,44 +141,29 @@
 			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</url>
 			<layout>p2</layout>
 		</repository>
-		
+
 		<repository>
-			<!--  This replaces the old cope update site, as cope is now EDapt -->
 			<id>edapt-updates</id>
 			<url>http://download.eclipse.org/edapt/update-site/</url>
 			<layout>p2</layout>
 		</repository>
-		
+
+		<repository>
+			<id>nebula-main-snapshots</id>
+			<url>http://download.eclipse.org/technology/nebula/snapshot</url>
+			<layout>p2</layout>
+		</repository>
+
 		<repository>
 			<id>mmxlabs-p2-snapshots</id>
 			<url>https://s3-proxy.appspot.com/p2-repo/repositories/mmxlabs-p2-snapshots/</url>
-			<!--<url>https://server1.mmxlabs.com/static/p2/mmxlabs-p2-snapshots/</url>-->
 			<layout>p2</layout>
 		</repository>
 
 		<repository>
 			<id>mmxlabs-p2-external</id>
 			<url>https://s3-proxy.appspot.com/p2-repo/repositories/mmxlabs-p2-external/</url>
-			<!--<url>https://server1.mmxlabs.com/static/p2/mmxlabs-p2-external/</url>-->
 			<layout>p2</layout>
 		</repository>
-<!--
-		<repository>
-			<id>mmxlabs-thirdparty</id>
-			<url>https://server1.mmxlabs.com/static/p2/mmxlabs-external-other/repo/</url>
-			<layout>p2</layout>
-		</repository>
--->
 	</repositories>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>org.sonatype.tycho</id>
-			<name>Tycho snapshot repository</name>
-			<url>https://repository.sonatype.org/content/repositories/snapshots</url>
-			<snapshots>
-				<updatePolicy>daily</updatePolicy>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 </project>

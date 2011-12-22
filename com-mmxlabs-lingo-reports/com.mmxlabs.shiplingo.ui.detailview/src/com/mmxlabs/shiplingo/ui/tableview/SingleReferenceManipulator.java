@@ -31,7 +31,8 @@ import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
  * 
  */
 public class SingleReferenceManipulator extends BasicAttributeManipulator {
-	private static final Logger log = LoggerFactory.getLogger(SingleReferenceManipulator.class);
+	private static final Logger log = LoggerFactory
+			.getLogger(SingleReferenceManipulator.class);
 	final IReferenceValueProvider valueProvider;
 	final EditingDomain editingDomain;
 
@@ -60,9 +61,13 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
-		final EObject value = (EObject) super.getValue(object);
-		return valueProvider.getName((EObject) object, (EReference) field,
-				value);
+		final Object value = super.getValue(object);
+		if (value instanceof EObject || value == null) {
+			return valueProvider.getName((EObject) object, (EReference) field,
+					(EObject) value);
+		} else {
+			return "";
+		}
 	}
 
 	@Override
@@ -85,7 +90,9 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	public Object getValue(final Object object) {
 		int x = valueList.indexOf(super.getValue(object));
 		if (x == -1) {
-			log.warn("Index of " + object + " to be selected is -1, so it is not a legal option in the control");
+			log.warn("Index of "
+					+ object
+					+ " to be selected is -1, so it is not a legal option in the control");
 		}
 		return x;
 	}
@@ -116,7 +123,11 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
 			Object object) {
-		return valueProvider.getNotifiers((EObject) object, (EReference) field,
-				(EObject) super.getValue(object));
+		final Object value = super.getValue(object);
+		if (value instanceof EObject)
+			return valueProvider.getNotifiers((EObject) object,
+					(EReference) field, (EObject) value);
+		else
+			return super.getExternalNotifiers(object);
 	}
 }

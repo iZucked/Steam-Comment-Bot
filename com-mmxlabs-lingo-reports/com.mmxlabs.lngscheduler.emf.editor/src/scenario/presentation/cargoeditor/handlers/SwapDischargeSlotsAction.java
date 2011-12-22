@@ -5,15 +5,15 @@
 package scenario.presentation.cargoeditor.handlers;
 
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 
 import scenario.presentation.LngEditorPlugin;
+import scenario.presentation.cargoeditor.LockableAction;
 
-public class SwapDischargeSlotsAction extends Action implements
+public class SwapDischargeSlotsAction extends LockableAction implements
 		ISelectionChangedListener {
 
 	final SwapDischargeHandler handler = new SwapDischargeHandler();
@@ -24,11 +24,7 @@ public class SwapDischargeSlotsAction extends Action implements
 						.getSymbolicName(), "/icons/swap.gif"));
 		setToolTipText("Swap discharge slots");
 		setText("Swap discharge slots");
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return super.isEnabled();
+		setEnabled(false);
 	}
 
 	@Override

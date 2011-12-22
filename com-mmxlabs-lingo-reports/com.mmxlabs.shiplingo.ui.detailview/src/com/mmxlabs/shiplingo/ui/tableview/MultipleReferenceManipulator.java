@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.dialogs.ListSelectionDialog;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
 import com.mmxlabs.shiplingo.ui.detailview.utils.CommandUtil;
@@ -58,6 +59,8 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 
 	@Override
 	public void setValue(Object object, Object value) {
+		final Object currentValue = getValue(object);
+		if (Equality.isEqual(currentValue, value)) return;
 		editingDomain.getCommandStack().execute(
 				CommandUtil.createMultipleAttributeSetter(editingDomain,
 						(EObject) object, field, (Collection) value));

@@ -72,7 +72,7 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void updateDisplay(Object value) {
-		render(value);
+		label.setText(render(value));
 	}
 
 	protected abstract Object displayDialog(final Object currentValue);

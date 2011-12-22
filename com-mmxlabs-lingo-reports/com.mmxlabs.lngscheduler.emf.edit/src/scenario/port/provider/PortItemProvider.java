@@ -31,7 +31,6 @@ import scenario.port.PortPackage;
 
 import scenario.provider.LngEditPlugin;
 import scenario.provider.UUIDObjectItemProvider;
-import scenario.provider.NamedObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link scenario.port.Port} object.

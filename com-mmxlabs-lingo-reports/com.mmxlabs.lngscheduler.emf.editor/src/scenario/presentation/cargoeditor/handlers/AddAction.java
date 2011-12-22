@@ -16,13 +16,15 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import scenario.presentation.cargoeditor.LockableAction;
+
 /**
  * An action for adding model elements
  * 
  * @author Tom Hinton
  * 
  */
-public abstract class AddAction extends Action implements IMenuCreator {
+public abstract class AddAction extends LockableAction implements IMenuCreator {
 	private Menu lastMenu = null;
 
 	public AddAction(final EditingDomain editingDomain, final String name) {

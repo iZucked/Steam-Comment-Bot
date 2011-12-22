@@ -164,6 +164,11 @@ public class PortEVP extends NamedObjectEVP {
 
 			return true;
 		}
+		
+		@Override
+		public Object getFilterValue(Object object) {
+			return getComparable(object);
+		}
 
 		@Override
 		public String render(Object object) {

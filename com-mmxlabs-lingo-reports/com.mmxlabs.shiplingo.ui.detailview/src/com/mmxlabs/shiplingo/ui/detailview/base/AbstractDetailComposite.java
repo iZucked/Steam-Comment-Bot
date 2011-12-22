@@ -103,6 +103,8 @@ public abstract class AbstractDetailComposite extends Composite {
 	private boolean currentStateValid = true;
 
 	private Runnable postValidationRunnable = null;
+	
+	protected boolean lockedForEditing = false;
 
 	/**
 	 * Construct a new detail composite within the parent composite.
@@ -361,8 +363,8 @@ public abstract class AbstractDetailComposite extends Composite {
 	 * @param composite
 	 */
 	public void addSubEditor(final AbstractDetailComposite composite) {
-		subEditors.add(composite);
-		myLayout.numColumns = subEditors.size() + 1;
+		addSubEditor(composite, true);
+
 	}
 
 	/**
@@ -451,5 +453,30 @@ public abstract class AbstractDetailComposite extends Composite {
 
 	public EMFPath getInputPath() {
 		return inputPath;
+	}
+
+	public void addSubEditor(AbstractDetailComposite composite, boolean expandColumns) {
+		subEditors.add(composite);
+		if (expandColumns)
+			myLayout.numColumns++;// = subEditors.size() + 1;
+	}
+
+	public boolean isLockedForEditing() {
+		return lockedForEditing;
+	}
+
+	public void setLockedForEditing(boolean lockedForEditing) {
+		this.lockedForEditing = lockedForEditing;
+		setEnabled(this, !lockedForEditing);
+		if (!lockedForEditing) setInput(input); // need to do this in case some controls are /meant/ to be disabled.
+	}
+	
+	private void setEnabled(final Control control, final boolean enabled) {
+		if (!(control instanceof Label || control instanceof Group))
+			control.setEnabled(enabled);
+		if (control instanceof Composite) {
+			for (final Control child : ((Composite) control).getChildren())
+				setEnabled(child, enabled);
+		}
 	}
 }

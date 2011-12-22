@@ -20,11 +20,9 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 /**
- * Simple wrapper based on {@link LNGSchedulerJobDescriptor} to run an optimisation in the
- * unit tests.
+ * Simple wrapper based on {@link LNGSchedulerJobDescriptor} to run an optimisation in the unit tests.
  * 
  * @author Simon Goodall
  * 
@@ -33,12 +31,12 @@ public class ScenarioRunner {
 
 	private final Scenario scenario;
 
-	private IOptimisationData<ISequenceElement> data;
-	private IOptimisationContext<ISequenceElement> context;
+	private IOptimisationData data;
+	private IOptimisationContext context;
 
 	private final ModelEntityMap entities = new ResourcelessModelEntityMap();
 
-	private LocalSearchOptimiser<ISequenceElement> optimiser;
+	private LocalSearchOptimiser optimiser;
 
 	private Schedule intialSchedule;
 
@@ -60,7 +58,7 @@ public class ScenarioRunner {
 		return scenario;
 	}
 
-	public final IOptimisationContext<ISequenceElement> getContext() {
+	public final IOptimisationContext getContext() {
 		return context;
 	}
 
@@ -70,25 +68,22 @@ public class ScenarioRunner {
 
 		final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
 
-		final OptimisationTransformer ot = new OptimisationTransformer(
-				lst.getOptimisationSettings());
+		final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 
 		data = lst.createOptimisationData(entities);
 
-		final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot
-				.createOptimiserAndContext(data, entities);
+		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
 		context = optAndContext.getFirst();
 		optimiser = optAndContext.getSecond();
 
 		// because we are driving the optimiser ourself, so we can be paused, we
 		// don't actually get progress callbacks.
-		optimiser
-				.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
+		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 
 		// Limit number of iterations to keep runtime down.
 		optimiser.setNumberOfIterations(10000);
-		
+
 		optimiser.init();
 
 		intialSchedule = exportSchedule(optimiser.start(context));
@@ -99,12 +94,10 @@ public class ScenarioRunner {
 		finalSchedule = exportSchedule(optimiser.getBestSolution(true));
 	}
 
-	private Schedule exportSchedule(
-			final IAnnotatedSolution<ISequenceElement> solution) {
+	private Schedule exportSchedule(final IAnnotatedSolution solution) {
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 
-		final Schedule schedule = exporter.exportAnnotatedSolution(scenario,
-				entities, solution);
+		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
 
 		return schedule;
 	}

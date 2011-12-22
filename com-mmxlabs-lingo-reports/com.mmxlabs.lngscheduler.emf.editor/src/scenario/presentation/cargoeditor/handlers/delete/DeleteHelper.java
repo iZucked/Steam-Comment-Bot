@@ -54,6 +54,8 @@ public class DeleteHelper {
 	}
 	
 	public static Deleter createDeleter(final EditingDomain domain, final EObject object) {
+		if (object == null)
+			return new Deleter(domain, (Collection<? extends EObject>) Collections.emptySet());
 		return createDeleter(domain, object.eClass(), Collections.singleton(object));
 	}
 

@@ -24,6 +24,7 @@ import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.SlotVisit;
 
+import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 
@@ -37,6 +38,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<IScheduleViewColourScheme>();
 
 	private IScheduleViewColourScheme currentScheme = null;
+
+	private GanttChartViewer viewer;
+
+	public EMFScheduleLabelProvider(final GanttChartViewer viewer) {
+		this.viewer = viewer;
+	}
 
 	@Override
 	public Image getImage(final Object element) {
@@ -86,7 +93,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 			if (element instanceof PortVisit) {
 				final PortVisit visit = (PortVisit) element;
 
-				sb.append("Port: " + visit.getPort().getName() + "\n");
+				if (visit.getPort() != null)
+					sb.append("Port: " + visit.getPort().getName() + "\n");
 				if (element instanceof SlotVisit) {
 					final SlotVisit svisit = (SlotVisit) element;
 					sb.append("Window Start Time: "
@@ -100,12 +108,15 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 				}
 			} else if (element instanceof Journey) {
 				final Journey journey = (Journey) element;
-				sb.append("From: " + journey.getFromPort().getName() + "\n");
-				sb.append("To: " + journey.getToPort().getName() + "\n");
+				if (journey.getFromPort() != null)
+					sb.append("From: " + journey.getFromPort().getName() + "\n");
+				if (journey.getToPort() != null)
+					sb.append("To: " + journey.getToPort().getName() + "\n");
 				sb.append("Vessel State: " + journey.getVesselState().getName()
 						+ "\n");
-				sb.append("Route: " + journey.getRoute() + "\n");
-				sb.append("Speed: " + journey.getSpeed() + "\n");
+				sb.append("Route: " + journey.getRoute().replace("default", "Direct") + "\n");
+				sb.append(
+						String.format("Speed: %.1f\n", journey.getSpeed()));
 				sb.append("Distance: " + journey.getDistance() + "\n");
 			}
 
@@ -116,7 +127,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 						sb.append(fq.getFuelType().getName() + ": ");
 						sb.append(fq.getQuantity() + " "
 								+ fq.getFuelUnit().getName());
-						sb.append(String.format(", cost $%,.2f\n",
+						sb.append(String.format(", cost $%,.0f\n",
 								(double) fq.getTotalPrice()));
 					}
 				}
@@ -157,7 +168,23 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements
 	@Override
 	public Color getBackground(final Object element) {
 		if (currentScheme != null) {
-			return currentScheme.getBackground(element);
+
+			final Color color = currentScheme.getBackground(element);
+//			if (viewer.getSelection().isEmpty() == false) {
+//				final ISelection selection = viewer.getSelection();
+//				if (selection instanceof IStructuredSelection) {
+//					if (((IStructuredSelection) selection).toList().contains(
+//							element)) {
+//						// darken selection
+//						final float scaf = 0.8f;
+//						return ColorCache.getColor(
+//								(int) (color.getRed() * scaf),
+//								(int) (color.getGreen() * scaf),
+//								(int) (color.getBlue() * scaf));
+//					}
+//				}
+//			}
+			return color;
 		}
 		return null;
 	}

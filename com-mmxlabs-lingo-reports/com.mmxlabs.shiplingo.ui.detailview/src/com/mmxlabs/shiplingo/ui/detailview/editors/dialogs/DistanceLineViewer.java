@@ -17,14 +17,16 @@ import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -37,7 +39,6 @@ import scenario.port.PortFactory;
 import scenario.port.PortPackage;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
 
 /**
  * Set the input to a distance model, and this will let you edit it
@@ -45,7 +46,7 @@ import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
  * @author Tom Hinton
  * 
  */
-public class DistanceLineViewer extends TableViewer {
+public class DistanceLineViewer extends GridTableViewer {
 	/**
 	 * @param parent
 	 */
@@ -125,15 +126,15 @@ public class DistanceLineViewer extends TableViewer {
 			}
 		});
 
-		final TableViewerColumn fromColumn = new TableViewerColumn(this,
-				SWT.NONE);
-		fromColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				return ((Pair<Port, Map<Port, DistanceLine>>) element)
-						.getFirst().getName();
-			}
-		});
+//		final GridViewerColumn fromColumn = new GridViewerColumn(this,
+//				SWT.NONE);
+//		fromColumn.setLabelProvider(new ColumnLabelProvider() {
+//			@Override
+//			public String getText(Object element) {
+//				return ((Pair<Port, Map<Port, DistanceLine>>) element)
+//						.getFirst().getName();
+//			}
+//		});
 
 		final ArrayList<Port> ports = new ArrayList<Port>();
 		ports.addAll(scenario.getPortModel().getPorts());
@@ -146,7 +147,7 @@ public class DistanceLineViewer extends TableViewer {
 
 		for (final Port p : ports) {
 
-			final TableViewerColumn toColumn = new TableViewerColumn(this,
+			final GridViewerColumn toColumn = new GridViewerColumn(this,
 					SWT.NONE);
 			
 			toColumn.getColumn().setText(p.getName());
@@ -211,7 +212,7 @@ public class DistanceLineViewer extends TableViewer {
 
 				@Override
 				protected CellEditor getCellEditor(Object element) {
-					final TextCellEditor tce = new TextCellEditor(getTable());
+					final TextCellEditor tce = new TextCellEditor(getGrid());
 					
 					tce.setValidator(new ICellEditorValidator() {
 						@Override
@@ -234,6 +235,17 @@ public class DistanceLineViewer extends TableViewer {
 				@Override
 				protected boolean canEdit(Object element) {
 					return true;
+				}
+			});
+			
+			
+			setRowHeaderLabelProvider(new CellLabelProvider() {
+				@Override
+				public void update(ViewerCell cell) {
+					final Object element = cell.getElement();
+					cell.setText(((Pair<Port, Map<Port, DistanceLine>>) element)
+							.getFirst().getName());
+					
 				}
 			});
 		}

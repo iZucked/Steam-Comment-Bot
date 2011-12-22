@@ -15,8 +15,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.window.IShellProvider;
+import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -25,8 +26,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.PlatformUI;
 
 import scenario.Scenario;
@@ -68,16 +67,15 @@ public class DistanceEditorDialog extends Dialog {
 	protected Control createDialogArea(final Composite parent) {
 		final Composite c = (Composite) super.createDialogArea(parent);
 
-		this.viewer = new DistanceLineViewer(parent, SWT.FULL_SELECTION
-				| SWT.BORDER);
+		this.viewer = new DistanceLineViewer(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		viewer.init(editingDomain, ((Scenario) valueProviderProvider.getModel()));
 
-		final Table table = viewer.getTable();
-		final TableLayout layout = new TableLayout();
-		table.setLayout(layout);
+		final Grid table = viewer.getGrid();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		table.setRowHeaderVisible(true);
+		table.setCellSelectionEnabled(true);
 
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -103,8 +101,8 @@ public class DistanceEditorDialog extends Dialog {
 				shellBounds.x + (shellBounds.width - dialogSize.x) / 2,
 				shellBounds.y + (shellBounds.height - dialogSize.y) / 2);
 
-		final TableColumn[] columns = viewer.getTable().getColumns();
-		for (final TableColumn c : columns) {
+		final GridColumn[] columns = viewer.getGrid().getColumns();
+		for (final GridColumn c : columns) {
 			c.pack();
 		}
 	}

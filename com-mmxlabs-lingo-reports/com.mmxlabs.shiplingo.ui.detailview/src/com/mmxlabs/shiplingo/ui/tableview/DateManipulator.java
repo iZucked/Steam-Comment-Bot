@@ -143,4 +143,23 @@ public class DateManipulator extends BasicAttributeManipulator {
 	public Comparable getComparable(Object object) {
 		return (Date) super.getValue(object);
 	}
+
+
+	@Override
+	public Object getFilterValue(Object object) {
+		final Date date = (Date) super.getValue(object);
+
+		if (date == null)
+			return null;
+
+		final EObject obj = (EObject) object;
+		final Port port = portReference == null ? null : ((Port) obj
+				.eGet(portReference));
+		final TimeZone zone = TimeZone.getTimeZone(port == null
+				|| port.getTimeZone() == null ? "UTC" : port.getTimeZone());
+
+		final Calendar cal = Calendar.getInstance(zone);
+		cal.setTime(date);
+		return cal;
+	}
 }

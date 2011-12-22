@@ -55,6 +55,7 @@ import scenario.Scenario;
 import scenario.ScenarioFactory;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
+import scenario.contract.ContractFactory;
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
 import scenario.contract.GroupEntity;
@@ -87,7 +88,6 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.shiplingo.importer.importers.CSVReader;
 import com.mmxlabs.shiplingo.importer.importers.DeferredReference;
 import com.mmxlabs.shiplingo.importer.importers.EObjectImporter;
@@ -250,22 +250,22 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 							final ModelEntityMap entities = new ResourcelessModelEntityMap();
 							entities.setScenario(scenario);
-							IOptimisationData<ISequenceElement> data;
+							IOptimisationData data;
 							data = lst.createOptimisationData(entities);
 							monitor.worked(1);
 
-							final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot.createOptimiserAndContext(data, entities);
+							final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
-							final IOptimisationContext<ISequenceElement> context = optAndContext.getFirst();
-							LocalSearchOptimiser<ISequenceElement> optimiser = optAndContext.getSecond();
+							final IOptimisationContext context = optAndContext.getFirst();
+							LocalSearchOptimiser optimiser = optAndContext.getSecond();
 
 							// because we are driving the optimiser ourself, so
 							// we can be paused, we
 							// don't actually get progress callbacks.
-							optimiser.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
+							optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 
 							optimiser.init();
-							IAnnotatedSolution<ISequenceElement> startSolution = optimiser.start(context);
+							IAnnotatedSolution startSolution = optimiser.start(context);
 							monitor.worked(1);
 							final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 							final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);
@@ -321,8 +321,21 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		ScenarioUtils.addDefaultSettings(scenario);
 
 		// copy shipping entity from last entity.
-		if (scenario.getContractModel().getEntities().isEmpty() == false)
-			scenario.getContractModel().setShippingEntity((GroupEntity) scenario.getContractModel().getEntities().get(scenario.getContractModel().getEntities().size() - 1));
+		if (scenario.getContractModel().getEntities().isEmpty() == false) {
+			final Entity possiblyGroupEntity = scenario.getContractModel().getEntities().get(scenario.getContractModel().getEntities().size()-1);
+			if (possiblyGroupEntity instanceof GroupEntity) {
+				final GroupEntity groupEntity = (GroupEntity) possiblyGroupEntity;
+				scenario.getContractModel().setShippingEntity(groupEntity);
+			} else {
+				final GroupEntity groupEntity = ContractFactory.eINSTANCE.createGroupEntity();
+				groupEntity.setName(possiblyGroupEntity.getName());
+				groupEntity.setOwnership(1.0);
+				groupEntity.setTaxRate(0.0);
+				groupEntity.setTransferOffset(0.0f);
+				scenario.getContractModel().getEntities().remove(possiblyGroupEntity);
+				scenario.getContractModel().setShippingEntity(groupEntity);
+			}
+		}
 	}
 
 	/**

@@ -6,10 +6,12 @@ package com.mmxlabs.ganttviewer;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -74,14 +76,14 @@ public class GanttChartViewer extends StructuredViewer {
 	public GanttChartViewer(final GanttChart ganttChart) {
 		this.ganttChart = ganttChart;
 		hookControl(ganttChart);
-		
+		final GanttChartViewer chartViewer = this;
 		ganttEventListener = new GanttEventListenerAdapter() {
 
 			@Override
 			public void eventDoubleClicked(final GanttEvent event,
 					final MouseEvent me) {
-				// TODO Auto-generated method stub
-				super.eventDoubleClicked(event, me);
+				// generate event
+				chartViewer.fireDoubleClick(new DoubleClickEvent(chartViewer, new StructuredSelection(getSelectionFromObjects(Collections.singletonList(event)))));
 			}
 
 			@Override
@@ -217,6 +219,13 @@ public class GanttChartViewer extends StructuredViewer {
 			selectedEvents = new ArrayList<GanttEvent>(0);
 		}
 		ganttChart.getGanttComposite().setSelection(selectedEvents);
+		if (selectedEvents.isEmpty() == false) {
+			final GanttEvent sel = selectedEvents.get(0);
+//			TODO figure out bug here; showEvent() blanks the view
+//			if (!ganttChart.getGanttComposite().isEventVisible(sel, ganttChart.getGanttComposite().getBounds()))
+//				ganttChart.getGanttComposite().showEvent(sel, SWT.CENTER);
+//			ganttChart.getGanttComposite().redraw();
+		}
 	}
 
 	@Override
@@ -309,7 +318,7 @@ public class GanttChartViewer extends StructuredViewer {
 						if (toolTip != null) {
 							event.setAdvancedTooltip(toolTip);
 						}
-
+						
 						// Standard parameters
 						event.setMoveable(false);
 						event.setResizable(false);

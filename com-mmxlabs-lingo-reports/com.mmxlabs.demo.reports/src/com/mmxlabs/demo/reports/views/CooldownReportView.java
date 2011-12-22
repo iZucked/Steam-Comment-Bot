@@ -5,6 +5,7 @@
 package com.mmxlabs.demo.reports.views;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -126,19 +127,25 @@ public class CooldownReportView extends EMFReportView {
 			@Override
 			public Object[] getElements(final Object inputElement) {
 				final ArrayList<ScheduledEvent> events = new ArrayList<ScheduledEvent>();
-
+				clearInputEquivalents();
 				if (inputElement instanceof Iterable) {
 					for (final Object schedule_ : ((Iterable<?>) inputElement)) {
 						if (schedule_ instanceof Schedule) {
 							final Schedule schedule = (Schedule) schedule_;
 							for (final Sequence sequence : schedule.getSequences()) {
+								Idle lastIdle = null;
 								for (final ScheduledEvent event : sequence.getEvents()) {
 									if (event instanceof Idle) {
 										final Idle idle = (Idle) event;
 										for (final FuelQuantity quantity : idle.getFuelUsage()) {
-											if (quantity.getFuelType() == FuelType.COOLDOWN && quantity.getQuantity() > 0)
+											if (quantity.getFuelType() == FuelType.COOLDOWN && quantity.getQuantity() > 0) {
 												events.add(idle);
+												lastIdle = idle;
+											}
 										}
+									} else if (event instanceof SlotVisit && lastIdle != null) {
+										setInputEquivalents(event, Collections.singleton((Object) ((SlotVisit)event).getCargoAllocation()));
+										lastIdle = null;
 									}
 								}
 							}
@@ -149,5 +156,10 @@ public class CooldownReportView extends EMFReportView {
 				return events.toArray();
 			}
 		};
+	}
+
+	@Override
+	protected boolean handleSelections() {
+		return true;
 	}
 }

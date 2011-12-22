@@ -12,6 +12,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import scenario.presentation.cargoeditor.LockableAction;
 import scenario.presentation.cargoeditor.handlers.delete.DeleteHelper;
 
 /**
@@ -21,7 +22,7 @@ import scenario.presentation.cargoeditor.handlers.delete.DeleteHelper;
  * @author Tom Hinton
  * 
  */
-public abstract class DeleteAction extends Action {
+public abstract class DeleteAction extends LockableAction {
 	private final EditingDomain editingDomain;
 
 	protected DeleteAction(final EditingDomain editingDomain) {

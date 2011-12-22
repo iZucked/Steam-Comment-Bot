@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.lngscheduler.emf.extras.tests.calculation;
+package com.mmxlabs.scheduler.its.tests.calculation;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -69,7 +69,6 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 
 /**
  * Methods for printing and creating a scenario where a ship travels from port A to port B then back to port A.
@@ -633,7 +632,7 @@ public class ScenarioTools {
 		final ModelEntityMap entities = new ResourcelessModelEntityMap();
 		final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 
-		IOptimisationData<ISequenceElement> data;
+		IOptimisationData data;
 		try {
 			data = lst.createOptimisationData(entities);
 		} catch (final IncompleteScenarioException e) {
@@ -641,15 +640,15 @@ public class ScenarioTools {
 			throw new RuntimeException(e);
 		}
 
-		final Pair<IOptimisationContext<ISequenceElement>, LocalSearchOptimiser<ISequenceElement>> optAndContext = ot.createOptimiserAndContext(data, entities);
+		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
-		final IOptimisationContext<ISequenceElement> context = optAndContext.getFirst();
-		final LocalSearchOptimiser<ISequenceElement> optimiser = optAndContext.getSecond();
+		final IOptimisationContext context = optAndContext.getFirst();
+		final LocalSearchOptimiser optimiser = optAndContext.getSecond();
 
-		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor<ISequenceElement>());
+		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 
 		optimiser.init();
-		final IAnnotatedSolution<ISequenceElement> startSolution = optimiser.start(context);
+		final IAnnotatedSolution startSolution = optimiser.start(context);
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);

@@ -111,7 +111,6 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		this.feature = feature;
 		this.editingDomain = editingDomain;
 		this.commandProcessor = commandProcessor;
-
 	}
 
 	@Override

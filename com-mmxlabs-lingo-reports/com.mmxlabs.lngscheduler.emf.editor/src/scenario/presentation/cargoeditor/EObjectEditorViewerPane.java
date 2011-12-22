@@ -34,21 +34,25 @@ import org.eclipse.emf.edit.command.ReplaceCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.NamedObject;
 import scenario.presentation.ScenarioEditor;
@@ -56,8 +60,8 @@ import scenario.presentation.cargoeditor.handlers.AddAction;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
-import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
-import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.importer.importers.ExportCSVAction;
 import com.mmxlabs.shiplingo.importer.importers.ImportCSVAction;
 import com.mmxlabs.shiplingo.importer.importers.ImportUI;
@@ -74,28 +78,57 @@ import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
  */
 public class EObjectEditorViewerPane extends ViewerPane {
 	protected final ScenarioEditor part;
-	private EObjectTableViewer viewer;
+	protected EObjectTableViewer eObjectTableViewer;
+	
+	private static final Logger log = LoggerFactory.getLogger(EObjectEditorViewerPane.class);
 
-
+	private boolean lockedForEditing;
+	
 	public EObjectEditorViewerPane(final IWorkbenchPage page,
 			final ScenarioEditor part) {
 		super(page, part);
 		this.part = part;
 	}
+	
+	/**
+	 * @return True if edit operations in this editor are disabled
+	 */
+	public boolean isLockedForEditing() {
+		return lockedForEditing;
+	}
 
+	/**
+	 * @param pass true to disable editing, false to re-enable it.
+	 */
+	public void setLockedForEditing(boolean lockedForEditing) {
+		this.lockedForEditing = lockedForEditing;
+		if (eObjectTableViewer != null)
+			eObjectTableViewer.setLockedForEditing(isLockedForEditing());
+		
+		for (final IContributionItem item : getToolBarManager().getItems()) {
+			if (item instanceof ActionContributionItem) {
+				final IAction action = (IAction) ((ActionContributionItem) item).getAction();
+				if (action instanceof LockableAction) {
+					((LockableAction) action).setLockedForEditing(lockedForEditing);
+				}
+			}
+		}
+	}
+	
 	@Override
 	public EObjectTableViewer createViewer(final Composite parent) {
-		viewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI) {
+		eObjectTableViewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
 			@Override
 			protected boolean refreshOrGiveUp() {
 				if (ImportUI.isImporting()) {
-					ImportUI.refreshLater(viewer);
+					ImportUI.refreshLater(eObjectTableViewer);
 					return true;
 				}
 				return false;
 			}
 		};
 
+		getToolBarManager().add(new GroupMarker("filter"));
 		getToolBarManager().add(new GroupMarker("pack"));
 		getToolBarManager().add(new GroupMarker("additions"));
 		getToolBarManager().add(new GroupMarker("edit"));
@@ -104,19 +137,22 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		getToolBarManager().add(new GroupMarker("exporters"));
 		getToolBarManager().add(new GroupMarker("copy"));
 		{
-			final Action a = new PackTableColumnsAction(viewer);
+			final Action a = new PackGridTableColumnsAction(eObjectTableViewer);
 			getToolBarManager().appendToGroup("pack", a);
 		}
 		{
-			final Action a = new CopyTableToClipboardAction(viewer.getTable());
+			final Action a = new CopyGridToClipboardAction(eObjectTableViewer.getGrid());
 			getToolBarManager().appendToGroup("copy", a);
 		}
 
 		getToolBarManager().update(true);
-		return viewer;
+
+		eObjectTableViewer.setLockedForEditing(isLockedForEditing());
+		
+		return eObjectTableViewer;
 	}
 
-	protected Action createDeleteAction(final TableViewer viewer,
+	protected Action createDeleteAction(final GridTableViewer viewer,
 			final EditingDomain editingDomain) {
 		return new scenario.presentation.cargoeditor.handlers.DeleteAction(
 				editingDomain) {
@@ -141,7 +177,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	 * @param e
 	 * @return
 	 */
-	protected Action createAddAction(final TableViewer viewer,
+	protected Action createAddAction(final GridTableViewer viewer,
 			final EditingDomain editingDomain, final EMFPath contentPath) {
 		return new AddAction(editingDomain, contentPath.getTargetType()
 				.getName()) {
@@ -219,15 +255,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	public void addColumn(final String columnName,
 			final ICellRenderer renderer, final ICellManipulator manipulator,
 			final Object... pathObjects) {
-		viewer.addColumn(columnName, renderer, manipulator, pathObjects);
+		eObjectTableViewer.addColumn(columnName, renderer, manipulator, pathObjects);
 	}
-
+	
 	public void init(final List<EReference> path,
 			final AdapterFactory adapterFactory) {
-		viewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
-		final Table table = viewer.getTable();
-		final TableLayout layout = new TableLayout();
-		table.setLayout(layout);
+		eObjectTableViewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
+		final Grid table = eObjectTableViewer.getGrid();
+		
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
@@ -235,27 +270,29 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final ToolBarManager x = getToolBarManager();
 			final EMFPath ePath = new EMFPath(true, path);
 			{
-				final Action a = createAddAction(viewer,
+				Action addAction = createAddAction(eObjectTableViewer,
 						part.getEditingDomain(), ePath);
-				if (a != null) {
-					x.appendToGroup("edit", a);
+				if (addAction != null) {
+					x.appendToGroup("edit", LockableAction.wrap(addAction));
 				}
 			}
 			{
-				final Action b = createDeleteAction(viewer,
+				Action deleteAction = createDeleteAction(eObjectTableViewer,
 						part.getEditingDomain());
-				if (b != null) {
-					x.appendToGroup("edit", b);
+				if (deleteAction != null) {
+					x.appendToGroup("edit", LockableAction.wrap(deleteAction));
+					
 				}
 			}
 			{
-				final Action a = createImportAction(viewer,
+				Action importAction = createImportAction(eObjectTableViewer,
 						part.getEditingDomain(), ePath);
-				if (a != null)
-					x.appendToGroup("importers", a);
+				if (importAction != null) {	
+					x.appendToGroup("importers", LockableAction.wrap(importAction));
+				}
 			}
 			{
-				final Action a = createExportAction(viewer, ePath);
+				final Action a = createExportAction(eObjectTableViewer, ePath);
 				if (a != null)
 					x.appendToGroup("exporters", a);
 			}
@@ -272,7 +309,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	 * @param editingDomain
 	 * @return
 	 */
-	protected Action createExportAction(final TableViewer viewer,
+	protected Action createExportAction(final GridTableViewer viewer,
 			final EMFPath ePath) {
 		return new ExportCSVAction() {
 			@Override
@@ -302,7 +339,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	 * @param ePath
 	 * @return
 	 */
-	protected Action createImportAction(final TableViewer viewer,
+	protected Action createImportAction(final GridTableViewer viewer,
 			final EditingDomain editingDomain, final EMFPath ePath) {
 		return new ImportCSVAction() {
 
@@ -353,10 +390,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 								Collections.singleton(newObject));
 
 						if (replace.canExecute() == false) {
-							// FIXME: Use e.g. log.error(xxx, new RuntimeException());
-							System.err
-									.println("Cannot execute replace command from "
-											+ oldObject + " to " + newObject);
+							log.error("Cannot execute replace command from "
+									+ oldObject + " to " + newObject, new RuntimeException("Replace command not executable!"));
 						}
 						cc.append(replace);
 					} else {
@@ -367,9 +402,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				}
 
 				if (cc.canExecute() == false) {
-					// FIXME: Use e.g. log.error(xxx, new RuntimeException());
-					System.err
-							.println("Warning: cannot evaluate import command");
+					log.error("Cannot execute import command", new RuntimeException("Import command not executable!"));
 				}
 
 				editingDomain.getCommandStack().execute(cc);
@@ -512,14 +545,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public void dispose() {
-		viewer.dispose();
+		eObjectTableViewer.dispose();
 
 		super.dispose();
 	}
 
 	@Override
 	protected void requestActivation() {
-		final Control c = viewer.getControl();
+		final Control c = eObjectTableViewer.getControl();
 		if (c.isDisposed() || c.getDisplay() == null)
 			return;
 		super.requestActivation();
@@ -528,7 +561,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public void showFocus(boolean inFocus) {
-		final Control c = viewer.getControl();
+		final Control c = eObjectTableViewer.getControl();
 		if (c.isDisposed() || c.getDisplay() == null)
 			return;
 		super.showFocus(inFocus);
@@ -536,15 +569,15 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	@Override
 	public void setFocus() {
-		final Control c = viewer.getControl();
+		final Control c = eObjectTableViewer.getControl();
 		if (c.isDisposed() || c.getDisplay() == null)
 			return;
 		super.setFocus();
 	}
 
 	@Override
-	public TableViewer getViewer() {
-		return viewer;
+	public GridTableViewer getViewer() {
+		return eObjectTableViewer;
 	}
 
 	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(
@@ -555,10 +588,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	}
 
 	public void refresh() {
-		if (viewer != null) {
-			if (viewer.getControl() != null
-					&& viewer.getControl().isDisposed() == false) {
-				viewer.refresh();
+		if (eObjectTableViewer != null) {
+			if (eObjectTableViewer.getControl() != null
+					&& eObjectTableViewer.getControl().isDisposed() == false) {
+				eObjectTableViewer.refresh();
 			}
 		}
 	}

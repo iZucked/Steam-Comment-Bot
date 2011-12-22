@@ -11,15 +11,15 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.IShellProvider;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
-
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselClassCost;
@@ -28,7 +28,6 @@ import scenario.port.CanalModel;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
-import com.mmxlabs.shiplingo.ui.tableview.NonEditableColumn;
 import com.mmxlabs.shiplingo.ui.tableview.NumericAttributeManipulator;
 
 /**
@@ -48,7 +47,7 @@ public class CanalCostsDialog extends Dialog {
 
 	private AdapterFactory adapterFactory;
 	private EditingDomain editingDomain;
-	
+
 	public CanalCostsDialog(final Shell parentShell) {
 		super(parentShell);
 	}
@@ -60,23 +59,25 @@ public class CanalCostsDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(final Composite parent) {
 		final Composite content = (Composite) super.createDialogArea(parent);
-		tableViewer = new EObjectTableViewer(content, SWT.FULL_SELECTION | SWT.BORDER);
+		tableViewer = new EObjectTableViewer(content, SWT.FULL_SELECTION
+				| SWT.BORDER);
 
 		tableViewer.init(adapterFactory, containment);
 
-		final Table table = tableViewer.getTable();
-		final TableLayout layout = new TableLayout();
-		table.setLayout(layout);
+		final Grid table = tableViewer.getGrid();
+
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		
-		tableViewer.addTypicalColumn("Canal", new NonEditableColumn() {
+		table.setRowHeaderVisible(true);
+		tableViewer.setRowHeaderLabelProvider(new CellLabelProvider() {
 			@Override
-			public String render(Object object) {
-				return ((VesselClassCost) object).getCanal().getName();
+			public void update(final ViewerCell cell) {
+				cell.setText(((VesselClassCost) cell.getElement()).getCanal()
+						.getName());
+
 			}
 		});
-
+		
 		tableViewer.addTypicalColumn(
 				"Laden Cost",
 				new NumericAttributeManipulator(FleetPackage.eINSTANCE
@@ -97,21 +98,23 @@ public class CanalCostsDialog extends Dialog {
 		tableViewer.setInput(container);
 
 		tableViewer.refresh();
-		
+
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		return content;
 	}
 
-	public int open(final AdapterFactory adapterFactory, final EditingDomain editingDomain,
-			final CanalModel canalModel, final EObject container, final EReference containment) {
+	public int open(final AdapterFactory adapterFactory,
+			final EditingDomain editingDomain, final CanalModel canalModel,
+			final EObject container, final EReference containment) {
 		this.canalModel = canalModel;
 
 		this.container = EcoreUtil.copy(container);
 		this.containment = containment;
-		
-		final EList<VesselClassCost> costs = (EList<VesselClassCost>) this.container.eGet(containment);
-		
+
+		final EList<VesselClassCost> costs = (EList<VesselClassCost>) this.container
+				.eGet(containment);
+
 		for (final Canal c : canalModel.getCanals()) {
 			boolean occurs = false;
 			for (final VesselClassCost cost : costs) {
@@ -125,18 +128,18 @@ public class CanalCostsDialog extends Dialog {
 				final VesselClassCost newCost = (VesselClassCost) EMFUtils
 						.createEObject(FleetPackage.eINSTANCE
 								.getVesselClassCost());
-				
+
 				newCost.setCanal(c);
 				costs.add(newCost);
 			}
 		}
-		
+
 		this.editingDomain = editingDomain;
 		this.adapterFactory = adapterFactory;
 
 		return super.open();
 	}
-	
+
 	public EList<VesselClassCost> getResult() {
 		return (EList<VesselClassCost>) this.container.eGet(containment);
 	}
@@ -149,6 +152,7 @@ public class CanalCostsDialog extends Dialog {
 	@Override
 	public void create() {
 		super.create();
-		getShell().setText("Canal Costs for " + ((VesselClass) container).getName());
+		getShell().setText(
+				"Canal Costs for " + ((VesselClass) container).getName());
 	}
 }

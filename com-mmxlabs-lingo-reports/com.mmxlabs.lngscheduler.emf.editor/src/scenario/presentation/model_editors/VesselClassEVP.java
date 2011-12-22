@@ -15,8 +15,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
@@ -65,7 +65,7 @@ public class VesselClassEVP extends NamedObjectEVP {
 	 * up fuel consumption curves.
 	 */
 	@Override
-	protected Action createImportAction(final TableViewer viewer,
+	protected Action createImportAction(final GridTableViewer viewer,
 			final EditingDomain editingDomain, final EMFPath ePath) {
 		final ImportCSVAction delegate = (ImportCSVAction) super
 				.createImportAction(viewer, editingDomain, ePath);

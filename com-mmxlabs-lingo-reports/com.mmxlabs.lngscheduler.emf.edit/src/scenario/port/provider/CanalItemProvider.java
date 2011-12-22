@@ -28,14 +28,12 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.ScenarioPackage;
-import scenario.fleet.FleetFactory;
 import scenario.port.Canal;
 import scenario.port.PortFactory;
 import scenario.port.PortPackage;
 
 import scenario.provider.LngEditPlugin;
 import scenario.provider.UUIDObjectItemProvider;
-import scenario.provider.NamedObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link scenario.port.Canal} object.

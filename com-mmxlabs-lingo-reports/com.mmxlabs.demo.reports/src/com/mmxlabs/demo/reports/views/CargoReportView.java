@@ -5,6 +5,7 @@
 package com.mmxlabs.demo.reports.views;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,8 +39,6 @@ public class CargoReportView extends EMFReportView {
 	public static final String ID = "com.mmxlabs.demo.reports.views.CargoReportView";
 
 	public CargoReportView() {
-		
-		
 		super("com.mmxlabs.demo.reports.CargoReportView");
 		
 		final CargoPackage c = CargoPackage.eINSTANCE;
@@ -109,32 +108,18 @@ public class CargoReportView extends EMFReportView {
 
 		addColumn("Total Cost", integerFormatter,
 				s.getCargoAllocation__GetTotalCost());
+		
+		
+	}
 
-		// addColumn("Discharge Entity", objectFormatter,
-		// s.getCargoAllocation_DischargeRevenue(),
-		// s.getBookedRevenue_Entity(), name);
-		//
-		// Object[][] fields = { { s.getCargoAllocation_LoadRevenue(), "Load" },
-		// { s.getCargoAllocation_ShippingRevenue(), "Shipping" },
-		// { s.getCargoAllocation_DischargeRevenue(), "Discharge" } };
-		//
-		// for (final Object[] f : fields) {
-		// // addColumn(f[1] + " Revenue", integerFormatter,
-		// // f[0],
-		// // s.getBookedRevenue__GetUntaxedRevenues());
-		// //
-		// // addColumn(f[1] + " Costs", costFormatter,
-		// // f[0],
-		// // s.getBookedRevenue__GetUntaxedCosts());
-		// //
-		// // addColumn(f[1] + " untaxed value", integerFormatter,
-		// // f[0],
-		// // s.getBookedRevenue__GetUntaxedValue());
-		// //
-		//
-		// addColumn(f[1] + " taxed value", integerFormatter, f[0],
-		// s.getBookedRevenue__GetTaxedValue());
-		// }
+	@Override
+	protected boolean handleSelections() {
+		return true;
+	}
+
+	@Override
+	protected Class<?> getSelectionAdaptionClass() {
+		return CargoAllocation.class;
 	}
 
 	@Override
@@ -173,10 +158,7 @@ public class CargoReportView extends EMFReportView {
 						addEntityColumns(scenario);
 					}
 					viewer.refresh();
-//					viewer.getControl().getParent().layout();
 				}});
-					
-				
 			}
 
 			@Override
@@ -187,6 +169,7 @@ public class CargoReportView extends EMFReportView {
 			@Override
 			public Object[] getElements(Object object) {
 				final ArrayList<CargoAllocation> allocations = new ArrayList<CargoAllocation>();
+				clearInputEquivalents();
 				if (object instanceof Iterable) {
 					for (final Object o : (Iterable<?>) object) {
 						if (o instanceof Schedule) {
@@ -196,6 +179,23 @@ public class CargoReportView extends EMFReportView {
 						}
 					}
 				}
+				
+				for (final CargoAllocation allocation : allocations) {
+					// map to events
+					setInputEquivalents(allocation, 
+							Arrays.asList(
+									new Object[] {
+										allocation.getLoadSlotVisit(),
+										allocation.getLoadSlot(),
+										allocation.getDischargeSlotVisit(),
+										allocation.getDischargeSlot(),
+										allocation.getBallastIdle(),
+										allocation.getBallastLeg(),
+										allocation.getLadenIdle(),
+										allocation.getLadenLeg()
+									}));
+				}
+				
 				return allocations.toArray();
 			}
 		};

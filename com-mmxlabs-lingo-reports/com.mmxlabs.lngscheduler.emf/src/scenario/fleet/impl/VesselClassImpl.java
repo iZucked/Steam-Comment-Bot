@@ -21,7 +21,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import scenario.AnnotatedObject;
 import scenario.ScenarioPackage;
 import scenario.fleet.FleetPackage;
-import scenario.fleet.PortExclusion;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselClassCost;
 import scenario.fleet.VesselFuel;

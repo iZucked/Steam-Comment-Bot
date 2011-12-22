@@ -8,8 +8,6 @@ package scenario.cargo;
 
 import org.eclipse.emf.common.util.EList;
 import scenario.AnnotatedObject;
-import org.eclipse.emf.ecore.EObject;
-
 import scenario.fleet.Vessel;
 
 /**

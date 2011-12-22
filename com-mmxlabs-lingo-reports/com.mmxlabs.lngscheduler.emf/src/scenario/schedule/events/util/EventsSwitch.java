@@ -11,7 +11,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import scenario.ScenarioObject;
-import scenario.schedule.events.*;
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.FuelMixture;

@@ -13,11 +13,14 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPage;
 
 import scenario.cargo.CargoPackage;
 import scenario.presentation.ScenarioEditor;
+import scenario.presentation.cargoeditor.handlers.ReplicateCargoAction;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
 import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
 
@@ -28,6 +31,7 @@ import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
 import com.mmxlabs.shiplingo.ui.tableview.EnumAttributeManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.MultipleReferenceManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.SingleReferenceManipulator;
+import com.mmxlabs.shiplingo.ui.tableview.filter.FilterControlContribution;
 
 /**
  * EVP for cargoes
@@ -44,8 +48,6 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 	public void init(List<EReference> path, AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		final CargoPackage cargoPackage = CargoPackage.eINSTANCE;
-
-		
 
 		{
 			final BasicAttributeManipulator id = new BasicAttributeManipulator(
@@ -120,12 +122,14 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 	}
 	
 	final SwapDischargeSlotsAction swapAction = new SwapDischargeSlotsAction();
+	final ReplicateCargoAction replicateAction = new ReplicateCargoAction();
 
 	@Override
 	public EObjectTableViewer createViewer(final Composite parent) {
 		final EObjectTableViewer v = super.createViewer(parent);
 
 		getToolBarManager().appendToGroup("edit", swapAction);
+		getToolBarManager().appendToGroup("edit", replicateAction);
 		getToolBarManager().update(true);
 
 		v.addSelectionChangedListener(swapAction);
@@ -139,7 +143,7 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 			public void keyReleased(final KeyEvent e) {
 
 				if (e.keyCode == ' ') {
-
+					if (isLockedForEditing()) return;
 					final ISelection selection = v.getSelection();
 					if (selection instanceof IStructuredSelection) {
 						final IStructuredSelection ssel = (IStructuredSelection) selection;

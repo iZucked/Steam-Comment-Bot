@@ -5,6 +5,7 @@
 package com.mmxlabs.demo.reports.views;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -59,6 +60,7 @@ public class LatenessReportView extends EMFReportView {
 			@Override
 			public Object[] getElements(final Object object) {
 				final ArrayList<ScheduledEvent> allEvents = new ArrayList<ScheduledEvent>();
+				clearInputEquivalents();
 				if (object instanceof Iterable) {
 					for (final Object o : ((Iterable<?>) object)) {
 						if (o instanceof Schedule) {
@@ -69,6 +71,7 @@ public class LatenessReportView extends EMFReportView {
 										if (visit.getStartTime().after(visit.getSlot().getWindowEnd())) {
 											allEvents.add(e);
 										}
+										setInputEquivalents(visit, Collections.singleton((Object)visit.getCargoAllocation()));
 									} else if (e instanceof VesselEventVisit) {
 										final VesselEventVisit vev = (VesselEventVisit) e;
 										if (vev.getStartTime().after(vev.getVesselEvent().getEndDate())) {
@@ -83,5 +86,10 @@ public class LatenessReportView extends EMFReportView {
 				return allEvents.toArray();
 			}
 		};
+	}
+
+	@Override
+	protected boolean handleSelections() {
+		return true;
 	}
 }

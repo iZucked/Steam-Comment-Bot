@@ -30,7 +30,6 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import scenario.fleet.FleetFactory;
 import scenario.fleet.FleetPackage;
-import scenario.fleet.VesselState;
 import scenario.fleet.VesselStateAttributes;
 
 import scenario.provider.LngEditPlugin;

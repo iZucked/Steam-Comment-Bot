@@ -2,6 +2,7 @@ package com.mmxlabs.shiplingo.ui.detailview.generated;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import scenario.fleet.FleetPackage;
@@ -57,9 +58,10 @@ public class VesselClassComposite extends AbstractDetailComposite {
     
     super.createContents(mainGroup);		
 
+   
     createFields(this, mainGroup);
   }
-
+	
 	/**
 	 * @generated NO notes
 	 */
@@ -206,33 +208,38 @@ public class VesselClassComposite extends AbstractDetailComposite {
 	/**
 	 * Create an editor for the ladenAttributes feature on VesselClass
 	 * 
-	 * @generated
+	 * @generated NO
 	 */
 	protected static void createLadenAttributesEditor(
 			final AbstractDetailComposite composite, final Composite mainGroup) {
-    final VesselStateAttributesComposite sub = 
-      new VesselStateAttributesComposite(composite, composite.getStyle(), 
-        "Laden Attributes", false);
-    sub.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-        true));
-    sub.setPath(new CompiledEMFPath(composite.getInputPath(), FleetPackage.eINSTANCE.getVesselClass_LadenAttributes()));
-    composite.addSubEditor(sub);
-  }
+
+		final Composite block = new Composite(composite, SWT.NONE);
+		block.setLayout(new GridLayout(1, false));
+		block.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		final VesselStateAttributesComposite sub = new VesselStateAttributesComposite(
+				block, composite.getStyle(), "Laden Attributes", false);
+		sub.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		sub.setPath(new CompiledEMFPath(composite.getInputPath(),
+				FleetPackage.eINSTANCE.getVesselClass_LadenAttributes()));
+		composite.addSubEditor(sub, false);
+
+		final VesselStateAttributesComposite sub2 = new VesselStateAttributesComposite(
+				block, composite.getStyle(), "Ballast Attributes", false);
+		sub2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		sub2.setPath(new CompiledEMFPath(composite.getInputPath(),
+				FleetPackage.eINSTANCE.getVesselClass_BallastAttributes()));
+		composite.addSubEditor(sub2);
+	}
 
 	/**
 	 * Create an editor for the ballastAttributes feature on VesselClass
 	 * 
-	 * @generated
+	 * @generated NO
 	 */
 	protected static void createBallastAttributesEditor(
 			final AbstractDetailComposite composite, final Composite mainGroup) {
-    final VesselStateAttributesComposite sub = 
-      new VesselStateAttributesComposite(composite, composite.getStyle(), 
-        "Ballast Attributes", false);
-    sub.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-        true));
-    sub.setPath(new CompiledEMFPath(composite.getInputPath(), FleetPackage.eINSTANCE.getVesselClass_BallastAttributes()));
-    composite.addSubEditor(sub);
+    
+    
   }
 
 	/**

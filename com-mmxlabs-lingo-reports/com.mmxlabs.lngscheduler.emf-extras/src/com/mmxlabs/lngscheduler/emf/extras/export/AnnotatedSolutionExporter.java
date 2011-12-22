@@ -45,14 +45,13 @@ import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -73,7 +72,7 @@ public class AnnotatedSolutionExporter {
 		return exportRuntimeAndFitness;
 	}
 
-	public void setExportRuntimeAndFitness(boolean exportRuntimeAndFitness) {
+	public void setExportRuntimeAndFitness(final boolean exportRuntimeAndFitness) {
 		this.exportRuntimeAndFitness = exportRuntimeAndFitness;
 	}
 
@@ -84,7 +83,7 @@ public class AnnotatedSolutionExporter {
 		exporters.add(visitExporter);
 	}
 
-	public Schedule exportAnnotatedSolution(final Scenario inputScenario, final ModelEntityMap entities, final IAnnotatedSolution<ISequenceElement> annotatedSolution) {
+	public Schedule exportAnnotatedSolution(final Scenario inputScenario, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
 		final List<IExporterExtension> extensions = new LinkedList<IExporterExtension>();
 		{
 			final String EXTENSION_ID = "com.mmxlabs.lngscheduler.exporter";
@@ -103,9 +102,9 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
-		final IOptimisationData<ISequenceElement> data = annotatedSolution.getContext().getOptimisationData();
+		final IOptimisationData data = annotatedSolution.getContext().getOptimisationData();
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		final IAnnotations<ISequenceElement> elementAnnotations = annotatedSolution.getElementAnnotations();
+		final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
 
 		final Schedule output = factory.createSchedule();
 
@@ -189,9 +188,9 @@ public class AnnotatedSolutionExporter {
 
 			final EList<ScheduledEvent> events = eSequence.getEvents();
 
-			Comparator<ScheduledEvent> eventComparator = new Comparator<ScheduledEvent>() {
+			final Comparator<ScheduledEvent> eventComparator = new Comparator<ScheduledEvent>() {
 				@Override
-				public int compare(ScheduledEvent arg0, ScheduledEvent arg1) {
+				public int compare(final ScheduledEvent arg0, final ScheduledEvent arg1) {
 					if (arg0.getStartTime().before(arg1.getStartTime())) {
 						return -1;
 					} else if (arg0.getStartTime().after(arg1.getStartTime())) {
@@ -213,7 +212,6 @@ public class AnnotatedSolutionExporter {
 				}
 			};
 
-			final IPortTypeProvider<ISequenceElement> portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 
 			final List<ScheduledEvent> eventsForElement = new ArrayList<ScheduledEvent>();
 			for (final ISequenceElement element : annotatedSolution.getSequences().getSequence(resource)) {
@@ -224,8 +222,9 @@ public class AnnotatedSolutionExporter {
 
 				for (final IAnnotationExporter exporter : exporters) {
 					final ScheduledEvent result = exporter.export(element, annotations, outputVessel);
-					if (result != null)
+					if (result != null) {
 						eventsForElement.add(result);
+					}
 				}
 
 				// this is messy, but we want to be sure stuff is in the right

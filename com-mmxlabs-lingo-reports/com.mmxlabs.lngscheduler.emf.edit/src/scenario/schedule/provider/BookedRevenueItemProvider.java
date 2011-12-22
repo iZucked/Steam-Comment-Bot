@@ -33,7 +33,6 @@ import scenario.provider.LngEditPlugin;
 import scenario.provider.ScenarioObjectItemProvider;
 
 import scenario.schedule.BookedRevenue;
-import scenario.schedule.ScheduleFactory;
 import scenario.schedule.SchedulePackage;
 
 /**
