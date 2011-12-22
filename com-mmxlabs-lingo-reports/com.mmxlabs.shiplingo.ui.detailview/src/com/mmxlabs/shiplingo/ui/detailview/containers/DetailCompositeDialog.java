@@ -146,6 +146,7 @@ public class DetailCompositeDialog extends Dialog {
 	@Override
 	public void create() {
 		super.create();
+		dcc.setLockedForEditing(lockedForEditing);
 		// commence editing
 		enableButtons();
 		updateEditor();
@@ -163,7 +164,7 @@ public class DetailCompositeDialog extends Dialog {
 			}
 		}
 		// btnOk.setEnabled(true);
-		getButton(IDialogConstants.OK_ID).setEnabled(true);
+		getButton(IDialogConstants.OK_ID).setEnabled(!lockedForEditing);
 //		setMessage("All fields are valid");
 	}
 
@@ -255,8 +256,15 @@ public class DetailCompositeDialog extends Dialog {
 			super.buttonPressed(buttonId);
 		}
 	}
-
+	
 	public int open(final List<EObject> objects) {
+		return open(objects, false);
+	}
+	
+	private boolean lockedForEditing = false;
+		
+	public int open(final List<EObject> objects, boolean locked) {
+		lockedForEditing = locked;
 		final List<EObject> duplicates = new ArrayList<EObject>(objects.size());
 		objectValidity = new boolean[objects.size()];
 		{

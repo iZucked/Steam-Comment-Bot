@@ -32,6 +32,7 @@ public class DetailCompositeContainer {
 	private final EditingDomain editingDomain;
 	private final ICommandProcessor processor;
 	private final IInlineEditorWrapper wrapper;
+	private boolean lockedForEditing = false;
 
 	public DetailCompositeContainer(
 			IValueProviderProvider valueProviderProvider,
@@ -77,6 +78,8 @@ public class DetailCompositeContainer {
 						wrapper);
 
 				adc.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+				
+				adc.setLockedForEditing(lockedForEditing);
 
 				classToComposite.put(eClass, adc);
 				return adc;
@@ -84,5 +87,12 @@ public class DetailCompositeContainer {
 			}
 		}
 		return null;
+	}
+	
+	public void setLockedForEditing(final boolean locked) {
+		lockedForEditing = locked;
+		for (final AbstractDetailComposite composite : classToComposite.values()) {
+			composite.setLockedForEditing(locked);
+		}
 	}
 }
