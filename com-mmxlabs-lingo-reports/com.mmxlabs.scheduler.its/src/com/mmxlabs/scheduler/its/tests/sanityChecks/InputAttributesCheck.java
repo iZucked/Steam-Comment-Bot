@@ -62,7 +62,6 @@ public class InputAttributesCheck {
 		final int numOfClassFour = 6;
 
 		// createVessels creates and adds the vessesl to the scenario.
-		// Add the created vessels to the list of input vessels.
 		csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500, false);
 		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false);
 		csc.addVesselSimple("classThree", numOfClassThree, 20, 25, 10000, 17, 14, 10, 1000, false);
