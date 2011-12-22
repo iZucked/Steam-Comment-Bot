@@ -5,15 +5,20 @@
 package com.mmxlabs.demo.app.wizards;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.management.timer.Timer;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EObject;
 
 import scenario.Scenario;
 import scenario.ScenarioFactory;
+import scenario.UUIDObject;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoFactory;
 import scenario.cargo.LoadSlot;
@@ -65,6 +70,8 @@ public class CustomScenarioCreator {
 
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
+
+	private static final String timeZone = TimeZone.getDefault().getID();
 
 	public CustomScenarioCreator(final float dischargePrice) {
 
@@ -215,11 +222,11 @@ public class CustomScenarioCreator {
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 			vessel.setClass(vc);
 			vessel.setName(i + " (class " + vesselClassName + ")");
-			
+
 			vessel.setTimeChartered(isTimeChartered);
-			
+
 			// TODO Does setting this set the vessel to be a spot charter?
-			//vessel.setDailyCharterOutPrice(charterOutPrice);
+			// vessel.setDailyCharterOutPrice(charterOutPrice);
 
 			final PortTimeAndHeel start = FleetFactory.eINSTANCE.createPortTimeAndHeel();
 			final PortAndTime end = FleetFactory.eINSTANCE.createPortAndTime();
@@ -291,10 +298,14 @@ public class CustomScenarioCreator {
 	 *            A list of distances from port B to port A
 	 */
 	public void addPorts(final Port portA, final Port portB, final int[] AtoBDistances, final int[] BtoADistances) {
-		if (!scenario.getPortModel().getPorts().contains(portA))
+		if (!scenario.getPortModel().getPorts().contains(portA)) {
 			scenario.getPortModel().getPorts().add(portA);
-		if (!scenario.getPortModel().getPorts().contains(portB))
+			portA.setTimeZone(timeZone);
+		}
+		if (!scenario.getPortModel().getPorts().contains(portB)) {
 			scenario.getPortModel().getPorts().add(portB);
+			portB.setTimeZone(timeZone);
+		}
 
 		for (int distance : AtoBDistances) {
 			final DistanceLine distanceLine = PortFactory.eINSTANCE.createDistanceLine();
@@ -433,7 +444,26 @@ public class CustomScenarioCreator {
 			for (VesselClass vc : scenario.getFleetModel().getVesselClasses())
 				addCanal(vc, canalCost);
 
+		fixUUIDMisMatches(scenario);
+
 		return scenario;
+	}
+
+	/**
+	 * When copying a scenario the UUIDs are not copied correctly unless the getter method is called. The method checks whether there is a value and makes a new one if there isn't
+	 * 
+	 * @param scenario
+	 *            The scenario to fix.
+	 */
+	private static void fixUUIDMisMatches(final Scenario scenario) {
+
+		TreeIterator<EObject> iterator = scenario.eAllContents();
+		while (iterator.hasNext()) {
+			EObject obj = iterator.next();
+
+			if (obj instanceof UUIDObject)
+				((UUIDObject) obj).getUUID();
+		}
 	}
 
 	public VesselClassCost createCanalCost(final String canalName, final Port portA, final Port portB, final int distanceAToB, final int distanceBToA, final int canalLadenCost,
@@ -474,5 +504,54 @@ public class CustomScenarioCreator {
 		scenario.getCanalModel().getCanals().add(canalCost.getCanal());
 
 		return canalCost;
+	}
+
+	/**
+	 * A vessel class has a list of inaccessible ports. This method can add to that list if the given vessel class has already been added to the scenario. Note that that this method does not check to
+	 * see if the ports are already in the scenario.
+	 * 
+	 * @param vc
+	 *            The vessel class to add the constraint to.
+	 * @param inaccessiblePorts
+	 *            The ports to make inaccessible.
+	 * @return If the ports are added successfully the method will return true. If the vessel class is not in the scenario it will return false.
+	 */
+	public boolean addInaccessiblePortsOnVesselClass(final VesselClass vc, final Port[] inaccessiblePorts) {
+		if (scenario.getFleetModel().getFleet().contains(vc)) {
+
+			for (VesselClass v : scenario.getFleetModel().getVesselClasses()) {
+				if (v.equals(vc))
+					v.getInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
+
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Each cargo has a list of vessels that has all vessels that are allowed to carry the cargo. (If empty there are no restrictions.) This method can add to that list. Note that no checks are made
+	 * to see if the given vessels are already in the scenario.
+	 * 
+	 * @param cargo
+	 *            The cargo to add the constraint to.
+	 * @param allowedVessels
+	 *            The list of vessels to add.
+	 * @return True if the vessels were added to the cargo's allowed vessel list. False if the cargo was not in the scenario.
+	 */
+	public boolean addAllowedVesselsOnCargo(final Cargo cargo, final ArrayList<Vessel> allowedVessels) {
+
+		if (scenario.getCargoModel().getCargoes().contains(cargo)) {
+
+			for (Cargo c : scenario.getCargoModel().getCargoes()) {
+				if (c.equals(cargo)) {
+					c.getAllowedVessels().addAll(allowedVessels);
+
+					return true;
+				}
+			}
+		}
+		return false;
+
 	}
 }
