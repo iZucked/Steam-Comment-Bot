@@ -72,6 +72,6 @@ public class ScenarioValidationStatusAdapterFactory implements IAdapterFactory {
 
 	@Override
 	public Class<?>[] getAdapterList() {
-		return new Class[] { IJobDescriptor.class };
+		return new Class[] { IStatus.class };
 	}
 }
