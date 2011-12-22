@@ -15,6 +15,14 @@ import org.eclipse.emf.common.util.ResourceLocator;
  * @generated
  */
 public final class LngEditorPlugin extends EMFPlugin {
+	
+	public static final boolean DEBUG_UI_ENABLED;
+
+	private static final String DEBUG_PROPERTY_KEY = "com.mmxlabs.debug_ui";
+	
+	static {
+		DEBUG_UI_ENABLED = System.getProperty(DEBUG_PROPERTY_KEY).equalsIgnoreCase("true");
+	}
 	/**
 	 * Keep track of the singleton.
 	 * <!-- begin-user-doc -->

@@ -1267,7 +1267,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 
 			// Create a page for the selection tree view.
 			//
-			if (false) {
+			if (LngEditorPlugin.DEBUG_UI_ENABLED) {
 			{
 				final ViewerPane viewerPane = new ViewerPane(getSite()
 						.getPage(), ScenarioEditor.this) {
