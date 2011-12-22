@@ -1268,63 +1268,53 @@ public class ScenarioEditor extends MultiPageEditorPart implements
 			// Create a page for the selection tree view.
 			//
 			if (LngEditorPlugin.DEBUG_UI_ENABLED) {
-			{
-				final ViewerPane viewerPane = new ViewerPane(getSite()
-						.getPage(), ScenarioEditor.this) {
-					@Override
-					public Viewer createViewer(final Composite composite) {
-						final Tree tree = new Tree(composite, SWT.MULTI);
-						final TreeViewer newTreeViewer = new TreeViewer(tree);
-						return newTreeViewer;
-					}
+				{
+					final ViewerPane viewerPane = new ViewerPane(getSite().getPage(), ScenarioEditor.this) {
+						@Override
+						public Viewer createViewer(final Composite composite) {
+							final Tree tree = new Tree(composite, SWT.MULTI);
+							final TreeViewer newTreeViewer = new TreeViewer(tree);
+							return newTreeViewer;
+						}
 
-					@Override
-					public void requestActivation() {
-						super.requestActivation();
-						setCurrentViewerPane(this);
-					}
-				};
-				viewerPane.createControl(getContainer());
+						@Override
+						public void requestActivation() {
+							super.requestActivation();
+							setCurrentViewerPane(this);
+						}
+					};
+					viewerPane.createControl(getContainer());
 
-				selectionViewer = (TreeViewer) viewerPane.getViewer();
-				selectionViewer
-						.setContentProvider(new AdapterFactoryContentProvider(
-								adapterFactory));
+					selectionViewer = (TreeViewer) viewerPane.getViewer();
+					selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
 
-				selectionViewer
-						.setLabelProvider(new AdapterFactoryLabelProvider(
-								adapterFactory));
-				selectionViewer.setInput(editingDomain.getResourceSet());
-				selectionViewer.setSelection(new StructuredSelection(
-						editingDomain.getResourceSet().getResources().get(0)),
-						true);
-				viewerPane.setTitle(editingDomain.getResourceSet());
+					selectionViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+					selectionViewer.setInput(editingDomain.getResourceSet());
+					selectionViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
+					viewerPane.setTitle(editingDomain.getResourceSet());
 
-				new AdapterFactoryTreeEditor(selectionViewer.getTree(),
-						adapterFactory);
+					new AdapterFactoryTreeEditor(selectionViewer.getTree(), adapterFactory);
 
-				createContextMenuFor(selectionViewer);
-				final int pageIndex = addPage(viewerPane.getControl());
-				setPageText(pageIndex, getString("_UI_SelectionPage_label"));
-			}
+					createContextMenuFor(selectionViewer);
+					final int pageIndex = addPage(viewerPane.getControl());
+					setPageText(pageIndex, getString("_UI_SelectionPage_label"));
+				}
 
-			// create a debug page
+				// create a debug page
 				final Composite debugPage = new Composite(getContainer(), SWT.NONE);
 				debugPage.setLayout(new GridLayout());
 				final Button lockButton = new Button(debugPage, SWT.TOGGLE);
 				lockButton.setText("Locked for editing");
-				
+
 				lockButton.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
 						setLockedForEditing(lockButton.getSelection());
 					}
 				});
-				
-				
-				setPageText(addPage(debugPage),"Debug");
+
+				setPageText(addPage(debugPage), "Debug");
 			}
-			
 
 			getSite().getShell().getDisplay().asyncExec(new Runnable() {
 				@Override
