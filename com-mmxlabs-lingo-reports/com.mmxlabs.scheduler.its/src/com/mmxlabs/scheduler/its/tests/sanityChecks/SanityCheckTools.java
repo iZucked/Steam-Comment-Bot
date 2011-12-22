@@ -14,10 +14,9 @@ import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
 
 /**
  * @author Adam
- *
+ * 
  */
 public class SanityCheckTools {
-
 
 	/**
 	 * Set the distance between the given ports in a random-ish manner.
@@ -29,16 +28,17 @@ public class SanityCheckTools {
 		int distance = 10;
 
 		for (final Port portX : ports) {
+
 			for (final Port portY : ports) {
+
 				if (!portX.equals(portY)) {
 
 					csc.addPorts(portX, portY, distance);
 
 					distance += 10;
-				} else {
 
+				} else
 					distance -= distance / 2;
-				}
 			}
 		}
 	}
