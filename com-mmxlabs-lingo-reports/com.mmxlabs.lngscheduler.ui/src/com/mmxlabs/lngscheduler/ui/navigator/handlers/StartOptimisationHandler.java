@@ -9,10 +9,18 @@ import java.util.Iterator;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.validation.marker.MarkerUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.internal.views.markers.ProblemsView;
+import org.eclipse.ui.views.markers.internal.ProblemView;
 
 import scenario.Scenario;
 
@@ -58,6 +66,25 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
 
+					final IStatus status = (IStatus) resource.getAdapter(IStatus.class);
+					if (status.matches(Status.ERROR)) {
+						Platform.getLog(Activator.getDefault().getBundle()).log(
+								new Status(Status.ERROR, Activator.PLUGIN_ID, "Validation errors were found in the resource " + resource.getName())
+								);
+						try {
+							MarkerUtil.createMarkers(status);
+							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(
+									"org.eclipse.ui.views.ProblemView" //TODO find where this lives
+									, null, IWorkbenchPage.VIEW_VISIBLE);
+						} catch (final CoreException e) {
+							Platform.getLog(Activator.getDefault().getBundle()).log(
+									new Status(Status.ERROR, Activator.PLUGIN_ID, "An error occurred when creating validtion markers for an invalid scenario", e)
+									);
+						}
+						
+						return null;
+					}
+					
 					// Adapt to a new or existing job
 					IJobDescriptor job = (IJobDescriptor) resource.getAdapter(IJobDescriptor.class);
 
@@ -88,8 +115,15 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 					// Now look to see whether or not we need to prepare, start or resume
 					if (control.getJobState() == EJobState.CREATED) {
-						control.prepare();
-						control.start();
+						try {
+							control.prepare();
+							control.start();
+						} catch (final Exception ex) {
+							Platform.getLog(Activator.getDefault().getBundle()).log(new Status(Status.ERROR, Activator.PLUGIN_ID, Status.OK, 
+									"An error ocurred starting the optimisation"
+									, ex));
+							control.cancel();
+						}
 						// Resume if paused
 					} else if (control.getJobState() == EJobState.PAUSED) {
 						control.resume();
