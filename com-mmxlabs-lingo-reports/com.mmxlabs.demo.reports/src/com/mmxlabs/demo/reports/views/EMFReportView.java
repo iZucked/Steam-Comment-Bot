@@ -127,7 +127,7 @@ public abstract class EMFReportView extends ViewPart implements
 						public String render(Object object) {
 							return formatter.format(object);
 						}
-						
+
 						@Override
 						public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
 							// TODO fix this
@@ -137,6 +137,11 @@ public abstract class EMFReportView extends ViewPart implements
 						@Override
 						public Comparable getComparable(Object object) {
 							return formatter.getComparable(object);
+						}
+
+						@Override
+						public Object getFilterValue(Object object) {
+							return formatter.getFilterable(object);
 						}
 					}
 					, noEditing, path);
@@ -152,6 +157,8 @@ public abstract class EMFReportView extends ViewPart implements
 		public String format(final Object object);
 
 		public Comparable getComparable(final Object object);
+		
+		public Object getFilterable(final Object object);
 	}
 
 	protected final IFormatter containingScheduleFormatter = new BaseFormatter() {
@@ -189,6 +196,10 @@ public abstract class EMFReportView extends ViewPart implements
 			return format(object);
 		}
 
+		@Override
+		public Object getFilterable(Object object) {
+			return getComparable(object);
+		}
 	}
 
 	public class IntegerFormatter implements IFormatter {
@@ -214,6 +225,12 @@ public abstract class EMFReportView extends ViewPart implements
 			if (x == null)
 				return -Integer.MAX_VALUE;
 			return x;
+		}
+
+
+		@Override
+		public Object getFilterable(Object object) {
+			return getComparable(object);
 		}
 	}
 
@@ -245,6 +262,14 @@ public abstract class EMFReportView extends ViewPart implements
 			if (object == null)
 				return new Date(-Long.MAX_VALUE);
 			return ((Calendar) object).getTime();
+		}
+
+		@Override
+		public Object getFilterable(Object object) {
+			if (object instanceof Calendar) {
+				return ((Calendar) object);
+			}
+			return object;
 		}
 	}
 
