@@ -40,12 +40,12 @@ public class SimpleEntity extends Entity {
 	 * For this case, taxed profit is just pretax * ownership * taxrate(time)
 	 */
 	@Override
-	public long getTaxedProfit(long downstreamTotalPretaxProfit, int time) {
+	public long getTaxedProfit(long pretax, int time) {
 		final int taxRate = (int) taxCurve.getValueAtPoint(time);
 
 		final int flip = Calculator.ScaleFactor - taxRate;
 
-		return Calculator.multiply(downstreamTotalPretaxProfit, Calculator.multiply(ownership, flip));
+		return Calculator.multiply(pretax, Calculator.multiply(ownership, flip));
 	}
 
 }
