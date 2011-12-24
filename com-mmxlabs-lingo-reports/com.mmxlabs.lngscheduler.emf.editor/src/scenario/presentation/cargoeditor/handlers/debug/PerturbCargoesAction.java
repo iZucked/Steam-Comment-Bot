@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor.handlers;
+package scenario.presentation.cargoeditor.handlers.debug;
 
 import java.util.Date;
 import java.util.Random;
@@ -29,6 +29,7 @@ import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
 import scenario.presentation.cargoeditor.LockableAction;
+import scenario.presentation.cargoeditor.handlers.ScenarioModifyingAction;
 
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
@@ -39,7 +40,7 @@ import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
  * @author hinton
  *
  */
-public class PerturbCargoesAction extends LockableAction implements ISelectionChangedListener {
+public class PerturbCargoesAction extends ScenarioModifyingAction {
 	public PerturbCargoesAction() {
 		setToolTipText("Perturb load and discharge times");
 		setText("Perturb");
@@ -50,7 +51,6 @@ public class PerturbCargoesAction extends LockableAction implements ISelectionCh
 	public void run() {
 		final InputDialog input = new InputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Perturb Cargoes", "Enter the number of hours of perturbation (+/- half this value will be added)", "24",
 				new IInputValidator() {
-
 					@Override
 					public String isValid(String newText) {
 						try {
@@ -69,7 +69,7 @@ public class PerturbCargoesAction extends LockableAction implements ISelectionCh
 			final Random r = new Random();
 			r.setSeed(System.currentTimeMillis());
 			assert editingDomain != null;
-			for (final Object o : theSelection.toArray()) {
+			for (final Object o : ((IStructuredSelection) getLastSelection()).toArray()) {
 				if (o instanceof Cargo) {
 					final int r1 = RandomHelper.nextIntBetween(r, -value/2, value/2);
 					final int r2 = RandomHelper.nextIntBetween(r, -value/2, value/2);
@@ -92,26 +92,14 @@ public class PerturbCargoesAction extends LockableAction implements ISelectionCh
 		}
 	}
 
-	private IStructuredSelection theSelection = null;
-	
+
 	@Override
-	public void selectionChanged(final SelectionChangedEvent event) {
-		final ISelection selection = event.getSelection();
+	protected boolean isApplicableToSelection(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection) selection;
-			setEnabled(ss.size() > 0);
-			theSelection = ss;
-		} else {
-			setEnabled(false);
+			return ss.size() > 0;
 		}
+		return false;
 	}
 
-	private EditingDomain getEditingDomain(final IWorkbenchWindow wbw) {
-		if (wbw == null || wbw.getActivePage() == null) {
-			return null;
-		}
-		IWorkbenchPart part = wbw.getActivePage().getActivePart();
-		return (part instanceof IEditingDomainProvider ? ((IEditingDomainProvider) part)
-				.getEditingDomain() : null);
-	}
 }

@@ -22,10 +22,10 @@ import scenario.cargo.CargoPackage;
 import scenario.presentation.LngEditorPlugin;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.LockableAction;
-import scenario.presentation.cargoeditor.handlers.FixNamesAction;
-import scenario.presentation.cargoeditor.handlers.PerturbCargoesAction;
 import scenario.presentation.cargoeditor.handlers.ReplicateCargoAction;
 import scenario.presentation.cargoeditor.handlers.SwapDischargeSlotsAction;
+import scenario.presentation.cargoeditor.handlers.debug.FixNamesAction;
+import scenario.presentation.cargoeditor.handlers.debug.PerturbCargoesAction;
 import scenario.presentation.cargoeditor.wiringeditor.WiringDialog;
 
 import com.mmxlabs.shiplingo.ui.tableview.BasicAttributeManipulator;

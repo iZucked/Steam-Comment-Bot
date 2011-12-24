@@ -2,25 +2,20 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package scenario.presentation.cargoeditor.handlers;
+package scenario.presentation.cargoeditor.handlers.debug;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.LoadSlot;
 import scenario.cargo.Slot;
-import scenario.presentation.cargoeditor.LockableAction;
+import scenario.presentation.cargoeditor.handlers.ScenarioModifyingAction;
 
 /**
  * A debug-mode action to jiggle cargoes around
@@ -28,7 +23,7 @@ import scenario.presentation.cargoeditor.LockableAction;
  * @author hinton
  *
  */
-public class FixNamesAction extends LockableAction implements ISelectionChangedListener {
+public class FixNamesAction extends ScenarioModifyingAction {
 	public FixNamesAction() {
 		setToolTipText("Fix cargo and slot names");
 		setText("Fix Names");
@@ -42,7 +37,7 @@ public class FixNamesAction extends LockableAction implements ISelectionChangedL
 		
 		assert editingDomain != null;
 		int index=1;
-		for (final Object o : theSelection.toArray()) {
+		for (final Object o : ((IStructuredSelection) getLastSelection()).toArray()) {
 			if (o instanceof Cargo) {
 				final Cargo c = (Cargo) o;
 				final LoadSlot l = c.getLoadSlot();
@@ -58,26 +53,13 @@ public class FixNamesAction extends LockableAction implements ISelectionChangedL
 		editingDomain.getCommandStack().execute(command);
 	}
 
-	private IStructuredSelection theSelection = null;
-	
 	@Override
-	public void selectionChanged(final SelectionChangedEvent event) {
-		final ISelection selection = event.getSelection();
+	protected boolean isApplicableToSelection(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection) selection;
-			setEnabled(ss.size() > 0);
-			theSelection = ss;
-		} else {
-			setEnabled(false);
+			return ss.size() > 0;
 		}
+		return false;
 	}
 
-	private EditingDomain getEditingDomain(final IWorkbenchWindow wbw) {
-		if (wbw == null || wbw.getActivePage() == null) {
-			return null;
-		}
-		IWorkbenchPart part = wbw.getActivePage().getActivePart();
-		return (part instanceof IEditingDomainProvider ? ((IEditingDomainProvider) part)
-				.getEditingDomain() : null);
-	}
 }
