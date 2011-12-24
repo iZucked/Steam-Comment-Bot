@@ -148,6 +148,7 @@ public class GenerateIndicesAction extends ScenarioModifyingAction implements IS
 										currentDate = new Date(currentDate.getTime() + sep);
 										currentValue += 
 												random.nextGaussian() * sigma1;
+										currentValue = Math.max(1, currentValue); // set a floor of 1 dollar
 										cc.append(AddCommand.create(domain, target.getPriceCurve(), MarketPackage.eINSTANCE.getStepwisePriceCurve_Prices(), price));
 									}
 
