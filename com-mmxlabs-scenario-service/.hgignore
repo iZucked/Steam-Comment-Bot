@@ -1,0 +1,15 @@
+
+syntax: regexp
+^com\.mmxlabs\.scenario\.service/target$
+
+syntax: regexp
+^com\.mmxlabs\.scenario\.service\.model/target$
+
+syntax: regexp
+^com\.mmxlabs\.scenario\.service\.model\.edit/target$
+
+syntax: regexp
+^com\.mmxlabs\.scenario\.service\.ui/target$
+
+syntax: regexp
+^com\.mmxlabs\.scenario\.service\.file/target$

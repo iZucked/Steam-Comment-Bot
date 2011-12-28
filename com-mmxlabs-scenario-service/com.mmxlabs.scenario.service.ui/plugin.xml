@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerContentBinding
+            viewerId="com.mmxlabs.scenario.service.ui.navigator">
+         <includes>
+            <contentExtension
+                  isRoot="true"
+                  pattern="com.mmxlabs.scenario.service.ui.navigatorContent">
+            </contentExtension>            
+         </includes>
+      </viewerContentBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator"
+            id="com.mmxlabs.scenario.service.ui.navigator"
+            name="Scenario Navigator"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent
+            activeByDefault="true"
+            contentProvider="com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceContentProvider"
+            id="com.mmxlabs.scenario.service.ui.navigatorContent"
+            labelProvider="com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceLabelProvider"
+            name="Scenario Service Content">
+         <triggerPoints>
+            <instanceof
+                  value="com.mmxlabs.scenario.service.model.ScenarioModel">
+            </instanceof>
+         </triggerPoints>
+      </navigatorContent>
+   </extension>
+
+</plugin>
