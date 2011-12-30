@@ -9,7 +9,6 @@ import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.scenario.service.Activator;
@@ -45,30 +44,26 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		return scenarioModel;
 	}
 
-	protected PropertySheetPage propertySheetPage;
-
 	/**
 	 * This accesses a cached version of the property sheet. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		if (propertySheetPage == null) {
-			propertySheetPage = new ExtendedPropertySheetPage(editingDomain) {
-				@Override
-				public void setSelectionToViewer(final List<?> selection) {
-					// ScenarioServiceNavigator.this.setSelectionToViewer(selection);
-					ScenarioServiceNavigator.this.setFocus();
-				}
+		ExtendedPropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain) {
+			@Override
+			public void setSelectionToViewer(final List<?> selection) {
+				// ScenarioServiceNavigator.this.setSelectionToViewer(selection);
+				ScenarioServiceNavigator.this.setFocus();
+			}
 
-				@Override
-				public void setActionBars(final IActionBars actionBars) {
-					super.setActionBars(actionBars);
-					// getActionBarContributor().shareGlobalActions(this, actionBars);
-				}
-			};
-			propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
-		}
+			@Override
+			public void setActionBars(final IActionBars actionBars) {
+				super.setActionBars(actionBars);
+				// getActionBarContributor().shareGlobalActions(this, actionBars);
+			}
+		};
+		propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
 
 		return propertySheetPage;
 	}
