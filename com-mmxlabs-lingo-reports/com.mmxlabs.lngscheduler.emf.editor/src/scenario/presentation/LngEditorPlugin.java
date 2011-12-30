@@ -19,16 +19,19 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
  * @generated
  */
 public final class LngEditorPlugin extends EMFPlugin {
-	
+
 	public static final boolean DEBUG_UI_ENABLED;
 
 	private static final String DEBUG_PROPERTY_KEY = "com.mmxlabs.debug_ui";
-	
-	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerServiceTracker;
 
-	
+
 	static {
-		DEBUG_UI_ENABLED = System.getProperty(DEBUG_PROPERTY_KEY).equalsIgnoreCase("true");
+		String property = System.getProperty(DEBUG_PROPERTY_KEY);
+		if (property != null) {
+			DEBUG_UI_ENABLED = property.equalsIgnoreCase("true");
+		} else {
+			DEBUG_UI_ENABLED = false;
+		}
 	}
 	/**
 	 * Keep track of the singleton.
@@ -37,7 +40,7 @@ public final class LngEditorPlugin extends EMFPlugin {
 	 * @generated
 	 */
 	public static final LngEditorPlugin INSTANCE = new LngEditorPlugin();
-	
+
 	/**
 	 * Keep track of the singleton.
 	 * <!-- begin-user-doc -->
@@ -53,9 +56,7 @@ public final class LngEditorPlugin extends EMFPlugin {
 	 * @generated
 	 */
 	public LngEditorPlugin() {
-		super
-			(new ResourceLocator [] {
-			});
+		super(new ResourceLocator[] {});
 	}
 
 	/**
@@ -69,7 +70,7 @@ public final class LngEditorPlugin extends EMFPlugin {
 	public ResourceLocator getPluginResourceLocator() {
 		return plugin;
 	}
-	
+
 	/**
 	 * Returns the singleton instance of the Eclipse plugin.
 	 * <!-- begin-user-doc -->
@@ -80,7 +81,7 @@ public final class LngEditorPlugin extends EMFPlugin {
 	public static Implementation getPlugin() {
 		return plugin;
 	}
-	
+
 	/**
 	 * The actual implementation of the Eclipse <b>Plugin</b>.
 	 * <!-- begin-user-doc -->
@@ -89,7 +90,7 @@ public final class LngEditorPlugin extends EMFPlugin {
 	 */
 	public static class Implementation extends EclipseUIPlugin {
 		private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerServiceTracker;
-		
+
 		/**
 		 * Creates an instance.
 		 * <!-- begin-user-doc -->
@@ -98,7 +99,7 @@ public final class LngEditorPlugin extends EMFPlugin {
 		 */
 		public Implementation() {
 			super();
-	
+
 			// Remember the static instance.
 			//
 			plugin = this;
@@ -107,8 +108,7 @@ public final class LngEditorPlugin extends EMFPlugin {
 		@Override
 		public void start(BundleContext context) throws Exception {
 			super.start(context);
-			jobManagerServiceTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context,
-					IEclipseJobManager.class.getName(), null);
+			jobManagerServiceTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context, IEclipseJobManager.class.getName(), null);
 			jobManagerServiceTracker.open();
 		}
 
@@ -118,7 +118,7 @@ public final class LngEditorPlugin extends EMFPlugin {
 			jobManagerServiceTracker = null;
 			super.stop(context);
 		}
-		
+
 		public IEclipseJobManager getJobManager() {
 			return jobManagerServiceTracker.getService();
 		}
