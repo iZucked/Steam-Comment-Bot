@@ -13,3 +13,7 @@ syntax: regexp
 
 syntax: regexp
 ^com\.mmxlabs\.scenario\.service\.file/target$
+syntax: regexp
+^\.settings$
+syntax: regexp
+^\.project$
