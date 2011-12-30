@@ -1,6 +1,8 @@
 package com.mmxlabs.scenario.service.file;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +33,13 @@ public class FileScenarioService implements IScenarioService {
 
 	private final Map<Object, Object> options;
 
+	private IPath workspaceLocation;
+
+	private ScenarioServiceIOHelper ioHelper;
+
 	public FileScenarioService() {
 		options = new HashMap<Object, Object>();
+		workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 	}
 
 	@Override
@@ -60,6 +67,7 @@ public class FileScenarioService implements IScenarioService {
 
 		final URI uri = URI.createFileURI(workspaceLocation + "/" + modelURIString);
 		load(uri);
+		ioHelper = new ScenarioServiceIOHelper(serviceModel, workspaceLocation.append("/data/"));
 	}
 
 	public void stop(final ComponentContext context) {
@@ -136,5 +144,29 @@ public class FileScenarioService implements IScenarioService {
 		serviceService.setDescription("File scenario service");
 
 		return serviceService;
+	}
+
+	@Override
+	public InputStream createInputStream(final String uuid, final Map<?, ?> options) throws IOException {
+
+		return ioHelper.createInputStream(uuid, options);
+	}
+
+	@Override
+	public OutputStream createOutputStream(final String uuid, final Map<?, ?> options) throws IOException {
+
+		return ioHelper.createOutputStream(uuid, options);
+	}
+
+	@Override
+	public boolean exists(final String uuid, final Map<?, ?> options) {
+
+		return ioHelper.exists(uuid, options);
+	}
+
+	@Override
+	public void delete(final String uuid, final Map<?, ?> options) {
+
+		ioHelper.delete(uuid, options);
 	}
 }
