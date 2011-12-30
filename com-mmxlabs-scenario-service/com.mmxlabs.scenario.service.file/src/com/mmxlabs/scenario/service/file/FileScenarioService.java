@@ -3,6 +3,7 @@ package com.mmxlabs.scenario.service.file;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -33,13 +35,10 @@ public class FileScenarioService implements IScenarioService {
 
 	private final Map<Object, Object> options;
 
-	private IPath workspaceLocation;
-
 	private ScenarioServiceIOHelper ioHelper;
 
 	public FileScenarioService() {
 		options = new HashMap<Object, Object>();
-		workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 	}
 
 	@Override
@@ -62,12 +61,17 @@ public class FileScenarioService implements IScenarioService {
 			throw new RuntimeException("FileScenarioService: No model URI property set");
 		}
 		final String modelURIString = value.toString();
+		
+		String scenarioServiceID = d.get("component.id").toString();
 
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 
 		final URI uri = URI.createFileURI(workspaceLocation + "/" + modelURIString);
 		load(uri);
+
 		ioHelper = new ScenarioServiceIOHelper(serviceModel, workspaceLocation.append("/data/"));
+
+		ioHelper.scanForScenarios(scenarioServiceID);
 	}
 
 	public void stop(final ComponentContext context) {
@@ -97,8 +101,8 @@ public class FileScenarioService implements IScenarioService {
 			@Override
 			public void notifyChanged(final Notification notification) {
 
+				// Auto save on change
 				// TODO: Filter Changes
-
 				save();
 			}
 
@@ -168,5 +172,16 @@ public class FileScenarioService implements IScenarioService {
 	public void delete(final String uuid, final Map<?, ?> options) {
 
 		ioHelper.delete(uuid, options);
+	}
+
+	@Override
+	public EObject getScenario(String uuid) {
+		try {
+			return ioHelper.loadScenario(uuid, Collections.EMPTY_MAP);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
