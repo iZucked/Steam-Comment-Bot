@@ -94,7 +94,8 @@ public class CargoExistenceCheck {
 	private void checkCargos(final Schedule result, final ArrayList<Cargo> inputCargos) {
 
 		final int numOfInputCargos = inputCargos.size();
-		int numOfOutputCargos = 0;
+
+		Assert.assertEquals("Same number of cargoes in the output as in the input", numOfInputCargos, result.getCargoAllocations());
 
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
@@ -103,10 +104,8 @@ public class CargoExistenceCheck {
 			Assert.assertTrue("Input cargo is in output", inputCargos.contains(c));
 
 			inputCargos.remove(c);
-			numOfOutputCargos++;
 		}
 
 		Assert.assertEquals("All cargos in output", 0, inputCargos.size());
-		Assert.assertEquals("Number of input cargos is the same as the number of output", numOfInputCargos, numOfOutputCargos);
 	}
 }
