@@ -96,6 +96,8 @@ public class CheckCargoAllowedVesselConstraintNotViolated {
 
 	/**
 	 * Test one class of vessel not being allowed to carry any cargo
+	 * 
+	 * (this was the test which found the bug highlighted in case 280 - now fixed)
 	 */
 	@Test
 	public void test2() {
