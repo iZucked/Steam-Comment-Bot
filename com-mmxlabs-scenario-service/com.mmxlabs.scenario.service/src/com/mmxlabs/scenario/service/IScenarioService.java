@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 
 public interface IScenarioService {
@@ -42,4 +43,8 @@ public interface IScenarioService {
 	
 	
 	EObject getScenario(String uuid);
+
+	ScenarioInstance getScenarioInstance(String uuid);
+
+	<T> T getAdapter(String uuid, Class<T> adapters);
 }

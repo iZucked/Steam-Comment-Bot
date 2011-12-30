@@ -61,6 +61,17 @@ public class ScenarioServiceIOHelper {
 		return filePath.toFile().exists();
 	}
 
+	public ScenarioInstance findInstance(final String uuid) {
+		final SELECT query = new SELECT(1, new FROM(scenarioService), new WHERE(new EObjectAttributeValueCondition(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid(), new StringValue(uuid))));
+		final IQueryResult queryResult = query.execute();
+
+		final Iterator<EObject> itr = queryResult.iterator();
+		while (itr.hasNext()) {
+			return (ScenarioInstance) itr.next();
+		}
+		return null;
+	}
+
 	public void delete(final String uuid, final Map<?, ?> options) {
 		final IPath filePath = dataPath.append(uuid);
 		filePath.toFile().delete();
@@ -80,13 +91,11 @@ public class ScenarioServiceIOHelper {
 		final IPath filePath = dataPath.append(uuid);
 
 		UpgradingResourceFactory f = new UpgradingResourceFactory(new XMIUpgradingResourceFactory());
-		
-		
-		
+
 		Resource res = f.createResource(URI.createFileURI(filePath.toFile().toString()));
 
 		HashMap<Object, Object> options2 = new HashMap<Object, Object>(options);
-		
+
 		options2.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
 		options2.put(XMLResource.OPTION_RESOURCE_HANDLER, new XMLResource.ResourceHandler() {
 
@@ -112,8 +121,9 @@ public class ScenarioServiceIOHelper {
 			public void postSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {
 			}
 		});
-		
+
 		res.load(options2);
+		
 		return res.getContents().get(0);
 	}
 

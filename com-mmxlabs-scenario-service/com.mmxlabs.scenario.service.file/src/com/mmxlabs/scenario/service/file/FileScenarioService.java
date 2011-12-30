@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
@@ -18,9 +19,15 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.osgi.service.component.ComponentContext;
 
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 
@@ -61,8 +68,8 @@ public class FileScenarioService implements IScenarioService {
 			throw new RuntimeException("FileScenarioService: No model URI property set");
 		}
 		final String modelURIString = value.toString();
-		
-		String scenarioServiceID = d.get("component.id").toString();
+
+		final String scenarioServiceID = d.get("component.id").toString();
 
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 
@@ -175,13 +182,62 @@ public class FileScenarioService implements IScenarioService {
 	}
 
 	@Override
-	public EObject getScenario(String uuid) {
-		try {
-			return ioHelper.loadScenario(uuid, Collections.EMPTY_MAP);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public EObject getScenario(final String uuid) {
+		final ScenarioInstance findInstance = ioHelper.findInstance(uuid);
+
+		if (findInstance.getInstance() == null) {
+			try {
+				final EObject scenario = ioHelper.loadScenario(uuid, Collections.EMPTY_MAP);
+
+				Map<Object, Object> adapters2 = (Map<Object, Object>) findInstance.getAdapters();
+				if (adapters2 == null) {
+					adapters2 = new HashMap<Object, Object>();
+					findInstance.setAdapters(adapters2);
+				}
+				final EditingDomain ed = initEditingDomain();
+				adapters2.put(EditingDomain.class, ed);
+				ed.getResourceSet().getResources().add(scenario.eResource());
+
+				findInstance.setInstance(scenario);
+
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		return findInstance.getInstance();
+	}
+
+	@Override
+	public ScenarioInstance getScenarioInstance(final String uuid) {
+		return ioHelper.findInstance(uuid);
+	}
+
+	@Override
+	public <T> T getAdapter(final String uuid, final Class<T> adapters) {
+
+		if (EditingDomain.class.isAssignableFrom(adapters)) {
+			final ScenarioInstance instance = ioHelper.findInstance(uuid);
+
+			final Map<?, ?> adapters2 = instance.getAdapters();
+			if (adapters2 != null && adapters2.containsKey(adapters)) {
+				return (T) adapters2.get(adapters);
+			}
+		}
+		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public EditingDomain initEditingDomain() {
+		final BasicCommandStack commandStack = new BasicCommandStack();
+
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+
+		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+
+		// Create the editing domain with a special command stack.
+		//
+		return new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
 	}
 }
