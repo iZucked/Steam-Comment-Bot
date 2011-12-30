@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EObject;
+
 import com.mmxlabs.scenario.service.model.ScenarioService;
 
 public interface IScenarioService {
@@ -37,4 +39,7 @@ public interface IScenarioService {
 	OutputStream createOutputStream(String uuid, Map<?, ?> options) throws IOException;
 
 	void delete(String uuid, Map<?, ?> options) throws IOException;
+	
+	
+	EObject getScenario(String uuid);
 }
