@@ -13,6 +13,8 @@ import scenario.port.Port;
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
 
 /**
+ * Tools that are used in many of the sanity checks.
+ * 
  * @author Adam
  * 
  */
@@ -44,7 +46,7 @@ public class SanityCheckTools {
 	}
 
 	/**
-	 * Add a number of cargos to the scenario in a random-ish manner.
+	 * Add a number of cargos to the scenario in a random-ish manner. For every port a cargo is added to go to every other port.
 	 * 
 	 * @param ports
 	 *            The ports to add cargos to.

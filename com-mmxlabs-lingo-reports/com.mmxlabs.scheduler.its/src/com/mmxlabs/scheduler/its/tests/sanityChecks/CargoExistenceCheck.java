@@ -35,9 +35,9 @@ public class CargoExistenceCheck {
 
 	private static final int dischargePrice = 1;
 	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
-	
+
 	/**
-	 * Check that all cargos added to the scenario are in the output.
+	 * Create a scenario with some cargos and vessels. Check that all cargos added to the scenario are in the output.
 	 */
 	@Test
 	public void test() {
@@ -84,10 +84,12 @@ public class CargoExistenceCheck {
 	}
 
 	/**
-	 * Check all the cargos in output are
+	 * Check all the cargos in output are in the input cargos once.
 	 * 
 	 * @param result
+	 *            The evaluated scenario (containing the cargos in the output)
 	 * @param inputCargos
+	 *            The cargos that were input into the unevaluated scenario.
 	 */
 	private void checkCargos(final Schedule result, final ArrayList<Cargo> inputCargos) {
 
