@@ -15,6 +15,7 @@ import com.mmxlabs.scenario.service.model.Solution;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -69,6 +70,20 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	private EClass metadataEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType classEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType objectEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -497,6 +512,24 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EDataType getClass_() {
+		return classEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EDataType getObject() {
+		return objectEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ScenarioServiceFactory getScenarioServiceFactory() {
 		return (ScenarioServiceFactory) getEFactoryInstance();
 	}
@@ -566,6 +599,10 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(metadataEClass, METADATA__COMMENT);
 		createEAttribute(metadataEClass, METADATA__LAST_MODIFIED_BY);
 		createEAttribute(metadataEClass, METADATA__CONTENT_TYPE);
+
+		// Create data types
+		classEDataType = createEDataType(CLASS);
+		objectEDataType = createEDataType(OBJECT);
 	}
 
 	/**
@@ -593,6 +630,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		setNsURI(eNS_URI);
 
 		// Create type parameters
+		addETypeParameter(classEDataType, "T");
 
 		// Set bounds for type parameters
 
@@ -635,9 +673,11 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		initEReference(getScenarioInstance_Controller(), ecorePackage.getEObject(), null, "controller", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		EGenericType g1 = createEGenericType(ecorePackage.getEMap());
-		EGenericType g2 = createEGenericType();
+		EGenericType g2 = createEGenericType(this.getClass_());
 		g1.getETypeArguments().add(g2);
-		g2 = createEGenericType();
+		EGenericType g3 = createEGenericType();
+		g2.getETypeArguments().add(g3);
+		g2 = createEGenericType(this.getObject());
 		g1.getETypeArguments().add(g2);
 		initEAttribute(getScenarioInstance_Adapters(), g1, "adapters", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);
@@ -683,6 +723,10 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMetadata_ContentType(), ecorePackage.getEString(), "contentType", null, 0, 1, Metadata.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
+
+		// Initialize data types
+		initEDataType(classEDataType, Class.class, "Class", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(objectEDataType, Object.class, "Object", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

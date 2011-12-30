@@ -35,8 +35,10 @@
         transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="adapters" transient="true">
       <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
-        <eTypeArguments/>
-        <eTypeArguments/>
+        <eTypeArguments eClassifier="#//Class">
+          <eTypeArguments/>
+        </eTypeArguments>
+        <eTypeArguments eClassifier="#//Object"/>
       </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>
@@ -72,4 +74,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModifiedBy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contentType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Class" instanceClassName="java.lang.Class">
+    <eTypeParameters name="T"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceClassName="java.lang.Object"/>
 </ecore:EPackage>

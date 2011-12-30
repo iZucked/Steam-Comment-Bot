@@ -221,7 +221,7 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 	 * @generated
 	 * @ordered
 	 */
-	protected Map<?, ?> adapters;
+	protected Map<Class<?>, Object> adapters;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -347,7 +347,7 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map<?, ?> getAdapters() {
+	public Map<Class<?>, Object> getAdapters() {
 		return adapters;
 	}
 
@@ -356,8 +356,8 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setAdapters(Map<?, ?> newAdapters) {
-		Map<?, ?> oldAdapters = adapters;
+	public void setAdapters(Map<Class<?>, Object> newAdapters) {
+		Map<Class<?>, Object> oldAdapters = adapters;
 		adapters = newAdapters;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS, oldAdapters, adapters));
@@ -665,7 +665,7 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 			setController((EObject) newValue);
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
-			setAdapters((Map<?, ?>) newValue);
+			setAdapters((Map<Class<?>, Object>) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -713,7 +713,7 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 			setController((EObject) null);
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
-			setAdapters((Map<?, ?>) null);
+			setAdapters((Map<Class<?>, Object>) null);
 			return;
 		}
 		super.eUnset(featureID);

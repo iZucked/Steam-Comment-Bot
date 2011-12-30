@@ -6,6 +6,7 @@ package com.mmxlabs.scenario.service.model;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -478,6 +479,26 @@ public interface ScenarioServicePackage extends EPackage {
 	int METADATA_FEATURE_COUNT = 6;
 
 	/**
+	 * The meta object id for the '<em>Class</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.lang.Class
+	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getClass_()
+	 * @generated
+	 */
+	int CLASS = 6;
+
+	/**
+	 * The meta object id for the '<em>Object</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.lang.Object
+	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getObject()
+	 * @generated
+	 */
+	int OBJECT = 7;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioInstance <em>Scenario Instance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -912,6 +933,28 @@ public interface ScenarioServicePackage extends EPackage {
 	EAttribute getMetadata_ContentType();
 
 	/**
+	 * Returns the meta object for data type '{@link java.lang.Class <em>Class</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Class</em>'.
+	 * @see java.lang.Class
+	 * @model instanceClass="java.lang.Class" typeParameters="T"
+	 * @generated
+	 */
+	EDataType getClass_();
+
+	/**
+	 * Returns the meta object for data type '{@link java.lang.Object <em>Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Object</em>'.
+	 * @see java.lang.Object
+	 * @model instanceClass="java.lang.Object"
+	 * @generated
+	 */
+	EDataType getObject();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1264,6 +1307,26 @@ public interface ScenarioServicePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute METADATA__CONTENT_TYPE = eINSTANCE.getMetadata_ContentType();
+
+		/**
+		 * The meta object literal for the '<em>Class</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.lang.Class
+		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getClass_()
+		 * @generated
+		 */
+		EDataType CLASS = eINSTANCE.getClass_();
+
+		/**
+		 * The meta object literal for the '<em>Object</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.lang.Object
+		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getObject()
+		 * @generated
+		 */
+		EDataType OBJECT = eINSTANCE.getObject();
 
 	}
 

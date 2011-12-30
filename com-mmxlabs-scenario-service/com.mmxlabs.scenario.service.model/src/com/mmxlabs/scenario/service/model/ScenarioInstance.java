@@ -135,7 +135,7 @@ public interface ScenarioInstance extends EObject {
 	 * @model transient="true"
 	 * @generated
 	 */
-	Map<?, ?> getAdapters();
+	Map<Class<?>, Object> getAdapters();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters <em>Adapters</em>}' attribute.
@@ -145,7 +145,7 @@ public interface ScenarioInstance extends EObject {
 	 * @see #getAdapters()
 	 * @generated
 	 */
-	void setAdapters(Map<?, ?> value);
+	void setAdapters(Map<Class<?>, Object> value);
 
 	/**
 	 * Returns the value of the '<em><b>Uri</b></em>' attribute.
