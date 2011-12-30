@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model;
 
+import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -25,6 +26,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInitialSolution <em>Initial Solution</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getVariations <em>Variations</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getParameterSets <em>Parameter Sets</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance <em>Instance</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getController <em>Controller</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters <em>Adapters</em>}</li>
  * </ul>
  * </p>
  *
@@ -64,6 +68,84 @@ public interface ScenarioInstance extends EObject {
 	 * @generated
 	 */
 	EList<ParamSet> getParameterSets();
+
+	/**
+	 * Returns the value of the '<em><b>Instance</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Instance</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Instance</em>' reference.
+	 * @see #setInstance(EObject)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_Instance()
+	 * @model transient="true"
+	 * @generated
+	 */
+	EObject getInstance();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance <em>Instance</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Instance</em>' reference.
+	 * @see #getInstance()
+	 * @generated
+	 */
+	void setInstance(EObject value);
+
+	/**
+	 * Returns the value of the '<em><b>Controller</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Controller</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Controller</em>' reference.
+	 * @see #setController(EObject)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_Controller()
+	 * @model transient="true"
+	 * @generated
+	 */
+	EObject getController();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getController <em>Controller</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Controller</em>' reference.
+	 * @see #getController()
+	 * @generated
+	 */
+	void setController(EObject value);
+
+	/**
+	 * Returns the value of the '<em><b>Adapters</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Adapters</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Adapters</em>' attribute.
+	 * @see #setAdapters(Map)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_Adapters()
+	 * @model transient="true"
+	 * @generated
+	 */
+	Map<?, ?> getAdapters();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters <em>Adapters</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Adapters</em>' attribute.
+	 * @see #getAdapters()
+	 * @generated
+	 */
+	void setAdapters(Map<?, ?> value);
 
 	/**
 	 * Returns the value of the '<em><b>Uri</b></em>' attribute.

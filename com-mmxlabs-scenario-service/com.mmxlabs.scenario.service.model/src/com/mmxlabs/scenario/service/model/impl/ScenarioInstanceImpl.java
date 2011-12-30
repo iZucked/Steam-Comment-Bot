@@ -12,12 +12,14 @@ import com.mmxlabs.scenario.service.model.Solution;
 
 import java.util.Collection;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -42,6 +44,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getInitialSolution <em>Initial Solution</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getVariations <em>Variations</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getParameterSets <em>Parameter Sets</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getInstance <em>Instance</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getController <em>Controller</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getAdapters <em>Adapters</em>}</li>
  * </ul>
  * </p>
  *
@@ -189,6 +194,36 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 	protected EList<ParamSet> parameterSets;
 
 	/**
+	 * The cached value of the '{@link #getInstance() <em>Instance</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInstance()
+	 * @generated
+	 * @ordered
+	 */
+	protected EObject instance;
+
+	/**
+	 * The cached value of the '{@link #getController() <em>Controller</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getController()
+	 * @generated
+	 * @ordered
+	 */
+	protected EObject controller;
+
+	/**
+	 * The cached value of the '{@link #getAdapters() <em>Adapters</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdapters()
+	 * @generated
+	 * @ordered
+	 */
+	protected Map<?, ?> adapters;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -229,6 +264,103 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 			parameterSets = new EObjectContainmentEList<ParamSet>(ParamSet.class, this, ScenarioServicePackage.SCENARIO_INSTANCE__PARAMETER_SETS);
 		}
 		return parameterSets;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EObject getInstance() {
+		if (instance != null && instance.eIsProxy()) {
+			InternalEObject oldInstance = (InternalEObject) instance;
+			instance = eResolveProxy(oldInstance);
+			if (instance != oldInstance) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE, oldInstance, instance));
+			}
+		}
+		return instance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EObject basicGetInstance() {
+		return instance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setInstance(EObject newInstance) {
+		EObject oldInstance = instance;
+		instance = newInstance;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE, oldInstance, instance));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EObject getController() {
+		if (controller != null && controller.eIsProxy()) {
+			InternalEObject oldController = (InternalEObject) controller;
+			controller = eResolveProxy(oldController);
+			if (controller != oldController) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioServicePackage.SCENARIO_INSTANCE__CONTROLLER, oldController, controller));
+			}
+		}
+		return controller;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EObject basicGetController() {
+		return controller;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setController(EObject newController) {
+		EObject oldController = controller;
+		controller = newController;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__CONTROLLER, oldController, controller));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map<?, ?> getAdapters() {
+		return adapters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAdapters(Map<?, ?> newAdapters) {
+		Map<?, ?> oldAdapters = adapters;
+		adapters = newAdapters;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS, oldAdapters, adapters));
 	}
 
 	/**
@@ -474,6 +606,16 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 			return getVariations();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__PARAMETER_SETS:
 			return getParameterSets();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
+			if (resolve)
+				return getInstance();
+			return basicGetInstance();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__CONTROLLER:
+			if (resolve)
+				return getController();
+			return basicGetController();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
+			return getAdapters();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -516,6 +658,15 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 			getParameterSets().clear();
 			getParameterSets().addAll((Collection<? extends ParamSet>) newValue);
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
+			setInstance((EObject) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__CONTROLLER:
+			setController((EObject) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
+			setAdapters((Map<?, ?>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -555,6 +706,15 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 		case ScenarioServicePackage.SCENARIO_INSTANCE__PARAMETER_SETS:
 			getParameterSets().clear();
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
+			setInstance((EObject) null);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__CONTROLLER:
+			setController((EObject) null);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
+			setAdapters((Map<?, ?>) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -585,6 +745,12 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 			return variations != null && !variations.isEmpty();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__PARAMETER_SETS:
 			return parameterSets != null && !parameterSets.isEmpty();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
+			return instance != null;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__CONTROLLER:
+			return controller != null;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
+			return adapters != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -610,6 +776,8 @@ public class ScenarioInstanceImpl extends EObjectImpl implements ScenarioInstanc
 		result.append(locked);
 		result.append(", archived: ");
 		result.append(archived);
+		result.append(", adapters: ");
+		result.append(adapters);
 		result.append(')');
 		return result.toString();
 	}

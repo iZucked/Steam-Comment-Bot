@@ -27,6 +27,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/initialSolution"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/variations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/parameterSets"/>
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/instance"/>
     </genClasses>
     <genClasses ecoreClass="scenario.service.ecore#//ParamSet">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ParamSet/name"/>
@@ -50,6 +51,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Metadata/lastModified"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Metadata/comment"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Metadata/lastModifiedBy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Metadata/contentType"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

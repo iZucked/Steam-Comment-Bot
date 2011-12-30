@@ -4,21 +4,16 @@
  */
 package com.mmxlabs.scenario.service.model.provider;
 
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.ComposedImage;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -29,18 +24,20 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioInstance} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> <!-- end-user-doc -->
  * @generated
  */
 public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
 		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public ScenarioInstanceItemProvider(AdapterFactory adapterFactory) {
@@ -49,8 +46,7 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 
 	/**
 	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -63,14 +59,15 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 			addUriPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
 			addArchivedPropertyDescriptor(object);
+			addControllerPropertyDescriptor(object);
+			addAdaptersPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
 	 * This adds a property descriptor for the Uri feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addUriPropertyDescriptor(Object object) {
@@ -81,8 +78,7 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 
 	/**
 	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
@@ -93,8 +89,7 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 
 	/**
 	 * This adds a property descriptor for the Uuid feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addUuidPropertyDescriptor(Object object) {
@@ -105,8 +100,7 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 
 	/**
 	 * This adds a property descriptor for the Locked feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addLockedPropertyDescriptor(Object object) {
@@ -117,8 +111,7 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 
 	/**
 	 * This adds a property descriptor for the Archived feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addArchivedPropertyDescriptor(Object object) {
@@ -128,11 +121,34 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 	}
 
 	/**
+	 * This adds a property descriptor for the Controller feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addControllerPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_controller_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_controller_feature", "_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__CONTROLLER, true, false, true, null, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Adapters feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAdaptersPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_adapters_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_adapters_feature", "_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__ADAPTERS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -143,13 +159,13 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__INITIAL_SOLUTION);
 			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__VARIATIONS);
 			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__PARAMETER_SETS);
+			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__INSTANCE);
 		}
 		return childrenFeatures;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -184,8 +200,7 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 
 	/**
 	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -195,10 +210,9 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -211,12 +225,14 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 		case ScenarioServicePackage.SCENARIO_INSTANCE__URI:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ARCHIVED:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__INITIAL_SOLUTION:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VARIATIONS:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__PARAMETER_SETS:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -226,8 +242,7 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 	/**
 	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
 	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -245,8 +260,7 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 
 	/**
 	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override

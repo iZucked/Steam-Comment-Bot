@@ -29,6 +29,16 @@
         eType="#//ScenarioInstance" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameterSets" upperBound="-1"
         eType="#//ParamSet" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instance" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controller" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="adapters" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments/>
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ParamSet">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

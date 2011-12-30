@@ -243,13 +243,40 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_INSTANCE__PARAMETER_SETS = 8;
 
 	/**
+	 * The feature id for the '<em><b>Instance</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__INSTANCE = 9;
+
+	/**
+	 * The feature id for the '<em><b>Controller</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__CONTROLLER = 10;
+
+	/**
+	 * The feature id for the '<em><b>Adapters</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__ADAPTERS = 11;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Instance</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = 9;
+	int SCENARIO_INSTANCE_FEATURE_COUNT = 12;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -481,6 +508,39 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getScenarioInstance_ParameterSets();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance <em>Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Instance</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EReference getScenarioInstance_Instance();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getController <em>Controller</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Controller</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getController()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EReference getScenarioInstance_Controller();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters <em>Adapters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Adapters</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_Adapters();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getUri <em>Uri</em>}'.
@@ -898,6 +958,30 @@ public interface ScenarioServicePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCENARIO_INSTANCE__PARAMETER_SETS = eINSTANCE.getScenarioInstance_ParameterSets();
+
+		/**
+		 * The meta object literal for the '<em><b>Instance</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO_INSTANCE__INSTANCE = eINSTANCE.getScenarioInstance_Instance();
+
+		/**
+		 * The meta object literal for the '<em><b>Controller</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO_INSTANCE__CONTROLLER = eINSTANCE.getScenarioInstance_Controller();
+
+		/**
+		 * The meta object literal for the '<em><b>Adapters</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_INSTANCE__ADAPTERS = eINSTANCE.getScenarioInstance_Adapters();
 
 		/**
 		 * The meta object literal for the '<em><b>Uri</b></em>' attribute feature.

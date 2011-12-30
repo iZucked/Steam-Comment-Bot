@@ -15,6 +15,7 @@ import com.mmxlabs.scenario.service.model.Solution;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -156,6 +157,33 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 */
 	public EReference getScenarioInstance_ParameterSets() {
 		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenarioInstance_Instance() {
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenarioInstance_Controller() {
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioInstance_Adapters() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -511,6 +539,9 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__INITIAL_SOLUTION);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__VARIATIONS);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__PARAMETER_SETS);
+		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__INSTANCE);
+		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__CONTROLLER);
+		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__ADAPTERS);
 
 		paramSetEClass = createEClass(PARAM_SET);
 		createEAttribute(paramSetEClass, PARAM_SET__NAME);
@@ -599,6 +630,17 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenarioInstance_ParameterSets(), this.getParamSet(), null, "parameterSets", null, 0, -1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
 				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenarioInstance_Instance(), ecorePackage.getEObject(), null, "instance", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenarioInstance_Controller(), ecorePackage.getEObject(), null, "controller", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		EGenericType g1 = createEGenericType(ecorePackage.getEMap());
+		EGenericType g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		initEAttribute(getScenarioInstance_Adapters(), g1, "adapters", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
 
 		initEClass(paramSetEClass, ParamSet.class, "ParamSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getParamSet_Name(), ecorePackage.getEString(), "name", null, 0, 1, ParamSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
