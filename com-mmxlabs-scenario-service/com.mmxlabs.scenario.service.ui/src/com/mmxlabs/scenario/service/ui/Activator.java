@@ -60,6 +60,16 @@ public class Activator extends AbstractUIPlugin {
 		};
 
 		context.addServiceListener(serviceListener, "(objectclass=" + IScenarioService.class.getCanonicalName() + ")");
+
+		// Add existing services
+		final Collection<ServiceReference<IScenarioService>> serviceReferences = context
+				.getServiceReferences(IScenarioService.class, "(objectclass=" + IScenarioService.class.getCanonicalName() + ")");
+		for (final ServiceReference<IScenarioService> ref : serviceReferences) {
+
+			final ServiceEvent event = new ServiceEvent(ServiceEvent.REGISTERED, ref);
+			serviceListener.serviceChanged(event);
+		}
+
 	}
 
 	/*
