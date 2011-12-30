@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.Metadata#getLastModified <em>Last Modified</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.Metadata#getComment <em>Comment</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.Metadata#getLastModifiedBy <em>Last Modified By</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.Metadata#getContentType <em>Content Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -158,5 +159,31 @@ public interface Metadata extends EObject {
 	 * @generated
 	 */
 	void setLastModifiedBy(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Content Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Content Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Content Type</em>' attribute.
+	 * @see #setContentType(String)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getMetadata_ContentType()
+	 * @model
+	 * @generated
+	 */
+	String getContentType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.Metadata#getContentType <em>Content Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Content Type</em>' attribute.
+	 * @see #getContentType()
+	 * @generated
+	 */
+	void setContentType(String value);
 
 } // Metadata

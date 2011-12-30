@@ -59,6 +59,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements IEditin
 			addLastModifiedPropertyDescriptor(object);
 			addCommentPropertyDescriptor(object);
 			addLastModifiedByPropertyDescriptor(object);
+			addContentTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -124,6 +125,18 @@ public class MetadataItemProvider extends ItemProviderAdapter implements IEditin
 	}
 
 	/**
+	 * This adds a property descriptor for the Content Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContentTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_Metadata_contentType_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Metadata_contentType_feature", "_UI_Metadata_type"),
+				ScenarioServicePackage.Literals.METADATA__CONTENT_TYPE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
 	 * This returns Metadata.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -163,6 +176,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements IEditin
 		case ScenarioServicePackage.METADATA__LAST_MODIFIED:
 		case ScenarioServicePackage.METADATA__COMMENT:
 		case ScenarioServicePackage.METADATA__LAST_MODIFIED_BY:
+		case ScenarioServicePackage.METADATA__CONTENT_TYPE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}

@@ -433,13 +433,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int METADATA__LAST_MODIFIED_BY = 4;
 
 	/**
+	 * The feature id for the '<em><b>Content Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METADATA__CONTENT_TYPE = 5;
+
+	/**
 	 * The number of structural features of the '<em>Metadata</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int METADATA_FEATURE_COUNT = 5;
+	int METADATA_FEATURE_COUNT = 6;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioInstance <em>Scenario Instance</em>}'.
@@ -832,6 +841,17 @@ public interface ScenarioServicePackage extends EPackage {
 	EAttribute getMetadata_LastModifiedBy();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.Metadata#getContentType <em>Content Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Content Type</em>'.
+	 * @see com.mmxlabs.scenario.service.model.Metadata#getContentType()
+	 * @see #getMetadata()
+	 * @generated
+	 */
+	EAttribute getMetadata_ContentType();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1152,6 +1172,14 @@ public interface ScenarioServicePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute METADATA__LAST_MODIFIED_BY = eINSTANCE.getMetadata_LastModifiedBy();
+
+		/**
+		 * The meta object literal for the '<em><b>Content Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute METADATA__CONTENT_TYPE = eINSTANCE.getMetadata_ContentType();
 
 	}
 

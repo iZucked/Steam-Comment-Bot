@@ -460,6 +460,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getMetadata_ContentType() {
+		return (EAttribute) metadataEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ScenarioServiceFactory getScenarioServiceFactory() {
 		return (ScenarioServiceFactory) getEFactoryInstance();
 	}
@@ -525,6 +534,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(metadataEClass, METADATA__LAST_MODIFIED);
 		createEAttribute(metadataEClass, METADATA__COMMENT);
 		createEAttribute(metadataEClass, METADATA__LAST_MODIFIED_BY);
+		createEAttribute(metadataEClass, METADATA__CONTENT_TYPE);
 	}
 
 	/**
@@ -629,6 +639,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMetadata_LastModifiedBy(), ecorePackage.getEString(), "lastModifiedBy", null, 0, 1, Metadata.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMetadata_ContentType(), ecorePackage.getEString(), "contentType", null, 0, 1, Metadata.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

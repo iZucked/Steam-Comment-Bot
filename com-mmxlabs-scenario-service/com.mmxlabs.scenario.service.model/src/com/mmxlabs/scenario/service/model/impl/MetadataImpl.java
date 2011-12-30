@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl#getLastModified <em>Last Modified</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl#getLastModifiedBy <em>Last Modified By</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl#getContentType <em>Content Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -133,6 +134,26 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * @ordered
 	 */
 	protected String lastModifiedBy = LAST_MODIFIED_BY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getContentType() <em>Content Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContentType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CONTENT_TYPE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getContentType() <em>Content Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContentType()
+	 * @generated
+	 * @ordered
+	 */
+	protected String contentType = CONTENT_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -263,6 +284,27 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getContentType() {
+		return contentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setContentType(String newContentType) {
+		String oldContentType = contentType;
+		contentType = newContentType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.METADATA__CONTENT_TYPE, oldContentType, contentType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -276,6 +318,8 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 			return getComment();
 		case ScenarioServicePackage.METADATA__LAST_MODIFIED_BY:
 			return getLastModifiedBy();
+		case ScenarioServicePackage.METADATA__CONTENT_TYPE:
+			return getContentType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -302,6 +346,9 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 			return;
 		case ScenarioServicePackage.METADATA__LAST_MODIFIED_BY:
 			setLastModifiedBy((String) newValue);
+			return;
+		case ScenarioServicePackage.METADATA__CONTENT_TYPE:
+			setContentType((String) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -330,6 +377,9 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 		case ScenarioServicePackage.METADATA__LAST_MODIFIED_BY:
 			setLastModifiedBy(LAST_MODIFIED_BY_EDEFAULT);
 			return;
+		case ScenarioServicePackage.METADATA__CONTENT_TYPE:
+			setContentType(CONTENT_TYPE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -352,6 +402,8 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 		case ScenarioServicePackage.METADATA__LAST_MODIFIED_BY:
 			return LAST_MODIFIED_BY_EDEFAULT == null ? lastModifiedBy != null : !LAST_MODIFIED_BY_EDEFAULT.equals(lastModifiedBy);
+		case ScenarioServicePackage.METADATA__CONTENT_TYPE:
+			return CONTENT_TYPE_EDEFAULT == null ? contentType != null : !CONTENT_TYPE_EDEFAULT.equals(contentType);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -377,6 +429,8 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 		result.append(comment);
 		result.append(", lastModifiedBy: ");
 		result.append(lastModifiedBy);
+		result.append(", contentType: ");
+		result.append(contentType);
 		result.append(')');
 		return result.toString();
 	}
