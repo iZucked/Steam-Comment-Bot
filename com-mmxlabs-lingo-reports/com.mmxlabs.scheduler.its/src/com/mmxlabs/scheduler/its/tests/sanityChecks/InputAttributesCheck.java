@@ -19,7 +19,7 @@ import scenario.Scenario;
 import scenario.port.Port;
 
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
-import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?254">Case 254: Check input attributes have not unexpectedly changed</a>

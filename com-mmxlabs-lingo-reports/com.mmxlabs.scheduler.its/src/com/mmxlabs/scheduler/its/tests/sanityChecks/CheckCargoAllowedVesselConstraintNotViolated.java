@@ -20,7 +20,7 @@ import scenario.schedule.Schedule;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
-import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?255">Case 255: Check constraints have not be violated</a><br>
