@@ -16,5 +16,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.edit.ui;bundle-version="2.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.mmxlabs.scenario.service.ui.navigator
+Export-Package: com.mmxlabs.scenario.service.ui,
+ com.mmxlabs.scenario.service.ui.commands,
+ com.mmxlabs.scenario.service.ui.editing,
+ com.mmxlabs.scenario.service.ui.navigator,
+ com.mmxlabs.scenario.service.ui.resource
 Bundle-ClassPath: .
