@@ -1,6 +1,8 @@
 package com.mmxlabs.scenario.service.ui;
 
 import java.lang.ref.WeakReference;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -22,7 +24,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	private Map<String, WeakReference<IScenarioService>> services;
+	private Map<String, WeakReference<IScenarioService>> services = new HashMap<String, WeakReference<IScenarioService>>();
 
 	private ServiceListener serviceListener;
 
@@ -44,10 +46,10 @@ public class Activator extends AbstractUIPlugin {
 		serviceListener = new ServiceListener() {
 
 			@Override
-			public void serviceChanged(ServiceEvent event) {
-				ServiceReference<?> serviceReference = event.getServiceReference();
-				IScenarioService service = (IScenarioService) context.getService(serviceReference);
-				String key = serviceReference.getProperty("component.id").toString();
+			public void serviceChanged(final ServiceEvent event) {
+				final ServiceReference<?> serviceReference = event.getServiceReference();
+				final IScenarioService service = (IScenarioService) context.getService(serviceReference);
+				final String key = serviceReference.getProperty("component.id").toString();
 
 				if (event.getType() == ServiceEvent.REGISTERED) {
 					services.put(key, new WeakReference<IScenarioService>(service));
@@ -65,7 +67,7 @@ public class Activator extends AbstractUIPlugin {
 	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
-	public void stop(BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		context.removeServiceListener(serviceListener);
 		services.clear();
 
