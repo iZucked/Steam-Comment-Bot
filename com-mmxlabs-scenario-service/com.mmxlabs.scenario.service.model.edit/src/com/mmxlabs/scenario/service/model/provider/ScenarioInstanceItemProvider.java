@@ -161,14 +161,25 @@ public class ScenarioInstanceItemProvider extends ItemProviderAdapter implements
 	}
 
 	/**
-	 * This returns ScenarioInstance.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
+	 * This returns ScenarioInstance.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioInstance"));
+		boolean locked = ((ScenarioInstance) object).isLocked();
+
+		final List<Object> images = new ArrayList<Object>(3);
+		images.add(getResourceLocator().getImage("full/obj16/ScenarioInstance"));
+		if (locked) {
+			images.add(getResourceLocator().getImage("overlays/lock"));
+
+		}
+		//		boolean archived = ((ScenarioInstance) object).isLocked();
+		//		if (archived) {
+		//			images.add(getResourceLocator().getImage("overlays/archive"));
+		//		}
+		return new ComposedImage(images);
 	}
 
 	/**
