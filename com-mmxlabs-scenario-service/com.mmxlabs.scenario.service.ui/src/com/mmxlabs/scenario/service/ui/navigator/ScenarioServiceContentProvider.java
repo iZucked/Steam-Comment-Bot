@@ -7,4 +7,15 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	public ScenarioServiceContentProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 	}
+
+	@Override
+	public Object[] getElements(final Object object) {
+		final Object[] elements = super.getElements(object);
+
+		// Skip root node if there is only one item
+		if (elements.length == 1) {
+			return getChildren(elements[0]);
+		}
+		return elements;
+	}
 }
