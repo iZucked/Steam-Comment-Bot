@@ -61,33 +61,35 @@ public class SaveOptimisationJobHandler extends AbstractOptimisationHandler {
 
 					final LNGSchedulerJobDescriptor job = (LNGSchedulerJobDescriptor) obj;
 					final LNGSchedulerJobControl control = (LNGSchedulerJobControl) jobManager.getControlForJob(job);
-					final IResource resource = jobManager.findResourceForJob(job);
+					final Object resource = jobManager.findResourceForJob(job);
+					if (resource instanceof IResource) {
 
-					final IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
+						final IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
 
-						@Override
-						public void run(final IProgressMonitor monitor) throws CoreException {
-							monitor.beginTask("Save Scenario", 2);
-							try {
-								// Attempt to save job
-								final IPath path = SaveJobUtil.saveLNGSchedulerJob(job, control, resource.getFileExtension(), resource);
-								if (path != null) {
-									// An IPath has been returned, try and find the IResource that it corresponds to
-									final IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
-									if (resource != null) {
-										// A resource exists!, refresh the parent so that the navigator will find it.
-										resource.getParent().refreshLocal(IResource.DEPTH_ONE, new SubProgressMonitor(monitor, 1));
+							@Override
+							public void run(final IProgressMonitor monitor) throws CoreException {
+								monitor.beginTask("Save Scenario", 2);
+								try {
+									// Attempt to save job
+									final IPath path = SaveJobUtil.saveLNGSchedulerJob(job, control, ((IResource) resource).getFileExtension(), (IResource) resource);
+									if (path != null) {
+										// An IPath has been returned, try and find the IResource that it corresponds to
+										final IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+										if (resource != null) {
+											// A resource exists!, refresh the parent so that the navigator will find it.
+											resource.getParent().refreshLocal(IResource.DEPTH_ONE, new SubProgressMonitor(monitor, 1));
+										}
 									}
+								} finally {
+									monitor.done();
 								}
-							} finally {
-								monitor.done();
 							}
+						};
+						try {
+							ResourcesPlugin.getWorkspace().run(runnable, null);
+						} catch (final CoreException e) {
+							Activator.error(e.getMessage(), e);
 						}
-					};
-					try {
-						ResourcesPlugin.getWorkspace().run(runnable, null);
-					} catch (final CoreException e) {
-						Activator.error(e.getMessage(), e);
 					}
 				}
 			}

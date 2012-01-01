@@ -46,7 +46,7 @@ public class TheNavigator extends CommonNavigator {
 		 * @param res
 		 * @param check
 		 */
-		private void checkItems(final TreeItem item, final IResource res, final boolean check) {
+		private void checkItems(final TreeItem item, final Object res, final boolean check) {
 
 			// See if we have a match
 			if (item.getData() instanceof IResource) {
@@ -63,7 +63,7 @@ public class TheNavigator extends CommonNavigator {
 		}
 
 		@Override
-		public void jobSelected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+		public void jobSelected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 			final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
 			for (final TreeItem i : items) {
@@ -72,7 +72,7 @@ public class TheNavigator extends CommonNavigator {
 		}
 
 		@Override
-		public void jobDeselected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+		public void jobDeselected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 			final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
 			for (final TreeItem i : items) {
 				checkItems(i, resource, false);

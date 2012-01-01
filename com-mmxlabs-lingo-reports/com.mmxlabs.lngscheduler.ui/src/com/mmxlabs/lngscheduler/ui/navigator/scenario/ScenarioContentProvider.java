@@ -43,7 +43,7 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider im
 	private final IEclipseJobManagerListener jobManagerListener = new EclipseJobManagerAdapter() {
 
 		@Override
-		public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+		public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 			control.removeListener(listener);
 
@@ -57,7 +57,7 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider im
 		}
 
 		@Override
-		public void jobAdded(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+		public void jobAdded(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 			control.addListener(listener);
 
@@ -80,7 +80,7 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider im
 		public boolean jobStateChanged(final IJobControl control, final EJobState oldState, final EJobState newState) {
 
 			// Find the resource for the job
-			final IResource resource = jobManager.findResourceForJob(control.getJobDescriptor());
+			final Object resource = jobManager.findResourceForJob(control.getJobDescriptor());
 
 			Display.getDefault().asyncExec(new Runnable() {
 
@@ -101,7 +101,7 @@ public class ScenarioContentProvider extends ResourceExtensionContentProvider im
 				@Override
 				public void run() {
 					// Find the resource for the job
-					final IResource resource = jobManager.findResourceForJob(control.getJobDescriptor());
+					final Object resource = jobManager.findResourceForJob(control.getJobDescriptor());
 
 					// Trigger a refresh of the tree
 					((TreeViewer) viewer).refresh(resource, true);

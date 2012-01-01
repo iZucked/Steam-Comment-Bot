@@ -189,14 +189,14 @@ public class ScheduleAdapter {
 		jobManagerListener = new EclipseJobManagerAdapter() {
 
 			@Override
-			public void jobSelected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+			public void jobSelected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 				control.addListener(jobListener);
 				setInput(c);
 
 			}
 
 			@Override
-			public void jobDeselected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+			public void jobDeselected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 				control.removeListener(jobListener);
 				setInput(c);
 			}

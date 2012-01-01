@@ -57,12 +57,12 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 	final IEclipseJobManagerListener jobManagerListener = new EclipseJobManagerAdapter() {
 
 		@Override
-		public void jobAdded(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+		public void jobAdded(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 			control.addListener(jobListener);
 		}
 
 		@Override
-		public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+		public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 			control.removeListener(jobListener);
 		}
