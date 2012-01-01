@@ -20,7 +20,7 @@ import scenario.schedule.Schedule;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
-import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?255">Case 255: Check constraints have not be violated</a><br>
@@ -38,7 +38,7 @@ public class CheckCargoAllowedVesselConstraintNotViolated {
 	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 	/**
-	 * Test a constraint of one cargo having an allowed vessel list of one.
+	 * One cargo only has one vessels on it's allowedVessels list. Check that the constraint holds.
 	 */
 	@Test
 	public void test() {
@@ -64,7 +64,6 @@ public class CheckCargoAllowedVesselConstraintNotViolated {
 		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false);
 		csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false);
 		ArrayList<Vessel> vesselsClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
-
 
 		// create some cargos.
 		ArrayList<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue)));
@@ -98,7 +97,7 @@ public class CheckCargoAllowedVesselConstraintNotViolated {
 	/**
 	 * Test one class of vessel not being allowed to carry any cargo
 	 * 
-	 * (this was the test which found the bug highlighted in case 280)
+	 * (this was the test which found the bug highlighted in case 280 - now fixed)
 	 */
 	@Test
 	public void test2() {

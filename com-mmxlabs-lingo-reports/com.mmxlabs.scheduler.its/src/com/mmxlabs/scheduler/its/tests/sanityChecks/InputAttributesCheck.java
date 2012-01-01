@@ -19,7 +19,7 @@ import scenario.Scenario;
 import scenario.port.Port;
 
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
-import com.mmxlabs.lngscheduler.emf.extras.tests.calculation.ScenarioTools;
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?254">Case 254: Check input attributes have not unexpectedly changed</a>
@@ -40,7 +40,7 @@ public class InputAttributesCheck {
 	 * Check that the scenario doesn't change after being evaluated. The scenario being tested is a simple one.
 	 * 
 	 * @throws InterruptedException
-	 *             Thrown by the method that checks the original and evaluated scenarios are the same
+	 *             Thrown by the method that checks that the original and evaluated scenarios are the same
 	 */
 	@Test
 	public void test() throws InterruptedException {

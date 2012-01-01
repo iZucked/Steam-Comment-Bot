@@ -60,7 +60,6 @@ public class VesselExistenceCheck {
 		final int numOfClassTwo = 7;
 		final int numOfClassThree = 4;
 		final int numOfClassFour = 6;
-		final int numOfInputVessels = numOfClassOne + numOfClassTwo + numOfClassThree + numOfClassFour;
 
 		// createVessels creates and adds the vessesl to the scenario.
 		// Add the created vessels to the list of input vessels.
@@ -85,7 +84,7 @@ public class VesselExistenceCheck {
 		ScenarioTools.printSequences(result);
 		
 		// check the output
-		checkVesselExistence(result, inputVessels, numOfInputVessels);
+		checkVesselExistence(result, inputVessels);
 	}
 	
 	/**
@@ -94,8 +93,11 @@ public class VesselExistenceCheck {
 	 * @param inputVessels
 	 * @param expectedNumOfVessels
 	 */
-	private void checkVesselExistence(final Schedule result, final ArrayList<Vessel> inputVessels, final int expectedNumOfVessels) {
-
+	private void checkVesselExistence(final Schedule result, final ArrayList<Vessel> inputVessels) {
+		
+		// the list of input vessels will be changed, and the number of expected vessels it not yet know, so save the number of expected vessels.
+		final int expectedNumOfVessels = inputVessels.size();
+		
 		// Check all vessels in the input exist in the output.
 		int numOfVesselsInOutput = 0;
 		for (AllocatedVessel av : result.getFleet()) {
@@ -113,6 +115,5 @@ public class VesselExistenceCheck {
 
 		Assert.assertEquals("Number of vessels in input same as number of vessels in output", expectedNumOfVessels, numOfVesselsInOutput);
 		Assert.assertEquals("All vessels were used in the output", inputVessels.size(), 0);
-		
 	}
 }

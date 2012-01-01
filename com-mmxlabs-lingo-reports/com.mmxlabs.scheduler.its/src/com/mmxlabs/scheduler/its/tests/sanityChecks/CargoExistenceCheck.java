@@ -35,9 +35,9 @@ public class CargoExistenceCheck {
 
 	private static final int dischargePrice = 1;
 	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
-	
+
 	/**
-	 * Check that all cargos added to the scenario are in the output.
+	 * Create a scenario with some cargos and vessels. Check that all cargos added to the scenario are in the output.
 	 */
 	@Test
 	public void test() {
@@ -84,15 +84,18 @@ public class CargoExistenceCheck {
 	}
 
 	/**
-	 * Check all the cargos in output are
+	 * Check all the cargos in output are in the input cargos once.
 	 * 
 	 * @param result
+	 *            The evaluated scenario (containing the cargos in the output)
 	 * @param inputCargos
+	 *            The cargos that were input into the unevaluated scenario.
 	 */
 	private void checkCargos(final Schedule result, final ArrayList<Cargo> inputCargos) {
 
 		final int numOfInputCargos = inputCargos.size();
-		int numOfOutputCargos = 0;
+
+		Assert.assertEquals("Same number of cargoes in the output as in the input", numOfInputCargos, result.getCargoAllocations());
 
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
@@ -101,10 +104,8 @@ public class CargoExistenceCheck {
 			Assert.assertTrue("Input cargo is in output", inputCargos.contains(c));
 
 			inputCargos.remove(c);
-			numOfOutputCargos++;
 		}
 
 		Assert.assertEquals("All cargos in output", 0, inputCargos.size());
-		Assert.assertEquals("Number of input cargos is the same as the number of output", numOfInputCargos, numOfOutputCargos);
 	}
 }
