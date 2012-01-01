@@ -1025,19 +1025,22 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 */
 	public void createModel() {
 		URI resourceURI = EditUIUtil.getURI(getEditorInput());
-		
+
 		final IEclipseJobManager manager = LngEditorPlugin.getPlugin().getJobManager();
 		for (final IJobDescriptor descriptor : manager.getJobs()) {
-			if (URI.createPlatformResourceURI(manager.findResourceForJob(descriptor).getFullPath().toString(), true).equals(resourceURI)) {
-				final IJobControl control = manager.getControlForJob(descriptor);
-				control.addListener(this);
-				jobControl = control;
-				this.jobStateChanged(jobControl, EJobState.CREATED, jobControl.getJobState());
-				break;
+			final Object resource = manager.findResourceForJob(descriptor);
+			if (resource instanceof IResource) {
+				if (URI.createPlatformResourceURI(((IResource)resource).getFullPath().toString(), true).equals(resourceURI)) {
+					final IJobControl control = manager.getControlForJob(descriptor);
+					control.addListener(this);
+					jobControl = control;
+					this.jobStateChanged(jobControl, EJobState.CREATED, jobControl.getJobState());
+					break;
+				}
 			}
 		}
 		manager.addEclipseJobManagerListener(this);
-		
+
 		Exception exception = null;
 		Resource resource = null;
 
@@ -1233,7 +1236,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 				updateProblemIndication();
 			}
 		});
-		
+
 		setLockedForEditing(isLockedForEditing());
 	}
 
@@ -1758,7 +1761,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 				}
 			}
 		};
-		
+
 		if (jobControl != null && jobControl.getJobState() == EJobState.COMPLETED) {
 			// nuke job as we have to start again
 			jobControl.cancel();
@@ -2100,19 +2103,21 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	private IJobControl jobControl = null;
 	
 	@Override
-	public void jobAdded(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, IResource resource) {
+	public void jobAdded(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
 		final URI uri = EditUIUtil.getURI(getEditorInput());
-		final URI resourceURI = URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
-		if (jobControl != null)
-			jobControl.removeListener(this);
-		if (uri.equals(resourceURI)) {
-			control.addListener(this);
-			jobControl = control;
+		if (resource instanceof IResource) {
+			final URI resourceURI = URI.createPlatformResourceURI(((IResource)resource).getFullPath().toString(), true);
+			if (jobControl != null)
+				jobControl.removeListener(this);
+			if (uri.equals(resourceURI)) {
+				control.addListener(this);
+				jobControl = control;
+			}
 		}
 	}
 
 	@Override
-	public void jobRemoved(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, IResource resource) {
+	public void jobRemoved(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
 		if (control == jobControl) {
 			control.removeListener(this);
 			jobControl = null;
@@ -2120,12 +2125,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	}
 
 	@Override
-	public void jobSelected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, IResource resource) {
+	public void jobSelected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource) {
 
 	}
 
 	@Override
-	public void jobDeselected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, IResource resource) {
+	public void jobDeselected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource) {
 
 	}
 
