@@ -38,10 +38,26 @@
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
                               value="scenario">
-                        </test></and>
+                        </test>
+                     </and>
                   </iterate>
                </or>
             </enabledWhen>
+            <activeWhen>
+               <or>
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <and>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scenario">
+                        </test>
+                     </and>
+                  </iterate>
+               </or>
+            </activeWhen>
             <!--
             <activeWhen>
                <or>
@@ -82,6 +98,21 @@
                   </iterate>
                </or>
             </enabledWhen>
+            <activeWhen>
+               <or>
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <and>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scenario">
+                        </test>
+                     </and>
+                  </iterate>
+               </or>
+            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.lngscheduler.ui.navigator.handlers.PauseOptimisationHandler"
@@ -101,6 +132,21 @@
                   </iterate>
                </or>
             </enabledWhen>
+            <activeWhen>
+               <or>
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <and>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scenario">
+                        </test>
+                     </and>
+                  </iterate>
+               </or>
+            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.lngscheduler.ui.navigator.handlers.SaveOptimisationHandler"
@@ -120,6 +166,21 @@
                   </iterate>
                </or>
             </enabledWhen>
+            <activeWhen>
+               <or>
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <and>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scenario">
+                        </test>
+                     </and>
+                  </iterate>
+               </or>
+            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.lngscheduler.ui.navigator.handlers.EvaluateOptimisationHandler"
@@ -139,6 +200,21 @@
                   </iterate>
                </or>
             </enabledWhen>
+            <activeWhen>
+               <or>
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <and>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scenario">
+                        </test>
+                     </and>
+                  </iterate>
+               </or>
+            </activeWhen>
          </handler>
       </extension>
 
