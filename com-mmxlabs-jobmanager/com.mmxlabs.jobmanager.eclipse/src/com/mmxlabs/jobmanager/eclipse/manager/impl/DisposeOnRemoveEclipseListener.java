@@ -1,7 +1,5 @@
 package com.mmxlabs.jobmanager.eclipse.manager.impl;
 
-import org.eclipse.core.resources.IResource;
-
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
@@ -24,7 +22,7 @@ public final class DisposeOnRemoveEclipseListener extends EclipseJobManagerAdapt
 	}
 
 	@Override
-	public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, IResource resource) {
+	public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 		// If this is the job being removed, then dispose and remove
 		// references to it

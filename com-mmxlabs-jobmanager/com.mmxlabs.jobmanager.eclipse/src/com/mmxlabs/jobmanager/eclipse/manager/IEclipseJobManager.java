@@ -5,9 +5,8 @@
 package com.mmxlabs.jobmanager.eclipse.manager;
 
 import java.util.Collection;
-import java.util.List;
 
-import org.eclipse.core.resources.IResource;
+import java.util.List;
 
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
@@ -22,7 +21,7 @@ public interface IEclipseJobManager {
 	 */
 	List<IJobDescriptor> getJobs();
 
-	IJobControl submitJob(IJobDescriptor job, IResource resource);
+	IJobControl submitJob(IJobDescriptor job, Object resource);
 
 	void removeJob(IJobDescriptor job);
 	
@@ -34,20 +33,20 @@ public interface IEclipseJobManager {
 
 	void toggleJobSelection(IJobDescriptor job);
 
-	void toggleResourceSelection(IResource resource);
+	void toggleResourceSelection(Object resource);
 
 	void setJobSelection(IJobDescriptor job, boolean selected);
 
-	void setResourceSelection(IResource resource, boolean selected);
+	void setResourceSelection(Object resource, boolean selected);
 
 	List<IJobDescriptor> getSelectedJobs();
 
-	List<IResource> getSelectedResources();
+	List<Object> getSelectedResources();
 
 	
-	IJobDescriptor findJobForResource(IResource resource);
+	IJobDescriptor findJobForResource(Object resource);
 
-	IResource findResourceForJob(IJobDescriptor job);
+	Object findResourceForJob(IJobDescriptor job);
 
 	IJobControl getControlForJob(IJobDescriptor jobDescriptor);
 

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.jobmanager.eclipse.manager.impl;
 
-import org.eclipse.core.resources.IResource;
-
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
@@ -22,22 +20,22 @@ import com.mmxlabs.jobmanager.manager.IJobManager;
 public class EclipseJobManagerAdapter implements IEclipseJobManagerListener {
 
 	@Override
-	public void jobAdded(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+	public void jobAdded(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 	}
 
 	@Override
-	public void jobRemoved(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+	public void jobRemoved(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 	}
 
 	@Override
-	public void jobSelected(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl jobControl, final IResource resource) {
+	public void jobSelected(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
 
 	}
 
 	@Override
-	public void jobDeselected(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl jobControl, final IResource resource) {
+	public void jobDeselected(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
 
 	}
 

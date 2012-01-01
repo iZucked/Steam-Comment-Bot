@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.jobmanager.eclipse.manager;
 
-import org.eclipse.core.resources.IResource;
-
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.manager.IJobManager;
@@ -26,7 +24,7 @@ public interface IEclipseJobManagerListener {
 	 * @param control
 	 * @param resource
 	 */
-	void jobAdded(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, IResource resource);
+	void jobAdded(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource);
 
 	/**
 	 * Notify that a {@link IJobDescriptor} and {@link IJobControl} has been removed from the {@link IEclipseJobManager}.
@@ -36,7 +34,7 @@ public interface IEclipseJobManagerListener {
 	 * @param control
 	 * @param resource
 	 */
-	void jobRemoved(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, IResource resource);
+	void jobRemoved(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource);
 
 	/**
 	 * Notify that a {@link IJobDescriptor} has been selected.
@@ -46,7 +44,7 @@ public interface IEclipseJobManagerListener {
 	 * @param control
 	 * @param resource
 	 */
-	void jobSelected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, IResource resource);
+	void jobSelected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource);
 
 	/**
 	 * Notify that a {@link IJobDescriptor} has been deselected.
@@ -56,7 +54,7 @@ public interface IEclipseJobManagerListener {
 	 * @param jobControl
 	 * @param resource
 	 */
-	void jobDeselected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, IResource resource);
+	void jobDeselected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource);
 
 	/**
 	 * Notify that a new {@link IJobManager} instance has been registered with the {@link IEclipseJobManager}

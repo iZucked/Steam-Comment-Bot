@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.jobmanager.eclipse.manager.impl;
 
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.eclipse.core.resources.IResource;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
@@ -40,11 +39,11 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	private final Map<IJobDescriptor, IJobManager> jobToManager = new HashMap<IJobDescriptor, IJobManager>();
 	private final Map<IJobDescriptor, IJobControl> jobToControls = new HashMap<IJobDescriptor, IJobControl>();
 
-	private final Map<IJobDescriptor, IResource> jobResourceMap = new HashMap<IJobDescriptor, IResource>();
+	private final Map<IJobDescriptor, Object> jobResourceMap = new HashMap<IJobDescriptor, Object>();
 
 	private final List<IJobDescriptor> selectedJobs = new LinkedList<IJobDescriptor>();
 
-	private final List<IResource> selectedResources = new LinkedList<IResource>();
+	private final List<Object> selectedResources = new LinkedList<Object>();
 
 	private final Set<IEclipseJobManagerListener> jobManagerListeners = new HashSet<IEclipseJobManagerListener>();
 
@@ -73,7 +72,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	 * @see com.mmxlabs.jobcontroller.core.IJobManager#addJob(com.mmxlabs.jobcontroller .core.IManagedJob)
 	 */
 	@Override
-	public IJobControl submitJob(final IJobDescriptor job, final IResource resource) {
+	public IJobControl submitJob(final IJobDescriptor job, final Object resource) {
 
 		if (jobs.contains(job)) {
 			throw new IllegalStateException("Job already submitted!");
@@ -117,7 +116,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 		jobs.remove(job);
 		jobResourceMap.remove(job);
 
-		final IResource resource = jobResourceMap.get(job);
+		final Object resource = jobResourceMap.get(job);
 		final IJobControl control = jobToControls.get(job);
 
 		for (final IJobManager manager : jobManagers.values()) {
@@ -152,7 +151,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	/**
 	 * @param job
 	 */
-	private void fireJobAdded(final IJobDescriptor job, final IJobControl jobControl, final IResource resource) {
+	private void fireJobAdded(final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
@@ -166,7 +165,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	/**
 	 * @param job
 	 */
-	private void fireJobRemoved(final IJobDescriptor job, final IJobControl jobControl, final IResource resource) {
+	private void fireJobRemoved(final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
@@ -180,7 +179,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	/**
 	 * @param job
 	 */
-	private void fireJobSelected(final IJobDescriptor job, final IJobControl control, final IResource resource) {
+	private void fireJobSelected(final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
@@ -194,7 +193,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	/**
 	 * @param job
 	 */
-	private void fireJobDeselected(final IJobDescriptor job, final IJobControl jobControl, final IResource resource) {
+	private void fireJobDeselected(final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
@@ -237,7 +236,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	 */
 	private void selectJob(final IJobDescriptor job) {
 		selectedJobs.add(job);
-		final IResource resource = jobResourceMap.get(job);
+		final Object resource = jobResourceMap.get(job);
 		final IJobControl control = jobToControls.get(job);
 		selectedResources.add(resource);
 		fireJobSelected(job, control, resource);
@@ -250,7 +249,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	 */
 	private void deselectJob(final IJobDescriptor job) {
 		selectedJobs.remove(job);
-		final IResource resource = jobResourceMap.get(job);
+		final Object resource = jobResourceMap.get(job);
 		final IJobControl control = jobToControls.get(job);
 		selectedResources.remove(resource);
 		fireJobDeselected(job, control, resource);
@@ -261,7 +260,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	 * 
 	 * @param job
 	 */
-	private void deselectResource(final IResource resource) {
+	private void deselectResource(final Object resource) {
 		selectedResources.remove(resource);
 		final IJobDescriptor job = findJobForResource(resource);
 		selectedJobs.remove(job);
@@ -274,7 +273,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	 * 
 	 * @param resource
 	 */
-	private void selectResource(final IResource resource) {
+	private void selectResource(final Object resource) {
 		selectedResources.add(resource);
 		final IJobDescriptor job = findJobForResource(resource);
 		selectedJobs.add(job);
@@ -283,8 +282,8 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	}
 
 	@Override
-	public IJobDescriptor findJobForResource(final IResource resource) {
-		for (final Map.Entry<IJobDescriptor, IResource> entry : jobResourceMap.entrySet()) {
+	public IJobDescriptor findJobForResource(final Object resource) {
+		for (final Map.Entry<IJobDescriptor, Object> entry : jobResourceMap.entrySet()) {
 			if (entry.getValue().equals(resource)) {
 				return entry.getKey();
 			}
@@ -293,12 +292,12 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	}
 
 	@Override
-	public IResource findResourceForJob(final IJobDescriptor job) {
+	public Object findResourceForJob(final IJobDescriptor job) {
 		return jobResourceMap.get(job);
 	}
 
 	@Override
-	public void toggleResourceSelection(final IResource resource) {
+	public void toggleResourceSelection(final Object resource) {
 		if (selectedResources.contains(resource)) {
 			deselectResource(resource);
 		} else {
@@ -321,7 +320,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	}
 
 	@Override
-	public void setResourceSelection(final IResource resource, final boolean selected) {
+	public void setResourceSelection(final Object resource, final boolean selected) {
 
 		if (selectedResources.contains(resource)) {
 			if (!selected) {
@@ -336,7 +335,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	}
 
 	@Override
-	public List<IResource> getSelectedResources() {
+	public List<Object> getSelectedResources() {
 		return selectedResources;
 	}
 

@@ -91,7 +91,7 @@ public class JobManagerView extends ViewPart {
 	private final IEclipseJobManagerListener jobManagerListener = new IEclipseJobManagerListener() {
 
 		@Override
-		public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+		public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 			control.removeListener(jobListener);
 
@@ -99,7 +99,7 @@ public class JobManagerView extends ViewPart {
 		}
 
 		@Override
-		public void jobAdded(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+		public void jobAdded(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 			control.addListener(jobListener);
 
@@ -107,13 +107,13 @@ public class JobManagerView extends ViewPart {
 		}
 
 		@Override
-		public void jobSelected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+		public void jobSelected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 			JobManagerView.this.refresh();
 		}
 
 		@Override
-		public void jobDeselected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final IResource resource) {
+		public void jobDeselected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
 			JobManagerView.this.refresh();
 		}
