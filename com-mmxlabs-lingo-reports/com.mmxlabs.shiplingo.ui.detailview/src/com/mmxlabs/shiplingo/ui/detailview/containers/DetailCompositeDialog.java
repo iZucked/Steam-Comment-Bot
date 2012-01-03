@@ -32,7 +32,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -299,13 +301,9 @@ public class DetailCompositeDialog extends Dialog {
 				}
 				final boolean isExecutable = cc.canExecute();
 				if (isExecutable) {
-					try {
-						editingDomain.getCommandStack().execute(cc);
-					} catch (final Throwable t) {
-						//display error message and log
-						// not sure how to make RCP pop up an error box.
-						log.error("Exception executing command", t);
-					}
+
+					editingDomain.getCommandStack().execute(cc);
+
 				} else {
 					log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 				}
