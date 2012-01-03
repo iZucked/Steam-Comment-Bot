@@ -423,9 +423,12 @@ public class CustomScenarioCreator {
 		// the start and end of the charter out starting-window is 0, for simplicity.
 		charterOut.setStartDate(startCharterOut);
 		charterOut.setEndDate(startCharterOut);
-		// same start and end port.
+
 		charterOut.setStartPort(startPort);
-		charterOut.setEndPort(endPort);
+		// don't set the end port if both ports are the same - this is equivalent to setting the end port to unset and is a good place to test it works
+		if (!startPort.equals(endPort))
+			charterOut.setEndPort(endPort);
+		
 		charterOut.setId(id);
 		charterOut.setHeelLimit(heelLimit);
 		charterOut.setDuration(charterOutDurationDays);
@@ -436,6 +439,7 @@ public class CustomScenarioCreator {
 		// add to the scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(charterOut);
 
+		
 		return charterOut;
 	}
 
