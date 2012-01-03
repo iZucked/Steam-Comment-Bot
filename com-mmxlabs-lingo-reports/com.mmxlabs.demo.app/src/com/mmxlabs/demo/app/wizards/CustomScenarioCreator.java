@@ -151,6 +151,9 @@ public class CustomScenarioCreator {
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
 		// final int minHeelVolume = 0;
+		
+		// TODO Make test for spot charter count.
+		// Make this spotCharterCount number non-zero for a class, check that the number of spot charter vessels for that class never exceeds the non-zero number.
 		final int spotCharterCount = 0;
 		final double fillCapacity = 1.0;
 
