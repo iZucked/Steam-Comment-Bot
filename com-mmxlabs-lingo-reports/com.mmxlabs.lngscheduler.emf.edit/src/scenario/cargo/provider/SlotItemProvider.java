@@ -67,14 +67,14 @@ public class SlotItemProvider
 			super.getPropertyDescriptors(object);
 
 			addIdPropertyDescriptor(object);
-			addMinQuantityPropertyDescriptor(object);
-			addMaxQuantityPropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 			addWindowStartPropertyDescriptor(object);
+			addContractPropertyDescriptor(object);
+			addFixedPricePropertyDescriptor(object);
+			addMinQuantityPropertyDescriptor(object);
+			addMaxQuantityPropertyDescriptor(object);
 			addWindowDurationPropertyDescriptor(object);
 			addSlotDurationPropertyDescriptor(object);
-			addFixedPricePropertyDescriptor(object);
-			addContractPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -315,12 +315,12 @@ public class SlotItemProvider
 
 		switch (notification.getFeatureID(Slot.class)) {
 			case CargoPackage.SLOT__ID:
+			case CargoPackage.SLOT__WINDOW_START:
+			case CargoPackage.SLOT__FIXED_PRICE:
 			case CargoPackage.SLOT__MIN_QUANTITY:
 			case CargoPackage.SLOT__MAX_QUANTITY:
-			case CargoPackage.SLOT__WINDOW_START:
 			case CargoPackage.SLOT__WINDOW_DURATION:
 			case CargoPackage.SLOT__SLOT_DURATION:
-			case CargoPackage.SLOT__FIXED_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

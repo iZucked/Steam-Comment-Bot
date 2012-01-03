@@ -155,7 +155,7 @@ public class CargoItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Cargo_allowRewiring_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Cargo_allowRewiring_feature", "_UI_Cargo_type"),
+				 getString("_UI_Cargo_allowRewiring_description"),
 				 CargoPackage.Literals.CARGO__ALLOW_REWIRING,
 				 true,
 				 false,
