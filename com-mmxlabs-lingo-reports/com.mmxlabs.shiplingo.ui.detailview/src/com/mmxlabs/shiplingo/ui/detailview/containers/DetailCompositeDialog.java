@@ -303,7 +303,7 @@ public class DetailCompositeDialog extends Dialog {
 				if (isExecutable) {
 
 					editingDomain.getCommandStack().execute(cc);
-
+					
 				} else {
 					log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 				}
