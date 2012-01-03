@@ -151,7 +151,7 @@ public class CustomScenarioCreator {
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
 		// final int minHeelVolume = 0;
-		
+
 		// TODO Make test for spot charter count.
 		// Make this spotCharterCount number non-zero for a class, check that the number of spot charter vessels for that class never exceeds the non-zero number.
 		final int spotCharterCount = 0;
@@ -411,7 +411,7 @@ public class CustomScenarioCreator {
 		// define the start and end time
 		dryDock.setStartDate(start);
 		dryDock.setEndDate(start);
-		
+
 		return dryDock;
 	}
 
@@ -435,7 +435,7 @@ public class CustomScenarioCreator {
 		charterOut.setRepositioningFee(repositioningFee);
 		// add to the scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(charterOut);
-		
+
 		return charterOut;
 	}
 
@@ -524,7 +524,8 @@ public class CustomScenarioCreator {
 	 * @return If the ports are added successfully the method will return true. If the vessel class is not in the scenario it will return false.
 	 */
 	public boolean addInaccessiblePortsOnVesselClass(final VesselClass vc, final Port[] inaccessiblePorts) {
-		if (scenario.getFleetModel().getFleet().contains(vc)) {
+
+		if (scenarioFleetModelContainsVesselClass(vc)) {
 
 			for (VesselClass v : scenario.getFleetModel().getVesselClasses()) {
 				if (v.equals(vc))
@@ -533,6 +534,16 @@ public class CustomScenarioCreator {
 				return true;
 			}
 		}
+		return false;
+	}
+
+	private boolean scenarioFleetModelContainsVesselClass(final VesselClass vc) {
+
+		for (Vessel v : scenario.getFleetModel().getFleet()) {
+			if (v.getClass_().equals(vc))
+				return true;
+		}
+
 		return false;
 	}
 
