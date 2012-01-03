@@ -79,10 +79,9 @@ public class VesselEventExistenceCheck {
 		for (Port portA : ports) {
 			for (Port portB : ports) {
 
-				if (!portA.equals(portB))
-					inputVesselEvents.add(csc.addCharterOut("CharterOut " + portA.getName() + " to " + portB.getName(), portA, portB, start, 1000, charterOutDurationDays, cvValue, numOfClassOne, 100,
-							0));
-				else
+				inputVesselEvents.add(csc.addCharterOut("CharterOut " + portA.getName() + " to " + portB.getName(), portA, portB, start, 1000, charterOutDurationDays, cvValue, numOfClassOne, 100, 0));
+				
+				if (portA.equals(portB))
 					charterOutDurationDays /= 2;
 
 			}
