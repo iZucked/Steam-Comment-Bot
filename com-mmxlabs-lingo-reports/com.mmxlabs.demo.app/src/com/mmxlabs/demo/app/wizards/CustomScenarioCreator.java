@@ -82,6 +82,9 @@ public class CustomScenarioCreator {
 		scenario.getContractModel().getEntities().add(e);
 		final GroupEntity s = ContractFactory.eINSTANCE.createGroupEntity();
 		scenario.getContractModel().setShippingEntity(s);
+		s.setOwnership(1.0);
+		s.setTaxRate(0.0);
+		s.setTransferOffset(0);
 
 		e.setName("Other");
 		s.setName("Shipping");
