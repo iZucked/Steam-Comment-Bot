@@ -83,8 +83,7 @@ public class DetailCompositeDialog extends Dialog {
 	private boolean[] objectValidity;
 
 	/**
-	 * The editor composite for the selected object (see
-	 * {@link #selectedObjectIndex})
+	 * The editor composite for the selected object (see {@link #selectedObjectIndex})
 	 */
 	private AbstractDetailComposite activeDetailComposite = null;
 
@@ -96,8 +95,7 @@ public class DetailCompositeDialog extends Dialog {
 	/**
 	 * A validator used to check whether the OK button should be enabled.
 	 */
-	final IValidator<EObject> validator = ModelValidationService.getInstance()
-			.newValidator(EvaluationMode.BATCH);
+	final IValidator<EObject> validator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 
 	final Runnable postValidationRunnable = new Runnable() {
 		@Override
@@ -110,16 +108,18 @@ public class DetailCompositeDialog extends Dialog {
 				Arrays.fill(objectValidity, true);
 				final IStatus globalValidity = validator.validate(duplicates);
 				for (final IStatus s : globalValidity.getChildren()) {
-					if (s.matches(Status.ERROR) == false) continue;
+					if (s.matches(Status.ERROR) == false)
+						continue;
 					if (s instanceof DetailConstraintStatusDecorator) {
 						for (EObject o : ((DetailConstraintStatusDecorator) s).getObjects()) {
 							int index = duplicates.indexOf(o);
-							while (index <0) {
+							while (index < 0) {
 								index = duplicates.indexOf(o);
 								o = o.eContainer();
-								if (o == null) break;
+								if (o == null)
+									break;
 							}
-							if (index>=0)
+							if (index >= 0)
 								objectValidity[index] = false;
 						}
 					}
@@ -131,7 +131,7 @@ public class DetailCompositeDialog extends Dialog {
 			checkValidity();
 		}
 	};
-	
+
 	/**
 	 * Construct a new detail composite dialog.
 	 * 
@@ -139,15 +139,11 @@ public class DetailCompositeDialog extends Dialog {
 	 * @param valueProviderProvider
 	 * @param editingDomain
 	 */
-	public DetailCompositeDialog(final Shell parentShell,
-			final IValueProviderProvider valueProviderProvider,
-			final EditingDomain editingDomain) {
+	public DetailCompositeDialog(final Shell parentShell, final IValueProviderProvider valueProviderProvider, final EditingDomain editingDomain) {
 		super(parentShell);
-		dcc = new DetailCompositeContainer(valueProviderProvider,
-				editingDomain, ICommandProcessor.EXECUTE);
+		dcc = new DetailCompositeContainer(valueProviderProvider, editingDomain, ICommandProcessor.EXECUTE);
 		this.editingDomain = editingDomain;
-		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS,
-				true);
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 	}
 
 	@Override
@@ -164,15 +160,15 @@ public class DetailCompositeDialog extends Dialog {
 		for (final boolean b : objectValidity) {
 			if (!b) {
 				// validity is false
-				 getButton(IDialogConstants.OK_ID).setEnabled(false);
-//				setErrorMessage("Something is not valid");
+				getButton(IDialogConstants.OK_ID).setEnabled(false);
+				// setErrorMessage("Something is not valid");
 				// btnOk.setEnabled(false);
 				return;
 			}
 		}
 		// btnOk.setEnabled(true);
 		getButton(IDialogConstants.OK_ID).setEnabled(!lockedForEditing);
-//		setMessage("All fields are valid");
+		// setMessage("All fields are valid");
 	}
 
 	/**
@@ -180,13 +176,9 @@ public class DetailCompositeDialog extends Dialog {
 	 */
 	private void updateEditor() {
 		final EObject selection = duplicates.get(selectedObjectIndex);
-		final AbstractDetailComposite detailComposite = dcc.getDetailView(
-				selection.eClass(), dialogArea);
+		final AbstractDetailComposite detailComposite = dcc.getDetailView(selection.eClass(), dialogArea);
 
-		getShell().setText(
-				"Editing " + EditorUtils.unmangle(selection.eClass().getName())
-						+ " " + (1 + selectedObjectIndex) + " of "
-						+ duplicates.size());
+		getShell().setText("Editing " + EditorUtils.unmangle(selection.eClass().getName()) + " " + (1 + selectedObjectIndex) + " of " + duplicates.size());
 
 		if (detailComposite != activeDetailComposite) {
 			if (activeDetailComposite != null) {
@@ -198,7 +190,7 @@ public class DetailCompositeDialog extends Dialog {
 			((GridData) activeDetailComposite.getLayoutData()).exclude = false;
 			activeDetailComposite.setVisible(true);
 		}
-		
+
 		detailComposite.setPostValidationRunnable(postValidationRunnable);
 
 		detailComposite.setInput(selection);
@@ -214,9 +206,7 @@ public class DetailCompositeDialog extends Dialog {
 			final Rectangle shellBounds = getParentShell().getBounds();
 			final Point dialogSize = shell.getSize();
 
-			shell.setLocation(shellBounds.x
-					+ (shellBounds.width - dialogSize.x) / 2, shellBounds.y
-					+ (shellBounds.height - dialogSize.y) / 2);
+			shell.setLocation(shellBounds.x + (shellBounds.width - dialogSize.x) / 2, shellBounds.y + (shellBounds.height - dialogSize.y) / 2);
 		}
 	}
 
@@ -234,10 +224,8 @@ public class DetailCompositeDialog extends Dialog {
 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		backButton = createButton(parent, IDialogConstants.BACK_ID,
-				IDialogConstants.BACK_LABEL, true);
-		nextButton = createButton(parent, IDialogConstants.NEXT_ID,
-				IDialogConstants.NEXT_LABEL, true);
+		backButton = createButton(parent, IDialogConstants.BACK_ID, IDialogConstants.BACK_LABEL, true);
+		nextButton = createButton(parent, IDialogConstants.NEXT_ID, IDialogConstants.NEXT_LABEL, true);
 		super.createButtonsForButtonBar(parent);
 	}
 
@@ -263,13 +251,13 @@ public class DetailCompositeDialog extends Dialog {
 			super.buttonPressed(buttonId);
 		}
 	}
-	
+
 	public int open(final List<EObject> objects) {
 		return open(objects, false);
 	}
-	
+
 	private boolean lockedForEditing = false;
-		
+
 	public int open(final List<EObject> objects, boolean locked) {
 		lockedForEditing = locked;
 		final List<EObject> duplicates = new ArrayList<EObject>(objects.size());
@@ -279,7 +267,7 @@ public class DetailCompositeDialog extends Dialog {
 			for (final EObject original : objects) {
 				final EObject duplicate = EcoreUtil.copy(original);
 				duplicates.add(duplicate);
-				
+
 				// add autocorrector adapters.
 				for (final Object adapter : original.eAdapters()) {
 					if (adapter instanceof AutoCorrector) {
@@ -294,10 +282,9 @@ public class DetailCompositeDialog extends Dialog {
 			// duplicates
 
 			ValidationSupport.getInstance().startEditingObjects(objects, duplicates);
-			
-			for (int i = 0; i<duplicates.size(); i++) {
-				objectValidity[i] = validator.validate(duplicates.get(i))
-						.isOK();
+
+			for (int i = 0; i < duplicates.size(); i++) {
+				objectValidity[i] = validator.validate(duplicates.get(i)).isOK();
 			}
 
 			final int value = open();
@@ -312,7 +299,13 @@ public class DetailCompositeDialog extends Dialog {
 				}
 				final boolean isExecutable = cc.canExecute();
 				if (isExecutable) {
-					editingDomain.getCommandStack().execute(cc);
+					try {
+						editingDomain.getCommandStack().execute(cc);
+					} catch (final Throwable t) {
+						//display error message and log
+						// not sure how to make RCP pop up an error box.
+						log.error("Exception executing command", t);
+					}
 				} else {
 					log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 				}
@@ -324,15 +317,10 @@ public class DetailCompositeDialog extends Dialog {
 	}
 
 	/**
-	 * Make a command to set the fields on the first argument to be equal to the
-	 * fields on the second argument. Presumes both arguments have the same
-	 * eclass
+	 * Make a command to set the fields on the first argument to be equal to the fields on the second argument. Presumes both arguments have the same eclass
 	 * 
-	 * TODO this may be a bit slow, as it just checks at the toplevel; to make
-	 * it faster, we need to establish a mapping between all objects and their
-	 * duplicates, including contained objects, and then use the information
-	 * given to the processor to only generate set commands for changed
-	 * attributes.
+	 * TODO this may be a bit slow, as it just checks at the toplevel; to make it faster, we need to establish a mapping between all objects and their duplicates, including contained objects, and then
+	 * use the information given to the processor to only generate set commands for changed attributes.
 	 * 
 	 * This will do for now.
 	 * 
@@ -342,12 +330,10 @@ public class DetailCompositeDialog extends Dialog {
 	 *            the object from which to copy the adjustment
 	 * @return
 	 */
-	private Command makeEqualizer(final EObject original,
-			final EObject duplicate) {
+	private Command makeEqualizer(final EObject original, final EObject duplicate) {
 		final CompoundCommand compound = new CompoundCommand();
 		compound.append(new IdentityCommand());
-		for (final EStructuralFeature feature : original.eClass()
-				.getEAllStructuralFeatures()) {
+		for (final EStructuralFeature feature : original.eClass().getEAllStructuralFeatures()) {
 			// For containment references, we need to compare the contained
 			// object, rather than generate a SetCommand.
 			if (original.eClass().getEAllContainments().contains(feature)) {
@@ -362,19 +348,14 @@ public class DetailCompositeDialog extends Dialog {
 				// ImportCSVAction which relinks objects that have been
 				// replaced.
 				if (feature.isMany()) {
-					final Command mas = CommandUtil
-							.createMultipleAttributeSetter(editingDomain,
-									original, feature,
-									(Collection) duplicate.eGet(feature));
+					final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection) duplicate.eGet(feature));
 					if (mas.canExecute() == false) {
 						log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
 								"Attempt to set feature which could not be set."));
 					}
 					compound.append(mas);
 				} else {
-					final Command c = makeEqualizer(
-							(EObject) original.eGet(feature),
-							(EObject) duplicate.eGet(feature));
+					final Command c = makeEqualizer((EObject) original.eGet(feature), (EObject) duplicate.eGet(feature));
 					// if (!c.getAffectedObjects().isEmpty()) {
 					compound.append(c);
 					// }
@@ -383,15 +364,11 @@ public class DetailCompositeDialog extends Dialog {
 				continue;
 			}
 			// Skip items which have not changed.
-			if (Equality.isEqual(original.eGet(feature),
-					duplicate.eGet(feature))
-					&& (!feature.isUnsettable() || (original.eIsSet(feature) == duplicate.eIsSet(feature)))) {
+			if (Equality.isEqual(original.eGet(feature), duplicate.eGet(feature)) && (!feature.isUnsettable() || (original.eIsSet(feature) == duplicate.eIsSet(feature)))) {
 				continue;
 			}
 			if (feature.isMany()) {
-				final Command mas = CommandUtil.createMultipleAttributeSetter(
-						editingDomain, original, feature,
-						(Collection) duplicate.eGet(feature));
+				final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection) duplicate.eGet(feature));
 				if (mas.canExecute() == false) {
 					// FIXME: Use e.g. log.error(xxx, new RuntimeException());
 					log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
@@ -399,13 +376,10 @@ public class DetailCompositeDialog extends Dialog {
 				}
 				compound.append(mas);
 			} else {
-				if (feature.isUnsettable()
-						&& duplicate.eIsSet(feature) == false) {
-					compound.append(SetCommand.create(editingDomain, original,
-							feature, SetCommand.UNSET_VALUE));
+				if (feature.isUnsettable() && duplicate.eIsSet(feature) == false) {
+					compound.append(SetCommand.create(editingDomain, original, feature, SetCommand.UNSET_VALUE));
 				} else {
-					compound.append(SetCommand.create(editingDomain, original,
-							feature, duplicate.eGet(feature)));
+					compound.append(SetCommand.create(editingDomain, original, feature, duplicate.eGet(feature)));
 				}
 			}
 		}
