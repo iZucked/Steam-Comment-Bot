@@ -1,8 +1,7 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
