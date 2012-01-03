@@ -33,8 +33,6 @@ public class VesselExistenceCheck {
 	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 	/**
-	 * TODO Add other vessels (time charter spot charter).
-	 * 
 	 * Create a load of vessels of varying classes and store them in an ArrayList. Create a load of ports with varying distances. Create a load of cargos to different ports and with different
 	 * durations. Check that the output contains all of the vessels in the ArrayList. <br>
 	 * There are many more vessels than required (so a lot will be idle) to try and trip up the optimiser and ensure it doesn't remove vessels that aren't used.
