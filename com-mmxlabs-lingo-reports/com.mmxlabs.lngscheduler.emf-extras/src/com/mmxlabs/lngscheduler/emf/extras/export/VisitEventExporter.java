@@ -108,6 +108,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		} else if (slot instanceof IVesselEventPortSlot) {
 			// final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
 			final VesselEvent event = entities.getModelObject(slot, VesselEvent.class);
+			if (event == null) return null;
 			final VesselEventVisit vev;
 			if (event instanceof CharterOut) {
 				final CharterOut charterOut = (CharterOut) event;
