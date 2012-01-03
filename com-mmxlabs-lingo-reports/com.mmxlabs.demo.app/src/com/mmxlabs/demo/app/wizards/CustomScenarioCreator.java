@@ -387,7 +387,7 @@ public class CustomScenarioCreator {
 		return cargo;
 	}
 
-	public void addDryDock(final Port startPort, final Date start, final int durationDays) {
+	public Drydock addDryDock(final Port startPort, final Date start, final int durationDays) {
 
 		if (!scenario.getPortModel().getPorts().contains(startPort)) {
 			Activator
@@ -408,9 +408,11 @@ public class CustomScenarioCreator {
 		// define the start and end time
 		dryDock.setStartDate(start);
 		dryDock.setEndDate(start);
+		
+		return dryDock;
 	}
 
-	public void addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays, final float cvValue,
+	public CharterOut addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays, final float cvValue,
 			final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 
 		final CharterOut charterOut = FleetFactory.eINSTANCE.createCharterOut();
@@ -430,6 +432,8 @@ public class CustomScenarioCreator {
 		charterOut.setRepositioningFee(repositioningFee);
 		// add to the scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(charterOut);
+		
+		return charterOut;
 	}
 
 	/**
