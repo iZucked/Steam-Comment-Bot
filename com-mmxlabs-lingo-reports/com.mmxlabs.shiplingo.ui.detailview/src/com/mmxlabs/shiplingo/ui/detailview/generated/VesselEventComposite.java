@@ -114,12 +114,12 @@ public abstract class VesselEventComposite extends AbstractDetailComposite {
 		
 	/**
 	 * Create an editor for the duration feature on VesselEvent
-	 * @generated
+	 * @generated NO
 	 */
 	protected static void createDurationEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
     composite.createEditorControl(mainGroup,
       composite.createEditor(FleetPackage.eINSTANCE.getVesselEvent_Duration()),
-      "Duration");
+      "Duration (days)");
   }
 		
 	/**
