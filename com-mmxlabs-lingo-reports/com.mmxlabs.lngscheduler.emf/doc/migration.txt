@@ -1,3 +1,8 @@
+====
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+====
+
 Using the COPE migrator
 -----------------------
 1. How it works
