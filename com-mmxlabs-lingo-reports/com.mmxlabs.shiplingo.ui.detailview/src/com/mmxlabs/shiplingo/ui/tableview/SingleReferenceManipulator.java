@@ -78,7 +78,8 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public CellEditor getCellEditor(final Composite c, final Object object) {
-		editor = new ComboBoxCellEditor(c, new String[0], SWT.READ_ONLY);
+		editor = new ComboBoxCellEditor(c, new String[0], SWT.READ_ONLY | SWT.FLAT | SWT.BORDER);
+//		editor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		setEditorNames();
 		return editor;
 	}

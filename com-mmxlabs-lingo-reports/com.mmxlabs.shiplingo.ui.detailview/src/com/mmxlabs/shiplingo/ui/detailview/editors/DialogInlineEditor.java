@@ -72,7 +72,8 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void updateDisplay(Object value) {
-		label.setText(render(value));
+		if (!label.isDisposed())
+			label.setText(render(value));
 	}
 
 	protected abstract Object displayDialog(final Object currentValue);

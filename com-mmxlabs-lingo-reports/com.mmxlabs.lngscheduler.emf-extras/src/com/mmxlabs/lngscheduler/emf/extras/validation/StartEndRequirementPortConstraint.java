@@ -63,7 +63,7 @@ public class StartEndRequirementPortConstraint extends AbstractModelConstraint {
 
 			final HashSet<String> badPorts = new HashSet<String>();
 			final List<String> badVessels = new LinkedList<String>();
-
+			if (scenario == null) return ctx.createSuccessStatus();
 			for (final Vessel v : scenario.getFleetModel().getFleet()) {
 				if (ValidationSupport.getInstance().isSame(v.getClass_(), vesselClass)) {
 					boolean bad = false;

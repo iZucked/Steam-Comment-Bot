@@ -82,6 +82,9 @@ public class CustomScenarioCreator {
 		scenario.getContractModel().getEntities().add(e);
 		final GroupEntity s = ContractFactory.eINSTANCE.createGroupEntity();
 		scenario.getContractModel().setShippingEntity(s);
+		s.setOwnership(1.0);
+		s.setTaxRate(0.0);
+		s.setTransferOffset(0);
 
 		e.setName("Other");
 		s.setName("Shipping");
@@ -151,6 +154,9 @@ public class CustomScenarioCreator {
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
 		// final int minHeelVolume = 0;
+
+		// TODO Make test for spot charter count.
+		// Make this spotCharterCount number non-zero for a class, check that the number of spot charter vessels for that class never exceeds the non-zero number.
 		final int spotCharterCount = 0;
 		final double fillCapacity = 1.0;
 
@@ -387,7 +393,7 @@ public class CustomScenarioCreator {
 		return cargo;
 	}
 
-	public void addDryDock(final Port startPort, final Date start, final int durationDays) {
+	public Drydock addDryDock(final Port startPort, final Date start, final int durationDays) {
 
 		if (!scenario.getPortModel().getPorts().contains(startPort)) {
 			Activator
@@ -408,9 +414,11 @@ public class CustomScenarioCreator {
 		// define the start and end time
 		dryDock.setStartDate(start);
 		dryDock.setEndDate(start);
+
+		return dryDock;
 	}
 
-	public void addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays, final float cvValue,
+	public CharterOut addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays, final float cvValue,
 			final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 
 		final CharterOut charterOut = FleetFactory.eINSTANCE.createCharterOut();
@@ -418,9 +426,12 @@ public class CustomScenarioCreator {
 		// the start and end of the charter out starting-window is 0, for simplicity.
 		charterOut.setStartDate(startCharterOut);
 		charterOut.setEndDate(startCharterOut);
-		// same start and end port.
+
 		charterOut.setStartPort(startPort);
-		charterOut.setEndPort(endPort);
+		// don't set the end port if both ports are the same - this is equivalent to setting the end port to unset and is a good place to test it works
+		if (!startPort.equals(endPort))
+			charterOut.setEndPort(endPort);
+		
 		charterOut.setId(id);
 		charterOut.setHeelLimit(heelLimit);
 		charterOut.setDuration(charterOutDurationDays);
@@ -430,6 +441,8 @@ public class CustomScenarioCreator {
 		charterOut.setRepositioningFee(repositioningFee);
 		// add to the scenario's fleet model
 		scenario.getFleetModel().getVesselEvents().add(charterOut);
+
+		return charterOut;
 	}
 
 	/**
@@ -517,7 +530,8 @@ public class CustomScenarioCreator {
 	 * @return If the ports are added successfully the method will return true. If the vessel class is not in the scenario it will return false.
 	 */
 	public boolean addInaccessiblePortsOnVesselClass(final VesselClass vc, final Port[] inaccessiblePorts) {
-		if (scenario.getFleetModel().getFleet().contains(vc)) {
+
+		if (scenarioFleetModelContainsVesselClass(vc)) {
 
 			for (VesselClass v : scenario.getFleetModel().getVesselClasses()) {
 				if (v.equals(vc))
@@ -526,6 +540,16 @@ public class CustomScenarioCreator {
 				return true;
 			}
 		}
+		return false;
+	}
+
+	private boolean scenarioFleetModelContainsVesselClass(final VesselClass vc) {
+
+		for (Vessel v : scenario.getFleetModel().getFleet()) {
+			if (v.getClass_().equals(vc))
+				return true;
+		}
+
 		return false;
 	}
 
