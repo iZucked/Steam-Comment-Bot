@@ -1,0 +1,140 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * All rights reserved.
+ */
+package com.mmxlabs.scheduler.its.tests.sanityChecks;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import scenario.Scenario;
+import scenario.fleet.VesselEvent;
+import scenario.port.Port;
+import scenario.schedule.CargoAllocation;
+import scenario.schedule.Schedule;
+import scenario.schedule.Sequence;
+import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.events.VesselEventVisit;
+
+import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
+
+/**
+ * <a href="https://mmxlabs.fogbugz.com/default.asp?261">Check that all vesselevents in input exist in output.</a>
+ * 
+ * @author Adam
+ * 
+ */
+public class VesselEventExistenceCheck {
+
+	private static final int dischargePrice = 1;
+	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+
+	@Test
+	public void test() {
+
+		// A list to hold all cargos that are input.
+		final ArrayList<VesselEvent> inputVesselEvents = new ArrayList<VesselEvent>();
+
+		@SuppressWarnings("unused")
+		final int loadPrice = 1;
+		final int cvValue = 10;
+
+		// a list of ports to use in the scenario
+		final Port[] ports = new Port[] { ScenarioTools.createPort("portA"), ScenarioTools.createPort("portB"), ScenarioTools.createPort("portC"), ScenarioTools.createPort("portD"),
+				ScenarioTools.createPort("portE"), ScenarioTools.createPort("portF") };
+
+		// Add the ports, and set the distances.
+		SanityCheckTools.setPortDistances(csc, ports);
+
+		// create a few vessels and add them to the scenario
+		final int numOfClassOne = 2;
+		final int numOfClassTwo = 2;
+		final int numOfClassThree = 1;
+
+		csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500, false);
+		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false);
+		csc.addVesselSimple("classThree", numOfClassThree, 11, 12, 500000, 13, 15, 15, 0, true);
+
+		// create some cargos.
+		// SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
+
+		// add some VesselEvents, i.e. CharterOuts and DryDocks
+		Date start = new Date(System.currentTimeMillis());
+		for (Port portA : ports) {
+			for (Port portB : ports) {
+				if (!portA.equals(portB)) {
+					inputVesselEvents.add(csc.addDryDock(portB, start, 1));
+					start.setTime(start.getTime() + TimeUnit.HOURS.toMillis(2));
+				}
+			}
+		}
+
+		start = new Date(System.currentTimeMillis());
+		int charterOutDurationDays = 1;
+		for (Port portA : ports) {
+			for (Port portB : ports) {
+				
+				if (!portA.equals(portB))
+					inputVesselEvents.add(csc.addCharterOut("ID", portA, portB, start, 1000, charterOutDurationDays, cvValue, numOfClassOne, 100, 0));
+				else
+					charterOutDurationDays /= 2;
+
+			}
+		}
+
+		final Scenario scenario = csc.buildScenario();
+		// evaluate and get a schedule
+		final Schedule result = ScenarioTools.evaluate(scenario);
+
+		// print the legs to console
+		for (CargoAllocation ca : result.getCargoAllocations())
+			ScenarioTools.printCargoAllocation(ca.getName(), ca);
+
+		// print each vessel's sequence
+		ScenarioTools.printSequences(result);
+
+		// check the output
+		checkVesselEvents(result, inputVesselEvents);
+	}
+
+	/**
+	 * Check all the cargos in output are in the input cargos once.
+	 * 
+	 * @param result
+	 *            The evaluated scenario (containing the cargos in the output)
+	 * @param inputCargos
+	 *            The cargos that were input into the unevaluated scenario.
+	 */
+	private void checkVesselEvents(final Schedule result, final ArrayList<VesselEvent> inputVesselEvents) {
+
+		final int inputNumOfVesselEvents = inputVesselEvents.size();
+		int outputNumOfVesselEvents = 0;
+
+
+		for (final Sequence seq : result.getSequences()) {
+			for (final ScheduledEvent e : seq.getEvents()) {
+				if (e instanceof VesselEventVisit) {
+
+					VesselEventVisit vev = (VesselEventVisit) e;
+					VesselEvent ve = vev.getVesselEvent();
+					
+					Assert.assertTrue("Input VesselEvent is in output", inputVesselEvents.contains(ve));
+
+					inputVesselEvents.remove(ve);
+					
+					
+					outputNumOfVesselEvents++;
+
+				}
+			}
+		}
+		Assert.assertEquals("Same number of VesselEvents in the output as in the input", inputNumOfVesselEvents, outputNumOfVesselEvents);
+
+		Assert.assertEquals("All VesselEvents in output", 0, inputVesselEvents.size());
+	}
+}
