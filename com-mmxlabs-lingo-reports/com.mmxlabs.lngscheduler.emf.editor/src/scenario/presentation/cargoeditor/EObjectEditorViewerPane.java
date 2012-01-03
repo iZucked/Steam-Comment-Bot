@@ -242,11 +242,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						return null;
 					}
 					final Object[] result = elsd.getResult();
-					return EMFUtils.createEObject((EClass) result[0]); // include
-																		// contained
-																		// objects
+					return EMFUtils.fixNullDates(EMFUtils.createEObject((EClass) result[0]));
 				} else {
-					return EMFUtils.createEObject(ec);
+					return EMFUtils.fixNullDates(EMFUtils.createEObject(ec));
 				}
 			}
 		};
