@@ -78,9 +78,10 @@ public class VesselEventExistenceCheck {
 		int charterOutDurationDays = 1;
 		for (Port portA : ports) {
 			for (Port portB : ports) {
-				
+
 				if (!portA.equals(portB))
-					inputVesselEvents.add(csc.addCharterOut("ID", portA, portB, start, 1000, charterOutDurationDays, cvValue, numOfClassOne, 100, 0));
+					inputVesselEvents.add(csc.addCharterOut("CharterOut " + portA.getName() + " to " + portB.getName(), portA, portB, start, 1000, charterOutDurationDays, cvValue, numOfClassOne, 100,
+							0));
 				else
 					charterOutDurationDays /= 2;
 
@@ -115,19 +116,17 @@ public class VesselEventExistenceCheck {
 		final int inputNumOfVesselEvents = inputVesselEvents.size();
 		int outputNumOfVesselEvents = 0;
 
-
 		for (final Sequence seq : result.getSequences()) {
 			for (final ScheduledEvent e : seq.getEvents()) {
 				if (e instanceof VesselEventVisit) {
 
 					VesselEventVisit vev = (VesselEventVisit) e;
 					VesselEvent ve = vev.getVesselEvent();
-					
+
 					Assert.assertTrue("Input VesselEvent is in output", inputVesselEvents.contains(ve));
 
 					inputVesselEvents.remove(ve);
-					
-					
+
 					outputNumOfVesselEvents++;
 
 				}
