@@ -688,7 +688,7 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 		Assert.assertEquals(
-		/* route cost consumption */1000 * 24 * 2 + // why is this *2
+		/* route cost consumption */1000 * 24 * 2 + // * 2 because of base fuel conversion factor
 				/* standard consumption */150 * 24 * Calculator.ScaleFactor, details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
@@ -896,6 +896,7 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 120000);
 		expectedPlan.setTotalFuelCost(FuelComponent.PilotLight, 140000);
 		expectedPlan.setTotalFuelCost(FuelComponent.IdlePilotLight, 160000);
+		expectedPlan.setLNGFuelVolume(120000);
 
 		Assert.assertEquals(expectedPlan, plan);
 
@@ -1056,6 +1057,7 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 360000);
 		expectedPlan.setTotalFuelCost(FuelComponent.PilotLight, 400000);
 		expectedPlan.setTotalFuelCost(FuelComponent.IdlePilotLight, 440000);
+		expectedPlan.setLNGFuelVolume(420000);
 
 		Assert.assertEquals(expectedPlan, plan);
 

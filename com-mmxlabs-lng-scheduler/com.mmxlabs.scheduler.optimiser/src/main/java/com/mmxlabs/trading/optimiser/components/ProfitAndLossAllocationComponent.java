@@ -62,7 +62,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 	private long lastEvaluation, lastAcceptance;
 	private IVesselProvider vesselProvider;
 	private IPortSlotProvider slotProvider;
-	
+
 	private long calibrationZeroLine = Long.MIN_VALUE;
 
 	public ProfitAndLossAllocationComponent(final String profitComponentName, final String dcpEntityprovider, final String vesselProviderKey, final String slotProviderKey,
@@ -121,7 +121,9 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 		if (entityProvider == null)
 			return 0;
 		final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
-		IAllocationAnnotation currentAllocation = allocationIterator.next();
+		IAllocationAnnotation currentAllocation = null;
+		if (allocationIterator.hasNext())
+			currentAllocation = allocationIterator.next();
 		long accumulator = 0;
 
 		for (final ScheduledSequence sequence : solution) {
@@ -145,17 +147,18 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 				time += getPlanDuration(plan);
 			}
 		}
-		
+
 		if (calibrationZeroLine == Long.MIN_VALUE) {
 			calibrationZeroLine = accumulator;
 		}
-		
-		lastEvaluation = (calibrationZeroLine-accumulator)/Calculator.ScaleFactor;
+
+		lastEvaluation = (calibrationZeroLine - accumulator) / Calculator.ScaleFactor;
 		return lastEvaluation;
 	}
 
-	 private final Map<String, Long> lastCargoValues = new HashMap<String, Long>();
-	 private final Map<String, String> lastCargoDetails = new HashMap<String, String>();
+	private final Map<String, Long> lastCargoValues = new HashMap<String, Long>();
+	private final Map<String, String> lastCargoDetails = new HashMap<String, String>();
+
 	/**
 	 * evaluate the group value of the given cargo
 	 * 
@@ -202,19 +205,19 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 
 		final long result = upstreamProfit + shippingProfit + downstreamProfit;
 
-//		 final String key = currentAllocation.getLoadSlot().getId() + "-" + currentAllocation.getDischargeSlot().getId();
+		// final String key = currentAllocation.getLoadSlot().getId() + "-" + currentAllocation.getDischargeSlot().getId();
 
-//		if (lastCargoValues.containsKey(key)) {
-//			final long lastResult = lastCargoValues.get(key);
-//			if (lastResult > 0 != result > 0) {
-//				System.err.println("Change in: " + key);
-//				System.err.println("   Before: " + lastResult + " " + lastCargoDetails.get(key));
-//				System.err.println("    After: " + result + " " + currentAllocation + ", ship cost = " + shippingCosts);
-//			}
-//		}
-//		
-//		 lastCargoDetails.put(key, currentAllocation + ", ship cost = " + shippingCosts);
-//		 lastCargoValues.put(key, result);
+		// if (lastCargoValues.containsKey(key)) {
+		// final long lastResult = lastCargoValues.get(key);
+		// if (lastResult > 0 != result > 0) {
+		// System.err.println("Change in: " + key);
+		// System.err.println("   Before: " + lastResult + " " + lastCargoDetails.get(key));
+		// System.err.println("    After: " + result + " " + currentAllocation + ", ship cost = " + shippingCosts);
+		// }
+		// }
+		//
+		// lastCargoDetails.put(key, currentAllocation + ", ship cost = " + shippingCosts);
+		// lastCargoValues.put(key, result);
 
 		if (annotatedSolution != null) {
 			final LinkedList<IProfitAndLossEntry> entries = new LinkedList<IProfitAndLossEntry>();
