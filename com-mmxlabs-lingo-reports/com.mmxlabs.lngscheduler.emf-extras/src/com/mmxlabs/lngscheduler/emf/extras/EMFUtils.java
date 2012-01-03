@@ -18,8 +18,10 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -32,6 +34,7 @@ import scenario.fleet.PortAndTime;
 import scenario.fleet.VesselEvent;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 
 /**
  * Utility class for doing things to scenarios.
@@ -250,7 +253,57 @@ public class EMFUtils {
 
 		return result;
 	}
+	
+	/**
+	 * For this object and all its contained objects, find all singular attributes with the given data type, and if they are null at the moment
+	 * either (a) unset them if they are unsettable attributes, or (b) set them to the given value if they are not unsettable.
+	 * 
+	 * 
+	 * @param object
+	 * @param dataType
+	 * @param valueIfSet
+	 * @return the input value.
+	 */
+	public static EObject unsetOrSetNullValues(final EObject input, final EDataType dataType, final Object valueIfSet) {
+		EObject object = input;
+		final TreeIterator<EObject> iterator = object.eAllContents();
+		while (object != null) {
+			for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
+				if (attribute.isMany()) continue;
+				if (attribute.getEAttributeType().equals(dataType)) {
+					final Object value = object.eGet(attribute);
+					if (value == null) {
+						if (attribute.isUnsettable()) {
+							object.eUnset(attribute);
+						} else {
+							object.eSet(attribute, valueIfSet);
+						}
+					}
+				}
+			}
+			
+			if (iterator.hasNext()) {
+				object = iterator.next();
+			} else {
+				object = null;
+			}
+		}
+		return input;
+	}
 
+	/**
+	 * Fix any dates which are null; dates shouldn't be null
+	 * 
+	 * @param input
+	 * @return the input
+	 */
+	public static EObject fixNullDates(final EObject input) {
+		final Date date = new Date();
+		final DateAndOptionalTime daot = new DateAndOptionalTime(date, true);
+		return unsetOrSetNullValues(unsetOrSetNullValues(input, ScenarioPackage.eINSTANCE.getDateAndOptionalTime(), daot), EcorePackage.eINSTANCE.getEDate(), date);
+	}
+
+	
 	/**
 	 * Find an EClass which is a common superclass of the given objects NOTE
 	 * this does not work with multiple supertypes

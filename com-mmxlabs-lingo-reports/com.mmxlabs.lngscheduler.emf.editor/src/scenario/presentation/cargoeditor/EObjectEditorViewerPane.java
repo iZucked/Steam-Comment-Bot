@@ -55,11 +55,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import scenario.NamedObject;
+import scenario.presentation.LngEditorPlugin;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.handlers.AddAction;
+import scenario.presentation.cargoeditor.handlers.debug.RemoveTimePartsAction;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
+import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.importer.importers.ExportCSVAction;
@@ -143,6 +146,12 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		{
 			final Action a = new CopyGridToClipboardAction(eObjectTableViewer.getGrid());
 			getToolBarManager().appendToGroup("copy", a);
+		}
+		
+		if (LngEditorPlugin.DEBUG_UI_ENABLED) {
+			final RemoveTimePartsAction rtpa = new RemoveTimePartsAction();
+			getToolBarManager().appendToGroup("edit", rtpa);
+			eObjectTableViewer.addSelectionChangedListener(rtpa);
 		}
 
 		getToolBarManager().update(true);
@@ -242,11 +251,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						return null;
 					}
 					final Object[] result = elsd.getResult();
-					return EMFUtils.createEObject((EClass) result[0]); // include
-																		// contained
-																		// objects
+					return EMFUtils.fixNullDates(EMFUtils.createEObject((EClass) result[0]));
 				} else {
-					return EMFUtils.createEObject(ec);
+					return EMFUtils.fixNullDates(EMFUtils.createEObject(ec));
 				}
 			}
 		};
