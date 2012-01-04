@@ -30,10 +30,12 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * 
  * Every VesselClass has a list of Ports called 'inaccessiblePorts'; check that no Vessel in the output Schedule goes to a port which is in its VesselClass' inaccessiblePorts list.
  * 
+ * TODO Remove print statements once working.
+ * 
  * @author Adam
  * 
  */
-public class CheckVesselClassPortConstraintNotViolated {
+public class VesselClassPortConstraintCheck {
 
 	private static final int dischargePrice = 1;
 	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
@@ -107,7 +109,7 @@ public class CheckVesselClassPortConstraintNotViolated {
 				else if (vesselClass.equals(vesselClassFour))
 					bannedPort = portD;
 				else
-					Assert.fail("Error! Expected an inaccessible port for all vessel classes, but vessel class " + vesselClass.getName() + " didn't have a banned port.");
+					Assert.fail("Expected an inaccessible port for all vessel classes, but vessel class " + vesselClass.getName() + " didn't have a banned port.");
 
 				Assert.assertTrue("inaccessible port still exists", vesselClass.getInaccessiblePorts().contains(bannedPort));
 				Assert.assertEquals("Only one inaccessible port expected", 1, vesselClass.getInaccessiblePorts().size());
