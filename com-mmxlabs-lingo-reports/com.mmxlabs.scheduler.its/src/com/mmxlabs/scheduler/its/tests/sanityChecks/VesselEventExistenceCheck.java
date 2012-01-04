@@ -37,7 +37,7 @@ public class VesselEventExistenceCheck {
 	@Test
 	public void test() {
 
-		// A list to hold all cargos that are input.
+		// A list for all VesselEvents from the input.
 		final ArrayList<VesselEvent> inputVesselEvents = new ArrayList<VesselEvent>();
 
 		@SuppressWarnings("unused")
@@ -60,10 +60,8 @@ public class VesselEventExistenceCheck {
 		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false);
 		csc.addVesselSimple("classThree", numOfClassThree, 11, 12, 500000, 13, 15, 15, 0, true);
 
-		// create some cargos.
-		// SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
 
-		// add some VesselEvents, i.e. CharterOuts and DryDocks
+		// add some VesselEvents, i.e. CharterOuts and DryDocks in a random-ish manner.
 		Date start = new Date(System.currentTimeMillis());
 		for (Port portA : ports) {
 			for (Port portB : ports) {
@@ -103,12 +101,12 @@ public class VesselEventExistenceCheck {
 	}
 
 	/**
-	 * Check all the cargos in output are in the input cargos once.
+	 * Check all the VesselEvents in output are in the input VesselEvents once.
 	 * 
 	 * @param result
-	 *            The evaluated scenario (containing the cargos in the output)
+	 *            The evaluated scenario (containing the VesselEvents in the output)
 	 * @param inputCargos
-	 *            The cargos that were input into the unevaluated scenario.
+	 *            The VesselEvents that were input into the unevaluated scenario.
 	 */
 	private void checkVesselEvents(final Schedule result, final ArrayList<VesselEvent> inputVesselEvents) {
 
