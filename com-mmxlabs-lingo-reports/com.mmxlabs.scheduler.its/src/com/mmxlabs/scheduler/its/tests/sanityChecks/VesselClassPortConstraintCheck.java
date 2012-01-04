@@ -16,9 +16,6 @@ import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.port.Port;
 import scenario.schedule.Schedule;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.PortVisit;
-import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetVessel;
 
@@ -115,7 +112,7 @@ public class VesselClassPortConstraintCheck {
 				Assert.assertEquals("Only one inaccessible port expected", 1, vesselClass.getInaccessiblePorts().size());
 				System.out.println("Vessel (" + vesselClass.getName() + ") is banned from " + vesselClass.getInaccessiblePorts().get(0).getName());
 
-				ArrayList<Port> visitedPorts = getVesselsVisitedPorts(result, fv);
+				ArrayList<Port> visitedPorts = SantityCheckTools.getVesselsVisitedPorts(result, fv);
 
 				for (Port p : visitedPorts) {
 					System.out.println("Vessel (" + vesselClass.getName() + ") visited " + p.getName() + " (banned from " + bannedPort.getName() + ")");
@@ -124,24 +121,5 @@ public class VesselClassPortConstraintCheck {
 				}
 			}
 		}
-	}
-
-	private ArrayList<Port> getVesselsVisitedPorts(final Schedule schedule, final FleetVessel fleetVessel) {
-
-		final ArrayList<Port> visitedPorts = new ArrayList<Port>();
-
-		for (Sequence sq : schedule.getSequences()) {
-			if (sq.getVessel().equals(fleetVessel)) {
-				for (ScheduledEvent se : sq.getEvents()) {
-					if (se instanceof PortVisit) {
-						PortVisit pv = (PortVisit) se;
-
-						visitedPorts.add(pv.getPort());
-					}
-				}
-			}
-		}
-
-		return visitedPorts;
 	}
 }

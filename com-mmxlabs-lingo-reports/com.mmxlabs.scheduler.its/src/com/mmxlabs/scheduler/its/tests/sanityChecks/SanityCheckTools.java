@@ -4,11 +4,17 @@
  */
 package com.mmxlabs.scheduler.its.tests.sanityChecks;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import scenario.cargo.Cargo;
 import scenario.port.Port;
+import scenario.schedule.Schedule;
+import scenario.schedule.Sequence;
+import scenario.schedule.events.PortVisit;
+import scenario.schedule.events.ScheduledEvent;
+import scenario.schedule.fleetallocation.FleetVessel;
 
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
 
@@ -84,5 +90,24 @@ public class SanityCheckTools {
 		}
 
 		return inputCargos;
+	}
+
+	private ArrayList<Port> getVesselsVisitedPorts(final Schedule schedule, final FleetVessel fleetVessel) {
+
+		final ArrayList<Port> visitedPorts = new ArrayList<Port>();
+
+		for (Sequence sq : schedule.getSequences()) {
+			if (sq.getVessel().equals(fleetVessel)) {
+				for (ScheduledEvent se : sq.getEvents()) {
+					if (se instanceof PortVisit) {
+						PortVisit pv = (PortVisit) se;
+
+						visitedPorts.add(pv.getPort());
+					}
+				}
+			}
+		}
+
+		return visitedPorts;
 	}
 }
