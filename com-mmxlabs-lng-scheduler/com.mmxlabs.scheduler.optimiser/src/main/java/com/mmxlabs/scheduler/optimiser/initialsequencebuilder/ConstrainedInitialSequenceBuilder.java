@@ -208,7 +208,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					
 					int x = vit1.compareTo(vit2);
 					if (x == 0) {
-						x = Integer.compare(vessel1.getVesselClass().getMaxSpeed(),
+						x = ((Integer) vessel1.getVesselClass().getMaxSpeed()).compareTo(
 								vessel2.getVesselClass().getMaxSpeed());
 					}
 					return x;
