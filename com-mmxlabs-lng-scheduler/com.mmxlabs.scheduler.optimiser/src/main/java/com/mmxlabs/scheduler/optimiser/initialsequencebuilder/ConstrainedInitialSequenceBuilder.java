@@ -205,17 +205,13 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					final VesselInstanceType vit1 = vessel1.getVesselInstanceType();
 					final VesselInstanceType vit2 = vessel2.getVesselInstanceType();
 
-					if (vit1.ordinal() < vit2.ordinal()) {
-						return -1;
-					} else if (vit1.ordinal() > vit2.ordinal()) {
-						return 1;
-					} else {
-						if (vessel1.getVesselClass().getMaxSpeed() > vessel2.getVesselClass().getMaxSpeed()) {
-							return -1;
-						} else {
-							return 1;
-						}
+					
+					int x = vit1.compareTo(vit2);
+					if (x == 0) {
+						x = Integer.compare(vessel1.getVesselClass().getMaxSpeed(),
+								vessel2.getVesselClass().getMaxSpeed());
 					}
+					return x;
 				}
 			});
 		}
