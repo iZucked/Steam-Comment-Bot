@@ -92,7 +92,15 @@ public class SanityCheckTools {
 		return inputCargos;
 	}
 
-	private ArrayList<Port> getVesselsVisitedPorts(final Schedule schedule, final FleetVessel fleetVessel) {
+	/**
+	 * Get a list of ports that a fleet vessel has visited in a schedule.
+	 * 
+	 * @param schedule
+	 *            The schedule that must contain the given FleetVessel
+	 * @param fleetVessel
+	 * @return A list of visited ports (with no duplicates)
+	 */
+	public static ArrayList<Port> getVesselsVisitedPorts(final Schedule schedule, final FleetVessel fleetVessel) {
 
 		final ArrayList<Port> visitedPorts = new ArrayList<Port>();
 
@@ -102,12 +110,13 @@ public class SanityCheckTools {
 					if (se instanceof PortVisit) {
 						PortVisit pv = (PortVisit) se;
 
-						visitedPorts.add(pv.getPort());
+						if (!visitedPorts.contains(pv.getPort()))
+							visitedPorts.add(pv.getPort());
 					}
 				}
 			}
 		}
 
 		return visitedPorts;
-	}
+	}	
 }

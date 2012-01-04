@@ -112,7 +112,7 @@ public class VesselClassPortConstraintCheck {
 				Assert.assertEquals("Only one inaccessible port expected", 1, vesselClass.getInaccessiblePorts().size());
 				System.out.println("Vessel (" + vesselClass.getName() + ") is banned from " + vesselClass.getInaccessiblePorts().get(0).getName());
 
-				ArrayList<Port> visitedPorts = SantityCheckTools.getVesselsVisitedPorts(result, fv);
+				ArrayList<Port> visitedPorts = SanityCheckTools.getVesselsVisitedPorts(result, fv);
 
 				for (Port p : visitedPorts) {
 					System.out.println("Vessel (" + vesselClass.getName() + ") visited " + p.getName() + " (banned from " + bannedPort.getName() + ")");
