@@ -95,7 +95,7 @@ public class CargoExistenceCheck {
 
 		final int numOfInputCargos = inputCargos.size();
 
-		Assert.assertEquals("Same number of cargoes in the output as in the input", numOfInputCargos, result.getCargoAllocations());
+		Assert.assertEquals("Same number of cargoes in the output as in the input", numOfInputCargos, result.getCargoAllocations().size());
 
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
