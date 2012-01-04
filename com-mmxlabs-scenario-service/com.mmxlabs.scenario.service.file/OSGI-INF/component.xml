@@ -5,7 +5,7 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" immediate="true" name="com.mmxlabs.scenario.service.file">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" deactivate="stop" immediate="true" name="com.mmxlabs.scenario.service.file">
    <implementation class="com.mmxlabs.scenario.service.file.FileScenarioService"/>
    <service>
       <provide interface="com.mmxlabs.scenario.service.IScenarioService"/>

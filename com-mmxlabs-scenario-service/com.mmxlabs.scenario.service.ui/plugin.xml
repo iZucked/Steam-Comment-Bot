@@ -46,6 +46,10 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
+            id="com.mmxlabs.scenario.service.ui.open"
+            name="Open">
+      </command>
+      <command
             id="com.mmxlabs.scenario.service.ui.lock"
             name="Lock/Unlock">
       </command>
@@ -53,8 +57,43 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
+            class="com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler"
+            commandId="com.mmxlabs.scenario.service.ui.open">
+         <enabledWhen>
+            <iterate>
+               <and>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </and>
+            </iterate>
+         </enabledWhen>
+      </handler>
+      <handler
             class="com.mmxlabs.scenario.service.ui.commands.LockScenarioCommandHandler"
             commandId="com.mmxlabs.scenario.service.ui.lock">
+         <enabledWhen>
+            <iterate>
+               <and>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </and>
+            </iterate>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.DeleteScenarioCommandHandler"
+            commandId="org.eclipse.ui.edit.delete">
+         <activeWhen>
+            <iterate>
+               <and>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </and>
+            </iterate>
+         </activeWhen>
          <enabledWhen>
             <iterate>
                <and>
@@ -72,11 +111,23 @@
             allPopups="false"
             locationURI="toolbar:com.mmxlabs.scenario.service.ui.navigator">
          <command
+               commandId="com.mmxlabs.scenario.service.ui.open"
+               label="Open"
+               style="push"
+               tooltip="Open Scenario">
+         </command>
+         <command
                commandId="com.mmxlabs.scenario.service.ui.lock"
                icon="icons/commands/lock.gif"
                label="Lock"
                style="push"
                tooltip="Lock/Unlock Scenario">
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.delete"
+               label="Delete"
+               style="push"
+               tooltip="Delete Scenario">
          </command>
       </menuContribution>
    </extension>

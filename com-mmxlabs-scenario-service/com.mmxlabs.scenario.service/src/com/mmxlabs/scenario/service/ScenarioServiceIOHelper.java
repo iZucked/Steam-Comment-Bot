@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.scenario.service.file;
+package com.mmxlabs.scenario.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.query.conditions.eobjects.structuralfeatures.EObjectAttributeValueCondition;
 import org.eclipse.emf.query.conditions.strings.StringValue;
 import org.eclipse.emf.query.statements.FROM;
@@ -26,8 +27,6 @@ import org.eclipse.emf.query.statements.IQueryResult;
 import org.eclipse.emf.query.statements.SELECT;
 import org.eclipse.emf.query.statements.WHERE;
 
-import com.mmxlabs.lngscheduler.emf.extras.UpgradingResourceFactory;
-import com.mmxlabs.lngscheduler.emf.extras.XMIUpgradingResourceFactory;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
@@ -91,72 +90,47 @@ public class ScenarioServiceIOHelper {
 		}
 	}
 
-	EObject loadScenario(String uuid, final Map<?, ?> options) throws IOException {
+	public EObject loadScenario(final String uuid, final Map<?, ?> options) throws IOException {
 		final IPath filePath = dataPath.append(uuid);
 
-		UpgradingResourceFactory f = new UpgradingResourceFactory(new XMIUpgradingResourceFactory());
+		final URI uri = URI.createFileURI(filePath.toFile().toString());
 
-		Resource res = f.createResource(URI.createFileURI(filePath.toFile().toString()));
+		final Resource.Factory f = Resource.Factory.Registry.INSTANCE.getFactory(uri);
 
-		HashMap<Object, Object> options2 = new HashMap<Object, Object>(options);
+		final Resource res = f.createResource(uri);
+
+		final HashMap<Object, Object> options2 = new HashMap<Object, Object>(options);
 
 		options2.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
 		options2.put(XMLResource.OPTION_RESOURCE_HANDLER, new XMLResource.ResourceHandler() {
 
 			@Override
-			public void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
+			public void preLoad(final XMLResource resource, final InputStream inputStream, final Map<?, ?> options) {
 				if (resource instanceof ResourceImpl) {
 					((ResourceImpl) resource).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
 				}
 			}
 
 			@Override
-			public void postLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
+			public void postLoad(final XMLResource resource, final InputStream inputStream, final Map<?, ?> options) {
 				if (resource instanceof ResourceImpl) {
 					((ResourceImpl) resource).setIntrinsicIDToEObjectMap(null);
 				}
 			}
 
 			@Override
-			public void preSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {
+			public void preSave(final XMLResource resource, final OutputStream outputStream, final Map<?, ?> options) {
 			}
 
 			@Override
-			public void postSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {
+			public void postSave(final XMLResource resource, final OutputStream outputStream, final Map<?, ?> options) {
 			}
 		});
 
 		res.load(options2);
-		
+
 		return res.getContents().get(0);
 	}
 
-	public void scanForScenarios(String scenarioServiceID) {
-
-		final File dataDir = dataPath.toFile();
-		if (dataDir.isDirectory() || dataDir.exists()) {
-			for (final File f : dataDir.listFiles()) {
-				final String uuid = f.getName();
-
-				// See if file exists in scenario
-				final SELECT query = new SELECT(1, new FROM(scenarioService), new WHERE(new EObjectAttributeValueCondition(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid(),
-						new StringValue(uuid))));
-				final IQueryResult queryResult = query.execute();
-
-				if (queryResult.isEmpty()) {
-					final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-					scenarioInstance.setUuid(uuid);
-					scenarioInstance.setName(uuid);
-
-					scenarioInstance.setUri("service://" + scenarioServiceID + "/" + uuid);
-
-					final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-					metadata.setContentType("text/xmi");
-					scenarioInstance.setMetadata(metadata);
-
-					scenarioService.getScenarios().add(scenarioInstance);
-				}
-			}
-		}
-	}
+	
 }

@@ -2,8 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.scenario.service.file;
+package com.mmxlabs.scenario.service.dirscan;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,141 +17,74 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.emf.query.conditions.eobjects.structuralfeatures.EObjectAttributeValueCondition;
+import org.eclipse.emf.query.statements.FROM;
+import org.eclipse.emf.query.statements.IQueryResult;
+import org.eclipse.emf.query.statements.SELECT;
+import org.eclipse.emf.query.statements.WHERE;
 import org.osgi.service.component.ComponentContext;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IServiceModelTracker;
 import com.mmxlabs.scenario.service.ScenarioServiceIOHelper;
+import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
-public class FileScenarioService implements IScenarioService {
+public class DirScanScenarioService implements IScenarioService {
 
-	private static final String PROPERTY_MODEL = "com.mmxlabs.scenario.service.file.model";
-
-	private ResourceSet resourceSet;
-	private Resource resource;
-
-	private ScenarioService serviceModel;
-
-	private final Map<Object, Object> options;
+	private ScenarioService scenarioService;
 
 	private ScenarioServiceIOHelper ioHelper;
 
-	public FileScenarioService() {
-		options = new HashMap<Object, Object>();
+	private IPath dataPath;
+
+	public DirScanScenarioService() {
 	}
 
 	@Override
 	public String getName() {
-		return "File Scenario Service";
+		return "Dir Scan Scenario Service";
 	}
 
 	@Override
 	public ScenarioService getServiceModel() {
-		return serviceModel;
+		return scenarioService;
 	}
 
 	public void start(final ComponentContext context) {
 
 		final Dictionary<?, ?> d = context.getProperties();
 
-		final Object value = d.get(PROPERTY_MODEL);
+		final String scenarioServiceID = d.get("component.id").toString();
 
-		if (value == null) {
-			throw new RuntimeException("FileScenarioService: No model URI property set");
-		}
-		final String modelURIString = value.toString();
+		dataPath = ResourcesPlugin.getWorkspace().getRoot().getLocation().append("/data/");
 
-		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+		scenarioService = initialise();
 
-		final URI uri = URI.createFileURI(workspaceLocation + "/" + modelURIString);
-		load(uri);
+		ioHelper = new ScenarioServiceIOHelper(scenarioService, dataPath);
 
-		ioHelper = new ScenarioServiceIOHelper(serviceModel, workspaceLocation.append("/data/"));
+		scanForScenarios(scenarioServiceID);
 	}
 
 	public void stop(final ComponentContext context) {
-		save();
-	}
-
-	public void load(final URI uri) {
-
-		resourceSet = new ResourceSetImpl();
-
-		resource = resourceSet.createResource(uri);
-		try {
-			resource.load(options);
-			serviceModel = (ScenarioService) resource.getContents().get(0);
-		} catch (final IOException e) {
-			// Initialise a new model
-			serviceModel = initialise();
-			resource.getContents().add(serviceModel);
-			save();
-		}
-
-		// Save on any change
-		resource.eAdapters().add(new Adapter() {
-
-			@Override
-			public void notifyChanged(final Notification notification) {
-
-				// Auto save on change
-				// TODO: Filter Changes
-				save();
-			}
-
-			@Override
-			public Notifier getTarget() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public void setTarget(final Notifier newTarget) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public boolean isAdapterForType(final Object type) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		});
-
-	}
-
-	public void save() {
-		// TODO: Wrap in a workspace save job
-
-		try {
-			resource.save(options);
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		scenarioService = null;
 	}
 
 	private ScenarioService initialise() {
 
 		final ScenarioService serviceService = ScenarioServiceFactory.eINSTANCE.createScenarioService();
 		serviceService.setName(getName());
-		serviceService.setDescription("File scenario service");
+		serviceService.setDescription("DirScan scenario service");
 
 		return serviceService;
 	}
@@ -240,5 +174,35 @@ public class FileScenarioService implements IScenarioService {
 		// Create the editing domain with a special command stack.
 		//
 		return new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
+	}
+
+	public void scanForScenarios(final String scenarioServiceID) {
+
+		final File dataDir = dataPath.toFile();
+		if (dataDir.isDirectory() || dataDir.exists()) {
+			for (final File f : dataDir.listFiles()) {
+				final String uuid = f.getName();
+
+				// See if file exists in scenario
+				final SELECT query = new SELECT(1, new FROM(scenarioService), new WHERE(new EObjectAttributeValueCondition(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid(),
+						new org.eclipse.emf.query.conditions.strings.StringValue(uuid))));
+				final IQueryResult queryResult = query.execute();
+
+				if (queryResult.isEmpty()) {
+					final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+					scenarioInstance.setUuid(uuid);
+					scenarioInstance.setName(uuid);
+
+					scenarioInstance.setUri("service://" + scenarioServiceID + "/" + uuid);
+
+					final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+					// TODO: Set correct content type
+					metadata.setContentType("text/xmi");
+					scenarioInstance.setMetadata(metadata);
+
+					scenarioService.getScenarios().add(scenarioInstance);
+				}
+			}
+		}
 	}
 }
