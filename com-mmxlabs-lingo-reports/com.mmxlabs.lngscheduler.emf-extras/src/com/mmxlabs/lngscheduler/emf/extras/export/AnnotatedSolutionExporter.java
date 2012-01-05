@@ -16,6 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.Scenario;
 import scenario.cargo.Cargo;
@@ -63,6 +65,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * 
  */
 public class AnnotatedSolutionExporter {
+	private static final Logger log = LoggerFactory.getLogger(AnnotatedSolutionExporter.class);
 	private final List<IAnnotationExporter> exporters = new LinkedList<IAnnotationExporter>();
 	final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
@@ -308,6 +311,7 @@ public class AnnotatedSolutionExporter {
 		}
 
 		// Process DES cargoes from the input side
+		//TODO this is all outdated now
 
 		for (final Cargo cargo : inputScenario.getCargoModel().getCargoes()) {
 			if (CargoType.DES.equals(cargo.getCargoType())) {
@@ -340,7 +344,7 @@ public class AnnotatedSolutionExporter {
 					purchasePricePerMMBTU = ((IndexPricePurchaseContract) purchaseContract).getIndex().getPriceCurve().getValueAtDate(allocation.getDischargeDate());
 				} else {
 					// FIXME: for P&L opt - DES cargoes will have a purchase contract (probably based on a price curve) & possibly a fixed price & quantity
-					System.err.println("A DES load slot should not have a " + purchaseContract.eClass().getName() + " contract");
+					log.error("A DES load slot should not have a " + purchaseContract.eClass().getName() + " contract");
 					continue;
 				}
 
