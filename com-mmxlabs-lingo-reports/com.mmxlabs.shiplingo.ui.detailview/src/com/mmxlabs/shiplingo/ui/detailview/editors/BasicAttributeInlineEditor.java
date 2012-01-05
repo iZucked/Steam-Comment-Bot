@@ -175,6 +175,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 			return;
 		}
 		currentlySettingValue = true;
+		
 		updateDisplay(getValue());
 		currentlySettingValue = false;
 	}
