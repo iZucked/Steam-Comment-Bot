@@ -16,10 +16,12 @@ import java.util.Random;
 import java.util.Set;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
@@ -47,6 +49,13 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @param
  */
 public class ConstrainedMoveGenerator implements IMoveGenerator {
+	/**
+	 * The proportion of moves which are related to optional elements
+	 * 
+	 * TODO make this a parameter.
+	 */
+	private static final double optionalMoveFrequency = 0.05;
+
 	/**
 	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
 	 */
@@ -118,6 +127,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private final LegalSequencingChecker checker;
 
 	private final SequencesConstrainedMoveGeneratorUnit sequencesMoveGenerator;
+	private final OptionalConstrainedMoveGeneratorUnit optionalMoveGenerator;
 
 	protected final IOptimisationContext context;
 
@@ -159,11 +169,26 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		}
 
 		this.sequencesMoveGenerator = new SequencesConstrainedMoveGeneratorUnit(this);
+		if (context.getOptimisationData().getDataComponentProviders().contains(SchedulerConstants.DCP_optionalElementsProvider)) {
+			final IOptionalElementsProvider optionalElementsProvider = context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider,
+					IOptionalElementsProvider.class);
+			if (optionalElementsProvider.getOptionalElements().size() > 0) {
+				this.optionalMoveGenerator = new OptionalConstrainedMoveGeneratorUnit(this);
+			} else {
+				this.optionalMoveGenerator = null;
+			}
+		} else {
+			this.optionalMoveGenerator = null;
+		}
 	}
 
 	@Override
 	public IMove generateMove() {
-		return sequencesMoveGenerator.generateMove();
+		if (optionalMoveGenerator != null && random.nextDouble() < optionalMoveFrequency) {
+			return optionalMoveGenerator.generateMove();
+		} else {
+			return sequencesMoveGenerator.generateMove();
+		}
 	}
 
 	@Override
