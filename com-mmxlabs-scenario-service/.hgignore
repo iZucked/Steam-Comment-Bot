@@ -12,6 +12,9 @@ syntax: regexp
 ^com\.mmxlabs\.scenario\.service\.ui/target$
 
 syntax: regexp
+^com\.mmxlabs\.scenario\.service\.dirscan/target$
+
+syntax: regexp
 ^com\.mmxlabs\.scenario\.service\.file/target$
 syntax: regexp
 ^\.settings$
