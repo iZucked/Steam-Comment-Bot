@@ -55,7 +55,7 @@ public class NameSetConstraint extends AbstractModelConstraint {
 		if (name == null || name.trim().isEmpty()) {
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(target
-							.eClass().getName(), name));
+							.eClass().getName(), attribute.getName()));
 			dsd.addEObjectAndFeature(target, attribute);
 			return dsd;
 		}
