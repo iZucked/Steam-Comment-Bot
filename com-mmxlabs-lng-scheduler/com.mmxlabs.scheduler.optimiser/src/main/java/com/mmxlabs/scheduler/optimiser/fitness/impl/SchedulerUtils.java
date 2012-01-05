@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
 public final class SchedulerUtils {
-	private final static int DEFAULT_VPO_CACHE_SIZE = 200000;
+	private final static int DEFAULT_VPO_CACHE_SIZE = 20000;
 
 	private SchedulerUtils() {
 

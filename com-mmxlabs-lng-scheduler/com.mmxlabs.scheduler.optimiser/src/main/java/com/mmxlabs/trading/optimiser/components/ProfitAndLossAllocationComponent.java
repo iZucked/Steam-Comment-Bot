@@ -1,13 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.trading.optimiser.components;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
@@ -60,6 +62,8 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 	private long lastEvaluation, lastAcceptance;
 	private IVesselProvider vesselProvider;
 	private IPortSlotProvider slotProvider;
+
+	private long calibrationZeroLine = Long.MIN_VALUE;
 
 	public ProfitAndLossAllocationComponent(final String profitComponentName, final String dcpEntityprovider, final String vesselProviderKey, final String slotProviderKey,
 			final CargoSchedulerFitnessCore cargoSchedulerFitnessCore) {
@@ -117,7 +121,9 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 		if (entityProvider == null)
 			return 0;
 		final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
-		IAllocationAnnotation currentAllocation = allocationIterator.next();
+		IAllocationAnnotation currentAllocation = null;
+		if (allocationIterator.hasNext())
+			currentAllocation = allocationIterator.next();
 		long accumulator = 0;
 
 		for (final ScheduledSequence sequence : solution) {
@@ -141,12 +147,18 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 				time += getPlanDuration(plan);
 			}
 		}
-		lastEvaluation = -accumulator;
+
+		if (calibrationZeroLine == Long.MIN_VALUE) {
+			calibrationZeroLine = accumulator;
+		}
+
+		lastEvaluation = (calibrationZeroLine - accumulator) / Calculator.ScaleFactor;
 		return lastEvaluation;
 	}
 
-	// private final Map<String, Long> lastCargoValues = new HashMap<String, Long>();
-	// private final Map<String, String> lastCargoDetails = new HashMap<String, String>();
+	private final Map<String, Long> lastCargoValues = new HashMap<String, Long>();
+	private final Map<String, String> lastCargoDetails = new HashMap<String, String>();
+
 	/**
 	 * evaluate the group value of the given cargo
 	 * 
@@ -194,7 +206,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 		final long result = upstreamProfit + shippingProfit + downstreamProfit;
 
 		// final String key = currentAllocation.getLoadSlot().getId() + "-" + currentAllocation.getDischargeSlot().getId();
-		//
+
 		// if (lastCargoValues.containsKey(key)) {
 		// final long lastResult = lastCargoValues.get(key);
 		// if (lastResult > 0 != result > 0) {
@@ -215,10 +227,10 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 			final DetailTree downstreamDetails = new DetailTree();
 
 			upstreamDetails.addChild(new LNGTransferDetailTree("Upstream purchase", loadVolume, upstreamTransferPricePerM3, cvValue));
-			final IDetailTree upstreamToShipping = new LNGTransferDetailTree("Upstream to shipping", loadVolume, shippingTransferPricePerM3, cvValue);
+			final IDetailTree upstreamToShipping = new LNGTransferDetailTree("Shipping to upstream", loadVolume, upstreamTransferPricePerM3, cvValue);
 			upstreamDetails.addChild(upstreamToShipping);
 			shippingDetails.addChild(upstreamToShipping);
-			final IDetailTree shippingToDownstream = new LNGTransferDetailTree("Shipping to downstream", dischargeVolume, shippingTransferPricePerM3, cvValue);
+			final IDetailTree shippingToDownstream = new LNGTransferDetailTree("Downstream to shipping", dischargeVolume, shippingTransferPricePerM3, cvValue);
 			shippingDetails.addChild(shippingToDownstream);
 
 			shippingDetails.addChild("Shipping Cost", shippingCosts);
@@ -285,7 +297,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 		final PortDetails portDetails = (PortDetails) plan.getSequence()[0];
 		if (portDetails.getPortSlot().getPortType() == PortType.CharterOut) {
 			// in the next line we're doing getPartialPlanDuration(., 2) because there might be a repositioning in the plan
-			revenue = Calculator.multiply(vessel.getHourlyCharterOutPrice(), getPartialPlanDuration(plan, 2));
+			revenue = vessel.getHourlyCharterOutPrice() * getPartialPlanDuration(plan, 2);
 		} else {
 			revenue = 0;
 		}

@@ -1,8 +1,7 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -119,10 +118,14 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 */
 		final long consuptionRateInMTPerHour = speed == 0 ? 0 : vesselClass.getConsumptionRate(vesselState).getRate(speed);
 		/**
-		 * The total number of MT of base fuel OR MT-equivalent of LNG required for this journey, inclusive of any extra required for canals
+		 * The total number of MT of base fuel OR MT-equivalent of LNG required for this journey, excluding any extra required for canals
 		 */
-		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consuptionRateInMTPerHour, travelTimeInHours)
-				+ Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(options.getRoute(), vesselClass), additionalRouteTimeInHours);
+		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consuptionRateInMTPerHour, travelTimeInHours);
+
+		/**
+		 * Base fuel requirement for canal traversal
+		 */
+		final long routeRequiredConsumptionInMT = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(options.getRoute(), vesselClass), additionalRouteTimeInHours);
 
 		// Calculate fuel requirements
 		if (options.useNBOForTravel()) {
@@ -136,25 +139,70 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			 */
 			final long nboProvidedInMT = Calculator.convertM3ToMT(nboProvidedInM3, equivalenceFactorM3ToMT);
 
-			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, nboProvidedInM3);
-			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.MT, nboProvidedInMT);
+			/**
+			 * How much NBO is produced while in the canal (M3)
+			 */
+			 long routeNboProvidedInM3;
+			/**
+			 * How much NBO is produced while in the canal (MTBFE)
+			 */
+			 long routeNboProvidedInMT;
+			/**
+			 * How much supplement is needed over and above NBO while in the canal (MTBFE)
+			 */
+			final long routeDiffInMT;
 
+			
+			if (routeRequiredConsumptionInMT > 0) {
+				// there is canal requirement, so compute provision from NBO and supplement required.
+				//TODO is this sensible? should it be the idle NBO rate or some other rate? nobody knows.
+				routeNboProvidedInM3 = Calculator.quantityFromRateTime(nboRateInM3PerHour, additionalRouteTimeInHours);
+				routeNboProvidedInMT = Calculator.convertM3ToMT(routeNboProvidedInM3, equivalenceFactorM3ToMT);
+				if (routeNboProvidedInMT < routeRequiredConsumptionInMT) {
+					routeDiffInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
+				} else {
+					routeDiffInMT = 0;
+					//TODO this may be a hack, see BugzID:229
+					routeNboProvidedInMT = routeRequiredConsumptionInMT;
+					routeNboProvidedInM3 = Calculator.convertMTToM3(routeNboProvidedInMT, equivalenceFactorM3ToMT);
+				}
+			} else {
+				routeNboProvidedInM3 = 0;
+				routeNboProvidedInMT = 0;
+				routeDiffInMT = 0;
+			}
+			
 			if (nboProvidedInMT < requiredConsumptionInMT) {
 				/**
 				 * How many MT of base-fuel-or-equivalent are required after the NBO amount has been used
 				 */
 				final long diffInMT = requiredConsumptionInMT - nboProvidedInMT;
-				final long diffInM3 = Calculator.convertMTToM3(diffInMT, equivalenceFactorM3ToMT);
 				if (options.useFBOForSupplement()) {
 					// Use FBO for remaining quantity
-					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, diffInM3);
-					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, diffInMT);
+					final long diffInM3 = Calculator.convertMTToM3(diffInMT, equivalenceFactorM3ToMT);
+					final long routeDiffInM3 = Calculator.convertMTToM3(routeDiffInMT, equivalenceFactorM3ToMT);
+					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, diffInM3 + routeDiffInM3);
+					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, diffInMT + routeDiffInMT);
 					output.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, 0);
 				} else {
 					// Use base for remaining quantity
 					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, 0);
 					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, 0);
-					output.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, diffInMT);
+					output.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, diffInMT + routeDiffInMT);
+				}
+			} else if (routeDiffInMT > 0) {
+				// The canal requires supplement, even though the journey does not!
+				if (options.useFBOForSupplement()) {
+					// Use FBO for remaining quantity
+					final long routeDiffInM3 = Calculator.convertMTToM3(routeDiffInMT, equivalenceFactorM3ToMT);
+					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, routeDiffInM3);
+					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, routeDiffInMT);
+					output.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, 0);
+				} else {
+					// Use base for remaining quantity
+					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, 0);
+					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, 0);
+					output.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, routeDiffInMT);
 				}
 			}
 
@@ -165,12 +213,15 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final long pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerHour, travelTimeInHours + additionalRouteTimeInHours);
 				output.setFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT, pilotLightConsumptionInMT);
 			}
+
+			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, nboProvidedInM3 + routeNboProvidedInM3);
+			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.MT, nboProvidedInMT + routeNboProvidedInMT);
 		} else {
 			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, 0);
 			output.setFuelConsumption(FuelComponent.NBO, FuelUnit.MT, 0);
 			output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, 0);
 			output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, 0);
-			output.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, requiredConsumptionInMT);
+			output.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, requiredConsumptionInMT + routeRequiredConsumptionInMT);
 			output.setFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT, 0);
 		}
 

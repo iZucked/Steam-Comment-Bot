@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.initialsequencebuilder;
@@ -183,7 +183,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				}
 			}
 			// part of a chain
-			if (after1.size() == 1) {
+			if (after1.size() == 1 && portTypeProvider.getPortType(element1) != PortType.Start) {
 				if (!tails.contains(element1)) {
 					heads.add(element1);
 				}
@@ -205,17 +205,13 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					final VesselInstanceType vit1 = vessel1.getVesselInstanceType();
 					final VesselInstanceType vit2 = vessel2.getVesselInstanceType();
 
-					if (vit1.ordinal() < vit2.ordinal()) {
-						return -1;
-					} else if (vit1.ordinal() > vit2.ordinal()) {
-						return 1;
-					} else {
-						if (vessel1.getVesselClass().getMaxSpeed() > vessel2.getVesselClass().getMaxSpeed()) {
-							return -1;
-						} else {
-							return 1;
-						}
+					
+					int x = vit1.compareTo(vit2);
+					if (x == 0) {
+						x = ((Integer) vessel1.getVesselClass().getMaxSpeed()).compareTo(
+								vessel2.getVesselClass().getMaxSpeed());
 					}
+					return x;
 				}
 			});
 		}
