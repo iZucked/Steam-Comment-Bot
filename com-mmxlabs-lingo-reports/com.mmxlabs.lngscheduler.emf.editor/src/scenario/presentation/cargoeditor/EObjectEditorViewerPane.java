@@ -4,6 +4,7 @@
  */
 package scenario.presentation.cargoeditor;
 
+import java.awt.Dialog;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
@@ -72,8 +74,7 @@ import com.mmxlabs.shiplingo.ui.tableview.ICellManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
 
 /**
- * A viewerpane which displays a list of EObjects in a table and lets you edit
- * them
+ * A viewerpane which displays a list of EObjects in a table and lets you edit them
  * 
  * @author hinton
  * 
@@ -81,17 +82,16 @@ import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
 public class EObjectEditorViewerPane extends ViewerPane {
 	protected final ScenarioEditor part;
 	protected EObjectTableViewer eObjectTableViewer;
-	
+
 	private static final Logger log = LoggerFactory.getLogger(EObjectEditorViewerPane.class);
 
 	private boolean lockedForEditing;
-	
-	public EObjectEditorViewerPane(final IWorkbenchPage page,
-			final ScenarioEditor part) {
+
+	public EObjectEditorViewerPane(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 		this.part = part;
 	}
-	
+
 	/**
 	 * @return True if edit operations in this editor are disabled
 	 */
@@ -100,13 +100,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	}
 
 	/**
-	 * @param pass true to disable editing, false to re-enable it.
+	 * @param pass
+	 *            true to disable editing, false to re-enable it.
 	 */
 	public void setLockedForEditing(boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
 		if (eObjectTableViewer != null)
 			eObjectTableViewer.setLockedForEditing(isLockedForEditing());
-		
+
 		for (final IContributionItem item : getToolBarManager().getItems()) {
 			if (item instanceof ActionContributionItem) {
 				final IAction action = (IAction) ((ActionContributionItem) item).getAction();
@@ -116,7 +117,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			}
 		}
 	}
-	
+
 	@Override
 	public EObjectTableViewer createViewer(final Composite parent) {
 		eObjectTableViewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
@@ -146,7 +147,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final Action a = new CopyGridToClipboardAction(eObjectTableViewer.getGrid());
 			getToolBarManager().appendToGroup("copy", a);
 		}
-		
+
 		if (LngEditorPlugin.DEBUG_UI_ENABLED) {
 			final RemoveTimePartsAction rtpa = new RemoveTimePartsAction();
 			getToolBarManager().appendToGroup("edit", rtpa);
@@ -156,14 +157,12 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		getToolBarManager().update(true);
 
 		eObjectTableViewer.setLockedForEditing(isLockedForEditing());
-		
+
 		return eObjectTableViewer;
 	}
 
-	protected Action createDeleteAction(final GridTableViewer viewer,
-			final EditingDomain editingDomain) {
-		return new scenario.presentation.cargoeditor.handlers.DeleteAction(
-				editingDomain) {
+	protected Action createDeleteAction(final GridTableViewer viewer, final EditingDomain editingDomain) {
+		return new scenario.presentation.cargoeditor.handlers.DeleteAction(editingDomain) {
 			@Override
 			protected Collection<EObject> getTargets() {
 				return ((IStructuredSelection) viewer.getSelection()).toList();
@@ -185,10 +184,8 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	 * @param e
 	 * @return
 	 */
-	protected Action createAddAction(final GridTableViewer viewer,
-			final EditingDomain editingDomain, final EMFPath contentPath) {
-		return new AddAction(editingDomain, contentPath.getTargetType()
-				.getName()) {
+	protected Action createAddAction(final GridTableViewer viewer, final EditingDomain editingDomain, final EMFPath contentPath) {
+		return new AddAction(editingDomain, contentPath.getTargetType().getName()) {
 			@Override
 			public Object getOwner() {
 				return contentPath.get((EObject) viewer.getInput(), 1);
@@ -203,8 +200,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			public EObject createObject(final boolean usingSelection) {
 				if (usingSelection && viewer.getSelection().isEmpty() == false) {
 					if (viewer.getSelection() instanceof IStructuredSelection) {
-						final IStructuredSelection sel = (IStructuredSelection) viewer
-								.getSelection();
+						final IStructuredSelection sel = (IStructuredSelection) viewer.getSelection();
 						if (sel.size() == 1) {
 							final Object selection = sel.getFirstElement();
 							if (selection instanceof EObject) {
@@ -216,8 +212,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						}
 					}
 				}
-				final EReference ref = (EReference) contentPath
-						.getPathComponent(0);
+				final EReference ref = (EReference) contentPath.getPathComponent(0);
 				final EClass ec = ref.getEReferenceType();
 				final EPackage p = ec.getEPackage();
 
@@ -227,25 +222,21 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					for (final EClassifier classifier : p.getEClassifiers()) {
 						if (classifier instanceof EClass) {
 							final EClass possibleSubClass = (EClass) classifier;
-							if (ec.isSuperTypeOf(possibleSubClass)
-									&& possibleSubClass.isAbstract() == false) {
+							if (ec.isSuperTypeOf(possibleSubClass) && possibleSubClass.isAbstract() == false) {
 								subClasses.add(possibleSubClass);
 							}
 						}
 					}
 					// display picker dialog somehow
-					final Shell shell = PlatformUI.getWorkbench()
-							.getActiveWorkbenchWindow().getShell();
-					final ElementListSelectionDialog elsd = new ElementListSelectionDialog(
-							shell, new LabelProvider() {
-								@Override
-								public String getText(final Object element) {
-									return ((EClass) element).getName();
-								}
-							});
+					final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+					final ElementListSelectionDialog elsd = new ElementListSelectionDialog(shell, new LabelProvider() {
+						@Override
+						public String getText(final Object element) {
+							return ((EClass) element).getName();
+						}
+					});
 					elsd.setElements(subClasses.toArray());
-					elsd.setTitle("Which type of " + ec.getName()
-							+ " do you want to add?");
+					elsd.setTitle("Which type of " + ec.getName() + " do you want to add?");
 					if (elsd.open() != Window.OK) {
 						return null;
 					}
@@ -258,17 +249,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		};
 	}
 
-	public void addColumn(final String columnName,
-			final ICellRenderer renderer, final ICellManipulator manipulator,
-			final Object... pathObjects) {
+	public void addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
 		eObjectTableViewer.addColumn(columnName, renderer, manipulator, pathObjects);
 	}
-	
-	public void init(final List<EReference> path,
-			final AdapterFactory adapterFactory) {
+
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		eObjectTableViewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
 		final Grid table = eObjectTableViewer.getGrid();
-		
+
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
@@ -276,24 +264,21 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final ToolBarManager x = getToolBarManager();
 			final EMFPath ePath = new EMFPath(true, path);
 			{
-				Action addAction = createAddAction(eObjectTableViewer,
-						part.getEditingDomain(), ePath);
+				Action addAction = createAddAction(eObjectTableViewer, part.getEditingDomain(), ePath);
 				if (addAction != null) {
 					x.appendToGroup("edit", LockableAction.wrap(addAction));
 				}
 			}
 			{
-				Action deleteAction = createDeleteAction(eObjectTableViewer,
-						part.getEditingDomain());
+				Action deleteAction = createDeleteAction(eObjectTableViewer, part.getEditingDomain());
 				if (deleteAction != null) {
 					x.appendToGroup("edit", LockableAction.wrap(deleteAction));
-					
+
 				}
 			}
 			{
-				Action importAction = createImportAction(eObjectTableViewer,
-						part.getEditingDomain(), ePath);
-				if (importAction != null) {	
+				Action importAction = createImportAction(eObjectTableViewer, part.getEditingDomain(), ePath);
+				if (importAction != null) {
 					x.appendToGroup("importers", LockableAction.wrap(importAction));
 				}
 			}
@@ -315,8 +300,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	 * @param editingDomain
 	 * @return
 	 */
-	protected Action createExportAction(final GridTableViewer viewer,
-			final EMFPath ePath) {
+	protected Action createExportAction(final GridTableViewer viewer, final EMFPath ePath) {
 		return new ExportCSVAction() {
 			@Override
 			public List<EObject> getObjectsToExport() {
@@ -337,16 +321,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	}
 
 	/**
-	 * Provides a hook for subclasses to override the behavior of the import
-	 * button, in particular for vessel classes which need a fuel curve file.
+	 * Provides a hook for subclasses to override the behavior of the import button, in particular for vessel classes which need a fuel curve file.
 	 * 
 	 * @param viewer2
 	 * @param editingDomain
 	 * @param ePath
 	 * @return
 	 */
-	protected Action createImportAction(final GridTableViewer viewer,
-			final EditingDomain editingDomain, final EMFPath ePath) {
+	protected Action createImportAction(final GridTableViewer viewer, final EditingDomain editingDomain, final EMFPath ePath) {
 		return new ImportCSVAction() {
 
 			@Override
@@ -356,8 +338,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 			@Override
 			protected EClass getImportClass() {
-				return (EClass) ((EStructuralFeature) ePath.getPathComponent(0))
-						.getEType();
+				return (EClass) ((EStructuralFeature) ePath.getPathComponent(0)).getEType();
 			}
 
 			@Override
@@ -365,15 +346,13 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				// this is quite a complicated procedure because it has to
 				// handle potential replacements.
 				final Map<String, EObject> objectsWithNames = new HashMap<String, EObject>();
-				for (final EObject oldObject : ((EList<EObject>) ePath
-						.get(getToplevelObject()))) {
+				for (final EObject oldObject : ((EList<EObject>) ePath.get(getToplevelObject()))) {
 					objectsWithNames.put(getId(oldObject), oldObject);
 				}
 
 				final CompoundCommand cc = new CompoundCommand();
 
-				final EObject container = (EObject) ePath.get(
-						getToplevelObject(), 1);
+				final EObject container = (EObject) ePath.get(getToplevelObject(), 1);
 				final Object containerFeature = ePath.getPathComponent(0);
 
 				for (final EObject newObject : newObjects) {
@@ -381,8 +360,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					if (objectsWithNames.containsKey(newId)) {
 						// object existed before, so we have to replace it
 						final EObject oldObject = objectsWithNames.get(newId);
-						final Command fixrefs = createFixReferencesAndContainments(
-								oldObject, newObject);
+						final Command fixrefs = createFixReferencesAndContainments(oldObject, newObject);
 						if (fixrefs != null)
 							cc.append(fixrefs);
 
@@ -390,36 +368,30 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						// get a dangling reference
 
 						// now perform replace in the original container
-						final Command replace = ReplaceCommand.create(
-								editingDomain, oldObject.eContainer(),
-								oldObject.eContainingFeature(), oldObject,
-								Collections.singleton(newObject));
+						final Command replace = ReplaceCommand.create(editingDomain, oldObject.eContainer(), oldObject.eContainingFeature(), oldObject, Collections.singleton(newObject));
 
 						if (replace.canExecute() == false) {
-							log.error("Cannot execute replace command from "
-									+ oldObject + " to " + newObject, new RuntimeException("Replace command not executable!"));
+							log.error("Cannot execute replace command from " + oldObject + " to " + newObject, new RuntimeException("Replace command not executable!"));
 						}
 						cc.append(replace);
 					} else {
 						// just do the add
-						cc.append(AddCommand.create(editingDomain, container,
-								containerFeature, newObject));
+						cc.append(AddCommand.create(editingDomain, container, containerFeature, newObject));
 					}
 				}
 
 				if (cc.canExecute() == false) {
 					log.error("Cannot execute import command", new RuntimeException("Import command not executable!"));
+					MessageDialog.openError(getViewForm().getShell(), "Import error", "The import command was not executable - see the error log for more details");
+				} else {
+					editingDomain.getCommandStack().execute(cc);
+
+					ImportUI.refresh(viewer);
 				}
-
-				editingDomain.getCommandStack().execute(cc);
-
-				ImportUI.refresh(viewer);
 			}
 
 			/**
-			 * Fix up any references to oldObject so they refer to newObject,
-			 * and fix up any references to singly-contained entries in
-			 * oldObject to the analogous entries in newObject, if they exist
+			 * Fix up any references to oldObject so they refer to newObject, and fix up any references to singly-contained entries in oldObject to the analogous entries in newObject, if they exist
 			 * 
 			 * returns null if there is nothing to do.
 			 * 
@@ -427,22 +399,16 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			 * @param newObject
 			 * @return
 			 */
-			private Command createFixReferencesAndContainments(
-					final EObject oldObject, final EObject newObject) {
+			private Command createFixReferencesAndContainments(final EObject oldObject, final EObject newObject) {
 				final CompoundCommand cc = new CompoundCommand();
-				final Command fixReferences = createFixReferences(oldObject,
-						newObject);
+				final Command fixReferences = createFixReferences(oldObject, newObject);
 				if (fixReferences != null)
 					cc.append(fixReferences);
 
-				for (final EReference reference : oldObject.eClass()
-						.getEAllContainments()) {
+				for (final EReference reference : oldObject.eClass().getEAllContainments()) {
 					if (reference.isMany() == false) {
-						if (newObject.eClass().getEAllContainments()
-								.contains(reference)) {
-							final Command recur = createFixReferencesAndContainments(
-									(EObject) oldObject.eGet(reference),
-									(EObject) newObject.eGet(reference));
+						if (newObject.eClass().getEAllContainments().contains(reference)) {
+							final Command recur = createFixReferencesAndContainments((EObject) oldObject.eGet(reference), (EObject) newObject.eGet(reference));
 							if (recur != null)
 								cc.append(recur);
 						}
@@ -452,8 +418,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					return null;
 				else {
 					if (cc.canExecute() == false) {
-						System.err.println("Cannot execute ref fixer from "
-								+ oldObject + " to " + newObject);
+						log.error("Cannot execute ref fixer from " + oldObject + " to " + newObject);
 					}
 					return cc;
 				}
@@ -461,27 +426,22 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			}
 
 			/**
-			 * Create a command which updates references to oldObject so that
-			 * they point to newObject instead. Returns null if there are no
-			 * references to update (because an empty compoundCommand is not
-			 * executable.
+			 * Create a command which updates references to oldObject so that they point to newObject instead. Returns null if there are no references to update (because an empty compoundCommand is
+			 * not executable.
 			 * 
 			 * @param oldObject
 			 * @param newObject
 			 * @return
 			 */
-			private Command createFixReferences(final EObject oldObject,
-					final EObject newObject) {
+			private Command createFixReferences(final EObject oldObject, final EObject newObject) {
 
 				final CompoundCommand cc = new CompoundCommand();
 				// find all references to it
-				final Collection<Setting> references = EcoreUtil.UsageCrossReferencer
-						.find(oldObject, getToplevelObject());
+				final Collection<Setting> references = EcoreUtil.UsageCrossReferencer.find(oldObject, getToplevelObject());
 
 				// iterate over those references and fix them
 				for (final Setting setting : references) {
-					final EStructuralFeature feature = setting
-							.getEStructuralFeature();
+					final EStructuralFeature feature = setting.getEStructuralFeature();
 					if (feature instanceof EReference) {
 						final EReference ref = (EReference) feature;
 
@@ -491,19 +451,13 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						// to the object being replaced, but at the
 						// moment our domain does not do that.
 						if (ref.isMany()) {
-							final int index = ((EList) setting.getEObject()
-									.eGet(feature)).indexOf(oldObject);
+							final int index = ((EList) setting.getEObject().eGet(feature)).indexOf(oldObject);
 
-							cc.append(RemoveCommand.create(editingDomain,
-									setting.getEObject(),
-									setting.getEStructuralFeature(), oldObject));
+							cc.append(RemoveCommand.create(editingDomain, setting.getEObject(), setting.getEStructuralFeature(), oldObject));
 
 							// add the new one in at the same index
 
-							cc.append(AddCommand.create(editingDomain,
-									setting.getEObject(),
-									setting.getEStructuralFeature(), newObject,
-									index));
+							cc.append(AddCommand.create(editingDomain, setting.getEObject(), setting.getEStructuralFeature(), newObject, index));
 
 							continue; // skip over generic set four
 										// lines below
@@ -511,17 +465,14 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					}
 
 					// single references need a set
-					cc.append(SetCommand.create(editingDomain,
-							setting.getEObject(),
-							setting.getEStructuralFeature(), newObject));
+					cc.append(SetCommand.create(editingDomain, setting.getEObject(), setting.getEStructuralFeature(), newObject));
 				}
 
 				if (cc.getCommandList().isEmpty())
 					return null;
 
 				if (cc.canExecute() == false) {
-					System.err.println("Cannot fix references from "
-							+ oldObject + " to " + newObject);
+					log.error("Cannot fix references from " + oldObject + " to " + newObject);
 				}
 				return cc;
 			}
@@ -530,14 +481,10 @@ public class EObjectEditorViewerPane extends ViewerPane {
 				if (object instanceof NamedObject) {
 					return ((NamedObject) object).getName();
 				} else {
-					final EDataType stringType = EcorePackage.eINSTANCE
-							.getEString();
-					for (final EAttribute attribute : object.eClass()
-							.getEAllAttributes()) {
+					final EDataType stringType = EcorePackage.eINSTANCE.getEString();
+					for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
 						if (attribute.getEAttributeType().equals(stringType)) {
-							if (attribute.getName().equalsIgnoreCase("name")
-									|| attribute.getName().equalsIgnoreCase(
-											"id")) {
+							if (attribute.getName().equalsIgnoreCase("name") || attribute.getName().equalsIgnoreCase("id")) {
 								// add to registry for type
 								return (String) object.eGet(attribute);
 							}
@@ -586,17 +533,13 @@ public class EObjectEditorViewerPane extends ViewerPane {
 		return eObjectTableViewer;
 	}
 
-	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(
-			final String columnName, final T manipulatorAndRenderer,
-			final Object... path) {
-		this.addColumn(columnName, manipulatorAndRenderer,
-				manipulatorAndRenderer, path);
+	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final Object... path) {
+		this.addColumn(columnName, manipulatorAndRenderer, manipulatorAndRenderer, path);
 	}
 
 	public void refresh() {
 		if (eObjectTableViewer != null) {
-			if (eObjectTableViewer.getControl() != null
-					&& eObjectTableViewer.getControl().isDisposed() == false) {
+			if (eObjectTableViewer.getControl() != null && eObjectTableViewer.getControl().isDisposed() == false) {
 				eObjectTableViewer.refresh();
 			}
 		}
