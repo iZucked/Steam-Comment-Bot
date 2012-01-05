@@ -6,12 +6,16 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class CheckingVPO implements IVoyagePlanOptimiser {
 	final private IVoyagePlanOptimiser reference, delegate;
+	private static final Logger log = LoggerFactory.getLogger(CheckingVPO.class);
 
 	public CheckingVPO(final IVoyagePlanOptimiser reference, final IVoyagePlanOptimiser delegate) {
 		super();
@@ -41,17 +45,15 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	public VoyagePlan optimise() {
 		final VoyagePlan ref = reference.optimise();
 		final VoyagePlan res = delegate.optimise();
-		// FIXME: Use check if logging is enabled
+
 		if (ref.toString().equals(res.toString()) == false) {
-			// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
-			System.err.println("Checking VPO Error: (plans are different)");
-			System.err.println("   reference value:" + ref.toString());
-			System.err.println("    delegate value:" + res.toString());
+			log.error("Checking VPO Error: (plans are different)");
+			log.error("   reference value:" + ref.toString());
+			log.error("    delegate value:" + res.toString());
 		} else if (reference.getBestCost() != delegate.getBestCost()) {
-			// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
-			System.err.println("Checking VPO Error: (Costs are different)");
-			System.err.println("    reference cost:" + reference.getBestCost());
-			System.err.println("     delegate cost:" + delegate.getBestCost());
+			log.error("Checking VPO Error: (Costs are different)");
+			log.error("    reference cost:" + reference.getBestCost());
+			log.error("     delegate cost:" + delegate.getBestCost());
 		}
 
 		return res;

@@ -13,6 +13,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -49,6 +52,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
+	private static final Logger log = LoggerFactory.getLogger(AbstractSequenceScheduler.class);
 
 	private IElementDurationProvider durationsProvider;
 
@@ -448,7 +452,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			final File f = new File("./" + name + ".py");
 			logWriter = new BufferedWriter(new FileWriter(f));
 
-			System.err.println("Created scheduler log " + f.getAbsolutePath());
+			log.debug("Created scheduler log " + f.getAbsolutePath());
 		} catch (final IOException ex) {
 		}
 	}
