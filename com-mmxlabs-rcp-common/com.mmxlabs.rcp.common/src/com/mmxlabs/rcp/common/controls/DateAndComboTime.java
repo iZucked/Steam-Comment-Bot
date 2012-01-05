@@ -23,8 +23,7 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Event;
 
 /**
- * A combined small-size date widget and a hourly combo time widget. An offset
- * can be specified to set the minutes for each hour interval.
+ * A combined small-size date widget and a hourly combo time widget. An offset can be specified to set the minutes for each hour interval.
  * 
  * @author Tom Hinton
  * 
@@ -37,18 +36,15 @@ public class DateAndComboTime extends Composite {
 	boolean settingValue = false;
 	private final boolean optionalTime;
 
-	public DateAndComboTime(final Composite parent, final int style,
-			final boolean bigDate, int offset) {
+	public DateAndComboTime(final Composite parent, final int style, final boolean bigDate, int offset) {
 		this(parent, style, bigDate, offset, false);
 	}
 
-	public DateAndComboTime(final Composite parent, final int style,
-			final boolean bigDate, int offset, final boolean optionalTime) {
+	public DateAndComboTime(final Composite parent, final int style, final boolean bigDate, int offset, final boolean optionalTime) {
 		super(parent, style);
 		this.optionalTime = optionalTime;
 		setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-		final RowLayout layout = new RowLayout(bigDate ? SWT.VERTICAL
-				: SWT.HORIZONTAL);
+		final RowLayout layout = new RowLayout(bigDate ? SWT.VERTICAL : SWT.HORIZONTAL);
 		if (!bigDate) {
 			layout.marginBottom = 0;
 			layout.marginTop = 0;
@@ -57,8 +53,7 @@ public class DateAndComboTime extends Composite {
 			layout.spacing = 1;
 		}
 		setLayout(layout);
-		date = new DateTime(this, (bigDate ? SWT.CALENDAR | SWT.BORDER
-				: SWT.DATE | SWT.MEDIUM) | SWT.BORDER | style);
+		date = new DateTime(this, (bigDate ? SWT.CALENDAR | SWT.BORDER : SWT.DATE | SWT.MEDIUM) | SWT.BORDER | style);
 
 		if (optionalTime) {
 			setTime = new Button(this, SWT.CHECK);
@@ -140,7 +135,7 @@ public class DateAndComboTime extends Composite {
 	public boolean isTimeSet() {
 		return setTime.getSelection();
 	}
-	
+
 	public synchronized Calendar getValue() {
 		final Calendar c = Calendar.getInstance(timeZone); // TODO this is a bit
 															// dodgy
@@ -163,32 +158,34 @@ public class DateAndComboTime extends Composite {
 		final Event changeEvent = new Event();
 		changeEvent.widget = this;
 
-		notifyListeners(isDefault ? SWT.DefaultSelection : SWT.Selection,
-				changeEvent);
+		notifyListeners(isDefault ? SWT.DefaultSelection : SWT.Selection, changeEvent);
 	}
 
 	public synchronized void setValue(final Calendar newValue) {
 		setValue(newValue, true);
 	}
 
-	public synchronized void setValue(final Calendar newValue,
-			final boolean isTimeSet) {
+	public synchronized void setValue(final Calendar newValue, final boolean isTimeSet) {
 		settingValue = true;
 
 		if (newValue != null) {
 			timeZone = newValue.getTimeZone();
-
-			date.setYear(newValue.get(Calendar.YEAR));
-			date.setMonth(newValue.get(Calendar.MONTH));
-			date.setDay(newValue.get(Calendar.DAY_OF_MONTH));
-
-			time.select(newValue.get(Calendar.HOUR_OF_DAY));
-			if (optionalTime) {
-				time.setEnabled(isTimeSet);
-				setTime.setSelection(isTimeSet);
+			if (!date.isDisposed()) {
+				date.setYear(newValue.get(Calendar.YEAR));
+				date.setMonth(newValue.get(Calendar.MONTH));
+				date.setDay(newValue.get(Calendar.DAY_OF_MONTH));
+			}
+			if (!time.isDisposed()) {
+				time.select(newValue.get(Calendar.HOUR_OF_DAY));
+				if (optionalTime) {
+					time.setEnabled(isTimeSet);
+					setTime.setSelection(isTimeSet);
+				}
 			}
 		} else {
-			time.select(0);
+			if (!time.isDisposed()) {
+				time.select(0);
+			}
 		}
 		settingValue = false;
 		notifyNewSelection(false);
@@ -212,8 +209,7 @@ public class DateAndComboTime extends Composite {
 
 	private void createHourItems(Combo c, int offset) {
 		if (offset > 59 || offset < 0) {
-			throw new IllegalArgumentException(
-					"Time offset should be in the range 0 to 59");
+			throw new IllegalArgumentException("Time offset should be in the range 0 to 59");
 		}
 		String[] items = new String[24];
 		for (int i = 0; i < 24; ++i) {
