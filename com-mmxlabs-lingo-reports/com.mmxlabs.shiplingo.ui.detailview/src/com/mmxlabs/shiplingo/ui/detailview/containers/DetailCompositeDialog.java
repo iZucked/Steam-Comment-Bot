@@ -26,6 +26,7 @@ import org.eclipse.emf.validation.service.IValidator;
 import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -306,6 +307,7 @@ public class DetailCompositeDialog extends Dialog {
 					editingDomain.getCommandStack().execute(cc);
 					
 				} else {
+					MessageDialog.openError(getShell(), "Error applying change", "An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
 					log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 				}
 			}
@@ -369,7 +371,6 @@ public class DetailCompositeDialog extends Dialog {
 			if (feature.isMany()) {
 				final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection) duplicate.eGet(feature));
 				if (mas.canExecute() == false) {
-					// FIXME: Use e.g. log.error(xxx, new RuntimeException());
 					log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
 							"Attempt to set feature which could not be set."));
 				}
