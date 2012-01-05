@@ -381,17 +381,15 @@ public class Range extends Composite {
 			text2.setText("text 1");
 			Text text3 = new Text(shell, SWT.NONE);
 			text3.setText("text 3");
-			// FIXME: Debugging code?
+			//These printlns are OK - this main is just a test.
 			final FocusListener fl = new FocusListener() {
 				@Override
 				public void focusGained(FocusEvent e) {
-					// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
 					System.err.println("got focus : " + e);
 				}
 
 				@Override
 				public void focusLost(FocusEvent e) {
-					// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
 					System.err.println("lost focus : " + e);
 				}
 			};
