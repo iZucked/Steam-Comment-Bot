@@ -11,6 +11,8 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.port.Canal;
 import scenario.port.PortPackage;
@@ -22,7 +24,7 @@ import scenario.port.PortPackage;
  * 
  */
 public class CanalImporter extends EObjectImporter {
-	
+	private final Logger log = LoggerFactory.getLogger(CanalImporter.class);
 
 	@Override
 	protected void populateContainment(final String prefix,
@@ -46,10 +48,12 @@ public class CanalImporter extends EObjectImporter {
 							reader, deferredReferences, registry);
 					result.eSet(reference, matrix.iterator().next());
 				} catch (IOException e) {
-					// FIXME: Use e.g. log.error(xxx, e);
-					System.err.println("Unable to import " + referenceName
+					log.error("Unable to import " + referenceName
 							+ " from " + fields.get(referenceName) + ": "
-							+ e.getMessage());
+							+ e.getMessage(), e);
+					super.warn("Unable to import " + referenceName
+							+ " from " + fields.get(referenceName) + ": "
+							+ e.getMessage(), true, referenceName);
 				}
 			}
 		} else {
