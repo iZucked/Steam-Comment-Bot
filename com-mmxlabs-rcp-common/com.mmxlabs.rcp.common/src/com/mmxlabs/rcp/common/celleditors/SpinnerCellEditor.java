@@ -12,6 +12,8 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
@@ -72,6 +74,15 @@ public class SpinnerCellEditor extends CellEditor {
 	@Override
 	protected Control createControl(final Composite parent) {
 		control = new Spinner(parent, SWT.NONE);
+		
+		control.addTraverseListener(new TraverseListener() {
+            public void keyTraversed(TraverseEvent e) {
+                if (e.detail == SWT.TRAVERSE_ESCAPE
+                        || e.detail == SWT.TRAVERSE_RETURN) {
+                    e.doit = false;
+                }
+            }
+        });
 		
 		control.addKeyListener(new KeyAdapter() {
 			{
