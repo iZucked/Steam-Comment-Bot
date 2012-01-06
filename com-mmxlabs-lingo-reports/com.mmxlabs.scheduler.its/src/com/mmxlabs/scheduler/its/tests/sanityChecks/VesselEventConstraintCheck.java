@@ -10,6 +10,7 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -79,6 +80,18 @@ public class VesselEventConstraintCheck {
 		 vesselsOfClassThree = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
 		 vesselsOfClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
 
+	}
+	
+	/**
+	 * Reset variables for the next test.
+	 */
+	@After
+	public void afterTests() {
+		ports = null;
+		vesselsOfClassOne = null;
+		vesselsOfClassTwo = null;
+		vesselsOfClassThree = null;
+		vesselsOfClassFour = null;
 	}
 	
 	/**
