@@ -9,8 +9,6 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -96,8 +94,8 @@ public class VesselEventConstraintCheck {
 		final VesselClass allowedCharterOutVesselClass = vesselsOfClassFour.get(0).getClass_();
 
 		// add some VesselEvents, i.e. CharterOuts and DryDocks in a random-ish manner.
-		addDrydocks(ports, allowedDrydockVessel, allowedDrydockVesselClass);
-		addCharterOuts(ports, allowedCharterOutVessel, allowedCharterOutVesselClass);
+		SanityCheckTools.addDrydocks(csc, ports, allowedDrydockVessel, allowedDrydockVesselClass);
+		SanityCheckTools.addCharterOuts(csc, ports, allowedCharterOutVessel, allowedCharterOutVesselClass, cvValue, dischargePrice);
 
 		final Scenario scenario = csc.buildScenario();
 		// evaluate and get a schedule
@@ -114,64 +112,6 @@ public class VesselEventConstraintCheck {
 		checkOutput(result, allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
 	}
 
-	/**
-	 * Add a load of drydocks from every port to every port. Also add constraints to each dry dock.
-	 * 
-	 * @param ports
-	 *            The ports to add dry docks to/from
-	 * @param allowedDrydockVessel
-	 *            A vessel to add to all dry dock's allowed-vessel list
-	 * @param allowedDrydockVesselClass
-	 *            A vessel class to add to all dry dock's allowed-vesselclass list.
-	 */
-	private void addDrydocks(final Port[] ports, final Vessel allowedDrydockVessel, final VesselClass allowedDrydockVesselClass) {
-
-		Date start = new Date(System.currentTimeMillis());
-		for (Port portA : ports) {
-			for (Port portB : ports) {
-				if (!portA.equals(portB)) {
-
-					final Drydock dry = csc.addDryDock(portB, start, 1);
-
-					dry.getVessels().add(allowedDrydockVessel);
-					dry.getVesselClasses().add(allowedDrydockVesselClass);
-
-					start.setTime(start.getTime() + TimeUnit.HOURS.toMillis(2));
-				}
-			}
-		}
-	}
-
-	/**
-	 * Adds a charter out from every port to every port. Also adds constraints to each charter out.
-	 * 
-	 * @param ports
-	 *            The ports to add charter outs to/from
-	 * @param allowedCharterOutVessel
-	 *            A vessel to add to all charter outs allowed-vessel list.
-	 * @param allowedCharterOutVesselClass
-	 *            A class of vessel to add to every charter out's allowed vessel class list.
-	 */
-	private void addCharterOuts(final Port[] ports, final Vessel allowedCharterOutVessel, final VesselClass allowedCharterOutVesselClass) {
-
-		Date start = new Date(System.currentTimeMillis());
-		int charterOutDurationDays = 1;
-		for (Port portA : ports) {
-			for (Port portB : ports) {
-
-				final String id = "CharterOut " + portA.getName() + " to " + portB.getName();
-
-				CharterOut charterOut = csc.addCharterOut(id, portA, portB, start, 1000, charterOutDurationDays, cvValue, dischargePrice, 100, 0);
-
-				charterOut.getVessels().add(allowedCharterOutVessel);
-				charterOut.getVesselClasses().add(allowedCharterOutVesselClass);
-
-				if (portA.equals(portB))
-					charterOutDurationDays /= 2;
-
-			}
-		}
-	}
 
 	/**
 	 * Check that dry docks and charter outs only use the vessels and vessel classes specified in the input.
