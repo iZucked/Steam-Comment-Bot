@@ -150,20 +150,28 @@ public class VesselEventConstraintCheck {
 
 					Vessel usedVessel = ((FleetVessel) seq.getVessel()).getVessel();
 
-					if (ve instanceof CharterOut) {
+					if (ve instanceof CharterOut) 
+						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedCharterOutVessel, allowedCharterOutVesselClass));
+					else if (ve instanceof Drydock)
 
-						final boolean isAllowed = usedVessel.equals(allowedCharterOutVessel) || allowedCharterOutVesselClass.equals(usedVessel.getClass_());
-						assertTrue(isAllowed);
+						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedDryDockVessel, allowedDryDockVesselClass));
 
-					} else if (ve instanceof Drydock) {
-
-						final boolean isAllowed = usedVessel.equals(allowedDryDockVessel) || allowedDryDockVesselClass.equals(usedVessel.getClass_());
-						assertTrue(isAllowed);
-
-					} else
+					else
 						fail("Test should cover all VesselEvents.");
 				}
 			}
 		}
+	}
+	
+	private boolean isUsedVesselValid(final Vessel usedVessel, final Vessel allowedVessel, final VesselClass allowedVesselClass) {
+		
+		boolean isValid = false;
+		if (allowedVessel != null)
+			isValid = isValid || usedVessel.equals(allowedVessel);
+		if (allowedVesselClass != null)
+			isValid = isValid || allowedVesselClass.equals(usedVessel.getClass_());
+		
+		return isValid;
+		
 	}
 }
