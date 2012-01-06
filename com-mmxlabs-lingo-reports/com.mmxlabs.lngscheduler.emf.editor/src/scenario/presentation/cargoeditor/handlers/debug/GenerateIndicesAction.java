@@ -23,6 +23,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.shiplingo.importer.importers.ImportUI;
+
 import scenario.market.Index;
 import scenario.market.MarketFactory;
 import scenario.market.MarketPackage;
@@ -132,27 +134,32 @@ public class GenerateIndicesAction extends ScenarioModifyingAction implements IS
 									final int count = Integer.parseInt(input3.getValue());
 									final int separation = Integer.parseInt(input4.getValue());
 
-									final CompoundCommand cc = new CompoundCommand();
+									try {
+										ImportUI.beginImport();
 
-									cc.append(DeleteCommand.create(domain, target.getPriceCurve().getPrices()));
+										final CompoundCommand cc = new CompoundCommand();
 
-									double currentValue = start;
-									Date currentDate = date;
-									final Random random = new Random(System.currentTimeMillis());
-									final long sep = Timer.ONE_DAY * separation;
+										cc.append(DeleteCommand.create(domain, target.getPriceCurve().getPrices()));
 
-									for (int i = 0; i < count; i++) {
-										final StepwisePrice price = MarketFactory.eINSTANCE.createStepwisePrice();
-										price.setDate(currentDate);
-										price.setPriceFromDate((float) currentValue);
-										currentDate = new Date(currentDate.getTime() + sep);
-										currentValue += 
-												random.nextGaussian() * sigma1;
-										currentValue = Math.max(1, currentValue); // set a floor of 1 dollar
-										cc.append(AddCommand.create(domain, target.getPriceCurve(), MarketPackage.eINSTANCE.getStepwisePriceCurve_Prices(), price));
+										double currentValue = start;
+										Date currentDate = date;
+										final Random random = new Random(System.currentTimeMillis());
+										final long sep = Timer.ONE_DAY * separation;
+
+										for (int i = 0; i < count; i++) {
+											final StepwisePrice price = MarketFactory.eINSTANCE.createStepwisePrice();
+											price.setDate(currentDate);
+											price.setPriceFromDate((float) currentValue);
+											currentDate = new Date(currentDate.getTime() + sep);
+											currentValue += random.nextGaussian() * sigma1;
+											currentValue = Math.max(1, currentValue); // set a floor of 1 dollar
+											cc.append(AddCommand.create(domain, target.getPriceCurve(), MarketPackage.eINSTANCE.getStepwisePriceCurve_Prices(), price));
+										}
+
+										domain.getCommandStack().execute(cc);
+									} finally {
+										ImportUI.endImport();
 									}
-
-									domain.getCommandStack().execute(cc);
 								} catch (ParseException e) {
 
 								}

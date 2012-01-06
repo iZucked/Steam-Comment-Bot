@@ -298,42 +298,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_MinQuantity() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSlot_MaxQuantity() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getSlot_Port() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSlot_WindowStart() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSlot_WindowDuration() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -342,7 +306,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_SlotDuration() {
+	public EAttribute getSlot_MaxQuantity() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -351,8 +315,44 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSlot_Port() {
+		return (EReference)slotEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_WindowStart() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_WindowDuration() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_SlotDuration() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getSlot_Contract() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(8);
+		return (EReference)slotEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -361,7 +361,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_FixedPrice() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -515,14 +515,14 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		slotEClass = createEClass(SLOT);
 		createEAttribute(slotEClass, SLOT__ID);
-		createEAttribute(slotEClass, SLOT__MIN_QUANTITY);
-		createEAttribute(slotEClass, SLOT__MAX_QUANTITY);
 		createEReference(slotEClass, SLOT__PORT);
 		createEAttribute(slotEClass, SLOT__WINDOW_START);
+		createEReference(slotEClass, SLOT__CONTRACT);
+		createEAttribute(slotEClass, SLOT__FIXED_PRICE);
+		createEAttribute(slotEClass, SLOT__MIN_QUANTITY);
+		createEAttribute(slotEClass, SLOT__MAX_QUANTITY);
 		createEAttribute(slotEClass, SLOT__WINDOW_DURATION);
 		createEAttribute(slotEClass, SLOT__SLOT_DURATION);
-		createEAttribute(slotEClass, SLOT__FIXED_PRICE);
-		createEReference(slotEClass, SLOT__CONTRACT);
 		createEOperation(slotEClass, SLOT___GET_LOCAL_WINDOW_START);
 		createEOperation(slotEClass, SLOT___GET_WINDOW_END);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_CONTRACT__OBJECT);
@@ -593,14 +593,14 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(slotEClass, Slot.class, "Slot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSlot_Id(), ecorePackage.getEString(), "id", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", "2147483647", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowStart(), theScenarioPackage.getDateAndOptionalTime(), "windowStart", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlot_Contract(), theContractPackage.getContract(), null, "contract", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_FixedPrice(), ecorePackage.getEFloat(), "fixedPrice", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", "2147483647", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowDuration(), ecorePackage.getEInt(), "windowDuration", "24", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_SlotDuration(), ecorePackage.getEInt(), "slotDuration", "6", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_FixedPrice(), ecorePackage.getEFloat(), "fixedPrice", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSlot_Contract(), theContractPackage.getContract(), null, "contract", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlot__GetLocalWindowStart(), ecorePackage.getEJavaObject(), "getLocalWindowStart", 1, 1, IS_UNIQUE, IS_ORDERED);
 

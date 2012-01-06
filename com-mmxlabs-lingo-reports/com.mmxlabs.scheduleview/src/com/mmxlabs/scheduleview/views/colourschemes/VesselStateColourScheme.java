@@ -40,9 +40,14 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 		// else if (mode == Mode.Lateness) {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
-
-			if (visit.getSlot().getWindowEnd().before(visit.getStartTime())) {
+			if (visit.getStartTime().after(visit.getSlot().getWindowEnd())) {
 				return ColorCache.getColor(255, 0, 0);
+			}
+			return ColorCache.getColor(0,0,0);
+		} else if (element instanceof VesselEventVisit) {
+			final VesselEventVisit vev = (VesselEventVisit) element;
+			if (vev.getStartTime().after(vev.getVesselEvent().getEndDate())) {
+				return ColorCache.getColor(255,0,0);
 			}
 		}
 		return null;

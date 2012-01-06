@@ -10,6 +10,7 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import scenario.AnnotatedObject;
+import scenario.cargo.*;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoModel;
 import scenario.cargo.CargoPackage;

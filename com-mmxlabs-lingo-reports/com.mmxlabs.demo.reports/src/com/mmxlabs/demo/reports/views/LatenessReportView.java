@@ -68,6 +68,7 @@ public class LatenessReportView extends EMFReportView {
 								for (final ScheduledEvent e : seq.getEvents()) {
 									if (e instanceof SlotVisit) {
 										final SlotVisit visit = (SlotVisit) e;
+										
 										if (visit.getStartTime().after(visit.getSlot().getWindowEnd())) {
 											allEvents.add(e);
 										}
