@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import scenario.Scenario;
@@ -51,27 +52,42 @@ public class VesselEventConstraintCheck {
 	private final static int cvValue = 10;
 	
 	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
-
-	@Test
-	public void test() {
+	
+	private Port[] ports; 
+	final int numOfClassOne = 3;
+	final int numOfClassTwo = 4;
+	final int numOfClassThree = 5;
+	final int numOfClassFour = 6;
+	private ArrayList<Vessel> vesselsOfClassOne;
+	private ArrayList<Vessel> vesselsOfClassTwo ;
+	private ArrayList<Vessel> vesselsOfClassThree;
+	private ArrayList<Vessel> vesselsOfClassFour; 
+	
+	/**
+	 * This is called before each test is run.
+	 */
+	@Before
+	public void setupTest() {
 		// a list of ports to use in the scenario
-		final Port[] ports = new Port[] { ScenarioTools.createPort("portA"), ScenarioTools.createPort("portB"), ScenarioTools.createPort("portC"), ScenarioTools.createPort("portD"),
+		ports = new Port[] { ScenarioTools.createPort("portA"), ScenarioTools.createPort("portB"), ScenarioTools.createPort("portC"), ScenarioTools.createPort("portD"),
 				ScenarioTools.createPort("portE"), ScenarioTools.createPort("portF") };
 
 		// Add the ports, and set the distances.
 		SanityCheckTools.setPortDistances(csc, ports);
 
-		// create a few vessels and add them to the list of vessels created.
-		final int numOfClassOne = 3;
-		final int numOfClassTwo = 4;
-		final int numOfClassThree = 5;
-		final int numOfClassFour = 6;
-
 		// createVessels creates and adds the vessels to the scenario.
-		ArrayList<Vessel> vesselsOfClassOne = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
-		ArrayList<Vessel> vesselsOfClassTwo = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
-		ArrayList<Vessel> vesselsOfClassThree = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
-		ArrayList<Vessel> vesselsOfClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
+		 vesselsOfClassOne = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
+		 vesselsOfClassTwo = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
+		 vesselsOfClassThree = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
+		 vesselsOfClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
+
+	}
+	
+	/**
+	 * Test that if all charter outs and all dry docks have restrictions on vessels and vessel classes then the constraints work.
+	 */
+	@Test
+	public void testAllConstraints() {
 
 		// get some vessels and vessel classes to restrict the dry docks and charter outs
 		final Vessel allowedDrydockVessel = vesselsOfClassOne.get(0);
