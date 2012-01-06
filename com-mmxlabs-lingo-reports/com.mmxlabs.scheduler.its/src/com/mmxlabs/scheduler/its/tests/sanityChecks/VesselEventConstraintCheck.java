@@ -50,7 +50,7 @@ public class VesselEventConstraintCheck {
 	private static final int dischargePrice = 1;
 	private final static int cvValue = 10;
 	
-	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+	private CustomScenarioCreator csc;
 	
 	private Port[] ports; 
 	final int numOfClassOne = 3;
@@ -67,6 +67,8 @@ public class VesselEventConstraintCheck {
 	 */
 	@Before
 	public void setupTest() {
+		csc = new CustomScenarioCreator(dischargePrice);
+		
 		// a list of ports to use in the scenario
 		ports = new Port[] { ScenarioTools.createPort("portA"), ScenarioTools.createPort("portB"), ScenarioTools.createPort("portC"), ScenarioTools.createPort("portD"),
 				ScenarioTools.createPort("portE"), ScenarioTools.createPort("portF") };
@@ -87,6 +89,7 @@ public class VesselEventConstraintCheck {
 	 */
 	@After
 	public void afterTests() {
+		csc = null;
 		ports = null;
 		vesselsOfClassOne = null;
 		vesselsOfClassTwo = null;
