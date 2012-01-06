@@ -258,6 +258,10 @@ public abstract class AbstractDetailComposite extends Composite {
 			sub.setInput(input);
 		}
 		validate();
+		
+		if (lockedForEditing) {
+			setEnabled(this, false);
+		}
 	}
 
 	/**
