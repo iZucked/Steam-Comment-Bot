@@ -39,9 +39,10 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * 
  * You may want to set up a scenario with RandomScenarioUtils, and then modify one of the vessel events to have some constraints like this.
  * 
- 
- 
- * TODO add vessel & it's vessel class to allowed lists, test it still works even though added twice. 
+ * 
+ * 
+ * TODO add vessel & it's vessel class to allowed lists, test it still works even though added twice.
+ * 
  * @author Adam
  * 
  */
@@ -49,26 +50,26 @@ public class VesselEventConstraintCheck {
 
 	private static final int dischargePrice = 1;
 	private final static int cvValue = 10;
-	
+
 	private CustomScenarioCreator csc;
-	
-	private Port[] ports; 
-	final int numOfClassOne = 3;
-	final int numOfClassTwo = 4;
-	final int numOfClassThree = 5;
-	final int numOfClassFour = 6;
+
+	private Port[] ports;
+	private final int numOfClassOne = 3;
+	private final int numOfClassTwo = 4;
+	private final int numOfClassThree = 5;
+	private final int numOfClassFour = 6;
 	private ArrayList<Vessel> vesselsOfClassOne;
-	private ArrayList<Vessel> vesselsOfClassTwo ;
+	private ArrayList<Vessel> vesselsOfClassTwo;
 	private ArrayList<Vessel> vesselsOfClassThree;
-	private ArrayList<Vessel> vesselsOfClassFour; 
-	
+	private ArrayList<Vessel> vesselsOfClassFour;
+
 	/**
 	 * This is called before each test is run.
 	 */
 	@Before
 	public void setupTest() {
 		csc = new CustomScenarioCreator(dischargePrice);
-		
+
 		// a list of ports to use in the scenario
 		ports = new Port[] { ScenarioTools.createPort("portA"), ScenarioTools.createPort("portB"), ScenarioTools.createPort("portC"), ScenarioTools.createPort("portD"),
 				ScenarioTools.createPort("portE"), ScenarioTools.createPort("portF") };
@@ -77,13 +78,13 @@ public class VesselEventConstraintCheck {
 		SanityCheckTools.setPortDistances(csc, ports);
 
 		// createVessels creates and adds the vessels to the scenario.
-		 vesselsOfClassOne = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
-		 vesselsOfClassTwo = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
-		 vesselsOfClassThree = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
-		 vesselsOfClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
+		vesselsOfClassOne = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
+		vesselsOfClassTwo = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
+		vesselsOfClassThree = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
+		vesselsOfClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
 
 	}
-	
+
 	/**
 	 * Reset variables for the next test.
 	 */
@@ -96,7 +97,7 @@ public class VesselEventConstraintCheck {
 		vesselsOfClassThree = null;
 		vesselsOfClassFour = null;
 	}
-	
+
 	/**
 	 * Test that if all charter outs and all dry docks have restrictions on vessels and vessel classes then the constraints work.
 	 */
@@ -128,15 +129,19 @@ public class VesselEventConstraintCheck {
 		checkOutput(result, allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
 	}
 
-
 	/**
 	 * Check that dry docks and charter outs only use the vessels and vessel classes specified in the input.
 	 * 
-	 * @param result The evaluated scenario
-	 * @param allowedDryDockVessel The vessel allowed to take dry docks
-	 * @param allowedDryDockVesselClass The vessel classes allowed to take dry docks
-	 * @param allowedCharterOutVessel The charter out vessel allowed to take dry docks
-	 * @param allowedCharterOutVesselClass The vessel class allowed to take charter outs.
+	 * @param result
+	 *            The evaluated scenario
+	 * @param allowedDryDockVessel
+	 *            The vessel allowed to take dry docks
+	 * @param allowedDryDockVesselClass
+	 *            The vessel classes allowed to take dry docks
+	 * @param allowedCharterOutVessel
+	 *            The charter out vessel allowed to take dry docks
+	 * @param allowedCharterOutVesselClass
+	 *            The vessel class allowed to take charter outs.
 	 */
 	private void checkOutput(final Schedule result, final Vessel allowedDryDockVessel, final VesselClass allowedDryDockVesselClass, final Vessel allowedCharterOutVessel,
 			final VesselClass allowedCharterOutVesselClass) {
@@ -150,7 +155,7 @@ public class VesselEventConstraintCheck {
 
 					Vessel usedVessel = ((FleetVessel) seq.getVessel()).getVessel();
 
-					if (ve instanceof CharterOut) 
+					if (ve instanceof CharterOut)
 						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedCharterOutVessel, allowedCharterOutVesselClass));
 					else if (ve instanceof Drydock)
 
@@ -162,16 +167,20 @@ public class VesselEventConstraintCheck {
 			}
 		}
 	}
-	
+
 	private boolean isUsedVesselValid(final Vessel usedVessel, final Vessel allowedVessel, final VesselClass allowedVesselClass) {
-		
-		boolean isValid = false;
-		if (allowedVessel != null)
-			isValid = isValid || usedVessel.equals(allowedVessel);
-		if (allowedVesselClass != null)
-			isValid = isValid || allowedVesselClass.equals(usedVessel.getClass_());
-		
-		return isValid;
-		
+
+		// in the case that there are no restrictions on a vessel event all vessels are valid, so return true
+		if (allowedVessel == null && allowedVesselClass == null)
+			return true;
+		else {
+			boolean isValid = false;
+			if (allowedVessel != null)
+				isValid = isValid || usedVessel.equals(allowedVessel);
+			if (allowedVesselClass != null)
+				isValid = isValid || allowedVesselClass.equals(usedVessel.getClass_());
+
+			return isValid;
+		}
 	}
 }
