@@ -398,7 +398,7 @@
             	severity="ERROR"
             	statusCode="1">
             	<message>
-            		Vessel Event {0} has invalid start and end dates - they must both be set, and the start date must be before the end date.
+            		Vessel Event {0} has invalid start and end dates - they must both be set, and the start date must not be after the end date.
             	</message>
             	<description>
             		The start end end window of a vessel event must be set and consistent.
