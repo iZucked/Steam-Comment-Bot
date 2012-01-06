@@ -55,10 +55,10 @@ public class ChartViewer {
 		}
 		
 		for (int i = 0; i < contentProvider.getSeriesCount(); i++) {
-			
+			final String seriesName = contentProvider.getSeriesName(i);
 			final ILineSeries series = (ILineSeries) chart.getSeriesSet()
 					.createSeries(SeriesType.LINE,
-							contentProvider.getSeriesName(i));
+							seriesName.isEmpty() ? i + " (no name)" : seriesName);
 			if (contentProvider.isDateSeries(i)) {
 				final Date[] dates = contentProvider.getDateXSeries(i);
 				series.setXDateSeries(dates);
