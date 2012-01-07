@@ -22,14 +22,14 @@ import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.cargo.Slot#getId <em>Id</em>}</li>
- *   <li>{@link scenario.cargo.Slot#getMinQuantity <em>Min Quantity</em>}</li>
- *   <li>{@link scenario.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getPort <em>Port</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getWindowStart <em>Window Start</em>}</li>
+ *   <li>{@link scenario.cargo.Slot#getContract <em>Contract</em>}</li>
+ *   <li>{@link scenario.cargo.Slot#getFixedPrice <em>Fixed Price</em>}</li>
+ *   <li>{@link scenario.cargo.Slot#getMinQuantity <em>Min Quantity</em>}</li>
+ *   <li>{@link scenario.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getWindowDuration <em>Window Duration</em>}</li>
  *   <li>{@link scenario.cargo.Slot#getSlotDuration <em>Slot Duration</em>}</li>
- *   <li>{@link scenario.cargo.Slot#getFixedPrice <em>Fixed Price</em>}</li>
- *   <li>{@link scenario.cargo.Slot#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -387,7 +387,7 @@ public interface Slot extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final java.util.Calendar calendar = java.util.Calendar.getInstance(\njava.util.TimeZone.getTimeZone(getPort().getTimeZone())\n);\ncalendar.setTime(getWindowStart());\nreturn calendar;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final java.util.Calendar calendar = java.util.Calendar.getInstance(\njava.util.TimeZone.getTimeZone(getPort().getTimeZone())\n);\ncalendar.setTime(getWindowStart().getDateWithDefaults(getPort()));\nreturn calendar;'"
 	 * @generated
 	 */
 	Object getLocalWindowStart();
@@ -396,7 +396,7 @@ public interface Slot extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return new Date(getWindowStart()\r\n\t\t\t\t\t\t.getTime()\r\n\t\t\t\t\t\t+ javax.management.timer.Timer.ONE_HOUR\r\n\t\t\t\t\t\t* getWindowDuration());'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return new Date(getWindowStart().getDateWithDefaults(getPort())\r\n\t\t\t\t\t\t.getTime()\r\n\t\t\t\t\t\t+ javax.management.timer.Timer.ONE_HOUR\r\n\t\t\t\t\t\t* getWindowDuration());'"
 	 * @generated
 	 */
 	Date getWindowEnd();
@@ -422,7 +422,7 @@ public interface Slot extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetMinQuantity())\n\treturn getMinQuantity();\nelse\n\treturn getSlotOrPortContract(scenario).getMinQuantity();'"
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetMinQuantity())\n\treturn getMinQuantity();\nelse {\n\tfinal scenario.contract.Contract c = getSlotOrPortContract(scenario);\n\tif (c == null) return getMinQuantity();\n\treturn c.getMinQuantity();\n}'"
 	 * @generated
 	 */
 	int getSlotOrContractMinQuantity(Object scenario);
@@ -430,7 +430,7 @@ public interface Slot extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetMaxQuantity())\n\treturn getMaxQuantity();\nelse\n\treturn getSlotOrPortContract(scenario).getMaxQuantity();'"
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetMaxQuantity())\n\treturn getMaxQuantity();\nelse {\n\tfinal scenario.contract.Contract c = getSlotOrPortContract(scenario);\n\tif (c == null) return getMaxQuantity();\n\treturn c.getMaxQuantity();\n}'"
 	 * @generated
 	 */
 	int getSlotOrContractMaxQuantity(Object scenario);

@@ -10,6 +10,7 @@ package com.mmxlabs.shiplingo.ui.detailview.containers;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -42,15 +43,26 @@ public class DetailCompositePropertySheetPage extends DetailCompositeContainer i
 	private Composite control;// , top;
 	private ScrolledComposite sc;
 
+
+	
 	public DetailCompositePropertySheetPage(final EditingDomain editingDomain, final IValueProviderProvider valueProviderProvider) {
-		super(valueProviderProvider, editingDomain, new ICommandProcessor() {
+		super(valueProviderProvider, editingDomain,null);
+		setProcessor(new ICommandProcessor() {
 			@Override
 			public void processCommand(final Command command, final EObject target, final EStructuralFeature feature) {
+				// check validity before command
+//				final boolean b = activeDetailView.isCurrentStateValid();
 				editingDomain.getCommandStack().execute(command);
+//				activeDetailView.validateWithinCommandExecution();
+//				if (!activeDetailView.isCurrentStateValid() && b) {
+//					editingDomain.getCommandStack().undo();
+					
+//				}
 			}
 		});
 	}
 
+	
 	@Override
 	public void createControl(final Composite parent) {
 		sc = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);

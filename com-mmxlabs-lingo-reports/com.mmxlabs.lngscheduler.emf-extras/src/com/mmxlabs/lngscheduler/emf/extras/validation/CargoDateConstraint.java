@@ -21,6 +21,7 @@ import scenario.cargo.CargoPackage;
 import scenario.cargo.CargoType;
 import scenario.cargo.Slot;
 import scenario.fleet.VesselClass;
+import scenario.fleet.VesselClassCost;
 import scenario.port.Canal;
 import scenario.port.DistanceLine;
 import scenario.port.DistanceModel;
@@ -29,6 +30,7 @@ import scenario.port.Port;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
  * Check that the end of any cargo's discharge window is not before the start of its load window.
@@ -91,41 +93,25 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
 				}
 
-				Map<DistanceModel, Map<Pair<Port, Port>, Integer>> distanceMatrices = (Map<DistanceModel, Map<Pair<Port, Port>, Integer>>) ctx.getCurrentConstraintData();
+				Map<Pair<Port, Port>, Integer> minTimes = (Map<Pair<Port, Port>, Integer>) ctx.getCurrentConstraintData();
+				final Pair<Port, Port> key = new Pair<Port, Port>(cargo.getLoadSlot().getPort(), cargo.getDischargeSlot().getPort());
+				if (minTimes == null) {
+					minTimes = new HashMap<Pair<Port, Port>, Integer>();
 
-				if (distanceMatrices == null) {
-					distanceMatrices = new HashMap<DistanceModel, Map<Pair<Port, Port>, Integer>>();
-					ctx.putCurrentConstraintData(distanceMatrices);
-				}
-
-				Map<Pair<Port, Port>, Integer> distanceMatrix = distanceMatrices.get(scenario.getDistanceModel());
-				if (distanceMatrix == null) {
-					distanceMatrix = new HashMap<Pair<Port, Port>, Integer>();
-					for (final DistanceLine dl : scenario.getDistanceModel().getDistances()) {
-						distanceMatrix.put(new Pair<Port, Port>(dl.getFromPort(), dl.getToPort()), dl.getDistance());
-					}
-					distanceMatrices.put(scenario.getDistanceModel(), distanceMatrix);
-				}
-				final Pair<Port, Port> key = new Pair<Port, Port>(loadSlot.getPort(), dischargeSlot.getPort());
-				Integer distance = distanceMatrix.get(key);
-				for (final Canal c : scenario.getCanalModel().getCanals()) {
-					Map<Pair<Port, Port>, Integer> canalMatrix = distanceMatrices.get(c.getDistanceModel());
-					if (canalMatrix == null) {
-						canalMatrix = new HashMap<Pair<Port, Port>, Integer>();
-						for (final DistanceLine dl : c.getDistanceModel().getDistances()) {
-							canalMatrix.put(new Pair<Port, Port>(dl.getFromPort(), dl.getToPort()), dl.getDistance());
-						}
-						distanceMatrices.put(c.getDistanceModel(), canalMatrix);
-					}
-					final Integer distance2 = canalMatrix.get(key);
-					if (distance2 != null) {
-						if (distance == null || distance2 < distance) {
-							distance = distance2;
+					collectMinTimes(minTimes, scenario.getDistanceModel(), 0, maxSpeedKnots);
+					
+					for (final VesselClass vc : scenario.getFleetModel().getVesselClasses()) {
+						for (final VesselClassCost vcc : vc.getCanalCosts()) {
+							collectMinTimes(minTimes, vcc.getCanal().getDistanceModel(), vcc.getTransitTime(), vc.getMaxSpeed());
 						}
 					}
+
+					ctx.putCurrentConstraintData(minTimes);
 				}
 
-				if (distance == null) {
+				final Integer time = minTimes.get(key);
+
+				if (time == null) {
 					// distance line is missing
 					// TODO customize message for this case.
 					// seems like a waste to run the same code twice
@@ -133,9 +119,8 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					dsd.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port());
 					return dsd;
 				} else {
-					if (distance / maxSpeedKnots > availableTime) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getId(), (int) (distance / maxSpeedKnots),
-								availableTime));
+					if (time > availableTime) {
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getId(), time, availableTime));
 						dsd.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart());
 						return dsd;
 					}
@@ -144,6 +129,16 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 			}
 		}
 		return ctx.createSuccessStatus();
+	}
+
+	private void collectMinTimes(Map<Pair<Port, Port>, Integer> minTimes, final DistanceModel d, int extraTime, float maxSpeed) {
+		for (final DistanceLine dl : d.getDistances()) {
+			final Pair<Port, Port> p = new Pair<Port, Port>(dl.getFromPort(), dl.getToPort());
+			final int time = Calculator.getTimeFromSpeedDistance(Calculator.scaleToInt(maxSpeed), dl.getDistance()) + extraTime;
+			if (!minTimes.containsKey(p) || minTimes.get(p) > time) {
+				minTimes.put(p, time);
+			}
+		}
 	}
 
 	/**
@@ -181,7 +176,8 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					&& cargo.getDischargeSlot().getWindowStart() != null) {
 				final String constraintID = ctx.getCurrentConstraintId();
 
-				final int availableTime = (int) ((dischargeSlot.getWindowEnd().getTime() - loadSlot.getWindowStart().getTime()) / Timer.ONE_HOUR);
+				final int availableTime = (int) ((dischargeSlot.getWindowEnd().getTime() - loadSlot.getWindowStart().getDateWithDefaults(loadSlot.getPort()).getTime()) / Timer.ONE_HOUR)
+						- (loadSlot.getSlotOrPortDuration());
 
 				if (constraintID.equals(DATE_ORDER_ID)) {
 					return validateSlotOrder(ctx, cargo, availableTime);

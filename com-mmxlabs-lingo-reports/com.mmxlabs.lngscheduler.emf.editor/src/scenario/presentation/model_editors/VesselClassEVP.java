@@ -40,6 +40,7 @@ import com.mmxlabs.shiplingo.importer.importers.WarningCollector;
 import com.mmxlabs.shiplingo.importer.ui.ImportWarningDialog;
 import com.mmxlabs.shiplingo.ui.detailview.editors.dialogs.CanalCostsDialog;
 import com.mmxlabs.shiplingo.ui.detailview.editors.dialogs.VesselStateAttributesDialog;
+import com.mmxlabs.shiplingo.ui.detailview.editors.dialogs.VesselStateAttributesDialog2;
 import com.mmxlabs.shiplingo.ui.tableview.BasicAttributeManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.DialogFeatureManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.MultipleReferenceManipulator;
@@ -196,12 +197,13 @@ public class VesselClassEVP extends NamedObjectEVP {
 				@Override
 				protected Object openDialogBox(final Control cellEditorWindow,
 						final Object object) {
-					final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
-							cellEditorWindow.getShell(),
-							(SWT.DIALOG_TRIM & ~SWT.CLOSE)
-									| SWT.APPLICATION_MODAL);
+					final VesselStateAttributesDialog2 dialog = new VesselStateAttributesDialog2(cellEditorWindow.getShell());
 
-					return dlg.open((VesselStateAttributes) getValue(object));
+					if (dialog.open((VesselStateAttributes) getValue(object), false) == Window.OK) {
+						return dialog.getResult();
+					} else {
+						return null;
+					}
 				}
 
 			};

@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import scenario.optimiser.*;
 import scenario.optimiser.Constraint;
 import scenario.optimiser.Discount;
 import scenario.optimiser.DiscountCurve;

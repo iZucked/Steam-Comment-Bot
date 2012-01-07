@@ -7,6 +7,7 @@ package com.mmxlabs.lngscheduler.emf.extras;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -298,7 +299,12 @@ public class EMFUtils {
 	 * @return the input
 	 */
 	public static EObject fixNullDates(final EObject input) {
-		final Date date = new Date();
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.clear(Calendar.MINUTE);
+		calendar.clear(Calendar.SECOND);
+		calendar.clear(Calendar.MILLISECOND);
+		final Date date = calendar.getTime();
 		final DateAndOptionalTime daot = new DateAndOptionalTime(date, true);
 		return unsetOrSetNullValues(unsetOrSetNullValues(input, ScenarioPackage.eINSTANCE.getDateAndOptionalTime(), daot), EcorePackage.eINSTANCE.getEDate(), date);
 	}

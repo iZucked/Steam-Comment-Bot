@@ -132,6 +132,10 @@ public abstract class AbstractDetailComposite extends Composite {
 	 * validation has happened.
 	 */
 	protected void validate() {
+		if (skipNextValidation) {
+			skipNextValidation = false;
+			return;
+		}
 		if (validator == null)
 			return;
 
@@ -147,6 +151,12 @@ public abstract class AbstractDetailComposite extends Composite {
 		}
 	}
 
+	private boolean skipNextValidation = false;
+	public void validateWithinCommandExecution() {
+		validate();
+		skipNextValidation = true;
+	}
+	
 	/**
 	 * Update validation markers in this and children of this.
 	 * 
@@ -206,6 +216,8 @@ public abstract class AbstractDetailComposite extends Composite {
 		return tallMode ? heightSum : heightMax;
 	}
 
+	
+	
 	/**
 	 * Call this to create the controls, then setInput to hook up.
 	 * 
@@ -258,6 +270,10 @@ public abstract class AbstractDetailComposite extends Composite {
 			sub.setInput(input);
 		}
 		validate();
+		
+		if (lockedForEditing) {
+			setEnabled(this, false);
+		}
 	}
 
 	/**
