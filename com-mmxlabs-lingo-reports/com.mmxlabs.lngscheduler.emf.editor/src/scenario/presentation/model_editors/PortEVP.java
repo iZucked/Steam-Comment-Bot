@@ -33,6 +33,7 @@ import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
+import scenario.port.PortCapability;
 import scenario.port.PortPackage;
 import scenario.presentation.LngEditorPlugin;
 import scenario.presentation.ScenarioEditor;
@@ -68,6 +69,69 @@ public class PortEVP extends NamedObjectEVP {
 		}
 		
 	}
+	
+	/**
+	 * Column for editing port capabilities.
+	 * 
+	 * @author hinton
+	 */
+	private class CapabilityManipulator implements ICellRenderer, ICellManipulator {
+		private final PortCapability capability;
+		private final EditingDomain editingDomain;
+
+		public CapabilityManipulator(final PortCapability capability, final EditingDomain editingDomain) {
+			this.capability = capability;
+			this.editingDomain = editingDomain;
+		}
+
+		@Override
+		public void setValue(Object object, Object value) {
+			
+			final Port p = (Port) object;
+			if ((Integer) value == 0) {
+				editingDomain.getCommandStack().execute(AddCommand.create(editingDomain, object, PortPackage.eINSTANCE.getPort_Capabilities(), capability));
+			} else {
+				editingDomain.getCommandStack().execute(RemoveCommand.create(editingDomain, object, PortPackage.eINSTANCE.getPort_Capabilities(), capability));
+			}
+		}
+
+		@Override
+		public CellEditor getCellEditor(Composite parent, Object object) {
+			return new ComboBoxCellEditor(parent, new String[] {"Yes", "No"});
+		}
+
+		@Override
+		public Object getValue(final Object object) {
+			final Port p = (Port) object;
+			return p.getCapabilities().contains(capability);
+		}
+
+		@Override
+		public boolean canEdit(Object object) {
+			return true;
+		}
+
+		@Override
+		public String render(Object object) {
+			return ((Boolean) getValue(object)) ? "Yes" : "No";
+		}
+
+		@Override
+		public Comparable getComparable(Object object) {
+			return render(object);
+		}
+
+		@Override
+		public Object getFilterValue(Object object) {
+			return getComparable(object);
+		}
+
+		@Override
+		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+			return Collections.emptySet();
+		}
+	}
+	
 	
 	/**
 	 * A special-case column for specifying default contract from the port even
@@ -269,11 +333,15 @@ public class PortEVP extends NamedObjectEVP {
 				TimezoneInlineEditor.getTimezones()
 				);
 		addColumn("Timezone", manipulator, manipulator);
-
+		
 		if (part.getScenario().getContractModel() != null) {
 			addTypicalColumn("Default Contract",
 					new DefaultContractManipulator(part.getEditingDomain(),
 							part.getContractProvider()));
+		}
+		
+		for (final PortCapability capability : PortCapability.values()) {
+			addTypicalColumn("Can " + capability.getName(), new CapabilityManipulator(capability, part.getEditingDomain()));
 		}
 	}
 
