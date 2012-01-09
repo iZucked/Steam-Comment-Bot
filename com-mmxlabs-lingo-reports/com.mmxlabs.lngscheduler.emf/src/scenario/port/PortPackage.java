@@ -6,6 +6,7 @@ package scenario.port;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -144,22 +145,13 @@ public interface PortPackage extends EPackage {
 	int PORT__TIME_ZONE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Regas Efficiency</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT__REGAS_EFFICIENCY = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The feature id for the '<em><b>Default CVvalue</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_CVVALUE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int PORT__DEFAULT_CVVALUE = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Default Window Start</b></em>' attribute.
@@ -168,7 +160,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_WINDOW_START = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int PORT__DEFAULT_WINDOW_START = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Default Slot Duration</b></em>' attribute.
@@ -177,7 +169,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_SLOT_DURATION = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int PORT__DEFAULT_SLOT_DURATION = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Should Arrive Cold</b></em>' attribute.
@@ -186,7 +178,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__SHOULD_ARRIVE_COLD = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int PORT__SHOULD_ARRIVE_COLD = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Default Load Duration</b></em>' attribute.
@@ -195,7 +187,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_LOAD_DURATION = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int PORT__DEFAULT_LOAD_DURATION = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Default Discharge Duration</b></em>' attribute.
@@ -204,7 +196,16 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_DISCHARGE_DURATION = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int PORT__DEFAULT_DISCHARGE_DURATION = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Capabilities</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__CAPABILITIES = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -427,6 +428,16 @@ public interface PortPackage extends EPackage {
 	int CANAL_MODEL_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link scenario.port.PortCapability <em>Capability</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.port.PortCapability
+	 * @see scenario.port.impl.PortPackageImpl#getPortCapability()
+	 * @generated
+	 */
+	int PORT_CAPABILITY = 6;
+
+	/**
 	 * Returns the meta object for class '{@link scenario.port.PortModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -467,17 +478,6 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPort_TimeZone();
-
-	/**
-	 * Returns the meta object for the attribute '{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Regas Efficiency</em>'.
-	 * @see scenario.port.Port#getRegasEfficiency()
-	 * @see #getPort()
-	 * @generated
-	 */
-	EAttribute getPort_RegasEfficiency();
 
 	/**
 	 * Returns the meta object for the attribute '{@link scenario.port.Port#getDefaultCVvalue <em>Default CVvalue</em>}'.
@@ -544,6 +544,17 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPort_DefaultDischargeDuration();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link scenario.port.Port#getCapabilities <em>Capabilities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Capabilities</em>'.
+	 * @see scenario.port.Port#getCapabilities()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_Capabilities();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
@@ -652,6 +663,16 @@ public interface PortPackage extends EPackage {
 	EReference getCanalModel_Canals();
 
 	/**
+	 * Returns the meta object for enum '{@link scenario.port.PortCapability <em>Capability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Capability</em>'.
+	 * @see scenario.port.PortCapability
+	 * @generated
+	 */
+	EEnum getPortCapability();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -711,14 +732,6 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT__TIME_ZONE = eINSTANCE.getPort_TimeZone();
 
 		/**
-		 * The meta object literal for the '<em><b>Regas Efficiency</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PORT__REGAS_EFFICIENCY = eINSTANCE.getPort_RegasEfficiency();
-
-		/**
 		 * The meta object literal for the '<em><b>Default CVvalue</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -765,6 +778,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__DEFAULT_DISCHARGE_DURATION = eINSTANCE.getPort_DefaultDischargeDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Capabilities</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__CAPABILITIES = eINSTANCE.getPort_Capabilities();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.
@@ -853,6 +874,16 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CANAL_MODEL__CANALS = eINSTANCE.getCanalModel_Canals();
+
+		/**
+		 * The meta object literal for the '{@link scenario.port.PortCapability <em>Capability</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.port.PortCapability
+		 * @see scenario.port.impl.PortPackageImpl#getPortCapability()
+		 * @generated
+		 */
+		EEnum PORT_CAPABILITY = eINSTANCE.getPortCapability();
 
 	}
 

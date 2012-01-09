@@ -6,30 +6,40 @@ package com.mmxlabs.shiplingo.ui.detailview.containers;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolBar;
 
 import scenario.ScenarioPackage;
 import scenario.cargo.CargoPackage;
@@ -56,12 +66,18 @@ import com.mmxlabs.shiplingo.ui.detailview.utils.ControlUtils;
  */
 public class MultiDetailDialog extends Dialog {
 	private final DetailCompositeContainer dcc;
+	/**
+	 * Track all the controls that have been created, so we can disable them after setInput(), which will re-enable them otherwise.
+	 */
+	private List<Control> controlsToDisable = new LinkedList<Control>();
 	private EObject proxy;
 
 	/**
 	 * A set which describes which features need to be set in the output command
 	 */
 	private final Set<Pair<EMFPath, EStructuralFeature>> featuresToSet = new HashSet<Pair<EMFPath, EStructuralFeature>>();
+	private final Map<Pair<EMFPath, EStructuralFeature>, String> setMode = new HashMap<Pair<EMFPath, EStructuralFeature>, String>();
+
 	private EditingDomain editingDomain;
 
 	public MultiDetailDialog(final Shell parentShell, final IValueProviderProvider valueProviderProvider, final EditingDomain editingDomain) {
@@ -79,6 +95,7 @@ public class MultiDetailDialog extends Dialog {
 					return null;
 
 				return new IInlineEditor() {
+
 					@Override
 					public void setInput(final EObject object) {
 						proxy.setInput(object);
@@ -111,24 +128,32 @@ public class MultiDetailDialog extends Dialog {
 						final Control sub = proxy.createControl(c2);
 						sub.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-						ControlUtils.setControlEnabled(sub, false);
-						final Button check = new Button(composite, SWT.TOGGLE);
-						check.setText("Set");
+						// we can't disable here any more, as the later setInput() call will re-enable
+						controlsToDisable.add(sub);
 
-						check.addSelectionListener(new SelectionAdapter() {
+						final ToolBarManager manager = new ToolBarManager(SWT.NONE);
+						final Pair<EMFPath, EStructuralFeature> pair = new Pair<EMFPath, EStructuralFeature>(getPath(), getFeature());
+						manager.add(new Action("Set", IAction.AS_CHECK_BOX) {
 							@Override
-							public void widgetSelected(final SelectionEvent e) {
-								if (check.getSelection()) {
-									featuresToSet.add(new Pair<EMFPath, EStructuralFeature>(getPath(), getFeature()));
-									ControlUtils.setControlEnabled(sub, true);
-									// sub.setEnabled(true);
+							public void run() {
+								ControlUtils.setControlEnabled(sub, isChecked());
+								if (isChecked()) {
+									featuresToSet.add(pair);
 								} else {
-									featuresToSet.remove(new Pair<EMFPath, EStructuralFeature>(getPath(), getFeature()));
-									// sub.setEnabled(false);
-									ControlUtils.setControlEnabled(sub, false);
+									featuresToSet.remove(pair);
 								}
 							}
 						});
+
+						if (proxy.getFeature().isMany() && (proxy.getFeature() instanceof EAttribute || (((EReference) proxy.getFeature()).isContainment() == false))) {
+							manager.add(new MultiFeatureAction(pair, setMode));
+						}
+						
+						final ToolBar tb = manager.createControl(composite);
+						final GridData gd = new GridData();
+						// TODO fix magic number - measure width properly and set everywhere
+						gd.minimumWidth = gd.widthHint = 64;
+						tb.setLayoutData(gd);
 
 						return composite;
 					}
@@ -175,6 +200,14 @@ public class MultiDetailDialog extends Dialog {
 	private void displayProxy() {
 		final AbstractDetailComposite editor = dcc.getDetailView(proxy.eClass(), (Composite) getDialogArea());
 		editor.setInput(proxy);
+		disableControls();
+	}
+
+	private void disableControls() {
+		for (final Control c : controlsToDisable) {
+			ControlUtils.setControlEnabled(c, false);
+		}
+		controlsToDisable.clear();
 	}
 
 	@Override
@@ -216,10 +249,40 @@ public class MultiDetailDialog extends Dialog {
 						value = ((EObject) p.getFirst().get(proxy)).eGet(p.getSecond());
 					}
 
-					for (final EObject object : objects) {
-						cc.append(SetCommand.create(editingDomain, p.getFirst().get(object), p.getSecond(), value));
+					final String mode = setMode.get(p);
+					if (p.getSecond().isMany() == false || mode == null || mode.equals(MultiFeatureAction.REPLACE)) {
+						for (final EObject object : objects) {
+							cc.append(SetCommand.create(editingDomain, p.getFirst().get(object), p.getSecond(), value));
+						}
+					} else {
+						if (mode.equals(MultiFeatureAction.UNION)) {
+							final List unionWith = (List) value;
+							for (final EObject object : objects) {
+								final ArrayList<Object> add = new ArrayList<Object>();
+								final List<Object> values = (List<Object>) ((EObject) p.getFirst().get(object)).eGet(p.getSecond());
+								add.addAll(values);
+								for (final Object o : unionWith) {
+									if (add.contains(o) == false) {
+										add.add(o);
+									}
+								}
+								cc.append(SetCommand.create(editingDomain, p.getFirst().get(object), p.getSecond(), add));
+							}
+						} else {
+							final List intersectWith = (List) value;
+							for (final EObject object : objects) {
+								final ArrayList<Object> drop = new ArrayList<Object>();
+								final List<Object> values = (List<Object>) ((EObject) p.getFirst().get(object)).eGet(p.getSecond());
+								for (final Object o : intersectWith) {
+									if (values.contains(o)) drop.add(o);
+								}
+								
+								cc.append(SetCommand.create(editingDomain, p.getFirst().get(object), p.getSecond(), drop));
+							}
+						}
 					}
 				}
+				cc.canExecute();
 				editingDomain.getCommandStack().execute(cc);
 			}
 			return result;
@@ -276,5 +339,81 @@ public class MultiDetailDialog extends Dialog {
 	@Override
 	protected boolean isResizable() {
 		return true;
+	}
+
+}
+
+class MultiFeatureAction extends Action implements IMenuCreator {
+	public static final String REPLACE = "Replace";
+	public static final String UNION = "Union";
+	public static final String INTERSECTION = "Intersection";
+	public static final String[] MODES = new String[] { REPLACE, UNION, INTERSECTION };
+	private Menu lastMenu;
+	private String mode = REPLACE;
+	private Pair<EMFPath, EStructuralFeature> path;
+	private Map<Pair<EMFPath, EStructuralFeature>, String> map;
+
+	public MultiFeatureAction(final Pair<EMFPath, EStructuralFeature> p, final Map<Pair<EMFPath, EStructuralFeature>, String> m) {
+		super("", IAction.AS_DROP_DOWN_MENU);
+		this.map = m;
+		this.path = p;
+	}
+
+	@Override
+	public void dispose() {
+
+	}
+
+	@Override
+	public Menu getMenu(Control parent) {
+		if (lastMenu != null) {
+			lastMenu.dispose();
+		}
+		lastMenu = new Menu(parent);
+
+		populate(lastMenu);
+
+		return lastMenu;
+	}
+
+	/**
+	 * @param lastMenu2
+	 */
+	private void populate(final Menu menu) {
+		for (final String s : MODES) {
+			final Action a = new Action(s, IAction.AS_RADIO_BUTTON) {
+				@Override
+				public void run() {
+					mode = s;
+					map.put(path, s);
+				}
+			};
+
+			// a.setActionDefinitionId(mode.toString());
+			final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
+			actionContributionItem.fill(menu, -1);
+
+			// Set initially checked item.
+			if (s.equals(mode)) {
+				a.setChecked(true);
+			}
+		}
+	}
+
+	@Override
+	public Menu getMenu(Menu parent) {
+		if (lastMenu != null) {
+			lastMenu.dispose();
+		}
+		lastMenu = new Menu(parent);
+
+		populate(lastMenu);
+
+		return lastMenu;
+	}
+
+	@Override
+	public IMenuCreator getMenuCreator() {
+		return this;
 	}
 }

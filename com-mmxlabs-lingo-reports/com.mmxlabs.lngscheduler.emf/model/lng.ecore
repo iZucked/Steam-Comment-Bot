@@ -610,8 +610,6 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//UUIDObject #//NamedObject #//AnnotatedObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="regasEfficiency" lowerBound="1"
-          eType="#//Percentage" defaultValueLiteral="1.0"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultCVvalue" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="22.8"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultWindowStart" lowerBound="1"
@@ -624,6 +622,8 @@
           lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultDischargeDuration"
           lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="Capabilities" upperBound="-1"
+          eType="#//port/PortCapability"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DistanceModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="distances" upperBound="-1"
@@ -641,6 +641,11 @@
     <eClassifiers xsi:type="ecore:EClass" name="CanalModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="canals" upperBound="-1"
           eType="#//port/Canal" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="PortCapability">
+      <eLiterals name="Load" literal="LOAD"/>
+      <eLiterals name="Discharge" value="1" literal="DISCHARGE"/>
+      <eLiterals name="Drydock" value="2" literal="DRYDOCK"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="cargo" nsURI="http://com.mmxlabs.lng.emf2/cargo" nsPrefix="com.mmxlabs.lng.emf.cargo">

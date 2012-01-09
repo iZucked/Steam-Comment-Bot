@@ -68,13 +68,13 @@ public class PortItemProvider
 			addNamePropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
-			addRegasEfficiencyPropertyDescriptor(object);
 			addDefaultCVvaluePropertyDescriptor(object);
 			addDefaultWindowStartPropertyDescriptor(object);
 			addDefaultSlotDurationPropertyDescriptor(object);
 			addShouldArriveColdPropertyDescriptor(object);
 			addDefaultLoadDurationPropertyDescriptor(object);
 			addDefaultDischargeDurationPropertyDescriptor(object);
+			addCapabilitiesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -137,28 +137,6 @@ public class PortItemProvider
 				 getString("_UI_Port_timeZone_feature"),
 				 getString("_UI_Port_timeZone_description"),
 				 PortPackage.Literals.PORT__TIME_ZONE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Regas Efficiency feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRegasEfficiencyPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_regasEfficiency_feature"),
-				 getString("_UI_Port_regasEfficiency_description"),
-				 PortPackage.Literals.PORT__REGAS_EFFICIENCY,
 				 true,
 				 false,
 				 false,
@@ -300,6 +278,28 @@ public class PortItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Capabilities feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCapabilitiesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_Capabilities_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_Capabilities_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__CAPABILITIES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Port.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -339,13 +339,13 @@ public class PortItemProvider
 			case PortPackage.PORT__NAME:
 			case PortPackage.PORT__NOTES:
 			case PortPackage.PORT__TIME_ZONE:
-			case PortPackage.PORT__REGAS_EFFICIENCY:
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 			case PortPackage.PORT__DEFAULT_WINDOW_START:
 			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
 			case PortPackage.PORT__SHOULD_ARRIVE_COLD:
 			case PortPackage.PORT__DEFAULT_LOAD_DURATION:
 			case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
+			case PortPackage.PORT__CAPABILITIES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

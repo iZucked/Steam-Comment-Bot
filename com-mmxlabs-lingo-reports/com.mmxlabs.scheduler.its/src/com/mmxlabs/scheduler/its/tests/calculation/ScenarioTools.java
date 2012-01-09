@@ -517,9 +517,6 @@ public class ScenarioTools {
 
 		e.setName("Other");
 		s.setName("Shipping");
-		s.setOwnership(1.0);
-		s.setTaxRate(0.0);
-		s.setTransferOffset(0);
 
 		final SalesContract sc = ContractFactory.eINSTANCE.createSalesContract();
 		final PurchaseContract pc = ContractFactory.eINSTANCE.createFixedPricePurchaseContract();
@@ -723,7 +720,7 @@ public class ScenarioTools {
 		for (final FuelQuantity fq : fuelQuantities)
 			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
 	}
-	
+
 	public static void printSequences(final Schedule result) {
 
 		int i = 1;
@@ -732,7 +729,6 @@ public class ScenarioTools {
 			ScenarioTools.printSequence(seq);
 		}
 
-		
 	}
 
 	public static void printSequence(final Sequence seq) {
@@ -742,8 +738,11 @@ public class ScenarioTools {
 			if (e instanceof Idle) {
 
 				final Idle i = (Idle) e;
+				
+				final String portName = i.getPort() == null ? "null" : i.getPort().getName();
+				
 				System.err.println("Idle:");
-				System.err.println("\tvessel state: " + i.getVesselState() + ", Duration: " + i.getEventDuration() + ", port: " + i.getPort().getName());
+				System.err.println("\tvessel state: " + i.getVesselState() + ", Duration: " + i.getEventDuration() + ", port: " + portName);
 				ScenarioTools.printFuel(i.getFuelUsage());
 
 			} else if (e instanceof CharterOutVisit) {
@@ -781,17 +780,19 @@ public class ScenarioTools {
 			}
 		}
 	}
-	
+
 	/**
 	 * Create a port using {@link PortFactory#eINSTANCE#createPort()} and give it a name.
-	 * @param name The name to give port.
+	 * 
+	 * @param name
+	 *            The name to give port.
 	 * @return The created port.
 	 */
 	public static Port createPort(final String name) {
 
 		final Port port = PortFactory.eINSTANCE.createPort();
 		port.setName(name);
-		
+
 		return port;
 	}
 }

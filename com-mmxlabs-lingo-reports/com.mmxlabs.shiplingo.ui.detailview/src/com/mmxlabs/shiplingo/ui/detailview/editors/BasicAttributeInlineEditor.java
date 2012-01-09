@@ -171,7 +171,11 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 	}
 
 	private synchronized void doUpdateDisplayWithValue() {
-		if (currentlySettingValue) {
+		doUpdateDisplayWithValue(false);
+	}
+	
+	private synchronized void doUpdateDisplayWithValue(final boolean allowRecursion) {
+		if (currentlySettingValue && !allowRecursion) {
 			return;
 		}
 		currentlySettingValue = true;
@@ -197,7 +201,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements
 		// check if msg is relevant
 		if (msg.getFeature() != null
 				&& updateOnChangeToFeature(msg.getFeature())) {
-			doUpdateDisplayWithValue();
+			doUpdateDisplayWithValue(feature.equals(msg.getFeature()) == false);
 		}
 		if (msg.getFeature() != null && msg.getFeature().equals(feature)) {
 			// it is a change to our feature

@@ -125,7 +125,10 @@ import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.Contract;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
+import scenario.contract.PurchaseContract;
+import scenario.contract.SalesContract;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
+import scenario.fleet.Drydock;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
 import scenario.market.MarketModel;
@@ -135,6 +138,7 @@ import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
 import scenario.port.Port;
+import scenario.port.PortCapability;
 import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.ChartViewer.IChartContentProvider;
@@ -167,6 +171,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.shiplingo.ui.autocorrector.AutoCorrector;
 import com.mmxlabs.shiplingo.ui.autocorrector.DateLocalisingCorrector;
+import com.mmxlabs.shiplingo.ui.autocorrector.SetPortForContractCorrector;
 import com.mmxlabs.shiplingo.ui.autocorrector.SlotIdCorrector;
 import com.mmxlabs.shiplingo.ui.autocorrector.SlotVolumeCorrector;
 import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
@@ -258,6 +263,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	};
 
 	final ScenarioRVP portProvider = new SimpleRVP(PortPackage.eINSTANCE.getPortModel_Ports()) {
+		private final Map<PortCapability, List<Pair<String, EObject>>> matchingValues = new HashMap<PortCapability, List<Pair<String, EObject>>>();
+		
 		@Override
 		protected void install() {
 			getScenario().getPortModel().eAdapters().add(this);
@@ -266,6 +273,90 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		@Override
 		protected EList<? extends EObject> getObjects() {
 			return getScenario().getPortModel().getPorts();
+		}
+
+		@Override
+		public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+			final List<Pair<String, EObject>> allValues = super.getAllowedValues(target, field);
+
+			// filter by contract
+			if (target instanceof Slot) {
+				return filterByContract((Slot) target);
+			}
+			
+			if (target instanceof PurchaseContract) {
+				return matchingValues.get(PortCapability.LOAD);
+			} else if (target instanceof SalesContract) {
+				return matchingValues.get(PortCapability.DISCHARGE);
+			} else if (target instanceof Drydock) {
+				return matchingValues.get(PortCapability.DRYDOCK);
+			}
+			
+			return allValues;
+		}
+
+		private List<Pair<String, EObject>> filterByContract(final Slot slot) {
+			final Contract contract = slot.getContract();
+			
+			List<Pair<String, EObject>> m;
+			if (slot instanceof LoadSlot) {
+				m = matchingValues.get(PortCapability.LOAD);
+			} else {
+				m =  matchingValues.get(PortCapability.DISCHARGE);
+			}
+			if (contract == null) {
+				return m;
+			} else {
+				final List<Port> ports = contract.getDefaultPorts();
+				if (ports.isEmpty()) return m;
+				final List<Pair<String, EObject>> filter = new ArrayList<Pair<String, EObject>>();
+				Iterator<Pair<String, EObject>> iterator = m.iterator();
+				while (iterator.hasNext()) {
+					final Pair<String, EObject> value = iterator.next();
+					if (ports.contains(value.getSecond())) {
+						filter.add(value);
+					}
+				}
+				return filter;
+			}
+		}
+		
+		@Override
+		protected void cacheValues() {
+			super.cacheValues();
+			matchingValues.clear();
+			for (final PortCapability pc : PortCapability.values()) {
+				final ArrayList<Pair<String, EObject>> matches = new ArrayList<Pair<String, EObject>>();
+				for (final Pair<String, EObject> value : cachedValues) {
+					if (value.getSecond() != null) {
+						final Port p = (Port) value.getSecond();
+						if (p.getCapabilities().isEmpty()) matches.add(value); //TODO this is a hack, possibly;
+						if (p.getCapabilities().contains(pc)) // this will be slow; may need to persuade EMF to use a hashset to be more sensible.
+							matches.add(value);
+					}
+				}
+				matchingValues.put(pc, matches);
+			}
+		}
+
+		@Override
+		protected boolean isRelevantTarget(Object target, Object feature) {
+			return super.isRelevantTarget(target, feature) || feature == PortPackage.eINSTANCE.getPort_Capabilities() || feature == CargoPackage.eINSTANCE.getSlot_Contract();
+		}
+
+		
+		
+		@Override
+		public boolean updateOnChangeToFeature(Object changedFeature) {
+			return super.updateOnChangeToFeature(changedFeature) || changedFeature == CargoPackage.eINSTANCE.getSlot_Contract();
+		}
+
+		@Override
+		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(EObject referer, EReference feature, EObject referenceValue) {
+			if (referer instanceof Slot) {
+				return Collections.singleton(new Pair<Notifier, List<Object>>(referer, Collections.singletonList((Object)CargoPackage.eINSTANCE.getSlot_Contract())));
+			}
+			return super.getNotifiers(referer, feature, referenceValue);
 		}
 	};
 
@@ -332,7 +423,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 					}
 
 					if (portContract != null) {
-						return portContract.getName() + " [from " + port.getName() + "]";
+						return "Default at " + port.getName() + " (" + portContract.getName() + ")";
 					} else {
 						return "empty";
 					}
@@ -391,7 +482,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 					}
 				}
 				notifiers.add(new Pair<Notifier, List<Object>>(port, Collections.singletonList((Object) namedObjectName)));
-
+				notifiers.add(new Pair<Notifier, List<Object>>(referer, Collections.singletonList((Object) CargoPackage.eINSTANCE.getSlot_Port())));
 				return notifiers;
 			}
 			return super.getNotifiers(referer, feature, referenceValue);
@@ -1150,6 +1241,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			autoCorrector.addCorrector(new SlotVolumeCorrector());
 			autoCorrector.addCorrector(new DateLocalisingCorrector());
 			autoCorrector.addCorrector(new SlotIdCorrector());
+			autoCorrector.addCorrector(new SetPortForContractCorrector());
 
 			final Scenario s = ((Scenario) (editingDomain.getResourceSet().getResources().get(0).getContents().get(0)));
 

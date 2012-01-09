@@ -103,7 +103,7 @@ class Match implements IFilter {
 					return ((Number) value).doubleValue() != numberValue.doubleValue();
 				}
 			}
-			return !(("" + value).toLowerCase().contains(lowerValue));
+			return !likeLowercaseString(value);
 		case GREATER:
 			if (value instanceof Number) {
 				if (numberValue != null) {

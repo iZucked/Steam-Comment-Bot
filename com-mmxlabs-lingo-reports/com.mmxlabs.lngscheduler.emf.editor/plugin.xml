@@ -110,6 +110,7 @@
                toolbarPath="scenarioGroup"
                tooltip="Removes all solutions and vessel assignments from this scenario">
          </action>
+         <!--
          <action
                class="com.mmxlabs.lngscheduler.emf.editor.actions.LinkStaticDataAction"
                id="com.mmxlabs.lngscheduler.emf.editor.actions.LinkStaticDataAction"
@@ -126,6 +127,7 @@
                toolbarPath="scenarioGroup"
                tooltip="Extract the static data from this scenario into a separate model">
          </action>
+         -->
       </actionSet>
    </extension>
 
