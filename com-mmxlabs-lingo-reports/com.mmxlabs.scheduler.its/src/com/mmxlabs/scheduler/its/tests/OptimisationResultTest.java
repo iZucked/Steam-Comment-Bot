@@ -93,8 +93,8 @@ public class OptimisationResultTest {
 			originalFitnesses.put("cargo-scheduler-cost-cooldown", 30692220L);
 			originalFitnesses.put("cargo-scheduler-charter-revenue", 0L);
 			originalFitnesses.put("cargo-scheduler-lateness", 726000000L);
-			originalFitnesses.put("cargo-scheduler-cost-base", 44356934L);
-			originalFitnesses.put("cargo-scheduler-cost-lng", 257071922L);
+			originalFitnesses.put("cargo-scheduler-cost-base", 44077092L);
+			originalFitnesses.put("cargo-scheduler-cost-lng", 257423625L);
 			originalFitnesses.put("cargo-scheduler-charter-cost", 0L);
 
 
@@ -104,8 +104,8 @@ public class OptimisationResultTest {
 			endFitnesses.put("cargo-scheduler-cost-cooldown", 30692220L);
 			endFitnesses.put("cargo-scheduler-charter-revenue", 0L);
 			endFitnesses.put("cargo-scheduler-lateness", 0L);
-			endFitnesses.put("cargo-scheduler-cost-base", 27356201L);
-			endFitnesses.put("cargo-scheduler-cost-lng", 213722761L);
+			endFitnesses.put("cargo-scheduler-cost-base", 27004381L);
+			endFitnesses.put("cargo-scheduler-cost-lng", 213956733L);
 			endFitnesses.put("cargo-scheduler-charter-cost", 0L);
 			// ↑ ↑ PASTE PRINTED MAP HERE ↑ ↑ //
 			

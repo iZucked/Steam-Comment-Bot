@@ -9,6 +9,10 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import scenario.cargo.Cargo;
+import scenario.fleet.CharterOut;
+import scenario.fleet.Drydock;
+import scenario.fleet.Vessel;
+import scenario.fleet.VesselClass;
 import scenario.port.Port;
 import scenario.schedule.Schedule;
 import scenario.schedule.Sequence;
@@ -118,5 +122,69 @@ public class SanityCheckTools {
 		}
 
 		return visitedPorts;
-	}	
+	}
+
+	/**
+	 * Add a load of drydocks from every port to every port. Also add constraints to each dry dock.
+	 * 
+	 * @param ports
+	 *            The ports to add dry docks to/from
+	 * @param allowedDrydockVessel
+	 *            A vessel to add to all dry dock's allowed-vessel list. If null it will not be added to any dry dock.
+	 * @param allowedDrydockVesselClass
+	 *            A vessel class to add to all dry dock's allowed-vesselclass list. If null it will not be added to any dry dock.
+	 */
+	public static void addDrydocks(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedDrydockVessel, final VesselClass allowedDrydockVesselClass) {
+
+		Date start = new Date(System.currentTimeMillis());
+		for (Port portA : ports) {
+			for (Port portB : ports) {
+				if (!portA.equals(portB)) {
+
+					final Drydock dry = csc.addDryDock(portB, start, 1);
+
+					if (allowedDrydockVessel != null)
+						dry.getVessels().add(allowedDrydockVessel);
+					if (allowedDrydockVesselClass != null)
+						dry.getVesselClasses().add(allowedDrydockVesselClass);
+
+					start.setTime(start.getTime() + TimeUnit.HOURS.toMillis(2));
+				}
+			}
+		}
+	}
+
+	/**
+	 * Adds a charter out from every port to every port. Also adds constraints to each charter out.
+	 * 
+	 * @param ports
+	 *            The ports to add charter outs to/from
+	 * @param allowedCharterOutVessel
+	 *            A vessel to add to all charter outs allowed-vessel list. If null it will not be added to any charter out.
+	 * @param allowedCharterOutVesselClass
+	 *            A class of vessel to add to every charter out's allowed vessel class list. If null it will not be added to any charter out.
+	 */
+	public static void addCharterOuts(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedCharterOutVessel, final VesselClass allowedCharterOutVesselClass, final float cvValue,
+			final float dischargePrice) {
+
+		Date start = new Date(System.currentTimeMillis());
+		int charterOutDurationDays = 1;
+		for (Port portA : ports) {
+			for (Port portB : ports) {
+
+				final String id = "CharterOut " + portA.getName() + " to " + portB.getName();
+
+				CharterOut charterOut = csc.addCharterOut(id, portA, portB, start, 1000, charterOutDurationDays, cvValue, dischargePrice, 100, 0);
+
+				if (allowedCharterOutVessel != null)
+					charterOut.getVessels().add(allowedCharterOutVessel);
+				if (allowedCharterOutVesselClass != null)
+					charterOut.getVesselClasses().add(allowedCharterOutVesselClass);
+
+				if (portA.equals(portB))
+					charterOutDurationDays /= 2;
+
+			}
+		}
+	}
 }
