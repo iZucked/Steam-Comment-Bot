@@ -17,7 +17,7 @@ import scenario.ScenarioPackage;
 import com.mmxlabs.common.Pair;
 
 public abstract class SimpleRVP extends ScenarioRVP {
-		private List<Pair<String, EObject>> cachedValues = null;
+		protected List<Pair<String, EObject>> cachedValues = null;
 		private final EReference containingReference;
 
 		public SimpleRVP(final EReference containingReference) {
