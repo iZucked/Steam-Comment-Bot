@@ -19,6 +19,7 @@ import scenario.optimiser.lso.ThresholderSettings;
 
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
@@ -56,6 +57,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(of, OrderedSequenceElementsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(of, PortTypeConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(of, TravelTimeConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(of, PortExclusionConstraintCheckerFactory.NAME, true));
 		}
 
 		// create objectives

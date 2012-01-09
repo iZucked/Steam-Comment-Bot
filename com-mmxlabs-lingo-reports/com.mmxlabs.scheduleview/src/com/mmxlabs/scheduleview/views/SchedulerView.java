@@ -138,6 +138,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			public boolean lockHeaderOnVerticalScroll() {
 				return true;
 			}
+			
+			@Override
+			public boolean drawFillsToBottomWhenUsingGanttSections() {
+				return true;
+			}
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL

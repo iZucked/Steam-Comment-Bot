@@ -6,6 +6,7 @@ package scenario.port.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -29,6 +30,7 @@ import scenario.port.CanalModel;
 import scenario.port.DistanceLine;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
+import scenario.port.PortCapability;
 import scenario.port.PortFactory;
 import scenario.port.PortModel;
 import scenario.port.PortPackage;
@@ -87,6 +89,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	private EClass canalModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum portCapabilityEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -222,7 +231,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_RegasEfficiency() {
+	public EAttribute getPort_DefaultCVvalue() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -231,7 +240,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_DefaultCVvalue() {
+	public EAttribute getPort_DefaultWindowStart() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -240,7 +249,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_DefaultWindowStart() {
+	public EAttribute getPort_DefaultSlotDuration() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -249,7 +258,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_DefaultSlotDuration() {
+	public EAttribute getPort_ShouldArriveCold() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -258,7 +267,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_ShouldArriveCold() {
+	public EAttribute getPort_DefaultLoadDuration() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -267,7 +276,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_DefaultLoadDuration() {
+	public EAttribute getPort_DefaultDischargeDuration() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -276,7 +285,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_DefaultDischargeDuration() {
+	public EAttribute getPort_Capabilities() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -375,6 +384,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getPortCapability() {
+		return portCapabilityEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PortFactory getPortFactory() {
 		return (PortFactory)getEFactoryInstance();
 	}
@@ -403,13 +421,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		portEClass = createEClass(PORT);
 		createEAttribute(portEClass, PORT__TIME_ZONE);
-		createEAttribute(portEClass, PORT__REGAS_EFFICIENCY);
 		createEAttribute(portEClass, PORT__DEFAULT_CVVALUE);
 		createEAttribute(portEClass, PORT__DEFAULT_WINDOW_START);
 		createEAttribute(portEClass, PORT__DEFAULT_SLOT_DURATION);
 		createEAttribute(portEClass, PORT__SHOULD_ARRIVE_COLD);
 		createEAttribute(portEClass, PORT__DEFAULT_LOAD_DURATION);
 		createEAttribute(portEClass, PORT__DEFAULT_DISCHARGE_DURATION);
+		createEAttribute(portEClass, PORT__CAPABILITIES);
 
 		distanceModelEClass = createEClass(DISTANCE_MODEL);
 		createEReference(distanceModelEClass, DISTANCE_MODEL__DISTANCES);
@@ -424,6 +442,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		canalModelEClass = createEClass(CANAL_MODEL);
 		createEReference(canalModelEClass, CANAL_MODEL__CANALS);
+
+		// Create enums
+		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
 	}
 
 	/**
@@ -469,13 +490,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPort_TimeZone(), ecorePackage.getEString(), "timeZone", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_RegasEfficiency(), theScenarioPackage.getPercentage(), "regasEfficiency", "1.0", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultCVvalue(), ecorePackage.getEFloat(), "defaultCVvalue", "22.8", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultWindowStart(), ecorePackage.getEInt(), "defaultWindowStart", "0", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultSlotDuration(), ecorePackage.getEInt(), "defaultSlotDuration", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_ShouldArriveCold(), ecorePackage.getEBoolean(), "shouldArriveCold", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultLoadDuration(), ecorePackage.getEInt(), "defaultLoadDuration", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultDischargeDuration(), ecorePackage.getEInt(), "defaultDischargeDuration", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_Capabilities(), this.getPortCapability(), "Capabilities", null, 0, -1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(distanceModelEClass, DistanceModel.class, "DistanceModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDistanceModel_Distances(), this.getDistanceLine(), null, "distances", null, 0, -1, DistanceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -490,6 +511,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		initEClass(canalModelEClass, CanalModel.class, "CanalModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCanalModel_Canals(), this.getCanal(), null, "canals", null, 0, -1, CanalModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(portCapabilityEEnum, PortCapability.class, "PortCapability");
+		addEEnumLiteral(portCapabilityEEnum, PortCapability.LOAD);
+		addEEnumLiteral(portCapabilityEEnum, PortCapability.DISCHARGE);
+		addEEnumLiteral(portCapabilityEEnum, PortCapability.DRYDOCK);
 	}
 
 } //PortPackageImpl

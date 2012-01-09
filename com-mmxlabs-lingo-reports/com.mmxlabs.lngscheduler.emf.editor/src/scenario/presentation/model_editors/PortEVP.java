@@ -270,11 +270,6 @@ public class PortEVP extends NamedObjectEVP {
 				);
 		addColumn("Timezone", manipulator, manipulator);
 
-		addTypicalColumn(
-				"Regas Efficiency",
-				new PercentageAttributeManipulator(PortPackage.eINSTANCE
-						.getPort_RegasEfficiency(), part.getEditingDomain()));
-
 		if (part.getScenario().getContractModel() != null) {
 			addTypicalColumn("Default Contract",
 					new DefaultContractManipulator(part.getEditingDomain(),

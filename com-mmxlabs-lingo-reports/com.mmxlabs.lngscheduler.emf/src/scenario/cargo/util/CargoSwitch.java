@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import scenario.AnnotatedObject;
+import scenario.cargo.*;
 import scenario.cargo.Cargo;
 import scenario.cargo.CargoModel;
 import scenario.cargo.CargoPackage;

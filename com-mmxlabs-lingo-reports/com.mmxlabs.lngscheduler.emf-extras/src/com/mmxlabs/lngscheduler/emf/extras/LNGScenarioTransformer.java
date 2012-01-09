@@ -553,17 +553,7 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	private int convertTime(final Date earliest, final DateAndOptionalTime windowStart, final Port port) {
-		if (windowStart.isOnlyDate()) {
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(port.getTimeZone()));
-
-			c.setTime(windowStart);
-
-			c.set(Calendar.HOUR_OF_DAY, port.getDefaultWindowStart());
-
-			return convertTime(earliest, c.getTime());
-		} else {
-			return convertTime(earliest, windowStart);
-		}
+		return convertTime(earliest, windowStart.getDateWithDefaults(port));
 	}
 
 	/**

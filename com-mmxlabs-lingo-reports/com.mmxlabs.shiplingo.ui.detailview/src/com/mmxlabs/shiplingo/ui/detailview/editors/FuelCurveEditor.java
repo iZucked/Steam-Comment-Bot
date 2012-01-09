@@ -6,12 +6,12 @@ package com.mmxlabs.shiplingo.ui.detailview.editors;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.window.Window;
 
 import scenario.fleet.VesselStateAttributes;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
-import com.mmxlabs.shiplingo.ui.detailview.editors.dialogs.VesselStateAttributesDialog;
+import com.mmxlabs.shiplingo.ui.detailview.editors.dialogs.VesselStateAttributesDialog2;
 
 public class FuelCurveEditor extends DialogInlineEditor {
 
@@ -22,14 +22,13 @@ public class FuelCurveEditor extends DialogInlineEditor {
 
 	@Override
 	protected Object displayDialog(final Object currentValue) {
-		final VesselStateAttributesDialog vsaDialog = new VesselStateAttributesDialog(getShell(),
-				(SWT.DIALOG_TRIM & ~SWT.CLOSE)
-				| SWT.APPLICATION_MODAL);
+		final VesselStateAttributesDialog2 dialog = new VesselStateAttributesDialog2(getShell());
 		
-		final VesselStateAttributes output = vsaDialog.open((VesselStateAttributes) input, true);
-		
-		if (output == null) return null;
-		return output.getFuelConsumptionCurve();
+		if (dialog.open((VesselStateAttributes) input, true) == Window.OK) {
+			return dialog.getResult().getFuelConsumptionCurve();
+		} else {
+			return null;
+		}
 	}
 
 	@Override

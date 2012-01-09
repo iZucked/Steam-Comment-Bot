@@ -323,6 +323,9 @@ public class ScenarioTools {
 
 		e.setName("Other");
 		s.setName("Shipping");
+		s.setOwnership(1.0);
+		s.setTaxRate(0.0);
+		s.setTransferOffset(0);
 
 		final SalesContract sc = ContractFactory.eINSTANCE.createSalesContract();
 		final PurchaseContract pc = ContractFactory.eINSTANCE.createFixedPricePurchaseContract();

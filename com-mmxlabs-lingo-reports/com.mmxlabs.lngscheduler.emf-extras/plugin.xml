@@ -398,7 +398,7 @@
             	severity="ERROR"
             	statusCode="1">
             	<message>
-            		Vessel Event {0} has invalid start and end dates - they must both be set, and the start date must be before the end date.
+            		Vessel Event {0} has invalid start and end dates - they must both be set, and the start date must not be after the end date.
             	</message>
             	<description>
             		The start end end window of a vessel event must be set and consistent.
@@ -438,6 +438,31 @@
             	</description>
             	<target class="VesselClassCost" />
             </constraint>
+   <constraint
+         class="com.mmxlabs.lngscheduler.emf.extras.validation.NameSetConstraint"
+         id="com.mmxlabs.lngscheduler.emf-extras.constraints.nameset"
+         isEnabledByDefault="true"
+         lang="Java"
+         mode="Batch"
+         name="Name or ID Valid"
+         severity="ERROR"
+         statusCode="1">
+      <message>
+         {0} has an invalid {1} - the {1} must not be empty or composed of whitespace.
+      </message>
+      <description>
+         Things with names or ID fields (such as cargoes, vessel events, ports and so on) must have a name or ID set to a non-empty non-blank value.
+      </description>
+      <target
+            class="NamedObject">
+      </target>
+      <target
+            class="Cargo">
+      </target>
+      <target
+            class="VesselEvent">
+      </target>
+   </constraint>
             
          </constraints>
       </constraintProvider>

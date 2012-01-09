@@ -28,14 +28,14 @@ import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getId <em>Id</em>}</li>
- *   <li>{@link scenario.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
- *   <li>{@link scenario.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
+ *   <li>{@link scenario.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
+ *   <li>{@link scenario.cargo.impl.SlotImpl#getFixedPrice <em>Fixed Price</em>}</li>
+ *   <li>{@link scenario.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
+ *   <li>{@link scenario.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getWindowDuration <em>Window Duration</em>}</li>
  *   <li>{@link scenario.cargo.impl.SlotImpl#getSlotDuration <em>Slot Duration</em>}</li>
- *   <li>{@link scenario.cargo.impl.SlotImpl#getFixedPrice <em>Fixed Price</em>}</li>
- *   <li>{@link scenario.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -61,6 +61,69 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected String id = ID_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port port;
+
+	/**
+	 * The default value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getWindowStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final DateAndOptionalTime WINDOW_START_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getWindowStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected DateAndOptionalTime windowStart = WINDOW_START_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getContract()
+	 * @generated
+	 * @ordered
+	 */
+	protected Contract contract;
+
+	/**
+	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getFixedPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final float FIXED_PRICE_EDEFAULT = 0.0F;
+
+	/**
+	 * The cached value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getFixedPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected float fixedPrice = FIXED_PRICE_EDEFAULT;
+
+	/**
+	 * This is true if the Fixed Price attribute has been set. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fixedPriceESet;
 
 	/**
 	 * The default value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
@@ -117,33 +180,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	protected boolean maxQuantityESet;
 
 	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port port;
-
-	/**
-	 * The default value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getWindowStart()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final DateAndOptionalTime WINDOW_START_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getWindowStart()
-	 * @generated
-	 * @ordered
-	 */
-	protected DateAndOptionalTime windowStart = WINDOW_START_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getWindowDuration() <em>Window Duration</em>}' attribute.
 	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -191,42 +227,6 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean slotDurationESet;
-
-	/**
-	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getFixedPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final float FIXED_PRICE_EDEFAULT = 0.0F;
-
-	/**
-	 * The cached value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getFixedPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected float fixedPrice = FIXED_PRICE_EDEFAULT;
-
-	/**
-	 * This is true if the Fixed Price attribute has been set. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean fixedPriceESet;
-
-	/**
-	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected Contract contract;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -555,7 +555,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		final java.util.Calendar calendar = java.util.Calendar.getInstance(
 		java.util.TimeZone.getTimeZone(getPort().getTimeZone())
 		);
-		calendar.setTime(getWindowStart());
+		calendar.setTime(getWindowStart().getDateWithDefaults(getPort()));
 		return calendar;
 	}
 
@@ -564,7 +564,7 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	 * @generated
 	 */
 	public Date getWindowEnd() {
-		return new Date(getWindowStart()
+		return new Date(getWindowStart().getDateWithDefaults(getPort())
 								.getTime()
 								+ javax.management.timer.Timer.ONE_HOUR
 								* getWindowDuration());
@@ -612,8 +612,11 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	public int getSlotOrContractMinQuantity(Object scenario) {
 		if (isSetMinQuantity())
 			return getMinQuantity();
-		else
-			return getSlotOrPortContract(scenario).getMinQuantity();
+		else {
+			final scenario.contract.Contract c = getSlotOrPortContract(scenario);
+			if (c == null) return getMinQuantity();
+			return c.getMinQuantity();
+		}
 	}
 
 	/**
@@ -624,8 +627,11 @@ public class SlotImpl extends EObjectImpl implements Slot {
 	public int getSlotOrContractMaxQuantity(Object scenario) {
 		if (isSetMaxQuantity())
 			return getMaxQuantity();
-		else
-			return getSlotOrPortContract(scenario).getMaxQuantity();
+		else {
+			final scenario.contract.Contract c = getSlotOrPortContract(scenario);
+			if (c == null) return getMaxQuantity();
+			return c.getMaxQuantity();
+		}
 	}
 
 	/**
@@ -637,24 +643,24 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		switch (featureID) {
 			case CargoPackage.SLOT__ID:
 				return getId();
-			case CargoPackage.SLOT__MIN_QUANTITY:
-				return getMinQuantity();
-			case CargoPackage.SLOT__MAX_QUANTITY:
-				return getMaxQuantity();
 			case CargoPackage.SLOT__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
 			case CargoPackage.SLOT__WINDOW_START:
 				return getWindowStart();
+			case CargoPackage.SLOT__CONTRACT:
+				if (resolve) return getContract();
+				return basicGetContract();
+			case CargoPackage.SLOT__FIXED_PRICE:
+				return getFixedPrice();
+			case CargoPackage.SLOT__MIN_QUANTITY:
+				return getMinQuantity();
+			case CargoPackage.SLOT__MAX_QUANTITY:
+				return getMaxQuantity();
 			case CargoPackage.SLOT__WINDOW_DURATION:
 				return getWindowDuration();
 			case CargoPackage.SLOT__SLOT_DURATION:
 				return getSlotDuration();
-			case CargoPackage.SLOT__FIXED_PRICE:
-				return getFixedPrice();
-			case CargoPackage.SLOT__CONTRACT:
-				if (resolve) return getContract();
-				return basicGetContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -669,29 +675,29 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__ID:
 				setId((String)newValue);
 				return;
-			case CargoPackage.SLOT__MIN_QUANTITY:
-				setMinQuantity((Integer)newValue);
-				return;
-			case CargoPackage.SLOT__MAX_QUANTITY:
-				setMaxQuantity((Integer)newValue);
-				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)newValue);
 				return;
 			case CargoPackage.SLOT__WINDOW_START:
 				setWindowStart((DateAndOptionalTime)newValue);
 				return;
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)newValue);
+				return;
+			case CargoPackage.SLOT__FIXED_PRICE:
+				setFixedPrice((Float)newValue);
+				return;
+			case CargoPackage.SLOT__MIN_QUANTITY:
+				setMinQuantity((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__MAX_QUANTITY:
+				setMaxQuantity((Integer)newValue);
+				return;
 			case CargoPackage.SLOT__WINDOW_DURATION:
 				setWindowDuration((Integer)newValue);
 				return;
 			case CargoPackage.SLOT__SLOT_DURATION:
 				setSlotDuration((Integer)newValue);
-				return;
-			case CargoPackage.SLOT__FIXED_PRICE:
-				setFixedPrice((Float)newValue);
-				return;
-			case CargoPackage.SLOT__CONTRACT:
-				setContract((Contract)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -707,29 +713,29 @@ public class SlotImpl extends EObjectImpl implements Slot {
 			case CargoPackage.SLOT__ID:
 				setId(ID_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__MIN_QUANTITY:
-				unsetMinQuantity();
-				return;
-			case CargoPackage.SLOT__MAX_QUANTITY:
-				unsetMaxQuantity();
-				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)null);
 				return;
 			case CargoPackage.SLOT__WINDOW_START:
 				setWindowStart(WINDOW_START_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)null);
+				return;
+			case CargoPackage.SLOT__FIXED_PRICE:
+				unsetFixedPrice();
+				return;
+			case CargoPackage.SLOT__MIN_QUANTITY:
+				unsetMinQuantity();
+				return;
+			case CargoPackage.SLOT__MAX_QUANTITY:
+				unsetMaxQuantity();
+				return;
 			case CargoPackage.SLOT__WINDOW_DURATION:
 				setWindowDuration(WINDOW_DURATION_EDEFAULT);
 				return;
 			case CargoPackage.SLOT__SLOT_DURATION:
 				unsetSlotDuration();
-				return;
-			case CargoPackage.SLOT__FIXED_PRICE:
-				unsetFixedPrice();
-				return;
-			case CargoPackage.SLOT__CONTRACT:
-				setContract((Contract)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -744,22 +750,22 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		switch (featureID) {
 			case CargoPackage.SLOT__ID:
 				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
-			case CargoPackage.SLOT__MIN_QUANTITY:
-				return isSetMinQuantity();
-			case CargoPackage.SLOT__MAX_QUANTITY:
-				return isSetMaxQuantity();
 			case CargoPackage.SLOT__PORT:
 				return port != null;
 			case CargoPackage.SLOT__WINDOW_START:
 				return WINDOW_START_EDEFAULT == null ? windowStart != null : !WINDOW_START_EDEFAULT.equals(windowStart);
+			case CargoPackage.SLOT__CONTRACT:
+				return contract != null;
+			case CargoPackage.SLOT__FIXED_PRICE:
+				return isSetFixedPrice();
+			case CargoPackage.SLOT__MIN_QUANTITY:
+				return isSetMinQuantity();
+			case CargoPackage.SLOT__MAX_QUANTITY:
+				return isSetMaxQuantity();
 			case CargoPackage.SLOT__WINDOW_DURATION:
 				return windowDuration != WINDOW_DURATION_EDEFAULT;
 			case CargoPackage.SLOT__SLOT_DURATION:
 				return isSetSlotDuration();
-			case CargoPackage.SLOT__FIXED_PRICE:
-				return isSetFixedPrice();
-			case CargoPackage.SLOT__CONTRACT:
-				return contract != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -799,18 +805,18 @@ public class SlotImpl extends EObjectImpl implements Slot {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (id: ");
 		result.append(id);
+		result.append(", windowStart: ");
+		result.append(windowStart);
+		result.append(", fixedPrice: ");
+		if (fixedPriceESet) result.append(fixedPrice); else result.append("<unset>");
 		result.append(", minQuantity: ");
 		if (minQuantityESet) result.append(minQuantity); else result.append("<unset>");
 		result.append(", maxQuantity: ");
 		if (maxQuantityESet) result.append(maxQuantity); else result.append("<unset>");
-		result.append(", windowStart: ");
-		result.append(windowStart);
 		result.append(", windowDuration: ");
 		result.append(windowDuration);
 		result.append(", slotDuration: ");
 		if (slotDurationESet) result.append(slotDuration); else result.append("<unset>");
-		result.append(", fixedPrice: ");
-		if (fixedPriceESet) result.append(fixedPrice); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

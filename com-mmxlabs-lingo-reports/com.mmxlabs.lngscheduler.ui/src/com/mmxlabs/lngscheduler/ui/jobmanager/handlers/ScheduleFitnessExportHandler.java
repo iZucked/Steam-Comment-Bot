@@ -31,7 +31,7 @@ public class ScheduleFitnessExportHandler extends AbstractHandler {
 				.getActiveWorkbenchWindowChecked(event);
 
 		ISelection selection = window.getSelectionService().getSelection();
-		System.out.println("Selection = " + selection);
+
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection items = (IStructuredSelection) selection;
 			

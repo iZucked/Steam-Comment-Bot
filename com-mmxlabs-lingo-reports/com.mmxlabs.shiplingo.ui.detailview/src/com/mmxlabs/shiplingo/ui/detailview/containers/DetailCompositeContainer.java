@@ -31,9 +31,17 @@ public class DetailCompositeContainer {
 	private final Map<EClass, AbstractDetailComposite> classToComposite = new HashMap<EClass, AbstractDetailComposite>();
 	private final IValueProviderProvider valueProviderProvider;
 	private final EditingDomain editingDomain;
-	private final ICommandProcessor processor;
+	private ICommandProcessor processor;
 	private final IInlineEditorWrapper wrapper;
 	private boolean lockedForEditing = false;
+	
+	public ICommandProcessor getProcessor() {
+		return processor;
+	}
+
+	public void setProcessor(ICommandProcessor processor) {
+		this.processor = processor;
+	}
 
 	public DetailCompositeContainer(
 			IValueProviderProvider valueProviderProvider,

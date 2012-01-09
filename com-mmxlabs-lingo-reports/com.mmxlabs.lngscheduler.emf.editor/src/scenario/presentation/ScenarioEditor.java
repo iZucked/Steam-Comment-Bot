@@ -125,7 +125,10 @@ import scenario.cargo.provider.CargoItemProviderAdapterFactory;
 import scenario.contract.Contract;
 import scenario.contract.ContractModel;
 import scenario.contract.ContractPackage;
+import scenario.contract.PurchaseContract;
+import scenario.contract.SalesContract;
 import scenario.contract.provider.ContractItemProviderAdapterFactory;
+import scenario.fleet.Drydock;
 import scenario.fleet.FleetPackage;
 import scenario.fleet.provider.FleetItemProviderAdapterFactory;
 import scenario.market.MarketModel;
@@ -135,6 +138,7 @@ import scenario.market.provider.MarketItemProviderAdapterFactory;
 import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
 import scenario.port.Port;
+import scenario.port.PortCapability;
 import scenario.port.PortPackage;
 import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.ChartViewer.IChartContentProvider;
@@ -258,6 +262,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	};
 
 	final ScenarioRVP portProvider = new SimpleRVP(PortPackage.eINSTANCE.getPortModel_Ports()) {
+		private final Map<PortCapability, List<Pair<String, EObject>>> matchingValues = new HashMap<PortCapability, List<Pair<String, EObject>>>();
+		
 		@Override
 		protected void install() {
 			getScenario().getPortModel().eAdapters().add(this);
@@ -266,6 +272,44 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		@Override
 		protected EList<? extends EObject> getObjects() {
 			return getScenario().getPortModel().getPorts();
+		}
+
+		@Override
+		public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+			final List<Pair<String, EObject>> allValues = super.getAllowedValues(target, field);
+
+			if (target instanceof LoadSlot || target instanceof PurchaseContract) {
+				return matchingValues.get(PortCapability.LOAD);
+			} else if (target instanceof Slot || target instanceof SalesContract) {
+				return matchingValues.get(PortCapability.DISCHARGE);
+			} else if (target instanceof Drydock) {
+				return matchingValues.get(PortCapability.DRYDOCK);
+			}
+			
+			return allValues;
+		}
+
+		@Override
+		protected void cacheValues() {
+			super.cacheValues();
+			matchingValues.clear();
+			for (final PortCapability pc : PortCapability.values()) {
+				final ArrayList<Pair<String, EObject>> matches = new ArrayList<Pair<String, EObject>>();
+				for (final Pair<String, EObject> value : cachedValues) {
+					if (value.getSecond() != null) {
+						final Port p = (Port) value.getSecond();
+						if (p.getCapabilities().isEmpty()) matches.add(value); //TODO this is a hack, possibly;
+						if (p.getCapabilities().contains(pc)) // this will be slow; may need to persuade EMF to use a hashset to be more sensible.
+							matches.add(value);
+					}
+				}
+				matchingValues.put(pc, matches);
+			}
+		}
+
+		@Override
+		protected boolean isRelevantTarget(Object target, Object feature) {
+			return super.isRelevantTarget(target, feature) || feature == PortPackage.eINSTANCE.getPort_Capabilities();
 		}
 	};
 

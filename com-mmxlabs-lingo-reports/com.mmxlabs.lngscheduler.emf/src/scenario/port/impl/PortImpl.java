@@ -6,18 +6,21 @@ package scenario.port.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import scenario.AnnotatedObject;
 import scenario.NamedObject;
 import scenario.ScenarioObject;
 import scenario.ScenarioPackage;
 import scenario.impl.UUIDObjectImpl;
 import scenario.port.Port;
+import scenario.port.PortCapability;
 import scenario.port.PortPackage;
 
 /**
@@ -30,13 +33,13 @@ import scenario.port.PortPackage;
  *   <li>{@link scenario.port.impl.PortImpl#getName <em>Name</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
- *   <li>{@link scenario.port.impl.PortImpl#getRegasEfficiency <em>Regas Efficiency</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultCVvalue <em>Default CVvalue</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultWindowStart <em>Default Window Start</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultSlotDuration <em>Default Slot Duration</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#isShouldArriveCold <em>Should Arrive Cold</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultLoadDuration <em>Default Load Duration</em>}</li>
  *   <li>{@link scenario.port.impl.PortImpl#getDefaultDischargeDuration <em>Default Discharge Duration</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getCapabilities <em>Capabilities</em>}</li>
  * </ul>
  * </p>
  *
@@ -102,26 +105,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * @ordered
 	 */
 	protected String timeZone = TIME_ZONE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getRegasEfficiency() <em>Regas Efficiency</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRegasEfficiency()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final Double REGAS_EFFICIENCY_EDEFAULT = new Double(1.0);
-
-	/**
-	 * The cached value of the '{@link #getRegasEfficiency() <em>Regas Efficiency</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRegasEfficiency()
-	 * @generated
-	 * @ordered
-	 */
-	protected Double regasEfficiency = REGAS_EFFICIENCY_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDefaultCVvalue() <em>Default CVvalue</em>}' attribute.
@@ -244,6 +227,16 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected int defaultDischargeDuration = DEFAULT_DISCHARGE_DURATION_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getCapabilities() <em>Capabilities</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCapabilities()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PortCapability> capabilities;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -332,27 +325,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		timeZone = newTimeZone;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__TIME_ZONE, oldTimeZone, timeZone));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Double getRegasEfficiency() {
-		return regasEfficiency;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setRegasEfficiency(Double newRegasEfficiency) {
-		Double oldRegasEfficiency = regasEfficiency;
-		regasEfficiency = newRegasEfficiency;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__REGAS_EFFICIENCY, oldRegasEfficiency, regasEfficiency));
 	}
 
 	/**
@@ -486,6 +458,18 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<PortCapability> getCapabilities() {
+		if (capabilities == null) {
+			capabilities = new EDataTypeUniqueEList<PortCapability>(PortCapability.class, this, PortPackage.PORT__CAPABILITIES);
+		}
+		return capabilities;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -495,8 +479,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return getNotes();
 			case PortPackage.PORT__TIME_ZONE:
 				return getTimeZone();
-			case PortPackage.PORT__REGAS_EFFICIENCY:
-				return getRegasEfficiency();
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 				return getDefaultCVvalue();
 			case PortPackage.PORT__DEFAULT_WINDOW_START:
@@ -509,6 +491,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return getDefaultLoadDuration();
 			case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
 				return getDefaultDischargeDuration();
+			case PortPackage.PORT__CAPABILITIES:
+				return getCapabilities();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -518,6 +502,7 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -529,9 +514,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return;
 			case PortPackage.PORT__TIME_ZONE:
 				setTimeZone((String)newValue);
-				return;
-			case PortPackage.PORT__REGAS_EFFICIENCY:
-				setRegasEfficiency((Double)newValue);
 				return;
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 				setDefaultCVvalue((Float)newValue);
@@ -550,6 +532,10 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return;
 			case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
 				setDefaultDischargeDuration((Integer)newValue);
+				return;
+			case PortPackage.PORT__CAPABILITIES:
+				getCapabilities().clear();
+				getCapabilities().addAll((Collection<? extends PortCapability>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -572,9 +558,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 			case PortPackage.PORT__TIME_ZONE:
 				setTimeZone(TIME_ZONE_EDEFAULT);
 				return;
-			case PortPackage.PORT__REGAS_EFFICIENCY:
-				setRegasEfficiency(REGAS_EFFICIENCY_EDEFAULT);
-				return;
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 				setDefaultCVvalue(DEFAULT_CVVALUE_EDEFAULT);
 				return;
@@ -592,6 +575,9 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return;
 			case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
 				setDefaultDischargeDuration(DEFAULT_DISCHARGE_DURATION_EDEFAULT);
+				return;
+			case PortPackage.PORT__CAPABILITIES:
+				getCapabilities().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -611,8 +597,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case PortPackage.PORT__TIME_ZONE:
 				return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
-			case PortPackage.PORT__REGAS_EFFICIENCY:
-				return REGAS_EFFICIENCY_EDEFAULT == null ? regasEfficiency != null : !REGAS_EFFICIENCY_EDEFAULT.equals(regasEfficiency);
 			case PortPackage.PORT__DEFAULT_CVVALUE:
 				return defaultCVvalue != DEFAULT_CVVALUE_EDEFAULT;
 			case PortPackage.PORT__DEFAULT_WINDOW_START:
@@ -625,6 +609,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				return defaultLoadDuration != DEFAULT_LOAD_DURATION_EDEFAULT;
 			case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
 				return defaultDischargeDuration != DEFAULT_DISCHARGE_DURATION_EDEFAULT;
+			case PortPackage.PORT__CAPABILITIES:
+				return capabilities != null && !capabilities.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -739,8 +725,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		result.append(notes);
 		result.append(", timeZone: ");
 		result.append(timeZone);
-		result.append(", regasEfficiency: ");
-		result.append(regasEfficiency);
 		result.append(", defaultCVvalue: ");
 		result.append(defaultCVvalue);
 		result.append(", defaultWindowStart: ");
@@ -753,6 +737,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		result.append(defaultLoadDuration);
 		result.append(", defaultDischargeDuration: ");
 		result.append(defaultDischargeDuration);
+		result.append(", Capabilities: ");
+		result.append(capabilities);
 		result.append(')');
 		return result.toString();
 	}

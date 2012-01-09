@@ -4,6 +4,7 @@
  */
 package scenario.port;
 
+import org.eclipse.emf.common.util.EList;
 import scenario.AnnotatedObject;
 import scenario.NamedObject;
 import scenario.UUIDObject;
@@ -17,13 +18,13 @@ import scenario.UUIDObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link scenario.port.Port#getTimeZone <em>Time Zone</em>}</li>
- *   <li>{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultCVvalue <em>Default CVvalue</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultWindowStart <em>Default Window Start</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultSlotDuration <em>Default Slot Duration</em>}</li>
  *   <li>{@link scenario.port.Port#isShouldArriveCold <em>Should Arrive Cold</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultLoadDuration <em>Default Load Duration</em>}</li>
  *   <li>{@link scenario.port.Port#getDefaultDischargeDuration <em>Default Discharge Duration</em>}</li>
+ *   <li>{@link scenario.port.Port#getCapabilities <em>Capabilities</em>}</li>
  * </ul>
  * </p>
  *
@@ -57,33 +58,6 @@ public interface Port extends UUIDObject, NamedObject, AnnotatedObject {
 	 * @generated
 	 */
 	void setTimeZone(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Regas Efficiency</b></em>' attribute.
-	 * The default value is <code>"1.0"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Regas Efficiency</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Regas Efficiency</em>' attribute.
-	 * @see #setRegasEfficiency(Double)
-	 * @see scenario.port.PortPackage#getPort_RegasEfficiency()
-	 * @model default="1.0" dataType="scenario.Percentage" required="true"
-	 * @generated
-	 */
-	Double getRegasEfficiency();
-
-	/**
-	 * Sets the value of the '{@link scenario.port.Port#getRegasEfficiency <em>Regas Efficiency</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Regas Efficiency</em>' attribute.
-	 * @see #getRegasEfficiency()
-	 * @generated
-	 */
-	void setRegasEfficiency(Double value);
 
 	/**
 	 * Returns the value of the '<em><b>Default CVvalue</b></em>' attribute.
@@ -242,5 +216,23 @@ public interface Port extends UUIDObject, NamedObject, AnnotatedObject {
 	 * @generated
 	 */
 	void setDefaultDischargeDuration(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Capabilities</b></em>' attribute list.
+	 * The list contents are of type {@link scenario.port.PortCapability}.
+	 * The literals are from the enumeration {@link scenario.port.PortCapability}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Capabilities</em>' attribute list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Capabilities</em>' attribute list.
+	 * @see scenario.port.PortCapability
+	 * @see scenario.port.PortPackage#getPort_Capabilities()
+	 * @model
+	 * @generated
+	 */
+	EList<PortCapability> getCapabilities();
 
 } // Port

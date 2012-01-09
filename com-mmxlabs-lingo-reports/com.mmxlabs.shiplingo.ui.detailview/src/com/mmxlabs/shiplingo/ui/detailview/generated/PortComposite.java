@@ -96,14 +96,23 @@ public class PortComposite extends AbstractDetailComposite {
 	protected static void createPortFields(
 			final AbstractDetailComposite composite, final Composite mainGroup) {
     createTimeZoneEditor(composite, mainGroup);
-    createRegasEfficiencyEditor(composite, mainGroup);
     createDefaultCVvalueEditor(composite, mainGroup);
     createDefaultWindowStartEditor(composite, mainGroup);
     createDefaultSlotDurationEditor(composite, mainGroup);
     createShouldArriveColdEditor(composite, mainGroup);
     createDefaultLoadDurationEditor(composite, mainGroup);
     createDefaultDischargeDurationEditor(composite, mainGroup);
+    createCapabilitiesEditor(composite, mainGroup);
   }
+
+	/**
+	 * Create an editor for the capabilities feature on Port
+	 * 
+	 * @generated
+	 */
+	private static void createCapabilitiesEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(PortPackage.eINSTANCE.getPort_Capabilities()), "Capabilities");
+	}
 
 	/**
 	 * Create an editor for the timeZone feature on Port
@@ -119,18 +128,6 @@ public class PortComposite extends AbstractDetailComposite {
 								.getEditingDomain(), composite
 								.getCommandProcessor()), "Time Zone");
 	}
-
-	/**
-	 * Create an editor for the regasEfficiency feature on Port
-	 * 
-	 * @generated
-	 */
-	protected static void createRegasEfficiencyEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(PortPackage.eINSTANCE.getPort_RegasEfficiency()),
-      "Regas Efficiency");
-  }
 
 	/**
 	 * Create an editor for the defaultCVvalue feature on Port

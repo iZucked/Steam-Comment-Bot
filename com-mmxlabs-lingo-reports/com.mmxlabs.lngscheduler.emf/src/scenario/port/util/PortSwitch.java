@@ -12,6 +12,7 @@ import scenario.AnnotatedObject;
 import scenario.NamedObject;
 import scenario.ScenarioObject;
 import scenario.UUIDObject;
+import scenario.port.*;
 import scenario.port.Canal;
 import scenario.port.CanalModel;
 import scenario.port.DistanceLine;

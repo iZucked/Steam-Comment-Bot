@@ -19,20 +19,9 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
  * @generated
  */
 public final class LngEditorPlugin extends EMFPlugin {
-
-	public static final boolean DEBUG_UI_ENABLED;
-
 	private static final String DEBUG_PROPERTY_KEY = "com.mmxlabs.debug_ui";
+	public static final boolean DEBUG_UI_ENABLED = "true".equalsIgnoreCase(System.getProperty(DEBUG_PROPERTY_KEY));
 
-
-	static {
-		String property = System.getProperty(DEBUG_PROPERTY_KEY);
-		if (property != null) {
-			DEBUG_UI_ENABLED = property.equalsIgnoreCase("true");
-		} else {
-			DEBUG_UI_ENABLED = false;
-		}
-	}
 	/**
 	 * Keep track of the singleton.
 	 * <!-- begin-user-doc -->
