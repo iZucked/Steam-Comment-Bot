@@ -143,6 +143,16 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			public boolean drawFillsToBottomWhenUsingGanttSections() {
 				return true;
 			}
+			
+			@Override
+			public int getSectionBarDividerHeight() {
+				return 0;
+			}
+
+			@Override
+			public boolean showGradientEventBars() {
+				return false;
+			}
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL
