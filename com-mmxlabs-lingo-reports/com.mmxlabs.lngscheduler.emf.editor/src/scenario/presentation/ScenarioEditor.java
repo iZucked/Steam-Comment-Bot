@@ -171,6 +171,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.shiplingo.ui.autocorrector.AutoCorrector;
 import com.mmxlabs.shiplingo.ui.autocorrector.DateLocalisingCorrector;
+import com.mmxlabs.shiplingo.ui.autocorrector.SetPortForContractCorrector;
 import com.mmxlabs.shiplingo.ui.autocorrector.SlotIdCorrector;
 import com.mmxlabs.shiplingo.ui.autocorrector.SlotVolumeCorrector;
 import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
@@ -295,7 +296,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		}
 
 		private List<Pair<String, EObject>> filterByContract(final Slot slot) {
-			final Contract contract = slot.getSlotOrPortContract(getScenario());
+			final Contract contract = slot.getContract();
 			
 			List<Pair<String, EObject>> m;
 			if (slot instanceof LoadSlot) {
@@ -340,7 +341,22 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 
 		@Override
 		protected boolean isRelevantTarget(Object target, Object feature) {
-			return super.isRelevantTarget(target, feature) || feature == PortPackage.eINSTANCE.getPort_Capabilities();
+			return super.isRelevantTarget(target, feature) || feature == PortPackage.eINSTANCE.getPort_Capabilities() || feature == CargoPackage.eINSTANCE.getSlot_Contract();
+		}
+
+		
+		
+		@Override
+		public boolean updateOnChangeToFeature(Object changedFeature) {
+			return super.updateOnChangeToFeature(changedFeature) || changedFeature == CargoPackage.eINSTANCE.getSlot_Contract();
+		}
+
+		@Override
+		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(EObject referer, EReference feature, EObject referenceValue) {
+			if (referer instanceof Slot) {
+				return Collections.singleton(new Pair<Notifier, List<Object>>(referer, Collections.singletonList((Object)CargoPackage.eINSTANCE.getSlot_Contract())));
+			}
+			return super.getNotifiers(referer, feature, referenceValue);
 		}
 	};
 
@@ -407,7 +423,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 					}
 
 					if (portContract != null) {
-						return portContract.getName() + " [from " + port.getName() + "]";
+						return "Default at " + port.getName() + " (" + portContract.getName() + ")";
 					} else {
 						return "empty";
 					}
@@ -466,7 +482,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 					}
 				}
 				notifiers.add(new Pair<Notifier, List<Object>>(port, Collections.singletonList((Object) namedObjectName)));
-
+				notifiers.add(new Pair<Notifier, List<Object>>(referer, Collections.singletonList((Object) CargoPackage.eINSTANCE.getSlot_Port())));
 				return notifiers;
 			}
 			return super.getNotifiers(referer, feature, referenceValue);
@@ -1225,6 +1241,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			autoCorrector.addCorrector(new SlotVolumeCorrector());
 			autoCorrector.addCorrector(new DateLocalisingCorrector());
 			autoCorrector.addCorrector(new SlotIdCorrector());
+			autoCorrector.addCorrector(new SetPortForContractCorrector());
 
 			final Scenario s = ((Scenario) (editingDomain.getResourceSet().getResources().get(0).getContents().get(0)));
 
