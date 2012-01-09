@@ -41,6 +41,7 @@ import com.mmxlabs.shiplingo.ui.detailview.editors.EENumInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ICommandProcessor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.IInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.LocalDateInlineEditor;
+import com.mmxlabs.shiplingo.ui.detailview.editors.MultiEnumInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.MultiReferenceInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.NumberInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ReferenceInlineEditor;
@@ -71,8 +72,7 @@ public abstract class AbstractDetailComposite extends Composite {
 	/**
 	 * The path used to dereference features viewed in this composite
 	 * 
-	 * TODO consider not needing this, for example by generating the appropriate
-	 * path following code in a version of setInput() produced by MTL
+	 * TODO consider not needing this, for example by generating the appropriate path following code in a version of setInput() produced by MTL
 	 */
 	protected EMFPath inputPath = new CompiledEMFPath(true);
 	/**
@@ -81,19 +81,16 @@ public abstract class AbstractDetailComposite extends Composite {
 	protected EObject input = null;
 
 	/**
-	 * Used to wrap all inline editors, so that extra controls can be introduced
-	 * on editors if desired.
+	 * Used to wrap all inline editors, so that extra controls can be introduced on editors if desired.
 	 */
 	protected IInlineEditorWrapper editorWrapper = IInlineEditorWrapper.IDENTITY;
 
 	/**
-	 * All the editors in this composite. See also
-	 * {@link #addEditor(IInlineEditor)}.
+	 * All the editors in this composite. See also {@link #addEditor(IInlineEditor)}.
 	 */
 	private final List<IInlineEditor> editors = new LinkedList<IInlineEditor>();
 	/**
-	 * All the composite editors for sub-objects in this composite. See
-	 * {@link #addSubEditor(AbstractDetailComposite)}.
+	 * All the composite editors for sub-objects in this composite. See {@link #addSubEditor(AbstractDetailComposite)}.
 	 */
 	private final List<AbstractDetailComposite> subEditors = new LinkedList<AbstractDetailComposite>();
 
@@ -104,7 +101,7 @@ public abstract class AbstractDetailComposite extends Composite {
 	private boolean currentStateValid = true;
 
 	private Runnable postValidationRunnable = null;
-	
+
 	protected boolean lockedForEditing = false;
 
 	/**
@@ -113,23 +110,19 @@ public abstract class AbstractDetailComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public AbstractDetailComposite(final Composite parent, int style,
-			final boolean shouldValidate) {
+	public AbstractDetailComposite(final Composite parent, int style, final boolean shouldValidate) {
 		super(parent, style);
 		if (shouldValidate) {
-			validator = ModelValidationService.getInstance().newValidator(
-					EvaluationMode.BATCH);
+			validator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 
-			validator.setOption(
-					IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+			validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 		} else {
 			validator = null;
 		}
 	}
 
 	/**
-	 * Trigger a validation, and tell the {@link #postValidationRunnable} that
-	 * validation has happened.
+	 * Trigger a validation, and tell the {@link #postValidationRunnable} that validation has happened.
 	 */
 	protected void validate() {
 		if (skipNextValidation) {
@@ -139,8 +132,7 @@ public abstract class AbstractDetailComposite extends Composite {
 		if (validator == null)
 			return;
 
-		final IStatus status = input == null ? Status.OK_STATUS : validator
-				.validate(input);
+		final IStatus status = input == null ? Status.OK_STATUS : validator.validate(input);
 
 		processValidation(status);
 
@@ -152,11 +144,12 @@ public abstract class AbstractDetailComposite extends Composite {
 	}
 
 	private boolean skipNextValidation = false;
+
 	public void validateWithinCommandExecution() {
 		validate();
 		skipNextValidation = true;
 	}
-	
+
 	/**
 	 * Update validation markers in this and children of this.
 	 * 
@@ -216,8 +209,6 @@ public abstract class AbstractDetailComposite extends Composite {
 		return tallMode ? heightSum : heightMax;
 	}
 
-	
-	
 	/**
 	 * Call this to create the controls, then setInput to hook up.
 	 * 
@@ -225,30 +216,22 @@ public abstract class AbstractDetailComposite extends Composite {
 	 * @param editingDomain
 	 * @param commandProcessor
 	 */
-	public void init(final IValueProviderProvider valueProviderProvider,
-			final EditingDomain editingDomain,
-			final ICommandProcessor commandProcessor,
-			final IInlineEditorWrapper editorWrapper) {
+	public void init(final IValueProviderProvider valueProviderProvider, final EditingDomain editingDomain, final ICommandProcessor commandProcessor, final IInlineEditorWrapper editorWrapper) {
 		this.editorWrapper = editorWrapper;
 		this.valueProviderProvider = valueProviderProvider;
 		this.editingDomain = editingDomain;
-		this.commandProcessor = validator == null ? commandProcessor
-				: (new ICommandProcessor() {
-					@Override
-					public void processCommand(final Command command,
-							final EObject target,
-							final EStructuralFeature feature) {
+		this.commandProcessor = validator == null ? commandProcessor : (new ICommandProcessor() {
+			@Override
+			public void processCommand(final Command command, final EObject target, final EStructuralFeature feature) {
 
-						commandProcessor.processCommand(command, target,
-								feature);
+				commandProcessor.processCommand(command, target, feature);
 
-						validate();
-					}
-				});
+				validate();
+			}
+		});
 		createContents(null);
 		for (final AbstractDetailComposite adc : subEditors) {
-			adc.init(valueProviderProvider, editingDomain,
-					this.commandProcessor, editorWrapper);
+			adc.init(valueProviderProvider, editingDomain, this.commandProcessor, editorWrapper);
 		}
 	}
 
@@ -270,15 +253,14 @@ public abstract class AbstractDetailComposite extends Composite {
 			sub.setInput(input);
 		}
 		validate();
-		
+
 		if (lockedForEditing) {
 			setEnabled(this, false);
 		}
 	}
 
 	/**
-	 * Set a path used to dereference the input object passed to
-	 * {@link #setInput(EObject)}.
+	 * Set a path used to dereference the input object passed to {@link #setInput(EObject)}.
 	 * 
 	 * @param path
 	 *            the new path to follow.
@@ -296,8 +278,7 @@ public abstract class AbstractDetailComposite extends Composite {
 	}
 
 	/**
-	 * Subclasses can override this to create extra editors without messing with
-	 * the main generated method
+	 * Subclasses can override this to create extra editors without messing with the main generated method
 	 * 
 	 * @param group
 	 */
@@ -316,8 +297,7 @@ public abstract class AbstractDetailComposite extends Composite {
 		final Group g = new Group(container, getStyle());
 		g.setText(label);
 
-		final GridData groupLayoutData = new GridData(SWT.FILL, SWT.FILL, true,
-				true);
+		final GridData groupLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
 
 		g.setLayoutData(groupLayoutData);
 		final GridLayout groupLayout = new GridLayout(2, false);
@@ -327,20 +307,15 @@ public abstract class AbstractDetailComposite extends Composite {
 	}
 
 	/**
-	 * Use the given editor to create a control in the given container, and also
-	 * passes it to {@link #addEditor(IInlineEditor)} so that it is updated with
-	 * new values.
+	 * Use the given editor to create a control in the given container, and also passes it to {@link #addEditor(IInlineEditor)} so that it is updated with new values.
 	 * 
-	 * NOTE this method is public but is not intended for general use by
-	 * clients. It's public so that subclasses in another package can call it
-	 * from static methods.
+	 * NOTE this method is public but is not intended for general use by clients. It's public so that subclasses in another package can call it from static methods.
 	 * 
 	 * @param container
 	 * @param feature
 	 * @param label
 	 */
-	public Control createEditorControl(final Composite container,
-			IInlineEditor editor, final String label) {
+	public Control createEditorControl(final Composite container, IInlineEditor editor, final String label) {
 		if (editor != null) {
 			editor = editorWrapper.wrap(editor);
 			if (editor == null)
@@ -350,8 +325,7 @@ public abstract class AbstractDetailComposite extends Composite {
 			labelControl.setText(label);
 			final Control control = editor.createControl(container);
 
-			labelControl.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
-					false, false));
+			labelControl.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 			control.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			addEditor(editor);
 			return control;
@@ -360,8 +334,7 @@ public abstract class AbstractDetailComposite extends Composite {
 	}
 
 	/**
-	 * Add the given editor to the list of editors, so it is updated for new
-	 * inputs.
+	 * Add the given editor to the list of editors, so it is updated for new inputs.
 	 * 
 	 * @param editor
 	 */
@@ -370,12 +343,9 @@ public abstract class AbstractDetailComposite extends Composite {
 	}
 
 	/**
-	 * Add the given composite to the list of sub-composites, again so it is
-	 * updated for new inputs.
+	 * Add the given composite to the list of sub-composites, again so it is updated for new inputs.
 	 * 
-	 * NOTE this method is public but is not intended for general use by
-	 * clients. It's public so that subclasses in another package can call it
-	 * from static methods.
+	 * NOTE this method is public but is not intended for general use by clients. It's public so that subclasses in another package can call it from static methods.
 	 * 
 	 * @param composite
 	 */
@@ -385,15 +355,11 @@ public abstract class AbstractDetailComposite extends Composite {
 	}
 
 	/**
-	 * Create an IIlineEditor for the given feature. This is switching on the
-	 * runtime type information provided by EMF, and so is a bit slower than
-	 * might be ideal. In principle the switch could be happening at generation
-	 * time in the MTL file, but I don't know enough MTL to do that at the mo.
+	 * Create an IIlineEditor for the given feature. This is switching on the runtime type information provided by EMF, and so is a bit slower than might be ideal. In principle the switch could be
+	 * happening at generation time in the MTL file, but I don't know enough MTL to do that at the mo.
 	 * 
 	 * 
-	 * NOTE this method is public but is not intended for general use by
-	 * clients. It's public so that subclasses in another package can call it
-	 * from static methods.
+	 * NOTE this method is public but is not intended for general use by clients. It's public so that subclasses in another package can call it from static methods.
 	 * 
 	 * @param feature
 	 * @return
@@ -405,41 +371,32 @@ public abstract class AbstractDetailComposite extends Composite {
 			assert feature instanceof EReference : "You can't have an eclass as an attribute!";
 			final EReference reference = (EReference) feature;
 			// lookup value provider
-			final IReferenceValueProvider valueProvider = valueProviderProvider
-					.getValueProvider((EClass) classifier);
+			final IReferenceValueProvider valueProvider = valueProviderProvider.getValueProvider((EClass) classifier);
 			if (valueProvider == null)
 				return null;
 			if (reference.isMany()) {
-				editor = new MultiReferenceInlineEditor(inputPath, feature,
-						editingDomain, commandProcessor, valueProvider);
+				editor = new MultiReferenceInlineEditor(inputPath, feature, editingDomain, commandProcessor, valueProvider);
 			} else {
-				editor = new ReferenceInlineEditor(inputPath, feature,
-						editingDomain, commandProcessor, valueProvider);
+				editor = new ReferenceInlineEditor(inputPath, feature, editingDomain, commandProcessor, valueProvider);
 			}
 		} else {
 			final EDataType dataType = (EDataType) classifier;
 			if (dataType == EcorePackage.eINSTANCE.getEString()) {
-				editor = new TextInlineEditor(inputPath, feature,
-						editingDomain, commandProcessor);
-			} else if (dataType == EcorePackage.eINSTANCE.getEDate()
-					|| dataType == ScenarioPackage.eINSTANCE
-							.getDateAndOptionalTime()) {
-				editor = new LocalDateInlineEditor(inputPath, feature,
-						editingDomain, commandProcessor);
-			} else if (dataType == EcorePackage.eINSTANCE.getEInt()
-					|| dataType == EcorePackage.eINSTANCE.getEFloat()
-					|| dataType == EcorePackage.eINSTANCE.getELong()
-					|| dataType == EcorePackage.eINSTANCE.getEDouble()
-					|| dataType == ScenarioPackage.eINSTANCE.getPercentage()) {
-				editor = new NumberInlineEditor(inputPath, feature,
-						editingDomain, commandProcessor);
+				editor = new TextInlineEditor(inputPath, feature, editingDomain, commandProcessor);
+			} else if (dataType == EcorePackage.eINSTANCE.getEDate() || dataType == ScenarioPackage.eINSTANCE.getDateAndOptionalTime()) {
+				editor = new LocalDateInlineEditor(inputPath, feature, editingDomain, commandProcessor);
+			} else if (dataType == EcorePackage.eINSTANCE.getEInt() || dataType == EcorePackage.eINSTANCE.getEFloat() || dataType == EcorePackage.eINSTANCE.getELong()
+					|| dataType == EcorePackage.eINSTANCE.getEDouble() || dataType == ScenarioPackage.eINSTANCE.getPercentage()) {
+				editor = new NumberInlineEditor(inputPath, feature, editingDomain, commandProcessor);
 			} else if (dataType.getInstanceClass().isEnum()) {
-				editor = new EENumInlineEditor(inputPath, (EAttribute) feature,
-						editingDomain, commandProcessor);
+				if (feature.isMany()) {
+					editor = new MultiEnumInlineEditor(inputPath, feature, editingDomain, commandProcessor);
+				} else {
+					editor = new EENumInlineEditor(inputPath, (EAttribute) feature, editingDomain, commandProcessor);
+				}
 			} else if (dataType == EcorePackage.eINSTANCE.getEBoolean()) {
-				editor = new ValueListInlineEditor(inputPath, feature, editingDomain, commandProcessor, 
-						CollectionsUtil.makeArrayList(new Pair<String, Object>("Yes", true), new Pair<String, Object>("No", false))
-						);
+				editor = new ValueListInlineEditor(inputPath, feature, editingDomain, commandProcessor, CollectionsUtil.makeArrayList(new Pair<String, Object>("Yes", true), new Pair<String, Object>(
+						"No", false)));
 			} else {
 				editor = null;
 			}
@@ -485,9 +442,10 @@ public abstract class AbstractDetailComposite extends Composite {
 	public void setLockedForEditing(boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
 		setEnabled(this, !lockedForEditing);
-		if (!lockedForEditing) setInput(input); // need to do this in case some controls are /meant/ to be disabled.
+		if (!lockedForEditing)
+			setInput(input); // need to do this in case some controls are /meant/ to be disabled.
 	}
-	
+
 	private void setEnabled(final Control control, final boolean enabled) {
 		if (!(control instanceof Label || control instanceof Group))
 			control.setEnabled(enabled);
