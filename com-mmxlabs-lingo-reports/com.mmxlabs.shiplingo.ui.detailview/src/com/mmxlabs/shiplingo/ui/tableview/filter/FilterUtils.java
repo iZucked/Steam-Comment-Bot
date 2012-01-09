@@ -39,6 +39,7 @@ public class FilterUtils {
 	private static final int COMMA=',';
 	private static final int LP='(';
 	private static final int RP=')';
+	private static final int NOTEQ='~';
 
 	private class FilterBuilder {
 		private Group disjunctions = new Group(false);
@@ -92,6 +93,7 @@ public class FilterUtils {
 					lastWord = tok.sval;
 				}
 				break;
+			case NOTEQ:
 			case COLON:
 			case EQ:
 			case LT:
