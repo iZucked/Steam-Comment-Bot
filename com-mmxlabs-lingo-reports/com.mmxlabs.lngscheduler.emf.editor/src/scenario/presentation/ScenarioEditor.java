@@ -278,9 +278,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
 			final List<Pair<String, EObject>> allValues = super.getAllowedValues(target, field);
 
-			if (target instanceof LoadSlot || target instanceof PurchaseContract) {
+			// filter by contract
+			if (target instanceof Slot) {
+				return filterByContract((Slot) target);
+			}
+			
+			if (target instanceof PurchaseContract) {
 				return matchingValues.get(PortCapability.LOAD);
-			} else if (target instanceof Slot || target instanceof SalesContract) {
+			} else if (target instanceof SalesContract) {
 				return matchingValues.get(PortCapability.DISCHARGE);
 			} else if (target instanceof Drydock) {
 				return matchingValues.get(PortCapability.DRYDOCK);
@@ -289,6 +294,32 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			return allValues;
 		}
 
+		private List<Pair<String, EObject>> filterByContract(final Slot slot) {
+			final Contract contract = slot.getSlotOrPortContract(getScenario());
+			
+			List<Pair<String, EObject>> m;
+			if (slot instanceof LoadSlot) {
+				m = matchingValues.get(PortCapability.LOAD);
+			} else {
+				m =  matchingValues.get(PortCapability.DISCHARGE);
+			}
+			if (contract == null) {
+				return m;
+			} else {
+				final List<Port> ports = contract.getDefaultPorts();
+				if (ports.isEmpty()) return m;
+				final List<Pair<String, EObject>> filter = new ArrayList<Pair<String, EObject>>();
+				Iterator<Pair<String, EObject>> iterator = m.iterator();
+				while (iterator.hasNext()) {
+					final Pair<String, EObject> value = iterator.next();
+					if (ports.contains(value.getSecond())) {
+						filter.add(value);
+					}
+				}
+				return filter;
+			}
+		}
+		
 		@Override
 		protected void cacheValues() {
 			super.cacheValues();
