@@ -130,9 +130,9 @@ public class SanityCheckTools {
 	 * @param ports
 	 *            The ports to add dry docks to/from
 	 * @param allowedDrydockVessel
-	 *            A vessel to add to all dry dock's allowed-vessel list
+	 *            A vessel to add to all dry dock's allowed-vessel list. If null it will not be added to any dry dock.
 	 * @param allowedDrydockVesselClass
-	 *            A vessel class to add to all dry dock's allowed-vesselclass list.
+	 *            A vessel class to add to all dry dock's allowed-vesselclass list. If null it will not be added to any dry dock.
 	 */
 	public static void addDrydocks(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedDrydockVessel, final VesselClass allowedDrydockVesselClass) {
 
@@ -143,8 +143,10 @@ public class SanityCheckTools {
 
 					final Drydock dry = csc.addDryDock(portB, start, 1);
 
-					dry.getVessels().add(allowedDrydockVessel);
-					dry.getVesselClasses().add(allowedDrydockVesselClass);
+					if (allowedDrydockVessel != null)
+						dry.getVessels().add(allowedDrydockVessel);
+					if (allowedDrydockVesselClass != null)
+						dry.getVesselClasses().add(allowedDrydockVesselClass);
 
 					start.setTime(start.getTime() + TimeUnit.HOURS.toMillis(2));
 				}
@@ -158,9 +160,9 @@ public class SanityCheckTools {
 	 * @param ports
 	 *            The ports to add charter outs to/from
 	 * @param allowedCharterOutVessel
-	 *            A vessel to add to all charter outs allowed-vessel list.
+	 *            A vessel to add to all charter outs allowed-vessel list. If null it will not be added to any charter out.
 	 * @param allowedCharterOutVesselClass
-	 *            A class of vessel to add to every charter out's allowed vessel class list.
+	 *            A class of vessel to add to every charter out's allowed vessel class list. If null it will not be added to any charter out.
 	 */
 	public static void addCharterOuts(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedCharterOutVessel, final VesselClass allowedCharterOutVesselClass, final float cvValue,
 			final float dischargePrice) {
@@ -174,8 +176,10 @@ public class SanityCheckTools {
 
 				CharterOut charterOut = csc.addCharterOut(id, portA, portB, start, 1000, charterOutDurationDays, cvValue, dischargePrice, 100, 0);
 
-				charterOut.getVessels().add(allowedCharterOutVessel);
-				charterOut.getVesselClasses().add(allowedCharterOutVesselClass);
+				if (allowedCharterOutVessel != null)
+					charterOut.getVessels().add(allowedCharterOutVessel);
+				if (allowedCharterOutVesselClass != null)
+					charterOut.getVesselClasses().add(allowedCharterOutVesselClass);
 
 				if (portA.equals(portB))
 					charterOutDurationDays /= 2;
