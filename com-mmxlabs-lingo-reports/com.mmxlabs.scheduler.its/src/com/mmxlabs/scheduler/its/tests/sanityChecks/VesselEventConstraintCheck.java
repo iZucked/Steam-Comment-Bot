@@ -110,6 +110,75 @@ public class VesselEventConstraintCheck {
 		final Vessel allowedCharterOutVessel = vesselsOfClassTwo.get(0);
 		final VesselClass allowedCharterOutVesselClass = vesselsOfClassFour.get(0).getClass_();
 
+		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
+	}
+	
+	/**
+	 * Only one vessel is allowed to take the dry dock. Test that the constraint works.
+	 */
+	@Test
+	public void testDrydockVessel() {
+
+		final Vessel allowedDrydockVessel = vesselsOfClassOne.get(0);
+		final VesselClass allowedDrydockVesselClass = null;
+		final Vessel allowedCharterOutVessel = null;
+		final VesselClass allowedCharterOutVesselClass = null;
+
+		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
+	}
+	
+	/**
+	 * Only one vessel is allowed to take charter outs. Test that the constraint works.
+	 */
+	@Test
+	public void testCharterOutVessel() {
+
+		final Vessel allowedDrydockVessel = null;
+		final VesselClass allowedDrydockVesselClass = null;
+		final Vessel allowedCharterOutVessel = vesselsOfClassOne.get(0);
+		final VesselClass allowedCharterOutVesselClass = null;
+
+		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
+	}
+	
+	/**
+	 * Only one vessel class is allowed to take dry docks. Test that the constraint works.
+	 */
+	@Test
+	public void testDryDockVesselClass() {
+
+		final Vessel allowedDrydockVessel = null;
+		final VesselClass allowedDrydockVesselClass = vesselsOfClassOne.get(0).getClass_();
+		final Vessel allowedCharterOutVessel = null;
+		final VesselClass allowedCharterOutVesselClass = null;
+
+		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
+	}
+	
+	/**
+	 * Only one vessel class is allowed to take charter outs. Test that the constraint works.
+	 */
+	@Test
+	public void testCharterOutVesselClass() {
+
+		final Vessel allowedDrydockVessel = null;
+		final VesselClass allowedDrydockVesselClass = null;
+		final Vessel allowedCharterOutVessel = null;
+		final VesselClass allowedCharterOutVesselClass = vesselsOfClassOne.get(0).getClass_();
+
+		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
+	}
+	
+	/**
+	 * Add some vessel events to the CSC and run the event. The given Vessels and VesselClasses are added to the allowed lists on every VesselEvent.
+	 * @param allowedDrydockVessel A vessel that is allowed to dry dock
+	 * @param allowedDrydockVesselClass A class of vessel that is allowed to dry dock
+	 * @param allowedCharterOutVessel A vessel that is allowed to charter out
+	 * @param allowedCharterOutVesselClass A class of vessel that is allowed charter out
+	 */
+	private void addVesselEventsAndRunTest(final Vessel allowedDrydockVessel, final VesselClass allowedDrydockVesselClass, final Vessel allowedCharterOutVessel, final VesselClass allowedCharterOutVesselClass) {
+		
+
 		// add some VesselEvents, i.e. CharterOuts and DryDocks in a random-ish manner.
 		SanityCheckTools.addDrydocks(csc, ports, allowedDrydockVessel, allowedDrydockVesselClass);
 		SanityCheckTools.addCharterOuts(csc, ports, allowedCharterOutVessel, allowedCharterOutVesselClass, cvValue, dischargePrice);
