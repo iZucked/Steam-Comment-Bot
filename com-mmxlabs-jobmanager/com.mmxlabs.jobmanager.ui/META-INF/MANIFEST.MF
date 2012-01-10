@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Ui
+Bundle-Name: JobManager: UI
 Bundle-SymbolicName: com.mmxlabs.jobmanager.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.mmxlabs.jobmanager.ui.Activator
-Bundle-Vendor: MMXLABS
+Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.mmxlabs.jobmanager;bundle-version="1.0.0",

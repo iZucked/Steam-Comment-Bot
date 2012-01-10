@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Eclipse
+Bundle-Name: Job Manager: Eclipse
 Bundle-SymbolicName: com.mmxlabs.jobmanager.eclipse;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
@@ -13,3 +13,4 @@ Export-Package: com.mmxlabs.jobmanager.eclipse.jobs.impl,
 Service-Component: OSGI-INF/*.xml
 Bundle-Activator: com.mmxlabs.jobmanager.eclipse.Activator
 Bundle-ActivationPolicy: lazy
+Bundle-Vendor: Minimax Labs
