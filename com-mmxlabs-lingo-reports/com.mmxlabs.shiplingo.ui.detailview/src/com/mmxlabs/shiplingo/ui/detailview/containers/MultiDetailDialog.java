@@ -50,6 +50,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
 import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
+import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.shiplingo.ui.autocorrector.AutoCorrector;
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
 import com.mmxlabs.shiplingo.ui.detailview.base.IInlineEditorWrapper;
@@ -343,43 +344,26 @@ public class MultiDetailDialog extends Dialog {
 
 }
 
-class MultiFeatureAction extends Action implements IMenuCreator {
+class MultiFeatureAction extends AbstractMenuAction {
 	public static final String REPLACE = "Replace";
 	public static final String UNION = "Union";
 	public static final String INTERSECTION = "Intersection";
 	public static final String[] MODES = new String[] { REPLACE, UNION, INTERSECTION };
-	private Menu lastMenu;
+	
 	private String mode = REPLACE;
 	private Pair<EMFPath, EStructuralFeature> path;
 	private Map<Pair<EMFPath, EStructuralFeature>, String> map;
 
 	public MultiFeatureAction(final Pair<EMFPath, EStructuralFeature> p, final Map<Pair<EMFPath, EStructuralFeature>, String> m) {
-		super("", IAction.AS_DROP_DOWN_MENU);
+		super("");
 		this.map = m;
 		this.path = p;
-	}
-
-	@Override
-	public void dispose() {
-
-	}
-
-	@Override
-	public Menu getMenu(Control parent) {
-		if (lastMenu != null) {
-			lastMenu.dispose();
-		}
-		lastMenu = new Menu(parent);
-
-		populate(lastMenu);
-
-		return lastMenu;
 	}
 
 	/**
 	 * @param lastMenu2
 	 */
-	private void populate(final Menu menu) {
+	protected void populate(final Menu menu) {
 		for (final String s : MODES) {
 			final Action a = new Action(s, IAction.AS_RADIO_BUTTON) {
 				@Override
@@ -398,22 +382,5 @@ class MultiFeatureAction extends Action implements IMenuCreator {
 				a.setChecked(true);
 			}
 		}
-	}
-
-	@Override
-	public Menu getMenu(Menu parent) {
-		if (lastMenu != null) {
-			lastMenu.dispose();
-		}
-		lastMenu = new Menu(parent);
-
-		populate(lastMenu);
-
-		return lastMenu;
-	}
-
-	@Override
-	public IMenuCreator getMenuCreator() {
-		return this;
 	}
 }

@@ -1501,9 +1501,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	private void createPortEditor(final IReferenceValueProvider everyContractProvider, final IReferenceValueProvider marketProvider) {
 		portEditorViewerPane = new PortEVP(getSite().getPage(), this);
 
-		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
+//		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
 
-		portEditorViewerPane.createControl(sash);
+		portEditorViewerPane.createControl(getContainer());
 
 		final List<EReference> path = new LinkedList<EReference>();
 
@@ -1515,19 +1515,19 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		portEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_PortModel(), PortPackage.eINSTANCE.getPortModel_Ports());
 		portEditorViewerPane.getViewer().setInput(editingDomain.getResourceSet().getResources().get(0).getContents().get(0));
 
-		// createContextMenuFor(portEditor.getViewer());
+//		// createContextMenuFor(portEditor.getViewer());
+//
+//		canalEditorViewerPane = new CanalEVP(getSite().getPage(), this);
+//
+//		canalEditorViewerPane.createControl(sash);
+//		canalEditorViewerPane.setTitle("Canals", getTitleImage());
+//
+//		canalEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_CanalModel(), PortPackage.eINSTANCE.getCanalModel_Canals());
+//
+//		canalEditorViewerPane.getViewer().setInput(getScenario());
+//		// createContextMenuFor(canalEVP.getViewer());
 
-		canalEditorViewerPane = new CanalEVP(getSite().getPage(), this);
-
-		canalEditorViewerPane.createControl(sash);
-		canalEditorViewerPane.setTitle("Canals", getTitleImage());
-
-		canalEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_CanalModel(), PortPackage.eINSTANCE.getCanalModel_Canals());
-
-		canalEditorViewerPane.getViewer().setInput(getScenario());
-		// createContextMenuFor(canalEVP.getViewer());
-
-		final int pageIndex = addPage(sash);
+		final int pageIndex = addPage(portEditorViewerPane.getControl());
 		setPageText(pageIndex, "Ports and Distances");
 
 	}

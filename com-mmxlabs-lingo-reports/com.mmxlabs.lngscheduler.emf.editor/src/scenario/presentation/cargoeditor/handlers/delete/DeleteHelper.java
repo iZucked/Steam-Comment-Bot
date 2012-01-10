@@ -19,6 +19,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 import scenario.cargo.CargoPackage;
 import scenario.fleet.FleetPackage;
+import scenario.port.PortPackage;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.fleetallocation.FleetallocationPackage;
 
@@ -80,6 +81,8 @@ public class DeleteHelper {
 			return new DeleteAllocatedVesselCommand(domain, value);
 		} else if (SchedulePackage.eINSTANCE.getSequence() == key) {
 			return new DeleteSequenceCommand(domain, value);
+		} else if (PortPackage.eINSTANCE.getCanal() == key) {
+			return new DeleteCanalCommand(domain, value);
 		}
 		return new Deleter(domain, value);
 	}
