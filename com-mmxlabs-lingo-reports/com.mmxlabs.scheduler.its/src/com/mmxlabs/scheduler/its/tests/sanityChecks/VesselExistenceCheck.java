@@ -17,6 +17,7 @@ import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetVessel;
+import scenario.schedule.fleetallocation.SpotVessel;
 
 import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
 import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
@@ -59,12 +60,29 @@ public class VesselExistenceCheck {
 		final int numOfClassThree = 4;
 		final int numOfClassFour = 6;
 
-		// createVessels creates and adds the vessesl to the scenario.
-		// Add the created vessels to the list of input vessels.
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500, false)));
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false)));
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 20, 25, 10000, 17, 14, 10, 1000, false)));
-		inputVessels.addAll(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
+		final int numOfSpotCharterClassOne = 10;
+		final int numOfSpotCharterClassTwo = 0;
+		final int numOfSpotCharterClassThree = 5;
+		final int numOfSpotCharterClassFour = 0;
+		
+		final int baseFuelUnitPrice = 10;
+		final int eqivFactor = 1;
+		final int speed = 10;
+		final int capacity = 1000000;
+		final int consumption = 10;
+		final int NBORate = 10;
+		final int pilotLight = 0;
+		final int minHeelVol = 500;
+		final boolean isTimeChartered = false;
+
+		inputVessels.addAll(Arrays.asList(csc.addVessel("classOne", numOfClassOne, numOfSpotCharterClassOne, baseFuelUnitPrice, eqivFactor, speed, speed, capacity, speed, consumption, speed,
+				consumption, consumption, NBORate, NBORate, speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLight, minHeelVol, isTimeChartered)));
+		inputVessels.addAll(Arrays.asList(csc.addVessel("classTwo", numOfClassTwo, numOfSpotCharterClassTwo, baseFuelUnitPrice, eqivFactor, speed, speed, capacity, speed, consumption, speed,
+				consumption, consumption, NBORate, NBORate, speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLight, minHeelVol, isTimeChartered)));
+		inputVessels.addAll(Arrays.asList(csc.addVessel("classThree", numOfClassThree, numOfSpotCharterClassThree, baseFuelUnitPrice, eqivFactor, speed, speed, capacity, speed, consumption, speed,
+				consumption, consumption, NBORate, NBORate, speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLight, minHeelVol, isTimeChartered)));
+		inputVessels.addAll(Arrays.asList(csc.addVessel("classFour", numOfClassFour, numOfSpotCharterClassFour, baseFuelUnitPrice, eqivFactor, speed, speed, capacity, speed, consumption, speed,
+				consumption, consumption, NBORate, NBORate, speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLight, minHeelVol, isTimeChartered)));
 
 		// create some cargos.
 		SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
@@ -80,22 +98,27 @@ public class VesselExistenceCheck {
 
 		// print each vessel's sequence
 		ScenarioTools.printSequences(result);
-		
+
 		// check the output
 		checkVesselExistence(result, inputVessels);
+		
+		final int maxNumOfSpotVessels = numOfSpotCharterClassOne + numOfSpotCharterClassTwo + numOfSpotCharterClassThree + numOfSpotCharterClassFour;
+		
+		checkNumOfSpotVesselsNotExceeded(result, maxNumOfSpotVessels);
 	}
-	
+
 	/**
 	 * Checks the output to make sure that the vessels from the input exist.
+	 * 
 	 * @param result
 	 * @param inputVessels
 	 * @param expectedNumOfVessels
 	 */
 	private void checkVesselExistence(final Schedule result, final ArrayList<Vessel> inputVessels) {
-		
+
 		// the list of input vessels will be changed, and the number of expected vessels it not yet know, so save the number of expected vessels.
 		final int expectedNumOfVessels = inputVessels.size();
-		
+
 		// Check all vessels in the input exist in the output.
 		int numOfVesselsInOutput = 0;
 		for (AllocatedVessel av : result.getFleet()) {
@@ -113,5 +136,21 @@ public class VesselExistenceCheck {
 
 		Assert.assertEquals("Number of vessels in input same as number of vessels in output", expectedNumOfVessels, numOfVesselsInOutput);
 		Assert.assertEquals("All vessels were used in the output", inputVessels.size(), 0);
+	}
+	
+	private void checkNumOfSpotVesselsNotExceeded(final Schedule result, final int maxNumOfSpotVessels) {
+		
+		
+		int numOfSpotVessels = 0;
+		for (AllocatedVessel av : result.getFleet()) {
+			
+			if (av instanceof SpotVessel) 
+				numOfSpotVessels++;
+			
+		
+		}
+		
+		Assert.assertTrue("Actual number of spot charter vessels does not exceed allowed number", numOfSpotVessels <= maxNumOfSpotVessels);
+		
 	}
 }
