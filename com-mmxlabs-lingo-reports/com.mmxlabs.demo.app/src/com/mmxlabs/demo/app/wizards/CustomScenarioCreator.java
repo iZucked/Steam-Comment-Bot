@@ -135,15 +135,16 @@ public class CustomScenarioCreator {
 			final int NBORate, final int pilotLightRate, final int minHeelVolume, final boolean isTimeChartered) {
 
 		final float equivalenceFactor = 1;
+		final int spotCharterCount = 0;
 
-		return addVessel(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption, NBORate, NBORate,
+		return addVessel(vesselClassName, numOfVesselsToCreate, spotCharterCount, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption, NBORate, NBORate,
 				speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLightRate, minHeelVolume, isTimeChartered);
 	}
 
 	/**
 	 * Creates a vessel class and adds the specified number of vessels of the created class to the scenario. The attributes of the vessel class and vessel are set using the arguments.
 	 */
-	public Vessel[] addVessel(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final float equivalenceFactor, final int minSpeed, final int maxSpeed,
+	public Vessel[] addVessel(final String vesselClassName, final int numOfVesselsToCreate, final int spotCharterCount, final float baseFuelUnitPrice, final float equivalenceFactor, final int minSpeed, final int maxSpeed,
 			final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed, final int ballastMaxConsumption, int ballastIdleConsumptionRate,
 			final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption,
 			int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume, final boolean isTimeChartered) {
@@ -155,9 +156,6 @@ public class CustomScenarioCreator {
 		final int cooldownVolume = 0;
 		// final int minHeelVolume = 0;
 
-		// TODO Make test for spot charter count.
-		// Make this spotCharterCount number non-zero for a class, check that the number of spot charter vessels for that class never exceeds the non-zero number.
-		final int spotCharterCount = 0;
 		final double fillCapacity = 1.0;
 
 		final VesselFuel baseFuel = FleetFactory.eINSTANCE.createVesselFuel();
