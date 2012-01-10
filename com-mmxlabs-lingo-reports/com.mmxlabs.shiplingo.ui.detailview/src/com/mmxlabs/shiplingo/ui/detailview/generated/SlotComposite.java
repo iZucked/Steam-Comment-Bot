@@ -143,7 +143,7 @@ public  class SlotComposite extends AbstractDetailComposite {
 	protected static void createWindowDurationEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
     composite.createEditorControl(mainGroup,
       composite.createEditor(CargoPackage.eINSTANCE.getSlot_WindowDuration()),
-      "Window Length (hrs)");
+      "Window (hrs)");
   }
 		
 	/**
