@@ -64,7 +64,7 @@ public class VesselExistenceCheck {
 		final int numOfSpotCharterClassTwo = 0;
 		final int numOfSpotCharterClassThree = 5;
 		final int numOfSpotCharterClassFour = 0;
-		
+
 		final int baseFuelUnitPrice = 10;
 		final int eqivFactor = 1;
 		final int speed = 10;
@@ -101,9 +101,9 @@ public class VesselExistenceCheck {
 
 		// check the output
 		checkVesselExistence(result, inputVessels);
-		
+
 		final int maxNumOfSpotVessels = numOfSpotCharterClassOne + numOfSpotCharterClassTwo + numOfSpotCharterClassThree + numOfSpotCharterClassFour;
-		
+
 		checkNumOfSpotVesselsNotExceeded(result, maxNumOfSpotVessels);
 	}
 
@@ -137,20 +137,23 @@ public class VesselExistenceCheck {
 		Assert.assertEquals("Number of vessels in input same as number of vessels in output", expectedNumOfVessels, numOfVesselsInOutput);
 		Assert.assertEquals("All vessels were used in the output", inputVessels.size(), 0);
 	}
-	
+
+	/**
+	 * Check that the maximum number of spot vessels is not exceeded.
+	 * 
+	 * @param result
+	 * @param maxNumOfSpotVessels
+	 */
 	private void checkNumOfSpotVesselsNotExceeded(final Schedule result, final int maxNumOfSpotVessels) {
-		
-		
+
 		int numOfSpotVessels = 0;
 		for (AllocatedVessel av : result.getFleet()) {
-			
-			if (av instanceof SpotVessel) 
+
+			if (av instanceof SpotVessel)
 				numOfSpotVessels++;
-			
-		
 		}
-		
+
 		Assert.assertTrue("Actual number of spot charter vessels does not exceed allowed number", numOfSpotVessels <= maxNumOfSpotVessels);
-		
+
 	}
 }
