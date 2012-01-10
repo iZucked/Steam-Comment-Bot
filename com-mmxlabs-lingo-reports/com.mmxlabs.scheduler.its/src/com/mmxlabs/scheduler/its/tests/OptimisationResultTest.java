@@ -93,19 +93,19 @@ public class OptimisationResultTest {
 			originalFitnesses.put("cargo-scheduler-cost-cooldown", 30692220L);
 			originalFitnesses.put("cargo-scheduler-charter-revenue", 0L);
 			originalFitnesses.put("cargo-scheduler-lateness", 726000000L);
-			originalFitnesses.put("cargo-scheduler-cost-base", 44077092L);
-			originalFitnesses.put("cargo-scheduler-cost-lng", 257423625L);
+			originalFitnesses.put("cargo-scheduler-cost-base", 44256952L);
+			originalFitnesses.put("cargo-scheduler-cost-lng", 257191648L);
 			originalFitnesses.put("cargo-scheduler-charter-cost", 0L);
 
 
 			final HashMap<String, Long> endFitnesses = new HashMap<String, Long>();
-			endFitnesses.put("cargo-scheduler-canal-cost", 690000L);
+			endFitnesses.put("cargo-scheduler-canal-cost", 1725000L);
 			endFitnesses.put("cargo-scheduler-group-profit", 0L);
 			endFitnesses.put("cargo-scheduler-cost-cooldown", 30692220L);
 			endFitnesses.put("cargo-scheduler-charter-revenue", 0L);
 			endFitnesses.put("cargo-scheduler-lateness", 0L);
-			endFitnesses.put("cargo-scheduler-cost-base", 27004381L);
-			endFitnesses.put("cargo-scheduler-cost-lng", 213956733L);
+			endFitnesses.put("cargo-scheduler-cost-base", 25029537L);
+			endFitnesses.put("cargo-scheduler-cost-lng", 212223263L);
 			endFitnesses.put("cargo-scheduler-charter-cost", 0L);
 			// ↑ ↑ PASTE PRINTED MAP HERE ↑ ↑ //
 			
