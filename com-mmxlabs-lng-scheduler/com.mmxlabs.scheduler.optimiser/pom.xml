@@ -16,8 +16,8 @@
 	</parent>
 
 	<scm>
-		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lng-scheduler</connection>
-		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lng-scheduler</developerConnection>
+		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lng-scheduler.hg</connection>
+		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lng-scheduler.hg</developerConnection>
 		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-lng-scheduler/</url>
 	</scm>
 
