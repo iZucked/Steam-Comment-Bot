@@ -212,6 +212,29 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.port.PortGroup} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortGroupItemProvider portGroupItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.port.PortGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortGroupAdapter() {
+		if (portGroupItemProvider == null) {
+			portGroupItemProvider = new PortGroupItemProvider(this);
+		}
+
+		return portGroupItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -316,6 +339,7 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 		if (distanceLineItemProvider != null) distanceLineItemProvider.dispose();
 		if (canalItemProvider != null) canalItemProvider.dispose();
 		if (canalModelItemProvider != null) canalModelItemProvider.dispose();
+		if (portGroupItemProvider != null) portGroupItemProvider.dispose();
 	}
 
 }

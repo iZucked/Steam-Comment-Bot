@@ -82,6 +82,7 @@ public class PortModelItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__PORTS);
+			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__PORT_GROUPS);
 		}
 		return childrenFeatures;
 	}
@@ -134,6 +135,7 @@ public class PortModelItemProvider
 
 		switch (notification.getFeatureID(PortModel.class)) {
 			case PortPackage.PORT_MODEL__PORTS:
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -155,6 +157,11 @@ public class PortModelItemProvider
 			(createChildParameter
 				(PortPackage.Literals.PORT_MODEL__PORTS,
 				 PortFactory.eINSTANCE.createPort()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PortPackage.Literals.PORT_MODEL__PORT_GROUPS,
+				 PortFactory.eINSTANCE.createPortGroup()));
 	}
 
 	/**

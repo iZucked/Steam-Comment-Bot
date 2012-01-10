@@ -175,7 +175,7 @@ public class VesselClassEVP extends NamedObjectEVP {
 		{
 			final MultipleReferenceManipulator capacity = new MultipleReferenceManipulator(
 					FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts(),
-					part.getEditingDomain(), part.getPortProvider(),
+					part.getEditingDomain(), part.getPortSelectionProvider(),
 					namedObjectName);
 			addColumn("Inaccessible Ports", capacity, capacity);
 		}

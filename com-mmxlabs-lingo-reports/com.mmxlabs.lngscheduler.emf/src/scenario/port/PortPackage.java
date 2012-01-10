@@ -7,6 +7,7 @@ package scenario.port;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -81,13 +82,22 @@ public interface PortPackage extends EPackage {
 	int PORT_MODEL__PORTS = 0;
 
 	/**
+	 * The feature id for the '<em><b>Port Groups</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__PORT_GROUPS = 1;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL_FEATURE_COUNT = 1;
+	int PORT_MODEL_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Model</em>' class.
@@ -226,13 +236,22 @@ public interface PortPackage extends EPackage {
 	int PORT___GET_CONTAINER = ScenarioPackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Get Closure</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT___GET_CLOSURE__ELIST = ScenarioPackage.UUID_OBJECT_OPERATION_COUNT + 2;
+
+	/**
 	 * The number of operations of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_OPERATION_COUNT = ScenarioPackage.UUID_OBJECT_OPERATION_COUNT + 1;
+	int PORT_OPERATION_COUNT = ScenarioPackage.UUID_OBJECT_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.
@@ -428,6 +447,143 @@ public interface PortPackage extends EPackage {
 	int CANAL_MODEL_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link scenario.port.impl.PortSelectionImpl <em>Selection</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.port.impl.PortSelectionImpl
+	 * @see scenario.port.impl.PortPackageImpl#getPortSelection()
+	 * @generated
+	 */
+	int PORT_SELECTION = 6;
+
+	/**
+	 * The feature id for the '<em><b>UUID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_SELECTION__UUID = ScenarioPackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_SELECTION__NAME = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Selection</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_SELECTION_FEATURE_COUNT = ScenarioPackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_SELECTION___GET_CONTAINER = ScenarioPackage.UUID_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Closure</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_SELECTION___GET_CLOSURE__ELIST = ScenarioPackage.UUID_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Selection</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_SELECTION_OPERATION_COUNT = ScenarioPackage.UUID_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link scenario.port.impl.PortGroupImpl <em>Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see scenario.port.impl.PortGroupImpl
+	 * @see scenario.port.impl.PortPackageImpl#getPortGroup()
+	 * @generated
+	 */
+	int PORT_GROUP = 7;
+
+	/**
+	 * The feature id for the '<em><b>UUID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP__UUID = PORT_SELECTION__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP__NAME = PORT_SELECTION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Contents</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP__CONTENTS = PORT_SELECTION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP_FEATURE_COUNT = PORT_SELECTION_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP___GET_CONTAINER = PORT_SELECTION___GET_CONTAINER;
+
+	/**
+	 * The operation id for the '<em>Get Closure</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP___GET_CLOSURE__ELIST = PORT_SELECTION_OPERATION_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP_OPERATION_COUNT = PORT_SELECTION_OPERATION_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link scenario.port.PortCapability <em>Capability</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -435,7 +591,7 @@ public interface PortPackage extends EPackage {
 	 * @see scenario.port.impl.PortPackageImpl#getPortCapability()
 	 * @generated
 	 */
-	int PORT_CAPABILITY = 6;
+	int PORT_CAPABILITY = 8;
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.PortModel <em>Model</em>}'.
@@ -457,6 +613,17 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPortModel_Ports();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link scenario.port.PortModel#getPortGroups <em>Port Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Port Groups</em>'.
+	 * @see scenario.port.PortModel#getPortGroups()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EReference getPortModel_PortGroups();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.Port <em>Port</em>}'.
@@ -555,6 +722,16 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPort_Capabilities();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.port.Port#getClosure(org.eclipse.emf.common.util.EList) <em>Get Closure</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Closure</em>' operation.
+	 * @see scenario.port.Port#getClosure(org.eclipse.emf.common.util.EList)
+	 * @generated
+	 */
+	EOperation getPort__GetClosure__EList();
 
 	/**
 	 * Returns the meta object for class '{@link scenario.port.DistanceModel <em>Distance Model</em>}'.
@@ -663,6 +840,57 @@ public interface PortPackage extends EPackage {
 	EReference getCanalModel_Canals();
 
 	/**
+	 * Returns the meta object for class '{@link scenario.port.PortSelection <em>Selection</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Selection</em>'.
+	 * @see scenario.port.PortSelection
+	 * @generated
+	 */
+	EClass getPortSelection();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.port.PortSelection#getClosure(org.eclipse.emf.common.util.EList) <em>Get Closure</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Closure</em>' operation.
+	 * @see scenario.port.PortSelection#getClosure(org.eclipse.emf.common.util.EList)
+	 * @generated
+	 */
+	EOperation getPortSelection__GetClosure__EList();
+
+	/**
+	 * Returns the meta object for class '{@link scenario.port.PortGroup <em>Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Group</em>'.
+	 * @see scenario.port.PortGroup
+	 * @generated
+	 */
+	EClass getPortGroup();
+
+	/**
+	 * Returns the meta object for the reference list '{@link scenario.port.PortGroup#getContents <em>Contents</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Contents</em>'.
+	 * @see scenario.port.PortGroup#getContents()
+	 * @see #getPortGroup()
+	 * @generated
+	 */
+	EReference getPortGroup_Contents();
+
+	/**
+	 * Returns the meta object for the '{@link scenario.port.PortGroup#getClosure(org.eclipse.emf.common.util.EList) <em>Get Closure</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Closure</em>' operation.
+	 * @see scenario.port.PortGroup#getClosure(org.eclipse.emf.common.util.EList)
+	 * @generated
+	 */
+	EOperation getPortGroup__GetClosure__EList();
+
+	/**
 	 * Returns the meta object for enum '{@link scenario.port.PortCapability <em>Capability</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -712,6 +940,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORT_MODEL__PORTS = eINSTANCE.getPortModel_Ports();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Groups</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_MODEL__PORT_GROUPS = eINSTANCE.getPortModel_PortGroups();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.PortImpl <em>Port</em>}' class.
@@ -786,6 +1022,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__CAPABILITIES = eINSTANCE.getPort_Capabilities();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Closure</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PORT___GET_CLOSURE__ELIST = eINSTANCE.getPort__GetClosure__EList();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.impl.DistanceModelImpl <em>Distance Model</em>}' class.
@@ -874,6 +1118,50 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CANAL_MODEL__CANALS = eINSTANCE.getCanalModel_Canals();
+
+		/**
+		 * The meta object literal for the '{@link scenario.port.impl.PortSelectionImpl <em>Selection</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.port.impl.PortSelectionImpl
+		 * @see scenario.port.impl.PortPackageImpl#getPortSelection()
+		 * @generated
+		 */
+		EClass PORT_SELECTION = eINSTANCE.getPortSelection();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Closure</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PORT_SELECTION___GET_CLOSURE__ELIST = eINSTANCE.getPortSelection__GetClosure__EList();
+
+		/**
+		 * The meta object literal for the '{@link scenario.port.impl.PortGroupImpl <em>Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see scenario.port.impl.PortGroupImpl
+		 * @see scenario.port.impl.PortPackageImpl#getPortGroup()
+		 * @generated
+		 */
+		EClass PORT_GROUP = eINSTANCE.getPortGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Contents</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_GROUP__CONTENTS = eINSTANCE.getPortGroup_Contents();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Closure</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PORT_GROUP___GET_CLOSURE__ELIST = eINSTANCE.getPortGroup__GetClosure__EList();
 
 		/**
 		 * The meta object literal for the '{@link scenario.port.PortCapability <em>Capability</em>}' enum.

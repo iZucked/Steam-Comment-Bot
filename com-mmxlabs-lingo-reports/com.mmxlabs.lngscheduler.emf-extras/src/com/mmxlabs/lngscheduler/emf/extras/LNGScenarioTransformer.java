@@ -24,6 +24,7 @@ import javax.management.timer.Timer;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -61,6 +62,7 @@ import scenario.optimiser.OptimisationSettings;
 import scenario.port.Canal;
 import scenario.port.DistanceLine;
 import scenario.port.Port;
+import scenario.port.PortSelection;
 import scenario.schedule.Schedule;
 import scenario.schedule.Sequence;
 import scenario.schedule.events.ScheduledEvent;
@@ -677,9 +679,11 @@ public class LNGScenarioTransformer {
 			 * set up inaccessible ports by applying resource allocation constraints
 			 */
 			Set<IPort> inaccessiblePorts = new HashSet<IPort>();
-			for (Port ePort : eVc.getInaccessiblePorts()) {
-				final IPort port = portAssociation.lookup(ePort);
-				inaccessiblePorts.add(port);
+			for (final PortSelection ePortSelection : eVc.getInaccessiblePorts()) {
+				for (final Port ePort : ePortSelection.getClosure(new UniqueEList<PortSelection>())) {
+					final IPort port = portAssociation.lookup(ePort);
+					inaccessiblePorts.add(port);
+				}
 			}
 
 			if (inaccessiblePorts.isEmpty() == false) {

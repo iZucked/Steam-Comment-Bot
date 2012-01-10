@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.shiplingo.ui.detailview.generated;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import scenario.optimiser.OptimiserPackage;
 
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
+import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 
 /**
  * A composite containing a form for editing DiscountCurve instances. The EClass hierarchy is implemented

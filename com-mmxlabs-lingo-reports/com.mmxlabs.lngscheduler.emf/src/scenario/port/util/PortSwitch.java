@@ -87,9 +87,10 @@ public class PortSwitch<T> extends Switch<T> {
 			case PortPackage.PORT: {
 				Port port = (Port)theEObject;
 				T result = casePort(port);
+				if (result == null) result = caseAnnotatedObject(port);
+				if (result == null) result = casePortSelection(port);
 				if (result == null) result = caseUUIDObject(port);
 				if (result == null) result = caseNamedObject(port);
-				if (result == null) result = caseAnnotatedObject(port);
 				if (result == null) result = caseScenarioObject(port);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -118,6 +119,25 @@ public class PortSwitch<T> extends Switch<T> {
 			case PortPackage.CANAL_MODEL: {
 				CanalModel canalModel = (CanalModel)theEObject;
 				T result = caseCanalModel(canalModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PortPackage.PORT_SELECTION: {
+				PortSelection portSelection = (PortSelection)theEObject;
+				T result = casePortSelection(portSelection);
+				if (result == null) result = caseUUIDObject(portSelection);
+				if (result == null) result = caseNamedObject(portSelection);
+				if (result == null) result = caseScenarioObject(portSelection);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PortPackage.PORT_GROUP: {
+				PortGroup portGroup = (PortGroup)theEObject;
+				T result = casePortGroup(portGroup);
+				if (result == null) result = casePortSelection(portGroup);
+				if (result == null) result = caseUUIDObject(portGroup);
+				if (result == null) result = caseNamedObject(portGroup);
+				if (result == null) result = caseScenarioObject(portGroup);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -212,6 +232,36 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCanalModel(CanalModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Selection</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Selection</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePortSelection(PortSelection object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Group</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePortGroup(PortGroup object) {
 		return null;
 	}
 

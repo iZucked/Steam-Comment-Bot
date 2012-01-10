@@ -7,6 +7,7 @@ package scenario.port.impl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -32,8 +33,10 @@ import scenario.port.DistanceModel;
 import scenario.port.Port;
 import scenario.port.PortCapability;
 import scenario.port.PortFactory;
+import scenario.port.PortGroup;
 import scenario.port.PortModel;
 import scenario.port.PortPackage;
+import scenario.port.PortSelection;
 import scenario.schedule.SchedulePackage;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.impl.EventsPackageImpl;
@@ -89,6 +92,20 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	private EClass canalModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass portSelectionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass portGroupEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -213,6 +230,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getPortModel_PortGroups() {
+		return (EReference)portModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPort() {
 		return portEClass;
 	}
@@ -287,6 +313,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 */
 	public EAttribute getPort_Capabilities() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getPort__GetClosure__EList() {
+		return portEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -384,6 +419,51 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getPortSelection() {
+		return portSelectionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getPortSelection__GetClosure__EList() {
+		return portSelectionEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getPortGroup() {
+		return portGroupEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPortGroup_Contents() {
+		return (EReference)portGroupEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getPortGroup__GetClosure__EList() {
+		return portGroupEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getPortCapability() {
 		return portCapabilityEEnum;
 	}
@@ -418,6 +498,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		// Create classes and their features
 		portModelEClass = createEClass(PORT_MODEL);
 		createEReference(portModelEClass, PORT_MODEL__PORTS);
+		createEReference(portModelEClass, PORT_MODEL__PORT_GROUPS);
 
 		portEClass = createEClass(PORT);
 		createEAttribute(portEClass, PORT__TIME_ZONE);
@@ -428,6 +509,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__DEFAULT_LOAD_DURATION);
 		createEAttribute(portEClass, PORT__DEFAULT_DISCHARGE_DURATION);
 		createEAttribute(portEClass, PORT__CAPABILITIES);
+		createEOperation(portEClass, PORT___GET_CLOSURE__ELIST);
 
 		distanceModelEClass = createEClass(DISTANCE_MODEL);
 		createEReference(distanceModelEClass, DISTANCE_MODEL__DISTANCES);
@@ -442,6 +524,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		canalModelEClass = createEClass(CANAL_MODEL);
 		createEReference(canalModelEClass, CANAL_MODEL__CANALS);
+
+		portSelectionEClass = createEClass(PORT_SELECTION);
+		createEOperation(portSelectionEClass, PORT_SELECTION___GET_CLOSURE__ELIST);
+
+		portGroupEClass = createEClass(PORT_GROUP);
+		createEReference(portGroupEClass, PORT_GROUP__CONTENTS);
+		createEOperation(portGroupEClass, PORT_GROUP___GET_CLOSURE__ELIST);
 
 		// Create enums
 		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
@@ -481,12 +570,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		portEClass.getESuperTypes().add(theScenarioPackage.getUUIDObject());
 		portEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
 		portEClass.getESuperTypes().add(theScenarioPackage.getAnnotatedObject());
+		portEClass.getESuperTypes().add(this.getPortSelection());
 		canalEClass.getESuperTypes().add(theScenarioPackage.getUUIDObject());
 		canalEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
+		portSelectionEClass.getESuperTypes().add(theScenarioPackage.getUUIDObject());
+		portSelectionEClass.getESuperTypes().add(theScenarioPackage.getNamedObject());
+		portGroupEClass.getESuperTypes().add(this.getPortSelection());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(portModelEClass, PortModel.class, "PortModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortModel_Ports(), this.getPort(), null, "ports", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortModel_PortGroups(), this.getPortGroup(), null, "portGroups", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPort_TimeZone(), ecorePackage.getEString(), "timeZone", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -497,6 +591,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_DefaultLoadDuration(), ecorePackage.getEInt(), "defaultLoadDuration", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultDischargeDuration(), ecorePackage.getEInt(), "defaultDischargeDuration", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_Capabilities(), this.getPortCapability(), "Capabilities", null, 0, -1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		EOperation op = initEOperation(getPort__GetClosure__EList(), this.getPort(), "getClosure", 1, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, this.getPortSelection(), "ignoreSelections", 1, -1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(distanceModelEClass, DistanceModel.class, "DistanceModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDistanceModel_Distances(), this.getDistanceLine(), null, "distances", null, 0, -1, DistanceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -511,6 +608,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		initEClass(canalModelEClass, CanalModel.class, "CanalModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCanalModel_Canals(), this.getCanal(), null, "canals", null, 0, -1, CanalModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(portSelectionEClass, PortSelection.class, "PortSelection", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		op = initEOperation(getPortSelection__GetClosure__EList(), this.getPort(), "getClosure", 1, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, this.getPortSelection(), "ignoreSelections", 1, -1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(portGroupEClass, PortGroup.class, "PortGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPortGroup_Contents(), this.getPortSelection(), null, "contents", null, 0, -1, PortGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		op = initEOperation(getPortGroup__GetClosure__EList(), this.getPort(), "getClosure", 1, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, this.getPortSelection(), "ignoreSelections", 1, -1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(portCapabilityEEnum, PortCapability.class, "PortCapability");

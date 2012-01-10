@@ -22,6 +22,7 @@ import scenario.impl.UUIDObjectImpl;
 import scenario.port.Port;
 import scenario.port.PortCapability;
 import scenario.port.PortPackage;
+import scenario.port.PortSelection;
 
 /**
  * <!-- begin-user-doc -->
@@ -470,6 +471,20 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<Port> getClosure(EList<PortSelection> ignoreSelections) {
+		if (ignoreSelections.contains(this)) {
+			return org.eclipse.emf.common.util.ECollections.emptyEList();
+		} else {
+			ignoreSelections.add(this);
+			return (EList<Port>) org.eclipse.emf.common.util.ECollections.singletonEList((Port)this);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -639,6 +654,11 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				default: return -1;
 			}
 		}
+		if (baseClass == PortSelection.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -663,6 +683,11 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 		if (baseClass == AnnotatedObject.class) {
 			switch (baseFeatureID) {
 				case ScenarioPackage.ANNOTATED_OBJECT__NOTES: return PortPackage.PORT__NOTES;
+				default: return -1;
+			}
+		}
+		if (baseClass == PortSelection.class) {
+			switch (baseFeatureID) {
 				default: return -1;
 			}
 		}
@@ -692,6 +717,12 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 				default: return -1;
 			}
 		}
+		if (baseClass == PortSelection.class) {
+			switch (baseOperationID) {
+				case PortPackage.PORT_SELECTION___GET_CLOSURE__ELIST: return PortPackage.PORT___GET_CLOSURE__ELIST;
+				default: return -1;
+			}
+		}
 		return super.eDerivedOperationID(baseOperationID, baseClass);
 	}
 
@@ -701,8 +732,11 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	 * @generated
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
+			case PortPackage.PORT___GET_CLOSURE__ELIST:
+				return getClosure((EList<PortSelection>)arguments.get(0));
 			case PortPackage.PORT___GET_CONTAINER:
 				return getContainer();
 		}

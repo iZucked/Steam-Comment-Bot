@@ -131,7 +131,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="pilotLightRate" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1"
-          eType="#//port/Port">
+          eType="#//port/PortSelection">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="documentation" value="A list of ports where this vessel can't dock because it is too large in some way."/>
         </eAnnotations>
@@ -607,8 +607,17 @@
     <eClassifiers xsi:type="ecore:EClass" name="PortModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
           eType="#//port/Port" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="portGroups" upperBound="-1"
+          eType="#//port/PortGroup" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//UUIDObject #//NamedObject #//AnnotatedObject">
+    <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//UUIDObject #//NamedObject #//AnnotatedObject #//port/PortSelection">
+      <eOperations name="getClosure" lowerBound="1" upperBound="-1" eType="#//port/Port">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (ignoreSelections.contains(this)) {&#xA;&#x9;return org.eclipse.emf.common.util.ECollections.emptyEList();&#xA;} else {&#xA;&#x9;ignoreSelections.add(this);&#xA;&#x9;return (EList&lt;Port>) org.eclipse.emf.common.util.ECollections.singletonEList((Port)this);&#xA;}"/>
+          <details key="documentation" value="Returns this port, contained in a list."/>
+        </eAnnotations>
+        <eParameters name="ignoreSelections" lowerBound="1" upperBound="-1" eType="#//port/PortSelection"/>
+      </eOperations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultCVvalue" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="22.8"/>
@@ -646,6 +655,22 @@
       <eLiterals name="Load" literal="LOAD"/>
       <eLiterals name="Discharge" value="1" literal="DISCHARGE"/>
       <eLiterals name="Drydock" value="2" literal="DRYDOCK"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PortSelection" abstract="true" eSuperTypes="#//UUIDObject #//NamedObject">
+      <eOperations name="getClosure" lowerBound="1" upperBound="-1" eType="#//port/Port">
+        <eParameters name="ignoreSelections" lowerBound="1" upperBound="-1" eType="#//port/PortSelection"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PortGroup" eSuperTypes="#//port/PortSelection">
+      <eOperations name="getClosure" lowerBound="1" upperBound="-1" eType="#//port/Port">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (ignoreSelections.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();&#xA;&#xA;final org.eclipse.emf.common.util.UniqueEList&lt;Port> result = new org.eclipse.emf.common.util.UniqueEList&lt;Port>();&#xA;ignoreSelections.add(this);&#xA;&#xA;for (final PortSelection selection : getContents()) {&#xA;&#x9;result.addAll(selection.getClosure(ignoreSelections));&#xA;}&#xA;&#xA;return result;"/>
+          <details key="documentation" value="Recursively collect up all the ports contained in this selection"/>
+        </eAnnotations>
+        <eParameters name="ignoreSelections" lowerBound="1" upperBound="-1" eType="#//port/PortSelection"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+          eType="#//port/PortSelection"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="cargo" nsURI="http://com.mmxlabs.lng.emf2/cargo" nsPrefix="com.mmxlabs.lng.emf.cargo">

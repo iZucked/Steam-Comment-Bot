@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.shiplingo.ui.detailview.generated;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import scenario.port.PortPackage;
 
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
+import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 
 /**
  * A composite containing a form for editing PortModel instances. The EClass hierarchy is implemented
@@ -75,6 +78,7 @@ public  class PortModelComposite extends AbstractDetailComposite {
 	 */
 	protected static void createPortModelFields(final AbstractDetailComposite composite, final Composite mainGroup) {
     createPortsEditor(composite, mainGroup);
+    createPortGroupsEditor(composite, mainGroup);
   }
 
 		
@@ -86,5 +90,15 @@ public  class PortModelComposite extends AbstractDetailComposite {
     composite.createEditorControl(mainGroup,
       composite.createEditor(PortPackage.eINSTANCE.getPortModel_Ports()),
       "Ports");
+  }
+
+  /**
+   * Create an editor for the portGroups feature on PortModel
+   * @generated
+   */
+  protected static void createPortGroupsEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(PortPackage.eINSTANCE.getPortModel_PortGroups()),
+      "Port Groups");
   }
 }

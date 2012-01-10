@@ -103,6 +103,14 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 				return createCanalModelAdapter();
 			}
 			@Override
+			public Adapter casePortSelection(PortSelection object) {
+				return createPortSelectionAdapter();
+			}
+			@Override
+			public Adapter casePortGroup(PortGroup object) {
+				return createPortGroupAdapter();
+			}
+			@Override
 			public Adapter caseUUIDObject(UUIDObject object) {
 				return createUUIDObjectAdapter();
 			}
@@ -219,6 +227,34 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCanalModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.port.PortSelection <em>Selection</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.port.PortSelection
+	 * @generated
+	 */
+	public Adapter createPortSelectionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link scenario.port.PortGroup <em>Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see scenario.port.PortGroup
+	 * @generated
+	 */
+	public Adapter createPortGroupAdapter() {
 		return null;
 	}
 

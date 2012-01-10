@@ -8,6 +8,7 @@ import org.eclipse.emf.common.util.EList;
 
 import scenario.AnnotatedObject;
 import scenario.NamedObject;
+import scenario.port.PortSelection;
 import scenario.port.Port;
 
 /**
@@ -329,7 +330,7 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 
 	/**
 	 * Returns the value of the '<em><b>Inaccessible Ports</b></em>' reference list.
-	 * The list contents are of type {@link scenario.port.Port}.
+	 * The list contents are of type {@link scenario.port.PortSelection}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -340,7 +341,7 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	 * @model
 	 * @generated
 	 */
-	EList<Port> getInaccessiblePorts();
+	EList<PortSelection> getInaccessiblePorts();
 
 	/**
 	 * Returns the value of the '<em><b>Canal Costs</b></em>' containment reference list.

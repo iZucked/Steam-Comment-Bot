@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.shiplingo.ui.detailview.generated;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import scenario.schedule.SchedulePackage;
 
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
+import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 
 /**
  * A composite containing a form for editing BookedRevenue instances. The EClass hierarchy is implemented
@@ -78,6 +81,7 @@ public  class BookedRevenueComposite extends AbstractDetailComposite {
     createDateEditor(composite, mainGroup);
     createEntityEditor(composite, mainGroup);
     createValueEditor(composite, mainGroup);
+    createDetailsEditor(composite, mainGroup);
   }
 
 		
@@ -109,5 +113,19 @@ public  class BookedRevenueComposite extends AbstractDetailComposite {
     composite.createEditorControl(mainGroup,
       composite.createEditor(SchedulePackage.eINSTANCE.getBookedRevenue_Value()),
       "Value");
+  }
+
+  /**
+   * Create an editor for the details feature on BookedRevenue
+   * @generated
+   */
+  protected static void createDetailsEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    final DetailComposite sub = 
+      new DetailComposite(composite, composite.getStyle(), 
+        "Details", false);
+    sub.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+        true));
+    sub.setPath(new CompiledEMFPath(composite.getInputPath(), SchedulePackage.eINSTANCE.getBookedRevenue_Details()));
+    composite.addSubEditor(sub);
   }
 }

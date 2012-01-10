@@ -32,7 +32,7 @@ import scenario.UUIDObject;
  * @model
  * @generated
  */
-public interface Port extends UUIDObject, NamedObject, AnnotatedObject {
+public interface Port extends UUIDObject, NamedObject, AnnotatedObject, PortSelection {
 	/**
 	 * Returns the value of the '<em><b>Time Zone</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -234,5 +234,17 @@ public interface Port extends UUIDObject, NamedObject, AnnotatedObject {
 	 * @generated
 	 */
 	EList<PortCapability> getCapabilities();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Returns this port, contained in a list.
+	 * <!-- end-model-doc -->
+	 * @model required="true" ignoreSelectionsRequired="true" ignoreSelectionsMany="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (ignoreSelections.contains(this)) {\n\treturn org.eclipse.emf.common.util.ECollections.emptyEList();\n} else {\n\tignoreSelections.add(this);\n\treturn (EList<Port>) org.eclipse.emf.common.util.ECollections.singletonEList((Port)this);\n}'"
+	 * @generated
+	 */
+	EList<Port> getClosure(EList<PortSelection> ignoreSelections);
 
 } // Port

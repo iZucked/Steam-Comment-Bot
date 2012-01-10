@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.shiplingo.ui.detailview.generated;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import scenario.port.PortPackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
+import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.shiplingo.ui.detailview.editors.TimezoneInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ValueListInlineEditor;
 
@@ -110,9 +113,11 @@ public class PortComposite extends AbstractDetailComposite {
 	 * 
 	 * @generated
 	 */
-	private static void createCapabilitiesEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-		composite.createEditorControl(mainGroup, composite.createEditor(PortPackage.eINSTANCE.getPort_Capabilities()), "Capabilities");
-	}
+	protected static void createCapabilitiesEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+    composite.createEditorControl(mainGroup,
+      composite.createEditor(PortPackage.eINSTANCE.getPort_Capabilities()),
+      "Capabilities");
+  }
 
 	/**
 	 * Create an editor for the timeZone feature on Port

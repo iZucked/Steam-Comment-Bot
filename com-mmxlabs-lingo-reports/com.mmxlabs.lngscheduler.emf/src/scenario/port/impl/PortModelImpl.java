@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import scenario.port.Port;
+import scenario.port.PortGroup;
 import scenario.port.PortModel;
 import scenario.port.PortPackage;
 
@@ -26,6 +27,7 @@ import scenario.port.PortPackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link scenario.port.impl.PortModelImpl#getPorts <em>Ports</em>}</li>
+ *   <li>{@link scenario.port.impl.PortModelImpl#getPortGroups <em>Port Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -41,6 +43,16 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 	 * @ordered
 	 */
 	protected EList<Port> ports;
+
+	/**
+	 * The cached value of the '{@link #getPortGroups() <em>Port Groups</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortGroups()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PortGroup> portGroups;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -78,11 +90,25 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<PortGroup> getPortGroups() {
+		if (portGroups == null) {
+			portGroups = new EObjectContainmentEList.Resolving<PortGroup>(PortGroup.class, this, PortPackage.PORT_MODEL__PORT_GROUPS);
+		}
+		return portGroups;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case PortPackage.PORT_MODEL__PORTS:
 				return ((InternalEList<?>)getPorts()).basicRemove(otherEnd, msgs);
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				return ((InternalEList<?>)getPortGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -97,6 +123,8 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 		switch (featureID) {
 			case PortPackage.PORT_MODEL__PORTS:
 				return getPorts();
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				return getPortGroups();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -114,6 +142,10 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 				getPorts().clear();
 				getPorts().addAll((Collection<? extends Port>)newValue);
 				return;
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				getPortGroups().clear();
+				getPortGroups().addAll((Collection<? extends PortGroup>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -129,6 +161,9 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__PORTS:
 				getPorts().clear();
 				return;
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				getPortGroups().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -143,6 +178,8 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 		switch (featureID) {
 			case PortPackage.PORT_MODEL__PORTS:
 				return ports != null && !ports.isEmpty();
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				return portGroups != null && !portGroups.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

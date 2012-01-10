@@ -24,6 +24,7 @@ import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
 import scenario.port.Port;
+import scenario.port.PortSelection;
 
 import com.mmxlabs.lngscheduler.emf.extras.validation.StartEndRequirementPortConstraint;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
@@ -56,7 +57,7 @@ public class StartEndRequirementPortConstraintTest {
 		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
 
 		@SuppressWarnings("unchecked")
-		final EList<Port> inaccessiblePorts = mock(EList.class);
+		final EList<PortSelection> inaccessiblePorts = mock(EList.class);
 
 		// The constraint will need to be able to get at the port and
 		// time's eContainer (the vessel owning it, in this case)

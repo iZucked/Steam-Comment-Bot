@@ -24,6 +24,7 @@ import scenario.fleet.VesselClassCost;
 import scenario.fleet.VesselFuel;
 import scenario.fleet.VesselStateAttributes;
 import scenario.impl.NamedObjectImpl;
+import scenario.port.PortSelection;
 import scenario.port.Port;
 
 /**
@@ -304,7 +305,7 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Port> inaccessiblePorts;
+	protected EList<PortSelection> inaccessiblePorts;
 
 	/**
 	 * The cached value of the '{@link #getCanalCosts() <em>Canal Costs</em>}' containment reference list.
@@ -746,9 +747,9 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Port> getInaccessiblePorts() {
+	public EList<PortSelection> getInaccessiblePorts() {
 		if (inaccessiblePorts == null) {
-			inaccessiblePorts = new EObjectResolvingEList<Port>(Port.class, this, FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS);
+			inaccessiblePorts = new EObjectResolvingEList<PortSelection>(PortSelection.class, this, FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS);
 		}
 		return inaccessiblePorts;
 	}
@@ -1006,7 +1007,7 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 				return;
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
-				getInaccessiblePorts().addAll((Collection<? extends Port>)newValue);
+				getInaccessiblePorts().addAll((Collection<? extends PortSelection>)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
 				getCanalCosts().clear();

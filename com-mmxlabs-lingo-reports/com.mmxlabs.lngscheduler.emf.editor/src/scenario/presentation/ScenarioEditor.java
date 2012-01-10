@@ -35,6 +35,7 @@ import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.BasicDiagnostic;
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -139,7 +140,9 @@ import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
 import scenario.port.Port;
 import scenario.port.PortCapability;
+import scenario.port.PortModel;
 import scenario.port.PortPackage;
+import scenario.port.PortSelection;
 import scenario.port.provider.PortItemProviderAdapterFactory;
 import scenario.presentation.ChartViewer.IChartContentProvider;
 import scenario.presentation.model_editors.CanalEVP;
@@ -147,6 +150,7 @@ import scenario.presentation.model_editors.CargoEVP;
 import scenario.presentation.model_editors.EntityEVP;
 import scenario.presentation.model_editors.IndexEVP;
 import scenario.presentation.model_editors.PortEVP;
+import scenario.presentation.model_editors.PortGroupEVP;
 import scenario.presentation.model_editors.PurchaseContractEVP;
 import scenario.presentation.model_editors.SalesContractEVP;
 import scenario.presentation.model_editors.VesselClassEVP;
@@ -262,6 +266,26 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		}
 	};
 
+	final ScenarioRVP portSelectionProvider = new SimpleRVP(PortPackage.eINSTANCE.getPortModel_PortGroups()) {
+		@Override
+		protected void install() {
+			getScenario().getPortModel().eAdapters().add(this);
+		}
+		
+		@Override
+		protected EList<? extends EObject> getObjects() {
+			final PortModel pm = getScenario().getPortModel();
+			final EList<PortSelection> result = new BasicEList<PortSelection>(pm.getPortGroups());
+			result.addAll(pm.getPorts());
+			return result;
+		}
+
+		@Override
+		protected boolean isRelevantTarget(Object target, Object feature) {
+			return super.isRelevantTarget(target, feature) || feature == PortPackage.eINSTANCE.getPortModel_Ports();
+		}
+	};
+	
 	final ScenarioRVP portProvider = new SimpleRVP(PortPackage.eINSTANCE.getPortModel_Ports()) {
 		private final Map<PortCapability, List<Pair<String, EObject>>> matchingValues = new HashMap<PortCapability, List<Pair<String, EObject>>>();
 		
@@ -736,6 +760,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	private SalesContractEVP salesContractEditorViewerPane;
 
 	private EntityEVP entityEditorViewerPane;
+
+	private PortGroupEVP portGroupEditorViewerPane;
 
 	/**
 	 * Handles activation of the editor or it's associated views. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1499,25 +1525,39 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	}
 
 	private void createPortEditor(final IReferenceValueProvider everyContractProvider, final IReferenceValueProvider marketProvider) {
-		portEditorViewerPane = new PortEVP(getSite().getPage(), this);
+		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
+		{
+			portEditorViewerPane = new PortEVP(getSite().getPage(), this);
+			portEditorViewerPane.createControl(sash);
 
-//		final SashForm sash = new SashForm(getContainer(), SWT.HORIZONTAL);
+			final List<EReference> path = new LinkedList<EReference>();
 
-		portEditorViewerPane.createControl(getContainer());
+			path.add(ScenarioPackage.eINSTANCE.getScenario_PortModel());
+			path.add(PortPackage.eINSTANCE.getPortModel_Ports());
 
-		final List<EReference> path = new LinkedList<EReference>();
+			portEditorViewerPane.setTitle("Ports", getTitleImage());
 
-		path.add(ScenarioPackage.eINSTANCE.getScenario_PortModel());
-		path.add(PortPackage.eINSTANCE.getPortModel_Ports());
+			portEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_PortModel(), PortPackage.eINSTANCE.getPortModel_Ports());
+			portEditorViewerPane.getViewer().setInput(getScenario());
+		}
+		{
+			portGroupEditorViewerPane = new PortGroupEVP(getSite().getPage(), this);
+			portGroupEditorViewerPane.createControl(sash);
 
-		portEditorViewerPane.setTitle("Ports", getTitleImage());
+			final List<EReference> path = new LinkedList<EReference>();
 
-		portEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_PortModel(), PortPackage.eINSTANCE.getPortModel_Ports());
-		portEditorViewerPane.getViewer().setInput(editingDomain.getResourceSet().getResources().get(0).getContents().get(0));
+			path.add(ScenarioPackage.eINSTANCE.getScenario_PortModel());
+			path.add(PortPackage.eINSTANCE.getPortModel_PortGroups());
 
-//		// createContextMenuFor(portEditor.getViewer());
-//
-//		canalEditorViewerPane = new CanalEVP(getSite().getPage(), this);
+			portGroupEditorViewerPane.setTitle("Port Groups", getTitleImage());
+
+			portGroupEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_PortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups());
+			portGroupEditorViewerPane.getViewer().setInput(getScenario());
+		}
+
+		// // createContextMenuFor(portEditor.getViewer());
+		//
+		// canalEditorViewerPane = new CanalEVP(getSite().getPage(), this);
 //
 //		canalEditorViewerPane.createControl(sash);
 //		canalEditorViewerPane.setTitle("Canals", getTitleImage());
@@ -1527,7 +1567,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 //		canalEditorViewerPane.getViewer().setInput(getScenario());
 //		// createContextMenuFor(canalEVP.getViewer());
 
-		final int pageIndex = addPage(portEditorViewerPane.getControl());
+		final int pageIndex = addPage(sash);
 		setPageText(pageIndex, "Ports and Distances");
 
 	}
@@ -1721,6 +1761,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			return getEntityProvider();
 		} else if (c == FleetPackage.eINSTANCE.getVesselFuel()) {
 			return fuelProvider;
+		} else if (c == PortPackage.eINSTANCE.getPortSelection()) {
+			return getPortSelectionProvider();
 		} else {
 			return null;
 		}
@@ -1792,6 +1834,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 				if (salesContractEditorViewerPane != null) salesContractEditorViewerPane.setLockedForEditing(lockedForEditing);
 				if (entityEditorViewerPane != null) entityEditorViewerPane.setLockedForEditing(lockedForEditing);
 				if (indexEditorViewerPane != null) indexEditorViewerPane.setLockedForEditing(lockedForEditing);
+				if (portGroupEditorViewerPane != null) portGroupEditorViewerPane.setLockedForEditing(lockedForEditing);	
 				for (final DetailCompositePropertySheetPage page : propertySheetPages.keySet()) {
 					page.setLockedForEditing(lockedForEditing);
 				}
@@ -2253,5 +2296,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	@Override
 	public boolean jobProgressUpdated(IJobControl job, int progressDelta) {
 		return true;
+	}
+
+	public IReferenceValueProvider getPortSelectionProvider() {
+		return portSelectionProvider;
 	}
 }

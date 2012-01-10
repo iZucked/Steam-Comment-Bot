@@ -494,6 +494,11 @@ public class ScenarioItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 PortFactory.eINSTANCE.createPortGroup()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
 				 CargoFactory.eINSTANCE.createCargoModel()));
 
 		newChildDescriptors.add

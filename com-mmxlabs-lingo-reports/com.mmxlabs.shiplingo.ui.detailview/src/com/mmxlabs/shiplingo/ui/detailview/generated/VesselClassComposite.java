@@ -62,7 +62,6 @@ public class VesselClassComposite extends AbstractDetailComposite {
     
     super.createContents(mainGroup);		
 
-   
     createFields(this, mainGroup);
   }
 	
