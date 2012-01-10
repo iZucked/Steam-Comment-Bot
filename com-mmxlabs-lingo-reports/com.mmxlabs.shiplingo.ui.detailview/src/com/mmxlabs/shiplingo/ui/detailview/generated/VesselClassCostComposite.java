@@ -84,12 +84,12 @@ public  class VesselClassCostComposite extends AbstractDetailComposite {
 		
 	/**
 	 * Create an editor for the canal feature on VesselClassCost
-	 * @generated
+	 * @generated NO
 	 */
 	protected static void createCanalEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClassCost_Canal()),
-      "Canal");
+//    composite.createEditorControl(mainGroup,
+//      composite.createEditor(FleetPackage.eINSTANCE.getVesselClassCost_Canal()),
+//      "Canal");
   }
 		
 	/**
