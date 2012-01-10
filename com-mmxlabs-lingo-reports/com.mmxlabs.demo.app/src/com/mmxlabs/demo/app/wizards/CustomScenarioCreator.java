@@ -231,9 +231,6 @@ public class CustomScenarioCreator {
 
 			vessel.setTimeChartered(isTimeChartered);
 
-			// TODO Does setting this set the vessel to be a spot charter?
-			// vessel.setDailyCharterOutPrice(charterOutPrice);
-
 			final PortTimeAndHeel start = FleetFactory.eINSTANCE.createPortTimeAndHeel();
 			final PortAndTime end = FleetFactory.eINSTANCE.createPortAndTime();
 
