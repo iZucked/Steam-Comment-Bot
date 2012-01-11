@@ -5,7 +5,6 @@
     <groupId>com.mmxlabs.jobmanager</groupId>
     <version>1-SNAPSHOT</version>
   </parent>
-  <groupId>com.mmxlabs.jobmanager.eclipse</groupId>
   <artifactId>com.mmxlabs.jobmanager.eclipse</artifactId>
   <packaging>eclipse-plugin</packaging>
 </project>

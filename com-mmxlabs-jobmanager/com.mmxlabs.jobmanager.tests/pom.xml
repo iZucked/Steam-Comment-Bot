@@ -5,7 +5,6 @@
     <groupId>com.mmxlabs.jobmanager</groupId>
     <version>1-SNAPSHOT</version>
   </parent>
-  <groupId>com.mmxlabs.jobmanager.tests</groupId>
   <artifactId>com.mmxlabs.jobmanager.tests</artifactId>
   <packaging>eclipse-test-plugin</packaging>
   <name>Jobmanager Tests</name>
