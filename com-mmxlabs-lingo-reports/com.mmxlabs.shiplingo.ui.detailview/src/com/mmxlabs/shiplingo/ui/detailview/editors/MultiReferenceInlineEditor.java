@@ -28,6 +28,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+import scenario.port.Port;
+import scenario.port.PortCapability;
+import scenario.port.PortPackage;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
@@ -142,6 +146,22 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 				return ((Pair<String, ?>) element).getFirst();
 			}
 		});
+		
+//		if (((EReference)feature).getEReferenceType().isSuperTypeOf(PortPackage.eINSTANCE.getPort())) {
+//			for (final PortCapability pc : PortCapability.values()) {
+//				dlg.addColumn(pc.getName(), new ColumnLabelProvider(){
+//					@Override
+//					public String getText(Object element) {
+//						final Pair<?, EObject> p = (Pair<?, EObject>)element;
+//						if (p.getSecond() instanceof Port) {
+//							return ((Port)p.getSecond()).getCapabilities().contains(pc) ? "Yes" : "No";
+//						} else {
+//							return "";
+//						}
+//					}
+//				});
+//			}
+//		}
 		
 		dlg.groupBy(new ColumnLabelProvider(){
 			@Override

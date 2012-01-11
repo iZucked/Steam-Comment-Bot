@@ -7,6 +7,7 @@ package scenario.contract;
 import org.eclipse.emf.common.util.EList;
 
 import scenario.NamedObject;
+import scenario.port.PortSelection;
 import scenario.port.Port;
 
 /**
@@ -57,7 +58,7 @@ public interface Contract extends NamedObject {
 
 	/**
 	 * Returns the value of the '<em><b>Default Ports</b></em>' reference list.
-	 * The list contents are of type {@link scenario.port.Port}.
+	 * The list contents are of type {@link scenario.port.PortSelection}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Default Ports</em>' reference list isn't clear,
@@ -69,7 +70,7 @@ public interface Contract extends NamedObject {
 	 * @model ordered="false"
 	 * @generated
 	 */
-	EList<Port> getDefaultPorts();
+	EList<PortSelection> getDefaultPorts();
 
 	/**
 	 * Returns the value of the '<em><b>Min Quantity</b></em>' attribute.

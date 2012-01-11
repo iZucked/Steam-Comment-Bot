@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import scenario.contract.ContractPackage;
 import scenario.contract.SimplePurchaseContract;
 
+import scenario.port.PortSelection;
 import scenario.port.Port;
 
 /**
@@ -39,7 +40,7 @@ public abstract class SimplePurchaseContractImpl extends PurchaseContractImpl im
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Port> cooldownPorts;
+	protected EList<PortSelection> cooldownPorts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -65,9 +66,9 @@ public abstract class SimplePurchaseContractImpl extends PurchaseContractImpl im
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Port> getCooldownPorts() {
+	public EList<PortSelection> getCooldownPorts() {
 		if (cooldownPorts == null) {
-			cooldownPorts = new EObjectResolvingEList<Port>(Port.class, this, ContractPackage.SIMPLE_PURCHASE_CONTRACT__COOLDOWN_PORTS);
+			cooldownPorts = new EObjectResolvingEList<PortSelection>(PortSelection.class, this, ContractPackage.SIMPLE_PURCHASE_CONTRACT__COOLDOWN_PORTS);
 		}
 		return cooldownPorts;
 	}
@@ -97,7 +98,7 @@ public abstract class SimplePurchaseContractImpl extends PurchaseContractImpl im
 		switch (featureID) {
 			case ContractPackage.SIMPLE_PURCHASE_CONTRACT__COOLDOWN_PORTS:
 				getCooldownPorts().clear();
-				getCooldownPorts().addAll((Collection<? extends Port>)newValue);
+				getCooldownPorts().addAll((Collection<? extends PortSelection>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

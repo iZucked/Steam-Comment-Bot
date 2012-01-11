@@ -39,6 +39,7 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -274,9 +275,18 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		
 		@Override
 		protected EList<? extends EObject> getObjects() {
-			final PortModel pm = getScenario().getPortModel();
-			final EList<PortSelection> result = new BasicEList<PortSelection>(pm.getPortGroups());
-			result.addAll(pm.getPorts());
+			return getScenario().getPortModel().getPortGroups();
+		}
+
+		@Override
+		public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
+			List<Pair<String, EObject>> groups = super.getAllowedValues(target, field);
+			List<Pair<String, EObject>> ports = portProvider.getAllowedValues(target, field);
+			
+			final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>(groups.size() + ports.size());
+			result.addAll(groups);
+			result.addAll(ports);
+			
 			return result;
 		}
 
@@ -331,7 +341,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			if (contract == null) {
 				return m;
 			} else {
-				final List<Port> ports = contract.getDefaultPorts();
+				final List<Port> ports = new ArrayList<Port>(contract.getDefaultPorts().size());
+				for (final PortSelection p : contract.getDefaultPorts()) {
+					ports.addAll(p.getClosure(new UniqueEList<PortSelection>()));
+				}
 				if (ports.isEmpty()) return m;
 				final List<Pair<String, EObject>> filter = new ArrayList<Pair<String, EObject>>();
 				Iterator<Pair<String, EObject>> iterator = m.iterator();

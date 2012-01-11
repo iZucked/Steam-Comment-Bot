@@ -813,7 +813,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
           eType="#//contract/Entity"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="defaultPorts" ordered="false"
-          upperBound="-1" eType="#//port/Port"/>
+          upperBound="-1" eType="#//port/PortSelection"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" lowerBound="1"
@@ -856,7 +856,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="SimplePurchaseContract" abstract="true"
         eSuperTypes="#//contract/PurchaseContract">
       <eStructuralFeatures xsi:type="ecore:EReference" name="cooldownPorts" upperBound="-1"
-          eType="#//port/Port"/>
+          eType="#//port/PortSelection"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="GroupEntity" eSuperTypes="#//contract/Entity">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="taxRate" lowerBound="1"

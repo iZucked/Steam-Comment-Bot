@@ -6,6 +6,7 @@ package scenario.contract;
 
 import org.eclipse.emf.common.util.EList;
 
+import scenario.port.PortSelection;
 import scenario.port.Port;
 
 /**
@@ -27,7 +28,7 @@ import scenario.port.Port;
 public interface SimplePurchaseContract extends PurchaseContract {
 	/**
 	 * Returns the value of the '<em><b>Cooldown Ports</b></em>' reference list.
-	 * The list contents are of type {@link scenario.port.Port}.
+	 * The list contents are of type {@link scenario.port.PortSelection}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Cooldown Ports</em>' reference list isn't clear,
@@ -39,6 +40,6 @@ public interface SimplePurchaseContract extends PurchaseContract {
 	 * @model
 	 * @generated
 	 */
-	EList<Port> getCooldownPorts();
+	EList<PortSelection> getCooldownPorts();
 
 } // SimplePurchaseContract

@@ -17,6 +17,7 @@ import scenario.contract.Contract;
 import scenario.contract.ContractPackage;
 import scenario.contract.Entity;
 import scenario.impl.NamedObjectImpl;
+import scenario.port.PortSelection;
 import scenario.port.Port;
 
 /**
@@ -54,7 +55,7 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Port> defaultPorts;
+	protected EList<PortSelection> defaultPorts;
 
 	/**
 	 * The default value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
@@ -158,9 +159,9 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Port> getDefaultPorts() {
+	public EList<PortSelection> getDefaultPorts() {
 		if (defaultPorts == null) {
-			defaultPorts = new EObjectResolvingEList<Port>(Port.class, this, ContractPackage.CONTRACT__DEFAULT_PORTS);
+			defaultPorts = new EObjectResolvingEList<PortSelection>(PortSelection.class, this, ContractPackage.CONTRACT__DEFAULT_PORTS);
 		}
 		return defaultPorts;
 	}
@@ -242,7 +243,7 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 				return;
 			case ContractPackage.CONTRACT__DEFAULT_PORTS:
 				getDefaultPorts().clear();
-				getDefaultPorts().addAll((Collection<? extends Port>)newValue);
+				getDefaultPorts().addAll((Collection<? extends PortSelection>)newValue);
 				return;
 			case ContractPackage.CONTRACT__MIN_QUANTITY:
 				setMinQuantity((Integer)newValue);
