@@ -52,7 +52,7 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 	static {
 		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
 		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
-		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap());
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
 		resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, 
 				new XMLResource.ResourceHandler() {
 					@Override
