@@ -40,7 +40,7 @@ public abstract class AbstractMenuAction extends Action implements IMenuCreator 
 	@Override
 	public Menu getMenu(final Control parent) {
 		if (lastMenu != null) {
-			lastMenu.dispose();
+			lastMenu.dispose();		
 		}
 		lastMenu = new Menu(parent);
 
