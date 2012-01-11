@@ -110,11 +110,11 @@
 			<layout>p2</layout>
 		</repository>
 
-                <repository>
-                        <id>nebula-main-snapshots</id>
-                        <url>http://download.eclipse.org/technology/nebula/snapshot</url>
-                        <layout>p2</layout>
-                </repository>
+		<repository>
+			<id>nebula-main-snapshots</id>
+			<url>http://download.eclipse.org/technology/nebula/snapshot</url>
+			<layout>p2</layout>
+		</repository>
 
 		<repository>
 			<id>swtbot</id>
@@ -129,10 +129,10 @@
 		</repository>
 
 		<repository>
-                        <id>com.mmxlabs.shiplingo.demo.nightly</id>
-                        <url>https://s3-proxy.appspot.com/p2-repo/repositories/com.mmxlabs.shiplingo.demo/nightly</url>
-                        <layout>p2</layout>
-                </repository>
+			<id>com.mmxlabs.shiplingo.demo.nightly</id>
+			<url>https://s3-proxy.appspot.com/p2-repo/repositories/com.mmxlabs.shiplingo.demo/nightly</url>
+			<layout>p2</layout>
+		</repository>
 
 
 	</repositories>
