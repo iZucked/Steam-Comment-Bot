@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.jobmanager.parent</artifactId>
 		<groupId>com.mmxlabs.jobmanager</groupId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.mmxlabs.jobmanager.ui</groupId>
 	<artifactId>com.mmxlabs.jobmanager.ui</artifactId>
