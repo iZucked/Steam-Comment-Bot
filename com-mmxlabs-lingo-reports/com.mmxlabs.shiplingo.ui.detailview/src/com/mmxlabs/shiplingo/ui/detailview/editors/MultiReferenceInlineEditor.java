@@ -15,7 +15,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -25,10 +27,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.dialogs.ListSelectionDialog;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
 import com.mmxlabs.shiplingo.ui.detailview.utils.CommandUtil;
 
@@ -122,7 +124,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 					public String getText(Object element) {
 						return ((Pair<String, ?>) element).getFirst();
 					}
-				}, "Select values:");
+				});
 		dlg.setTitle("Value Selection");
 
 		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
@@ -134,17 +136,30 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		}
 
 		dlg.setInitialSelections(selectedOptions.toArray());
-		dlg.setBlockOnOpen(true);
-		dlg.open();
-		Object[] result = dlg.getResult();
-		if (result == null)
-			return null;
-		else {
+		dlg.addColumn("Name", new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				return ((Pair<String, ?>) element).getFirst();
+			}
+		});
+		
+		dlg.groupBy(new ColumnLabelProvider(){
+			@Override
+			public String getText(Object element) {
+				return ((Pair<?, EObject>) element).getSecond().eClass().getName();
+			}
+		});
+		
+		if (dlg.open() == Window.OK) {
+			final Object[] result = dlg.getResult();
+
 			final ArrayList<EObject> resultList = new ArrayList<EObject>();
 			for (final Object o : result) {
 				resultList.add(((Pair<String, EObject>) o).getSecond());
 			}
 			return resultList;
 		}
+		
+		return null;
 	}
 }

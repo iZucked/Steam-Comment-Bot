@@ -17,12 +17,18 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.dialogs.ListSelectionDialog;
+//import org.eclipse.ui.dialogs.ListSelectionDialog;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
 import com.mmxlabs.shiplingo.ui.detailview.utils.CommandUtil;
 
@@ -75,15 +81,19 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);
 
-		ListSelectionDialog dlg = new ListSelectionDialog(
+		ListSelectionDialog listSelectionDialog = new ListSelectionDialog(
 				cellEditorWindow.getShell(), options.toArray(),
-				new ArrayContentProvider(), new LabelProvider() {
+				new ArrayContentProvider(),
+
+				new LabelProvider() {
 
 					@Override
 					public String getText(Object element) {
 						return ((Pair<String, ?>) element).getFirst();
 					}
-				}, "Select values:");
+				}
+				);
+		ListSelectionDialog dlg = listSelectionDialog;//, "Select values:");
 		dlg.setTitle("Value Selection");
 
 		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
@@ -95,18 +105,33 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		}
 
 		dlg.setInitialSelections(selectedOptions.toArray());
-		dlg.setBlockOnOpen(true);
-		dlg.open();
-		Object[] result = dlg.getResult();
-		if (result == null)
-			return null;
-		else {
+		dlg.addColumn("Name", new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				return ((Pair<String, ?>) element).getFirst();
+			}
+		});
+		
+//		dlg.addColumn("Type", );
+		
+		dlg.groupBy(new ColumnLabelProvider(){
+			@Override
+			public String getText(Object element) {
+				return ((Pair<?, EObject>) element).getSecond().eClass().getName();
+			}
+		});
+
+		if (dlg.open() == Window.OK) {
+			final Object[] result = dlg.getResult();
+
 			final ArrayList<EObject> resultList = new ArrayList<EObject>();
 			for (final Object o : result) {
 				resultList.add(((Pair<String, EObject>) o).getSecond());
 			}
+			
 			return resultList;
 		}
+		return null;
 	}
 
 	@Override
