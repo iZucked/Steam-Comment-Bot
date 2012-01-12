@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -163,6 +164,17 @@ public class DistanceLineViewer extends GridTableViewer {
 						return "";
 					}
 				}
+
+//				@Override
+//				public void update(final ViewerCell cell) {
+//					super.update(cell);
+//					
+//					final Pair<Port, Map<Port, DistanceLine>> e = (Pair<Port, Map<Port, DistanceLine>>) cell.getElement();
+//					cell.getControl().setToolTipText("Distance from "
+//							+e.getFirst().getName() + " to " + e.getSecond().get(p) + "\n" +
+//							
+//							cell.getControl().getToolTipText());
+//				}
 			});
 
 			toColumn.setEditingSupport(new EditingSupport(this) {
