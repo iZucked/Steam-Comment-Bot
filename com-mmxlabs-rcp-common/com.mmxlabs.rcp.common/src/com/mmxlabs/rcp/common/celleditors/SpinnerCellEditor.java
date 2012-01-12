@@ -76,7 +76,8 @@ public class SpinnerCellEditor extends CellEditor {
 		control = new Spinner(parent, SWT.NONE);
 		
 		control.addTraverseListener(new TraverseListener() {
-            public void keyTraversed(TraverseEvent e) {
+            @Override
+			public void keyTraversed(TraverseEvent e) {
                 if (e.detail == SWT.TRAVERSE_ESCAPE
                         || e.detail == SWT.TRAVERSE_RETURN) {
                     e.doit = false;
