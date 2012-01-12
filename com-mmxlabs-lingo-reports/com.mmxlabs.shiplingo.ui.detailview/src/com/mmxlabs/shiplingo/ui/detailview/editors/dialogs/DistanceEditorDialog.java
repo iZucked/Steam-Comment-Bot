@@ -14,9 +14,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.IShellProvider;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
@@ -124,17 +126,20 @@ public class DistanceEditorDialog extends Dialog {
 		viewer.init(editingDomain, ((Scenario) valueProviderProvider.getModel()));
 
 		final Grid grid = viewer.getGrid();
-
 		final Label rowLabel = new Label(barComposite, SWT.NONE);
 		rowLabel.setText("Row:");
 		final Text rowFilter = new Text(barComposite, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 		rowFilter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		rowFilter.setToolTipText("Filter rows to show source ports with names containing this text");
+		
 		final Label columnLabel = new Label(barComposite, SWT.NONE);
 		columnLabel.setText("Column:");
 		final Text columnFilter = new Text(barComposite, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 		columnFilter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		columnFilter.setToolTipText("Filter columns to show destination ports with names containing this text");
+		
 		columnFilter.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
