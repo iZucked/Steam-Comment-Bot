@@ -7,15 +7,15 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-        <parent>
-                <groupId>com.mmxlabs.common</groupId>
-                <artifactId>common-util-parent</artifactId>
-                <version>1-SNAPSHOT</version>
-        </parent>
+	<parent>
+		<groupId>com.mmxlabs.common</groupId>
+		<artifactId>common-util-parent</artifactId>
+		<version>1-SNAPSHOT</version>
+	</parent>
 
 
 	<properties>
-                <tycho-extras-version>0.13.0</tycho-extras-version>
+		<tycho-extras-version>0.13.0</tycho-extras-version>
 	</properties>
 
 	<build>
@@ -42,7 +42,7 @@
 							<!--<attach>false</attach>-->
 							<!-- Config files to process -->
 							<descriptors>
-						        	<descriptor>assembly.xml</descriptor>
+								<descriptor>assembly.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
