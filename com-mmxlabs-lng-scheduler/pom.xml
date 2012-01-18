@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.mmxlabs.scheduler</groupId>
+	<artifactId>com.mmxlabs.scheduler.parent</artifactId>
+	<version>1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Scheduler - Parentr</name>
+	<description>LNG Scheduler</description>
+
+	<parent>
+		<groupId>com.mmxlabs.parent</groupId>
+		<artifactId>bundle-parent</artifactId>
+		<version>5</version>
+		<relativePath />
+	</parent>
+
+	<scm>
+		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lng-scheduler.hg</connection>
+		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lng-scheduler.hg</developerConnection>
+		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-lng-scheduler/</url>
+	</scm>
+
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.lng.scheduler/</url>
+	</ciManagement>
+
+	<modules>
+		<module>com.mmxlabs.scheduler.optimiser</module>
+		<!--<module>com.mmxlabs.scheduler.spring</module>-->
+		<module>com.mmxlabs.scheduler.p2</module>
+	</modules>
+</project>
