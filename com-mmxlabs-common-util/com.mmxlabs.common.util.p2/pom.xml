@@ -39,7 +39,7 @@
 							<!-- Avoids appending e.g. -bin to finalName -->
 							<appendAssemblyId>false</appendAssemblyId>
 							<!-- This is only an intermediate artifact - no need to archive -->
-							<!--<attach>false</attach>-->
+							<attach>false</attach>
 							<!-- Config files to process -->
 							<descriptors>
 								<descriptor>assembly.xml</descriptor>
