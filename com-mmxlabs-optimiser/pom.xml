@@ -12,8 +12,8 @@
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>bundle-parent</artifactId>
-		<version>3</version>
 		<relativePath />
+		<version>5</version>
 	</parent>
 
 	<scm>
@@ -32,6 +32,7 @@
 		<module>optimiser-lso</module>
 		<module>optimiser-common</module>
 		<module>optimiser-ga</module>
+		<module>optimiser-p2</module>
 	</modules>
 
 </project>
