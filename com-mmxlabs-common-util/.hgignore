@@ -4,4 +4,4 @@ target/
 .settings/
 
 syntax: regexp
-^META-INF$
+^com\.mmxlabs\.common\.util/META-INF$
