@@ -1076,4 +1076,10 @@ public interface ISettings {
      * @return true to scroll chart vertically. Default is true.
      */
     public boolean scrollChartVerticallyOnMouseWheel();
+    
+    /**
+     * Whether the gantt section backgrounds should be rendered with a gradient (true) or alternating colours (false).
+     * @return true to render with gradients. Default is true.
+     */
+    public boolean drawSectionsWithGradients();
 }

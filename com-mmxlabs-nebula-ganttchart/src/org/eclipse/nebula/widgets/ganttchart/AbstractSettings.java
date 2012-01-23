@@ -506,4 +506,8 @@ public abstract class AbstractSettings implements ISettings {
     public boolean scrollChartVerticallyOnMouseWheel() {
     	return true;
     }
+    
+    public boolean drawSectionsWithGradients() {
+    	return true;
+    }
 }
