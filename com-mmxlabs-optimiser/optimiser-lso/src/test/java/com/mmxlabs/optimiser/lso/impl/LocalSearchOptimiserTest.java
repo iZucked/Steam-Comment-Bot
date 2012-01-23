@@ -265,11 +265,11 @@ public class LocalSearchOptimiserTest {
 			Assert.assertEquals(seq2.get(i), seq4.get(i));
 		}
 
-		Assert.assertEquals(Integer.valueOf(6), seq4.get(0));
-		Assert.assertEquals(Integer.valueOf(7), seq4.get(1));
-		Assert.assertEquals(Integer.valueOf(8), seq4.get(2));
-		Assert.assertEquals(Integer.valueOf(9), seq4.get(3));
-		Assert.assertEquals(Integer.valueOf(10), seq4.get(4));
+		Assert.assertEquals(6, seq4.get(0).getIndex());
+		Assert.assertEquals(7, seq4.get(1).getIndex());
+		Assert.assertEquals(8, seq4.get(2).getIndex());
+		Assert.assertEquals(9, seq4.get(3).getIndex());
+		Assert.assertEquals(10, seq4.get(4).getIndex());
 
 	}
 
