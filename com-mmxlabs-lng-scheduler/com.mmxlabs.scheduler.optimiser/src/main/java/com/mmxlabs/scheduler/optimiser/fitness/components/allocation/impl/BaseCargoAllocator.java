@@ -18,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VirtualCargo;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
@@ -165,6 +166,11 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 				}
 			}
 		}
+		
+		for (final VirtualCargo virtual : sequences.getVirtualCargoes()) {
+			// add virtual cargo, somehow; contracts need to know how to price this, because we need the load price.
+		}
+		
 		solve();
 		final LinkedList<IAllocationAnnotation> result = new LinkedList<IAllocationAnnotation>();
 		for (final IAllocationAnnotation aa : getAllocations())

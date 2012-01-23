@@ -6,7 +6,9 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
@@ -48,6 +50,11 @@ public class ProfitSharingContract implements ILoadPriceCalculator2 {
 
 	@Override
 	public int calculateLoadUnitPrice(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int actualSalesPrice, int loadVolume, IVesselClass vesselClass, VoyagePlan plan) {
+		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, actualSalesPrice);
+	}
+
+	@Override
+	public int calculateLoadUnitPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int loadTime, int dischargeTime, int actualSalesPrice) {
 		final int marketPurchasePrice = (int) market.getValueAtPoint(loadTime);
 
 		final int referenceSalesPrice = (int) referenceMarket.getValueAtPoint(dischargeTime);

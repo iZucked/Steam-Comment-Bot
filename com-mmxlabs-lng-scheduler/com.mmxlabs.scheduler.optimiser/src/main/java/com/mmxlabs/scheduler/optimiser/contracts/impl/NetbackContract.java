@@ -4,9 +4,13 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import javax.naming.OperationNotSupportedException;
+
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -111,5 +115,11 @@ public class NetbackContract implements ILoadPriceCalculator2 {
 		int result = (int) (salesPrice - transportCostPerMMBTU - marginScaled);
 		// System.err.println("netback cost " + actualSalesPrice + " => " + result);
 		return result;
+	}
+
+	@Override
+	public int calculateLoadUnitPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int loadTime, int dischargeTime, int salesPrice) {
+		//TODO implement me
+		throw new RuntimeException("A netback requires shipping costs - not yet handled");
 	}
 }

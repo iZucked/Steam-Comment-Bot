@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -38,4 +40,15 @@ public interface ILoadPriceCalculator2 extends ICalculator {
 	 * @return
 	 */
 	public int calculateLoadUnitPrice(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePrice, int loadVolume, IVesselClass vesselClass, VoyagePlan plan);
+
+	/**
+	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when a third-party is handling shipping
+	 * 
+	 * TODO decide what scheduling information is needed here
+	 * 
+	 * @param loadOption
+	 * @param dischargeOption
+	 * @return
+	 */
+	public int calculateLoadUnitPrice(ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice);
 }

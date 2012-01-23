@@ -24,11 +24,14 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
@@ -88,10 +91,19 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		for (int i = 0; i < sequences.size(); i++) {
 			final ISequence sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
-			final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
-			if (scheduledSequence == null)
-				return null;
-			result.add(scheduledSequence);
+			final IVessel vessel = vesselProvider.getVessel(resource);
+			if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+				assert sequence.size() == 4 : "A virtual sequence should always contain 4 elements (Start - Load - Discharge - End)";
+				
+				result.addVirtualCargo((ILoadOption) portSlotProvider.getPortSlot(sequence.get(1)), 
+						(IDischargeOption)portSlotProvider.getPortSlot(sequence.get(2)),
+						arrivalTimes[i][1], arrivalTimes[i][2]);
+			} else {
+				final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+				if (scheduledSequence == null)
+					return null;
+				result.add(scheduledSequence);
+			}
 		}
 
 		return result;
@@ -110,6 +122,13 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	public ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
+		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+			// Virtual vessels are those operated by a third party, for FOB and DES situations.
+			// Should we compute a schedule for them anyway? The arrival times don't mean much,
+			// but contracts need this kind of information to make up numbers with.
+			return null;
+		}
+		
 		// Get start time
 		final int startTime = arrivalTimes[0];
 

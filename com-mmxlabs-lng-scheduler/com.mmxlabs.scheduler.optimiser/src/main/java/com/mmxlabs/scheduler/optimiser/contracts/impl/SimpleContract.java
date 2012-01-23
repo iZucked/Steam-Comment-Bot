@@ -5,7 +5,9 @@
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -40,4 +42,8 @@ public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoa
 		return calculateSimpleLoadUnitPrice(time);
 	}
 
+	@Override
+	public int calculateLoadUnitPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int loadTime, int dischargeTime, int salesPrice) {
+		return calculateSimpleLoadUnitPrice(loadTime);
+	}
 }
