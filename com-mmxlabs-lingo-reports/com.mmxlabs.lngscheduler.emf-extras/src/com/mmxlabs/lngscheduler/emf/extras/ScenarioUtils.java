@@ -69,7 +69,7 @@ public class ScenarioUtils {
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_COOLDOWN_COMPONENT_NAME, 1));
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME, 1));
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1));
-			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.DISTANCE_COMPONENT_NAME, 0));
+//			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.DISTANCE_COMPONENT_NAME, 0));
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME, 1));
 
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, 1));
