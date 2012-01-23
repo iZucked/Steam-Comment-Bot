@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
-		<version>4</version>
+		<version>5</version>
 		<relativePath />
 	</parent>
 
@@ -156,13 +156,13 @@
 
 		<repository>
 			<id>mmxlabs-p2-snapshots</id>
-			<url>https://s3-proxy.appspot.com/p2-repo/repositories/mmxlabs-p2-snapshots/</url>
+			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/</url>
 			<layout>p2</layout>
 		</repository>
 
 		<repository>
 			<id>mmxlabs-p2-external</id>
-			<url>https://s3-proxy.appspot.com/p2-repo/repositories/mmxlabs-p2-external/</url>
+			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>
