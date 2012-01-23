@@ -110,7 +110,7 @@ public class UnmodifiableSequenceWrapperTest {
 		context.checking(new Expectations() {
 			{
 				oneOf(target).next();
-				returnValue(element);
+				will(returnValue(element));
 				
 			}
 		});
