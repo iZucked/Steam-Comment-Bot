@@ -21,8 +21,6 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 
 	public static final String FITNESS_CORE_NAME = "CargoSchedulerCore";
 
-	public static final String DISTANCE_COMPONENT_NAME = "cargo-scheduler-distance";
-
 	public static final String LATENESS_COMPONENT_NAME = "cargo-scheduler-lateness";
 
 	public static final String COST_BASE_COMPONENT_NAME = "cargo-scheduler-cost-base";
@@ -55,7 +53,7 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 
 	@Override
 	public Collection<String> getFitnessComponentNames() {
-		return CollectionsUtil.makeArrayList(DISTANCE_COMPONENT_NAME, LATENESS_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME, CHARTER_COST_COMPONENT_NAME,
+		return CollectionsUtil.makeArrayList(LATENESS_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME, CHARTER_COST_COMPONENT_NAME,
 				ROUTE_PRICE_COMPONENT_NAME, COST_COOLDOWN_COMPONENT_NAME, CHARTER_REVENUE_COMPONENT_NAME, PROFIT_COMPONENT_NAME);
 	}
 
