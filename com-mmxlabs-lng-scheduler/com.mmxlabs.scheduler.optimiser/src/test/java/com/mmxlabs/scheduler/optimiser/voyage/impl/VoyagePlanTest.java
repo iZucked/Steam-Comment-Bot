@@ -42,26 +42,20 @@ public class VoyagePlanTest {
 
 	@Test
 	public void testEquals() {
-		Object[] seq1 = new Object[0];
-		Object[] seq2 = new Object[0];
+		final Object[] seq1 = new Object[0];
 
-		FuelComponent fuel1 = FuelComponent.Base;
-		FuelComponent fuel2 = FuelComponent.Base_Supplemental;
-		FuelComponent fuel3 = FuelComponent.NBO;
-		FuelComponent fuel4 = FuelComponent.FBO;
+		final FuelComponent fuel1 = FuelComponent.Base;
+		final FuelComponent fuel2 = FuelComponent.Base_Supplemental;
+		final FuelComponent fuel3 = FuelComponent.NBO;
+		final FuelComponent fuel4 = FuelComponent.FBO;
 
-		VoyagePlan plan1 = make(seq1, 1, 2, 3, 4, fuel1, 5, fuel2, 6);
-		VoyagePlan plan2 = make(seq1, 1, 2, 3, 4, fuel1, 5, fuel2, 6);
+		final VoyagePlan plan1 = make(seq1, fuel1, 5, fuel2, 6);
+		final VoyagePlan plan2 = make(seq1, fuel1, 5, fuel2, 6);
 
-		VoyagePlan plan3 = make(seq2, 1, 2, 3, 4, fuel1, 5, fuel2, 6);
-		VoyagePlan plan4 = make(seq1, 21, 2, 3, 4, fuel1, 5, fuel2, 6);
-		VoyagePlan plan5 = make(seq1, 1, 22, 3, 4, fuel1, 5, fuel2, 6);
-		VoyagePlan plan6 = make(seq1, 1, 2, 23, 4, fuel1, 5, fuel2, 6);
-		VoyagePlan plan7 = make(seq1, 1, 2, 3, 24, fuel1, 5, fuel2, 6);
-		VoyagePlan plan8 = make(seq1, 1, 2, 3, 4, fuel3, 5, fuel2, 6);
-		VoyagePlan plan9 = make(seq1, 1, 2, 3, 4, fuel1, 25, fuel2, 6);
-		VoyagePlan plan10 = make(seq1, 1, 2, 3, 4, fuel1, 5, fuel4, 6);
-		VoyagePlan plan11 = make(seq1, 1, 2, 3, 4, fuel1, 5, fuel2, 26);
+		final VoyagePlan plan3 = make(seq1, fuel3, 5, fuel2, 6);
+		final VoyagePlan plan4 = make(seq1, fuel1, 25, fuel2, 6);
+		final VoyagePlan plan5 = make(seq1, fuel1, 5, fuel4, 6);
+		final VoyagePlan plan6 = make(seq1, fuel1, 5, fuel2, 26);
 
 		Assert.assertTrue(plan1.equals(plan1));
 		Assert.assertTrue(plan1.equals(plan2));
@@ -71,30 +65,18 @@ public class VoyagePlanTest {
 		Assert.assertFalse(plan1.equals(plan4));
 		Assert.assertFalse(plan1.equals(plan5));
 		Assert.assertFalse(plan1.equals(plan6));
-		Assert.assertFalse(plan1.equals(plan7));
-		Assert.assertFalse(plan1.equals(plan8));
-		Assert.assertFalse(plan1.equals(plan9));
-		Assert.assertFalse(plan1.equals(plan10));
-		Assert.assertFalse(plan1.equals(plan11));
 
 		Assert.assertFalse(plan3.equals(plan1));
 		Assert.assertFalse(plan4.equals(plan1));
 		Assert.assertFalse(plan5.equals(plan1));
 		Assert.assertFalse(plan6.equals(plan1));
-		Assert.assertFalse(plan7.equals(plan1));
-		Assert.assertFalse(plan8.equals(plan1));
-		Assert.assertFalse(plan9.equals(plan1));
-		Assert.assertFalse(plan10.equals(plan1));
-		Assert.assertFalse(plan11.equals(plan1));
 
 		Assert.assertFalse(plan1.equals(new Object()));
 	}
 
-	VoyagePlan make(Object[] sequence, long dischargeVolume, long loadVolume,
-			long salesRevenue, long purchaseCost, FuelComponent fuel1,
-			long consumption, FuelComponent fuel2, long cost) {
+	VoyagePlan make(final Object[] sequence, final FuelComponent fuel1, final long consumption, final FuelComponent fuel2, final long cost) {
 
-		VoyagePlan p = new VoyagePlan();
+		final VoyagePlan p = new VoyagePlan();
 
 		p.setSequence(sequence);
 		p.setFuelConsumption(fuel1, consumption);

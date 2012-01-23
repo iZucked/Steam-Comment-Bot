@@ -19,11 +19,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 public final class VoyagePlan implements Cloneable {
 
 	private Object[] sequence;
-
-	// private long loadVolume;
-	// private long salesRevenue;
-	// private long purchaseCost;
-
 	private final LongFastEnumMap<FuelComponent> fuelConsumptions;
 	private final LongFastEnumMap<FuelComponent> fuelCosts;
 	private long lngFuelVolume;
@@ -36,9 +31,6 @@ public final class VoyagePlan implements Cloneable {
 	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> fuelCosts) {
 		super();
 		this.sequence = sequence;
-		// this.loadVolume = loadVolume;
-		// this.salesRevenue = salesRevenue;
-		// this.purchaseCost = purchaseCost;
 		this.fuelConsumptions = fuelConsumptions;
 		this.fuelCosts = fuelCosts;
 		this.lngFuelVolume = fuelVolume;

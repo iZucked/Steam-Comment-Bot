@@ -186,7 +186,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 			shippingCalculator.prepareEvaluation(sequences);
 		}
 
-		@SuppressWarnings("unchecked")
 		final IPortSlotProvider portSlotProvider = solution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 
 		// re-evaluate everything

@@ -9,22 +9,10 @@
 	<description>LNG Scheduler</description>
 
 	<parent>
-		<groupId>com.mmxlabs.parent</groupId>
-		<artifactId>bundle-parent</artifactId>
-		<version>1</version>
-		<relativePath />
+		<groupId>com.mmxlabs.scheduler</groupId>
+		<artifactId>com.mmxlabs.scheduler.parent</artifactId>
+		<version>1-SNAPSHOT</version>
 	</parent>
-
-	<scm>
-		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lng-scheduler.h</connection>
-		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lng-scheduler.h</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-lng-scheduler/</url>
-	</scm>
-
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.lng.scheduler/</url>
-	</ciManagement>
 
 	<dependencies>
 
@@ -84,7 +72,6 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>com.springsource.slf4j.log4j</artifactId>
-			<version>${org.slf4j.version}</version>
 			<scope>test</scope>
 		</dependency>
 
