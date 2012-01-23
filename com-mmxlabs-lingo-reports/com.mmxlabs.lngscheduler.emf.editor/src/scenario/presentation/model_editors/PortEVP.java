@@ -119,7 +119,7 @@ public class PortEVP extends NamedObjectEVP {
 		@Override
 		public Object getValue(final Object object) {
 			final Port p = (Port) object;
-			return p.getCapabilities().contains(capability);
+			return p.getCapabilities().contains(capability) ? 0 : 1;
 		}
 
 		@Override
@@ -129,7 +129,7 @@ public class PortEVP extends NamedObjectEVP {
 
 		@Override
 		public String render(Object object) {
-			return ((Boolean) getValue(object)) ? "Yes" : "No";
+			return ((Integer) getValue(object)) == 0 ? "Yes" : "No";
 		}
 
 		@Override
