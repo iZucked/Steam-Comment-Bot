@@ -102,6 +102,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionR
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -480,15 +481,10 @@ public class LNGScenarioTransformer {
 			if (loadSlot.isSetFixedPrice()) {
 				final int fixedPrice = Calculator.scaleToInt(loadSlot.getFixedPrice());
 
-				loadPriceCalculator = new ILoadPriceCalculator2() {
+				loadPriceCalculator = new SimpleContract() {
+					
 					@Override
-					public void prepareEvaluation(ScheduledSequences sequences) {
-
-					}
-
-					@Override
-					public int calculateLoadUnitPrice(ILoadSlot aloadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePrice, int loadVolume, IVesselClass vesselClass,
-							VoyagePlan plan) {
+					public int calculateSimpleLoadUnitPrice(int loadTime) {
 						return fixedPrice;
 					}
 				};
