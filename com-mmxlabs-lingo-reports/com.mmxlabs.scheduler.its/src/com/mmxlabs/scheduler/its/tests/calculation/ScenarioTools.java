@@ -654,6 +654,7 @@ public class ScenarioTools {
 		final IAnnotatedSolution startSolution = optimiser.start(context);
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		//TODO addd trading extension?
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);
 
 		return schedule;

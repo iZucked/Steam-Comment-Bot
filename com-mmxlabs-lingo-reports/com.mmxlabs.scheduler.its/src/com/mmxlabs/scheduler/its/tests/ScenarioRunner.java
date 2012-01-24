@@ -4,15 +4,20 @@
  */
 package com.mmxlabs.scheduler.its.tests;
 
+import javax.naming.ldap.BasicControl;
+
 import scenario.Scenario;
+import scenario.contract.ContractPackage;
 import scenario.schedule.Schedule;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
 import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
+import com.mmxlabs.lngscheduler.emf.extras.contracts.SimpleContractTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
 import com.mmxlabs.lngscheduler.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -20,6 +25,7 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 
 /**
  * Simple wrapper based on {@link LNGSchedulerJobDescriptor} to run an optimisation in the unit tests.
@@ -67,7 +73,14 @@ public class ScenarioRunner {
 		entities.setScenario(scenario);
 
 		final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
-
+		
+		if (!lst.addPlatformTransformerExtensions()) {
+			// add extensions manually; TODO improve this later.
+			final SimpleContractTransformer sct = new SimpleContractTransformer();
+			lst.addTransformerExtension(sct);
+			lst.addContractTransformer(sct, sct.getContractEClasses());
+		}
+		
 		final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 
 		data = lst.createOptimisationData(entities);
@@ -96,7 +109,7 @@ public class ScenarioRunner {
 
 	private Schedule exportSchedule(final IAnnotatedSolution solution) {
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-
+		// TODO add trading exporter extension?
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
 
 		return schedule;
