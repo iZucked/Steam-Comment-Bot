@@ -4,8 +4,14 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.contracts;
 
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.eclipse.emf.ecore.EClass;
+
 import scenario.Scenario;
 import scenario.cargo.Slot;
+import scenario.contract.ContractPackage;
 import scenario.contract.FixedPricePurchaseContract;
 import scenario.contract.IndexPricePurchaseContract;
 import scenario.contract.NetbackPurchaseContract;
@@ -34,6 +40,13 @@ public class SimpleContractTransformer implements IContractTransformer {
 	private SimpleContractBuilder contractBuilder;
 	private ModelEntityMap map;
 	private Scenario scenario;
+	private final Collection<EClass> handledClasses
+		= Arrays.asList(
+				ContractPackage.eINSTANCE.getSalesContract(),
+				ContractPackage.eINSTANCE.getFixedPricePurchaseContract(),
+				ContractPackage.eINSTANCE.getNetbackPurchaseContract(),
+				ContractPackage.eINSTANCE.getIndexPricePurchaseContract(),
+				ContractPackage.eINSTANCE.getProfitSharingPurchaseContract());
 
 	@Override
 	public void startTransforming(final Scenario scenario, final ModelEntityMap map, final ISchedulerBuilder builder) {
@@ -92,5 +105,12 @@ public class SimpleContractTransformer implements IContractTransformer {
 	@Override
 	public void slotTransformed(final Slot modelSlot, final IPortSlot optimiserSlot) {
 
+	}
+
+	/**
+	 * @return
+	 */
+	public Collection<EClass> getContractEClasses() {
+		return handledClasses;
 	}
 }

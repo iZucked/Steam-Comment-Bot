@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,6 +22,7 @@ import java.util.TreeMap;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.URI;
@@ -103,8 +105,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRat
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Wrapper for an EMF LNG Scheduling {@link scenario.Scenario}, providing utility methods to coSnvert it into an optimization job. Typical usage is to construct an LNGScenarioTransformer with a given
@@ -121,6 +121,23 @@ public class LNGScenarioTransformer {
 	private Date earliestTime;
 	private Date latestTime;
 
+	
+	/**
+	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
+	 */
+	final Map<EClass, IContractTransformer> contractTransformersByEClass = new LinkedHashMap<EClass, IContractTransformer>();
+
+	/**
+	 * A set of all contract transformers being used; these should be mapped to in {@link #contractTransformersByEClass}
+	 */
+	final Set<IContractTransformer> contractTransformers = new LinkedHashSet<IContractTransformer>();
+
+	/**
+	 * A set of all transformer extensions being used (should contain {@link #contractTransformers})
+	 */
+	final Set<ITransformerExtension> allTransformerExtensions = new LinkedHashSet<ITransformerExtension>();
+
+	
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
@@ -152,27 +169,16 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Instantiates and returns an {@link IOptimisationData} isomorphic to the contained scenario.
-	 * 
-	 * @return
-	 * @throws IncompleteScenarioException
+	 * Get any {@link ITransformerExtension} and {@link IContractTransformer}s from the platform's registry.
 	 */
-	public IOptimisationData createOptimisationData(final ModelEntityMap entities) throws IncompleteScenarioException {
-		// Create any transformer extensions
-		/**
-		 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
-		 */
-		final Map<EClass, IContractTransformer> contractTransformersByEClass = new LinkedHashMap<EClass, IContractTransformer>();
-
-		final Set<IContractTransformer> contractTransformers = new LinkedHashSet<IContractTransformer>();
-
-		final Set<ITransformerExtension> allTransformerExtensions = new LinkedHashSet<ITransformerExtension>();
-
-		{
-			final String EXTENSION_ID = "com.mmxlabs.lngscheduler.transformer";
-
-			final IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID);
-
+	public boolean addPlatformTransformerExtensions() {
+		if (Platform.getExtensionRegistry() == null) {
+			log.warn("addPlatformTransformerExtensions() called, but Platform.getExtensionRegistry() returns null - skipping");
+			return false;
+		}
+		final String EXTENSION_ID = "com.mmxlabs.lngscheduler.transformer";
+		final IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID);
+		if (config != null) {
 			final Map<String, EClass> contracts = new HashMap<String, EClass>();
 
 			for (final Contract c : scenario.getContractModel().getSalesContracts()) {
@@ -182,44 +188,57 @@ public class LNGScenarioTransformer {
 			for (final Contract c : scenario.getContractModel().getPurchaseContracts()) {
 				contracts.put(c.eClass().getInstanceClass().getCanonicalName(), c.eClass());
 			}
-
+			
 			for (final IConfigurationElement e : config) {
 				final HashSet<String> modelClasses = new HashSet<String>();
 				for (final IConfigurationElement mc : e.getChildren("modelclass")) {
 					final String s = mc.getAttribute("class");
 					modelClasses.add(s);
 				}
-
-				log.debug("Extension provides " + modelClasses);
-
 				modelClasses.retainAll(contracts.keySet());
-
-				log.debug("Scenario requires " + modelClasses);
-
-				// if (modelClasses.isEmpty() == false) {
 				try {
 					final Object object = e.createExecutableExtension("transformer");
 					if (object instanceof ITransformerExtension) {
-						allTransformerExtensions.add((ITransformerExtension) object);
-						log.debug(object.getClass().getCanonicalName() + " added to transformer extensions");
+						addTransformerExtension((ITransformerExtension) object);
 					}
-
+					
 					if (object instanceof IContractTransformer) {
-						contractTransformers.add((IContractTransformer) object);
-
-						log.debug("Instantiated a contract transformer: " + object.getClass().getCanonicalName());
+						final List<EClass> classes = new LinkedList<EClass>();
 						for (final String mc : modelClasses) {
-							log.debug(object.getClass().getCanonicalName() + " handling " + mc);
-							contractTransformersByEClass.put(contracts.get(mc), (IContractTransformer) object);
+							classes.add(contracts.get(mc));
 						}
+						addContractTransformer((IContractTransformer) object, classes);
 					}
-				} catch (final Exception ex) {
-
+				} catch (final CoreException e1) {
+					log.error("Core exception when creating transformer extension", e1);
 				}
-				// }
 			}
+		} else {
+			log.error("Extension registry returned a null array for extension point " + EXTENSION_ID);
 		}
-
+		return true;
+	}
+	
+	public void addTransformerExtension(final ITransformerExtension extension) {
+		log.debug(extension.getClass().getCanonicalName() + " added to transformer extensions");
+		allTransformerExtensions.add(extension);
+	}
+	
+	public void addContractTransformer(final IContractTransformer transformer, final Collection<EClass> forContracts) {
+		contractTransformers.add(transformer);
+		for (final EClass ec : forContracts) {
+			log.debug(transformer.getClass().getCanonicalName() + " handling contracts with eClass " + ec.getName());
+			contractTransformersByEClass.put(ec, transformer);
+		}
+	}
+	
+	/**
+	 * Instantiates and returns an {@link IOptimisationData} isomorphic to the contained scenario.
+	 * 
+	 * @return
+	 * @throws IncompleteScenarioException
+	 */
+	public IOptimisationData createOptimisationData(final ModelEntityMap entities) throws IncompleteScenarioException {
 		/*
 		 * Set reference for hour 0
 		 */
