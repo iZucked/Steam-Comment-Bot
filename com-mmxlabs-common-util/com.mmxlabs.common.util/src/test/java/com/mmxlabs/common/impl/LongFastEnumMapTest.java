@@ -72,7 +72,8 @@ public class LongFastEnumMapTest {
 		Assert.assertFalse(map1.equals(map2));
 
 		map2.put(Enum1.Enum1_A, 5l);
-		Assert.assertEquals(map1, map2);
+		Assert.assertFalse(map1.equals(new Object()));
+		Assert.assertFalse(map1.equals(null));
 	}
 
 }
