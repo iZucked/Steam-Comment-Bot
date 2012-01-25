@@ -32,6 +32,8 @@ public class MappingTransformerTest {
 		final MappingTransformer<Object, String> transformer = new MappingTransformer<Object, String>(
 				map);
 
+		Assert.assertSame(map, transformer.getMapping());
+		
 		Assert.assertSame(s1, transformer.transform(obj1));
 		Assert.assertSame(s2, transformer.transform(obj2));
 		Assert.assertSame(s3, transformer.transform(obj3));
