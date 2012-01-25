@@ -17,6 +17,8 @@ public class StepwiseIntegerCurveTest {
 		final StepwiseIntegerCurve c = new StepwiseIntegerCurve();
 		c.setDefaultValue(12);
 		
+		Assert.assertEquals(12, c.getDefaultValue());
+		
 		Assert.assertEquals(12, c.getValueAtPoint(123), 0);
 		c.setValueAfter(10, 44);
 		
