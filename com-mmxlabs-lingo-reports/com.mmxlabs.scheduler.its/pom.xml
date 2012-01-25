@@ -29,6 +29,8 @@
 								<exclude>**/OptimisationRepeatabilityTest.java</exclude>
 								<exclude>**/OptimisationResultTest.java</exclude>
 							</excludes>
+							<product>com.mmxlabs.demo.app.product</product>
+							<application>com.mmxlabs.demo.app.application</application>
 						</configuration>
 					</plugin>
 				</plugins>
