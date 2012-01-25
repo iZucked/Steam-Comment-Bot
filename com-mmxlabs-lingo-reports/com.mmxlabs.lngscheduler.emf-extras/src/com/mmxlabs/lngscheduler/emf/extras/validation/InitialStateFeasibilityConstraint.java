@@ -48,6 +48,7 @@ public class InitialStateFeasibilityConstraint extends AbstractModelConstraint {
 
 			IOptimisationData data;
 			try {
+				lst.addPlatformTransformerExtensions();
 				data = lst.createOptimisationData(entities);
 				final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 				if (optAndContext.getFirst().getInitialSequences() == null) {

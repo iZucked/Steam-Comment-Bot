@@ -68,7 +68,8 @@ public class AnnotatedSolutionExporter {
 	private static final Logger log = LoggerFactory.getLogger(AnnotatedSolutionExporter.class);
 	private final List<IAnnotationExporter> exporters = new LinkedList<IAnnotationExporter>();
 	final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
-
+	final List<IExporterExtension> extensions = new LinkedList<IExporterExtension>();
+	
 	private boolean exportRuntimeAndFitness = false;
 
 	public boolean isExportRuntimeAndFitness() {
@@ -86,25 +87,32 @@ public class AnnotatedSolutionExporter {
 		exporters.add(visitExporter);
 	}
 
-	public Schedule exportAnnotatedSolution(final Scenario inputScenario, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
-		final List<IExporterExtension> extensions = new LinkedList<IExporterExtension>();
-		{
-			final String EXTENSION_ID = "com.mmxlabs.lngscheduler.exporter";
+	public boolean addPlatformExporterExtensions() {
+		if (Platform.getExtensionRegistry() == null) {
+			log.warn("addPlatformExporterExtensions() called without a platform - skipping");
+			return false;
+		}
+		final String EXTENSION_ID = "com.mmxlabs.lngscheduler.exporter";
+		final IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID);
 
-			final IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID);
-
-			for (final IConfigurationElement e : config) {
-				try {
-					final Object object = e.createExecutableExtension("exporter");
-					if (object instanceof IExporterExtension) {
-						extensions.add((IExporterExtension) object);
-					}
-				} catch (final Exception ex) {
-
+		for (final IConfigurationElement e : config) {
+			try {
+				final Object object = e.createExecutableExtension("exporter");
+				if (object instanceof IExporterExtension) {
+					addExporterExtension((IExporterExtension) object);
 				}
+			} catch (final Exception ex) {
+				log.error("Exception caught when adding platform exporter extensions", ex);
 			}
 		}
-
+		return true;
+	}
+	
+	public void addExporterExtension(final IExporterExtension extension) {
+		extensions.add(extension);
+	}
+	
+	public Schedule exportAnnotatedSolution(final Scenario inputScenario, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
 		final IOptimisationData data = annotatedSolution.getContext().getOptimisationData();
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();

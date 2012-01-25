@@ -19,6 +19,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import scenario.cargo.CargoPackage;
+import scenario.contract.ContractPackage;
 import scenario.fleet.FleetPackage;
 import scenario.port.PortPackage;
 
@@ -46,7 +47,8 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 					FleetPackage.eINSTANCE.getVesselEvent_StartPort(),
 					FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(),
 					FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(),
-					FleetPackage.eINSTANCE.getPortAndTime_Port()
+					FleetPackage.eINSTANCE.getPortAndTime_Port(),
+					ContractPackage.eINSTANCE.getContract_Entity()
 			// TODO add any more refs to check here
 			);
 
