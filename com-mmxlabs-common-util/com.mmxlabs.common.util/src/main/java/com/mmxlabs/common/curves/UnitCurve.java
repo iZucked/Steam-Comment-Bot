@@ -16,7 +16,7 @@ public final class UnitCurve implements ICurve {
 		return 1;
 	}
 
-	public static ICurve getInstance() {
+	public static UnitCurve getInstance() {
 		return INSTANCE;
 	}
 }
