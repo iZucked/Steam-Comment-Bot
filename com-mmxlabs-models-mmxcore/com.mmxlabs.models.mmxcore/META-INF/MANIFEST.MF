@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: com.mmxlabs.models.mmxcore;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: .
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Export-Package: com.mmxlabs.models.mmxcore,
+ com.mmxlabs.models.mmxcore.impl,
+ com.mmxlabs.models.mmxcore.util
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.ecore.xmi;bundle-version="2.7.0"
+Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
