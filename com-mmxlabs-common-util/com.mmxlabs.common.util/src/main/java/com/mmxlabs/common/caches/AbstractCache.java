@@ -4,14 +4,9 @@
  */
 package com.mmxlabs.common.caches;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mmxlabs.common.Pair;
 
 public abstract class AbstractCache<K, V> {
-	
-	private static final Logger log = LoggerFactory.getLogger(AbstractCache.class);
 	
 	private static final int SAMPLE = 100000;
 	private final String name;
