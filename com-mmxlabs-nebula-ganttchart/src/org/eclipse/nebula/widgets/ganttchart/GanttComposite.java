@@ -1710,6 +1710,16 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         final int maxX = bounds.width + dayWidth; // we need to draw beyond 1 day as the days at the edge of the viewport also needs to be filled in case a half-day is visible there
         int startX = bounds.x;
 
+
+        boolean toggle = true;
+        boolean gradient = _settings.drawSectionsWithGradients();
+        
+        if (!gradient && gs != null ) {
+        	// Use the index of the section to determine which fill to use
+        	int idx = _ganttSections.indexOf(gs);
+			toggle = (idx & 1) == 1;
+        }
+        
         int offset = 0;
         if (gs == null) {
             offset = _vScrollPos;
@@ -1731,20 +1741,14 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         // year view don't.
         switch (_currentView) {
             case ISettings.VIEW_DAY:
-                gc.setForeground(getDayBackgroundGradient(Calendar.MONDAY, true, gs));
-                gc.setBackground(getDayBackgroundGradient(Calendar.MONDAY, false, gs));
-
-                gc.fillGradientRectangle(startX, startY, maxX, heightY, true);
+            	fillRectangle(gc, startX, startY, maxX, heightY, getDayBackgroundGradient(Calendar.MONDAY, true, gs), getDayBackgroundGradient(Calendar.MONDAY, false, gs), gradient, toggle);
                 return;
             case ISettings.VIEW_WEEK:
                 break;
             case ISettings.VIEW_MONTH:
                 break;
             case ISettings.VIEW_YEAR:
-                gc.setForeground(getDayBackgroundGradient(Calendar.MONDAY, true, gs));
-                gc.setBackground(getDayBackgroundGradient(Calendar.MONDAY, false, gs));
-
-                gc.fillGradientRectangle(startX, startY, maxX, heightY, true);
+            	fillRectangle(gc, startX, startY, maxX, heightY, getDayBackgroundGradient(Calendar.MONDAY, true, gs), getDayBackgroundGradient(Calendar.MONDAY, false, gs), gradient, toggle);
                 return;
             default:
                 break;
@@ -1753,33 +1757,23 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         final Calendar temp = Calendar.getInstance(_defaultLocale);
         temp.setTime(_mainCalendar.getTime());
 
+        
         // fill all of it first, then do weekends
-        gc.setForeground(getDayBackgroundGradient(Calendar.MONDAY, true, gs));
-        gc.setBackground(getDayBackgroundGradient(Calendar.MONDAY, false, gs));
-
-        gc.fillGradientRectangle(startX, startY, maxX, heightY, true);
-
+    	fillRectangle(gc, startX, startY, maxX, heightY, getDayBackgroundGradient(Calendar.MONDAY, true, gs), getDayBackgroundGradient(Calendar.MONDAY, false, gs), gradient, toggle);
+        
         while (true) {
             final int day = temp.get(Calendar.DAY_OF_WEEK);
 
             if (_selHeaderDates.contains(temp)) {
-                gc.setForeground(_colorManager.getSelectedDayColorTop());
-                gc.setBackground(_colorManager.getSelectedDayColorBottom());
-                gc.fillGradientRectangle(startX, startY, dayWidth, heightY, true);
+            	fillRectangle(gc, startX, startY, dayWidth, heightY, _colorManager.getSelectedDayColorTop(), _colorManager.getSelectedDayColorBottom(), gradient, toggle);
             } else {
                 if (_currentView != ISettings.VIEW_D_DAY) {
                     if ((day == Calendar.SATURDAY || day == Calendar.SUNDAY)) {
-                        gc.setForeground(getDayBackgroundGradient(day, true, gs));
-                        gc.setBackground(getDayBackgroundGradient(day, false, gs));
-
-                        // fill the whole thing all the way down
-                        gc.fillGradientRectangle(startX, startY, dayWidth, heightY, true);
+                    	fillRectangle(gc, startX, startY, dayWidth, heightY, getDayBackgroundGradient(day, true, gs), getDayBackgroundGradient(day, false, gs), gradient, toggle);
                     }
 
                     if (DateHelper.isToday(temp)) {
-                        gc.setForeground(_todayBGColorTop);
-                        gc.setBackground(_todayBGColorBottom);
-                        gc.fillGradientRectangle(startX + 1, startY, dayWidth - 1, heightY, true);
+                    	fillRectangle(gc, startX + 1, startY, dayWidth - 1, heightY, _todayBGColorTop, _todayBGColorBottom, gradient, toggle);
                     }
                 }
             }
@@ -1795,6 +1789,23 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
     }
 
+    private void fillRectangle(final GC gc, int x, int y, int width, int height, Color fore, Color back, boolean gradient, boolean toggle) {
+
+		if (gradient) {
+			gc.setForeground(fore);
+			gc.setBackground(back);
+
+			gc.fillGradientRectangle(x, y, width, height, toggle);
+		} else {
+			if (toggle) {
+				gc.setBackground(fore);
+			} else {
+				gc.setBackground(back);
+			}
+			gc.fillRectangle(x, y, width, height);
+		}
+    }
+    
     // draws the zoom level box in the corner, only shown when zooming
     private void drawZoomLevel(final GC gc) {
 
