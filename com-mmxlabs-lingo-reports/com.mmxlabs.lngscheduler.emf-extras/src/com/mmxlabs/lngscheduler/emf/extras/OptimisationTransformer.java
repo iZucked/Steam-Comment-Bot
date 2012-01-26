@@ -6,10 +6,8 @@ package com.mmxlabs.lngscheduler.emf.extras;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +48,6 @@ import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
@@ -73,16 +70,16 @@ public class OptimisationTransformer {
 	private static final Logger log = LoggerFactory.getLogger(OptimisationTransformer.class);
 	private final OptimisationSettings settings;
 
-	public OptimisationTransformer(OptimisationSettings settings) {
+	public OptimisationTransformer(final OptimisationSettings settings) {
 		this.settings = settings;
 	}
 
 	public IOptimisationContext createOptimisationContext(final IOptimisationData data, final ModelEntityMap mem) {
-		ISequences sequences = createInitialSequences(data, mem);
-		IConstraintCheckerRegistry checkerRegistry = createConstraintCheckerRegistry();
-		IFitnessFunctionRegistry componentRegistry = createFitnessFunctionRegistry();
-		List<String> checkers = getEnabledConstraintNames();
-		List<String> components = getEnabledFitnessFunctionNames();
+		final ISequences sequences = createInitialSequences(data, mem);
+		final IConstraintCheckerRegistry checkerRegistry = createConstraintCheckerRegistry();
+		final IFitnessFunctionRegistry componentRegistry = createFitnessFunctionRegistry();
+		final List<String> checkers = getEnabledConstraintNames();
+		final List<String> components = getEnabledFitnessFunctionNames();
 		log.debug("Desired components: " + components);
 		components.retainAll(componentRegistry.getFitnessComponentNames());
 		log.debug("Available components: " + components);
@@ -90,19 +87,19 @@ public class OptimisationTransformer {
 		return new OptimisationContext(data, sequences, components, componentRegistry, checkers, checkerRegistry);
 	}
 
-	public Pair<IOptimisationContext, LocalSearchOptimiser> createOptimiserAndContext(IOptimisationData data, final ModelEntityMap mem) {
-		IOptimisationContext context = createOptimisationContext(data, mem);
+	public Pair<IOptimisationContext, LocalSearchOptimiser> createOptimiserAndContext(final IOptimisationData data, final ModelEntityMap mem) {
+		final IOptimisationContext context = createOptimisationContext(data, mem);
 
-		LSOConstructor lsoConstructor = new LSOConstructor((LSOSettings) settings);
+		final LSOConstructor lsoConstructor = new LSOConstructor((LSOSettings) settings);
 
 		return new Pair<IOptimisationContext, LocalSearchOptimiser>(context, lsoConstructor.buildOptimiser(context,
 				SequencesManipulatorUtil.createDefaultSequenceManipulators(data)));
 	}
 
 	private List<String> getEnabledConstraintNames() {
-		List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<String>();
 
-		for (Constraint c : settings.getConstraints()) {
+		for (final Constraint c : settings.getConstraints()) {
 			if (c.isEnabled()) {
 				result.add(c.getName());
 			}
@@ -112,9 +109,9 @@ public class OptimisationTransformer {
 	}
 
 	private List<String> getEnabledFitnessFunctionNames() {
-		List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<String>();
 
-		for (Objective o : settings.getObjectives()) {
+		for (final Objective o : settings.getObjectives()) {
 			if (o.getWeight() > 0) {
 				result.add(o.getName());
 			}
@@ -171,14 +168,14 @@ public class OptimisationTransformer {
 	 * @param data
 	 * @return
 	 */
-	public ISequences createInitialSequences(IOptimisationData data, final ModelEntityMap mem) {
+	public ISequences createInitialSequences(final IOptimisationData data, final ModelEntityMap mem) {
 		// Create the sequenced constraint checkers here
 		final IModifiableSequences advice;
 		final Map<ISequenceElement, IResource> resourceAdvice = new HashMap<ISequenceElement, IResource>();
 		if (settings.getInitialSchedule() != null) {
 			advice = new ModifiableSequences(data.getResources());
 
-			final Map<IVesselClass, Set<IVessel>> spotVesselsByClass = new LinkedHashMap<IVesselClass, Set<IVessel>>();
+//			final Map<IVesselClass, Set<IVessel>> spotVesselsByClass = new LinkedHashMap<IVesselClass, Set<IVessel>>();
 
 			final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 

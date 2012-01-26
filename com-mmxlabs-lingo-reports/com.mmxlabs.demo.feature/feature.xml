@@ -16,7 +16,8 @@
    </description>
 
    <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+      Copyright (C) Minimax Labs Ltd., 2010 - 2012
+All rights reserved.
    </copyright>
 
    <license url="http://www.example.com/license">
@@ -151,7 +152,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.nebula.widgets.ganttchart"
+         id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart"
          download-size="0"
          install-size="0"
          version="0.0.0"

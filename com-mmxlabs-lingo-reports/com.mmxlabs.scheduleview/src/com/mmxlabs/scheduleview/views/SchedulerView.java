@@ -153,6 +153,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			public boolean showGradientEventBars() {
 				return false;
 			}
+			
+			@Override
+			public boolean drawSectionsWithGradients() {
+				return false;
+			}
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL

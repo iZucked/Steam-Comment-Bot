@@ -71,7 +71,7 @@ public class PathDelegateCache {
 			}
 			try {
 				methods.add(containerClass.getDeclaredMethod(methodName));
-			} catch (Exception ex) {
+			} catch (final Exception ex) {
 				return null;
 			}
 		}
@@ -80,7 +80,7 @@ public class PathDelegateCache {
 				.createTransformer(methods, loader);
 		try {
 			return tc.newInstance();
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			return null; //fallthrough to no transformer
 		}
 	}
