@@ -245,6 +245,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							final ModelEntityMap entities = new ResourcelessModelEntityMap();
 							entities.setScenario(scenario);
 							IOptimisationData data;
+							lst.addPlatformTransformerExtensions();
 							data = lst.createOptimisationData(entities);
 							monitor.worked(1);
 
@@ -262,6 +263,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							IAnnotatedSolution startSolution = optimiser.start(context);
 							monitor.worked(1);
 							final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+							exporter.addPlatformExporterExtensions();
 							final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);
 
 							schedule.setName(scenario.getOptimisation().getCurrentSettings().getInitialSchedule().getName());

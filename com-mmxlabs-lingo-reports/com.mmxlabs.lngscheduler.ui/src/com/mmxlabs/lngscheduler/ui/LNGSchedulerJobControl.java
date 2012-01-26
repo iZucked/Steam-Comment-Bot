@@ -75,6 +75,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		IOptimisationData data;
 		try {
+			lst.addPlatformTransformerExtensions();
 			data = lst.createOptimisationData(entities);
 		} catch (final IncompleteScenarioException e) {
 			// Wrap up exception
@@ -98,6 +99,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 	private Schedule saveSolution(final String name, final IAnnotatedSolution solution) {
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		exporter.addPlatformExporterExtensions();
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
 
 		schedule.setName(scenario.getName() + " " + name);
