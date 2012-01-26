@@ -1050,7 +1050,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
         _mainBounds = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
         _lockedHeaderY = _mainBounds.y;
-        _mainBounds.y -= _vScrollPos;
+//        _mainBounds.y -= _vScrollPos;
 
         boolean calcHeaderOnly = ((_settings.drawHeader() && _settings.lockHeaderOnVerticalScroll()) || !_settings.drawHeader()); 
         
@@ -1081,7 +1081,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
             // if we fill the bottom then fill it!
             if (_settings.drawFillsToBottomWhenUsingGanttSections()) {
-                final Rectangle extraBounds = new Rectangle(_mainBounds.x, _mainBounds.y + getHeaderHeight() - _vScrollPos, _mainBounds.x + _mainBounds.width, _mainBounds.y + _mainBounds.height - getHeaderHeight() + _vScrollPos);
+                final Rectangle extraBounds = new Rectangle(0, _mainBounds.y + getHeaderHeight(), _mainBounds.x + _mainBounds.width, _mainBounds.y + _mainBounds.height);
                 drawFills(gc, extraBounds);
                 drawVerticalLines(gc, extraBounds, false);
             }
@@ -1600,7 +1600,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         }
 
         // we need to take the "previous" scroll location into account
-        y += _vScrollPos;
+//        y += _vScrollPos;
 
         final int max = _vScrollBar.getMaximum() - _vScrollBar.getThumb();
 
@@ -1711,8 +1711,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         int startX = bounds.x;
 
 
-        boolean toggle = true;
-        boolean gradient = _settings.drawSectionsWithGradients();
+        boolean toggle = false;
+        boolean gradient = gs == null || _settings.drawSectionsWithGradients();
         
         if (!gradient && gs != null ) {
         	// Use the index of the section to determine which fill to use
