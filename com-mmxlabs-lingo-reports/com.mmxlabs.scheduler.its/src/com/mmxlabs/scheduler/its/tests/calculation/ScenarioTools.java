@@ -62,6 +62,7 @@ import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.ScenarioUtils;
+import com.mmxlabs.lngscheduler.emf.extras.contracts.SimpleContractTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -635,6 +636,13 @@ public class ScenarioTools {
 		final ModelEntityMap entities = new ResourcelessModelEntityMap();
 		final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 
+		if (!lst.addPlatformTransformerExtensions()) {
+			// add extensions manually; TODO improve this later.
+			final SimpleContractTransformer sct = new SimpleContractTransformer();
+			lst.addTransformerExtension(sct);
+			lst.addContractTransformer(sct, sct.getContractEClasses());
+		}
+		
 		IOptimisationData data;
 		try {
 			data = lst.createOptimisationData(entities);
