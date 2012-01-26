@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.port/src"
+    modelPluginID="com.mmxlabs.models.lng.port" modelName="Port" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
+  <foreignModel>port.ecore</foreignModel>
+  <genPackages prefix="Port" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
+      ecorePackage="port.ecore#/">
+    <genClasses ecoreClass="port.ecore#//Port"/>
+    <genClasses ecoreClass="port.ecore#//Route">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/lines"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Route/canal"/>
+    </genClasses>
+    <genClasses ecoreClass="port.ecore#//PortGroup"/>
+    <genClasses ecoreClass="port.ecore#//RouteLine">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//RouteLine/from"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//RouteLine/to"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//RouteLine/distance"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
