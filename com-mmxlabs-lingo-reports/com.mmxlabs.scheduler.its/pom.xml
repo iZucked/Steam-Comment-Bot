@@ -27,11 +27,11 @@
 							<failIfNoTests>false</failIfNoTests>
 							<!-- Include non-standard test suffix -->
 							<includes>
-								<include>**/Tests.java</include>
+								<include>**/*Tests.*</include>
 							</includes>
 							<excludes>
-								<exclude>**/OptimisationRepeatabilityTest.java</exclude>
-								<exclude>**/OptimisationResultTest.java</exclude>
+								<exclude>**/OptimisationRepeatabilityTest.*</exclude>
+								<exclude>**/OptimisationResultTest.*</exclude>
 							</excludes>
 							<product>com.mmxlabs.demo.app.product</product>
 							<application>com.mmxlabs.demo.app.application</application>
