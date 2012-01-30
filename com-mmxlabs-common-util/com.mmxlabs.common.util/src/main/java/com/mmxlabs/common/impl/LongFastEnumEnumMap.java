@@ -57,7 +57,7 @@ public final class LongFastEnumEnumMap<K extends Enum<K>, L extends Enum<L>> {
 
 	@Override
 	public final int hashCode() {
-		// TODO: Is this correct for 2-D case?
-		return Arrays.hashCode(values);
+
+		return Arrays.deepHashCode(values);
 	}
 }
