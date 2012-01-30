@@ -58,7 +58,7 @@ public class LongFastEnumEnumMapTest {
 
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testGetPut2() {
-		final LongFastEnumEnumMap<Enum1, Enum2> map = new LongFastEnumEnumMap<Enum1, Enum2>(Enum1.values().length, Enum2.values().length);
+		final LongFastEnumEnumMap<Enum1, Enum2> map = new LongFastEnumEnumMap<Enum1, Enum2>(1, 1);
 
 		map.get(Enum1.Enum1_A, Enum2.Enum2_B);
 	}
