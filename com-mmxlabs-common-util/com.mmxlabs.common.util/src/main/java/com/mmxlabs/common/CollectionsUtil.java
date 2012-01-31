@@ -183,4 +183,19 @@ public final class CollectionsUtil {
 		}
 		return result;
 	}
+
+	/**
+	 * Creates and returns a {@link HashSet} from the given elements.
+	 * 
+	 * @param elements
+	 * @return
+	 */
+	public static <T> Set<T> createHashSet(final T... elements) {
+		final HashSet<T> set = new HashSet<T>(elements.length);
+
+		for (final T t : elements) {
+			set.add(t);
+		}
+		return set;
+	}
 }
