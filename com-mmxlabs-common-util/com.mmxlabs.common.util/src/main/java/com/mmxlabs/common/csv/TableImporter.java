@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 public class TableImporter {
-	private List<String> rowKeys, colKeys;
+	private final List<String> rowKeys, colKeys;
 
-	private Map<String, Map<String, String>> contents;
+	private final Map<String, Map<String, String>> contents;
 
 	public TableImporter(final InputStream is) throws IOException {
 		rowKeys = new ArrayList<String>();
@@ -27,27 +27,33 @@ public class TableImporter {
 	}
 
 	protected void load(final InputStream is) throws IOException {
-		final BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(is));
 
-		String line = null;
-		boolean firstRow = true;
-		while ((line = br.readLine()) != null) {
-			final String[] cells = line.split(",");
-			if (firstRow) {
-				for (int i = 1; i < cells.length; i++) {
-					colKeys.add(cells[i].trim());
+			String line = null;
+			boolean firstRow = true;
+			while ((line = br.readLine()) != null) {
+				final String[] cells = line.split(",");
+				if (firstRow) {
+					for (int i = 1; i < cells.length; i++) {
+						colKeys.add(cells[i].trim());
+					}
+					firstRow = false;
+				} else {
+					rowKeys.add(cells[0].trim());
+					final HashMap<String, String> map = new HashMap<String, String>();
+					for (int i = 1; i < cells.length; i++) {
+						map.put(colKeys.get(i - 1), cells[i].trim());
+					}
+					contents.put(cells[0], map);
 				}
-				firstRow = false;
-			} else {
-				rowKeys.add(cells[0].trim());
-				final HashMap<String, String> map = new HashMap<String, String>();
-				for (int i = 1; i < cells.length; i++) {
-					map.put(colKeys.get(i - 1), cells[i].trim());
-				}
-				contents.put(cells[0], map);
+			}
+		} finally {
+			if (br != null) {
+				br.close();
 			}
 		}
-		br.close();
 	}
 
 	public String getCell(final String row, final String column) {
