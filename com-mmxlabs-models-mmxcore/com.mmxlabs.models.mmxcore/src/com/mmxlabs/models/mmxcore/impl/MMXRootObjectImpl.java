@@ -125,6 +125,11 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 
 	/**
 	 * Add the given model as a submodel in here
+	 * 
+	 * TODO this will always change the container of the submodel; if the submodel is shared with other instances,
+	 * this would cause a problem. However, if we always want full containment on our model, we have to do this, so think about
+	 * how this ought to work (primarily for things like validation)
+	 * 
 	 * @generated NO
 	 */
 	public void addSubModel(UUIDObject subModel) {
