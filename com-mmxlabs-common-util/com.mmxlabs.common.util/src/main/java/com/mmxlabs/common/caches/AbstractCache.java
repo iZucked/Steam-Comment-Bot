@@ -51,4 +51,8 @@ public abstract class AbstractCache<K, V> {
 	
 	public abstract V get(final K key);
 	public abstract int size();
+
+	public final String getName() {
+		return name;
+	}
 }
