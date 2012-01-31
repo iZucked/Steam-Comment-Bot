@@ -12,19 +12,17 @@ public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 	final int evictionThreshold;
 
 	class Entry {
-		SoftReference<Pair<K, V>> reference = new SoftReference<Pair<K, V>>(
-				null);
+		SoftReference<Pair<K, V>> reference = new SoftReference<Pair<K, V>>(null);
 		int misses;
 
 		public void clear() {
 			reference = new SoftReference<Pair<K, V>>(null);
 		}
 
-		public final V getAndUpdate(final IKeyEvaluator<K, V> evaluator,
-				final K key) {
+		public final V getAndUpdate(final IKeyEvaluator<K, V> evaluator, final K key) {
 			final Pair<K, V> entry = reference.get();
 			queries++;
-			if (entry != null && key.equals(entry.getFirst())) {
+			if ((entry != null) && key.equals(entry.getFirst())) {
 				misses = 0;
 				// hits++;
 				return entry.getSecond();
@@ -34,7 +32,7 @@ public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 				// if (entry == null) memoryMisses++;
 				// else valueMisses++;
 
-				if (entry == null || misses > evictionThreshold) {
+				if ((entry == null) || (misses > evictionThreshold)) {
 					this.reference = new SoftReference<Pair<K, V>>(value);
 					// evictions++;
 					misses = 0;
@@ -48,13 +46,11 @@ public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 
 	Object[] entries;
 
-	public SimpleCache(final String name, final IKeyEvaluator<K, V> evaluator,
-			final int size) {
+	public SimpleCache(final String name, final IKeyEvaluator<K, V> evaluator, final int size) {
 		this(name, evaluator, size, 2);
 	}
 
-	public SimpleCache(final String name, final IKeyEvaluator<K, V> evaluator,
-			final int binCount, final int maxMisses) {
+	public SimpleCache(final String name, final IKeyEvaluator<K, V> evaluator, final int binCount, final int maxMisses) {
 		super(name, evaluator);
 		this.evictionThreshold = maxMisses;
 		this.entries = new Object[binCount];
@@ -74,7 +70,7 @@ public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 
 	@Override
 	public void clear() {
-		for (Object o : entries) {
+		for (final Object o : entries) {
 			((Entry) o).clear();
 		}
 	}
