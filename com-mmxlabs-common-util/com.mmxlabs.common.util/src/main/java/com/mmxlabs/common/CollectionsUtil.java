@@ -170,7 +170,9 @@ public final class CollectionsUtil {
 	}
 
 	/**
-	 * @param initialConstraintValues
+	 * Convert a list of {@link Long}s to an array of longs.
+	 * 
+	 * @param longs
 	 * @return
 	 */
 	public static long[] longsToLongArray(final List<Long> longs) {
