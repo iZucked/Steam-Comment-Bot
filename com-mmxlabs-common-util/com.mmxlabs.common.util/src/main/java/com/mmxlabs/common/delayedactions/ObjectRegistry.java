@@ -8,8 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The {@link ObjectRegistry} stores object references first by {@link Class}
- * and then by a key.
+ * The {@link ObjectRegistry} stores object references first by {@link Class} and then by a key.
  * 
  * @author Simon Goodall
  * 
@@ -19,8 +18,7 @@ public final class ObjectRegistry {
 	private final Map<Class<?>, Map<Object, Object>> registry = new HashMap<Class<?>, Map<Object, Object>>();
 
 	/**
-	 * Returns the object registered under the given key for the specified
-	 * {@link Class}. Returns null if no object is found.
+	 * Returns the object registered under the given key for the specified {@link Class}. Returns null if no object is found.
 	 * 
 	 * @param <T>
 	 * @param cls
@@ -60,8 +58,7 @@ public final class ObjectRegistry {
 	}
 
 	/**
-	 * Returns true if there is an object registered under the given class and
-	 * key.
+	 * Returns true if there is an object registered under the given class and key.
 	 * 
 	 * @param cls
 	 * @param key

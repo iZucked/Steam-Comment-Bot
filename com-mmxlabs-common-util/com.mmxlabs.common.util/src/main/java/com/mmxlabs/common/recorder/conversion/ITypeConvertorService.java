@@ -5,8 +5,7 @@
 package com.mmxlabs.common.recorder.conversion;
 
 /**
- * Interface definining a service to convert between Objects and String
- * representations e.g. during an XML I/O operation.
+ * Interface definining a service to convert between Objects and String representations e.g. during an XML I/O operation.
  * 
  * @author Simon Goodall
  * 
@@ -28,9 +27,7 @@ public interface ITypeConvertorService {
 	public void unregisterTypeConvertor(final String className);
 
 	/**
-	 * Converts the {@link String} representation of a {@link Class}
-	 * (fully-qualified class name specified) to an Object using an appropriate
-	 * {@link ITypeConvertor} previously registered.
+	 * Converts the {@link String} representation of a {@link Class} (fully-qualified class name specified) to an Object using an appropriate {@link ITypeConvertor} previously registered.
 	 * 
 	 * @param className
 	 * @param value
@@ -39,9 +36,7 @@ public interface ITypeConvertorService {
 	public Object toObject(final String className, final String value);
 
 	/**
-	 * Converts the Object into a {@link String} representation of a
-	 * {@link Class} (fully-qualified class name specified) using an appropriate
-	 * {@link ITypeConvertor} previously registered.
+	 * Converts the Object into a {@link String} representation of a {@link Class} (fully-qualified class name specified) using an appropriate {@link ITypeConvertor} previously registered.
 	 * 
 	 * @param className
 	 * @param value

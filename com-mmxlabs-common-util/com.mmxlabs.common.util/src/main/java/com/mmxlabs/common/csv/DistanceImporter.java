@@ -24,16 +24,14 @@ public class DistanceImporter {
 	}
 
 	/**
-	 * Uses pathname to create a new File instance (see
-	 * {@link File#File(String)}).
+	 * Uses pathname to create a new File instance (see {@link File#File(String)}).
 	 * 
 	 * @param pathname
 	 *            A pathname string.
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public DistanceImporter(final String pathname)
-			throws FileNotFoundException, IOException {
+	public DistanceImporter(final String pathname) throws FileNotFoundException, IOException {
 		this(new FileInputStream(new File(pathname)));
 	}
 

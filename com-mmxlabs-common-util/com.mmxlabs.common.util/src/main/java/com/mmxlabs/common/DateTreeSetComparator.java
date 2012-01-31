@@ -8,11 +8,8 @@ import java.util.Comparator;
 import java.util.Date;
 
 /**
- * A {@link Comparator} for use in the {@link DateTreeSet}. It is used to
- * compare {@link Date} objects. However objects of the templated type will be
- * converted to a {@link Date} using the {@link ITransformer} passed in to the
- * constructor. NOTE: It is assumed objects will be instance of {@link Date} or
- * the template type. No checks are made to ensure this.
+ * A {@link Comparator} for use in the {@link DateTreeSet}. It is used to compare {@link Date} objects. However objects of the templated type will be converted to a {@link Date} using the
+ * {@link ITransformer} passed in to the constructor. NOTE: It is assumed objects will be instance of {@link Date} or the template type. No checks are made to ensure this.
  * 
  * @author Simon Goodall
  * 
@@ -42,19 +39,19 @@ public final class DateTreeSetComparator<T> implements Comparator<Object> {
 		if (value == 0) {
 			final int h1 = System.identityHashCode(o1);
 			final int h2 = System.identityHashCode(o2);
-			if (h1 < h2)
+			if (h1 < h2) {
 				return -1;
-			else if (h1 > h2)
+			} else if (h1 > h2) {
 				return 1;
-			else
+			} else {
 				return 0;
+			}
 		}
 		return value;
 	}
 
 	/**
-	 * Converts the Object (assumed to be the template type or a {@link Date})
-	 * to a {@link Date} instance.
+	 * Converts the Object (assumed to be the template type or a {@link Date}) to a {@link Date} instance.
 	 * 
 	 * @param obj
 	 * @return

@@ -10,14 +10,14 @@ public class InvalidOptionException extends OptionsException {
 	 * 
 	 */
 	private static final long serialVersionUID = -1326382489991283946L;
-	private String option;
+	private final String option;
 
 	@Override
 	public String getMessage() {
 		return "No Such Option: " + option;
 	}
 
-	public InvalidOptionException(String option) {
+	public InvalidOptionException(final String option) {
 		this.option = option;
 	}
 

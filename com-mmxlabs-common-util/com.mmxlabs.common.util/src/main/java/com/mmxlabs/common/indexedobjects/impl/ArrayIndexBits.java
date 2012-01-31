@@ -19,19 +19,17 @@ public class ArrayIndexBits<T extends IIndexedObject> implements IIndexBits<T> {
 	final BitSet bits = new BitSet();
 
 	@Override
-	public boolean isSet(T element) {
+	public boolean isSet(final T element) {
 		return bits.get(element.getIndex());
 	}
 
-
 	@Override
-	public void set(T element) {
+	public void set(final T element) {
 		bits.set(element.getIndex());
 	}
 
-
 	@Override
-	public void clear(T element) {
+	public void clear(final T element) {
 		bits.clear(element.getIndex());
 	}
 }

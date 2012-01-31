@@ -13,11 +13,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * Added a {@link NavigableSet} implementation wrapping a {@link TreeSet} to mix
- * the element type and {@link Date} objects. A {@link ITransformer} is used to
- * convert the element type to a {@link Date} object for sorting and querying.
- * This class has additional {@link Date} methods as an alternative to query by
- * element type.
+ * Added a {@link NavigableSet} implementation wrapping a {@link TreeSet} to mix the element type and {@link Date} objects. A {@link ITransformer} is used to convert the element type to a {@link Date}
+ * object for sorting and querying. This class has additional {@link Date} methods as an alternative to query by element type.
  * 
  * @author Simon Goodall
  * 
@@ -140,18 +137,12 @@ public final class DateTreeSet<T> implements NavigableSet<T> {
 	}
 
 	@Override
-	public NavigableSet<T> subSet(final T fromElement,
-			final boolean fromInclusive, final T toElement,
-			final boolean toInclusive) {
-		return (NavigableSet<T>) treeSet.subSet(fromElement, fromInclusive,
-				toElement, toInclusive);
+	public NavigableSet<T> subSet(final T fromElement, final boolean fromInclusive, final T toElement, final boolean toInclusive) {
+		return (NavigableSet<T>) treeSet.subSet(fromElement, fromInclusive, toElement, toInclusive);
 	}
 
-	public NavigableSet<T> subSet(final Date fromDate,
-			final boolean fromInclusive, final Date toDate,
-			final boolean toInclusive) {
-		return (NavigableSet<T>) treeSet.subSet(fromDate, fromInclusive,
-				toDate, toInclusive);
+	public NavigableSet<T> subSet(final Date fromDate, final boolean fromInclusive, final Date toDate, final boolean toInclusive) {
+		return (NavigableSet<T>) treeSet.subSet(fromDate, fromInclusive, toDate, toInclusive);
 	}
 
 	@Override

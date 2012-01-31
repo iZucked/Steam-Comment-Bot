@@ -27,21 +27,17 @@ public class InterfaceRecorderTest {
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see
-			 * com.mmxlabs.optimiser.builder.impl.internal.ITestClass#setMessage
-			 * (java.lang.String)
+			 * @see com.mmxlabs.optimiser.builder.impl.internal.ITestClass#setMessage (java.lang.String)
 			 */
 			@Override
-			public void setMessage(String message) {
+			public void setMessage(final String message) {
 				this.message = message;
 			}
 
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see
-			 * com.mmxlabs.optimiser.builder.impl.internal.ITestClass#getMessage
-			 * ()
+			 * @see com.mmxlabs.optimiser.builder.impl.internal.ITestClass#getMessage ()
 			 */
 			@Override
 			public String getMessage() {
@@ -56,46 +52,44 @@ public class InterfaceRecorderTest {
 			@Override
 			public void setList(final Integer... ints) {
 				this.ints = new LinkedList<Integer>();
-				for (int i : ints) {
+				for (final int i : ints) {
 					this.ints.add(i);
 				}
 			}
+
 			@Override
 			public void done() {
 
 			}
 		}
 
-		
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		
-		InterfaceRecorder recorder = new InterfaceRecorder();
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-		TestClass object = new TestClass();
+		final InterfaceRecorder recorder = new InterfaceRecorder();
 
-		ITestClass rec = recorder
-				.createRecorder(ITestClass.class, object, outputStream, "done");
+		final TestClass object = new TestClass();
+
+		final ITestClass rec = recorder.createRecorder(ITestClass.class, object, outputStream, "done");
 
 		rec.setMessage("hello");
 
 		rec.done();
-		
+
 		System.out.println("Msg is: " + object.getMessage());
 
-	//	rec.setList(1 ,2, 4);
-		
-		
-		byte[] byteArray = outputStream.toByteArray();
+		// rec.setList(1 ,2, 4);
+
+		final byte[] byteArray = outputStream.toByteArray();
 		System.out.println(outputStream.toString());
-		
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-		TestClass t2 = new TestClass();
+
+		final ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+		final TestClass t2 = new TestClass();
 		try {
 			recorder.replay(t2, inputStream, "done");
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		System.out.println(t2.getMessage());
 	}
 

@@ -21,8 +21,7 @@ public final class ReflectiveFieldSetter<T> implements Runnable {
 	private final Field field;
 	private final Object object;
 
-	public ReflectiveFieldSetter(final Object object, final Field field,
-			final ITransformer<T, ?> transformer, final T source) {
+	public ReflectiveFieldSetter(final Object object, final Field field, final ITransformer<T, ?> transformer, final T source) {
 
 		this.transformer = transformer;
 		this.source = source;

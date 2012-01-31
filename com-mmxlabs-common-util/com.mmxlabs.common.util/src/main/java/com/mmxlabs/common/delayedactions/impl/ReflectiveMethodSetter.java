@@ -15,8 +15,7 @@ public final class ReflectiveMethodSetter<T> implements Runnable {
 	private final Method method;
 	private final Object object;
 
-	public ReflectiveMethodSetter(final Object object, final Method method,
-			final ITransformer<T, ?> transformer, final T source) {
+	public ReflectiveMethodSetter(final Object object, final Method method, final ITransformer<T, ?> transformer, final T source) {
 
 		this.transformer = transformer;
 		this.source = source;

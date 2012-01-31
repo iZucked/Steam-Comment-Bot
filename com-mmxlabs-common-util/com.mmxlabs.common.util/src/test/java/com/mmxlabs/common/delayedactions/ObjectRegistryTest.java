@@ -45,7 +45,7 @@ public class ObjectRegistryTest {
 		Assert.assertTrue(registry.containsValue(c1, k3));
 		Assert.assertFalse(registry.containsValue(c2, k3));
 		Assert.assertSame(o1, registry.getValue(c1, k3));
-		
+
 		registry.dispose();
 
 		Assert.assertFalse(registry.containsValue(c1, k1));

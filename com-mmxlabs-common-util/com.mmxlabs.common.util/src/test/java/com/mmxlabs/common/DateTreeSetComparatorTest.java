@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 
 public class DateTreeSetComparatorTest {
 
@@ -42,8 +42,7 @@ public class DateTreeSetComparatorTest {
 			}
 		};
 
-		final DateTreeSetComparator<Object> cmp = new DateTreeSetComparator<Object>(
-				transformer);
+		final DateTreeSetComparator<Object> cmp = new DateTreeSetComparator<Object>(transformer);
 
 		//
 		Assert.assertEquals(cmp.compare(d1, d2), cmp.compare(obj1, obj2));
@@ -92,8 +91,7 @@ public class DateTreeSetComparatorTest {
 			}
 		};
 
-		final DateTreeSetComparator<Object> cmp = new DateTreeSetComparator<Object>(
-				transformer);
+		final DateTreeSetComparator<Object> cmp = new DateTreeSetComparator<Object>(transformer);
 
 		// Check obj1 retrieves d1, therefore obj1 equals d1
 		Assert.assertEquals(0, cmp.compare(d1, obj1));

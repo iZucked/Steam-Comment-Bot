@@ -30,7 +30,7 @@ public class DelayedActionsManagerTest {
 		manager.queue(r2);
 
 		final Sequence sequence = context.sequence("sequence-name");
-		
+
 		context.checking(new Expectations() {
 			{
 				one(r1).run();

@@ -4,26 +4,29 @@
  */
 package com.mmxlabs.common.options;
 
-
 import java.util.Arrays;
 import java.util.Iterator;
 
 public class StringListParser implements OptionParser {
 	protected String separator;
 	protected String defaultValue;
-	public StringListParser(String separator, String defaultValue) {
+
+	public StringListParser(final String separator, final String defaultValue) {
 		this.defaultValue = defaultValue;
 		this.separator = separator;
 	}
-	public StringListParser(String separator) {
+
+	public StringListParser(final String separator) {
 		this(separator, null);
 	}
+
 	@Override
-	public Object parse(String op, Iterator<String> iter) throws InvalidArgumentException {
-		String s = iter.next();
-		String [] args = s.split(separator);
+	public Object parse(final String op, final Iterator<String> iter) throws InvalidArgumentException {
+		final String s = iter.next();
+		final String[] args = s.split(separator);
 		return Arrays.asList(args);
 	}
+
 	@Override
 	public Object getDefaultValue() {
 		if (defaultValue != null) {
@@ -32,6 +35,7 @@ public class StringListParser implements OptionParser {
 			return null;
 		}
 	}
+
 	@Override
 	public boolean hasDefaultValue() {
 		return defaultValue != null;

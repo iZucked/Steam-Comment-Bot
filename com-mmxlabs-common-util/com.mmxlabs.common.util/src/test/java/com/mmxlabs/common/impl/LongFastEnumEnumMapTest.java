@@ -17,7 +17,6 @@ public class LongFastEnumEnumMapTest {
 		Enum2_A, Enum2_B;
 	}
 
-	
 	@Test
 	public void testHashCode() {
 

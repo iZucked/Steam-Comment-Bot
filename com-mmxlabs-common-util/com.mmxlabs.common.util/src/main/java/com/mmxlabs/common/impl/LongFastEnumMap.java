@@ -8,12 +8,8 @@ import java.util.Arrays;
 import java.util.EnumMap;
 
 /**
- * Fast {@link EnumMap}-like implementation to link longs to an {@link Enum}.
- * This uses the enum ordinals to index an array, the size of which is specified
- * in the constructor. Unlike {@link EnumMap}, this implementation does not type
- * check the enum key, requires the number of enum elements to be specified
- * rather than rely on internal trickery and avoids boxing/unboxing by using
- * long primitives.
+ * Fast {@link EnumMap}-like implementation to link longs to an {@link Enum}. This uses the enum ordinals to index an array, the size of which is specified in the constructor. Unlike {@link EnumMap},
+ * this implementation does not type check the enum key, requires the number of enum elements to be specified rather than rely on internal trickery and avoids boxing/unboxing by using long primitives.
  * 
  * @author Simon Goodall
  * 

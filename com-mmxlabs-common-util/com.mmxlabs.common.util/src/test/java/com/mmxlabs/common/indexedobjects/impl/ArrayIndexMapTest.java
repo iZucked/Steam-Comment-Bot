@@ -89,11 +89,11 @@ public class ArrayIndexMapTest {
 		map.set(key1, value1);
 		map.set(key2, value2);
 
-		Iterable<Object> values = map.getValues();
+		final Iterable<Object> values = map.getValues();
 
 		Assert.assertNotNull(values);
 
-		Iterator<Object> iterator = values.iterator();
+		final Iterator<Object> iterator = values.iterator();
 
 		Assert.assertNotNull(iterator);
 
@@ -103,8 +103,8 @@ public class ArrayIndexMapTest {
 		Assert.assertSame(value2, iterator.next());
 		Assert.assertFalse(iterator.hasNext());
 	}
-	
-	@Test(expected=NoSuchElementException.class)
+
+	@Test(expected = NoSuchElementException.class)
 	public void testGetValues2() {
 		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
 		final Object value1 = new Object();
@@ -115,11 +115,11 @@ public class ArrayIndexMapTest {
 		map.set(key1, value1);
 		map.set(key2, value2);
 
-		Iterable<Object> values = map.getValues();
+		final Iterable<Object> values = map.getValues();
 
 		Assert.assertNotNull(values);
 
-		Iterator<Object> iterator = values.iterator();
+		final Iterator<Object> iterator = values.iterator();
 
 		Assert.assertNotNull(iterator);
 
@@ -128,12 +128,11 @@ public class ArrayIndexMapTest {
 		Assert.assertTrue(iterator.hasNext());
 		Assert.assertSame(value2, iterator.next());
 		Assert.assertFalse(iterator.hasNext());
-		
+
 		// Trigger no such element exception
 		iterator.next();
 
 	}
-
 
 	@Test
 	public void testClear() {
@@ -153,21 +152,21 @@ public class ArrayIndexMapTest {
 		Assert.assertSame(o1, object);
 
 		map.clear();
-		
+
 		Assert.assertNull(map.maybeGet(key));
-		
+
 		context.assertIsSatisfied();
 
 	}
 
 	private static class MockIndexedObject implements IIndexedObject {
-		
+
 		private final int index;
-		
-		public MockIndexedObject(int index) {
+
+		public MockIndexedObject(final int index) {
 			this.index = index;
 		}
-		
+
 		@Override
 		public int getIndex() {
 			return index;

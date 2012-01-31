@@ -21,34 +21,34 @@ public class DateTreeSetTest {
 
 	@Test
 	public void testDateTreeSet() {
-		
+
 		final Object obj1 = "First";
 		final Object obj2 = "Second";
 		final Object obj3 = "Third";
-		
-		final Date date1 = createDate(2011, 01, 01); 
+
+		final Date date1 = createDate(2011, 01, 01);
 		final Date date2 = createDate(2011, 01, 01);
 		final Date date3 = createDate(2011, 01, 02);
-		
+
 		final Map<Object, Date> map = CollectionsUtil.makeHashMap(obj1, date1, obj2, date2, obj3, date3);
-		
+
 		final ITransformer<Object, Date> transformer = new MappingTransformer<Object, Date>(map);
-		
+
 		final DateTreeSet<Object> dts = new DateTreeSet<Object>(transformer);
-		
+
 		dts.add(obj1);
-		
+
 		Assert.assertTrue(dts.contains(obj1));
 		Assert.assertTrue(dts.contains(date1));
-		
+
 		Assert.assertFalse(dts.contains(obj2));
 		Assert.assertTrue(dts.contains(date2));
-		
+
 		Assert.assertFalse(dts.contains(obj3));
 		Assert.assertFalse(dts.contains(date3));
-	
+
 		Assert.assertEquals(1, dts.size());
-		
+
 		fail("Not yet implemented");
 	}
 
@@ -257,9 +257,8 @@ public class DateTreeSetTest {
 		fail("Not yet implemented");
 	}
 
-	
 	private Date createDate(final int year, final int month, final int day) {
-		
+
 		final Calendar c = Calendar.getInstance();
 		c.clear();
 		c.set(Calendar.YEAR, year);
@@ -268,4 +267,3 @@ public class DateTreeSetTest {
 		return c.getTime();
 	}
 }
-

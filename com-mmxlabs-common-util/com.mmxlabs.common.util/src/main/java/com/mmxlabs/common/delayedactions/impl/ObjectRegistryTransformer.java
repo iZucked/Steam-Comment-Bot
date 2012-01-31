@@ -8,8 +8,7 @@ import com.mmxlabs.common.ITransformer;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.delayedactions.ObjectRegistry;
 
-public final class ObjectRegistryTransformer<U> implements
-		ITransformer<Pair<Class<U>, Object>, U> {
+public final class ObjectRegistryTransformer<U> implements ITransformer<Pair<Class<U>, Object>, U> {
 
 	private final ObjectRegistry registry;
 

@@ -7,8 +7,7 @@ package com.mmxlabs.common.recorder.conversion.impl;
 import com.mmxlabs.common.recorder.conversion.ITypeConvertor;
 
 /**
- * Implementation of {@link ITypeConvertor} to convert between a
- * {@link Float} and a {@link String} using {@link Float} conversion methods.
+ * Implementation of {@link ITypeConvertor} to convert between a {@link Float} and a {@link String} using {@link Float} conversion methods.
  * 
  * @author Simon Goodall
  * 

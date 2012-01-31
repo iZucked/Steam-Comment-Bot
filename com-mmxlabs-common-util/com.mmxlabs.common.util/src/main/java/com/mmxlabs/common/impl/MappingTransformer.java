@@ -9,8 +9,7 @@ import java.util.Map;
 import com.mmxlabs.common.ITransformer;
 
 /**
- * {@link ITransformer} implementation which uses a {@link Map} to transform a
- * known set of types.
+ * {@link ITransformer} implementation which uses a {@link Map} to transform a known set of types.
  * 
  * @author Simon Goodall
  * 

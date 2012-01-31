@@ -40,26 +40,19 @@ public class XmlStreamReader<T> {
 		this.stream = stream;
 	}
 
-	public void parse() throws IOException, XMLStreamException,
-			ClassNotFoundException, IllegalArgumentException,
-			IllegalAccessException, InvocationTargetException,
-			SecurityException, NoSuchMethodException {
+	public void parse() throws IOException, XMLStreamException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException,
+			NoSuchMethodException {
 
 		final XMLInputFactory inputFactory = XMLInputFactory.newFactory();
 
 		final XMLEventReader reader = inputFactory.createXMLEventReader(stream);
 
-		final QName qname_methodName = new QName(
-				XmlRecordingConstants.ATTR_METHOD_NAME);
-		final QName qname_methodReturnedRef = new QName(
-				XmlRecordingConstants.ATTR_METHOD_RETURNED_REF);
+		final QName qname_methodName = new QName(XmlRecordingConstants.ATTR_METHOD_NAME);
+		final QName qname_methodReturnedRef = new QName(XmlRecordingConstants.ATTR_METHOD_RETURNED_REF);
 
-		final QName qname_argumentType = new QName(
-				XmlRecordingConstants.ATTR_ARGUMENT_TYPE);
-		final QName qname_argumentRef = new QName(
-				XmlRecordingConstants.ATTR_ARGUMENT_REF);
-		final QName qname_argumentValue = new QName(
-				XmlRecordingConstants.ATTR_ARGUMENT_VALUE);
+		final QName qname_argumentType = new QName(XmlRecordingConstants.ATTR_ARGUMENT_TYPE);
+		final QName qname_argumentRef = new QName(XmlRecordingConstants.ATTR_ARGUMENT_REF);
+		final QName qname_argumentValue = new QName(XmlRecordingConstants.ATTR_ARGUMENT_VALUE);
 
 		final List<Class<?>> parameterTypes = new LinkedList<Class<?>>();
 		final List<Object> arguments = new LinkedList<Object>();
@@ -71,31 +64,24 @@ public class XmlStreamReader<T> {
 
 			if (event.isStartElement()) {
 				final StartElement startElement = event.asStartElement();
-				if (XmlRecordingConstants.ELEMENT_METHOD.equals(startElement
-						.getName().getLocalPart())) {
+				if (XmlRecordingConstants.ELEMENT_METHOD.equals(startElement.getName().getLocalPart())) {
 
-					methodName = startElement.getAttributeByName(
-							qname_methodName).getValue();
+					methodName = startElement.getAttributeByName(qname_methodName).getValue();
 
-					returnedRef = startElement.getAttributeByName(
-							qname_methodReturnedRef).getValue();
+					returnedRef = startElement.getAttributeByName(qname_methodReturnedRef).getValue();
 
-				} else if (XmlRecordingConstants.ELEMENT_ARGUMENT
-						.equals(startElement.getName().getLocalPart())) {
+				} else if (XmlRecordingConstants.ELEMENT_ARGUMENT.equals(startElement.getName().getLocalPart())) {
 
-					final String type = startElement.getAttributeByName(
-							qname_argumentType).getValue();
+					final String type = startElement.getAttributeByName(qname_argumentType).getValue();
 
 					final Class<?> typeClass = Class.forName(type);
 
 					Object arg = null;
-					final Attribute attribRef = startElement
-							.getAttributeByName(qname_argumentRef);
+					final Attribute attribRef = startElement.getAttributeByName(qname_argumentRef);
 					if (attribRef != null) {
 						arg = objectMap.get(attribRef.getValue());
 					} else {
-						final Attribute attribValue = startElement
-								.getAttributeByName(qname_argumentValue);
+						final Attribute attribValue = startElement.getAttributeByName(qname_argumentValue);
 
 						// TODO: use a registry of "things" to convert string to
 						// object
@@ -108,16 +94,12 @@ public class XmlStreamReader<T> {
 			} else if (event.isEndElement()) {
 				final EndElement endElement = event.asEndElement();
 
-				if (XmlRecordingConstants.ELEMENT_METHOD.equals(endElement
-						.getName().getLocalPart())) {
+				if (XmlRecordingConstants.ELEMENT_METHOD.equals(endElement.getName().getLocalPart())) {
 					final Class<?> cls = object.getClass();
-					Class<?> parameterTypesArray[] = new Class[parameterTypes
-							.size()];
-					parameterTypesArray = parameterTypes
-							.toArray(parameterTypesArray);
+					Class<?> parameterTypesArray[] = new Class[parameterTypes.size()];
+					parameterTypesArray = parameterTypes.toArray(parameterTypesArray);
 					final Object[] argumentsArray = arguments.toArray();
-					final Method m = cls.getMethod(methodName,
-							parameterTypesArray);
+					final Method m = cls.getMethod(methodName, parameterTypesArray);
 
 					final Object ret = m.invoke(object, argumentsArray);
 					if (returnedRef != null) {

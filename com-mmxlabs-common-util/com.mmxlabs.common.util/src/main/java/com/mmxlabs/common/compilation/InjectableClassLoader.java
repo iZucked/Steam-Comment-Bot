@@ -6,19 +6,21 @@ package com.mmxlabs.common.compilation;
 
 /**
  * @author Tom Hinton
- *
+ * 
  */
 public class InjectableClassLoader extends ClassLoader implements IInjectableClassLoader {
 	String fqn = null;
 	byte[] bytecode = null;
+
 	/**
 	 * @param classLoader
 	 */
-	public InjectableClassLoader(ClassLoader classLoader) {
+	public InjectableClassLoader(final ClassLoader classLoader) {
 		super(classLoader);
 	}
+
 	@Override
-	public synchronized Class<?> injectAndLoadClass(String qualifiedName, byte[] bytecode) throws ClassNotFoundException {
+	public synchronized Class<?> injectAndLoadClass(final String qualifiedName, final byte[] bytecode) throws ClassNotFoundException {
 		fqn = qualifiedName;
 		this.bytecode = bytecode;
 		final Class<?> result = this.loadClass(qualifiedName);
@@ -26,6 +28,7 @@ public class InjectableClassLoader extends ClassLoader implements IInjectableCla
 		fqn = null;
 		return result;
 	}
+
 	@Override
 	protected synchronized Class<?> findClass(final String name) throws ClassNotFoundException {
 		if (name.equals(fqn)) {

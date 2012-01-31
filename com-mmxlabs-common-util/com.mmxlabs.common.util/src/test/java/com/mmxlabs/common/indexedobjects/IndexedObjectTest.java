@@ -16,12 +16,12 @@ public class IndexedObjectTest {
 		final IIndexingContext context = new SimpleIndexingContext();
 		final IndexedObject o1 = new IndexedObject(context);
 		final IndexedObject o2 = new IndexedObject(context);
-		
+
 		Assert.assertFalse(o1.getIndex() == o2.getIndex());
 		Assert.assertEquals(o1.getIndex(), 0);
 		Assert.assertEquals(o2.getIndex(), 1);
 	}
-	
+
 	@Test
 	public void testIndexedSubclasses() {
 		final IIndexingContext context = new SimpleIndexingContext();
@@ -32,15 +32,15 @@ public class IndexedObjectTest {
 		Assert.assertTrue(a.getIndex() == b.getIndex());
 		Assert.assertFalse(a.getIndex() == a1.getIndex());
 	}
-	
+
 	static class A extends IndexedObject {
-		public A(IIndexingContext provider) {
+		public A(final IIndexingContext provider) {
 			super(provider);
-		}		
+		}
 	}
-	
+
 	static class B extends IndexedObject {
-		public B(IIndexingContext provider) {
+		public B(final IIndexingContext provider) {
 			super(provider);
 		}
 	}

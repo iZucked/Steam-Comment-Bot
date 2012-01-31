@@ -5,8 +5,7 @@
 package com.mmxlabs.common;
 
 /**
- * Interface defining a mechanism to transform an object of one type to another
- * type.
+ * Interface defining a mechanism to transform an object of one type to another type.
  * 
  * @author Simon Goodall
  * 

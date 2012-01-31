@@ -7,9 +7,7 @@ package com.mmxlabs.common.recorder.conversion;
 import com.mmxlabs.common.ITransformer;
 
 /**
- * Interface defining a two-way conversion mechanism between an object and a
- * {@link String}. This differs to the {@link ITransformer} interface which only
- * provides a one-way conversion.
+ * Interface defining a two-way conversion mechanism between an object and a {@link String}. This differs to the {@link ITransformer} interface which only provides a one-way conversion.
  * 
  * @author Simon Goodall
  * 

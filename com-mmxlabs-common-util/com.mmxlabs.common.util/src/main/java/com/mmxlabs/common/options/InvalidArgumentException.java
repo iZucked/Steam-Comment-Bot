@@ -4,13 +4,12 @@
  */
 package com.mmxlabs.common.options;
 
-
 public class InvalidArgumentException extends OptionsException {
 
-	private String message;
+	private final String message;
 	private String option;
 
-	public InvalidArgumentException(String string) {
+	public InvalidArgumentException(final String string) {
 		this.message = string;
 	}
 
@@ -19,7 +18,7 @@ public class InvalidArgumentException extends OptionsException {
 	 */
 	private static final long serialVersionUID = 6971609184244683139L;
 
-	public void setOption(String opt) {
+	public void setOption(final String opt) {
 		this.option = opt;
 	}
 
@@ -28,6 +27,4 @@ public class InvalidArgumentException extends OptionsException {
 		return "Invalid argument for " + option + " : " + message;
 	}
 
-	
-	
 }

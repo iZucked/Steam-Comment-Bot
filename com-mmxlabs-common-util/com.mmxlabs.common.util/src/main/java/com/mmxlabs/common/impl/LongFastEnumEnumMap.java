@@ -7,8 +7,7 @@ package com.mmxlabs.common.impl;
 import java.util.Arrays;
 
 /**
- * A two-dimensional EnumxEnum to long map implementation. See
- * {@link LongFastEnumMap} for more details.
+ * A two-dimensional EnumxEnum to long map implementation. See {@link LongFastEnumMap} for more details.
  * 
  * @author Simon Goodall
  * 

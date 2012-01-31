@@ -32,20 +32,16 @@ import com.mmxlabs.common.options.OptionsException;
 /**
  * Command-line interface for {@link AccurateNauticalDistanceCalculator}.
  * 
- * Sample inputs are in the data/nauticaldistances directory; the program
- * requires two input files:
+ * Sample inputs are in the data/nauticaldistances directory; the program requires two input files:
  * <ol>
  * <li>
- * a picture of the earth, as a mercator projection, in which pure blue is
- * terrain passable by vessels, and non-blue is impassable.</li>
+ * a picture of the earth, as a mercator projection, in which pure blue is terrain passable by vessels, and non-blue is impassable.</li>
  * <li>
- * a list of ports, as a CSV file, whose first three columns are port name, port
- * latitude and port longitude in that order</li>
+ * a list of ports, as a CSV file, whose first three columns are port name, port latitude and port longitude in that order</li>
  * </ol>
  * Run with --help argument for more help.
  * 
- * Copyright (C) Minimax Labs Ltd., 2010 
- * All rights reserved. 
+ * Copyright (C) Minimax Labs Ltd., 2010 All rights reserved.
  * 
  * @author hinton
  * 
@@ -53,7 +49,7 @@ import com.mmxlabs.common.options.OptionsException;
 public class DistanceMatrixCreator {
 
 	private static final Logger log = LoggerFactory.getLogger(DistanceMatrixCreator.class);
-	
+
 	private String imageFilePath;
 	private String outputFilePath;
 	private String coordinatesFilePath;
@@ -64,13 +60,13 @@ public class DistanceMatrixCreator {
 	 * @throws InvalidOptionException
 	 * @throws IOException
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		final DistanceMatrixCreator me = new DistanceMatrixCreator();
 		final Options options = new Options();
 
 		try {
 			options.parseAndSet(args, me);
-		} catch (OptionsException e1) {
+		} catch (final OptionsException e1) {
 			log.error("Error: " + e1.getMessage(), e1);
 			log.error(options.getHelp());
 			return;
@@ -78,7 +74,7 @@ public class DistanceMatrixCreator {
 
 		try {
 			me.run();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			log.error(e.getMessage(), e);
 		}
 
@@ -87,8 +83,7 @@ public class DistanceMatrixCreator {
 	private void run() throws IOException {
 		final BufferedImage image = ImageIO.read(new File(getImageFilePath()));
 
-		final boolean[][] landMatrix = new boolean[image.getWidth()][image
-				.getHeight()];
+		final boolean[][] landMatrix = new boolean[image.getWidth()][image.getHeight()];
 		for (int i = 0; i < landMatrix.length; i++) {
 			for (int j = 0; j < landMatrix[i].length; j++) {
 				final int pixel = image.getRGB(i, j);
@@ -96,24 +91,20 @@ public class DistanceMatrixCreator {
 			}
 		}
 
-		final double mlat = Math.atan(2 * Math.PI * image.getHeight()
-				/ (double) image.getWidth())
-				* 180 / Math.PI;
+		final double mlat = (Math.atan((2 * Math.PI * image.getHeight()) / image.getWidth()) * 180) / Math.PI;
 
 		log.info("Presuming max. latitude = " + mlat);
 		log.info("Computing line-of-sight distance matrix");
 
 		// BufferedWriter loslog = new BufferedWriter(new
 		// FileWriter("./los.txt"));
-		final AccurateNauticalDistanceCalculator calculator = new AccurateNauticalDistanceCalculator(
-				landMatrix, mlat);
+		final AccurateNauticalDistanceCalculator calculator = new AccurateNauticalDistanceCalculator(landMatrix, mlat);
 		// loslog.close();
 
 		{
 			BufferedWriter coast = null;
 			try {
-				coast = new BufferedWriter(new FileWriter(
-						"./coast.txt"));
+				coast = new BufferedWriter(new FileWriter("./coast.txt"));
 				calculator.writeCoastalPoints(coast);
 			} finally {
 				if (coast != null) {
@@ -126,15 +117,12 @@ public class DistanceMatrixCreator {
 		BufferedReader portReader = null;
 		final List<Pair<String, Pair<Double, Double>>> ports = new ArrayList<Pair<String, Pair<Double, Double>>>();
 		try {
-			portReader = new BufferedReader(new FileReader(
-					getCoordinatesFilePath()));
-	
+			portReader = new BufferedReader(new FileReader(getCoordinatesFilePath()));
+
 			String line;
 			while ((line = portReader.readLine()) != null) {
-				String[] parts = line.split(",");
-				ports.add(new Pair<String, Pair<Double, Double>>(parts[0],
-						new Pair<Double, Double>(Double.parseDouble(parts[1]),
-								Double.parseDouble(parts[2]))));
+				final String[] parts = line.split(",");
+				ports.add(new Pair<String, Pair<Double, Double>>(parts[0], new Pair<Double, Double>(Double.parseDouble(parts[1]), Double.parseDouble(parts[2]))));
 			}
 		} finally {
 			if (portReader != null) {
@@ -142,15 +130,13 @@ public class DistanceMatrixCreator {
 			}
 		}
 
-		Collections.sort(ports,
-				new Comparator<Pair<String, Pair<Double, Double>>>() {
-					@Override
-					public int compare(Pair<String, Pair<Double, Double>> o1,
-							Pair<String, Pair<Double, Double>> o2) {
-						return o1.getFirst().compareTo(o2.getFirst());
-					}
+		Collections.sort(ports, new Comparator<Pair<String, Pair<Double, Double>>>() {
+			@Override
+			public int compare(final Pair<String, Pair<Double, Double>> o1, final Pair<String, Pair<Double, Double>> o2) {
+				return o1.getFirst().compareTo(o2.getFirst());
+			}
 
-				});
+		});
 
 		log.info("Computing full distance matrix");
 
@@ -160,8 +146,7 @@ public class DistanceMatrixCreator {
 			final Pair<Double, Double> startPort = ports.get(i).getSecond();
 
 			log.info("Calculating distances from " + ports.get(i));
-			final List<Integer> distances = calculator.getShortestPaths(
-					startPort, otherPorts);
+			final List<Integer> distances = calculator.getShortestPaths(startPort, otherPorts);
 
 			for (int j = 0; j < i; j++) {
 				matrix[i][j] = matrix[j][i] = distances.get(j);
@@ -175,11 +160,10 @@ public class DistanceMatrixCreator {
 			BufferedWriter real = null;
 			try {
 				snap = new BufferedWriter(new FileWriter(
-			
-					"./snapports.txt"));
-				 real = new BufferedWriter(new FileWriter(
-						"./realports.txt"));
-				
+
+				"./snapports.txt"));
+				real = new BufferedWriter(new FileWriter("./realports.txt"));
+
 				calculator.writeSnappedPoints(snap, real, otherPorts);
 			} finally {
 				if (snap != null) {
@@ -195,8 +179,7 @@ public class DistanceMatrixCreator {
 		// write matrix out
 		BufferedWriter distanceWriter = null;
 		try {
-			distanceWriter = new BufferedWriter(
-					new FileWriter(getOutputFilePath()));
+			distanceWriter = new BufferedWriter(new FileWriter(getOutputFilePath()));
 			for (final Pair<String, Pair<Double, Double>> x : ports) {
 				distanceWriter.write(",");
 				distanceWriter.write(x.getFirst());
@@ -206,10 +189,12 @@ public class DistanceMatrixCreator {
 				distanceWriter.write(ports.get(i).getFirst());
 				distanceWriter.write(",");
 				for (int j = 0; j < matrix[i].length; j++) {
-					if (j != 0)
+					if (j != 0) {
 						distanceWriter.write(",");
-					if (matrix[i][j] != Integer.MAX_VALUE)
+					}
+					if (matrix[i][j] != Integer.MAX_VALUE) {
 						distanceWriter.write(Integer.toString(matrix[i][j]));
+					}
 				}
 			}
 			distanceWriter.flush();
@@ -235,10 +220,8 @@ public class DistanceMatrixCreator {
 		// }
 	}
 
-	private boolean isLand(int pixel) {
-		return !(ColorModel.getRGBdefault().getRed(pixel) == 0
-				&& ColorModel.getRGBdefault().getGreen(pixel) == 0 && ColorModel
-				.getRGBdefault().getBlue(pixel) == 255);
+	private boolean isLand(final int pixel) {
+		return !((ColorModel.getRGBdefault().getRed(pixel) == 0) && (ColorModel.getRGBdefault().getGreen(pixel) == 0) && (ColorModel.getRGBdefault().getBlue(pixel) == 255));
 	}
 
 	public String getImageFilePath() {
@@ -249,7 +232,7 @@ public class DistanceMatrixCreator {
 			+ "Blue pixels (RGB 0 0 255) are considered sea, and all other pixels are considered land. "
 			+ "The projection should be equal-aspect around the equator (so that one pixel across is one pixel up), in order for the maximum latitude to be correctly computed. "
 			+ "All terrain above/below the maximum latitude is considered impassable (land).")
-	public void setImageFilePath(String imageFilePath) {
+	public void setImageFilePath(final String imageFilePath) {
 		this.imageFilePath = imageFilePath;
 	}
 
@@ -258,7 +241,7 @@ public class DistanceMatrixCreator {
 	}
 
 	@Option(defaultValue = "distances.csv", help = "Distance matrix file name (output).")
-	public void setOutputFilePath(String outputFilePath) {
+	public void setOutputFilePath(final String outputFilePath) {
 		this.outputFilePath = outputFilePath;
 	}
 
@@ -267,7 +250,7 @@ public class DistanceMatrixCreator {
 	}
 
 	@Option(defaultValue = "ports.csv", help = "List of port coordinates, in a CSV file. Column 0 is port name, column 1 is degrees latitude (-90 to 90) and column 2 degrees longitude (-180 to 180).")
-	public void setCoordinatesFilePath(String coordinatesFilePath) {
+	public void setCoordinatesFilePath(final String coordinatesFilePath) {
 		this.coordinatesFilePath = coordinatesFilePath;
 	}
 }

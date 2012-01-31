@@ -35,8 +35,7 @@ public class CollectionsUtilTest {
 		// TODO: We should test the actual object instances rather than rely
 		// upon equals as different instances could be equal.
 
-		final Map<String, String> map = CollectionsUtil.makeHashMap("key1",
-				"value1", "key2", "value2");
+		final Map<String, String> map = CollectionsUtil.makeHashMap("key1", "value1", "key2", "value2");
 
 		Assert.assertEquals(2, map.size());
 

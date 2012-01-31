@@ -7,8 +7,7 @@ package com.mmxlabs.common.recorder.conversion.impl;
 import com.mmxlabs.common.recorder.conversion.ITypeConvertor;
 
 /**
- * Implementation of {@link ITypeConvertor} to perform a null conversion for
- * {@link String} objects.
+ * Implementation of {@link ITypeConvertor} to perform a null conversion for {@link String} objects.
  * 
  * @author Simon Goodall
  * 

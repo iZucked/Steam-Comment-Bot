@@ -4,19 +4,21 @@
  */
 package com.mmxlabs.common.options;
 
-
 import java.util.Iterator;
 
 public class StringEatingParser implements OptionParser {
 	protected String defaultValue;
 	protected boolean hasDefaultValue;
-	public StringEatingParser(String defaultValue) {
+
+	public StringEatingParser(final String defaultValue) {
 		this.defaultValue = defaultValue;
 		hasDefaultValue = true;
 	}
+
 	public StringEatingParser() {
 		hasDefaultValue = false;
 	}
+
 	@Override
 	public Object getDefaultValue() {
 		return defaultValue;
@@ -28,9 +30,8 @@ public class StringEatingParser implements OptionParser {
 	}
 
 	@Override
-	public Object parse(String op, Iterator<String> iter)
-			throws InvalidArgumentException {
-		StringBuffer sb = new StringBuffer();
+	public Object parse(final String op, final Iterator<String> iter) throws InvalidArgumentException {
+		final StringBuffer sb = new StringBuffer();
 		while (iter.hasNext()) {
 			sb.append(iter.next());
 			sb.append(" ");

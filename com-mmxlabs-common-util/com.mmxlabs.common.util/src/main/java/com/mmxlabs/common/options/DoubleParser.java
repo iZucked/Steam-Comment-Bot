@@ -11,14 +11,15 @@ public class DoubleParser implements OptionParser {
 
 	public DoubleParser() {
 	}
-	
-	public DoubleParser(String value) {
+
+	public DoubleParser(final String value) {
 		defaultValue = Double.parseDouble(value);
 	}
-	
-	public DoubleParser(double value) {
+
+	public DoubleParser(final double value) {
 		this.defaultValue = value;
 	}
+
 	@Override
 	public Object getDefaultValue() {
 		return defaultValue;
@@ -30,12 +31,11 @@ public class DoubleParser implements OptionParser {
 	}
 
 	@Override
-	public Object parse(String op, Iterator<String> iter)
-			throws InvalidArgumentException {
-		String s = iter.next();
+	public Object parse(final String op, final Iterator<String> iter) throws InvalidArgumentException {
+		final String s = iter.next();
 		try {
 			return Double.parseDouble(s);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new InvalidArgumentException("Are you sure " + s + " is a double?");
 		}
 	}

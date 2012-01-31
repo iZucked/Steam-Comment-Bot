@@ -22,22 +22,18 @@ import com.mmxlabs.common.CollectionsUtil;
  * 
  */
 public class MethodChainGenerator implements Opcodes {
-	private AtomicInteger counter = new AtomicInteger(0);
+	private final AtomicInteger counter = new AtomicInteger(0);
 	private final static String GENERATED_CLASS_PREFIX = "GeneratedMethodChain_";
 	private final static String OUTPUT_PACKAGE = "com.mmxlabs.common.compilation";
-	public Class<? extends ITransformer> createTransformer(
-			final List<Method> chain, final IInjectableClassLoader loader) {
-		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 
-		final String newClassName = GENERATED_CLASS_PREFIX
-				+ counter.getAndIncrement();
+	public Class<? extends ITransformer> createTransformer(final List<Method> chain, final IInjectableClassLoader loader) {
+		final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+
+		final String newClassName = GENERATED_CLASS_PREFIX + counter.getAndIncrement();
 
 		final String fqn = OUTPUT_PACKAGE + "." + newClassName;
 
-		cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER,
-				OUTPUT_PACKAGE.replace('.','/') + "/" + newClassName, null,
-				"java/lang/Object",
-				new String[] { OUTPUT_PACKAGE.replace('.','/') + "/ITransformer" });
+		cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER, OUTPUT_PACKAGE.replace('.', '/') + "/" + newClassName, null, "java/lang/Object", new String[] { OUTPUT_PACKAGE.replace('.', '/') + "/ITransformer" });
 
 		addBlankConstructor(cw);
 
@@ -46,9 +42,8 @@ public class MethodChainGenerator implements Opcodes {
 		cw.visitEnd();
 
 		try {
-			return (Class<? extends ITransformer>)
-				loader.injectAndLoadClass(fqn, cw.toByteArray());
-		} catch (ClassNotFoundException e) {
+			return (Class<? extends ITransformer>) loader.injectAndLoadClass(fqn, cw.toByteArray());
+		} catch (final ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -56,15 +51,12 @@ public class MethodChainGenerator implements Opcodes {
 	}
 
 	/**
-	 * Generate the transform method. This should be pretty efficient, I can't
-	 * really see how to make it any better.
+	 * Generate the transform method. This should be pretty efficient, I can't really see how to make it any better.
 	 * 
 	 * @param cw
 	 */
-	private void addTransformMethod(final ClassWriter cw,
-			final List<Method> chain) {
-		final MethodVisitor mw = cw.visitMethod(ACC_PUBLIC, "transform",
-				"(Ljava/lang/Object;)Ljava/lang/Object;", null, null);
+	private void addTransformMethod(final ClassWriter cw, final List<Method> chain) {
+		final MethodVisitor mw = cw.visitMethod(ACC_PUBLIC, "transform", "(Ljava/lang/Object;)Ljava/lang/Object;", null, null);
 		mw.visitCode();
 
 		// each step in the chain does this
@@ -79,8 +71,7 @@ public class MethodChainGenerator implements Opcodes {
 		for (final Method m : chain) {
 			// check that stack 1 contains something of the right type
 			final Class<?> dc = m.getDeclaringClass();
-			final String containerTypeName = dc.getCanonicalName().replace('.',
-					'/');
+			final String containerTypeName = dc.getCanonicalName().replace('.', '/');
 			// first duplicate the top element, as the instanceof consumes
 			// whatever is on the stack.
 			mw.visitInsn(DUP);
@@ -93,22 +84,20 @@ public class MethodChainGenerator implements Opcodes {
 			mw.visitJumpInsn(IFEQ, returnNull);
 			// perform checkcast (may not be needed? we did an instanceof, which
 			// helpfully also checks for null)
-			 mw.visitTypeInsn(CHECKCAST, containerTypeName);
+			mw.visitTypeInsn(CHECKCAST, containerTypeName);
 			// call method
-			 
+
 			final String methodReturnCode = getTypeCode(m.getReturnType());
 			if (dc.isInterface()) {
-				mw.visitMethodInsn(INVOKEINTERFACE, containerTypeName,
-						m.getName(), "()" + methodReturnCode);
+				mw.visitMethodInsn(INVOKEINTERFACE, containerTypeName, m.getName(), "()" + methodReturnCode);
 			} else {
-				mw.visitMethodInsn(INVOKEVIRTUAL, containerTypeName,
-						m.getName(), "()" + methodReturnCode);
+				mw.visitMethodInsn(INVOKEVIRTUAL, containerTypeName, m.getName(), "()" + methodReturnCode);
 			}
 			// result should now be at stack top
 			final Class<?> typeOnRegister = m.getReturnType();
 			if (typeOnRegister.isPrimitive()) {
 				String boxedType = null;
-				
+
 				if (typeOnRegister == Boolean.TYPE) {
 					boxedType = "Boolean";
 				} else if (typeOnRegister == Character.TYPE) {
@@ -129,10 +118,8 @@ public class MethodChainGenerator implements Opcodes {
 				// execute boxing valueOf call.
 				if (boxedType != null) {
 					boxedType = "java/lang/" + boxedType;
-					final String boxingSignature = "(" + methodReturnCode + ")L" + boxedType
-							+ ";";
-					mw.visitMethodInsn(INVOKESTATIC, boxedType, "valueOf",
-							boxingSignature);
+					final String boxingSignature = "(" + methodReturnCode + ")L" + boxedType + ";";
+					mw.visitMethodInsn(INVOKESTATIC, boxedType, "valueOf", boxingSignature);
 				}
 			}
 
@@ -156,7 +143,7 @@ public class MethodChainGenerator implements Opcodes {
 	 * @param returnType
 	 * @return
 	 */
-	private String getTypeCode(Class<?> type) {
+	private String getTypeCode(final Class<?> type) {
 		if (type == Boolean.TYPE) {
 			return "Z";
 		} else if (type == Character.TYPE) {
@@ -185,9 +172,8 @@ public class MethodChainGenerator implements Opcodes {
 	 * 
 	 * @param cw
 	 */
-	private void addBlankConstructor(ClassWriter cw) {
-		final MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V",
-				null, null);
+	private void addBlankConstructor(final ClassWriter cw) {
+		final MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
 		mv.visitCode();
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
@@ -196,13 +182,11 @@ public class MethodChainGenerator implements Opcodes {
 		mv.visitEnd();
 	}
 
-	public static void main(String args[]) throws Exception {
+	public static void main(final String args[]) throws Exception {
 		final MethodChainGenerator generator = new MethodChainGenerator();
-		
-		final Class<? extends ITransformer> tc = generator.createTransformer(
-				CollectionsUtil.makeArrayList(Integer.class.getMethod("intValue"), String.class.getMethod("toLowerCase")),
-				new InjectableClassLoader(generator.getClass().getClassLoader())
-		);
+
+		final Class<? extends ITransformer> tc = generator.createTransformer(CollectionsUtil.makeArrayList(Integer.class.getMethod("intValue"), String.class.getMethod("toLowerCase")),
+				new InjectableClassLoader(generator.getClass().getClassLoader()));
 		final ITransformer t = tc.newInstance();
 		System.err.println(t.transform("hello world"));
 	}

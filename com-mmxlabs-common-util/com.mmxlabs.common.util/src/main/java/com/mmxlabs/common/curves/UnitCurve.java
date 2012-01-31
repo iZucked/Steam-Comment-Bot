@@ -6,13 +6,13 @@ package com.mmxlabs.common.curves;
 
 public final class UnitCurve implements ICurve {
 	protected UnitCurve() {
-		
+
 	}
-	
+
 	private static final UnitCurve INSTANCE = new UnitCurve();
-	
+
 	@Override
-	public double getValueAtPoint(double point) {
+	public double getValueAtPoint(final double point) {
 		return 1;
 	}
 

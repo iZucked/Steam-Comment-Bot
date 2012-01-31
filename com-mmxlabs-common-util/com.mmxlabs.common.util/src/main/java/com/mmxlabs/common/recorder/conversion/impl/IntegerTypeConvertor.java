@@ -7,8 +7,7 @@ package com.mmxlabs.common.recorder.conversion.impl;
 import com.mmxlabs.common.recorder.conversion.ITypeConvertor;
 
 /**
- * Implementation of {@link ITypeConvertor} to convert between a
- * {@link Integer} and a {@link String} using {@link Integer} conversion methods.
+ * Implementation of {@link ITypeConvertor} to convert between a {@link Integer} and a {@link String} using {@link Integer} conversion methods.
  * 
  * @author Simon Goodall
  * 
@@ -27,6 +26,6 @@ public class IntegerTypeConvertor implements ITypeConvertor<Integer> {
 
 	@Override
 	public String toString(final Object object) {
-		return Integer.toString((Integer)object);
+		return Integer.toString((Integer) object);
 	}
 }

@@ -7,9 +7,7 @@ package com.mmxlabs.common;
 import java.util.HashMap;
 
 /**
- * A two-way association from one type to another. Internally maintains two
- * {@link HashMap}s for lookup in both directions. Null values are not
- * permitted.
+ * A two-way association from one type to another. Internally maintains two {@link HashMap}s for lookup in both directions. Null values are not permitted.
  * 
  * @author hinton
  * 

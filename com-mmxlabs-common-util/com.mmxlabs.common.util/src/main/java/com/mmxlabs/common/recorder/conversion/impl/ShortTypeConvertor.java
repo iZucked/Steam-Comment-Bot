@@ -7,8 +7,7 @@ package com.mmxlabs.common.recorder.conversion.impl;
 import com.mmxlabs.common.recorder.conversion.ITypeConvertor;
 
 /**
- * Implementation of {@link ITypeConvertor} to convert between a {@link Short}
- * and a {@link String} using {@link Short} conversion methods.
+ * Implementation of {@link ITypeConvertor} to convert between a {@link Short} and a {@link String} using {@link Short} conversion methods.
  * 
  * @author Simon Goodall
  * 

@@ -19,7 +19,7 @@ public class DetailTree implements IDetailTree {
 	private final String key;
 	private final Object value;
 
-	public DetailTree(String key, Object value) {
+	public DetailTree(final String key, final Object value) {
 		super();
 		this.key = key;
 		this.value = value;

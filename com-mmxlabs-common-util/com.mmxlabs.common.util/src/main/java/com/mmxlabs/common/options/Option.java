@@ -13,8 +13,12 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Option {
 	String EMPTY_DEFAULT_STRING_HACK = "872846712349876219846192874698126348916723498671234987";
+
 	public String help();
+
 	public String name() default "";
+
 	public String defaultValue() default EMPTY_DEFAULT_STRING_HACK;
+
 	public int order() default 0;
 }

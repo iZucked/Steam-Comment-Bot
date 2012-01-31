@@ -11,9 +11,7 @@ import com.mmxlabs.common.recorder.conversion.ITypeConvertor;
 import com.mmxlabs.common.recorder.conversion.ITypeConvertorService;
 
 /**
- * Default implementation of {@link ITypeConvertorService}. This implementation
- * will register {@link ITypeConvertor} for primitive and their Object
- * counterparts. This can be disabled calling
+ * Default implementation of {@link ITypeConvertorService}. This implementation will register {@link ITypeConvertor} for primitive and their Object counterparts. This can be disabled calling
  * {@link #TypeConvertorService(boolean)} with false.
  * 
  * @author Simon Goodall
@@ -24,18 +22,16 @@ public final class TypeConvertorService implements ITypeConvertorService {
 	private final Map<String, ITypeConvertor<?>> map = new HashMap<String, ITypeConvertor<?>>();
 
 	/**
-	 * Create instance of {@link TypeConvertorService} registering default set
-	 * of {@link ITypeConvertor} for primitives.
+	 * Create instance of {@link TypeConvertorService} registering default set of {@link ITypeConvertor} for primitives.
 	 */
 	public TypeConvertorService() {
 		this(true);
 	}
 
 	/**
-	 * Create instance of {@link TypeConvertorService} specifying whether to
-	 * register the default set of {@link ITypeConvertor} for primitives.
+	 * Create instance of {@link TypeConvertorService} specifying whether to register the default set of {@link ITypeConvertor} for primitives.
 	 */
-	public TypeConvertorService(boolean registerDefault) {
+	public TypeConvertorService(final boolean registerDefault) {
 
 		if (registerDefault) {
 			// Register default handlers
@@ -57,12 +53,10 @@ public final class TypeConvertorService implements ITypeConvertorService {
 
 	@Override
 	public void registerTypeConvertor(final ITypeConvertor<?> convertor) {
-		registerTypeConvertor(convertor.getDataType().getCanonicalName(),
-				convertor);
+		registerTypeConvertor(convertor.getDataType().getCanonicalName(), convertor);
 	}
 
-	public void registerTypeConvertor(final String type,
-			final ITypeConvertor<?> convertor) {
+	public void registerTypeConvertor(final String type, final ITypeConvertor<?> convertor) {
 		map.put(type, convertor);
 	}
 
@@ -76,8 +70,7 @@ public final class TypeConvertorService implements ITypeConvertorService {
 		if (map.containsKey(className)) {
 			return map.get(className).toObject(value);
 		}
-		throw new IllegalArgumentException("Type: " + className
-				+ " has no registered type convertor");
+		throw new IllegalArgumentException("Type: " + className + " has no registered type convertor");
 	}
 
 	@Override
@@ -85,7 +78,6 @@ public final class TypeConvertorService implements ITypeConvertorService {
 		if (map.containsKey(className)) {
 			return map.get(className).toString(object);
 		}
-		throw new IllegalArgumentException("Type: " + className
-				+ " has no registered type convertor");
+		throw new IllegalArgumentException("Type: " + className + " has no registered type convertor");
 	}
 }

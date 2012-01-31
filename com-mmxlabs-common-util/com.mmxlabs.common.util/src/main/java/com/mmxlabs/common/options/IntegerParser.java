@@ -4,20 +4,21 @@
  */
 package com.mmxlabs.common.options;
 
-
 import java.util.Iterator;
 
 public class IntegerParser implements OptionParser {
 	protected Integer defaultValue = null;
-	public IntegerParser(Integer defaultValue) {
+
+	public IntegerParser(final Integer defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 
-	public IntegerParser(String value) {
+	public IntegerParser(final String value) {
 		this.defaultValue = Integer.parseInt(value);
 	}
+
 	public IntegerParser() {
-		
+
 	}
 
 	@Override
@@ -31,12 +32,12 @@ public class IntegerParser implements OptionParser {
 	}
 
 	@Override
-	public Object parse(String op, Iterator<String> iter) throws InvalidArgumentException {
+	public Object parse(final String op, final Iterator<String> iter) throws InvalidArgumentException {
 		try {
-			String s = iter.next();
-			Integer i = Integer.valueOf(s);
+			final String s = iter.next();
+			final Integer i = Integer.valueOf(s);
 			return i;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new InvalidArgumentException(e.getMessage());
 		}
 	}

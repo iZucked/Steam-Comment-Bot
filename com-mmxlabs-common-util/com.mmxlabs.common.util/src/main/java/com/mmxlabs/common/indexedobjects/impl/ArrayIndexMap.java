@@ -11,32 +11,32 @@ import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
 
 /**
- * An indexed map directly backed with an array, which doubles in size whenever its capacity
- * is exhausted. Optimised for fast access rather than any other considerations.
+ * An indexed map directly backed with an array, which doubles in size whenever its capacity is exhausted. Optimised for fast access rather than any other considerations.
+ * 
  * @author hinton
- *
+ * 
  * @param <T>
  * @param <U>
  */
 public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexMap<T, U> {
 	private U[] contents;
 	private boolean[] isSet;
-	
+
 	/**
-	 * The default capacity when not specified in constructor. 
+	 * The default capacity when not specified in constructor.
 	 */
 	private static final int defaultInitialCapacity = 128;
-	
+
 	@SuppressWarnings("unchecked")
 	public ArrayIndexMap(final int initialCapacity) {
 		contents = (U[]) new Object[initialCapacity];
 		isSet = new boolean[initialCapacity];
 	}
-	
+
 	public ArrayIndexMap() {
 		this(defaultInitialCapacity);
 	}
-	
+
 	private synchronized void ensure(final int index) {
 		if (index < contents.length) {
 			return;
@@ -48,18 +48,18 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 
 		System.arraycopy(contents, 0, newContents, 0, contents.length);
 		System.arraycopy(isSet, 0, newIsSet, 0, isSet.length);
-		
+
 		contents = newContents;
-		isSet = newIsSet;	
+		isSet = newIsSet;
 	}
-	
+
 	@Override
 	public final U maybeGet(final T key) {
-//		return get(key);
+		// return get(key);
 		final int index = key.getIndex();
-		if (index >= contents.length || !isSet[index]) { 
+		if ((index >= contents.length) || !isSet[index]) {
 			return null;
-		} else {	
+		} else {
 			return contents[index];
 		}
 	}
@@ -67,7 +67,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 	@Override
 	public final U get(final T key) {
 		final int index = key.getIndex();
-		if (index >= contents.length) { 
+		if (index >= contents.length) {
 			throw new NoSuchElementException("Index " + index + " exceeds maximum ever seen");
 		} else if (!isSet[index]) {
 			throw new NoSuchElementException("Index " + index + " has never been set!");
@@ -92,18 +92,21 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 				return new Iterator<U>() {
 					private void advance() {
 						index++;
-						while (index < isSet.length && !isSet[index]) {
+						while ((index < isSet.length) && !isSet[index]) {
 							index++;
 						}
 					}
-					
+
 					private int index = 0;
 
 					@Override
 					public boolean hasNext() {
-						
-						if (index < isSet.length && isSet[index]) return true;
-						else return false;
+
+						if ((index < isSet.length) && isSet[index]) {
+							return true;
+						} else {
+							return false;
+						}
 					}
 
 					@Override
@@ -118,11 +121,11 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 
 					@Override
 					public void remove() {
-						throw new UnsupportedOperationException();						
+						throw new UnsupportedOperationException();
 					}
 				};
 			}
-			
+
 		};
 	}
 

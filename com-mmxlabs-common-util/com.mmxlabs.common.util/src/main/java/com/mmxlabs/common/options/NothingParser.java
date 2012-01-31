@@ -4,12 +4,11 @@
  */
 package com.mmxlabs.common.options;
 
-
 import java.util.Iterator;
 
 public class NothingParser implements OptionParser {
 	@Override
-	public Object parse(String op, Iterator<String> iter) throws InvalidArgumentException {
+	public Object parse(final String op, final Iterator<String> iter) throws InvalidArgumentException {
 		return true;
 	}
 

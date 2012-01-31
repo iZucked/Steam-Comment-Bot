@@ -13,8 +13,8 @@ interface ITestClass {
 	public String getMessage();
 
 	List<Integer> getList();
-	
-	void setList(Integer ...  ints);
+
+	void setList(Integer... ints);
 
 	void done();
 }
