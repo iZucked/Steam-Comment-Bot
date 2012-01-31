@@ -21,7 +21,6 @@ import java.util.Set;
 public final class CollectionsUtil {
 
 	private CollectionsUtil() {
-
 	}
 
 	/**
@@ -106,7 +105,7 @@ public final class CollectionsUtil {
 	 * @param sequences
 	 * @return
 	 */
-	public static <T> List<T> makeArrayList2(Class<T> cls, final T... elements) {
+	public static <T> List<T> makeArrayList2(final Class<T> cls, final T... elements) {
 
 		final List<T> collection = new ArrayList<T>(elements.length);
 
