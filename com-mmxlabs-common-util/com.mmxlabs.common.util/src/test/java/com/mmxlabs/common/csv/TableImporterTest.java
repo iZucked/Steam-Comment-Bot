@@ -27,7 +27,7 @@ public class TableImporterTest {
 
 		// Check input data
 		final Iterable<String> columnKeys = ti.getColumnKeys();
-		final Set<String> cKeys = CollectionsUtil.createHashSet("col1", "col2", "col3");
+		final Set<String> cKeys = CollectionsUtil.makeHashSet("col1", "col2", "col3");
 
 		for (final String s : columnKeys) {
 			Assert.assertTrue(cKeys.remove(s));
@@ -35,7 +35,7 @@ public class TableImporterTest {
 		Assert.assertTrue(cKeys.isEmpty());
 
 		final Iterable<String> rowKeys = ti.getRowKeys();
-		final Set<String> rKeys = CollectionsUtil.createHashSet("row1", "row2");
+		final Set<String> rKeys = CollectionsUtil.makeHashSet("row1", "row2");
 
 		for (final String s : rowKeys) {
 			Assert.assertTrue(rKeys.remove(s));
@@ -107,7 +107,7 @@ public class TableImporterTest {
 
 		// Check input data
 		final Iterable<String> columnKeys = ti.getColumnKeys();
-		final Set<String> cKeys = CollectionsUtil.createHashSet("col1", "col2", "col3");
+		final Set<String> cKeys = CollectionsUtil.makeHashSet("col1", "col2", "col3");
 
 		for (final String s : columnKeys) {
 			Assert.assertTrue(cKeys.remove(s));
@@ -115,7 +115,7 @@ public class TableImporterTest {
 		Assert.assertTrue(cKeys.isEmpty());
 
 		final Iterable<String> rowKeys = ti.getRowKeys();
-		final Set<String> rKeys = CollectionsUtil.createHashSet("row1", "row2");
+		final Set<String> rKeys = CollectionsUtil.makeHashSet("row1", "row2");
 
 		for (final String s : rowKeys) {
 			Assert.assertTrue(rKeys.remove(s));
@@ -151,7 +151,7 @@ public class TableImporterTest {
 
 		// Check input data
 		final Iterable<String> columnKeys = ti.getColumnKeys();
-		final Set<String> cKeys = CollectionsUtil.createHashSet("col1", "col2", "col3");
+		final Set<String> cKeys = CollectionsUtil.makeHashSet("col1", "col2", "col3");
 
 		for (final String s : columnKeys) {
 			Assert.assertTrue(cKeys.remove(s));
@@ -159,7 +159,7 @@ public class TableImporterTest {
 		Assert.assertTrue(cKeys.isEmpty());
 
 		final Iterable<String> rowKeys = ti.getRowKeys();
-		final Set<String> rKeys = CollectionsUtil.createHashSet("row1", "row2");
+		final Set<String> rKeys = CollectionsUtil.makeHashSet("row1", "row2");
 
 		for (final String s : rowKeys) {
 			Assert.assertTrue(rKeys.remove(s));
@@ -195,7 +195,7 @@ public class TableImporterTest {
 
 		// Check input data
 		final Iterable<String> columnKeys = ti.getColumnKeys();
-		final Set<String> cKeys = CollectionsUtil.createHashSet("col1", "col2", "col3");
+		final Set<String> cKeys = CollectionsUtil.makeHashSet("col1", "col2", "col3");
 
 		for (final String s : columnKeys) {
 			Assert.assertTrue(cKeys.remove(s));
@@ -203,7 +203,7 @@ public class TableImporterTest {
 		Assert.assertTrue(cKeys.isEmpty());
 
 		final Iterable<String> rowKeys = ti.getRowKeys();
-		final Set<String> rKeys = CollectionsUtil.createHashSet("row1", "row2");
+		final Set<String> rKeys = CollectionsUtil.makeHashSet("row1", "row2");
 
 		for (final String s : rowKeys) {
 			Assert.assertTrue(rKeys.remove(s));
