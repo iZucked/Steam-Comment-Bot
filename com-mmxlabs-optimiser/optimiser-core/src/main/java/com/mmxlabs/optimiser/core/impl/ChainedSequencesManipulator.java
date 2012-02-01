@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
  * 
  */
 public class ChainedSequencesManipulator implements ISequencesManipulator {
-	List<ISequencesManipulator> delegates = new ArrayList<ISequencesManipulator>();
+	private final List<ISequencesManipulator> delegates = new ArrayList<ISequencesManipulator>();
 
 	public void addDelegate(final ISequencesManipulator delegate) {
 		delegates.add(delegate);
@@ -36,7 +36,5 @@ public class ChainedSequencesManipulator implements ISequencesManipulator {
 			manipulator.dispose();
 		}
 		delegates.clear();
-		delegates = null;
 	}
-
 }
