@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
-import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
 
 public class ConstraintCheckerRegistryTest {
 
@@ -27,6 +26,23 @@ public class ConstraintCheckerRegistryTest {
 		registry.registerConstraintCheckerFactory(factory1);
 
 		Assert.assertTrue(registry.getConstraintCheckerNames().contains("factory1"));
+	}
+
+	@Test
+	public void testDeregisterConstraintCheckerFactory() {
+
+		final ConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
+		final IConstraintCheckerFactory factory1 = new MockConstraintCheckerFactory("factory1");
+
+		Assert.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
+
+		registry.registerConstraintCheckerFactory(factory1);
+
+		Assert.assertTrue(registry.getConstraintCheckerNames().contains("factory1"));
+
+		registry.deregisterConstraintCheckerFactory(factory1);
+
+		Assert.assertFalse(registry.getConstraintCheckerNames().contains("factory1"));
 	}
 
 	@Test(expected = RuntimeException.class)
