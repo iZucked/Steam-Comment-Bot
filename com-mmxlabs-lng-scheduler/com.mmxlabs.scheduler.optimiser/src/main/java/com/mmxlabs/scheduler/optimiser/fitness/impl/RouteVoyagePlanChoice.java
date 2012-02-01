@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.List;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
+import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 

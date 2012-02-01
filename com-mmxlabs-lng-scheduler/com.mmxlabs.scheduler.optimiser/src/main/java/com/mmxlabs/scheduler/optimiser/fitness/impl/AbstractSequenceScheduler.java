@@ -23,7 +23,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
+import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -247,7 +247,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 					voyagePlanOptimiser.addChoice(new IdleNBOVoyagePlanChoice(options));
 				}
 
-				final List<MatrixEntry<IPort, Integer>> distances = new ArrayList<IMultiMatrixProvider.MatrixEntry<IPort, Integer>>(distanceProvider.getValues(prevPort, thisPort));
+				final List<MatrixEntry<IPort, Integer>> distances = new ArrayList<MatrixEntry<IPort, Integer>>(distanceProvider.getValues(prevPort, thisPort));
 				// Only add route choice if there is one
 				if (distances.size() == 1) {
 					final MatrixEntry<IPort, Integer> d = distances.get(0);

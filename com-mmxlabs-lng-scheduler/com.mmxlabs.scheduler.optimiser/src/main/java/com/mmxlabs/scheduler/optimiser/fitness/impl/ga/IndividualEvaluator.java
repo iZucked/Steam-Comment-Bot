@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider.MatrixEntry;
+import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.optimiser.ga.IIndividualEvaluator;
 import com.mmxlabs.optimiser.ga.Individual;
 import com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual;
