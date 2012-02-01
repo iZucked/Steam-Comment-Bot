@@ -15,6 +15,7 @@ import java.util.Set;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 
 /**
  * Implementation of an {@link IMultiMatrixProvider} and
