@@ -39,6 +39,21 @@ public final class CollectionsUtil {
 	}
 
 	/**
+	 * Convert a {@link Collection} of {@link Long}s to an array of longs.
+	 * 
+	 * @param longs
+	 * @return
+	 */
+	public static long[] longsToLongArray(final Collection<Long> longs) {
+		final long[] result = new long[longs.size()];
+		int ix = 0;
+		for (final long x : longs) {
+			result[ix++] = x;
+		}
+		return result;
+	}
+
+	/**
 	 * A workaround for the horrible effect of autoboxing on collections. Convert an array of ints to an {@link ArrayList} of {@link Integer}s.
 	 * 
 	 * @param a
@@ -138,23 +153,6 @@ public final class CollectionsUtil {
 	}
 
 	/**
-	 * Returns a value from a {@link Map} if the key exists, otherwise return the specified default value.
-	 * 
-	 * @param <K>
-	 * @param <T>
-	 * @param map
-	 * @param key
-	 * @param defaultValue
-	 * @return
-	 */
-	public static <K, T> T getValue(final Map<K, T> map, final K key, final T defaultValue) {
-		if (map.containsKey(key)) {
-			return map.get(key);
-		}
-		return defaultValue;
-	}
-
-	/**
 	 * Create a hash set containing the given elements
 	 * 
 	 * @param <T>
@@ -170,32 +168,19 @@ public final class CollectionsUtil {
 	}
 
 	/**
-	 * Convert a list of {@link Long}s to an array of longs.
+	 * Returns a value from a {@link Map} if the key exists, otherwise return the specified default value.
 	 * 
-	 * @param longs
+	 * @param <K>
+	 * @param <T>
+	 * @param map
+	 * @param key
+	 * @param defaultValue
 	 * @return
 	 */
-	public static long[] longsToLongArray(final List<Long> longs) {
-		final long[] result = new long[longs.size()];
-		int ix = 0;
-		for (final long x : longs) {
-			result[ix++] = x;
+	public static <K, T> T getValue(final Map<K, T> map, final K key, final T defaultValue) {
+		if (map.containsKey(key)) {
+			return map.get(key);
 		}
-		return result;
-	}
-
-	/**
-	 * Creates and returns a {@link HashSet} from the given elements.
-	 * 
-	 * @param elements
-	 * @return
-	 */
-	public static <T> Set<T> createHashSet(final T... elements) {
-		final HashSet<T> set = new HashSet<T>(elements.length);
-
-		for (final T t : elements) {
-			set.add(t);
-		}
-		return set;
+		return defaultValue;
 	}
 }
