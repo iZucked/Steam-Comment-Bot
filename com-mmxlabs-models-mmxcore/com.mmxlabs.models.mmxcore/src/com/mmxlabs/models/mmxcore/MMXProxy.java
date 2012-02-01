@@ -22,11 +22,12 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>{@link com.mmxlabs.models.mmxcore.MMXProxy#getReference <em>Reference</em>}</li>
  *   <li>{@link com.mmxlabs.models.mmxcore.MMXProxy#getReferentOwner <em>Referent Owner</em>}</li>
  *   <li>{@link com.mmxlabs.models.mmxcore.MMXProxy#getIndex <em>Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.mmxcore.MMXProxy#getReferentName <em>Referent Name</em>}</li>
  * </ul>
  * </p>
  *
  * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getMMXProxy()
- * @model
+ * @model annotation="http://www.mmxlabs.com/mmxcore/1/MMXCore generatedType='com.mmxlabs.YourMum' originalType='MMXProxy'"
  * @generated
  */
 public interface MMXProxy extends EObject {
@@ -159,5 +160,31 @@ public interface MMXProxy extends EObject {
 	 * @generated
 	 */
 	void setIndex(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Referent Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Referent Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Referent Name</em>' attribute.
+	 * @see #setReferentName(String)
+	 * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getMMXProxy_ReferentName()
+	 * @model required="true"
+	 * @generated
+	 */
+	String getReferentName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.mmxcore.MMXProxy#getReferentName <em>Referent Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Referent Name</em>' attribute.
+	 * @see #getReferentName()
+	 * @generated
+	 */
+	void setReferentName(String value);
 
 } // MMXProxy

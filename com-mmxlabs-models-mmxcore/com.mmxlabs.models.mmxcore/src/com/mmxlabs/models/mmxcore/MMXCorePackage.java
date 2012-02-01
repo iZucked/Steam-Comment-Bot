@@ -245,13 +245,22 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_PROXY__INDEX = 4;
 
 	/**
+	 * The feature id for the '<em><b>Referent Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_PROXY__REFERENT_NAME = 5;
+
+	/**
 	 * The number of structural features of the '<em>MMX Proxy</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MMX_PROXY_FEATURE_COUNT = 5;
+	int MMX_PROXY_FEATURE_COUNT = 6;
 
 
 	/**
@@ -524,6 +533,17 @@ public interface MMXCorePackage extends EPackage {
 	EAttribute getMMXProxy_Index();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.mmxcore.MMXProxy#getReferentName <em>Referent Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Referent Name</em>'.
+	 * @see com.mmxlabs.models.mmxcore.MMXProxy#getReferentName()
+	 * @see #getMMXProxy()
+	 * @generated
+	 */
+	EAttribute getMMXProxy_ReferentName();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.MMXRootObject <em>MMX Root Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -731,6 +751,14 @@ public interface MMXCorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MMX_PROXY__INDEX = eINSTANCE.getMMXProxy_Index();
+
+		/**
+		 * The meta object literal for the '<em><b>Referent Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MMX_PROXY__REFERENT_NAME = eINSTANCE.getMMXProxy_ReferentName();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl <em>MMX Root Object</em>}' class.

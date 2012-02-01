@@ -266,6 +266,15 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getMMXProxy_ReferentName() {
+		return (EAttribute)mmxProxyEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getMMXRootObject() {
 		return mmxRootObjectEClass;
 	}
@@ -368,6 +377,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		createEReference(mmxProxyEClass, MMX_PROXY__REFERENCE);
 		createEAttribute(mmxProxyEClass, MMX_PROXY__REFERENT_OWNER);
 		createEAttribute(mmxProxyEClass, MMX_PROXY__INDEX);
+		createEAttribute(mmxProxyEClass, MMX_PROXY__REFERENT_NAME);
 
 		mmxRootObjectEClass = createEClass(MMX_ROOT_OBJECT);
 		createEReference(mmxRootObjectEClass, MMX_ROOT_OBJECT__SUB_MODELS);
@@ -459,6 +469,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		initEReference(getMMXProxy_Reference(), ecorePackage.getEReference(), null, "reference", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMMXProxy_ReferentOwner(), ecorePackage.getEString(), "referentOwner", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMMXProxy_Index(), ecorePackage.getEInt(), "index", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMMXProxy_ReferentName(), ecorePackage.getEString(), "referentName", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(mmxRootObjectEClass, MMXRootObject.class, "MMXRootObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMMXRootObject_SubModels(), this.getMMXSubModel(), null, "subModels", null, 0, -1, MMXRootObject.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -487,6 +498,27 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.mmxlabs.com/mmxcore/1/MMXCore
+		createMMXCoreAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/mmxcore/1/MMXCore</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createMMXCoreAnnotations() {
+		String source = "http://www.mmxlabs.com/mmxcore/1/MMXCore";			
+		addAnnotation
+		  (mmxProxyEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.YourMum",
+			 "originalType", "MMXProxy"
+		   });
 	}
 
 } //MMXCorePackageImpl

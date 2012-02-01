@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXProxyImpl#getReference <em>Reference</em>}</li>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXProxyImpl#getReferentOwner <em>Referent Owner</em>}</li>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXProxyImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXProxyImpl#getReferentName <em>Referent Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -116,6 +117,26 @@ public class MMXProxyImpl extends EObjectImpl implements MMXProxy {
 	 * @ordered
 	 */
 	protected int index = INDEX_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getReferentName() <em>Referent Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferentName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String REFERENT_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getReferentName() <em>Referent Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferentName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String referentName = REFERENT_NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -280,6 +301,27 @@ public class MMXProxyImpl extends EObjectImpl implements MMXProxy {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getReferentName() {
+		return referentName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setReferentName(String newReferentName) {
+		String oldReferentName = referentName;
+		referentName = newReferentName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MMXCorePackage.MMX_PROXY__REFERENT_NAME, oldReferentName, referentName));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -295,6 +337,8 @@ public class MMXProxyImpl extends EObjectImpl implements MMXProxy {
 				return getReferentOwner();
 			case MMXCorePackage.MMX_PROXY__INDEX:
 				return getIndex();
+			case MMXCorePackage.MMX_PROXY__REFERENT_NAME:
+				return getReferentName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -321,6 +365,9 @@ public class MMXProxyImpl extends EObjectImpl implements MMXProxy {
 				return;
 			case MMXCorePackage.MMX_PROXY__INDEX:
 				setIndex((Integer)newValue);
+				return;
+			case MMXCorePackage.MMX_PROXY__REFERENT_NAME:
+				setReferentName((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -349,6 +396,9 @@ public class MMXProxyImpl extends EObjectImpl implements MMXProxy {
 			case MMXCorePackage.MMX_PROXY__INDEX:
 				setIndex(INDEX_EDEFAULT);
 				return;
+			case MMXCorePackage.MMX_PROXY__REFERENT_NAME:
+				setReferentName(REFERENT_NAME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -371,6 +421,8 @@ public class MMXProxyImpl extends EObjectImpl implements MMXProxy {
 				return REFERENT_OWNER_EDEFAULT == null ? referentOwner != null : !REFERENT_OWNER_EDEFAULT.equals(referentOwner);
 			case MMXCorePackage.MMX_PROXY__INDEX:
 				return index != INDEX_EDEFAULT;
+			case MMXCorePackage.MMX_PROXY__REFERENT_NAME:
+				return REFERENT_NAME_EDEFAULT == null ? referentName != null : !REFERENT_NAME_EDEFAULT.equals(referentName);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -391,6 +443,8 @@ public class MMXProxyImpl extends EObjectImpl implements MMXProxy {
 		result.append(referentOwner);
 		result.append(", index: ");
 		result.append(index);
+		result.append(", referentName: ");
+		result.append(referentName);
 		result.append(')');
 		return result.toString();
 	}
