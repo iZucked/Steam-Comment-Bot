@@ -35,6 +35,9 @@ public class PairKeyedMapTest {
 		Assert.assertTrue(map.containsValue(obj1));
 		Assert.assertFalse(map.containsValue(obj2));
 
+		Assert.assertSame(obj1, map.get(key1, key2));
+		Assert.assertSame(obj1, map.get(p1));
+
 		map.put(p2, obj2);
 
 		Assert.assertTrue(map.containsKey(p1));
@@ -42,6 +45,9 @@ public class PairKeyedMapTest {
 
 		Assert.assertTrue(map.containsValue(obj1));
 		Assert.assertTrue(map.containsValue(obj2));
+
+		Assert.assertSame(obj2, map.get(key1, key3));
+		Assert.assertSame(obj2, map.get(p2));
 
 		map.clear();
 
