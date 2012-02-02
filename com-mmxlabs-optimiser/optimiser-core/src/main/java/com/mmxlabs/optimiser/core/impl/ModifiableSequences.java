@@ -31,9 +31,8 @@ public final class ModifiableSequences implements IModifiableSequences {
 	private final List<IResource> resources;
 
 	private final Map<IResource, IModifiableSequence> sequenceMap;
-	
-	final List<ISequenceElement> unusedElements = new ArrayList<ISequenceElement>();
 
+	private final List<ISequenceElement> unusedElements = new ArrayList<ISequenceElement>();
 
 	/**
 	 * Constructor taking a list of {@link IResource} instances. The {@link IModifiableSequence} instances will be created automatically. The resources list is copied to maintain internal consistency
@@ -144,12 +143,12 @@ public final class ModifiableSequences implements IModifiableSequences {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 
 		if (obj instanceof ModifiableSequences) {
 			return sequenceMap.equals(((ModifiableSequences) obj).sequenceMap) && unusedElements.equals(((ModifiableSequences) obj).unusedElements);
 		} else if (obj instanceof ISequences) {
-			ISequences seq = (ISequences) obj;
+			final ISequences seq = (ISequences) obj;
 			if (size() != seq.size()) {
 				return false;
 			}
