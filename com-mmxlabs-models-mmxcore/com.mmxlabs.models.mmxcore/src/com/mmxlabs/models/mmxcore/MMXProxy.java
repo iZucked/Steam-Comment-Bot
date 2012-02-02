@@ -27,7 +27,7 @@ import org.eclipse.emf.ecore.EReference;
  * </p>
  *
  * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getMMXProxy()
- * @model annotation="http://www.mmxlabs.com/mmxcore/1/MMXCore generatedType='com.mmxlabs.YourMum' originalType='MMXProxy'"
+ * @model
  * @generated
  */
 public interface MMXProxy extends EObject {

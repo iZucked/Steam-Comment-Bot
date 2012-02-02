@@ -498,27 +498,6 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 		// Create resource
 		createResource(eNS_URI);
-
-		// Create annotations
-		// http://www.mmxlabs.com/mmxcore/1/MMXCore
-		createMMXCoreAnnotations();
-	}
-
-	/**
-	 * Initializes the annotations for <b>http://www.mmxlabs.com/mmxcore/1/MMXCore</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void createMMXCoreAnnotations() {
-		String source = "http://www.mmxlabs.com/mmxcore/1/MMXCore";			
-		addAnnotation
-		  (mmxProxyEClass, 
-		   source, 
-		   new String[] {
-			 "generatedType", "com.mmxlabs.YourMum",
-			 "originalType", "MMXProxy"
-		   });
 	}
 
 } //MMXCorePackageImpl
