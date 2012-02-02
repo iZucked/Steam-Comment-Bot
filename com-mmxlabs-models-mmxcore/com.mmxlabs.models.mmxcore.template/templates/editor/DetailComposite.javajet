@@ -1,0 +1,4 @@
+<%@ jet package="org.eclipse.emf.codegen.ecore.templates.editor" imports="java.util.* org.eclipse.emf.codegen.ecore.genmodel.*" class="DetailComposite" version="$Id: DetailComposite.javajet,v 1.69 2010/03/11 02:31:37 khussey Exp $" %>
+<%
+
+%>
