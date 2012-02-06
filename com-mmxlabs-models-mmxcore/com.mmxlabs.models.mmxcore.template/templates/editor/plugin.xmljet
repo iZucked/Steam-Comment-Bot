@@ -251,16 +251,18 @@
   <%}%>
 <%}%>
 
+<% // generator for MMX labs extension points %>
+<%for (final GenPackage genPackage : genModel.getAllGenPackagesWithClassifiers()) {%>
+	<%if (!genPackage.getGenClasses().isEmpty()) {%>
 	<extension
-         point="com.mmxlabs.models.ui.componenthelpers">
-<% // get all genpackages with classifiers %>
-// for each classifier, generate extension
-      <componentHelper
-            helperClass="foo"
-            inheritable="false"
-            modelClass="bar">
-      </componentHelper>
-   </extension>
-
-
+		<point="com.mmxlabs.models.ui.componenthelpers">
+		<%for (final GenClass genClass : genPackage.getGenClasses()) { %>
+		<componentHelper
+			helperClass="<%=genPackage.getPresentationPackageName()%>.composites.<%=genClass.getName()%>ComponentHelper"
+			inheritable="false"
+			modelClass=<%=genClass.getQualifiedInterfaceName()%> />
+		<% } // for genClasses %>
+	</extension>
+    <%} // if genclasses is empty %>
+<% } // for genpackages with classifiers %>
 </plugin>
