@@ -15,6 +15,8 @@ import org.eclipse.emf.codegen.jet.JETException;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.Monitor;
 
+import com.mmxlabs.models.mmxcore.templates.editor.ComponentHelper;
+
 /**
  * This should generate UI code in the editor, hopefully
  * 
@@ -28,7 +30,7 @@ public class MMXUIGeneratorAdapterFactory extends GenBaseGeneratorAdapter {
 			.getBaseURL().toString() + "templates";
 
 	public MMXUIGeneratorAdapterFactory() {
-
+		int x = 1;
 	}
 
 	@Override
@@ -57,16 +59,16 @@ public class MMXUIGeneratorAdapterFactory extends GenBaseGeneratorAdapter {
 					.getGenClasses().size());
 
 			final JETEmitter emitter = createJETEmitter(new JETEmitterDescriptor(
-					"editor/DetailComposite.javajet",
-					"com.mmxlabs.models.mmxcore.template.DetailComposite"));
+					"editor/ComponentHelper.javajet",
+					ComponentHelper.class.getName()));
 			for (final GenClass genClass : genPackage.getGenClasses()) {
 				monitor.subTask("Generating composite for "
 						+ genClass.getName());
 				generateJava(
 						genModel.getEditorDirectory(),
 						// compute package name
-						genPackage.getPresentationPackageName(),
-						genClass.getClassName() + "Composite", emitter, null,
+						genPackage.getPresentationPackageName() + ".composites",
+						genClass.getName() + "ComponentHelper", emitter, new Object[]{genClass},
 						createMonitor(monitor, 1));
 				monitor.worked(1);
 			}

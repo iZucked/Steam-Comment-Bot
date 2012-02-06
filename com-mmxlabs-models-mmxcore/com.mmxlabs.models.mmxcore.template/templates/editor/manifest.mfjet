@@ -38,7 +38,8 @@ Export-Package: <%=pack%><%while(packagesIterator.hasNext()) { pack = packagesIt
 <%}%>
 <%Iterator<String> requiredPluginIterator = genModel.getEditorRequiredPlugins().iterator(); if (requiredPluginIterator.hasNext()) { String pluginID = requiredPluginIterator.next();%>
 Require-Bundle: <%=pluginID%><%if (!pluginID.startsWith("org.eclipse.core.runtime")){%>;visibility:=reexport<%} while(requiredPluginIterator.hasNext()) { pluginID = requiredPluginIterator.next();%>,
- <%=pluginID%><%if (!pluginID.startsWith("org.eclipse.core.runtime")){%>;visibility:=reexport<%}}%>
+ <%=pluginID%><%if (!pluginID.startsWith("org.eclipse.core.runtime")){%>;visibility:=reexport<%}}%>,
+ com.mmxlabs.models.ui
 <%}%>
 <%if (genModel.isRichAjaxPlatform()) {%>
 Import-Package: org.eclipse.emf.common.ui,

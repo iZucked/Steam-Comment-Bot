@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="com.mmxlabs.models.ui.editorfactories" name="Inline Editor Factories" schema="schema/com.mmxlabs.models.ui.editorfactories.exsd"/>
+   <extension-point id="com.mmxlabs.models.ui.componenthelpers" name="Component Helpers" schema="schema/com.mmxlabs.models.ui.componenthelpers.exsd"/>
+   <extension
+         point="com.mmxlabs.models.ui.editorfactories">
+      <editorFactory
+            factoryClass="com.mmxlabs.models.ui.impl.DefaultInlineEditorFactory">
+         <FeatureAnyOf>
+            <EDataTypeIs
+                  EDataTypeName="EInt"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore"></EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EDouble"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EFloat"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EBoolean"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EByte"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EChar"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EShort"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="ELong"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EClassExtends
+                  EClass="org.eclipse.emf.ecore.EObject">
+            </EClassExtends>
+         </FeatureAnyOf>
+      </editorFactory>
+   </extension>
+</plugin>

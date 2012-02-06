@@ -32,6 +32,7 @@
       class="<%=genModel.getQualifiedEditorPluginClassName()%>$Implementation">
 
    <requires>
+   	<import plugin="com.mmxlabs.models.ui" />
   <%for (String pluginID : genModel.getEditorRequiredPlugins()) { %>
       <import plugin="<%=pluginID%>"<%if (!pluginID.startsWith("org.eclipse.core.runtime")) {%> export="true"<%}%>/>
   <%}%>
@@ -249,5 +250,17 @@
    </extension>
   <%}%>
 <%}%>
+
+	<extension
+         point="com.mmxlabs.models.ui.componenthelpers">
+<% // get all genpackages with classifiers %>
+// for each classifier, generate extension
+      <componentHelper
+            helperClass="foo"
+            inheritable="false"
+            modelClass="bar">
+      </componentHelper>
+   </extension>
+
 
 </plugin>
