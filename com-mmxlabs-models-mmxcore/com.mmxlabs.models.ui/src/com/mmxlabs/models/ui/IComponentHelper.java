@@ -10,5 +10,5 @@ public interface IComponentHelper {
 	/**
 	 * Called when a composite is being filled with editors for a particular type.
 	 */
-	public void addEditorsToComposite(IDetailComposite detailComposite);
+	public void addEditorsToComposite(IInlineEditorContainer detailComposite);
 }

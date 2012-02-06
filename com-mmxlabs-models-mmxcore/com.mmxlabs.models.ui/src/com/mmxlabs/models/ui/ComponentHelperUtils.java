@@ -9,7 +9,7 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 
 /**
- * Helper methods for {@link IComponentHelper} instances, mainly to add editors to {@link IDetailComposite} instances.
+ * Helper methods for {@link IComponentHelper} instances, mainly to add editors to {@link IInlineEditorContainer} instances.
  * 
  * @author hinton
  *

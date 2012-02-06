@@ -2,9 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.ui.detailview.base;
+package com.mmxlabs.models.ui.editors;
 
-import com.mmxlabs.shiplingo.ui.detailview.editors.IInlineEditor;
+
 
 /**
  * Instances provide a single method to wrap an IInlineEditor, allowing its

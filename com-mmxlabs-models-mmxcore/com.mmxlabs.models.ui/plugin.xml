@@ -3,6 +3,7 @@
 <plugin>
    <extension-point id="com.mmxlabs.models.ui.editorfactories" name="Inline Editor Factories" schema="schema/com.mmxlabs.models.ui.editorfactories.exsd"/>
    <extension-point id="com.mmxlabs.models.ui.componenthelpers" name="Component Helpers" schema="schema/com.mmxlabs.models.ui.componenthelpers.exsd"/>
+   <extension-point id="com.mmxlabs.models.ui.valueproviders" name="Reference Value Providers" schema="schema/com.mmxlabs.models.ui.valueproviders.exsd"/>
    <extension
          point="com.mmxlabs.models.ui.editorfactories">
       <editorFactory

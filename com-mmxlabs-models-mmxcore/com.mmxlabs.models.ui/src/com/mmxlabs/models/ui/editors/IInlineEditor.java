@@ -12,17 +12,21 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+
 /**
  * This is an interface for an inline editor. It is given an input, and should
  * generate commands and send them to the appropriate command processor when
- * stuff happens.
+ * stuff happens. It doesn't handle layout or provision of labels or anything.
  * 
  * @author Tom Hinton
  * 
  */
 public interface IInlineEditor {
-	public void setInput(final EObject object);
+	public void setCommandHandler(final ICommandHandler handler);
+	public void display(final MMXRootObject scenario, final EObject object);
 	public Control createControl(final Composite parent);
 	void processValidation(IStatus status);	
 	public EStructuralFeature getFeature();
+	public String getLabel();
 }

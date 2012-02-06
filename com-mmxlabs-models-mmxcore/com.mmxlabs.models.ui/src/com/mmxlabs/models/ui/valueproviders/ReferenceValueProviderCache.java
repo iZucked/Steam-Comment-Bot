@@ -8,7 +8,6 @@ import org.eclipse.emf.ecore.EReference;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.ReferenceValueProviderFactoryRegistry;
 
 /**
  * Utility class for caching reference value providers for a given root object. If a reference value provider

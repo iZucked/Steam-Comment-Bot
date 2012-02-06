@@ -61,6 +61,13 @@
             <element ref="FeatureAnyOf" minOccurs="0" maxOccurs="1"/>
             <element ref="OwnerAnyOf" minOccurs="0" maxOccurs="1"/>
          </sequence>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="factoryClass" type="string">
             <annotation>
                <documentation>

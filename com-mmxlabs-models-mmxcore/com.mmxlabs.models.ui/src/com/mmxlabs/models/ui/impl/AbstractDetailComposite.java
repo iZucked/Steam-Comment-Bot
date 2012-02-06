@@ -37,6 +37,8 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.shiplingo.ui.detailview.editors.EENumInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ICommandProcessor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.IInlineEditor;
