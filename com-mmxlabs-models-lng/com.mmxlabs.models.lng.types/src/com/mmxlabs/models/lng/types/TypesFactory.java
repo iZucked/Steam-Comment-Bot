@@ -35,6 +35,15 @@ public interface TypesFactory extends EFactory {
 	TimeWindow createTimeWindow();
 
 	/**
+	 * Returns a new object of class '<em>AVessel Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>AVessel Set</em>'.
+	 * @generated
+	 */
+	AVesselSet createAVesselSet();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

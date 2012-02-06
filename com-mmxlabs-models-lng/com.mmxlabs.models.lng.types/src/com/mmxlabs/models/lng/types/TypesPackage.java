@@ -227,6 +227,61 @@ public interface TypesPackage extends EPackage {
 	int AROUTE_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AVesselSetImpl <em>AVessel Set</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.impl.AVesselSetImpl
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVesselSet()
+	 * @generated
+	 */
+	int AVESSEL_SET = 12;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AVESSEL_SET__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AVESSEL_SET__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AVESSEL_SET__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AVESSEL_SET__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>AVessel Set</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AVESSEL_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AVesselImpl <em>AVessel</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -243,7 +298,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+	int AVESSEL__EXTENSIONS = AVESSEL_SET__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
@@ -252,7 +307,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+	int AVESSEL__PROXIES = AVESSEL_SET__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -261,7 +316,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+	int AVESSEL__UUID = AVESSEL_SET__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -270,7 +325,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int AVESSEL__NAME = AVESSEL_SET__NAME;
 
 	/**
 	 * The number of structural features of the '<em>AVessel</em>' class.
@@ -279,7 +334,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int AVESSEL_FEATURE_COUNT = AVESSEL_SET_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AVesselClassImpl <em>AVessel Class</em>}' class.
@@ -298,7 +353,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_CLASS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+	int AVESSEL_CLASS__EXTENSIONS = AVESSEL_SET__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
@@ -307,7 +362,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_CLASS__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+	int AVESSEL_CLASS__PROXIES = AVESSEL_SET__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -316,7 +371,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_CLASS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+	int AVESSEL_CLASS__UUID = AVESSEL_SET__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -325,7 +380,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_CLASS__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int AVESSEL_CLASS__NAME = AVESSEL_SET__NAME;
 
 	/**
 	 * The number of structural features of the '<em>AVessel Class</em>' class.
@@ -334,7 +389,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_CLASS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int AVESSEL_CLASS_FEATURE_COUNT = AVESSEL_SET_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AVesselEventImpl <em>AVessel Event</em>}' class.
@@ -383,22 +438,13 @@ public interface TypesPackage extends EPackage {
 	int AVESSEL_EVENT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>AVessel Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int AVESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AContractImpl <em>AContract</em>}' class.
@@ -667,69 +713,14 @@ public interface TypesPackage extends EPackage {
 	int ASLOT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>ASlot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int ASLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ALocatedImpl <em>ALocated</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.ALocatedImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getALocated()
-	 * @generated
-	 */
-	int ALOCATED = 11;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALOCATED__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALOCATED__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALOCATED__PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>ALocated</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALOCATED_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.TimeWindowImpl <em>Time Window</em>}' class.
@@ -739,7 +730,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getTimeWindow()
 	 * @generated
 	 */
-	int TIME_WINDOW = 12;
+	int TIME_WINDOW = 11;
 
 	/**
 	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
@@ -880,27 +871,6 @@ public interface TypesPackage extends EPackage {
 	EClass getASlot();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ALocated <em>ALocated</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>ALocated</em>'.
-	 * @see com.mmxlabs.models.lng.types.ALocated
-	 * @generated
-	 */
-	EClass getALocated();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.types.ALocated#getPort <em>Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Port</em>'.
-	 * @see com.mmxlabs.models.lng.types.ALocated#getPort()
-	 * @see #getALocated()
-	 * @generated
-	 */
-	EReference getALocated_Port();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.TimeWindow <em>Time Window</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -931,6 +901,16 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getTimeWindow_Length();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AVesselSet <em>AVessel Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>AVessel Set</em>'.
+	 * @see com.mmxlabs.models.lng.types.AVesselSet
+	 * @generated
+	 */
+	EClass getAVesselSet();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1065,24 +1045,6 @@ public interface TypesPackage extends EPackage {
 		EClass ASLOT = eINSTANCE.getASlot();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ALocatedImpl <em>ALocated</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.ALocatedImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getALocated()
-		 * @generated
-		 */
-		EClass ALOCATED = eINSTANCE.getALocated();
-
-		/**
-		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ALOCATED__PORT = eINSTANCE.getALocated_Port();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.TimeWindowImpl <em>Time Window</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1107,6 +1069,16 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TIME_WINDOW__LENGTH = eINSTANCE.getTimeWindow_Length();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AVesselSetImpl <em>AVessel Set</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.impl.AVesselSetImpl
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVesselSet()
+		 * @generated
+		 */
+		EClass AVESSEL_SET = eINSTANCE.getAVesselSet();
 
 	}
 

@@ -6,22 +6,15 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
-import com.mmxlabs.models.lng.types.ALocated;
-import com.mmxlabs.models.lng.types.APort;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import com.mmxlabs.models.lng.types.AVesselEvent;
 import com.mmxlabs.models.lng.types.TypesPackage;
-
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
-
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +24,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.types.impl.AVesselEventImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.types.impl.AVesselEventImpl#getPort <em>Port</em>}</li>
  * </ul>
  * </p>
  *
@@ -57,16 +49,6 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements AVessel
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected APort port;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -113,52 +95,11 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements AVessel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public APort getPort() {
-		if (port != null && port.eIsProxy()) {
-			InternalEObject oldPort = (InternalEObject)port;
-			port = (APort)eResolveProxy(oldPort);
-			if (port != oldPort) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypesPackage.AVESSEL_EVENT__PORT, oldPort, port));
-			}
-		}
-		return port;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public APort basicGetPort() {
-		return port;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPort(APort newPort) {
-		APort oldPort = port;
-		port = newPort;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.AVESSEL_EVENT__PORT, oldPort, port));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case TypesPackage.AVESSEL_EVENT__NAME:
 				return getName();
-			case TypesPackage.AVESSEL_EVENT__PORT:
-				if (resolve) return getPort();
-				return basicGetPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -173,9 +114,6 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements AVessel
 		switch (featureID) {
 			case TypesPackage.AVESSEL_EVENT__NAME:
 				setName((String)newValue);
-				return;
-			case TypesPackage.AVESSEL_EVENT__PORT:
-				setPort((APort)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -192,9 +130,6 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements AVessel
 			case TypesPackage.AVESSEL_EVENT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case TypesPackage.AVESSEL_EVENT__PORT:
-				setPort((APort)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -209,8 +144,6 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements AVessel
 		switch (featureID) {
 			case TypesPackage.AVESSEL_EVENT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case TypesPackage.AVESSEL_EVENT__PORT:
-				return port != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -228,12 +161,6 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements AVessel
 				default: return -1;
 			}
 		}
-		if (baseClass == ALocated.class) {
-			switch (derivedFeatureID) {
-				case TypesPackage.AVESSEL_EVENT__PORT: return TypesPackage.ALOCATED__PORT;
-				default: return -1;
-			}
-		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -247,12 +174,6 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements AVessel
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return TypesPackage.AVESSEL_EVENT__NAME;
-				default: return -1;
-			}
-		}
-		if (baseClass == ALocated.class) {
-			switch (baseFeatureID) {
-				case TypesPackage.ALOCATED__PORT: return TypesPackage.AVESSEL_EVENT__PORT;
 				default: return -1;
 			}
 		}

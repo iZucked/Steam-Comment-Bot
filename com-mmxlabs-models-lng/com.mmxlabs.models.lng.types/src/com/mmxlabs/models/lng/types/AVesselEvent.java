@@ -19,5 +19,5 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model abstract="true"
  * @generated
  */
-public interface AVesselEvent extends UUIDObject, NamedObject, ALocated {
+public interface AVesselEvent extends UUIDObject, NamedObject {
 } // AVesselEvent
