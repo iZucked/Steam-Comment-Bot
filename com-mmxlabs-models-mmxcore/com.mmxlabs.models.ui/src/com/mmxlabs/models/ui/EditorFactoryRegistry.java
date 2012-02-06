@@ -14,7 +14,29 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 
 /**
- * Handles the extension point for editor stuff.
+ * The editor factory registry matches {@link IInlineEditorFactory}s to combinations of {@link EClass} and {@link EStructuralFeature}.
+ * 
+ * When a UI is being constructed by a typical {@link IComponentHelper}, the {@link IComponentHelper} will use {@link ComponentHelperUtils#createDefaultEditor(EClass, EStructuralFeature)}
+ * to create the {@link IInlineEditor} for each field. This method asks this registry to look up a suitable {@link IInlineEditorFactory} for the combination of {@link EClass} and {@link EStructuralFeature}
+ * being displayed.
+ * 
+ * {@link IInlineEditorFactory}s are registered on the com.mmxlabs.models.ui.editorfactories extension point. The extension point can specify a feature name, an owner EClass, and a list of feature classes or EDataTypes.
+ * 
+ * The registry will find a match for a class and feature thus:
+ * <ol>
+ * <li>For each extension
+ * <ol><li>If the extension specifies a feature name, the name must match exactly</li>
+ * <li>If the extension specifies an owner class, the EClass passed in must be a subclass of that owner class</li>
+ * <li>If the extension specifies some types, the feature must have a type assignable to that type</li>
+ * </ol>
+ * <li>If two extensions match, the winner is the more specific one, according to:
+ * <ol>
+ * <li>If one matching extension specifies a feature name and the other doesn't, the one with the name wins</li>
+ * <li>If one extension specifies a datatype and it matches, and the other doesn't, the first wins</li>
+ * <li>If one extension's feature reference type is more specific, it wins</li>
+ * <li>If one extension's feature owner type is more specific, it wins</li>
+ * </ol>
+ * 
  * @author hinton
  *
  */
