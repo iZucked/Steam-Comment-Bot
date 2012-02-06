@@ -15,6 +15,7 @@ package com.mmxlabs.models.lng.types;
  *
  * @see com.mmxlabs.models.lng.types.TypesPackage#getAPort()
  * @model abstract="true"
+ *        annotation="http://www.mmxlabs.com/mmxcore/1/MMXCore generatedType='com.mmxlabs.models.lng.port.Port'"
  * @generated
  */
 public interface APort extends APortSet {

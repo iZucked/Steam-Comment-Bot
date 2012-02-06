@@ -105,6 +105,7 @@ public class TypesSwitch<T> extends Switch<T> {
 			case TypesPackage.AVESSEL: {
 				AVessel aVessel = (AVessel)theEObject;
 				T result = caseAVessel(aVessel);
+				if (result == null) result = caseAVesselSet(aVessel);
 				if (result == null) result = caseUUIDObject(aVessel);
 				if (result == null) result = caseNamedObject(aVessel);
 				if (result == null) result = caseMMXObject(aVessel);
@@ -114,6 +115,7 @@ public class TypesSwitch<T> extends Switch<T> {
 			case TypesPackage.AVESSEL_CLASS: {
 				AVesselClass aVesselClass = (AVesselClass)theEObject;
 				T result = caseAVesselClass(aVesselClass);
+				if (result == null) result = caseAVesselSet(aVesselClass);
 				if (result == null) result = caseUUIDObject(aVesselClass);
 				if (result == null) result = caseNamedObject(aVesselClass);
 				if (result == null) result = caseMMXObject(aVesselClass);
@@ -125,7 +127,6 @@ public class TypesSwitch<T> extends Switch<T> {
 				T result = caseAVesselEvent(aVesselEvent);
 				if (result == null) result = caseUUIDObject(aVesselEvent);
 				if (result == null) result = caseNamedObject(aVesselEvent);
-				if (result == null) result = caseALocated(aVesselEvent);
 				if (result == null) result = caseMMXObject(aVesselEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -171,21 +172,22 @@ public class TypesSwitch<T> extends Switch<T> {
 				T result = caseASlot(aSlot);
 				if (result == null) result = caseUUIDObject(aSlot);
 				if (result == null) result = caseNamedObject(aSlot);
-				if (result == null) result = caseALocated(aSlot);
 				if (result == null) result = caseMMXObject(aSlot);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.ALOCATED: {
-				ALocated aLocated = (ALocated)theEObject;
-				T result = caseALocated(aLocated);
-				if (result == null) result = caseMMXObject(aLocated);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case TypesPackage.TIME_WINDOW: {
 				TimeWindow timeWindow = (TimeWindow)theEObject;
 				T result = caseTimeWindow(timeWindow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case TypesPackage.AVESSEL_SET: {
+				AVesselSet aVesselSet = (AVesselSet)theEObject;
+				T result = caseAVesselSet(aVesselSet);
+				if (result == null) result = caseUUIDObject(aVesselSet);
+				if (result == null) result = caseNamedObject(aVesselSet);
+				if (result == null) result = caseMMXObject(aVesselSet);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -359,21 +361,6 @@ public class TypesSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ALocated</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ALocated</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseALocated(ALocated object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Time Window</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -385,6 +372,21 @@ public class TypesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTimeWindow(TimeWindow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>AVessel Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>AVessel Set</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAVesselSet(AVesselSet object) {
 		return null;
 	}
 

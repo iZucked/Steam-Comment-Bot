@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.port.impl;
 import com.mmxlabs.models.lng.port.*;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -64,8 +65,39 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 			case PortPackage.ROUTE: return createRoute();
 			case PortPackage.PORT_GROUP: return createPortGroup();
 			case PortPackage.ROUTE_LINE: return createRouteLine();
+			case PortPackage.PORT_MODEL: return createPortModel();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case PortPackage.PORT_CAPABILITY:
+				return createPortCapabilityFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case PortPackage.PORT_CAPABILITY:
+				return convertPortCapabilityToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -107,6 +139,36 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	public RouteLine createRouteLine() {
 		RouteLineImpl routeLine = new RouteLineImpl();
 		return routeLine;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortModel createPortModel() {
+		PortModelImpl portModel = new PortModelImpl();
+		return portModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortCapability createPortCapabilityFromString(EDataType eDataType, String initialValue) {
+		PortCapability result = PortCapability.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertPortCapabilityToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**

@@ -12,6 +12,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -110,13 +111,22 @@ public interface PortPackage extends EPackage {
 	int PORT__NAME = TypesPackage.APORT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Capabilities</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__CAPABILITIES = TypesPackage.APORT_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_FEATURE_COUNT + 0;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -312,6 +322,90 @@ public interface PortPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortModelImpl <em>Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.port.impl.PortModelImpl
+	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getPortModel()
+	 * @generated
+	 */
+	int PORT_MODEL = 4;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Ports</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Routes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__ROUTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.PortCapability <em>Capability</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.port.PortCapability
+	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getPortCapability()
+	 * @generated
+	 */
+	int PORT_CAPABILITY = 5;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -320,6 +414,17 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPort();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.port.Port#getCapabilities <em>Capabilities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Capabilities</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getCapabilities()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_Capabilities();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Route <em>Route</em>}'.
@@ -407,6 +512,48 @@ public interface PortPackage extends EPackage {
 	EAttribute getRouteLine_Distance();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.PortModel <em>Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Model</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel
+	 * @generated
+	 */
+	EClass getPortModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.port.PortModel#getPorts <em>Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Ports</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel#getPorts()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EReference getPortModel_Ports();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.port.PortModel#getRoutes <em>Routes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Routes</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel#getRoutes()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EReference getPortModel_Routes();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.port.PortCapability <em>Capability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Capability</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortCapability
+	 * @generated
+	 */
+	EEnum getPortCapability();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -437,6 +584,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PORT = eINSTANCE.getPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Capabilities</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__CAPABILITIES = eINSTANCE.getPort_Capabilities();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -507,6 +662,42 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ROUTE_LINE__DISTANCE = eINSTANCE.getRouteLine_Distance();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.PortModelImpl <em>Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.port.impl.PortModelImpl
+		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getPortModel()
+		 * @generated
+		 */
+		EClass PORT_MODEL = eINSTANCE.getPortModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Ports</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_MODEL__PORTS = eINSTANCE.getPortModel_Ports();
+
+		/**
+		 * The meta object literal for the '<em><b>Routes</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_MODEL__ROUTES = eINSTANCE.getPortModel_Routes();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.PortCapability <em>Capability</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.port.PortCapability
+		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getPortCapability()
+		 * @generated
+		 */
+		EEnum PORT_CAPABILITY = eINSTANCE.getPortCapability();
 
 	}
 

@@ -120,12 +120,12 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 				return createASlotAdapter();
 			}
 			@Override
-			public Adapter caseALocated(ALocated object) {
-				return createALocatedAdapter();
-			}
-			@Override
 			public Adapter caseTimeWindow(TimeWindow object) {
 				return createTimeWindowAdapter();
+			}
+			@Override
+			public Adapter caseAVesselSet(AVesselSet object) {
+				return createAVesselSetAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -314,20 +314,6 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ALocated <em>ALocated</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ALocated
-	 * @generated
-	 */
-	public Adapter createALocatedAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.TimeWindow <em>Time Window</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -338,6 +324,20 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTimeWindowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AVesselSet <em>AVessel Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.AVesselSet
+	 * @generated
+	 */
+	public Adapter createAVesselSetAdapter() {
 		return null;
 	}
 

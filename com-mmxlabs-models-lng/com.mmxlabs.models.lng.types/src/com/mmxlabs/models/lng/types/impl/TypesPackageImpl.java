@@ -6,11 +6,15 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import com.mmxlabs.models.lng.types.ACargo;
 import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.types.AIndex;
 import com.mmxlabs.models.lng.types.ALegalEntity;
-import com.mmxlabs.models.lng.types.ALocated;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.ARoute;
@@ -18,18 +22,11 @@ import com.mmxlabs.models.lng.types.ASlot;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselEvent;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TimeWindow;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
-
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
-
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -120,14 +117,14 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass aLocatedEClass = null;
+	private EClass timeWindowEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass timeWindowEClass = null;
+	private EClass aVesselSetEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -297,24 +294,6 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getALocated() {
-		return aLocatedEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getALocated_Port() {
-		return (EReference)aLocatedEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getTimeWindow() {
 		return timeWindowEClass;
 	}
@@ -335,6 +314,15 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 */
 	public EAttribute getTimeWindow_Length() {
 		return (EAttribute)timeWindowEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getAVesselSet() {
+		return aVesselSetEClass;
 	}
 
 	/**
@@ -387,12 +375,11 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		aSlotEClass = createEClass(ASLOT);
 
-		aLocatedEClass = createEClass(ALOCATED);
-		createEReference(aLocatedEClass, ALOCATED__PORT);
-
 		timeWindowEClass = createEClass(TIME_WINDOW);
 		createEAttribute(timeWindowEClass, TIME_WINDOW__START_DATE);
 		createEAttribute(timeWindowEClass, TIME_WINDOW__LENGTH);
+
+		aVesselSetEClass = createEClass(AVESSEL_SET);
 	}
 
 	/**
@@ -431,13 +418,10 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		aPortSetEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		aRouteEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		aRouteEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
-		aVesselEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		aVesselEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
-		aVesselClassEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		aVesselClassEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		aVesselEClass.getESuperTypes().add(this.getAVesselSet());
+		aVesselClassEClass.getESuperTypes().add(this.getAVesselSet());
 		aVesselEventEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		aVesselEventEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
-		aVesselEventEClass.getESuperTypes().add(this.getALocated());
 		aContractEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		aContractEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		aLegalEntityEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
@@ -448,8 +432,8 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		aCargoEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		aSlotEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		aSlotEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
-		aSlotEClass.getESuperTypes().add(this.getALocated());
-		aLocatedEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		aVesselSetEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		aVesselSetEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(aPortEClass, APort.class, "APort", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -474,15 +458,34 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		initEClass(aSlotEClass, ASlot.class, "ASlot", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(aLocatedEClass, ALocated.class, "ALocated", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getALocated_Port(), this.getAPort(), null, "port", null, 1, 1, ALocated.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(timeWindowEClass, TimeWindow.class, "TimeWindow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTimeWindow_StartDate(), ecorePackage.getEDate(), "startDate", null, 1, 1, TimeWindow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTimeWindow_Length(), ecorePackage.getEInt(), "length", null, 1, 1, TimeWindow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(aVesselSetEClass, AVesselSet.class, "AVesselSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.mmxlabs.com/mmxcore/1/MMXCore
+		createMMXCoreAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/mmxcore/1/MMXCore</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createMMXCoreAnnotations() {
+		String source = "http://www.mmxlabs.com/mmxcore/1/MMXCore";		
+		addAnnotation
+		  (aPortEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.port.Port"
+		   });
 	}
 
 } //TypesPackageImpl

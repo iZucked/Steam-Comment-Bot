@@ -19,5 +19,5 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model abstract="true"
  * @generated
  */
-public interface ASlot extends UUIDObject, NamedObject, ALocated {
+public interface ASlot extends UUIDObject, NamedObject {
 } // ASlot
