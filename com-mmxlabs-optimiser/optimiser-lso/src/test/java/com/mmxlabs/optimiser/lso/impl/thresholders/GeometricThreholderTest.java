@@ -13,9 +13,9 @@ import org.junit.Test;
 public class GeometricThreholderTest {
 	@Test
 	public void testAcceptanceCases() {
-		//can't mock classes, sadly. Perhaps we should use a random interface instead.
+		// can't mock classes, sadly. Perhaps we should use a random interface instead.
 		final double p = 0.76;
-		Random mockRandom = new Random() {
+		final Random mockRandom = new Random() {
 			@Override
 			public double nextDouble() {
 				return p;
@@ -24,9 +24,9 @@ public class GeometricThreholderTest {
 		final double mlnHalf = -Math.log(p);
 		final double initialTemperature = 100;
 		final double alpha = 0.95;
-		GeometricThresholder t = new GeometricThresholder(mockRandom, 2, initialTemperature, alpha);
+		final GeometricThresholder t = new GeometricThresholder(mockRandom, 2, initialTemperature, alpha);
 		t.init();
-		
+
 		Assert.assertEquals(initialTemperature, t.getTemperature());
 
 		Assert.assertFalse(t.accept((long) (mlnHalf * initialTemperature) + 1));
@@ -37,7 +37,7 @@ public class GeometricThreholderTest {
 		t.step();
 		t.step();
 		Assert.assertEquals(initialTemperature * alpha * alpha, t.getTemperature());
-		Assert.assertTrue(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha)  - 1));
-		Assert.assertFalse(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha) + 1 ));
+		Assert.assertTrue(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha) - 1));
+		Assert.assertFalse(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha) + 1));
 	}
 }

@@ -7,8 +7,6 @@ package com.mmxlabs.optimiser.common.fitness;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.optimiser.common.fitness.MatrixProviderFitnessCore;
-import com.mmxlabs.optimiser.common.fitness.MatrixProviderFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 
 public class MatrixProviderFitnessCoreFactoryTest {

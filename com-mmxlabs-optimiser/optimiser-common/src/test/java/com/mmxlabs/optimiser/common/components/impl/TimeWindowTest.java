@@ -7,8 +7,6 @@ package com.mmxlabs.optimiser.common.components.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
-
 public class TimeWindowTest {
 
 	@Test
@@ -32,20 +30,19 @@ public class TimeWindowTest {
 		final TimeWindow tw5 = new TimeWindow(10, 10);
 
 		Assert.assertTrue(tw1.equals(tw1));
-		
+
 		Assert.assertTrue(tw1.equals(tw2));
 		Assert.assertTrue(tw2.equals(tw1));
-		
+
 		Assert.assertFalse(tw1.equals(tw3));
 		Assert.assertFalse(tw1.equals(tw4));
 		Assert.assertFalse(tw1.equals(tw5));
-		
-		
+
 		Assert.assertFalse(tw3.equals(tw1));
 		Assert.assertFalse(tw4.equals(tw1));
 		Assert.assertFalse(tw5.equals(tw1));
-		
+
 		Assert.assertFalse(tw1.equals(new Object()));
 	}
-	
+
 }

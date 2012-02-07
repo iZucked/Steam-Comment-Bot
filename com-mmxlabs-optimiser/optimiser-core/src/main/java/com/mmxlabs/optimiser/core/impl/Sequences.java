@@ -17,8 +17,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
- * Default implementation of {@link ISequences}. Uses {@link ListSequence}
- * instances when required.
+ * Default implementation of {@link ISequences}. Uses {@link ListSequence} instances when required.
  * 
  * 
  * @author Simon Goodall
@@ -31,11 +30,10 @@ public final class Sequences implements ISequences {
 	private final Map<IResource, ISequence> sequenceMap;
 
 	final List<ISequenceElement> unusedElements = new ArrayList<ISequenceElement>();
-	
+
 	/**
-	 * Constructor taking a list of {@link IResource} instances. The
-	 * {@link ISequence} instances will be created automatically. The resources
-	 * list is copied to maintain internal consistency with the sequence map.
+	 * Constructor taking a list of {@link IResource} instances. The {@link ISequence} instances will be created automatically. The resources list is copied to maintain internal consistency with the
+	 * sequence map.
 	 * 
 	 * @param resources
 	 */
@@ -49,23 +47,18 @@ public final class Sequences implements ISequences {
 	}
 
 	/**
-	 * Constructor taking both the ordered list of resources and a {@link Map}
-	 * containing the initial sequences. References are maintained to both
-	 * objects.
+	 * Constructor taking both the ordered list of resources and a {@link Map} containing the initial sequences. References are maintained to both objects.
 	 * 
 	 * @param resources
 	 * @param sequenceMap
 	 */
-	public Sequences(final List<IResource> resources,
-			final Map<IResource, ISequence> sequenceMap) {
+	public Sequences(final List<IResource> resources, final Map<IResource, ISequence> sequenceMap) {
 		this.resources = resources;
 		this.sequenceMap = sequenceMap;
 	}
 
 	/**
-	 * Constructor which creates a deep copy of the input {@link ISequences}
-	 * object. This includes creating new {@link ISequence} objects, but not the
-	 * sequence elements.
+	 * Constructor which creates a deep copy of the input {@link ISequences} object. This includes creating new {@link ISequence} objects, but not the sequence elements.
 	 * 
 	 * @param sequences
 	 *            Source {@link ISequences} object
@@ -107,8 +100,7 @@ public final class Sequences implements ISequences {
 
 		// Create a copy so external modification does not affect internal
 		// state.
-		final Map<IResource, ISequence> map = Collections
-				.unmodifiableMap(sequenceMap);
+		final Map<IResource, ISequence> map = Collections.unmodifiableMap(sequenceMap);
 		return map;
 	}
 

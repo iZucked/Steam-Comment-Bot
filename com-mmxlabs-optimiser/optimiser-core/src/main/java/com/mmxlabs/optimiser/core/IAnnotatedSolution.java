@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.optimiser.core;
 
-
 public interface IAnnotatedSolution {
 
 	/**
@@ -15,17 +14,16 @@ public interface IAnnotatedSolution {
 	ISequences getSequences();
 
 	/**
-	 * Returns the {@link IAnnotations} associated with the sequence elements in
-	 * this solution
+	 * Returns the {@link IAnnotations} associated with the sequence elements in this solution
 	 * 
 	 * @return
 	 */
 	IAnnotations getElementAnnotations();
 
-	//annotations for other components?
-	//IAnnotations<IResource> getResourceAnnotations();
-	//IAnnotations<ISequence> getSequenceAnnotations();
-	
+	// annotations for other components?
+	// IAnnotations<IResource> getResourceAnnotations();
+	// IAnnotations<ISequence> getSequenceAnnotations();
+
 	/**
 	 * Returns the {@link IOptimisationContext} used to create this solution.
 	 * 
@@ -37,11 +35,12 @@ public interface IAnnotatedSolution {
 	 * Release any internal resources.
 	 */
 	void dispose();
-	
+
 	<U> U getGeneralAnnotation(String key, Class<U> clz);
-	
+
 	/**
 	 * Set a general annotation.
+	 * 
 	 * @param key
 	 * @param value
 	 */

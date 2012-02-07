@@ -456,7 +456,7 @@ public class ListModifiableSequenceTest {
 		Assert.assertEquals(0, sequence.size());
 
 		final ISequenceElement object1 = context.mock(ISequenceElement.class, "1");
-		
+
 		sequence.add(object1);
 
 		Assert.assertEquals(1, sequence.size());

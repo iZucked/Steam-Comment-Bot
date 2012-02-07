@@ -88,11 +88,11 @@ public class Move4over2Test {
 		final IModifiableSequence sequence1 = OptimiserTestUtil.makeSequence(1, 2, 3, 4, 5);
 		final IModifiableSequence sequence2 = OptimiserTestUtil.makeSequence(6, 7, 8, 9, 10);
 
-		List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
 		final Move4over2 move = new Move4over2();
 
@@ -113,8 +113,8 @@ public class Move4over2Test {
 
 		move.apply(sequences);
 
-		List<ISequenceElement> expectedSequence1 = OptimiserTestUtil.makeList(7, 8, 3, 4, 5);
-		List<ISequenceElement> expectedSequence2 = OptimiserTestUtil.makeList(6, 1, 2, 9, 10);
+		final List<ISequenceElement> expectedSequence1 = OptimiserTestUtil.makeList(7, 8, 3, 4, 5);
+		final List<ISequenceElement> expectedSequence2 = OptimiserTestUtil.makeList(6, 1, 2, 9, 10);
 
 		Assert.assertEquals(expectedSequence1.size(), sequence1.size());
 		for (int i = 0; i < expectedSequence1.size(); ++i) {
@@ -136,11 +136,11 @@ public class Move4over2Test {
 		final IModifiableSequence sequence1 = OptimiserTestUtil.makeSequence(1, 2, 3, 4, 5);
 		final IModifiableSequence sequence2 = OptimiserTestUtil.makeSequence(6, 7, 8, 9, 10);
 
-		List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
 		final Move4over2 move = new Move4over2();
 

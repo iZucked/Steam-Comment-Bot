@@ -8,8 +8,7 @@ import java.util.Random;
 
 import com.mmxlabs.optimiser.ga.IIndividualFactory;
 
-public final class RandomByteArrayIndividualFactory implements
-		IIndividualFactory<ByteArrayIndividual> {
+public final class RandomByteArrayIndividualFactory implements IIndividualFactory<ByteArrayIndividual> {
 
 	/**
 	 * Number of bytes in each individual.
@@ -18,8 +17,7 @@ public final class RandomByteArrayIndividualFactory implements
 
 	private final Random random;
 
-	public RandomByteArrayIndividualFactory(final int numBytes,
-			final Random random) {
+	public RandomByteArrayIndividualFactory(final int numBytes, final Random random) {
 		this.numBytes = numBytes;
 		this.random = random;
 	}

@@ -45,8 +45,9 @@ public class OptionalSequenceElementsConstraintChecker implements IConstraintChe
 	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			if (optionalElementsProvider.isElementRequired(element)) {
-				if (messages != null)
+				if (messages != null) {
 					messages.add("Element " + element + " is required, but is in the unused set");
+				}
 				return false;
 			}
 		}
@@ -58,8 +59,9 @@ public class OptionalSequenceElementsConstraintChecker implements IConstraintChe
 
 		final int desiredCount = optionalElementsProvider.getOptionalElements().size() + optionalElementsProvider.getRequiredElements().size();
 		if (elementCount != desiredCount) {
-			if (messages != null)
+			if (messages != null) {
 				messages.add("There are " + elementCount + " elements in the solution, but there should be " + desiredCount);
+			}
 			return false;
 		}
 

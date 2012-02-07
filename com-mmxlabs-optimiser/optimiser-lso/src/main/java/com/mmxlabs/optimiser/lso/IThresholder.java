@@ -7,8 +7,7 @@ package com.mmxlabs.optimiser.lso;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 
 /**
- * {@link IThresholder} implementations are used by {@link IFitnessEvaluator}s
- * to determine whether a single delta value is acceptable.
+ * {@link IThresholder} implementations are used by {@link IFitnessEvaluator}s to determine whether a single delta value is acceptable.
  * 
  * @author Simon Goodall
  * 
@@ -22,6 +21,7 @@ public interface IThresholder {
 
 	/**
 	 * Return true if the given delta value is acceptable.
+	 * 
 	 * @param delta
 	 * @return
 	 */

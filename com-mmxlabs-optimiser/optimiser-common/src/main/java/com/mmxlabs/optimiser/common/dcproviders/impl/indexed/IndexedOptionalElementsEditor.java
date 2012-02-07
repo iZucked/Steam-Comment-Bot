@@ -35,7 +35,6 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 		return name;
 	}
 
-
 	@Override
 	public void dispose() {
 		optionalElements = null;
@@ -43,24 +42,20 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 		requiredList.clear();
 	}
 
-
 	@Override
 	public boolean isElementOptional(final ISequenceElement element) {
 		return optionalElements.isSet(element);
 	}
-
 
 	@Override
 	public boolean isElementRequired(final ISequenceElement element) {
 		return !isElementOptional(element);
 	}
 
-
 	@Override
 	public List<ISequenceElement> getOptionalElements() {
 		return Collections.unmodifiableList(optionalList);
 	}
-
 
 	@Override
 	public List<ISequenceElement> getRequiredElements() {
@@ -75,10 +70,12 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 			optionalElements.clear(element);
 		}
 
-		while (optionalList.remove(element))
+		while (optionalList.remove(element)) {
 			;
-		while (requiredList.remove(element))
+		}
+		while (requiredList.remove(element)) {
 			;
+		}
 		if (isOptional) {
 			optionalList.add(element);
 		}

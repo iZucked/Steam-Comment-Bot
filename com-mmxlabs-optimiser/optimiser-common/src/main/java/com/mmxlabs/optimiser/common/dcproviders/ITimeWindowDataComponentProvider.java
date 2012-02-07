@@ -11,18 +11,15 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
 /**
- * {@link IDataComponentProvider} interface to provide {@link ITimeWindow}
- * information for sequence elements.
+ * {@link IDataComponentProvider} interface to provide {@link ITimeWindow} information for sequence elements.
  * 
  * @author Simon Goodall
  * 
  */
-public interface ITimeWindowDataComponentProvider extends
-		IDataComponentProvider {
+public interface ITimeWindowDataComponentProvider extends IDataComponentProvider {
 
 	/**
-	 * Return a {@link List} of {@link ITimeWindow} for this sequence element,
-	 * or an empty list if nothing has been set.
+	 * Return a {@link List} of {@link ITimeWindow} for this sequence element, or an empty list if nothing has been set.
 	 * 
 	 * @param element
 	 * @return

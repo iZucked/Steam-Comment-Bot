@@ -8,7 +8,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 
 public class IntegerElement implements ISequenceElement, Comparable<IntegerElement> {
 
-	private int idx;
+	private final int idx;
 
 	public IntegerElement(final int idx) {
 		this.idx = idx;
@@ -25,12 +25,12 @@ public class IntegerElement implements ISequenceElement, Comparable<IntegerEleme
 	}
 
 	@Override
-	public int compareTo(IntegerElement o) {
+	public int compareTo(final IntegerElement o) {
 		return idx - o.idx;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 
 		if (obj instanceof IntegerElement) {
 			return idx == ((IntegerElement) obj).idx;

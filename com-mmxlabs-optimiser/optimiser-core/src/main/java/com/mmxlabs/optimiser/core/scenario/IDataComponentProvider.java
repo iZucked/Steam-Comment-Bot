@@ -8,8 +8,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 
 /**
- * {@link IDataComponentProvider} implementations provide additional data for
- * e.g. {@link IFitnessCore} and {@link IConstraintChecker} objects.
+ * {@link IDataComponentProvider} implementations provide additional data for e.g. {@link IFitnessCore} and {@link IConstraintChecker} objects.
  * 
  * @author proshun, Simon Goodall
  */
@@ -23,8 +22,7 @@ public interface IDataComponentProvider {
 	String getName();
 
 	/**
-	 * Notify {@link IDataComponentProvider} that it is no longer required and
-	 * clean up any internal references.
+	 * Notify {@link IDataComponentProvider} that it is no longer required and clean up any internal references.
 	 */
 	void dispose();
 }

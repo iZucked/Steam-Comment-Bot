@@ -10,8 +10,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 
 /**
- * Implementation of an {@link IMatrixProvider} and {@link IMatrixEditor} using
- * a two dimensional {@link HashMap} as the backing implementation.
+ * Implementation of an {@link IMatrixProvider} and {@link IMatrixEditor} using a two dimensional {@link HashMap} as the backing implementation.
  * 
  * @author Simon Goodall
  * 
@@ -20,8 +19,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
  * @param <U>
  *            Value type
  */
-public final class HashMapMatrixProvider<T, U> implements
-		IMatrixProvider<T, U>, IMatrixEditor<T, U> {
+public final class HashMapMatrixProvider<T, U> implements IMatrixProvider<T, U>, IMatrixEditor<T, U> {
 
 	private final HashMap<T, HashMap<T, U>> matrix;
 
@@ -74,7 +72,7 @@ public final class HashMapMatrixProvider<T, U> implements
 		matrix.clear();
 	}
 
-	public void setDefaultValue(U defaultValue) {
+	public void setDefaultValue(final U defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 
@@ -83,7 +81,7 @@ public final class HashMapMatrixProvider<T, U> implements
 	}
 
 	@Override
-	public boolean has(T x, T y) {
+	public boolean has(final T x, final T y) {
 		return matrix.containsKey(x) && matrix.get(x).containsKey(y);
 	}
 }

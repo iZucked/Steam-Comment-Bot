@@ -12,9 +12,8 @@ import com.mmxlabs.optimiser.ga.IIndividualEvaluator;
 import com.mmxlabs.optimiser.ga.IIndividualFactory;
 import com.mmxlabs.optimiser.ga.Individual;
 
-public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
-		IGeneticAlgorithm<I> {
-	
+public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements IGeneticAlgorithm<I> {
+
 	private final IIndividualEvaluator<I> individualEvaluator;
 
 	private final IIndividualFactory<I> individualFactory;
@@ -25,8 +24,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	private final int N;
 
 	/**
-	 * Threshold (between 0.0 and 1.0) of change to mutate a single byte in new
-	 * individuals
+	 * Threshold (between 0.0 and 1.0) of change to mutate a single byte in new individuals
 	 */
 	private final float mutateThreshold;
 
@@ -41,14 +39,12 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	private final I[] population;
 
 	/**
-	 * Subset of population which are good and to be retained. There are
-	 * {@link #N} items.
+	 * Subset of population which are good and to be retained. There are {@link #N} items.
 	 */
 	private final I[] good;
 
 	/**
-	 * Subset of population which are bad and are to be replaced with new
-	 * members. There are {@link #population#length} - {@link #N} items.
+	 * Subset of population which are bad and are to be replaced with new members. There are {@link #population#length} - {@link #N} items.
 	 */
 
 	private final I[] bad;
@@ -64,10 +60,8 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	private long bestFitness;
 
 	@SuppressWarnings("unchecked")
-	public AbstractGAAlgorithm(final Random random,
-			final IIndividualEvaluator<I> individualEvaluator,
-			final IIndividualFactory<I> individualFactory,
-			final float mutateThreshold, final int numElements, final int topN) {
+	public AbstractGAAlgorithm(final Random random, final IIndividualEvaluator<I> individualEvaluator, final IIndividualFactory<I> individualFactory, final float mutateThreshold,
+			final int numElements, final int topN) {
 		this.random = random;
 		this.individualEvaluator = individualEvaluator;
 		this.individualFactory = individualFactory;
@@ -100,8 +94,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#initPopulation()
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#initPopulation()
 	 */
 	@Override
 	public final void initPopulation() {
@@ -131,14 +124,11 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#evaluate(int,
-	 * com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual[],
-	 * com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual[],
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#evaluate(int, com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual[], com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual[],
 	 * com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual[])
 	 */
 	@Override
-	public final void evaluate(final int N, final I[] population,
-			final I[] good, final I[] bad) {
+	public final void evaluate(final int N, final I[] population, final I[] good, final I[] bad) {
 
 		int badIdx = 0;
 
@@ -186,7 +176,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 		// Record best entry;
 		final Tuple<I> t = topN.first();
 		if (t.f < bestFitness) {
-			bestIndividual = t.i.clone(); //have to clone, because sometimes we are adjusted elsewhere
+			bestIndividual = t.i.clone(); // have to clone, because sometimes we are adjusted elsewhere
 			bestFitness = t.f;
 		}
 	}
@@ -194,8 +184,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#getMutateThreshold()
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#getMutateThreshold()
 	 */
 	@Override
 	public final float getMutateThreshold() {
@@ -215,9 +204,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#getIndividualEvaluator
-	 * ()
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#getIndividualEvaluator ()
 	 */
 	@Override
 	public final IIndividualEvaluator<I> getIndividualEvaluator() {
@@ -247,8 +234,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#getBestIndividual()
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#getBestIndividual()
 	 */
 	@Override
 	public final I getBestIndividual() {
@@ -258,8 +244,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#getBestFitness()
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#getBestFitness()
 	 */
 	@Override
 	public final long getBestFitness() {
@@ -269,9 +254,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#mutate(com.mmxlabs
-	 * .optimiser.ga.bytearray.ByteArrayIndividual[])
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#mutate(com.mmxlabs .optimiser.ga.bytearray.ByteArrayIndividual[])
 	 */
 	@Override
 	public final void mutate(final I[] mutatable) {
@@ -283,16 +266,13 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#crossover(com.mmxlabs
-	 * .optimiser.ga.bytearray.ByteArrayIndividual[],
-	 * com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual[])
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#crossover(com.mmxlabs .optimiser.ga.bytearray.ByteArrayIndividual[], com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual[])
 	 */
 	@Override
 	public final void crossover(final I[] good, final I[] bad) {
 
 		int badIdx = 0;
-		while (badIdx + 1 < bad.length) {
+		while ((badIdx + 1) < bad.length) {
 			final int idx1 = random.nextInt(good.length);
 			final int idx2 = random.nextInt(good.length);
 			op_crossover(good[idx1], good[idx2], bad[badIdx++], bad[badIdx++]);

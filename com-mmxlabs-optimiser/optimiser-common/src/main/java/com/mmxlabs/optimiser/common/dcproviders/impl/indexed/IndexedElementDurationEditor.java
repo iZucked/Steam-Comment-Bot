@@ -61,7 +61,7 @@ public final class IndexedElementDurationEditor implements IElementDurationProvi
 	}
 
 	@Override
-	public void setElementDuration(ISequenceElement element, IResource resource, int duration) {
+	public void setElementDuration(final ISequenceElement element, final IResource resource, final int duration) {
 		IIndexMap<ISequenceElement, Integer> byElementForResource = durationByElementByResource.maybeGet(resource);
 		if (byElementForResource == null) {
 			byElementForResource = new ArrayIndexMap<ISequenceElement, Integer>();

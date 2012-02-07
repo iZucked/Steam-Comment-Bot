@@ -18,9 +18,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 
 /**
- * Implementation of an {@link IMultiMatrixProvider} and
- * {@link IMultiMatrixEditor} using {@link HashMapMatrixProvider} as the backing
- * implementation.
+ * Implementation of an {@link IMultiMatrixProvider} and {@link IMultiMatrixEditor} using {@link HashMapMatrixProvider} as the backing implementation.
  * 
  * @author Simon Goodall
  * 
@@ -29,16 +27,14 @@ import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
  * @param <U>
  *            Value type
  */
-public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements
-		IMultiMatrixProvider<T, U>, IMultiMatrixEditor<T, U> {
+public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements IMultiMatrixProvider<T, U>, IMultiMatrixEditor<T, U> {
 
 	private final HashMap<String, IMatrixProvider<T, U>> matricies;
 
 	private final String name;
 
 	/**
-	 * Cached array of keys. This will be reset whenever a new matrix is set and
-	 * recalculated when {@link #getKeys()} is called.
+	 * Cached array of keys. This will be reset whenever a new matrix is set and recalculated when {@link #getKeys()} is called.
 	 */
 	private transient String[] keys;
 
@@ -96,11 +92,9 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements
 
 	@Override
 	public final Collection<MatrixEntry<T, U>> getValues(final T x, final T y) {
-		final List<MatrixEntry<T, U>> entries = new ArrayList<MatrixEntry<T, U>>(
-				matricies.size());
+		final List<MatrixEntry<T, U>> entries = new ArrayList<MatrixEntry<T, U>>(matricies.size());
 
-		for (final Map.Entry<String, IMatrixProvider<T, U>> entry : matricies
-				.entrySet()) {
+		for (final Map.Entry<String, IMatrixProvider<T, U>> entry : matricies.entrySet()) {
 			final String key = entry.getKey();
 			final IMatrixProvider<T, U> p = entry.getValue();
 			final U u = p.get(x, y);
@@ -110,8 +104,7 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements
 	}
 
 	/**
-	 * Get the minimum distance and associated route key. This method is here
-	 * for eventual precomputation optimisation
+	 * Get the minimum distance and associated route key. This method is here for eventual precomputation optimisation
 	 * 
 	 * @param x
 	 * @param y
@@ -130,21 +123,19 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements
 	@Override
 	public MatrixEntry<T, U> getMaximum(final T x, final T y) {
 		/*
-		 * This does not actually return the maximum value, but instead either
-		 * (a) the maximum non-default value if there is a non-default value or
-		 * (b) the first default value encountered if there is no non-default value.
+		 * This does not actually return the maximum value, but instead either (a) the maximum non-default value if there is a non-default value or (b) the first default value encountered if there is
+		 * no non-default value.
 		 */
 		U invalid = null;
 		U minimum = null;
 		String minKey = null;
 
-		for (final Map.Entry<String, IMatrixProvider<T, U>> entry : matricies
-				.entrySet()) {
+		for (final Map.Entry<String, IMatrixProvider<T, U>> entry : matricies.entrySet()) {
 			final String key = entry.getKey();
 			final IMatrixProvider<T, U> p = entry.getValue();
 			if (p.has(x, y)) {
 				final U u = p.get(x, y);
-				if (minimum == null || u.compareTo(minimum) <= 0) {
+				if ((minimum == null) || (u.compareTo(minimum) <= 0)) {
 					minimum = u;
 					minKey = key;
 				}
@@ -153,8 +144,7 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements
 				minKey = key;
 			}
 		}
-		return new MatrixEntry<T, U>(minKey, x, y, minimum == null ? invalid
-				: minimum);
+		return new MatrixEntry<T, U>(minKey, x, y, minimum == null ? invalid : minimum);
 	}
 
 	@Override

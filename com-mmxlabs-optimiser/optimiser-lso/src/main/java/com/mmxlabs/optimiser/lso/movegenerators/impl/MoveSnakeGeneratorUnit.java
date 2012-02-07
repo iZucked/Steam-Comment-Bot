@@ -15,13 +15,10 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.impl.MoveSnake;
 
-public final class MoveSnakeGeneratorUnit implements
-		IRandomMoveGeneratorUnit {
+public final class MoveSnakeGeneratorUnit implements IRandomMoveGeneratorUnit {
 
 	@Override
-	public IMove generateRandomMove(
-			final RandomMoveGenerator moveGenerator,
-			final ISequences sequences) {
+	public IMove generateRandomMove(final RandomMoveGenerator moveGenerator, final ISequences sequences) {
 
 		final Random random = moveGenerator.getRandom();
 
@@ -52,20 +49,17 @@ public final class MoveSnakeGeneratorUnit implements
 		final List<IResource> tos = new ArrayList<IResource>(froms);
 		Collections.rotate(tos, 1);
 
-		final List<Integer> startPositions = new ArrayList<Integer>(
-				numChangedResources);
-		final List<Integer> endPositions = new ArrayList<Integer>(
-				numChangedResources);
-		final List<Integer> insertPositions = new ArrayList<Integer>(
-				numChangedResources);
+		final List<Integer> startPositions = new ArrayList<Integer>(numChangedResources);
+		final List<Integer> endPositions = new ArrayList<Integer>(numChangedResources);
+		final List<Integer> insertPositions = new ArrayList<Integer>(numChangedResources);
 
-		// Fill in array so set ops don't fail 
+		// Fill in array so set ops don't fail
 		for (int i = 0; i < numChangedResources; ++i) {
 			startPositions.add(i, -1);
-			endPositions.add(i,-1);
+			endPositions.add(i, -1);
 			insertPositions.add(i, -1);
 		}
-		
+
 		// Generate outgoing segment
 		final int[] breakPoints = new int[3];
 		for (int i = 0; i < numChangedResources; ++i) {
@@ -77,13 +71,11 @@ public final class MoveSnakeGeneratorUnit implements
 				startPositions.set(i, breakPoints[0]);
 				endPositions.set(i, breakPoints[1]);
 				// TODO: Why was this error not picked up before? -- only two routes?
-				insertPositions.set((i + 1) % numChangedResources,
-						breakPoints[2]);
+				insertPositions.set((i + 1) % numChangedResources, breakPoints[2]);
 			} else {
 				startPositions.set(i, breakPoints[1]);
 				endPositions.set(i, breakPoints[2]);
-				insertPositions.set((i + 1) % numChangedResources,
-						breakPoints[0]);
+				insertPositions.set((i + 1) % numChangedResources, breakPoints[0]);
 			}
 		}
 

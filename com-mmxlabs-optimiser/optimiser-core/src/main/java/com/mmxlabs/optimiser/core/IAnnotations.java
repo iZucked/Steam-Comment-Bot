@@ -6,7 +6,6 @@ package com.mmxlabs.optimiser.core;
 
 import java.util.Map;
 
-
 /**
  * @author hinton
  * 

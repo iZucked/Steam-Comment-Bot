@@ -4,10 +4,8 @@
  */
 package com.mmxlabs.optimiser.ga;
 
-
 /**
- * The {@link IIndividualEvaluator} calculates the fitness of a given
- * individual.
+ * The {@link IIndividualEvaluator} calculates the fitness of a given individual.
  * 
  * @author Simon Goodall
  * 

@@ -7,9 +7,6 @@ package com.mmxlabs.optimiser.common.constraints;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
-import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
-
 public class ResourceAllocationConstraintCheckerFactoryTest {
 
 	@Test

@@ -10,9 +10,7 @@ import java.util.Set;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
 /**
- * Interface defining multiple two dimensional matrix with a simple value
- * getter. Each matrix has a "key" to access it. A default matrix can be
- * provided using the {@link #Default_Key}.
+ * Interface defining multiple two dimensional matrix with a simple value getter. Each matrix has a "key" to access it. A default matrix can be provided using the {@link #Default_Key}.
  * 
  * @author Simon Goodall
  * 
@@ -21,8 +19,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * @param <U>
  *            Value type
  */
-public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends
-		IDataComponentProvider {
+public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataComponentProvider {
 
 	/**
 	 * Key for the default matrix.
@@ -38,8 +35,7 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends
 	boolean containsKey(String key);
 
 	/**
-	 * Returns the {@link IMatrixProvider} for the given key. Returns null if
-	 * key is not present.
+	 * Returns the {@link IMatrixProvider} for the given key. Returns null if key is not present.
 	 * 
 	 * @param key
 	 * @param x
@@ -63,9 +59,7 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends
 	String[] getKeys();
 
 	/**
-	 * Returns the {@link Collection} of matrix entries, one from each
-	 * {@link IMatrixProvider}, that corresponds to
-	 * {@link IMatrixProvider#get(Object, Object)} for the given arguments.
+	 * Returns the {@link Collection} of matrix entries, one from each {@link IMatrixProvider}, that corresponds to {@link IMatrixProvider#get(Object, Object)} for the given arguments.
 	 * 
 	 * @param x
 	 * @param y
@@ -83,8 +77,7 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends
 	MatrixEntry<T, U> getMinimum(T x, T y);
 
 	/**
-	 * Returns the {@link MatrixEntry} with maximum non-default-value cost for
-	 * points x and y.
+	 * Returns the {@link MatrixEntry} with maximum non-default-value cost for points x and y.
 	 * 
 	 * @param x
 	 * @param y
@@ -93,9 +86,7 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends
 	MatrixEntry<T, U> getMaximum(T x, T y);
 
 	/**
-	 * Returns the cost of the matrix entry returned by
-	 * {@link IMultiMatrixProvider#getValues(T, T)}. This is the shortest
-	 * distance between these two points in this multimatrix.
+	 * Returns the cost of the matrix entry returned by {@link IMultiMatrixProvider#getValues(T, T)}. This is the shortest distance between these two points in this multimatrix.
 	 * 
 	 * @param x
 	 * @param y
@@ -104,9 +95,7 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends
 	U getMinimumValue(T x, T y);
 
 	/**
-	 * Returns the cost of the matrix entry returned by
-	 * {@link IMultiMatrixProvider#getMaximum}. This is the longest distance
-	 * between these two points which is less than the default value.
+	 * Returns the cost of the matrix entry returned by {@link IMultiMatrixProvider#getMaximum}. This is the longest distance between these two points which is less than the default value.
 	 * 
 	 * @param x
 	 * @param y

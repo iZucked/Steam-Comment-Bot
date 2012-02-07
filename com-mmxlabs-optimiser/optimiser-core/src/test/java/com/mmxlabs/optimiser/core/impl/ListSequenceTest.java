@@ -18,7 +18,6 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.impl.ListSequence;
 
 /**
  * Test the {@link ListSequence} against the documented API. TODO: Use JMock to test internal calls against a List object.

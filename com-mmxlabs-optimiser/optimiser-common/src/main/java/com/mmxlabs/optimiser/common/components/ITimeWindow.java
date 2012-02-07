@@ -5,8 +5,7 @@
 package com.mmxlabs.optimiser.common.components;
 
 /**
- * Interface defining a window of time bounded by {@link #getStart()} and
- * {@link #getEnd()}.
+ * Interface defining a window of time bounded by {@link #getStart()} and {@link #getEnd()}.
  * 
  * @author Simon Goodall
  * 

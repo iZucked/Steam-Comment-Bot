@@ -7,9 +7,6 @@ package com.mmxlabs.optimiser.common.constraints;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintChecker;
-import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
-
 public class OrderedSequenceElementsConstraintCheckerFactoryTest {
 
 	@Test

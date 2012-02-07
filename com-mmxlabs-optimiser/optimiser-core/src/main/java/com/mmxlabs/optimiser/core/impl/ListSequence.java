@@ -119,7 +119,7 @@ public final class ListSequence implements ISequence {
 		final Iterator<ISequenceElement> i = iterator();
 		while (i.hasNext()) {
 			final ISequenceElement obj = i.next();
-			hashCode = 31 * hashCode + (obj == null ? 0 : obj.hashCode());
+			hashCode = (31 * hashCode) + (obj == null ? 0 : obj.hashCode());
 		}
 		return hashCode;
 	}

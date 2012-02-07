@@ -12,16 +12,12 @@ import com.mmxlabs.optimiser.ga.IIndividualFactory;
 import com.mmxlabs.optimiser.ga.impl.AbstractGAAlgorithm;
 
 /**
- * Genetic Algorithm implementation which works on a {@link IntArrayIndividual}.
- * Generates an integer array with values between 0 (inclusive) and
- * {@link #maxValue} (exclusive).
+ * Genetic Algorithm implementation which works on a {@link IntArrayIndividual}. Generates an integer array with values between 0 (inclusive) and {@link #maxValue} (exclusive).
  * 
  * @author Simon Goodall
  * 
  */
-public final class IntArrayGAAlgorithm extends
-		AbstractGAAlgorithm<IntArrayIndividual> implements
-		IGeneticAlgorithm<IntArrayIndividual> {
+public final class IntArrayGAAlgorithm extends AbstractGAAlgorithm<IntArrayIndividual> implements IGeneticAlgorithm<IntArrayIndividual> {
 
 	/**
 	 * Number of ints in each individual.
@@ -33,14 +29,10 @@ public final class IntArrayGAAlgorithm extends
 	 */
 	private final int maxValue;
 
-	public IntArrayGAAlgorithm(final Random random,
-			final IIndividualEvaluator<IntArrayIndividual> individualEvaluator,
-			final IIndividualFactory<IntArrayIndividual> individualFactory,
-			final float mutateThreshold, final int numElements, final int topN,
-			final int numInts, final int maxValue) {
+	public IntArrayGAAlgorithm(final Random random, final IIndividualEvaluator<IntArrayIndividual> individualEvaluator, final IIndividualFactory<IntArrayIndividual> individualFactory,
+			final float mutateThreshold, final int numElements, final int topN, final int numInts, final int maxValue) {
 
-		super(random, individualEvaluator, individualFactory, mutateThreshold,
-				numElements, topN);
+		super(random, individualEvaluator, individualFactory, mutateThreshold, numElements, topN);
 		this.numInts = numInts;
 		this.maxValue = maxValue;
 	}
@@ -48,13 +40,10 @@ public final class IntArrayGAAlgorithm extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#op_mutate(com.mmxlabs
-	 * .optimiser.ga.bytearray.ByteArrayIndividual, float)
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#op_mutate(com.mmxlabs .optimiser.ga.bytearray.ByteArrayIndividual, float)
 	 */
 	@Override
-	public final void op_mutate(final IntArrayIndividual individual,
-			final float threshold) {
+	public final void op_mutate(final IntArrayIndividual individual, final float threshold) {
 		final int[] ints = individual.ints;
 		final Random random = getRandom();
 		for (int i = 0; i < ints.length; ++i) {
@@ -65,10 +54,7 @@ public final class IntArrayGAAlgorithm extends
 	}
 
 	@Override
-	public final void op_crossover(final IntArrayIndividual individual1,
-			final IntArrayIndividual individual2,
-			final IntArrayIndividual newIndividual1,
-			final IntArrayIndividual newIndividual2) {
+	public final void op_crossover(final IntArrayIndividual individual1, final IntArrayIndividual individual2, final IntArrayIndividual newIndividual1, final IntArrayIndividual newIndividual2) {
 
 		final int[] ints1 = individual1.ints;
 		final int[] ints2 = individual2.ints;
@@ -107,9 +93,7 @@ public final class IntArrayGAAlgorithm extends
 	}
 
 	@Override
-	public final void op_crossover(final IntArrayIndividual individual1,
-			final IntArrayIndividual individual2,
-			final IntArrayIndividual newIndividual1) {
+	public final void op_crossover(final IntArrayIndividual individual1, final IntArrayIndividual individual2, final IntArrayIndividual newIndividual1) {
 
 		final int[] ints1 = individual1.ints;
 		final int[] ints2 = individual2.ints;

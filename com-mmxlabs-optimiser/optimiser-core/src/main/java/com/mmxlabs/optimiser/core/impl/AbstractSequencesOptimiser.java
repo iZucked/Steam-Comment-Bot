@@ -42,21 +42,17 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	private long startTime;
 
 	/**
-	 * Initialise method checking the object has all the correct pieces of data
-	 * to be able to perform the
-	 * {@link #optimise(IOptimisationContext, Collection, Object)} method.
-	 * Throws an {@link IllegalStateException} on error.
+	 * Initialise method checking the object has all the correct pieces of data to be able to perform the {@link #optimise(IOptimisationContext, Collection, Object)} method. Throws an
+	 * {@link IllegalStateException} on error.
 	 */
 	public void init() {
 
 		if (numberOfIterations < 1) {
-			throw new IllegalStateException(
-					"Number of iterations is less than 1");
+			throw new IllegalStateException("Number of iterations is less than 1");
 		}
 
 		if (constraintCheckers == null) {
-			throw new IllegalStateException(
-					"Constraint Checkers list is not set");
+			throw new IllegalStateException("Constraint Checkers list is not set");
 		}
 
 		if (fitnessEvaluator == null) {
@@ -77,58 +73,43 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	}
 
 	/**
-	 * A default optimisation loop, which calls start() and then step() until
-	 * done, and notifies the progress monitor. Subclasses will need to
-	 * implement these.
+	 * A default optimisation loop, which calls start() and then step() until done, and notifies the progress monitor. Subclasses will need to implement these.
 	 */
 	@Override
 	public final void optimise(final IOptimisationContext optimiserContext) {
 		final IAnnotatedSolution startSolution = start(optimiserContext);
-		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(),
-				startSolution);
-		final int percentage = (100 * getReportInterval())
-				/ getNumberOfIterations();
+		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(), startSolution);
+		final int percentage = (100 * getReportInterval()) / getNumberOfIterations();
 
 		numberOfIterationsCompleted = 0;
 
 		while (getNumberOfIterationsCompleted() < getNumberOfIterations()) {
 			step(percentage);
-			getProgressMonitor().report(this, getNumberOfIterationsCompleted(),
-					fitnessEvaluator.getCurrentFitness(),
-					fitnessEvaluator.getBestFitness(),
-					getCurrentSolution(false), getBestSolution(false));
+			getProgressMonitor().report(this, getNumberOfIterationsCompleted(), fitnessEvaluator.getCurrentFitness(), fitnessEvaluator.getBestFitness(), getCurrentSolution(false),
+					getBestSolution(false));
 		}
 
-		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(),
-				getBestSolution(true));
+		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(), getBestSolution(true));
 	}
 
 	@Override
 	public final IAnnotatedSolution getBestSolution(final boolean forExport) {
-		final IAnnotatedSolution annotatedSolution = fitnessEvaluator
-				.getBestAnnotatedSolution(currentContext, forExport);
+		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getBestAnnotatedSolution(currentContext, forExport);
 		final long clock = System.currentTimeMillis() - getStartTime();
 
-		annotatedSolution.setGeneralAnnotation(
-				OptimiserConstants.G_AI_iterations,
-				getNumberOfIterationsCompleted());
-		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime,
-				clock);
+		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, getNumberOfIterationsCompleted());
+		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, clock);
 
 		return annotatedSolution;
 	}
 
 	@Override
 	public final IAnnotatedSolution getCurrentSolution(final boolean forExport) {
-		final IAnnotatedSolution annotatedSolution = fitnessEvaluator
-				.getCurrentAnnotatedSolution(currentContext, forExport);
+		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getCurrentAnnotatedSolution(currentContext, forExport);
 		final long clock = System.currentTimeMillis() - getStartTime();
 
-		annotatedSolution.setGeneralAnnotation(
-				OptimiserConstants.G_AI_iterations,
-				getNumberOfIterationsCompleted());
-		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime,
-				clock);
+		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, getNumberOfIterationsCompleted());
+		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, clock);
 
 		return annotatedSolution;
 	}
@@ -139,16 +120,13 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	}
 
 	/**
-	 * Copy the {@link ISequences} for the specified {@link IResource}s from the
-	 * source sequences to the destination sequences.
+	 * Copy the {@link ISequences} for the specified {@link IResource}s from the source sequences to the destination sequences.
 	 * 
 	 * @param source
 	 * @param destination
 	 * @param affectedResources
 	 */
-	protected final void updateSequences(final ISequences source,
-			final IModifiableSequences destination,
-			final Collection<IResource> affectedResources) {
+	protected final void updateSequences(final ISequences source, final IModifiableSequences destination, final Collection<IResource> affectedResources) {
 
 		for (final IResource resource : affectedResources) {
 			// Get source sequence
@@ -156,8 +134,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 			assert sourceSequence != null;
 
 			// Get destination sequence
-			final IModifiableSequence destinationSequence = destination
-					.getModifiableSequence(resource);
+			final IModifiableSequence destinationSequence = destination.getModifiableSequence(resource);
 			assert destinationSequence != null;
 
 			// Replace all entries in the destination with those in the source
@@ -174,8 +151,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		return numberOfIterations;
 	}
 
-	public final void setConstraintCheckers(
-			final List<IConstraintChecker> constraintCheckers) {
+	public final void setConstraintCheckers(final List<IConstraintChecker> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
 	}
 
@@ -184,8 +160,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		return constraintCheckers;
 	}
 
-	public final void setFitnessEvaluator(
-			final IFitnessEvaluator fitnessEvaluator) {
+	public final void setFitnessEvaluator(final IFitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
 	}
 
@@ -194,8 +169,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		return fitnessEvaluator;
 	}
 
-	public final void setSequenceManipulator(
-			final ISequencesManipulator sequenceManipulator) {
+	public final void setSequenceManipulator(final ISequencesManipulator sequenceManipulator) {
 		this.sequenceManipulator = sequenceManipulator;
 	}
 
@@ -208,8 +182,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		return progressMonitor;
 	}
 
-	public final void setProgressMonitor(
-			final IOptimiserProgressMonitor progressMonitor) {
+	public final void setProgressMonitor(final IOptimiserProgressMonitor progressMonitor) {
 		this.progressMonitor = progressMonitor;
 	}
 
@@ -225,8 +198,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		return numberOfIterationsCompleted;
 	}
 
-	public final void setNumberOfIterationsCompleted(
-			final int numberOfIterationsCompleted) {
+	public final void setNumberOfIterationsCompleted(final int numberOfIterationsCompleted) {
 		this.numberOfIterationsCompleted = numberOfIterationsCompleted;
 	}
 
@@ -234,8 +206,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		return currentContext;
 	}
 
-	protected final void setCurrentContext(
-			final IOptimisationContext currentContext) {
+	protected final void setCurrentContext(final IOptimisationContext currentContext) {
 		this.currentContext = currentContext;
 	}
 
@@ -243,7 +214,6 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		return startTime;
 	}
 
-	
 	protected final void setStartTime(final long startTime) {
 		this.startTime = startTime;
 	}

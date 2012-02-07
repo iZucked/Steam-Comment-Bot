@@ -24,8 +24,7 @@ public class HashMapMultiMatrixProviderTest {
 	public void testHashMapMatrixProviderString() {
 
 		final String name = "Name";
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>(
-				name);
+		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>(name);
 		Assert.assertSame(name, provider.getName());
 	}
 
@@ -35,11 +34,9 @@ public class HashMapMultiMatrixProviderTest {
 		final String key = "key";
 
 		@SuppressWarnings("unchecked")
-		final IMatrixProvider<Integer, Integer> p = context
-				.mock(IMatrixProvider.class);
+		final IMatrixProvider<Integer, Integer> p = context.mock(IMatrixProvider.class);
 
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>(
-				"Name");
+		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>("Name");
 
 		Assert.assertNull(provider.get(null));
 		Assert.assertNull(provider.get(key));
@@ -57,11 +54,9 @@ public class HashMapMultiMatrixProviderTest {
 		final String key2 = "key2";
 
 		@SuppressWarnings("unchecked")
-		final IMatrixProvider<Integer, Integer> p = context
-				.mock(IMatrixProvider.class);
+		final IMatrixProvider<Integer, Integer> p = context.mock(IMatrixProvider.class);
 
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>(
-				"Name");
+		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>("Name");
 
 		Assert.assertFalse(provider.containsKey(null));
 		Assert.assertFalse(provider.containsKey(key));
@@ -81,11 +76,9 @@ public class HashMapMultiMatrixProviderTest {
 		final String key2 = "key2";
 
 		@SuppressWarnings("unchecked")
-		final IMatrixProvider<Integer, Integer> p = context
-				.mock(IMatrixProvider.class);
+		final IMatrixProvider<Integer, Integer> p = context.mock(IMatrixProvider.class);
 
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>(
-				"Name");
+		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>("Name");
 
 		Set<String> keySet = provider.getKeySet();
 		Assert.assertTrue(keySet.isEmpty());
@@ -106,11 +99,9 @@ public class HashMapMultiMatrixProviderTest {
 		final String key2 = "key2";
 
 		@SuppressWarnings("unchecked")
-		final IMatrixProvider<Integer, Integer> p = context
-				.mock(IMatrixProvider.class);
+		final IMatrixProvider<Integer, Integer> p = context.mock(IMatrixProvider.class);
 
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>(
-				"Name");
+		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>("Name");
 
 		String[] keys = provider.getKeys();
 		Assert.assertNotNull(keys);
@@ -131,8 +122,8 @@ public class HashMapMultiMatrixProviderTest {
 		Assert.assertEquals(2, keys.length);
 
 		// Due to set, we cannot be sure of the order.
-		Assert.assertTrue(key == keys[0] || key == keys[1]);
-		Assert.assertTrue(key2 == keys[0] || key2 == keys[1]);
+		Assert.assertTrue((key == keys[0]) || (key == keys[1]));
+		Assert.assertTrue((key2 == keys[0]) || (key2 == keys[1]));
 		Assert.assertTrue(keys[0] != keys[1]);
 	}
 
@@ -142,11 +133,9 @@ public class HashMapMultiMatrixProviderTest {
 		final String key = "key";
 
 		@SuppressWarnings("unchecked")
-		final IMatrixProvider<Integer, Integer> p = context
-				.mock(IMatrixProvider.class);
+		final IMatrixProvider<Integer, Integer> p = context.mock(IMatrixProvider.class);
 
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>(
-				"Name");
+		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>("Name");
 
 		String[] keys = provider.getKeys();
 		Assert.assertNotNull(keys);

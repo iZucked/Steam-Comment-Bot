@@ -54,8 +54,9 @@ public final class FitnessHelper implements IFitnessHelper {
 	@Override
 	public boolean evaluateSequencesFromCores(final ISequences sequences, final Collection<IFitnessCore> fitnessCores, final Collection<IResource> affectedResources) {
 		for (final IFitnessCore core : fitnessCores) {
-			if (!core.evaluate(sequences, affectedResources))
+			if (!core.evaluate(sequences, affectedResources)) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -97,8 +98,7 @@ public final class FitnessHelper implements IFitnessHelper {
 	}
 
 	@Override
-	public IAnnotatedSolution buildAnnotatedSolution(final IOptimisationContext context, final ISequences state, final Collection<IFitnessComponent> fitnessComponents,
-			final boolean forExport) {
+	public IAnnotatedSolution buildAnnotatedSolution(final IOptimisationContext context, final ISequences state, final Collection<IFitnessComponent> fitnessComponents, final boolean forExport) {
 
 		final Set<IFitnessCore> cores = getFitnessCores(fitnessComponents);
 

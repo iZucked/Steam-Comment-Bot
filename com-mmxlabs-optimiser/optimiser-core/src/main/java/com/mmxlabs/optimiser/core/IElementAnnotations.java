@@ -13,8 +13,7 @@ package com.mmxlabs.optimiser.core;
 public interface IElementAnnotations {
 
 	/**
-	 * Return the object stored under the given key. The object will be cast to
-	 * the given class or a {@link ClassCastException} will be thrown.
+	 * Return the object stored under the given key. The object will be cast to the given class or a {@link ClassCastException} will be thrown.
 	 * 
 	 * @param <U>
 	 * @param key

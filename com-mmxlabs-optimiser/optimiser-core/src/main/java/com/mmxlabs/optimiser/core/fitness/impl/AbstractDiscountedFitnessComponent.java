@@ -47,7 +47,7 @@ public abstract class AbstractDiscountedFitnessComponent implements IFitnessComp
 	 * 
 	 * @param discountCurve
 	 */
-	public void setDiscountCurve(ICurve discountCurve) {
+	public void setDiscountCurve(final ICurve discountCurve) {
 		this.discountCurve = discountCurve;
 	}
 

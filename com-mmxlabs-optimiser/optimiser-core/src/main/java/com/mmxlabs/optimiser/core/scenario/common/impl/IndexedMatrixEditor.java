@@ -11,11 +11,11 @@ public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrix
 	private final String name;
 	private final U defaultValue;
 	private U[][] matrix;
-	
+
 	private int maxIndex = -1;
-	
+
 	@SuppressWarnings("unchecked")
-	public IndexedMatrixEditor(String name, final U defaultValue) {
+	public IndexedMatrixEditor(final String name, final U defaultValue) {
 		super();
 		this.defaultValue = defaultValue;
 		this.name = name;
@@ -54,30 +54,30 @@ public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrix
 		final int xi, yi;
 		xi = x.getIndex();
 		yi = y.getIndex();
-		if (xi > maxIndex || yi>maxIndex) {
+		if ((xi > maxIndex) || (yi > maxIndex)) {
 			resize(Math.max(xi, yi));
 		}
-		
+
 		matrix[xi][yi] = v;
 	}
-	
+
 	private void resize(final int newMax) {
 		maxIndex = newMax;
-		
+
 		@SuppressWarnings("unchecked")
-		U[][] newMatrix = (U[][]) new Object[newMax + 1][newMax + 1];
-		
-		//copy old matrix contents
-		for (int i = 0; i<matrix.length; i++) {
+		final U[][] newMatrix = (U[][]) new Object[newMax + 1][newMax + 1];
+
+		// copy old matrix contents
+		for (int i = 0; i < matrix.length; i++) {
 			System.arraycopy(matrix[i], 0, newMatrix[i], 0, matrix[i].length);
 		}
-		
-		for (int i = matrix.length; i<newMatrix.length; i++) {
-			for (int j = 0; j<newMatrix.length; j++) {
+
+		for (int i = matrix.length; i < newMatrix.length; i++) {
+			for (int j = 0; j < newMatrix.length; j++) {
 				newMatrix[i][j] = newMatrix[j][i] = defaultValue;
 			}
 		}
-		
+
 		matrix = newMatrix;
 	}
 

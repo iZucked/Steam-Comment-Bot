@@ -10,8 +10,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.optimiser.ga.Individual;
 
 /**
- * Class to combined an {@link Individual} with it's fitness for use in a
- * {@link TreeSet} ordered by fitness.
+ * Class to combined an {@link Individual} with it's fitness for use in a {@link TreeSet} ordered by fitness.
  * 
  */
 public final class Tuple<I> implements Comparable<Tuple<I>> {

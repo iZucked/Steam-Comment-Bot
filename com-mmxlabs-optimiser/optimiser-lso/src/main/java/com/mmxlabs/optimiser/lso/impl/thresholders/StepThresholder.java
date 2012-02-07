@@ -7,8 +7,7 @@ package com.mmxlabs.optimiser.lso.impl.thresholders;
 import com.mmxlabs.optimiser.lso.IThresholder;
 
 /**
- * Simple {@link IThresholder} implementation which reduces an initial threshold
- * by a fixed amount each step.
+ * Simple {@link IThresholder} implementation which reduces an initial threshold by a fixed amount each step.
  * 
  * @author Simon Goodall
  * 
@@ -25,7 +24,7 @@ public final class StepThresholder implements IThresholder {
 
 	}
 
-	public StepThresholder(int stepSize, long initialThreshold) {
+	public StepThresholder(final int stepSize, final long initialThreshold) {
 		this.stepSize = stepSize;
 		this.initialThreshold = initialThreshold;
 		this.currentThreshold = initialThreshold;
@@ -35,7 +34,7 @@ public final class StepThresholder implements IThresholder {
 		return stepSize;
 	}
 
-	public final void setStepSize(int stepSize) {
+	public final void setStepSize(final int stepSize) {
 		this.stepSize = stepSize;
 	}
 
@@ -43,7 +42,7 @@ public final class StepThresholder implements IThresholder {
 		return initialThreshold;
 	}
 
-	public final void setInitialThreshold(long initialThreshold) {
+	public final void setInitialThreshold(final long initialThreshold) {
 		this.initialThreshold = initialThreshold;
 	}
 
@@ -52,7 +51,7 @@ public final class StepThresholder implements IThresholder {
 	}
 
 	@Override
-	public boolean accept(long delta) {
+	public boolean accept(final long delta) {
 
 		return (delta < currentThreshold);
 	}

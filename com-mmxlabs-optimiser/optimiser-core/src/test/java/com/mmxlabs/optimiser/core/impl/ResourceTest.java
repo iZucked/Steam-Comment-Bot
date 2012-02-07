@@ -9,10 +9,10 @@ import org.junit.Test;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
-import com.mmxlabs.optimiser.core.impl.Resource;
 
 public class ResourceTest {
 	IIndexingContext index = new SimpleIndexingContext();
+
 	@Test
 	public void testResource() {
 		final Resource resource = new Resource(index);

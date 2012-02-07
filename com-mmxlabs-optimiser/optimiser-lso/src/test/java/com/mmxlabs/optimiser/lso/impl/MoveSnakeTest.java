@@ -324,7 +324,7 @@ public class MoveSnakeTest {
 
 		move.setToResources(CollectionsUtil.makeArrayList(resource2));
 
-		Collection<IResource> affectedResources = move.getAffectedResources();
+		final Collection<IResource> affectedResources = move.getAffectedResources();
 
 		Assert.assertNotNull(affectedResources);
 		Assert.assertEquals(2, affectedResources.size());

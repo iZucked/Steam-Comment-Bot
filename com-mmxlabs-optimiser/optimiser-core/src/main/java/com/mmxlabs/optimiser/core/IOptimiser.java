@@ -21,8 +21,7 @@ public interface IOptimiser {
 	void optimise(IOptimisationContext optimisationContext);
 
 	/**
-	 * Returns the {@link IFitnessEvaluator} instance used within the
-	 * optimisation process.
+	 * Returns the {@link IFitnessEvaluator} instance used within the optimisation process.
 	 * 
 	 * @return
 	 */

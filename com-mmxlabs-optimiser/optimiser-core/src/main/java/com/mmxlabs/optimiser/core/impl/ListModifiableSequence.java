@@ -33,7 +33,7 @@ public final class ListModifiableSequence implements IModifiableSequence {
 	}
 
 	@Override
-	public void add(final ISequenceElement  element) {
+	public void add(final ISequenceElement element) {
 		list.add(element);
 	}
 
@@ -141,7 +141,7 @@ public final class ListModifiableSequence implements IModifiableSequence {
 		final Iterator<ISequenceElement> i = iterator();
 		while (i.hasNext()) {
 			final ISequenceElement obj = i.next();
-			hashCode = 31 * hashCode + (obj == null ? 0 : obj.hashCode());
+			hashCode = (31 * hashCode) + (obj == null ? 0 : obj.hashCode());
 		}
 		return hashCode;
 	}

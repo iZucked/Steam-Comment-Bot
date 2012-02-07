@@ -13,9 +13,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
- * Interface defining an optimisation context. This ties together static
- * optimisation data, initial state, parameters and fitness components that will
- * compose an optimisation run.
+ * Interface defining an optimisation context. This ties together static optimisation data, initial state, parameters and fitness components that will compose an optimisation run.
  * 
  * @author Simon Goodall
  * 
@@ -30,41 +28,35 @@ public interface IOptimisationContext {
 	IOptimisationData getOptimisationData();
 
 	/**
-	 * Returns the initial sequences state - i.e. the starting point of the
-	 * optimisation process.
+	 * Returns the initial sequences state - i.e. the starting point of the optimisation process.
 	 * 
 	 * @return
 	 */
 	ISequences getInitialSequences();
 
 	/**
-	 * Returns the {@link IFitnessFunctionRegistry} instance to be used to
-	 * obtain {@link IFitnessComponent}s. @see {@link #getFitnessComponents()}.
+	 * Returns the {@link IFitnessFunctionRegistry} instance to be used to obtain {@link IFitnessComponent}s. @see {@link #getFitnessComponents()}.
 	 * 
 	 * @return
 	 */
 	IFitnessFunctionRegistry getFitnessFunctionRegistry();
 
 	/**
-	 * Returns a list of {@link IFitnessComponent} names to be used to evaluate
-	 * this optimisation.
+	 * Returns a list of {@link IFitnessComponent} names to be used to evaluate this optimisation.
 	 * 
 	 * @return
 	 */
 	List<String> getFitnessComponents();
 
 	/**
-	 * Returns the {@link IConstraintCheckerRegistry} instance to be used to
-	 * obtain {@link IConstraintChecker} instances. @see
-	 * {@link #getConstraintCheckers()}.
+	 * Returns the {@link IConstraintCheckerRegistry} instance to be used to obtain {@link IConstraintChecker} instances. @see {@link #getConstraintCheckers()}.
 	 * 
 	 * @return
 	 */
 	IConstraintCheckerRegistry getConstraintCheckerRegistry();
 
 	/**
-	 * Returns a list of {@link IConstraintChecker} names to be used in this
-	 * optimisation.
+	 * Returns a list of {@link IConstraintChecker} names to be used in this optimisation.
 	 * 
 	 * @return
 	 */

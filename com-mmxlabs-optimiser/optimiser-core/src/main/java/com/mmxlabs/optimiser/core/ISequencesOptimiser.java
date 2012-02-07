@@ -24,17 +24,14 @@ public interface ISequencesOptimiser extends IOptimiser {
 	int getNumberOfIterations();
 
 	/**
-	 * Returns the list of {@link IConstraintChecker} used to validate
-	 * {@link ISequences} before evaluating them in each iteration.
+	 * Returns the list of {@link IConstraintChecker} used to validate {@link ISequences} before evaluating them in each iteration.
 	 * 
 	 * @return
 	 */
 	List<IConstraintChecker> getConstraintCheckers();
 
 	/**
-	 * Returns the {@link ISequencesManipulator} used to transform
-	 * {@link ISequences} into a new {@link ISequences} object to validate and
-	 * evaluate each iteration.
+	 * Returns the {@link ISequencesManipulator} used to transform {@link ISequences} into a new {@link ISequences} object to validate and evaluate each iteration.
 	 * 
 	 * @return
 	 */

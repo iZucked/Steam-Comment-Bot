@@ -5,8 +5,7 @@
 package com.mmxlabs.optimiser.ga;
 
 /**
- * Interface defining the individual to pass into the {@link IGeneticAlgorithm}.
- * Implementations are assumed to be mutable.
+ * Interface defining the individual to pass into the {@link IGeneticAlgorithm}. Implementations are assumed to be mutable.
  * 
  * @author Simon Goodall
  * 

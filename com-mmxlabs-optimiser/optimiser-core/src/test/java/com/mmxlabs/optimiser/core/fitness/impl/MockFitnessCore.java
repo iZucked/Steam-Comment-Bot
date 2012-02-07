@@ -23,8 +23,7 @@ public final class MockFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void accepted(final ISequences sequences,
-			final Collection<IResource> affectedResources) {
+	public void accepted(final ISequences sequences, final Collection<IResource> affectedResources) {
 
 	}
 
@@ -39,8 +38,7 @@ public final class MockFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences,
-			final Collection<IResource> affectedResources) {
+	public boolean evaluate(final ISequences sequences, final Collection<IResource> affectedResources) {
 		return true;
 	}
 
@@ -55,7 +53,7 @@ public final class MockFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void annotate(ISequences sequences, IAnnotatedSolution solution, final boolean forExport) {
-		
+	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
+
 	}
 }

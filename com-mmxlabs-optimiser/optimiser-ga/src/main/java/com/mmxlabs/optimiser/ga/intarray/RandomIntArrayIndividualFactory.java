@@ -8,16 +8,14 @@ import java.util.Random;
 
 import com.mmxlabs.optimiser.ga.IIndividualFactory;
 
-public final class RandomIntArrayIndividualFactory implements
-		IIndividualFactory<IntArrayIndividual> {
+public final class RandomIntArrayIndividualFactory implements IIndividualFactory<IntArrayIndividual> {
 
 	private final int numInts;
 
 	private final int maxValue;
 	private final Random random;
 
-	public RandomIntArrayIndividualFactory(final int numInts,
-			final int maxValue, final Random random) {
+	public RandomIntArrayIndividualFactory(final int numInts, final int maxValue, final Random random) {
 		this.numInts = numInts;
 		this.maxValue = maxValue;
 		this.random = random;

@@ -18,7 +18,7 @@ public final class IndexedResourceAllocationConstraintProvider implements IResou
 
 	private final IIndexMap<ISequenceElement, Collection<IResource>> allowedResources = new ArrayIndexMap<ISequenceElement, Collection<IResource>>();
 
-	public IndexedResourceAllocationConstraintProvider(String name) {
+	public IndexedResourceAllocationConstraintProvider(final String name) {
 		super();
 		this.name = name;
 	}

@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 public class InstrumentingMoveGenerator implements IMoveGenerator {
 	private static final Logger log = LoggerFactory.getLogger(InstrumentingMoveGenerator.class);
-	
+
 	private static final int HIT_COUNT = 10000;
 
 	private final boolean collectStats;
@@ -33,7 +33,7 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 	int hits = 0;
 	int total = 0;
 	int totalAccepted = 0;
-	
+
 	long lastPrintTime;
 	Class<? extends IMove> lastMoveClass;
 	Map<Class<? extends IMove>, Stats> stats = new HashMap<Class<? extends IMove>, Stats>();
@@ -58,7 +58,7 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 	private long lastBatchTime;
 
 	private final BufferedWriter output;
-	
+
 	class Stats {
 		private final Class<? extends IMove> moveClass;
 
@@ -74,8 +74,7 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 
 		private int generatedCount = 0;
 
-		public Stats(final Class<? extends IMove> moveClass, final long delta,
-				final boolean accepted) {
+		public Stats(final Class<? extends IMove> moveClass, final long delta, final boolean accepted) {
 			this.moveClass = moveClass;
 			addSample(delta, accepted);
 		}
@@ -92,13 +91,15 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 			}
 			if (delta < 0) {
 				goodMoves++;
-				if (accepted)
+				if (accepted) {
 					goodAccepted++;
+				}
 				meanGoodDelta += Math.abs(delta);
 			} else if (delta > 0) {
 				badMoves++;
-				if (accepted)
+				if (accepted) {
 					badAccepted++;
+				}
 				meanBadDelta += Math.abs(delta);
 			} else {
 				zMoves++;
@@ -110,8 +111,7 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 			final double den = 0.01 * generatedCount;
 			final double den2 = 0.01 * moveCount;
 			return String.format("%s: : %d generated, %.2f%% evaluated, %.2f%% accepted. Of feasible, %.2f%% good, %.2f%% bad. %.2f%% of acc are bad", moveClass.getSimpleName(), generatedCount,
-					moveCount / den,
-					acceptCount / den, goodMoves / den2, badMoves / den2, badAccepted / (0.01 * acceptCount));
+					moveCount / den, acceptCount / den, goodMoves / den2, badMoves / den2, badAccepted / (0.01 * acceptCount));
 		}
 
 		public void moveGenerated() {
@@ -119,15 +119,14 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 		}
 	}
 
-	public InstrumentingMoveGenerator(final IMoveGenerator delegate,
-			final boolean collectStats, final boolean logToFile) {
+	public InstrumentingMoveGenerator(final IMoveGenerator delegate, final boolean collectStats, final boolean logToFile) {
 		super();
 		this.collectStats = collectStats;
 		this.delegate = delegate;
 		if (logToFile) {
 			BufferedWriter output2 = null;
 			try {
-				final String s =System.currentTimeMillis() + "-moves.log";
+				final String s = System.currentTimeMillis() + "-moves.log";
 				log.debug("logging moves to " + s);
 				output2 = new BufferedWriter(new FileWriter(s));
 			} catch (final IOException e) {
@@ -178,7 +177,7 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 		}
 		if (output != null) {
 			try {
-				output.write("MOVE: " +  (move == null ? "null" : move.toString()) + "\n");
+				output.write("MOVE: " + (move == null ? "null" : move.toString()) + "\n");
 			} catch (final IOException e) {
 			}
 		}
@@ -196,19 +195,19 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 	}
 
 	public void notifyOfThresholderDecision(final long delta, final boolean answer) {
-		if (answer)
+		if (answer) {
 			totalAccepted++;
+		}
 		if (collectStats) {
 			if (stats.containsKey(lastMoveClass)) {
 				stats.get(lastMoveClass).addSample(delta, answer);
 			} else {
-				stats.put(lastMoveClass,
-						new Stats(lastMoveClass, delta, answer));
+				stats.put(lastMoveClass, new Stats(lastMoveClass, delta, answer));
 			}
 
 			stats.get(AllMoves.class).addSample(delta, answer);
 		}
-		
+
 		if (output != null) {
 			try {
 				output.write("RESULT: " + delta + ", " + answer + "\n");
@@ -225,7 +224,7 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 
 		sb.append("Called " + total + " times, " + nulls + " nulls, " + totalAccepted + " accepted\n");
 
-		sb.append("Timing: " + 1000 * HIT_COUNT / (double) lastBatchTime + " moves/second\n");
+		sb.append("Timing: " + ((1000 * HIT_COUNT) / (double) lastBatchTime) + " moves/second\n");
 
 		for (final Stats stat : stats.values()) {
 			sb.append("\t" + stat.toString() + "\n");

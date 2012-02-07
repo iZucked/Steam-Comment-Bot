@@ -47,7 +47,7 @@ public final class LinearFitnessCombiner implements IFitnessCombiner {
 			final String componentName = component.getName();
 			if (fitnessComponentWeights.containsKey(componentName)) {
 				final double weight = fitnessComponentWeights.get(componentName);
-				final long fitness = Math.round(weight * (double) rawFitness);
+				final long fitness = Math.round(weight * rawFitness);
 				totalFitness += fitness;
 			}
 		}

@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Extended version of the {@link ISequences} interface allowing access to
- * {@link IModifiableSequence} instances rather than the read-only
- * {@link ISequence} instances.
+ * Extended version of the {@link ISequences} interface allowing access to {@link IModifiableSequence} instances rather than the read-only {@link ISequence} instances.
  * 
  * @author Simon Goodall
  * 
@@ -31,7 +29,7 @@ public interface IModifiableSequences extends ISequences {
 	 * @return
 	 */
 	IModifiableSequence getModifiableSequence(int index);
-	
+
 	/**
 	 * @return
 	 */

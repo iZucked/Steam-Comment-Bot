@@ -25,9 +25,9 @@ public final class AnnotatedSolution implements IAnnotatedSolution {
 	private IOptimisationContext context;
 
 	private IAnnotations elementAnnotations = new HashMapAnnotations();
-	
+
 	private Map<String, Object> generalAnnotations = new HashMap<String, Object>();
-	
+
 	@Override
 	public ISequences getSequences() {
 		return sequences;
@@ -58,17 +58,20 @@ public final class AnnotatedSolution implements IAnnotatedSolution {
 	public IAnnotations getElementAnnotations() {
 		return elementAnnotations;
 	}
-	
+
 	@Override
 	public void setGeneralAnnotation(final String key, final Object value) {
-		if (generalAnnotations == null) throw new RuntimeException("Attempted to set an annotation after dispose()");
+		if (generalAnnotations == null) {
+			throw new RuntimeException("Attempted to set an annotation after dispose()");
+		}
 		generalAnnotations.put(key, value);
 	}
 
-
 	@Override
-	public <U> U getGeneralAnnotation(String key, Class<U> clz) {
-		if (generalAnnotations == null) return null;
+	public <U> U getGeneralAnnotation(final String key, final Class<U> clz) {
+		if (generalAnnotations == null) {
+			return null;
+		}
 		return clz.cast(generalAnnotations.get(key));
 	}
 }

@@ -44,8 +44,9 @@ public final class RandomMoveGenerator implements IMoveGenerator {
 		double newMove = random.nextDouble() * totalWeight;
 		for (int i = 0; i < units.size(); i++) {
 			final double weight = weights.get(i);
-			if (newMove <= weight)
+			if (newMove <= weight) {
 				return units.get(i).generateRandomMove(this, sequences);
+			}
 			newMove -= weight;
 		}
 

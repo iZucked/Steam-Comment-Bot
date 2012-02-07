@@ -17,30 +17,21 @@ import com.mmxlabs.optimiser.ga.impl.AbstractGAAlgorithm;
  * @author Simon Goodall
  * 
  */
-public final class ByteArrayGAAlgorithm extends
-		AbstractGAAlgorithm<ByteArrayIndividual> implements
-		IGeneticAlgorithm<ByteArrayIndividual> {
+public final class ByteArrayGAAlgorithm extends AbstractGAAlgorithm<ByteArrayIndividual> implements IGeneticAlgorithm<ByteArrayIndividual> {
 
-	public ByteArrayGAAlgorithm(
-			final Random random,
-			final IIndividualEvaluator<ByteArrayIndividual> individualEvaluator,
-			final IIndividualFactory<ByteArrayIndividual> individualFactory,
+	public ByteArrayGAAlgorithm(final Random random, final IIndividualEvaluator<ByteArrayIndividual> individualEvaluator, final IIndividualFactory<ByteArrayIndividual> individualFactory,
 			final float mutateThreshold, final int numElements, final int topN) {
 
-		super(random, individualEvaluator, individualFactory, mutateThreshold,
-				numElements, topN);
+		super(random, individualEvaluator, individualFactory, mutateThreshold, numElements, topN);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#op_mutate(com.mmxlabs
-	 * .optimiser.ga.bytearray.ByteArrayIndividual, float)
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#op_mutate(com.mmxlabs .optimiser.ga.bytearray.ByteArrayIndividual, float)
 	 */
 	@Override
-	public final void op_mutate(final ByteArrayIndividual individual,
-			final float threshold) {
+	public final void op_mutate(final ByteArrayIndividual individual, final float threshold) {
 		final byte[] storage = new byte[1];
 		final byte[] bytes = individual.bytes;
 		for (int i = 0; i < bytes.length; ++i) {
@@ -54,18 +45,11 @@ public final class ByteArrayGAAlgorithm extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#op_crossover(com
-	 * .mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual,
-	 * com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual,
-	 * com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual,
-	 * com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual)
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#op_crossover(com .mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual, com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual,
+	 * com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual, com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual)
 	 */
 	@Override
-	public final void op_crossover(final ByteArrayIndividual individual1,
-			final ByteArrayIndividual individual2,
-			final ByteArrayIndividual newIndividual1,
-			final ByteArrayIndividual newIndividual2) {
+	public final void op_crossover(final ByteArrayIndividual individual1, final ByteArrayIndividual individual2, final ByteArrayIndividual newIndividual1, final ByteArrayIndividual newIndividual2) {
 
 		final byte[] bytes1 = individual1.bytes;
 		final byte[] bytes2 = individual2.bytes;
@@ -106,16 +90,11 @@ public final class ByteArrayGAAlgorithm extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#op_crossover(com
-	 * .mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual,
-	 * com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual,
+	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#op_crossover(com .mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual, com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual,
 	 * com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual)
 	 */
 	@Override
-	public final void op_crossover(final ByteArrayIndividual individual1,
-			final ByteArrayIndividual individual2,
-			final ByteArrayIndividual newIndividual1) {
+	public final void op_crossover(final ByteArrayIndividual individual1, final ByteArrayIndividual individual2, final ByteArrayIndividual newIndividual1) {
 
 		final byte[] bytes1 = individual1.bytes;
 		final byte[] bytes2 = individual2.bytes;

@@ -17,8 +17,6 @@ import org.junit.Test;
 
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.core.fitness.impl.FitnessComponentInstantiator;
-import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 
 public class FitnessComponentInstantiatorTest {
 

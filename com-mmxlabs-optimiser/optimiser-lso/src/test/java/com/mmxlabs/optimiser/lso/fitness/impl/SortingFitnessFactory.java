@@ -31,7 +31,7 @@ public final class SortingFitnessFactory implements IFitnessCoreFactory {
 
 	@Override
 	public IFitnessCore instantiate() {
-	
+
 		return new SortingFitnessCore();
 	}
 

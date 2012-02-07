@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.core.IModifiableSequences;
-import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 
 @RunWith(JMock.class)
 public class NullSequencesManipulatorTest {

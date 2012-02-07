@@ -8,20 +8,16 @@ import java.util.Collection;
 
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
 
-public final class IndexedMultiMatrixProvider<T extends IIndexedObject, 
-	U extends Comparable<U>> extends
-		HashMapMultiMatrixProvider<T, U> {
+public final class IndexedMultiMatrixProvider<T extends IIndexedObject, U extends Comparable<U>> extends HashMapMultiMatrixProvider<T, U> {
 
-	public IndexedMultiMatrixProvider(String name) {
+	public IndexedMultiMatrixProvider(final String name) {
 		super(name);
 	}
 
-	private final IndexedMatrixEditor<T, U> minima = 
-		new IndexedMatrixEditor<T, U>("minimum-values", null);
-	
-	private final IndexedMatrixEditor<T, U> maxima = 
-		new IndexedMatrixEditor<T, U>("maximum-values", null);
-	
+	private final IndexedMatrixEditor<T, U> minima = new IndexedMatrixEditor<T, U>("minimum-values", null);
+
+	private final IndexedMatrixEditor<T, U> maxima = new IndexedMatrixEditor<T, U>("maximum-values", null);
+
 	public final void cacheExtremalValues(final Collection<T> elements) {
 		for (final T x : elements) {
 			for (final T y : elements) {
@@ -30,11 +26,12 @@ public final class IndexedMultiMatrixProvider<T extends IIndexedObject,
 			}
 		}
 	}
+
 	@Override
 	public U getMinimumValue(final T x, final T y) {
 		return minima.get(x, y);
 	}
-	
+
 	@Override
 	public U getMaximumValue(final T x, final T y) {
 		return maxima.get(x, y);

@@ -10,17 +10,17 @@ public class MoveHydraTest {
 
 	@Test
 	public void testApply() {
-//		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
 
 	@Test
 	public void testGetAffectedResources() {
-//		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
 
 	@Test
 	public void testValidate() {
-//		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
 
 }

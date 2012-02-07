@@ -19,9 +19,7 @@ import org.junit.Test;
 public class TupleTest {
 
 	/**
-	 * Test method for
-	 * {@link com.mmxlabs.optimiser.ga.impl.Tuple#Tuple(java.lang.Object, int, long)}
-	 * .
+	 * Test method for {@link com.mmxlabs.optimiser.ga.impl.Tuple#Tuple(java.lang.Object, int, long)} .
 	 */
 	@Test
 	public void testTuple() {
@@ -36,9 +34,7 @@ public class TupleTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link com.mmxlabs.optimiser.ga.impl.Tuple#compareTo(com.mmxlabs.optimiser.ga.impl.Tuple)}
-	 * .
+	 * Test method for {@link com.mmxlabs.optimiser.ga.impl.Tuple#compareTo(com.mmxlabs.optimiser.ga.impl.Tuple)} .
 	 */
 	@Test
 	public void testCompareTo() {
@@ -74,9 +70,7 @@ public class TupleTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link com.mmxlabs.optimiser.ga.impl.Tuple#compareTo(com.mmxlabs.optimiser.ga.impl.Tuple)}
-	 * .
+	 * Test method for {@link com.mmxlabs.optimiser.ga.impl.Tuple#compareTo(com.mmxlabs.optimiser.ga.impl.Tuple)} .
 	 */
 	@Test
 	public void testCompareToInTreeSet() {

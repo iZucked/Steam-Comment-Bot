@@ -7,8 +7,6 @@ package com.mmxlabs.optimiser.core.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.optimiser.core.impl.ElementAnnotations;
-
 public class ElementAnnotationsTest {
 	private class Class1 {
 

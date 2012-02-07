@@ -52,6 +52,6 @@ public final class TimeWindow implements ITimeWindow {
 	@Override
 	public final int hashCode() {
 		// Based on Arrays.hashCode(int[])
-		return 31 * start + end;
+		return (31 * start) + end;
 	}
 }

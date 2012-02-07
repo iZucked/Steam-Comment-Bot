@@ -123,11 +123,13 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 		// Evaluates the current sequences
 		if (affectedResources == null) {
-			if (!fitnessHelper.evaluateSequencesFromComponents(sequences, fitnessComponents))
+			if (!fitnessHelper.evaluateSequencesFromComponents(sequences, fitnessComponents)) {
 				return Long.MAX_VALUE;
+			}
 		} else {
-			if (!fitnessHelper.evaluateSequencesFromComponents(sequences, fitnessComponents, affectedResources))
+			if (!fitnessHelper.evaluateSequencesFromComponents(sequences, fitnessComponents, affectedResources)) {
 				return Long.MAX_VALUE;
+			}
 		}
 
 		return fitnessCombiner.calculateFitness(fitnessComponents);
@@ -274,7 +276,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	}
 
 	@Override
-	public IAnnotatedSolution getBestAnnotatedSolution(IOptimisationContext context, final boolean forExport) {
+	public IAnnotatedSolution getBestAnnotatedSolution(final IOptimisationContext context, final boolean forExport) {
 		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(context, getBestSequences(), getFitnessComponents(), forExport);
 
 		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, new HashMap<String, Long>(bestFitnesses));
@@ -283,7 +285,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	}
 
 	@Override
-	public IAnnotatedSolution getCurrentAnnotatedSolution(IOptimisationContext context, final boolean forExport) {
+	public IAnnotatedSolution getCurrentAnnotatedSolution(final IOptimisationContext context, final boolean forExport) {
 		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(context, getCurrentSequences(), getFitnessComponents(), forExport);
 
 		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, new HashMap<String, Long>(currentFitnesses));

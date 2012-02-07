@@ -80,25 +80,33 @@ public class Move2over2 implements IMove {
 	public final boolean validate(final ISequences sequences) {
 		try {
 			final int offset = preserveStartAndEnd ? 1 : 0;
-			if (resource1 == null)
+			if (resource1 == null) {
 				return false;
-			if (resource2 == null)
+			}
+			if (resource2 == null) {
 				return false;
-			if (resource1Position < offset)
+			}
+			if (resource1Position < offset) {
 				return false;
-			if (resource2Position < offset)
+			}
+			if (resource2Position < offset) {
 				return false;
+			}
 			final Map<IResource, ISequence> sequenceMap = sequences.getSequences();
-			if (sequenceMap.containsKey(resource1) == false)
+			if (sequenceMap.containsKey(resource1) == false) {
 				return false;
-			if (sequenceMap.containsKey(resource2) == false)
+			}
+			if (sequenceMap.containsKey(resource2) == false) {
 				return false;
+			}
 			final ISequence A = sequenceMap.get(resource1);
 			final ISequence B = sequenceMap.get(resource2);
-			if (resource1Position >= (A.size() /*-  offset*/))
+			if (resource1Position >= (A.size() /*-  offset*/)) {
 				return false;
-			if (resource2Position >= (B.size() /*-  offset*/))
+			}
+			if (resource2Position >= (B.size() /*-  offset*/)) {
 				return false;
+			}
 			return true;
 		} catch (final Exception e) {
 			return false;

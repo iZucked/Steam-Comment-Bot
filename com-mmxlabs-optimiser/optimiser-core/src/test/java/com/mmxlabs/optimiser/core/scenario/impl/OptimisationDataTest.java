@@ -19,7 +19,6 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 
 @RunWith(JMock.class)
 public class OptimisationDataTest {
@@ -110,6 +109,7 @@ public class OptimisationDataTest {
 			public String getName() {
 				return null;
 			}
+
 			@Override
 			public void dispose() {
 			}

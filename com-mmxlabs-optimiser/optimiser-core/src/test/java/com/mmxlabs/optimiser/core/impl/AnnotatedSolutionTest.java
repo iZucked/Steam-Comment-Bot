@@ -31,8 +31,7 @@ public class AnnotatedSolutionTest {
 
 	@Test
 	public void testGetSetContext() {
-		final IOptimisationContext optContext = context
-				.mock(IOptimisationContext.class);
+		final IOptimisationContext optContext = context.mock(IOptimisationContext.class);
 		final AnnotatedSolution solution = new AnnotatedSolution();
 		Assert.assertNull(solution.getContext());
 		solution.setContext(optContext);
@@ -58,20 +57,18 @@ public class AnnotatedSolutionTest {
 		final IAnnotations elementAnnotations = solution.getElementAnnotations();
 
 		Assert.assertNotNull(elementAnnotations);
-		
+
 		// How to test this further?
 	}
 
 	@Test
 	public void testDispose() {
 		final ISequences sequences = context.mock(ISequences.class);
-		final IOptimisationContext optContext = context
-				.mock(IOptimisationContext.class);
+		final IOptimisationContext optContext = context.mock(IOptimisationContext.class);
 
 		final Object annotation = new Object();
 		final String key = "key";
 
-		
 		final AnnotatedSolution solution = new AnnotatedSolution();
 
 		Assert.assertNull(solution.getSequences());
@@ -83,14 +80,13 @@ public class AnnotatedSolutionTest {
 		Assert.assertSame(optContext, solution.getContext());
 		Assert.assertSame(sequences, solution.getSequences());
 
-
 		solution.setGeneralAnnotation(key, annotation);
 
 		solution.dispose();
 
 		Assert.assertNull(solution.getSequences());
 		Assert.assertNull(solution.getContext());
-		
+
 		Assert.assertNull(solution.getGeneralAnnotation(key, Object.class));
 		Assert.assertNull(solution.getElementAnnotations());
 	}

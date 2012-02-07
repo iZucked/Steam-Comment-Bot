@@ -26,7 +26,7 @@ public interface IMatrixProvider<T, U> extends IDataComponentProvider {
 	 * @return
 	 */
 	U get(T x, T y);
-	
+
 	/**
 	 * Return true if the edge from x to y has been set.
 	 * 

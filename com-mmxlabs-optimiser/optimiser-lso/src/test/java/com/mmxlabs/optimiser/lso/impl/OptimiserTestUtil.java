@@ -36,7 +36,7 @@ public class OptimiserTestUtil {
 
 	public static List<ISequenceElement> makeList(final int... integers) {
 		final List<ISequenceElement> elementsList = new ArrayList<ISequenceElement>();
-		for (int i : integers) {
+		for (final int i : integers) {
 			elementsList.add(new IntegerElement(i));
 		}
 		return elementsList;
@@ -73,7 +73,7 @@ public class OptimiserTestUtil {
 
 		return sequences;
 	}
-	
+
 	public static IModifiableSequences makeSequences(final IResource res, final int... elements) {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(res, makeSequence(elements));

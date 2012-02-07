@@ -62,8 +62,9 @@ public class MovingAverageThresholder implements IThresholder {
 
 		final boolean accepted = random.nextDouble() < Math.exp(-delta / T);
 		accepts.set(front, accepted);
-		if (accepted)
+		if (accepted) {
 			acceptCount++;
+		}
 		front = (front + 1) % window.length;
 		if (accepts.get(front)) {
 			acceptCount--;
@@ -80,7 +81,7 @@ public class MovingAverageThresholder implements IThresholder {
 		} else {
 			if (tick == 0) {
 				logAlpha = Math.log(alpha0 * Math.pow(cooling, epoch));
-				log.debug("Epoch " + epoch + ", alpha = " + alpha0 * Math.pow(cooling, epoch) + " T=" + lastT);
+				log.debug("Epoch " + epoch + ", alpha = " + (alpha0 * Math.pow(cooling, epoch)) + " T=" + lastT);
 			}
 			tick++;
 		}

@@ -22,9 +22,7 @@ public final class ElementAnnotations implements IElementAnnotations {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.scheduler.optmiser.fitness.ISequenceSchedulerAdditionalInfo
-	 * #get(java.lang.String, java.lang.Class)
+	 * @see com.mmxlabs.scheduler.optmiser.fitness.ISequenceSchedulerAdditionalInfo #get(java.lang.String, java.lang.Class)
 	 */
 	@Override
 	public <U> U get(final String key, final Class<U> clz) {
@@ -38,9 +36,7 @@ public final class ElementAnnotations implements IElementAnnotations {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.scheduler.optmiser.fitness.ISequenceSchedulerAdditionalInfo
-	 * #put(java.lang.String, java.lang.Object)
+	 * @see com.mmxlabs.scheduler.optmiser.fitness.ISequenceSchedulerAdditionalInfo #put(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public void put(final String key, final Object value) {

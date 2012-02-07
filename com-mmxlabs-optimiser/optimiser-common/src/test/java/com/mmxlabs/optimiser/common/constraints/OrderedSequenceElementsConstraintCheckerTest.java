@@ -20,7 +20,6 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
-import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintChecker;
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;

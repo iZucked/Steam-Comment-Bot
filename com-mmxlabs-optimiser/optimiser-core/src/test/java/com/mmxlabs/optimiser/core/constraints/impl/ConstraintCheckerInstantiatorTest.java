@@ -12,8 +12,6 @@ import org.junit.Test;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
-import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
 
 public class ConstraintCheckerInstantiatorTest {
 

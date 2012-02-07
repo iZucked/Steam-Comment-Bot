@@ -36,17 +36,13 @@ public class Move4over1Test {
 
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 
-		final IModifiableSequence sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
 
-		final List<IResource> resources = CollectionsUtil
-				.makeArrayList(resource1);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1);
 
-		final Map<IResource, IModifiableSequence> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1);
 
-		final ModifiableSequences sequences = new ModifiableSequences(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
 		final Move4over1 move = new Move4over1();
 
@@ -84,16 +80,13 @@ public class Move4over1Test {
 	public void testApplyOnData() {
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 
-		final IModifiableSequence sequence1 = new ListModifiableSequence(
-				OptimiserTestUtil.makeList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+		final IModifiableSequence sequence1 = new ListModifiableSequence(OptimiserTestUtil.makeList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1);
 
-		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil
-				.makeHashMap(resource1, sequence1);
+		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1);
 
-		final IModifiableSequences sequences = new ModifiableSequences(
-				resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
 		final Move4over1 move = new Move4over1();
 
@@ -113,8 +106,7 @@ public class Move4over1Test {
 
 		move.apply(sequences);
 
-		final List<ISequenceElement> expectedSequence1 = OptimiserTestUtil.makeList(5, 6,
-				3, 4, 1, 2, 7, 8, 9, 10);
+		final List<ISequenceElement> expectedSequence1 = OptimiserTestUtil.makeList(5, 6, 3, 4, 1, 2, 7, 8, 9, 10);
 
 		Assert.assertEquals(expectedSequence1.size(), sequence1.size());
 		for (int i = 0; i < expectedSequence1.size(); ++i) {
@@ -126,16 +118,13 @@ public class Move4over1Test {
 	public void testValidate() {
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 
-		final IModifiableSequence sequence1 = new ListModifiableSequence(
-				OptimiserTestUtil.makeList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+		final IModifiableSequence sequence1 = new ListModifiableSequence(OptimiserTestUtil.makeList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1);
 
-		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil
-				.makeHashMap(resource1, sequence1);
+		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1);
 
-		final IModifiableSequences sequences = new ModifiableSequences(
-				resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
 		final Move4over1 move = new Move4over1();
 
@@ -164,10 +153,9 @@ public class Move4over1Test {
 
 		final Map<IResource, ISequence> sequenceMap_r1 = Collections.emptyMap();
 
-		List<IResource> r1 = Collections.emptyList();
-		
-		Assert.assertFalse(move.validate(new Sequences(r1, sequenceMap_r1)));
+		final List<IResource> r1 = Collections.emptyList();
 
+		Assert.assertFalse(move.validate(new Sequences(r1, sequenceMap_r1)));
 
 		// NOTE: This test does not trigger the desired code path. Check cobertura reports
 		move.setSegment1End(100);
@@ -178,7 +166,6 @@ public class Move4over1Test {
 		Assert.assertFalse(move.validate(sequences));
 		move.setSegment1Start(resource1Start);
 
-		
 		move.setSegment2End(100);
 		Assert.assertFalse(move.validate(sequences));
 		move.setSegment2End(resource2End);
@@ -211,7 +198,7 @@ public class Move4over1Test {
 		move.setSegment1Start(pos);
 		Assert.assertEquals(pos, move.getSegment1Start());
 	}
-	
+
 	@Test
 	public void testGetSetSegment1End() {
 
@@ -222,7 +209,6 @@ public class Move4over1Test {
 		move.setSegment1End(pos);
 		Assert.assertEquals(pos, move.getSegment1End());
 	}
-	
 
 	@Test
 	public void testGetSetSegment2Start() {
@@ -234,7 +220,7 @@ public class Move4over1Test {
 		move.setSegment2Start(pos);
 		Assert.assertEquals(pos, move.getSegment2Start());
 	}
-	
+
 	@Test
 	public void testGetSetSegment2End() {
 

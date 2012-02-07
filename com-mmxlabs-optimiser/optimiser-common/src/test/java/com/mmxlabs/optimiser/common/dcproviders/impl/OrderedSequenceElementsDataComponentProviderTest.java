@@ -11,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 @RunWith(JMock.class)

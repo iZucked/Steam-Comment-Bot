@@ -17,9 +17,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 public interface IElementDurationProvider extends IDataComponentProvider {
 
 	/**
-	 * Return the duration set for the given element for the {@link IResource}
-	 * If no duration has been set, then the default value
-	 * {@link #getDefaultValue()} will be returned.
+	 * Return the duration set for the given element for the {@link IResource} If no duration has been set, then the default value {@link #getDefaultValue()} will be returned.
 	 * 
 	 * @param element
 	 * @param resource

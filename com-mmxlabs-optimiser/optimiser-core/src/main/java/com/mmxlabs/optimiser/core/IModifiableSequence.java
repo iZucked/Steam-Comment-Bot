@@ -4,12 +4,9 @@
  */
 package com.mmxlabs.optimiser.core;
 
-
 /**
- * The {@link IModifiableSequence} interface extends the {@link ISequence}
- * interface to allow sequence contents to be modified. It is expected that the
- * main users of this interface will be {@link ISequencesManipulator} instances
- * and optimiser operators.
+ * The {@link IModifiableSequence} interface extends the {@link ISequence} interface to allow sequence contents to be modified. It is expected that the main users of this interface will be
+ * {@link ISequencesManipulator} instances and optimiser operators.
  * 
  * @author Simon Goodall
  * 
@@ -32,8 +29,7 @@ public interface IModifiableSequence extends ISequence {
 	void remove(int index);
 
 	/**
-	 * Remove the given element from the sequence. Returns false if the element
-	 * did not exist or true on success.
+	 * Remove the given element from the sequence. Returns false if the element did not exist or true on success.
 	 * 
 	 * @param element
 	 */
@@ -72,10 +68,8 @@ public interface IModifiableSequence extends ISequence {
 	void remove(int start, int end);
 
 	/**
-	 * Insert a range of elements defined be the given {@link ISegment} at the
-	 * specified index. The new element at index is the first element of the segment,
-	 * the new element at index+1 the second of the segment, and so on, with the previous elements
-	 * being shifted right.
+	 * Insert a range of elements defined be the given {@link ISegment} at the specified index. The new element at index is the first element of the segment, the new element at index+1 the second of
+	 * the segment, and so on, with the previous elements being shifted right.
 	 * 
 	 * @param index
 	 * @param segment
@@ -83,8 +77,7 @@ public interface IModifiableSequence extends ISequence {
 	void insert(int index, ISegment segment);
 
 	/**
-	 * Replaces all entries in the current sequence with those in the specified
-	 * sequence.
+	 * Replaces all entries in the current sequence with those in the specified sequence.
 	 * 
 	 * @param sequence
 	 */

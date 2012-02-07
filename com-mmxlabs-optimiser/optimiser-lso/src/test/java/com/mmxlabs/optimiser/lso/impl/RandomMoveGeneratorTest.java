@@ -56,12 +56,12 @@ public class RandomMoveGeneratorTest {
 	@Test
 	public void testRandomAccessors() {
 
-		RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
+		final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 
 		// Initially should be null
 		Assert.assertNull(moveGenerator.getRandom());
 
-		Random random = new Random();
+		final Random random = new Random();
 
 		moveGenerator.setRandom(random);
 		Assert.assertSame(random, moveGenerator.getRandom());
@@ -70,12 +70,12 @@ public class RandomMoveGeneratorTest {
 	@Test
 	public void testSequencesAccessors() {
 
-		RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
+		final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 
 		// Initially should be null
 		Assert.assertNull(moveGenerator.getSequences());
 
-		ISequences sequences = context.mock(ISequences.class);
+		final ISequences sequences = context.mock(ISequences.class);
 
 		moveGenerator.setSequences(sequences);
 		Assert.assertSame(sequences, moveGenerator.getSequences());
@@ -84,14 +84,14 @@ public class RandomMoveGeneratorTest {
 	@Test
 	public void testGenerateBreakPoint() {
 
-		RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
+		final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 		moveGenerator.setRandom(new Random());
 
-		ISequence sequence = OptimiserTestUtil.makeSequence(new IntegerElement(1), new IntegerElement(2), new IntegerElement(3));
+		final ISequence sequence = OptimiserTestUtil.makeSequence(new IntegerElement(1), new IntegerElement(2), new IntegerElement(3));
 
 		// Run it a few times to let rng take its course
 		for (int i = 0; i < 10; ++i) {
-			int bp = moveGenerator.generateBreakPoint(sequence);
+			final int bp = moveGenerator.generateBreakPoint(sequence);
 			Assert.assertTrue(bp >= 0);
 			Assert.assertTrue(bp <= sequence.size());
 

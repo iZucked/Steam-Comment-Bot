@@ -60,12 +60,13 @@ public class HashMapAnnotations implements IAnnotations {
 	 * @see com.mmxlabs.optimiser.core.IAnnotations#getAnnotations(java.lang.Object)
 	 */
 	@Override
-	public Map<String, Object> getAnnotations(ISequenceElement element) {
+	public Map<String, Object> getAnnotations(final ISequenceElement element) {
 		final Map<String, Object> inner = contents.get(element);
-		if (inner != null)
+		if (inner != null) {
 			return Collections.unmodifiableMap(inner);
-		else
+		} else {
 			return Collections.emptyMap();
+		}
 	}
 
 }

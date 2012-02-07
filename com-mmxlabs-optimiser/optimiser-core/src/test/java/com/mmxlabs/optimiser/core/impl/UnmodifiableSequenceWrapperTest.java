@@ -16,7 +16,6 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.impl.UnmodifiableSequenceWrapper;
 
 /**
  * Ensure the {@link UnmodifiableSequenceWrapper} correctly invokes methods on the target object.
@@ -74,12 +73,12 @@ public class UnmodifiableSequenceWrapperTest {
 		final ISequence sequence = new ISequence() {
 
 			@Override
-			public ISequenceElement get(int index) {
+			public ISequenceElement get(final int index) {
 				return null;
 			}
 
 			@Override
-			public ISegment getSegment(int start, int end) {
+			public ISegment getSegment(final int start, final int end) {
 				return null;
 			}
 
@@ -106,12 +105,12 @@ public class UnmodifiableSequenceWrapperTest {
 
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(sequence);
 
-		Iterator<ISequenceElement> wrappedItr = wrapped.iterator();
+		final Iterator<ISequenceElement> wrappedItr = wrapped.iterator();
 		context.checking(new Expectations() {
 			{
 				oneOf(target).next();
 				will(returnValue(element));
-				
+
 			}
 		});
 
@@ -130,12 +129,12 @@ public class UnmodifiableSequenceWrapperTest {
 		final ISequence sequence = new ISequence() {
 
 			@Override
-			public ISequenceElement get(int index) {
+			public ISequenceElement get(final int index) {
 				return null;
 			}
 
 			@Override
-			public ISegment getSegment(int start, int end) {
+			public ISegment getSegment(final int start, final int end) {
 				return null;
 			}
 
@@ -162,7 +161,7 @@ public class UnmodifiableSequenceWrapperTest {
 
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(sequence);
 
-		Iterator<ISequenceElement> wrappedItr = wrapped.iterator();
+		final Iterator<ISequenceElement> wrappedItr = wrapped.iterator();
 		context.checking(new Expectations() {
 			{
 				oneOf(target).hasNext();
@@ -184,12 +183,12 @@ public class UnmodifiableSequenceWrapperTest {
 		final ISequence sequence = new ISequence() {
 
 			@Override
-			public ISequenceElement get(int index) {
+			public ISequenceElement get(final int index) {
 				return null;
 			}
 
 			@Override
-			public ISegment getSegment(int start, int end) {
+			public ISegment getSegment(final int start, final int end) {
 				return null;
 			}
 
@@ -216,7 +215,7 @@ public class UnmodifiableSequenceWrapperTest {
 
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(sequence);
 
-		Iterator<ISequenceElement> wrappedItr = wrapped.iterator();
+		final Iterator<ISequenceElement> wrappedItr = wrapped.iterator();
 		context.checking(new Expectations() {
 			{
 				// Exception should be thrown

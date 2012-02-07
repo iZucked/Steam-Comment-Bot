@@ -12,10 +12,10 @@ import com.mmxlabs.optimiser.ga.IIndividualEvaluator;
 import com.mmxlabs.optimiser.ga.Individual;
 
 /**
- * A memoizing evaluator; wraps another evaluator but adds a cache to make
- * reevaluation efficient.
+ * A memoizing evaluator; wraps another evaluator but adds a cache to make reevaluation efficient.
  * 
- * @param I Individual Type
+ * @param I
+ *            Individual Type
  * 
  * @author Tom Hinton
  * 
@@ -25,20 +25,17 @@ public final class CachingIndividualEvaluator<I extends Individual<I>> implement
 
 	private final AbstractCache<I, Long> cache;
 
-	public CachingIndividualEvaluator(final IIndividualEvaluator<I> delegate,
-			final int size) {
+	public CachingIndividualEvaluator(final IIndividualEvaluator<I> delegate, final int size) {
 		super();
 
-		cache = new SimpleCache<I, Long>("IE",
-				new IKeyEvaluator<I, Long>() {
+		cache = new SimpleCache<I, Long>("IE", new IKeyEvaluator<I, Long>() {
 
-					@Override
-					public Pair<I, Long> evaluate(final I key) {
-						// do clone key
-						return new Pair<I, Long>(key.clone(), delegate
-								.evaluate(key));
-					}
-				}, size, 3);
+			@Override
+			public Pair<I, Long> evaluate(final I key) {
+				// do clone key
+				return new Pair<I, Long>(key.clone(), delegate.evaluate(key));
+			}
+		}, size, 3);
 
 		this.delegate = delegate;
 	}

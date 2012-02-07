@@ -37,20 +37,15 @@ public class Move3over2Test {
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 		final IResource resource2 = context.mock(IResource.class, "resource2");
 
-		final IModifiableSequence sequence1 = context.mock(
-				IModifiableSequence.class, "sequence1");
+		final IModifiableSequence sequence1 = context.mock(IModifiableSequence.class, "sequence1");
 
-		final IModifiableSequence sequence2 = context.mock(
-				IModifiableSequence.class, "sequence2");
+		final IModifiableSequence sequence2 = context.mock(IModifiableSequence.class, "sequence2");
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence> map = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(
-				resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
 		final Move3over2 move = new Move3over2();
 
@@ -88,19 +83,14 @@ public class Move3over2Test {
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 		final IResource resource2 = context.mock(IResource.class, "resource2");
 
-		final IModifiableSequence sequence1 = new ListModifiableSequence(
-				OptimiserTestUtil.makeList(1, 2, 3, 4, 5));
-		final IModifiableSequence sequence2 = new ListModifiableSequence(
-				OptimiserTestUtil.makeList(6, 7, 8, 9, 10));
+		final IModifiableSequence sequence1 = new ListModifiableSequence(OptimiserTestUtil.makeList(1, 2, 3, 4, 5));
+		final IModifiableSequence sequence2 = new ListModifiableSequence(OptimiserTestUtil.makeList(6, 7, 8, 9, 10));
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final IModifiableSequences sequences = new ModifiableSequences(
-				resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
 		final Move3over2 move = new Move3over2();
 
@@ -119,10 +109,8 @@ public class Move3over2Test {
 
 		move.apply(sequences);
 
-		final List<ISequenceElement> expectedSequence1 = OptimiserTestUtil.makeList(
-				3, 4, 5);
-		final List<ISequenceElement> expectedSequence2 = OptimiserTestUtil.makeList(
-				6, 1, 2, 7, 8, 9, 10);
+		final List<ISequenceElement> expectedSequence1 = OptimiserTestUtil.makeList(3, 4, 5);
+		final List<ISequenceElement> expectedSequence2 = OptimiserTestUtil.makeList(6, 1, 2, 7, 8, 9, 10);
 
 		Assert.assertEquals(expectedSequence1.size(), sequence1.size());
 		for (int i = 0; i < expectedSequence1.size(); ++i) {
@@ -140,19 +128,14 @@ public class Move3over2Test {
 		final IResource resource1 = context.mock(IResource.class, "resource1");
 		final IResource resource2 = context.mock(IResource.class, "resource2");
 
-		final IModifiableSequence sequence1 = new ListModifiableSequence(
-				OptimiserTestUtil.makeList(1, 2, 3, 4, 5));
-		final IModifiableSequence sequence2 = new ListModifiableSequence(
-				OptimiserTestUtil.makeList(6, 7, 8, 9, 10));
+		final IModifiableSequence sequence1 = new ListModifiableSequence(OptimiserTestUtil.makeList(1, 2, 3, 4, 5));
+		final IModifiableSequence sequence2 = new ListModifiableSequence(OptimiserTestUtil.makeList(6, 7, 8, 9, 10));
 
-		final List<IResource> resources = CollectionsUtil.makeArrayList(
-				resource1, resource2);
+		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil
-				.makeHashMap(resource1, sequence1, resource2, sequence2);
+		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final IModifiableSequences sequences = new ModifiableSequences(
-				resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
 		final Move3over2 move = new Move3over2();
 
@@ -177,15 +160,11 @@ public class Move3over2Test {
 
 		move.setResource2Position(resource2Start);
 
-		final Map<IResource, ISequence> sequenceMap_r1 = CollectionsUtil
-				.makeHashMap(resource1, sequence1);
-		final Map<IResource, ISequence> sequenceMap_r2 = CollectionsUtil
-				.makeHashMap(resource2, sequence2);
+		final Map<IResource, ISequence> sequenceMap_r1 = CollectionsUtil.makeHashMap(resource1, sequence1);
+		final Map<IResource, ISequence> sequenceMap_r2 = CollectionsUtil.makeHashMap(resource2, sequence2);
 
-		Assert.assertFalse(move.validate(new Sequences(Collections
-				.singletonList(resource2), sequenceMap_r2)));
-		Assert.assertFalse(move.validate(new Sequences(Collections
-				.singletonList(resource1), sequenceMap_r1)));
+		Assert.assertFalse(move.validate(new Sequences(Collections.singletonList(resource2), sequenceMap_r2)));
+		Assert.assertFalse(move.validate(new Sequences(Collections.singletonList(resource1), sequenceMap_r1)));
 
 		Assert.assertTrue(move.validate(sequences));
 
@@ -196,7 +175,7 @@ public class Move3over2Test {
 		move.setResource1End(-1);
 		Assert.assertFalse(move.validate(sequences));
 		move.setResource1End(resource1End);
-		
+
 		move.setResource1Start(100);
 		Assert.assertFalse(move.validate(sequences));
 		move.setResource1Start(resource1Start);
@@ -208,11 +187,11 @@ public class Move3over2Test {
 		move.setResource2Position(100);
 		Assert.assertFalse(move.validate(sequences));
 		move.setResource2Position(resource2Start);
-		
+
 		move.setResource2Position(-1);
 		Assert.assertFalse(move.validate(sequences));
 		move.setResource2Position(resource2Start);
-		
+
 	}
 
 	@Test

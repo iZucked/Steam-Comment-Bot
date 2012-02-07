@@ -27,8 +27,9 @@ public class Move2over2GeneratorUnit implements IRandomMoveGeneratorUnit {
 
 		final List<IResource> resources = sequences.getResources();
 		final int resourceCount = resources.size();
-		if (resourceCount == 1)
+		if (resourceCount == 1) {
 			return null; // need two sequences at least
+		}
 
 		// pick two random sequences
 		final int resource1 = random.nextInt(resourceCount);
