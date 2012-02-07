@@ -16,12 +16,21 @@
       </category>
       
       <view
-            name="Cargo"
+            name="Cargo Costs"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.demo.reports"
             class="com.mmxlabs.demo.reports.views.CargoReportView"
             id="com.mmxlabs.demo.reports.views.CargoReportView">
       </view>
+      
+      <view
+            name="Cargo"
+            icon="icons/cview16/exec_statistic_view.gif"
+            category="com.mmxlabs.demo.reports"
+            class="com.mmxlabs.demo.reports.views.BasicCargoReportView"
+            id="com.mmxlabs.demo.reports.views.BasicCargoReportView">
+      </view>
+      
       <view
             category="com.mmxlabs.demo.reports"
             class="com.mmxlabs.demo.reports.views.FitnessReportView"

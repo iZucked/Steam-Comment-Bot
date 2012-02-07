@@ -8,11 +8,13 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
+import com.mmxlabs.demo.reports.views.BasicCargoReportView;
 import com.mmxlabs.demo.reports.views.CargoReportView;
 import com.mmxlabs.demo.reports.views.CooldownReportView;
 import com.mmxlabs.demo.reports.views.FitnessReportView;
 import com.mmxlabs.demo.reports.views.LatenessReportView;
 import com.mmxlabs.demo.reports.views.PortRotationReportView;
+import com.mmxlabs.demo.reports.views.TotalsHierarchyView;
 import com.mmxlabs.demo.reports.views.TotalsReportView;
 import com.mmxlabs.scheduleview.views.SchedulerView;
 
@@ -31,7 +33,8 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.BOTTOM, 0.5f, SchedulerView.ID);
 
 		reportsFolder.addView(TotalsReportView.ID);
-		reportsFolder.addView("com.mmxlabs.demo.reports.views.TotalsHierarchyView");
+		reportsFolder.addView(TotalsHierarchyView.ID);
+		reportsFolder.addView(BasicCargoReportView.ID);
 		reportsFolder.addView(CargoReportView.ID);
 		reportsFolder.addView(LatenessReportView.ID);
 		reportsFolder.addView(CooldownReportView.ID);
@@ -39,8 +42,9 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 
 		layout.addShowViewShortcut(SchedulerView.ID);
 		layout.addShowViewShortcut(TotalsReportView.ID);
-		layout.addShowViewShortcut("com.mmxlabs.demo.reports.views.TotalsHierarchyView");
+		layout.addShowViewShortcut(TotalsHierarchyView.ID);
 		layout.addShowViewShortcut(CargoReportView.ID);
+		layout.addShowViewShortcut(BasicCargoReportView.ID);
 		layout.addShowViewShortcut(FitnessReportView.ID);
 		layout.addShowViewShortcut(LatenessReportView.ID);
 		layout.addShowViewShortcut(CooldownReportView.ID);
