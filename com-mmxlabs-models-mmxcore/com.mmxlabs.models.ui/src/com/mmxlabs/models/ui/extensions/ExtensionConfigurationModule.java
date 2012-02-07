@@ -16,6 +16,13 @@ import com.mmxlabs.models.ui.registries.impl.DisplayCompositeFactoryRegistry;
 import com.mmxlabs.models.ui.registries.impl.EditorFactoryRegistry;
 import com.mmxlabs.models.ui.registries.impl.ReferenceValueProviderFactoryRegistry;
 
+/**
+ * A guice module which wires up the various extension point registries to
+ * the actual extension points, and their interfaces to their implementations.
+ * 
+ * @author hinton
+ *
+ */
 public class ExtensionConfigurationModule extends AbstractModule {
 	@Override
 	protected void configure() {

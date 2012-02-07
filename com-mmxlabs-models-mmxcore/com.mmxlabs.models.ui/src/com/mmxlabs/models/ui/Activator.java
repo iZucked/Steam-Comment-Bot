@@ -12,8 +12,6 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IDisplayCompositeFactoryRegistry;
 import com.mmxlabs.models.ui.registries.IEditorFactoryRegistry;
 import com.mmxlabs.models.ui.registries.IReferenceValueProviderFactoryRegistry;
-import com.mmxlabs.models.ui.registries.impl.EditorFactoryRegistry;
-import com.mmxlabs.models.ui.registries.impl.ReferenceValueProviderFactoryRegistry;
 
 /**
  * The activator class controls the plug-in life cycle

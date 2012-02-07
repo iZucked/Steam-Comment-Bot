@@ -1,6 +1,7 @@
 package com.mmxlabs.models.ui.editors;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.swt.widgets.Composite;
 
 /**
  * Interface for factories which will create composites for displaying model objects.
@@ -14,7 +15,7 @@ public interface IDisplayCompositeFactory {
 	 * @param eClass
 	 * @return
 	 */
-	public IDisplayComposite createToplevelComposite(final EClass eClass);
+	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass);
 	/**
 	 * This is for creating a composite which can be displayed within a top level composite somewhere;
 	 * it should just handle the direct fields on the eClass, not any contained classes.
@@ -22,5 +23,5 @@ public interface IDisplayCompositeFactory {
 	 * @param eClass
 	 * @return
 	 */
-	public IDisplayComposite createSublevelComposite(final EClass eClass);
+	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass);
 }

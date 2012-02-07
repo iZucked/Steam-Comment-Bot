@@ -6,6 +6,8 @@
    <extension-point id="com.mmxlabs.models.ui.valueproviders" name="Reference Value Providers" schema="schema/com.mmxlabs.models.ui.valueproviders.exsd"/>
    <extension-point id="com.mmxlabs.models.ui.displaycompositefactories" name="Display Composite Factories" schema="schema/com.mmxlabs.models.ui.displaycompositefactories.exsd"/>
    <extension
+         id="com.mmxlabs.models.ui.defs"
+         name="Def. ed. factories"
          point="com.mmxlabs.models.ui.editorfactories">
       <editorFactory
       		id="com.mmxlabs.models.ui.defaultEditorFactory"
@@ -47,5 +49,16 @@
             </EClassExtends>
          </FeatureAnyOf>
       </editorFactory>
+   </extension>
+   <extension
+         id="com.mmxlabs.models.ui.dcfs"
+         name="Def. composite. factories"
+         point="com.mmxlabs.models.ui.displaycompositefactories">
+      <displayCompositeFactory
+            eClass="org.eclipse.emf.ecore.EObject"
+            factory="com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory"
+            id="com.mmxlabs.models.ui.defaultDisplayCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
    </extension>
 </plugin>
