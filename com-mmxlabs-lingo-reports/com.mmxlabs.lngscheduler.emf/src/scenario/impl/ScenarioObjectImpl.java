@@ -15,18 +15,16 @@ import scenario.ScenarioObject;
 import scenario.ScenarioPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Object</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Object</b></em>'. <!-- end-user-doc -->
  * <p>
  * </p>
- *
+ * 
  * @generated
  */
 public abstract class ScenarioObjectImpl extends EObjectImpl implements ScenarioObject {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ScenarioObjectImpl() {
@@ -34,8 +32,8 @@ public abstract class ScenarioObjectImpl extends EObjectImpl implements Scenario
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -44,26 +42,27 @@ public abstract class ScenarioObjectImpl extends EObjectImpl implements Scenario
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public EObject getContainer() {
 		return eContainer();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case ScenarioPackage.SCENARIO_OBJECT___GET_CONTAINER:
-				return getContainer();
+		case ScenarioPackage.SCENARIO_OBJECT___GET_CONTAINER:
+			return getContainer();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
-} //ScenarioObjectImpl
+} // ScenarioObjectImpl

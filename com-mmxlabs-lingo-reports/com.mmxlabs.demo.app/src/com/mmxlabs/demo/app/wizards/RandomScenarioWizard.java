@@ -39,7 +39,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 	private DetailsPage details;
 
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		this.workbench = workbench;
 		this.details = new DetailsPage("Details");
 	}
@@ -57,7 +57,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 		Scenario scenario = null;
 
 		try {
-			RandomScenarioUtils utils = new RandomScenarioUtils();
+			final RandomScenarioUtils utils = new RandomScenarioUtils();
 			scenario = utils.createScenario();
 			final String matrixPath = details.getMatrixURI().toFileString();
 			final String slotsPath = details.getSlotsURI().toFileString();
@@ -91,10 +91,10 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 
 			ScenarioUtils.addDefaultSettings(scenario);
 
-		} catch (FileNotFoundException e1) {
+		} catch (final FileNotFoundException e1) {
 			e1.printStackTrace();
 			return false;
-		} catch (IOException e1) {
+		} catch (final IOException e1) {
 			e1.printStackTrace();
 			return false;
 		}
@@ -102,14 +102,14 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 		final URI fileURI = URI.createFileURI(outputFileName);
 
 		// save scenario to file
-		ResourceSet resourceSet = new ResourceSetImpl();
-		Resource resource = resourceSet.createResource(fileURI);
+		final ResourceSet resourceSet = new ResourceSetImpl();
+		final Resource resource = resourceSet.createResource(fileURI);
 
 		resource.getContents().add(scenario);
 
 		try {
 			resource.save(new HashMap<Object, Object>());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			return false;
 		}
 
@@ -119,7 +119,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 	}
 
 	static class DetailsPage extends WizardPage {
-		protected DetailsPage(String pageName) {
+		protected DetailsPage(final String pageName) {
 			super(pageName);
 		}
 
@@ -161,9 +161,9 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 		private Text slotsField;
 
 		@Override
-		public void createControl(Composite parent) {
-			Composite myContents = new Composite(parent, SWT.NONE);
-			GridLayout layout = new GridLayout(1, false);
+		public void createControl(final Composite parent) {
+			final Composite myContents = new Composite(parent, SWT.NONE);
+			final GridLayout layout = new GridLayout(1, false);
 			myContents.setLayout(layout);
 
 			fileField = makeElement(myContents, "Scenario file to create", "scenario", false);
@@ -173,7 +173,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 
 			Label label = new Label(myContents, SWT.NONE);
 			label.setText("Other model features");
-			Composite row = new Composite(myContents, SWT.NONE);
+			final Composite row = new Composite(myContents, SWT.NONE);
 			row.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 			row.setLayout(new GridLayout(3, false));
 
@@ -198,14 +198,14 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			setControl(myContents);
 		}
 
-		public Text makeElement(Composite contents, String caption, String extension, boolean open) {
-			Label label = new Label(contents, SWT.NONE);
+		public Text makeElement(final Composite contents, final String caption, final String extension, final boolean open) {
+			final Label label = new Label(contents, SWT.NONE);
 			label.setText(caption);
 			return makeFilePicker(contents, new String[] { "*." + extension }, open);
 		}
 
-		public Text makeFilePicker(Composite container, final String[] extensions, final boolean open) {
-			Composite row = new Composite(container, SWT.NONE);
+		public Text makeFilePicker(final Composite container, final String[] extensions, final boolean open) {
+			final Composite row = new Composite(container, SWT.NONE);
 
 			row.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
@@ -214,7 +214,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			final Text t = new Text(row, SWT.BORDER);
 			t.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-			Button picker = new Button(row, SWT.PUSH);
+			final Button picker = new Button(row, SWT.PUSH);
 			picker.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
 
 			picker.setText("Choose");
@@ -224,8 +224,8 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 			new SelectionListener() {
 
 				@Override
-				public void widgetSelected(SelectionEvent e) {
-					FileDialog fd = new FileDialog(getShell(), open ? SWT.OPEN : SWT.SAVE);
+				public void widgetSelected(final SelectionEvent e) {
+					final FileDialog fd = new FileDialog(getShell(), open ? SWT.OPEN : SWT.SAVE);
 					fd.setFilterExtensions(extensions);
 					final String sd = fd.open();
 					if (sd != null) {
@@ -234,7 +234,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 				}
 
 				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
+				public void widgetDefaultSelected(final SelectionEvent e) {
 				}
 			}
 

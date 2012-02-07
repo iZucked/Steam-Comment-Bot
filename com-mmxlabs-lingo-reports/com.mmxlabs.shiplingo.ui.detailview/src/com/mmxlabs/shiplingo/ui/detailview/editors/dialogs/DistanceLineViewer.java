@@ -27,7 +27,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -51,14 +50,14 @@ public class DistanceLineViewer extends GridTableViewer {
 	/**
 	 * @param parent
 	 */
-	public DistanceLineViewer(Composite parent) {
+	public DistanceLineViewer(final Composite parent) {
 		super(parent);
 	}
 
 	/**
 	 * @param table
 	 */
-	public DistanceLineViewer(Table table) {
+	public DistanceLineViewer(final Table table) {
 		super(table);
 	}
 
@@ -66,15 +65,14 @@ public class DistanceLineViewer extends GridTableViewer {
 	 * @param parent
 	 * @param style
 	 */
-	public DistanceLineViewer(Composite parent, int style) {
+	public DistanceLineViewer(final Composite parent, final int style) {
 		super(parent, style);
 	}
 
 	public void init(final EditingDomain editingDomain, final Scenario scenario) {
 		setContentProvider(new IStructuredContentProvider() {
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput,
-					Object newInput) {
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 			}
 
@@ -84,13 +82,12 @@ public class DistanceLineViewer extends GridTableViewer {
 			}
 
 			@Override
-			public Object[] getElements(Object inputElement) {
+			public Object[] getElements(final Object inputElement) {
 				if (inputElement instanceof DistanceModel) {
 					final DistanceModel dm = (DistanceModel) inputElement;
 					final Map<Port, Map<Port, DistanceLine>> values = new HashMap<Port, Map<Port, DistanceLine>>();
-					
-					for (final Port p : scenario.getPortModel()
-							.getPorts()) {
+
+					for (final Port p : scenario.getPortModel().getPorts()) {
 						values.put(p, new HashMap<Port, DistanceLine>());
 					}
 
@@ -99,27 +96,16 @@ public class DistanceLineViewer extends GridTableViewer {
 					}
 
 					final List<Pair<Port, Map<Port, DistanceLine>>> output = new ArrayList<Pair<Port, Map<Port, DistanceLine>>>();
-					for (final Map.Entry<Port, Map<Port, DistanceLine>> entry : values
-							.entrySet()) {
-						output.add(new Pair<Port, Map<Port, DistanceLine>>(
-								entry.getKey(), entry.getValue()));
+					for (final Map.Entry<Port, Map<Port, DistanceLine>> entry : values.entrySet()) {
+						output.add(new Pair<Port, Map<Port, DistanceLine>>(entry.getKey(), entry.getValue()));
 					}
 
-					Collections
-							.sort(output,
-									new Comparator<Pair<Port, Map<Port, DistanceLine>>>() {
-										@Override
-										public int compare(
-												Pair<Port, Map<Port, DistanceLine>> o1,
-												Pair<Port, Map<Port, DistanceLine>> o2) {
-											return o1
-													.getFirst()
-													.getName()
-													.compareTo(
-															o2.getFirst()
-																	.getName());
-										}
-									});
+					Collections.sort(output, new Comparator<Pair<Port, Map<Port, DistanceLine>>>() {
+						@Override
+						public int compare(final Pair<Port, Map<Port, DistanceLine>> o1, final Pair<Port, Map<Port, DistanceLine>> o2) {
+							return o1.getFirst().getName().compareTo(o2.getFirst().getName());
+						}
+					});
 
 					return output.toArray();
 				}
@@ -127,35 +113,34 @@ public class DistanceLineViewer extends GridTableViewer {
 			}
 		});
 
-//		final GridViewerColumn fromColumn = new GridViewerColumn(this,
-//				SWT.NONE);
-//		fromColumn.setLabelProvider(new ColumnLabelProvider() {
-//			@Override
-//			public String getText(Object element) {
-//				return ((Pair<Port, Map<Port, DistanceLine>>) element)
-//						.getFirst().getName();
-//			}
-//		});
+		// final GridViewerColumn fromColumn = new GridViewerColumn(this,
+		// SWT.NONE);
+		// fromColumn.setLabelProvider(new ColumnLabelProvider() {
+		// @Override
+		// public String getText(Object element) {
+		// return ((Pair<Port, Map<Port, DistanceLine>>) element)
+		// .getFirst().getName();
+		// }
+		// });
 
 		final ArrayList<Port> ports = new ArrayList<Port>();
 		ports.addAll(scenario.getPortModel().getPorts());
 		Collections.sort(ports, new Comparator<Port>() {
 			@Override
-			public int compare(Port o1, Port o2) {
+			public int compare(final Port o1, final Port o2) {
 				return o1.getName().compareTo(o2.getName());
 			}
 		});
 
 		for (final Port p : ports) {
 
-			final GridViewerColumn toColumn = new GridViewerColumn(this,
-					SWT.NONE);
-			
+			final GridViewerColumn toColumn = new GridViewerColumn(this, SWT.NONE);
+
 			toColumn.getColumn().setText(p.getName());
-			
+
 			toColumn.setLabelProvider(new ColumnLabelProvider() {
 				@Override
-				public String getText(Object element) {
+				public String getText(final Object element) {
 					final Pair<Port, Map<Port, DistanceLine>> e = (Pair<Port, Map<Port, DistanceLine>>) element;
 					final DistanceLine dl = e.getSecond().get(p);
 					if (dl != null) {
@@ -165,31 +150,31 @@ public class DistanceLineViewer extends GridTableViewer {
 					}
 				}
 
-//				@Override
-//				public void update(final ViewerCell cell) {
-//					super.update(cell);
-//					
-//					final Pair<Port, Map<Port, DistanceLine>> e = (Pair<Port, Map<Port, DistanceLine>>) cell.getElement();
-//					cell.getControl().setToolTipText("Distance from "
-//							+e.getFirst().getName() + " to " + e.getSecond().get(p) + "\n" +
-//							
-//							cell.getControl().getToolTipText());
-//				}
+				// @Override
+				// public void update(final ViewerCell cell) {
+				// super.update(cell);
+				//
+				// final Pair<Port, Map<Port, DistanceLine>> e = (Pair<Port, Map<Port, DistanceLine>>) cell.getElement();
+				// cell.getControl().setToolTipText("Distance from "
+				// +e.getFirst().getName() + " to " + e.getSecond().get(p) + "\n" +
+				//
+				// cell.getControl().getToolTipText());
+				// }
 			});
 
 			toColumn.setEditingSupport(new EditingSupport(this) {
 				@Override
-				protected void setValue(Object element, Object value) {
+				protected void setValue(final Object element, final Object value) {
 					final Pair<Port, Map<Port, DistanceLine>> e = (Pair<Port, Map<Port, DistanceLine>>) element;
 					final String stringValue = value.toString();
 					final Command command;
 					DistanceLine dl = e.getSecond().get(p);
 
 					if (stringValue.isEmpty()) {
-						if (dl == null)
+						if (dl == null) {
 							return;
-						command = RemoveCommand.create(editingDomain,
-								dl);
+						}
+						command = RemoveCommand.create(editingDomain, dl);
 						e.getSecond().remove(p);
 					} else {
 						if (dl == null) {
@@ -198,16 +183,9 @@ public class DistanceLineViewer extends GridTableViewer {
 							dl.setToPort(p);
 							dl.setDistance(Integer.parseInt(stringValue));
 							e.getSecond().put(p, dl);
-							command = AddCommand.create(
-									editingDomain, getInput(),
-									PortPackage.eINSTANCE
-											.getDistanceModel_Distances(), dl);
+							command = AddCommand.create(editingDomain, getInput(), PortPackage.eINSTANCE.getDistanceModel_Distances(), dl);
 						} else {
-							command = SetCommand.create(
-									editingDomain, dl,
-									PortPackage.eINSTANCE
-											.getDistanceLine_Distance(),
-									Integer.parseInt(stringValue));
+							command = SetCommand.create(editingDomain, dl, PortPackage.eINSTANCE.getDistanceLine_Distance(), Integer.parseInt(stringValue));
 						}
 					}
 					editingDomain.getCommandStack().execute(command);
@@ -215,49 +193,53 @@ public class DistanceLineViewer extends GridTableViewer {
 				}
 
 				@Override
-				protected Object getValue(Object element) {
+				protected Object getValue(final Object element) {
 					final Pair<Port, Map<Port, DistanceLine>> e = (Pair<Port, Map<Port, DistanceLine>>) element;
 					final DistanceLine dl = e.getSecond().get(p);
-					if (dl == null) return "";
+					if (dl == null) {
+						return "";
+					}
 					return Integer.toString(dl.getDistance());
 				}
 
 				@Override
-				protected CellEditor getCellEditor(Object element) {
+				protected CellEditor getCellEditor(final Object element) {
 					final TextCellEditor tce = new TextCellEditor(getGrid());
-					
+
 					tce.setValidator(new ICellEditorValidator() {
 						@Override
-						public String isValid(Object value) {
+						public String isValid(final Object value) {
 							final String s = value.toString();
-							if (s.isEmpty()) return null;
-							try {
-								int i = Integer.parseInt(s);
-								if (i < 0) return s + " is negative";
+							if (s.isEmpty()) {
 								return null;
-							} catch (NumberFormatException nfe) {
+							}
+							try {
+								final int i = Integer.parseInt(s);
+								if (i < 0) {
+									return s + " is negative";
+								}
+								return null;
+							} catch (final NumberFormatException nfe) {
 								return s + " is not an integer";
 							}
 						}
 					});
-					
+
 					return tce;
 				}
 
 				@Override
-				protected boolean canEdit(Object element) {
+				protected boolean canEdit(final Object element) {
 					return true;
 				}
 			});
-			
-			
+
 			setRowHeaderLabelProvider(new CellLabelProvider() {
 				@Override
-				public void update(ViewerCell cell) {
+				public void update(final ViewerCell cell) {
 					final Object element = cell.getElement();
-					cell.setText(((Pair<Port, Map<Port, DistanceLine>>) element)
-							.getFirst().getName());
-					
+					cell.setText(((Pair<Port, Map<Port, DistanceLine>>) element).getFirst().getName());
+
 				}
 			});
 		}

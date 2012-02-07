@@ -4,13 +4,6 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Test;
@@ -144,10 +137,11 @@ public class ShipFillPercentageConstraintTest {
 		when(validationContext.getTarget()).thenReturn(vesselClass);
 		when(validationContext.getCurrentConstraintId()).thenReturn(id);
 
-		if (expectSuccess)
+		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
-		else
+		} else {
 			when(validationContext.createFailureStatus(any(), any(), any())).thenReturn(resultStatus);
+		}
 
 		// validate the constraint
 		constraint.validate(validationContext);
@@ -157,10 +151,11 @@ public class ShipFillPercentageConstraintTest {
 		verify(vesselClass, atLeast(1)).getFillCapacity();
 		verify(validationContext).getTarget();
 		verify(validationContext, atLeast(1)).getCurrentConstraintId();
-		if (expectSuccess)
+		if (expectSuccess) {
 			verify(validationContext).createSuccessStatus();
-		else
+		} else {
 			verify(validationContext).createFailureStatus(any(), any(), any());
+		}
 		// verify that only the methods above are called.
 		verifyNoMoreInteractions(vesselClass);
 		verifyNoMoreInteractions(validationContext);

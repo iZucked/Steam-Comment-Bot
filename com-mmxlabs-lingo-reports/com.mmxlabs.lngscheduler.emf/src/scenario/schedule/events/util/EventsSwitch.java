@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import scenario.ScenarioObject;
-import scenario.schedule.events.*;
 import scenario.schedule.events.CharterOutVisit;
 import scenario.schedule.events.EventsPackage;
 import scenario.schedule.events.FuelMixture;
@@ -22,31 +21,24 @@ import scenario.schedule.events.SlotVisit;
 import scenario.schedule.events.VesselEventVisit;
 
 /**
- * <!-- begin-user-doc -->
- * The <b>Switch</b> for the model's inheritance hierarchy.
- * It supports the call {@link #doSwitch(EObject) doSwitch(object)}
- * to invoke the <code>caseXXX</code> method for each class of the model,
- * starting with the actual class of the object
- * and proceeding up the inheritance hierarchy
- * until a non-null result is returned,
- * which is the result of the switch.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> The <b>Switch</b> for the model's inheritance hierarchy. It supports the call {@link #doSwitch(EObject) doSwitch(object)} to invoke the <code>caseXXX</code> method for each
+ * class of the model, starting with the actual class of the object and proceeding up the inheritance hierarchy until a non-null result is returned, which is the result of the switch. <!--
+ * end-user-doc -->
+ * 
  * @see scenario.schedule.events.EventsPackage
  * @generated
  */
 public class EventsSwitch<T> extends Switch<T> {
 	/**
-	 * The cached model package
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached model package <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected static EventsPackage modelPackage;
 
 	/**
-	 * Creates an instance of the switch.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the switch. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EventsSwitch() {
@@ -56,270 +48,316 @@ public class EventsSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Checks whether this is a switch for the given package.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Checks whether this is a switch for the given package. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @parameter ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
 	 */
 	@Override
-	protected boolean isSwitchFor(EPackage ePackage) {
+	protected boolean isSwitchFor(final EPackage ePackage) {
 		return ePackage == modelPackage;
 	}
 
 	/**
-	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
 	@Override
-	protected T doSwitch(int classifierID, EObject theEObject) {
+	protected T doSwitch(final int classifierID, final EObject theEObject) {
 		switch (classifierID) {
-			case EventsPackage.FUEL_MIXTURE: {
-				FuelMixture fuelMixture = (FuelMixture)theEObject;
-				T result = caseFuelMixture(fuelMixture);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+		case EventsPackage.FUEL_MIXTURE: {
+			final FuelMixture fuelMixture = (FuelMixture) theEObject;
+			T result = caseFuelMixture(fuelMixture);
+			if (result == null) {
+				result = defaultCase(theEObject);
 			}
-			case EventsPackage.FUEL_QUANTITY: {
-				FuelQuantity fuelQuantity = (FuelQuantity)theEObject;
-				T result = caseFuelQuantity(fuelQuantity);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case EventsPackage.FUEL_QUANTITY: {
+			final FuelQuantity fuelQuantity = (FuelQuantity) theEObject;
+			T result = caseFuelQuantity(fuelQuantity);
+			if (result == null) {
+				result = defaultCase(theEObject);
 			}
-			case EventsPackage.SCHEDULED_EVENT: {
-				ScheduledEvent scheduledEvent = (ScheduledEvent)theEObject;
-				T result = caseScheduledEvent(scheduledEvent);
-				if (result == null) result = caseScenarioObject(scheduledEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case EventsPackage.SCHEDULED_EVENT: {
+			final ScheduledEvent scheduledEvent = (ScheduledEvent) theEObject;
+			T result = caseScheduledEvent(scheduledEvent);
+			if (result == null) {
+				result = caseScenarioObject(scheduledEvent);
 			}
-			case EventsPackage.JOURNEY: {
-				Journey journey = (Journey)theEObject;
-				T result = caseJourney(journey);
-				if (result == null) result = caseScheduledEvent(journey);
-				if (result == null) result = caseFuelMixture(journey);
-				if (result == null) result = caseScenarioObject(journey);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = defaultCase(theEObject);
 			}
-			case EventsPackage.PORT_VISIT: {
-				PortVisit portVisit = (PortVisit)theEObject;
-				T result = casePortVisit(portVisit);
-				if (result == null) result = caseScheduledEvent(portVisit);
-				if (result == null) result = caseScenarioObject(portVisit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case EventsPackage.JOURNEY: {
+			final Journey journey = (Journey) theEObject;
+			T result = caseJourney(journey);
+			if (result == null) {
+				result = caseScheduledEvent(journey);
 			}
-			case EventsPackage.IDLE: {
-				Idle idle = (Idle)theEObject;
-				T result = caseIdle(idle);
-				if (result == null) result = casePortVisit(idle);
-				if (result == null) result = caseFuelMixture(idle);
-				if (result == null) result = caseScheduledEvent(idle);
-				if (result == null) result = caseScenarioObject(idle);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = caseFuelMixture(journey);
 			}
-			case EventsPackage.SLOT_VISIT: {
-				SlotVisit slotVisit = (SlotVisit)theEObject;
-				T result = caseSlotVisit(slotVisit);
-				if (result == null) result = casePortVisit(slotVisit);
-				if (result == null) result = caseScheduledEvent(slotVisit);
-				if (result == null) result = caseScenarioObject(slotVisit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = caseScenarioObject(journey);
 			}
-			case EventsPackage.VESSEL_EVENT_VISIT: {
-				VesselEventVisit vesselEventVisit = (VesselEventVisit)theEObject;
-				T result = caseVesselEventVisit(vesselEventVisit);
-				if (result == null) result = casePortVisit(vesselEventVisit);
-				if (result == null) result = caseScheduledEvent(vesselEventVisit);
-				if (result == null) result = caseScenarioObject(vesselEventVisit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = defaultCase(theEObject);
 			}
-			case EventsPackage.CHARTER_OUT_VISIT: {
-				CharterOutVisit charterOutVisit = (CharterOutVisit)theEObject;
-				T result = caseCharterOutVisit(charterOutVisit);
-				if (result == null) result = caseVesselEventVisit(charterOutVisit);
-				if (result == null) result = casePortVisit(charterOutVisit);
-				if (result == null) result = caseScheduledEvent(charterOutVisit);
-				if (result == null) result = caseScenarioObject(charterOutVisit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case EventsPackage.PORT_VISIT: {
+			final PortVisit portVisit = (PortVisit) theEObject;
+			T result = casePortVisit(portVisit);
+			if (result == null) {
+				result = caseScheduledEvent(portVisit);
 			}
-			default: return defaultCase(theEObject);
+			if (result == null) {
+				result = caseScenarioObject(portVisit);
+			}
+			if (result == null) {
+				result = defaultCase(theEObject);
+			}
+			return result;
+		}
+		case EventsPackage.IDLE: {
+			final Idle idle = (Idle) theEObject;
+			T result = caseIdle(idle);
+			if (result == null) {
+				result = casePortVisit(idle);
+			}
+			if (result == null) {
+				result = caseFuelMixture(idle);
+			}
+			if (result == null) {
+				result = caseScheduledEvent(idle);
+			}
+			if (result == null) {
+				result = caseScenarioObject(idle);
+			}
+			if (result == null) {
+				result = defaultCase(theEObject);
+			}
+			return result;
+		}
+		case EventsPackage.SLOT_VISIT: {
+			final SlotVisit slotVisit = (SlotVisit) theEObject;
+			T result = caseSlotVisit(slotVisit);
+			if (result == null) {
+				result = casePortVisit(slotVisit);
+			}
+			if (result == null) {
+				result = caseScheduledEvent(slotVisit);
+			}
+			if (result == null) {
+				result = caseScenarioObject(slotVisit);
+			}
+			if (result == null) {
+				result = defaultCase(theEObject);
+			}
+			return result;
+		}
+		case EventsPackage.VESSEL_EVENT_VISIT: {
+			final VesselEventVisit vesselEventVisit = (VesselEventVisit) theEObject;
+			T result = caseVesselEventVisit(vesselEventVisit);
+			if (result == null) {
+				result = casePortVisit(vesselEventVisit);
+			}
+			if (result == null) {
+				result = caseScheduledEvent(vesselEventVisit);
+			}
+			if (result == null) {
+				result = caseScenarioObject(vesselEventVisit);
+			}
+			if (result == null) {
+				result = defaultCase(theEObject);
+			}
+			return result;
+		}
+		case EventsPackage.CHARTER_OUT_VISIT: {
+			final CharterOutVisit charterOutVisit = (CharterOutVisit) theEObject;
+			T result = caseCharterOutVisit(charterOutVisit);
+			if (result == null) {
+				result = caseVesselEventVisit(charterOutVisit);
+			}
+			if (result == null) {
+				result = casePortVisit(charterOutVisit);
+			}
+			if (result == null) {
+				result = caseScheduledEvent(charterOutVisit);
+			}
+			if (result == null) {
+				result = caseScenarioObject(charterOutVisit);
+			}
+			if (result == null) {
+				result = defaultCase(theEObject);
+			}
+			return result;
+		}
+		default:
+			return defaultCase(theEObject);
 		}
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Fuel Mixture</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Fuel Mixture</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Fuel Mixture</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFuelMixture(FuelMixture object) {
+	public T caseFuelMixture(final FuelMixture object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Fuel Quantity</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Fuel Quantity</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate
+	 * the switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Fuel Quantity</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFuelQuantity(FuelQuantity object) {
+	public T caseFuelQuantity(final FuelQuantity object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Scheduled Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Scheduled Event</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate
+	 * the switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Scheduled Event</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseScheduledEvent(ScheduledEvent object) {
+	public T caseScheduledEvent(final ScheduledEvent object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Idle</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Idle</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Idle</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseIdle(Idle object) {
+	public T caseIdle(final Idle object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Journey</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Journey</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Journey</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseJourney(Journey object) {
+	public T caseJourney(final Journey object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Port Visit</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Port Visit</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Port Visit</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePortVisit(PortVisit object) {
+	public T casePortVisit(final PortVisit object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Slot Visit</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Slot Visit</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Slot Visit</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseSlotVisit(SlotVisit object) {
+	public T caseSlotVisit(final SlotVisit object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Charter Out Visit</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Out Visit</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will
+	 * terminate the switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Charter Out Visit</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCharterOutVisit(CharterOutVisit object) {
+	public T caseCharterOutVisit(final CharterOutVisit object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Vessel Event Visit</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Event Visit</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will
+	 * terminate the switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Vessel Event Visit</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseVesselEventVisit(VesselEventVisit object) {
+	public T caseVesselEventVisit(final VesselEventVisit object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Object</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Object</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseScenarioObject(ScenarioObject object) {
+	public T caseScenarioObject(final ScenarioObject object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch, but this is the last case anyway.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>EObject</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch, but this is the last case anyway. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated
 	 */
 	@Override
-	public T defaultCase(EObject object) {
+	public T defaultCase(final EObject object) {
 		return null;
 	}
 
-} //EventsSwitch
+} // EventsSwitch

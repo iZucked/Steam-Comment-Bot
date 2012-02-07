@@ -19,8 +19,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.internal.views.markers.ProblemsView;
-import org.eclipse.ui.views.markers.internal.ProblemView;
 
 import scenario.Scenario;
 
@@ -56,7 +54,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 
-		if (selection != null && selection instanceof IStructuredSelection) {
+		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			final Iterator<?> itr = strucSelection.iterator();
@@ -67,24 +65,20 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					final IResource resource = (IResource) obj;
 
 					final IStatus status = (IStatus) resource.getAdapter(IStatus.class);
-					if (status.matches(Status.ERROR)) {
-						Platform.getLog(Activator.getDefault().getBundle()).log(
-								new Status(Status.ERROR, Activator.PLUGIN_ID, "Validation errors were found in the resource " + resource.getName())
-								);
+					if (status.matches(IStatus.ERROR)) {
+						Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Validation errors were found in the resource " + resource.getName()));
 						try {
 							MarkerUtil.updateMarkers(status);
-							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(
-									"org.eclipse.ui.views.ProblemView" //TODO find where this lives
+							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
 									, null, IWorkbenchPage.VIEW_VISIBLE);
 						} catch (final CoreException e) {
 							Platform.getLog(Activator.getDefault().getBundle()).log(
-									new Status(Status.ERROR, Activator.PLUGIN_ID, "An error occurred when creating validtion markers for an invalid scenario", e)
-									);
+									new Status(IStatus.ERROR, Activator.PLUGIN_ID, "An error occurred when creating validtion markers for an invalid scenario", e));
 						}
-						
+
 						return null;
 					}
-					
+
 					// Adapt to a new or existing job
 					IJobDescriptor job = (IJobDescriptor) resource.getAdapter(IJobDescriptor.class);
 
@@ -97,7 +91,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					IJobControl control = jobManager.getControlForJob(job);
 
 					// If there is a job, but it is terminated, then we need to create a new one
-					if (control != null && (control.getJobState() == EJobState.CANCELLED || control.getJobState() == EJobState.COMPLETED)) {
+					if ((control != null) && ((control.getJobState() == EJobState.CANCELLED) || (control.getJobState() == EJobState.COMPLETED))) {
 
 						// Remove from job handler -- this should trigger the dispose listener registered on creation.
 						jobManager.removeJob(job);
@@ -119,9 +113,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 							control.prepare();
 							control.start();
 						} catch (final Exception ex) {
-							Platform.getLog(Activator.getDefault().getBundle()).log(new Status(Status.ERROR, Activator.PLUGIN_ID, Status.OK, 
-									"An error ocurred starting the optimisation"
-									, ex));
+							Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK, "An error ocurred starting the optimisation", ex));
 							control.cancel();
 						}
 						// Resume if paused
@@ -150,7 +142,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 		final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-		if (selection != null && selection instanceof IStructuredSelection) {
+		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
@@ -175,7 +167,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 						return true;
 					}
 
-					return (control.getJobState() != EJobState.RUNNING && control.getJobState() != EJobState.CANCELLING);
+					return ((control.getJobState() != EJobState.RUNNING) && (control.getJobState() != EJobState.CANCELLING));
 				}
 			}
 		}

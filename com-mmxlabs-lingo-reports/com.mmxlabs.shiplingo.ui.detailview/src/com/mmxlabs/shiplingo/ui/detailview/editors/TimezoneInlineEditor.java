@@ -17,9 +17,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public class TimezoneInlineEditor extends ValueListInlineEditor {
-	public TimezoneInlineEditor(final EMFPath path,
-			final EStructuralFeature feature,
-			final EditingDomain editingDomain, final ICommandProcessor processor) {
+	public TimezoneInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor processor) {
 		super(path, feature, editingDomain, processor, getTimezones());
 	}
 
@@ -27,13 +25,14 @@ public class TimezoneInlineEditor extends ValueListInlineEditor {
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 
 		for (final String s : TimeZone.getAvailableIDs()) {
-			if (s.indexOf("/") != -1)
+			if (s.indexOf("/") != -1) {
 				values.add(new Pair<String, Object>(s, s));
+			}
 		}
 
 		Collections.sort(values, new Comparator<Pair<String, Object>>() {
 			@Override
-			public int compare(Pair<String, Object> o1, Pair<String, Object> o2) {
+			public int compare(final Pair<String, Object> o1, final Pair<String, Object> o2) {
 				return o1.getFirst().compareTo(o2.getFirst());
 			}
 		});

@@ -36,25 +36,20 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 		this.afcp = new AdapterFactoryContentProvider(adapterFactory) {
 
 			@Override
-			protected IPropertySource createPropertySource(Object object,
-					IItemPropertySource itemPropertySource) {
+			protected IPropertySource createPropertySource(final Object object, final IItemPropertySource itemPropertySource) {
 				return new PropertySource(object, itemPropertySource) {
 					// TODO really we need to override the
 					// itemPropertyDescriptor to do this properly.
 					@Override
-					protected IPropertyDescriptor createPropertyDescriptor(
-							final IItemPropertyDescriptor itemPropertyDescriptor) {
-						return new PropertyDescriptor(object,
-								itemPropertyDescriptor) {
+					protected IPropertyDescriptor createPropertyDescriptor(final IItemPropertyDescriptor itemPropertyDescriptor) {
+						return new PropertyDescriptor(object, itemPropertyDescriptor) {
 							@Override
-							public CellEditor createPropertyEditor(
-									final Composite composite) {
+							public CellEditor createPropertyEditor(final Composite composite) {
 								return super.createPropertyEditor(composite);
 							}
 
 							@Override
-							protected CellEditor createEDataTypeCellEditor(
-									EDataType eDataType, Composite composite) {
+							protected CellEditor createEDataTypeCellEditor(final EDataType eDataType, final Composite composite) {
 								// if (eDataType.equals(ecorePackage.getEInt())
 								// || eDataType.equals(ecorePackage
 								// .getELong())
@@ -82,40 +77,37 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 	}
 
 	@Override
-	public IPropertySource getPropertySource(Object object) {
+	public IPropertySource getPropertySource(final Object object) {
 		final IPropertySource defaultSource = afcp.getPropertySource(object);
-		if (defaultSource == null)
+		if (defaultSource == null) {
 			return null;
+		}
 		final ArrayList<Pair<EReference, IPropertySource>> subSources = new ArrayList<Pair<EReference, IPropertySource>>();
-		subSources.add(new Pair<EReference, IPropertySource>(null,
-				defaultSource));
+		subSources.add(new Pair<EReference, IPropertySource>(null, defaultSource));
 		final String topName;
 
 		if (object instanceof EObject) {
 			// flatten out containment
 			final EObject eObject = (EObject) object;
 			topName = ((EObject) object).eClass().getName();
-			for (final EReference reference : eObject.eClass()
-					.getEAllContainments()) {
+			for (final EReference reference : eObject.eClass().getEAllContainments()) {
 				// if (reference.isMany())
 				// continue;
 				final Object value = eObject.eGet(reference);
 				// get a source for the contained object
-				
+
 				if (reference.isMany()) {
 					for (final Object o : ((Iterable) value)) {
 						final IPropertySource subSource = getPropertySource(o);
 
-						subSources.add(new Pair<EReference, IPropertySource>(reference,
-								subSource));
+						subSources.add(new Pair<EReference, IPropertySource>(reference, subSource));
 					}
 				} else {
 					final IPropertySource subSource = getPropertySource(value);
 
-					subSources.add(new Pair<EReference, IPropertySource>(reference,
-							subSource));
+					subSources.add(new Pair<EReference, IPropertySource>(reference, subSource));
 				}
-				
+
 			}
 		} else {
 			topName = "";
@@ -128,30 +120,30 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 			// IPropertySource>();
 
 			@Override
-			public void setPropertyValue(Object id, Object value) {
+			public void setPropertyValue(final Object id, final Object value) {
 				assert id instanceof Pair;
-				Pair<IPropertySource, Object> pair = (Pair) id;
+				final Pair<IPropertySource, Object> pair = (Pair) id;
 				pair.getFirst().setPropertyValue(pair.getSecond(), value);
 			}
 
 			@Override
-			public void resetPropertyValue(Object id) {
+			public void resetPropertyValue(final Object id) {
 				assert id instanceof Pair;
-				Pair<IPropertySource, Object> pair = (Pair) id;
+				final Pair<IPropertySource, Object> pair = (Pair) id;
 				pair.getFirst().resetPropertyValue(pair.getSecond());
 			}
 
 			@Override
-			public boolean isPropertySet(Object id) {
+			public boolean isPropertySet(final Object id) {
 				assert id instanceof Pair;
-				Pair<IPropertySource, Object> pair = (Pair) id;
+				final Pair<IPropertySource, Object> pair = (Pair) id;
 				return pair.getFirst().isPropertySet(pair.getSecond());
 			}
 
 			@Override
-			public Object getPropertyValue(Object id) {
+			public Object getPropertyValue(final Object id) {
 				assert id instanceof Pair;
-				Pair<IPropertySource, Object> pair = (Pair) id;
+				final Pair<IPropertySource, Object> pair = (Pair) id;
 				return pair.getFirst().getPropertyValue(pair.getSecond());
 			}
 
@@ -161,26 +153,21 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 					final ArrayList<IPropertyDescriptor> subDescriptors = new ArrayList<IPropertyDescriptor>();
 
 					for (final Pair<EReference, IPropertySource> refAndSource : subSources) {
-						final IPropertySource subSource = refAndSource
-								.getSecond();
-						if (subSource == null)
+						final IPropertySource subSource = refAndSource.getSecond();
+						if (subSource == null) {
 							continue;
-						final String prefixName = refAndSource.getFirst() == null ? topName
-								: refAndSource.getFirst().getName();
+						}
+						final String prefixName = refAndSource.getFirst() == null ? topName : refAndSource.getFirst().getName();
 
-						final IPropertyDescriptor[] subDescriptorList = subSource
-								.getPropertyDescriptors();
+						final IPropertyDescriptor[] subDescriptorList = subSource.getPropertyDescriptors();
 
 						for (final IPropertyDescriptor descriptor : subDescriptorList) {
 							final IPropertyDescriptor wrappedDescriptor = new IPropertyDescriptor() {
-								final Pair<Object, Object> id = new Pair<Object, Object>(
-										subSource, descriptor.getId());
+								final Pair<Object, Object> id = new Pair<Object, Object>(subSource, descriptor.getId());
 
 								@Override
-								public CellEditor createPropertyEditor(
-										Composite parent) {
-									return descriptor
-											.createPropertyEditor(parent);
+								public CellEditor createPropertyEditor(final Composite parent) {
+									return descriptor.createPropertyEditor(parent);
 								}
 
 								@Override
@@ -219,10 +206,8 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 								}
 
 								@Override
-								public boolean isCompatibleWith(
-										IPropertyDescriptor anotherProperty) {
-									return descriptor
-											.isCompatibleWith(anotherProperty);
+								public boolean isCompatibleWith(final IPropertyDescriptor anotherProperty) {
+									return descriptor.isCompatibleWith(anotherProperty);
 								}
 
 							};
@@ -233,8 +218,7 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 						}
 					}
 
-					descriptors = subDescriptors
-							.toArray(new IPropertyDescriptor[0]);
+					descriptors = subDescriptors.toArray(new IPropertyDescriptor[0]);
 				}
 				return descriptors;
 			}

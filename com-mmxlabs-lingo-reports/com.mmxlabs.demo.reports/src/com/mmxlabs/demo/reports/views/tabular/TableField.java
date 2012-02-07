@@ -10,9 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The TableField annotation applies to getter methods; it's used for the
- * reflective content provider to find out which accessors to use for which
- * columns.
+ * The TableField annotation applies to getter methods; it's used for the reflective content provider to find out which accessors to use for which columns.
  * 
  * @author hinton
  * 
@@ -22,12 +20,14 @@ import java.lang.annotation.Target;
 public @interface TableField {
 	/**
 	 * A hint for where the column for this field should go
+	 * 
 	 * @return an integer; lower = further left.
 	 */
 	int order() default 0;
 
 	/**
 	 * The name for this column
+	 * 
 	 * @return a column name
 	 */
 	String columnText() default "";

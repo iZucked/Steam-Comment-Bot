@@ -1,23 +1,22 @@
 package com.mmxlabs.shiplingo.ui.detailview.generated;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
-import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 
 /**
- * A composite containing a form for editing PortSelection instances. The EClass hierarchy is implemented
- * by the static methods at the bottom of the class, and is not mirrored in the java class hierarchy for the composites,
- * because ECore supports multiple inheritance but java does not.
- *
+ * A composite containing a form for editing PortSelection instances. The EClass hierarchy is implemented by the static methods at the bottom of the class, and is not mirrored in the java class
+ * hierarchy for the composites, because ECore supports multiple inheritance but java does not.
+ * 
  * @generated
  */
 public abstract class PortSelectionComposite extends AbstractDetailComposite {
 	private final String mainGroupTitle;
+
 	/**
 	 * Call superclass constructor
-     * @generated
+	 * 
+	 * @generated
 	 */
 	public PortSelectionComposite(final Composite container, final int style, final String mainGroupTitle, final boolean validate) {
 		super(container, style, validate);
@@ -34,8 +33,10 @@ public abstract class PortSelectionComposite extends AbstractDetailComposite {
 
 	/**
 	 * Create the main contents
+	 * 
 	 * @generated
 	 */
+	@Override
 	protected void createContents(final Composite group) {
 		final Composite mainGroup;
 
@@ -44,8 +45,8 @@ public abstract class PortSelectionComposite extends AbstractDetailComposite {
 		} else {
 			mainGroup = group;
 		}
-		
-		super.createContents(mainGroup);		
+
+		super.createContents(mainGroup);
 
 		createFields(this, mainGroup);
 	}
@@ -60,15 +61,17 @@ public abstract class PortSelectionComposite extends AbstractDetailComposite {
 
 	/**
 	 * Create fields belonging to all the supertypes of PortSelection.
+	 * 
 	 * @generated
 	 */
 	protected static void createFieldsFromSupers(final AbstractDetailComposite composite, final Composite mainGroup) {
-			UUIDObjectComposite.createFields(composite, mainGroup);
-			NamedObjectComposite.createFields(composite, mainGroup);
+		UUIDObjectComposite.createFields(composite, mainGroup);
+		NamedObjectComposite.createFields(composite, mainGroup);
 	}
 
 	/**
 	 * Create fields belonging directly to PortSelection
+	 * 
 	 * @generated
 	 */
 	protected static void createPortSelectionFields(final AbstractDetailComposite composite, final Composite mainGroup) {

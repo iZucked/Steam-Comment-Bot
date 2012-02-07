@@ -17,23 +17,20 @@ import scenario.schedule.CargoRevenue;
 import scenario.schedule.SchedulePackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Cargo Revenue</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Cargo Revenue</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.schedule.impl.CargoRevenueImpl#getCargo <em>Cargo</em>}</li>
+ * <li>{@link scenario.schedule.impl.CargoRevenueImpl#getCargo <em>Cargo</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class CargoRevenueImpl extends BookedRevenueImpl implements CargoRevenue {
 	/**
-	 * The cached value of the '{@link #getCargo() <em>Cargo</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getCargo() <em>Cargo</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getCargo()
 	 * @generated
 	 * @ordered
@@ -41,8 +38,8 @@ public class CargoRevenueImpl extends BookedRevenueImpl implements CargoRevenue 
 	protected CargoAllocation cargo;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected CargoRevenueImpl() {
@@ -50,8 +47,8 @@ public class CargoRevenueImpl extends BookedRevenueImpl implements CargoRevenue 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -60,25 +57,27 @@ public class CargoRevenueImpl extends BookedRevenueImpl implements CargoRevenue 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public CargoAllocation getCargo() {
-		if (cargo != null && cargo.eIsProxy()) {
-			InternalEObject oldCargo = (InternalEObject)cargo;
-			cargo = (CargoAllocation)eResolveProxy(oldCargo);
+		if ((cargo != null) && cargo.eIsProxy()) {
+			final InternalEObject oldCargo = (InternalEObject) cargo;
+			cargo = (CargoAllocation) eResolveProxy(oldCargo);
 			if (cargo != oldCargo) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_REVENUE__CARGO, oldCargo, cargo));
+				}
 			}
 		}
 		return cargo;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public CargoAllocation basicGetCargo() {
@@ -86,97 +85,102 @@ public class CargoRevenueImpl extends BookedRevenueImpl implements CargoRevenue 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setCargo(CargoAllocation newCargo) {
-		CargoAllocation oldCargo = cargo;
+	@Override
+	public void setCargo(final CargoAllocation newCargo) {
+		final CargoAllocation oldCargo = cargo;
 		cargo = newCargo;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_REVENUE__CARGO, oldCargo, cargo));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return getCargo().getName();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_REVENUE__CARGO:
-				if (resolve) return getCargo();
-				return basicGetCargo();
+		case SchedulePackage.CARGO_REVENUE__CARGO:
+			if (resolve) {
+				return getCargo();
+			}
+			return basicGetCargo();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_REVENUE__CARGO:
-				setCargo((CargoAllocation)newValue);
-				return;
+		case SchedulePackage.CARGO_REVENUE__CARGO:
+			setCargo((CargoAllocation) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_REVENUE__CARGO:
-				setCargo((CargoAllocation)null);
-				return;
+		case SchedulePackage.CARGO_REVENUE__CARGO:
+			setCargo((CargoAllocation) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_REVENUE__CARGO:
-				return cargo != null;
+		case SchedulePackage.CARGO_REVENUE__CARGO:
+			return cargo != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case SchedulePackage.CARGO_REVENUE___GET_NAME:
-				return getName();
+		case SchedulePackage.CARGO_REVENUE___GET_NAME:
+			return getName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
-} //CargoRevenueImpl
+} // CargoRevenueImpl

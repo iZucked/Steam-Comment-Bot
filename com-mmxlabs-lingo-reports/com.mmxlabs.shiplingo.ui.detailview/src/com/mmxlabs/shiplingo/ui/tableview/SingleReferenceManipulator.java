@@ -24,24 +24,20 @@ import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
 /**
  * A column manipulator for setting single-valued EReference features.
  * 
- * Uses {@link ComboBoxCellEditor} for its edit control, and takes the values
- * from an {@link IReferenceValueProvider}.
+ * Uses {@link ComboBoxCellEditor} for its edit control, and takes the values from an {@link IReferenceValueProvider}.
  * 
  * @author hinton
  * 
  */
 public class SingleReferenceManipulator extends BasicAttributeManipulator {
-	private static final Logger log = LoggerFactory
-			.getLogger(SingleReferenceManipulator.class);
+	private static final Logger log = LoggerFactory.getLogger(SingleReferenceManipulator.class);
 	final IReferenceValueProvider valueProvider;
 	final EditingDomain editingDomain;
 
 	private ComboBoxCellEditor editor;
 
 	/**
-	 * Create a manipulator for the given field in the target object, taking
-	 * values from the given valueProvider and creating set commands in the
-	 * provided editingDomain.
+	 * Create a manipulator for the given field in the target object, taking values from the given valueProvider and creating set commands in the provided editingDomain.
 	 * 
 	 * @param field
 	 *            the field to set
@@ -50,9 +46,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	 * @param editingDomain
 	 *            editing domain for setting
 	 */
-	public SingleReferenceManipulator(final EReference field,
-			final IReferenceValueProvider valueProvider,
-			final EditingDomain editingDomain) {
+	public SingleReferenceManipulator(final EReference field, final IReferenceValueProvider valueProvider, final EditingDomain editingDomain) {
 		super(field, editingDomain);
 
 		this.valueProvider = valueProvider;
@@ -62,9 +56,8 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	@Override
 	public String render(final Object object) {
 		final Object value = super.getValue(object);
-		if (value instanceof EObject || value == null) {
-			return valueProvider.getName((EObject) object, (EReference) field,
-					(EObject) value);
+		if ((value instanceof EObject) || (value == null)) {
+			return valueProvider.getName((EObject) object, (EReference) field, (EObject) value);
 		} else {
 			return "";
 		}
@@ -79,7 +72,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	@Override
 	public CellEditor getCellEditor(final Composite c, final Object object) {
 		editor = new ComboBoxCellEditor(c, new String[0], SWT.READ_ONLY | SWT.FLAT | SWT.BORDER);
-//		editor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+		// editor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		setEditorNames();
 		return editor;
 	}
@@ -89,11 +82,9 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public Object getValue(final Object object) {
-		int x = valueList.indexOf(super.getValue(object));
+		final int x = valueList.indexOf(super.getValue(object));
 		if (x == -1) {
-			log.warn("Index of "
-					+ object
-					+ " to be selected is -1, so it is not a legal option in the control");
+			log.warn("Index of " + object + " to be selected is -1, so it is not a legal option in the control");
 		}
 		return x;
 	}
@@ -101,8 +92,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	@Override
 	public boolean canEdit(final Object object) {
 		// get legal item list
-		final Iterable<Pair<String, EObject>> values = valueProvider
-				.getAllowedValues((EObject) object, field);
+		final Iterable<Pair<String, EObject>> values = valueProvider.getAllowedValues((EObject) object, field);
 
 		valueList.clear();
 		names.clear();
@@ -116,19 +106,19 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	}
 
 	void setEditorNames() {
-		if (editor == null)
+		if (editor == null) {
 			return;
+		}
 		editor.setItems(names.toArray(new String[] {}));
 	}
 
 	@Override
-	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
-			Object object) {
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		final Object value = super.getValue(object);
-		if (value instanceof EObject)
-			return valueProvider.getNotifiers((EObject) object,
-					(EReference) field, (EObject) value);
-		else
+		if (value instanceof EObject) {
+			return valueProvider.getNotifiers((EObject) object, (EReference) field, (EObject) value);
+		} else {
 			return super.getExternalNotifiers(object);
+		}
 	}
 }

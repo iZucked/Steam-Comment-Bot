@@ -25,8 +25,7 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 /**
  * An inline editor for picking a value from a fixed list of values.
  * 
- * It's constructed with a list of name/value pairs. The names are displayed for
- * the corresponding value objects.
+ * It's constructed with a list of name/value pairs. The names are displayed for the corresponding value objects.
  * 
  * @author hinton
  * 
@@ -37,11 +36,7 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 	private final List<String> names;
 	private final List<Object> values;
 
-	public ValueListInlineEditor(final EMFPath path,
-			final EStructuralFeature feature,
-			final EditingDomain editingDomain,
-			final ICommandProcessor processor,
-			final List<Pair<String, Object>> values) {
+	public ValueListInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor processor, final List<Pair<String, Object>> values) {
 		super(path, feature, editingDomain, processor);
 		names = new ArrayList<String>(values.size());
 		this.values = new ArrayList<Object>(values.size());
@@ -59,7 +54,7 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 
 		final SelectionListener sl = new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				doSetValue(values.get(combo.getSelectionIndex()));
 			}
 		};
@@ -67,7 +62,7 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 		combo.addSelectionListener(sl);
 		combo.addDisposeListener(new DisposeListener() {
 			@Override
-			public void widgetDisposed(DisposeEvent e) {
+			public void widgetDisposed(final DisposeEvent e) {
 				combo.removeSelectionListener(sl);
 			}
 		});

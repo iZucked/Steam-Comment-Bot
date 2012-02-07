@@ -11,12 +11,10 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 public interface ICommandProcessor {
 	public final ICommandProcessor EXECUTE = new ICommandProcessor() {
 		@Override
-		public void processCommand(final Command command, final EObject target,
-				final EStructuralFeature feature) {
+		public void processCommand(final Command command, final EObject target, final EStructuralFeature feature) {
 			command.execute();
 		}
 	};
 
-	public void processCommand(final Command command, final EObject target,
-			final EStructuralFeature feature);
+	public void processCommand(final Command command, final EObject target, final EStructuralFeature feature);
 }

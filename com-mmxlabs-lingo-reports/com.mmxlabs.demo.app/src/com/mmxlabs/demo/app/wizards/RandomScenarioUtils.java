@@ -83,7 +83,7 @@ public class RandomScenarioUtils {
 
 	private final Random random;
 
-	public RandomScenarioUtils(Random random) {
+	public RandomScenarioUtils(final Random random) {
 		this.random = random;
 	}
 
@@ -103,18 +103,18 @@ public class RandomScenarioUtils {
 		final DistanceImporter di = new DistanceImporter(distanceFile);
 		final PortModel portModel = scenario.getPortModel();
 
-		for (String s : di.getKeys()) {
-			Port port = portFactory.createPort();
+		for (final String s : di.getKeys()) {
+			final Port port = portFactory.createPort();
 			port.setName(s);
 			portModel.getPorts().add(port);
 		}
 
 		final DistanceModel dm = scenario.getDistanceModel();
 
-		for (Port a : scenario.getPortModel().getPorts()) {
-			for (Port b : scenario.getPortModel().getPorts()) {
+		for (final Port a : scenario.getPortModel().getPorts()) {
+			for (final Port b : scenario.getPortModel().getPorts()) {
 				final int distance = di.getDistance(a.getName(), b.getName());
-				if (!(a.equals(b)) && distance != Integer.MAX_VALUE) {
+				if (!(a.equals(b)) && (distance != Integer.MAX_VALUE)) {
 					final DistanceLine dl = portFactory.createDistanceLine();
 					dl.setFromPort(a);
 					dl.setToPort(b);
@@ -129,22 +129,22 @@ public class RandomScenarioUtils {
 
 	public Scenario addDefaultFleet(final Scenario scenario, final int spotCount) {
 		// generate the standard fleet
-		VesselClass steam_138 = addVesselClass(scenario, "STEAM-138", 12, 19.5f, 138000);
-		VesselClass steam_145 = addVesselClass(scenario, "STEAM-145", 12, 19.5f, 145000);
-		VesselClass dfde_177 = addVesselClass(scenario, "DFDE-177", 12, 19.5f, 177000); // TODO different from testutils, because the
-																						// curve for DFDE doesn't contain a speed of 20.
-		VesselClass steam_126 = addVesselClass(scenario, "STEAM-126", 12, 19.5f, 138000); // TODO units in the model; should it be a
-																							// float?
+		final VesselClass steam_138 = addVesselClass(scenario, "STEAM-138", 12, 19.5f, 138000);
+		final VesselClass steam_145 = addVesselClass(scenario, "STEAM-145", 12, 19.5f, 145000);
+		final VesselClass dfde_177 = addVesselClass(scenario, "DFDE-177", 12, 19.5f, 177000); // TODO different from testutils, because the
+		// curve for DFDE doesn't contain a speed of 20.
+		final VesselClass steam_126 = addVesselClass(scenario, "STEAM-126", 12, 19.5f, 138000); // TODO units in the model; should it be a
+		// float?
 
-		float[][] steamLaden = new float[][] { { 12, 91 }, { 13, 100 }, { 14, 115 }, { 15, 125 }, { 16, 140 }, { 17, 150 }, { 18, 160 }, { 19, 176 }, { 19.5f, 190 } };
-		float[][] dfdeLaden = new float[][] { { 12, 50 }, { 13, 65 }, { 14, 74 }, { 15, 85 }, { 16, 100 }, { 17, 110 }, { 18, 120 }, { 19, 133 }, { 19.5f, 145 } };
+		final float[][] steamLaden = new float[][] { { 12, 91 }, { 13, 100 }, { 14, 115 }, { 15, 125 }, { 16, 140 }, { 17, 150 }, { 18, 160 }, { 19, 176 }, { 19.5f, 190 } };
+		final float[][] dfdeLaden = new float[][] { { 12, 50 }, { 13, 65 }, { 14, 74 }, { 15, 85 }, { 16, 100 }, { 17, 110 }, { 18, 120 }, { 19, 133 }, { 19.5f, 145 } };
 
-		float[][] steamBallast = new float[steamLaden.length][2];
+		final float[][] steamBallast = new float[steamLaden.length][2];
 		for (int i = 0; i < steamLaden.length; i++) {
 			steamBallast[i][0] = steamLaden[i][0];
 			steamBallast[i][1] = 0.94f * steamLaden[i][1];
 		}
-		float[][] dfdeBallast = new float[dfdeLaden.length][2];
+		final float[][] dfdeBallast = new float[dfdeLaden.length][2];
 		for (int i = 0; i < dfdeBallast.length; i++) {
 			dfdeBallast[i][0] = dfdeLaden[i][0];
 			dfdeBallast[i][1] = 0.94f * dfdeLaden[i][1];
@@ -208,8 +208,8 @@ public class RandomScenarioUtils {
 		return scenario;
 	}
 
-	public Scenario addRandomCargoes(final Scenario scenario, final String distanceMatrix, final String slotsFile, final int count, int minWindow, int maxWindow, int minVisit, int maxVisit,
-			int minSlack, int maxSlack, double locality, int scenarioDuration) throws NumberFormatException, IOException {
+	public Scenario addRandomCargoes(final Scenario scenario, final String distanceMatrix, final String slotsFile, final int count, final int minWindow, final int maxWindow, final int minVisit,
+			final int maxVisit, final int minSlack, final int maxSlack, final double locality, final int scenarioDuration) throws NumberFormatException, IOException {
 		// set up markets
 		final Index loadMarket = marketFactory.createIndex();
 		final Index dischargeMarket = marketFactory.createIndex();
@@ -233,7 +233,7 @@ public class RandomScenarioUtils {
 		loadCurve.setDefaultValue((dischargePrice - 200) / (float) Calculator.ScaleFactor);
 
 		for (int i = 0; i < scenarioDuration; i += 30) {
-			final Date forwardDate = createHourlyDate(now + i * Timer.ONE_DAY);
+			final Date forwardDate = createHourlyDate(now + (i * Timer.ONE_DAY));
 			final StepwisePrice price = marketFactory.createStepwisePrice();
 
 			dischargePrice += (random.nextInt(80) - 40);
@@ -294,18 +294,18 @@ public class RandomScenarioUtils {
 
 		// load slots file
 
-		BufferedReader br = new BufferedReader(new FileReader(new File(slotsFile)));
+		final BufferedReader br = new BufferedReader(new FileReader(new File(slotsFile)));
 
-		Map<String, Integer> loadSlots = new HashMap<String, Integer>();
-		Map<String, Integer> dischargeSlots = new HashMap<String, Integer>();
+		final Map<String, Integer> loadSlots = new HashMap<String, Integer>();
+		final Map<String, Integer> dischargeSlots = new HashMap<String, Integer>();
 
 		String line;
 		int totalLoads = 0;
 		int totalDischarges = 0;
 		while ((line = br.readLine()) != null) {
-			String[] parts = line.split(",");
-			String pn = parts[0].replace("\"", "");
-			int loadDischargeCount = Integer.parseInt(parts[2]);
+			final String[] parts = line.split(",");
+			final String pn = parts[0].replace("\"", "");
+			final int loadDischargeCount = Integer.parseInt(parts[2]);
 			if (parts[1].contains("L")) {
 				loadSlots.put(pn, loadDischargeCount);
 				totalLoads += loadDischargeCount;
@@ -337,13 +337,16 @@ public class RandomScenarioUtils {
 			int minDistance = Integer.MAX_VALUE;
 			for (final String s2 : dischargeSlots.keySet()) {
 				final int distance = di.getDistance(s, s2);
-				if (distance == Integer.MAX_VALUE)
+				if (distance == Integer.MAX_VALUE) {
 					continue;
+				}
 
-				if (distance < minDistance)
+				if (distance < minDistance) {
 					minDistance = distance;
-				if (distance > maxDistance)
+				}
+				if (distance > maxDistance) {
 					maxDistance = distance;
+				}
 			}
 			minDistanceFrom.put(s, minDistance);
 			maxDistanceFrom.put(s, maxDistance);
@@ -356,12 +359,13 @@ public class RandomScenarioUtils {
 			final int maxDistance = maxDistanceFrom.get(load.getKey());
 			for (final Map.Entry<String, Integer> discharge : dischargeSlots.entrySet()) {
 				final int distance = di.getDistance(load.getKey(), discharge.getKey());
-				if (distance == Integer.MAX_VALUE)
+				if (distance == Integer.MAX_VALUE) {
 					continue;
+				}
 				// need to implement suitable bias-o-factor here
 				final Pair<String, String> slot = new Pair<String, String>(load.getKey(), discharge.getKey());
 
-				final double dprop = 1 - (distance - minDistance) / (double) (maxDistance - minDistance);
+				final double dprop = 1 - ((distance - minDistance) / (double) (maxDistance - minDistance));
 				final double loadFactor = dprop * (load.getValue() * discharge.getValue());
 				final double dFactor = Math.exp(locality * dprop);
 				final double p = loadFactor * dFactor;
@@ -378,7 +382,7 @@ public class RandomScenarioUtils {
 		for (int i = 0; i < count; i++) {
 			double pin = random.nextDouble() * totalp;
 			for (final Pair<Pair<String, String>, Double> choice : wheel) {
-				if (pin - choice.getSecond() <= 0) {
+				if ((pin - choice.getSecond()) <= 0) {
 					// add choice as a cargo.
 					addCargo(scenario, now, choice.getFirst().getFirst(), choice.getFirst().getSecond(), minWindow, maxWindow, minVisit, maxVisit, minSlack, maxSlack, scenarioDuration, loadContract,
 							dischargeContract);
@@ -419,25 +423,29 @@ public class RandomScenarioUtils {
 	 * @param dischargeMarket
 	 * @param loadMarket
 	 */
-	private void addCargo(final Scenario scenario, final long now, final String loadPortName, String dischargePortName, int minWindow, int maxWindow, int minVisit, int maxVisit, int minSlack,
-			int maxSlack, int scenarioDuration, PurchaseContract loadContract, SalesContract dischargeContract) {
+	private void addCargo(final Scenario scenario, final long now, final String loadPortName, final String dischargePortName, final int minWindow, final int maxWindow, final int minVisit,
+			final int maxVisit, final int minSlack, final int maxSlack, final int scenarioDuration, final PurchaseContract loadContract, final SalesContract dischargeContract) {
 
 		final int index = scenario.getCargoModel().getCargoes().size();
 
 		Port loadPort = null, dischargePort = null;
 		for (final Port p : scenario.getPortModel().getPorts()) {
-			if (p.getName().equals(loadPortName))
+			if (p.getName().equals(loadPortName)) {
 				loadPort = p;
-			if (p.getName().equals(dischargePortName))
+			}
+			if (p.getName().equals(dischargePortName)) {
 				dischargePort = p;
-			if (loadPort != null && dischargePort != null)
+			}
+			if ((loadPort != null) && (dischargePort != null)) {
 				break;
+			}
 		}
 
 		DistanceLine line = null;
 		for (final DistanceLine dl : scenario.getDistanceModel().getDistances()) {
-			if (dl.getFromPort().equals(loadPort) && dl.getToPort().equals(dischargePort))
+			if (dl.getFromPort().equals(loadPort) && dl.getToPort().equals(dischargePort)) {
 				line = dl;
+			}
 		}
 
 		assert line != null;
@@ -459,13 +467,13 @@ public class RandomScenarioUtils {
 		// Pick load start time window day
 		final int startDay = random.nextInt(scenarioDuration);
 
-		final int loadVisitDuration = minVisit + random.nextInt(maxVisit - minVisit + 1);
-		final int dischargeVisitDuration = minVisit + random.nextInt(maxVisit - minVisit + 1);
+		final int loadVisitDuration = minVisit + random.nextInt((maxVisit - minVisit) + 1);
+		final int dischargeVisitDuration = minVisit + random.nextInt((maxVisit - minVisit) + 1);
 
-		final int endDay = startDay + minTravelTime + (int) Math.ceil(loadVisitDuration / 24.0) + minSlack + random.nextInt(maxTravelTime - minTravelTime + maxSlack - minSlack + 1);
+		final int endDay = startDay + minTravelTime + (int) Math.ceil(loadVisitDuration / 24.0) + minSlack + random.nextInt((((maxTravelTime - minTravelTime) + maxSlack) - minSlack) + 1);
 
-		final int loadWindow = minWindow + random.nextInt(maxWindow - minWindow + 1);
-		final int dischargeWindow = minWindow + random.nextInt(maxWindow - minWindow + 1);
+		final int loadWindow = minWindow + random.nextInt((maxWindow - minWindow) + 1);
+		final int dischargeWindow = minWindow + random.nextInt((maxWindow - minWindow) + 1);
 
 		loadSlot.setSlotDuration(loadVisitDuration);
 		dischargeSlot.setSlotDuration(dischargeVisitDuration);
@@ -473,8 +481,8 @@ public class RandomScenarioUtils {
 		loadSlot.setWindowDuration(loadWindow);
 		dischargeSlot.setWindowDuration(dischargeWindow);
 
-		loadSlot.setWindowStart(new DateAndOptionalTime(createHourlyDate(now + Timer.ONE_DAY * startDay), false));
-		dischargeSlot.setWindowStart(new DateAndOptionalTime(createHourlyDate(now + Timer.ONE_DAY * endDay), false));
+		loadSlot.setWindowStart(new DateAndOptionalTime(createHourlyDate(now + (Timer.ONE_DAY * startDay)), false));
+		dischargeSlot.setWindowStart(new DateAndOptionalTime(createHourlyDate(now + (Timer.ONE_DAY * endDay)), false));
 
 		// dischargeSlot.setMarket(dischargeMarket);
 		// loadSlot.setMarket(loadMarket);
@@ -509,13 +517,14 @@ public class RandomScenarioUtils {
 	 * @return
 	 */
 	public Scenario addCharterOuts(final Scenario scenario, int charterOuts, final int minCharterLength, final int maxCharterLength, final int scenarioLength) {
-		while (charterOuts-- > 0)
+		while (charterOuts-- > 0) {
 			createRandomCharterout(scenario, minCharterLength, maxCharterLength, scenarioLength);
+		}
 		return scenario;
 	}
 
-	private Vessel addVessel(Scenario scenario, String string, VesselClass class1) {
-		Vessel v = fleetFactory.createVessel();
+	private Vessel addVessel(final Scenario scenario, final String string, final VesselClass class1) {
+		final Vessel v = fleetFactory.createVessel();
 
 		v.setName(string);
 		v.setClass(class1);
@@ -525,16 +534,16 @@ public class RandomScenarioUtils {
 		return v;
 	}
 
-	private VesselStateAttributes createVesselStateAttributes(VesselState state, float nbo, float idlenbo, float idleconsumption, float[][] curve) {
-		VesselStateAttributes vsa = fleetFactory.createVesselStateAttributes();
+	private VesselStateAttributes createVesselStateAttributes(final VesselState state, final float nbo, final float idlenbo, final float idleconsumption, final float[][] curve) {
+		final VesselStateAttributes vsa = fleetFactory.createVesselStateAttributes();
 
 		vsa.setVesselState(state);
 		vsa.setIdleConsumptionRate(idleconsumption);
 		vsa.setNboRate(nbo);
 		vsa.setIdleNBORate(idlenbo);
 
-		for (float[] point : curve) {
-			FuelConsumptionLine line = fleetFactory.createFuelConsumptionLine();
+		for (final float[] point : curve) {
+			final FuelConsumptionLine line = fleetFactory.createFuelConsumptionLine();
 			line.setSpeed(point[0]);
 			line.setConsumption(point[1]);
 			vsa.getFuelConsumptionCurve().add(line);
@@ -543,8 +552,8 @@ public class RandomScenarioUtils {
 		return vsa;
 	}
 
-	private VesselClass addVesselClass(Scenario scenario, String name, int minSpeed, float maxSpeed, long capacity) {
-		VesselClass vc = fleetFactory.createVesselClass();
+	private VesselClass addVesselClass(final Scenario scenario, final String name, final int minSpeed, final float maxSpeed, final long capacity) {
+		final VesselClass vc = fleetFactory.createVesselClass();
 
 		vc.setName(name);
 		vc.setMinSpeed(minSpeed);
@@ -565,15 +574,15 @@ public class RandomScenarioUtils {
 	 * @param minSize
 	 * @param maxSize
 	 */
-	private void createRandomCharterout(Scenario scenario, int minSize, int maxSize, final int scenarioLength) {
-		CharterOut co = fleetFactory.createCharterOut();
+	private void createRandomCharterout(final Scenario scenario, final int minSize, final int maxSize, final int scenarioLength) {
+		final CharterOut co = fleetFactory.createCharterOut();
 
 		// narrow initial TW for now
 		final long now = (new Date()).getTime();
 		final int size = random.nextInt(maxSize - minSize) + minSize;
 		final int startDay = random.nextInt(scenarioLength - size);
-		co.setStartDate(createHourlyDate(now + startDay * Timer.ONE_DAY));
-		co.setEndDate(createHourlyDate(now + startDay * Timer.ONE_DAY + 6 * Timer.ONE_HOUR));
+		co.setStartDate(createHourlyDate(now + (startDay * Timer.ONE_DAY)));
+		co.setEndDate(createHourlyDate(now + (startDay * Timer.ONE_DAY) + (6 * Timer.ONE_HOUR)));
 		co.setDuration(size);
 		co.getVesselClasses().add(RandomHelper.chooseElementFrom(random, scenario.getFleetModel().getVesselClasses()));
 
@@ -590,10 +599,10 @@ public class RandomScenarioUtils {
 	 * @param scenario
 	 * @param addVessel
 	 */
-	private void randomiseAvailability(Scenario scenario, Vessel addVessel) {
+	private void randomiseAvailability(final Scenario scenario, final Vessel addVessel) {
 		// Add a random start constraint.
-		PortAndTime start = fleetFactory.createPortAndTime();
-		EList<Port> ports = scenario.getPortModel().getPorts();
+		final PortAndTime start = fleetFactory.createPortAndTime();
+		final EList<Port> ports = scenario.getPortModel().getPorts();
 		start.setPort(ports.get(random.nextInt(ports.size())));
 	}
 

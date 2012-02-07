@@ -15,10 +15,6 @@ import org.eclipse.emf.validation.service.ModelValidationService;
 
 import scenario.Scenario;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.lngscheduler.ui.Activator;
-
 /**
  * {@link IAdapterFactory} to adapt a Resource to an IStatus indicating the validation status of the resource's scenario.
  * 
@@ -41,7 +37,7 @@ public class ScenarioValidationStatusAdapterFactory implements IAdapterFactory {
 		} else if (adaptableObject instanceof Scenario) {
 			scenario = (Scenario) adaptableObject;
 		}
-		
+
 		if (scenario == null) {
 			return null;
 		}
@@ -50,12 +46,10 @@ public class ScenarioValidationStatusAdapterFactory implements IAdapterFactory {
 	}
 
 	private static IStatus validate(final IResource resource, final Scenario scenario) {
-		final IValidator<EObject> validator = ModelValidationService.getInstance().newValidator(
-				EvaluationMode.BATCH);
+		final IValidator<EObject> validator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 
-		validator.setOption(
-				IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
-		
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
 		final IStatus status = validator.validate(scenario);
 		return status;
 	}

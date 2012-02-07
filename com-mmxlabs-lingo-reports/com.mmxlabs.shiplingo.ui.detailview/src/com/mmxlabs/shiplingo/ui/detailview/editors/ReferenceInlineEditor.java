@@ -32,14 +32,12 @@ import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
  */
 public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	private Combo combo;
-	private IReferenceValueProvider valueProvider;
+	private final IReferenceValueProvider valueProvider;
 
 	private final ArrayList<String> nameList = new ArrayList<String>();
 	private final ArrayList<EObject> valueList = new ArrayList<EObject>();
 
-	public ReferenceInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain, final ICommandProcessor processor,
-			final IReferenceValueProvider valueProvider) {
+	public ReferenceInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor processor, final IReferenceValueProvider valueProvider) {
 		super(path, feature, editingDomain, processor);
 		this.valueProvider = valueProvider;
 	}
@@ -54,19 +52,19 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 				final SelectionListener sl = this;
 				combo.addDisposeListener(new DisposeListener() {
 					@Override
-					public void widgetDisposed(DisposeEvent e) {
+					public void widgetDisposed(final DisposeEvent e) {
 						combo.removeSelectionListener(sl);
 					}
 				});
 			}
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				doSetValue(valueList.get(nameList.indexOf(combo.getText())));
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 
 			}
 		});
@@ -75,17 +73,17 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	public void setInput(EObject source) {
+	public void setInput(final EObject source) {
 		super.setInput(source);
-		
+
 	}
 
 	@Override
 	protected void updateControl() {
-		if (combo.isDisposed())
+		if (combo.isDisposed()) {
 			return;
-		final List<Pair<String, EObject>> values = valueProvider
-				.getAllowedValues(input, feature);
+		}
+		final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(input, feature);
 		// update combo contents
 		combo.removeAll();
 		nameList.clear();
@@ -100,13 +98,15 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		if (combo.isDisposed())
+		if (combo.isDisposed()) {
 			return;
+		}
 		final int curIndex = valueList.indexOf(value);
-		if (curIndex == -1)
+		if (curIndex == -1) {
 			combo.setText("");
-		else
+		} else {
 			combo.setText(nameList.get(curIndex));
+		}
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	protected boolean updateOnChangeToFeature(Object changedFeature) {
+	protected boolean updateOnChangeToFeature(final Object changedFeature) {
 		return valueProvider.updateOnChangeToFeature(changedFeature);
 	}
 }

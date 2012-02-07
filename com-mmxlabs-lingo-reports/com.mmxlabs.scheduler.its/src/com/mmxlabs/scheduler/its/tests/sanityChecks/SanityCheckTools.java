@@ -49,8 +49,9 @@ public class SanityCheckTools {
 
 					distance += 10;
 
-				} else
+				} else {
 					distance -= distance / 2;
+				}
 			}
 		}
 	}
@@ -69,17 +70,17 @@ public class SanityCheckTools {
 		// For each port there is a cargo from every other port (i.e. no cargo goes from one port to the same port).
 		// This gives the number of cargos below.
 		final int numOfCargos = ports.length * (ports.length - 1);// - ports.length;
-		Cargo[] inputCargos = new Cargo[numOfCargos];
+		final Cargo[] inputCargos = new Cargo[numOfCargos];
 		int i = 0;
 
-		Date cargoStart = new Date(System.currentTimeMillis());
+		final Date cargoStart = new Date(System.currentTimeMillis());
 		int duration = 50;
 
 		for (final Port portX : ports) {
 			for (final Port portY : ports) {
 				if (!portX.equals(portY)) {
 
-					Cargo c = csc.addCargo(portX.getName() + " to " + portY.getName() + " in " + duration + ".", portX, portY, loadPrice, dischargePrice, cvValue, cargoStart, duration);
+					final Cargo c = csc.addCargo(portX.getName() + " to " + portY.getName() + " in " + duration + ".", portX, portY, loadPrice, dischargePrice, cvValue, cargoStart, duration);
 
 					inputCargos[i++] = c;
 
@@ -108,14 +109,15 @@ public class SanityCheckTools {
 
 		final ArrayList<Port> visitedPorts = new ArrayList<Port>();
 
-		for (Sequence sq : schedule.getSequences()) {
+		for (final Sequence sq : schedule.getSequences()) {
 			if (sq.getVessel().equals(fleetVessel)) {
-				for (ScheduledEvent se : sq.getEvents()) {
+				for (final ScheduledEvent se : sq.getEvents()) {
 					if (se instanceof PortVisit) {
-						PortVisit pv = (PortVisit) se;
+						final PortVisit pv = (PortVisit) se;
 
-						if (!visitedPorts.contains(pv.getPort()))
+						if (!visitedPorts.contains(pv.getPort())) {
 							visitedPorts.add(pv.getPort());
+						}
 					}
 				}
 			}
@@ -136,17 +138,19 @@ public class SanityCheckTools {
 	 */
 	public static void addDrydocks(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedDrydockVessel, final VesselClass allowedDrydockVesselClass) {
 
-		Date start = new Date(System.currentTimeMillis());
-		for (Port portA : ports) {
-			for (Port portB : ports) {
+		final Date start = new Date(System.currentTimeMillis());
+		for (final Port portA : ports) {
+			for (final Port portB : ports) {
 				if (!portA.equals(portB)) {
 
 					final Drydock dry = csc.addDryDock(portB, start, 1);
 
-					if (allowedDrydockVessel != null)
+					if (allowedDrydockVessel != null) {
 						dry.getVessels().add(allowedDrydockVessel);
-					if (allowedDrydockVesselClass != null)
+					}
+					if (allowedDrydockVesselClass != null) {
 						dry.getVesselClasses().add(allowedDrydockVesselClass);
+					}
 
 					start.setTime(start.getTime() + TimeUnit.HOURS.toMillis(2));
 				}
@@ -167,22 +171,25 @@ public class SanityCheckTools {
 	public static void addCharterOuts(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedCharterOutVessel, final VesselClass allowedCharterOutVesselClass, final float cvValue,
 			final float dischargePrice) {
 
-		Date start = new Date(System.currentTimeMillis());
+		final Date start = new Date(System.currentTimeMillis());
 		int charterOutDurationDays = 1;
-		for (Port portA : ports) {
-			for (Port portB : ports) {
+		for (final Port portA : ports) {
+			for (final Port portB : ports) {
 
 				final String id = "CharterOut " + portA.getName() + " to " + portB.getName();
 
-				CharterOut charterOut = csc.addCharterOut(id, portA, portB, start, 1000, charterOutDurationDays, cvValue, dischargePrice, 100, 0);
+				final CharterOut charterOut = csc.addCharterOut(id, portA, portB, start, 1000, charterOutDurationDays, cvValue, dischargePrice, 100, 0);
 
-				if (allowedCharterOutVessel != null)
+				if (allowedCharterOutVessel != null) {
 					charterOut.getVessels().add(allowedCharterOutVessel);
-				if (allowedCharterOutVesselClass != null)
+				}
+				if (allowedCharterOutVesselClass != null) {
 					charterOut.getVesselClasses().add(allowedCharterOutVesselClass);
+				}
 
-				if (portA.equals(portB))
+				if (portA.equals(portB)) {
 					charterOutDurationDays /= 2;
+				}
 
 			}
 		}

@@ -12,10 +12,11 @@ import com.mmxlabs.common.Pair;
  * generic interface for a filter on a bunch of key-value pairs
  * 
  * @author hinton
- *
+ * 
  */
 public interface IFilter {
-	public boolean matches(final Map<String, Pair<?,?>> properties);
+	public boolean matches(final Map<String, Pair<?, ?>> properties);
+
 	/**
 	 * 
 	 * @return something identical to this filter, but possible more efficient

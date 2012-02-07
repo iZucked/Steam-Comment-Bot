@@ -20,7 +20,7 @@ import scenario.schedule.events.VesselEventVisit;
 
 /**
  * @author hinton
- *
+ * 
  */
 public class LatenessReportView extends EMFReportView {
 	public static final String ID = "com.mmxlabs.demo.reports.views.LatenessReportView";
@@ -46,17 +46,17 @@ public class LatenessReportView extends EMFReportView {
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
-			
+
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-				
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+
 			}
-			
+
 			@Override
 			public void dispose() {
-				
+
 			}
-			
+
 			@Override
 			public Object[] getElements(final Object object) {
 				final ArrayList<ScheduledEvent> allEvents = new ArrayList<ScheduledEvent>();
@@ -68,11 +68,11 @@ public class LatenessReportView extends EMFReportView {
 								for (final ScheduledEvent e : seq.getEvents()) {
 									if (e instanceof SlotVisit) {
 										final SlotVisit visit = (SlotVisit) e;
-										
+
 										if (visit.getStartTime().after(visit.getSlot().getWindowEnd())) {
 											allEvents.add(e);
 										}
-										setInputEquivalents(visit, Collections.singleton((Object)visit.getCargoAllocation()));
+										setInputEquivalents(visit, Collections.singleton((Object) visit.getCargoAllocation()));
 									} else if (e instanceof VesselEventVisit) {
 										final VesselEventVisit vev = (VesselEventVisit) e;
 										if (vev.getStartTime().after(vev.getVesselEvent().getEndDate())) {

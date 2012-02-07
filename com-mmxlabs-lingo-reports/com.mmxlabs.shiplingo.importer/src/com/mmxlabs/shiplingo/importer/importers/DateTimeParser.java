@@ -23,10 +23,8 @@ import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 public class DateTimeParser {
 	private final static DateTimeParser INSTANCE = new DateTimeParser();
 	final SimpleDateFormat consistentDate = new SimpleDateFormat("yyyy-MM-dd");
-	final SimpleDateFormat consistentDateTime = new SimpleDateFormat(
-			"yyyy-MM-dd HH:00");
-	final SimpleDateFormat dateWithShortTime = new SimpleDateFormat(
-			"yyyy-MM-dd HH");
+	final SimpleDateFormat consistentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:00");
+	final SimpleDateFormat dateWithShortTime = new SimpleDateFormat("yyyy-MM-dd HH");
 
 	protected DateTimeParser() {
 		final TimeZone utc = TimeZone.getTimeZone("UTC");
@@ -44,77 +42,74 @@ public class DateTimeParser {
 	 * 
 	 * @param dateString
 	 * @return
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public Date parseDate(final String dateString) throws ParseException {
 		// try parsing as a date and time
 		try {
 			final Date result = consistentDateTime.parse(dateString);
 			return result;
-		} catch (ParseException ex) {
+		} catch (final ParseException ex) {
 		}
 
 		try {
 			final Date result = dateWithShortTime.parse(dateString);
 			return result;
-		} catch (ParseException ex) {
+		} catch (final ParseException ex) {
 		}
 
 		try {
 			final Date result = consistentDate.parse(dateString);
 			return result;
-		} catch (ParseException ex) {
+		} catch (final ParseException ex) {
 		}
 
 		// last try - use ECore
 		try {
-			return (Date) EcoreFactory.eINSTANCE.createFromString(
-					EcorePackage.eINSTANCE.getEDate(), dateString);
+			return (Date) EcoreFactory.eINSTANCE.createFromString(EcorePackage.eINSTANCE.getEDate(), dateString);
 		} catch (final Exception ex) {
 			throw new ParseException("Could not parse date value " + dateString, 0);
 		}
 	}
 
 	public String formatDate(final Date date, final String zone) {
-		SimpleDateFormat c = (SimpleDateFormat) consistentDateTime
-				.clone();
-		
+		SimpleDateFormat c = (SimpleDateFormat) consistentDateTime.clone();
+
 		if (date instanceof DateAndOptionalTime) {
 			if (((DateAndOptionalTime) date).isOnlyDate()) {
 				c = (SimpleDateFormat) consistentDate.clone();
 			}
 		}
-		
+
 		c.setTimeZone(TimeZone.getTimeZone(zone));
 		return c.format(date);
 	}
 
 	public DateAndOptionalTime parseDateAndOptionalTime(final String dateString) {
 		// try parsing as a date and time
-				try {
-					final Date result = consistentDateTime.parse(dateString);
-					return new DateAndOptionalTime(result, false);
-				} catch (ParseException ex) {
-				}
+		try {
+			final Date result = consistentDateTime.parse(dateString);
+			return new DateAndOptionalTime(result, false);
+		} catch (final ParseException ex) {
+		}
 
-				try {
-					final Date result = dateWithShortTime.parse(dateString);
-					return new DateAndOptionalTime(result, false);
-				} catch (ParseException ex) {
-				}
+		try {
+			final Date result = dateWithShortTime.parse(dateString);
+			return new DateAndOptionalTime(result, false);
+		} catch (final ParseException ex) {
+		}
 
-				try {
-					final Date result = consistentDate.parse(dateString);
-					return new DateAndOptionalTime(result, true);
-				} catch (ParseException ex) {
-				}
+		try {
+			final Date result = consistentDate.parse(dateString);
+			return new DateAndOptionalTime(result, true);
+		} catch (final ParseException ex) {
+		}
 
-				// last try - use ECore
-				try {
-					return new DateAndOptionalTime((Date) EcoreFactory.eINSTANCE.createFromString(
-							EcorePackage.eINSTANCE.getEDate(), dateString), false);
-				} catch (final Exception ex) {
-					return null;
-				}
+		// last try - use ECore
+		try {
+			return new DateAndOptionalTime((Date) EcoreFactory.eINSTANCE.createFromString(EcorePackage.eINSTANCE.getEDate(), dateString), false);
+		} catch (final Exception ex) {
+			return null;
+		}
 	}
 }

@@ -15,12 +15,9 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import com.mmxlabs.common.Pair;
 
 /**
- * Gadget for changing values when other values change; although this could just
- * be a bunch of separate adapters that seems less tidy and more prone to
- * recursive activation.
+ * Gadget for changing values when other values change; although this could just be a bunch of separate adapters that seems less tidy and more prone to recursive activation.
  * 
- * TODO hook it into the interface to let users know when a change has been made
- * in this way.
+ * TODO hook it into the interface to let users know when a change has been made in this way.
  * 
  * @author Tom Hinton
  * 
@@ -30,7 +27,7 @@ public class AutoCorrector extends EContentAdapter {
 	private final EditingDomain editingDomain;
 	private boolean correcting = false;
 
-	public AutoCorrector(EditingDomain editingDomain) {
+	public AutoCorrector(final EditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
 	}
 
@@ -39,13 +36,13 @@ public class AutoCorrector extends EContentAdapter {
 		super.notifyChanged(notification);
 
 		if (notification.isTouch() == false) {
-			if (correcting)
+			if (correcting) {
 				return;
+			}
 			correcting = true;
-			
+
 			for (final ICorrector corrector : correctors) {
-				final Pair<String, Command> correction = corrector.correct(
-						notification, editingDomain);
+				final Pair<String, Command> correction = corrector.correct(notification, editingDomain);
 				if (correction != null) {
 					editingDomain.getCommandStack().execute(correction.getSecond());
 				}
@@ -59,7 +56,6 @@ public class AutoCorrector extends EContentAdapter {
 	}
 
 	public interface ICorrector {
-		public Pair<String, Command> correct(final Notification notification,
-				final EditingDomain editingDomain);
+		public Pair<String, Command> correct(final Notification notification, final EditingDomain editingDomain);
 	}
 }

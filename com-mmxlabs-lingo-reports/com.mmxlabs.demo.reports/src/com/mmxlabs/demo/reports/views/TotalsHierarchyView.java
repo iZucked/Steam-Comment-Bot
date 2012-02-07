@@ -91,11 +91,9 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	private Action copyTreeAction;
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart part,
-			final ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 
-		final List<Schedule> schedules = ScheduleAdapter
-				.getSchedules(selection);
+		final List<Schedule> schedules = ScheduleAdapter.getSchedules(selection);
 		setSelectedSchedules(schedules);
 	}
 
@@ -117,10 +115,10 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 			this.nonValued = nonValued;
 			this.cost = 0;
 		}
-		
+
 		public TreeData(final String name, final String misc) {
 			this(name, true);
-			this.label  = misc;
+			this.label = misc;
 		}
 
 		public TreeData(final String name) {
@@ -140,11 +138,13 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		}
 
 		public long getCost() {
-			if (nonValued)
+			if (nonValued) {
 				return 0;
+			}
 			long accumulator = cost;
-			for (final TreeData d : children)
+			for (final TreeData d : children) {
 				accumulator += d.getCost();
+			}
 			return accumulator;
 		}
 
@@ -166,8 +166,9 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		}
 
 		public String renderCost() {
-			if (nonValued)
+			if (nonValued) {
 				return label;
+			}
 			return myFormat.format(getCost());
 		}
 	}
@@ -190,8 +191,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 			dummy.addChild(createProfitTreeData(schedule));
 		} else {
 			for (final Schedule schedule : schedules) {
-				Scenario s = (Scenario)schedule.eContainer().eContainer();
-				final String scheduleName = 		s.getName();
+				final Scenario s = (Scenario) schedule.eContainer().eContainer();
+				final String scheduleName = s.getName();
 				// final String scheduleName = schedule.getName();
 				// don't sum costs and profits, because it's meaningless
 				// (profits already include costs)
@@ -210,8 +211,9 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		if (schedule != null) {
 			for (final BookedRevenue revenue : schedule.getRevenue()) {
 				final Entity e = revenue.getEntity();
-				if (e == null || !(e instanceof GroupEntity))
+				if ((e == null) || !(e instanceof GroupEntity)) {
 					continue;
+				}
 
 				TreeData td = byEntity.get(e);
 				if (td == null) {
@@ -225,7 +227,6 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 				for (final Detail d : revenue.getDetails().getChildren()) {
 					rd.addChild(createDetailTreeData(d));
 				}
-				
 
 				// for (final LineItem item : revenue.getLineItems()) {
 				// final TreeData li = new TreeData(item.getName(),
@@ -245,8 +246,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	 * @param details
 	 * @return
 	 */
-	private TreeData createDetailTreeData(Detail details) {
-		final TreeData top = new TreeData(details.getName(),details.getValue());
+	private TreeData createDetailTreeData(final Detail details) {
+		final TreeData top = new TreeData(details.getName(), details.getValue());
 		for (final Detail d : details.getChildren()) {
 			top.addChild(createDetailTreeData(d));
 		}
@@ -262,13 +263,12 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	private TreeData createCostsTreeData(final Schedule schedule) {
 		final TreeData top = new TreeData("Total Costs");
 
-		if (schedule == null)
+		if (schedule == null) {
 			return top;
+		}
 
-		final EnumMap<FuelType, TreeData> fleetFuelUsages = new EnumMap<FuelType, TreeData>(
-				FuelType.class);
-		final EnumMap<FuelType, TreeData> spotFuelUsages = new EnumMap<FuelType, TreeData>(
-				FuelType.class);
+		final EnumMap<FuelType, TreeData> fleetFuelUsages = new EnumMap<FuelType, TreeData>(FuelType.class);
+		final EnumMap<FuelType, TreeData> spotFuelUsages = new EnumMap<FuelType, TreeData>(FuelType.class);
 
 		final TreeData fleetLNG = new TreeData("Fleet Vessels");
 		final TreeData spotLNG = new TreeData("Spot Vessels");
@@ -305,11 +305,9 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		for (final Sequence seq : schedule.getSequences()) {
 			final AllocatedVessel av = seq.getVessel();
-			final EnumMap<FuelType, TreeData> vesselFuelUsage = new EnumMap<FuelType, TreeData>(
-					FuelType.class);
+			final EnumMap<FuelType, TreeData> vesselFuelUsage = new EnumMap<FuelType, TreeData>(FuelType.class);
 
-			final EnumMap<FuelType, TreeData> fuelUsages = (av instanceof FleetVessel) ? fleetFuelUsages
-					: spotFuelUsages;
+			final EnumMap<FuelType, TreeData> fuelUsages = (av instanceof FleetVessel) ? fleetFuelUsages : spotFuelUsages;
 
 			for (final FuelType t : FuelType.values()) {
 				final TreeData thisFuelAndVessel = new TreeData(av.getName());
@@ -322,22 +320,19 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 					final String name;
 					if (evt instanceof Journey) {
 						final Journey j = (Journey) evt;
-						name = j.getFromPort().getName() + " to "
-								+ j.getToPort().getName();
+						name = j.getFromPort().getName() + " to " + j.getToPort().getName();
 					} else if (evt instanceof PortVisit) {
-						name = ((PortVisit) evt).getDisplayTypeName() + " "
-								+ ((PortVisit) evt).getId();
+						name = ((PortVisit) evt).getDisplayTypeName() + " " + ((PortVisit) evt).getId();
 					} else {
 						name = "Unknown";
 					}
 					final FuelMixture mix = (FuelMixture) evt;
 					for (final FuelQuantity fq : mix.getFuelUsage()) {
-						if (fq.getTotalPrice() == 0)
+						if (fq.getTotalPrice() == 0) {
 							continue;
-						final TreeData eventUsage = new TreeData(name,
-								fq.getTotalPrice());
-						vesselFuelUsage.get(fq.getFuelType()).addChild(
-								eventUsage);
+						}
+						final TreeData eventUsage = new TreeData(name, fq.getTotalPrice());
+						vesselFuelUsage.get(fq.getFuelType()).addChild(eventUsage);
 					}
 				}
 			}
@@ -357,21 +352,14 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		for (final Sequence seq : schedule.getSequences()) {
 			final AllocatedVessel av = seq.getVessel();
 			final TreeData thisVessel = new TreeData(av.getName());
-			(av instanceof FleetVessel ? fleetCanalCosts : spotCanalCosts)
-					.addChild(thisVessel);
+			(av instanceof FleetVessel ? fleetCanalCosts : spotCanalCosts).addChild(thisVessel);
 
 			for (final ScheduledEvent event : seq.getEvents()) {
 				if (event instanceof Journey) {
 					final Journey j = (Journey) event;
 					if (j.getRouteCost() > 0) {
-						final TreeData thisLeg = new TreeData(j
-								.getVesselState().getName()
-								+ " voyage from "
-								+ j.getFromPort().getName()
-								+ " to "
-								+ j.getToPort().getName()
-								+ " via "
-								+ j.getRoute(), j.getRouteCost());
+						final TreeData thisLeg = new TreeData(j.getVesselState().getName() + " voyage from " + j.getFromPort().getName() + " to " + j.getToPort().getName() + " via " + j.getRoute(),
+								j.getRouteCost());
 						thisVessel.addChild(thisLeg);
 					}
 				}
@@ -396,22 +384,22 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		this.viewer = new TreeViewer(parent, SWT.FULL_SELECTION | SWT.MULTI
-				| SWT.H_SCROLL | SWT.V_SCROLL) {
+		this.viewer = new TreeViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
 			@Override
 			protected void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
-				
-				final boolean inputEmpty = input == null || (input instanceof Collection && ((Collection<?>)input).isEmpty());
-				final boolean oldInputEmpty = oldInput == null || (oldInput instanceof Collection && ((Collection<?>)oldInput).isEmpty());
-				
+
+				final boolean inputEmpty = (input == null) || ((input instanceof Collection) && ((Collection<?>) input).isEmpty());
+				final boolean oldInputEmpty = (oldInput == null) || ((oldInput instanceof Collection) && ((Collection<?>) oldInput).isEmpty());
+
 				if (inputEmpty != oldInputEmpty) {
 					if (packColumnsAction != null) {
 						packColumnsAction.run();
 					}
 				}
 			};
-		};;
+		};
+		;
 
 		// autopack and set alternating colours - disabled because no longer
 		// required
@@ -439,8 +427,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		viewer.setContentProvider(new ITreeContentProvider() {
 			@Override
-			public void inputChanged(final Viewer arg0, final Object arg1,
-					final Object arg2) {
+			public void inputChanged(final Viewer arg0, final Object arg1, final Object arg2) {
 
 			}
 
@@ -514,11 +501,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		viewer.setInput(null);
 
 		// Create the help context id for the viewer's control
-		PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(viewer.getControl(),
-						"com.mmxlabs.demo.reports.TotalsHierarchyView");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.TotalsHierarchyView");
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
@@ -585,8 +568,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 	private void makeActions() {
 		packColumnsAction = new PackTreeColumnsAction(viewer);
 		copyTreeAction = new CopyTreeToClipboardAction(viewer.getTree());
-		getViewSite().getActionBars().setGlobalActionHandler(
-				ActionFactory.COPY.getId(), copyTreeAction);
+		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTreeAction);
 	}
 
 	@Override

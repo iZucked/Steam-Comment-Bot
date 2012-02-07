@@ -7,14 +7,14 @@ package com.mmxlabs.scheduler.its.tests.calculation.singleEvent;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.common.TimeUnitConvert;
-import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
-
 import scenario.Scenario;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
+
+import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 
 /**
  * <a href="">Case 203: Test for min/max speed conditions</a>
@@ -55,7 +55,7 @@ public class MinMaxSpeedTests {
 		// set the travel time to be one hour too little
 		final int travelTime = (distanceBetweenPorts / maxSpeed) - 1;
 
-		CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
+		final CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
 
 		Assert.assertTrue("Laden leg travels at max speed", a.getLadenLeg().getSpeed() == maxSpeed);
 		Assert.assertTrue("Ballast leg travels at max speed", a.getBallastLeg().getSpeed() == maxSpeed);
@@ -71,14 +71,15 @@ public class MinMaxSpeedTests {
 		// set the travel time to be sufficient for min speed travel
 		final int travelTime = (distanceBetweenPorts / minSpeed) + 1;
 
-		CargoAllocation a = test(testName, travelTime, baseFuelCheap);
+		final CargoAllocation a = test(testName, travelTime, baseFuelCheap);
 
 		// assert that base fuel is used on the ballast leg as it is cheaper than LNG
-		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO || fq.getFuelType() == FuelType.FBO)
+		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if ((fq.getFuelType() == FuelType.NBO) || (fq.getFuelType() == FuelType.FBO)) {
 				Assert.assertTrue("LNG not used as BF cheaper", fq.getQuantity() == 0);
-			else if (fq.getFuelType() == FuelType.BASE_FUEL)
+			} else if (fq.getFuelType() == FuelType.BASE_FUEL) {
 				Assert.assertTrue("Base fuel used, LNG more expensive", fq.getQuantity() > 0);
+			}
 		}
 
 		// assert that the vessel travels at min speed as there is sufficient time.
@@ -97,14 +98,15 @@ public class MinMaxSpeedTests {
 		// set the travel time to be sufficient for min speed travel
 		final int travelTime = (distanceBetweenPorts / minSpeed) + 10;
 
-		CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
+		final CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
 
 		// assert that NBO is used on the ballast leg as it is cheaper than base fuel
-		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO)
+		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO) {
 				Assert.assertTrue("Cheap NBO used", fq.getQuantity() > 0);
-			else if (fq.getFuelType() == FuelType.BASE_FUEL)
+			} else if (fq.getFuelType() == FuelType.BASE_FUEL) {
 				Assert.assertTrue("Base fuel not used", fq.getQuantity() == 0);
+			}
 		}
 
 		// Min NBO Speed is 11 because
@@ -117,7 +119,7 @@ public class MinMaxSpeedTests {
 		final int minNBOSpeed = 11;
 		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minNBOSpeed);
 	}
-	
+
 	/**
 	 * Check that the min vessel is speed is used if NBO is not used on the ballast voyage.
 	 */
@@ -128,14 +130,15 @@ public class MinMaxSpeedTests {
 		// set the travel time to be sufficient for min speed travel
 		final int travelTime = (distanceBetweenPorts / minSpeed) + 10;
 
-		CargoAllocation a = test(testName, travelTime, baseFuelCheap);
+		final CargoAllocation a = test(testName, travelTime, baseFuelCheap);
 
 		// Base fuel used on ballast as it is cheaper than LNG
-		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO)
+		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO) {
 				Assert.assertTrue("NBO not used", fq.getQuantity() == 0);
-			else if (fq.getFuelType() == FuelType.BASE_FUEL)
+			} else if (fq.getFuelType() == FuelType.BASE_FUEL) {
 				Assert.assertTrue("Base fuel used", fq.getQuantity() > 0);
+			}
 		}
 
 		Assert.assertTrue("Ballast leg travels at min speed", a.getBallastLeg().getSpeed() == minSpeed);
@@ -170,7 +173,7 @@ public class MinMaxSpeedTests {
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
 
-		Scenario scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
+		final Scenario scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
 				ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption,
 				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, true, pilotLightRate, minHeelVolume);
 

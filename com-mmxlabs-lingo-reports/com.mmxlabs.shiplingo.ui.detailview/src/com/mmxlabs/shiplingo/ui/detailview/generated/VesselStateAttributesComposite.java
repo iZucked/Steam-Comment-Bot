@@ -4,14 +4,11 @@
  */
 package com.mmxlabs.shiplingo.ui.detailview.generated;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import scenario.fleet.FleetPackage;
 
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
-import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 import com.mmxlabs.shiplingo.ui.detailview.editors.FuelCurveEditor;
 
 /**
@@ -29,9 +26,9 @@ public class VesselStateAttributesComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	public VesselStateAttributesComposite(final Composite container, final int style, final String mainGroupTitle, final boolean validate) {
-    super(container, style, validate);
-    this.mainGroupTitle = mainGroupTitle;
-  }
+		super(container, style, validate);
+		this.mainGroupTitle = mainGroupTitle;
+	}
 
 	public VesselStateAttributesComposite(final Composite container, final int style, final boolean validate) {
 		this(container, style, "Vessel State Attributes", validate);
@@ -48,26 +45,26 @@ public class VesselStateAttributesComposite extends AbstractDetailComposite {
 	 */
 	@Override
 	protected void createContents(final Composite group) {
-    final Composite mainGroup;
+		final Composite mainGroup;
 
-    if (group == null) {
-      mainGroup = createGroup(this, mainGroupTitle);
-    } else {
-      mainGroup = group;
-    }
-    
-    super.createContents(mainGroup);		
+		if (group == null) {
+			mainGroup = createGroup(this, mainGroupTitle);
+		} else {
+			mainGroup = group;
+		}
 
-    createFields(this, mainGroup);
-  }
+		super.createContents(mainGroup);
+
+		createFields(this, mainGroup);
+	}
 
 	/**
 	 * @generated
 	 */
 	protected static void createFields(final AbstractDetailComposite composite, final Composite mainGroup) {
-    createFieldsFromSupers(composite, mainGroup);
-    createVesselStateAttributesFields(composite, mainGroup);
-  }
+		createFieldsFromSupers(composite, mainGroup);
+		createVesselStateAttributesFields(composite, mainGroup);
+	}
 
 	/**
 	 * Create fields belonging to all the supertypes of VesselStateAttributes.
@@ -75,7 +72,7 @@ public class VesselStateAttributesComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	protected static void createFieldsFromSupers(final AbstractDetailComposite composite, final Composite mainGroup) {
-  }
+	}
 
 	/**
 	 * Create fields belonging directly to VesselStateAttributes
@@ -83,12 +80,12 @@ public class VesselStateAttributesComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	protected static void createVesselStateAttributesFields(final AbstractDetailComposite composite, final Composite mainGroup) {
-    createNboRateEditor(composite, mainGroup);
-    createIdleNBORateEditor(composite, mainGroup);
-    createIdleConsumptionRateEditor(composite, mainGroup);
-    createFuelConsumptionCurveEditor(composite, mainGroup);
-    createVesselStateEditor(composite, mainGroup);
-  }
+		createNboRateEditor(composite, mainGroup);
+		createIdleNBORateEditor(composite, mainGroup);
+		createIdleConsumptionRateEditor(composite, mainGroup);
+		createFuelConsumptionCurveEditor(composite, mainGroup);
+		createVesselStateEditor(composite, mainGroup);
+	}
 
 	/**
 	 * Create an editor for the nboRate feature on VesselStateAttributes
@@ -114,10 +111,8 @@ public class VesselStateAttributesComposite extends AbstractDetailComposite {
 	 * @generated
 	 */
 	protected static void createIdleConsumptionRateEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselStateAttributes_IdleConsumptionRate()),
-      "Idle Consumption Rate");
-  }
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselStateAttributes_IdleConsumptionRate()), "Idle Consumption Rate");
+	}
 
 	/**
 	 * Create an editor for the fuelConsumptionCurve feature on VesselStateAttributes

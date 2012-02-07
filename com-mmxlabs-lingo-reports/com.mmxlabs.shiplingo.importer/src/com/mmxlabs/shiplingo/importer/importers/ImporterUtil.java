@@ -31,14 +31,11 @@ public class ImporterUtil {
 		return INSTANCE;
 	}
 
-	public Map<String, Collection<Map<String, String>>> exportEObjects(final EClass exportClass,
-			final List<? extends EObject> objectsToExport) {
-		
-		final EObjectImporter exporter = EObjectImporterFactory.getInstance()
-				.getImporter(exportClass);
-		final Map<String, Collection<Map<String, String>>> result = exporter
-				.exportObjects(objectsToExport);
-		
+	public Map<String, Collection<Map<String, String>>> exportEObjects(final EClass exportClass, final List<? extends EObject> objectsToExport) {
+
+		final EObjectImporter exporter = EObjectImporterFactory.getInstance().getImporter(exportClass);
+		final Map<String, Collection<Map<String, String>>> result = exporter.exportObjects(objectsToExport);
+
 		return result;
 	}
 
@@ -47,11 +44,9 @@ public class ImporterUtil {
 	 * 
 	 * @param value
 	 */
-	public void writeObjects(final String filename,
-			final Collection<Map<String, String>> value) {
+	public void writeObjects(final String filename, final Collection<Map<String, String>> value) {
 		try {
-			final BufferedWriter bw = new BufferedWriter(new FileWriter(
-					filename));
+			final BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
 
 			final LinkedHashSet<String> keys = new LinkedHashSet<String>();
 			for (final Map<String, String> map : value) {
@@ -71,8 +66,7 @@ public class ImporterUtil {
 				comma = false;
 				for (final String col : keys) {
 					final String v = row.get(col);
-					final String ve = v == null ? "" : (v.contains(",") ? "\""
-							+ v.replace("\"", "\"\"") + "\"" : v);
+					final String ve = v == null ? "" : (v.contains(",") ? "\"" + v.replace("\"", "\"\"") + "\"" : v);
 					bw.write((comma ? "," : "") + ve);
 					comma = true;
 				}

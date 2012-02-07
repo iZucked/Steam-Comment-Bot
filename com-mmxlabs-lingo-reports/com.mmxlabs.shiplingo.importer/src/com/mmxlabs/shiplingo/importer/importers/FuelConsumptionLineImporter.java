@@ -55,7 +55,7 @@ public class FuelConsumptionLineImporter extends EObjectImporter {
 
 		Collections.sort(lines, new Comparator<FuelConsumptionLine>() {
 			@Override
-			public int compare(FuelConsumptionLine o1, FuelConsumptionLine o2) {
+			public int compare(final FuelConsumptionLine o1, final FuelConsumptionLine o2) {
 				return Float.compare(o1.getSpeed(), o2.getSpeed());
 			}
 		});

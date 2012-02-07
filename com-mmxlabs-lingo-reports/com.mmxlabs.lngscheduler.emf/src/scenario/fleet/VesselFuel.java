@@ -7,31 +7,28 @@ package scenario.fleet;
 import scenario.NamedObject;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Vessel Fuel</b></em>'.
- * <!-- end-user-doc -->
- *
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Vessel Fuel</b></em>'. <!-- end-user-doc -->
+ * 
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.fleet.VesselFuel#getUnitPrice <em>Unit Price</em>}</li>
- *   <li>{@link scenario.fleet.VesselFuel#getEquivalenceFactor <em>Equivalence Factor</em>}</li>
+ * <li>{@link scenario.fleet.VesselFuel#getUnitPrice <em>Unit Price</em>}</li>
+ * <li>{@link scenario.fleet.VesselFuel#getEquivalenceFactor <em>Equivalence Factor</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @see scenario.fleet.FleetPackage#getVesselFuel()
  * @model
  * @generated
  */
 public interface VesselFuel extends NamedObject {
 	/**
-	 * Returns the value of the '<em><b>Unit Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Unit Price</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Unit Price</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Unit Price</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Unit Price</em>' attribute.
 	 * @see #setUnitPrice(float)
 	 * @see scenario.fleet.FleetPackage#getVesselFuel_UnitPrice()
@@ -41,23 +38,22 @@ public interface VesselFuel extends NamedObject {
 	float getUnitPrice();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselFuel#getUnitPrice <em>Unit Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Unit Price</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselFuel#getUnitPrice <em>Unit Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Unit Price</em>' attribute.
 	 * @see #getUnitPrice()
 	 * @generated
 	 */
 	void setUnitPrice(float value);
 
 	/**
-	 * Returns the value of the '<em><b>Equivalence Factor</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Equivalence Factor</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Equivalence Factor</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Equivalence Factor</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Equivalence Factor</em>' attribute.
 	 * @see #setEquivalenceFactor(float)
 	 * @see scenario.fleet.FleetPackage#getVesselFuel_EquivalenceFactor()
@@ -67,10 +63,10 @@ public interface VesselFuel extends NamedObject {
 	float getEquivalenceFactor();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselFuel#getEquivalenceFactor <em>Equivalence Factor</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Equivalence Factor</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselFuel#getEquivalenceFactor <em>Equivalence Factor</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Equivalence Factor</em>' attribute.
 	 * @see #getEquivalenceFactor()
 	 * @generated
 	 */

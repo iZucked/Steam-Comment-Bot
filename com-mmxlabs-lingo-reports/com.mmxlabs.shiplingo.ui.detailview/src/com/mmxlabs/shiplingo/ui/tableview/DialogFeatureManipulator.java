@@ -15,15 +15,13 @@ import org.eclipse.swt.widgets.Label;
  * @author hinton
  * 
  */
-public abstract class DialogFeatureManipulator extends
-		BasicAttributeManipulator {
+public abstract class DialogFeatureManipulator extends BasicAttributeManipulator {
 
 	/**
 	 * @param field
 	 * @param editingDomain
 	 */
-	public DialogFeatureManipulator(EStructuralFeature field,
-			EditingDomain editingDomain) {
+	public DialogFeatureManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
 		super(field, editingDomain);
 	}
 
@@ -34,14 +32,16 @@ public abstract class DialogFeatureManipulator extends
 			private Composite editor;
 
 			@Override
-			protected void doSetValue(Object value) {
+			protected void doSetValue(final Object value) {
 				this.value = value;
-				if (label != null) label.setText(renderValue(value));
+				if (label != null) {
+					label.setText(renderValue(value));
+				}
 			}
-			
+
 			private boolean locked = false;
 			private Label label;
-			
+
 			@Override
 			protected void doSetFocus() {
 				if (!locked) {
@@ -60,9 +60,11 @@ public abstract class DialogFeatureManipulator extends
 
 					});
 				}
-				if (label != null) label.setText(renderValue(value));
+				if (label != null) {
+					label.setText(renderValue(value));
+				}
 			}
-			
+
 			@Override
 			protected boolean dependsOnExternalFocusListener() {
 				return false;
@@ -72,31 +74,31 @@ public abstract class DialogFeatureManipulator extends
 			protected Object doGetValue() {
 				return value;
 			}
-			
+
 			@Override
-			protected Control createControl(Composite parent) {
-		        editor = new Composite(parent, getStyle());
-		        
-		        editor.setBackground(parent.getBackground());
-		        
-		        label = new Label(editor, getStyle());
-		        
-		        return editor;
+			protected Control createControl(final Composite parent) {
+				editor = new Composite(parent, getStyle());
+
+				editor.setBackground(parent.getBackground());
+
+				label = new Label(editor, getStyle());
+
+				return editor;
 			}
 		};
-//		return new DialogCellEditor(c) {
-//			@Override
-//			protected Object openDialogBox(Control cellEditorWindow) {
-//				return DialogFeatureManipulator.this.openDialogBox(
-//						cellEditorWindow, object);
-//			}
-//
-//			@Override
-//			protected void updateContents(Object value) {
-//				getDefaultLabel().setText(DialogFeatureManipulator.this.renderValue(value));
-//			}
-//
-//		};
+		// return new DialogCellEditor(c) {
+		// @Override
+		// protected Object openDialogBox(Control cellEditorWindow) {
+		// return DialogFeatureManipulator.this.openDialogBox(
+		// cellEditorWindow, object);
+		// }
+		//
+		// @Override
+		// protected void updateContents(Object value) {
+		// getDefaultLabel().setText(DialogFeatureManipulator.this.renderValue(value));
+		// }
+		//
+		// };
 	}
 
 	@Override
@@ -104,8 +106,7 @@ public abstract class DialogFeatureManipulator extends
 		return renderValue(getValue(object));
 	}
 
-	protected abstract Object openDialogBox(Control cellEditorWindow,
-			Object object);
-	
+	protected abstract Object openDialogBox(Control cellEditorWindow, Object object);
+
 	protected abstract String renderValue(Object value);
 }

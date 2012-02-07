@@ -11,19 +11,16 @@ import java.util.List;
 import org.eclipse.emf.common.util.Enumerator;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the literals of the enumeration '<em><b>Fuel Unit</b></em>',
- * and utility methods for working with them.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the literals of the enumeration '<em><b>Fuel Unit</b></em>', and utility methods for working with them. <!-- end-user-doc -->
+ * 
  * @see scenario.schedule.events.EventsPackage#getFuelUnit()
  * @model
  * @generated
  */
 public enum FuelUnit implements Enumerator {
 	/**
-	 * The '<em><b>MT</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The '<em><b>MT</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #MT_VALUE
 	 * @generated
 	 * @ordered
@@ -31,9 +28,8 @@ public enum FuelUnit implements Enumerator {
 	MT(0, "MT", "MT"),
 
 	/**
-	 * The '<em><b>M3</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The '<em><b>M3</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #M3_VALUE
 	 * @generated
 	 * @ordered
@@ -41,9 +37,8 @@ public enum FuelUnit implements Enumerator {
 	M3(1, "M3", "M3"),
 
 	/**
-	 * The '<em><b>MMB Tu</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The '<em><b>MMB Tu</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #MMB_TU_VALUE
 	 * @generated
 	 * @ordered
@@ -51,13 +46,12 @@ public enum FuelUnit implements Enumerator {
 	MMB_TU(2, "MMBTu", "MMBTu");
 
 	/**
-	 * The '<em><b>MT</b></em>' literal value.
-	 * <!-- begin-user-doc -->
+	 * The '<em><b>MT</b></em>' literal value. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>MT</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of '<em><b>MT</b></em>' literal object isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #MT
 	 * @model
 	 * @generated
@@ -66,13 +60,12 @@ public enum FuelUnit implements Enumerator {
 	public static final int MT_VALUE = 0;
 
 	/**
-	 * The '<em><b>M3</b></em>' literal value.
-	 * <!-- begin-user-doc -->
+	 * The '<em><b>M3</b></em>' literal value. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>M3</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of '<em><b>M3</b></em>' literal object isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #M3
 	 * @model
 	 * @generated
@@ -81,13 +74,12 @@ public enum FuelUnit implements Enumerator {
 	public static final int M3_VALUE = 1;
 
 	/**
-	 * The '<em><b>MMB Tu</b></em>' literal value.
-	 * <!-- begin-user-doc -->
+	 * The '<em><b>MMB Tu</b></em>' literal value. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>MMB Tu</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of '<em><b>MMB Tu</b></em>' literal object isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #MMB_TU
 	 * @model name="MMBTu"
 	 * @generated
@@ -96,35 +88,27 @@ public enum FuelUnit implements Enumerator {
 	public static final int MMB_TU_VALUE = 2;
 
 	/**
-	 * An array of all the '<em><b>Fuel Unit</b></em>' enumerators.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * An array of all the '<em><b>Fuel Unit</b></em>' enumerators. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	private static final FuelUnit[] VALUES_ARRAY =
-		new FuelUnit[] {
-			MT,
-			M3,
-			MMB_TU,
-		};
+	private static final FuelUnit[] VALUES_ARRAY = new FuelUnit[] { MT, M3, MMB_TU, };
 
 	/**
-	 * A public read-only list of all the '<em><b>Fuel Unit</b></em>' enumerators.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * A public read-only list of all the '<em><b>Fuel Unit</b></em>' enumerators. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static final List<FuelUnit> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
-	 * Returns the '<em><b>Fuel Unit</b></em>' literal with the specified literal value.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the '<em><b>Fuel Unit</b></em>' literal with the specified literal value. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public static FuelUnit get(String literal) {
+	public static FuelUnit get(final String literal) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			FuelUnit result = VALUES_ARRAY[i];
+			final FuelUnit result = VALUES_ARRAY[i];
 			if (result.toString().equals(literal)) {
 				return result;
 			}
@@ -133,14 +117,13 @@ public enum FuelUnit implements Enumerator {
 	}
 
 	/**
-	 * Returns the '<em><b>Fuel Unit</b></em>' literal with the specified name.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the '<em><b>Fuel Unit</b></em>' literal with the specified name. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public static FuelUnit getByName(String name) {
+	public static FuelUnit getByName(final String name) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			FuelUnit result = VALUES_ARRAY[i];
+			final FuelUnit result = VALUES_ARRAY[i];
 			if (result.getName().equals(name)) {
 				return result;
 			}
@@ -149,89 +132,92 @@ public enum FuelUnit implements Enumerator {
 	}
 
 	/**
-	 * Returns the '<em><b>Fuel Unit</b></em>' literal with the specified integer value.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the '<em><b>Fuel Unit</b></em>' literal with the specified integer value. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public static FuelUnit get(int value) {
+	public static FuelUnit get(final int value) {
 		switch (value) {
-			case MT_VALUE: return MT;
-			case M3_VALUE: return M3;
-			case MMB_TU_VALUE: return MMB_TU;
+		case MT_VALUE:
+			return MT;
+		case M3_VALUE:
+			return M3;
+		case MMB_TU_VALUE:
+			return MMB_TU;
 		}
 		return null;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private final int value;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private final String name;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private final String literal;
 
 	/**
-	 * Only this class can construct instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Only this class can construct instances. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	private FuelUnit(int value, String name, String literal) {
+	private FuelUnit(final int value, final String name, final String literal) {
 		this.value = value;
 		this.name = name;
 		this.literal = literal;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public int getValue() {
-	  return value;
+		return value;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public String getName() {
-	  return name;
+		return name;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public String getLiteral() {
-	  return literal;
+		return literal;
 	}
 
 	/**
-	 * Returns the literal value of the enumerator, which is its string representation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the literal value of the enumerator, which is its string representation. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
 		return literal;
 	}
-	
-} //FuelUnit
+
+} // FuelUnit

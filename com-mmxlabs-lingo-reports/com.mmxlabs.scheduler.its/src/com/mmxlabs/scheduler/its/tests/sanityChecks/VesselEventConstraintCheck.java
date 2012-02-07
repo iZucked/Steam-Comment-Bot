@@ -112,7 +112,7 @@ public class VesselEventConstraintCheck {
 
 		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
 	}
-	
+
 	/**
 	 * Only one vessel is allowed to take the dry dock. Test that the constraint works.
 	 */
@@ -126,7 +126,7 @@ public class VesselEventConstraintCheck {
 
 		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
 	}
-	
+
 	/**
 	 * Only one vessel is allowed to take charter outs. Test that the constraint works.
 	 */
@@ -140,7 +140,7 @@ public class VesselEventConstraintCheck {
 
 		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
 	}
-	
+
 	/**
 	 * Only one vessel class is allowed to take dry docks. Test that the constraint works.
 	 */
@@ -154,7 +154,7 @@ public class VesselEventConstraintCheck {
 
 		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
 	}
-	
+
 	/**
 	 * Only one vessel class is allowed to take charter outs. Test that the constraint works.
 	 */
@@ -168,16 +168,21 @@ public class VesselEventConstraintCheck {
 
 		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
 	}
-	
+
 	/**
 	 * Add some vessel events to the CSC and run the event. The given Vessels and VesselClasses are added to the allowed lists on every VesselEvent.
-	 * @param allowedDrydockVessel A vessel that is allowed to dry dock
-	 * @param allowedDrydockVesselClass A class of vessel that is allowed to dry dock
-	 * @param allowedCharterOutVessel A vessel that is allowed to charter out
-	 * @param allowedCharterOutVesselClass A class of vessel that is allowed charter out
+	 * 
+	 * @param allowedDrydockVessel
+	 *            A vessel that is allowed to dry dock
+	 * @param allowedDrydockVesselClass
+	 *            A class of vessel that is allowed to dry dock
+	 * @param allowedCharterOutVessel
+	 *            A vessel that is allowed to charter out
+	 * @param allowedCharterOutVesselClass
+	 *            A class of vessel that is allowed charter out
 	 */
-	private void addVesselEventsAndRunTest(final Vessel allowedDrydockVessel, final VesselClass allowedDrydockVesselClass, final Vessel allowedCharterOutVessel, final VesselClass allowedCharterOutVesselClass) {
-		
+	private void addVesselEventsAndRunTest(final Vessel allowedDrydockVessel, final VesselClass allowedDrydockVesselClass, final Vessel allowedCharterOutVessel,
+			final VesselClass allowedCharterOutVesselClass) {
 
 		// add some VesselEvents, i.e. CharterOuts and DryDocks in a random-ish manner.
 		SanityCheckTools.addDrydocks(csc, ports, allowedDrydockVessel, allowedDrydockVesselClass);
@@ -188,8 +193,9 @@ public class VesselEventConstraintCheck {
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
 		// print the legs to console
-		for (CargoAllocation ca : result.getCargoAllocations())
+		for (final CargoAllocation ca : result.getCargoAllocations()) {
 			ScenarioTools.printCargoAllocation(ca.getName(), ca);
+		}
 
 		// print each vessel's sequence
 		ScenarioTools.printSequences(result);
@@ -219,19 +225,18 @@ public class VesselEventConstraintCheck {
 			for (final ScheduledEvent e : seq.getEvents()) {
 				if (e instanceof VesselEventVisit) {
 
-					VesselEventVisit vev = (VesselEventVisit) e;
-					VesselEvent ve = vev.getVesselEvent();
+					final VesselEventVisit vev = (VesselEventVisit) e;
+					final VesselEvent ve = vev.getVesselEvent();
 
-					Vessel usedVessel = ((FleetVessel) seq.getVessel()).getVessel();
+					final Vessel usedVessel = ((FleetVessel) seq.getVessel()).getVessel();
 
-					if (ve instanceof CharterOut)
+					if (ve instanceof CharterOut) {
 						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedCharterOutVessel, allowedCharterOutVesselClass));
-					else if (ve instanceof Drydock)
-
+					} else if (ve instanceof Drydock) {
 						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedDryDockVessel, allowedDryDockVesselClass));
-
-					else
+					} else {
 						fail("Test should cover all VesselEvents.");
+					}
 				}
 			}
 		}
@@ -240,14 +245,16 @@ public class VesselEventConstraintCheck {
 	private boolean isUsedVesselValid(final Vessel usedVessel, final Vessel allowedVessel, final VesselClass allowedVesselClass) {
 
 		// in the case that there are no restrictions on a vessel event all vessels are valid, so return true
-		if (allowedVessel == null && allowedVesselClass == null)
+		if ((allowedVessel == null) && (allowedVesselClass == null)) {
 			return true;
-		else {
+		} else {
 			boolean isValid = false;
-			if (allowedVessel != null)
+			if (allowedVessel != null) {
 				isValid = isValid || usedVessel.equals(allowedVessel);
-			if (allowedVesselClass != null)
+			}
+			if (allowedVesselClass != null) {
 				isValid = isValid || allowedVesselClass.equals(usedVessel.getClass_());
+			}
 
 			return isValid;
 		}

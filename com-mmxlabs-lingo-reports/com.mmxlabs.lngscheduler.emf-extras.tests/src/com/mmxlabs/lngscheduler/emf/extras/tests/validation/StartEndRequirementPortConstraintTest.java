@@ -4,13 +4,6 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.validation.IValidationContext;
@@ -154,12 +147,11 @@ public class StartEndRequirementPortConstraintTest {
 		when(validationContext.getTarget()).thenReturn(vc);
 
 		final IStatus result = constraint.validate(validationContext);
-		
+
 		System.out.println(result);
 
 		Assert.assertTrue("Result should be a detail constraint status decorator", result instanceof DetailConstraintStatusDecorator);
-		
-		
+
 		verify(vc, atLeastOnce()).eContainer();
 		verify(vc, atLeastOnce()).eContainingFeature();
 		verify(inaccessiblePorts, atLeastOnce()).contains(portA);

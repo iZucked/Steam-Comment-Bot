@@ -19,23 +19,20 @@ import scenario.port.DistanceModel;
 import scenario.port.PortPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Distance Model</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Distance Model</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.port.impl.DistanceModelImpl#getDistances <em>Distances</em>}</li>
+ * <li>{@link scenario.port.impl.DistanceModelImpl#getDistances <em>Distances</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class DistanceModelImpl extends EObjectImpl implements DistanceModel {
 	/**
-	 * The cached value of the '{@link #getDistances() <em>Distances</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getDistances() <em>Distances</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDistances()
 	 * @generated
 	 * @ordered
@@ -43,8 +40,8 @@ public class DistanceModelImpl extends EObjectImpl implements DistanceModel {
 	protected EList<DistanceLine> distances;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected DistanceModelImpl() {
@@ -52,8 +49,8 @@ public class DistanceModelImpl extends EObjectImpl implements DistanceModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -62,10 +59,11 @@ public class DistanceModelImpl extends EObjectImpl implements DistanceModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<DistanceLine> getDistances() {
 		if (distances == null) {
 			distances = new EObjectContainmentEList.Resolving<DistanceLine>(DistanceLine.class, this, PortPackage.DISTANCE_MODEL__DISTANCES);
@@ -74,77 +72,77 @@ public class DistanceModelImpl extends EObjectImpl implements DistanceModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case PortPackage.DISTANCE_MODEL__DISTANCES:
-				return ((InternalEList<?>)getDistances()).basicRemove(otherEnd, msgs);
+		case PortPackage.DISTANCE_MODEL__DISTANCES:
+			return ((InternalEList<?>) getDistances()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case PortPackage.DISTANCE_MODEL__DISTANCES:
-				return getDistances();
+		case PortPackage.DISTANCE_MODEL__DISTANCES:
+			return getDistances();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case PortPackage.DISTANCE_MODEL__DISTANCES:
-				getDistances().clear();
-				getDistances().addAll((Collection<? extends DistanceLine>)newValue);
-				return;
+		case PortPackage.DISTANCE_MODEL__DISTANCES:
+			getDistances().clear();
+			getDistances().addAll((Collection<? extends DistanceLine>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case PortPackage.DISTANCE_MODEL__DISTANCES:
-				getDistances().clear();
-				return;
+		case PortPackage.DISTANCE_MODEL__DISTANCES:
+			getDistances().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case PortPackage.DISTANCE_MODEL__DISTANCES:
-				return distances != null && !distances.isEmpty();
+		case PortPackage.DISTANCE_MODEL__DISTANCES:
+			return (distances != null) && !distances.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //DistanceModelImpl
+} // DistanceModelImpl

@@ -51,7 +51,7 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 
 		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 
-		if (selection != null && selection instanceof IStructuredSelection) {
+		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			final Iterator<?> itr = strucSelection.iterator();
@@ -64,7 +64,6 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 					final IJobDescriptor job = jobManager.findJobForResource(resource);
 					final IJobControl control = jobManager.getControlForJob(job);
 
-					
 					if (job instanceof LNGSchedulerJobDescriptor) {
 
 						final IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
@@ -76,7 +75,7 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 								try {
 									// Attempt to save job
 									// FIXME: Do not hardcode extension
-									final IPath path = SaveJobUtil.saveLNGSchedulerJob((LNGSchedulerJobDescriptor) job, (LNGSchedulerJobControl)control, resource.getFileExtension(), resource);
+									final IPath path = SaveJobUtil.saveLNGSchedulerJob((LNGSchedulerJobDescriptor) job, (LNGSchedulerJobControl) control, resource.getFileExtension(), resource);
 									if (path != null) {
 										// An IPath has been returned, try and find the IResource that it corresponds to
 										final IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
@@ -118,7 +117,7 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 
 		final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-		if (selection != null && selection instanceof IStructuredSelection) {
+		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			final Iterator<?> itr = strucSelection.iterator();

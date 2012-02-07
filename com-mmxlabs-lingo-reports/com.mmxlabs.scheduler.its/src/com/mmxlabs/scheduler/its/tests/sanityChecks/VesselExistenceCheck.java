@@ -31,7 +31,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 public class VesselExistenceCheck {
 
 	private static final int dischargePrice = 1;
-	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+	private final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 	/**
 	 * Create a load of vessels of varying classes and store them in an ArrayList. Create a load of ports with varying distances. Create a load of cargos to different ports and with different
@@ -93,8 +93,9 @@ public class VesselExistenceCheck {
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
 		// print the legs to console
-		for (CargoAllocation ca : result.getCargoAllocations())
+		for (final CargoAllocation ca : result.getCargoAllocations()) {
 			ScenarioTools.printCargoAllocation(ca.getName(), ca);
+		}
 
 		// print each vessel's sequence
 		ScenarioTools.printSequences(result);
@@ -121,9 +122,9 @@ public class VesselExistenceCheck {
 
 		// Check all vessels in the input exist in the output.
 		int numOfVesselsInOutput = 0;
-		for (AllocatedVessel av : result.getFleet()) {
+		for (final AllocatedVessel av : result.getFleet()) {
 			if (av instanceof FleetVessel) {
-				FleetVessel fv = (FleetVessel) av;
+				final FleetVessel fv = (FleetVessel) av;
 
 				Assert.assertTrue("Input vessel exists in output", inputVessels.contains(fv.getVessel()));
 				// remove the vessel - it should only exist once.
@@ -147,10 +148,11 @@ public class VesselExistenceCheck {
 	private void checkNumOfSpotVesselsNotExceeded(final Schedule result, final int maxNumOfSpotVessels) {
 
 		int numOfSpotVessels = 0;
-		for (AllocatedVessel av : result.getFleet()) {
+		for (final AllocatedVessel av : result.getFleet()) {
 
-			if (av instanceof SpotVessel)
+			if (av instanceof SpotVessel) {
 				numOfSpotVessels++;
+			}
 		}
 
 		Assert.assertTrue("Actual number of spot charter vessels does not exceed allowed number", numOfSpotVessels <= maxNumOfSpotVessels);

@@ -8,7 +8,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
-import scenario.*;
+import scenario.AnnotatedObject;
+import scenario.Detail;
 import scenario.NamedObject;
 import scenario.Scenario;
 import scenario.ScenarioObject;
@@ -16,31 +17,24 @@ import scenario.ScenarioPackage;
 import scenario.UUIDObject;
 
 /**
- * <!-- begin-user-doc -->
- * The <b>Switch</b> for the model's inheritance hierarchy.
- * It supports the call {@link #doSwitch(EObject) doSwitch(object)}
- * to invoke the <code>caseXXX</code> method for each class of the model,
- * starting with the actual class of the object
- * and proceeding up the inheritance hierarchy
- * until a non-null result is returned,
- * which is the result of the switch.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> The <b>Switch</b> for the model's inheritance hierarchy. It supports the call {@link #doSwitch(EObject) doSwitch(object)} to invoke the <code>caseXXX</code> method for each
+ * class of the model, starting with the actual class of the object and proceeding up the inheritance hierarchy until a non-null result is returned, which is the result of the switch. <!--
+ * end-user-doc -->
+ * 
  * @see scenario.ScenarioPackage
  * @generated
  */
 public class ScenarioSwitch<T> extends Switch<T> {
 	/**
-	 * The cached model package
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached model package <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected static ScenarioPackage modelPackage;
 
 	/**
-	 * Creates an instance of the switch.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the switch. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ScenarioSwitch() {
@@ -50,174 +44,182 @@ public class ScenarioSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Checks whether this is a switch for the given package.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Checks whether this is a switch for the given package. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @parameter ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
 	 */
 	@Override
-	protected boolean isSwitchFor(EPackage ePackage) {
+	protected boolean isSwitchFor(final EPackage ePackage) {
 		return ePackage == modelPackage;
 	}
 
 	/**
-	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
 	@Override
-	protected T doSwitch(int classifierID, EObject theEObject) {
+	protected T doSwitch(final int classifierID, final EObject theEObject) {
 		switch (classifierID) {
-			case ScenarioPackage.SCENARIO: {
-				Scenario scenario = (Scenario)theEObject;
-				T result = caseScenario(scenario);
-				if (result == null) result = caseAnnotatedObject(scenario);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+		case ScenarioPackage.SCENARIO: {
+			final Scenario scenario = (Scenario) theEObject;
+			T result = caseScenario(scenario);
+			if (result == null) {
+				result = caseAnnotatedObject(scenario);
 			}
-			case ScenarioPackage.SCENARIO_OBJECT: {
-				ScenarioObject scenarioObject = (ScenarioObject)theEObject;
-				T result = caseScenarioObject(scenarioObject);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = defaultCase(theEObject);
 			}
-			case ScenarioPackage.NAMED_OBJECT: {
-				NamedObject namedObject = (NamedObject)theEObject;
-				T result = caseNamedObject(namedObject);
-				if (result == null) result = caseScenarioObject(namedObject);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case ScenarioPackage.SCENARIO_OBJECT: {
+			final ScenarioObject scenarioObject = (ScenarioObject) theEObject;
+			T result = caseScenarioObject(scenarioObject);
+			if (result == null) {
+				result = defaultCase(theEObject);
 			}
-			case ScenarioPackage.UUID_OBJECT: {
-				UUIDObject uuidObject = (UUIDObject)theEObject;
-				T result = caseUUIDObject(uuidObject);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case ScenarioPackage.NAMED_OBJECT: {
+			final NamedObject namedObject = (NamedObject) theEObject;
+			T result = caseNamedObject(namedObject);
+			if (result == null) {
+				result = caseScenarioObject(namedObject);
 			}
-			case ScenarioPackage.ANNOTATED_OBJECT: {
-				AnnotatedObject annotatedObject = (AnnotatedObject)theEObject;
-				T result = caseAnnotatedObject(annotatedObject);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = defaultCase(theEObject);
 			}
-			case ScenarioPackage.DETAIL: {
-				Detail detail = (Detail)theEObject;
-				T result = caseDetail(detail);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case ScenarioPackage.UUID_OBJECT: {
+			final UUIDObject uuidObject = (UUIDObject) theEObject;
+			T result = caseUUIDObject(uuidObject);
+			if (result == null) {
+				result = defaultCase(theEObject);
 			}
-			default: return defaultCase(theEObject);
+			return result;
+		}
+		case ScenarioPackage.ANNOTATED_OBJECT: {
+			final AnnotatedObject annotatedObject = (AnnotatedObject) theEObject;
+			T result = caseAnnotatedObject(annotatedObject);
+			if (result == null) {
+				result = defaultCase(theEObject);
+			}
+			return result;
+		}
+		case ScenarioPackage.DETAIL: {
+			final Detail detail = (Detail) theEObject;
+			T result = caseDetail(detail);
+			if (result == null) {
+				result = defaultCase(theEObject);
+			}
+			return result;
+		}
+		default:
+			return defaultCase(theEObject);
 		}
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Scenario</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Scenario</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Scenario</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseScenario(Scenario object) {
+	public T caseScenario(final Scenario object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Object</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Object</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseScenarioObject(ScenarioObject object) {
+	public T caseScenarioObject(final ScenarioObject object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Named Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Named Object</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Named Object</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseNamedObject(NamedObject object) {
+	public T caseNamedObject(final NamedObject object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>UUID Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>UUID Object</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>UUID Object</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseUUIDObject(UUIDObject object) {
+	public T caseUUIDObject(final UUIDObject object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Annotated Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Annotated Object</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate
+	 * the switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Annotated Object</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAnnotatedObject(AnnotatedObject object) {
+	public T caseAnnotatedObject(final AnnotatedObject object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Detail</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>Detail</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Detail</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDetail(Detail object) {
+	public T caseDetail(final Detail object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch, but this is the last case anyway.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * Returns the result of interpreting the object as an instance of '<em>EObject</em>'. <!-- begin-user-doc --> This implementation returns null; returning a non-null result will terminate the
+	 * switch, but this is the last case anyway. <!-- end-user-doc -->
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated
 	 */
 	@Override
-	public T defaultCase(EObject object) {
+	public T defaultCase(final EObject object) {
 		return null;
 	}
 
-} //ScenarioSwitch
+} // ScenarioSwitch

@@ -49,7 +49,7 @@ import com.mmxlabs.common.Pair;
  */
 public class ReducedScheduleImporter extends EObjectImporter {
 	@Override
-	public Map<String, Collection<Map<String, String>>> exportObjects(Collection<? extends EObject> objects) {
+	public Map<String, Collection<Map<String, String>>> exportObjects(final Collection<? extends EObject> objects) {
 		final HashMap<String, Collection<Map<String, String>>> result = new HashMap<String, Collection<Map<String, String>>>();
 
 		for (final EObject object : objects) {
@@ -117,8 +117,9 @@ public class ReducedScheduleImporter extends EObjectImporter {
 					@Override
 					public void run() {
 						for (int i = 1; i < fline.length; i++) {
-							if (fline[i].isEmpty())
+							if (fline[i].isEmpty()) {
 								continue;
+							}
 
 							final Cargo c = (Cargo) registry.get(new Pair<EClass, String>(cargoClass, fline[i]));
 							if (c != null) {
@@ -146,7 +147,7 @@ public class ReducedScheduleImporter extends EObjectImporter {
 				});
 
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 
 		}
 

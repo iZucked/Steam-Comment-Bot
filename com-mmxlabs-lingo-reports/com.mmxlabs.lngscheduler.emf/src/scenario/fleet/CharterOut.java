@@ -6,21 +6,18 @@ package scenario.fleet;
 
 import scenario.port.Port;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Charter Out</b></em>'.
- * <!-- end-user-doc -->
- *
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Charter Out</b></em>'. <!-- end-user-doc -->
+ * 
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}</li>
- *   <li>{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
- *   <li>{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}</li>
+ * <li>{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}</li>
+ * <li>{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
+ * <li>{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @see scenario.fleet.FleetPackage#getCharterOut()
  * @model
  * @generated
@@ -28,13 +25,12 @@ import scenario.port.Port;
 public interface CharterOut extends VesselEvent, HeelOptions {
 
 	/**
-	 * Returns the value of the '<em><b>End Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>End Port</b></em>' reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>End Port</em>' reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>End Port</em>' reference isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>End Port</em>' reference.
 	 * @see #isSetEndPort()
 	 * @see #unsetEndPort()
@@ -46,10 +42,10 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	Port getEndPort();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>End Port</em>' reference.
+	 * Sets the value of the '{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>End Port</em>' reference.
 	 * @see #isSetEndPort()
 	 * @see #unsetEndPort()
 	 * @see #getEndPort()
@@ -58,9 +54,8 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	void setEndPort(Port value);
 
 	/**
-	 * Unsets the value of the '{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Unsets the value of the '{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isSetEndPort()
 	 * @see #getEndPort()
 	 * @see #setEndPort(Port)
@@ -69,9 +64,8 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	void unsetEndPort();
 
 	/**
-	 * Returns whether the value of the '{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}' reference is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns whether the value of the '{@link scenario.fleet.CharterOut#getEndPort <em>End Port</em>}' reference is set. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return whether the value of the '<em>End Port</em>' reference is set.
 	 * @see #unsetEndPort()
 	 * @see #getEndPort()
@@ -81,13 +75,12 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	boolean isSetEndPort();
 
 	/**
-	 * Returns the value of the '<em><b>Daily Charter Out Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Daily Charter Out Price</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Daily Charter Out Price</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Daily Charter Out Price</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Daily Charter Out Price</em>' attribute.
 	 * @see #isSetDailyCharterOutPrice()
 	 * @see #unsetDailyCharterOutPrice()
@@ -99,10 +92,10 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	int getDailyCharterOutPrice();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Daily Charter Out Price</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Daily Charter Out Price</em>' attribute.
 	 * @see #isSetDailyCharterOutPrice()
 	 * @see #unsetDailyCharterOutPrice()
 	 * @see #getDailyCharterOutPrice()
@@ -111,9 +104,8 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	void setDailyCharterOutPrice(int value);
 
 	/**
-	 * Unsets the value of the '{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Unsets the value of the '{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isSetDailyCharterOutPrice()
 	 * @see #getDailyCharterOutPrice()
 	 * @see #setDailyCharterOutPrice(int)
@@ -122,9 +114,8 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	void unsetDailyCharterOutPrice();
 
 	/**
-	 * Returns whether the value of the '{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns whether the value of the '{@link scenario.fleet.CharterOut#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute is set. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return whether the value of the '<em>Daily Charter Out Price</em>' attribute is set.
 	 * @see #unsetDailyCharterOutPrice()
 	 * @see #getDailyCharterOutPrice()
@@ -134,13 +125,12 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	boolean isSetDailyCharterOutPrice();
 
 	/**
-	 * Returns the value of the '<em><b>Repositioning Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Repositioning Fee</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Repositioning Fee</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Repositioning Fee</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Repositioning Fee</em>' attribute.
 	 * @see #isSetRepositioningFee()
 	 * @see #unsetRepositioningFee()
@@ -152,10 +142,10 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	int getRepositioningFee();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Repositioning Fee</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Repositioning Fee</em>' attribute.
 	 * @see #isSetRepositioningFee()
 	 * @see #unsetRepositioningFee()
 	 * @see #getRepositioningFee()
@@ -164,9 +154,8 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	void setRepositioningFee(int value);
 
 	/**
-	 * Unsets the value of the '{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Unsets the value of the '{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isSetRepositioningFee()
 	 * @see #getRepositioningFee()
 	 * @see #setRepositioningFee(int)
@@ -175,9 +164,8 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	void unsetRepositioningFee();
 
 	/**
-	 * Returns whether the value of the '{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns whether the value of the '{@link scenario.fleet.CharterOut#getRepositioningFee <em>Repositioning Fee</em>}' attribute is set. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return whether the value of the '<em>Repositioning Fee</em>' attribute is set.
 	 * @see #unsetRepositioningFee()
 	 * @see #getRepositioningFee()
@@ -187,10 +175,9 @@ public interface CharterOut extends VesselEvent, HeelOptions {
 	boolean isSetRepositioningFee();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetEndPort()) return getEndPort();\nelse return getStartPort();'"
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation" required="true" annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetEndPort()) return getEndPort();\nelse return getStartPort();'"
 	 * @generated
 	 */
 	Port getEffectiveEndPort();

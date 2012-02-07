@@ -90,9 +90,9 @@ public class HeelOutOfCharterOutTests {
 		// set charter out details.
 		final int charterOutTimeDays = 10;
 
-		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
+		final Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
 
-		Journey j = getJourneyAfterCharterOut(result);
+		final Journey j = getJourneyAfterCharterOut(result);
 
 		// expect LNG to never be used as the discharge price of the LNG makes it more expensive than base fuel.
 		FuelUsageAssertions.assertLNGNotUsed(j);
@@ -114,7 +114,7 @@ public class HeelOutOfCharterOutTests {
 		// set charter out details.
 		final int charterOutTimeDays = 10;
 
-		Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
+		final Schedule result = evaluateCharterOutScenario(dischargePrice, cvValue, baseFuelUnitPrice, charterOutTimeDays, heelLimit);
 
 		return getJourneyAfterCharterOut(result);
 	}
@@ -126,7 +126,7 @@ public class HeelOutOfCharterOutTests {
 	public void heelAvailableCheaper() {
 
 		final int heelLimit = 1000;
-		Journey j = testHeelWithCheaperLNG(heelLimit);
+		final Journey j = testHeelWithCheaperLNG(heelLimit);
 		FuelUsageAssertions.assertBaseFuelNotUsed(j);
 	}
 
@@ -137,7 +137,7 @@ public class HeelOutOfCharterOutTests {
 	public void heelNBOAvailableCheaper() {
 
 		final int heelLimit = 500;
-		Journey j = testHeelWithCheaperLNG(heelLimit);
+		final Journey j = testHeelWithCheaperLNG(heelLimit);
 		FuelUsageAssertions.assertFBONotUsed(j);
 	}
 
@@ -148,7 +148,7 @@ public class HeelOutOfCharterOutTests {
 	public void heelCheaperButNotAvailable() {
 
 		final int heelLimit = 0;
-		Journey j = testHeelWithCheaperLNG(heelLimit);
+		final Journey j = testHeelWithCheaperLNG(heelLimit);
 		FuelUsageAssertions.assertLNGNotUsed(j);
 	}
 
@@ -164,13 +164,14 @@ public class HeelOutOfCharterOutTests {
 
 			System.err.println("Heel limit: " + heelLimit);
 
-			Journey j = testHeelWithCheaperLNG(heelLimit);
+			final Journey j = testHeelWithCheaperLNG(heelLimit);
 
 			// get the amount of heel used
 			long LNGUsed = 0;
-			for (FuelQuantity fq : j.getFuelUsage()) {
-				if (fq.getFuelType() == FuelType.FBO || fq.getFuelType() == FuelType.NBO)
+			for (final FuelQuantity fq : j.getFuelUsage()) {
+				if ((fq.getFuelType() == FuelType.FBO) || (fq.getFuelType() == FuelType.NBO)) {
 					LNGUsed += fq.getQuantity();
+				}
 			}
 
 			Assert.assertTrue("Heel not exceeded", LNGUsed <= heelLimit);
@@ -226,7 +227,7 @@ public class HeelOutOfCharterOutTests {
 		final int ladenNBORate = NBORatePerDay;
 		final int pilotLightRate = 0;
 
-		Scenario scenario = ScenarioTools.createCharterOutScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
+		final Scenario scenario = ScenarioTools.createCharterOutScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
 				ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption,
 				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, pilotLightRate, charterOutTimeDays, heelLimit);
 
@@ -234,8 +235,9 @@ public class HeelOutOfCharterOutTests {
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
 		// print the Sequence (there should only be one Sequence)
-		for (Sequence seq : result.getSequences())
+		for (final Sequence seq : result.getSequences()) {
 			ScenarioTools.printSequence(seq);
+		}
 
 		return result;
 	}
@@ -246,20 +248,20 @@ public class HeelOutOfCharterOutTests {
 	 * @param charterOutSchedule
 	 * @return
 	 */
-	private Journey getJourneyAfterCharterOut(Schedule charterOutSchedule) {
+	private Journey getJourneyAfterCharterOut(final Schedule charterOutSchedule) {
 		// only expect one sequence.
 		Assert.assertTrue("Only one sequence", charterOutSchedule.getSequences().size() == 1);
-		Sequence seq = charterOutSchedule.getSequences().get(0);
+		final Sequence seq = charterOutSchedule.getSequences().get(0);
 
 		// get the event after the charter out.
-		for (ScheduledEvent e : seq.getEvents()) {
+		for (final ScheduledEvent e : seq.getEvents()) {
 
 			if (e instanceof CharterOutVisit) {
 				// got the charter out, now get the event after it and make sure it is a journey. If it is, return it.
-				int charterOutIndex = seq.getEvents().indexOf(e);
-				int nextEventIndex = charterOutIndex + 1;
+				final int charterOutIndex = seq.getEvents().indexOf(e);
+				final int nextEventIndex = charterOutIndex + 1;
 				Assert.assertTrue("There is an event after the charter out", seq.getEvents().size() >= nextEventIndex);
-				ScheduledEvent eventAfterCharterOut = seq.getEvents().get(charterOutIndex + 1);
+				final ScheduledEvent eventAfterCharterOut = seq.getEvents().get(charterOutIndex + 1);
 				Assert.assertTrue("Event after charter out is a journey", eventAfterCharterOut instanceof Journey);
 
 				return (Journey) eventAfterCharterOut;

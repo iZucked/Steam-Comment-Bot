@@ -7,9 +7,7 @@ package com.mmxlabs.shiplingo.ui.detailview.base;
 import com.mmxlabs.shiplingo.ui.detailview.editors.IInlineEditor;
 
 /**
- * Instances provide a single method to wrap an IInlineEditor, allowing its
- * control to be modified without the editor or the containing composite knowing
- * too much about it.
+ * Instances provide a single method to wrap an IInlineEditor, allowing its control to be modified without the editor or the containing composite knowing too much about it.
  * 
  * @author hinton
  */

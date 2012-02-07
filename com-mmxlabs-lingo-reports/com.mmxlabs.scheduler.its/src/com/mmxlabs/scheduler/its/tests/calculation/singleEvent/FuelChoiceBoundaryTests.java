@@ -7,14 +7,14 @@ package com.mmxlabs.scheduler.its.tests.calculation.singleEvent;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.common.TimeUnitConvert;
-import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
-
 import scenario.Scenario;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
+
+import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 
 /**
  * From <a href="https://mmxlabs.fogbugz.com/default.asp?179">case 179</a>:
@@ -41,22 +41,25 @@ public class FuelChoiceBoundaryTests {
 		final int fuelConsumptionPerHour = 11;
 		final int NBORatePerHour = 10;
 
-		CargoAllocation a = testPriceConsumption("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour);
+		final CargoAllocation a = testPriceConsumption("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour);
 
 		// need to check that FBO is never used on any leg or idle.
 		for (final FuelQuantity fq : a.getLadenLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.FBO)
+			if (fq.getFuelType() == FuelType.FBO) {
 				Assert.assertTrue("Laden leg never uses FBO", fq.getQuantity() == 0);
+			}
 		}
 
 		// Check there is no heel by checking there is no NBO used after discharge
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO)
+			if (fq.getFuelType() == FuelType.NBO) {
 				Assert.assertTrue("Ballast leg never uses NBO", fq.getQuantity() == 0);
+			}
 		}
 		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO)
+			if (fq.getFuelType() == FuelType.NBO) {
 				Assert.assertTrue("Ballast idle never uses NBO", fq.getQuantity() == 0);
+			}
 		}
 	}
 
@@ -72,24 +75,28 @@ public class FuelChoiceBoundaryTests {
 		final int fuelConsumptionPerHour = 11;
 		final int NBORatePerHour = 10;
 
-		CargoAllocation a = testPriceConsumption("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour);
+		final CargoAllocation a = testPriceConsumption("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour);
 
 		// need to check that base fuel is never used on any leg or idle.
 		for (final FuelQuantity fq : a.getLadenLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL)
+			if (fq.getFuelType() == FuelType.BASE_FUEL) {
 				Assert.assertTrue("Laden leg never uses base fuel", fq.getQuantity() == 0);
+			}
 		}
 		for (final FuelQuantity fq : a.getLadenIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL)
+			if (fq.getFuelType() == FuelType.BASE_FUEL) {
 				Assert.assertTrue("Laden idle never uses base fuel", fq.getQuantity() == 0);
+			}
 		}
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL)
+			if (fq.getFuelType() == FuelType.BASE_FUEL) {
 				Assert.assertTrue("Ballast leg never uses base fuel", fq.getQuantity() == 0);
+			}
 		}
 		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL)
+			if (fq.getFuelType() == FuelType.BASE_FUEL) {
 				Assert.assertTrue("Ballast idle never uses base fuel", fq.getQuantity() == 0);
+			}
 		}
 	}
 
@@ -140,15 +147,17 @@ public class FuelChoiceBoundaryTests {
 
 		final int pilotLightRate = 0;
 
-		CargoAllocation a = testPilotLight("Test ballast cheaper on NBO, ballast idle cheaper on base", pilotLightRate);
+		final CargoAllocation a = testPilotLight("Test ballast cheaper on NBO, ballast idle cheaper on base", pilotLightRate);
 
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() != FuelType.NBO)
+			if (fq.getFuelType() != FuelType.NBO) {
 				Assert.assertTrue("Ballast leg only uses NBO", fq.getQuantity() == 0);
+			}
 		}
 		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL)
+			if (fq.getFuelType() == FuelType.BASE_FUEL) {
 				Assert.assertTrue("Ballast idle uses base fuel", fq.getQuantity() > 0);
+			}
 		}
 	}
 
@@ -160,11 +169,12 @@ public class FuelChoiceBoundaryTests {
 
 		final int pilotLightRate = 3;
 
-		CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
+		final CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
 
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() != FuelType.BASE_FUEL)
+			if (fq.getFuelType() != FuelType.BASE_FUEL) {
 				Assert.assertTrue("Ballast leg only uses base fuel", fq.getQuantity() == 0);
+			}
 		}
 	}
 
@@ -176,11 +186,12 @@ public class FuelChoiceBoundaryTests {
 
 		final int pilotLightRate = 2;
 
-		CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
+		final CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
 
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() != FuelType.FBO)
+			if (fq.getFuelType() != FuelType.FBO) {
 				Assert.assertTrue("Ballast leg uses NBO and base fuel", fq.getQuantity() > 0);
+			}
 		}
 	}
 

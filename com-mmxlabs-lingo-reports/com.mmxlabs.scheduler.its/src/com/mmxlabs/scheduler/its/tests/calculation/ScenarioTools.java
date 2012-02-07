@@ -229,7 +229,7 @@ public class ScenarioTools {
 
 		// if given a canals with canal costs, add them to the scenario.
 		if (canalCosts != null) {
-			for (VesselClassCost canalCost : canalCosts) {
+			for (final VesselClassCost canalCost : canalCosts) {
 				if (canalCost != null) {
 					// add the canal to the scenario
 					scenario.getCanalModel().getCanals().add(canalCost.getCanal());
@@ -302,7 +302,7 @@ public class ScenarioTools {
 		scenario.getPortModel().getPorts().add(A);
 		scenario.getPortModel().getPorts().add(B);
 
-		for (int distance : distancesBetweenPorts) {
+		for (final int distance : distancesBetweenPorts) {
 			final DistanceLine distanceLine = PortFactory.eINSTANCE.createDistanceLine();
 			distanceLine.setFromPort(A);
 			distanceLine.setToPort(B);
@@ -371,7 +371,7 @@ public class ScenarioTools {
 		final Date now = new Date();
 		load.setWindowStart(new DateAndOptionalTime(now, false));
 		load.setWindowDuration(0);
-		final Date dischargeDate = new Date(now.getTime() + Timer.ONE_HOUR * travelTime);
+		final Date dischargeDate = new Date(now.getTime() + (Timer.ONE_HOUR * travelTime));
 		dis.setWindowStart(new DateAndOptionalTime(dischargeDate, false));
 		dis.setWindowDuration(0);
 
@@ -383,7 +383,7 @@ public class ScenarioTools {
 			// add to scenario's fleet model
 			scenario.getFleetModel().getVesselEvents().add(dryDock);
 			// set the date to be after the discharge date
-			final Date thenNext = new Date(dischargeDate.getTime() + Timer.ONE_HOUR * travelTime);
+			final Date thenNext = new Date(dischargeDate.getTime() + (Timer.ONE_HOUR * travelTime));
 			dryDock.setStartDate(thenNext);
 			dryDock.setEndDate(thenNext);
 		}
@@ -642,7 +642,7 @@ public class ScenarioTools {
 			lst.addTransformerExtension(sct);
 			lst.addContractTransformer(sct, sct.getContractEClasses());
 		}
-		
+
 		IOptimisationData data;
 		try {
 			data = lst.createOptimisationData(entities);
@@ -662,7 +662,7 @@ public class ScenarioTools {
 		final IAnnotatedSolution startSolution = optimiser.start(context);
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-		//TODO addd trading extension?
+		// TODO addd trading extension?
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);
 
 		return schedule;
@@ -681,14 +681,18 @@ public class ScenarioTools {
 		System.err.println("Allocation " + ((Cargo) a.getLoadSlot().eContainer()).getId());
 		System.err.println("Total cost: " + a.getTotalCost() + ", Total LNG volume used for fuel: " + a.getFuelVolume() + "M3");
 
-		if (a.getLadenLeg() != null)
+		if (a.getLadenLeg() != null) {
 			printJourney("Laden Leg", a.getLadenLeg());
-		if (a.getLadenIdle() != null)
+		}
+		if (a.getLadenIdle() != null) {
 			printIdle("Laden Idle", a.getLadenIdle());
-		if (a.getBallastLeg() != null)
+		}
+		if (a.getBallastLeg() != null) {
 			printJourney("Ballast Leg", a.getBallastLeg());
-		if (a.getBallastIdle() != null)
+		}
+		if (a.getBallastIdle() != null) {
 			printIdle("Ballast Idle", a.getBallastIdle());
+		}
 	}
 
 	/**
@@ -724,10 +728,11 @@ public class ScenarioTools {
 	 * 
 	 * @param fuelQuantities
 	 */
-	public static void printFuel(EList<FuelQuantity> fuelQuantities) {
+	public static void printFuel(final EList<FuelQuantity> fuelQuantities) {
 
-		for (final FuelQuantity fq : fuelQuantities)
+		for (final FuelQuantity fq : fuelQuantities) {
 			System.err.println("\t" + fq.getFuelType() + " " + fq.getQuantity() + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
+		}
 	}
 
 	public static void printSequences(final Schedule result) {
@@ -747,9 +752,9 @@ public class ScenarioTools {
 			if (e instanceof Idle) {
 
 				final Idle i = (Idle) e;
-				
+
 				final String portName = i.getPort() == null ? "null" : i.getPort().getName();
-				
+
 				System.err.println("Idle:");
 				System.err.println("\tvessel state: " + i.getVesselState() + ", Duration: " + i.getEventDuration() + ", port: " + portName);
 				ScenarioTools.printFuel(i.getFuelUsage());
@@ -776,11 +781,11 @@ public class ScenarioTools {
 				ScenarioTools.printFuel(j.getFuelUsage());
 
 			} else if (e instanceof SlotVisit) {
-				SlotVisit sv = (SlotVisit) e;
+				final SlotVisit sv = (SlotVisit) e;
 				System.err.println("SlotVisit:");
 				System.err.println("\tDuration: " + sv.getEventDuration());
 			} else if (e instanceof PortVisit) {
-				PortVisit pv = (PortVisit) e;
+				final PortVisit pv = (PortVisit) e;
 				System.err.println("PortVisit:");
 				System.err.println("\tDuration: " + pv.getEventDuration());
 			} else {

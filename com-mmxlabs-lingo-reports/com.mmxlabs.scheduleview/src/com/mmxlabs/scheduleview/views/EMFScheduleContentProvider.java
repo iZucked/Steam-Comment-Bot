@@ -22,8 +22,7 @@ import scenario.schedule.events.SlotVisit;
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 
 /**
- * A gantt chart content provider which provides content for a selected EMF
- * Schedule object.
+ * A gantt chart content provider which provides content for a selected EMF Schedule object.
  * 
  * @author hinton
  * 
@@ -37,16 +36,16 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	@Override
 	public Object[] getChildren(final Object parent) {
-		
-		if (parent instanceof Collection<?>) {
-			List<Object> children = new ArrayList<Object>();
 
-			for (Object o : (Collection)parent) {
+		if (parent instanceof Collection<?>) {
+			final List<Object> children = new ArrayList<Object>();
+
+			for (final Object o : (Collection) parent) {
 				if (o instanceof Schedule) {
 					children.addAll(((Schedule) o).getSequences());
 				}
 			}
-			
+
 			return children.toArray();
 		} else if (parent instanceof Schedule) {
 			final Schedule schedule = (Schedule) parent;
@@ -69,7 +68,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		return element instanceof Schedule || element instanceof Sequence;
+		return (element instanceof Schedule) || (element instanceof Sequence);
 	}
 
 	@Override
@@ -86,7 +85,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	public Calendar getElementStartTime(final Object element) {
 		if (element instanceof ScheduledEvent) {
 			final ScheduledEvent event = (ScheduledEvent) element;
-			Calendar c = Calendar.getInstance();
+			final Calendar c = Calendar.getInstance();
 
 			final Date startTime = event.getStartTime();
 			if (startTime != null) {
@@ -101,7 +100,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	public Calendar getElementEndTime(final Object element) {
 		if (element instanceof ScheduledEvent) {
 			final ScheduledEvent event = (ScheduledEvent) element;
-			Calendar c = Calendar.getInstance();
+			final Calendar c = Calendar.getInstance();
 
 			final Date endTime = event.getEndTime();
 			if (endTime != null) {
@@ -116,7 +115,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	public Calendar getElementPlannedStartTime(final Object element) {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
-			Calendar c = Calendar.getInstance();
+			final Calendar c = Calendar.getInstance();
 			final Slot slot = visit.getSlot();
 
 			final Date windowStart = slot.getWindowStart();
@@ -133,7 +132,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	public Calendar getElementPlannedEndTime(final Object element) {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
-			Calendar c = Calendar.getInstance();
+			final Calendar c = Calendar.getInstance();
 			final Slot slot = visit.getSlot();
 			final Date windowStart = slot.getWindowStart();
 			if (windowStart != null) {

@@ -110,7 +110,7 @@ public abstract class AbstractDetailComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public AbstractDetailComposite(final Composite parent, int style, final boolean shouldValidate) {
+	public AbstractDetailComposite(final Composite parent, final int style, final boolean shouldValidate) {
 		super(parent, style);
 		if (shouldValidate) {
 			validator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
@@ -129,14 +129,15 @@ public abstract class AbstractDetailComposite extends Composite {
 			skipNextValidation = false;
 			return;
 		}
-		if (validator == null)
+		if (validator == null) {
 			return;
+		}
 
 		final IStatus status = input == null ? Status.OK_STATUS : validator.validate(input);
 
 		processValidation(status);
 
-		currentStateValid = status.matches(Status.ERROR) == false;
+		currentStateValid = status.matches(IStatus.ERROR) == false;
 
 		if (postValidationRunnable != null) {
 			postValidationRunnable.run();
@@ -155,7 +156,7 @@ public abstract class AbstractDetailComposite extends Composite {
 	 * 
 	 * @param status
 	 */
-	private void processValidation(IStatus status) {
+	private void processValidation(final IStatus status) {
 		for (final IInlineEditor e : editors) {
 			e.processValidation(status);
 		}
@@ -194,7 +195,7 @@ public abstract class AbstractDetailComposite extends Composite {
 		boolean tallMode = false;
 		for (final Control c : getChildren()) {
 			final Point p = c.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-			if (p.x + 10 >= width) {
+			if ((p.x + 10) >= width) {
 				tallMode = true;
 			}
 
@@ -318,8 +319,9 @@ public abstract class AbstractDetailComposite extends Composite {
 	public Control createEditorControl(final Composite container, IInlineEditor editor, final String label) {
 		if (editor != null) {
 			editor = editorWrapper.wrap(editor);
-			if (editor == null)
+			if (editor == null) {
 				return null; // wrapper may filter out this editor.
+			}
 			// create label & control
 			final Label labelControl = new Label(container, SWT.NONE);
 			labelControl.setText(label);
@@ -372,8 +374,9 @@ public abstract class AbstractDetailComposite extends Composite {
 			final EReference reference = (EReference) feature;
 			// lookup value provider
 			final IReferenceValueProvider valueProvider = valueProviderProvider.getValueProvider((EClass) classifier);
-			if (valueProvider == null)
+			if (valueProvider == null) {
 				return null;
+			}
 			if (reference.isMany()) {
 				editor = new MultiReferenceInlineEditor(inputPath, feature, editingDomain, commandProcessor, valueProvider);
 			} else {
@@ -383,10 +386,10 @@ public abstract class AbstractDetailComposite extends Composite {
 			final EDataType dataType = (EDataType) classifier;
 			if (dataType == EcorePackage.eINSTANCE.getEString()) {
 				editor = new TextInlineEditor(inputPath, feature, editingDomain, commandProcessor);
-			} else if (dataType == EcorePackage.eINSTANCE.getEDate() || dataType == ScenarioPackage.eINSTANCE.getDateAndOptionalTime()) {
+			} else if ((dataType == EcorePackage.eINSTANCE.getEDate()) || (dataType == ScenarioPackage.eINSTANCE.getDateAndOptionalTime())) {
 				editor = new LocalDateInlineEditor(inputPath, feature, editingDomain, commandProcessor);
-			} else if (dataType == EcorePackage.eINSTANCE.getEInt() || dataType == EcorePackage.eINSTANCE.getEFloat() || dataType == EcorePackage.eINSTANCE.getELong()
-					|| dataType == EcorePackage.eINSTANCE.getEDouble() || dataType == ScenarioPackage.eINSTANCE.getPercentage()) {
+			} else if ((dataType == EcorePackage.eINSTANCE.getEInt()) || (dataType == EcorePackage.eINSTANCE.getEFloat()) || (dataType == EcorePackage.eINSTANCE.getELong())
+					|| (dataType == EcorePackage.eINSTANCE.getEDouble()) || (dataType == ScenarioPackage.eINSTANCE.getPercentage())) {
 				editor = new NumberInlineEditor(inputPath, feature, editingDomain, commandProcessor);
 			} else if (dataType.getInstanceClass().isEnum()) {
 				if (feature.isMany()) {
@@ -429,29 +432,33 @@ public abstract class AbstractDetailComposite extends Composite {
 		return inputPath;
 	}
 
-	public void addSubEditor(AbstractDetailComposite composite, boolean expandColumns) {
+	public void addSubEditor(final AbstractDetailComposite composite, final boolean expandColumns) {
 		subEditors.add(composite);
-		if (expandColumns)
+		if (expandColumns) {
 			myLayout.numColumns++;// = subEditors.size() + 1;
+		}
 	}
 
 	public boolean isLockedForEditing() {
 		return lockedForEditing;
 	}
 
-	public void setLockedForEditing(boolean lockedForEditing) {
+	public void setLockedForEditing(final boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
 		setEnabled(this, !lockedForEditing);
-		if (!lockedForEditing)
+		if (!lockedForEditing) {
 			setInput(input); // need to do this in case some controls are /meant/ to be disabled.
+		}
 	}
 
 	private void setEnabled(final Control control, final boolean enabled) {
-		if (!(control instanceof Label || control instanceof Group))
+		if (!((control instanceof Label) || (control instanceof Group))) {
 			control.setEnabled(enabled);
+		}
 		if (control instanceof Composite) {
-			for (final Control child : ((Composite) control).getChildren())
+			for (final Control child : ((Composite) control).getChildren()) {
 				setEnabled(child, enabled);
+			}
 		}
 	}
 }

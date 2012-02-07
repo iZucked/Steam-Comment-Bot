@@ -44,9 +44,9 @@ public class CharterOutTests {
 		// discharge price makes LNG slightly cheaper than BF.
 		final float dischargePrice = 0.99f;
 
-		CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+		final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
-		//a leg between ports A and B will take 100 hours.
+		// a leg between ports A and B will take 100 hours.
 		final long legDurationHours = 100;
 
 		final Port portA = PortFactory.eINSTANCE.createPort();
@@ -100,15 +100,16 @@ public class CharterOutTests {
 		for (final Sequence seq : result.getSequences()) {
 			for (final ScheduledEvent e : seq.getEvents()) {
 				if (e instanceof Journey) {
-					Journey j = (Journey) e;
+					final Journey j = (Journey) e;
 
 					if (j.getToPort().equals(portB)) {
 						// first journey, so check that heel is used.
 						// get the amount of heel used
 						long LNGUsed = 0;
-						for (FuelQuantity fq : j.getFuelUsage()) {
-							if (fq.getFuelType() == FuelType.FBO || fq.getFuelType() == FuelType.NBO)
+						for (final FuelQuantity fq : j.getFuelUsage()) {
+							if ((fq.getFuelType() == FuelType.FBO) || (fq.getFuelType() == FuelType.NBO)) {
 								LNGUsed += fq.getQuantity();
+							}
 						}
 
 						Assert.assertTrue("Heel not exceeded", LNGUsed <= firstCOHeelLimit);
@@ -118,16 +119,18 @@ public class CharterOutTests {
 						// second journey, check heel is NOT used.
 						// get the amount of heel used
 						long LNGUsed = 0;
-						for (FuelQuantity fq : j.getFuelUsage()) {
-							if (fq.getFuelType() == FuelType.FBO || fq.getFuelType() == FuelType.NBO)
+						for (final FuelQuantity fq : j.getFuelUsage()) {
+							if ((fq.getFuelType() == FuelType.FBO) || (fq.getFuelType() == FuelType.NBO)) {
 								LNGUsed += fq.getQuantity();
+							}
 						}
 
 						Assert.assertTrue("Heel not exceeded", LNGUsed == secondCOHeelLimit);
 
 						FuelUsageAssertions.assertLNGNotUsed(j);
-					} else
+					} else {
 						Assert.fail("Journey not to a recognised port?");
+					}
 				}
 			}
 		}

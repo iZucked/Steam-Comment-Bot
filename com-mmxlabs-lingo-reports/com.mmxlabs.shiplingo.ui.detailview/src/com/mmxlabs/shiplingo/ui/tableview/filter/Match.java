@@ -18,7 +18,7 @@ class Match implements IFilter {
 	public enum Operation {
 		LIKE, EQUAL, NOTEQUAL, LESS, GREATER;
 
-		public static Operation fromToken(int matchOp) {
+		public static Operation fromToken(final int matchOp) {
 			switch (matchOp) {
 			case '=':
 				return EQUAL;
@@ -37,7 +37,7 @@ class Match implements IFilter {
 	private final Operation operation;
 	private final String key;
 	private final String value;
-	private String lowerValue;
+	private final String lowerValue;
 	private Double numberValue;
 	private Integer integerValue;
 
@@ -56,37 +56,41 @@ class Match implements IFilter {
 		this.lowerValue = value.toLowerCase();
 		try {
 			numberValue = Double.parseDouble(value);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			numberValue = null;
 		}
 		try {
 			integerValue = Integer.parseInt(value);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			integerValue = null;
 		}
 	}
 
 	@Override
-	public boolean matches(final Map<String, Pair<?,?>> properties) {
+	public boolean matches(final Map<String, Pair<?, ?>> properties) {
 		if (key == null) {
-			for (final Pair<?,?> o : properties.values()) {
-				if (matches(o.getFirst(),o.getSecond()))
+			for (final Pair<?, ?> o : properties.values()) {
+				if (matches(o.getFirst(), o.getSecond())) {
 					return true;
+				}
 			}
 			return false;
 		} else {
 			final Pair<?, ?> value = properties.get(key);
-			if (value == null) return false;
+			if (value == null) {
+				return false;
+			}
 			return matches(value.getFirst(), value.getSecond());
 		}
 	}
 
-	private boolean matches(final Object value, Object renderedValue) {
+	private boolean matches(final Object value, final Object renderedValue) {
 		switch (operation) {
 		case LIKE:
 			if (value instanceof Calendar) {
-				if (likeCalendar((Calendar) value))
+				if (likeCalendar((Calendar) value)) {
 					return true;
+				}
 				return likeLowercaseString(renderedValue);
 			}
 			return likeLowercaseString(value);
@@ -130,9 +134,9 @@ class Match implements IFilter {
 	 * @param input
 	 * @return
 	 */
-	private boolean likeLowercaseString(Object input) {
+	private boolean likeLowercaseString(final Object input) {
 		final String lowerInput = (input + "").toLowerCase();
-		return lowerInput.contains(lowerValue) ;
+		return lowerInput.contains(lowerValue);
 	}
 
 	private final static DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
@@ -145,11 +149,12 @@ class Match implements IFilter {
 	private boolean likeCalendar(final Calendar calendar) {
 		if (integerValue != null) {
 			final int i = integerValue;
-			return calendar.get(Calendar.YEAR) == integerValue || calendar.get(Calendar.DAY_OF_MONTH) == i || calendar.get(Calendar.MONTH) + 1 == i;
+			return (calendar.get(Calendar.YEAR) == integerValue) || (calendar.get(Calendar.DAY_OF_MONTH) == i) || ((calendar.get(Calendar.MONTH) + 1) == i);
 		}
 
-		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.get(Calendar.MONTH)]))
+		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.get(Calendar.MONTH)])) {
 			return true;
+		}
 
 		return false;
 	}

@@ -30,9 +30,9 @@ public class CSVReader {
 	private final String directory;
 	private final String filename;
 	private final Map<String, String> originalHeaderLine = new HashMap<String, String>();
-	
+
 	private final Set<String> unusedHeaders = new HashSet<String>();
-	
+
 	/**
 	 * @param inputFileName
 	 * @throws IOException
@@ -42,7 +42,9 @@ public class CSVReader {
 		filename = new File(inputFileName).getName();
 		reader = new BufferedReader(new FileReader(inputFileName));
 		headerLine = readLine();
-		if (headerLine == null) return;
+		if (headerLine == null) {
+			return;
+		}
 		for (int i = 0; i < headerLine.length; i++) {
 			final String lc = headerLine[i].toLowerCase();
 			originalHeaderLine.put(lc, headerLine[i]);
@@ -50,11 +52,11 @@ public class CSVReader {
 		}
 		unusedHeaders.addAll(originalHeaderLine.keySet());
 	}
-	
+
 	public CSVReader getAdjacentReader(final String pathFragment) throws IOException {
-		return new CSVReader(directory +File.separator+ pathFragment);
+		return new CSVReader(directory + File.separator + pathFragment);
 	}
-	
+
 	public String getCasedColumnName(final String lowerCaseName) {
 		return originalHeaderLine.get(lowerCaseName);
 	}
@@ -62,7 +64,9 @@ public class CSVReader {
 	public String[] readLine() throws IOException {
 		final String line = reader.readLine();
 		lineNumber++;
-		if (line == null) return null;
+		if (line == null) {
+			return null;
+		}
 		final LinkedList<String> fields = new LinkedList<String>();
 		StringBuffer temp = new StringBuffer();
 		State state = State.NORMAL;
@@ -110,7 +114,7 @@ public class CSVReader {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * @return
 	 * @throws IOException
@@ -126,9 +130,10 @@ public class CSVReader {
 			}
 		};
 		final String[] fields = readLine();
-		if (fields == null)
+		if (fields == null) {
 			return null;
-		for (int i = 0; i < headerLine.length && i < fields.length; i++) {
+		}
+		for (int i = 0; (i < headerLine.length) && (i < fields.length); i++) {
 			row.put(headerLine[i], fields[i]);
 		}
 		return row;
@@ -142,6 +147,7 @@ public class CSVReader {
 	}
 
 	private int lineNumber = 1;
+
 	/**
 	 * @return
 	 */

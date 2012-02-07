@@ -57,7 +57,7 @@ public class EObjectImporter {
 			for (final EClassifier classifier : ePackage.getEClassifiers()) {
 				if (classifier instanceof EClass) {
 					final EClass possibleSubClass = (EClass) classifier;
-					if (outputEClass.isSuperTypeOf(possibleSubClass) && possibleSubClass.isAbstract() == false && possibleSubClass.getName().equalsIgnoreCase(fields.get("kind"))) {
+					if (outputEClass.isSuperTypeOf(possibleSubClass) && (possibleSubClass.isAbstract() == false) && possibleSubClass.getName().equalsIgnoreCase(fields.get("kind"))) {
 						return (EClass) classifier;
 					}
 				}
@@ -134,7 +134,7 @@ public class EObjectImporter {
 	 * @param prefix2
 	 * @return
 	 */
-	private Map<String, String> exportObject(EObject object, String prefix) {
+	private Map<String, String> exportObject(final EObject object, final String prefix) {
 		// First write out all the fields in the object, then write all the
 		// fields in its contained objects
 		final LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
@@ -153,7 +153,7 @@ public class EObjectImporter {
 	protected void flattenAttributesAndReferences(final EObject object, final String prefix, final Map<String, String> output) {
 		String timezone = "UTC";
 		for (final EReference ref : object.eClass().getEAllReferences()) {
-			if (ref.getEReferenceType().equals(PortPackage.eINSTANCE.getPort()) && ref.isContainment() == false && ref.isMany() == false) {
+			if (ref.getEReferenceType().equals(PortPackage.eINSTANCE.getPort()) && (ref.isContainment() == false) && (ref.isMany() == false)) {
 				final Port p = (Port) object.eGet(ref);
 				if (p != null) {
 					timezone = p.getTimeZone();
@@ -168,12 +168,12 @@ public class EObjectImporter {
 			if (value instanceof Date) {
 				svalue = DateTimeParser.getInstance().formatDate((Date) value, timezone);
 			} else if (attribute.getEType() == ScenarioPackage.eINSTANCE.getPercentage()) {
-				if (value == null || ((Number) value).doubleValue() == 0)
+				if ((value == null) || (((Number) value).doubleValue() == 0)) {
 					svalue = "0";
-				else {
+				} else {
 					svalue = String.format("%.1g", ((Number) value).doubleValue() * 100.0);
 				}
-			} else if (value instanceof Float || value instanceof Double) {
+			} else if ((value instanceof Float) || (value instanceof Double)) {
 				svalue = String.format("%3g", ((Number) value).doubleValue());
 			} else if (value != null) {
 				svalue = value.toString();
@@ -182,8 +182,9 @@ public class EObjectImporter {
 		}
 
 		for (final EReference reference : object.eClass().getEAllReferences()) {
-			if (reference.isContainment())
+			if (reference.isContainment()) {
 				continue;
+			}
 			if (reference.isMany()) {
 				final EList<EObject> values = (EList<EObject>) object.eGet(reference);
 
@@ -249,7 +250,7 @@ public class EObjectImporter {
 		String fieldValue = "";
 		for (final Map.Entry<String, Collection<Map<String, String>>> e : subObjects.entrySet()) {
 			final String adjustedName = NamedObjectRegistry.getName(object) + "-" + e.getKey();
-			Collection<Map<String, String>> extraFile = addExportFile(adjustedName);
+			final Collection<Map<String, String>> extraFile = addExportFile(adjustedName);
 			if (e.getKey().equals(reference.getEReferenceType().getName())) {
 				fieldValue = adjustedName;
 			}
@@ -269,7 +270,7 @@ public class EObjectImporter {
 			while ((row = reader.readRow()) != null) {
 				importedObjects.add(importObject(row, deferredReferences, registry));
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
@@ -358,7 +359,7 @@ public class EObjectImporter {
 					final CSVReader reader = currentReader.getAdjacentReader(filePath);
 					final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(reference.getEReferenceType());
 					((EList<EObject>) result.eGet(reference)).addAll(importer.importObjects(reader, deferredReferences, registry));
-				} catch (IOException e) {
+				} catch (final IOException e) {
 
 				}
 			}
@@ -377,7 +378,7 @@ public class EObjectImporter {
 	/**
 	 * @param currentReader
 	 */
-	protected void setCurrentReader(CSVReader currentReader) {
+	protected void setCurrentReader(final CSVReader currentReader) {
 		this.currentReader = currentReader;
 	}
 
@@ -388,7 +389,7 @@ public class EObjectImporter {
 	 * @param fields
 	 * @param deferredReferences
 	 */
-	protected void populateReference(String prefix, final EObject target, final EReference reference, final Map<String, String> fields, final Collection<DeferredReference> deferredReferences) {
+	protected void populateReference(final String prefix, final EObject target, final EReference reference, final Map<String, String> fields, final Collection<DeferredReference> deferredReferences) {
 
 		final String referenceName = prefix + reference.getName().toLowerCase();
 		if (fields.containsKey(referenceName)) {
@@ -411,7 +412,7 @@ public class EObjectImporter {
 	 * @param attribute
 	 * @param fields
 	 */
-	protected void populateAttribute(String prefix, final EObject target, final EAttribute attribute, final Map<String, String> fields) {
+	protected void populateAttribute(final String prefix, final EObject target, final EAttribute attribute, final Map<String, String> fields) {
 		final String attributeName = prefix + attribute.getName().toLowerCase();
 		if (fields.containsKey(attributeName)) {
 			final String value = fields.get(attributeName);
@@ -440,14 +441,15 @@ public class EObjectImporter {
 				} else {
 					obj = dataType.getEPackage().getEFactoryInstance().createFromString(dataType, value);
 				}
-				if (!attribute.isUnsettable() || obj != null) {
+				if (!attribute.isUnsettable() || (obj != null)) {
 					target.eSet(attribute, obj);
 				} else {
 					target.eUnset(attribute);
 				}
 			} catch (final Exception ex) {
-				if (!(attribute.isUnsettable() && value.isEmpty()))
+				if (!(attribute.isUnsettable() && value.isEmpty())) {
 					warn("Error parsing value \"" + value + "\" - " + ex.getMessage(), true, attributeName);
+				}
 			}
 		} else {
 			// warn that the column is missing; ignore line number

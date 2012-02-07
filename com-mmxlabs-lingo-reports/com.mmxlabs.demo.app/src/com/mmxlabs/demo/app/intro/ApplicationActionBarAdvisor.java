@@ -51,8 +51,7 @@ import org.eclipse.ui.menus.IMenuService;
 
 /**
  * 
- * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some
- * point (rebase on version in history?)
+ * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some point (rebase on version in history?)
  * 
  */
 @SuppressWarnings("restriction")
@@ -218,13 +217,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private MenuManager coolbarPopupMenuManager;
 
 	/**
-	 * Constructs a new action builder which contributes actions to the given
-	 * window.
+	 * Constructs a new action builder which contributes actions to the given window.
 	 * 
 	 * @param configurer
 	 *            the action bar configurer for the window
 	 */
-	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
+	public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer) {
 		super(configurer);
 		window = configurer.getWindowConfigurer().getWindow();
 	}
@@ -237,8 +235,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Hooks listeners on the preference store and the window's page,
-	 * perspective and selection services.
+	 * Hooks listeners on the preference store and the window's page, perspective and selection services.
 	 */
 	private void hookListeners() {
 
@@ -276,11 +273,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// preference change
 		propPrefListener = new IPropertyChangeListener() {
 			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				if (event.getProperty().equals(
-						IPreferenceConstants.REUSE_EDITORS_BOOLEAN)) {
-					if (window.getShell() != null
-							&& !window.getShell().isDisposed()) {
+			public void propertyChange(final PropertyChangeEvent event) {
+				if (event.getProperty().equals(IPreferenceConstants.REUSE_EDITORS_BOOLEAN)) {
+					if ((window.getShell() != null) && !window.getShell().isDisposed()) {
 						// this property change notification could be from a
 						// non-ui thread
 						window.getShell().getDisplay().syncExec(new Runnable() {
@@ -294,15 +289,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 			}
 		};
 		/*
-		 * In order to ensure that the pin action toolbar sets its size
-		 * correctly, the pin action should set its visiblity before we call
-		 * updatePinActionToolbar().
+		 * In order to ensure that the pin action toolbar sets its size correctly, the pin action should set its visiblity before we call updatePinActionToolbar().
 		 * 
-		 * In other words we always want the PinActionContributionItem to be
-		 * notified before the WorkbenchActionBuilder.
+		 * In other words we always want the PinActionContributionItem to be notified before the WorkbenchActionBuilder.
 		 */
-		WorkbenchPlugin.getDefault().getPreferenceStore()
-				.addPropertyChangeListener(propPrefListener);
+		WorkbenchPlugin.getDefault().getPreferenceStore().addPropertyChangeListener(propPrefListener);
 		// listen for project description changes, which can affect enablement
 		// of build actions
 		// resourceListener = new IResourceChangeListener() {
@@ -340,48 +331,39 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Fills the coolbar with the workbench actions.
 	 */
 	@Override
-	protected void fillCoolBar(ICoolBarManager coolBar) {
+	protected void fillCoolBar(final ICoolBarManager coolBar) {
 
-		IActionBarConfigurer2 actionBarConfigurer = (IActionBarConfigurer2) getActionBarConfigurer();
+		final IActionBarConfigurer2 actionBarConfigurer = (IActionBarConfigurer2) getActionBarConfigurer();
 		{ // Set up the context Menu
 			coolbarPopupMenuManager = new MenuManager();
-			coolbarPopupMenuManager.add(new ActionContributionItem(
-					lockToolBarAction));
+			coolbarPopupMenuManager.add(new ActionContributionItem(lockToolBarAction));
 			// coolbarPopupMenuManager.add(new
 			// ActionContributionItem(editActionSetAction));
 			coolBar.setContextMenuManager(coolbarPopupMenuManager);
-			IMenuService menuService = (IMenuService) window
-					.getService(IMenuService.class);
-			menuService.populateContributionManager(coolbarPopupMenuManager,
-					"popup:windowCoolbarContextMenu"); //$NON-NLS-1$
+			final IMenuService menuService = (IMenuService) window.getService(IMenuService.class);
+			menuService.populateContributionManager(coolbarPopupMenuManager, "popup:windowCoolbarContextMenu"); //$NON-NLS-1$
 		}
 		coolBar.add(new GroupMarker(IIDEActionConstants.GROUP_FILE));
 		{ // File Group
-			IToolBarManager fileToolBar = actionBarConfigurer
-					.createToolBarManager();
+			final IToolBarManager fileToolBar = actionBarConfigurer.createToolBarManager();
 			fileToolBar.add(new Separator(IWorkbenchActionConstants.NEW_GROUP));
 			fileToolBar.add(newWizardDropDownAction);
 			fileToolBar.add(new GroupMarker(IWorkbenchActionConstants.NEW_EXT));
-			fileToolBar.add(new GroupMarker(
-					IWorkbenchActionConstants.SAVE_GROUP));
+			fileToolBar.add(new GroupMarker(IWorkbenchActionConstants.SAVE_GROUP));
 			fileToolBar.add(saveAction);
 			fileToolBar.add(saveAllAction);
-			fileToolBar
-					.add(new GroupMarker(IWorkbenchActionConstants.SAVE_EXT));
+			fileToolBar.add(new GroupMarker(IWorkbenchActionConstants.SAVE_EXT));
 			fileToolBar.add(getPrintItem());
-			fileToolBar
-					.add(new GroupMarker(IWorkbenchActionConstants.PRINT_EXT));
+			fileToolBar.add(new GroupMarker(IWorkbenchActionConstants.PRINT_EXT));
 			//
 			// fileToolBar
 			// .add(new Separator(IWorkbenchActionConstants.BUILD_GROUP));
 			// fileToolBar
 			// .add(new GroupMarker(IWorkbenchActionConstants.BUILD_EXT));
-			fileToolBar.add(new Separator(
-					IWorkbenchActionConstants.MB_ADDITIONS));
+			fileToolBar.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 
 			// Add to the cool bar manager
-			coolBar.add(actionBarConfigurer.createToolBarContributionItem(
-					fileToolBar, IWorkbenchActionConstants.TOOLBAR_FILE));
+			coolBar.add(actionBarConfigurer.createToolBarContributionItem(fileToolBar, IWorkbenchActionConstants.TOOLBAR_FILE));
 		}
 
 		coolBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -411,17 +393,13 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		coolBar.add(new GroupMarker(IWorkbenchActionConstants.GROUP_HELP));
 
 		{ // Help group
-			IToolBarManager helpToolBar = actionBarConfigurer
-					.createToolBarManager();
-			helpToolBar
-					.add(new Separator(IWorkbenchActionConstants.GROUP_HELP));
+			final IToolBarManager helpToolBar = actionBarConfigurer.createToolBarManager();
+			helpToolBar.add(new Separator(IWorkbenchActionConstants.GROUP_HELP));
 			// helpToolBar.add(searchComboItem);
 			// Add the group for applications to contribute
-			helpToolBar
-					.add(new GroupMarker(IWorkbenchActionConstants.GROUP_APP));
+			helpToolBar.add(new GroupMarker(IWorkbenchActionConstants.GROUP_APP));
 			// Add to the cool bar manager
-			coolBar.add(actionBarConfigurer.createToolBarContributionItem(
-					helpToolBar, IWorkbenchActionConstants.TOOLBAR_HELP));
+			coolBar.add(actionBarConfigurer.createToolBarContributionItem(helpToolBar, IWorkbenchActionConstants.TOOLBAR_HELP));
 		}
 
 	}
@@ -430,7 +408,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Fills the menu bar with the workbench actions.
 	 */
 	@Override
-	protected void fillMenuBar(IMenuManager menuBar) {
+	protected void fillMenuBar(final IMenuManager menuBar) {
 		menuBar.add(createFileMenu());
 		menuBar.add(createEditMenu());
 		// menuBar.add(createNavigateMenu());
@@ -444,15 +422,14 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Creates and returns the File menu.
 	 */
 	private MenuManager createFileMenu() {
-		MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_file,
-				IWorkbenchActionConstants.M_FILE);
+		final MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_file, IWorkbenchActionConstants.M_FILE);
 		menu.add(new GroupMarker(IWorkbenchActionConstants.FILE_START));
 		{
 			// create the New submenu, using the same id for it as the New
 			// action
-			String newText = IDEWorkbenchMessages.Workbench_new;
-			String newId = ActionFactory.NEW.getId();
-			MenuManager newMenu = new MenuManager(newText, newId);
+			final String newText = IDEWorkbenchMessages.Workbench_new;
+			final String newId = ActionFactory.NEW.getId();
+			final MenuManager newMenu = new MenuManager(newText, newId);
 			newMenu.setActionDefinitionId("org.eclipse.ui.file.newQuickMenu"); //$NON-NLS-1$
 			newMenu.add(new Separator(newId));
 			this.newWizardMenu = new NewWizardMenu(getWindow());
@@ -503,7 +480,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// the carbon UI code will do a search through our menu structure
 		// looking for it when Cmd-Q is invoked (or Quit is chosen from the
 		// application menu.
-		ActionContributionItem quitItem = new ActionContributionItem(quitAction);
+		final ActionContributionItem quitItem = new ActionContributionItem(quitAction);
 		quitItem.setVisible(!Util.isMac());
 		menu.add(quitItem);
 		menu.add(new GroupMarker(IWorkbenchActionConstants.FILE_END));
@@ -514,8 +491,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Creates and returns the Edit menu.
 	 */
 	private MenuManager createEditMenu() {
-		MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_edit,
-				IWorkbenchActionConstants.M_EDIT);
+		final MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_edit, IWorkbenchActionConstants.M_EDIT);
 		menu.add(new GroupMarker(IWorkbenchActionConstants.EDIT_START));
 
 		menu.add(undoAction);
@@ -628,9 +604,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Creates and returns the Window menu.
 	 */
 	private MenuManager createWindowMenu() {
-		MenuManager menu = new MenuManager(
-				IDEWorkbenchMessages.Workbench_window,
-				IWorkbenchActionConstants.M_WINDOW);
+		final MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_window, IWorkbenchActionConstants.M_WINDOW);
 
 		menu.add(newWindowAction);
 		menu.add(newEditorAction);
@@ -639,13 +613,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		addPerspectiveActions(menu);
 		menu.add(new Separator());
 		addKeyboardShortcuts(menu);
-		Separator sep = new Separator(IWorkbenchActionConstants.MB_ADDITIONS);
+		final Separator sep = new Separator(IWorkbenchActionConstants.MB_ADDITIONS);
 		sep.setVisible(!Util.isMac());
 		menu.add(sep);
 
 		// See the comment for quit in createFileMenu
-		ActionContributionItem openPreferencesItem = new ActionContributionItem(
-				openPreferencesAction);
+		final ActionContributionItem openPreferencesItem = new ActionContributionItem(openPreferencesAction);
 		openPreferencesItem.setVisible(!Util.isMac());
 		menu.add(openPreferencesItem);
 
@@ -656,21 +629,17 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	/**
 	 * Adds the perspective actions to the specified menu.
 	 */
-	private void addPerspectiveActions(MenuManager menu) {
+	private void addPerspectiveActions(final MenuManager menu) {
 		{
-			String openText = IDEWorkbenchMessages.Workbench_openPerspective;
-			MenuManager changePerspMenuMgr = new MenuManager(openText,
-					"openPerspective"); //$NON-NLS-1$
-			IContributionItem changePerspMenuItem = ContributionItemFactory.PERSPECTIVES_SHORTLIST
-					.create(getWindow());
+			final String openText = IDEWorkbenchMessages.Workbench_openPerspective;
+			final MenuManager changePerspMenuMgr = new MenuManager(openText, "openPerspective"); //$NON-NLS-1$
+			final IContributionItem changePerspMenuItem = ContributionItemFactory.PERSPECTIVES_SHORTLIST.create(getWindow());
 			changePerspMenuMgr.add(changePerspMenuItem);
 			menu.add(changePerspMenuMgr);
 		}
 		{
-			MenuManager showViewMenuMgr = new MenuManager(
-					IDEWorkbenchMessages.Workbench_showView, "showView"); //$NON-NLS-1$
-			IContributionItem showViewMenu = ContributionItemFactory.VIEWS_SHORTLIST
-					.create(getWindow());
+			final MenuManager showViewMenuMgr = new MenuManager(IDEWorkbenchMessages.Workbench_showView, "showView"); //$NON-NLS-1$
+			final IContributionItem showViewMenu = ContributionItemFactory.VIEWS_SHORTLIST.create(getWindow());
 			showViewMenuMgr.add(showViewMenu);
 			menu.add(showViewMenuMgr);
 		}
@@ -698,9 +667,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	/**
 	 * Adds the keyboard navigation submenu to the specified menu.
 	 */
-	private void addKeyboardShortcuts(MenuManager menu) {
-		MenuManager subMenu = new MenuManager(
-				IDEWorkbenchMessages.Workbench_shortcuts, "shortcuts"); //$NON-NLS-1$
+	private void addKeyboardShortcuts(final MenuManager menu) {
+		final MenuManager subMenu = new MenuManager(IDEWorkbenchMessages.Workbench_shortcuts, "shortcuts"); //$NON-NLS-1$
 		menu.add(subMenu);
 		subMenu.add(showPartPaneMenuAction);
 		// subMenu.add(showViewMenuAction);
@@ -725,8 +693,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Creates and returns the Help menu.
 	 */
 	private MenuManager createHelpMenu() {
-		MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_help,
-				IWorkbenchActionConstants.M_HELP);
+		final MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_help, IWorkbenchActionConstants.M_HELP);
 		addSeparatorOrGroupMarker(menu, "group.intro"); //$NON-NLS-1$
 		// See if a welcome or intro page is specified
 		if (introAction != null) {
@@ -756,8 +723,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// about should always be at the bottom
 		menu.add(new Separator("group.about")); //$NON-NLS-1$
 
-		ActionContributionItem aboutItem = new ActionContributionItem(
-				aboutAction);
+		final ActionContributionItem aboutItem = new ActionContributionItem(aboutAction);
 		aboutItem.setVisible(!Util.isMac());
 		menu.add(aboutItem);
 		menu.add(new GroupMarker("group.about.ext")); //$NON-NLS-1$
@@ -765,20 +731,17 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Adds a <code>GroupMarker</code> or <code>Separator</code> to a menu. The
-	 * test for whether a separator should be added is done by checking for the
-	 * existence of a preference matching the string useSeparator.MENUID.GROUPID
-	 * that is set to <code>true</code>.
+	 * Adds a <code>GroupMarker</code> or <code>Separator</code> to a menu. The test for whether a separator should be added is done by checking for the existence of a preference matching the string
+	 * useSeparator.MENUID.GROUPID that is set to <code>true</code>.
 	 * 
 	 * @param menu
 	 *            the menu to add to
 	 * @param groupId
 	 *            the group id for the added separator or group marker
 	 */
-	private void addSeparatorOrGroupMarker(MenuManager menu, String groupId) {
-		String prefId = "useSeparator." + menu.getId() + "." + groupId; //$NON-NLS-1$ //$NON-NLS-2$
-		boolean addExtraSeparators = IDEWorkbenchPlugin.getDefault()
-				.getPreferenceStore().getBoolean(prefId);
+	private void addSeparatorOrGroupMarker(final MenuManager menu, final String groupId) {
+		final String prefId = "useSeparator." + menu.getId() + "." + groupId; //$NON-NLS-1$ //$NON-NLS-2$
+		final boolean addExtraSeparators = IDEWorkbenchPlugin.getDefault().getPreferenceStore().getBoolean(prefId);
 		if (addExtraSeparators) {
 			menu.add(new Separator(groupId));
 		} else {
@@ -787,8 +750,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Disposes any resources and unhooks any listeners that are no longer
-	 * needed. Called when the window is closed.
+	 * Disposes any resources and unhooks any listeners that are no longer needed. Called when the window is closed.
 	 */
 	@Override
 	public void dispose() {
@@ -796,8 +758,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 			return;
 		}
 		isDisposed = true;
-		IMenuService menuService = (IMenuService) window
-				.getService(IMenuService.class);
+		final IMenuService menuService = (IMenuService) window.getService(IMenuService.class);
 		menuService.releaseContributions(coolbarPopupMenuManager);
 		coolbarPopupMenuManager.dispose();
 
@@ -812,8 +773,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// prefListener = null;
 		// }
 		if (propPrefListener != null) {
-			WorkbenchPlugin.getDefault().getPreferenceStore()
-					.removePropertyChangeListener(propPrefListener);
+			WorkbenchPlugin.getDefault().getPreferenceStore().removePropertyChangeListener(propPrefListener);
 			propPrefListener = null;
 		}
 		// if (resourceListener != null) {
@@ -900,11 +860,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Returns true if the menu with the given ID should be considered as an OLE
-	 * container menu. Container menus are preserved in OLE menu merging.
+	 * Returns true if the menu with the given ID should be considered as an OLE container menu. Container menus are preserved in OLE menu merging.
 	 */
 	@Override
-	public boolean isApplicationMenu(String menuId) {
+	public boolean isApplicationMenu(final String menuId) {
 		if (menuId.equals(IWorkbenchActionConstants.M_FILE)) {
 			return true;
 		}
@@ -915,10 +874,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Return whether or not given id matches the id of the coolitems that the
-	 * workbench creates.
+	 * Return whether or not given id matches the id of the coolitems that the workbench creates.
 	 */
-	public boolean isWorkbenchCoolItemId(String id) {
+	public boolean isWorkbenchCoolItemId(final String id) {
 		if (IWorkbenchActionConstants.TOOLBAR_FILE.equalsIgnoreCase(id)) {
 			return true;
 		}
@@ -932,13 +890,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Fills the status line with the workbench contribution items.
 	 */
 	@Override
-	protected void fillStatusLine(IStatusLineManager statusLine) {
+	protected void fillStatusLine(final IStatusLineManager statusLine) {
 		statusLine.add(statusLineItem);
 	}
 
 	/**
-	 * Creates actions (and contribution items) for the menu bar, toolbar and
-	 * status line.
+	 * Creates actions (and contribution items) for the menu bar, toolbar and status line.
 	 */
 	@Override
 	protected void makeActions(final IWorkbenchWindow window) {
@@ -951,8 +908,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		newWizardAction = ActionFactory.NEW.create(window);
 		register(newWizardAction);
 
-		newWizardDropDownAction = IDEActionFactory.NEW_WIZARD_DROP_DOWN
-				.create(window);
+		newWizardDropDownAction = IDEActionFactory.NEW_WIZARD_DROP_DOWN.create(window);
 		register(newWizardDropDownAction);
 
 		importResourcesAction = ActionFactory.IMPORT.create(window);
@@ -1015,9 +971,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		register(dynamicHelpAction);
 
 		aboutAction = ActionFactory.ABOUT.create(window);
-		aboutAction
-				.setImageDescriptor(IDEInternalWorkbenchImages
-						.getImageDescriptor(IDEInternalWorkbenchImages.IMG_OBJS_DEFAULT_PROD));
+		aboutAction.setImageDescriptor(IDEInternalWorkbenchImages.getImageDescriptor(IDEInternalWorkbenchImages.IMG_OBJS_DEFAULT_PROD));
 		register(aboutAction);
 
 		openPreferencesAction = ActionFactory.PREFERENCES.create(window);
@@ -1029,8 +983,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// showViewMenuAction = ActionFactory.SHOW_VIEW_MENU.create(window);
 		// register(showViewMenuAction);
 
-		showPartPaneMenuAction = ActionFactory.SHOW_PART_PANE_MENU
-				.create(window);
+		showPartPaneMenuAction = ActionFactory.SHOW_PART_PANE_MENU.create(window);
 		register(showPartPaneMenuAction);
 
 		nextEditorAction = ActionFactory.NEXT_EDITOR.create(window);
@@ -1047,11 +1000,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		nextPerspectiveAction = ActionFactory.NEXT_PERSPECTIVE.create(window);
 		register(nextPerspectiveAction);
-		prevPerspectiveAction = ActionFactory.PREVIOUS_PERSPECTIVE
-				.create(window);
+		prevPerspectiveAction = ActionFactory.PREVIOUS_PERSPECTIVE.create(window);
 		register(prevPerspectiveAction);
-		ActionFactory.linkCycleActionPair(nextPerspectiveAction,
-				prevPerspectiveAction);
+		ActionFactory.linkCycleActionPair(nextPerspectiveAction, prevPerspectiveAction);
 
 		activateEditorAction = ActionFactory.ACTIVATE_EDITOR.create(window);
 		register(activateEditorAction);
@@ -1065,8 +1016,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		switchToEditorAction = ActionFactory.SHOW_OPEN_EDITORS.create(window);
 		register(switchToEditorAction);
 
-		workbookEditorsAction = ActionFactory.SHOW_WORKBOOK_EDITORS
-				.create(window);
+		workbookEditorsAction = ActionFactory.SHOW_WORKBOOK_EDITORS.create(window);
 		register(workbookEditorsAction);
 
 		quickAccessAction = ActionFactory.SHOW_QUICK_ACCESS.create(window);
@@ -1084,8 +1034,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		register(resetPerspectiveAction);
 		closePerspAction = ActionFactory.CLOSE_PERSPECTIVE.create(window);
 		register(closePerspAction);
-		closeAllPerspsAction = ActionFactory.CLOSE_ALL_PERSPECTIVES
-				.create(window);
+		closeAllPerspsAction = ActionFactory.CLOSE_ALL_PERSPECTIVES.create(window);
 		register(closeAllPerspsAction);
 
 		// forwardHistoryAction = ActionFactory.FORWARD_HISTORY
@@ -1130,8 +1079,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		openWorkspaceAction = IDEActionFactory.OPEN_WORKSPACE.create(window);
 		register(openWorkspaceAction);
 
-		projectPropertyDialogAction = IDEActionFactory.OPEN_PROJECT_PROPERTIES
-				.create(window);
+		projectPropertyDialogAction = IDEActionFactory.OPEN_PROJECT_PROPERTIES.create(window);
 		register(projectPropertyDialogAction);
 
 		if (window.getWorkbench().getIntroManager().hasIntro()) {
@@ -1162,19 +1110,18 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	/**
 	 * Creates the feature-dependent actions for the menu bar.
 	 */
-	private void makeFeatureDependentActions(IWorkbenchWindow window) {
+	private void makeFeatureDependentActions(final IWorkbenchWindow window) {
 		AboutInfo[] infos = null;
 
-		IPreferenceStore prefs = IDEWorkbenchPlugin.getDefault()
-				.getPreferenceStore();
+		final IPreferenceStore prefs = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
 
 		// Optimization: avoid obtaining the about infos if the platform state
 		// is
 		// unchanged from last time. See bug 75130 for details.
-		String stateKey = "platformState"; //$NON-NLS-1$
-		String prevState = prefs.getString(stateKey);
-		String currentState = String.valueOf(Platform.getStateStamp());
-		boolean sameState = currentState.equals(prevState);
+		final String stateKey = "platformState"; //$NON-NLS-1$
+		final String prevState = prefs.getString(stateKey);
+		final String currentState = String.valueOf(Platform.getStateStamp());
+		final boolean sameState = currentState.equals(prevState);
 		if (!sameState) {
 			prefs.putValue(stateKey, currentState);
 		}
@@ -1182,8 +1129,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// See if a welcome page is specified.
 		// Optimization: if welcome pages were found on a previous run, then
 		// just add the action.
-		String quickStartKey = IDEActionFactory.QUICK_START.getId();
-		String showQuickStart = prefs.getString(quickStartKey);
+		final String quickStartKey = IDEActionFactory.QUICK_START.getId();
+		final String showQuickStart = prefs.getString(quickStartKey);
 		if (sameState && "true".equals(showQuickStart)) { //$NON-NLS-1$
 			quickStartAction = IDEActionFactory.QUICK_START.create(window);
 			register(quickStartAction);
@@ -1192,7 +1139,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		} else {
 			// do the work
 			infos = IDEWorkbenchPlugin.getDefault().getFeatureInfos();
-			boolean found = hasWelcomePage(infos);
+			final boolean found = hasWelcomePage(infos);
 			prefs.setValue(quickStartKey, String.valueOf(found));
 			if (found) {
 				quickStartAction = IDEActionFactory.QUICK_START.create(window);
@@ -1203,11 +1150,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// See if a tips and tricks page is specified.
 		// Optimization: if tips and tricks were found on a previous run, then
 		// just add the action.
-		String tipsAndTricksKey = IDEActionFactory.TIPS_AND_TRICKS.getId();
-		String showTipsAndTricks = prefs.getString(tipsAndTricksKey);
+		final String tipsAndTricksKey = IDEActionFactory.TIPS_AND_TRICKS.getId();
+		final String showTipsAndTricks = prefs.getString(tipsAndTricksKey);
 		if (sameState && "true".equals(showTipsAndTricks)) { //$NON-NLS-1$
-			tipsAndTricksAction = IDEActionFactory.TIPS_AND_TRICKS
-					.create(window);
+			tipsAndTricksAction = IDEActionFactory.TIPS_AND_TRICKS.create(window);
 			register(tipsAndTricksAction);
 		} else if (sameState && "false".equals(showTipsAndTricks)) { //$NON-NLS-1$
 			// do nothing
@@ -1216,11 +1162,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 			if (infos == null) {
 				infos = IDEWorkbenchPlugin.getDefault().getFeatureInfos();
 			}
-			boolean found = hasTipsAndTricks(infos);
+			final boolean found = hasTipsAndTricks(infos);
 			prefs.setValue(tipsAndTricksKey, String.valueOf(found));
 			if (found) {
-				tipsAndTricksAction = IDEActionFactory.TIPS_AND_TRICKS
-						.create(window);
+				tipsAndTricksAction = IDEActionFactory.TIPS_AND_TRICKS.create(window);
 				register(tipsAndTricksAction);
 			}
 		}
@@ -1231,10 +1176,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * 
 	 * @param infos
 	 *            the infos
-	 * @return <code>true</code> if a welcome page was found, <code>false</code>
-	 *         if not
+	 * @return <code>true</code> if a welcome page was found, <code>false</code> if not
 	 */
-	private boolean hasWelcomePage(AboutInfo[] infos) {
+	private boolean hasWelcomePage(final AboutInfo[] infos) {
 		for (int i = 0; i < infos.length; i++) {
 			if (infos[i].getWelcomePageURL() != null) {
 				return true;
@@ -1248,10 +1192,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * 
 	 * @param infos
 	 *            the infos
-	 * @return <code>true</code> if tips and tricks were found,
-	 *         <code>false</code> if not
+	 * @return <code>true</code> if tips and tricks were found, <code>false</code> if not
 	 */
-	private boolean hasTipsAndTricks(AboutInfo[] infos) {
+	private boolean hasTipsAndTricks(final AboutInfo[] infos) {
 		for (int i = 0; i < infos.length; i++) {
 			if (infos[i].getTipsAndTricksHref() != null) {
 				return true;
@@ -1351,18 +1294,15 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 */
 	void updatePinActionToolbar() {
 
-		ICoolBarManager coolBarManager = getActionBarConfigurer()
-				.getCoolBarManager();
-		IContributionItem cbItem = coolBarManager
-				.find(IWorkbenchActionConstants.TOOLBAR_NAVIGATE);
+		final ICoolBarManager coolBarManager = getActionBarConfigurer().getCoolBarManager();
+		final IContributionItem cbItem = coolBarManager.find(IWorkbenchActionConstants.TOOLBAR_NAVIGATE);
 		if (!(cbItem instanceof IToolBarContributionItem)) {
 			// This should not happen
-			IDEWorkbenchPlugin
-					.log("Navigation toolbar contribution item is missing"); //$NON-NLS-1$
+			IDEWorkbenchPlugin.log("Navigation toolbar contribution item is missing"); //$NON-NLS-1$
 			return;
 		}
-		IToolBarContributionItem toolBarItem = (IToolBarContributionItem) cbItem;
-		IToolBarManager toolBarManager = toolBarItem.getToolBarManager();
+		final IToolBarContributionItem toolBarItem = (IToolBarContributionItem) cbItem;
+		final IToolBarManager toolBarManager = toolBarItem.getToolBarManager();
 		if (toolBarManager == null) {
 			// error if this happens, navigation toolbar assumed to always exist
 			IDEWorkbenchPlugin.log("Navigate toolbar is missing"); //$NON-NLS-1$
@@ -1378,44 +1318,27 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	private IContributionItem getCutItem() {
-		return getItem(ActionFactory.CUT.getId(),
-				ActionFactory.CUT.getCommandId(), ISharedImages.IMG_TOOL_CUT,
-				ISharedImages.IMG_TOOL_CUT_DISABLED,
-				WorkbenchMessages.Workbench_cut,
+		return getItem(ActionFactory.CUT.getId(), ActionFactory.CUT.getCommandId(), ISharedImages.IMG_TOOL_CUT, ISharedImages.IMG_TOOL_CUT_DISABLED, WorkbenchMessages.Workbench_cut,
 				WorkbenchMessages.Workbench_cutToolTip, null);
 	}
 
 	private IContributionItem getCopyItem() {
-		return getItem(ActionFactory.COPY.getId(),
-				ActionFactory.COPY.getCommandId(), ISharedImages.IMG_TOOL_COPY,
-				ISharedImages.IMG_TOOL_COPY_DISABLED,
-				WorkbenchMessages.Workbench_copy,
+		return getItem(ActionFactory.COPY.getId(), ActionFactory.COPY.getCommandId(), ISharedImages.IMG_TOOL_COPY, ISharedImages.IMG_TOOL_COPY_DISABLED, WorkbenchMessages.Workbench_copy,
 				WorkbenchMessages.Workbench_copyToolTip, null);
 	}
 
 	private IContributionItem getPasteItem() {
-		return getItem(ActionFactory.PASTE.getId(),
-				ActionFactory.PASTE.getCommandId(),
-				ISharedImages.IMG_TOOL_PASTE,
-				ISharedImages.IMG_TOOL_PASTE_DISABLED,
-				WorkbenchMessages.Workbench_paste,
+		return getItem(ActionFactory.PASTE.getId(), ActionFactory.PASTE.getCommandId(), ISharedImages.IMG_TOOL_PASTE, ISharedImages.IMG_TOOL_PASTE_DISABLED, WorkbenchMessages.Workbench_paste,
 				WorkbenchMessages.Workbench_pasteToolTip, null);
 	}
 
 	private IContributionItem getPrintItem() {
-		return getItem(ActionFactory.PRINT.getId(),
-				ActionFactory.PRINT.getCommandId(),
-				ISharedImages.IMG_ETOOL_PRINT_EDIT,
-				ISharedImages.IMG_ETOOL_PRINT_EDIT_DISABLED,
-				WorkbenchMessages.Workbench_print,
-				WorkbenchMessages.Workbench_printToolTip, null);
+		return getItem(ActionFactory.PRINT.getId(), ActionFactory.PRINT.getCommandId(), ISharedImages.IMG_ETOOL_PRINT_EDIT, ISharedImages.IMG_ETOOL_PRINT_EDIT_DISABLED,
+				WorkbenchMessages.Workbench_print, WorkbenchMessages.Workbench_printToolTip, null);
 	}
 
 	private IContributionItem getSelectAllItem() {
-		return getItem(ActionFactory.SELECT_ALL.getId(),
-				ActionFactory.SELECT_ALL.getCommandId(), null, null,
-				WorkbenchMessages.Workbench_selectAll,
-				WorkbenchMessages.Workbench_selectAllToolTip, null);
+		return getItem(ActionFactory.SELECT_ALL.getId(), ActionFactory.SELECT_ALL.getCommandId(), null, null, WorkbenchMessages.Workbench_selectAll, WorkbenchMessages.Workbench_selectAllToolTip, null);
 	}
 
 	// private IContributionItem getFindItem() {
@@ -1443,105 +1366,66 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// }
 	//
 	private IContributionItem getDeleteItem() {
-		return getItem(ActionFactory.DELETE.getId(),
-				ActionFactory.DELETE.getCommandId(),
-				ISharedImages.IMG_TOOL_DELETE,
-				ISharedImages.IMG_TOOL_DELETE_DISABLED,
-				WorkbenchMessages.Workbench_delete,
-				WorkbenchMessages.Workbench_deleteToolTip,
-				IWorkbenchHelpContextIds.DELETE_RETARGET_ACTION);
+		return getItem(ActionFactory.DELETE.getId(), ActionFactory.DELETE.getCommandId(), ISharedImages.IMG_TOOL_DELETE, ISharedImages.IMG_TOOL_DELETE_DISABLED, WorkbenchMessages.Workbench_delete,
+				WorkbenchMessages.Workbench_deleteToolTip, IWorkbenchHelpContextIds.DELETE_RETARGET_ACTION);
 	}
 
 	private IContributionItem getRevertItem() {
-		return getItem(ActionFactory.REVERT.getId(),
-				ActionFactory.REVERT.getCommandId(), null, null,
-				WorkbenchMessages.Workbench_revert,
-				WorkbenchMessages.Workbench_revertToolTip, null);
+		return getItem(ActionFactory.REVERT.getId(), ActionFactory.REVERT.getCommandId(), null, null, WorkbenchMessages.Workbench_revert, WorkbenchMessages.Workbench_revertToolTip, null);
 	}
 
 	private IContributionItem getRefreshItem() {
-		return getItem(ActionFactory.REFRESH.getId(),
-				ActionFactory.REFRESH.getCommandId(), null, null,
-				WorkbenchMessages.Workbench_refresh,
-				WorkbenchMessages.Workbench_refreshToolTip, null);
+		return getItem(ActionFactory.REFRESH.getId(), ActionFactory.REFRESH.getCommandId(), null, null, WorkbenchMessages.Workbench_refresh, WorkbenchMessages.Workbench_refreshToolTip, null);
 	}
 
 	private IContributionItem getPropertiesItem() {
-		return getItem(ActionFactory.PROPERTIES.getId(),
-				ActionFactory.PROPERTIES.getCommandId(), null, null,
-				WorkbenchMessages.Workbench_properties,
-				WorkbenchMessages.Workbench_propertiesToolTip, null);
+		return getItem(ActionFactory.PROPERTIES.getId(), ActionFactory.PROPERTIES.getCommandId(), null, null, WorkbenchMessages.Workbench_properties, WorkbenchMessages.Workbench_propertiesToolTip,
+				null);
 	}
 
 	private IContributionItem getMoveItem() {
-		return getItem(ActionFactory.MOVE.getId(),
-				ActionFactory.MOVE.getCommandId(), null, null,
-				WorkbenchMessages.Workbench_move,
-				WorkbenchMessages.Workbench_moveToolTip, null);
+		return getItem(ActionFactory.MOVE.getId(), ActionFactory.MOVE.getCommandId(), null, null, WorkbenchMessages.Workbench_move, WorkbenchMessages.Workbench_moveToolTip, null);
 	}
 
 	private IContributionItem getRenameItem() {
-		return getItem(ActionFactory.RENAME.getId(),
-				ActionFactory.RENAME.getCommandId(), null, null,
-				WorkbenchMessages.Workbench_rename,
-				WorkbenchMessages.Workbench_renameToolTip, null);
+		return getItem(ActionFactory.RENAME.getId(), ActionFactory.RENAME.getCommandId(), null, null, WorkbenchMessages.Workbench_rename, WorkbenchMessages.Workbench_renameToolTip, null);
 	}
 
 	private IContributionItem getOpenProjectItem() {
-		return getItem(IDEActionFactory.OPEN_PROJECT.getId(),
-				IDEActionFactory.OPEN_PROJECT.getCommandId(), null, null,
-				IDEWorkbenchMessages.OpenResourceAction_text,
+		return getItem(IDEActionFactory.OPEN_PROJECT.getId(), IDEActionFactory.OPEN_PROJECT.getCommandId(), null, null, IDEWorkbenchMessages.OpenResourceAction_text,
 				IDEWorkbenchMessages.OpenResourceAction_toolTip, null);
 	}
 
 	private IContributionItem getCloseProjectItem() {
-		return getItem(IDEActionFactory.CLOSE_PROJECT.getId(),
-				IDEActionFactory.CLOSE_PROJECT.getCommandId(), null, null,
-				IDEWorkbenchMessages.CloseResourceAction_text,
+		return getItem(IDEActionFactory.CLOSE_PROJECT.getId(), IDEActionFactory.CLOSE_PROJECT.getCommandId(), null, null, IDEWorkbenchMessages.CloseResourceAction_text,
 				IDEWorkbenchMessages.CloseResourceAction_text, null);
 	}
 
-	private IContributionItem getItem(String actionId, String commandId,
-			String image, String disabledImage, String label, String tooltip,
-			String helpContextId) {
-		ISharedImages sharedImages = getWindow().getWorkbench()
-				.getSharedImages();
+	private IContributionItem getItem(final String actionId, final String commandId, final String image, final String disabledImage, final String label, final String tooltip,
+			final String helpContextId) {
+		final ISharedImages sharedImages = getWindow().getWorkbench().getSharedImages();
 
-		IActionCommandMappingService acms = (IActionCommandMappingService) getWindow()
-				.getService(IActionCommandMappingService.class);
+		final IActionCommandMappingService acms = (IActionCommandMappingService) getWindow().getService(IActionCommandMappingService.class);
 		acms.map(actionId, commandId);
 
-		CommandContributionItemParameter commandParm = new CommandContributionItemParameter(
-				getWindow(), actionId, commandId, null,
-				sharedImages.getImageDescriptor(image),
-				sharedImages.getImageDescriptor(disabledImage), null, label,
-				null, tooltip, CommandContributionItem.STYLE_PUSH, null, false);
+		final CommandContributionItemParameter commandParm = new CommandContributionItemParameter(getWindow(), actionId, commandId, null, sharedImages.getImageDescriptor(image),
+				sharedImages.getImageDescriptor(disabledImage), null, label, null, tooltip, CommandContributionItem.STYLE_PUSH, null, false);
 		return new CommandContributionItem(commandParm);
 	}
 
 	/**
-	 * @See 
-	 *      http://random-eclipse-tips.blogspot.com/2009/02/eclipse-rcp-removing-
-	 *      unwanted_02.html
+	 * @See http://random-eclipse-tips.blogspot.com/2009/02/eclipse-rcp-removing- unwanted_02.html
 	 * 
-	 *      This method can seemingly go in numerous places. However, I suspect
-	 *      none of them will work should a plugin get loaded after this method
-	 *      has been called. This should be hooked into a bundle activator
-	 *      listener of some kind.
+	 *      This method can seemingly go in numerous places. However, I suspect none of them will work should a plugin get loaded after this method has been called. This should be hooked into a bundle
+	 *      activator listener of some kind.
 	 */
 	private void hideUnwantedActionSets() {
 
-		final ActionSetRegistry reg = WorkbenchPlugin.getDefault()
-				.getActionSetRegistry();
+		final ActionSetRegistry reg = WorkbenchPlugin.getDefault().getActionSetRegistry();
 		final IActionSetDescriptor[] actionSets = reg.getActionSets();
-		final String[] removeActionSets = new String[] {
-				"org.eclipse.search.searchActionSet",
-				"org.eclipse.ui.edit.text.actionSet.navigation",
-				"org.eclipse.ui.edit.text.actionSet.annotationNavigation",
-				"org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo",
-				"org.eclipse.ui.edit.text.actionSet.openExternalFile",
-				"org.eclipse.ui.externaltools.ExternalToolsSet",
-				"org.eclipse.ui.actionSet.openFiles", };
+		final String[] removeActionSets = new String[] { "org.eclipse.search.searchActionSet", "org.eclipse.ui.edit.text.actionSet.navigation",
+				"org.eclipse.ui.edit.text.actionSet.annotationNavigation", "org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo", "org.eclipse.ui.edit.text.actionSet.openExternalFile",
+				"org.eclipse.ui.externaltools.ExternalToolsSet", "org.eclipse.ui.actionSet.openFiles", };
 
 		for (int i = 0; i < actionSets.length; i++) {
 			boolean found = false;
@@ -1553,8 +1437,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 			if (!found) {
 				continue;
 			}
-			final IExtension ext = actionSets[i].getConfigurationElement()
-					.getDeclaringExtension();
+			final IExtension ext = actionSets[i].getConfigurationElement().getDeclaringExtension();
 			reg.removeExtension(ext, new Object[] { actionSets[i] });
 		}
 	}

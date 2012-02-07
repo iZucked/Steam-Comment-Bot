@@ -9,13 +9,13 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
-
 import scenario.Scenario;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
+
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 
 /**
  * This class contains some whole-system tests which check the fuel choices on a single cargo.
@@ -58,11 +58,11 @@ public class SimpleCalculationTests {
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			Assert.assertTrue("Ballast leg never uses base", fq.getQuantity() == 0 || fq.getFuelType() != FuelType.BASE_FUEL);
+			Assert.assertTrue("Ballast leg never uses base", (fq.getQuantity() == 0) || (fq.getFuelType() != FuelType.BASE_FUEL));
 		}
 
 		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			Assert.assertTrue("Ballast idle never uses base", fq.getQuantity() == 0 || fq.getFuelType() != FuelType.BASE_FUEL);
+			Assert.assertTrue("Ballast idle never uses base", (fq.getQuantity() == 0) || (fq.getFuelType() != FuelType.BASE_FUEL));
 		}
 	}
 
@@ -87,14 +87,14 @@ public class SimpleCalculationTests {
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
 		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			Assert.assertTrue("Ballast leg only uses base", fq.getQuantity() == 0 || fq.getFuelType() == FuelType.BASE_FUEL);
+			Assert.assertTrue("Ballast leg only uses base", (fq.getQuantity() == 0) || (fq.getFuelType() == FuelType.BASE_FUEL));
 		}
 
 		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			Assert.assertTrue("Ballast idle only uses base", fq.getQuantity() == 0 || fq.getFuelType() == FuelType.BASE_FUEL);
+			Assert.assertTrue("Ballast idle only uses base", (fq.getQuantity() == 0) || (fq.getFuelType() == FuelType.BASE_FUEL));
 		}
 	}
-	
+
 	/**
 	 * Create a simple scenario which contains a vessel + vessel class a couple of ports and a canal, etc.
 	 * 
@@ -132,7 +132,7 @@ public class SimpleCalculationTests {
 		final int ladenNBORate = 200;
 		// ports
 		final int distanceBetweenPorts = 1000;
-		
+
 		final boolean useDryDock = true;
 
 		return ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed,

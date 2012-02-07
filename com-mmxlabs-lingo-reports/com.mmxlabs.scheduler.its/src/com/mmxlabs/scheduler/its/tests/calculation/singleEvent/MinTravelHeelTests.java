@@ -7,14 +7,14 @@ package com.mmxlabs.scheduler.its.tests.calculation.singleEvent;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.common.TimeUnitConvert;
-import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
-
 import scenario.Scenario;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
+
+import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?187">Case 187: Min travel heel is used</a>
@@ -40,23 +40,26 @@ public class MinTravelHeelTests {
 		final String testName = "Test zero min heel";
 		final int minHeelVolume = 0;
 
-		CargoAllocation a = testMinHeel(testName, minHeelVolume);
+		final CargoAllocation a = testMinHeel(testName, minHeelVolume);
 
 		// ballast travel is cheaper on NBO
-		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO)
+		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO) {
 				Assert.assertTrue("Ballast leg uses NBO", fq.getQuantity() > 0);
-			else if (fq.getFuelType() == FuelType.BASE_FUEL || fq.getFuelType() == FuelType.FBO)
+			} else if ((fq.getFuelType() == FuelType.BASE_FUEL) || (fq.getFuelType() == FuelType.FBO)) {
 				Assert.assertTrue("Ballast leg doesn't use FBO or base fuel", fq.getQuantity() == 0);
+			}
 		}
 		// ballast idle is cheaper on base fuel
-		for (FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL)
+		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.BASE_FUEL) {
 				Assert.assertTrue("Ballast idle uses base fuel", fq.getQuantity() > 0);
-			else
+			} else {
 				Assert.assertTrue("Ballast idle doesn't use NBO or FBO", fq.getQuantity() == 0);
+			}
 		}
 	}
+
 	/**
 	 * Min heel is non-zero. Test that ballast leg is NBO, idle is cheaper on BF but NBO is used because min heel is left over
 	 */
@@ -66,21 +69,23 @@ public class MinTravelHeelTests {
 		// travel uses 1000 MT of LNG, so give 90 MT extra for idle (9 MT/hour * 10 hours = 90 MT)
 		final int minHeelVolume = 100;
 
-		CargoAllocation a = testMinHeel(testName, minHeelVolume);
+		final CargoAllocation a = testMinHeel(testName, minHeelVolume);
 
 		// ballast travel is cheaper on NBO
-		for (FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO)
+		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO) {
 				Assert.assertTrue("Ballast leg uses NBO", fq.getQuantity() > 0);
-			else if (fq.getFuelType() == FuelType.BASE_FUEL || fq.getFuelType() == FuelType.FBO)
+			} else if ((fq.getFuelType() == FuelType.BASE_FUEL) || (fq.getFuelType() == FuelType.FBO)) {
 				Assert.assertTrue("Ballast leg doesn't use FBO or base fuel", fq.getQuantity() == 0);
+			}
 		}
 		// ballast idle is cheaper on base fuel but NBO used from left over min heel.
-		for (FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO)
+		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
+			if (fq.getFuelType() == FuelType.NBO) {
 				Assert.assertTrue("Ballast idle uses NBO", fq.getQuantity() > 0);
-			else if (fq.getFuelType() == FuelType.BASE_FUEL)
+			} else if (fq.getFuelType() == FuelType.BASE_FUEL) {
 				Assert.assertTrue("Ballast idle doesn't use base fuel", fq.getQuantity() == 0);
+			}
 		}
 	}
 
@@ -140,7 +145,7 @@ public class MinTravelHeelTests {
 		final int ladenNBORate = TimeUnitConvert.convertPerHourToPerDay(NBOTravelRatePerHour);
 		final int pilotLightRate = 0;
 
-		Scenario scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
+		final Scenario scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
 				ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption,
 				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, true, pilotLightRate, minHeelVolume);
 

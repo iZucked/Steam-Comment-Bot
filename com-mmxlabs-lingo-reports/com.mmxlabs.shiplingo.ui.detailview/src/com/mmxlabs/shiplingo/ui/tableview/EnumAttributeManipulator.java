@@ -16,20 +16,20 @@ import com.mmxlabs.common.Pair;
 
 /**
  * Editor for enums
+ * 
  * @author hinton
- *
+ * 
  */
 public class EnumAttributeManipulator extends ValueListAttributeManipulator {
-	public EnumAttributeManipulator(final EAttribute field,
-			final EditingDomain editingDomain) {
+	public EnumAttributeManipulator(final EAttribute field, final EditingDomain editingDomain) {
 		super(field, editingDomain, getValues((EEnum) field.getEAttributeType()));
 	}
+
 	private static List<Pair<String, Object>> getValues(final EEnum eenum) {
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 		for (final EEnumLiteral literal : eenum.getELiterals()) {
-			values.add(new Pair<String, Object>(literal.getName(), literal
-					.getInstance()));
+			values.add(new Pair<String, Object>(literal.getName(), literal.getInstance()));
 		}
 		return values;
-	}	
+	}
 }

@@ -34,7 +34,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 public class InputAttributesCheck {
 
 	private static final int dischargePrice = 1;
-	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+	private final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 	/**
 	 * Check that the scenario doesn't change after being evaluated. The scenario being tested is a simple one.

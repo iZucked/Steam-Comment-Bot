@@ -16,17 +16,14 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public class EENumInlineEditor extends ValueListInlineEditor {
-	public EENumInlineEditor(EMFPath path, EAttribute feature,
-			EditingDomain editingDomain, final ICommandProcessor processor) {
-		super(path, feature, editingDomain, processor,
-				getValues((EEnum) feature.getEAttributeType()));
+	public EENumInlineEditor(final EMFPath path, final EAttribute feature, final EditingDomain editingDomain, final ICommandProcessor processor) {
+		super(path, feature, editingDomain, processor, getValues((EEnum) feature.getEAttributeType()));
 	}
 
 	private static List<Pair<String, Object>> getValues(final EEnum eenum) {
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 		for (final EEnumLiteral literal : eenum.getELiterals()) {
-			values.add(new Pair<String, Object>(literal.getName(), literal
-					.getInstance()));
+			values.add(new Pair<String, Object>(literal.getName(), literal.getInstance()));
 		}
 		return values;
 	}

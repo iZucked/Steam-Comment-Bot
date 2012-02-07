@@ -19,23 +19,20 @@ import scenario.market.MarketModel;
 import scenario.market.MarketPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Model</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Model</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.market.impl.MarketModelImpl#getIndices <em>Indices</em>}</li>
+ * <li>{@link scenario.market.impl.MarketModelImpl#getIndices <em>Indices</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	/**
-	 * The cached value of the '{@link #getIndices() <em>Indices</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getIndices() <em>Indices</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getIndices()
 	 * @generated
 	 * @ordered
@@ -43,8 +40,8 @@ public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	protected EList<Index> indices;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected MarketModelImpl() {
@@ -52,8 +49,8 @@ public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -62,10 +59,11 @@ public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<Index> getIndices() {
 		if (indices == null) {
 			indices = new EObjectContainmentEList.Resolving<Index>(Index.class, this, MarketPackage.MARKET_MODEL__INDICES);
@@ -74,77 +72,77 @@ public class MarketModelImpl extends EObjectImpl implements MarketModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case MarketPackage.MARKET_MODEL__INDICES:
-				return ((InternalEList<?>)getIndices()).basicRemove(otherEnd, msgs);
+		case MarketPackage.MARKET_MODEL__INDICES:
+			return ((InternalEList<?>) getIndices()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case MarketPackage.MARKET_MODEL__INDICES:
-				return getIndices();
+		case MarketPackage.MARKET_MODEL__INDICES:
+			return getIndices();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case MarketPackage.MARKET_MODEL__INDICES:
-				getIndices().clear();
-				getIndices().addAll((Collection<? extends Index>)newValue);
-				return;
+		case MarketPackage.MARKET_MODEL__INDICES:
+			getIndices().clear();
+			getIndices().addAll((Collection<? extends Index>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case MarketPackage.MARKET_MODEL__INDICES:
-				getIndices().clear();
-				return;
+		case MarketPackage.MARKET_MODEL__INDICES:
+			getIndices().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case MarketPackage.MARKET_MODEL__INDICES:
-				return indices != null && !indices.isEmpty();
+		case MarketPackage.MARKET_MODEL__INDICES:
+			return (indices != null) && !indices.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //MarketModelImpl
+} // MarketModelImpl

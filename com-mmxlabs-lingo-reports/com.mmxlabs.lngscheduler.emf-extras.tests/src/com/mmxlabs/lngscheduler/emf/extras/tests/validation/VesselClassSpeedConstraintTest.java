@@ -4,15 +4,6 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
-import static org.mockito.Matchers.anyFloat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
@@ -387,15 +378,17 @@ public class VesselClassSpeedConstraintTest {
 
 		// find out the speed which the test is failing about, so the failure status can be called using the correct speed.
 		float failureSpeed = 0;
-		if (ID.equals(MIN_ID))
+		if (ID.equals(MIN_ID)) {
 			failureSpeed = minVCSpeed;
-		else if (ID.equals(MAX_ID))
+		} else if (ID.equals(MAX_ID)) {
 			failureSpeed = maxVCSpeed;
+		}
 
-		if (expectSuccess)
+		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
-		else
+		} else {
 			when(validationContext.createFailureStatus(anyFloat(), anyFloat(), anyFloat())).thenReturn(resultStatus);
+		}
 
 		constraint.validate(validationContext);
 
@@ -416,10 +409,11 @@ public class VesselClassSpeedConstraintTest {
 		verify(laden, atLeast(0)).getFuelConsumptionCurve();
 		verify(ballast, atLeast(0)).getFuelConsumptionCurve();
 
-		if (expectSuccess)
+		if (expectSuccess) {
 			verify(validationContext).createSuccessStatus();
-		else
+		} else {
 			verify(validationContext).createFailureStatus(failureSpeed, minFCLSpeed, maxFCLSpeed);
+		}
 	}
 
 }

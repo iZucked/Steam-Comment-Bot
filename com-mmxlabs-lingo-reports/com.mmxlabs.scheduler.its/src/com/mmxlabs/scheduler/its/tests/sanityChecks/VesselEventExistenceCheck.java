@@ -32,7 +32,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 public class VesselEventExistenceCheck {
 
 	private static final int dischargePrice = 1;
-	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+	private final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 	@Test
 	public void test() {
@@ -60,11 +60,10 @@ public class VesselEventExistenceCheck {
 		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false);
 		csc.addVesselSimple("classThree", numOfClassThree, 11, 12, 500000, 13, 15, 15, 0, true);
 
-
 		// add some VesselEvents, i.e. CharterOuts and DryDocks in a random-ish manner.
 		Date start = new Date(System.currentTimeMillis());
-		for (Port portA : ports) {
-			for (Port portB : ports) {
+		for (final Port portA : ports) {
+			for (final Port portB : ports) {
 				if (!portA.equals(portB)) {
 					inputVesselEvents.add(csc.addDryDock(portB, start, 1));
 					start.setTime(start.getTime() + TimeUnit.HOURS.toMillis(2));
@@ -74,13 +73,14 @@ public class VesselEventExistenceCheck {
 
 		start = new Date(System.currentTimeMillis());
 		int charterOutDurationDays = 1;
-		for (Port portA : ports) {
-			for (Port portB : ports) {
+		for (final Port portA : ports) {
+			for (final Port portB : ports) {
 
 				inputVesselEvents.add(csc.addCharterOut("CharterOut " + portA.getName() + " to " + portB.getName(), portA, portB, start, 1000, charterOutDurationDays, cvValue, numOfClassOne, 100, 0));
-				
-				if (portA.equals(portB))
+
+				if (portA.equals(portB)) {
 					charterOutDurationDays /= 2;
+				}
 
 			}
 		}
@@ -90,8 +90,9 @@ public class VesselEventExistenceCheck {
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
 		// print the legs to console
-		for (CargoAllocation ca : result.getCargoAllocations())
+		for (final CargoAllocation ca : result.getCargoAllocations()) {
 			ScenarioTools.printCargoAllocation(ca.getName(), ca);
+		}
 
 		// print each vessel's sequence
 		ScenarioTools.printSequences(result);
@@ -117,8 +118,8 @@ public class VesselEventExistenceCheck {
 			for (final ScheduledEvent e : seq.getEvents()) {
 				if (e instanceof VesselEventVisit) {
 
-					VesselEventVisit vev = (VesselEventVisit) e;
-					VesselEvent ve = vev.getVesselEvent();
+					final VesselEventVisit vev = (VesselEventVisit) e;
+					final VesselEvent ve = vev.getVesselEvent();
 
 					Assert.assertTrue("Input VesselEvent is in output", inputVesselEvents.contains(ve));
 

@@ -4,32 +4,30 @@
  */
 package com.mmxlabs.shiplingo.ui.detailview.generated;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import scenario.port.PortPackage;
 
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
-import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
 
 /**
- * A composite containing a form for editing CanalModel instances. The EClass hierarchy is implemented
- * by the static methods at the bottom of the class, and is not mirrored in the java class hierarchy for the composites,
- * because ECore supports multiple inheritance but java does not.
- *
+ * A composite containing a form for editing CanalModel instances. The EClass hierarchy is implemented by the static methods at the bottom of the class, and is not mirrored in the java class hierarchy
+ * for the composites, because ECore supports multiple inheritance but java does not.
+ * 
  * @generated
  */
-public  class CanalModelComposite extends AbstractDetailComposite {
+public class CanalModelComposite extends AbstractDetailComposite {
 	private final String mainGroupTitle;
+
 	/**
 	 * Call superclass constructor
-     * @generated
+	 * 
+	 * @generated
 	 */
 	public CanalModelComposite(final Composite container, final int style, final String mainGroupTitle, final boolean validate) {
-    super(container, style, validate);
-    this.mainGroupTitle = mainGroupTitle;
-  }
+		super(container, style, validate);
+		this.mainGroupTitle = mainGroupTitle;
+	}
 
 	public CanalModelComposite(final Composite container, final int style, final boolean validate) {
 		this(container, style, "Canal Model", validate);
@@ -41,53 +39,55 @@ public  class CanalModelComposite extends AbstractDetailComposite {
 
 	/**
 	 * Create the main contents
+	 * 
 	 * @generated
 	 */
+	@Override
 	protected void createContents(final Composite group) {
-    final Composite mainGroup;
+		final Composite mainGroup;
 
-    if (group == null) {
-      mainGroup = createGroup(this, mainGroupTitle);
-    } else {
-      mainGroup = group;
-    }
-    
-    super.createContents(mainGroup);		
+		if (group == null) {
+			mainGroup = createGroup(this, mainGroupTitle);
+		} else {
+			mainGroup = group;
+		}
 
-    createFields(this, mainGroup);
-  }
+		super.createContents(mainGroup);
+
+		createFields(this, mainGroup);
+	}
 
 	/**
 	 * @generated
 	 */
 	protected static void createFields(final AbstractDetailComposite composite, final Composite mainGroup) {
-    createFieldsFromSupers(composite, mainGroup);
-    createCanalModelFields(composite, mainGroup);
-  }
+		createFieldsFromSupers(composite, mainGroup);
+		createCanalModelFields(composite, mainGroup);
+	}
 
 	/**
 	 * Create fields belonging to all the supertypes of CanalModel.
+	 * 
 	 * @generated
 	 */
 	protected static void createFieldsFromSupers(final AbstractDetailComposite composite, final Composite mainGroup) {
-  }
+	}
 
 	/**
 	 * Create fields belonging directly to CanalModel
+	 * 
 	 * @generated
 	 */
 	protected static void createCanalModelFields(final AbstractDetailComposite composite, final Composite mainGroup) {
-    createCanalsEditor(composite, mainGroup);
-  }
+		createCanalsEditor(composite, mainGroup);
+	}
 
-		
 	/**
 	 * Create an editor for the canals feature on CanalModel
+	 * 
 	 * @generated
 	 */
 	protected static void createCanalsEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(PortPackage.eINSTANCE.getCanalModel_Canals()),
-      "Canals");
-  }
+		composite.createEditorControl(mainGroup, composite.createEditor(PortPackage.eINSTANCE.getCanalModel_Canals()), "Canals");
+	}
 }

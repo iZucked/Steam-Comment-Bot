@@ -13,24 +13,21 @@ import scenario.optimiser.Discount;
 import scenario.optimiser.OptimiserPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Discount</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Discount</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.optimiser.impl.DiscountImpl#getTime <em>Time</em>}</li>
- *   <li>{@link scenario.optimiser.impl.DiscountImpl#getDiscountFactor <em>Discount Factor</em>}</li>
+ * <li>{@link scenario.optimiser.impl.DiscountImpl#getTime <em>Time</em>}</li>
+ * <li>{@link scenario.optimiser.impl.DiscountImpl#getDiscountFactor <em>Discount Factor</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class DiscountImpl extends EObjectImpl implements Discount {
 	/**
-	 * The default value of the '{@link #getTime() <em>Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getTime() <em>Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getTime()
 	 * @generated
 	 * @ordered
@@ -38,9 +35,8 @@ public class DiscountImpl extends EObjectImpl implements Discount {
 	protected static final int TIME_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getTime() <em>Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getTime() <em>Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getTime()
 	 * @generated
 	 * @ordered
@@ -48,9 +44,8 @@ public class DiscountImpl extends EObjectImpl implements Discount {
 	protected int time = TIME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDiscountFactor() <em>Discount Factor</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getDiscountFactor() <em>Discount Factor</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDiscountFactor()
 	 * @generated
 	 * @ordered
@@ -58,9 +53,8 @@ public class DiscountImpl extends EObjectImpl implements Discount {
 	protected static final float DISCOUNT_FACTOR_EDEFAULT = 1.0F;
 
 	/**
-	 * The cached value of the '{@link #getDiscountFactor() <em>Discount Factor</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getDiscountFactor() <em>Discount Factor</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDiscountFactor()
 	 * @generated
 	 * @ordered
@@ -68,8 +62,8 @@ public class DiscountImpl extends EObjectImpl implements Discount {
 	protected float discountFactor = DISCOUNT_FACTOR_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected DiscountImpl() {
@@ -77,8 +71,8 @@ public class DiscountImpl extends EObjectImpl implements Discount {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -87,125 +81,133 @@ public class DiscountImpl extends EObjectImpl implements Discount {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public int getTime() {
 		return time;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setTime(int newTime) {
-		int oldTime = time;
+	@Override
+	public void setTime(final int newTime) {
+		final int oldTime = time;
 		time = newTime;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.DISCOUNT__TIME, oldTime, time));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public float getDiscountFactor() {
 		return discountFactor;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDiscountFactor(float newDiscountFactor) {
-		float oldDiscountFactor = discountFactor;
-		discountFactor = newDiscountFactor;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.DISCOUNT__DISCOUNT_FACTOR, oldDiscountFactor, discountFactor));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public void setDiscountFactor(final float newDiscountFactor) {
+		final float oldDiscountFactor = discountFactor;
+		discountFactor = newDiscountFactor;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.DISCOUNT__DISCOUNT_FACTOR, oldDiscountFactor, discountFactor));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT__TIME:
-				return getTime();
-			case OptimiserPackage.DISCOUNT__DISCOUNT_FACTOR:
-				return getDiscountFactor();
+		case OptimiserPackage.DISCOUNT__TIME:
+			return getTime();
+		case OptimiserPackage.DISCOUNT__DISCOUNT_FACTOR:
+			return getDiscountFactor();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT__TIME:
-				setTime((Integer)newValue);
-				return;
-			case OptimiserPackage.DISCOUNT__DISCOUNT_FACTOR:
-				setDiscountFactor((Float)newValue);
-				return;
+		case OptimiserPackage.DISCOUNT__TIME:
+			setTime((Integer) newValue);
+			return;
+		case OptimiserPackage.DISCOUNT__DISCOUNT_FACTOR:
+			setDiscountFactor((Float) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT__TIME:
-				setTime(TIME_EDEFAULT);
-				return;
-			case OptimiserPackage.DISCOUNT__DISCOUNT_FACTOR:
-				setDiscountFactor(DISCOUNT_FACTOR_EDEFAULT);
-				return;
+		case OptimiserPackage.DISCOUNT__TIME:
+			setTime(TIME_EDEFAULT);
+			return;
+		case OptimiserPackage.DISCOUNT__DISCOUNT_FACTOR:
+			setDiscountFactor(DISCOUNT_FACTOR_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT__TIME:
-				return time != TIME_EDEFAULT;
-			case OptimiserPackage.DISCOUNT__DISCOUNT_FACTOR:
-				return discountFactor != DISCOUNT_FACTOR_EDEFAULT;
+		case OptimiserPackage.DISCOUNT__TIME:
+			return time != TIME_EDEFAULT;
+		case OptimiserPackage.DISCOUNT__DISCOUNT_FACTOR:
+			return discountFactor != DISCOUNT_FACTOR_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (time: ");
 		result.append(time);
 		result.append(", discountFactor: ");
@@ -214,4 +216,4 @@ public class DiscountImpl extends EObjectImpl implements Discount {
 		return result.toString();
 	}
 
-} //DiscountImpl
+} // DiscountImpl

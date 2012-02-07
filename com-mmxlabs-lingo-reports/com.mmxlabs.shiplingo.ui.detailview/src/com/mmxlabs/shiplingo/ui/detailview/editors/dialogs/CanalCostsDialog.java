@@ -20,6 +20,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselClassCost;
@@ -33,8 +34,7 @@ import com.mmxlabs.shiplingo.ui.tableview.NumericAttributeManipulator;
 /**
  * A dialog for editing the canal costs associated with a vessel class
  * 
- * Displays a table in which there is a row for each canal, and a column for
- * each attribute.
+ * Displays a table in which there is a row for each canal, and a column for each attribute.
  * 
  * @author Tom Hinton
  * 
@@ -59,8 +59,7 @@ public class CanalCostsDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(final Composite parent) {
 		final Composite content = (Composite) super.createDialogArea(parent);
-		tableViewer = new EObjectTableViewer(content, SWT.FULL_SELECTION
-				| SWT.BORDER);
+		tableViewer = new EObjectTableViewer(content, SWT.FULL_SELECTION | SWT.BORDER);
 
 		tableViewer.init(adapterFactory, containment);
 
@@ -72,28 +71,15 @@ public class CanalCostsDialog extends Dialog {
 		tableViewer.setRowHeaderLabelProvider(new CellLabelProvider() {
 			@Override
 			public void update(final ViewerCell cell) {
-				cell.setText(((VesselClassCost) cell.getElement()).getCanal()
-						.getName());
+				cell.setText(((VesselClassCost) cell.getElement()).getCanal().getName());
 
 			}
 		});
-		
-		tableViewer.addTypicalColumn(
-				"Laden Cost",
-				new NumericAttributeManipulator(FleetPackage.eINSTANCE
-						.getVesselClassCost_LadenCost(), editingDomain));
-		tableViewer.addTypicalColumn(
-				"Unladen Cost",
-				new NumericAttributeManipulator(FleetPackage.eINSTANCE
-						.getVesselClassCost_UnladenCost(), editingDomain));
-		tableViewer.addTypicalColumn(
-				"Transit Time",
-				new NumericAttributeManipulator(FleetPackage.eINSTANCE
-						.getVesselClassCost_TransitTime(), editingDomain));
-		tableViewer.addTypicalColumn(
-				"Transit Base Fuel",
-				new NumericAttributeManipulator(FleetPackage.eINSTANCE
-						.getVesselClassCost_TransitFuel(), editingDomain));
+
+		tableViewer.addTypicalColumn("Laden Cost", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassCost_LadenCost(), editingDomain));
+		tableViewer.addTypicalColumn("Unladen Cost", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassCost_UnladenCost(), editingDomain));
+		tableViewer.addTypicalColumn("Transit Time", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassCost_TransitTime(), editingDomain));
+		tableViewer.addTypicalColumn("Transit Base Fuel", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassCost_TransitFuel(), editingDomain));
 
 		tableViewer.setInput(container);
 
@@ -104,16 +90,13 @@ public class CanalCostsDialog extends Dialog {
 		return content;
 	}
 
-	public int open(final AdapterFactory adapterFactory,
-			final EditingDomain editingDomain, final CanalModel canalModel,
-			final EObject container, final EReference containment) {
+	public int open(final AdapterFactory adapterFactory, final EditingDomain editingDomain, final CanalModel canalModel, final EObject container, final EReference containment) {
 		this.canalModel = canalModel;
 
 		this.container = EcoreUtil.copy(container);
 		this.containment = containment;
 
-		final EList<VesselClassCost> costs = (EList<VesselClassCost>) this.container
-				.eGet(containment);
+		final EList<VesselClassCost> costs = (EList<VesselClassCost>) this.container.eGet(containment);
 
 		for (final Canal c : canalModel.getCanals()) {
 			boolean occurs = false;
@@ -125,9 +108,7 @@ public class CanalCostsDialog extends Dialog {
 			}
 			if (occurs == false) {
 				// add a cost for this canal to the costs list.
-				final VesselClassCost newCost = (VesselClassCost) EMFUtils
-						.createEObject(FleetPackage.eINSTANCE
-								.getVesselClassCost());
+				final VesselClassCost newCost = (VesselClassCost) EMFUtils.createEObject(FleetPackage.eINSTANCE.getVesselClassCost());
 
 				newCost.setCanal(c);
 				costs.add(newCost);
@@ -152,7 +133,6 @@ public class CanalCostsDialog extends Dialog {
 	@Override
 	public void create() {
 		super.create();
-		getShell().setText(
-				"Canal Costs for " + ((VesselClass) container).getName());
+		getShell().setText("Canal Costs for " + ((VesselClass) container).getName());
 	}
 }

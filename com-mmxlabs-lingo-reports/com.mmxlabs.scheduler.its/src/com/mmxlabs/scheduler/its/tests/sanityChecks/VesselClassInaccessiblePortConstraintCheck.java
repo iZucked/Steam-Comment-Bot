@@ -35,7 +35,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 public class VesselClassInaccessiblePortConstraintCheck {
 
 	private static final int dischargePrice = 1;
-	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+	private final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 	@Test
 	public void test() {
@@ -60,16 +60,16 @@ public class VesselClassInaccessiblePortConstraintCheck {
 		final int numOfClassFour = 1;
 
 		// createVessels creates and adds the vessesl to the scenario.
-		ArrayList<Vessel> vesselsOfClassOne = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
-		ArrayList<Vessel> vesselsOfClassTwo = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
-		ArrayList<Vessel> vesselsOfClassThree = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
-		ArrayList<Vessel> vesselsOfClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
+		final ArrayList<Vessel> vesselsOfClassOne = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
+		final ArrayList<Vessel> vesselsOfClassTwo = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
+		final ArrayList<Vessel> vesselsOfClassThree = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
+		final ArrayList<Vessel> vesselsOfClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
 
 		// get the vessel classes
-		VesselClass vesselClassOne = vesselsOfClassOne.get(0).getClass_();
-		VesselClass vesselClassTwo = vesselsOfClassTwo.get(0).getClass_();
-		VesselClass vesselClassThree = vesselsOfClassThree.get(0).getClass_();
-		VesselClass vesselClassFour = vesselsOfClassFour.get(0).getClass_();
+		final VesselClass vesselClassOne = vesselsOfClassOne.get(0).getClass_();
+		final VesselClass vesselClassTwo = vesselsOfClassTwo.get(0).getClass_();
+		final VesselClass vesselClassThree = vesselsOfClassThree.get(0).getClass_();
+		final VesselClass vesselClassFour = vesselsOfClassFour.get(0).getClass_();
 
 		// create some cargos.
 		SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
@@ -90,31 +90,32 @@ public class VesselClassInaccessiblePortConstraintCheck {
 
 		// check contraints.
 
-		for (AllocatedVessel av : result.getFleet()) {
+		for (final AllocatedVessel av : result.getFleet()) {
 			if (av instanceof FleetVessel) {
-				FleetVessel fv = (FleetVessel) av;
+				final FleetVessel fv = (FleetVessel) av;
 
-				VesselClass vesselClass = fv.getVessel().getClass_();
+				final VesselClass vesselClass = fv.getVessel().getClass_();
 
 				Port bannedPort = null;
-				if (vesselClass.equals(vesselClassOne))
+				if (vesselClass.equals(vesselClassOne)) {
 					bannedPort = portA;
-				else if (vesselClass.equals(vesselClassTwo))
+				} else if (vesselClass.equals(vesselClassTwo)) {
 					bannedPort = portB;
-				else if (vesselClass.equals(vesselClassThree))
+				} else if (vesselClass.equals(vesselClassThree)) {
 					bannedPort = portC;
-				else if (vesselClass.equals(vesselClassFour))
+				} else if (vesselClass.equals(vesselClassFour)) {
 					bannedPort = portD;
-				else
+				} else {
 					Assert.fail("Expected an inaccessible port for all vessel classes, but vessel class " + vesselClass.getName() + " didn't have a banned port.");
+				}
 
 				Assert.assertTrue("inaccessible port still exists", vesselClass.getInaccessiblePorts().contains(bannedPort));
 				Assert.assertEquals("Only one inaccessible port expected", 1, vesselClass.getInaccessiblePorts().size());
 				System.out.println("Vessel (" + vesselClass.getName() + ") is banned from " + vesselClass.getInaccessiblePorts().get(0).getName());
 
-				ArrayList<Port> visitedPorts = SanityCheckTools.getVesselsVisitedPorts(result, fv);
+				final ArrayList<Port> visitedPorts = SanityCheckTools.getVesselsVisitedPorts(result, fv);
 
-				for (Port p : visitedPorts) {
+				for (final Port p : visitedPorts) {
 					System.out.println("Vessel (" + vesselClass.getName() + ") visited " + p.getName() + " (banned from " + bannedPort.getName() + ")");
 
 					Assert.assertFalse(vesselClass.getName() + " vessel did not visit inaccessible port (" + bannedPort.getName() + ")", bannedPort.equals(p));

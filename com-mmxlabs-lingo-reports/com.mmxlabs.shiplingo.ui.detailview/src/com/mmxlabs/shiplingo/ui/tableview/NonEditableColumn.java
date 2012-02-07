@@ -16,43 +16,43 @@ import com.mmxlabs.common.Pair;
 public abstract class NonEditableColumn implements ICellManipulator, ICellRenderer {
 
 	@Override
-	public Comparable getComparable(Object object) {
+	public Comparable getComparable(final Object object) {
 		return render(object);
 	}
 
 	@Override
-	public void setValue(Object object, Object value) {
+	public void setValue(final Object object, final Object value) {
 
 	}
 
 	@Override
-	public CellEditor getCellEditor(Composite parent, Object object) {
+	public CellEditor getCellEditor(final Composite parent, final Object object) {
 		return null;
 	}
 
 	@Override
-	public Object getValue(Object object) {
+	public Object getValue(final Object object) {
 		return null;
 	}
 
 	@Override
-	public boolean canEdit(Object object) {
+	public boolean canEdit(final Object object) {
 		return false;
 	}
-	
+
 	@Override
-	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
-			Object object) {
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return Collections.emptySet();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.shiplingo.ui.tableview.ICellRenderer#getFilterValue(java.lang.Object)
 	 */
 	@Override
-	public Object getFilterValue(Object object) {
+	public Object getFilterValue(final Object object) {
 		return getComparable(object);
 	}
-	
-	
+
 }

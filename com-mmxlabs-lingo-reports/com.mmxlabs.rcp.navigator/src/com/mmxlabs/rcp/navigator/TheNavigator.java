@@ -140,7 +140,7 @@ public class TheNavigator extends CommonNavigator {
 						// Get current job manager
 						final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 						// If checked, we may need to create a job
-						if (ti.getChecked() && jobManager.findJobForResource(resource) == null) {
+						if (ti.getChecked() && (jobManager.findJobForResource(resource) == null)) {
 							IJobControl control = null;
 							// Adapt to a new or existing job
 							final IJobDescriptor job = (IJobDescriptor) resource.getAdapter(IJobDescriptor.class);
@@ -236,7 +236,7 @@ public class TheNavigator extends CommonNavigator {
 						return false;
 					}
 					final IJobControl control = jobManager.getControlForJob(oldJ);
-					if (control  == null) {
+					if (control == null) {
 						return false;
 					}
 

@@ -14,10 +14,8 @@ public class ZoomInAction extends Action {
 	public ZoomInAction() {
 		super();
 		setText("Zoom In");
-		setImageDescriptor(Activator
-				.getImageDescriptor("icons/clcl16/zoomin_nav.gif"));
-		setDisabledImageDescriptor(Activator
-				.getImageDescriptor("icons/dlcl16/zoomin_nav.gif"));
+		setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomin_nav.gif"));
+		setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomin_nav.gif"));
 	}
 
 	public ZoomInAction(final GanttChart ganttChart) {
@@ -35,7 +33,7 @@ public class ZoomInAction extends Action {
 
 	@Override
 	public boolean isEnabled() {
-		return ganttChart != null && ganttChart.getSettings().enableZooming();
+		return (ganttChart != null) && ganttChart.getSettings().enableZooming();
 	}
 
 	@Override

@@ -18,12 +18,12 @@ import scenario.Scenario;
 public abstract class AbstractScenarioHandler extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 
-		ISelection selection = window.getSelectionService().getSelection();
+		final ISelection selection = window.getSelectionService().getSelection();
 		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection items = (IStructuredSelection) selection;
+			final IStructuredSelection items = (IStructuredSelection) selection;
 
 			for (final Object x : items.toList()) {
 				if (x instanceof Scenario) {

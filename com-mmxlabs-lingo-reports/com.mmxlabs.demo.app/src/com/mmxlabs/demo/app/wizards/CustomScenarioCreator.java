@@ -137,17 +137,18 @@ public class CustomScenarioCreator {
 		final float equivalenceFactor = 1;
 		final int spotCharterCount = 0;
 
-		return addVessel(vesselClassName, numOfVesselsToCreate, spotCharterCount, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption, NBORate, NBORate,
-				speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLightRate, minHeelVolume, isTimeChartered);
+		return addVessel(vesselClassName, numOfVesselsToCreate, spotCharterCount, baseFuelUnitPrice, equivalenceFactor, speed, speed, capacity, speed, consumption, speed, consumption, consumption,
+				NBORate, NBORate, speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLightRate, minHeelVolume, isTimeChartered);
 	}
 
 	/**
 	 * Creates a vessel class and adds the specified number of vessels of the created class to the scenario. The attributes of the vessel class and vessel are set using the arguments.
 	 */
-	public Vessel[] addVessel(final String vesselClassName, final int numOfVesselsToCreate, final int spotCharterCount, final float baseFuelUnitPrice, final float equivalenceFactor, final int minSpeed, final int maxSpeed,
-			final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed, final int ballastMaxConsumption, int ballastIdleConsumptionRate,
-			final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption,
-			int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume, final boolean isTimeChartered) {
+	public Vessel[] addVessel(final String vesselClassName, final int numOfVesselsToCreate, final int spotCharterCount, final float baseFuelUnitPrice, final float equivalenceFactor,
+			final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed, final int ballastMaxConsumption,
+			final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption, final int ladenMaxSpeed,
+			final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume,
+			final boolean isTimeChartered) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -219,7 +220,7 @@ public class CustomScenarioCreator {
 		ballast.setNboRate(ballastNBORate);
 
 		// return a list of all vessels created.
-		Vessel created[] = new Vessel[numOfVesselsToCreate];
+		final Vessel created[] = new Vessel[numOfVesselsToCreate];
 
 		// now create vessels of this class
 		for (int i = 0; i < numOfVesselsToCreate; i++) {
@@ -308,7 +309,7 @@ public class CustomScenarioCreator {
 			portB.setTimeZone(timeZone);
 		}
 
-		for (int distance : AtoBDistances) {
+		for (final int distance : AtoBDistances) {
 			final DistanceLine distanceLine = PortFactory.eINSTANCE.createDistanceLine();
 			distanceLine.setFromPort(portA);
 			distanceLine.setToPort(portB);
@@ -316,7 +317,7 @@ public class CustomScenarioCreator {
 			scenario.getDistanceModel().getDistances().add(distanceLine);
 		}
 
-		for (int distance : BtoADistances) {
+		for (final int distance : BtoADistances) {
 			final DistanceLine distanceLine = PortFactory.eINSTANCE.createDistanceLine();
 			distanceLine.setFromPort(portB);
 			distanceLine.setToPort(portA);
@@ -377,7 +378,7 @@ public class CustomScenarioCreator {
 
 		load.setWindowStart(new DateAndOptionalTime(loadWindowStart, false));
 		load.setWindowDuration(0);
-		final Date dischargeDate = new Date(loadWindowStart.getTime() + Timer.ONE_HOUR * travelTime);
+		final Date dischargeDate = new Date(loadWindowStart.getTime() + (Timer.ONE_HOUR * travelTime));
 		dis.setWindowStart(new DateAndOptionalTime(dischargeDate, false));
 		dis.setWindowDuration(0);
 
@@ -424,9 +425,10 @@ public class CustomScenarioCreator {
 
 		charterOut.setStartPort(startPort);
 		// don't set the end port if both ports are the same - this is equivalent to setting the end port to unset and is a good place to test it works
-		if (!startPort.equals(endPort))
+		if (!startPort.equals(endPort)) {
 			charterOut.setEndPort(endPort);
-		
+		}
+
 		charterOut.setId(id);
 		charterOut.setHeelLimit(heelLimit);
 		charterOut.setDuration(charterOutDurationDays);
@@ -448,9 +450,11 @@ public class CustomScenarioCreator {
 	public Scenario buildScenario() {
 
 		// Add every canal to every vessel class.
-		for (VesselClassCost canalCost : this.canalCostsForAllVesselClasses)
-			for (VesselClass vc : scenario.getFleetModel().getVesselClasses())
+		for (final VesselClassCost canalCost : this.canalCostsForAllVesselClasses) {
+			for (final VesselClass vc : scenario.getFleetModel().getVesselClasses()) {
 				addCanal(vc, canalCost);
+			}
+		}
 
 		fixUUIDMisMatches(scenario);
 
@@ -465,22 +469,25 @@ public class CustomScenarioCreator {
 	 */
 	private static void fixUUIDMisMatches(final Scenario scenario) {
 
-		TreeIterator<EObject> iterator = scenario.eAllContents();
+		final TreeIterator<EObject> iterator = scenario.eAllContents();
 		while (iterator.hasNext()) {
-			EObject obj = iterator.next();
+			final EObject obj = iterator.next();
 
-			if (obj instanceof UUIDObject)
+			if (obj instanceof UUIDObject) {
 				((UUIDObject) obj).getUUID();
+			}
 		}
 	}
 
 	public VesselClassCost createCanalCost(final String canalName, final Port portA, final Port portB, final int distanceAToB, final int distanceBToA, final int canalLadenCost,
 			final int canalUnladenCost, final int canalTransitFuelDays, final int canalTransitTime) {
 
-		if (!scenario.getPortModel().getPorts().contains(portA))
+		if (!scenario.getPortModel().getPorts().contains(portA)) {
 			scenario.getPortModel().getPorts().add(portA);
-		if (!scenario.getPortModel().getPorts().contains(portB))
+		}
+		if (!scenario.getPortModel().getPorts().contains(portB)) {
 			scenario.getPortModel().getPorts().add(portB);
+		}
 
 		final Canal canal = PortFactory.eINSTANCE.createCanal();
 		canal.setName(canalName);
@@ -528,9 +535,10 @@ public class CustomScenarioCreator {
 
 		if (scenarioFleetModelContainsVesselClass(vc)) {
 
-			for (VesselClass v : scenario.getFleetModel().getVesselClasses()) {
-				if (v.equals(vc))
+			for (final VesselClass v : scenario.getFleetModel().getVesselClasses()) {
+				if (v.equals(vc)) {
 					v.getInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
+				}
 
 				return true;
 			}
@@ -540,9 +548,10 @@ public class CustomScenarioCreator {
 
 	private boolean scenarioFleetModelContainsVesselClass(final VesselClass vc) {
 
-		for (Vessel v : scenario.getFleetModel().getFleet()) {
-			if (v.getClass_().equals(vc))
+		for (final Vessel v : scenario.getFleetModel().getFleet()) {
+			if (v.getClass_().equals(vc)) {
 				return true;
+			}
 		}
 
 		return false;
@@ -562,7 +571,7 @@ public class CustomScenarioCreator {
 
 		if (scenario.getCargoModel().getCargoes().contains(cargo)) {
 
-			for (Cargo c : scenario.getCargoModel().getCargoes()) {
+			for (final Cargo c : scenario.getCargoModel().getCargoes()) {
 				if (c.equals(cargo)) {
 					c.getAllowedVessels().addAll(allowedVessels);
 

@@ -12,14 +12,12 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
-	public ApplicationWorkbenchWindowAdvisor(
-			final IWorkbenchWindowConfigurer configurer) {
+	public ApplicationWorkbenchWindowAdvisor(final IWorkbenchWindowConfigurer configurer) {
 		super(configurer);
 	}
 
 	@Override
-	public ActionBarAdvisor createActionBarAdvisor(
-			final IActionBarConfigurer configurer) {
+	public ActionBarAdvisor createActionBarAdvisor(final IActionBarConfigurer configurer) {
 		return new ApplicationActionBarAdvisor(configurer);
 	}
 

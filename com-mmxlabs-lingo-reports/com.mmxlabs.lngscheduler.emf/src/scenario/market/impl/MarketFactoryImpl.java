@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.market.*;
 import scenario.market.Index;
 import scenario.market.MarketFactory;
 import scenario.market.MarketModel;
@@ -19,35 +18,31 @@ import scenario.market.StepwisePrice;
 import scenario.market.StepwisePriceCurve;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Factory</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static MarketFactory init() {
 		try {
-			MarketFactory theMarketFactory = (MarketFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/market"); 
+			final MarketFactory theMarketFactory = (MarketFactory) EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/market");
 			if (theMarketFactory != null) {
 				return theMarketFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (final Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new MarketFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MarketFactoryImpl() {
@@ -55,74 +50,83 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public EObject create(EClass eClass) {
+	public EObject create(final EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case MarketPackage.INDEX: return createIndex();
-			case MarketPackage.MARKET_MODEL: return createMarketModel();
-			case MarketPackage.STEPWISE_PRICE_CURVE: return createStepwisePriceCurve();
-			case MarketPackage.STEPWISE_PRICE: return createStepwisePrice();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		case MarketPackage.INDEX:
+			return createIndex();
+		case MarketPackage.MARKET_MODEL:
+			return createMarketModel();
+		case MarketPackage.STEPWISE_PRICE_CURVE:
+			return createStepwisePriceCurve();
+		case MarketPackage.STEPWISE_PRICE:
+			return createStepwisePrice();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public Index createIndex() {
-		IndexImpl index = new IndexImpl();
+		final IndexImpl index = new IndexImpl();
 		return index;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public MarketModel createMarketModel() {
-		MarketModelImpl marketModel = new MarketModelImpl();
+		final MarketModelImpl marketModel = new MarketModelImpl();
 		return marketModel;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public StepwisePriceCurve createStepwisePriceCurve() {
-		StepwisePriceCurveImpl stepwisePriceCurve = new StepwisePriceCurveImpl();
+		final StepwisePriceCurveImpl stepwisePriceCurve = new StepwisePriceCurveImpl();
 		return stepwisePriceCurve;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public StepwisePrice createStepwisePrice() {
-		StepwisePriceImpl stepwisePrice = new StepwisePriceImpl();
+		final StepwisePriceImpl stepwisePrice = new StepwisePriceImpl();
 		return stepwisePrice;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public MarketPackage getMarketPackage() {
-		return (MarketPackage)getEPackage();
+		return (MarketPackage) getEPackage();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */
@@ -131,4 +135,4 @@ public class MarketFactoryImpl extends EFactoryImpl implements MarketFactory {
 		return MarketPackage.eINSTANCE;
 	}
 
-} //MarketFactoryImpl
+} // MarketFactoryImpl

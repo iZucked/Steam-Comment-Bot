@@ -13,16 +13,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
-
 import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
 import com.mmxlabs.shiplingo.ui.detailview.base.IInlineEditorWrapper;
 import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
 import com.mmxlabs.shiplingo.ui.detailview.editors.ICommandProcessor;
 
 /**
- * A class which holds and tracks detail composite containers, placing them in
- * another composite and hiding and showing them as appropriate, rather than
- * constructing/disposing them.
+ * A class which holds and tracks detail composite containers, placing them in another composite and hiding and showing them as appropriate, rather than constructing/disposing them.
  * 
  * @author hinton
  * 
@@ -34,19 +31,16 @@ public class DetailCompositeContainer {
 	private ICommandProcessor processor;
 	private final IInlineEditorWrapper wrapper;
 	private boolean lockedForEditing = false;
-	
+
 	public ICommandProcessor getProcessor() {
 		return processor;
 	}
 
-	public void setProcessor(ICommandProcessor processor) {
+	public void setProcessor(final ICommandProcessor processor) {
 		this.processor = processor;
 	}
 
-	public DetailCompositeContainer(
-			IValueProviderProvider valueProviderProvider,
-			EditingDomain editingDomain, ICommandProcessor processor,
-			IInlineEditorWrapper wrapper) {
+	public DetailCompositeContainer(final IValueProviderProvider valueProviderProvider, final EditingDomain editingDomain, final ICommandProcessor processor, final IInlineEditorWrapper wrapper) {
 		super();
 		this.valueProviderProvider = valueProviderProvider;
 		this.editingDomain = editingDomain;
@@ -54,11 +48,8 @@ public class DetailCompositeContainer {
 		this.wrapper = wrapper;
 	}
 
-	public DetailCompositeContainer(
-			IValueProviderProvider valueProviderProvider,
-			EditingDomain editingDomain, ICommandProcessor processor) {
-		this(valueProviderProvider, editingDomain, processor,
-				IInlineEditorWrapper.IDENTITY);
+	public DetailCompositeContainer(final IValueProviderProvider valueProviderProvider, final EditingDomain editingDomain, final ICommandProcessor processor) {
+		this(valueProviderProvider, editingDomain, processor, IInlineEditorWrapper.IDENTITY);
 	}
 
 	/**
@@ -68,26 +59,18 @@ public class DetailCompositeContainer {
 	 * @param control2
 	 * @return
 	 */
-	public AbstractDetailComposite getDetailView(final EClass eClass,
-			final Composite control2) {
+	public AbstractDetailComposite getDetailView(final EClass eClass, final Composite control2) {
 		if (classToComposite.containsKey(eClass)) {
 			return classToComposite.get(eClass);
 		} else {
 			try {
-				final Class c = Class
-						.forName("com.mmxlabs.shiplingo.ui.detailview.generated."
-								+ eClass.getName().substring(0, 1)
-										.toUpperCase()
-								+ eClass.getName().substring(1) + "Composite");
-				final AbstractDetailComposite adc = (AbstractDetailComposite) c
-						.getConstructor(Composite.class, Integer.TYPE)
-						.newInstance(control2, SWT.NONE);
+				final Class c = Class.forName("com.mmxlabs.shiplingo.ui.detailview.generated." + eClass.getName().substring(0, 1).toUpperCase() + eClass.getName().substring(1) + "Composite");
+				final AbstractDetailComposite adc = (AbstractDetailComposite) c.getConstructor(Composite.class, Integer.TYPE).newInstance(control2, SWT.NONE);
 
-				adc.init(valueProviderProvider, editingDomain, processor,
-						wrapper);
+				adc.init(valueProviderProvider, editingDomain, processor, wrapper);
 
 				adc.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-				
+
 				adc.setLockedForEditing(lockedForEditing);
 
 				classToComposite.put(eClass, adc);
@@ -97,7 +80,7 @@ public class DetailCompositeContainer {
 		}
 		return null;
 	}
-	
+
 	public void setLockedForEditing(final boolean locked) {
 		lockedForEditing = locked;
 		for (final AbstractDetailComposite composite : classToComposite.values()) {

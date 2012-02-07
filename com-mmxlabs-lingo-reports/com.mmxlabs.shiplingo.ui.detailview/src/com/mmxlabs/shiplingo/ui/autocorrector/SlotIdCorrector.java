@@ -25,34 +25,23 @@ public class SlotIdCorrector extends BaseCorrector {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * scenario.presentation.cargoeditor.autocorrect.AutoCorrector.ICorrector
-	 * #correct(org.eclipse.emf.common.notify.Notification,
-	 * org.eclipse.emf.edit.domain.EditingDomain)
+	 * @see scenario.presentation.cargoeditor.autocorrect.AutoCorrector.ICorrector #correct(org.eclipse.emf.common.notify.Notification, org.eclipse.emf.edit.domain.EditingDomain)
 	 */
 	@Override
-	public Pair<String, Command> correct(Notification notification,
-			EditingDomain editingDomain) {
+	public Pair<String, Command> correct(final Notification notification, final EditingDomain editingDomain) {
 
 		if (notification.isTouch()) {
 			return null;
 		}
 		if (notification.getEventType() == Notification.SET) {
-			if (notification.getFeature() == CargoPackage.eINSTANCE
-					.getCargo_Id()) {
+			if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_Id()) {
 				final Cargo target = (Cargo) notification.getNotifier();
 				final CompoundCommand fix = new CompoundCommand();
 				if (target.getLoadSlot() != null) {
-					fix.append(SetCommand.create(editingDomain,
-							target.getLoadSlot(),
-							CargoPackage.eINSTANCE.getSlot_Id(), "load-"
-									+ target.getId()));
+					fix.append(SetCommand.create(editingDomain, target.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Id(), "load-" + target.getId()));
 				}
 				if (target.getDischargeSlot() != null) {
-					fix.append(SetCommand.create(editingDomain,
-							target.getDischargeSlot(),
-							CargoPackage.eINSTANCE.getSlot_Id(), "discharge-"
-									+ target.getId()));
+					fix.append(SetCommand.create(editingDomain, target.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Id(), "discharge-" + target.getId()));
 				}
 			}
 		}

@@ -18,44 +18,38 @@ import org.w3c.dom.Element;
 
 public class DynamicContentProvider implements IIntroXHTMLContentProvider {
 
+	@Override
+	public void init(final IIntroContentProviderSite site) {
+	}
 
-    @Override
-	public void init(IIntroContentProviderSite site) {
-    }
+	@Override
+	public void createContent(final String id, final PrintWriter out) {
+	}
 
+	@Override
+	public void createContent(final String id, final Composite parent, final FormToolkit toolkit) {
+	}
 
-    @Override
-	public void createContent(String id, PrintWriter out) {
-    }
+	private static String getCurrentTimeString() {
+		final StringBuffer content = new StringBuffer("Dynamic content from Intro ContentProvider: ");
+		content.append("Current time is: ");
+		content.append(new Date(System.currentTimeMillis()));
+		return content.toString();
+	}
 
-    @Override
-	public void createContent(String id, Composite parent, FormToolkit toolkit) {
-    }
+	@Override
+	public void createContent(final String id, final Element parent) {
+		final Document dom = parent.getOwnerDocument();
+		final Element para = dom.createElement("p");
+		para.setAttribute("id", "someDynamicContentId");
+		para.appendChild(dom.createTextNode(getCurrentTimeString()));
+		parent.appendChild(para);
 
-    private static String getCurrentTimeString() {
-        StringBuffer content = new StringBuffer(
-                "Dynamic content from Intro ContentProvider: ");
-        content.append("Current time is: ");
-        content.append(new Date(System.currentTimeMillis()));
-        return content.toString();
-    }
+	}
 
-    @Override
-	public void createContent(String id, Element parent) {
-        Document dom = parent.getOwnerDocument();
-        Element para = dom.createElement("p");
-        para.setAttribute("id", "someDynamicContentId");
-        para.appendChild(dom.createTextNode(getCurrentTimeString()));
-        parent.appendChild(para);
-
-    }
-
-
-    @Override
+	@Override
 	public void dispose() {
 
-    }
-
-
+	}
 
 }

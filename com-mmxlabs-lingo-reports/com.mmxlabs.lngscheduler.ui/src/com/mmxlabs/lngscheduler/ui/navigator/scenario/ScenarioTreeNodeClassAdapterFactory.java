@@ -18,9 +18,7 @@ import com.mmxlabs.lngscheduler.ui.Activator;
 import com.mmxlabs.rcp.common.ecore.EcoreContentProvider;
 
 /**
- * An {@link IAdapterFactory} used to get {@link Schedule} instances from a
- * {@link Scenario} or {@link IResource}. This should be registered in the
- * plugin.xml for this plugin.
+ * An {@link IAdapterFactory} used to get {@link Schedule} instances from a {@link Scenario} or {@link IResource}. This should be registered in the plugin.xml for this plugin.
  * 
  * @author Simon Goodall
  * 
@@ -28,35 +26,29 @@ import com.mmxlabs.rcp.common.ecore.EcoreContentProvider;
 public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 
 	// FIXME: Get this string from somewhere else
-	private final EcoreContentProvider scp = new EcoreContentProvider(
-			Collections.singleton("scenario"));
+	private final EcoreContentProvider scp = new EcoreContentProvider(Collections.singleton("scenario"));
 
 	@Override
-	public Object getAdapter(final Object adaptableObject,
-			@SuppressWarnings("rawtypes") final Class adapterType) {
+	public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
 
 		if (adaptableObject instanceof IResource) {
 
 			/**
-			 * Try obtaining in memory data from a running job before falling
-			 * back to loading the scenario from the resource. This allows the
-			 * current optimisation state to be shown.
+			 * Try obtaining in memory data from a running job before falling back to loading the scenario from the resource. This allows the current optimisation state to be shown.
 			 */
-			final IJobDescriptor job = Activator.getDefault().getJobManager()
-					.findJobForResource((IResource) adaptableObject);
-			
-			
-//			if (job != null) {
-//				FIXME
-//				final Scenario scenario = ((LNGSchedulerJob) job).getScenario();
-//				if (scenario != null) {
-//					if (Scenario.class.isAssignableFrom(adapterType)) {
-//						return scenario;
-//					} else if (Schedule.class.isAssignableFrom(adapterType)) {
-//						return getSchedule(scenario);
-//					}
-//				}
-//			}
+			final IJobDescriptor job = Activator.getDefault().getJobManager().findJobForResource(adaptableObject);
+
+			// if (job != null) {
+			// FIXME
+			// final Scenario scenario = ((LNGSchedulerJob) job).getScenario();
+			// if (scenario != null) {
+			// if (Scenario.class.isAssignableFrom(adapterType)) {
+			// return scenario;
+			// } else if (Schedule.class.isAssignableFrom(adapterType)) {
+			// return getSchedule(scenario);
+			// }
+			// }
+			// }
 
 			// Fall back to directly loading from resource
 			if (Scenario.class.isAssignableFrom(adapterType)) {

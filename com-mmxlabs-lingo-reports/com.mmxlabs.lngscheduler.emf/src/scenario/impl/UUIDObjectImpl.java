@@ -15,23 +15,20 @@ import scenario.ScenarioPackage;
 import scenario.UUIDObject;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>UUID Object</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>UUID Object</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.impl.UUIDObjectImpl#getUUID <em>UUID</em>}</li>
+ * <li>{@link scenario.impl.UUIDObjectImpl#getUUID <em>UUID</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public abstract class UUIDObjectImpl extends EObjectImpl implements UUIDObject {
 	/**
-	 * The default value of the '{@link #getUUID() <em>UUID</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getUUID() <em>UUID</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getUUID()
 	 * @generated
 	 * @ordered
@@ -39,9 +36,8 @@ public abstract class UUIDObjectImpl extends EObjectImpl implements UUIDObject {
 	protected static final String UUID_EDEFAULT = "";
 
 	/**
-	 * The cached value of the '{@link #getUUID() <em>UUID</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getUUID() <em>UUID</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getUUID()
 	 * @generated
 	 * @ordered
@@ -49,8 +45,8 @@ public abstract class UUIDObjectImpl extends EObjectImpl implements UUIDObject {
 	protected String uuid = UUID_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected UUIDObjectImpl() {
@@ -58,8 +54,8 @@ public abstract class UUIDObjectImpl extends EObjectImpl implements UUIDObject {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -68,102 +64,106 @@ public abstract class UUIDObjectImpl extends EObjectImpl implements UUIDObject {
 	}
 
 	/**
-	 * This getter is modified so that the UUID of an object is never null.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This getter is modified so that the UUID of an object is never null. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated NO
 	 */
+	@Override
 	public String getUUID() {
-		if (uuid == null || uuid.isEmpty()) {
+		if ((uuid == null) || uuid.isEmpty()) {
 			setUUID(UUID.randomUUID().toString());
 		}
 		return uuid;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setUUID(String newUUID) {
-		String oldUUID = uuid;
-		uuid = newUUID;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.UUID_OBJECT__UUID, oldUUID, uuid));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public void setUUID(final String newUUID) {
+		final String oldUUID = uuid;
+		uuid = newUUID;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.UUID_OBJECT__UUID, oldUUID, uuid));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case ScenarioPackage.UUID_OBJECT__UUID:
-				return getUUID();
+		case ScenarioPackage.UUID_OBJECT__UUID:
+			return getUUID();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case ScenarioPackage.UUID_OBJECT__UUID:
-				setUUID((String)newValue);
-				return;
+		case ScenarioPackage.UUID_OBJECT__UUID:
+			setUUID((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case ScenarioPackage.UUID_OBJECT__UUID:
-				setUUID(UUID_EDEFAULT);
-				return;
+		case ScenarioPackage.UUID_OBJECT__UUID:
+			setUUID(UUID_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case ScenarioPackage.UUID_OBJECT__UUID:
-				return UUID_EDEFAULT == null ? uuid != null : !UUID_EDEFAULT.equals(uuid);
+		case ScenarioPackage.UUID_OBJECT__UUID:
+			return UUID_EDEFAULT == null ? uuid != null : !UUID_EDEFAULT.equals(uuid);
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (UUID: ");
 		result.append(uuid);
 		result.append(')');
 		return result.toString();
 	}
 
-} //UUIDObjectImpl
+} // UUIDObjectImpl

@@ -10,7 +10,7 @@ import org.eclipse.swt.graphics.Image;
 public interface IGanttChartToolTipProvider extends ILabelProvider {
 
 	String getToolTipText(Object element);
-	
+
 	String getToolTipTitle(Object element);
 
 	Image getToolTipImage(Object element);

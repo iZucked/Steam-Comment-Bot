@@ -37,10 +37,10 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -115,8 +115,9 @@ public class EObjectTableViewer extends GridTableViewer {
 					refresh();
 					return;
 				}
-				while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null))
+				while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null)) {
 					;
+				}
 				if (source != null) {
 					EObjectTableViewer.this.update(source, null);
 					EObjectTableViewer.this.updateObjectExternalNotifiers(source); // may have
@@ -179,7 +180,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	private IFilter filter = null;
 
 	private boolean lockedForEditing = false;
-	
+
 	/**
 	 * @return True if editing is currently disabled on this table.
 	 */
@@ -188,9 +189,10 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	/**
-	 * @param Set to true if editing should be disabled on this table.
+	 * @param Set
+	 *            to true if editing should be disabled on this table.
 	 */
-	public void setLockedForEditing(boolean lockedForEditing) {
+	public void setLockedForEditing(final boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
 	}
 
@@ -200,17 +202,18 @@ public class EObjectTableViewer extends GridTableViewer {
 		return displayValidationErrors;
 	}
 
-	public void setDisplayValidationErrors(boolean displayValidationErrors) {
+	public void setDisplayValidationErrors(final boolean displayValidationErrors) {
 		this.displayValidationErrors = displayValidationErrors;
 	}
 
-	public EObjectTableViewer(Composite parent, int style) {
+	public EObjectTableViewer(final Composite parent, final int style) {
 		super(parent, style);
 	}
 
 	public void setFilterString(final String filterString) {
-		if (filterString.isEmpty())
+		if (filterString.isEmpty()) {
 			filter = null;
+		}
 		final FilterUtils utils = new FilterUtils();
 		filter = utils.parseFilterString(filterString);
 		refresh(false);
@@ -254,8 +257,9 @@ public class EObjectTableViewer extends GridTableViewer {
 				if (Character.isWhitespace(c)) {
 					ws = true;
 				} else {
-					if (ws)
+					if (ws) {
 						initials += c;
+					}
 					ws = false;
 				}
 			}
@@ -271,15 +275,16 @@ public class EObjectTableViewer extends GridTableViewer {
 			 * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
 			 */
 			@Override
-			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
-				long fireTime = System.currentTimeMillis();
-				boolean activate = event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION || event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED
-						&& event.keyCode == SWT.F2 && (fireTime - timer) > 500; // this is a hack; for some reason without this we get loads of keydown events.
+			protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
+				final long fireTime = System.currentTimeMillis();
+				final boolean activate = (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
+						|| ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.F2) && ((fireTime - timer) > 500)); // this is a hack; for some reason without
+																																							// this we get loads of keydown events.
 				timer = fireTime;
 				return activate;
 			}
 
-		}, GridViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | GridViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
+		}, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
 
 		columnSortOrder.add(tColumn);
 
@@ -295,13 +300,15 @@ public class EObjectTableViewer extends GridTableViewer {
 
 					// TODO hack because this is very slow and canals contain many
 					// elements
-					if (object instanceof Canal || object instanceof VesselClass)
+					if ((object instanceof Canal) || (object instanceof VesselClass)) {
 						return super.getBackground(element);
+					}
 
 					final TreeIterator<EObject> iterator = object.eAllContents();
 					while (iterator.hasNext()) {
-						if (hasValidationError(iterator.next()))
+						if (hasValidationError(iterator.next())) {
 							return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+						}
 					}
 				}
 				return super.getBackground(element);
@@ -314,16 +321,20 @@ public class EObjectTableViewer extends GridTableViewer {
 
 			private boolean hasValidationError(final EObject object) {
 				final Resource r = object.eResource();
-				if (r == null)
+				if (r == null) {
 					return false;
+				}
 				try {
-					if (r.getURI().isPlatform() == false) return false;
+					if (r.getURI().isPlatform() == false) {
+						return false;
+					}
 					final IFile containingFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(r.getURI().toPlatformString(true)));
 					final IMarker[] markers = containingFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 					for (final IMarker marker : markers) {
 						final String uri = marker.getAttribute(EValidator.URI_ATTRIBUTE, null);
-						if (uri == null)
+						if (uri == null) {
 							continue;
+						}
 						final URI uri2 = URI.create(uri);
 						if (uri2.getFragment().equals(r.getURIFragment(object))) {
 							return true;
@@ -340,7 +351,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		column.setEditingSupport(new EditingSupport(viewer) {
 			@Override
 			protected boolean canEdit(final Object element) {
-				return lockedForEditing == false && manipulator.canEdit(path.get((EObject) element));
+				return (lockedForEditing == false) && manipulator.canEdit(path.get((EObject) element));
 			}
 
 			@Override
@@ -358,7 +369,9 @@ public class EObjectTableViewer extends GridTableViewer {
 			protected void setValue(final Object element, final Object value) {
 				// a value has come out of the celleditor and is being set on
 				// the element.
-				if (lockedForEditing) return;
+				if (lockedForEditing) {
+					return;
+				}
 				manipulator.setValue(path.get((EObject) element), value);
 				refresh();
 			}
@@ -399,6 +412,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		columnSortOrder.clear();
 	}
 
+	@Override
 	public Control getControl() {
 		return getGrid();
 	}
@@ -430,7 +444,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 		new IStructuredContentProvider() {
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				contentProvider.inputChanged(viewer, oldInput, newInput);
 			}
 
@@ -440,7 +454,7 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 
 			@Override
-			public Object[] getElements(Object inputElement) {
+			public Object[] getElements(final Object inputElement) {
 				removeAdapters();
 				currentElements.clear();
 				final Object[] elements = contentProvider.getElements(inputElement);
@@ -460,7 +474,7 @@ public class EObjectTableViewer extends GridTableViewer {
 			public int compare(final Viewer viewer, final Object e1, final Object e2) {
 				final Iterator<GridColumn> iterator = columnSortOrder.iterator();
 				int comparison = 0;
-				while (iterator.hasNext() && comparison == 0) {
+				while (iterator.hasNext() && (comparison == 0)) {
 					final GridColumn column = iterator.next();
 					final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
 					final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
@@ -476,14 +490,15 @@ public class EObjectTableViewer extends GridTableViewer {
 
 		addFilter(new ViewerFilter() {
 			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				if (filter == null)
+			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+				if (filter == null) {
 					return true;
+				}
 
 				/**
 				 * This map contains representations of each column for this object, both the real value and the display value.
 				 */
-				final Map<String, Pair<?,?>> attributes = new HashMap<String, Pair<?,?>>();
+				final Map<String, Pair<?, ?>> attributes = new HashMap<String, Pair<?, ?>>();
 				// this could probably be much faster
 				for (final GridColumn column : getGrid().getColumns()) {
 					final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
@@ -551,8 +566,8 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	private void updateObjectExternalNotifiers(final EObject object) {
-		Set<Notifier> dropNotifiers = new HashSet<Notifier>();
-		Set<Notifier> addNotifiers = new HashSet<Notifier>();
+		final Set<Notifier> dropNotifiers = new HashSet<Notifier>();
+		final Set<Notifier> addNotifiers = new HashSet<Notifier>();
 		Set<Notifier> notifiers = externalNotifiersByObject.get(object);
 
 		// look at the existing notifiers for this object, and disassociate them
@@ -610,13 +625,15 @@ public class EObjectTableViewer extends GridTableViewer {
 		}
 
 		for (final Notifier n : dropNotifiers) {
-			if (n != null)
+			if (n != null) {
 				n.eAdapters().remove(externalAdapter);
+			}
 		}
 
 		for (final Notifier n : addNotifiers) {
-			if (n != null)
+			if (n != null) {
 				n.eAdapters().add(externalAdapter);
+			}
 		}
 	}
 
@@ -636,10 +653,11 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	/**
 	 * Get possible (unfiltered) values for the column with the given name
+	 * 
 	 * @param columnName
 	 * @return
 	 */
-	public Set<String> getDistinctValues(String columnName) {
+	public Set<String> getDistinctValues(final String columnName) {
 		final TreeSet<String> result = new TreeSet<String>();
 
 		for (final GridColumn column : getGrid().getColumns()) {

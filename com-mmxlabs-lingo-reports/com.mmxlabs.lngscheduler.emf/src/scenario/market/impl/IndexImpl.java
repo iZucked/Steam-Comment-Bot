@@ -16,23 +16,20 @@ import scenario.market.MarketPackage;
 import scenario.market.StepwisePriceCurve;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Index</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Index</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.market.impl.IndexImpl#getPriceCurve <em>Price Curve</em>}</li>
+ * <li>{@link scenario.market.impl.IndexImpl#getPriceCurve <em>Price Curve</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class IndexImpl extends NamedObjectImpl implements Index {
 	/**
-	 * The cached value of the '{@link #getPriceCurve() <em>Price Curve</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getPriceCurve() <em>Price Curve</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getPriceCurve()
 	 * @generated
 	 * @ordered
@@ -40,8 +37,8 @@ public class IndexImpl extends NamedObjectImpl implements Index {
 	protected StepwisePriceCurve priceCurve;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected IndexImpl() {
@@ -49,8 +46,8 @@ public class IndexImpl extends NamedObjectImpl implements Index {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -59,31 +56,35 @@ public class IndexImpl extends NamedObjectImpl implements Index {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public StepwisePriceCurve getPriceCurve() {
-		if (priceCurve != null && priceCurve.eIsProxy()) {
-			InternalEObject oldPriceCurve = (InternalEObject)priceCurve;
-			priceCurve = (StepwisePriceCurve)eResolveProxy(oldPriceCurve);
+		if ((priceCurve != null) && priceCurve.eIsProxy()) {
+			final InternalEObject oldPriceCurve = (InternalEObject) priceCurve;
+			priceCurve = (StepwisePriceCurve) eResolveProxy(oldPriceCurve);
 			if (priceCurve != oldPriceCurve) {
-				InternalEObject newPriceCurve = (InternalEObject)priceCurve;
+				final InternalEObject newPriceCurve = (InternalEObject) priceCurve;
 				NotificationChain msgs = oldPriceCurve.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MarketPackage.INDEX__PRICE_CURVE, null, null);
 				if (newPriceCurve.eInternalContainer() == null) {
 					msgs = newPriceCurve.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MarketPackage.INDEX__PRICE_CURVE, null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
+				if (msgs != null) {
+					msgs.dispatch();
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MarketPackage.INDEX__PRICE_CURVE, oldPriceCurve, priceCurve));
+				}
 			}
 		}
 		return priceCurve;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public StepwisePriceCurve basicGetPriceCurve() {
@@ -91,110 +92,121 @@ public class IndexImpl extends NamedObjectImpl implements Index {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public NotificationChain basicSetPriceCurve(StepwisePriceCurve newPriceCurve, NotificationChain msgs) {
-		StepwisePriceCurve oldPriceCurve = priceCurve;
+	public NotificationChain basicSetPriceCurve(final StepwisePriceCurve newPriceCurve, NotificationChain msgs) {
+		final StepwisePriceCurve oldPriceCurve = priceCurve;
 		priceCurve = newPriceCurve;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MarketPackage.INDEX__PRICE_CURVE, oldPriceCurve, newPriceCurve);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MarketPackage.INDEX__PRICE_CURVE, oldPriceCurve, newPriceCurve);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPriceCurve(StepwisePriceCurve newPriceCurve) {
-		if (newPriceCurve != priceCurve) {
-			NotificationChain msgs = null;
-			if (priceCurve != null)
-				msgs = ((InternalEObject)priceCurve).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MarketPackage.INDEX__PRICE_CURVE, null, msgs);
-			if (newPriceCurve != null)
-				msgs = ((InternalEObject)newPriceCurve).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MarketPackage.INDEX__PRICE_CURVE, null, msgs);
-			msgs = basicSetPriceCurve(newPriceCurve, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.INDEX__PRICE_CURVE, newPriceCurve, newPriceCurve));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public void setPriceCurve(final StepwisePriceCurve newPriceCurve) {
+		if (newPriceCurve != priceCurve) {
+			NotificationChain msgs = null;
+			if (priceCurve != null) {
+				msgs = ((InternalEObject) priceCurve).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MarketPackage.INDEX__PRICE_CURVE, null, msgs);
+			}
+			if (newPriceCurve != null) {
+				msgs = ((InternalEObject) newPriceCurve).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MarketPackage.INDEX__PRICE_CURVE, null, msgs);
+			}
+			msgs = basicSetPriceCurve(newPriceCurve, msgs);
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.INDEX__PRICE_CURVE, newPriceCurve, newPriceCurve));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case MarketPackage.INDEX__PRICE_CURVE:
-				return basicSetPriceCurve(null, msgs);
+		case MarketPackage.INDEX__PRICE_CURVE:
+			return basicSetPriceCurve(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case MarketPackage.INDEX__PRICE_CURVE:
-				if (resolve) return getPriceCurve();
-				return basicGetPriceCurve();
+		case MarketPackage.INDEX__PRICE_CURVE:
+			if (resolve) {
+				return getPriceCurve();
+			}
+			return basicGetPriceCurve();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case MarketPackage.INDEX__PRICE_CURVE:
-				setPriceCurve((StepwisePriceCurve)newValue);
-				return;
+		case MarketPackage.INDEX__PRICE_CURVE:
+			setPriceCurve((StepwisePriceCurve) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case MarketPackage.INDEX__PRICE_CURVE:
-				setPriceCurve((StepwisePriceCurve)null);
-				return;
+		case MarketPackage.INDEX__PRICE_CURVE:
+			setPriceCurve((StepwisePriceCurve) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case MarketPackage.INDEX__PRICE_CURVE:
-				return priceCurve != null;
+		case MarketPackage.INDEX__PRICE_CURVE:
+			return priceCurve != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //IndexImpl
+} // IndexImpl

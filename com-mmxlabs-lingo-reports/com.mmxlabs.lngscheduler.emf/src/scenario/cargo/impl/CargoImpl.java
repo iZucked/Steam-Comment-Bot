@@ -23,28 +23,25 @@ import scenario.fleet.Vessel;
 import scenario.impl.AnnotatedObjectImpl;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Cargo</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Cargo</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.cargo.impl.CargoImpl#getId <em>Id</em>}</li>
- *   <li>{@link scenario.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
- *   <li>{@link scenario.cargo.impl.CargoImpl#getLoadSlot <em>Load Slot</em>}</li>
- *   <li>{@link scenario.cargo.impl.CargoImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
- *   <li>{@link scenario.cargo.impl.CargoImpl#getCargoType <em>Cargo Type</em>}</li>
- *   <li>{@link scenario.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
+ * <li>{@link scenario.cargo.impl.CargoImpl#getId <em>Id</em>}</li>
+ * <li>{@link scenario.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ * <li>{@link scenario.cargo.impl.CargoImpl#getLoadSlot <em>Load Slot</em>}</li>
+ * <li>{@link scenario.cargo.impl.CargoImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
+ * <li>{@link scenario.cargo.impl.CargoImpl#getCargoType <em>Cargo Type</em>}</li>
+ * <li>{@link scenario.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	/**
-	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -52,9 +49,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	protected static final String ID_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -62,9 +58,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	protected String id = ID_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getAllowedVessels()
 	 * @generated
 	 * @ordered
@@ -72,9 +67,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	protected EList<Vessel> allowedVessels;
 
 	/**
-	 * The cached value of the '{@link #getLoadSlot() <em>Load Slot</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getLoadSlot() <em>Load Slot</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getLoadSlot()
 	 * @generated
 	 * @ordered
@@ -82,9 +76,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	protected LoadSlot loadSlot;
 
 	/**
-	 * The cached value of the '{@link #getDischargeSlot() <em>Discharge Slot</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getDischargeSlot() <em>Discharge Slot</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDischargeSlot()
 	 * @generated
 	 * @ordered
@@ -92,9 +85,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	protected Slot dischargeSlot;
 
 	/**
-	 * The default value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getCargoType()
 	 * @generated
 	 * @ordered
@@ -102,9 +94,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	protected static final CargoType CARGO_TYPE_EDEFAULT = CargoType.FLEET;
 
 	/**
-	 * The cached value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getCargoType()
 	 * @generated
 	 * @ordered
@@ -112,9 +103,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	protected CargoType cargoType = CARGO_TYPE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isAllowRewiring() <em>Allow Rewiring</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #isAllowRewiring() <em>Allow Rewiring</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isAllowRewiring()
 	 * @generated
 	 * @ordered
@@ -122,9 +112,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	protected static final boolean ALLOW_REWIRING_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isAllowRewiring() <em>Allow Rewiring</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #isAllowRewiring() <em>Allow Rewiring</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isAllowRewiring()
 	 * @generated
 	 * @ordered
@@ -132,17 +121,16 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	protected boolean allowRewiring = ALLOW_REWIRING_EDEFAULT;
 
 	/**
-	 * This is true if the Allow Rewiring attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is true if the Allow Rewiring attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean allowRewiringESet;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected CargoImpl() {
@@ -150,8 +138,8 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -160,52 +148,59 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public String getId() {
 		return id;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setId(String newId) {
-		String oldId = id;
+	@Override
+	public void setId(final String newId) {
+		final String oldId = id;
 		id = newId;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__ID, oldId, id));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public LoadSlot getLoadSlot() {
-		if (loadSlot != null && loadSlot.eIsProxy()) {
-			InternalEObject oldLoadSlot = (InternalEObject)loadSlot;
-			loadSlot = (LoadSlot)eResolveProxy(oldLoadSlot);
+		if ((loadSlot != null) && loadSlot.eIsProxy()) {
+			final InternalEObject oldLoadSlot = (InternalEObject) loadSlot;
+			loadSlot = (LoadSlot) eResolveProxy(oldLoadSlot);
 			if (loadSlot != oldLoadSlot) {
-				InternalEObject newLoadSlot = (InternalEObject)loadSlot;
+				final InternalEObject newLoadSlot = (InternalEObject) loadSlot;
 				NotificationChain msgs = oldLoadSlot.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__LOAD_SLOT, null, null);
 				if (newLoadSlot.eInternalContainer() == null) {
 					msgs = newLoadSlot.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__LOAD_SLOT, null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
+				if (msgs != null) {
+					msgs.dispatch();
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO__LOAD_SLOT, oldLoadSlot, loadSlot));
+				}
 			}
 		}
 		return loadSlot;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public LoadSlot basicGetLoadSlot() {
@@ -213,65 +208,78 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public NotificationChain basicSetLoadSlot(LoadSlot newLoadSlot, NotificationChain msgs) {
-		LoadSlot oldLoadSlot = loadSlot;
+	public NotificationChain basicSetLoadSlot(final LoadSlot newLoadSlot, NotificationChain msgs) {
+		final LoadSlot oldLoadSlot = loadSlot;
 		loadSlot = newLoadSlot;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__LOAD_SLOT, oldLoadSlot, newLoadSlot);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__LOAD_SLOT, oldLoadSlot, newLoadSlot);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setLoadSlot(LoadSlot newLoadSlot) {
+	@Override
+	public void setLoadSlot(final LoadSlot newLoadSlot) {
 		if (newLoadSlot != loadSlot) {
 			NotificationChain msgs = null;
-			if (loadSlot != null)
-				msgs = ((InternalEObject)loadSlot).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__LOAD_SLOT, null, msgs);
-			if (newLoadSlot != null)
-				msgs = ((InternalEObject)newLoadSlot).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__LOAD_SLOT, null, msgs);
+			if (loadSlot != null) {
+				msgs = ((InternalEObject) loadSlot).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__LOAD_SLOT, null, msgs);
+			}
+			if (newLoadSlot != null) {
+				msgs = ((InternalEObject) newLoadSlot).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__LOAD_SLOT, null, msgs);
+			}
 			msgs = basicSetLoadSlot(newLoadSlot, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__LOAD_SLOT, newLoadSlot, newLoadSlot));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public Slot getDischargeSlot() {
-		if (dischargeSlot != null && dischargeSlot.eIsProxy()) {
-			InternalEObject oldDischargeSlot = (InternalEObject)dischargeSlot;
-			dischargeSlot = (Slot)eResolveProxy(oldDischargeSlot);
+		if ((dischargeSlot != null) && dischargeSlot.eIsProxy()) {
+			final InternalEObject oldDischargeSlot = (InternalEObject) dischargeSlot;
+			dischargeSlot = (Slot) eResolveProxy(oldDischargeSlot);
 			if (dischargeSlot != oldDischargeSlot) {
-				InternalEObject newDischargeSlot = (InternalEObject)dischargeSlot;
+				final InternalEObject newDischargeSlot = (InternalEObject) dischargeSlot;
 				NotificationChain msgs = oldDischargeSlot.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__DISCHARGE_SLOT, null, null);
 				if (newDischargeSlot.eInternalContainer() == null) {
 					msgs = newDischargeSlot.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__DISCHARGE_SLOT, null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
+				if (msgs != null) {
+					msgs.dispatch();
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO__DISCHARGE_SLOT, oldDischargeSlot, dischargeSlot));
+				}
 			}
 		}
 		return dischargeSlot;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Slot basicGetDischargeSlot() {
@@ -279,44 +287,54 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public NotificationChain basicSetDischargeSlot(Slot newDischargeSlot, NotificationChain msgs) {
-		Slot oldDischargeSlot = dischargeSlot;
+	public NotificationChain basicSetDischargeSlot(final Slot newDischargeSlot, NotificationChain msgs) {
+		final Slot oldDischargeSlot = dischargeSlot;
 		dischargeSlot = newDischargeSlot;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__DISCHARGE_SLOT, oldDischargeSlot, newDischargeSlot);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__DISCHARGE_SLOT, oldDischargeSlot, newDischargeSlot);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setDischargeSlot(Slot newDischargeSlot) {
+	@Override
+	public void setDischargeSlot(final Slot newDischargeSlot) {
 		if (newDischargeSlot != dischargeSlot) {
 			NotificationChain msgs = null;
-			if (dischargeSlot != null)
-				msgs = ((InternalEObject)dischargeSlot).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__DISCHARGE_SLOT, null, msgs);
-			if (newDischargeSlot != null)
-				msgs = ((InternalEObject)newDischargeSlot).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__DISCHARGE_SLOT, null, msgs);
+			if (dischargeSlot != null) {
+				msgs = ((InternalEObject) dischargeSlot).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__DISCHARGE_SLOT, null, msgs);
+			}
+			if (newDischargeSlot != null) {
+				msgs = ((InternalEObject) newDischargeSlot).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO__DISCHARGE_SLOT, null, msgs);
+			}
 			msgs = basicSetDischargeSlot(newDischargeSlot, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__DISCHARGE_SLOT, newDischargeSlot, newDischargeSlot));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<Vessel> getAllowedVessels() {
 		if (allowedVessels == null) {
 			allowedVessels = new EObjectResolvingEList<Vessel>(Vessel.class, this, CargoPackage.CARGO__ALLOWED_VESSELS);
@@ -325,218 +343,237 @@ public class CargoImpl extends AnnotatedObjectImpl implements Cargo {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public CargoType getCargoType() {
 		return cargoType;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setCargoType(CargoType newCargoType) {
-		CargoType oldCargoType = cargoType;
+	@Override
+	public void setCargoType(final CargoType newCargoType) {
+		final CargoType oldCargoType = cargoType;
 		cargoType = newCargoType == null ? CARGO_TYPE_EDEFAULT : newCargoType;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__CARGO_TYPE, oldCargoType, cargoType));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public boolean isAllowRewiring() {
 		return allowRewiring;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setAllowRewiring(boolean newAllowRewiring) {
-		boolean oldAllowRewiring = allowRewiring;
+	@Override
+	public void setAllowRewiring(final boolean newAllowRewiring) {
+		final boolean oldAllowRewiring = allowRewiring;
 		allowRewiring = newAllowRewiring;
-		boolean oldAllowRewiringESet = allowRewiringESet;
+		final boolean oldAllowRewiringESet = allowRewiringESet;
 		allowRewiringESet = true;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__ALLOW_REWIRING, oldAllowRewiring, allowRewiring, !oldAllowRewiringESet));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public void unsetAllowRewiring() {
-		boolean oldAllowRewiring = allowRewiring;
-		boolean oldAllowRewiringESet = allowRewiringESet;
+		final boolean oldAllowRewiring = allowRewiring;
+		final boolean oldAllowRewiringESet = allowRewiringESet;
 		allowRewiring = ALLOW_REWIRING_EDEFAULT;
 		allowRewiringESet = false;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.CARGO__ALLOW_REWIRING, oldAllowRewiring, ALLOW_REWIRING_EDEFAULT, oldAllowRewiringESet));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public boolean isSetAllowRewiring() {
 		return allowRewiringESet;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case CargoPackage.CARGO__LOAD_SLOT:
-				return basicSetLoadSlot(null, msgs);
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				return basicSetDischargeSlot(null, msgs);
+		case CargoPackage.CARGO__LOAD_SLOT:
+			return basicSetLoadSlot(null, msgs);
+		case CargoPackage.CARGO__DISCHARGE_SLOT:
+			return basicSetDischargeSlot(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case CargoPackage.CARGO__ID:
-				return getId();
-			case CargoPackage.CARGO__ALLOWED_VESSELS:
-				return getAllowedVessels();
-			case CargoPackage.CARGO__LOAD_SLOT:
-				if (resolve) return getLoadSlot();
-				return basicGetLoadSlot();
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				if (resolve) return getDischargeSlot();
-				return basicGetDischargeSlot();
-			case CargoPackage.CARGO__CARGO_TYPE:
-				return getCargoType();
-			case CargoPackage.CARGO__ALLOW_REWIRING:
-				return isAllowRewiring();
+		case CargoPackage.CARGO__ID:
+			return getId();
+		case CargoPackage.CARGO__ALLOWED_VESSELS:
+			return getAllowedVessels();
+		case CargoPackage.CARGO__LOAD_SLOT:
+			if (resolve) {
+				return getLoadSlot();
+			}
+			return basicGetLoadSlot();
+		case CargoPackage.CARGO__DISCHARGE_SLOT:
+			if (resolve) {
+				return getDischargeSlot();
+			}
+			return basicGetDischargeSlot();
+		case CargoPackage.CARGO__CARGO_TYPE:
+			return getCargoType();
+		case CargoPackage.CARGO__ALLOW_REWIRING:
+			return isAllowRewiring();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case CargoPackage.CARGO__ID:
-				setId((String)newValue);
-				return;
-			case CargoPackage.CARGO__ALLOWED_VESSELS:
-				getAllowedVessels().clear();
-				getAllowedVessels().addAll((Collection<? extends Vessel>)newValue);
-				return;
-			case CargoPackage.CARGO__LOAD_SLOT:
-				setLoadSlot((LoadSlot)newValue);
-				return;
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				setDischargeSlot((Slot)newValue);
-				return;
-			case CargoPackage.CARGO__CARGO_TYPE:
-				setCargoType((CargoType)newValue);
-				return;
-			case CargoPackage.CARGO__ALLOW_REWIRING:
-				setAllowRewiring((Boolean)newValue);
-				return;
+		case CargoPackage.CARGO__ID:
+			setId((String) newValue);
+			return;
+		case CargoPackage.CARGO__ALLOWED_VESSELS:
+			getAllowedVessels().clear();
+			getAllowedVessels().addAll((Collection<? extends Vessel>) newValue);
+			return;
+		case CargoPackage.CARGO__LOAD_SLOT:
+			setLoadSlot((LoadSlot) newValue);
+			return;
+		case CargoPackage.CARGO__DISCHARGE_SLOT:
+			setDischargeSlot((Slot) newValue);
+			return;
+		case CargoPackage.CARGO__CARGO_TYPE:
+			setCargoType((CargoType) newValue);
+			return;
+		case CargoPackage.CARGO__ALLOW_REWIRING:
+			setAllowRewiring((Boolean) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case CargoPackage.CARGO__ID:
-				setId(ID_EDEFAULT);
-				return;
-			case CargoPackage.CARGO__ALLOWED_VESSELS:
-				getAllowedVessels().clear();
-				return;
-			case CargoPackage.CARGO__LOAD_SLOT:
-				setLoadSlot((LoadSlot)null);
-				return;
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				setDischargeSlot((Slot)null);
-				return;
-			case CargoPackage.CARGO__CARGO_TYPE:
-				setCargoType(CARGO_TYPE_EDEFAULT);
-				return;
-			case CargoPackage.CARGO__ALLOW_REWIRING:
-				unsetAllowRewiring();
-				return;
+		case CargoPackage.CARGO__ID:
+			setId(ID_EDEFAULT);
+			return;
+		case CargoPackage.CARGO__ALLOWED_VESSELS:
+			getAllowedVessels().clear();
+			return;
+		case CargoPackage.CARGO__LOAD_SLOT:
+			setLoadSlot((LoadSlot) null);
+			return;
+		case CargoPackage.CARGO__DISCHARGE_SLOT:
+			setDischargeSlot((Slot) null);
+			return;
+		case CargoPackage.CARGO__CARGO_TYPE:
+			setCargoType(CARGO_TYPE_EDEFAULT);
+			return;
+		case CargoPackage.CARGO__ALLOW_REWIRING:
+			unsetAllowRewiring();
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case CargoPackage.CARGO__ID:
-				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
-			case CargoPackage.CARGO__ALLOWED_VESSELS:
-				return allowedVessels != null && !allowedVessels.isEmpty();
-			case CargoPackage.CARGO__LOAD_SLOT:
-				return loadSlot != null;
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				return dischargeSlot != null;
-			case CargoPackage.CARGO__CARGO_TYPE:
-				return cargoType != CARGO_TYPE_EDEFAULT;
-			case CargoPackage.CARGO__ALLOW_REWIRING:
-				return isSetAllowRewiring();
+		case CargoPackage.CARGO__ID:
+			return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+		case CargoPackage.CARGO__ALLOWED_VESSELS:
+			return (allowedVessels != null) && !allowedVessels.isEmpty();
+		case CargoPackage.CARGO__LOAD_SLOT:
+			return loadSlot != null;
+		case CargoPackage.CARGO__DISCHARGE_SLOT:
+			return dischargeSlot != null;
+		case CargoPackage.CARGO__CARGO_TYPE:
+			return cargoType != CARGO_TYPE_EDEFAULT;
+		case CargoPackage.CARGO__ALLOW_REWIRING:
+			return isSetAllowRewiring();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (id: ");
 		result.append(id);
 		result.append(", cargoType: ");
 		result.append(cargoType);
 		result.append(", allowRewiring: ");
-		if (allowRewiringESet) result.append(allowRewiring); else result.append("<unset>");
+		if (allowRewiringESet) {
+			result.append(allowRewiring);
+		} else {
+			result.append("<unset>");
+		}
 		result.append(')');
 		return result.toString();
 	}
 
-} //CargoImpl
+} // CargoImpl

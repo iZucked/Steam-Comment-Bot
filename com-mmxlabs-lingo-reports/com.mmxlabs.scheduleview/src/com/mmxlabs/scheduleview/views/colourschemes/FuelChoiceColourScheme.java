@@ -34,7 +34,7 @@ public class FuelChoiceColourScheme implements IScheduleViewColourScheme {
 			int b = 0;
 
 			for (final FuelQuantity fq : journey.getFuelUsage()) {
-				if (fq.getQuantity() > 0 && fq.getPurpose() == FuelPurpose.TRAVEL) {
+				if ((fq.getQuantity() > 0) && (fq.getPurpose() == FuelPurpose.TRAVEL)) {
 					switch (fq.getFuelType()) {
 					case BASE_FUEL:
 						r = 255;
@@ -48,7 +48,7 @@ public class FuelChoiceColourScheme implements IScheduleViewColourScheme {
 					}
 				}
 			}
-			
+
 			return ColorCache.getColor(r, g, b);
 		}
 		// else if (mode == Mode.Lateness) {

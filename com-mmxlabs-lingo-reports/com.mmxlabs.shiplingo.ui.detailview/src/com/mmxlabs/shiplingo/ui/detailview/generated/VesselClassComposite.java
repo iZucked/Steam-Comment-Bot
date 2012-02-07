@@ -16,10 +16,8 @@ import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
 import com.mmxlabs.shiplingo.ui.detailview.editors.VesselClassCostEditor;
 
 /**
- * A composite containing a form for editing VesselClass instances. The EClass
- * hierarchy is implemented by the static methods at the bottom of the class,
- * and is not mirrored in the java class hierarchy for the composites, because
- * ECore supports multiple inheritance but java does not.
+ * A composite containing a form for editing VesselClass instances. The EClass hierarchy is implemented by the static methods at the bottom of the class, and is not mirrored in the java class
+ * hierarchy for the composites, because ECore supports multiple inheritance but java does not.
  * 
  * @generated
  */
@@ -31,14 +29,12 @@ public class VesselClassComposite extends AbstractDetailComposite {
 	 * 
 	 * @generated
 	 */
-	public VesselClassComposite(final Composite container, final int style,
-			final String mainGroupTitle, final boolean validate) {
-    super(container, style, validate);
-    this.mainGroupTitle = mainGroupTitle;
-  }
+	public VesselClassComposite(final Composite container, final int style, final String mainGroupTitle, final boolean validate) {
+		super(container, style, validate);
+		this.mainGroupTitle = mainGroupTitle;
+	}
 
-	public VesselClassComposite(final Composite container, final int style,
-			final boolean validate) {
+	public VesselClassComposite(final Composite container, final int style, final boolean validate) {
 		this(container, style, "Vessel Class", validate);
 	}
 
@@ -51,25 +47,25 @@ public class VesselClassComposite extends AbstractDetailComposite {
 	 * 
 	 * @generated
 	 */
+	@Override
 	protected void createContents(final Composite group) {
-    final Composite mainGroup;
+		final Composite mainGroup;
 
-    if (group == null) {
-      mainGroup = createGroup(this, mainGroupTitle);
-    } else {
-      mainGroup = group;
-    }
-    
-    super.createContents(mainGroup);		
+		if (group == null) {
+			mainGroup = createGroup(this, mainGroupTitle);
+		} else {
+			mainGroup = group;
+		}
 
-    createFields(this, mainGroup);
-  }
-	
+		super.createContents(mainGroup);
+
+		createFields(this, mainGroup);
+	}
+
 	/**
 	 * @generated NO notes
 	 */
-	protected static void createFields(final AbstractDetailComposite composite,
-			final Composite mainGroup) {
+	protected static void createFields(final AbstractDetailComposite composite, final Composite mainGroup) {
 		createFieldsFromSupers(composite, mainGroup);
 		createVesselClassFields(composite, mainGroup);
 		AnnotatedObjectComposite.createFields(composite, mainGroup);
@@ -80,10 +76,9 @@ public class VesselClassComposite extends AbstractDetailComposite {
 	 * 
 	 * @generated NO notes
 	 */
-	protected static void createFieldsFromSupers(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
+	protected static void createFieldsFromSupers(final AbstractDetailComposite composite, final Composite mainGroup) {
 		NamedObjectComposite.createFields(composite, mainGroup);
-//		AnnotatedObjectComposite.createFields(composite, mainGroup);
+		// AnnotatedObjectComposite.createFields(composite, mainGroup);
 	}
 
 	/**
@@ -91,146 +86,116 @@ public class VesselClassComposite extends AbstractDetailComposite {
 	 * 
 	 * @generated
 	 */
-	protected static void createVesselClassFields(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    createCapacityEditor(composite, mainGroup);
-    createMinSpeedEditor(composite, mainGroup);
-    createMaxSpeedEditor(composite, mainGroup);
-    createMinHeelVolumeEditor(composite, mainGroup);
-    createFillCapacityEditor(composite, mainGroup);
-    createSpotCharterCountEditor(composite, mainGroup);
-    createDailyCharterInPriceEditor(composite, mainGroup);
-    createDailyCharterOutPriceEditor(composite, mainGroup);
-    createLadenAttributesEditor(composite, mainGroup);
-    createBallastAttributesEditor(composite, mainGroup);
-    createBaseFuelEditor(composite, mainGroup);
-    createPilotLightRateEditor(composite, mainGroup);
-    createInaccessiblePortsEditor(composite, mainGroup);
-    createCanalCostsEditor(composite, mainGroup);
-    createWarmupTimeEditor(composite, mainGroup);
-    createCooldownTimeEditor(composite, mainGroup);
-    createCooldownVolumeEditor(composite, mainGroup);
-  }
+	protected static void createVesselClassFields(final AbstractDetailComposite composite, final Composite mainGroup) {
+		createCapacityEditor(composite, mainGroup);
+		createMinSpeedEditor(composite, mainGroup);
+		createMaxSpeedEditor(composite, mainGroup);
+		createMinHeelVolumeEditor(composite, mainGroup);
+		createFillCapacityEditor(composite, mainGroup);
+		createSpotCharterCountEditor(composite, mainGroup);
+		createDailyCharterInPriceEditor(composite, mainGroup);
+		createDailyCharterOutPriceEditor(composite, mainGroup);
+		createLadenAttributesEditor(composite, mainGroup);
+		createBallastAttributesEditor(composite, mainGroup);
+		createBaseFuelEditor(composite, mainGroup);
+		createPilotLightRateEditor(composite, mainGroup);
+		createInaccessiblePortsEditor(composite, mainGroup);
+		createCanalCostsEditor(composite, mainGroup);
+		createWarmupTimeEditor(composite, mainGroup);
+		createCooldownTimeEditor(composite, mainGroup);
+		createCooldownVolumeEditor(composite, mainGroup);
+	}
 
 	/**
 	 * Create an editor for the capacity feature on VesselClass
 	 * 
 	 * @generated
 	 */
-	protected static void createCapacityEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_Capacity()),
-      "Capacity");
-  }
+	protected static void createCapacityEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_Capacity()), "Capacity");
+	}
 
 	/**
 	 * Create an editor for the minSpeed feature on VesselClass
 	 * 
 	 * @generated
 	 */
-	protected static void createMinSpeedEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_MinSpeed()),
-      "Min Speed");
-  }
+	protected static void createMinSpeedEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_MinSpeed()), "Min Speed");
+	}
 
 	/**
 	 * Create an editor for the maxSpeed feature on VesselClass
 	 * 
 	 * @generated
 	 */
-	protected static void createMaxSpeedEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_MaxSpeed()),
-      "Max Speed");
-  }
+	protected static void createMaxSpeedEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_MaxSpeed()), "Max Speed");
+	}
 
 	/**
 	 * Create an editor for the minHeelVolume feature on VesselClass
 	 * 
 	 * @generated
 	 */
-	protected static void createMinHeelVolumeEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_MinHeelVolume()),
-      "Min Heel Volume");
-  }
+	protected static void createMinHeelVolumeEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_MinHeelVolume()), "Min Heel Volume");
+	}
 
 	/**
 	 * Create an editor for the fillCapacity feature on VesselClass
 	 * 
 	 * @generated
 	 */
-	protected static void createFillCapacityEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_FillCapacity()),
-      "Fill Capacity");
-  }
+	protected static void createFillCapacityEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_FillCapacity()), "Fill Capacity");
+	}
 
 	/**
 	 * Create an editor for the spotCharterCount feature on VesselClass
 	 * 
 	 * @generated
 	 */
-	protected static void createSpotCharterCountEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_SpotCharterCount()),
-      "Spot Charter Count");
-  }
+	protected static void createSpotCharterCountEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_SpotCharterCount()), "Spot Charter Count");
+	}
 
 	/**
 	 * Create an editor for the dailyCharterInPrice feature on VesselClass
 	 * 
 	 * @generated
 	 */
-	protected static void createDailyCharterInPriceEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_DailyCharterInPrice()),
-      "Daily Charter In Price");
-  }
+	protected static void createDailyCharterInPriceEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_DailyCharterInPrice()), "Daily Charter In Price");
+	}
 
 	/**
 	 * Create an editor for the dailyCharterOutPrice feature on VesselClass
 	 * 
 	 * @generated
 	 */
-	protected static void createDailyCharterOutPriceEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_DailyCharterOutPrice()),
-      "Daily Charter Out Price");
-  }
+	protected static void createDailyCharterOutPriceEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_DailyCharterOutPrice()), "Daily Charter Out Price");
+	}
 
 	/**
 	 * Create an editor for the ladenAttributes feature on VesselClass
 	 * 
 	 * @generated NO
 	 */
-	protected static void createLadenAttributesEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
+	protected static void createLadenAttributesEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
 
 		final Composite block = new Composite(composite, SWT.NONE);
 		block.setLayout(new GridLayout(1, false));
 		block.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		final VesselStateAttributesComposite sub = new VesselStateAttributesComposite(
-				block, composite.getStyle(), "Laden Attributes", false);
+		final VesselStateAttributesComposite sub = new VesselStateAttributesComposite(block, composite.getStyle(), "Laden Attributes", false);
 		sub.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		sub.setPath(new CompiledEMFPath(composite.getInputPath(),
-				FleetPackage.eINSTANCE.getVesselClass_LadenAttributes()));
+		sub.setPath(new CompiledEMFPath(composite.getInputPath(), FleetPackage.eINSTANCE.getVesselClass_LadenAttributes()));
 		composite.addSubEditor(sub, false);
 
-		final VesselStateAttributesComposite sub2 = new VesselStateAttributesComposite(
-				block, composite.getStyle(), "Ballast Attributes", false);
+		final VesselStateAttributesComposite sub2 = new VesselStateAttributesComposite(block, composite.getStyle(), "Ballast Attributes", false);
 		sub2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		sub2.setPath(new CompiledEMFPath(composite.getInputPath(),
-				FleetPackage.eINSTANCE.getVesselClass_BallastAttributes()));
+		sub2.setPath(new CompiledEMFPath(composite.getInputPath(), FleetPackage.eINSTANCE.getVesselClass_BallastAttributes()));
 		composite.addSubEditor(sub2);
 	}
 
@@ -239,90 +204,73 @@ public class VesselClassComposite extends AbstractDetailComposite {
 	 * 
 	 * @generated NO
 	 */
-	protected static void createBallastAttributesEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    
-    
-  }
+	protected static void createBallastAttributesEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+
+	}
 
 	/**
 	 * Create an editor for the baseFuel feature on VesselClass
 	 * 
 	 * @generated
 	 */
-	protected static void createBaseFuelEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_BaseFuel()),
-      "Base Fuel");
-  }
+	protected static void createBaseFuelEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_BaseFuel()), "Base Fuel");
+	}
 
 	/**
-   * Create an editor for the pilotLightRate feature on VesselClass
-   * @generated
-   */
-  protected static void createPilotLightRateEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_PilotLightRate()),
-      "Pilot Light Rate");
-  }
+	 * Create an editor for the pilotLightRate feature on VesselClass
+	 * 
+	 * @generated
+	 */
+	protected static void createPilotLightRateEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_PilotLightRate()), "Pilot Light Rate");
+	}
 
-  /**
+	/**
 	 * Create an editor for the inaccessiblePorts feature on VesselClass
 	 * 
 	 * @generated
 	 */
-	protected static void createInaccessiblePortsEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts()),
-      "Inaccessible Ports");
-  }
+	protected static void createInaccessiblePortsEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts()), "Inaccessible Ports");
+	}
 
 	/**
 	 * Create an editor for the canalCosts feature on VesselClass
 	 * 
 	 * @generated NO custom editor
 	 */
-	protected static void createCanalCostsEditor(
-			final AbstractDetailComposite composite, final Composite mainGroup) {
+	protected static void createCanalCostsEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
 		composite.createEditorControl(
 				mainGroup,
-				new VesselClassCostEditor(composite.getInputPath(),
-						FleetPackage.eINSTANCE.getVesselClass_CanalCosts(),
-						composite.getCommandProcessor(), composite
-								.getEditingDomain(), composite
-								.getValueProviderProvider()),
-				"Canal Costs");
+				new VesselClassCostEditor(composite.getInputPath(), FleetPackage.eINSTANCE.getVesselClass_CanalCosts(), composite.getCommandProcessor(), composite.getEditingDomain(), composite
+						.getValueProviderProvider()), "Canal Costs");
 	}
 
-  /**
-   * Create an editor for the warmupTime feature on VesselClass
-   * @generated
-   */
-  protected static void createWarmupTimeEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_WarmupTime()),
-      "Warmup Time");
-  }
+	/**
+	 * Create an editor for the warmupTime feature on VesselClass
+	 * 
+	 * @generated
+	 */
+	protected static void createWarmupTimeEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_WarmupTime()), "Warmup Time");
+	}
 
-  /**
-   * Create an editor for the cooldownTime feature on VesselClass
-   * @generated
-   */
-  protected static void createCooldownTimeEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_CooldownTime()),
-      "Cooldown Time");
-  }
+	/**
+	 * Create an editor for the cooldownTime feature on VesselClass
+	 * 
+	 * @generated
+	 */
+	protected static void createCooldownTimeEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_CooldownTime()), "Cooldown Time");
+	}
 
-  /**
-   * Create an editor for the cooldownVolume feature on VesselClass
-   * @generated
-   */
-  protected static void createCooldownVolumeEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
-    composite.createEditorControl(mainGroup,
-      composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_CooldownVolume()),
-      "Cooldown Volume");
-  }
+	/**
+	 * Create an editor for the cooldownVolume feature on VesselClass
+	 * 
+	 * @generated
+	 */
+	protected static void createCooldownVolumeEditor(final AbstractDetailComposite composite, final Composite mainGroup) {
+		composite.createEditorControl(mainGroup, composite.createEditor(FleetPackage.eINSTANCE.getVesselClass_CooldownVolume()), "Cooldown Volume");
+	}
 }

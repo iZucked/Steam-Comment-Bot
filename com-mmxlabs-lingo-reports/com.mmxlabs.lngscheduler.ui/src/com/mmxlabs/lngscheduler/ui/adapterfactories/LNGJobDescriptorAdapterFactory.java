@@ -32,22 +32,22 @@ public class LNGJobDescriptorAdapterFactory implements IAdapterFactory {
 
 			resource = (IResource) adaptableObject;
 
-			IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 			/**
 			 * Try obtaining in memory data from a running job before falling back to loading the scenario from the resource. This allows the current optimisation state to be shown.
 			 */
-			final IJobDescriptor job = jobManager.findJobForResource((IResource) adaptableObject);
+			final IJobDescriptor job = jobManager.findJobForResource(adaptableObject);
 			if (job != null) {
 				return job;
 			}
 
 			scenario = (Scenario) resource.getAdapter(Scenario.class);
-//		} else if (adaptableObject instanceof Scenario) {
-//
-//			scenario = (Scenario) scenario;
-//
-//			// TODO: Find the resource?
-//			resource = null;
+			// } else if (adaptableObject instanceof Scenario) {
+			//
+			// scenario = (Scenario) scenario;
+			//
+			// // TODO: Find the resource?
+			// resource = null;
 		}
 		if (scenario == null) {
 			return null;

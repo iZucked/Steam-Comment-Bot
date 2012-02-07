@@ -16,7 +16,7 @@ import scenario.schedule.events.Idle;
  * A colour scheme which highlights cooldown in red
  * 
  * @author hinton
- *
+ * 
  */
 public class CooldownColourScheme implements IScheduleViewColourScheme {
 	@Override
@@ -25,7 +25,7 @@ public class CooldownColourScheme implements IScheduleViewColourScheme {
 	}
 
 	@Override
-	public Color getForeground(Object element) {
+	public Color getForeground(final Object element) {
 		return null;
 	}
 
@@ -33,13 +33,13 @@ public class CooldownColourScheme implements IScheduleViewColourScheme {
 	public Color getBackground(final Object element) {
 		if (element instanceof FuelMixture) {
 			for (final FuelQuantity fq : ((FuelMixture) element).getFuelUsage()) {
-				if (fq.getFuelType() == FuelType.COOLDOWN && fq.getQuantity() > 0) {
+				if ((fq.getFuelType() == FuelType.COOLDOWN) && (fq.getQuantity() > 0)) {
 					return ColorCache.getColor(255, 0, 0);
 				}
 			}
 		}
 		if (element instanceof Idle) {
-			return ColorCache.getColor(0,0,255);
+			return ColorCache.getColor(0, 0, 255);
 		}
 		return null;
 	}

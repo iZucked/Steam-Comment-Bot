@@ -19,7 +19,7 @@ public class HighSpeedColourScheme implements IScheduleViewColourScheme {
 		this(19.0);
 	}
 
-	public HighSpeedColourScheme(double speed) {
+	public HighSpeedColourScheme(final double speed) {
 		this.speed = speed;
 	}
 

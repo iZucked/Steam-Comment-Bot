@@ -14,24 +14,21 @@ import scenario.contract.SalesContract;
 import scenario.market.Index;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Sales Contract</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Sales Contract</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.contract.impl.SalesContractImpl#getMarkup <em>Markup</em>}</li>
- *   <li>{@link scenario.contract.impl.SalesContractImpl#getIndex <em>Index</em>}</li>
+ * <li>{@link scenario.contract.impl.SalesContractImpl#getMarkup <em>Markup</em>}</li>
+ * <li>{@link scenario.contract.impl.SalesContractImpl#getIndex <em>Index</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class SalesContractImpl extends ContractImpl implements SalesContract {
 	/**
-	 * The default value of the '{@link #getMarkup() <em>Markup</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getMarkup() <em>Markup</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getMarkup()
 	 * @generated
 	 * @ordered
@@ -39,9 +36,8 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	protected static final float MARKUP_EDEFAULT = 1.05F;
 
 	/**
-	 * The cached value of the '{@link #getMarkup() <em>Markup</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getMarkup() <em>Markup</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getMarkup()
 	 * @generated
 	 * @ordered
@@ -49,9 +45,8 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	protected float markup = MARKUP_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getIndex()
 	 * @generated
 	 * @ordered
@@ -59,8 +54,8 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	protected Index index;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SalesContractImpl() {
@@ -68,8 +63,8 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -78,25 +73,27 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public Index getIndex() {
-		if (index != null && index.eIsProxy()) {
-			InternalEObject oldIndex = (InternalEObject)index;
-			index = (Index)eResolveProxy(oldIndex);
+		if ((index != null) && index.eIsProxy()) {
+			final InternalEObject oldIndex = (InternalEObject) index;
+			index = (Index) eResolveProxy(oldIndex);
 			if (index != oldIndex) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.SALES_CONTRACT__INDEX, oldIndex, index));
+				}
 			}
 		}
 		return index;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Index basicGetIndex() {
@@ -104,121 +101,130 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setIndex(Index newIndex) {
-		Index oldIndex = index;
+	@Override
+	public void setIndex(final Index newIndex) {
+		final Index oldIndex = index;
 		index = newIndex;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.SALES_CONTRACT__INDEX, oldIndex, index));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public float getMarkup() {
 		return markup;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setMarkup(float newMarkup) {
-		float oldMarkup = markup;
-		markup = newMarkup;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.SALES_CONTRACT__MARKUP, oldMarkup, markup));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public void setMarkup(final float newMarkup) {
+		final float oldMarkup = markup;
+		markup = newMarkup;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.SALES_CONTRACT__MARKUP, oldMarkup, markup));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case ContractPackage.SALES_CONTRACT__MARKUP:
-				return getMarkup();
-			case ContractPackage.SALES_CONTRACT__INDEX:
-				if (resolve) return getIndex();
-				return basicGetIndex();
+		case ContractPackage.SALES_CONTRACT__MARKUP:
+			return getMarkup();
+		case ContractPackage.SALES_CONTRACT__INDEX:
+			if (resolve) {
+				return getIndex();
+			}
+			return basicGetIndex();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case ContractPackage.SALES_CONTRACT__MARKUP:
-				setMarkup((Float)newValue);
-				return;
-			case ContractPackage.SALES_CONTRACT__INDEX:
-				setIndex((Index)newValue);
-				return;
+		case ContractPackage.SALES_CONTRACT__MARKUP:
+			setMarkup((Float) newValue);
+			return;
+		case ContractPackage.SALES_CONTRACT__INDEX:
+			setIndex((Index) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case ContractPackage.SALES_CONTRACT__MARKUP:
-				setMarkup(MARKUP_EDEFAULT);
-				return;
-			case ContractPackage.SALES_CONTRACT__INDEX:
-				setIndex((Index)null);
-				return;
+		case ContractPackage.SALES_CONTRACT__MARKUP:
+			setMarkup(MARKUP_EDEFAULT);
+			return;
+		case ContractPackage.SALES_CONTRACT__INDEX:
+			setIndex((Index) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case ContractPackage.SALES_CONTRACT__MARKUP:
-				return markup != MARKUP_EDEFAULT;
-			case ContractPackage.SALES_CONTRACT__INDEX:
-				return index != null;
+		case ContractPackage.SALES_CONTRACT__MARKUP:
+			return markup != MARKUP_EDEFAULT;
+		case ContractPackage.SALES_CONTRACT__INDEX:
+			return index != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (markup: ");
 		result.append(markup);
 		result.append(')');
 		return result.toString();
 	}
 
-} //SalesContractImpl
+} // SalesContractImpl

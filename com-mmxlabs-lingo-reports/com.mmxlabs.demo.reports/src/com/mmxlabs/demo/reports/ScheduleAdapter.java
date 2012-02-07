@@ -7,7 +7,6 @@ package com.mmxlabs.demo.reports;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
@@ -123,10 +122,10 @@ public class ScheduleAdapter {
 			// messing around with the context?
 
 			final IJobControl control = jobManager.getControlForJob(job);
-			Object jobContext = control.getJobOutput();
+			final Object jobContext = control.getJobOutput();
 
 			if (jobContext instanceof SerializableScenario) {
-				Scenario s = ((SerializableScenario) jobContext).scenario;
+				final Scenario s = ((SerializableScenario) jobContext).scenario;
 				final Schedule schedule = getLastScheduleFromScenario(s);
 				if (schedule != null) {
 					schedules.add(schedule);
@@ -205,7 +204,7 @@ public class ScheduleAdapter {
 		jobManager.addEclipseJobManagerListener(jobManagerListener);
 
 		for (final IJobDescriptor j : jobManager.getSelectedJobs()) {
-			IJobControl control = jobManager.getControlForJob(j);
+			final IJobControl control = jobManager.getControlForJob(j);
 			control.addListener(jobListener);
 		}
 

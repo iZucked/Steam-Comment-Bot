@@ -36,7 +36,7 @@ public class VesselClassImporter extends EObjectImporter {
 	private static final String CANAL = "canal";
 
 	@Override
-	public Map<String, Collection<Map<String, String>>> exportObjects(Collection<? extends EObject> objects) {
+	public Map<String, Collection<Map<String, String>>> exportObjects(final Collection<? extends EObject> objects) {
 		final Map<String, Collection<Map<String, String>>> result = super.exportObjects(objects);
 
 		final LinkedList<Map<String, String>> lines = new LinkedList<Map<String, String>>();
@@ -62,7 +62,7 @@ public class VesselClassImporter extends EObjectImporter {
 	 * @param ballastAttributes
 	 * @return
 	 */
-	private Map<String, String> convertLines(String vcName, VesselStateAttributes attributes) {
+	private Map<String, String> convertLines(final String vcName, final VesselStateAttributes attributes) {
 		final LinkedHashMap<String, String> out = new LinkedHashMap<String, String>();
 
 		out.put("class", vcName);
@@ -76,7 +76,7 @@ public class VesselClassImporter extends EObjectImporter {
 	}
 
 	@Override
-	protected void flattenMultiContainment(EObject object, String prefix, EReference reference, Map<String, String> output) {
+	protected void flattenMultiContainment(final EObject object, final String prefix, final EReference reference, final Map<String, String> output) {
 		if (reference == FleetPackage.eINSTANCE.getVesselClass_CanalCosts()) {
 			final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(FleetPackage.eINSTANCE.getVesselClassCost());
 
@@ -84,8 +84,9 @@ public class VesselClassImporter extends EObjectImporter {
 				final Map<String, String> map = importer.exportObject(vcc);
 				final String p2 = prefix + CANAL + SEPARATOR + vcc.getCanal().getName() + SEPARATOR;
 				for (final Map.Entry<String, String> e : map.entrySet()) {
-					if (e.getKey().equalsIgnoreCase(CANAL))
+					if (e.getKey().equalsIgnoreCase(CANAL)) {
 						continue;
+					}
 					output.put(p2 + e.getKey(), e.getValue());
 				}
 			}
@@ -95,7 +96,8 @@ public class VesselClassImporter extends EObjectImporter {
 	}
 
 	@Override
-	protected void populateContainment(String prefix, EObject result, EReference reference, Map<String, String> fields, Collection<DeferredReference> deferredReferences, NamedObjectRegistry registry) {
+	protected void populateContainment(final String prefix, final EObject result, final EReference reference, final Map<String, String> fields, final Collection<DeferredReference> deferredReferences,
+			final NamedObjectRegistry registry) {
 		if (reference == FleetPackage.eINSTANCE.getVesselClass_CanalCosts()) {
 			final Map<String, Map<String, String>> canalCosts = new HashMap<String, Map<String, String>>();
 			for (final String fieldName : fields.keySet()) {
@@ -123,10 +125,10 @@ public class VesselClassImporter extends EObjectImporter {
 		} else {
 			super.populateContainment(prefix, result, reference, fields, deferredReferences, registry);
 			// force vessel state to match up - why is there even a vessel state field, given that it's implied?
-			if (reference == FleetPackage.eINSTANCE.getVesselClass_LadenAttributes() && result.eGet(reference) != null) {
+			if ((reference == FleetPackage.eINSTANCE.getVesselClass_LadenAttributes()) && (result.eGet(reference) != null)) {
 				((VesselStateAttributes) result.eGet(reference)).setVesselState(VesselState.LADEN);
 			}
-			if (reference == FleetPackage.eINSTANCE.getVesselClass_BallastAttributes() && result.eGet(reference) != null) {
+			if ((reference == FleetPackage.eINSTANCE.getVesselClass_BallastAttributes()) && (result.eGet(reference) != null)) {
 				((VesselStateAttributes) result.eGet(reference)).setVesselState(VesselState.BALLAST);
 			}
 		}

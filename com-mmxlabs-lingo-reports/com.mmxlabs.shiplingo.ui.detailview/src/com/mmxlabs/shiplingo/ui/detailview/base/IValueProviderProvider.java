@@ -11,9 +11,10 @@ import org.eclipse.emf.ecore.EObject;
  * An interface which provides value providers given an EClass.
  * 
  * @author hinton
- *
+ * 
  */
 public interface IValueProviderProvider {
 	public IReferenceValueProvider getValueProvider(final EClass referenceClass);
+
 	public EObject getModel();
 }

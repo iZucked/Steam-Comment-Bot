@@ -42,11 +42,11 @@ import com.mmxlabs.demo.app.DelayedOpenFileProcessor;
 @SuppressWarnings("restriction")
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
-	private DelayedOpenFileProcessor delayedOpenFileProcessor;
-	
+	private final DelayedOpenFileProcessor delayedOpenFileProcessor;
+
 	private static final String PERSPECTIVE_ID = "com.mmxlabs.demo.app.perspective.editing";
 
-	public ApplicationWorkbenchAdvisor(DelayedOpenFileProcessor processor) {
+	public ApplicationWorkbenchAdvisor(final DelayedOpenFileProcessor processor) {
 		super();
 		this.delayedOpenFileProcessor = processor;
 	}
@@ -105,9 +105,9 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	// / Methods taken from IDE Workbench advisor
 
 	private void refreshFromLocal() {
-		String[] commandLineArgs = Platform.getCommandLineArgs();
-		IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
-		boolean refresh = store.getBoolean(IDEInternalPreferences.REFRESH_WORKSPACE_ON_STARTUP);
+		final String[] commandLineArgs = Platform.getCommandLineArgs();
+		final IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
+		final boolean refresh = store.getBoolean(IDEInternalPreferences.REFRESH_WORKSPACE_ON_STARTUP);
 		if (!refresh) {
 			return;
 		}
@@ -120,9 +120,9 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		}
 
 		final IContainer root = ResourcesPlugin.getWorkspace().getRoot();
-		Job job = new WorkspaceJob(IDEWorkbenchMessages.Workspace_refreshing) {
+		final Job job = new WorkspaceJob(IDEWorkbenchMessages.Workspace_refreshing) {
 			@Override
-			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 				root.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 				return Status.OK_STATUS;
 			}
@@ -188,7 +188,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		// //$NON-NLS-1$
 		// icons
 
-		Bundle ideBundle = Platform.getBundle(IDEWorkbenchPlugin.IDE_WORKBENCH);
+		final Bundle ideBundle = Platform.getBundle(IDEWorkbenchPlugin.IDE_WORKBENCH);
 
 		declareWorkbenchImage(ideBundle, IDEInternalWorkbenchImages.IMG_ETOOL_BUILD_EXEC, PATH_ETOOL + "build_exec.gif", false); //$NON-NLS-1$
 		declareWorkbenchImage(ideBundle, IDEInternalWorkbenchImages.IMG_ETOOL_BUILD_EXEC_HOVER, PATH_ETOOL + "build_exec.gif", false); //$NON-NLS-1$
@@ -277,20 +277,22 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	 *            <code>true</code> if this is a shared image, and <code>false</code> if this is not a shared image
 	 * @see IWorkbenchConfigurer#declareImage
 	 */
-	private void declareWorkbenchImage(Bundle ideBundle, String symbolicName, String path, boolean shared) {
-		URL url = FileLocator.find(ideBundle, new Path(path), null);
-		ImageDescriptor desc = ImageDescriptor.createFromURL(url);
+	private void declareWorkbenchImage(final Bundle ideBundle, final String symbolicName, final String path, final boolean shared) {
+		final URL url = FileLocator.find(ideBundle, new Path(path), null);
+		final ImageDescriptor desc = ImageDescriptor.createFromURL(url);
 		getWorkbenchConfigurer().declareImage(symbolicName, desc, shared);
 	}
 
-	
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.application.WorkbenchAdvisor#eventLoopIdle(org.eclipse.swt.widgets.Display)
 	 */
-	public void eventLoopIdle(Display display) {
-		if (delayedOpenFileProcessor != null)
+	@Override
+	public void eventLoopIdle(final Display display) {
+		if (delayedOpenFileProcessor != null) {
 			delayedOpenFileProcessor.processEvents(display);
+		}
 		super.eventLoopIdle(display);
 	}
 }

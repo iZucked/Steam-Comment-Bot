@@ -11,16 +11,16 @@ import org.eclipse.emf.ecore.EReference;
 
 /**
  * Stub to prevent export of fuel consumption lines.
+ * 
  * @author Tom Hinton
- *
+ * 
  */
 public class VesselStateAttributesImporter extends EObjectImporter {
 
 	@Override
-	protected void flattenMultiContainment(EObject object, String prefix,
-			EReference reference, Map<String, String> output) {
+	protected void flattenMultiContainment(final EObject object, final String prefix, final EReference reference, final Map<String, String> output) {
 		// TODO Auto-generated method stub
-//		super.flattenMultiContainment(object, prefix, reference, output);
+		// super.flattenMultiContainment(object, prefix, reference, output);
 	}
 
 }

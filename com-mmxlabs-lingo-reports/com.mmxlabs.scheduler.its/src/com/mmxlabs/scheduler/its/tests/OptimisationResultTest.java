@@ -36,7 +36,7 @@ public class OptimisationResultTest {
 	 * Toggle between printing a map of fitness names to fitness values to testing the map against the fitnesses generated at runtime.
 	 */
 	private static final boolean printFitnessMap = false;
-	
+
 	private static final String originalFitnessesMapName = "originalFitnesses";
 	private static final String endFitnessesMapName = "endFitnesses";
 
@@ -84,8 +84,7 @@ public class OptimisationResultTest {
 		if (printFitnessMap) {
 			printFitnessesAsMap(originalFitnessesMapName, currentOriginalFitnesses);
 			printFitnessesAsMap(endFitnessesMapName, currentEndFitnesses);
-		}
-		else {
+		} else {
 			// ↓ ↓ PASTE PRINTED MAP HERE ↓ ↓ //
 			final HashMap<String, Long> originalFitnesses = new HashMap<String, Long>();
 			originalFitnesses.put("cargo-scheduler-canal-cost", 8955000L);
@@ -97,7 +96,6 @@ public class OptimisationResultTest {
 			originalFitnesses.put("cargo-scheduler-cost-lng", 257191648L);
 			originalFitnesses.put("cargo-scheduler-charter-cost", 0L);
 
-
 			final HashMap<String, Long> endFitnesses = new HashMap<String, Long>();
 			endFitnesses.put("cargo-scheduler-canal-cost", 1725000L);
 			endFitnesses.put("cargo-scheduler-group-profit", 0L);
@@ -108,7 +106,7 @@ public class OptimisationResultTest {
 			endFitnesses.put("cargo-scheduler-cost-lng", 212223263L);
 			endFitnesses.put("cargo-scheduler-charter-cost", 0L);
 			// ↑ ↑ PASTE PRINTED MAP HERE ↑ ↑ //
-			
+
 			// print them to console (for manual checking)
 			printOldAndNew("original", originalFitnesses, currentOriginalFitnesses);
 			printOldAndNew("end", endFitnesses, currentEndFitnesses);
@@ -122,16 +120,19 @@ public class OptimisationResultTest {
 	/**
 	 * Prints the given EList as a Map to the console.
 	 * 
-	 * @param mapName The variable name of the map.
-	 * @param fitnesses A list of fitnesses to print.
+	 * @param mapName
+	 *            The variable name of the map.
+	 * @param fitnesses
+	 *            A list of fitnesses to print.
 	 */
 	private void printFitnessesAsMap(final String mapName, final EList<ScheduleFitness> fitnesses) {
 
 		System.out.println();
 		System.out.println("final HashMap<String, Long> " + mapName + " = new HashMap<String, Long>();");
 
-		for (ScheduleFitness f : fitnesses)
+		for (final ScheduleFitness f : fitnesses) {
 			System.out.println(mapName + ".put(\"" + f.getName() + "\", " + f.getValue() + "L);");
+		}
 
 		System.out.println();
 	}
@@ -144,7 +145,7 @@ public class OptimisationResultTest {
 		long totalOriginalFitness = 0;
 		long totalCurrentFitness = 0;
 
-		for (ScheduleFitness f : currentFitnesses) {
+		for (final ScheduleFitness f : currentFitnesses) {
 
 			// get the values
 			final long originalFitnessValue = originalFitnesses.get(f.getName()).longValue();
@@ -164,15 +165,20 @@ public class OptimisationResultTest {
 
 	/**
 	 * Print the old and new fitnesses to the console.
-	 * @param name The name of the fitnesses (for identification in the console).
-	 * @param originalFitnesses The fitnesses previously generated.
-	 * @param currentFitnesses The fitnesses generated in this execution.
+	 * 
+	 * @param name
+	 *            The name of the fitnesses (for identification in the console).
+	 * @param originalFitnesses
+	 *            The fitnesses previously generated.
+	 * @param currentFitnesses
+	 *            The fitnesses generated in this execution.
 	 */
 	private void printOldAndNew(final String name, final HashMap<String, Long> originalFitnesses, final EList<ScheduleFitness> currentFitnesses) {
 
 		System.out.println(name);
-		for (ScheduleFitness f : currentFitnesses)
+		for (final ScheduleFitness f : currentFitnesses) {
 			System.out.println(f.getName() + ": " + originalFitnesses.get(f.getName()).longValue() + ", " + f.getValue());
+		}
 		System.out.println();
 	}
 }

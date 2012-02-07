@@ -35,7 +35,7 @@ import scenario.schedule.events.ScheduledEvent;
 public class TotalsContentProvider implements IStructuredContentProvider {
 
 	public static class RowData {
-		public RowData(String scheduleName, String component, boolean isCost, long fitness) {
+		public RowData(final String scheduleName, final String component, final boolean isCost, final long fitness) {
 			super();
 			this.scheduleName = scheduleName;
 			this.component = component;
@@ -94,7 +94,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-		Scenario s = (Scenario) schedule.eContainer().eContainer();
+		final Scenario s = (Scenario) schedule.eContainer().eContainer();
 		final String scheduleName = s.getName();
 
 		for (final Entry<FuelType, Long> entry : totalFuelCosts.entrySet()) {
@@ -112,10 +112,12 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		final Map<Entity, Long> totalRevenue = new HashMap<Entity, Long>();
 
 		for (final BookedRevenue revenue : schedule.getRevenue()) {
-			if (revenue.getEntity() == null)
+			if (revenue.getEntity() == null) {
 				continue;
-			if (revenue.getEntity() instanceof GroupEntity == false)
+			}
+			if ((revenue.getEntity() instanceof GroupEntity) == false) {
 				continue;
+			}
 			final Long l = totalRevenue.get(revenue.getEntity());
 			totalRevenue.put(revenue.getEntity(), (l == null ? 0 : l.longValue()) + revenue.getValue());
 		}

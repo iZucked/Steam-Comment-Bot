@@ -22,13 +22,12 @@ public class MasterDetailView extends Composite {
 		public Control createDetailView(final Composite parent);
 	}
 
-	public MasterDetailView(final Composite parent, final int style,
-			final IMasterDetailControlProvider controlProvider) {
+	public MasterDetailView(final Composite parent, final int style, final IMasterDetailControlProvider controlProvider) {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
 		final ViewerPane master = controlProvider.createMasterViewer(this);
 		final Control detail = controlProvider.createDetailView(this);
-		
+
 		master.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		detail.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 	}

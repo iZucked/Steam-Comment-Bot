@@ -91,8 +91,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	}
 
 	/**
-	 * This is a callback that will allow us to create the viewer and initialize
-	 * it.
+	 * This is a callback that will allow us to create the viewer and initialize it.
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -133,17 +132,17 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			public boolean allowBlankAreaVerticalDragAndDropToMoveChart() {
 				return true;
 			}
-			
+
 			@Override
 			public boolean lockHeaderOnVerticalScroll() {
 				return true;
 			}
-			
+
 			@Override
 			public boolean drawFillsToBottomWhenUsingGanttSections() {
 				return true;
 			}
-			
+
 			@Override
 			public int getSectionBarDividerHeight() {
 				return 0;
@@ -153,26 +152,20 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			public boolean showGradientEventBars() {
 				return false;
 			}
-			
+
 			@Override
 			public boolean drawSectionsWithGradients() {
 				return false;
 			}
 		};
 
-		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings) {
+		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings) {
 			@Override
-			protected synchronized void inputChanged(final Object input,
-					final Object oldInput) {
+			protected synchronized void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
 
-				final boolean inputEmpty = input == null
-						|| (input instanceof Collection && ((Collection<?>) input)
-								.isEmpty());
-				final boolean oldInputEmpty = oldInput == null
-						|| (oldInput instanceof Collection && ((Collection<?>) oldInput)
-								.isEmpty());
+				final boolean inputEmpty = (input == null) || ((input instanceof Collection) && ((Collection<?>) input).isEmpty());
+				final boolean oldInputEmpty = (oldInput == null) || ((oldInput instanceof Collection) && ((Collection<?>) oldInput).isEmpty());
 
 				if (inputEmpty != oldInputEmpty) {
 
@@ -186,8 +179,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
 
 		viewer.setContentProvider(new EMFScheduleContentProvider());
-		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(
-				viewer);
+		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer);
 		labelProvider.addColourScheme(new VesselStateColourScheme());
 		labelProvider.addColourScheme(new FuelChoiceColourScheme());
 		labelProvider.addColourScheme(new RouteChoiceColourScheme());
@@ -219,11 +211,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		// Create the help context id for the viewer's control. This is in the
 		// format of pluginid.contextId
-		PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(viewer.getControl(),
-						"com.mmxlabs.scheduleview.SchedulerViewer");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.scheduleview.SchedulerViewer");
 
 		makeActions();
 		hookContextMenu();
@@ -260,8 +248,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		// };
 
 		getSite().setSelectionProvider(viewer);
-		getSite().getWorkbenchWindow().getSelectionService()
-				.addPostSelectionListener(this);
+		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
 		jobManagerListener = ScheduleAdapter.registerView(viewer);
 
 		// getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
@@ -333,8 +320,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
 
-		toggleColourSchemeAction = new ToggleColourSchemeAction(
-				(EMFScheduleLabelProvider) (viewer.getLabelProvider()));
+		toggleColourSchemeAction = new ToggleColourSchemeAction((EMFScheduleLabelProvider) (viewer.getLabelProvider()));
 
 		sortModeAction = new SortModeAction(viewerComparator);
 
@@ -342,8 +328,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		saveFullImageAction = new SaveFullImageAction(viewer.getGanttChart());
 
-		getViewSite().getActionBars().setGlobalActionHandler(
-				ActionFactory.SAVE_AS.getId(), saveFullImageAction);
+		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.SAVE_AS.getId(), saveFullImageAction);
 	}
 
 	/**
@@ -392,7 +377,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 					viewer.setInput(input);
 
-					if (input != null && needFit) {
+					if ((input != null) && needFit) {
 						packAction.run();
 					}
 				}
@@ -411,16 +396,14 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	}
 
 	/**
-	 * Create a new {@link PropertySheetPage} instance hooked up to the default
-	 * EMF adapter factory.
+	 * Create a new {@link PropertySheetPage} instance hooked up to the default EMF adapter factory.
 	 * 
 	 * @return
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
 		final PropertySheetPage propertySheetPage = new PropertySheetPage();
 
-		propertySheetPage
-				.setPropertySourceProvider(new ScheduledEventPropertySourceProvider());
+		propertySheetPage.setPropertySourceProvider(new ScheduledEventPropertySourceProvider());
 
 		return propertySheetPage;
 	}
@@ -434,17 +417,14 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			super("Colour Scheme", IAction.AS_DROP_DOWN_MENU);
 			this.lp = lp;
 
-			setImageDescriptor(Activator
-					.getImageDescriptor("/icons/colour_scheme.gif"));
+			setImageDescriptor(Activator.getImageDescriptor("/icons/colour_scheme.gif"));
 		}
 
 		@Override
 		public void run() {
 
-			final List<IScheduleViewColourScheme> colourSchemes = lp
-					.getColourSchemes();
-			final IScheduleViewColourScheme currentScheme = lp
-					.getCurrentScheme();
+			final List<IScheduleViewColourScheme> colourSchemes = lp.getColourSchemes();
+			final IScheduleViewColourScheme currentScheme = lp.getCurrentScheme();
 			int nextIdx = -1;
 			if (currentScheme != null) {
 				nextIdx = colourSchemes.indexOf(currentScheme);
@@ -489,13 +469,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		private void createMenuItems(final Menu menu) {
 
-			final List<IScheduleViewColourScheme> colourSchemes = lp
-					.getColourSchemes();
+			final List<IScheduleViewColourScheme> colourSchemes = lp.getColourSchemes();
 
 			for (final IScheduleViewColourScheme scheme : colourSchemes) {
 
-				final Action a = new Action(scheme.getName(),
-						IAction.AS_RADIO_BUTTON) {
+				final Action a = new Action(scheme.getName(), IAction.AS_RADIO_BUTTON) {
 					@Override
 					public void run() {
 						lp.setScheme(scheme);
@@ -505,8 +483,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 				};
 
 				// a.setActionDefinitionId(mode.toString());
-				final ActionContributionItem actionContributionItem = new ActionContributionItem(
-						a);
+				final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
 				actionContributionItem.fill(menu, -1);
 
 				// Set initially checked item.
@@ -534,8 +511,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			super("Sort", IAction.AS_DROP_DOWN_MENU);
 			this.comparator = comparator;
 
-			setImageDescriptor(Activator
-					.getImageDescriptor("/icons/alphab_sort_co.gif"));
+			setImageDescriptor(Activator.getImageDescriptor("/icons/alphab_sort_co.gif"));
 		}
 
 		@Override
@@ -543,8 +519,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 			// Step through modes
 			ScenarioViewerComparator.Mode mode = comparator.getMode();
-			final int nextMode = (mode.ordinal() + 1)
-					% ScenarioViewerComparator.Mode.values().length;
+			final int nextMode = (mode.ordinal() + 1) % ScenarioViewerComparator.Mode.values().length;
 			mode = ScenarioViewerComparator.Mode.values()[nextMode];
 			comparator.setMode(mode);
 
@@ -581,11 +556,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		private void createMenuItems(final Menu menu) {
 
-			for (final ScenarioViewerComparator.Mode mode : ScenarioViewerComparator.Mode
-					.values()) {
+			for (final ScenarioViewerComparator.Mode mode : ScenarioViewerComparator.Mode.values()) {
 
-				final Action a = new Action(mode.getDisplayName(),
-						IAction.AS_RADIO_BUTTON) {
+				final Action a = new Action(mode.getDisplayName(), IAction.AS_RADIO_BUTTON) {
 					@Override
 					public void run() {
 						comparator.setMode(mode);
@@ -594,8 +567,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 				};
 
 				// a.setActionDefinitionId(mode.toString());
-				final ActionContributionItem actionContributionItem = new ActionContributionItem(
-						a);
+				final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
 				actionContributionItem.fill(menu, -1);
 
 				// Set initially checked item.
@@ -615,15 +587,15 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, ISelection selection) {
 		// TODO make selection more obvious - the gantt selection box is small
 		// TODO this seems hard, having taken a look.
-		if (part == this)
+		if (part == this) {
 			return;
+		}
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection sel = (IStructuredSelection) selection;
-			final List<Object> objects = new ArrayList<Object>(sel.toList()
-					.size());
+			final List<Object> objects = new ArrayList<Object>(sel.toList().size());
 			for (final Object o : sel.toList()) {
 				if (o instanceof CargoAllocation) {
 					final CargoAllocation allocation = (CargoAllocation) o;

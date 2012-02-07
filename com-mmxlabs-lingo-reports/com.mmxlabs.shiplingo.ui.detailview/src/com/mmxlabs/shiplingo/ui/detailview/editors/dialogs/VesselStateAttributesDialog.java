@@ -27,7 +27,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -70,7 +69,7 @@ public class VesselStateAttributesDialog extends Dialog {
 	 * @param parent
 	 * @param style
 	 */
-	public VesselStateAttributesDialog(Shell parent, int style) {
+	public VesselStateAttributesDialog(final Shell parent, final int style) {
 		super(parent, style);
 		setText("SWT Dialog");
 	}
@@ -78,7 +77,7 @@ public class VesselStateAttributesDialog extends Dialog {
 	public VesselStateAttributes open(final VesselStateAttributes attributes) {
 		return this.open(attributes, false);
 	}
-	
+
 	/**
 	 * Open the dialog.
 	 * 
@@ -89,15 +88,13 @@ public class VesselStateAttributesDialog extends Dialog {
 		createContents(hidingTopPart);
 		shlFuelCurve.open();
 		shlFuelCurve.layout();
-		Display display = getParent().getDisplay();
+		final Display display = getParent().getDisplay();
 
 		// center in parent window
 		final Rectangle shellBounds = getParent().getBounds();
 		final Point dialogSize = shlFuelCurve.getSize();
 
-		shlFuelCurve.setLocation(shellBounds.x
-				+ (shellBounds.width - dialogSize.x) / 2, shellBounds.y
-				+ (shellBounds.height - dialogSize.y) / 2);
+		shlFuelCurve.setLocation(shellBounds.x + ((shellBounds.width - dialogSize.x) / 2), shellBounds.y + ((shellBounds.height - dialogSize.y) / 2));
 
 		while (!shlFuelCurve.isDisposed()) {
 			if (!display.readAndDispatch()) {
@@ -107,37 +104,31 @@ public class VesselStateAttributesDialog extends Dialog {
 		return this.attributes;
 	}
 
-	
-	
 	/**
 	 * Create contents of the dialog.
-	 * @param hidingTopPart 
+	 * 
+	 * @param hidingTopPart
 	 */
-	private void createContents(boolean hidingTopPart) {
+	private void createContents(final boolean hidingTopPart) {
 		shlFuelCurve = new Shell(getParent(), getStyle());
 		shlFuelCurve.setSize(382, 507);
-		shlFuelCurve.setText(attributes.getVesselState().getName()
-				+ 
-		(hidingTopPart ? " Fuel Curve":		
-		" Vessel State Attributes")
-				
+		shlFuelCurve.setText(attributes.getVesselState().getName() + (hidingTopPart ? " Fuel Curve" : " Vessel State Attributes")
+
 		);
 		shlFuelCurve.setLayout(new GridLayout(1, false));
 
-		Group grpIdleBoiloff = new Group(shlFuelCurve, SWT.NONE);
+		final Group grpIdleBoiloff = new Group(shlFuelCurve, SWT.NONE);
 		grpIdleBoiloff.setLayout(new GridLayout(3, false));
-		grpIdleBoiloff.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				false, 1, 1));
-		
+		grpIdleBoiloff.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+
 		if (hidingTopPart) {
 			grpIdleBoiloff.setVisible(false);
 			((GridData) grpIdleBoiloff.getLayoutData()).exclude = true;
 		}
 		grpIdleBoiloff.setText("Idle Consumption and NBO");
 
-		Label lblActiveNboRate = new Label(grpIdleBoiloff, SWT.NONE);
-		lblActiveNboRate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
-				true, false, 1, 1));
+		final Label lblActiveNboRate = new Label(grpIdleBoiloff, SWT.NONE);
+		lblActiveNboRate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		lblActiveNboRate.setText("Active NBO Rate:");
 
 		final Spinner nboRateSpinner = new Spinner(grpIdleBoiloff, SWT.BORDER);
@@ -145,99 +136,83 @@ public class VesselStateAttributesDialog extends Dialog {
 		nboRateSpinner.setMaximum(100000);
 		nboRateSpinner.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				attributes.setNboRate((float) (nboRateSpinner.getSelection() * Math
-						.pow(10, -nboRateSpinner.getDigits())));
+			public void widgetDefaultSelected(final SelectionEvent e) {
+				attributes.setNboRate((float) (nboRateSpinner.getSelection() * Math.pow(10, -nboRateSpinner.getDigits())));
 			}
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				widgetDefaultSelected(e);
 			}
 		});
 		nboRateSpinner.setDigits(2);
 
-		Label lblMday = new Label(grpIdleBoiloff, SWT.NONE);
-		lblMday.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false,
-				1, 1));
+		final Label lblMday = new Label(grpIdleBoiloff, SWT.NONE);
+		lblMday.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblMday.setText("M3/day");
 
-		Label lblIdleNboRate = new Label(grpIdleBoiloff, SWT.NONE);
-		lblIdleNboRate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
+		final Label lblIdleNboRate = new Label(grpIdleBoiloff, SWT.NONE);
+		lblIdleNboRate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblIdleNboRate.setText("Idle NBO Rate:");
 
-		final Spinner idleNboRatespinner = new Spinner(grpIdleBoiloff,
-				SWT.BORDER);
+		final Spinner idleNboRatespinner = new Spinner(grpIdleBoiloff, SWT.BORDER);
 		idleNboRatespinner.setIncrement(0);
 		idleNboRatespinner.setMaximum(100000);
 		idleNboRatespinner.setDigits(2);
 		idleNboRatespinner.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				attributes.setIdleNBORate((float) (idleNboRatespinner
-						.getSelection() * Math.pow(10,
-						-idleNboRatespinner.getDigits())));
+			public void widgetDefaultSelected(final SelectionEvent e) {
+				attributes.setIdleNBORate((float) (idleNboRatespinner.getSelection() * Math.pow(10, -idleNboRatespinner.getDigits())));
 			}
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				widgetDefaultSelected(e);
 			}
 		});
 
-		Label lblMday_1 = new Label(grpIdleBoiloff, SWT.NONE);
+		final Label lblMday_1 = new Label(grpIdleBoiloff, SWT.NONE);
 		lblMday_1.setText("M3/day");
 
-		Label lblIdleFuelConsumption = new Label(grpIdleBoiloff, SWT.NONE);
-		lblIdleFuelConsumption.setLayoutData(new GridData(SWT.RIGHT,
-				SWT.CENTER, false, false, 1, 1));
+		final Label lblIdleFuelConsumption = new Label(grpIdleBoiloff, SWT.NONE);
+		lblIdleFuelConsumption.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblIdleFuelConsumption.setText("Idle Fuel Consumption:");
 
-		final Spinner idleConsumptionSpinner = new Spinner(grpIdleBoiloff,
-				SWT.BORDER);
+		final Spinner idleConsumptionSpinner = new Spinner(grpIdleBoiloff, SWT.BORDER);
 		idleConsumptionSpinner.setIncrement(0);
 		idleConsumptionSpinner.setMaximum(100000);
 		idleConsumptionSpinner.setDigits(2);
 		idleConsumptionSpinner.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				attributes
-						.setIdleConsumptionRate((float) (idleConsumptionSpinner
-								.getSelection() * Math.pow(10,
-								-idleConsumptionSpinner.getDigits())));
+			public void widgetDefaultSelected(final SelectionEvent e) {
+				attributes.setIdleConsumptionRate((float) (idleConsumptionSpinner.getSelection() * Math.pow(10, -idleConsumptionSpinner.getDigits())));
 			}
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				widgetDefaultSelected(e);
 			}
 		});
 
-		Label lblMtday = new Label(grpIdleBoiloff, SWT.NONE);
+		final Label lblMtday = new Label(grpIdleBoiloff, SWT.NONE);
 		lblMtday.setText("MT/day");
 
-		Group grpSpeedconsumptionCurve = new Group(shlFuelCurve, SWT.NONE);
+		final Group grpSpeedconsumptionCurve = new Group(shlFuelCurve, SWT.NONE);
 		grpSpeedconsumptionCurve.setLayout(new GridLayout(1, false));
-		grpSpeedconsumptionCurve.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
-				true, true, 1, 1));
+		grpSpeedconsumptionCurve.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		grpSpeedconsumptionCurve.setText("Speed/Consumption Curve");
 
-		final TableViewer tableViewer = new TableViewer(
-				grpSpeedconsumptionCurve, SWT.BORDER | SWT.FULL_SELECTION);
-		tableViewer
-				.addPostSelectionChangedListener(new ISelectionChangedListener() {
-					@Override
-					public void selectionChanged(SelectionChangedEvent event) {
-						btnRemoveLine.setEnabled(!event.getSelection()
-								.isEmpty());
-					}
-				});
+		final TableViewer tableViewer = new TableViewer(grpSpeedconsumptionCurve, SWT.BORDER | SWT.FULL_SELECTION);
+		tableViewer.addPostSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(final SelectionChangedEvent event) {
+				btnRemoveLine.setEnabled(!event.getSelection().isEmpty());
+			}
+		});
 
 		tableViewer.setContentProvider(new IStructuredContentProvider() {
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput,
-					Object newInput) {
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 			}
 
@@ -247,17 +222,13 @@ public class VesselStateAttributesDialog extends Dialog {
 			}
 
 			@Override
-			public Object[] getElements(Object inputElement) {
-				final FuelConsumptionLine[] lines = (FuelConsumptionLine[]) ((VesselStateAttributes) inputElement)
-						.getFuelConsumptionCurve().toArray(
-								new FuelConsumptionLine[] {});
+			public Object[] getElements(final Object inputElement) {
+				final FuelConsumptionLine[] lines = ((VesselStateAttributes) inputElement).getFuelConsumptionCurve().toArray(new FuelConsumptionLine[] {});
 
 				Arrays.sort(lines, new Comparator<FuelConsumptionLine>() {
 					@Override
-					public int compare(final FuelConsumptionLine first,
-							final FuelConsumptionLine second) {
-						return ((Float) first.getSpeed())
-								.compareTo((Float) second.getSpeed());
+					public int compare(final FuelConsumptionLine first, final FuelConsumptionLine second) {
+						return ((Float) first.getSpeed()).compareTo(second.getSpeed());
 					}
 				});
 
@@ -266,121 +237,111 @@ public class VesselStateAttributesDialog extends Dialog {
 		});
 
 		fuelCurveTable = tableViewer.getTable();
-		fuelCurveTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				false, 1, 1));
+		fuelCurveTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		fuelCurveTable.setLinesVisible(true);
 		fuelCurveTable.setHeaderVisible(true);
-		
+
 		fuelCurveTable.setLayout(new TableLayout());
 
-		TableViewerColumn speedColumn = new TableViewerColumn(tableViewer,
-				SWT.NONE);
+		final TableViewerColumn speedColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		speedColumn.setEditingSupport(new EditingSupport(tableViewer) {
 			@Override
-			protected boolean canEdit(Object element) {
+			protected boolean canEdit(final Object element) {
 				return true;
 			}
 
 			@Override
-			protected CellEditor getCellEditor(Object element) {
-				SpinnerCellEditor editor = new SpinnerCellEditor(tableViewer.getTable());
+			protected CellEditor getCellEditor(final Object element) {
+				final SpinnerCellEditor editor = new SpinnerCellEditor(tableViewer.getTable());
 				editor.setDigits(2);
-				editor.setMinimumValue((Integer)0);
-				editor.setMaximumValue((Integer)100000);
+				editor.setMinimumValue(0);
+				editor.setMaximumValue(100000);
 				return editor;
 			}
 
 			@Override
-			protected Object getValue(Object element) {
-				return element == null ? null : (Float) ((FuelConsumptionLine) element)
-						.getSpeed();
+			protected Object getValue(final Object element) {
+				return element == null ? null : (Float) ((FuelConsumptionLine) element).getSpeed();
 			}
 
 			@Override
-			protected void setValue(Object element, Object value) {
+			protected void setValue(final Object element, final Object value) {
 				((FuelConsumptionLine) element).setSpeed((Float) value);
 				tableViewer.refresh();
 			}
 		});
 		speedColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
-			public Image getImage(Object element) {
+			public Image getImage(final Object element) {
 				return null;
 			}
 
 			@Override
-			public String getText(Object element) {
-				return element == null ? "" : ((FuelConsumptionLine) element)
-						.getSpeed() + "";
+			public String getText(final Object element) {
+				return element == null ? "" : ((FuelConsumptionLine) element).getSpeed() + "";
 			}
 		});
 
-		TableColumn tblclmnSpeedknots = speedColumn.getColumn();
+		final TableColumn tblclmnSpeedknots = speedColumn.getColumn();
 		tblclmnSpeedknots.setWidth(167);
 		tblclmnSpeedknots.setText("Speed (knots)");
 
-		TableViewerColumn fuelConsumptionColumn = new TableViewerColumn(
-				tableViewer, SWT.NONE);
-		fuelConsumptionColumn
-				.setEditingSupport(new EditingSupport(tableViewer) {
-					@Override
-					protected boolean canEdit(Object element) {
-						return true;
-					}
+		final TableViewerColumn fuelConsumptionColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		fuelConsumptionColumn.setEditingSupport(new EditingSupport(tableViewer) {
+			@Override
+			protected boolean canEdit(final Object element) {
+				return true;
+			}
 
-					@Override
-					protected CellEditor getCellEditor(Object element) {
-						SpinnerCellEditor editor = new SpinnerCellEditor(tableViewer.getTable());
-						editor.setDigits(2);
-						editor.setMinimumValue((Integer)0);
-						editor.setMaximumValue((Integer)100000);
-						return editor;
-					}
+			@Override
+			protected CellEditor getCellEditor(final Object element) {
+				final SpinnerCellEditor editor = new SpinnerCellEditor(tableViewer.getTable());
+				editor.setDigits(2);
+				editor.setMinimumValue(0);
+				editor.setMaximumValue(100000);
+				return editor;
+			}
 
-					@Override
-					protected Object getValue(Object element) {
-						return element == null ? null : (Float) ((FuelConsumptionLine) element)
-								.getConsumption();
-					}
+			@Override
+			protected Object getValue(final Object element) {
+				return element == null ? null : (Float) ((FuelConsumptionLine) element).getConsumption();
+			}
 
-					@Override
-					protected void setValue(Object element, Object value) {
-						((FuelConsumptionLine) element).setConsumption((Float) value);
-						tableViewer.refresh();
-					}
-				});
+			@Override
+			protected void setValue(final Object element, final Object value) {
+				((FuelConsumptionLine) element).setConsumption((Float) value);
+				tableViewer.refresh();
+			}
+		});
 		fuelConsumptionColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
-			public Image getImage(Object element) {
+			public Image getImage(final Object element) {
 				return null;
 			}
 
 			@Override
-			public String getText(Object element) {
-				return element == null ? "" : ((FuelConsumptionLine) element)
-						.getConsumption() + "";
+			public String getText(final Object element) {
+				return element == null ? "" : ((FuelConsumptionLine) element).getConsumption() + "";
 			}
 		});
-		TableColumn tblclmnFuelConsumptionmt = fuelConsumptionColumn
-				.getColumn();
+		final TableColumn tblclmnFuelConsumptionmt = fuelConsumptionColumn.getColumn();
 		tblclmnFuelConsumptionmt.setWidth(180);
 		tblclmnFuelConsumptionmt.setText("Fuel Consumption (MT)");
 
-		Composite composite = new Composite(grpSpeedconsumptionCurve, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
+		final Composite composite = new Composite(grpSpeedconsumptionCurve, SWT.NONE);
+		composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		composite.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		btnRemoveLine = new Button(composite, SWT.FLAT);
 		btnRemoveLine.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				final ISelection sel = tableViewer.getSelection();
-				if (sel.isEmpty())
+				if (sel.isEmpty()) {
 					return; // should never happen
+				}
 				if (sel instanceof IStructuredSelection) {
-					final FuelConsumptionLine line = (FuelConsumptionLine) ((IStructuredSelection) sel)
-							.getFirstElement();
+					final FuelConsumptionLine line = (FuelConsumptionLine) ((IStructuredSelection) sel).getFirstElement();
 
 					attributes.getFuelConsumptionCurve().remove(line);
 					tableViewer.refresh();
@@ -390,12 +351,11 @@ public class VesselStateAttributesDialog extends Dialog {
 		btnRemoveLine.setEnabled(false);
 		btnRemoveLine.setText("-");
 
-		Button btnAddLine = new Button(composite, SWT.FLAT);
+		final Button btnAddLine = new Button(composite, SWT.FLAT);
 		btnAddLine.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				FuelConsumptionLine line = FleetPackage.eINSTANCE
-						.getFleetFactory().createFuelConsumptionLine();
+			public void widgetSelected(final SelectionEvent e) {
+				final FuelConsumptionLine line = FleetPackage.eINSTANCE.getFleetFactory().createFuelConsumptionLine();
 				line.setConsumption(0);
 				line.setSpeed(0);
 				attributes.getFuelConsumptionCurve().add(line);
@@ -405,10 +365,8 @@ public class VesselStateAttributesDialog extends Dialog {
 		});
 		btnAddLine.setText("+");
 
-		Composite graphComposite = new Composite(grpSpeedconsumptionCurve,
-				SWT.NONE);
-		graphComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true, 0, 1));
+		final Composite graphComposite = new Composite(grpSpeedconsumptionCurve, SWT.NONE);
+		graphComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 1));
 		graphComposite.setLayout(new FillLayout());
 		final Chart chart = new Chart(graphComposite, SWT.NONE);
 
@@ -417,8 +375,7 @@ public class VesselStateAttributesDialog extends Dialog {
 		chart.getAxisSet().getYAxis(0).getTitle().setVisible(false);
 		chart.getLegend().setVisible(false);
 
-		final ISeries series = chart.getSeriesSet().createSeries(
-				SeriesType.LINE, "Fuel Consumption");
+		final ISeries series = chart.getSeriesSet().createSeries(SeriesType.LINE, "Fuel Consumption");
 
 		final EContentAdapter chartUpdater = new EContentAdapter() {
 			{
@@ -426,24 +383,20 @@ public class VesselStateAttributesDialog extends Dialog {
 			}
 
 			@Override
-			public void notifyChanged(Notification msg) {
+			public void notifyChanged(final Notification msg) {
 				super.notifyChanged(msg);// hack
 				redraw();
 			}
 
 			public void redraw() {
-				final EList<FuelConsumptionLine> curve = attributes
-						.getFuelConsumptionCurve();
+				final EList<FuelConsumptionLine> curve = attributes.getFuelConsumptionCurve();
 
-				final FuelConsumptionLine[] lines = curve
-						.toArray(new FuelConsumptionLine[] {});
+				final FuelConsumptionLine[] lines = curve.toArray(new FuelConsumptionLine[] {});
 
 				Arrays.sort(lines, new Comparator<FuelConsumptionLine>() {
 					@Override
-					public int compare(final FuelConsumptionLine first,
-							final FuelConsumptionLine second) {
-						return ((Float) first.getSpeed())
-								.compareTo((Float) second.getSpeed());
+					public int compare(final FuelConsumptionLine first, final FuelConsumptionLine second) {
+						return ((Float) first.getSpeed()).compareTo(second.getSpeed());
 					}
 				});
 
@@ -461,10 +414,8 @@ public class VesselStateAttributesDialog extends Dialog {
 
 					minSpeed = Math.min(speedValues[i], minSpeed);
 					maxSpeed = Math.max(speedValues[i], maxSpeed);
-					minConsumption = Math.min(consumptionValues[i],
-							minConsumption);
-					maxConsumption = Math.max(consumptionValues[i],
-							maxConsumption);
+					minConsumption = Math.min(consumptionValues[i], minConsumption);
+					maxConsumption = Math.max(consumptionValues[i], maxConsumption);
 
 				}
 
@@ -482,10 +433,8 @@ public class VesselStateAttributesDialog extends Dialog {
 				if (maxConsumption == -Double.MAX_VALUE) {
 					maxConsumption = 100;
 				}
-				chart.getAxisSet().getXAxis(0)
-						.setRange(new Range(minSpeed, maxSpeed));
-				chart.getAxisSet().getYAxis(0)
-						.setRange(new Range(minConsumption, maxConsumption));
+				chart.getAxisSet().getXAxis(0).setRange(new Range(minSpeed, maxSpeed));
+				chart.getAxisSet().getYAxis(0).setRange(new Range(minConsumption, maxConsumption));
 				chart.redraw();
 			}
 		};
@@ -495,31 +444,31 @@ public class VesselStateAttributesDialog extends Dialog {
 		// remove updater when done
 		shlFuelCurve.addDisposeListener(new DisposeListener() {
 			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				if (attributes != null)
+			public void widgetDisposed(final DisposeEvent e) {
+				if (attributes != null) {
 					attributes.eAdapters().remove(chartUpdater);
+				}
 			}
 		});
 
-		Composite buttonsComposite = new Composite(shlFuelCurve, SWT.NONE);
+		final Composite buttonsComposite = new Composite(shlFuelCurve, SWT.NONE);
 		buttonsComposite.setLayout(new RowLayout(SWT.HORIZONTAL));
-		buttonsComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
-				false, false, 1, 1));
+		buttonsComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 
-		Button btnCancel = new Button(buttonsComposite, SWT.NONE);
+		final Button btnCancel = new Button(buttonsComposite, SWT.NONE);
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				attributes = null; // cancel by returning null.
 				shlFuelCurve.close();
 			}
 		});
 		btnCancel.setText("Cancel");
 
-		Button btnOk = new Button(buttonsComposite, SWT.NONE);
+		final Button btnOk = new Button(buttonsComposite, SWT.NONE);
 		btnOk.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				shlFuelCurve.close();
 			}
 		});
@@ -529,15 +478,10 @@ public class VesselStateAttributesDialog extends Dialog {
 		// set values
 		tableViewer.setInput(attributes);
 
-		idleConsumptionSpinner.setSelection((int) (attributes
-				.getIdleConsumptionRate() * Math.pow(10,
-				idleConsumptionSpinner.getDigits())));
+		idleConsumptionSpinner.setSelection((int) (attributes.getIdleConsumptionRate() * Math.pow(10, idleConsumptionSpinner.getDigits())));
 
-		idleNboRatespinner
-				.setSelection((int) (attributes.getIdleNBORate() * Math.pow(10,
-						idleNboRatespinner.getDigits())));
+		idleNboRatespinner.setSelection((int) (attributes.getIdleNBORate() * Math.pow(10, idleNboRatespinner.getDigits())));
 
-		nboRateSpinner.setSelection((int) (attributes.getNboRate() * Math.pow(
-				10, nboRateSpinner.getDigits())));
+		nboRateSpinner.setSelection((int) (attributes.getNboRate() * Math.pow(10, nboRateSpinner.getDigits())));
 	}
 }

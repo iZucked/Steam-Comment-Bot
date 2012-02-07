@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.shiplingo.ui.detailview.editors;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -14,8 +13,6 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EEnumLiteral;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -31,7 +28,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.dialogs.ListSelectionDialog;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.shiplingo.ui.detailview.utils.CommandUtil;
 
@@ -39,18 +35,18 @@ import com.mmxlabs.shiplingo.ui.detailview.utils.CommandUtil;
  * An editor for picking multiple values from an enum.
  * 
  * @author hinton
- *
+ * 
  */
 public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 	private Label theLabel;
-	private EEnum myEnum;
-	private Enumerator[] enumerators;
+	private final EEnum myEnum;
+	private final Enumerator[] enumerators;
 
-	public MultiEnumInlineEditor(EMFPath path, EStructuralFeature feature, EditingDomain editingDomain, ICommandProcessor commandProcessor) {
+	public MultiEnumInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor commandProcessor) {
 		super(path, feature, editingDomain, commandProcessor);
-		myEnum = (EEnum) ((EAttribute)feature).getEAttributeType();
+		myEnum = (EEnum) ((EAttribute) feature).getEAttributeType();
 		enumerators = new Enumerator[myEnum.getELiterals().size()];
-		for (int i = 0; i<enumerators.length; i++) {
+		for (int i = 0; i < enumerators.length; i++) {
 			enumerators[i] = myEnum.getELiterals().get(i).getInstance();
 		}
 	}
@@ -70,7 +66,7 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				final List<Object> o = openDialogBox(parent);
 				if (o != null) {
 					doSetValue(o);
@@ -85,42 +81,39 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	protected Command createSetCommand(Object value) {
-		final CompoundCommand setter = CommandUtil
-				.createMultipleAttributeSetter(editingDomain, input, feature,
-						(Collection) value);
+	protected Command createSetCommand(final Object value) {
+		final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(editingDomain, input, feature, (Collection) value);
 		return setter;
 	}
-	
+
 	@Override
 	protected void updateDisplay(final Object value) {
-		List<Enumerator> selectedValues = (List<Enumerator>) value;
+		final List<Enumerator> selectedValues = (List<Enumerator>) value;
 		final StringBuilder sb = new StringBuilder();
 		for (final Enumerator obj : selectedValues) {
-			if (sb.length() > 0)
+			if (sb.length() > 0) {
 				sb.append(", ");
+			}
 			sb.append(obj.getName());
 		}
 		theLabel.setText(sb.toString());
 	}
 
 	@SuppressWarnings("unchecked")
-	protected List<Object> openDialogBox(Control cellEditorWindow) {
-		ListSelectionDialog dlg = new ListSelectionDialog(
-				cellEditorWindow.getShell(), enumerators,
-				new ArrayContentProvider(), new LabelProvider() {
-					@Override
-					public String getText(Object element) {
-						return ((Enumerator) element).getName();
-					}
-				}, "Select values:");
+	protected List<Object> openDialogBox(final Control cellEditorWindow) {
+		final ListSelectionDialog dlg = new ListSelectionDialog(cellEditorWindow.getShell(), enumerators, new ArrayContentProvider(), new LabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return ((Enumerator) element).getName();
+			}
+		}, "Select values:");
 		dlg.setTitle("Value Selection");
-		
+
 		dlg.setInitialSelections(((Collection) getValue()).toArray());
 		dlg.setBlockOnOpen(true);
 		dlg.open();
-		Object[] result = dlg.getResult();
-		
+		final Object[] result = dlg.getResult();
+
 		return Arrays.asList(result);
 	}
 }

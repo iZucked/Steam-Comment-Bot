@@ -35,7 +35,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 public class CargoAllowedVesselConstraintCheck {
 
 	private static final int dischargePrice = 1;
-	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+	private final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 	/**
 	 * One cargo only has one vessels on it's allowedVessels list. Check that the constraint holds.
@@ -63,10 +63,10 @@ public class CargoAllowedVesselConstraintCheck {
 		csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false);
 		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false);
 		csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false);
-		ArrayList<Vessel> vesselsClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
+		final ArrayList<Vessel> vesselsClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
 
 		// create some cargos.
-		ArrayList<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue)));
+		final ArrayList<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue)));
 
 		// add a constraint to one cargo - it can only be carried by the one vessel that is class four.
 		final Cargo constrainedCargo = cargoes.get(0);
@@ -79,12 +79,12 @@ public class CargoAllowedVesselConstraintCheck {
 		// get the cargo that was constraned out of the results.
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
-			Cargo c = (Cargo) (ca.getLoadSlot().eContainer());
+			final Cargo c = (Cargo) (ca.getLoadSlot().eContainer());
 
 			if (c.equals(constrainedCargo)) {
 				// found the constrained cargo
 				// now get the name of the vessel and see it it matches the one class four vessel.
-				AllocatedVessel av = ca.getVessel();
+				final AllocatedVessel av = ca.getVessel();
 
 				final boolean namesMatch = av.getName().equals(vesselsClassFour.get(0).getName());
 				Assert.assertTrue("Only vessel class four used", namesMatch);
@@ -119,8 +119,8 @@ public class CargoAllowedVesselConstraintCheck {
 		final int numOfClassFour = 8;
 
 		// this vessels that will be allowed to carry the cargo
-		ArrayList<Vessel> allowedVessels = new ArrayList<Vessel>();
-		
+		final ArrayList<Vessel> allowedVessels = new ArrayList<Vessel>();
+
 		// createVessels creates and adds the vessesl to the scenario.
 		allowedVessels.addAll(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
 		allowedVessels.addAll(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
@@ -129,11 +129,12 @@ public class CargoAllowedVesselConstraintCheck {
 		csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true);
 
 		// create some cargos.
-		ArrayList<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue)));
+		final ArrayList<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue)));
 
 		// constrain all cargoes so none of class four can carry any.
-		for (Cargo c : cargoes) 
+		for (final Cargo c : cargoes) {
 			Assert.assertTrue("Allowed vessels added to cargo successfully", csc.addAllowedVesselsOnCargo(c, allowedVessels));
+		}
 
 		// build and run the scenario
 		final Scenario scenario = csc.buildScenario();
@@ -142,11 +143,11 @@ public class CargoAllowedVesselConstraintCheck {
 		// check that the vessel that carries every cargo matches the name of one in the allowed vessels list.
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
-			AllocatedVessel av = ca.getVessel();
+			final AllocatedVessel av = ca.getVessel();
 
 			boolean inAllowedVessels = false;
-			for (Vessel v : allowedVessels) {
-				
+			for (final Vessel v : allowedVessels) {
+
 				if (v.getName().equals(av.getName())) {
 					inAllowedVessels = true;
 					break;

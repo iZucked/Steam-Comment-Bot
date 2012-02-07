@@ -39,33 +39,28 @@ public class OptimisationRepeatabilityTest {
 	@BeforeClass
 	public static void registerEMF() {
 
-		// Load up the Scenario Package 
+		// Load up the Scenario Package
 		@SuppressWarnings("unused")
 		final ScenarioPackage einstance = ScenarioPackage.eINSTANCE;
 	}
 
 	@Test
-	public void testScenario() throws IOException, InterruptedException,
-			IncompleteScenarioException {
+	public void testScenario() throws IOException, InterruptedException, IncompleteScenarioException {
 
 		final URL url = getClass().getResource("/test.scenario");
 
 		testScenario(url, 5);
 	}
 
-	private void testScenario(final URL url, final int numTries)
-			throws IOException, InterruptedException,
-			IncompleteScenarioException {
+	private void testScenario(final URL url, final int numTries) throws IOException, InterruptedException, IncompleteScenarioException {
 
-		final Resource resource = new XMIResourceImpl(URI.createURI(url
-				.toString()));
+		final Resource resource = new XMIResourceImpl(URI.createURI(url.toString()));
 		resource.load(Collections.emptyMap());
 
 		final ResourceSetImpl resourceSet = new ResourceSetImpl();
 		resourceSet.getResources().add(resource);
 
-		final Scenario originalScenario = (Scenario) (resource.getAllContents()
-				.next());
+		final Scenario originalScenario = (Scenario) (resource.getAllContents().next());
 
 		final ScenarioRunner[] scenarioRunners = new ScenarioRunner[numTries];
 		for (int i = 0; i < numTries; ++i) {
@@ -82,16 +77,14 @@ public class OptimisationRepeatabilityTest {
 
 			if (i > 0) {
 				// Ensure same initial schedules
-				final MatchModel match = MatchService.doMatch(
-						scenarioRunners[0].getIntialSchedule(),
-						scenarioRunners[i].getIntialSchedule(), null);
+				final MatchModel match = MatchService.doMatch(scenarioRunners[0].getIntialSchedule(), scenarioRunners[i].getIntialSchedule(), null);
 				final DiffModel diff = DiffService.doDiff(match);
 				final EList<DiffElement> differences = diff.getDifferences();
 				// Dump any differences to std.err before asserting
 				for (final DiffElement d : differences) {
 					System.err.println(d.toString());
 				}
-								
+
 				Assert.assertTrue("initial solution 0 and " + i + " should be the same", differences.isEmpty());
 			}
 		}
@@ -101,9 +94,7 @@ public class OptimisationRepeatabilityTest {
 			scenarioRunners[i].run();
 			if (i > 0) {
 				// Ensure same final schedules
-				final MatchModel match = MatchService.doMatch(
-						scenarioRunners[0].getFinalSchedule(),
-						scenarioRunners[i].getFinalSchedule(), null);
+				final MatchModel match = MatchService.doMatch(scenarioRunners[0].getFinalSchedule(), scenarioRunners[i].getFinalSchedule(), null);
 				final DiffModel diff = DiffService.doDiff(match);
 				final EList<DiffElement> differences = diff.getDifferences();
 
@@ -118,8 +109,7 @@ public class OptimisationRepeatabilityTest {
 
 		// Ensure source model is unchanged
 		for (int i = 0; i < numTries; ++i) {
-			final MatchModel match = MatchService.doMatch(originalScenario,
-					scenarioRunners[i].getScenario(), null);
+			final MatchModel match = MatchService.doMatch(originalScenario, scenarioRunners[i].getScenario(), null);
 			final DiffModel diff = DiffService.doDiff(match);
 			final EList<DiffElement> differences = diff.getDifferences();
 			// Dump any differences to std.err before asserting

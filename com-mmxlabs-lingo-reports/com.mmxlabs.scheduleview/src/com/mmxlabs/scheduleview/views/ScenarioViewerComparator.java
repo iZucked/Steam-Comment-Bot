@@ -12,12 +12,8 @@ import scenario.schedule.Sequence;
 import scenario.schedule.fleetallocation.SpotVessel;
 
 /**
- * {@link ViewerComparator} to sort the {@link SchedulerView} contents.
- * Implementation sort vessels alphabetically grouped into fleet and spot
- * vessels. There are currently two sort modes on top of this;
- * {@link Mode#STACK} will show multiple scenarios in sequence.
- * {@link Mode#INTERLEAVE} will show the same vessel for multiple scenarios
- * side-by-side.
+ * {@link ViewerComparator} to sort the {@link SchedulerView} contents. Implementation sort vessels alphabetically grouped into fleet and spot vessels. There are currently two sort modes on top of
+ * this; {@link Mode#STACK} will show multiple scenarios in sequence. {@link Mode#INTERLEAVE} will show the same vessel for multiple scenarios side-by-side.
  * 
  * @author Simon Goodall
  * 
@@ -29,7 +25,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 
 		private final String displayName;
 
-		private Mode(String displayName) {
+		private Mode(final String displayName) {
 			this.displayName = displayName;
 		}
 
@@ -85,7 +81,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 			// Sort by name
 			final String str1 = s1.getVessel() == null ? null : s1.getVessel().getName();
 			final String str2 = s2.getVessel() == null ? null : s2.getVessel().getName();
-			
+
 			final int c = str1 == null ? -1 : str1.compareTo(str2);
 			if (c != 0) {
 				return c;
@@ -93,7 +89,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		} else if (mode == Mode.INTERLEAVE) {
 
 			// Then order by element order
-			if (e1 instanceof Sequence && e2 instanceof Sequence) {
+			if ((e1 instanceof Sequence) && (e2 instanceof Sequence)) {
 				final Sequence s1 = (Sequence) e1;
 				final Sequence s2 = (Sequence) e2;
 
@@ -106,8 +102,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				}
 
 				// Sort by name
-				final int c = s1.getVessel().getName()
-						.compareTo(s2.getVessel().getName());
+				final int c = s1.getVessel().getName().compareTo(s2.getVessel().getName());
 				if (c != 0) {
 					return c;
 				}

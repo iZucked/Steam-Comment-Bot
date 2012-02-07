@@ -38,22 +38,17 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 
 /**
- * A column manipulator which sets/displays the initial vessel for a cargo. This
- * is the vessel which the cargo will be put on in the initial schedule, either
- * because it's contained in a sequence, or because its cargoallocation is
- * providing that advice to the ISB.
+ * A column manipulator which sets/displays the initial vessel for a cargo. This is the vessel which the cargo will be put on in the initial schedule, either because it's contained in a sequence, or
+ * because its cargoallocation is providing that advice to the ISB.
  * 
- * This could be speeded up by cargo / allocation relationships, but that would
- * need lots of notifiers hooking up.
+ * This could be speeded up by cargo / allocation relationships, but that would need lots of notifiers hooking up.
  * 
- * TODO allow to clear allocation TODO hook notifier for refreshing containing
- * {@link EObjectEditorViewerPane}
+ * TODO allow to clear allocation TODO hook notifier for refreshing containing {@link EObjectEditorViewerPane}
  * 
  * @author Tom Hinton
  * 
  */
-public class CargoInitialVesselManipulator implements ICellManipulator,
-		ICellRenderer {
+public class CargoInitialVesselManipulator implements ICellManipulator, ICellRenderer {
 	private ComboBoxCellEditor editor;
 	private final EditingDomain editingDomain;
 
@@ -65,33 +60,31 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 	}
 
 	private Scenario getScenario(final Cargo cargo) {
-		if (cargo.eContainer() != null
-				&& cargo.eContainer().eContainer() instanceof Scenario) {
+		if ((cargo.eContainer() != null) && (cargo.eContainer().eContainer() instanceof Scenario)) {
 			return (Scenario) (cargo.eContainer().eContainer());
 		}
 		return null;
 	}
 
-	private CargoAllocation getCargoAllocation(final Schedule schedule,
-			final Cargo cargo) {
-		if (schedule == null || cargo == null)
+	private CargoAllocation getCargoAllocation(final Schedule schedule, final Cargo cargo) {
+		if ((schedule == null) || (cargo == null)) {
 			return null;
+		}
 
 		// find the cargo allocation for this cargo, if there is one.
 		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
-			if (ca.getLoadSlot() == cargo.getLoadSlot()
-					&& ca.getDischargeSlot() == cargo.getDischargeSlot()) {
+			if ((ca.getLoadSlot() == cargo.getLoadSlot()) && (ca.getDischargeSlot() == cargo.getDischargeSlot())) {
 				return ca;
 			}
 		}
 		return null;
 	}
 
-	private AllocatedVessel getAllocatedVessel(final Schedule schedule,
-			final Cargo cargo) {
+	private AllocatedVessel getAllocatedVessel(final Schedule schedule, final Cargo cargo) {
 		final CargoAllocation ca = getCargoAllocation(schedule, cargo);
-		if (ca != null)
+		if (ca != null) {
 			return ca.getVessel();
+		}
 		return null;
 	}
 
@@ -112,63 +105,65 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 	}
 
 	/**
-	 * Pull the initial sequences from a scenario, or null if there is a missing
-	 * link somewhere.
+	 * Pull the initial sequences from a scenario, or null if there is a missing link somewhere.
 	 * 
 	 * @param scenario
 	 * @return
 	 */
 	private Schedule getSchedule(final Scenario scenario) {
-		if (scenario == null)
+		if (scenario == null) {
 			return null;
-		if (scenario.getOptimisation() == null)
+		}
+		if (scenario.getOptimisation() == null) {
 			return null;
-		if (scenario.getOptimisation().getCurrentSettings() == null)
+		}
+		if (scenario.getOptimisation().getCurrentSettings() == null) {
 			return null;
-		if (scenario.getOptimisation().getCurrentSettings()
-				.getInitialSchedule() == null)
+		}
+		if (scenario.getOptimisation().getCurrentSettings().getInitialSchedule() == null) {
 			return null;
-		return scenario.getOptimisation().getCurrentSettings()
-				.getInitialSchedule();
+		}
+		return scenario.getOptimisation().getCurrentSettings().getInitialSchedule();
 	}
 
 	private Schedule getOrCreateSchedule(final Scenario scenario) {
 		Schedule schedule = getSchedule(scenario);
 
 		if (schedule == null) {
-			if (scenario == null)
+			if (scenario == null) {
 				return null;
-			if (scenario.getOptimisation() == null)
+			}
+			if (scenario.getOptimisation() == null) {
 				return null;
-			if (scenario.getOptimisation().getCurrentSettings() == null)
+			}
+			if (scenario.getOptimisation().getCurrentSettings() == null) {
 				return null;
+			}
 
 			schedule = ScheduleFactory.eINSTANCE.createSchedule();
 			scenario.getScheduleModel().getSchedules().add(schedule);
 			// create fleet (create spots?)
 			for (final Vessel v : scenario.getFleetModel().getFleet()) {
-				final FleetVessel av = FleetallocationFactory.eINSTANCE
-						.createFleetVessel();
+				final FleetVessel av = FleetallocationFactory.eINSTANCE.createFleetVessel();
 				av.setVessel(v);
 				schedule.getFleet().add(av);
 			}
 
-			scenario.getOptimisation().getCurrentSettings()
-					.setInitialSchedule(schedule);
+			scenario.getOptimisation().getCurrentSettings().setInitialSchedule(schedule);
 		}
 		return schedule;
 	}
 
 	@Override
-	public Comparable getComparable(Object object) {
+	public Comparable getComparable(final Object object) {
 		return render(object);
 	}
 
 	@Override
-	public Object getFilterValue(Object object) {
+	public Object getFilterValue(final Object object) {
 		return getComparable(object);
 	}
-	
+
 	@Override
 	public CellEditor getCellEditor(final Composite parent, final Object object) {
 		editor = new ComboBoxCellEditor(parent, new String[0], SWT.READ_ONLY);
@@ -191,11 +186,13 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 			final Cargo cargo = (Cargo) object;
 			final Scenario scenario = getScenario(cargo);
 			final Schedule schedule = getSchedule(scenario);
-			if (scenario == null || schedule == null)
+			if ((scenario == null) || (schedule == null)) {
 				return -1;
+			}
 			final AllocatedVessel av = getAllocatedVessel(schedule, cargo);
-			if (av == null)
+			if (av == null) {
 				return -1;
+			}
 			return vessels.indexOf(av);
 		}
 		return -1;
@@ -203,35 +200,34 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 
 	@Override
 	public void setValue(final Object object, final Object value) {
-		if (value instanceof Integer && object instanceof Cargo) {
+		if ((value instanceof Integer) && (object instanceof Cargo)) {
 			final Cargo cargo = (Cargo) object;
 			final Integer integerValue = (Integer) value;
-			if (integerValue.intValue() == -1)
+			if (integerValue.intValue() == -1) {
 				return;
+			}
 			final AllocatedVessel vessel = vessels.get(integerValue);
 
 			final Scenario scenario = getScenario(cargo);
 			final Schedule schedule = getSchedule(scenario);
-			if (scenario == null || schedule == null)
+			if ((scenario == null) || (schedule == null)) {
 				return;
+			}
 			final CompoundCommand command = new CompoundCommand();
 
 			CargoAllocation allocation = getCargoAllocation(schedule, cargo);
 			if (allocation == null) {
 				allocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
 				// schedule.getCargoAllocations().add(allocation);
-				command.append(AddCommand.create(editingDomain, schedule,
-						SchedulePackage.eINSTANCE
-								.getSchedule_CargoAllocations(), allocation));
+				command.append(AddCommand.create(editingDomain, schedule, SchedulePackage.eINSTANCE.getSchedule_CargoAllocations(), allocation));
 				allocation.setLoadSlot(cargo.getLoadSlot());
 				allocation.setDischargeSlot(cargo.getDischargeSlot());
 				allocation.setVessel(vessel);
 			} else {
-				if (allocation.getVessel() == vessel)
+				if (allocation.getVessel() == vessel) {
 					return;
-				command.append(SetCommand.create(editingDomain, allocation,
-						SchedulePackage.eINSTANCE.getCargoAllocation_Vessel(),
-						vessel));
+				}
+				command.append(SetCommand.create(editingDomain, allocation, SchedulePackage.eINSTANCE.getCargoAllocation_Vessel(), vessel));
 			}
 
 			if (allocation.getLoadSlotVisit() != null) {
@@ -240,13 +236,8 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 				// the initial sequence builder should do the rest.
 				command.append(DeleteCommand.create(
 						editingDomain,
-						CollectionsUtil.makeArrayList(
-								allocation.getLoadSlotVisit(),
-								allocation.getDischargeSlotVisit(),
-								allocation.getLadenIdle(),
-								allocation.getLadenLeg(),
-								allocation.getBallastIdle(),
-								allocation.getBallastLeg())));
+						CollectionsUtil.makeArrayList(allocation.getLoadSlotVisit(), allocation.getDischargeSlotVisit(), allocation.getLadenIdle(), allocation.getLadenLeg(),
+								allocation.getBallastIdle(), allocation.getBallastLeg())));
 			}
 
 			editingDomain.getCommandStack().execute(command);
@@ -263,12 +254,12 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 			final Scenario scenario = getScenario(cargo);
 			final Schedule schedule = getOrCreateSchedule(scenario);
 
-			if (scenario == null || schedule == null)
+			if ((scenario == null) || (schedule == null)) {
 				return false;
+			}
 
 			// get vessel names
-			final ArrayList<Pair<String, AllocatedVessel>> namesAndValues = new ArrayList<Pair<String, AllocatedVessel>>(
-					schedule.getFleet().size());
+			final ArrayList<Pair<String, AllocatedVessel>> namesAndValues = new ArrayList<Pair<String, AllocatedVessel>>(schedule.getFleet().size());
 			for (final AllocatedVessel av : schedule.getFleet()) {
 				// TODO filter out vessels which cannot carry this cargo.
 				final VesselClass avClass;
@@ -277,23 +268,18 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 				} else {
 					avClass = ((SpotVessel) av).getVesselClass();
 				}
-				if (avClass.getInaccessiblePorts().contains(
-						cargo.getLoadSlot().getPort())
-						|| avClass.getInaccessiblePorts().contains(
-								cargo.getDischargeSlot().getPort()))
+				if (avClass.getInaccessiblePorts().contains(cargo.getLoadSlot().getPort()) || avClass.getInaccessiblePorts().contains(cargo.getDischargeSlot().getPort())) {
 					continue;
-				namesAndValues.add(new Pair<String, AllocatedVessel>(av
-						.getName(), av));
+				}
+				namesAndValues.add(new Pair<String, AllocatedVessel>(av.getName(), av));
 			}
 
-			Collections.sort(namesAndValues,
-					new Comparator<Pair<String, AllocatedVessel>>() {
-						@Override
-						public int compare(Pair<String, AllocatedVessel> arg0,
-								Pair<String, AllocatedVessel> arg1) {
-							return arg0.getFirst().compareTo(arg1.getFirst());
-						}
-					});
+			Collections.sort(namesAndValues, new Comparator<Pair<String, AllocatedVessel>>() {
+				@Override
+				public int compare(final Pair<String, AllocatedVessel> arg0, final Pair<String, AllocatedVessel> arg1) {
+					return arg0.getFirst().compareTo(arg1.getFirst());
+				}
+			});
 
 			names.clear();
 			vessels.clear();
@@ -312,21 +298,32 @@ public class CargoInitialVesselManipulator implements ICellManipulator,
 	}
 
 	@Override
-	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
-			Object object) {
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 			final Scenario scenario = getScenario(cargo);
 			final Schedule schedule = getSchedule(scenario);
 			final CargoAllocation allocation = getCargoAllocation(schedule, cargo);
-			
+
 			final LinkedList<Pair<Notifier, List<Object>>> result = new LinkedList<Pair<Notifier, List<Object>>>();
-		 	if (allocation != null) result.add(new Pair<Notifier, List<Object>>(allocation, null));
-			if (scenario != null) result.add(new Pair<Notifier, List<Object>>(scenario.getScheduleModel(), null));
-			if (schedule != null) result.add(new Pair<Notifier, List<Object>>(schedule, null));
-			if (scenario != null) result.add(new Pair<Notifier, List<Object>>(scenario.getOptimisation().getCurrentSettings(), null));
-			if (scenario != null) result.add(new Pair<Notifier, List<Object>>(scenario.getOptimisation(), null));
-			if (allocation != null && allocation.getLoadSlotVisit() != null) result.add(new Pair<Notifier, List<Object>>(allocation.getLoadSlotVisit().eContainer(), null));
+			if (allocation != null) {
+				result.add(new Pair<Notifier, List<Object>>(allocation, null));
+			}
+			if (scenario != null) {
+				result.add(new Pair<Notifier, List<Object>>(scenario.getScheduleModel(), null));
+			}
+			if (schedule != null) {
+				result.add(new Pair<Notifier, List<Object>>(schedule, null));
+			}
+			if (scenario != null) {
+				result.add(new Pair<Notifier, List<Object>>(scenario.getOptimisation().getCurrentSettings(), null));
+			}
+			if (scenario != null) {
+				result.add(new Pair<Notifier, List<Object>>(scenario.getOptimisation(), null));
+			}
+			if ((allocation != null) && (allocation.getLoadSlotVisit() != null)) {
+				result.add(new Pair<Notifier, List<Object>>(allocation.getLoadSlotVisit().eContainer(), null));
+			}
 			return result;
 		}
 		return Collections.emptySet();

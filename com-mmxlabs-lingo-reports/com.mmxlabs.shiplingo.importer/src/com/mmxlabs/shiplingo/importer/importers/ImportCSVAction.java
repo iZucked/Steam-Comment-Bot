@@ -41,8 +41,7 @@ import com.mmxlabs.shiplingo.importer.ui.ImportWarningDialog;
  */
 public abstract class ImportCSVAction extends Action {
 	public ImportCSVAction() {
-		super("Import from CSV", AbstractUIPlugin.imageDescriptorFromPlugin(
-				"org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
+		super("Import from CSV", AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
 	}
 
 	protected abstract EObject getToplevelObject();
@@ -53,34 +52,31 @@ public abstract class ImportCSVAction extends Action {
 
 	@Override
 	public void run() {
-		final FileDialog openDialog = new FileDialog(PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getShell(), SWT.OPEN);
+		final FileDialog openDialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
 
 		openDialog.setFilterExtensions(new String[] { "*.csv" });
-		openDialog.setText("Choose a CSV file from which to import "
-				+ getNiceName(getImportClass()));
+		openDialog.setText("Choose a CSV file from which to import " + getNiceName(getImportClass()));
 
 		final String inputFileName = openDialog.open();
-		if (inputFileName == null)
+		if (inputFileName == null) {
 			return;
+		}
 
 		final WarningCollector warningCollector = new WarningCollector();
 
-		final WorkspaceJob job = new WorkspaceJob("Import CSV from "
-				+ inputFileName) {
+		final WorkspaceJob job = new WorkspaceJob("Import CSV from " + inputFileName) {
 
 			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor)
-					throws CoreException {
+			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 				// count lines in file
 				BufferedReader br;
 				try {
 					ImportUI.beginImport();
-					br = new BufferedReader(new FileReader(new File(
-							inputFileName)));
+					br = new BufferedReader(new FileReader(new File(inputFileName)));
 					int lineCount = 0;
-					while (br.readLine() != null)
+					while (br.readLine() != null) {
 						lineCount++;
+					}
 					br.close();
 					monitor.beginTask("Import CSV Data", 4);
 
@@ -90,12 +86,10 @@ public abstract class ImportCSVAction extends Action {
 					monitor.worked(1);
 					registry.addEObjects(getToplevelObject());
 					monitor.subTask("Read CSV");
-					final EObjectImporter importer = EObjectImporterFactory
-							.getInstance().getImporter(getImportClass());
+					final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(getImportClass());
 					importer.addImportWarningListener(warningCollector);
 					final CSVReader reader = new CSVReader(inputFileName);
-					final Collection<EObject> importedObjects = importer
-							.importObjects(reader, deferments, registry);
+					final Collection<EObject> importedObjects = importer.importObjects(reader, deferments, registry);
 					monitor.worked(1);
 					// Tell implementation to add these objects
 					monitor.subTask("Merge new data");
@@ -107,8 +101,7 @@ public abstract class ImportCSVAction extends Action {
 					registry.addEObjects(getToplevelObject());
 					// link up imported references
 
-					final Map<Pair<EClass, String>, EObject> m = registry
-							.getContents();
+					final Map<Pair<EClass, String>, EObject> m = registry.getContents();
 					for (final DeferredReference dr : deferments) {
 						dr.setRegistry(m);
 						dr.run();
@@ -125,7 +118,7 @@ public abstract class ImportCSVAction extends Action {
 
 					ImportUI.endImport();
 					return Status.OK_STATUS;
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					ImportUI.endImport();
 					return Status.CANCEL_STATUS;
 				}
@@ -139,26 +132,22 @@ public abstract class ImportCSVAction extends Action {
 		try {
 			job.join();
 			if (warningCollector.getWarnings().isEmpty() == false) {
-				final ImportWarningDialog iwd = new ImportWarningDialog(
-						PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-								.getShell());
+				final ImportWarningDialog iwd = new ImportWarningDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
 				iwd.setWarnings(warningCollector.getWarnings());
 				iwd.open();
 			}
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 		}
 	}
 
-	private final Map<EClass, String> niceNames = CollectionsUtil.makeHashMap(
-			PortPackage.eINSTANCE.getDistanceModel(), "Distance Matrix",
-			FleetPackage.eINSTANCE.getVesselEvent(), "Vessel Events",
+	private final Map<EClass, String> niceNames = CollectionsUtil.makeHashMap(PortPackage.eINSTANCE.getDistanceModel(), "Distance Matrix", FleetPackage.eINSTANCE.getVesselEvent(), "Vessel Events",
 			FleetPackage.eINSTANCE.getVesselClass(), "Vessel Classes");
 
 	/**
 	 * @param importClass
 	 * @return
 	 */
-	private String getNiceName(EClass importClass) {
+	private String getNiceName(final EClass importClass) {
 		if (niceNames.containsKey(importClass)) {
 			return niceNames.get(importClass);
 		} else {

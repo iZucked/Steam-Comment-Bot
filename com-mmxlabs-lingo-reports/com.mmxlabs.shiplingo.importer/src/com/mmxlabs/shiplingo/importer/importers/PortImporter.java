@@ -26,11 +26,8 @@ import com.mmxlabs.common.Pair;
  */
 public class PortImporter extends EObjectImporter {
 	@Override
-	public EObject importObject(Map<String, String> fields,
-			Collection<DeferredReference> deferredReferences,
-			NamedObjectRegistry registry) {
-		final Port p = (Port) super.importObject(fields, deferredReferences,
-				registry);
+	public EObject importObject(final Map<String, String> fields, final Collection<DeferredReference> deferredReferences, final NamedObjectRegistry registry) {
+		final Port p = (Port) super.importObject(fields, deferredReferences, registry);
 
 		// check for old defaultcontract field
 		if (fields.containsKey("defaultcontract")) {
@@ -38,14 +35,10 @@ public class PortImporter extends EObjectImporter {
 
 			// add a custom deferred reference which first looks up the contract
 			// and then executes the linkage.
-			deferredReferences.add(new DeferredReference(null,
-					ContractPackage.eINSTANCE.getContract_DefaultPorts(), p
-							.getName()) {
+			deferredReferences.add(new DeferredReference(null, ContractPackage.eINSTANCE.getContract_DefaultPorts(), p.getName()) {
 				@Override
 				public void run() {
-					final EObject o = registry.get(new Pair<EClass, String>(
-							ContractPackage.eINSTANCE.getContract(),
-							contractName));
+					final EObject o = registry.get(new Pair<EClass, String>(ContractPackage.eINSTANCE.getContract(), contractName));
 					if (o instanceof Contract) {
 						this.target = o;
 						super.run();

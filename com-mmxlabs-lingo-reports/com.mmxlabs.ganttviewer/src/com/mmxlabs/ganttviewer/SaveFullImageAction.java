@@ -31,8 +31,7 @@ public class SaveFullImageAction extends Action {
 		final GanttComposite composite = ganttChart.getGanttComposite();
 		final Image full = composite.getFullImage();
 
-		final FileDialog fd = new FileDialog(Display.getDefault()
-				.getActiveShell(), SWT.SAVE);
+		final FileDialog fd = new FileDialog(Display.getDefault().getActiveShell(), SWT.SAVE);
 		fd.setFilterExtensions(new String[] { ".jpg" });
 		fd.setFilterNames(new String[] { "JPG File" });
 		fd.setFileName("img.jpg");
@@ -48,8 +47,7 @@ public class SaveFullImageAction extends Action {
 
 	@Override
 	public boolean isEnabled() {
-		return super.isEnabled() && ganttChart != null
-				&& ganttChart.getSettings().enableZooming();
+		return super.isEnabled() && (ganttChart != null) && ganttChart.getSettings().enableZooming();
 	}
 
 }

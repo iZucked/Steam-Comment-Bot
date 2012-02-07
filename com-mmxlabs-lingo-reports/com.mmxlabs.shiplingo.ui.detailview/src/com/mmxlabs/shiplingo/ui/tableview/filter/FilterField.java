@@ -40,7 +40,7 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 	private final GridData layoutData;
 
 	private EObjectTableViewer viewer = null;
-	private ContentProposalAdapter adapter;
+	private final ContentProposalAdapter adapter;
 
 	public FilterField(final Composite textContainer) {
 		text = new Text(textContainer, SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
@@ -67,9 +67,9 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 				setChecked(false);
 				setText("Filter table");
 				try {
-				setImageDescriptor(
-						ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.shiplingo.ui.detailview/icons/filter.gif")));
-				} catch (MalformedURLException ex) {}
+					setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.shiplingo.ui.detailview/icons/filter.gif")));
+				} catch (final MalformedURLException ex) {
+				}
 				// setImageDescriptor(LngEditorPlugin.Implementation
 				// .imageDescriptorFromPlugin(LngEditorPlugin.getPlugin()
 				// .getSymbolicName(), "/icons/filter.gif"));
@@ -81,8 +81,9 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 				layoutData.exclude = !layoutData.exclude;
 				text.getParent().layout(true);
 				if (text.isVisible() == false) {
-					if (viewer != null)
+					if (viewer != null) {
 						viewer.setFilterString("");
+					}
 				} else {
 					text.setFocus();
 				}
@@ -98,7 +99,7 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 		return viewer;
 	}
 
-	public void setViewer(EObjectTableViewer viewer) {
+	public void setViewer(final EObjectTableViewer viewer) {
 		this.viewer = viewer;
 		proposals.setViewer(viewer);
 	}
@@ -113,21 +114,24 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 
 	@Override
 	public void modifyText(final ModifyEvent e) {
-		if (e.widget == text)
-			if (viewer != null)
+		if (e.widget == text) {
+			if (viewer != null) {
 				viewer.setFilterString(text.isVisible() ? text.getText() : "");
+			}
+		}
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(final KeyEvent e) {
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
+	public void keyReleased(final KeyEvent e) {
 		if (e.keyCode == SWT.ESC) {
 			// I can see no nice way to handle this case other than using a timer; sorry!
-			if (System.currentTimeMillis() - proposalLastClosed < 200)
+			if ((System.currentTimeMillis() - proposalLastClosed) < 200) {
 				return;
+			}
 			if (text.getText().length() > 0) {
 				text.setText("");
 			} else {
@@ -146,11 +150,11 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 	private long proposalLastClosed;
 
 	@Override
-	public void proposalPopupOpened(ContentProposalAdapter adapter) {
+	public void proposalPopupOpened(final ContentProposalAdapter adapter) {
 	}
 
 	@Override
-	public void proposalPopupClosed(ContentProposalAdapter adapter) {
+	public void proposalPopupClosed(final ContentProposalAdapter adapter) {
 		proposalLastClosed = System.currentTimeMillis();
 	}
 }

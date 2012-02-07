@@ -43,7 +43,7 @@ public class PauseOptimisationHandler extends AbstractOptimisationHandler {
 
 		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 
-		if (selection != null && selection instanceof IStructuredSelection) {
+		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			final Iterator<?> itr = strucSelection.iterator();
@@ -84,7 +84,7 @@ public class PauseOptimisationHandler extends AbstractOptimisationHandler {
 
 		final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-		if (selection != null && selection instanceof IStructuredSelection) {
+		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			final Iterator<?> itr = strucSelection.iterator();

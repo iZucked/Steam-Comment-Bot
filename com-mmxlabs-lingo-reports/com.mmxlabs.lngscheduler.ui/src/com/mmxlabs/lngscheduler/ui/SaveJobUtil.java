@@ -47,7 +47,7 @@ public final class SaveJobUtil {
 	 *            Existing resource to base UI on
 	 * @return New resource {@link IPath}.
 	 */
-	public static IPath saveLNGSchedulerJob(final LNGSchedulerJobDescriptor job, LNGSchedulerJobControl control, final String fileExt, final IResource resource) {
+	public static IPath saveLNGSchedulerJob(final LNGSchedulerJobDescriptor job, final LNGSchedulerJobControl control, final String fileExt, final IResource resource) {
 
 		final IPath newFile = openSaveAsDialog(null, fileExt, resource);
 		if (newFile == null) {

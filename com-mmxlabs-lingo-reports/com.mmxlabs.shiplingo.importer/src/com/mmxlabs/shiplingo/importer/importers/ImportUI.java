@@ -21,8 +21,7 @@ public class ImportUI {
 	private static final Set<Viewer> refresh = new HashSet<Viewer>();
 
 	/**
-	 * If true, an import job is currently running, and you shouldn't do a
-	 * refresh at the moment.
+	 * If true, an import job is currently running, and you shouldn't do a refresh at the moment.
 	 * 
 	 * @return
 	 */
@@ -43,7 +42,7 @@ public class ImportUI {
 	public static synchronized void endImport() {
 		isImporting = false;
 
-		//TODO should we do one runnable which refreshes everything?
+		// TODO should we do one runnable which refreshes everything?
 		for (final Viewer v : refresh) {
 			PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 				@Override
@@ -58,6 +57,7 @@ public class ImportUI {
 
 	/**
 	 * Refresh a viewer next time an import task finishes.
+	 * 
 	 * @param viewer
 	 */
 	public static synchronized void refreshLater(final Viewer viewer) {
@@ -66,6 +66,7 @@ public class ImportUI {
 
 	/**
 	 * Refresh the viewer now, if no import, or later, if importing.
+	 * 
 	 * @param viewer
 	 */
 	public static synchronized void refresh(final Viewer viewer) {

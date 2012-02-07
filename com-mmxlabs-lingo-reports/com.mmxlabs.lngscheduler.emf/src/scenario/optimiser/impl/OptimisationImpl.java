@@ -21,24 +21,21 @@ import scenario.optimiser.OptimisationSettings;
 import scenario.optimiser.OptimiserPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Optimisation</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Optimisation</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.optimiser.impl.OptimisationImpl#getAllSettings <em>All Settings</em>}</li>
- *   <li>{@link scenario.optimiser.impl.OptimisationImpl#getCurrentSettings <em>Current Settings</em>}</li>
+ * <li>{@link scenario.optimiser.impl.OptimisationImpl#getAllSettings <em>All Settings</em>}</li>
+ * <li>{@link scenario.optimiser.impl.OptimisationImpl#getCurrentSettings <em>Current Settings</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	/**
-	 * The cached value of the '{@link #getAllSettings() <em>All Settings</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getAllSettings() <em>All Settings</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getAllSettings()
 	 * @generated
 	 * @ordered
@@ -46,9 +43,8 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	protected EList<OptimisationSettings> allSettings;
 
 	/**
-	 * The cached value of the '{@link #getCurrentSettings() <em>Current Settings</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getCurrentSettings() <em>Current Settings</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getCurrentSettings()
 	 * @generated
 	 * @ordered
@@ -56,8 +52,8 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	protected OptimisationSettings currentSettings;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected OptimisationImpl() {
@@ -65,8 +61,8 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -75,10 +71,11 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<OptimisationSettings> getAllSettings() {
 		if (allSettings == null) {
 			allSettings = new EObjectContainmentEList.Resolving<OptimisationSettings>(OptimisationSettings.class, this, OptimiserPackage.OPTIMISATION__ALL_SETTINGS);
@@ -87,25 +84,27 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public OptimisationSettings getCurrentSettings() {
-		if (currentSettings != null && currentSettings.eIsProxy()) {
-			InternalEObject oldCurrentSettings = (InternalEObject)currentSettings;
-			currentSettings = (OptimisationSettings)eResolveProxy(oldCurrentSettings);
+		if ((currentSettings != null) && currentSettings.eIsProxy()) {
+			final InternalEObject oldCurrentSettings = (InternalEObject) currentSettings;
+			currentSettings = (OptimisationSettings) eResolveProxy(oldCurrentSettings);
 			if (currentSettings != oldCurrentSettings) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS, oldCurrentSettings, currentSettings));
+				}
 			}
 		}
 		return currentSettings;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public OptimisationSettings basicGetCurrentSettings() {
@@ -113,100 +112,104 @@ public class OptimisationImpl extends EObjectImpl implements Optimisation {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCurrentSettings(OptimisationSettings newCurrentSettings) {
-		OptimisationSettings oldCurrentSettings = currentSettings;
-		currentSettings = newCurrentSettings;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS, oldCurrentSettings, currentSettings));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public void setCurrentSettings(final OptimisationSettings newCurrentSettings) {
+		final OptimisationSettings oldCurrentSettings = currentSettings;
+		currentSettings = newCurrentSettings;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS, oldCurrentSettings, currentSettings));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
-				return ((InternalEList<?>)getAllSettings()).basicRemove(otherEnd, msgs);
+		case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
+			return ((InternalEList<?>) getAllSettings()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
-				return getAllSettings();
-			case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
-				if (resolve) return getCurrentSettings();
-				return basicGetCurrentSettings();
+		case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
+			return getAllSettings();
+		case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
+			if (resolve) {
+				return getCurrentSettings();
+			}
+			return basicGetCurrentSettings();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
-				getAllSettings().clear();
-				getAllSettings().addAll((Collection<? extends OptimisationSettings>)newValue);
-				return;
-			case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
-				setCurrentSettings((OptimisationSettings)newValue);
-				return;
+		case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
+			getAllSettings().clear();
+			getAllSettings().addAll((Collection<? extends OptimisationSettings>) newValue);
+			return;
+		case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
+			setCurrentSettings((OptimisationSettings) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
-				getAllSettings().clear();
-				return;
-			case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
-				setCurrentSettings((OptimisationSettings)null);
-				return;
+		case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
+			getAllSettings().clear();
+			return;
+		case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
+			setCurrentSettings((OptimisationSettings) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
-				return allSettings != null && !allSettings.isEmpty();
-			case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
-				return currentSettings != null;
+		case OptimiserPackage.OPTIMISATION__ALL_SETTINGS:
+			return (allSettings != null) && !allSettings.isEmpty();
+		case OptimiserPackage.OPTIMISATION__CURRENT_SETTINGS:
+			return currentSettings != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //OptimisationImpl
+} // OptimisationImpl

@@ -23,7 +23,7 @@ import scenario.schedule.ScheduleFitness;
 public class FitnessContentProvider implements IStructuredContentProvider {
 
 	public static class RowData {
-		public RowData(String scenario, String component, long fitness) {
+		public RowData(final String scenario, final String component, final long fitness) {
 			super();
 			this.scenario = scenario;
 			this.component = component;
@@ -44,22 +44,21 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 	}
 
 	@Override
-	public synchronized void inputChanged(final Viewer viewer,
-			final Object oldInput, final Object newInput) {
+	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		rowData = new RowData[0];
 		if (newInput instanceof Iterable) {
 			final List<RowData> rowDataList = new LinkedList<RowData>();
 			for (final Object o : ((Iterable<?>) newInput)) {
 				if (o instanceof Schedule) {
 					final Schedule schedule = (Schedule) o;
-					Scenario s = (Scenario)schedule.eContainer().eContainer();
-					final String scheduleName = 		s.getName();
+					final Scenario s = (Scenario) schedule.eContainer().eContainer();
+					final String scheduleName = s.getName();
 					long total = 0l;
 					for (final ScheduleFitness f : schedule.getFitness()) {
 						rowDataList.add(new RowData(scheduleName, f.getName(), f.getValue()));
-						if (!(f.getName().equals("iterations") || f.getName()
-								.equals("runtime")))
+						if (!(f.getName().equals("iterations") || f.getName().equals("runtime"))) {
 							total += f.getValue();
+						}
 					}
 					rowDataList.add(new RowData(scheduleName, "Total", total));
 

@@ -9,8 +9,7 @@ import org.eclipse.swt.graphics.Color;
 import com.mmxlabs.scheduleview.views.SchedulerView;
 
 /**
- * Interface defining a colour scheme used to render the {@link SchedulerView}
- * elements.
+ * Interface defining a colour scheme used to render the {@link SchedulerView} elements.
  * 
  * TODO: Add a mechanism to define a key for the colour scheme.
  * 

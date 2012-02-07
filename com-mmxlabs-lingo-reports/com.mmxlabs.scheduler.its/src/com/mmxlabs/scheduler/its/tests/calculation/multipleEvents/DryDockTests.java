@@ -43,7 +43,7 @@ public class DryDockTests {
 	public void threeDryDocksTest() {
 
 		final float dischargePrice = 1f;
-		CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+		final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 		final long legDurationHours = 10;
 
@@ -92,16 +92,17 @@ public class DryDockTests {
 		for (final Sequence seq : result.getSequences()) {
 			for (final ScheduledEvent e : seq.getEvents()) {
 				if (e instanceof Journey) {
-					Journey j = (Journey) e;
+					final Journey j = (Journey) e;
 
 					FuelUsageAssertions.assertLNGNotUsed(j);
 
-					for (FuelQuantity fq : j.getFuelUsage()) {
-						if (fq.getFuelType() == FuelType.BASE_FUEL)
+					for (final FuelQuantity fq : j.getFuelUsage()) {
+						if (fq.getFuelType() == FuelType.BASE_FUEL) {
 							Assert.assertEquals("100MT of basefuel used", 100, fq.getQuantity());
+						}
 					}
 				} else if (e instanceof VesselEventVisit) {
-					VesselEventVisit vev = (VesselEventVisit) e;
+					final VesselEventVisit vev = (VesselEventVisit) e;
 
 					Assert.assertEquals("Duration of dry dock matches expected", TimeUnit.DAYS.toHours(dryDockDurationDays), vev.getEventDuration());
 				}

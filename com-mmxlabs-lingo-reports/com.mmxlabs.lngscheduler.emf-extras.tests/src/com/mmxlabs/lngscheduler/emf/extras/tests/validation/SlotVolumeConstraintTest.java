@@ -4,12 +4,6 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
 import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
@@ -152,10 +146,11 @@ public class SlotVolumeConstraintTest {
 		when(validationContext.getTarget()).thenReturn(slot);
 		when(validationContext.getEventType()).thenReturn(EMFEventType.NULL);
 
-		if (expectSuccess)
+		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(successStatus);
-		else
+		} else {
 			when(validationContext.createFailureStatus()).thenReturn(successStatus);
+		}
 
 		// validate the constraint using the mocked expected values set above
 		constraint.validate(validationContext);

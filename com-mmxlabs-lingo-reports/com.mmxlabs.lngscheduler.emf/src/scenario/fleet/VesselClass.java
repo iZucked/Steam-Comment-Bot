@@ -9,49 +9,45 @@ import org.eclipse.emf.common.util.EList;
 import scenario.AnnotatedObject;
 import scenario.NamedObject;
 import scenario.port.PortSelection;
-import scenario.port.Port;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Vessel Class</b></em>'.
- * <!-- end-user-doc -->
- *
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Vessel Class</b></em>'. <!-- end-user-doc -->
+ * 
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.fleet.VesselClass#getCapacity <em>Capacity</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getDailyCharterInPrice <em>Daily Charter In Price</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getCanalCosts <em>Canal Costs</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getWarmupTime <em>Warmup Time</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getCooldownTime <em>Cooldown Time</em>}</li>
- *   <li>{@link scenario.fleet.VesselClass#getCooldownVolume <em>Cooldown Volume</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getCapacity <em>Capacity</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getDailyCharterInPrice <em>Daily Charter In Price</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getCanalCosts <em>Canal Costs</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getWarmupTime <em>Warmup Time</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getCooldownTime <em>Cooldown Time</em>}</li>
+ * <li>{@link scenario.fleet.VesselClass#getCooldownVolume <em>Cooldown Volume</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @see scenario.fleet.FleetPackage#getVesselClass()
  * @model
  * @generated
  */
 public interface VesselClass extends NamedObject, AnnotatedObject {
 	/**
-	 * Returns the value of the '<em><b>Capacity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Capacity</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Capacity</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Capacity</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Capacity</em>' attribute.
 	 * @see #setCapacity(long)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_Capacity()
@@ -61,23 +57,22 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	long getCapacity();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getCapacity <em>Capacity</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Capacity</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getCapacity <em>Capacity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Capacity</em>' attribute.
 	 * @see #getCapacity()
 	 * @generated
 	 */
 	void setCapacity(long value);
 
 	/**
-	 * Returns the value of the '<em><b>Min Speed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Min Speed</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Min Speed</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Min Speed</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Min Speed</em>' attribute.
 	 * @see #setMinSpeed(float)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_MinSpeed()
@@ -87,23 +82,22 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	float getMinSpeed();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Min Speed</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Min Speed</em>' attribute.
 	 * @see #getMinSpeed()
 	 * @generated
 	 */
 	void setMinSpeed(float value);
 
 	/**
-	 * Returns the value of the '<em><b>Max Speed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Max Speed</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Max Speed</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Max Speed</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Max Speed</em>' attribute.
 	 * @see #setMaxSpeed(float)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_MaxSpeed()
@@ -113,23 +107,22 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	float getMaxSpeed();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Max Speed</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Max Speed</em>' attribute.
 	 * @see #getMaxSpeed()
 	 * @generated
 	 */
 	void setMaxSpeed(float value);
 
 	/**
-	 * Returns the value of the '<em><b>Laden Attributes</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Laden Attributes</b></em>' containment reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Laden Attributes</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Laden Attributes</em>' containment reference isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Laden Attributes</em>' containment reference.
 	 * @see #setLadenAttributes(VesselStateAttributes)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_LadenAttributes()
@@ -139,23 +132,22 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	VesselStateAttributes getLadenAttributes();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Laden Attributes</em>' containment reference.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Laden Attributes</em>' containment reference.
 	 * @see #getLadenAttributes()
 	 * @generated
 	 */
 	void setLadenAttributes(VesselStateAttributes value);
 
 	/**
-	 * Returns the value of the '<em><b>Ballast Attributes</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Ballast Attributes</b></em>' containment reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Ballast Attributes</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Ballast Attributes</em>' containment reference isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Ballast Attributes</em>' containment reference.
 	 * @see #setBallastAttributes(VesselStateAttributes)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_BallastAttributes()
@@ -165,22 +157,19 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	VesselStateAttributes getBallastAttributes();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Ballast Attributes</em>' containment reference.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Ballast Attributes</em>' containment reference.
 	 * @see #getBallastAttributes()
 	 * @generated
 	 */
 	void setBallastAttributes(VesselStateAttributes value);
 
 	/**
-	 * Returns the value of the '<em><b>Min Heel Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The volume of cargo below which boil-off cannot be used for fuel. Some vessels cannot access LNG below a certain level in their tanks for fuel.
-	 * <!-- end-model-doc -->
+	 * Returns the value of the '<em><b>Min Heel Volume</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc --> <!-- begin-model-doc --> The volume of cargo below which boil-off cannot be
+	 * used for fuel. Some vessels cannot access LNG below a certain level in their tanks for fuel. <!-- end-model-doc -->
+	 * 
 	 * @return the value of the '<em>Min Heel Volume</em>' attribute.
 	 * @see #setMinHeelVolume(long)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_MinHeelVolume()
@@ -190,23 +179,19 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	long getMinHeelVolume();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Min Heel Volume</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getMinHeelVolume <em>Min Heel Volume</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Min Heel Volume</em>' attribute.
 	 * @see #getMinHeelVolume()
 	 * @generated
 	 */
 	void setMinHeelVolume(long value);
 
 	/**
-	 * Returns the value of the '<em><b>Fill Capacity</b></em>' attribute.
-	 * The default value is <code>"0.958"</code>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The ship fill capacity, as a proportion (from 0 to 1). Ship fill capacity is the percentage of vessel cargo capacity that can actually be used. Typically this is 98.5%.
-	 * <!-- end-model-doc -->
+	 * Returns the value of the '<em><b>Fill Capacity</b></em>' attribute. The default value is <code>"0.958"</code>. <!-- begin-user-doc --> <!-- end-user-doc --> <!-- begin-model-doc --> The ship
+	 * fill capacity, as a proportion (from 0 to 1). Ship fill capacity is the percentage of vessel cargo capacity that can actually be used. Typically this is 98.5%. <!-- end-model-doc -->
+	 * 
 	 * @return the value of the '<em>Fill Capacity</em>' attribute.
 	 * @see #setFillCapacity(Double)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_FillCapacity()
@@ -216,22 +201,19 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	Double getFillCapacity();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Fill Capacity</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Fill Capacity</em>' attribute.
 	 * @see #getFillCapacity()
 	 * @generated
 	 */
 	void setFillCapacity(Double value);
 
 	/**
-	 * Returns the value of the '<em><b>Daily Charter Out Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The cost per day of spot chartering vessels of this class, expressed in dollars
-	 * <!-- end-model-doc -->
+	 * Returns the value of the '<em><b>Daily Charter Out Price</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc --> <!-- begin-model-doc --> The cost per day of spot chartering vessels
+	 * of this class, expressed in dollars <!-- end-model-doc -->
+	 * 
 	 * @return the value of the '<em>Daily Charter Out Price</em>' attribute.
 	 * @see #isSetDailyCharterOutPrice()
 	 * @see #unsetDailyCharterOutPrice()
@@ -243,10 +225,10 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	int getDailyCharterOutPrice();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Daily Charter Out Price</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Daily Charter Out Price</em>' attribute.
 	 * @see #isSetDailyCharterOutPrice()
 	 * @see #unsetDailyCharterOutPrice()
 	 * @see #getDailyCharterOutPrice()
@@ -255,9 +237,8 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	void setDailyCharterOutPrice(int value);
 
 	/**
-	 * Unsets the value of the '{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Unsets the value of the '{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isSetDailyCharterOutPrice()
 	 * @see #getDailyCharterOutPrice()
 	 * @see #setDailyCharterOutPrice(int)
@@ -266,9 +247,8 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	void unsetDailyCharterOutPrice();
 
 	/**
-	 * Returns whether the value of the '{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns whether the value of the '{@link scenario.fleet.VesselClass#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}' attribute is set. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return whether the value of the '<em>Daily Charter Out Price</em>' attribute is set.
 	 * @see #unsetDailyCharterOutPrice()
 	 * @see #getDailyCharterOutPrice()
@@ -278,13 +258,12 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	boolean isSetDailyCharterOutPrice();
 
 	/**
-	 * Returns the value of the '<em><b>Spot Charter Count</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Spot Charter Count</b></em>' attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Spot Charter Count</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Spot Charter Count</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Spot Charter Count</em>' attribute.
 	 * @see #setSpotCharterCount(int)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_SpotCharterCount()
@@ -294,22 +273,19 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	int getSpotCharterCount();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Spot Charter Count</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Spot Charter Count</em>' attribute.
 	 * @see #getSpotCharterCount()
 	 * @generated
 	 */
 	void setSpotCharterCount(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Daily Charter In Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The cost per day of spot chartering vessels of this class, expressed in dollars
-	 * <!-- end-model-doc -->
+	 * Returns the value of the '<em><b>Daily Charter In Price</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc --> <!-- begin-model-doc --> The cost per day of spot chartering vessels
+	 * of this class, expressed in dollars <!-- end-model-doc -->
+	 * 
 	 * @return the value of the '<em>Daily Charter In Price</em>' attribute.
 	 * @see #setDailyCharterInPrice(int)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_DailyCharterInPrice()
@@ -319,23 +295,19 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	int getDailyCharterInPrice();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getDailyCharterInPrice <em>Daily Charter In Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Daily Charter In Price</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getDailyCharterInPrice <em>Daily Charter In Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Daily Charter In Price</em>' attribute.
 	 * @see #getDailyCharterInPrice()
 	 * @generated
 	 */
 	void setDailyCharterInPrice(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Inaccessible Ports</b></em>' reference list.
-	 * The list contents are of type {@link scenario.port.PortSelection}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * A list of ports where this vessel can't dock because it is too large in some way.
-	 * <!-- end-model-doc -->
+	 * Returns the value of the '<em><b>Inaccessible Ports</b></em>' reference list. The list contents are of type {@link scenario.port.PortSelection}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-model-doc --> A list of ports where this vessel can't dock because it is too large in some way. <!-- end-model-doc -->
+	 * 
 	 * @return the value of the '<em>Inaccessible Ports</em>' reference list.
 	 * @see scenario.fleet.FleetPackage#getVesselClass_InaccessiblePorts()
 	 * @model
@@ -344,14 +316,12 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	EList<PortSelection> getInaccessiblePorts();
 
 	/**
-	 * Returns the value of the '<em><b>Canal Costs</b></em>' containment reference list.
-	 * The list contents are of type {@link scenario.fleet.VesselClassCost}.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Canal Costs</b></em>' containment reference list. The list contents are of type {@link scenario.fleet.VesselClassCost}. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Canal Costs</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Canal Costs</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Canal Costs</em>' containment reference list.
 	 * @see scenario.fleet.FleetPackage#getVesselClass_CanalCosts()
 	 * @model containment="true" resolveProxies="true"
@@ -360,14 +330,12 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	EList<VesselClassCost> getCanalCosts();
 
 	/**
-	 * Returns the value of the '<em><b>Warmup Time</b></em>' attribute.
-	 * The default value is <code>"24"</code>.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Warmup Time</b></em>' attribute. The default value is <code>"24"</code>. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Warmup Time</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Warmup Time</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Warmup Time</em>' attribute.
 	 * @see #setWarmupTime(int)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_WarmupTime()
@@ -377,24 +345,22 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	int getWarmupTime();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getWarmupTime <em>Warmup Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Warmup Time</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getWarmupTime <em>Warmup Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Warmup Time</em>' attribute.
 	 * @see #getWarmupTime()
 	 * @generated
 	 */
 	void setWarmupTime(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Cooldown Time</b></em>' attribute.
-	 * The default value is <code>"12"</code>.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Cooldown Time</b></em>' attribute. The default value is <code>"12"</code>. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Cooldown Time</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Cooldown Time</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Cooldown Time</em>' attribute.
 	 * @see #setCooldownTime(int)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_CooldownTime()
@@ -404,24 +370,22 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	int getCooldownTime();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getCooldownTime <em>Cooldown Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cooldown Time</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getCooldownTime <em>Cooldown Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Cooldown Time</em>' attribute.
 	 * @see #getCooldownTime()
 	 * @generated
 	 */
 	void setCooldownTime(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Cooldown Volume</b></em>' attribute.
-	 * The default value is <code>"500"</code>.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Cooldown Volume</b></em>' attribute. The default value is <code>"500"</code>. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Cooldown Volume</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Cooldown Volume</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Cooldown Volume</em>' attribute.
 	 * @see #setCooldownVolume(int)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_CooldownVolume()
@@ -431,23 +395,22 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	int getCooldownVolume();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getCooldownVolume <em>Cooldown Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cooldown Volume</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getCooldownVolume <em>Cooldown Volume</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Cooldown Volume</em>' attribute.
 	 * @see #getCooldownVolume()
 	 * @generated
 	 */
 	void setCooldownVolume(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Base Fuel</b></em>' reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Base Fuel</b></em>' reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Base Fuel</em>' reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Base Fuel</em>' reference isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Base Fuel</em>' reference.
 	 * @see #setBaseFuel(VesselFuel)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_BaseFuel()
@@ -457,24 +420,22 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	VesselFuel getBaseFuel();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Fuel</em>' reference.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Base Fuel</em>' reference.
 	 * @see #getBaseFuel()
 	 * @generated
 	 */
 	void setBaseFuel(VesselFuel value);
 
 	/**
-	 * Returns the value of the '<em><b>Pilot Light Rate</b></em>' attribute.
-	 * The default value is <code>"0"</code>.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Pilot Light Rate</b></em>' attribute. The default value is <code>"0"</code>. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Pilot Light Rate</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Pilot Light Rate</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Pilot Light Rate</em>' attribute.
 	 * @see #setPilotLightRate(int)
 	 * @see scenario.fleet.FleetPackage#getVesselClass_PilotLightRate()
@@ -484,10 +445,10 @@ public interface VesselClass extends NamedObject, AnnotatedObject {
 	int getPilotLightRate();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Pilot Light Rate</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Pilot Light Rate</em>' attribute.
 	 * @see #getPilotLightRate()
 	 * @generated
 	 */

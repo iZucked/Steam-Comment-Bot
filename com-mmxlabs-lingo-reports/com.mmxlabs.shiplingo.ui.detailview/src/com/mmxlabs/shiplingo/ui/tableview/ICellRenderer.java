@@ -11,9 +11,8 @@ import org.eclipse.emf.common.notify.Notifier;
 import com.mmxlabs.common.Pair;
 
 /**
- * Implementors are used by {@link EObjectEditorViewerPane} to render (as text)
- * and sort columns. Rendering and sorting are together because they are
- * typically operations decided by the type of the thing being rendered.
+ * Implementors are used by {@link EObjectEditorViewerPane} to render (as text) and sort columns. Rendering and sorting are together because they are typically operations decided by the type of the
+ * thing being rendered.
  * 
  * @author hinton
  * 
@@ -34,7 +33,7 @@ public interface ICellRenderer {
 	 * @return comparable for sorting object by this cell.
 	 */
 	Comparable getComparable(Object object);
-	
+
 	/**
 	 * Get a representation useful for filtering.
 	 * 
@@ -44,10 +43,8 @@ public interface ICellRenderer {
 	Object getFilterValue(Object object);
 
 	/**
-	 * Get any non-contained notifiers which should be listened to for
-	 * triggering a refresh on the given object. We could use a modified
-	 * EContentAdapter to track non-containment references, but that leads to
-	 * refreshing every table whenever anything is changed.
+	 * Get any non-contained notifiers which should be listened to for triggering a refresh on the given object. We could use a modified EContentAdapter to track non-containment references, but that
+	 * leads to refreshing every table whenever anything is changed.
 	 * 
 	 * @return
 	 */

@@ -4,12 +4,6 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
 import java.util.Date;
 
 import org.eclipse.emf.validation.IValidationContext;
@@ -104,9 +98,9 @@ public class VesselEventDateConstraintTest {
 		// Set the start and end dates as given in the arguments.
 		when(vesselEvent.getStartDate()).thenReturn(start);
 		when(vesselEvent.getEndDate()).thenReturn(end);
-		if (expectSuccess)
+		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
-		else {
+		} else {
 			when(vesselEvent.getId()).thenReturn(vesselEventID);
 			when(validationContext.createFailureStatus(vesselEventID)).thenReturn(resultStatus);
 		}
@@ -116,9 +110,9 @@ public class VesselEventDateConstraintTest {
 		verify(validationContext).getTarget();
 		verify(vesselEvent).getStartDate();
 		verify(vesselEvent).getEndDate();
-		if (expectSuccess)
+		if (expectSuccess) {
 			verify(validationContext).createSuccessStatus();
-		else {
+		} else {
 			verify(vesselEvent).getId();
 			verify(validationContext).createFailureStatus(anyString());
 		}

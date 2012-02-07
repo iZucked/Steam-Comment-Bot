@@ -17,25 +17,22 @@ import scenario.impl.ScenarioObjectImpl;
 import scenario.port.Port;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Port Exclusion</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Port Exclusion</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.fleet.impl.PortExclusionImpl#getStartDate <em>Start Date</em>}</li>
- *   <li>{@link scenario.fleet.impl.PortExclusionImpl#getEndDate <em>End Date</em>}</li>
- *   <li>{@link scenario.fleet.impl.PortExclusionImpl#getPort <em>Port</em>}</li>
+ * <li>{@link scenario.fleet.impl.PortExclusionImpl#getStartDate <em>Start Date</em>}</li>
+ * <li>{@link scenario.fleet.impl.PortExclusionImpl#getEndDate <em>End Date</em>}</li>
+ * <li>{@link scenario.fleet.impl.PortExclusionImpl#getPort <em>Port</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusion {
 	/**
-	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getStartDate()
 	 * @generated
 	 * @ordered
@@ -43,9 +40,8 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	protected static final Date START_DATE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getStartDate() <em>Start Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getStartDate()
 	 * @generated
 	 * @ordered
@@ -53,18 +49,16 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	protected Date startDate = START_DATE_EDEFAULT;
 
 	/**
-	 * This is true if the Start Date attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is true if the Start Date attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean startDateESet;
 
 	/**
-	 * The default value of the '{@link #getEndDate() <em>End Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getEndDate() <em>End Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getEndDate()
 	 * @generated
 	 * @ordered
@@ -72,9 +66,8 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	protected static final Date END_DATE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getEndDate() <em>End Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getEndDate() <em>End Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getEndDate()
 	 * @generated
 	 * @ordered
@@ -82,18 +75,16 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	protected Date endDate = END_DATE_EDEFAULT;
 
 	/**
-	 * This is true if the End Date attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is true if the End Date attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean endDateESet;
 
 	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getPort()
 	 * @generated
 	 * @ordered
@@ -101,8 +92,8 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	protected Port port;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected PortExclusionImpl() {
@@ -110,8 +101,8 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -120,25 +111,27 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public Port getPort() {
-		if (port != null && port.eIsProxy()) {
-			InternalEObject oldPort = (InternalEObject)port;
-			port = (Port)eResolveProxy(oldPort);
+		if ((port != null) && port.eIsProxy()) {
+			final InternalEObject oldPort = (InternalEObject) port;
+			port = (Port) eResolveProxy(oldPort);
 			if (port != oldPort) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.PORT_EXCLUSION__PORT, oldPort, port));
+				}
 			}
 		}
 		return port;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Port basicGetPort() {
@@ -146,204 +139,230 @@ public class PortExclusionImpl extends ScenarioObjectImpl implements PortExclusi
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setPort(Port newPort) {
-		Port oldPort = port;
+	@Override
+	public void setPort(final Port newPort) {
+		final Port oldPort = port;
 		port = newPort;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.PORT_EXCLUSION__PORT, oldPort, port));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public Date getStartDate() {
 		return startDate;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setStartDate(Date newStartDate) {
-		Date oldStartDate = startDate;
+	@Override
+	public void setStartDate(final Date newStartDate) {
+		final Date oldStartDate = startDate;
 		startDate = newStartDate;
-		boolean oldStartDateESet = startDateESet;
+		final boolean oldStartDateESet = startDateESet;
 		startDateESet = true;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.PORT_EXCLUSION__START_DATE, oldStartDate, startDate, !oldStartDateESet));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public void unsetStartDate() {
-		Date oldStartDate = startDate;
-		boolean oldStartDateESet = startDateESet;
+		final Date oldStartDate = startDate;
+		final boolean oldStartDateESet = startDateESet;
 		startDate = START_DATE_EDEFAULT;
 		startDateESet = false;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.PORT_EXCLUSION__START_DATE, oldStartDate, START_DATE_EDEFAULT, oldStartDateESet));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public boolean isSetStartDate() {
 		return startDateESet;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public Date getEndDate() {
 		return endDate;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setEndDate(Date newEndDate) {
-		Date oldEndDate = endDate;
+	@Override
+	public void setEndDate(final Date newEndDate) {
+		final Date oldEndDate = endDate;
 		endDate = newEndDate;
-		boolean oldEndDateESet = endDateESet;
+		final boolean oldEndDateESet = endDateESet;
 		endDateESet = true;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.PORT_EXCLUSION__END_DATE, oldEndDate, endDate, !oldEndDateESet));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public void unsetEndDate() {
-		Date oldEndDate = endDate;
-		boolean oldEndDateESet = endDateESet;
+		final Date oldEndDate = endDate;
+		final boolean oldEndDateESet = endDateESet;
 		endDate = END_DATE_EDEFAULT;
 		endDateESet = false;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.PORT_EXCLUSION__END_DATE, oldEndDate, END_DATE_EDEFAULT, oldEndDateESet));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public boolean isSetEndDate() {
 		return endDateESet;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.PORT_EXCLUSION__START_DATE:
-				return getStartDate();
-			case FleetPackage.PORT_EXCLUSION__END_DATE:
-				return getEndDate();
-			case FleetPackage.PORT_EXCLUSION__PORT:
-				if (resolve) return getPort();
-				return basicGetPort();
+		case FleetPackage.PORT_EXCLUSION__START_DATE:
+			return getStartDate();
+		case FleetPackage.PORT_EXCLUSION__END_DATE:
+			return getEndDate();
+		case FleetPackage.PORT_EXCLUSION__PORT:
+			if (resolve) {
+				return getPort();
+			}
+			return basicGetPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case FleetPackage.PORT_EXCLUSION__START_DATE:
-				setStartDate((Date)newValue);
-				return;
-			case FleetPackage.PORT_EXCLUSION__END_DATE:
-				setEndDate((Date)newValue);
-				return;
-			case FleetPackage.PORT_EXCLUSION__PORT:
-				setPort((Port)newValue);
-				return;
+		case FleetPackage.PORT_EXCLUSION__START_DATE:
+			setStartDate((Date) newValue);
+			return;
+		case FleetPackage.PORT_EXCLUSION__END_DATE:
+			setEndDate((Date) newValue);
+			return;
+		case FleetPackage.PORT_EXCLUSION__PORT:
+			setPort((Port) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case FleetPackage.PORT_EXCLUSION__START_DATE:
-				unsetStartDate();
-				return;
-			case FleetPackage.PORT_EXCLUSION__END_DATE:
-				unsetEndDate();
-				return;
-			case FleetPackage.PORT_EXCLUSION__PORT:
-				setPort((Port)null);
-				return;
+		case FleetPackage.PORT_EXCLUSION__START_DATE:
+			unsetStartDate();
+			return;
+		case FleetPackage.PORT_EXCLUSION__END_DATE:
+			unsetEndDate();
+			return;
+		case FleetPackage.PORT_EXCLUSION__PORT:
+			setPort((Port) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case FleetPackage.PORT_EXCLUSION__START_DATE:
-				return isSetStartDate();
-			case FleetPackage.PORT_EXCLUSION__END_DATE:
-				return isSetEndDate();
-			case FleetPackage.PORT_EXCLUSION__PORT:
-				return port != null;
+		case FleetPackage.PORT_EXCLUSION__START_DATE:
+			return isSetStartDate();
+		case FleetPackage.PORT_EXCLUSION__END_DATE:
+			return isSetEndDate();
+		case FleetPackage.PORT_EXCLUSION__PORT:
+			return port != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (startDate: ");
-		if (startDateESet) result.append(startDate); else result.append("<unset>");
+		if (startDateESet) {
+			result.append(startDate);
+		} else {
+			result.append("<unset>");
+		}
 		result.append(", endDate: ");
-		if (endDateESet) result.append(endDate); else result.append("<unset>");
+		if (endDateESet) {
+			result.append(endDate);
+		} else {
+			result.append("<unset>");
+		}
 		result.append(')');
 		return result.toString();
 	}
 
-} //PortExclusionImpl
+} // PortExclusionImpl

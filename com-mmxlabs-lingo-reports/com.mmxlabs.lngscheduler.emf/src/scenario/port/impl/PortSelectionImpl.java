@@ -9,42 +9,34 @@ package scenario.port.impl;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import scenario.NamedObject;
 import scenario.ScenarioObject;
 import scenario.ScenarioPackage;
-
 import scenario.impl.UUIDObjectImpl;
-
 import scenario.port.Port;
 import scenario.port.PortPackage;
 import scenario.port.PortSelection;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Selection</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Selection</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.port.impl.PortSelectionImpl#getName <em>Name</em>}</li>
+ * <li>{@link scenario.port.impl.PortSelectionImpl#getName <em>Name</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public abstract class PortSelectionImpl extends UUIDObjectImpl implements PortSelection {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -52,9 +44,8 @@ public abstract class PortSelectionImpl extends UUIDObjectImpl implements PortSe
 	protected static final String NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -62,8 +53,8 @@ public abstract class PortSelectionImpl extends UUIDObjectImpl implements PortSe
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected PortSelectionImpl() {
@@ -71,8 +62,8 @@ public abstract class PortSelectionImpl extends UUIDObjectImpl implements PortSe
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -81,198 +72,214 @@ public abstract class PortSelectionImpl extends UUIDObjectImpl implements PortSe
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setName(String newName) {
-		String oldName = name;
+	@Override
+	public void setName(final String newName) {
+		final String oldName = name;
 		name = newName;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT_SELECTION__NAME, oldName, name));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public EList<Port> getClosure(EList<PortSelection> ignoreSelections) {
+	@Override
+	public EList<Port> getClosure(final EList<PortSelection> ignoreSelections) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public EObject getContainer() {
 		return eContainer();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case PortPackage.PORT_SELECTION__NAME:
-				return getName();
+		case PortPackage.PORT_SELECTION__NAME:
+			return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case PortPackage.PORT_SELECTION__NAME:
-				setName((String)newValue);
-				return;
+		case PortPackage.PORT_SELECTION__NAME:
+			setName((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case PortPackage.PORT_SELECTION__NAME:
-				setName(NAME_EDEFAULT);
-				return;
+		case PortPackage.PORT_SELECTION__NAME:
+			setName(NAME_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case PortPackage.PORT_SELECTION__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case PortPackage.PORT_SELECTION__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+	public int eBaseStructuralFeatureID(final int derivedFeatureID, final Class<?> baseClass) {
 		if (baseClass == ScenarioObject.class) {
 			switch (derivedFeatureID) {
-				default: return -1;
+			default:
+				return -1;
 			}
 		}
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
-				case PortPackage.PORT_SELECTION__NAME: return ScenarioPackage.NAMED_OBJECT__NAME;
-				default: return -1;
+			case PortPackage.PORT_SELECTION__NAME:
+				return ScenarioPackage.NAMED_OBJECT__NAME;
+			default:
+				return -1;
 			}
 		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+	public int eDerivedStructuralFeatureID(final int baseFeatureID, final Class<?> baseClass) {
 		if (baseClass == ScenarioObject.class) {
 			switch (baseFeatureID) {
-				default: return -1;
+			default:
+				return -1;
 			}
 		}
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
-				case ScenarioPackage.NAMED_OBJECT__NAME: return PortPackage.PORT_SELECTION__NAME;
-				default: return -1;
+			case ScenarioPackage.NAMED_OBJECT__NAME:
+				return PortPackage.PORT_SELECTION__NAME;
+			default:
+				return -1;
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+	public int eDerivedOperationID(final int baseOperationID, final Class<?> baseClass) {
 		if (baseClass == ScenarioObject.class) {
 			switch (baseOperationID) {
-				case ScenarioPackage.SCENARIO_OBJECT___GET_CONTAINER: return PortPackage.PORT_SELECTION___GET_CONTAINER;
-				default: return -1;
+			case ScenarioPackage.SCENARIO_OBJECT___GET_CONTAINER:
+				return PortPackage.PORT_SELECTION___GET_CONTAINER;
+			default:
+				return -1;
 			}
 		}
 		if (baseClass == NamedObject.class) {
 			switch (baseOperationID) {
-				default: return -1;
+			default:
+				return -1;
 			}
 		}
 		return super.eDerivedOperationID(baseOperationID, baseClass);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case PortPackage.PORT_SELECTION___GET_CLOSURE__ELIST:
-				return getClosure((EList<PortSelection>)arguments.get(0));
-			case PortPackage.PORT_SELECTION___GET_CONTAINER:
-				return getContainer();
+		case PortPackage.PORT_SELECTION___GET_CLOSURE__ELIST:
+			return getClosure((EList<PortSelection>) arguments.get(0));
+		case PortPackage.PORT_SELECTION___GET_CONTAINER:
+			return getContainer();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(')');
 		return result.toString();
 	}
 
-} //PortSelectionImpl
+} // PortSelectionImpl

@@ -15,15 +15,14 @@ import com.mmxlabs.shiplingo.ui.detailview.editors.dialogs.VesselStateAttributes
 
 public class FuelCurveEditor extends DialogInlineEditor {
 
-	public FuelCurveEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain,final ICommandProcessor processor) {
+	public FuelCurveEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor processor) {
 		super(path, feature, editingDomain, processor);
 	}
 
 	@Override
 	protected Object displayDialog(final Object currentValue) {
 		final VesselStateAttributesDialog2 dialog = new VesselStateAttributesDialog2(getShell());
-		
+
 		if (dialog.open((VesselStateAttributes) input, true) == Window.OK) {
 			return dialog.getResult().getFuelConsumptionCurve();
 		} else {
@@ -32,7 +31,7 @@ public class FuelCurveEditor extends DialogInlineEditor {
 	}
 
 	@Override
-	protected String render(Object value) {
+	protected String render(final Object value) {
 		return "";
 	}
 }

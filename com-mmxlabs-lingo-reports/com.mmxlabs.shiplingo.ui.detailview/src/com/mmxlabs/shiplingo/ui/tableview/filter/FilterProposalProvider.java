@@ -20,42 +20,46 @@ import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
  * Provide a bunch of filter suggestions
  * 
  * @author hinton
- *
+ * 
  */
 public class FilterProposalProvider implements IContentProposalProvider {
-	private List<Pair<String, String>> proposals = new ArrayList<Pair<String, String>>();
+	private final List<Pair<String, String>> proposals = new ArrayList<Pair<String, String>>();
 	private EObjectTableViewer viewer = null;
-	
+
 	public EObjectTableViewer getViewer() {
 		return viewer;
 	}
 
 	/**
-	 * @param viewer the viewer to set
+	 * @param viewer
+	 *            the viewer to set
 	 */
-	public void setViewer(EObjectTableViewer viewer) {
+	public void setViewer(final EObjectTableViewer viewer) {
 		this.viewer = viewer;
 	}
 
 	public void setProposals(final Map<String, List<String>> map) {
 		proposals.clear();
 		for (final Map.Entry<String, List<String>> entry : map.entrySet()) {
-			for (final String value : entry.getValue())
+			for (final String value : entry.getValue()) {
 				proposals.add(new Pair<String, String>(value + ":", entry.getKey()));
+			}
 		}
 	}
-	
+
 	@Override
-	public IContentProposal[] getProposals(String contents, int position) {
+	public IContentProposal[] getProposals(final String contents, final int position) {
 		setProposals(viewer.getColumnMnemonics());
 		final List<ContentProposal> out = new ArrayList<ContentProposal>();
-		
+
 		int spaceBefore = contents.substring(0, position).lastIndexOf(' ');
 
-		
-		if (spaceBefore == -1) spaceBefore = 0;
-		else spaceBefore++;
-		final String prefix=contents.substring(spaceBefore, position);
+		if (spaceBefore == -1) {
+			spaceBefore = 0;
+		} else {
+			spaceBefore++;
+		}
+		final String prefix = contents.substring(spaceBefore, position);
 
 		for (final Pair<String, String> proposal : proposals) {
 			if (proposal.getFirst().equals(prefix)) {
@@ -63,23 +67,20 @@ public class FilterProposalProvider implements IContentProposalProvider {
 				return getValues(proposal.getSecond());
 			}
 			if (proposal.getFirst().startsWith(prefix)) {
-				out.add(new ContentProposal(
-						proposal.getFirst().substring(prefix.length())
-						, proposal.getFirst() + " ("+proposal.getSecond()+")", "Match column " + proposal.getSecond()));
+				out.add(new ContentProposal(proposal.getFirst().substring(prefix.length()), proposal.getFirst() + " (" + proposal.getSecond() + ")", "Match column " + proposal.getSecond()));
 			}
 		}
-		
+
 		return out.toArray(new IContentProposal[out.size()]);
 	}
 
-	
 	private IContentProposal[] getValues(final String columnName) {
 		if (viewer == null) {
 			return new IContentProposal[0];
 		}
-		
+
 		final Set<String> values = viewer.getDistinctValues(columnName);
-		
+
 		final IContentProposal[] result = new IContentProposal[values.size()];
 		int index = 0;
 		for (final String s : values) {
@@ -89,16 +90,22 @@ public class FilterProposalProvider implements IContentProposalProvider {
 				result[index++] = new ContentProposal(s + " ", s, "Match " + columnName + " to " + s);
 			}
 		}
-		
+
 		return result;
 	}
 
-	private boolean needsEscaping(String s) {
-		for (int i = 0; i<s.length();i++) {
-			char c = s.charAt(i);
-			if (Character.isWhitespace(c))return true;
-			if (c==':' || c=='<' || c=='>' || c=='~' || c=='=') return true;
-			if (c=='\'' || c=='"' || c==',') return true;
+	private boolean needsEscaping(final String s) {
+		for (int i = 0; i < s.length(); i++) {
+			final char c = s.charAt(i);
+			if (Character.isWhitespace(c)) {
+				return true;
+			}
+			if ((c == ':') || (c == '<') || (c == '>') || (c == '~') || (c == '=')) {
+				return true;
+			}
+			if ((c == '\'') || (c == '"') || (c == ',')) {
+				return true;
+			}
 		}
 		return false;
 	}

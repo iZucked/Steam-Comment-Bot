@@ -28,10 +28,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
-import scenario.port.Port;
-import scenario.port.PortCapability;
-import scenario.port.PortPackage;
-
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
@@ -45,7 +41,7 @@ import com.mmxlabs.shiplingo.ui.detailview.utils.CommandUtil;
  * 
  */
 public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
-	private IReferenceValueProvider valueProvider;
+	private final IReferenceValueProvider valueProvider;
 	private Label theLabel;
 
 	/**
@@ -54,10 +50,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	 * @param editingDomain
 	 * @param commandProcessor
 	 */
-	public MultiReferenceInlineEditor(final EMFPath path,
-			final EStructuralFeature feature,
-			final EditingDomain editingDomain,
-			final ICommandProcessor commandProcessor,
+	public MultiReferenceInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor commandProcessor,
 			final IReferenceValueProvider valueProvider) {
 		super(path, feature, editingDomain, commandProcessor);
 		this.valueProvider = valueProvider;
@@ -78,7 +71,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				final List<EObject> o = openDialogBox(parent);
 				if (o != null) {
 					doSetValue(o);
@@ -93,42 +86,39 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	protected Command createSetCommand(Object value) {
-		final CompoundCommand setter = CommandUtil
-				.createMultipleAttributeSetter(editingDomain, input, feature,
-						(Collection) value);
+	protected Command createSetCommand(final Object value) {
+		final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(editingDomain, input, feature, (Collection) value);
 		return setter;
 	}
 
 	@Override
-	protected void updateDisplay(Object value) {
-		List<? extends EObject> selectedValues = (List<? extends EObject>) value;
+	protected void updateDisplay(final Object value) {
+		final List<? extends EObject> selectedValues = (List<? extends EObject>) value;
 		final StringBuilder sb = new StringBuilder();
 		for (final EObject obj : selectedValues) {
-			if (sb.length() > 0)
+			if (sb.length() > 0) {
 				sb.append(", ");
+			}
 			sb.append(valueProvider.getName(input, (EReference) feature, obj));
 		}
 		theLabel.setText(sb.toString());
 	}
 
 	@SuppressWarnings("unchecked")
-	protected List<EObject> openDialogBox(Control cellEditorWindow) {
-		List<Pair<String, EObject>> options = valueProvider.getAllowedValues(
-				input, feature);
+	protected List<EObject> openDialogBox(final Control cellEditorWindow) {
+		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, feature);
 
-		if (options.size() > 0 && options.get(0).getSecond() == null)
+		if ((options.size() > 0) && (options.get(0).getSecond() == null)) {
 			options.remove(0);
+		}
 
-		ListSelectionDialog dlg = new ListSelectionDialog(
-				cellEditorWindow.getShell(), options.toArray(),
-				new ArrayContentProvider(), new LabelProvider() {
+		final ListSelectionDialog dlg = new ListSelectionDialog(cellEditorWindow.getShell(), options.toArray(), new ArrayContentProvider(), new LabelProvider() {
 
-					@Override
-					public String getText(Object element) {
-						return ((Pair<String, ?>) element).getFirst();
-					}
-				});
+			@Override
+			public String getText(final Object element) {
+				return ((Pair<String, ?>) element).getFirst();
+			}
+		});
 		dlg.setTitle("Value Selection");
 
 		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
@@ -142,34 +132,34 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		dlg.setInitialSelections(selectedOptions.toArray());
 		dlg.addColumn("Name", new ColumnLabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				return ((Pair<String, ?>) element).getFirst();
 			}
 		});
-		
-//		if (((EReference)feature).getEReferenceType().isSuperTypeOf(PortPackage.eINSTANCE.getPort())) {
-//			for (final PortCapability pc : PortCapability.values()) {
-//				dlg.addColumn(pc.getName(), new ColumnLabelProvider(){
-//					@Override
-//					public String getText(Object element) {
-//						final Pair<?, EObject> p = (Pair<?, EObject>)element;
-//						if (p.getSecond() instanceof Port) {
-//							return ((Port)p.getSecond()).getCapabilities().contains(pc) ? "Yes" : "No";
-//						} else {
-//							return "";
-//						}
-//					}
-//				});
-//			}
-//		}
-		
-		dlg.groupBy(new ColumnLabelProvider(){
+
+		// if (((EReference)feature).getEReferenceType().isSuperTypeOf(PortPackage.eINSTANCE.getPort())) {
+		// for (final PortCapability pc : PortCapability.values()) {
+		// dlg.addColumn(pc.getName(), new ColumnLabelProvider(){
+		// @Override
+		// public String getText(Object element) {
+		// final Pair<?, EObject> p = (Pair<?, EObject>)element;
+		// if (p.getSecond() instanceof Port) {
+		// return ((Port)p.getSecond()).getCapabilities().contains(pc) ? "Yes" : "No";
+		// } else {
+		// return "";
+		// }
+		// }
+		// });
+		// }
+		// }
+
+		dlg.groupBy(new ColumnLabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				return ((Pair<?, EObject>) element).getSecond().eClass().getName();
 			}
 		});
-		
+
 		if (dlg.open() == Window.OK) {
 			final Object[] result = dlg.getResult();
 
@@ -179,7 +169,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 			}
 			return resultList;
 		}
-		
+
 		return null;
 	}
 }

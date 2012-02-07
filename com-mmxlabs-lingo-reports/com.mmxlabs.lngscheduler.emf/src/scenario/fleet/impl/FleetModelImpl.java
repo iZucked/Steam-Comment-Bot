@@ -22,26 +22,23 @@ import scenario.fleet.VesselEvent;
 import scenario.fleet.VesselFuel;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Model</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Model</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.fleet.impl.FleetModelImpl#getFleet <em>Fleet</em>}</li>
- *   <li>{@link scenario.fleet.impl.FleetModelImpl#getVesselClasses <em>Vessel Classes</em>}</li>
- *   <li>{@link scenario.fleet.impl.FleetModelImpl#getVesselEvents <em>Vessel Events</em>}</li>
- *   <li>{@link scenario.fleet.impl.FleetModelImpl#getFuels <em>Fuels</em>}</li>
+ * <li>{@link scenario.fleet.impl.FleetModelImpl#getFleet <em>Fleet</em>}</li>
+ * <li>{@link scenario.fleet.impl.FleetModelImpl#getVesselClasses <em>Vessel Classes</em>}</li>
+ * <li>{@link scenario.fleet.impl.FleetModelImpl#getVesselEvents <em>Vessel Events</em>}</li>
+ * <li>{@link scenario.fleet.impl.FleetModelImpl#getFuels <em>Fuels</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	/**
-	 * The cached value of the '{@link #getFleet() <em>Fleet</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getFleet() <em>Fleet</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getFleet()
 	 * @generated
 	 * @ordered
@@ -49,9 +46,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	protected EList<Vessel> fleet;
 
 	/**
-	 * The cached value of the '{@link #getVesselClasses() <em>Vessel Classes</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getVesselClasses() <em>Vessel Classes</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getVesselClasses()
 	 * @generated
 	 * @ordered
@@ -59,9 +55,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	protected EList<VesselClass> vesselClasses;
 
 	/**
-	 * The cached value of the '{@link #getVesselEvents() <em>Vessel Events</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getVesselEvents() <em>Vessel Events</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getVesselEvents()
 	 * @generated
 	 * @ordered
@@ -69,9 +64,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	protected EList<VesselEvent> vesselEvents;
 
 	/**
-	 * The cached value of the '{@link #getFuels() <em>Fuels</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getFuels() <em>Fuels</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getFuels()
 	 * @generated
 	 * @ordered
@@ -79,8 +73,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	protected EList<VesselFuel> fuels;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected FleetModelImpl() {
@@ -88,8 +82,8 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -98,10 +92,11 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<Vessel> getFleet() {
 		if (fleet == null) {
 			fleet = new EObjectContainmentEList.Resolving<Vessel>(Vessel.class, this, FleetPackage.FLEET_MODEL__FLEET);
@@ -110,10 +105,11 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<VesselClass> getVesselClasses() {
 		if (vesselClasses == null) {
 			vesselClasses = new EObjectContainmentEList.Resolving<VesselClass>(VesselClass.class, this, FleetPackage.FLEET_MODEL__VESSEL_CLASSES);
@@ -122,10 +118,11 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<VesselEvent> getVesselEvents() {
 		if (vesselEvents == null) {
 			vesselEvents = new EObjectContainmentEList.Resolving<VesselEvent>(VesselEvent.class, this, FleetPackage.FLEET_MODEL__VESSEL_EVENTS);
@@ -134,10 +131,11 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<VesselFuel> getFuels() {
 		if (fuels == null) {
 			fuels = new EObjectContainmentEList.Resolving<VesselFuel>(VesselFuel.class, this, FleetPackage.FLEET_MODEL__FUELS);
@@ -146,116 +144,116 @@ public class FleetModelImpl extends EObjectImpl implements FleetModel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case FleetPackage.FLEET_MODEL__FLEET:
-				return ((InternalEList<?>)getFleet()).basicRemove(otherEnd, msgs);
-			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
-				return ((InternalEList<?>)getVesselClasses()).basicRemove(otherEnd, msgs);
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
-				return ((InternalEList<?>)getVesselEvents()).basicRemove(otherEnd, msgs);
-			case FleetPackage.FLEET_MODEL__FUELS:
-				return ((InternalEList<?>)getFuels()).basicRemove(otherEnd, msgs);
+		case FleetPackage.FLEET_MODEL__FLEET:
+			return ((InternalEList<?>) getFleet()).basicRemove(otherEnd, msgs);
+		case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
+			return ((InternalEList<?>) getVesselClasses()).basicRemove(otherEnd, msgs);
+		case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
+			return ((InternalEList<?>) getVesselEvents()).basicRemove(otherEnd, msgs);
+		case FleetPackage.FLEET_MODEL__FUELS:
+			return ((InternalEList<?>) getFuels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.FLEET_MODEL__FLEET:
-				return getFleet();
-			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
-				return getVesselClasses();
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
-				return getVesselEvents();
-			case FleetPackage.FLEET_MODEL__FUELS:
-				return getFuels();
+		case FleetPackage.FLEET_MODEL__FLEET:
+			return getFleet();
+		case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
+			return getVesselClasses();
+		case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
+			return getVesselEvents();
+		case FleetPackage.FLEET_MODEL__FUELS:
+			return getFuels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case FleetPackage.FLEET_MODEL__FLEET:
-				getFleet().clear();
-				getFleet().addAll((Collection<? extends Vessel>)newValue);
-				return;
-			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
-				getVesselClasses().clear();
-				getVesselClasses().addAll((Collection<? extends VesselClass>)newValue);
-				return;
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
-				getVesselEvents().clear();
-				getVesselEvents().addAll((Collection<? extends VesselEvent>)newValue);
-				return;
-			case FleetPackage.FLEET_MODEL__FUELS:
-				getFuels().clear();
-				getFuels().addAll((Collection<? extends VesselFuel>)newValue);
-				return;
+		case FleetPackage.FLEET_MODEL__FLEET:
+			getFleet().clear();
+			getFleet().addAll((Collection<? extends Vessel>) newValue);
+			return;
+		case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
+			getVesselClasses().clear();
+			getVesselClasses().addAll((Collection<? extends VesselClass>) newValue);
+			return;
+		case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
+			getVesselEvents().clear();
+			getVesselEvents().addAll((Collection<? extends VesselEvent>) newValue);
+			return;
+		case FleetPackage.FLEET_MODEL__FUELS:
+			getFuels().clear();
+			getFuels().addAll((Collection<? extends VesselFuel>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case FleetPackage.FLEET_MODEL__FLEET:
-				getFleet().clear();
-				return;
-			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
-				getVesselClasses().clear();
-				return;
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
-				getVesselEvents().clear();
-				return;
-			case FleetPackage.FLEET_MODEL__FUELS:
-				getFuels().clear();
-				return;
+		case FleetPackage.FLEET_MODEL__FLEET:
+			getFleet().clear();
+			return;
+		case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
+			getVesselClasses().clear();
+			return;
+		case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
+			getVesselEvents().clear();
+			return;
+		case FleetPackage.FLEET_MODEL__FUELS:
+			getFuels().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case FleetPackage.FLEET_MODEL__FLEET:
-				return fleet != null && !fleet.isEmpty();
-			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
-				return vesselClasses != null && !vesselClasses.isEmpty();
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
-				return vesselEvents != null && !vesselEvents.isEmpty();
-			case FleetPackage.FLEET_MODEL__FUELS:
-				return fuels != null && !fuels.isEmpty();
+		case FleetPackage.FLEET_MODEL__FLEET:
+			return (fleet != null) && !fleet.isEmpty();
+		case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
+			return (vesselClasses != null) && !vesselClasses.isEmpty();
+		case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
+			return (vesselEvents != null) && !vesselEvents.isEmpty();
+		case FleetPackage.FLEET_MODEL__FUELS:
+			return (fuels != null) && !fuels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //FleetModelImpl
+} // FleetModelImpl

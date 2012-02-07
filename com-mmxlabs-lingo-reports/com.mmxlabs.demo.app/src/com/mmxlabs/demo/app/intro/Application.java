@@ -23,14 +23,14 @@ public class Application implements IApplication {
 	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.IApplicationContext)
 	 */
 	@Override
-	public Object start(IApplicationContext context) {
+	public Object start(final IApplicationContext context) {
 
-		Display display = PlatformUI.createDisplay();
+		final Display display = PlatformUI.createDisplay();
 
-		DelayedOpenFileProcessor processor = new DelayedOpenFileProcessor(display);
+		final DelayedOpenFileProcessor processor = new DelayedOpenFileProcessor(display);
 
 		try {
-			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor(processor));
+			final int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor(processor));
 			if (returnCode == PlatformUI.RETURN_RESTART) {
 				return IApplication.EXIT_RESTART;
 			}
@@ -47,15 +47,17 @@ public class Application implements IApplication {
 	 */
 	@Override
 	public void stop() {
-		if (!PlatformUI.isWorkbenchRunning())
+		if (!PlatformUI.isWorkbenchRunning()) {
 			return;
+		}
 		final IWorkbench workbench = PlatformUI.getWorkbench();
 		final Display display = workbench.getDisplay();
 		display.syncExec(new Runnable() {
 			@Override
 			public void run() {
-				if (!display.isDisposed())
+				if (!display.isDisposed()) {
 					workbench.close();
+				}
 			}
 		});
 	}

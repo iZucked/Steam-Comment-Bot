@@ -21,61 +21,62 @@ import org.eclipse.swt.widgets.Shell;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
-	public DialogInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain, final ICommandProcessor processor) {
+	public DialogInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor processor) {
 		super(path, feature, editingDomain, processor);
 	}
+
 	private Button button;
 	private Label label;
-	
+
 	protected Shell getShell() {
 		return button.getShell();
 	}
-	
+
 	@Override
 	public Control createControl(final Composite parent) {
 		final Composite contents = new Composite(parent, SWT.NONE);
 		contents.setLayout(new RowLayout(SWT.HORIZONTAL));
-		
+
 		final Label label = new Label(contents, SWT.NONE);
 		final Button button = new Button(contents, SWT.NONE);
 		button.setText("Edit");
 		this.label = label;
 		this.button = button;
-		button.addSelectionListener(
-				new SelectionListener() {
-					{
-						final SelectionListener sl = this;
-						button.addDisposeListener(
-								new DisposeListener() {
-									@Override
-									public void widgetDisposed(DisposeEvent e) {
-										button.removeSelectionListener(sl);
-									}
-								});
-					}
-					
+		button.addSelectionListener(new SelectionListener() {
+			{
+				final SelectionListener sl = this;
+				button.addDisposeListener(new DisposeListener() {
 					@Override
-					public void widgetSelected(SelectionEvent e) {
-						final Object o = displayDialog(getValue());
-						if (o != null)
-							doSetValue(o);
+					public void widgetDisposed(final DisposeEvent e) {
+						button.removeSelectionListener(sl);
 					}
-					
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {}
+				});
+			}
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final Object o = displayDialog(getValue());
+				if (o != null) {
+					doSetValue(o);
 				}
-				);
-		
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+			}
+		});
+
 		return super.wrapControl(contents);
 	}
 
 	@Override
-	protected void updateDisplay(Object value) {
-		if (!label.isDisposed())
+	protected void updateDisplay(final Object value) {
+		if (!label.isDisposed()) {
 			label.setText(render(value));
+		}
 	}
 
 	protected abstract Object displayDialog(final Object currentValue);
+
 	protected abstract String render(final Object value);
 }

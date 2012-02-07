@@ -25,55 +25,51 @@ import scenario.ScenarioPackage;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public class NumberInlineEditor extends UnsettableInlineEditor {
-	private EDataType type;
+	private final EDataType type;
 
 	private final static class NumberTypes {
 		public final static EDataType l = EcorePackage.eINSTANCE.getELong();
 		public final static EDataType f = EcorePackage.eINSTANCE.getEFloat();
 		public final static EDataType d = EcorePackage.eINSTANCE.getEDouble();
 		public final static EDataType i = EcorePackage.eINSTANCE.getEInt();
-		public final static EDataType p = ScenarioPackage.eINSTANCE
-				.getPercentage();
+		public final static EDataType p = ScenarioPackage.eINSTANCE.getPercentage();
 
-		public static Object create(final EDataType type, int spinnerValue) {
-			int digits = getDigits(type);
+		public static Object create(final EDataType type, final int spinnerValue) {
+			final int digits = getDigits(type);
 			if (type == l) {
 				return Long.valueOf(spinnerValue);
 			} else if (type == i) {
 				return Integer.valueOf(spinnerValue);
 			} else if (type == p) {
-				return (Double) ((double) (spinnerValue * Math.pow(10, -(digits + 2))));
+				return ((double) );
 			} else if (type == f) {
-				return (Float) ((float) (spinnerValue * Math.pow(10, -digits)));
+				return ((float) (spinnerValue * Math.pow(10, -digits)));
 			} else if (type == d) {
-				return (Double) ((double) (spinnerValue * Math.pow(10, -digits)));
+				return ((double) );
 			} else {
 				throw new RuntimeException("Unknown type of numeric field");
 			}
 		}
 
 		public static int convert(final EDataType type, final Object value) {
-			int digits = getDigits(type);
-			if (type == l || type == i) {
+			final int digits = getDigits(type);
+			if ((type == l) || (type == i)) {
 				return ((Number) value).intValue();
 			} else if (type == f) {
-				return ((int) (((Number) value).floatValue() * Math.pow(10,
-						digits)));
+				return ((int) (((Number) value).floatValue() * Math.pow(10, digits)));
 			} else if (type == d) {
-				return ((int) (((Number) value).doubleValue() * Math.pow(10,
-						digits)));
+				return ((int) (((Number) value).doubleValue() * Math.pow(10, digits)));
 			} else if (type == p) {
-				return ((int) (((Number) value).doubleValue() * Math.pow(10,
-						digits + 2)));
+				return ((int) (((Number) value).doubleValue() * Math.pow(10, digits + 2)));
 			} else {
 				throw new RuntimeException("Unknown type of numeric field");
 			}
 		}
 
 		public static int getDigits(final EDataType type) {
-			if (type == l || type == i) {
+			if ((type == l) || (type == i)) {
 				return 0;
-			} else if (type == f || type == d) {
+			} else if ((type == f) || (type == d)) {
 				return 2;
 			} else if (type == p) {
 				return 1;
@@ -82,13 +78,12 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 			}
 		}
 
-		public static void setupSpinner(final EDataType type,
-				final Spinner spinner) {
-			if (type == l || type == i) {
+		public static void setupSpinner(final EDataType type, final Spinner spinner) {
+			if ((type == l) || (type == i)) {
 				spinner.setDigits(0);
 				spinner.setMaximum(Integer.MAX_VALUE);
 				spinner.setMinimum(0);
-			} else if (type == f || type == d) {
+			} else if ((type == f) || (type == d)) {
 				spinner.setDigits(2);
 				spinner.setMaximum(Integer.MAX_VALUE);
 				spinner.setMinimum(0);
@@ -99,22 +94,25 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 			}
 		}
 
-		public static Object getDefaultValue(EDataType type) {
-			if (type == i)
-				return ((Integer) 0);
-			if (type == l)
-				return ((Long) 0l);
-			if (type == d || type == p)
-				return ((Double) 0d);
-			if (type == f)
-				return ((Float) 0f);
-				
+		public static Object getDefaultValue(final EDataType type) {
+			if (type == i) {
+				return 0;
+			}
+			if (type == l) {
+				return 0l;
+			}
+			if ((type == d) || (type == p)) {
+				return 0d;
+			}
+			if (type == f) {
+				return 0f;
+			}
+
 			throw new RuntimeException("Unknown type for number : " + type.getName());
 		}
 	}
 
-	public NumberInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain, final ICommandProcessor processor) {
+	public NumberInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor processor) {
 		super(path, feature, editingDomain, processor);
 		type = (EDataType) feature.getEType();
 	}
@@ -122,7 +120,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 	private Spinner spinner;
 
 	@Override
-	public Control createValueControl(Composite parent) {
+	public Control createValueControl(final Composite parent) {
 		final Composite box = new Composite(parent, SWT.NONE);
 		final GridLayout boxLayout = new GridLayout(1, false);
 		boxLayout.marginHeight = 0;
@@ -135,19 +133,19 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 				final SelectionListener sl = this;
 				spinner.addDisposeListener(new DisposeListener() {
 					@Override
-					public void widgetDisposed(DisposeEvent e) {
+					public void widgetDisposed(final DisposeEvent e) {
 						spinner.removeSelectionListener(sl);
 					}
 				});
 			}
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				doSetValue(NumberTypes.create(type, spinner.getSelection()));
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 				doSetValue(NumberTypes.create(type, spinner.getSelection()));
 			}
 		});
@@ -166,9 +164,10 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	protected void updateValueDisplay(Object value) {
-		if (spinner.isDisposed())
+	protected void updateValueDisplay(final Object value) {
+		if (spinner.isDisposed()) {
 			return;
+		}
 		if (value == null) {
 			spinner.setSelection(0);
 		} else {

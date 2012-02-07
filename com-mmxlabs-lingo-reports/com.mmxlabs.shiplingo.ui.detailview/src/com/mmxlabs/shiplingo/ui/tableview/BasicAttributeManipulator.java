@@ -27,14 +27,12 @@ import com.mmxlabs.common.Pair;
  * @author hinton
  * 
  */
-public class BasicAttributeManipulator implements ICellManipulator,
-		ICellRenderer {
+public class BasicAttributeManipulator implements ICellManipulator, ICellRenderer {
 
 	protected final EStructuralFeature field;
 	protected final EditingDomain editingDomain;
 
-	public BasicAttributeManipulator(final EStructuralFeature field,
-			final EditingDomain editingDomain) {
+	public BasicAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
 		super();
 		this.field = field;
 		this.editingDomain = editingDomain;
@@ -43,20 +41,22 @@ public class BasicAttributeManipulator implements ICellManipulator,
 	@Override
 	public String render(final Object object) {
 		final Object value = getValue(object);
-		if (value == null) return "";
-		else return value.toString();
+		if (value == null) {
+			return "";
+		} else {
+			return value.toString();
+		}
 	}
 
 	@Override
 	public void setValue(final Object object, final Object value) {
 		final Object currentValue = reallyGetValue(object);
-		if ((currentValue == null && value == null) || ((currentValue != null && value != null) && currentValue.equals(value)))
+		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
 			return;
+		}
 
-		final Command command = editingDomain.createCommand(SetCommand.class,
-				new CommandParameter((EObject) object, field, value));
-		((SetCommand) command).setLabel("Set " + field.getName() + " to "
-				+ (value == null ? "null" : value.toString()));
+		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, field, value));
+		((SetCommand) command).setLabel("Set " + field.getName() + " to " + (value == null ? "null" : value.toString()));
 		editingDomain.getCommandStack().execute(command);
 	}
 
@@ -66,19 +66,21 @@ public class BasicAttributeManipulator implements ICellManipulator,
 	}
 
 	@Override
-	public Object getValue(Object object) {
+	public Object getValue(final Object object) {
 		return reallyGetValue(object);
 	}
-	
+
 	@Override
-	public Object getFilterValue(Object object) {
+	public Object getFilterValue(final Object object) {
 		return getComparable(object);
 	}
 
-	private Object reallyGetValue(Object object) {
-		if (object == null) return "";
+	private Object reallyGetValue(final Object object) {
+		if (object == null) {
+			return "";
+		}
 		final Object result = ((EObject) object).eGet(field);
-		if (result == null && (field.getEType() == EcorePackage.eINSTANCE.getEString())) {
+		if ((result == null) && (field.getEType() == EcorePackage.eINSTANCE.getEString())) {
 			return "";
 		} else {
 			return result;
@@ -86,19 +88,18 @@ public class BasicAttributeManipulator implements ICellManipulator,
 	}
 
 	@Override
-	public boolean canEdit(Object object) {
+	public boolean canEdit(final Object object) {
 		return true;
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Comparable getComparable(Object object) {
+	public Comparable getComparable(final Object object) {
 		return render(object);
 	}
 
 	@Override
-	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
-			Object object) {
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return Collections.emptySet();
 	}
 }

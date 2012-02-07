@@ -7,30 +7,27 @@ package scenario.schedule.events;
 import scenario.fleet.CharterOut;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Charter Out Visit</b></em>'.
- * <!-- end-user-doc -->
- *
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Charter Out Visit</b></em>'. <!-- end-user-doc -->
+ * 
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link scenario.schedule.events.CharterOutVisit#getCharterOut <em>Charter Out</em>}</li>
+ * <li>{@link scenario.schedule.events.CharterOutVisit#getCharterOut <em>Charter Out</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @see scenario.schedule.events.EventsPackage#getCharterOutVisit()
  * @model
  * @generated
  */
 public interface CharterOutVisit extends VesselEventVisit {
 	/**
-	 * Returns the value of the '<em><b>Charter Out</b></em>' reference.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Charter Out</b></em>' reference. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Charter Out</em>' reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Charter Out</em>' reference isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Charter Out</em>' reference.
 	 * @see #setCharterOut(CharterOut)
 	 * @see scenario.schedule.events.EventsPackage#getCharterOutVisit_CharterOut()
@@ -40,10 +37,10 @@ public interface CharterOutVisit extends VesselEventVisit {
 	CharterOut getCharterOut();
 
 	/**
-	 * Sets the value of the '{@link scenario.schedule.events.CharterOutVisit#getCharterOut <em>Charter Out</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Charter Out</em>' reference.
+	 * Sets the value of the '{@link scenario.schedule.events.CharterOutVisit#getCharterOut <em>Charter Out</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Charter Out</em>' reference.
 	 * @see #getCharterOut()
 	 * @generated
 	 */

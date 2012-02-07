@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
@@ -34,9 +33,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,19 +109,22 @@ public class DetailCompositeDialog extends Dialog {
 				Arrays.fill(objectValidity, true);
 				final IStatus globalValidity = validator.validate(duplicates);
 				for (final IStatus s : globalValidity.getChildren()) {
-					if (s.matches(Status.ERROR) == false)
+					if (s.matches(IStatus.ERROR) == false) {
 						continue;
+					}
 					if (s instanceof DetailConstraintStatusDecorator) {
 						for (EObject o : ((DetailConstraintStatusDecorator) s).getObjects()) {
 							int index = duplicates.indexOf(o);
 							while (index < 0) {
 								index = duplicates.indexOf(o);
 								o = o.eContainer();
-								if (o == null)
+								if (o == null) {
 									break;
+								}
 							}
-							if (index >= 0)
+							if (index >= 0) {
 								objectValidity[index] = false;
+							}
 						}
 					}
 				}
@@ -210,7 +210,7 @@ public class DetailCompositeDialog extends Dialog {
 			final Rectangle shellBounds = getParentShell().getBounds();
 			final Point dialogSize = shell.getSize();
 
-			shell.setLocation(shellBounds.x + (shellBounds.width - dialogSize.x) / 2, shellBounds.y + (shellBounds.height - dialogSize.y) / 2);
+			shell.setLocation(shellBounds.x + ((shellBounds.width - dialogSize.x) / 2), shellBounds.y + ((shellBounds.height - dialogSize.y) / 2));
 		}
 	}
 
@@ -220,14 +220,14 @@ public class DetailCompositeDialog extends Dialog {
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) {
+	protected Control createDialogArea(final Composite parent) {
 		final Composite c = (Composite) super.createDialogArea(parent);
 		dialogArea = c;
 		return c;
 	}
 
 	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
+	protected void createButtonsForButtonBar(final Composite parent) {
 		backButton = createButton(parent, IDialogConstants.BACK_ID, IDialogConstants.BACK_LABEL, true);
 		nextButton = createButton(parent, IDialogConstants.NEXT_ID, IDialogConstants.NEXT_LABEL, true);
 		super.createButtonsForButtonBar(parent);
@@ -235,7 +235,7 @@ public class DetailCompositeDialog extends Dialog {
 
 	private void enableButtons() {
 		backButton.setEnabled(selectedObjectIndex > 0);
-		nextButton.setEnabled(selectedObjectIndex < duplicates.size() - 1);
+		nextButton.setEnabled(selectedObjectIndex < (duplicates.size() - 1));
 	}
 
 	@Override
@@ -262,12 +262,12 @@ public class DetailCompositeDialog extends Dialog {
 
 	private boolean lockedForEditing = false;
 
-	public int open(final List<EObject> objects, boolean locked) {
+	public int open(final List<EObject> objects, final boolean locked) {
 		lockedForEditing = locked;
 		final List<EObject> duplicates = new ArrayList<EObject>(objects.size());
 		objectValidity = new boolean[objects.size()];
 		{
-			int objectIndex = 0;
+			final int objectIndex = 0;
 			for (final EObject original : objects) {
 				final EObject duplicate = EcoreUtil.copy(original);
 				duplicates.add(duplicate);
@@ -305,9 +305,10 @@ public class DetailCompositeDialog extends Dialog {
 				if (isExecutable) {
 
 					editingDomain.getCommandStack().execute(cc);
-					
+
 				} else {
-					MessageDialog.openError(getShell(), "Error applying change", "An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
+					MessageDialog.openError(getShell(), "Error applying change",
+							"An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
 					log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 				}
 			}
@@ -376,7 +377,7 @@ public class DetailCompositeDialog extends Dialog {
 				}
 				compound.append(mas);
 			} else {
-				if (feature.isUnsettable() && duplicate.eIsSet(feature) == false) {
+				if (feature.isUnsettable() && (duplicate.eIsSet(feature) == false)) {
 					compound.append(SetCommand.create(editingDomain, original, feature, SetCommand.UNSET_VALUE));
 				} else {
 					compound.append(SetCommand.create(editingDomain, original, feature, duplicate.eGet(feature)));

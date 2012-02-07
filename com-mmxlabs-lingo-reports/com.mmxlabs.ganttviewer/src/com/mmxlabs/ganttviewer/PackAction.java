@@ -37,19 +37,18 @@ public class PackAction extends Action {
 		for (final GanttEvent event : (List<GanttEvent>) composite.getEvents()) {
 			final Calendar startDate = event.getEarliestStartDate();
 			final Calendar endDate = event.getLatestEndDate();
-			if (earliestDate == null || startDate.before(earliestDate)) {
+			if ((earliestDate == null) || startDate.before(earliestDate)) {
 				earliestDate = startDate;
 			}
-			if (latestDate == null || endDate.after(latestDate)) {
+			if ((latestDate == null) || endDate.after(latestDate)) {
 				latestDate = endDate;
 			}
 		}
 
 		// we have found the extent, now zoom
-		if (earliestDate != null && latestDate != null) {
+		if ((earliestDate != null) && (latestDate != null)) {
 			// adjust the zoom
-			final int daysNeeded = (int) ((latestDate.getTimeInMillis() - earliestDate
-					.getTimeInMillis()) / (Timer.ONE_DAY)) + 28;
+			final int daysNeeded = (int) ((latestDate.getTimeInMillis() - earliestDate.getTimeInMillis()) / (Timer.ONE_DAY)) + 28;
 
 			if (daysNeeded < 150) {
 				composite.setZoomLevel(ISettings.ZOOM_MONTH_NORMAL);
@@ -62,8 +61,7 @@ public class PackAction extends Action {
 			}
 
 			final Calendar leftDate = (Calendar) earliestDate.clone();
-			leftDate.setTimeInMillis(leftDate.getTimeInMillis() - Timer.ONE_DAY
-					* 14);
+			leftDate.setTimeInMillis(leftDate.getTimeInMillis() - (Timer.ONE_DAY * 14));
 
 			// Set the left hand side
 			composite.setDate(leftDate, SWT.LEFT);
@@ -73,8 +71,7 @@ public class PackAction extends Action {
 
 	@Override
 	public boolean isEnabled() {
-		return super.isEnabled() && ganttChart != null
-				&& ganttChart.getSettings().enableZooming();
+		return super.isEnabled() && (ganttChart != null) && ganttChart.getSettings().enableZooming();
 	}
 
 }

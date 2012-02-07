@@ -20,14 +20,11 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -70,7 +67,7 @@ public class MultiDetailDialog extends Dialog {
 	/**
 	 * Track all the controls that have been created, so we can disable them after setInput(), which will re-enable them otherwise.
 	 */
-	private List<Control> controlsToDisable = new LinkedList<Control>();
+	private final List<Control> controlsToDisable = new LinkedList<Control>();
 	private EObject proxy;
 
 	/**
@@ -86,14 +83,18 @@ public class MultiDetailDialog extends Dialog {
 		dcc = new DetailCompositeContainer(valueProviderProvider, editingDomain, ICommandProcessor.EXECUTE, new IInlineEditorWrapper() {
 			@Override
 			public IInlineEditor wrap(final IInlineEditor proxy) {
-				if (proxy.getFeature() == ScenarioPackage.eINSTANCE.getNamedObject_Name())
+				if (proxy.getFeature() == ScenarioPackage.eINSTANCE.getNamedObject_Name()) {
 					return null;
-				if (proxy.getFeature() == CargoPackage.eINSTANCE.getSlot_Id())
+				}
+				if (proxy.getFeature() == CargoPackage.eINSTANCE.getSlot_Id()) {
 					return null;
-				if (proxy.getFeature() == CargoPackage.eINSTANCE.getCargo_Id())
+				}
+				if (proxy.getFeature() == CargoPackage.eINSTANCE.getCargo_Id()) {
 					return null;
-				if (proxy.getFeature() == FleetPackage.eINSTANCE.getVesselEvent_Id())
+				}
+				if (proxy.getFeature() == FleetPackage.eINSTANCE.getVesselEvent_Id()) {
 					return null;
+				}
 
 				return new IInlineEditor() {
 
@@ -103,7 +104,7 @@ public class MultiDetailDialog extends Dialog {
 					}
 
 					@Override
-					public void processValidation(IStatus status) {
+					public void processValidation(final IStatus status) {
 						proxy.processValidation(status);
 
 					};
@@ -146,10 +147,10 @@ public class MultiDetailDialog extends Dialog {
 							}
 						});
 
-						if (proxy.getFeature().isMany() && (proxy.getFeature() instanceof EAttribute || (((EReference) proxy.getFeature()).isContainment() == false))) {
+						if (proxy.getFeature().isMany() && ((proxy.getFeature() instanceof EAttribute) || (((EReference) proxy.getFeature()).isContainment() == false))) {
 							manager.add(new MultiFeatureAction(pair, setMode));
 						}
-						
+
 						final ToolBar tb = manager.createControl(composite);
 						final GridData gd = new GridData();
 						// TODO fix magic number - measure width properly and set everywhere
@@ -194,7 +195,7 @@ public class MultiDetailDialog extends Dialog {
 			final Rectangle shellBounds = getParentShell().getBounds();
 			final Point dialogSize = shell.getSize();
 
-			shell.setLocation(shellBounds.x + (shellBounds.width - dialogSize.x) / 2, shellBounds.y + (shellBounds.height - dialogSize.y) / 2);
+			shell.setLocation(shellBounds.x + ((shellBounds.width - dialogSize.x) / 2), shellBounds.y + ((shellBounds.height - dialogSize.y) / 2));
 		}
 	}
 
@@ -244,14 +245,14 @@ public class MultiDetailDialog extends Dialog {
 				final CompoundCommand cc = new CompoundCommand();
 				for (final Pair<EMFPath, EStructuralFeature> p : featuresToSet) {
 					final Object value;
-					if (p.getSecond().isUnsettable() && ((EObject) p.getFirst().get(proxy)).eIsSet(p.getSecond()) == false) {
+					if (p.getSecond().isUnsettable() && (((EObject) p.getFirst().get(proxy)).eIsSet(p.getSecond()) == false)) {
 						value = SetCommand.UNSET_VALUE;
 					} else {
 						value = ((EObject) p.getFirst().get(proxy)).eGet(p.getSecond());
 					}
 
 					final String mode = setMode.get(p);
-					if (p.getSecond().isMany() == false || mode == null || mode.equals(MultiFeatureAction.REPLACE)) {
+					if ((p.getSecond().isMany() == false) || (mode == null) || mode.equals(MultiFeatureAction.REPLACE)) {
 						for (final EObject object : objects) {
 							cc.append(SetCommand.create(editingDomain, p.getFirst().get(object), p.getSecond(), value));
 						}
@@ -275,9 +276,11 @@ public class MultiDetailDialog extends Dialog {
 								final ArrayList<Object> drop = new ArrayList<Object>();
 								final List<Object> values = (List<Object>) ((EObject) p.getFirst().get(object)).eGet(p.getSecond());
 								for (final Object o : intersectWith) {
-									if (values.contains(o)) drop.add(o);
+									if (values.contains(o)) {
+										drop.add(o);
+									}
 								}
-								
+
 								cc.append(SetCommand.create(editingDomain, p.getFirst().get(object), p.getSecond(), drop));
 							}
 						}
@@ -303,13 +306,15 @@ public class MultiDetailDialog extends Dialog {
 			boolean gotValue = false;
 			Object value = null;
 			if (feature instanceof EReference) {
-				if (((EReference) feature).isContainment())
+				if (((EReference) feature).isContainment()) {
 					continue attribute_loop;
+				}
 			}
 
 			for (final EObject m : multiples) {
-				if (m == null)
+				if (m == null) {
 					return;
+				}
 				final Object mValue = m.eGet(feature);
 				if (!gotValue) {
 					gotValue = true;
@@ -327,8 +332,9 @@ public class MultiDetailDialog extends Dialog {
 		// now do contained objects
 		final List<EObject> containedObjects = new ArrayList<EObject>(multiples.size());
 		for (final EReference c : target.eClass().getEAllContainments()) {
-			if (c.isMany())
+			if (c.isMany()) {
 				continue;
+			}
 			containedObjects.clear();
 			for (final EObject m : multiples) {
 				containedObjects.add((EObject) m.eGet(c));
@@ -349,10 +355,10 @@ class MultiFeatureAction extends AbstractMenuAction {
 	public static final String UNION = "Union";
 	public static final String INTERSECTION = "Intersection";
 	public static final String[] MODES = new String[] { REPLACE, UNION, INTERSECTION };
-	
+
 	private String mode = REPLACE;
-	private Pair<EMFPath, EStructuralFeature> path;
-	private Map<Pair<EMFPath, EStructuralFeature>, String> map;
+	private final Pair<EMFPath, EStructuralFeature> path;
+	private final Map<Pair<EMFPath, EStructuralFeature>, String> map;
 
 	public MultiFeatureAction(final Pair<EMFPath, EStructuralFeature> p, final Map<Pair<EMFPath, EStructuralFeature>, String> m) {
 		super("");
@@ -363,6 +369,7 @@ class MultiFeatureAction extends AbstractMenuAction {
 	/**
 	 * @param lastMenu2
 	 */
+	@Override
 	protected void populate(final Menu menu) {
 		for (final String s : MODES) {
 			final Action a = new Action(s, IAction.AS_RADIO_BUTTON) {

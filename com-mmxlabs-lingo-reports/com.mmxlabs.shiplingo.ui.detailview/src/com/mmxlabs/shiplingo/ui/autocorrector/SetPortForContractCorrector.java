@@ -29,7 +29,7 @@ import com.mmxlabs.common.Pair;
 public class SetPortForContractCorrector extends BaseCorrector {
 
 	@Override
-	public Pair<String, Command> correct(Notification notification, EditingDomain editingDomain) {
+	public Pair<String, Command> correct(final Notification notification, final EditingDomain editingDomain) {
 		final Object o = notification.getNotifier();
 		if (o instanceof Slot) {
 			if (notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Contract()) {
@@ -37,10 +37,12 @@ public class SetPortForContractCorrector extends BaseCorrector {
 				final Contract c = (Contract) notification.getNewValue();
 				if (c != null) {
 					final Port p = s.getPort();
-					if (c.getDefaultPorts().isEmpty())
+					if (c.getDefaultPorts().isEmpty()) {
 						return null;
-					if (c.getDefaultPorts().contains(p))
+					}
+					if (c.getDefaultPorts().contains(p)) {
 						return null;
+					}
 					final PortCapability capability = (s instanceof LoadSlot) ? PortCapability.LOAD : PortCapability.DISCHARGE;
 					// TODO add a flag for default port?
 					for (final PortSelection ps : c.getDefaultPorts()) {

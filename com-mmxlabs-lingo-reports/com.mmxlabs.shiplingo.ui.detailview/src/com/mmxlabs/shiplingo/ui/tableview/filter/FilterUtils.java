@@ -16,80 +16,73 @@ import com.mmxlabs.common.Pair;
  * 
  * said grammar is
  * 
- * matcher:=
- * 		term |
- * 		key:term |
- * 		key=term |
- * 		key<term |
- * 		key>term
+ * matcher:= term | key:term | key=term | key<term | key>term
  * 
- * conj:=
- * 		(term )+
+ * conj:= (term )+
  * 
  * disj:=(conj,)+
  * 
  * @author hinton
- *
+ * 
  */
 public class FilterUtils {
-	private static final int COLON=':';
-	private static final int EQ='=';
-	private static final int LT='<';
-	private static final int GT='>';
-	private static final int COMMA=',';
-	private static final int LP='(';
-	private static final int RP=')';
-	private static final int NOTEQ='~';
+	private static final int COLON = ':';
+	private static final int EQ = '=';
+	private static final int LT = '<';
+	private static final int GT = '>';
+	private static final int COMMA = ',';
+	private static final int LP = '(';
+	private static final int RP = ')';
+	private static final int NOTEQ = '~';
 
 	private class FilterBuilder {
-		private Group disjunctions = new Group(false);
+		private final Group disjunctions = new Group(false);
 		private Group conjunction = new Group(true);
 		{
 			disjunctions.addFilter(conjunction);
 		}
-		public void pushAnd(IFilter filter) {
+
+		public void pushAnd(final IFilter filter) {
 			conjunction.addFilter(filter);
 		}
-		
-		public void pushOr(IFilter filter) {
+
+		public void pushOr(final IFilter filter) {
 			pushOr();
 			pushAnd(filter);
 		}
-		
+
 		public IFilter getFilter() {
 			return disjunctions.collapse();
 		}
 
-
 		public void pushOr() {
 			conjunction = new Group(true);
 			disjunctions.addFilter(conjunction);
-			
+
 		}
 	}
-	
-	private  IFilter parseTokenizer(final StreamTokenizer tok) throws IOException {
+
+	private IFilter parseTokenizer(final StreamTokenizer tok) throws IOException {
 		final FilterBuilder builder = new FilterBuilder();
 
 		boolean inMatcher = false;
 		String lastWord = null;
 		int matchOp = -1;
-		top:
-		while (tok.nextToken() != StreamTokenizer.TT_EOF) {
+		top: while (tok.nextToken() != StreamTokenizer.TT_EOF) {
 			switch (tok.ttype) {
 			case '"':
 			case '\'':
 			case StreamTokenizer.TT_WORD:
 				if (inMatcher) {
 					builder.pushAnd(new Match(Match.Operation.fromToken(matchOp), lastWord, tok.sval));
-					
+
 					lastWord = null;
 					inMatcher = false;
 				} else {
-					if (lastWord!= null) {
+					if (lastWord != null) {
 						builder.pushAnd(new Match(Match.Operation.LIKE, lastWord));
 					}
-					
+
 					lastWord = tok.sval;
 				}
 				break;
@@ -117,10 +110,10 @@ public class FilterUtils {
 		}
 		return builder.getFilter();
 	}
-	
+
 	public IFilter parseFilterString(final String filterString) {
 		final StreamTokenizer tok = new StreamTokenizer(new StringReader(filterString));
-		
+
 		tok.resetSyntax();
 		tok.eolIsSignificant(false);
 		tok.lowerCaseMode(true);
@@ -136,27 +129,29 @@ public class FilterUtils {
 		tok.wordChars('A', 'Z');
 		tok.wordChars('/', '/');
 		tok.wordChars('-', '-');
-		tok.wordChars('+','+');
-		
+		tok.wordChars('+', '+');
+
 		try {
 			final IFilter filter = parseTokenizer(tok);
-			if (filter == null) return null;
+			if (filter == null) {
+				return null;
+			}
 			return filter.collapse();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			return null;
 		}
 	}
-	
-	public static void main(String[] args) {
-		FilterUtils fu = new FilterUtils();
+
+	public static void main(final String[] args) {
+		final FilterUtils fu = new FilterUtils();
 		final IFilter filter = fu.parseFilterString(args[0]);
 		System.out.println(filter);
 		final HashMap<String, Pair<?, ?>> values = new HashMap<String, Pair<?, ?>>();
-		
-		for (int i = 1; i<args.length; i+=2) {
-			values.put(args[i], new Pair<String, String>(args[i+1], args[i+1]));
+
+		for (int i = 1; i < args.length; i += 2) {
+			values.put(args[i], new Pair<String, String>(args[i + 1], args[i + 1]));
 		}
-		
+
 		System.out.println(filter.matches(values));
 	}
 }

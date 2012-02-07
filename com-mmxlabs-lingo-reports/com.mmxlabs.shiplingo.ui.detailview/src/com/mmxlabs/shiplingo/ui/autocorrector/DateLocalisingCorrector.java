@@ -27,15 +27,14 @@ import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 public class DateLocalisingCorrector extends BaseCorrector {
 
 	private static TimeZone getZone(final Port port) {
-		if (port == null || port.getTimeZone() == null
-				|| port.getTimeZone().equals(""))
+		if ((port == null) || (port.getTimeZone() == null) || port.getTimeZone().equals("")) {
 			return TimeZone.getDefault();
+		}
 		return TimeZone.getTimeZone(port.getTimeZone());
 	}
 
 	@Override
-	public Pair<String, Command> correct(Notification notification,
-			EditingDomain editingDomain) {
+	public Pair<String, Command> correct(final Notification notification, final EditingDomain editingDomain) {
 		final Object feature = notification.getFeature();
 
 		if (notification.getEventType() == Notification.SET) {
@@ -45,56 +44,44 @@ public class DateLocalisingCorrector extends BaseCorrector {
 				if (ref.getEType().equals(PortPackage.eINSTANCE.getPort())) {
 					// check whether there's a nearby date attribute and
 					// localize the time
-					
+
 					final Port oldValue = (Port) notification.getOldValue();
 
-					if (oldValue == null)
+					if (oldValue == null) {
 						return null; // break out if port was null, because this
 										// is probably an import.
+					}
 
 					final Port newValue = (Port) notification.getNewValue();
 
 					final TimeZone oldZone = getZone(oldValue);
 					final TimeZone newZone = getZone(newValue);
-					if (oldZone.equals(newZone))
+					if (oldZone.equals(newZone)) {
 						return null;
+					}
 
 					final EClass parent = ref.getEContainingClass();
-					for (final EAttribute attribute : parent
-							.getEAllAttributes()) {
-						if (attribute.getEAttributeType().equals(
-								EcorePackage.eINSTANCE.getEDate())
-								|| attribute.getEAttributeType().equals(
-										ScenarioPackage.eINSTANCE
-												.getDateAndOptionalTime())) {
+					for (final EAttribute attribute : parent.getEAllAttributes()) {
+						if (attribute.getEAttributeType().equals(EcorePackage.eINSTANCE.getEDate()) || attribute.getEAttributeType().equals(ScenarioPackage.eINSTANCE.getDateAndOptionalTime())) {
 							// localize this date
-							final Date date = (Date) ((EObject) notification
-									.getNotifier()).eGet(attribute);
-							
-							if (date == null)
+							final Date date = (Date) ((EObject) notification.getNotifier()).eGet(attribute);
+
+							if (date == null) {
 								return null;
+							}
 							final Calendar c = Calendar.getInstance(oldZone);
 							c.setTime(date);
 							final Calendar c2 = Calendar.getInstance(newZone);
-							c2.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
-									c.get(Calendar.DATE),
-									c.get(Calendar.HOUR_OF_DAY),
-									c.get(Calendar.MINUTE),
-									c.get(Calendar.SECOND));
-							
+							c2.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), c.get(Calendar.SECOND));
+
 							final Date result;
 							if (date instanceof DateAndOptionalTime) {
 								result = new DateAndOptionalTime(c2.getTime(), ((DateAndOptionalTime) date).isOnlyDate());
 							} else {
 								result = c2.getTime();
 							}
-							
-							return new Pair<String, Command>(
-									"Adjust date to local time", makeSetter(
-											editingDomain,
-											(EObject) notification
-													.getNotifier(), attribute,
-											result));
+
+							return new Pair<String, Command>("Adjust date to local time", makeSetter(editingDomain, (EObject) notification.getNotifier(), attribute, result));
 						}
 					}
 				}

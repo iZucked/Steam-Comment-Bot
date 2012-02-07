@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import scenario.schedule.fleetallocation.*;
 import scenario.schedule.fleetallocation.AllocatedVessel;
 import scenario.schedule.fleetallocation.FleetVessel;
 import scenario.schedule.fleetallocation.FleetallocationFactory;
@@ -18,35 +17,31 @@ import scenario.schedule.fleetallocation.FleetallocationPackage;
 import scenario.schedule.fleetallocation.SpotVessel;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Factory</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class FleetallocationFactoryImpl extends EFactoryImpl implements FleetallocationFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static FleetallocationFactory init() {
 		try {
-			FleetallocationFactory theFleetallocationFactory = (FleetallocationFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/schedule/fleetallocation"); 
+			final FleetallocationFactory theFleetallocationFactory = (FleetallocationFactory) EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/schedule/fleetallocation");
 			if (theFleetallocationFactory != null) {
 				return theFleetallocationFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (final Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new FleetallocationFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public FleetallocationFactoryImpl() {
@@ -54,63 +49,70 @@ public class FleetallocationFactoryImpl extends EFactoryImpl implements Fleetall
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public EObject create(EClass eClass) {
+	public EObject create(final EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case FleetallocationPackage.ALLOCATED_VESSEL: return createAllocatedVessel();
-			case FleetallocationPackage.FLEET_VESSEL: return createFleetVessel();
-			case FleetallocationPackage.SPOT_VESSEL: return createSpotVessel();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		case FleetallocationPackage.ALLOCATED_VESSEL:
+			return createAllocatedVessel();
+		case FleetallocationPackage.FLEET_VESSEL:
+			return createFleetVessel();
+		case FleetallocationPackage.SPOT_VESSEL:
+			return createSpotVessel();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public AllocatedVessel createAllocatedVessel() {
-		AllocatedVesselImpl allocatedVessel = new AllocatedVesselImpl();
+		final AllocatedVesselImpl allocatedVessel = new AllocatedVesselImpl();
 		return allocatedVessel;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public FleetVessel createFleetVessel() {
-		FleetVesselImpl fleetVessel = new FleetVesselImpl();
+		final FleetVesselImpl fleetVessel = new FleetVesselImpl();
 		return fleetVessel;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public SpotVessel createSpotVessel() {
-		SpotVesselImpl spotVessel = new SpotVesselImpl();
+		final SpotVesselImpl spotVessel = new SpotVesselImpl();
 		return spotVessel;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public FleetallocationPackage getFleetallocationPackage() {
-		return (FleetallocationPackage)getEPackage();
+		return (FleetallocationPackage) getEPackage();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */
@@ -119,4 +121,4 @@ public class FleetallocationFactoryImpl extends EFactoryImpl implements Fleetall
 		return FleetallocationPackage.eINSTANCE;
 	}
 
-} //FleetallocationFactoryImpl
+} // FleetallocationFactoryImpl

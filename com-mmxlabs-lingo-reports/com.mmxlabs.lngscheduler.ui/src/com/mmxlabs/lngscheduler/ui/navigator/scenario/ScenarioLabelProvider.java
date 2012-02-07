@@ -99,7 +99,7 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements ICo
 		if (columnIndex == 1) {
 			if (element instanceof IResource) {
 				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-				final IJobDescriptor job = jobManager.findJobForResource((IResource) element);
+				final IJobDescriptor job = jobManager.findJobForResource(element);
 
 				if (job != null) {
 					final IJobControl control = jobManager.getControlForJob(job);
@@ -128,12 +128,12 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements ICo
 		if (columnIndex == 1) {
 			if (element instanceof IResource) {
 				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-				final IJobDescriptor job = jobManager.findJobForResource((IResource) element);
+				final IJobDescriptor job = jobManager.findJobForResource(element);
 				if (job != null) {
 					final IJobControl control = jobManager.getControlForJob(job);
 					if (control != null) {
 						final EJobState jobState = control.getJobState();
-						if (jobState == EJobState.RUNNING || jobState == EJobState.PAUSED || jobState == EJobState.PAUSING) {
+						if ((jobState == EJobState.RUNNING) || (jobState == EJobState.PAUSED) || (jobState == EJobState.PAUSING)) {
 							return jobState.toString() + " (" + control.getProgress() + "%)";
 						} else {
 							return jobState.toString();

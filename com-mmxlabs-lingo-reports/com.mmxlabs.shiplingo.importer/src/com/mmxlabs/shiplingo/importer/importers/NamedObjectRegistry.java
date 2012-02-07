@@ -21,11 +21,12 @@ import com.mmxlabs.common.Pair;
 
 /**
  * Tracks all objects with a "name" or an "id" in a scenario for us
+ * 
  * @author Tom Hinton
  * 
  */
 public class NamedObjectRegistry {
-	private Map<Pair<EClass, String>, EObject> contents = new HashMap<Pair<EClass, String>, EObject>();
+	private final Map<Pair<EClass, String>, EObject> contents = new HashMap<Pair<EClass, String>, EObject>();
 
 	public NamedObjectRegistry() {
 
@@ -33,52 +34,60 @@ public class NamedObjectRegistry {
 
 	/**
 	 * Add an EObject to the registry ({@link #addEObject(EObject)}, and add all its contents.
+	 * 
 	 * @param top
 	 */
 	public void addEObjects(final EObject top) {
-		if (top == null) return;
+		if (top == null) {
+			return;
+		}
 		addEObject(top);
 		final TreeIterator<EObject> iterator = top.eAllContents();
 		while (iterator.hasNext()) {
 			addEObject(iterator.next());
 		}
 	}
-	
+
 	private void addAbstractSuperclasses(final EClass superClass, final EObject object, final String id) {
 		if (superClass.isAbstract()) {
 			contents.put(new Pair<EClass, String>(superClass, id), object);
 		}
-		
+
 		for (final EClass superSuperClass : superClass.getEAllSuperTypes()) {
 			addAbstractSuperclasses(superSuperClass, object, id);
 		}
 	}
-	
+
 	/**
 	 * Add an EObject to the registry, but ignore its contents.
+	 * 
 	 * @param top
 	 */
 	public void addEObject(final EObject top) {
-		if (top == null)
+		if (top == null) {
 			return;
+		}
 		final String id = getName(top);
-		if (id != null && id.isEmpty() == false) {
+		if ((id != null) && (id.isEmpty() == false)) {
 			contents.put(new Pair<EClass, String>(top.eClass(), id), top);
-			
+
 			// process superclasses
 			for (final EClass superclass : top.eClass().getEAllSuperTypes()) {
 				addAbstractSuperclasses(superclass, top, id);
 			}
 		}
 	}
-	
+
 	/**
 	 * Get the name / id field of an object.
+	 * 
 	 * @param top
 	 * @return
 	 */
 	public static String getName(final EObject top) {
-		if (top == null) return null;
+		if (top == null) {
+			return null;
+		}
 		if (top instanceof NamedObject) {
 			return ((NamedObject) top).getName();
 		}

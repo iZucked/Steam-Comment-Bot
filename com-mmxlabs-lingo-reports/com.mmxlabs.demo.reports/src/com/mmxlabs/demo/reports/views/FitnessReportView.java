@@ -68,8 +68,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 		viewer.refresh();
 	}
 
-	private void addSortSelectionListener(final TableColumn column,
-			final int value) {
+	private void addSortSelectionListener(final TableColumn column, final int value) {
 		column.addSelectionListener(new SelectionAdapter() {
 			{
 				final SelectionAdapter self = this;
@@ -96,13 +95,12 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	private TableViewer viewer;
 
 	private Action packColumnsAction;
-	
+
 	private Action copyTableAction;
 
 	private IEclipseJobManagerListener jobManagerListener;
 
-	static class ViewLabelProvider extends CellLabelProvider implements
-			ITableLabelProvider {
+	static class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider {
 		@Override
 		public String getColumnText(final Object obj, final int index) {
 
@@ -137,20 +135,18 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	}
 
 	/**
-	 * This is a callback that will allow us to create the viewer and initialise
-	 * it.
+	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL) {
+		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
 			@Override
 			protected void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
-				
-				final boolean inputEmpty = input == null || (input instanceof Collection && ((Collection<?>)input).isEmpty());
-				final boolean oldInputEmpty = oldInput == null || (oldInput instanceof Collection && ((Collection<?>)oldInput).isEmpty());
-				
+
+				final boolean inputEmpty = (input == null) || ((input instanceof Collection) && ((Collection<?>) input).isEmpty());
+				final boolean oldInputEmpty = (oldInput == null) || ((oldInput instanceof Collection) && ((Collection<?>) oldInput).isEmpty());
+
 				if (inputEmpty != oldInputEmpty) {
 
 					if (packColumnsAction != null) {
@@ -195,7 +191,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 				final int d = inverseSort ? -1 : 1;
 				int sort = 0;
 				final Iterator<Integer> iterator = sortColumns.iterator();
-				while (iterator.hasNext() && sort == 0) {
+				while (iterator.hasNext() && (sort == 0)) {
 					switch (iterator.next()) {
 					case 0:
 						sort = r1.scenario.compareTo(r2.scenario);
@@ -204,7 +200,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 						sort = r1.component.compareTo(r2.component);
 						break;
 					case 2:
-						sort = ((Long) r1.fitness).compareTo((Long) r2.fitness);
+						sort = ((Long) r1.fitness).compareTo(r2.fitness);
 						break;
 					}
 				}
@@ -215,24 +211,21 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 		});
 
 		// Create the help context id for the viewer's control
-		PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.FitnessReportView");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.FitnessReportView");
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-//
-//		getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-//				this);
-//
-//		// Trigger initial view state
-//		final ISelection selection = getSite().getWorkbenchWindow()
-//				.getSelectionService()
-//				.getSelection("com.mmxlabs.rcp.navigator");
-//
-//		selectionChanged(null, selection);
-		
+		//
+		// getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
+		// this);
+		//
+		// // Trigger initial view state
+		// final ISelection selection = getSite().getWorkbenchWindow()
+		// .getSelectionService()
+		// .getSelection("com.mmxlabs.rcp.navigator");
+		//
+		// selectionChanged(null, selection);
+
 		jobManagerListener = ScheduleAdapter.registerView(viewer);
 	}
 
@@ -261,7 +254,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
-		
+
 		manager.add(new GroupMarker("pack"));
 		// Other plug-ins can contribute there actions here
 		manager.add(new GroupMarker("additions"));
@@ -323,11 +316,9 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart arg0,
-			final ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart arg0, final ISelection selection) {
 
-		final List<Schedule> schedules = ScheduleAdapter
-				.getSchedules(selection);
+		final List<Schedule> schedules = ScheduleAdapter.getSchedules(selection);
 		// if (!schedules.isEmpty()) {
 		setInput(schedules);
 		// } else {
@@ -337,9 +328,9 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void dispose() {
-//		getSite().getPage().removeSelectionListener(
-//				"com.mmxlabs.rcp.navigator", this);
-		
+		// getSite().getPage().removeSelectionListener(
+		// "com.mmxlabs.rcp.navigator", this);
+
 		ScheduleAdapter.deregisterView(jobManagerListener);
 
 		super.dispose();

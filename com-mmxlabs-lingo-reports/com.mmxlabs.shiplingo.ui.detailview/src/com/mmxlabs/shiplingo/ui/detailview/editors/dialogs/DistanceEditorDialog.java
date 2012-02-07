@@ -14,11 +14,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.IShellProvider;
-import org.eclipse.jface.window.ToolTip;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
@@ -63,11 +61,11 @@ public class DistanceEditorDialog extends Dialog {
 	private EditingDomain editingDomain;
 	private IValueProviderProvider valueProviderProvider;
 
-	public DistanceEditorDialog(Shell parentShell) {
+	public DistanceEditorDialog(final Shell parentShell) {
 		super(parentShell);
 	}
 
-	public DistanceEditorDialog(IShellProvider parentShell) {
+	public DistanceEditorDialog(final IShellProvider parentShell) {
 		super(parentShell);
 	}
 
@@ -94,7 +92,7 @@ public class DistanceEditorDialog extends Dialog {
 			}
 
 			@Override
-			public void addObjects(Collection<EObject> newObjects) {
+			public void addObjects(final Collection<EObject> newObjects) {
 				assert newObjects.size() == 1;
 				final DistanceModel newModel = (DistanceModel) newObjects.iterator().next();
 				DistanceEditorDialog.this.distanceModel = newModel;
@@ -132,14 +130,14 @@ public class DistanceEditorDialog extends Dialog {
 		rowFilter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		rowFilter.setToolTipText("Filter rows to show source ports with names containing this text");
-		
+
 		final Label columnLabel = new Label(barComposite, SWT.NONE);
 		columnLabel.setText("Column:");
 		final Text columnFilter = new Text(barComposite, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 		columnFilter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		columnFilter.setToolTipText("Filter columns to show destination ports with names containing this text");
-		
+
 		columnFilter.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
@@ -160,36 +158,39 @@ public class DistanceEditorDialog extends Dialog {
 		});
 		getShell().addTraverseListener(new TraverseListener() {
 			@Override
-			public void keyTraversed(TraverseEvent e) {
-				if (e.keyCode == SWT.ESC && (columnFilter.isFocusControl() || rowFilter.isFocusControl()))
+			public void keyTraversed(final TraverseEvent e) {
+				if ((e.keyCode == SWT.ESC) && (columnFilter.isFocusControl() || rowFilter.isFocusControl())) {
 					e.doit = false;
+				}
 			}
 		});
 
 		columnFilter.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyPressed(final KeyEvent e) {
 				if (e.keyCode == SWT.ESC) {
-					if (columnFilter.getText().isEmpty())
+					if (columnFilter.getText().isEmpty()) {
 						getButton(CANCEL).notifyListeners(SWT.Selection, new Event());
-					else
+					} else {
 						columnFilter.setText("");
+					}
 				}
 			}
 		});
 
 		rowFilter.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyPressed(final KeyEvent e) {
 				if (e.keyCode == SWT.ESC) {
-					if (rowFilter.getText().isEmpty())
+					if (rowFilter.getText().isEmpty()) {
 						getButton(CANCEL).notifyListeners(SWT.Selection, new Event());
-					else
+					} else {
 						rowFilter.setText("");
+					}
 				}
 			}
 		});
-		
+
 		rowFilter.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
@@ -197,14 +198,12 @@ public class DistanceEditorDialog extends Dialog {
 				if (text.isEmpty()) {
 					viewer.setFilters(new ViewerFilter[0]);
 				} else {
-					viewer.setFilters(new ViewerFilter[] {
-						new ViewerFilter() {							
-							@Override
-							public boolean select(Viewer viewer, Object parentElement, Object element) {
-								return ((Pair<Port, ?>) element).getFirst().getName().toLowerCase().contains(text);
-							}
+					viewer.setFilters(new ViewerFilter[] { new ViewerFilter() {
+						@Override
+						public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+							return ((Pair<Port, ?>) element).getFirst().getName().toLowerCase().contains(text);
 						}
-					});
+					} });
 				}
 			}
 		});
@@ -250,7 +249,7 @@ public class DistanceEditorDialog extends Dialog {
 		final Rectangle shellBounds = getParentShell().getBounds();
 		final Point dialogSize = getShell().getSize();
 
-		getShell().setLocation(shellBounds.x + (shellBounds.width - dialogSize.x) / 2, shellBounds.y + (shellBounds.height - dialogSize.y) / 2);
+		getShell().setLocation(shellBounds.x + ((shellBounds.width - dialogSize.x) / 2), shellBounds.y + ((shellBounds.height - dialogSize.y) / 2));
 
 		final GridColumn[] columns = viewer.getGrid().getColumns();
 		for (final GridColumn c : columns) {

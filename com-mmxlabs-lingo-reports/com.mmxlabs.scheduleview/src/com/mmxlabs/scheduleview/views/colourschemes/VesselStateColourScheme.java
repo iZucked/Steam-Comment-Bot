@@ -27,8 +27,7 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 	public Color getBackground(final Object element) {
 		if (element instanceof Journey) {
 			final Journey journey = (Journey) element;
-			if (journey.getVesselState().equals(
-					scenario.fleet.VesselState.LADEN)) {
+			if (journey.getVesselState().equals(scenario.fleet.VesselState.LADEN)) {
 				return ColorCache.getColor(0, 255, 0);
 			} else {
 				return ColorCache.getColor(0, 0, 255);
@@ -43,11 +42,11 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 			if (visit.getStartTime().after(visit.getSlot().getWindowEnd())) {
 				return ColorCache.getColor(255, 0, 0);
 			}
-			return ColorCache.getColor(0,0,0);
+			return ColorCache.getColor(0, 0, 0);
 		} else if (element instanceof VesselEventVisit) {
 			final VesselEventVisit vev = (VesselEventVisit) element;
 			if (vev.getStartTime().after(vev.getVesselEvent().getEndDate())) {
-				return ColorCache.getColor(255,0,0);
+				return ColorCache.getColor(255, 0, 0);
 			}
 		}
 		return null;

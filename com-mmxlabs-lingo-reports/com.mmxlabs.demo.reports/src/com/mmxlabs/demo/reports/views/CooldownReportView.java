@@ -35,7 +35,7 @@ public class CooldownReportView extends EMFReportView {
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.demo.reports.views.CooldownReportView";
-	
+
 	public CooldownReportView() {
 		super("com.mmxlabs.demo.reports.CooldownReportView");
 
@@ -53,7 +53,7 @@ public class CooldownReportView extends EMFReportView {
 					while (index >= 0) {
 						final ScheduledEvent before = sequence.getEvents().get(index);
 
-						if (before instanceof SlotVisit || before instanceof VesselEventVisit) {
+						if ((before instanceof SlotVisit) || (before instanceof VesselEventVisit)) {
 							return before.getName();
 						}
 
@@ -70,7 +70,7 @@ public class CooldownReportView extends EMFReportView {
 				if (object instanceof Idle) {
 					final Idle idle = (Idle) object;
 					final Sequence sequence = (Sequence) idle.eContainer();
-					int index = sequence.getEvents().indexOf(idle) + 1;
+					final int index = sequence.getEvents().indexOf(idle) + 1;
 					final ScheduledEvent after = sequence.getEvents().get(index);
 
 					return after.getName();
@@ -95,7 +95,7 @@ public class CooldownReportView extends EMFReportView {
 				return null;
 			}
 		});
-		
+
 		addColumn("Cost", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
@@ -115,7 +115,7 @@ public class CooldownReportView extends EMFReportView {
 	protected IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 			}
 
@@ -138,13 +138,13 @@ public class CooldownReportView extends EMFReportView {
 									if (event instanceof Idle) {
 										final Idle idle = (Idle) event;
 										for (final FuelQuantity quantity : idle.getFuelUsage()) {
-											if (quantity.getFuelType() == FuelType.COOLDOWN && quantity.getQuantity() > 0) {
+											if ((quantity.getFuelType() == FuelType.COOLDOWN) && (quantity.getQuantity() > 0)) {
 												events.add(idle);
 												lastIdle = idle;
 											}
 										}
-									} else if (event instanceof SlotVisit && lastIdle != null) {
-										setInputEquivalents(event, Collections.singleton((Object) ((SlotVisit)event).getCargoAllocation()));
+									} else if ((event instanceof SlotVisit) && (lastIdle != null)) {
+										setInputEquivalents(event, Collections.singleton((Object) ((SlotVisit) event).getCargoAllocation()));
 										lastIdle = null;
 									}
 								}

@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Composite;
  * Refactoring IFeatureManipulator.
  * 
  * @author hinton
- *
+ * 
  */
 public interface ICellManipulator {
 

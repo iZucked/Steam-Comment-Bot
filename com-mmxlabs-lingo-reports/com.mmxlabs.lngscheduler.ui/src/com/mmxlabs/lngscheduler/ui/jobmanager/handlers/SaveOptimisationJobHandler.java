@@ -50,7 +50,7 @@ public class SaveOptimisationJobHandler extends AbstractOptimisationHandler {
 		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 		final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
-		if (selection != null && selection instanceof IStructuredSelection) {
+		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			final Iterator<?> itr = strucSelection.iterator();

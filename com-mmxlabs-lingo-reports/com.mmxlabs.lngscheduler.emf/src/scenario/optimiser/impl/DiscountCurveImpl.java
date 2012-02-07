@@ -22,24 +22,21 @@ import scenario.optimiser.DiscountCurve;
 import scenario.optimiser.OptimiserPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Discount Curve</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Discount Curve</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link scenario.optimiser.impl.DiscountCurveImpl#getStartDate <em>Start Date</em>}</li>
- *   <li>{@link scenario.optimiser.impl.DiscountCurveImpl#getDiscounts <em>Discounts</em>}</li>
+ * <li>{@link scenario.optimiser.impl.DiscountCurveImpl#getStartDate <em>Start Date</em>}</li>
+ * <li>{@link scenario.optimiser.impl.DiscountCurveImpl#getDiscounts <em>Discounts</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve {
 	/**
-	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getStartDate()
 	 * @generated
 	 * @ordered
@@ -47,9 +44,8 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	protected static final Date START_DATE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getStartDate() <em>Start Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getStartDate()
 	 * @generated
 	 * @ordered
@@ -57,18 +53,16 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	protected Date startDate = START_DATE_EDEFAULT;
 
 	/**
-	 * This is true if the Start Date attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is true if the Start Date attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean startDateESet;
 
 	/**
-	 * The cached value of the '{@link #getDiscounts() <em>Discounts</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getDiscounts() <em>Discounts</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDiscounts()
 	 * @generated
 	 * @ordered
@@ -76,8 +70,8 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	protected EList<Discount> discounts;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected DiscountCurveImpl() {
@@ -85,8 +79,8 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -95,10 +89,11 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<Discount> getDiscounts() {
 		if (discounts == null) {
 			discounts = new EObjectContainmentEList.Resolving<Discount>(Discount.class, this, OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS);
@@ -107,149 +102,161 @@ public class DiscountCurveImpl extends NamedObjectImpl implements DiscountCurve 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public Date getStartDate() {
 		return startDate;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	public void setStartDate(Date newStartDate) {
-		Date oldStartDate = startDate;
+	@Override
+	public void setStartDate(final Date newStartDate) {
+		final Date oldStartDate = startDate;
 		startDate = newStartDate;
-		boolean oldStartDateESet = startDateESet;
+		final boolean oldStartDateESet = startDateESet;
 		startDateESet = true;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.DISCOUNT_CURVE__START_DATE, oldStartDate, startDate, !oldStartDateESet));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public void unsetStartDate() {
-		Date oldStartDate = startDate;
-		boolean oldStartDateESet = startDateESet;
+		final Date oldStartDate = startDate;
+		final boolean oldStartDateESet = startDateESet;
 		startDate = START_DATE_EDEFAULT;
 		startDateESet = false;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.UNSET, OptimiserPackage.DISCOUNT_CURVE__START_DATE, oldStartDate, START_DATE_EDEFAULT, oldStartDateESet));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
+	@Override
 	public boolean isSetStartDate() {
 		return startDateESet;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
-				return ((InternalEList<?>)getDiscounts()).basicRemove(otherEnd, msgs);
+		case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
+			return ((InternalEList<?>) getDiscounts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
-				return getStartDate();
-			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
-				return getDiscounts();
+		case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
+			return getStartDate();
+		case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
+			return getDiscounts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
-				setStartDate((Date)newValue);
-				return;
-			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
-				getDiscounts().clear();
-				getDiscounts().addAll((Collection<? extends Discount>)newValue);
-				return;
+		case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
+			setStartDate((Date) newValue);
+			return;
+		case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
+			getDiscounts().clear();
+			getDiscounts().addAll((Collection<? extends Discount>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
-				unsetStartDate();
-				return;
-			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
-				getDiscounts().clear();
-				return;
+		case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
+			unsetStartDate();
+			return;
+		case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
+			getDiscounts().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
-				return isSetStartDate();
-			case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
-				return discounts != null && !discounts.isEmpty();
+		case OptimiserPackage.DISCOUNT_CURVE__START_DATE:
+			return isSetStartDate();
+		case OptimiserPackage.DISCOUNT_CURVE__DISCOUNTS:
+			return (discounts != null) && !discounts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (startDate: ");
-		if (startDateESet) result.append(startDate); else result.append("<unset>");
+		if (startDateESet) {
+			result.append(startDate);
+		} else {
+			result.append("<unset>");
+		}
 		result.append(')');
 		return result.toString();
 	}
 
-} //DiscountCurveImpl
+} // DiscountCurveImpl

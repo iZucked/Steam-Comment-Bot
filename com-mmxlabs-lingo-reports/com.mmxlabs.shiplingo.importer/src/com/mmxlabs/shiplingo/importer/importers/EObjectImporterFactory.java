@@ -19,21 +19,21 @@ import scenario.schedule.SchedulePackage;
  * 
  * 
  * @author Tom Hinton
- *
+ * 
  */
 public class EObjectImporterFactory {
 	private static final EObjectImporterFactory INSTANCE = new EObjectImporterFactory();
-	
+
 	private EObjectImporterFactory() {
-		
+
 	}
-	
+
 	public static EObjectImporterFactory getInstance() {
 		return INSTANCE;
 	}
-	
+
 	public EObjectImporter getImporter(final EClass importClass) {
-		//TODO handle any other special cases here.
+		// TODO handle any other special cases here.
 		if (PortPackage.eINSTANCE.getPort().isSuperTypeOf(importClass)) {
 			final PortImporter i = new PortImporter();
 			i.setOutputEClass(importClass);

@@ -34,7 +34,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
 public class CargoExistenceCheck {
 
 	private static final int dischargePrice = 1;
-	private CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+	private final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 	/**
 	 * Create a scenario with some cargos and vessels. Check that all cargos added to the scenario are in the output.
@@ -73,8 +73,9 @@ public class CargoExistenceCheck {
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
 		// print the legs to console
-		for (CargoAllocation ca : result.getCargoAllocations())
+		for (final CargoAllocation ca : result.getCargoAllocations()) {
 			ScenarioTools.printCargoAllocation(ca.getName(), ca);
+		}
 
 		// print each vessel's sequence
 		ScenarioTools.printSequences(result);
@@ -99,7 +100,7 @@ public class CargoExistenceCheck {
 
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
-			Cargo c = (Cargo) (ca.getLoadSlot().eContainer());
+			final Cargo c = (Cargo) (ca.getLoadSlot().eContainer());
 
 			Assert.assertTrue("Input cargo is in output", inputCargos.contains(c));
 

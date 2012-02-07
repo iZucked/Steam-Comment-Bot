@@ -26,15 +26,14 @@ import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 
 public class GanttViewerTest {
 
-	public static class GanttLabelProvider implements ILabelProvider,
-			IGanttChartToolTipProvider, IColorProvider {
+	public static class GanttLabelProvider implements ILabelProvider, IGanttChartToolTipProvider, IColorProvider {
 
 		public GanttLabelProvider() {
 
 		}
 
 		@Override
-		public void addListener(ILabelProviderListener listener) {
+		public void addListener(final ILabelProviderListener listener) {
 
 		}
 
@@ -44,75 +43,73 @@ public class GanttViewerTest {
 		}
 
 		@Override
-		public boolean isLabelProperty(Object element, String property) {
+		public boolean isLabelProperty(final Object element, final String property) {
 			return false;
 		}
 
 		@Override
-		public void removeListener(ILabelProviderListener listener) {
+		public void removeListener(final ILabelProviderListener listener) {
 
 		}
 
 		@Override
-		public Color getForeground(Object element) {
+		public Color getForeground(final Object element) {
 			return null;
 		}
 
 		@Override
-		public Color getBackground(Object element) {
-			Random r = new Random();
-			return new Color(null, r.nextInt(255), r.nextInt(255),
-					r.nextInt(255));
+		public Color getBackground(final Object element) {
+			final Random r = new Random();
+			return new Color(null, r.nextInt(255), r.nextInt(255), r.nextInt(255));
 		}
 
 		@Override
-		public String getToolTipText(Object element) {
+		public String getToolTipText(final Object element) {
 			return null;
 		}
 
 		@Override
-		public String getToolTipTitle(Object element) {
+		public String getToolTipTitle(final Object element) {
 			return null;
 		}
 
 		@Override
-		public Image getToolTipImage(Object element) {
+		public Image getToolTipImage(final Object element) {
 			return null;
 		}
 
 		@Override
-		public Image getImage(Object element) {
+		public Image getImage(final Object element) {
 			return null;
 		}
 
 		@Override
-		public String getText(Object element) {
+		public String getText(final Object element) {
 			return element.toString();
 		}
 	}
 
-	public static class GanttContentProvider extends TreeNodeContentProvider
-			implements IGanttChartContentProvider {
+	public static class GanttContentProvider extends TreeNodeContentProvider implements IGanttChartContentProvider {
 
 		int counter = 0;
 
 		Map<Object, Calendar> map = new HashMap<Object, Calendar>();
 
 		@Override
-		public Calendar getElementStartTime(Object element) {
+		public Calendar getElementStartTime(final Object element) {
 			return createCalendar(element);
 		}
 
 		@Override
-		public Calendar getElementEndTime(Object element) {
+		public Calendar getElementEndTime(final Object element) {
 			return createCalendar(element);
 		}
 
-		Calendar createCalendar(Object o) {
+		Calendar createCalendar(final Object o) {
 			if (map.containsKey(o)) {
 				return map.get(o);
 			} else {
-				Calendar c = Calendar.getInstance();
+				final Calendar c = Calendar.getInstance();
 				c.add(Calendar.HOUR, counter++ * 24);
 				map.put(o, c);
 				return c;
@@ -121,37 +118,37 @@ public class GanttViewerTest {
 		}
 
 		@Override
-		public Calendar getElementPlannedStartTime(Object element) {
+		public Calendar getElementPlannedStartTime(final Object element) {
 			return null;
 		}
 
 		@Override
-		public Calendar getElementPlannedEndTime(Object element) {
+		public Calendar getElementPlannedEndTime(final Object element) {
 			return null;
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
-		Display display = new Display();
-		Shell shell = new Shell(display);
+		final Display display = new Display();
+		final Shell shell = new Shell(display);
 		shell.setText("Gantt Viewer Tester");
 		shell.setLayout(new FillLayout());
 
-		GanttChartViewer viewer = new GanttChartViewer(shell);
+		final GanttChartViewer viewer = new GanttChartViewer(shell);
 
 		viewer.setContentProvider(new GanttContentProvider());
 		viewer.setLabelProvider(new GanttLabelProvider());
 
-		TreeNode resources[] = new TreeNode[2];
+		final TreeNode resources[] = new TreeNode[2];
 		resources[0] = new TreeNode("resource1");
 		resources[1] = new TreeNode("resource2");
 
-		TreeNode[] children1 = new TreeNode[2];
+		final TreeNode[] children1 = new TreeNode[2];
 		children1[0] = new TreeNode("child1");
 		children1[1] = new TreeNode("child2");
 
-		TreeNode[] children2 = new TreeNode[2];
+		final TreeNode[] children2 = new TreeNode[2];
 		children2[0] = new TreeNode("child3");
 		children2[1] = new TreeNode("child4");
 

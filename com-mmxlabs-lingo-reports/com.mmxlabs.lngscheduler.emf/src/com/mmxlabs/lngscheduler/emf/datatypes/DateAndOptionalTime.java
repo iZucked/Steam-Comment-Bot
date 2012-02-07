@@ -27,17 +27,17 @@ public class DateAndOptionalTime extends Date {
 		this.onlyDate = isOnlyDate;
 	}
 
-	private boolean onlyDate;
+	private final boolean onlyDate;
 
 	public boolean isOnlyDate() {
 		return onlyDate;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj instanceof DateAndOptionalTime) {
 			final DateAndOptionalTime daot = (DateAndOptionalTime) obj;
-			return super.equals(obj) && daot.isOnlyDate() == isOnlyDate();
+			return super.equals(obj) && (daot.isOnlyDate() == isOnlyDate());
 		}
 		return super.equals(obj);
 	}

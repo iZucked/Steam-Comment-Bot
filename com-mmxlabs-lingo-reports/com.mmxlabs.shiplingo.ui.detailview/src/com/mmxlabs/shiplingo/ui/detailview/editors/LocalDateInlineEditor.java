@@ -34,17 +34,16 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 
 	private final boolean optionalDate;
 
-	public LocalDateInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain, final ICommandProcessor processor) {
+	public LocalDateInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor processor) {
 		super(path, feature, editingDomain, processor);
-		optionalDate = feature.getEType().equals(
-				ScenarioPackage.eINSTANCE.getDateAndOptionalTime());
+		optionalDate = feature.getEType().equals(ScenarioPackage.eINSTANCE.getDateAndOptionalTime());
 		final EClass container = feature.getEContainingClass();
 		// check for associated port reference
 		EReference portReference = null;
 		for (final EReference ref : container.getEAllReferences()) {
-			if (ref.isMany())
+			if (ref.isMany()) {
 				continue;
+			}
 			if (ref.getEReferenceType().equals(PortPackage.eINSTANCE.getPort())) {
 				portReference = ref;
 				break;
@@ -63,17 +62,15 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 	// }
 
 	@Override
-	protected Control createValueControl(Composite parent) {
-		final DateAndComboTime dateAndTime = new DateAndComboTime(parent,
-				SWT.DROP_DOWN, false, 0, optionalDate);
+	protected Control createValueControl(final Composite parent) {
+		final DateAndComboTime dateAndTime = new DateAndComboTime(parent, SWT.DROP_DOWN, false, 0, optionalDate);
 		this.dateAndTime = dateAndTime;
 
 		final Listener listener = new Listener() {
 			@Override
 			public void handleEvent(final Event event) {
 				if (optionalDate) {
-					doSetValue(new DateAndOptionalTime(dateAndTime.getValue()
-							.getTime(), !dateAndTime.isTimeSet()));
+					doSetValue(new DateAndOptionalTime(dateAndTime.getValue().getTime(), !dateAndTime.isTimeSet()));
 				} else {
 					doSetValue(dateAndTime.getValue().getTime());
 				}
@@ -85,7 +82,7 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 
 		dateAndTime.addDisposeListener(new DisposeListener() {
 			@Override
-			public void widgetDisposed(DisposeEvent e) {
+			public void widgetDisposed(final DisposeEvent e) {
 				dateAndTime.removeListener(SWT.Selection, listener);
 				dateAndTime.removeListener(SWT.DefaultSelection, listener);
 			}
@@ -95,22 +92,19 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 	}
 
 	private TimeZone getTimeZone() {
-		final Port port = (Port) (portReference == null ? null : input
-				.eGet(portReference));
-		final TimeZone zone = TimeZone.getTimeZone(portReference == null
-				|| port == null || port.getTimeZone() == null ? "UTC" : port
-				.getTimeZone());
+		final Port port = (Port) (portReference == null ? null : input.eGet(portReference));
+		final TimeZone zone = TimeZone.getTimeZone((portReference == null) || (port == null) || (port.getTimeZone() == null) ? "UTC" : port.getTimeZone());
 		return zone;
 	}
 
 	private Calendar getCalendar(final Date utcDate) {
 		final Calendar cal = Calendar.getInstance(getTimeZone());
-		if (utcDate == null)
+		if (utcDate == null) {
 			return null;
+		}
 		cal.setTime(utcDate);
 		if (optionalDate && ((DateAndOptionalTime) utcDate).isOnlyDate()) {
-			final Port port = (Port) (portReference == null ? null : input
-					.eGet(portReference));
+			final Port port = (Port) (portReference == null ? null : input.eGet(portReference));
 			if (port != null) {
 				cal.set(Calendar.HOUR_OF_DAY, port.getDefaultWindowStart());
 			}
@@ -120,18 +114,19 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateControl() {
-		if (dateAndTime.isDisposed())
+		if (dateAndTime.isDisposed()) {
 			return;
-		if (input != null && portReference != null
-				&& input.eGet(portReference) != null) {
+		}
+		if ((input != null) && (portReference != null) && (input.eGet(portReference) != null)) {
 			dateAndTime.setTimeZone(getTimeZone());
 		}
 	}
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		if (dateAndTime.isDisposed())
+		if (dateAndTime.isDisposed()) {
 			return;
+		}
 		// Value will be a Date, so we need to find a port and localize the
 		// date. Same as in the other date editors.
 		if (optionalDate) {
@@ -144,10 +139,9 @@ public class LocalDateInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	protected boolean updateOnChangeToFeature(Object changedFeature) {
-		return super.updateOnChangeToFeature(changedFeature)
-				|| changedFeature.equals(portReference); // update if port
-															// changes
+	protected boolean updateOnChangeToFeature(final Object changedFeature) {
+		return super.updateOnChangeToFeature(changedFeature) || changedFeature.equals(portReference); // update if port
+																										// changes
 	}
 
 	@Override

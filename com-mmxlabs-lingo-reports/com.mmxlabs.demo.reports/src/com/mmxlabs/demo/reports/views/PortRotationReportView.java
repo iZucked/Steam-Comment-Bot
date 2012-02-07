@@ -19,8 +19,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.demo.reports.views.EMFReportView.ColumnHandler;
-
 import scenario.Scenario;
 import scenario.ScenarioPackage;
 import scenario.cargo.LoadSlot;
@@ -59,21 +57,17 @@ public class PortRotationReportView extends EMFReportView {
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 		final EventsPackage ep = EventsPackage.eINSTANCE;
-//		final CargoPackage cp = CargoPackage.eINSTANCE;
-//		final PortPackage pp = PortPackage.eINSTANCE;
+		// final CargoPackage cp = CargoPackage.eINSTANCE;
+		// final PortPackage pp = PortPackage.eINSTANCE;
 
-		final EStructuralFeature name = ScenarioPackage.eINSTANCE
-				.getNamedObject_Name();
+		final EStructuralFeature name = ScenarioPackage.eINSTANCE.getNamedObject_Name();
 
 		addColumn("Schedule", containingScheduleFormatter);
 
-		 vesselColumn = addColumn("Vessel", objectFormatter,
-				ScenarioPackage.eINSTANCE.getScenarioObject__GetContainer(),
-				sp.getSequence_Vessel(),
+		vesselColumn = addColumn("Vessel", objectFormatter, ScenarioPackage.eINSTANCE.getScenarioObject__GetContainer(), sp.getSequence_Vessel(),
 				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
 
-		addColumn("Type", objectFormatter,
-				ep.getScheduledEvent__GetDisplayTypeName());
+		addColumn("Type", objectFormatter, ep.getScheduledEvent__GetDisplayTypeName());
 
 		addColumn("ID", objectFormatter, ep.getScheduledEvent__GetName());
 		// objectFormatter,
@@ -81,32 +75,26 @@ public class PortRotationReportView extends EMFReportView {
 		// sp.getCargoAllocation__GetName()
 		// );
 
-		 dateColumn = addColumn("Start Date",
-				datePartFormatter, ep.getScheduledEvent__GetLocalStartTime());
-		addColumn("Start Time", timePartFormatter,
-				ep.getScheduledEvent__GetLocalStartTime());
+		dateColumn = addColumn("Start Date", datePartFormatter, ep.getScheduledEvent__GetLocalStartTime());
+		addColumn("Start Time", timePartFormatter, ep.getScheduledEvent__GetLocalStartTime());
 
-		addColumn("End Date", datePartFormatter,
-				ep.getScheduledEvent__GetLocalEndTime());
-		addColumn("End Time", timePartFormatter,
-				ep.getScheduledEvent__GetLocalEndTime());
+		addColumn("End Date", datePartFormatter, ep.getScheduledEvent__GetLocalEndTime());
+		addColumn("End Time", timePartFormatter, ep.getScheduledEvent__GetLocalEndTime());
 
-		 durationColumn = addColumn("Duration (DD:HH)",
-				new BaseFormatter() {
-					@Override
-					public String format(final Object object) {
-						final ScheduledEvent se = (ScheduledEvent) object;
-						final int duration = se.getEventDuration();
-						return String.format("%02d:%02d", duration / 24,
-								duration % 24);
-					}
+		durationColumn = addColumn("Duration (DD:HH)", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				final ScheduledEvent se = (ScheduledEvent) object;
+				final int duration = se.getEventDuration();
+				return String.format("%02d:%02d", duration / 24, duration % 24);
+			}
 
-					@Override
-					public Comparable getComparable(final Object object) {
-						return ((ScheduledEvent) object).getEventDuration();
-					}
+			@Override
+			public Comparable getComparable(final Object object) {
+				return ((ScheduledEvent) object).getEventDuration();
+			}
 
-				});
+		});
 		addColumn("Speed", objectFormatter, ep.getJourney_Speed());
 		addColumn("Distance", integerFormatter, ep.getJourney_Distance());
 		addColumn("From Port", objectFormatter, ep.getJourney_FromPort(), name);
@@ -171,8 +159,7 @@ public class PortRotationReportView extends EMFReportView {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof FuelMixture) {
-						for (final FuelQuantity q : ((FuelMixture) object)
-								.getFuelUsage()) {
+						for (final FuelQuantity q : ((FuelMixture) object).getFuelUsage()) {
 							if (q.getFuelType().equals(ft)) {
 								return (int) q.getUnitPrice();
 							}
@@ -224,12 +211,15 @@ public class PortRotationReportView extends EMFReportView {
 			@Override
 			public Integer getIntValue(final Object object) {
 				long total = 0;
-				if (object instanceof FuelMixture)
+				if (object instanceof FuelMixture) {
 					total += ((FuelMixture) object).getTotalFuelCost();
-				if (object instanceof ScheduledEvent)
+				}
+				if (object instanceof ScheduledEvent) {
 					total += ((ScheduledEvent) object).getHireCost();
-				if (object instanceof Journey)
+				}
+				if (object instanceof Journey) {
 					total += ((Journey) object).getRouteCost();
+				}
 
 				return (int) total;
 			}
@@ -238,9 +228,8 @@ public class PortRotationReportView extends EMFReportView {
 
 	private final List<String> entityColumnNames = new ArrayList<String>();
 
-	
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
 		durationColumn.column.getColumn().notifyListeners(SWT.Selection, null);
 		dateColumn.column.getColumn().notifyListeners(SWT.Selection, null);
@@ -257,8 +246,7 @@ public class PortRotationReportView extends EMFReportView {
 		return new IStructuredContentProvider() {
 
 			@Override
-			public void inputChanged(final Viewer viewer, Object oldInput,
-					final Object newInput) {
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				Display.getCurrent().asyncExec(new Runnable() {
 					@Override
 					public void run() {
@@ -276,8 +264,7 @@ public class PortRotationReportView extends EMFReportView {
 									entityColumnNames.clear();
 
 									EObject o = (EObject) element;
-									while (o != null
-											&& !(o instanceof Scenario)) {
+									while ((o != null) && !(o instanceof Scenario)) {
 										o = o.eContainer();
 									}
 
@@ -310,8 +297,7 @@ public class PortRotationReportView extends EMFReportView {
 				if (object instanceof Iterable) {
 					for (final Object o : ((Iterable<?>) object)) {
 						if (o instanceof Schedule) {
-							for (final Sequence seq : ((Schedule) o)
-									.getSequences()) {
+							for (final Sequence seq : ((Schedule) o).getSequences()) {
 								allEvents.addAll(seq.getEvents());
 							}
 						}
@@ -319,11 +305,7 @@ public class PortRotationReportView extends EMFReportView {
 				}
 				for (final ScheduledEvent event : allEvents) {
 					if (event instanceof SlotVisit) {
-						setInputEquivalents(event, 
-								Arrays.asList(
-										new Object[] {
-											((SlotVisit) event).getCargoAllocation()	
-										}));
+						setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getCargoAllocation() }));
 					} else {
 						setInputEquivalents(event, Collections.emptyList());
 					}
@@ -341,8 +323,9 @@ public class PortRotationReportView extends EMFReportView {
 	}
 
 	private void addEntityColumn(final Entity entity) {
-		if (!(entity instanceof GroupEntity))
+		if (!(entity instanceof GroupEntity)) {
 			return;
+		}
 		final String title = "Profit to " + entity.getName();
 		entityColumnNames.add(title);
 		addColumn(title, new IntegerFormatter() {
@@ -353,31 +336,25 @@ public class PortRotationReportView extends EMFReportView {
 					if (slotVisit.getSlot() instanceof LoadSlot) {
 						// display P&L
 						int value = 0;
-						final CargoAllocation allocation = slotVisit
-								.getCargoAllocation();
+						final CargoAllocation allocation = slotVisit.getCargoAllocation();
 
 						if (allocation == null) {
 							return null;
 						}
 
 						if (allocation.getLoadRevenue() != null) {
-							if (entity.equals(allocation.getLoadRevenue()
-									.getEntity())) {
+							if (entity.equals(allocation.getLoadRevenue().getEntity())) {
 								value += allocation.getLoadRevenue().getValue();
 							}
 						}
 						if (allocation.getShippingRevenue() != null) {
-							if (entity.equals(allocation.getShippingRevenue()
-									.getEntity())) {
-								value += allocation.getShippingRevenue()
-										.getValue();
+							if (entity.equals(allocation.getShippingRevenue().getEntity())) {
+								value += allocation.getShippingRevenue().getValue();
 							}
 						}
 						if (allocation.getDischargeRevenue() != null) {
-							if (entity.equals(allocation.getDischargeRevenue()
-									.getEntity())) {
-								value += allocation.getDischargeRevenue()
-										.getValue();
+							if (entity.equals(allocation.getDischargeRevenue().getEntity())) {
+								value += allocation.getDischargeRevenue().getValue();
 							}
 						}
 						return value;

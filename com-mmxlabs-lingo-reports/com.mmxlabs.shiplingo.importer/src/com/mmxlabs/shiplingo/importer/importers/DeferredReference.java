@@ -26,8 +26,7 @@ public class DeferredReference implements Runnable {
 
 	protected Map<Pair<EClass, String>, EObject> registry;
 
-	public DeferredReference(final EObject target, final EReference reference,
-			final String key) {
+	public DeferredReference(final EObject target, final EReference reference, final String key) {
 		super();
 		this.target = target;
 		this.reference = reference;
@@ -51,7 +50,7 @@ public class DeferredReference implements Runnable {
 		return registry;
 	}
 
-	public void setRegistry(Map<Pair<EClass, String>, EObject> registry) {
+	public void setRegistry(final Map<Pair<EClass, String>, EObject> registry) {
 		this.registry = registry;
 	}
 
@@ -60,11 +59,10 @@ public class DeferredReference implements Runnable {
 		assert this.registry != null;
 
 		EObject value = registry.get(key);
-		
+
 		if (value == null) {
 			if (key.getSecond().isEmpty() == false) {
-				for (final Map.Entry<Pair<EClass, String>, EObject> entry : registry
-						.entrySet()) {
+				for (final Map.Entry<Pair<EClass, String>, EObject> entry : registry.entrySet()) {
 					if (entry.getKey().getSecond().equals(key.getSecond())) {
 						if (key.getFirst().isSuperTypeOf(entry.getKey().getFirst())) {
 							value = entry.getValue();
@@ -74,12 +72,11 @@ public class DeferredReference implements Runnable {
 				}
 			}
 		}
-		
+
 		if (value != null) {
 			if (reference.isMany()) {
 				@SuppressWarnings("unchecked")
-				final EList<EObject> stuff = (EList<EObject>) (target
-						.eGet(reference));
+				final EList<EObject> stuff = (EList<EObject>) (target.eGet(reference));
 				stuff.add(value);
 			} else {
 				target.eSet(reference, value);
@@ -87,11 +84,8 @@ public class DeferredReference implements Runnable {
 		} else {
 			if (key.getSecond().isEmpty() == false) {
 				// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
-				//TODO generate proper warning, with line # and filename.
-				System.err.println("Warning: no value for "
-						+ key.getFirst().getName() + " named "
-						+ key.getSecond() + " (setting " + reference.getName()
-						+ " on a " + target.eClass().getName() + ")");
+				// TODO generate proper warning, with line # and filename.
+				System.err.println("Warning: no value for " + key.getFirst().getName() + " named " + key.getSecond() + " (setting " + reference.getName() + " on a " + target.eClass().getName() + ")");
 			}
 		}
 	}

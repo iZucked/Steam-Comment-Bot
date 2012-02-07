@@ -39,20 +39,19 @@ public class DateManipulator extends BasicAttributeManipulator {
 	 * @param field
 	 * @param editingDomain
 	 */
-	public DateManipulator(final EAttribute field,
-			final EditingDomain editingDomain) {
+	public DateManipulator(final EAttribute field, final EditingDomain editingDomain) {
 		super(field, editingDomain);
 		// check for port
 		final EClass container = field.getEContainingClass();
 		// check for associated port reference
 
-		optionalTime = field.getEType() == ScenarioPackage.eINSTANCE
-				.getDateAndOptionalTime();
+		optionalTime = field.getEType() == ScenarioPackage.eINSTANCE.getDateAndOptionalTime();
 
 		EReference portReference = null;
 		for (final EReference ref : container.getEAllReferences()) {
-			if (ref.isMany())
+			if (ref.isMany()) {
 				continue;
+			}
 			if (ref.getEReferenceType().equals(PortPackage.eINSTANCE.getPort())) {
 				portReference = ref;
 				break;
@@ -63,35 +62,33 @@ public class DateManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
-		if (object == null)
+		if (object == null) {
 			return "";
+		}
 		final Calendar calendar;
 		if (optionalTime) {
 			calendar = ((Pair<Calendar, Boolean>) getValue(object)).getFirst();
 		} else {
 			calendar = (Calendar) getValue(object);
 		}
-		
-		final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-				DateFormat.SHORT);
+
+		final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 		df.setCalendar(calendar);
-		if (calendar == null)
+		if (calendar == null) {
 			return "";
-		return df.format(calendar.getTime()) + " ("
-				+ calendar.getTimeZone().getDisplayName(false, TimeZone.SHORT)
-				+ ")";
+		}
+		return df.format(calendar.getTime()) + " (" + calendar.getTimeZone().getDisplayName(false, TimeZone.SHORT) + ")";
 
 	}
 
 	@Override
-	public void setValue(Object object, Object value) {
+	public void setValue(final Object object, final Object value) {
 		if (value == null) {
 			super.setValue(object, null);
 		} else {
 			if (optionalTime) {
 				final Pair<Calendar, Boolean> p = (Pair<Calendar, Boolean>) value;
-				super.setValue(object, new DateAndOptionalTime(p.getFirst()
-						.getTime(), !(p.getSecond())));
+				super.setValue(object, new DateAndOptionalTime(p.getFirst().getTime(), !(p.getSecond())));
 			} else {
 				super.setValue(object, ((Calendar) value).getTime());
 			}
@@ -99,7 +96,7 @@ public class DateManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public CellEditor getCellEditor(final Composite c, Object object) {
+	public CellEditor getCellEditor(final Composite c, final Object object) {
 		if (optionalTime) {
 			return new DateAndOptionalTimeCellEditor(c);
 		} else {
@@ -108,20 +105,20 @@ public class DateManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public Object getValue(Object object) {
-		if (object == null)
+	public Object getValue(final Object object) {
+		if (object == null) {
 			return null;
+		}
 
 		final Date date = (Date) super.getValue(object);
 
-		if (date == null)
+		if (date == null) {
 			return null;
+		}
 
 		final EObject obj = (EObject) object;
-		final Port port = portReference == null ? null : ((Port) obj
-				.eGet(portReference));
-		final TimeZone zone = TimeZone.getTimeZone(port == null
-				|| port.getTimeZone() == null ? "UTC" : port.getTimeZone());
+		final Port port = portReference == null ? null : ((Port) obj.eGet(portReference));
+		final TimeZone zone = TimeZone.getTimeZone((port == null) || (port.getTimeZone() == null) ? "UTC" : port.getTimeZone());
 
 		final Calendar cal = Calendar.getInstance(zone);
 		cal.setTime(date);
@@ -132,31 +129,28 @@ public class DateManipulator extends BasicAttributeManipulator {
 					cal.set(Calendar.HOUR_OF_DAY, port.getDefaultWindowStart());
 				}
 			}
-			return new Pair<Calendar, Boolean>(cal,
-					!((DateAndOptionalTime) date).isOnlyDate());
+			return new Pair<Calendar, Boolean>(cal, !((DateAndOptionalTime) date).isOnlyDate());
 		}
 
 		return cal;
 	}
 
 	@Override
-	public Comparable getComparable(Object object) {
+	public Comparable getComparable(final Object object) {
 		return (Date) super.getValue(object);
 	}
 
-
 	@Override
-	public Object getFilterValue(Object object) {
+	public Object getFilterValue(final Object object) {
 		final Date date = (Date) super.getValue(object);
 
-		if (date == null)
+		if (date == null) {
 			return null;
+		}
 
 		final EObject obj = (EObject) object;
-		final Port port = portReference == null ? null : ((Port) obj
-				.eGet(portReference));
-		final TimeZone zone = TimeZone.getTimeZone(port == null
-				|| port.getTimeZone() == null ? "UTC" : port.getTimeZone());
+		final Port port = portReference == null ? null : ((Port) obj.eGet(portReference));
+		final TimeZone zone = TimeZone.getTimeZone((port == null) || (port.getTimeZone() == null) ? "UTC" : port.getTimeZone());
 
 		final Calendar cal = Calendar.getInstance(zone);
 		cal.setTime(date);

@@ -59,7 +59,7 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 		final IEclipseJobManager jm = Activator.getDefault().getJobManager();
 
-		if (selection != null && selection instanceof IStructuredSelection) {
+		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			final Iterator<?> itr = strucSelection.iterator();
@@ -78,7 +78,7 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 					final IJobDescriptor existingJob = jm.findJobForResource(resource);
 					final IJobControl control = jm.getControlForJob(existingJob);
 
-					if (control != null && control.getJobState() == EJobState.CREATED) {
+					if ((control != null) && (control.getJobState() == EJobState.CREATED)) {
 						// Remove existing job. We assume that it will be disposed somehow.....
 						jm.removeJob(existingJob);
 						// } else {
@@ -99,18 +99,18 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 								// Prepare should load up the model and evaluate the initial solution.
 								control.prepare();
 
-
 								final Scenario output = control.getJobOutput().scenario;
-								
+
 								final Iterator<Schedule> iterator = output.getScheduleModel().getSchedules().iterator();
 								Schedule lastSchedule = null;
 								while (iterator.hasNext()) {
 									lastSchedule = iterator.next();
-									if (iterator.hasNext())
+									if (iterator.hasNext()) {
 										iterator.remove();
+									}
 								}
 								output.getOptimisation().getCurrentSettings().setInitialSchedule(lastSchedule);
-								
+
 								// Create new resource using original scenario URI
 								final XMIResourceImpl r = new XMIResourceImpl(scenario.eResource().getURI());
 								// Copy scenario to ensure we don't change resources.
@@ -161,7 +161,7 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 
 		final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-		if (selection != null && selection instanceof IStructuredSelection) {
+		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
 			// if
@@ -185,7 +185,7 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 
 					final IJobDescriptor job = jm.findJobForResource(resource);
 					final IJobControl control = jm.getControlForJob(job);
-					if (job == null || control.getJobState() == EJobState.CREATED) {
+					if ((job == null) || (control.getJobState() == EJobState.CREATED)) {
 						return true;
 					}
 				}

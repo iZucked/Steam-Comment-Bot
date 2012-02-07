@@ -18,13 +18,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Control;
-//import org.eclipse.ui.dialogs.ListSelectionDialog;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
@@ -38,62 +34,58 @@ import com.mmxlabs.shiplingo.ui.detailview.utils.CommandUtil;
  */
 public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 	private final IReferenceValueProvider valueProvider;
-	private EAttribute nameAttribute;
+	private final EAttribute nameAttribute;
 
-	public MultipleReferenceManipulator(final EStructuralFeature field,
-			final EditingDomain editingDomain,
-			final IReferenceValueProvider valueProvider,
-			final EAttribute nameAttribute) {
+	public MultipleReferenceManipulator(final EStructuralFeature field, final EditingDomain editingDomain, final IReferenceValueProvider valueProvider, final EAttribute nameAttribute) {
 		super(field, editingDomain);
 		this.valueProvider = valueProvider;
 		this.nameAttribute = nameAttribute;
 	}
 
 	@Override
-	protected String renderValue(Object value) {
-		if (value == null)
+	protected String renderValue(final Object value) {
+		if (value == null) {
 			return "";
-		List<? extends EObject> selectedValues = (List<? extends EObject>) value;
+		}
+		final List<? extends EObject> selectedValues = (List<? extends EObject>) value;
 		final StringBuilder sb = new StringBuilder();
 		for (final EObject obj : selectedValues) {
-			if (sb.length() > 0)
+			if (sb.length() > 0) {
 				sb.append(", ");
+			}
 			sb.append(obj.eGet(nameAttribute));
 		}
 		return sb.toString();
 	}
 
 	@Override
-	public void setValue(Object object, Object value) {
+	public void setValue(final Object object, final Object value) {
 		final Object currentValue = getValue(object);
-		if (Equality.isEqual(currentValue, value)) return;
-		editingDomain.getCommandStack().execute(
-				CommandUtil.createMultipleAttributeSetter(editingDomain,
-						(EObject) object, field, (Collection) value));
+		if (Equality.isEqual(currentValue, value)) {
+			return;
+		}
+		editingDomain.getCommandStack().execute(CommandUtil.createMultipleAttributeSetter(editingDomain, (EObject) object, field, (Collection) value));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Object openDialogBox(Control cellEditorWindow, Object object) {
-		List<Pair<String, EObject>> options = valueProvider.getAllowedValues(
-				(EObject) object, field);
+	protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
+		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues((EObject) object, field);
 
-		if (options.size() > 0 && options.get(0).getSecond() == null)
+		if ((options.size() > 0) && (options.get(0).getSecond() == null)) {
 			options.remove(0);
+		}
 
-		ListSelectionDialog listSelectionDialog = new ListSelectionDialog(
-				cellEditorWindow.getShell(), options.toArray(),
-				new ArrayContentProvider(),
+		final ListSelectionDialog listSelectionDialog = new ListSelectionDialog(cellEditorWindow.getShell(), options.toArray(), new ArrayContentProvider(),
 
-				new LabelProvider() {
+		new LabelProvider() {
 
-					@Override
-					public String getText(Object element) {
-						return ((Pair<String, ?>) element).getFirst();
-					}
-				}
-				);
-		ListSelectionDialog dlg = listSelectionDialog;//, "Select values:");
+			@Override
+			public String getText(final Object element) {
+				return ((Pair<String, ?>) element).getFirst();
+			}
+		});
+		final ListSelectionDialog dlg = listSelectionDialog;// , "Select values:");
 		dlg.setTitle("Value Selection");
 
 		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
@@ -107,16 +99,16 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		dlg.setInitialSelections(selectedOptions.toArray());
 		dlg.addColumn("Name", new ColumnLabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				return ((Pair<String, ?>) element).getFirst();
 			}
 		});
-		
-//		dlg.addColumn("Type", );
-		
-		dlg.groupBy(new ColumnLabelProvider(){
+
+		// dlg.addColumn("Type", );
+
+		dlg.groupBy(new ColumnLabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				return ((Pair<?, EObject>) element).getSecond().eClass().getName();
 			}
 		});
@@ -128,21 +120,19 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 			for (final Object o : result) {
 				resultList.add(((Pair<String, EObject>) o).getSecond());
 			}
-			
+
 			return resultList;
 		}
 		return null;
 	}
 
 	@Override
-	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
-			Object object) {
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		if (object != null) {
 			final EList<EObject> values = (EList) super.getValue(object);
 			final LinkedList<Pair<Notifier, List<Object>>> notifiers = new LinkedList<Pair<Notifier, List<Object>>>();
 			for (final EObject ref : values) {
-				for (final Pair<Notifier, List<Object>> p : valueProvider
-						.getNotifiers((EObject) object, (EReference) field, ref)) {
+				for (final Pair<Notifier, List<Object>> p : valueProvider.getNotifiers((EObject) object, (EReference) field, ref)) {
 					notifiers.add(p);
 				}
 			}

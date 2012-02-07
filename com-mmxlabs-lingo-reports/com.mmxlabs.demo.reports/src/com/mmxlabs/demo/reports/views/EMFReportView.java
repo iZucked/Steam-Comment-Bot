@@ -68,8 +68,7 @@ import com.mmxlabs.shiplingo.ui.tableview.filter.FilterField;
  * @author hinton
  * 
  */
-public abstract class EMFReportView extends ViewPart implements
-		ISelectionListener {
+public abstract class EMFReportView extends ViewPart implements ISelectionListener {
 	private final List<ColumnHandler> handlers = new ArrayList<ColumnHandler>();
 	private final List<ColumnHandler> handlersInOrder = new ArrayList<ColumnHandler>();
 	private FilterField filterField;
@@ -85,26 +84,26 @@ public abstract class EMFReportView extends ViewPart implements
 
 	private final ICellManipulator noEditing = new ICellManipulator() {
 		@Override
-		public void setValue(Object object, Object value) {
-			
+		public void setValue(final Object object, final Object value) {
+
 		}
-		
+
 		@Override
-		public Object getValue(Object object) {
+		public Object getValue(final Object object) {
 			return null;
 		}
-		
+
 		@Override
-		public CellEditor getCellEditor(Composite parent, Object object) {
+		public CellEditor getCellEditor(final Composite parent, final Object object) {
 			return null;
 		}
-		
+
 		@Override
-		public boolean canEdit(Object object) {
+		public boolean canEdit(final Object object) {
 			return false;
 		}
 	};
-	
+
 	protected class ColumnHandler {
 		private static final String COLUMN_HANDLER = "COLUMN_HANDLER";
 		private final IFormatter formatter;
@@ -112,8 +111,7 @@ public abstract class EMFReportView extends ViewPart implements
 		private final String title;
 		public GridViewerColumn column;
 
-		public ColumnHandler(final IFormatter formatter,
-				final Object[] features, final String title) {
+		public ColumnHandler(final IFormatter formatter, final Object[] features, final String title) {
 			super();
 			this.formatter = formatter;
 			this.path = new CompiledEMFPath(true, features);
@@ -121,30 +119,28 @@ public abstract class EMFReportView extends ViewPart implements
 		}
 
 		public GridViewerColumn createColumn(final EObjectTableViewer viewer) {
-			final GridViewerColumn column = viewer.addColumn(title, 
-					new ICellRenderer() {
-						@Override
-						public String render(Object object) {
-							return formatter.format(object);
-						}
+			final GridViewerColumn column = viewer.addColumn(title, new ICellRenderer() {
+				@Override
+				public String render(final Object object) {
+					return formatter.format(object);
+				}
 
-						@Override
-						public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
-							// TODO fix this
-							return Collections.emptySet();
-						}
-						
-						@Override
-						public Comparable getComparable(Object object) {
-							return formatter.getComparable(object);
-						}
+				@Override
+				public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
+					// TODO fix this
+					return Collections.emptySet();
+				}
 
-						@Override
-						public Object getFilterValue(Object object) {
-							return formatter.getFilterable(object);
-						}
-					}
-					, noEditing, path);
+				@Override
+				public Comparable getComparable(final Object object) {
+					return formatter.getComparable(object);
+				}
+
+				@Override
+				public Object getFilterValue(final Object object) {
+					return formatter.getFilterable(object);
+				}
+			}, noEditing, path);
 
 			final GridColumn tc = column.getColumn();
 			tc.setData(COLUMN_HANDLER, this);
@@ -157,21 +153,20 @@ public abstract class EMFReportView extends ViewPart implements
 		public String format(final Object object);
 
 		public Comparable getComparable(final Object object);
-		
+
 		public Object getFilterable(final Object object);
 	}
 
 	protected final IFormatter containingScheduleFormatter = new BaseFormatter() {
 		@Override
 		public String format(Object object) {
-			while (object != null && !(object instanceof Schedule)) {
+			while ((object != null) && !(object instanceof Schedule)) {
 				if (object instanceof EObject) {
 					object = ((EObject) object).eContainer();
 				}
 			}
 			if (object instanceof Schedule) {
-				Scenario s = (Scenario) ((Schedule) object).eContainer()
-						.eContainer();
+				final Scenario s = (Scenario) ((Schedule) object).eContainer().eContainer();
 				return s.getName();
 			} else {
 				return "";
@@ -197,39 +192,42 @@ public abstract class EMFReportView extends ViewPart implements
 		}
 
 		@Override
-		public Object getFilterable(Object object) {
+		public Object getFilterable(final Object object) {
 			return getComparable(object);
 		}
 	}
 
 	public class IntegerFormatter implements IFormatter {
 		public Integer getIntValue(final Object object) {
-			if (object == null)
+			if (object == null) {
 				return null;
+			}
 			return ((Number) object).intValue();
 		}
 
 		@Override
 		public String format(final Object object) {
-			if (object == null)
+			if (object == null) {
 				return "";
+			}
 			final Integer x = getIntValue(object);
-			if (x == null)
+			if (x == null) {
 				return "";
+			}
 			return String.format("%,d", x);
 		}
 
 		@Override
 		public Comparable getComparable(final Object object) {
 			final Integer x = getIntValue(object);
-			if (x == null)
+			if (x == null) {
 				return -Integer.MAX_VALUE;
+			}
 			return x;
 		}
 
-
 		@Override
-		public Object getFilterable(Object object) {
+		public Object getFilterable(final Object object) {
 			return getComparable(object);
 		}
 	}
@@ -238,57 +236,52 @@ public abstract class EMFReportView extends ViewPart implements
 		final DateFormat dateFormat;
 		final boolean showZone;
 
-		public CalendarFormatter(final DateFormat dateFormat,
-				final boolean showZone) {
+		public CalendarFormatter(final DateFormat dateFormat, final boolean showZone) {
 			this.dateFormat = dateFormat;
 			this.showZone = showZone;
 		}
 
 		@Override
 		public String format(final Object object) {
-			if (object == null)
+			if (object == null) {
 				return "";
+			}
 			final Calendar cal = (Calendar) object;
 
 			dateFormat.setCalendar(cal);
-			return dateFormat.format(cal.getTime())
-					+ (showZone ? (" ("
-							+ cal.getTimeZone().getDisplayName(false,
-									TimeZone.SHORT) + ")") : "");
+			return dateFormat.format(cal.getTime()) + (showZone ? (" (" + cal.getTimeZone().getDisplayName(false, TimeZone.SHORT) + ")") : "");
 		}
 
 		@Override
 		public Comparable getComparable(final Object object) {
-			if (object == null)
+			if (object == null) {
 				return new Date(-Long.MAX_VALUE);
+			}
 			return ((Calendar) object).getTime();
 		}
 
 		@Override
-		public Object getFilterable(Object object) {
+		public Object getFilterable(final Object object) {
 			if (object instanceof Calendar) {
-				return ((Calendar) object);
+				return object;
 			}
 			return object;
 		}
 	}
 
-	protected final IFormatter calendarFormatter = new CalendarFormatter(
-			DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT),
-			true);
+	protected final IFormatter calendarFormatter = new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), true);
 
-	protected final IFormatter datePartFormatter = new CalendarFormatter(
-			DateFormat.getDateInstance(DateFormat.LONG), false);
-	protected final IFormatter timePartFormatter = new CalendarFormatter(
-			DateFormat.getTimeInstance(DateFormat.SHORT), false);
+	protected final IFormatter datePartFormatter = new CalendarFormatter(DateFormat.getDateInstance(DateFormat.LONG), false);
+	protected final IFormatter timePartFormatter = new CalendarFormatter(DateFormat.getTimeInstance(DateFormat.SHORT), false);
 
 	protected final IntegerFormatter integerFormatter = new IntegerFormatter();
 
 	protected final IFormatter costFormatter = new IntegerFormatter() {
 		@Override
 		public Integer getIntValue(final Object object) {
-			if (object == null)
+			if (object == null) {
 				return null;
+			}
 			return -super.getIntValue(object);
 		}
 	};
@@ -303,8 +296,7 @@ public abstract class EMFReportView extends ViewPart implements
 
 	protected abstract IStructuredContentProvider getContentProvider();
 
-	protected ColumnHandler addColumn(final String title,
-			final IFormatter formatter, final Object... path) {
+	protected ColumnHandler addColumn(final String title, final IFormatter formatter, final Object... path) {
 		final ColumnHandler handler = new ColumnHandler(formatter, path, title);
 		handlers.add(handler);
 		handlersInOrder.add(handler);
@@ -316,11 +308,10 @@ public abstract class EMFReportView extends ViewPart implements
 		return handler;
 	}
 
-	private HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
-	private HashSet<Object> contents = new HashSet<Object>();
+	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
+	private final HashSet<Object> contents = new HashSet<Object>();
 
-	protected void setInputEquivalents(final Object input,
-			final Collection<Object> objectEquivalents) {
+	protected void setInputEquivalents(final Object input, final Collection<Object> objectEquivalents) {
 		for (final Object o : objectEquivalents) {
 			equivalents.put(o, input);
 		}
@@ -339,41 +330,35 @@ public abstract class EMFReportView extends ViewPart implements
 		final GridLayout layout = new GridLayout(1, false);
 		layout.marginHeight = layout.marginWidth = 0;
 		container.setLayout(layout);
-		
-		viewer = new EObjectTableViewer(container, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL | SWT.FULL_SELECTION) {
+
+		viewer = new EObjectTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
 			@Override
-			protected void inputChanged(final Object input,
-					final Object oldInput) {
+			protected void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
 
-				final boolean inputEmpty = input == null
-						|| (input instanceof Collection && ((Collection<?>) input)
-								.isEmpty());
-				final boolean oldInputEmpty = oldInput == null
-						|| (oldInput instanceof Collection && ((Collection<?>) oldInput)
-								.isEmpty());
+				final boolean inputEmpty = (input == null) || ((input instanceof Collection) && ((Collection<?>) input).isEmpty());
+				final boolean oldInputEmpty = (oldInput == null) || ((oldInput instanceof Collection) && ((Collection<?>) oldInput).isEmpty());
 
 				if (inputEmpty != oldInputEmpty) {
-//					Disabled because running this takes up 50% of the runtime when displaying a new schedule (!)
-//					if (packColumnsAction != null) {
-//						packColumnsAction.run();
-//					}
+					// Disabled because running this takes up 50% of the runtime when displaying a new schedule (!)
+					// if (packColumnsAction != null) {
+					// packColumnsAction.run();
+					// }
 				}
 			};
 		};
-		
+
 		filterField.setViewer(viewer);
-		
+
 		viewer.getGrid().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		// this is very slow on refresh
 		viewer.setDisplayValidationErrors(false);
-		
+
 		if (handleSelections()) {
 			viewer.setComparer(new IElementComparer() {
 				@Override
-				public int hashCode(Object element) {
+				public int hashCode(final Object element) {
 					return element.hashCode();
 				}
 
@@ -398,8 +383,7 @@ public abstract class EMFReportView extends ViewPart implements
 		}
 
 		if (helpContextId != null) {
-			PlatformUI.getWorkbench().getHelpSystem()
-					.setHelp(viewer.getControl(), helpContextId);
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), helpContextId);
 		}
 
 		makeActions();
@@ -409,10 +393,10 @@ public abstract class EMFReportView extends ViewPart implements
 		viewer.init(getContentProvider());
 
 		getSite().setSelectionProvider(viewer);
-		if (handleSelections())
-			getSite().getWorkbenchWindow().getSelectionService()
-					.addPostSelectionListener(this);
-		
+		if (handleSelections()) {
+			getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
+		}
+
 		jobManagerListener = ScheduleAdapter.registerView(viewer);
 	}
 
@@ -461,8 +445,7 @@ public abstract class EMFReportView extends ViewPart implements
 	private void makeActions() {
 		packColumnsAction = new PackGridTableColumnsAction(viewer);
 		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
-		getViewSite().getActionBars().setGlobalActionHandler(
-				ActionFactory.COPY.getId(), copyTableAction);
+		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 
 	@Override
@@ -485,8 +468,7 @@ public abstract class EMFReportView extends ViewPart implements
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart part,
-			final ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (part == this) {
 			return;
 		}

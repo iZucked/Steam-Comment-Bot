@@ -34,7 +34,7 @@ public class DistanceRoundingTests {
 		final int travelTime = 1;
 		final int speed = 10;
 
-		CargoAllocation a = test(testName, distanceBetweenPorts, travelTime, speed);
+		final CargoAllocation a = test(testName, distanceBetweenPorts, travelTime, speed);
 
 		// The expected duration, if an int, will be rounded to zero.
 		final int expectedDuration = distanceBetweenPorts / speed;
@@ -46,8 +46,9 @@ public class DistanceRoundingTests {
 		Assert.assertSame(expectedDuration, a.getLadenLeg().getEventDuration());
 		Assert.assertSame(expectedDuration, a.getBallastLeg().getEventDuration());
 
-		/* At the moment the expected result is that the duration is rounded to zero. These tests are for if this isn't the case.
-		 *
+		/*
+		 * At the moment the expected result is that the duration is rounded to zero. These tests are for if this isn't the case.
+		 * 
 		 * 
 		 * // check the transit time is non-zero
 		 * 
@@ -95,9 +96,9 @@ public class DistanceRoundingTests {
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
 
-		Scenario scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, ballastMinSpeed,
-				ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed,
-				ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, true, pilotLightRate, minHeelVolume);
+		final Scenario scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity,
+				ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption,
+				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, true, pilotLightRate, minHeelVolume);
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);

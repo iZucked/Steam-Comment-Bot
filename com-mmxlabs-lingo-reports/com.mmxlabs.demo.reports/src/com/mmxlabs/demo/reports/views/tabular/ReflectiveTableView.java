@@ -19,8 +19,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.mmxlabs.common.Pair;
 
 /**
- * A {@link ViewPart} which displays stuff from an
- * {@link IReflectiveContentProvider}.
+ * A {@link ViewPart} which displays stuff from an {@link IReflectiveContentProvider}.
  * 
  * @author hinton
  * 
@@ -29,15 +28,13 @@ public abstract class ReflectiveTableView extends ViewPart {
 	protected TableViewer viewer;
 	private IReflectiveContentProvider contentProvider;
 
-	public void setContentProvider(
-			final IReflectiveContentProvider contentProvider) {
+	public void setContentProvider(final IReflectiveContentProvider contentProvider) {
 		this.contentProvider = contentProvider;
 	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
+		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		viewer.setContentProvider(contentProvider);
 
 		final Class<?> rowClass = contentProvider.getRowClass();
@@ -52,25 +49,21 @@ public abstract class ReflectiveTableView extends ViewPart {
 		Collections.sort(accessors, new Comparator<Pair<TableField, Method>>() {
 
 			@Override
-			public int compare(Pair<TableField, Method> arg0,
-					Pair<TableField, Method> arg1) {
-				return ((Integer) (arg0.getFirst().order()))
-						.compareTo((Integer) (arg1.getFirst().order()));
+			public int compare(final Pair<TableField, Method> arg0, final Pair<TableField, Method> arg1) {
+				return ((Integer) (arg0.getFirst().order())).compareTo((arg1.getFirst().order()));
 			}
 		});
-		
-		
+
 		viewer.getTable().setHeaderVisible(true);
 		viewer.getTable().setLinesVisible(true);
-		
+
 		for (final Pair<TableField, Method> accessor : accessors) {
 			final TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 			column.getColumn().setText(accessor.getFirst().columnText());
 			column.setLabelProvider(new ReflectiveLabelProvider(accessor.getSecond()));
 			column.getColumn().pack();
 		}
-		
-		
+
 	}
 
 	/*

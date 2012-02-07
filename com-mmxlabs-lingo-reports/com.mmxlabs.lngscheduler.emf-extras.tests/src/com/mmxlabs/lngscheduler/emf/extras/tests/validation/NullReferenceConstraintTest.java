@@ -4,12 +4,6 @@
  */
 package com.mmxlabs.lngscheduler.emf.extras.tests.validation;
 
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
@@ -69,7 +63,7 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.NullReferenceConstraint;
 public class NullReferenceConstraintTest {
 
 	private VesselEvent initVesselEvent() {
-		VesselEvent vesselEvent = FleetFactory.eINSTANCE.createCharterOut();
+		final VesselEvent vesselEvent = FleetFactory.eINSTANCE.createCharterOut();
 		vesselEvent.setStartPort(PortFactory.eINSTANCE.createPort());
 		return vesselEvent;
 	}
@@ -124,7 +118,7 @@ public class NullReferenceConstraintTest {
 	 */
 	@Test
 	public void testVesselEvent() {
-		VesselEvent ve = initVesselEvent();
+		final VesselEvent ve = initVesselEvent();
 		// test it
 		Assert.assertNotNull(ve.getStartPort());
 		testNullReferenceConstraint(true, ve);
@@ -362,10 +356,11 @@ public class NullReferenceConstraintTest {
 
 		// mock results of method calls
 		when(validationContext.getTarget()).thenReturn(target);
-		if (expectSuccess)
+		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
-		else
+		} else {
 			when(validationContext.createFailureStatus()).thenReturn(resultStatus);
+		}
 
 		// run the thing
 		constraint.validate(validationContext);

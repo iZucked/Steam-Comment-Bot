@@ -13,9 +13,7 @@ import org.eclipse.swt.widgets.Control;
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 /**
- * This is an interface for an inline editor. It is given an input, and should
- * generate commands and send them to the appropriate command processor when
- * stuff happens.
+ * This is an interface for an inline editor. It is given an input, and should generate commands and send them to the appropriate command processor when stuff happens.
  * 
  * @author Tom Hinton
  * 
@@ -26,7 +24,8 @@ public interface IInlineEditor {
 	public Control createControl(final Composite parent);
 
 	void processValidation(IStatus status);
-	
+
 	public EStructuralFeature getFeature();
+
 	public EMFPath getPath();
 }

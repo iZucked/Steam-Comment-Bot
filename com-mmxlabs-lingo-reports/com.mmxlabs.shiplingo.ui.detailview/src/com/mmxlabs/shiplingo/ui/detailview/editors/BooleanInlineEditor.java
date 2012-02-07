@@ -19,45 +19,46 @@ import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 
 public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 	private Button button;
-	public BooleanInlineEditor(EMFPath path, EStructuralFeature feature,
-			EditingDomain editingDomain, final ICommandProcessor commandProcessor) {
+
+	public BooleanInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor commandProcessor) {
 		super(path, feature, editingDomain, commandProcessor);
 	}
 
 	@Override
 	public Control createControl(final Composite parent) {
 		final Button button = new Button(parent, SWT.CHECK);
-		
-		button.addSelectionListener(
-				new SelectionListener() {
-					{
-						final SelectionListener sl = this;
-						button.addDisposeListener(
-								new DisposeListener() {
-									@Override
-									public void widgetDisposed(DisposeEvent e) {
-										button.removeSelectionListener(sl);
-									}
-								}
-								);
-					}
+
+		button.addSelectionListener(new SelectionListener() {
+			{
+				final SelectionListener sl = this;
+				button.addDisposeListener(new DisposeListener() {
 					@Override
-					public void widgetSelected(SelectionEvent e) {
-						doSetValue((Boolean) button.getSelection());
+					public void widgetDisposed(final DisposeEvent e) {
+						button.removeSelectionListener(sl);
 					}
-					
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {}
 				});
-		
+			}
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				doSetValue(button.getSelection());
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+			}
+		});
+
 		this.button = button;
-		
+
 		return super.wrapControl(button);
 	}
 
 	@Override
 	protected void updateDisplay(final Object value) {
-		if (button.isDisposed()) return;
+		if (button.isDisposed()) {
+			return;
+		}
 		if (Boolean.TRUE.equals(value)) {
 			this.button.setSelection(true);
 		} else {

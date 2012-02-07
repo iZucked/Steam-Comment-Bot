@@ -21,9 +21,7 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 	private Text text;
 	private final int style;
 
-	public TextInlineEditor(final EMFPath path,
-			final EStructuralFeature feature,
-			final EditingDomain editingDomain, final ICommandProcessor processor) {
+	public TextInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor processor) {
 		this(path, feature, editingDomain, processor, SWT.BORDER);
 	}
 
@@ -34,16 +32,13 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 	 * @param commandProcessor
 	 * @param i
 	 */
-	public TextInlineEditor(final EMFPath path,
-			final EStructuralFeature feature,
-			final EditingDomain editingDomain,
-			final ICommandProcessor commandProcessor, final int style) {
+	public TextInlineEditor(final EMFPath path, final EStructuralFeature feature, final EditingDomain editingDomain, final ICommandProcessor commandProcessor, final int style) {
 		super(path, feature, editingDomain, commandProcessor);
 		this.style = style;
 	}
 
 	@Override
-	public Control createValueControl(Composite parent) {
+	public Control createValueControl(final Composite parent) {
 		final Text text = new Text(parent, style);
 
 		text.addModifyListener(new ModifyListener() {
@@ -51,14 +46,14 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 				final ModifyListener ml = this;
 				text.addDisposeListener(new DisposeListener() {
 					@Override
-					public void widgetDisposed(DisposeEvent e) {
+					public void widgetDisposed(final DisposeEvent e) {
 						text.removeModifyListener(ml);
 					}
 				});
 			}
 
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void modifyText(final ModifyEvent e) {
 				TextInlineEditor.this.doSetValue(text.getText());
 			}
 		});
@@ -70,8 +65,9 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		if (text.isDisposed())
+		if (text.isDisposed()) {
 			return;
+		}
 		text.setText(value == null ? "" : value.toString());
 	}
 

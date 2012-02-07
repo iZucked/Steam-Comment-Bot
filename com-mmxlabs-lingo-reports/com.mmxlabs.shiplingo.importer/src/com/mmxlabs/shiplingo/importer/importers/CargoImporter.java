@@ -21,11 +21,8 @@ import scenario.contract.ContractPackage;
 public class CargoImporter extends EObjectImporter {
 
 	@Override
-	public EObject importObject(Map<String, String> fields,
-			Collection<DeferredReference> deferredReferences,
-			NamedObjectRegistry registry) {
-		final Cargo c = (Cargo) super.importObject(fields, deferredReferences,
-				registry);
+	public EObject importObject(final Map<String, String> fields, final Collection<DeferredReference> deferredReferences, final NamedObjectRegistry registry) {
+		final Cargo c = (Cargo) super.importObject(fields, deferredReferences, registry);
 
 		// if (c.getLoadSlot().getId().isEmpty()) {
 		c.getLoadSlot().setId("load-" + c.getId());
@@ -39,7 +36,7 @@ public class CargoImporter extends EObjectImporter {
 	}
 
 	@Override
-	protected void populateReference(String prefix, EObject target, EReference reference, Map<String, String> fields, Collection<DeferredReference> deferredReferences) {
+	protected void populateReference(final String prefix, final EObject target, final EReference reference, final Map<String, String> fields, final Collection<DeferredReference> deferredReferences) {
 		if (reference == CargoPackage.eINSTANCE.getSlot_Contract()) {
 			final String referenceName = prefix + reference.getName().toLowerCase();
 			if (fields.containsKey(referenceName)) {

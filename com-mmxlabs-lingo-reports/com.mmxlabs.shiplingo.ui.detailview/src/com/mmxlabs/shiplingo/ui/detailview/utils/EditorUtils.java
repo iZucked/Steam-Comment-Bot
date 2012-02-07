@@ -8,7 +8,7 @@ package com.mmxlabs.shiplingo.ui.detailview.utils;
  * Handy methods for editor parts
  * 
  * @author Tom Hinton
- *
+ * 
  */
 public class EditorUtils {
 	public static String unmangle(final String name) {
@@ -20,8 +20,9 @@ public class EditorUtils {
 				sb.append(Character.toUpperCase(c));
 				firstChar = false;
 			} else {
-				if (lastWasLower && Character.isUpperCase(c))
+				if (lastWasLower && Character.isUpperCase(c)) {
 					sb.append(" ");
+				}
 				lastWasLower = Character.isLowerCase(c);
 				sb.append(c);
 			}
