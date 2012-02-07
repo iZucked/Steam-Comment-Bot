@@ -52,8 +52,7 @@ public class CopyTableToClipboardActionTest {
 				shell.open();
 
 				// Create and run the copy action
-				final CopyTableToClipboardAction a = new CopyTableToClipboardAction(
-						table);
+				final CopyTableToClipboardAction a = new CopyTableToClipboardAction(table);
 				a.run();
 				// Grab clipboard contents
 				final Clipboard cb = new Clipboard(bot.getDisplay());
@@ -64,8 +63,7 @@ public class CopyTableToClipboardActionTest {
 					Assert.assertTrue(contents instanceof String);
 
 					// Check string is as expected
-					Assert.assertEquals(expectedStringBuilder.toString(),
-							(String) contents);
+					Assert.assertEquals(expectedStringBuilder.toString(), contents);
 				} finally {
 
 					cb.dispose();

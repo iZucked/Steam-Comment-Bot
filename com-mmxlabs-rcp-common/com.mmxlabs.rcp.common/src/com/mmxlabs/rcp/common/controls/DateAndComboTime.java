@@ -36,11 +36,11 @@ public class DateAndComboTime extends Composite {
 	boolean settingValue = false;
 	private final boolean optionalTime;
 
-	public DateAndComboTime(final Composite parent, final int style, final boolean bigDate, int offset) {
+	public DateAndComboTime(final Composite parent, final int style, final boolean bigDate, final int offset) {
 		this(parent, style, bigDate, offset, false);
 	}
 
-	public DateAndComboTime(final Composite parent, final int style, final boolean bigDate, int offset, final boolean optionalTime) {
+	public DateAndComboTime(final Composite parent, final int style, final boolean bigDate, final int offset, final boolean optionalTime) {
 		super(parent, style);
 		this.optionalTime = optionalTime;
 		setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
@@ -59,7 +59,7 @@ public class DateAndComboTime extends Composite {
 			setTime = new Button(this, SWT.CHECK);
 			final SelectionListener sl = new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(final SelectionEvent e) {
 					time.setEnabled(setTime.getSelection());
 					notifyNewSelection(false);
 				}
@@ -67,7 +67,7 @@ public class DateAndComboTime extends Composite {
 			setTime.addSelectionListener(sl);
 			setTime.addDisposeListener(new DisposeListener() {
 				@Override
-				public void widgetDisposed(DisposeEvent e) {
+				public void widgetDisposed(final DisposeEvent e) {
 					setTime.removeSelectionListener(sl);
 				}
 			});
@@ -99,8 +99,8 @@ public class DateAndComboTime extends Composite {
 		time.addSelectionListener(listener);
 
 		final KeyListener kl = new KeyListener() {
-			private Event toEvent(KeyEvent e) {
-				Event e2 = new Event();
+			private Event toEvent(final KeyEvent e) {
+				final Event e2 = new Event();
 				e2.widget = DateAndComboTime.this;
 				e2.character = e.character;
 				e2.data = e.data;
@@ -112,12 +112,12 @@ public class DateAndComboTime extends Composite {
 			}
 
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyPressed(final KeyEvent e) {
 				notifyListeners(SWT.KeyDown, toEvent(e));
 			}
 
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyReleased(final KeyEvent e) {
 				notifyListeners(SWT.KeyUp, toEvent(e));
 			}
 		};
@@ -152,9 +152,10 @@ public class DateAndComboTime extends Composite {
 		return c;
 	}
 
-	private void notifyNewSelection(boolean isDefault) {
-		if (settingValue)
+	private void notifyNewSelection(final boolean isDefault) {
+		if (settingValue) {
 			return;
+		}
 		final Event changeEvent = new Event();
 		changeEvent.widget = this;
 
@@ -193,8 +194,9 @@ public class DateAndComboTime extends Composite {
 
 	@Override
 	public boolean isFocusControl() {
-		if (date.isFocusControl() || time.isFocusControl())
+		if (date.isFocusControl() || time.isFocusControl()) {
 			return true;
+		}
 		return super.isFocusControl();
 	}
 
@@ -207,11 +209,11 @@ public class DateAndComboTime extends Composite {
 		}
 	}
 
-	private void createHourItems(Combo c, int offset) {
-		if (offset > 59 || offset < 0) {
+	private void createHourItems(final Combo c, final int offset) {
+		if ((offset > 59) || (offset < 0)) {
 			throw new IllegalArgumentException("Time offset should be in the range 0 to 59");
 		}
-		String[] items = new String[24];
+		final String[] items = new String[24];
 		for (int i = 0; i < 24; ++i) {
 			final String offsetStr = String.format("%02d:%02d", i, offset);
 			items[i] = offsetStr;

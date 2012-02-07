@@ -51,20 +51,21 @@ public class ListSelectionDialog extends Dialog {
 	private String title = "Select elements";
 	private String message = "Choose some elements";
 	private CheckboxTreeViewer viewer;
-	private ILabelProvider labelProvider;
-	private GroupedElementProvider contentProvider;
-	private Object input;
-	private List<Pair<String, CellLabelProvider>> columns = new LinkedList<Pair<String, CellLabelProvider>>();
-	private LinkedList<ILabelProvider> groupStack = new LinkedList<ILabelProvider>();
+	private final ILabelProvider labelProvider;
+	private final GroupedElementProvider contentProvider;
+	private final Object input;
+	private final List<Pair<String, CellLabelProvider>> columns = new LinkedList<Pair<String, CellLabelProvider>>();
+	private final LinkedList<ILabelProvider> groupStack = new LinkedList<ILabelProvider>();
 	private Object[] initialSelection = new Object[0];
 	private Object[] result;
 
 	private class GroupedElementProvider implements ITreeContentProvider {
-		private IStructuredContentProvider delegate;
-		private List<ILabelProvider> groupers = new LinkedList<ILabelProvider>();
+		private final IStructuredContentProvider delegate;
+		private final List<ILabelProvider> groupers = new LinkedList<ILabelProvider>();
 
-		private Map<Object, E> originalToViewer = new HashMap<Object, E>();
-		private Map<E, Object> viewerToOriginal = new HashMap<E, Object>();
+		private final Map<Object, E> originalToViewer = new HashMap<Object, E>();
+		private final Map<E, Object> viewerToOriginal = new HashMap<E, Object>();
+
 		private class E {
 			public final Object value;
 			public final G parent;
@@ -80,7 +81,7 @@ public class ListSelectionDialog extends Dialog {
 			public final Object[] children;
 			public Object parent;
 
-			public G(Object parent, final String name, final List<Object> inputs, final List<ILabelProvider> stack) {
+			public G(final Object parent, final String name, final List<Object> inputs, final List<ILabelProvider> stack) {
 				this.name = name;
 				this.parent = parent;
 				if (stack.isEmpty()) {
@@ -130,7 +131,7 @@ public class ListSelectionDialog extends Dialog {
 		/**
 		 * @param contentProvider
 		 */
-		public GroupedElementProvider(IStructuredContentProvider contentProvider) {
+		public GroupedElementProvider(final IStructuredContentProvider contentProvider) {
 			this.delegate = contentProvider;
 		}
 
@@ -140,7 +141,7 @@ public class ListSelectionDialog extends Dialog {
 		}
 
 		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 			originalToViewer.clear();
 			viewerToOriginal.clear();
 			delegate.inputChanged(viewer, oldInput, newInput);
@@ -153,7 +154,7 @@ public class ListSelectionDialog extends Dialog {
 		}
 
 		@Override
-		public Object[] getChildren(Object parentElement) {
+		public Object[] getChildren(final Object parentElement) {
 			if (parentElement instanceof G) {
 				final G parent = (G) parentElement;
 				return parent.children;
@@ -162,7 +163,7 @@ public class ListSelectionDialog extends Dialog {
 		}
 
 		@Override
-		public Object getParent(Object element) {
+		public Object getParent(final Object element) {
 			if (element instanceof E) {
 				return ((E) element).parent;
 			} else if (element instanceof G) {
@@ -172,19 +173,19 @@ public class ListSelectionDialog extends Dialog {
 		}
 
 		@Override
-		public boolean hasChildren(Object element) {
+		public boolean hasChildren(final Object element) {
 			return element instanceof G;
 		}
 
 		public Object[] getViewerElements(final Object[] inputElements) {
-			Object[] result = new Object[inputElements.length];
+			final Object[] result = new Object[inputElements.length];
 			int k = 0;
 			for (final Object i : inputElements) {
 				result[k++] = originalToViewer.get(i);
 			}
 			return result;
 		}
-		
+
 		/**
 		 * @param labelProvider
 		 * @return
@@ -192,12 +193,12 @@ public class ListSelectionDialog extends Dialog {
 		public ILabelProvider wrapLabelProvider(final ILabelProvider labelProvider) {
 			return new ILabelProvider() {
 				@Override
-				public void removeListener(ILabelProviderListener listener) {
+				public void removeListener(final ILabelProviderListener listener) {
 					labelProvider.removeListener(listener);
 				}
 
 				@Override
-				public boolean isLabelProperty(Object element, String property) {
+				public boolean isLabelProperty(final Object element, final String property) {
 					if (element instanceof E) {
 						return labelProvider.isLabelProperty(((E) element).value, property);
 					}
@@ -210,12 +211,12 @@ public class ListSelectionDialog extends Dialog {
 				}
 
 				@Override
-				public void addListener(ILabelProviderListener listener) {
+				public void addListener(final ILabelProviderListener listener) {
 					labelProvider.addListener(listener);
 				}
 
 				@Override
-				public String getText(Object element) {
+				public String getText(final Object element) {
 					if (element instanceof E) {
 						return labelProvider.getText(((E) element).value);
 					} else if (element instanceof G) {
@@ -226,7 +227,7 @@ public class ListSelectionDialog extends Dialog {
 				}
 
 				@Override
-				public Image getImage(Object element) {
+				public Image getImage(final Object element) {
 					if (element instanceof E) {
 						return labelProvider.getImage(((E) element).value);
 					} else if (element instanceof G) {
@@ -237,7 +238,7 @@ public class ListSelectionDialog extends Dialog {
 				}
 			};
 		}
-		
+
 		public ColumnLabelProvider wrapColumnLabelProvider(final ColumnLabelProvider clp, final boolean isFirstColumn) {
 			return new ColumnLabelProvider() {
 				private Object unwrap(final Object element) {
@@ -248,106 +249,107 @@ public class ListSelectionDialog extends Dialog {
 					}
 					return element;
 				}
-				
+
 				@Override
-				public Font getFont(Object element) {
-					Object a = unwrap(element);
-					return a == null? null: clp.getFont(a);
+				public Font getFont(final Object element) {
+					final Object a = unwrap(element);
+					return a == null ? null : clp.getFont(a);
 				}
 
 				@Override
-				public Color getBackground(Object element) {
-					Object a = unwrap(element);
-					return a == null? null: clp.getBackground(a);
+				public Color getBackground(final Object element) {
+					final Object a = unwrap(element);
+					return a == null ? null : clp.getBackground(a);
 				}
 
 				@Override
-				public Color getForeground(Object element) {
-					Object a = unwrap(element);
-					return a == null? null: clp.getBackground(a);
+				public Color getForeground(final Object element) {
+					final Object a = unwrap(element);
+					return a == null ? null : clp.getBackground(a);
 				}
 
 				@Override
-				public Image getImage(Object element) {
-					Object a = unwrap(element);
-					return a == null? super.getImage(element): clp.getImage(a);
+				public Image getImage(final Object element) {
+					final Object a = unwrap(element);
+					return a == null ? super.getImage(element) : clp.getImage(a);
 				}
 
 				@Override
-				public String getText(Object element) {
+				public String getText(final Object element) {
 					if (element instanceof G) {
-						if (isFirstColumn)
+						if (isFirstColumn) {
 							return ((G) element).name;
-						else
+						} else {
 							return "";
+						}
 					} else {
 						return clp.getText(unwrap(element));
 					}
 				}
 
 				@Override
-				public Image getToolTipImage(Object object) {
-					Object a = unwrap(object);
-					return a == null? super.getToolTipImage(object): clp.getToolTipImage(a);
+				public Image getToolTipImage(final Object object) {
+					final Object a = unwrap(object);
+					return a == null ? super.getToolTipImage(object) : clp.getToolTipImage(a);
 				}
 
 				@Override
-				public String getToolTipText(Object element) {
-					Object a = unwrap(element);
-					return a == null? super.getToolTipText(element): clp.getToolTipText(a);
+				public String getToolTipText(final Object element) {
+					final Object a = unwrap(element);
+					return a == null ? super.getToolTipText(element) : clp.getToolTipText(a);
 				}
 
 				@Override
-				public Color getToolTipBackgroundColor(Object object) {
-					Object a = unwrap(object);
-					return a == null? super.getToolTipBackgroundColor(object): clp.getToolTipBackgroundColor(a);
+				public Color getToolTipBackgroundColor(final Object object) {
+					final Object a = unwrap(object);
+					return a == null ? super.getToolTipBackgroundColor(object) : clp.getToolTipBackgroundColor(a);
 				}
 
 				@Override
-				public Color getToolTipForegroundColor(Object object) {
-					Object a = unwrap(object);
-					return a == null? super.getToolTipForegroundColor(object): clp.getToolTipForegroundColor(a);
+				public Color getToolTipForegroundColor(final Object object) {
+					final Object a = unwrap(object);
+					return a == null ? super.getToolTipForegroundColor(object) : clp.getToolTipForegroundColor(a);
 				}
 
 				@Override
-				public Font getToolTipFont(Object object) {
-					Object a = unwrap(object);
-					return a == null? super.getToolTipFont(object): clp.getToolTipFont(a);
+				public Font getToolTipFont(final Object object) {
+					final Object a = unwrap(object);
+					return a == null ? super.getToolTipFont(object) : clp.getToolTipFont(a);
 				}
 
 				@Override
-				public Point getToolTipShift(Object object) {
-					Object a = unwrap(object);
-					return a == null? super.getToolTipShift(object): clp.getToolTipShift(a);
+				public Point getToolTipShift(final Object object) {
+					final Object a = unwrap(object);
+					return a == null ? super.getToolTipShift(object) : clp.getToolTipShift(a);
 
 				}
 
 				@Override
-				public boolean useNativeToolTip(Object object) {
-					Object a = unwrap(object);
-					return a == null? super.useNativeToolTip(object): clp.useNativeToolTip(a);
+				public boolean useNativeToolTip(final Object object) {
+					final Object a = unwrap(object);
+					return a == null ? super.useNativeToolTip(object) : clp.useNativeToolTip(a);
 				}
 
 				@Override
-				public int getToolTipTimeDisplayed(Object object) {
-					Object a = unwrap(object);
-					return a == null? super.getToolTipTimeDisplayed(object): clp.getToolTipTimeDisplayed(a);
+				public int getToolTipTimeDisplayed(final Object object) {
+					final Object a = unwrap(object);
+					return a == null ? super.getToolTipTimeDisplayed(object) : clp.getToolTipTimeDisplayed(a);
 				}
 
 				@Override
-				public int getToolTipDisplayDelayTime(Object object) {
-					Object a = unwrap(object);
-					return a == null? super.getToolTipDisplayDelayTime(object): clp.getToolTipDisplayDelayTime(a);
+				public int getToolTipDisplayDelayTime(final Object object) {
+					final Object a = unwrap(object);
+					return a == null ? super.getToolTipDisplayDelayTime(object) : clp.getToolTipDisplayDelayTime(a);
 				}
 
 				@Override
-				public int getToolTipStyle(Object object) {
-					Object a = unwrap(object);
-					return a == null? super.getToolTipStyle(object): clp.getToolTipStyle(a);
+				public int getToolTipStyle(final Object object) {
+					final Object a = unwrap(object);
+					return a == null ? super.getToolTipStyle(object) : clp.getToolTipStyle(a);
 				}
 
 				@Override
-				public void addListener(ILabelProviderListener listener) {
+				public void addListener(final ILabelProviderListener listener) {
 					clp.addListener(listener);
 				}
 
@@ -357,28 +359,30 @@ public class ListSelectionDialog extends Dialog {
 				}
 
 				@Override
-				public boolean isLabelProperty(Object element, String property) {
-					Object a = unwrap(element);
-					return a == null? false : clp.isLabelProperty(a, property);
+				public boolean isLabelProperty(final Object element, final String property) {
+					final Object a = unwrap(element);
+					return a == null ? false : clp.isLabelProperty(a, property);
 				}
 
 				@Override
-				public void removeListener(ILabelProviderListener listener) {
+				public void removeListener(final ILabelProviderListener listener) {
 					clp.removeListener(listener);
-				}				
+				}
 			};
 		}
 
 		public Object[] getInputElements(final Object[] checkedElements) {
 			final LinkedList<Object> result = new LinkedList<Object>();
-			
+
 			for (final Object o : checkedElements) {
 				if (o instanceof E) {
 					final Object original = viewerToOriginal.get(o);
-					if (original != null) result.add(original);
+					if (original != null) {
+						result.add(original);
+					}
 				}
 			}
-			
+
 			return result.toArray();
 		}
 	}
@@ -386,14 +390,14 @@ public class ListSelectionDialog extends Dialog {
 	public ListSelectionDialog(final Shell parentShell, final Object input, final IStructuredContentProvider contentProvider, final ILabelProvider labelProvider) {
 		super(parentShell);
 		this.input = input;
-//		if (contentProvider instanceof ITreeContentProvider) {
-//			this.contentProvider = contentProvider;
-//			this.labelProvider = labelProvider;
-//		} else {
-			final GroupedElementProvider gep = new GroupedElementProvider(contentProvider);
-			this.contentProvider = gep;
-			this.labelProvider = gep.wrapLabelProvider(labelProvider);
-//		}
+		// if (contentProvider instanceof ITreeContentProvider) {
+		// this.contentProvider = contentProvider;
+		// this.labelProvider = labelProvider;
+		// } else {
+		final GroupedElementProvider gep = new GroupedElementProvider(contentProvider);
+		this.contentProvider = gep;
+		this.labelProvider = gep.wrapLabelProvider(labelProvider);
+		// }
 	}
 
 	@Override
@@ -402,7 +406,7 @@ public class ListSelectionDialog extends Dialog {
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) {
+	protected Control createDialogArea(final Composite parent) {
 		final Composite box = (Composite) super.createDialogArea(parent);
 
 		final Composite inner = new Composite(box, SWT.NONE);
@@ -423,23 +427,22 @@ public class ListSelectionDialog extends Dialog {
 			viewer.getTree().setHeaderVisible(true);
 			viewer.getTree().setLinesVisible(true);
 		}
-		
 
 		inner.setLayoutData(new GridData(GridData.FILL_BOTH));
 		viewer.setInput(input);
-		viewer.setCheckedElements(contentProvider.getViewerElements(initialSelection ));
+		viewer.setCheckedElements(contentProvider.getViewerElements(initialSelection));
 		viewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(final CheckStateChangedEvent event) {
 				// propagate check marks
 			}
 		});
-		
+
 		viewer.expandAll();
 		for (final TreeColumn column : viewer.getTree().getColumns()) {
 			column.pack();
 		}
-		
+
 		return box;
 	}
 
@@ -457,7 +460,7 @@ public class ListSelectionDialog extends Dialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(480,640);
+		return new Point(480, 640);
 	}
 
 	/**
@@ -467,7 +470,7 @@ public class ListSelectionDialog extends Dialog {
 	 * @param labelProvider
 	 */
 	public void groupBy(final ColumnLabelProvider labelProvider) {
-		((GroupedElementProvider)contentProvider).groupers.add(labelProvider);
+		contentProvider.groupers.add(labelProvider);
 	}
 
 	/**
@@ -484,7 +487,7 @@ public class ListSelectionDialog extends Dialog {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 
@@ -492,11 +495,11 @@ public class ListSelectionDialog extends Dialog {
 		return message;
 	}
 
-	public void setMessage(String message) {
+	public void setMessage(final String message) {
 		this.message = message;
 	}
 
-	public void setInitialSelections(Object[] array) {
+	public void setInitialSelections(final Object[] array) {
 		initialSelection = array;
 	}
 

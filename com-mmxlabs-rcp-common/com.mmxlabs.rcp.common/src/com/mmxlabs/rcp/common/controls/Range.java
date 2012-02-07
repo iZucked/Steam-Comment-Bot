@@ -22,8 +22,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * A widget which allows the user to select a range by choosing a lower and
- * upper bound.
+ * A widget which allows the user to select a range by choosing a lower and upper bound.
  * 
  * The widget will ensure that:
  * 
@@ -32,9 +31,7 @@ import org.eclipse.swt.widgets.Text;
  * <li>minimumSeparation <= (upper - lower) <= maximumSeparation</li>
  * </ol>
  * 
- * These values can be set with {@link #setMaximumValue(int)},
- * {@link #setMinimumValue(int)}, {@link #setMaximumSeparation(int)} and
- * {@link #setMinimumSeparation(int)}.
+ * These values can be set with {@link #setMaximumValue(int)}, {@link #setMinimumValue(int)}, {@link #setMaximumSeparation(int)} and {@link #setMinimumSeparation(int)}.
  * 
  * By default the range can contain any pair of integers l, u such that l <= u.
  * 
@@ -96,7 +93,7 @@ public class Range extends Composite {
 		return selectionListener;
 	}
 
-	public Range(Composite parent, int style) {
+	public Range(final Composite parent, final int style) {
 		super(parent, style);
 		final FillLayout layout = new FillLayout(SWT.HORIZONTAL);
 		layout.marginHeight = 0;
@@ -130,20 +127,24 @@ public class Range extends Composite {
 
 	boolean hasFocus = false;
 
-	private Listener filter = new Listener() {
+	private final Listener filter = new Listener() {
 		@Override
-		public void handleEvent(Event event) {
-			if (((Control) event.widget).getShell() == getShell())
+		public void handleEvent(final Event event) {
+			if (((Control) event.widget).getShell() == getShell()) {
 				handleFocus(SWT.FocusOut);
+			}
 		}
 	};
 
-	protected void handleFocus(int type) {
-		if (isDisposed()) return;
+	protected void handleFocus(final int type) {
+		if (isDisposed()) {
+			return;
+		}
 		switch (type) {
 		case SWT.FocusIn: {
-			if (hasFocus)
+			if (hasFocus) {
 				return;
+			}
 			hasFocus = true;
 			final Display display = getDisplay();
 			display.removeFilter(SWT.FocusIn, filter);
@@ -155,12 +156,14 @@ public class Range extends Composite {
 		}
 			break;
 		case SWT.FocusOut: {
-			if (!hasFocus)
+			if (!hasFocus) {
 				return;
+			}
 			final Display display = getDisplay();
 			final Control focus = display.getFocusControl();
-			if (focus == maxSpinner || focus == minSpinner)
+			if ((focus == maxSpinner) || (focus == minSpinner)) {
 				return;
+			}
 			hasFocus = false;
 			display.removeFilter(SWT.FocusIn, filter);
 			final Event e = new Event();
@@ -172,7 +175,7 @@ public class Range extends Composite {
 	}
 
 	@Override
-	public Point computeSize(int wHint, int hHint, boolean changed) {
+	public Point computeSize(final int wHint, final int hHint, final boolean changed) {
 		return new Point(wHint, hHint);
 	}
 
@@ -195,9 +198,7 @@ public class Range extends Composite {
 	}
 
 	/**
-	 * Set the lower bound value entered into this range. May also adjust the
-	 * upper bound value to ensure that the constraints are met (see
-	 * {@link Range} for details).
+	 * Set the lower bound value entered into this range. May also adjust the upper bound value to ensure that the constraints are met (see {@link Range} for details).
 	 * 
 	 * Triggers notifies any {@link SelectionListener}s that are attached
 	 * 
@@ -208,14 +209,15 @@ public class Range extends Composite {
 		minSpinner.removeSelectionListener(getSelectionListener());
 		maxSpinner.removeSelectionListener(getSelectionListener());
 		this.lowerValue = lowerValue;
-		if (minSpinner.getSelection() != lowerValue)
+		if (minSpinner.getSelection() != lowerValue) {
 			minSpinner.setSelection(lowerValue);
+		}
 
 		// clamp upper value
-		if (upperValue - lowerValue < minimumSeparation) {
+		if ((upperValue - lowerValue) < minimumSeparation) {
 			upperValue = lowerValue + minimumSeparation;
 			maxSpinner.setSelection(upperValue);
-		} else if (upperValue - lowerValue > maximumSeparation) {
+		} else if ((upperValue - lowerValue) > maximumSeparation) {
 			upperValue = lowerValue + maximumSeparation;
 			maxSpinner.setSelection(upperValue);
 		}
@@ -229,9 +231,7 @@ public class Range extends Composite {
 	}
 
 	/**
-	 * Set the upper bound value entered into this range. May also adjust the
-	 * lower bound value to ensure that the constraints are met (see
-	 * {@link Range} for details).
+	 * Set the upper bound value entered into this range. May also adjust the lower bound value to ensure that the constraints are met (see {@link Range} for details).
 	 * 
 	 * Triggers notifies any {@link SelectionListener}s that are attached
 	 * 
@@ -243,14 +243,15 @@ public class Range extends Composite {
 		maxSpinner.removeSelectionListener(getSelectionListener());
 		this.upperValue = upperValue;
 
-		if (maxSpinner.getSelection() != upperValue)
+		if (maxSpinner.getSelection() != upperValue) {
 			maxSpinner.setSelection(upperValue);
+		}
 
 		// clamp lower value
-		if (upperValue - lowerValue < minimumSeparation) {
+		if ((upperValue - lowerValue) < minimumSeparation) {
 			lowerValue = upperValue - minimumSeparation;
 			minSpinner.setSelection(lowerValue);
-		} else if (upperValue - lowerValue > maximumSeparation) {
+		} else if ((upperValue - lowerValue) > maximumSeparation) {
 			lowerValue = upperValue - maximumSeparation;
 			minSpinner.setSelection(lowerValue);
 		}
@@ -264,8 +265,7 @@ public class Range extends Composite {
 	}
 
 	/**
-	 * Sets the ranges of the two spinners to ensure only legal lvalues can
-	 * happen
+	 * Sets the ranges of the two spinners to ensure only legal lvalues can happen
 	 */
 	private void setSpinnerLimits() {
 		minSpinner.setMinimum(minimumValue);
@@ -288,7 +288,7 @@ public class Range extends Composite {
 	 * 
 	 * @return
 	 */
-	public void setMaximumValue(int maximumValue) {
+	public void setMaximumValue(final int maximumValue) {
 		this.maximumValue = maximumValue;
 		setSpinnerLimits();
 	}
@@ -307,14 +307,13 @@ public class Range extends Composite {
 	 * 
 	 * @return
 	 */
-	public void setMinimumValue(int minimumValue) {
+	public void setMinimumValue(final int minimumValue) {
 		this.minimumValue = minimumValue;
 		setSpinnerLimits();
 	}
 
 	/**
-	 * Get the minimum legal difference between the upper bound and the lower
-	 * bound
+	 * Get the minimum legal difference between the upper bound and the lower bound
 	 * 
 	 * @return
 	 */
@@ -323,19 +322,17 @@ public class Range extends Composite {
 	}
 
 	/**
-	 * Set the minimum legal difference between the upper bound and the lower
-	 * bound
+	 * Set the minimum legal difference between the upper bound and the lower bound
 	 * 
 	 * @return
 	 */
-	public void setMinimumSeparation(int minimumSeparation) {
+	public void setMinimumSeparation(final int minimumSeparation) {
 		this.minimumSeparation = minimumSeparation;
 		setSpinnerLimits();
 	}
 
 	/**
-	 * Get the maximum legal difference between the upper bound and the lower
-	 * bound
+	 * Get the maximum legal difference between the upper bound and the lower bound
 	 * 
 	 * @return
 	 */
@@ -344,12 +341,11 @@ public class Range extends Composite {
 	}
 
 	/**
-	 * Set the maximum legal difference between the upper bound and the lower
-	 * bound
+	 * Set the maximum legal difference between the upper bound and the lower bound
 	 * 
 	 * @return
 	 */
-	public void setMaximumSeparation(int maximumSeparation) {
+	public void setMaximumSeparation(final int maximumSeparation) {
 		this.maximumSeparation = maximumSeparation;
 	}
 
@@ -360,36 +356,37 @@ public class Range extends Composite {
 
 	@Override
 	public boolean isFocusControl() {
-		if (minSpinner.isFocusControl() || maxSpinner.isFocusControl())
+		if (minSpinner.isFocusControl() || maxSpinner.isFocusControl()) {
 			return true;
+		}
 		return super.isFocusControl();
 	}
 
 	public static class RangeDisplay {
 
-		public static void main(String[] args) {
-			Display display = new Display();
-			Shell shell = new Shell(display);
+		public static void main(final String[] args) {
+			final Display display = new Display();
+			final Shell shell = new Shell(display);
 
 			shell.setLayout(new RowLayout(SWT.VERTICAL));
 
-			Composite comp = new Composite(shell, SWT.NONE);
+			final Composite comp = new Composite(shell, SWT.NONE);
 			comp.setLayout(new RowLayout(SWT.HORIZONTAL));
-			Text text = new Text(comp, SWT.NONE);
+			final Text text = new Text(comp, SWT.NONE);
 			text.setText("text 1");
-			Text text2 = new Text(comp, SWT.NONE);
+			final Text text2 = new Text(comp, SWT.NONE);
 			text2.setText("text 1");
-			Text text3 = new Text(shell, SWT.NONE);
+			final Text text3 = new Text(shell, SWT.NONE);
 			text3.setText("text 3");
-			//These printlns are OK - this main is just a test.
+			// These printlns are OK - this main is just a test.
 			final FocusListener fl = new FocusListener() {
 				@Override
-				public void focusGained(FocusEvent e) {
+				public void focusGained(final FocusEvent e) {
 					System.err.println("got focus : " + e);
 				}
 
 				@Override
-				public void focusLost(FocusEvent e) {
+				public void focusLost(final FocusEvent e) {
 					System.err.println("lost focus : " + e);
 				}
 			};
@@ -402,8 +399,9 @@ public class Range extends Composite {
 			shell.open();
 
 			while (!shell.isDisposed()) {
-				if (!display.readAndDispatch())
+				if (!display.readAndDispatch()) {
 					display.sleep();
+				}
 			}
 			display.dispose();
 		}

@@ -108,7 +108,7 @@ public class CopyGridToClipboardAction extends Action {
 		}
 	}
 
-	public void setRowHeadersIncluded(boolean b) {
+	public void setRowHeadersIncluded(final boolean b) {
 		this.rowHeadersIncluded = true;
 	}
 }

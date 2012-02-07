@@ -16,8 +16,7 @@ import org.eclipse.swt.widgets.TableItem;
 import com.mmxlabs.rcp.common.Activator;
 
 /**
- * Copies "rendered" table contents to the clipboard. This will maintain the
- * column order, sort order and label provider output.
+ * Copies "rendered" table contents to the clipboard. This will maintain the column order, sort order and label provider output.
  * 
  * @author Simon Goodall
  * 
@@ -76,16 +75,14 @@ public class CopyTableToClipboardAction extends Action {
 		try {
 			// Create the text transfer and set the contents
 			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { sb.toString() },
-					new Transfer[] { textTransfer });
+			cb.setContents(new Object[] { sb.toString() }, new Transfer[] { textTransfer });
 		} finally {
 			// Clean up our local resources - system clipboard now has the data
 			cb.dispose();
 		}
 	}
 
-	private void processTableItem(final StringBuffer sb, final int numColumns,
-			final TableItem item) {
+	private void processTableItem(final StringBuffer sb, final int numColumns, final TableItem item) {
 		for (int i = 0; i < numColumns; ++i) {
 
 			sb.append(item.getText(i));

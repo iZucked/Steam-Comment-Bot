@@ -16,9 +16,8 @@ import org.eclipse.swt.widgets.TreeItem;
 import com.mmxlabs.rcp.common.Activator;
 
 /**
- * Copies "rendered" tree contents to the clipboard. This will maintain the
- * column order, sort order and label provider output. Child entries not yet
- * visible (parent is not expanded) will not be copied by this action.
+ * Copies "rendered" tree contents to the clipboard. This will maintain the column order, sort order and label provider output. Child entries not yet visible (parent is not expanded) will not be
+ * copied by this action.
  * 
  * @author Simon Goodall
  * 
@@ -77,8 +76,7 @@ public class CopyTreeToClipboardAction extends Action {
 		try {
 			// Create the text transfer and set the contents
 			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { sb.toString() },
-					new Transfer[] { textTransfer });
+			cb.setContents(new Object[] { sb.toString() }, new Transfer[] { textTransfer });
 		} finally {
 			// Clean up our local resources - system clipboard now has the data
 			cb.dispose();
@@ -92,8 +90,7 @@ public class CopyTreeToClipboardAction extends Action {
 	 * @param numColumns
 	 * @param item
 	 */
-	private void processTreeItem(final StringBuffer sb, final int numColumns,
-			final TreeItem item) {
+	private void processTreeItem(final StringBuffer sb, final int numColumns, final TreeItem item) {
 
 		for (int i = 0; i < numColumns; ++i) {
 

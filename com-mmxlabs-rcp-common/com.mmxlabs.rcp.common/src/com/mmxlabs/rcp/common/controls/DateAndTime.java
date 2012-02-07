@@ -27,12 +27,10 @@ public class DateAndTime extends Composite {
 	final DateTime date, time;
 	boolean settingValue = false;
 
-	public DateAndTime(final Composite parent, final int style,
-			final boolean bigDate) {
+	public DateAndTime(final Composite parent, final int style, final boolean bigDate) {
 		super(parent, style);
 		setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-		final RowLayout layout = new RowLayout(bigDate ? SWT.VERTICAL
-				: SWT.HORIZONTAL);
+		final RowLayout layout = new RowLayout(bigDate ? SWT.VERTICAL : SWT.HORIZONTAL);
 		if (!bigDate) {
 			layout.marginBottom = 0;
 			layout.marginTop = 0;
@@ -41,8 +39,7 @@ public class DateAndTime extends Composite {
 			layout.spacing = 1;
 		}
 		setLayout(layout);
-		date = new DateTime(this, bigDate ? SWT.CALENDAR | SWT.BORDER
-				: SWT.DATE | SWT.MEDIUM);
+		date = new DateTime(this, bigDate ? SWT.CALENDAR | SWT.BORDER : SWT.DATE | SWT.MEDIUM);
 		time = new DateTime(this, SWT.TIME | SWT.SHORT);
 
 		final SelectionListener listener = new SelectionListener() {
@@ -61,8 +58,8 @@ public class DateAndTime extends Composite {
 		time.addSelectionListener(listener);
 
 		final KeyListener kl = new KeyListener() {
-			private Event toEvent(KeyEvent e) {
-				Event e2 = new Event();
+			private Event toEvent(final KeyEvent e) {
+				final Event e2 = new Event();
 				e2.widget = DateAndTime.this;
 				e2.character = e.character;
 				e2.data = e.data;
@@ -74,12 +71,12 @@ public class DateAndTime extends Composite {
 			}
 
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyPressed(final KeyEvent e) {
 				notifyListeners(SWT.KeyDown, toEvent(e));
 			}
 
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyReleased(final KeyEvent e) {
 				notifyListeners(SWT.KeyUp, toEvent(e));
 			}
 		};
@@ -103,20 +100,19 @@ public class DateAndTime extends Composite {
 
 		c.clear();
 
-		c.set(date.getYear(), date.getMonth(), date.getDay(), time.getHours(),
-				time.getMinutes());
+		c.set(date.getYear(), date.getMonth(), date.getDay(), time.getHours(), time.getMinutes());
 
 		return c;
 	}
 
-	private void notifyNewSelection(boolean isDefault) {
-		if (settingValue)
+	private void notifyNewSelection(final boolean isDefault) {
+		if (settingValue) {
 			return;
+		}
 		final Event changeEvent = new Event();
 		changeEvent.widget = this;
 
-		notifyListeners(isDefault ? SWT.DefaultSelection : SWT.Selection,
-				changeEvent);
+		notifyListeners(isDefault ? SWT.DefaultSelection : SWT.Selection, changeEvent);
 	}
 
 	public synchronized void setValue(final Calendar newValue) {
@@ -138,8 +134,9 @@ public class DateAndTime extends Composite {
 
 	@Override
 	public boolean isFocusControl() {
-		if (date.isFocusControl() || time.isFocusControl())
+		if (date.isFocusControl() || time.isFocusControl()) {
 			return true;
+		}
 		return super.isFocusControl();
 	}
 

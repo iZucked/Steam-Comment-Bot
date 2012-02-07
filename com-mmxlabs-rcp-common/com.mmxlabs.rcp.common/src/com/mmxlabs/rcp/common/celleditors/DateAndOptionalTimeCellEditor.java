@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Listener;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.rcp.common.controls.DateAndComboTime;
 
-
 /**
  * A CellEditor which displays a date & time picker control.
  * 
@@ -37,16 +36,15 @@ public class DateAndOptionalTimeCellEditor extends CellEditor {
 		super();
 	}
 
-	public DateAndOptionalTimeCellEditor(Composite parent, int style) {
+	public DateAndOptionalTimeCellEditor(final Composite parent, final int style) {
 		super(parent, style);
 	}
 
-	public DateAndOptionalTimeCellEditor(Composite parent) {
+	public DateAndOptionalTimeCellEditor(final Composite parent) {
 		super(parent);
 	}
 
-	public void setLegalRange(final Calendar minimumValue,
-			final Calendar maximumValue) {
+	public void setLegalRange(final Calendar minimumValue, final Calendar maximumValue) {
 
 	}
 
@@ -55,12 +53,12 @@ public class DateAndOptionalTimeCellEditor extends CellEditor {
 		popup = new DateAndComboTime(parent, SWT.DROP_DOWN, false, 0, true);
 		popup.addListener(SWT.Selection, getSelectionListener());
 		popup.addKeyListener(getKeyListener());
-		popup.addDisposeListener(new DisposeListener() {			
+		popup.addDisposeListener(new DisposeListener() {
 			@Override
-			public void widgetDisposed(DisposeEvent e) {
+			public void widgetDisposed(final DisposeEvent e) {
 				popup.removeListener(SWT.Selection, getSelectionListener());
 				popup.removeKeyListener(getKeyListener());
-//				popup.removeFocusListener(getFocusListener());
+				// popup.removeFocusListener(getFocusListener());
 			}
 		});
 		setValueValid(true);
@@ -68,25 +66,27 @@ public class DateAndOptionalTimeCellEditor extends CellEditor {
 	}
 
 	private Listener selectionListener = null;
+
 	private Listener getSelectionListener() {
 		if (selectionListener == null) {
 			selectionListener = new Listener() {
 				@Override
-				public void handleEvent(Event event) {
+				public void handleEvent(final Event event) {
 					markDirty();
-				}						
+				}
 			};
 		}
 		return selectionListener;
 	}
-	
+
 	private KeyListener keyListener = null;
+
 	private KeyListener getKeyListener() {
 		if (keyListener == null) {
 			keyListener = new KeyAdapter() {
 				@Override
-				public void keyPressed(KeyEvent e) {
-					 keyReleaseOccured(e);
+				public void keyPressed(final KeyEvent e) {
+					keyReleaseOccured(e);
 				}
 			};
 		}
@@ -97,7 +97,6 @@ public class DateAndOptionalTimeCellEditor extends CellEditor {
 	protected void doSetFocus() {
 		popup.setFocus();
 	}
-
 
 	@Override
 	protected Object doGetValue() {

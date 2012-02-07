@@ -27,7 +27,7 @@ public class CopyTreeToClipboardActionTest {
 	public void testCopyTreeToClipboardAction() throws InterruptedException {
 
 		SWTUtils.waitForDisplayToAppear();
-		
+
 		// Get bot ref to workbench
 		final SWTWorkbenchBot bot = new SWTWorkbenchBot();
 
@@ -42,7 +42,7 @@ public class CopyTreeToClipboardActionTest {
 				final StringBuilder expectedStringBuilder = new StringBuilder();
 				shell.setLayout(new FillLayout());
 				final Tree tree = new Tree(shell, SWT.BORDER);
-				
+
 				// Generate TreeItems and the expected output string
 				for (int i = 0; i < 4; i++) {
 					final TreeItem iItem = new TreeItem(tree, 0);
@@ -64,10 +64,9 @@ public class CopyTreeToClipboardActionTest {
 				shell.open();
 
 				// Create and run the copy action
-				final CopyTreeToClipboardAction a = new CopyTreeToClipboardAction(
-						tree);
+				final CopyTreeToClipboardAction a = new CopyTreeToClipboardAction(tree);
 				a.run();
-				
+
 				// Grab clipboard contents
 				final Clipboard cb = new Clipboard(bot.getDisplay());
 				try {
@@ -78,8 +77,7 @@ public class CopyTreeToClipboardActionTest {
 					Assert.assertTrue(contents instanceof String);
 
 					// Check string is as expected
-					Assert.assertEquals(expectedStringBuilder.toString(),
-							(String) contents);
+					Assert.assertEquals(expectedStringBuilder.toString(), contents);
 				} finally {
 
 					cb.dispose();

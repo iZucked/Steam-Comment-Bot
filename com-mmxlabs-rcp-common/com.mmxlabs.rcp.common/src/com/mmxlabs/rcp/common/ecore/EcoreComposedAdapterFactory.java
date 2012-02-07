@@ -13,10 +13,8 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 
 /**
- * Utility class to create a shared {@link ComposedAdapterFactory} instance with
- * the basic item provider adapter factories. This is used with
- * {@link EcoreLabelProvider} as we cannot do this stuff easily in the
- * constructor.
+ * Utility class to create a shared {@link ComposedAdapterFactory} instance with the basic item provider adapter factories. This is used with {@link EcoreLabelProvider} as we cannot do this stuff
+ * easily in the constructor.
  * 
  * @author Simon Goodall
  * 

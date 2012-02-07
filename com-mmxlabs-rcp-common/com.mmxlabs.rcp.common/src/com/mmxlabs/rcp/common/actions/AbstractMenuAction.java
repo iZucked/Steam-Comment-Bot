@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Menu;
  * An abstract superclass for actions with a menu that provide their own menu.
  * 
  * @author hinton
- *
+ * 
  */
 public abstract class AbstractMenuAction extends Action implements IMenuCreator {
 	private Menu lastMenu;
@@ -26,7 +26,7 @@ public abstract class AbstractMenuAction extends Action implements IMenuCreator 
 
 	@Override
 	public void dispose() {
-		if (lastMenu != null && lastMenu.isDisposed() == false) {
+		if ((lastMenu != null) && (lastMenu.isDisposed() == false)) {
 			lastMenu.dispose();
 		}
 		lastMenu = null;
@@ -40,7 +40,7 @@ public abstract class AbstractMenuAction extends Action implements IMenuCreator 
 	@Override
 	public Menu getMenu(final Control parent) {
 		if (lastMenu != null) {
-			lastMenu.dispose();		
+			lastMenu.dispose();
 		}
 		lastMenu = new Menu(parent);
 
@@ -48,7 +48,7 @@ public abstract class AbstractMenuAction extends Action implements IMenuCreator 
 
 		return lastMenu;
 	}
-	
+
 	protected void addActionToMenu(final Action a, final Menu m) {
 		final ActionContributionItem aci = new ActionContributionItem(a);
 		aci.fill(m, -1);
@@ -57,7 +57,8 @@ public abstract class AbstractMenuAction extends Action implements IMenuCreator 
 	/**
 	 * Subclasses should fill their menu with actions here.
 	 * 
-	 * @param menu the menu which is about to be displayed
+	 * @param menu
+	 *            the menu which is about to be displayed
 	 */
 	protected abstract void populate(final Menu menu);
 

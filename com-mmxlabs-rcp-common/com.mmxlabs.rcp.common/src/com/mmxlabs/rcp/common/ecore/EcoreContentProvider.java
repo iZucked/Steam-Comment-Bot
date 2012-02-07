@@ -33,47 +33,44 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import com.mmxlabs.rcp.common.Activator;
 
 /**
- * A subclass of {@link AdapterFactoryContentProvider} which caches EMF model
- * instances. This class implements a {@link IResourceChangeListener} to
- * automaticallty reload instances on filesystem changes.
+ * A subclass of {@link AdapterFactoryContentProvider} which caches EMF model instances. This class implements a {@link IResourceChangeListener} to automaticallty reload instances on filesystem
+ * changes.
  * 
  * @author Simon Goodall
  * 
  */
-public class EcoreContentProvider extends AdapterFactoryContentProvider
-		implements IResourceChangeListener, IResourceDeltaVisitor {
+public class EcoreContentProvider extends AdapterFactoryContentProvider implements IResourceChangeListener, IResourceDeltaVisitor {
 
 	/**
-	 * Shared resource set impl between all instances of
-	 * {@link EcoreContentProvider}. FIXME: Should this really be static? - As
-	 * the resource listener is not - will we reload the model multiple times?
+	 * Shared resource set impl between all instances of {@link EcoreContentProvider}. FIXME: Should this really be static? - As the resource listener is not - will we reload the model multiple times?
 	 */
 	private static ResourceSetImpl resourceSet = new ResourceSetImpl();
 	static {
 		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
 		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
 		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
-		resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, 
-				new XMLResource.ResourceHandler() {
-					@Override
-					public void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
-						if (resource instanceof ResourceImpl) {
-							((ResourceImpl)resource).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
-						}
-					}
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, new XMLResource.ResourceHandler() {
+			@Override
+			public void preLoad(final XMLResource resource, final InputStream inputStream, final Map<?, ?> options) {
+				if (resource instanceof ResourceImpl) {
+					((ResourceImpl) resource).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
+				}
+			}
 
-					@Override
-					public void postLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
-						if (resource instanceof ResourceImpl) {
-							((ResourceImpl)resource).setIntrinsicIDToEObjectMap(null);
-						}
-					}
+			@Override
+			public void postLoad(final XMLResource resource, final InputStream inputStream, final Map<?, ?> options) {
+				if (resource instanceof ResourceImpl) {
+					((ResourceImpl) resource).setIntrinsicIDToEObjectMap(null);
+				}
+			}
 
-					@Override
-					public void preSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {}
+			@Override
+			public void preSave(final XMLResource resource, final OutputStream outputStream, final Map<?, ?> options) {
+			}
 
-					@Override
-					public void postSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {}
+			@Override
+			public void postSave(final XMLResource resource, final OutputStream outputStream, final Map<?, ?> options) {
+			}
 		});
 	}
 	private final Collection<String> fileExtensions;
@@ -83,8 +80,7 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 
 		this.fileExtensions = fileExtensions;
 
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
-				IResourceChangeEvent.POST_CHANGE);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 	}
 
 	@Override
@@ -92,7 +88,7 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 		if (parentElement instanceof IFile) {
 			final IFile file = (IFile) parentElement;
 			final String fileExtension = file.getFileExtension();
-			if (fileExtension != null && fileExtension.equals("scenario")) {
+			if ((fileExtension != null) && fileExtension.equals("scenario")) {
 				final String path = file.getFullPath().toString();
 				final URI uri = URI.createPlatformResourceURI(path, true);
 				parentElement = resourceSet.getResource(uri, true);
@@ -136,11 +132,7 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 			final IResourceDelta delta = event.getDelta();
 			delta.accept(this);
 		} catch (final CoreException e) {
-			Activator
-					.getDefault()
-					.getLog()
-					.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e
-							.getMessage(), e));
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 		}
 	}
 
@@ -152,12 +144,10 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 		final String fileExtension = changedResource.getFileExtension();
 
 		// Make sure resource is a File and has a requested file extension
-		if (changedResource.getType() == IResource.FILE
-				&& fileExtensions.contains(fileExtension)) {
+		if ((changedResource.getType() == IResource.FILE) && fileExtensions.contains(fileExtension)) {
 			try {
 				// Get a URI to the resource
-				final String path = ((IFile) changedResource).getFullPath()
-						.toString();
+				final String path = ((IFile) changedResource).getFullPath().toString();
 				final URI uri = URI.createPlatformResourceURI(path, true);
 
 				// Get existing Resource impl
@@ -173,11 +163,7 @@ public class EcoreContentProvider extends AdapterFactoryContentProvider
 					}
 				}
 			} catch (final IOException ie) {
-				Activator
-						.getDefault()
-						.getLog()
-						.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-								"Error reloading resource", ie));
+				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error reloading resource", ie));
 			}
 			return false;
 		}
