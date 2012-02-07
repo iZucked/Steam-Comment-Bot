@@ -583,11 +583,10 @@ public class JobManagerView extends ViewPart {
 
 					final IJobControl control = jobManager.getControlForJob(job);
 
-
 					control.addListener(new IJobControlListener() {
 
 						@Override
-						public boolean jobStateChanged(IJobControl jc, EJobState oldState, EJobState newState) {
+						public boolean jobStateChanged(final IJobControl jc, final EJobState oldState, final EJobState newState) {
 							if (newState == EJobState.CANCELLED) {
 								jobManager.removeJob(job);
 								return false;
@@ -596,7 +595,7 @@ public class JobManagerView extends ViewPart {
 						}
 
 						@Override
-						public boolean jobProgressUpdated(IJobControl job, int progressDelta) {
+						public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
 							return true;
 						}
 					});
@@ -778,7 +777,7 @@ public class JobManagerView extends ViewPart {
 			@Override
 			public boolean hasNext() {
 				next = null;
-				while (selectionItr.hasNext() && next == null) {
+				while (selectionItr.hasNext() && (next == null)) {
 					final Object obj = selectionItr.next();
 					if (obj instanceof IJobDescriptor) {
 						next = (IJobDescriptor) obj;

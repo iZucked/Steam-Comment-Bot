@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.jobmanager.eclipse.manager.impl;
 
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -106,12 +105,12 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	 */
 	@Override
 	public void removeJob(final IJobDescriptor job) {
-		if (job == null)
+		if (job == null) {
 			return;
+		}
 		if (selectedJobs.contains(job)) {
 			deselectJob(job);
 		}
-
 
 		jobs.remove(job);
 		jobResourceMap.remove(job);
@@ -350,7 +349,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 		if (jobManagers.size() == 1) {
 			return jobManagers.values().iterator().next();
 		}
-		
+
 		final TreeSet<MatchResult> results = new TreeSet<MatchResult>();
 		for (final IJobManager mgr : jobManagers.values()) {
 			final int score = jobMatcher.matchJob(job, mgr);
@@ -413,7 +412,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	}
 
 	@Override
-	public IJobControl getControlForJob(IJobDescriptor jobDescriptor) {
+	public IJobControl getControlForJob(final IJobDescriptor jobDescriptor) {
 		return jobToControls.get(jobDescriptor);
 	}
 

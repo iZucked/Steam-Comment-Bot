@@ -36,5 +36,5 @@ public final class AdapterFactoryJobControlFactory implements IJobControlFactory
 	public IJobControl createJobControl(final IJobDescriptor job) {
 
 		return (IJobControl) adapterManager.getAdapter(job, IJobControl.class);
-	}	
+	}
 }

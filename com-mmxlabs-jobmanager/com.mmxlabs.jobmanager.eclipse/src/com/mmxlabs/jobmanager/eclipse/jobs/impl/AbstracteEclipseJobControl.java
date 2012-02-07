@@ -53,8 +53,9 @@ public abstract class AbstracteEclipseJobControl implements IJobControl {
 						final int p0 = getProgress();
 						final boolean more = step();
 						final int p1 = getProgress();
-						if (p1 > p0)
+						if (p1 > p0) {
 							monitor.worked(p1 - p0);
+						}
 						if (more == false) {
 							setJobState(EJobState.COMPLETED);
 							return Status.OK_STATUS;
@@ -127,7 +128,7 @@ public abstract class AbstracteEclipseJobControl implements IJobControl {
 			// we are probably preparing, so add a listener which waits
 			this.addListener(new IJobControlListener() {
 				@Override
-				public boolean jobStateChanged(IJobControl jobControl, EJobState oldState, EJobState newState) {
+				public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
 					if (newState == EJobState.INITIALISED) {
 						runner.schedule();
 						return false; // return false to avoid getting any more events
@@ -136,7 +137,7 @@ public abstract class AbstracteEclipseJobControl implements IJobControl {
 				}
 
 				@Override
-				public boolean jobProgressUpdated(IJobControl jobControl, int progressDelta) {
+				public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
 					return false;
 				}
 			});
