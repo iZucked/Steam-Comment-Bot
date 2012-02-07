@@ -17,7 +17,7 @@ package <%=genPackage.getPresentationPackageName()%>.composites;
 <%genModel.markImportLocation(stringBuffer, genPackage);%>
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IDetailComposite;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
@@ -70,7 +70,7 @@ public class <%=thisClassName%> implements IComponentHelper {
 	 * @generated
 	 */
 	@Override
-	public void addEditorsToComposite(final IDetailComposite detailComposite, final EClass topClass) {
+	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 <% for (final GenFeature genFeature : genClass.getGenFeatures()) { %>
 		add_<%=genFeature.getName()%>Editor(detailComposite, topClass);
@@ -82,7 +82,7 @@ public class <%=thisClassName%> implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	protected void add_<%=genFeature.getName()%>Editor(final IDetailComposite detailComposite, final EClass topClass) {
+	protected void add_<%=genFeature.getName()%>Editor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(<%=genFeature.getQualifiedFeatureAccessor()%>, topClass));
 	}
 <% } %>
