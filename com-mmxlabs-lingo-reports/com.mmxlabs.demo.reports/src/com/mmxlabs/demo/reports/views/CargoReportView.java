@@ -40,76 +40,62 @@ public class CargoReportView extends EMFReportView {
 
 	public CargoReportView() {
 		super("com.mmxlabs.demo.reports.CargoReportView");
-		
+
 		final CargoPackage c = CargoPackage.eINSTANCE;
 		final SchedulePackage s = SchedulePackage.eINSTANCE;
 
 		final EAttribute name = ScenarioPackage.eINSTANCE.getNamedObject_Name();
 
 		addColumn("Schedule", containingScheduleFormatter);
-		
+
 		// TODO cargo id not slot id.
 		addColumn("ID", objectFormatter, s.getCargoAllocation__GetName());
 
 		addColumn("Type", objectFormatter, s.getCargoAllocation_CargoType());
 
-		addColumn("Vessel", objectFormatter, s.getCargoAllocation_Vessel(),
-				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
+		addColumn("Vessel", objectFormatter, s.getCargoAllocation_Vessel(), FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
 
-		addColumn("Load Port", objectFormatter,
-				s.getCargoAllocation_LoadSlot(), c.getSlot_Port(),
-				name);
+		addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadSlot(), c.getSlot_Port(), name);
 
-		addColumn("Discharge Port", objectFormatter,
-				s.getCargoAllocation_DischargeSlot(), c.getSlot_Port(),
-				name);
+		addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeSlot(), c.getSlot_Port(), name);
 
 		addColumn("Load Date", datePartFormatter, s.getCargoAllocation__GetLocalLoadDate());
-		addColumn("Load Time", timePartFormatter,
-				s.getCargoAllocation__GetLocalLoadDate());
+		addColumn("Load Time", timePartFormatter, s.getCargoAllocation__GetLocalLoadDate());
 
 		addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation__GetLocalDischargeDate());
-		addColumn("Discharge Date", timePartFormatter,
-				s.getCargoAllocation__GetLocalDischargeDate());
+		addColumn("Discharge Time", timePartFormatter, s.getCargoAllocation__GetLocalDischargeDate());
 
-		addColumn("Load Volume", integerFormatter,
-				s.getCargoAllocation__GetLoadVolume());
+		addColumn("Load Volume", integerFormatter, s.getCargoAllocation__GetLoadVolume());
 
-		addColumn("Fuel Volume", integerFormatter,
-				s.getCargoAllocation_FuelVolume());
+		addColumn("Fuel Volume", integerFormatter, s.getCargoAllocation_FuelVolume());
 
-		addColumn("Discharge Volume", integerFormatter,
-				s.getCargoAllocation_DischargeVolume());
+		addColumn("Discharge Volume", integerFormatter, s.getCargoAllocation_DischargeVolume());
 
 		addColumn("Laden Cost", new IntegerFormatter() {
 			@Override
-			public Integer getIntValue(Object object) {
+			public Integer getIntValue(final Object object) {
 				final CargoAllocation a = (CargoAllocation) object;
-				if (a == null || a.getLadenIdle() == null
-						|| a.getLadenLeg() == null)
+				if ((a == null) || (a.getLadenIdle() == null) || (a.getLadenLeg() == null)) {
 					return null;
-				return (int) (a.getLadenIdle().getTotalCost() + a.getLadenLeg()
-						.getTotalCost());
+				}
+				return (int) (a.getLadenIdle().getTotalCost() + a.getLadenLeg().getTotalCost());
 
 			}
 		});
 
 		addColumn("Ballast Cost", new IntegerFormatter() {
 			@Override
-			public Integer getIntValue(Object object) {
+			public Integer getIntValue(final Object object) {
 				final CargoAllocation a = (CargoAllocation) object;
-				if (a == null || a.getBallastIdle() == null
-						|| a.getBallastLeg() == null)
+				if ((a == null) || (a.getBallastIdle() == null) || (a.getBallastLeg() == null)) {
 					return null;
-				return (int) (a.getBallastIdle().getTotalCost() + a
-						.getBallastLeg().getTotalCost());
+				}
+				return (int) (a.getBallastIdle().getTotalCost() + a.getBallastLeg().getTotalCost());
 			}
 		});
 
-		addColumn("Total Cost", integerFormatter,
-				s.getCargoAllocation__GetTotalCost());
-		
-		
+		addColumn("Total Cost", integerFormatter, s.getCargoAllocation__GetTotalCost());
+
 	}
 
 	@Override
@@ -126,39 +112,41 @@ public class CargoReportView extends EMFReportView {
 	protected IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
 			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput,
-					final Object newInput) {
-				Display.getCurrent().asyncExec(
-						new Runnable() {
-				@Override
-				public void run() {
-					if (viewer.getControl().isDisposed()) return;
-					final Set<Scenario> scenarios = new HashSet<Scenario>();
-					if (newInput instanceof Iterable) {
-						for (final Object element : ((Iterable<?>) newInput)) {
-							if (element instanceof Schedule) {
-								// find all referenced entities
-								for (final String s : entityColumnNames) {
-									removeColumn(s);
-								}
-								entityColumnNames.clear();
-								
-								EObject o = (EObject) element;
-								while (o != null && !(o instanceof Scenario)) {
-									o = o.eContainer();
-								}
-								
-								if (o != null)
-									scenarios.add((Scenario) o);
-							}
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+				Display.getCurrent().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						if (viewer.getControl().isDisposed()) {
+							return;
 						}
-						
+						final Set<Scenario> scenarios = new HashSet<Scenario>();
+						if (newInput instanceof Iterable) {
+							for (final Object element : ((Iterable<?>) newInput)) {
+								if (element instanceof Schedule) {
+									// find all referenced entities
+									for (final String s : entityColumnNames) {
+										removeColumn(s);
+									}
+									entityColumnNames.clear();
+
+									EObject o = (EObject) element;
+									while ((o != null) && !(o instanceof Scenario)) {
+										o = o.eContainer();
+									}
+
+									if (o != null) {
+										scenarios.add((Scenario) o);
+									}
+								}
+							}
+
+						}
+						for (final Scenario scenario : scenarios) {
+							addEntityColumns(scenario);
+						}
+						viewer.refresh();
 					}
-					for (final Scenario scenario : scenarios) {
-						addEntityColumns(scenario);
-					}
-					viewer.refresh();
-				}});
+				});
 			}
 
 			@Override
@@ -167,35 +155,26 @@ public class CargoReportView extends EMFReportView {
 			}
 
 			@Override
-			public Object[] getElements(Object object) {
+			public Object[] getElements(final Object object) {
 				final ArrayList<CargoAllocation> allocations = new ArrayList<CargoAllocation>();
 				clearInputEquivalents();
 				if (object instanceof Iterable) {
 					for (final Object o : (Iterable<?>) object) {
 						if (o instanceof Schedule) {
 							// collect allocations from object
-							allocations.addAll(((Schedule) o)
-									.getCargoAllocations());
+							allocations.addAll(((Schedule) o).getCargoAllocations());
 						}
 					}
 				}
-				
+
 				for (final CargoAllocation allocation : allocations) {
 					// map to events
-					setInputEquivalents(allocation, 
-							Arrays.asList(
-									new Object[] {
-										allocation.getLoadSlotVisit(),
-										allocation.getLoadSlot(),
-										allocation.getDischargeSlotVisit(),
-										allocation.getDischargeSlot(),
-										allocation.getBallastIdle(),
-										allocation.getBallastLeg(),
-										allocation.getLadenIdle(),
-										allocation.getLadenLeg()
-									}));
+					setInputEquivalents(
+							allocation,
+							Arrays.asList(new Object[] { allocation.getLoadSlotVisit(), allocation.getLoadSlot(), allocation.getDischargeSlotVisit(), allocation.getDischargeSlot(),
+									allocation.getBallastIdle(), allocation.getBallastLeg(), allocation.getLadenIdle(), allocation.getLadenLeg() }));
 				}
-				
+
 				return allocations.toArray();
 			}
 		};
@@ -211,8 +190,9 @@ public class CargoReportView extends EMFReportView {
 	}
 
 	private void addEntityColumn(final Entity entity) {
-		if (!(entity instanceof GroupEntity))
+		if (!(entity instanceof GroupEntity)) {
 			return;
+		}
 		final String title = "Profit to " + entity.getName();
 		entityColumnNames.add(title);
 		addColumn(title, new IntegerFormatter() {
@@ -222,13 +202,13 @@ public class CargoReportView extends EMFReportView {
 					// display P&L
 					int value = 0;
 					final CargoAllocation allocation = (CargoAllocation) object;
-					if (allocation.getLoadRevenue() != null && entity.equals(allocation.getLoadRevenue().getEntity())) {
+					if ((allocation.getLoadRevenue() != null) && entity.equals(allocation.getLoadRevenue().getEntity())) {
 						value += allocation.getLoadRevenue().getValue();
 					}
-					if (allocation.getShippingRevenue() != null && entity.equals(allocation.getShippingRevenue().getEntity())) {
+					if ((allocation.getShippingRevenue() != null) && entity.equals(allocation.getShippingRevenue().getEntity())) {
 						value += allocation.getShippingRevenue().getValue();
 					}
-					if (allocation.getDischargeRevenue() != null && entity.equals(allocation.getDischargeRevenue().getEntity())) {
+					if ((allocation.getDischargeRevenue() != null) && entity.equals(allocation.getDischargeRevenue().getEntity())) {
 						value += allocation.getDischargeRevenue().getValue();
 					}
 					return value;
