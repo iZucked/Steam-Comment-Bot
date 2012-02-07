@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editors.IDisplayComposite;
 
 /**
  * The default composite used to display an EObject
@@ -21,7 +22,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * @author hinton
  * 
  */
-public class DefaultTopLevelComposite extends Composite {
+public class DefaultTopLevelComposite extends Composite implements IDisplayComposite {
 
 	private DefaultDetailComposite topLevel = null;
 	private List<EReference> childReferences = new LinkedList<EReference>();
@@ -64,5 +65,10 @@ public class DefaultTopLevelComposite extends Composite {
 		}
 		
 		((GridLayout)getLayout()).numColumns = childComposites.size() + 1;
+	}
+
+	@Override
+	public Composite getComposite() {
+		return this;
 	}
 }

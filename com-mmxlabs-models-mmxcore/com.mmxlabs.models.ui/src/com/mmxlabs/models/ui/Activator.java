@@ -1,25 +1,32 @@
 package com.mmxlabs.models.ui;
 
+import javax.inject.Inject;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderFactoryRegistry;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.mmxlabs.models.ui.extensions.ExtensionConfigurationModule;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.registries.IDisplayCompositeFactoryRegistry;
+import com.mmxlabs.models.ui.registries.IEditorFactoryRegistry;
+import com.mmxlabs.models.ui.registries.IReferenceValueProviderFactoryRegistry;
+import com.mmxlabs.models.ui.registries.impl.EditorFactoryRegistry;
+import com.mmxlabs.models.ui.registries.impl.ReferenceValueProviderFactoryRegistry;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
-	public static final String REFERENCE_VALUE_PROVIDER_FACTORY_EXTENSION_POINT = "com.mmxlabs.models.ui.valueproviders";
-
-	private final ReferenceValueProviderFactoryRegistry referenceValueProviderFactoryRegistry
-		= new ReferenceValueProviderFactoryRegistry(REFERENCE_VALUE_PROVIDER_FACTORY_EXTENSION_POINT);
-	
-	private final EditorFactoryRegistry editorFactoryRegistry = new EditorFactoryRegistry();
-	private final ComponentHelperRegistry componentHelperRegistry = new ComponentHelperRegistry();
-	
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.models.ui"; //$NON-NLS-1$
 
+	@Inject IEditorFactoryRegistry editorFactoryRegistry;
+	@Inject IDisplayCompositeFactoryRegistry displayCompositeFactoryRegistry;
+	@Inject IComponentHelperRegistry componentHelperRegistry;
+	@Inject IReferenceValueProviderFactoryRegistry referenceValueProviderFactoryRegistry;
+	
 	// The shared instance
 	private static Activator plugin;
 	
@@ -27,6 +34,8 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
+		Injector injector = Guice.createInjector(new ExtensionConfigurationModule());
+		injector.injectMembers(this);
 	}
 
 	/*
@@ -56,15 +65,19 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	public EditorFactoryRegistry getEditorFactoryRegistry() {
+	public IEditorFactoryRegistry getEditorFactoryRegistry() {
 		return editorFactoryRegistry;
 	}
 
-	public ReferenceValueProviderFactoryRegistry getReferenceValueProviderFactoryRegistry() {
-		return referenceValueProviderFactoryRegistry;
+	public IDisplayCompositeFactoryRegistry getDisplayCompositeFactoryRegistry() {
+		return displayCompositeFactoryRegistry;
 	}
 
-	public ComponentHelperRegistry getComponentHelperRegistry() {
+	public IComponentHelperRegistry getComponentHelperRegistry() {
 		return componentHelperRegistry;
+	}
+
+	public IReferenceValueProviderFactoryRegistry getReferenceValueProviderFactoryRegistry() {
+		return referenceValueProviderFactoryRegistry;
 	}
 }

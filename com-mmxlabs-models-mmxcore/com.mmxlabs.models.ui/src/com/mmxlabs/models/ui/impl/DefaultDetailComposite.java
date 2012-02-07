@@ -16,6 +16,7 @@ import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 
@@ -24,7 +25,7 @@ import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
  * @author hinton
  *
  */
-public class DefaultDetailComposite extends Composite implements IInlineEditorContainer {
+public class DefaultDetailComposite extends Composite implements IInlineEditorContainer, IDisplayComposite {
 	private ICommandHandler commandHandler;
 	private EClass displayedClass;
 	private IInlineEditorWrapper wrapper = new IInlineEditorWrapper() {
@@ -90,5 +91,10 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		this.displayedClass = eClass;
 		final IComponentHelper helper = Activator.getDefault().getComponentHelperRegistry().getComponentHelper(displayedClass);
 		helper.addEditorsToComposite(this);
+	}
+
+	@Override
+	public Composite getComposite() {
+		return this;
 	}
 }

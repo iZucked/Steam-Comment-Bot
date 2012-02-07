@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EReference;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.registries.IReferenceValueProviderFactoryRegistry;
 
 /**
  * Utility class for caching reference value providers for a given root object. If a reference value provider
@@ -18,12 +19,12 @@ import com.mmxlabs.models.ui.Activator;
  *
  */
 public class ReferenceValueProviderCache {
-	private final ReferenceValueProviderFactoryRegistry registry;
+	private final IReferenceValueProviderFactoryRegistry registry;
 	private final MMXRootObject rootObject;
 	private final HashMap<Pair<EClass, EReference>, IReferenceValueProvider> cache = 
 			new HashMap<Pair<EClass, EReference>, IReferenceValueProvider>();
 	
-	public ReferenceValueProviderCache(final MMXRootObject root, final ReferenceValueProviderFactoryRegistry registry) {
+	public ReferenceValueProviderCache(final MMXRootObject root, final IReferenceValueProviderFactoryRegistry registry) {
 		this.registry = registry;
 		this.rootObject = root;
 	}
