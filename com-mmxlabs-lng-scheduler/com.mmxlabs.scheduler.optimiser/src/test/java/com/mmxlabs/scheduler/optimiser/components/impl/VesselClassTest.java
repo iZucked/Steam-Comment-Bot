@@ -128,8 +128,7 @@ public class VesselClassTest {
 		final VesselState state1 = VesselState.Laden;
 		final VesselState state2 = VesselState.Ballast;
 
-		final IConsumptionRateCalculator calc = context
-				.mock(IConsumptionRateCalculator.class);
+		final IConsumptionRateCalculator calc = context.mock(IConsumptionRateCalculator.class);
 
 		final VesselClass vesselClass = new VesselClass();
 		Assert.assertNull(vesselClass.getConsumptionRate(state1));
@@ -162,7 +161,7 @@ public class VesselClassTest {
 		vesselClass.setBaseFuelUnitPrice(value);
 		Assert.assertEquals(value, vesselClass.getBaseFuelUnitPrice());
 	}
-	
+
 	@Test
 	public void testGetSetBaseFuelConversionFactor() {
 		final int value = 100;
@@ -171,7 +170,7 @@ public class VesselClassTest {
 		vesselClass.setBaseFuelConversionFactor(value);
 		Assert.assertEquals(value, vesselClass.getBaseFuelConversionFactor());
 	}
-	
+
 	@Test
 	public void testGetSetPilotLightRate() {
 		final long value = 100;

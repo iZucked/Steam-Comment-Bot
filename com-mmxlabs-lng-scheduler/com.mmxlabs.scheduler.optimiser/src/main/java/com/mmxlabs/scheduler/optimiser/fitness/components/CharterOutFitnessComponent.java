@@ -88,7 +88,7 @@ public class CharterOutFitnessComponent extends AbstractPerRouteSchedulerFitness
 		if (object instanceof VoyageDetails) {
 			final VoyageDetails voyageDetails = (VoyageDetails) object;
 			// check idle time is quite long, so a charter out is not ridiculous
-			if (generateOpportunities && voyageDetails.getIdleTime() > idleTimeThreshold) {
+			if (generateOpportunities && (voyageDetails.getIdleTime() > idleTimeThreshold)) {
 				// TODO this is where a market model would slot in (or maybe
 				// above)
 
@@ -99,8 +99,9 @@ public class CharterOutFitnessComponent extends AbstractPerRouteSchedulerFitness
 			}
 		} else if (object instanceof PortDetails) {
 			final PortDetails portDetails = (PortDetails) object;
-			if (portDetails.getPortSlot().getPortType().equals(PortType.CharterOut))
+			if (portDetails.getPortSlot().getPortType().equals(PortType.CharterOut)) {
 				fitnessAccumulator += getDiscountedValue(time, Calculator.multiply(portDetails.getVisitDuration(), charterOutPrice));
+			}
 		}
 		return true;
 	}

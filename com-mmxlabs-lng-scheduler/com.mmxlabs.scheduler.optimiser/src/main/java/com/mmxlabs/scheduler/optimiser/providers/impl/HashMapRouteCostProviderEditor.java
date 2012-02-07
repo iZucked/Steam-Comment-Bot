@@ -12,8 +12,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 
-public class HashMapRouteCostProviderEditor implements
-		IRouteCostProviderEditor {
+public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor {
 
 	public HashMapRouteCostProviderEditor(final String name, final String defaultKey) {
 		super();
@@ -22,20 +21,16 @@ public class HashMapRouteCostProviderEditor implements
 	}
 
 	final String name;
-	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Integer>>>
-		pricesByRouteClassAndState = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Integer>>>();
-	
+	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Integer>>> pricesByRouteClassAndState = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Integer>>>();
+
 	private final Map<String, Integer> defaultPrices = new HashMap<String, Integer>();
 	private final String defaultKey;
-	
-	private final Map<String, Map<IVesselClass, Integer>> travelTimesByRouteAndClass =
-		new HashMap<String, Map<IVesselClass, Integer>>();
-	private final Map<String, Map<IVesselClass, Long>> baseFuelByRouteAndClass = 
-		new HashMap<String, Map<IVesselClass, Long>>();
-	
+
+	private final Map<String, Map<IVesselClass, Integer>> travelTimesByRouteAndClass = new HashMap<String, Map<IVesselClass, Integer>>();
+	private final Map<String, Map<IVesselClass, Long>> baseFuelByRouteAndClass = new HashMap<String, Map<IVesselClass, Long>>();
+
 	@Override
-	public int getRouteCost(final String route, final IVesselClass vesselClass,
-			final VesselState vesselState) {
+	public int getRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState) {
 		if (route.equals(defaultKey)) {
 			return 0;
 		}
@@ -52,7 +47,9 @@ public class HashMapRouteCostProviderEditor implements
 			}
 		}
 		final Integer x = defaultPrices.get(route);
-		if (x != null) return x;
+		if (x != null) {
+			return x;
+		}
 		return 0;
 	}
 
@@ -69,8 +66,7 @@ public class HashMapRouteCostProviderEditor implements
 	}
 
 	@Override
-	public void setRouteCost(final String route, final IVesselClass vesselClass,
-			final VesselState vesselState, final int price) {
+	public void setRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState, final int price) {
 		if (!pricesByRouteClassAndState.containsKey(route)) {
 			final EnumMap<VesselState, Integer> single = new EnumMap<VesselState, Integer>(VesselState.class);
 			single.put(vesselState, price);
@@ -84,7 +80,7 @@ public class HashMapRouteCostProviderEditor implements
 			} else {
 				final EnumMap<VesselState, Integer> single = new EnumMap<VesselState, Integer>(VesselState.class);
 				single.put(vesselState, price);
-				byV.put(vesselClass, single);	
+				byV.put(vesselClass, single);
 			}
 		}
 	}
@@ -95,13 +91,12 @@ public class HashMapRouteCostProviderEditor implements
 	}
 
 	@Override
-	public void setRouteTimeAndFuel(final String routeName, final IVesselClass vc,
-			final int transitTimeInHours, final long baseFuelInScaledMT) {
+	public void setRouteTimeAndFuel(final String routeName, final IVesselClass vc, final int transitTimeInHours, final long baseFuelInScaledMT) {
 		if (!travelTimesByRouteAndClass.containsKey(routeName)) {
 			travelTimesByRouteAndClass.put(routeName, new HashMap<IVesselClass, Integer>());
 		}
 		travelTimesByRouteAndClass.get(routeName).put(vc, transitTimeInHours);
-		
+
 		if (!baseFuelByRouteAndClass.containsKey(routeName)) {
 			baseFuelByRouteAndClass.put(routeName, new HashMap<IVesselClass, Long>());
 		}

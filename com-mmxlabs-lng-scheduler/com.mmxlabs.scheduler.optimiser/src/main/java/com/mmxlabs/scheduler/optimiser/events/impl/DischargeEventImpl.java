@@ -12,8 +12,7 @@ import com.mmxlabs.scheduler.optimiser.events.IDischargeEvent;
  * @author Simon Goodall
  * 
  */
-public final class DischargeEventImpl extends PortVisitEventImpl implements
-		IDischargeEvent {
+public final class DischargeEventImpl extends PortVisitEventImpl implements IDischargeEvent {
 
 	private long dischargeVolume;
 	private long salesPrice;

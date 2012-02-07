@@ -42,7 +42,7 @@ public final class SchedulerUtils {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static  ISequenceScheduler createSimpleSequenceScheduler(final IOptimisationData data) {
+	public static ISequenceScheduler createSimpleSequenceScheduler(final IOptimisationData data) {
 
 		final SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
 
@@ -62,7 +62,7 @@ public final class SchedulerUtils {
 		return scheduler;
 	}
 
-	public static  IVoyagePlanOptimiser createVoyagePlanOptimiser(final IOptimisationData data) {
+	public static IVoyagePlanOptimiser createVoyagePlanOptimiser(final IOptimisationData data) {
 		final LNGVoyageCalculator voyageCalculator = new LNGVoyageCalculator();
 
 		voyageCalculator.setRouteCostDataComponentProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
@@ -73,7 +73,7 @@ public final class SchedulerUtils {
 		return voyagePlanOptimiser;
 	}
 
-	public static  IVoyagePlanOptimiser createCachingVoyagePlanOptimiser(final IOptimisationData data, final int cacheSize) {
+	public static IVoyagePlanOptimiser createCachingVoyagePlanOptimiser(final IOptimisationData data, final int cacheSize) {
 		// duplicate code due to type erasure
 
 		final LNGVoyageCalculator voyageCalculator = new LNGVoyageCalculator();
@@ -91,7 +91,7 @@ public final class SchedulerUtils {
 		}
 	}
 
-	public static  IVoyagePlanOptimiser createVPO(final IOptimisationData data, final int vpoCacheSize) {
+	public static IVoyagePlanOptimiser createVPO(final IOptimisationData data, final int vpoCacheSize) {
 		// return createVoyagePlanOptimiser();
 		return createCachingVoyagePlanOptimiser(data, vpoCacheSize);
 		// return new CheckingVPO(
@@ -100,7 +100,7 @@ public final class SchedulerUtils {
 	}
 
 	//
-	// public static  ISequenceScheduler createGASequenceScheduler(
+	// public static ISequenceScheduler createGASequenceScheduler(
 	// final IOptimisationData data,
 	// final Collection<ICargoSchedulerFitnessComponent> fitnessComponents) {
 	// return createGASequenceScheduler(data, fitnessComponents,
@@ -110,12 +110,12 @@ public final class SchedulerUtils {
 	/**
 	 * Set all the standard DCPs for any abstract sequence scheduler
 	 * 
-	 * @param 
+	 * @param
 	 * @param data
 	 * @param scheduler
 	 */
 	@SuppressWarnings("unchecked")
-	private static  void setDataComponentProviders(final IOptimisationData data, final AbstractSequenceScheduler scheduler) {
+	private static void setDataComponentProviders(final IOptimisationData data, final AbstractSequenceScheduler scheduler) {
 		final IMultiMatrixProvider<IPort, Integer> distanceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class);
 
 		scheduler.setDistanceProvider(distanceProvider);
@@ -141,7 +141,7 @@ public final class SchedulerUtils {
 		scheduler.setVesselProvider(vesselProvider);
 	}
 
-	// public static  RandomSeparatedSequenceScheduler
+	// public static RandomSeparatedSequenceScheduler
 	// createRandomSeparatedSequenceScheduler(
 	// final IOptimisationData data,
 	// final Collection<ICargoSchedulerFitnessComponent> fitnessComponents,
@@ -404,14 +404,15 @@ public final class SchedulerUtils {
 	// return scheduler;
 	// }
 	//
-	// public static  ISequenceScheduler createRandomSequenceScheduler(
+	// public static ISequenceScheduler createRandomSequenceScheduler(
 	// IOptimisationData data, Collection<ICargoSchedulerFitnessComponent>
 	// components) {
 	// return createRandomSequenceScheduler(data, components,
 	// DEFAULT_VPO_CACHE_SIZE);
 	// }
 
-	public static  DirectRandomSequenceScheduler createDirectRandomSequenceScheduler(IOptimisationData data, Collection<ICargoSchedulerFitnessComponent> components, Collection<ICargoAllocationFitnessComponent> components2, int vpoCacheSize) {
+	public static DirectRandomSequenceScheduler createDirectRandomSequenceScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> components,
+			final Collection<ICargoAllocationFitnessComponent> components2, final int vpoCacheSize) {
 
 		final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
 		final ScheduleEvaluator evaluator = new ScheduleEvaluator();
@@ -443,8 +444,8 @@ public final class SchedulerUtils {
 		return scheduler;
 	}
 
-	public static DirectRandomSequenceScheduler createDirectRandomSequenceScheduler(IOptimisationData data,
-			Collection<ICargoSchedulerFitnessComponent> components, Collection<ICargoAllocationFitnessComponent> components2) {
+	public static DirectRandomSequenceScheduler createDirectRandomSequenceScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> components,
+			final Collection<ICargoAllocationFitnessComponent> components2) {
 		return createDirectRandomSequenceScheduler(data, components, components2, DEFAULT_VPO_CACHE_SIZE);
 	}
 }

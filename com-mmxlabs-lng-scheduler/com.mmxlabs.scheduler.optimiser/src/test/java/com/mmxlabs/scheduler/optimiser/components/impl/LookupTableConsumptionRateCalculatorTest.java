@@ -21,8 +21,7 @@ public class LookupTableConsumptionRateCalculatorTest {
 
 	@Test
 	public void testLookupTableConsumptionRateCalculator() {
-		final IConsumptionRateCalculator calc = context
-				.mock(IConsumptionRateCalculator.class);
+		final IConsumptionRateCalculator calc = context.mock(IConsumptionRateCalculator.class);
 
 		context.setDefaultResultForType(long.class, 100l);
 
@@ -37,8 +36,7 @@ public class LookupTableConsumptionRateCalculatorTest {
 			}
 		});
 
-		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(
-				5, 10, calc);
+		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(5, 10, calc);
 
 		Assert.assertEquals(100l, lookupCalc.getRate(5));
 		Assert.assertEquals(100l, lookupCalc.getRate(6));
@@ -53,8 +51,7 @@ public class LookupTableConsumptionRateCalculatorTest {
 
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testLookupTableConsumptionRateCalculator2() {
-		final IConsumptionRateCalculator calc = context
-				.mock(IConsumptionRateCalculator.class);
+		final IConsumptionRateCalculator calc = context.mock(IConsumptionRateCalculator.class);
 
 		context.setDefaultResultForType(long.class, 100l);
 
@@ -69,8 +66,7 @@ public class LookupTableConsumptionRateCalculatorTest {
 			}
 		});
 
-		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(
-				5, 10, calc);
+		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(5, 10, calc);
 
 		context.assertIsSatisfied();
 		lookupCalc.getRate(4);
@@ -79,8 +75,7 @@ public class LookupTableConsumptionRateCalculatorTest {
 
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testLookupTableConsumptionRateCalculator3() {
-		final IConsumptionRateCalculator calc = context
-				.mock(IConsumptionRateCalculator.class);
+		final IConsumptionRateCalculator calc = context.mock(IConsumptionRateCalculator.class);
 
 		context.setDefaultResultForType(long.class, 100l);
 
@@ -95,8 +90,7 @@ public class LookupTableConsumptionRateCalculatorTest {
 			}
 		});
 
-		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(
-				5, 10, calc);
+		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(5, 10, calc);
 
 		context.assertIsSatisfied();
 		lookupCalc.getRate(11);

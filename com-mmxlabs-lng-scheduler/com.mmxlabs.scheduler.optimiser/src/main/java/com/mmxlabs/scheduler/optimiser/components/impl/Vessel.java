@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
  */
 public final class Vessel extends IndexedObject implements IVessel {
 
-	public Vessel(IIndexingContext provider) {
+	public Vessel(final IIndexingContext provider) {
 		super(provider);
 	}
 
@@ -29,7 +29,7 @@ public final class Vessel extends IndexedObject implements IVessel {
 	private VesselInstanceType vesselInstanceType = VesselInstanceType.UNKNOWN;
 
 	private int hourlyCharterOutPrice;
-	
+
 	@Override
 	public String getName() {
 		return name;
@@ -53,11 +53,11 @@ public final class Vessel extends IndexedObject implements IVessel {
 		return vesselInstanceType;
 	}
 
-	public void setVesselInstanceType(
-			final VesselInstanceType vesselInstanceType) {
+	public void setVesselInstanceType(final VesselInstanceType vesselInstanceType) {
 		this.vesselInstanceType = vesselInstanceType;
 	}
 
+	@Override
 	public String toString() {
 		return getName();
 	}
@@ -67,7 +67,7 @@ public final class Vessel extends IndexedObject implements IVessel {
 		return hourlyCharterOutPrice;
 	}
 
-	public void setHourlyCharterOutPrice(int hourlyCharterOutPrice) {
+	public void setHourlyCharterOutPrice(final int hourlyCharterOutPrice) {
 		this.hourlyCharterOutPrice = hourlyCharterOutPrice;
 	}
 }

@@ -17,15 +17,14 @@ public abstract class PortSlot implements IPortSlot {
 	private IPort port;
 
 	private ITimeWindow timeWindow;
-	
+
 	private PortType portType;
-	
+
 	public PortSlot() {
 
 	}
 
-	public PortSlot(final String id, final IPort port,
-			final ITimeWindow timeWindow) {
+	public PortSlot(final String id, final IPort port, final ITimeWindow timeWindow) {
 		this.id = id;
 		this.port = port;
 		this.timeWindow = timeWindow;
@@ -79,7 +78,7 @@ public abstract class PortSlot implements IPortSlot {
 
 		return false;
 	}
-	
+
 	@Override
 	public PortType getPortType() {
 		return portType;
@@ -91,7 +90,6 @@ public abstract class PortSlot implements IPortSlot {
 
 	@Override
 	public String toString() {
-		return id + (timeWindow == null ? " <any>" : " <" + timeWindow.getStart() + ", " + timeWindow.getEnd()
-				+ ">");
+		return id + (timeWindow == null ? " <any>" : " <" + timeWindow.getStart() + ", " + timeWindow.getEnd() + ">");
 	}
 }

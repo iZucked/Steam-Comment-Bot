@@ -19,31 +19,32 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author hinton
- *
+ * 
  */
 public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoadPriceCalculator2, IShippingPriceCalculator {
 
 	@Override
-	public void prepareEvaluation(ScheduledSequences sequences) {
+	public void prepareEvaluation(final ScheduledSequences sequences) {
 	}
 
 	@Override
-	public int calculateLoadUnitPrice(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePrice, int loadVolume, IVesselClass vesselClass, VoyagePlan plan) {
+	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePrice, final int loadVolume,
+			final IVesselClass vesselClass, final VoyagePlan plan) {
 		return calculateSimpleLoadUnitPrice(loadTime);
 	}
 
 	@Override
-	public void prepareEvaluation(ISequences sequences) {
+	public void prepareEvaluation(final ISequences sequences) {
 
 	}
 
 	@Override
-	public int calculateUnitPrice(IPortSlot slot, int time) {
+	public int calculateUnitPrice(final IPortSlot slot, final int time) {
 		return calculateSimpleLoadUnitPrice(time);
 	}
 
 	@Override
-	public int calculateLoadUnitPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int loadTime, int dischargeTime, int salesPrice) {
+	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice) {
 		return calculateSimpleLoadUnitPrice(loadTime);
 	}
 }

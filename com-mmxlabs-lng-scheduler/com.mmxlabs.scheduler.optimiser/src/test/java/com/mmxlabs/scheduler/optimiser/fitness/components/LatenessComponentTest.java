@@ -68,8 +68,8 @@ public class LatenessComponentTest {
 
 	@Test
 	public void testEvaluateSequence() {
-		
-		// the penalty per 1 unit (hour?) of late. As set in LatenessComponent. 
+
+		// the penalty per 1 unit (hour?) of late. As set in LatenessComponent.
 		final int penalty = 1000000;
 
 		// the expected times
@@ -78,16 +78,16 @@ public class LatenessComponentTest {
 		final int loadEndTime = 11;
 		final int dischargeStartTime = 20;
 		final int dischargeEndTime = 21;
-		
+
 		// the amounts to be late by
 		final int loadLateTime = 1;
 		final int dischargeLateTime = 1;
-		
+
 		final String name = "name";
 		final CargoSchedulerFitnessCore core = null;
 		final LatenessComponent c = new LatenessComponent(name, core);
 		c.init(null);
-		
+
 		// set up time windows from load/discharge end/start times above
 		final TimeWindow window1 = new TimeWindow(loadStartTime, loadEndTime);
 		final TimeWindow window2 = new TimeWindow(dischargeStartTime, dischargeEndTime);
@@ -115,15 +115,15 @@ public class LatenessComponentTest {
 		c.nextVoyagePlan(voyagePlan, voyageStartTime);
 		c.nextObject(loadDetails, loadEndTime + loadLateTime);
 		c.nextObject(dischargeDetails, dischargeEndTime + dischargeLateTime);
-		
+
 		c.endSequence();
-		
+
 		final long cost = c.endEvaluationAndGetCost();
-		
-		final long expectedCost = (dischargeLateTime  + loadLateTime) * penalty;
+
+		final long expectedCost = (dischargeLateTime + loadLateTime) * penalty;
 		Assert.assertEquals("Expected cost equals calculated cost.", expectedCost, cost);
-		
+
 		context.assertIsSatisfied();
-		
+
 	}
 }

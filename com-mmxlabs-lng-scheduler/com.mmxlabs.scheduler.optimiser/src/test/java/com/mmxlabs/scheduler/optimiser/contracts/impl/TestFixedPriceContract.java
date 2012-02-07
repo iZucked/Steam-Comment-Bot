@@ -8,7 +8,7 @@ import org.junit.Test;
 
 /**
  * @author Tom Hinton
- *
+ * 
  */
 public class TestFixedPriceContract {
 	@Test

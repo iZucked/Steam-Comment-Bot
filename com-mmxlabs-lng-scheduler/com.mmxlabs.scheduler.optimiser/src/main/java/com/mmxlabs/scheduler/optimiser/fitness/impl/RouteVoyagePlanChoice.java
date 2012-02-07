@@ -12,8 +12,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
- * Implementation of {@link IVoyagePlanChoice} to change the route used between
- * ports.
+ * Implementation of {@link IVoyagePlanChoice} to change the route used between ports.
  * 
  * @author Simon Goodall
  * 
@@ -26,8 +25,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final List<MatrixEntry<IPort, Integer>> distances;
 
-	public RouteVoyagePlanChoice(final VoyageOptions options,
-			final List<MatrixEntry<IPort, Integer>> distances) {
+	public RouteVoyagePlanChoice(final VoyageOptions options, final List<MatrixEntry<IPort, Integer>> distances) {
 		this.options = options;
 		this.distances = distances;
 	}
@@ -45,7 +43,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 	@Override
 	public final boolean nextChoice() {
 		while (true) {
-			if (choice + 1 == numChoices()) {
+			if ((choice + 1) == numChoices()) {
 				return true;
 			}
 			if (apply(choice + 1)) {

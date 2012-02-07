@@ -22,11 +22,9 @@ public class CachingConsumptionRateCalculatorTest {
 	@Test
 	public void testCachingConsumptionRateCalculator() {
 
-		final IConsumptionRateCalculator calc = context
-				.mock(IConsumptionRateCalculator.class);
+		final IConsumptionRateCalculator calc = context.mock(IConsumptionRateCalculator.class);
 
-		CachingConsumptionRateCalculator cachingCalc = new CachingConsumptionRateCalculator(
-				calc);
+		final CachingConsumptionRateCalculator cachingCalc = new CachingConsumptionRateCalculator(calc);
 
 		context.setDefaultResultForType(long.class, 100l);
 

@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
  * @param
  */
 public class ScheduleEvaluator {
-	
+
 	private final VoyagePlanIterator vpIterator = new VoyagePlanIterator();
 
 	private ICargoAllocator cargoAllocator;
@@ -44,16 +44,18 @@ public class ScheduleEvaluator {
 		// values from the ScheduledSequences.
 
 		final HashSet<IResource> affectedResources = new HashSet<IResource>();
-		for (final int index : changedSequences)
+		for (final int index : changedSequences) {
 			affectedResources.add(scheduledSequences.get(index).getResource());
+		}
 		if (!vpIterator.iterateSchedulerComponents(fitnessComponents, scheduledSequences, affectedResources, fitnesses)) {
 			return Long.MAX_VALUE;
 		}
 
 		long total = 0;
 		for (final long l : fitnesses) {
-			if (l == Long.MAX_VALUE)
+			if (l == Long.MAX_VALUE) {
 				return Long.MAX_VALUE;
+			}
 			total += l;
 		}
 
@@ -72,8 +74,9 @@ public class ScheduleEvaluator {
 
 		for (final ICargoAllocationFitnessComponent component : allocationComponents) {
 			final long l = component.evaluate(scheduledSequences, allocations);
-			if (l == Long.MAX_VALUE)
+			if (l == Long.MAX_VALUE) {
 				return Long.MAX_VALUE;
+			}
 			total += l;
 		}
 
@@ -100,8 +103,9 @@ public class ScheduleEvaluator {
 
 	public void evaluateSchedule(final ScheduledSequences bestResult) {
 		final HashSet<IResource> allResources = new HashSet<IResource>();
-		for (final ScheduledSequence schedule : bestResult)
+		for (final ScheduledSequence schedule : bestResult) {
 			allResources.add(schedule.getResource());
+		}
 		vpIterator.iterateSchedulerComponents(fitnessComponents, bestResult, allResources);
 	}
 }

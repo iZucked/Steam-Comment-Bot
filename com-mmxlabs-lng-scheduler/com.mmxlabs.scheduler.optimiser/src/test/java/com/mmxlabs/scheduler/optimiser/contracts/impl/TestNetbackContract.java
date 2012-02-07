@@ -31,32 +31,31 @@ public class TestNetbackContract {
 	@Test
 	public void testComputeNetbackPrice() {
 		final Mockery context = new Mockery();
-		final IMultiMatrixProvider<IPort, Integer> distanceProvider = context
-				.mock(IMultiMatrixProvider.class);
+		final IMultiMatrixProvider<IPort, Integer> distanceProvider = context.mock(IMultiMatrixProvider.class);
 		final IPort A = context.mock(IPort.class, "Port A");
 		final IPort B = context.mock(IPort.class, "Port B");
 
 		final ILoadSlot slotA = context.mock(ILoadSlot.class, "Slot A");
 		final IDischargeSlot slotB = context.mock(IDischargeSlot.class, "Slot B");
-		
+
 		final VoyageDetails ladenLeg = new VoyageDetails();
 
 		final VoyageDetails ballastLeg = new VoyageDetails();
 
 		final VoyageOptions ladenOptions = new VoyageOptions();
 		final VoyageOptions ballastOptions = new VoyageOptions();
-		
+
 		ladenOptions.setFromPortSlot(slotA);
 		ladenOptions.setToPortSlot(slotB);
 		ballastOptions.setFromPortSlot(slotB);
-		
+
 		ladenLeg.setOptions(ladenOptions);
 		ballastLeg.setOptions(ballastOptions);
-		
+
 		final IVesselClass vesselClass = context.mock(IVesselClass.class);
-		
+
 		final IConsumptionRateCalculator curve = context.mock(IConsumptionRateCalculator.class);
-		
+
 		context.checking(new Expectations() {
 			{
 
@@ -69,21 +68,21 @@ public class TestNetbackContract {
 				will(returnValue(MAX_SPEED)); // 10 knots => 100 hours
 				atLeast(1).of(vesselClass).getHourlyCharterInPrice();
 				will(returnValue(1000));
-				
+
 				atLeast(1).of(slotA).getPort();
 				will(returnValue(A));
 				atLeast(1).of(slotB).getPort();
 				will(returnValue(B));
-				
+
 				atLeast(1).of(vesselClass).getBaseFuelUnitPrice();
 				will(returnValue(1000));
-				
+
 				atLeast(1).of(vesselClass).getBaseFuelConversionFactor();
 				will(returnValue(500));
-				
+
 				atLeast(1).of(vesselClass).getConsumptionRate(VesselState.Ballast);
 				will(returnValue(curve));
-				
+
 				atLeast(1).of(curve).getRate(MAX_SPEED);
 				will(returnValue(500l));
 			}

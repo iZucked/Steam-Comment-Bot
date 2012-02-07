@@ -9,9 +9,8 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
- * Implementation of {@link IVoyagePlanChoice} to alter NBO choice during idle
- * events. If Idle NBO is true, then this implies that the NBO choice during the
- * journey is true, otherwise {@link #apply(int)} will fail.
+ * Implementation of {@link IVoyagePlanChoice} to alter NBO choice during idle events. If Idle NBO is true, then this implies that the NBO choice during the journey is true, otherwise
+ * {@link #apply(int)} will fail.
  * 
  * @author Simon Goodall
  * 
@@ -39,7 +38,7 @@ public final class IdleNBOVoyagePlanChoice implements IVoyagePlanChoice {
 	@Override
 	public final boolean nextChoice() {
 		while (true) {
-			if (choice + 1 == numChoices()) {
+			if ((choice + 1) == numChoices()) {
 				return true;
 			}
 			if (apply(choice + 1)) {
@@ -60,7 +59,7 @@ public final class IdleNBOVoyagePlanChoice implements IVoyagePlanChoice {
 		options.setUseNBOForIdle(useNBOForIdle);
 
 		// We have to use idle NBO when laden
-		if (!useNBOForIdle && options.getVesselState() == VesselState.Laden) {
+		if (!useNBOForIdle && (options.getVesselState() == VesselState.Laden)) {
 			return false;
 		}
 

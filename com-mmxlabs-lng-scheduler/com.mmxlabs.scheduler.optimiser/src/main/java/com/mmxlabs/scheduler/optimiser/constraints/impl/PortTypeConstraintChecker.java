@@ -103,19 +103,21 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		for (final ISequenceElement t : sequence) {
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
-				if (!((type == PortType.Start && instanceType != VesselInstanceType.SPOT_CHARTER) || (instanceType == VesselInstanceType.SPOT_CHARTER && (type == PortType.Load || type == PortType.End)))) {
+				if (!(((type == PortType.Start) && (instanceType != VesselInstanceType.SPOT_CHARTER)) || ((instanceType == VesselInstanceType.SPOT_CHARTER) && ((type == PortType.Load) || (type == PortType.End))))) {
 					// must either start with Start and be not a spot charter,
 					// or must start with a load or an End and be a spot charter
 
-					if (messages != null)
+					if (messages != null) {
 						messages.add("Sequence must begin with PortType.Start or, if charter, End or Load, but actually begins with " + type + " (for instance type " + instanceType + ")");
+					}
 					return false;
 				}
 			} else {
 				if (previousType == PortType.End) {
 					// Cannot have two elements with an End type.
-					if (messages != null)
+					if (messages != null) {
 						messages.add("Sequence can only have one PortType.End");
+					}
 					return false;
 				}
 			}
@@ -124,14 +126,16 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Discharge:
 				if (seenDischarge) {
 					// Cannot have two discharges in a row
-					if (messages != null)
+					if (messages != null) {
 						messages.add("Cannot have two PortType.Discharge in a row");
+					}
 					return false;
 				}
 				if (!seenLoad) {
 					// Cannot discharge without loading
-					if (messages != null)
+					if (messages != null) {
 						messages.add("Cannot have PortType.Discharge without a PortType.Load");
+					}
 					return false;
 				}
 				seenLoad = false;
@@ -140,8 +144,9 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Load:
 				if (seenLoad) {
 					// Cannot have two loads in a row
-					if (messages != null)
+					if (messages != null) {
 						messages.add("Cannot have two PortType.Load in a row");
+					}
 					return false;
 				}
 				seenLoad = true;
@@ -150,8 +155,9 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Start:
 				if (previous != null) {
 					// Start must occur at the start
-					if (messages != null)
+					if (messages != null) {
 						messages.add("PortType.Start must occur at beginning of Sequence");
+					}
 					return false;
 				}
 				break;
@@ -163,16 +169,18 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Virtual:
 				if (seenLoad) {
 					// Cannot insert between load and discharge
-					if (messages != null)
+					if (messages != null) {
 						messages.add("Cannot insert " + type + " between PortType.Load and PortType.Discharge");
+					}
 					return false;
 				}
 				break;
 			case End:
 				break;
 			default:
-				if (messages != null)
+				if (messages != null) {
 					messages.add("Unsupported PortType");
+				}
 				// Unsupported type
 				return false;
 
@@ -184,8 +192,9 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 		if (previousType != PortType.End) {
 			// Must end with an End type.
-			if (messages != null)
+			if (messages != null) {
 				messages.add("Sequence must end with PortType.End");
+			}
 			return false;
 		}
 
@@ -215,21 +224,25 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 		// check the legality of this sequencing decision
 		// End can't come before anything and Start can't come after anything
-		if (firstType.equals(PortType.End) || secondType.equals(PortType.Start))
+		if (firstType.equals(PortType.End) || secondType.equals(PortType.Start)) {
 			return false;
+		}
 
-		if (firstType.equals(PortType.Start) && secondType.equals(PortType.Discharge))
+		if (firstType.equals(PortType.Start) && secondType.equals(PortType.Discharge)) {
 			return false; // first port should be a load slot (TODO is this
 							// true?)
+		}
 
 		// load must precede discharge or waypoint, but nothing else
-		if (firstType.equals(PortType.Load))
+		if (firstType.equals(PortType.Load)) {
 			return (secondType.equals(PortType.Discharge) || secondType.equals(PortType.Waypoint));
+		}
 
 		// discharge may precede anything but Discharge (and start, but we
 		// already did that)
-		if (firstType.equals(PortType.Discharge) && secondType.equals(PortType.Discharge))
+		if (firstType.equals(PortType.Discharge) && secondType.equals(PortType.Discharge)) {
 			return false;
+		}
 
 		return true;
 	}

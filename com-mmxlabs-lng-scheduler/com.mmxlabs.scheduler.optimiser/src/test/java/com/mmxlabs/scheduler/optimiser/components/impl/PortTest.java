@@ -12,6 +12,7 @@ import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 
 public class PortTest {
 	final IIndexingContext index = new SimpleIndexingContext();
+
 	@Test
 	public void testGetSetName() {
 		final Port port = new Port(index);
@@ -20,22 +21,21 @@ public class PortTest {
 		port.setName(name);
 		Assert.assertSame(name, port.getName());
 	}
-	
 
 	@Test
 	public void testEquals() {
-		
-		Port port1 = new Port(index,"name");
-		Port port2 = new Port(index,"name");
-		
-		Port port3 = new Port(index,"name2");
-		
+
+		final Port port1 = new Port(index, "name");
+		final Port port2 = new Port(index, "name");
+
+		final Port port3 = new Port(index, "name2");
+
 		Assert.assertTrue(port1.equals(port1));
 		Assert.assertTrue(port1.equals(port2));
 		Assert.assertTrue(port2.equals(port1));
-		
+
 		Assert.assertFalse(port1.equals(port3));
-		
+
 		Assert.assertFalse(port1.equals(new Object()));
 	}
 

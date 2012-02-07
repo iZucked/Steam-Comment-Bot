@@ -49,7 +49,7 @@ public class TradingBuilderExtension implements IBuilderExtension {
 	}
 
 	@Override
-	public Collection<Pair<String, IDataComponentProvider>> createDataComponentProviders(IOptimisationData optimisationData) {
+	public Collection<Pair<String, IDataComponentProvider>> createDataComponentProviders(final IOptimisationData optimisationData) {
 		return Collections.singleton(new Pair<String, IDataComponentProvider>(entityProvider.getName(), entityProvider));
 	}
 
@@ -59,7 +59,7 @@ public class TradingBuilderExtension implements IBuilderExtension {
 	}
 
 	@Override
-	public void finishBuilding(IOptimisationData optimisationData) {
+	public void finishBuilding(final IOptimisationData optimisationData) {
 
 	}
 }

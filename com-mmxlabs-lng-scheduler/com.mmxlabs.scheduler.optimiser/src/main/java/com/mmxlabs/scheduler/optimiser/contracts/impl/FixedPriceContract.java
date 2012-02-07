@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
-
 /**
  * @author hinton
  * 
@@ -17,7 +16,7 @@ public class FixedPriceContract extends SimpleContract {
 	}
 
 	@Override
-	public int calculateSimpleLoadUnitPrice(int loadTime) {
+	public int calculateSimpleLoadUnitPrice(final int loadTime) {
 		return pricePerMMBTU;
 	}
 }

@@ -59,8 +59,9 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	@Override
 	public boolean checkConstraints(final ISequences sequences) {
 		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
-			if (!checkSequence(entry.getValue(), entry.getKey()))
+			if (!checkSequence(entry.getValue(), entry.getKey())) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -77,8 +78,9 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			prev = cur;
 			cur = iter.next();
 			if (prev != null) {
-				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed))
+				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed)) {
 					return false;
+				}
 			}
 		}
 		return true;
@@ -121,15 +123,17 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 		final int distance = distanceProvider.getMinimumValue(slot1.getPort(), slot2.getPort());
 
-		if (distance == Integer.MAX_VALUE)
+		if (distance == Integer.MAX_VALUE) {
 			return false;
+		}
 
 		final int travelTime = Calculator.getTimeFromSpeedDistance(resourceMaxSpeed, distance);
 		final ITimeWindow tw1 = slot1.getTimeWindow();
 		final ITimeWindow tw2 = slot2.getTimeWindow();
 
-		if (tw1 == null || tw2 == null)
+		if ((tw1 == null) || (tw2 == null)) {
 			return true; // if the time windows are null, there is no effective constraint
+		}
 
 		final int earliestArrivalTime = tw1.getStart() + elementDurationProvider.getElementDuration(first, resource) + travelTime;
 
@@ -143,8 +147,9 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 		final int distance = distanceProvider.get(IMultiMatrixProvider.Default_Key).get(slot1.getPort(), slot2.getPort());
-		if (distance == Integer.MAX_VALUE)
+		if (distance == Integer.MAX_VALUE) {
 			return "No edge connecting ports";
+		}
 		final int travelTime = Calculator.getTimeFromSpeedDistance(vesselProvider.getVessel(resource).getVesselClass().getMaxSpeed(), distance);
 		final ITimeWindow tw1 = slot1.getTimeWindow();
 		final ITimeWindow tw2 = slot2.getTimeWindow();

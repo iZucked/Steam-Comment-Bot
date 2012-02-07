@@ -10,15 +10,12 @@ import java.util.Map;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 
 /**
- * Implementation of {@link IConsumptionRateCalculator} which wraps another
- * {@link IConsumptionRateCalculator} instance and caches the result in a
- * {@link HashMap} for future lookups.
+ * Implementation of {@link IConsumptionRateCalculator} which wraps another {@link IConsumptionRateCalculator} instance and caches the result in a {@link HashMap} for future lookups.
  * 
  * @author Simon Goodall
  * 
  */
-public final class CachingConsumptionRateCalculator implements
-		IConsumptionRateCalculator {
+public final class CachingConsumptionRateCalculator implements IConsumptionRateCalculator {
 
 	private final IConsumptionRateCalculator calc;
 
@@ -27,12 +24,12 @@ public final class CachingConsumptionRateCalculator implements
 	 */
 	private final Map<Integer, Long> cache = new HashMap<Integer, Long>();
 
-	public CachingConsumptionRateCalculator(IConsumptionRateCalculator calc) {
+	public CachingConsumptionRateCalculator(final IConsumptionRateCalculator calc) {
 		this.calc = calc;
 	}
 
 	@Override
-	public long getRate(int speed) {
+	public long getRate(final int speed) {
 
 		// Check cache first,
 		if (cache.containsKey(speed)) {
@@ -40,7 +37,7 @@ public final class CachingConsumptionRateCalculator implements
 		}
 
 		// Fallback to real calculator
-		long rate = calc.getRate(speed);
+		final long rate = calc.getRate(speed);
 
 		// Cache the value
 		cache.put(speed, rate);
@@ -49,7 +46,7 @@ public final class CachingConsumptionRateCalculator implements
 	}
 
 	@Override
-	public int getSpeed(long rate) {
+	public int getSpeed(final long rate) {
 		return calc.getSpeed(rate);
 	}
 }

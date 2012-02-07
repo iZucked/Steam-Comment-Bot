@@ -24,9 +24,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public final class ScheduledSequences extends ArrayList<ScheduledSequence>  {
+public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Collection<IAllocationAnnotation> allocations = null;
 	private final List<VirtualCargo> virtualCargoes = new LinkedList<VirtualCargo>();
 
@@ -34,18 +34,18 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence>  {
 		return allocations;
 	}
 
-	public final void setAllocations(Collection<IAllocationAnnotation> allocations) {
+	public final void setAllocations(final Collection<IAllocationAnnotation> allocations) {
 		this.allocations = allocations;
 	}
 
 	public void addScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans) {
 		add(new ScheduledSequence(resource, startTime, voyagePlans));
 	}
-	
+
 	public List<VirtualCargo> getVirtualCargoes() {
 		return Collections.unmodifiableList(virtualCargoes);
 	}
-	
+
 	public void addVirtualCargo(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime) {
 		virtualCargoes.add(new VirtualCargo(loadOption, dischargeOption, loadTime, dischargeTime));
 	}

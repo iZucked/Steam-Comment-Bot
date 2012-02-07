@@ -19,8 +19,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 public final class PortDetails implements Cloneable {
 
-	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(
-			FuelComponent.class);
+	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(FuelComponent.class);
 
 	private int visitDuration;
 
@@ -30,8 +29,7 @@ public final class PortDetails implements Cloneable {
 
 	}
 
-	private PortDetails(final int visitDuration, final IPortSlot portSlot,
-			final EnumMap<FuelComponent, Long> fuelConsumption) {
+	private PortDetails(final int visitDuration, final IPortSlot portSlot, final EnumMap<FuelComponent, Long> fuelConsumption) {
 		this.visitDuration = visitDuration;
 		this.portSlot = portSlot;
 		this.fuelConsumption.putAll(fuelConsumption);
@@ -46,8 +44,7 @@ public final class PortDetails implements Cloneable {
 		}
 	}
 
-	public final void setFuelConsumption(final FuelComponent fuel,
-			final long consumption) {
+	public final void setFuelConsumption(final FuelComponent fuel, final long consumption) {
 		fuelConsumption.put(fuel, consumption);
 	}
 
@@ -96,11 +93,10 @@ public final class PortDetails implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "PortDetails [fuelConsumption=" + fuelConsumption
-				+ ", visitDuration=" + visitDuration + ", portSlot=" + portSlot
-				+ "]";
+		return "PortDetails [fuelConsumption=" + fuelConsumption + ", visitDuration=" + visitDuration + ", portSlot=" + portSlot + "]";
 	}
 
+	@Override
 	public PortDetails clone() {
 		return new PortDetails(visitDuration, portSlot, fuelConsumption);
 	}

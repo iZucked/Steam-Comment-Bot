@@ -25,9 +25,9 @@ public class PortSlotTest {
 		final IPort port = context.mock(IPort.class);
 		final ITimeWindow tw = context.mock(ITimeWindow.class);
 
-		long heelLimit = 1;
-		int heelUnitPrice = 2;
-		int heelCVValue = 3;
+		final long heelLimit = 1;
+		final int heelUnitPrice = 2;
+		final int heelCVValue = 3;
 
 		final StartPortSlot slot = new StartPortSlot(id, port, tw, heelLimit, heelUnitPrice, heelCVValue);
 
@@ -45,10 +45,10 @@ public class PortSlotTest {
 
 		final IPort port = context.mock(IPort.class);
 
-		long heelLimit = 1;
-		int heelUnitPrice = 2;
-		int heelCVValue = 3;
-		
+		final long heelLimit = 1;
+		final int heelUnitPrice = 2;
+		final int heelCVValue = 3;
+
 		final StartPortSlot slot = new StartPortSlot(heelLimit, heelUnitPrice, heelCVValue);
 		Assert.assertNull(slot.getPort());
 		slot.setPort(port);
@@ -62,10 +62,10 @@ public class PortSlotTest {
 	@Test
 	public void testGetSetTimeWindow() {
 		final ITimeWindow window = context.mock(ITimeWindow.class);
-		long heelLimit = 1;
-		int heelUnitPrice = 2;
-		int heelCVValue = 3;
-		
+		final long heelLimit = 1;
+		final int heelUnitPrice = 2;
+		final int heelCVValue = 3;
+
 		final StartPortSlot slot = new StartPortSlot(heelLimit, heelUnitPrice, heelCVValue);
 		Assert.assertNull(slot.getTimeWindow());
 		slot.setTimeWindow(window);
@@ -79,10 +79,10 @@ public class PortSlotTest {
 	@Test
 	public void testGetSetID() {
 		final String id = "id";
-		long heelLimit = 1;
-		int heelUnitPrice = 2;
-		int heelCVValue = 3;
-		
+		final long heelLimit = 1;
+		final int heelUnitPrice = 2;
+		final int heelCVValue = 3;
+
 		final StartPortSlot slot = new StartPortSlot(heelLimit, heelUnitPrice, heelCVValue);
 		Assert.assertNull(slot.getId());
 		slot.setId(id);

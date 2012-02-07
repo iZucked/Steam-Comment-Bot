@@ -19,6 +19,6 @@ public interface ITotalVolumeLimitProvider extends IDataComponentProvider {
 	 * @return an iterable over the total volume limits in this problem
 	 */
 	public Iterable<ITotalVolumeLimit> getTotalVolumeLimits();
-	
+
 	public boolean isEmpty();
 }

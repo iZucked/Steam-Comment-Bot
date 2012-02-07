@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @author hinton
  * 
- * @param 
+ * @param
  */
 public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
@@ -54,7 +54,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			this.vessel = vessel;
 			final int sz = sequence.size();
 			this.times = new int[sz / 2];
-			this.slots = new IPortSlot[sz / 2 + 1];
+			this.slots = new IPortSlot[(sz / 2) + 1];
 			int slotix = 0;
 			int timeix = 0;
 
@@ -62,9 +62,9 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			for (final Object o : sequence) {
 				if (o instanceof PortDetails) {
 					slots[slotix] = ((PortDetails) o).getPortSlot();
-					if (loadix == -1 && slots[slotix] instanceof ILoadSlot) {
+					if ((loadix == -1) && (slots[slotix] instanceof ILoadSlot)) {
 						loadix = slotix;
-					} else if (dischargeix == -1 && slots[slotix] instanceof IDischargeSlot) {
+					} else if ((dischargeix == -1) && (slots[slotix] instanceof IDischargeSlot)) {
 						dischargeix = slotix;
 					}
 					slotix++;
@@ -77,7 +77,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			this.arrivalTimes = arrivalTimes;
 			this.choices = choices;
 
-			if (loadix != -1 && dischargeix != -1) {
+			if ((loadix != -1) && (dischargeix != -1)) {
 				// loadPrice =
 				// ((ILoadSlot)
 				// slots[loadix]).getPurchasePriceAtTime(arrivalTimes.get(loadix));
@@ -93,13 +93,13 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			final int prime = 31;
 			int result = 1;
 			// result = prime * result + getOuterType().hashCode();
-			result = prime * result + Arrays.hashCode(slots);
-			result = prime * result + Arrays.hashCode(times);
+			result = (prime * result) + Arrays.hashCode(slots);
+			result = (prime * result) + Arrays.hashCode(times);
 
 			// result = prime * result + loadPrice;
-			result = prime * result + dischargePrice;
+			result = (prime * result) + dischargePrice;
 
-			result = prime * result + ((vessel == null) ? 0 : vessel.hashCode());
+			result = (prime * result) + ((vessel == null) ? 0 : vessel.hashCode());
 
 			return result;
 		}
@@ -117,9 +117,8 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			// if (!getOuterType().equals(other.getOuterType()))
 			// return false;
 
-			return Equality.shallowEquals(slots, other.slots) && (vessel == other.vessel) && Arrays.equals(times, other.times) &&
-			// loadPrice == other.loadPrice &&
-					dischargePrice == other.dischargePrice;
+			return Equality.shallowEquals(slots, other.slots) && (vessel == other.vessel) && Arrays.equals(times, other.times) && (// loadPrice == other.loadPrice &&
+					dischargePrice == other.dischargePrice);
 		}
 	}
 

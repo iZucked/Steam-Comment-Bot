@@ -23,18 +23,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * A faster than LP cargo allocator. Does a bit of finagling to make it all
- * work, which isn't hugely pretty. Each cargo is assigned an index by the base
- * class; this class maps ports slots to a single load/discharge sum constraint
- * (i.e. presumes that there cannot be two contractual limits applying to a
- * single slot) using the cargoConstraints array.
+ * A faster than LP cargo allocator. Does a bit of finagling to make it all work, which isn't hugely pretty. Each cargo is assigned an index by the base class; this class maps ports slots to a single
+ * load/discharge sum constraint (i.e. presumes that there cannot be two contractual limits applying to a single slot) using the cargoConstraints array.
  * 
- * Cargoes are then sorted by their unit price, and allocated the minimum of (a)
- * vessel capacity, (b) the remaining load limit and (c) the remaining discharge
- * limit for those cargoes.
+ * Cargoes are then sorted by their unit price, and allocated the minimum of (a) vessel capacity, (b) the remaining load limit and (c) the remaining discharge limit for those cargoes.
  * 
- * TODO has no handling of load lower bounds; need to do a first pass allocating
- * LB to every cargo first.
+ * TODO has no handling of load lower bounds; need to do a first pass allocating LB to every cargo first.
  * 
  * @author hinton
  * 
@@ -55,15 +49,11 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 	}
 
 	@Override
-	public void addCargo(final VoyagePlan plan, final PortDetails loadDetails, final VoyageDetails ladenLeg,
-			final PortDetails dischargeDetails, final VoyageDetails ballastLeg, final int loadTime, final int dischargeTime,
-			final long requiredLoadVolume, final IVesselClass vesselClass) {
-		super.addCargo(plan, loadDetails, ladenLeg, dischargeDetails, ballastLeg, loadTime, dischargeTime,
-				requiredLoadVolume, vesselClass);
+	public void addCargo(final VoyagePlan plan, final PortDetails loadDetails, final VoyageDetails ladenLeg, final PortDetails dischargeDetails, final VoyageDetails ballastLeg, final int loadTime,
+			final int dischargeTime, final long requiredLoadVolume, final IVesselClass vesselClass) {
+		super.addCargo(plan, loadDetails, ladenLeg, dischargeDetails, ballastLeg, loadTime, dischargeTime, requiredLoadVolume, vesselClass);
 
-		cargoConstraints.add(new Pair<Integer, Integer>(volumeConstraintMap
-				.get(loadDetails.getPortSlot()), volumeConstraintMap
-				.get(dischargeDetails.getPortSlot())));
+		cargoConstraints.add(new Pair<Integer, Integer>(volumeConstraintMap.get(loadDetails.getPortSlot()), volumeConstraintMap.get(dischargeDetails.getPortSlot())));
 	}
 
 	final ArrayList<Pair<Integer, Integer>> cargoConstraints = new ArrayList<Pair<Integer, Integer>>();
@@ -74,8 +64,9 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 
 		// sort cargoes by unit cost
 		final Integer[] variables = new Integer[cargoCount];
-		for (int i = 0; i < variables.length; i++)
+		for (int i = 0; i < variables.length; i++) {
 			variables[i] = i;
+		}
 		final Comparator<Integer> comparator = new Comparator<Integer>() {
 			@Override
 			public int compare(final Integer arg0, final Integer arg1) {
@@ -95,16 +86,14 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 		Arrays.sort(variables, comparator);
 
 		// set up constraint table
-		final long[] remainders = CollectionsUtil
-				.longsToLongArray(initialConstraintValues);
+		final long[] remainders = CollectionsUtil.longsToLongArray(initialConstraintValues);
 
 		final long[] allocations = new long[cargoCount];
 
 		// Now allocate whatever minimum quantity is required for each slot
 
 		for (final int variable : variables) {
-			final Pair<Integer, Integer> constraintIndices = cargoConstraints
-					.get(variable);
+			final Pair<Integer, Integer> constraintIndices = cargoConstraints.get(variable);
 
 			// Firstly, remove the forced load volume from consideration
 			// Since every constraintIndices pair has first = load slot
@@ -123,8 +112,7 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 
 			// It is, the greater of the minimum load LESS FUEL, and minimum
 			// discharge
-			final long lowerLoadBound = Math.max(loadSlot.getMinLoadVolume()
-					- fuelVolume, dischargeSlot.getMinDischargeVolume());
+			final long lowerLoadBound = Math.max(loadSlot.getMinLoadVolume() - fuelVolume, dischargeSlot.getMinDischargeVolume());
 
 			// so allocate it
 			allocations[variable] = lowerLoadBound;
@@ -144,35 +132,27 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 		// unit value)
 		for (final int variable : variables) {
 			final long fuelRequired = forcedLoadVolume.get(variable);
-			final Pair<Integer, Integer> constraintIndices = cargoConstraints
-					.get(variable);
+			final Pair<Integer, Integer> constraintIndices = cargoConstraints.get(variable);
 			// This is however much is left in the load-side summed volume
 			// constraint
-			final long slack1 = constraintIndices.getFirst() == null ? Long.MAX_VALUE
-					: remainders[constraintIndices.getFirst()];
+			final long slack1 = constraintIndices.getFirst() == null ? Long.MAX_VALUE : remainders[constraintIndices.getFirst()];
 			// this is what is left in the discharge-side summed volume
 			// constraint
-			final long slack2 = constraintIndices.getSecond() == null ? Long.MAX_VALUE
-					: remainders[constraintIndices.getSecond()];
+			final long slack2 = constraintIndices.getSecond() == null ? Long.MAX_VALUE : remainders[constraintIndices.getSecond()];
 
 			// this is what is left from the load-side upper bound
 			// (we subtract the allocation which we enforced in the loop above,
 			// and the fuel load)
-			final long loadSlack = loadSlots.get(variable).getMaxLoadVolume()
-					- (fuelRequired + allocations[variable]);
+			final long loadSlack = loadSlots.get(variable).getMaxLoadVolume() - (fuelRequired + allocations[variable]);
 
 			// and this is what is left on the discharge side
-			final long dischargeSlack = dischargeSlots.get(variable)
-					.getMaxDischargeVolume() - allocations[variable];
+			final long dischargeSlack = dischargeSlots.get(variable).getMaxDischargeVolume() - allocations[variable];
 
 			// and finally this is what is left of the vessel cargo capacity
-			final long cargoSlack = vesselCapacity.get(variable)
-					- (fuelRequired + allocations[variable]);
+			final long cargoSlack = vesselCapacity.get(variable) - (fuelRequired + allocations[variable]);
 
 			// the maximum we can allocate here is the minimum of all of these
-			final long allocation = Math.min(Math.min(
-					Math.min(Math.min(loadSlack, dischargeSlack), slack1),
-					slack2), cargoSlack);
+			final long allocation = Math.min(Math.min(Math.min(Math.min(loadSlack, dischargeSlack), slack1), slack2), cargoSlack);
 
 			// System.err.println("Load SV Slack:" + slack1);
 			// System.err.println("Discharge SV Slack:" + slack2);
@@ -183,10 +163,12 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 			//
 			// System.err.println("Allocated: " + allocation);
 
-			if (constraintIndices.getFirst() != null)
+			if (constraintIndices.getFirst() != null) {
 				remainders[constraintIndices.getFirst()] -= allocation;
-			if (constraintIndices.getSecond() != null)
+			}
+			if (constraintIndices.getSecond() != null) {
 				remainders[constraintIndices.getSecond()] -= allocation;
+			}
 
 			allocations[variable] += allocation;
 		}
@@ -199,18 +181,17 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 	private void prepareConstraintMaps() {
 		volumeConstraintMap.clear();
 		initialConstraintValues.clear();
-		for (final ITotalVolumeLimit limit : cargoAllocationProvider
-				.getTotalVolumeLimits()) {
+		for (final ITotalVolumeLimit limit : cargoAllocationProvider.getTotalVolumeLimits()) {
 			final int index = initialConstraintValues.size();
 			initialConstraintValues.add(limit.getVolumeLimit());
 
 			for (final IPortSlot slot : limit.getPossibleSlots()) {
 				final Integer time = slotTimes.get(slot);
-				if (time == null)
+				if (time == null) {
 					continue;
+				}
 				final ITimeWindow window = limit.getTimeWindow();
-				if (window.getStart() <= time.intValue()
-						&& window.getEnd() >= time.intValue()) {
+				if ((window.getStart() <= time.intValue()) && (window.getEnd() >= time.intValue())) {
 					volumeConstraintMap.put(slot, index);
 				}
 			}

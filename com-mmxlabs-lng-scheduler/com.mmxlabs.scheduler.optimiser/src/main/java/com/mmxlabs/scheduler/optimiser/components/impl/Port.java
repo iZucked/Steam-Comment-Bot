@@ -80,7 +80,7 @@ public final class Port extends IndexedObject implements IPort {
 		return cooldownPriceCalculator;
 	}
 
-	public void setCooldownPriceCalculator(IShippingPriceCalculator cooldownPriceCalculator) {
+	public void setCooldownPriceCalculator(final IShippingPriceCalculator cooldownPriceCalculator) {
 		this.cooldownPriceCalculator = cooldownPriceCalculator;
 	}
 }

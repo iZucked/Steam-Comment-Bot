@@ -15,7 +15,7 @@ public class VesselEvent implements IVesselEvent {
 	private long maxHeelOut;
 	private int heelCVValue;
 	private int heelUnitPrice;
-		
+
 	public VesselEvent() {
 		super();
 	}
@@ -63,7 +63,9 @@ public class VesselEvent implements IVesselEvent {
 		return startPort;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.components.IVesselEvent#getEndPort()
 	 */
 	@Override
@@ -71,7 +73,9 @@ public class VesselEvent implements IVesselEvent {
 		return endPort;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.components.IVesselEvent#getMaxHeelOut()
 	 */
 	@Override
@@ -79,7 +83,9 @@ public class VesselEvent implements IVesselEvent {
 		return maxHeelOut;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.components.IVesselEvent#getHeelCVValue()
 	 */
 	@Override

@@ -8,7 +8,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 /**
  * @author hinton
- *
+ * 
  */
 public interface IDischargeOption extends IPortSlot {
 	/**

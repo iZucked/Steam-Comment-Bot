@@ -20,6 +20,6 @@ public interface IPortSlot {
 	IPort getPort();
 
 	ITimeWindow getTimeWindow();
-	
+
 	PortType getPortType();
 }

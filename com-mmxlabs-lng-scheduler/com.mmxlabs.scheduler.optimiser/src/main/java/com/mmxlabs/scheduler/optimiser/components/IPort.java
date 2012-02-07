@@ -8,8 +8,7 @@ import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 /**
- * This interface defines a Port, a physical location that can be used as a
- * source or destination point for travel.
+ * This interface defines a Port, a physical location that can be used as a source or destination point for travel.
  * 
  * @author Simon Goodall
  * 
@@ -24,11 +23,8 @@ public interface IPort extends IIndexedObject {
 	String getName();
 
 	/**
-	 * Some ports do not typically provide cooldown facilities to inbound
-	 * vessels. These ports will return true here, indicating that vessels
-	 * should arrive cold. If a vessel <em>cannot</em> arrive cold, because its
-	 * earlier journey does not allow any LNG to load, cooldown may still be
-	 * performed.
+	 * Some ports do not typically provide cooldown facilities to inbound vessels. These ports will return true here, indicating that vessels should arrive cold. If a vessel <em>cannot</em> arrive
+	 * cold, because its earlier journey does not allow any LNG to load, cooldown may still be performed.
 	 * 
 	 * @return true if cooldown is not routinely provided at this port.
 	 */

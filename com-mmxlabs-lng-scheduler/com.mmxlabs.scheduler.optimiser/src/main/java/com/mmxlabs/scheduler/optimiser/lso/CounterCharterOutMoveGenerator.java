@@ -30,7 +30,7 @@ public class CounterCharterOutMoveGenerator implements IMoveGenerator {
 	final List<Map.Entry<IResource, ISequence>> nonEmptyBadSequences = new ArrayList<Map.Entry<IResource, ISequence>>();
 	final List<Map.Entry<IResource, ISequence>> goodSequences = new ArrayList<Map.Entry<IResource, ISequence>>();
 	private Random random;
-	
+
 	private class RemoveCharterOut extends Move3over2 {
 
 	}
@@ -48,7 +48,6 @@ public class CounterCharterOutMoveGenerator implements IMoveGenerator {
 			}
 		}
 
-		
 		if (nonEmptyBadSequences.size() > 0) {
 			final Map.Entry<IResource, ISequence> bad = RandomHelper.chooseElementFrom(random, nonEmptyBadSequences);
 			final Map.Entry<IResource, ISequence> good = RandomHelper.chooseElementFrom(random, goodSequences);
@@ -60,7 +59,7 @@ public class CounterCharterOutMoveGenerator implements IMoveGenerator {
 			result.setResource1End(bad.getValue().size() - 1);
 			result.setResource2Position(RandomHelper.nextIntBetween(random, 1, good.getValue().size() - 1));
 		}
-		
+
 		nonEmptyBadSequences.clear();
 		goodSequences.clear();
 

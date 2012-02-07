@@ -53,7 +53,7 @@ public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 			// capacity violation. needs something better. can't just set it to
 			// the previous arrival time, because that won't allow enough travel time
 			int timeWindowStart = Integer.MAX_VALUE;
-			if (timeWindows.isEmpty() && idx > 0) {
+			if (timeWindows.isEmpty() && (idx > 0)) {
 
 				final int lastTimeWindowStart = arrivalTimes[idx - 1];
 				timeWindowStart = lastTimeWindowStart

@@ -12,8 +12,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit;
 
 /**
- * An implementation of {@link ITotalVolumeLimit} with a couple of utility
- * methods.
+ * An implementation of {@link ITotalVolumeLimit} with a couple of utility methods.
  * 
  * @author hinton
  * 
@@ -23,8 +22,7 @@ public class TotalVolumeLimit implements ITotalVolumeLimit {
 	private final Set<IPortSlot> possibleSlots = new LinkedHashSet<IPortSlot>();
 	private long volumeLimit;
 
-	public TotalVolumeLimit(ITimeWindow timeWindow,
-			Set<IPortSlot> possibleSlots, long volumeLimit) {
+	public TotalVolumeLimit(final ITimeWindow timeWindow, final Set<IPortSlot> possibleSlots, final long volumeLimit) {
 		super();
 		setTimeWindow(timeWindow);
 		setPossibleSlots(possibleSlots);
@@ -40,7 +38,7 @@ public class TotalVolumeLimit implements ITotalVolumeLimit {
 	/**
 	 * @param volumeLimit
 	 */
-	public void setVolumeLimit(long volumeLimit) {
+	public void setVolumeLimit(final long volumeLimit) {
 		this.volumeLimit = volumeLimit;
 	}
 
@@ -53,8 +51,7 @@ public class TotalVolumeLimit implements ITotalVolumeLimit {
 	}
 
 	/**
-	 * A utility method; add the given port slot to possible slots iff the
-	 * window for the given slot overlaps the time window for this limit.
+	 * A utility method; add the given port slot to possible slots iff the window for the given slot overlaps the time window for this limit.
 	 * 
 	 * @param slot
 	 */
@@ -63,7 +60,7 @@ public class TotalVolumeLimit implements ITotalVolumeLimit {
 		final int min = slotWindow.getStart();
 		final int max = slotWindow.getEnd();
 
-		if (!(max < timeWindow.getStart() || min > timeWindow.getEnd())) {
+		if (!((max < timeWindow.getStart()) || (min > timeWindow.getEnd()))) {
 			possibleSlots.add(slot);
 		}
 	}
@@ -71,16 +68,14 @@ public class TotalVolumeLimit implements ITotalVolumeLimit {
 	/**
 	 * @param timeWindow
 	 */
-	public void setTimeWindow(ITimeWindow timeWindow) {
+	public void setTimeWindow(final ITimeWindow timeWindow) {
 		this.timeWindow = timeWindow;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit#getPossibleSlots
-	 * ()
+	 * @see com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit#getPossibleSlots ()
 	 */
 	@Override
 	public Set<IPortSlot> getPossibleSlots() {
@@ -90,9 +85,7 @@ public class TotalVolumeLimit implements ITotalVolumeLimit {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit#getVolumeLimit
-	 * ()
+	 * @see com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit#getVolumeLimit ()
 	 */
 	@Override
 	public long getVolumeLimit() {
@@ -102,9 +95,7 @@ public class TotalVolumeLimit implements ITotalVolumeLimit {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit#getTimeWindow
-	 * ()
+	 * @see com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit#getTimeWindow ()
 	 */
 	@Override
 	public ITimeWindow getTimeWindow() {

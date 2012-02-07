@@ -34,7 +34,7 @@ public class VesselTest {
 	public void testGetSetVesselClass() {
 		final Vessel vessel = new Vessel(index);
 		Assert.assertNull(vessel.getVesselClass());
-		IVesselClass vesselClass = context.mock(IVesselClass.class);
+		final IVesselClass vesselClass = context.mock(IVesselClass.class);
 		vessel.setVesselClass(vesselClass);
 		Assert.assertSame(vesselClass, vessel.getVesselClass());
 	}
@@ -43,7 +43,7 @@ public class VesselTest {
 	public void testGetSetVesselInstanceType() {
 		final Vessel vessel = new Vessel(index);
 		Assert.assertSame(VesselInstanceType.UNKNOWN, vessel.getVesselInstanceType());
-		VesselInstanceType value = VesselInstanceType.FLEET;
+		final VesselInstanceType value = VesselInstanceType.FLEET;
 		vessel.setVesselInstanceType(value);
 		Assert.assertSame(value, vessel.getVesselInstanceType());
 	}

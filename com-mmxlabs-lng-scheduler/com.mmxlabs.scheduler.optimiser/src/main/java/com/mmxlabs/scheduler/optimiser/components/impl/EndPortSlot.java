@@ -10,8 +10,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public final class EndPortSlot extends PortSlot {
 
-	public EndPortSlot(final String id, final IPort port,
-			final ITimeWindow timeWindow) {
+	public EndPortSlot(final String id, final IPort port, final ITimeWindow timeWindow) {
 		super(id, port, timeWindow);
 		setPortType(PortType.End);
 	}

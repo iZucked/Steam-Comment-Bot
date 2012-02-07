@@ -74,8 +74,9 @@ public final class VoyagePlanIterator {
 		extraTime = 0;
 		if (obj instanceof PortDetails) {
 			final PortDetails details = (PortDetails) obj;
-			if (currentIndex != currentSequence.length - 1)
+			if (currentIndex != (currentSequence.length - 1)) {
 				extraTime = details.getVisitDuration();
+			}
 		} else if (obj instanceof VoyageDetails) {
 			final VoyageDetails details = (VoyageDetails) obj;
 			extraTime = details.getOptions().getAvailableTime();
@@ -86,11 +87,11 @@ public final class VoyagePlanIterator {
 	}
 
 	public final boolean hasNextObject() {
-		return (currentSequence != null && currentIndex < currentSequence.length) || planIterator.hasNext();
+		return ((currentSequence != null) && (currentIndex < currentSequence.length)) || planIterator.hasNext();
 	}
 
 	public final boolean nextObjectIsStartOfPlan() {
-		return (currentSequence != null && currentIndex == 0) || planIterator.hasNext();
+		return ((currentSequence != null) && (currentIndex == 0)) || planIterator.hasNext();
 	}
 
 	public final int getCurrentTime() {
@@ -109,8 +110,9 @@ public final class VoyagePlanIterator {
 	 */
 	public boolean iterateSchedulerComponents(final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences sequences, final Collection<IResource> affectedResources) {
 
-		if (sequences == null)
+		if (sequences == null) {
 			return false;
+		}
 
 		for (final ICargoSchedulerFitnessComponent component : components) {
 			component.startEvaluation();
@@ -118,8 +120,9 @@ public final class VoyagePlanIterator {
 
 		for (final ScheduledSequence sequence : sequences) {
 			// TODO work out why this makes for problems.
-			if (!iterateSchedulerComponents(components, sequence, affectedResources.contains(sequence.getResource())))
+			if (!iterateSchedulerComponents(components, sequence, affectedResources.contains(sequence.getResource()))) {
 				return false;
+			}
 		}
 
 		for (final ICargoSchedulerFitnessComponent component : components) {
@@ -145,8 +148,9 @@ public final class VoyagePlanIterator {
 		}
 
 		for (final ScheduledSequence sequence : sequences) {
-			if (!iterateSchedulerComponents(components, sequence, affectedResources.contains(sequence.getResource())))
+			if (!iterateSchedulerComponents(components, sequence, affectedResources.contains(sequence.getResource()))) {
 				return false;
+			}
 		}
 
 		int i = 0;
@@ -183,25 +187,29 @@ public final class VoyagePlanIterator {
 				final VoyagePlan plan = getCurrentPlan();
 
 				for (final ICargoSchedulerFitnessComponent component : components) {
-					if (!component.nextVoyagePlan(plan, time))
+					if (!component.nextVoyagePlan(plan, time)) {
 						return false;
-					if (!component.nextObject(obj, time))
+					}
+					if (!component.nextObject(obj, time)) {
 						return false;
+					}
 				}
 			} else {
 				final Object obj = nextObject();
 				final int time = getCurrentTime();
 				for (final ICargoSchedulerFitnessComponent component : components) {
-					if (!component.nextObject(obj, time))
+					if (!component.nextObject(obj, time)) {
 						return false;
+					}
 				}
 			}
 
 		}
 
 		for (final ICargoSchedulerFitnessComponent component : components) {
-			if (!component.endSequence())
+			if (!component.endSequence()) {
 				return false;
+			}
 		}
 
 		return true;
@@ -248,25 +256,29 @@ public final class VoyagePlanIterator {
 				final VoyagePlan plan = getCurrentPlan();
 
 				for (final ICargoSchedulerFitnessComponent component : components) {
-					if (!component.nextVoyagePlan(plan, time))
+					if (!component.nextVoyagePlan(plan, time)) {
 						return;
-					if (!component.annotateNextObject(obj, time, annotatedSolution))
+					}
+					if (!component.annotateNextObject(obj, time, annotatedSolution)) {
 						return;
+					}
 				}
 			} else {
 				final Object obj = nextObject();
 				final int time = getCurrentTime();
 				for (final ICargoSchedulerFitnessComponent component : components) {
-					if (!component.annotateNextObject(obj, time, annotatedSolution))
+					if (!component.annotateNextObject(obj, time, annotatedSolution)) {
 						return;
+					}
 				}
 			}
 
 		}
 
 		for (final ICargoSchedulerFitnessComponent component : components) {
-			if (!component.endSequence())
+			if (!component.endSequence()) {
 				return;
+			}
 		}
 	}
 }

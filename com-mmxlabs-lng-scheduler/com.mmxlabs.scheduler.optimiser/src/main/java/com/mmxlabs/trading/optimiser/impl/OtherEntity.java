@@ -16,17 +16,17 @@ public class OtherEntity extends Entity {
 	}
 
 	@Override
-	public int getDownstreamTransferPrice(int dischargePricePerM3, int cvValue) {
+	public int getDownstreamTransferPrice(final int dischargePricePerM3, final int cvValue) {
 		return dischargePricePerM3;
 	}
 
 	@Override
-	public int getUpstreamTransferPrice(int loadPricePerM3, int cvValue) {
+	public int getUpstreamTransferPrice(final int loadPricePerM3, final int cvValue) {
 		return loadPricePerM3;
 	}
 
 	@Override
-	public long getTaxedProfit(long downstreamTotalPretaxProfit, int time) {
+	public long getTaxedProfit(final long downstreamTotalPretaxProfit, final int time) {
 		return 0;
 	}
 }

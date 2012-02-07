@@ -29,43 +29,37 @@ public final class VesselClass implements IVesselClass {
 
 	private long idlePilotLightRate;
 
-	private final EnumMap<VesselState, Integer> minNBOSpeed = new EnumMap<VesselState, Integer>(
-			VesselState.class);
+	private final EnumMap<VesselState, Integer> minNBOSpeed = new EnumMap<VesselState, Integer>(VesselState.class);
 
 	private long minHeel;
 
-	private final EnumMap<VesselState, Long> nboRate = new EnumMap<VesselState, Long>(
-			VesselState.class);
+	private final EnumMap<VesselState, Long> nboRate = new EnumMap<VesselState, Long>(VesselState.class);
 
-	private final EnumMap<VesselState, Long> idleConsumptionRate = new EnumMap<VesselState, Long>(
-			VesselState.class);
+	private final EnumMap<VesselState, Long> idleConsumptionRate = new EnumMap<VesselState, Long>(VesselState.class);
 
-	private final EnumMap<VesselState, Long> idleNBORate = new EnumMap<VesselState, Long>(
-			VesselState.class);
+	private final EnumMap<VesselState, Long> idleNBORate = new EnumMap<VesselState, Long>(VesselState.class);
 
-	private final EnumMap<VesselState, IConsumptionRateCalculator> consumptionRate = new EnumMap<VesselState, IConsumptionRateCalculator>(
-			VesselState.class);
+	private final EnumMap<VesselState, IConsumptionRateCalculator> consumptionRate = new EnumMap<VesselState, IConsumptionRateCalculator>(VesselState.class);
 
-	private final EnumMap<VesselState, Integer> nboSpeeds = new EnumMap<VesselState, Integer>(
-			VesselState.class);
+	private final EnumMap<VesselState, Integer> nboSpeeds = new EnumMap<VesselState, Integer>(VesselState.class);
 
 	/**
 	 * The price per hour to charter vessels of this class.
 	 */
 	private int hourlyCharterInPrice;
-	
+
 	/**
-	 * The volume of LNG required to cool the tanks on vessels of this class. 
+	 * The volume of LNG required to cool the tanks on vessels of this class.
 	 */
 	private int cooldownVolume;
-	
+
 	/**
 	 * The time in hours required to cool the tanks on vessels of this class.
 	 */
 	private int cooldownTime;
-	
+
 	/**
-	 * The time in hours required for empty tanks to warm up on vessels of this class.  
+	 * The time in hours required for empty tanks to warm up on vessels of this class.
 	 */
 	private int warmupTime;
 
@@ -125,8 +119,7 @@ public final class VesselClass implements IVesselClass {
 		return CollectionsUtil.getValue(minNBOSpeed, vesselState, 0);
 	}
 
-	public void setMinNBOSpeed(final VesselState vesselState,
-			final int minNBOSpeed) {
+	public void setMinNBOSpeed(final VesselState vesselState, final int minNBOSpeed) {
 		this.minNBOSpeed.put(vesselState, minNBOSpeed);
 	}
 
@@ -152,14 +145,12 @@ public final class VesselClass implements IVesselClass {
 	}
 
 	@Override
-	public IConsumptionRateCalculator getConsumptionRate(
-			final VesselState vesselState) {
+	public IConsumptionRateCalculator getConsumptionRate(final VesselState vesselState) {
 
 		return CollectionsUtil.getValue(consumptionRate, vesselState, null);
 	}
 
-	public void setConsumptionRate(final VesselState vesselState,
-			final IConsumptionRateCalculator calc) {
+	public void setConsumptionRate(final VesselState vesselState, final IConsumptionRateCalculator calc) {
 		consumptionRate.put(vesselState, calc);
 	}
 
@@ -188,11 +179,11 @@ public final class VesselClass implements IVesselClass {
 		return baseFuelConversionFactor;
 	}
 
-	public void setBaseFuelConversionFactor(int baseFuelConversionFactor) {
+	public void setBaseFuelConversionFactor(final int baseFuelConversionFactor) {
 		this.baseFuelConversionFactor = baseFuelConversionFactor;
 	}
 
-	public void setHourlyCharterInPrice(int hourlyCharterInPrice) {
+	public void setHourlyCharterInPrice(final int hourlyCharterInPrice) {
 		this.hourlyCharterInPrice = hourlyCharterInPrice;
 	}
 
@@ -206,7 +197,7 @@ public final class VesselClass implements IVesselClass {
 		return pilotLightRate;
 	}
 
-	public final void setPilotLightRate(long pilotLightRate) {
+	public final void setPilotLightRate(final long pilotLightRate) {
 		this.pilotLightRate = pilotLightRate;
 	}
 
@@ -215,7 +206,7 @@ public final class VesselClass implements IVesselClass {
 		return idlePilotLightRate;
 	}
 
-	public final void setIdlePilotLightRate(long idlePilotLightRate) {
+	public final void setIdlePilotLightRate(final long idlePilotLightRate) {
 		this.idlePilotLightRate = idlePilotLightRate;
 	}
 
@@ -234,15 +225,15 @@ public final class VesselClass implements IVesselClass {
 		return cooldownVolume;
 	}
 
-	public void setCooldownVolume(int cooldownVolume) {
+	public void setCooldownVolume(final int cooldownVolume) {
 		this.cooldownVolume = cooldownVolume;
 	}
 
-	public void setCooldownTime(int cooldownTime) {
+	public void setCooldownTime(final int cooldownTime) {
 		this.cooldownTime = cooldownTime;
 	}
 
-	public void setWarmupTime(int warmupTime) {
+	public void setWarmupTime(final int warmupTime) {
 		this.warmupTime = warmupTime;
 	}
 }

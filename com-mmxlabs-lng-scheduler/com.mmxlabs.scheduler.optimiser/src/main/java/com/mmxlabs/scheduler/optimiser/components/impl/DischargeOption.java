@@ -12,7 +12,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * @author hinton
- *
+ * 
  */
 public class DischargeOption extends PortSlot implements IDischargeOption {
 
@@ -26,8 +26,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 		setPortType(PortType.Discharge);
 	}
 
-	public DischargeOption(final String id, final IPort port, final ITimeWindow timwWindow, final long minDischargeVolume, final long maxDischargeVolume,
-			final IShippingPriceCalculator priceCalculator) {
+	public DischargeOption(final String id, final IPort port, final ITimeWindow timwWindow, final long minDischargeVolume, final long maxDischargeVolume, final IShippingPriceCalculator priceCalculator) {
 		super(id, port, timwWindow);
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;

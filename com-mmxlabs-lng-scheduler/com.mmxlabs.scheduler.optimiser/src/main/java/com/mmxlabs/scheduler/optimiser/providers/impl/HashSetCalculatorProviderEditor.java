@@ -63,8 +63,9 @@ public class HashSetCalculatorProviderEditor implements ICalculatorProviderEdito
 	 */
 	@Override
 	public void addLoadPriceCalculator(final ILoadPriceCalculator2 calculator) {
-		if (calculator != null)
+		if (calculator != null) {
 			loadPriceCalculators.add(calculator);
+		}
 	}
 
 	/*
@@ -74,8 +75,9 @@ public class HashSetCalculatorProviderEditor implements ICalculatorProviderEdito
 	 */
 	@Override
 	public void addShippingPriceCalculator(final IShippingPriceCalculator calculator) {
-		if (calculator != null)
+		if (calculator != null) {
 			shippingPriceCalculators.add(calculator);
+		}
 	}
 
 }

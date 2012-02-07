@@ -173,7 +173,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		return allComponents;
 	}
 
-	public void setSchedulerFactory(ISchedulerFactory schedulerFactory) {
+	public void setSchedulerFactory(final ISchedulerFactory schedulerFactory) {
 		this.schedulerFactory = schedulerFactory;
 	}
 

@@ -7,16 +7,13 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 
 /**
- * {@link IConsumptionRateCalculator} implementation which takes an existing
- * {@link IConsumptionRateCalculator} and a min/max bounds to generate a lookup
- * table of speed to rate pairs. Note if the range between min and max bounds is
- * large, then the lookup table will also be large.
+ * {@link IConsumptionRateCalculator} implementation which takes an existing {@link IConsumptionRateCalculator} and a min/max bounds to generate a lookup table of speed to rate pairs. Note if the
+ * range between min and max bounds is large, then the lookup table will also be large.
  * 
  * @author Simon Goodall
  * 
  */
-public final class LookupTableConsumptionRateCalculator implements
-		IConsumptionRateCalculator {
+public final class LookupTableConsumptionRateCalculator implements IConsumptionRateCalculator {
 
 	private final int minSpeed;
 
@@ -33,8 +30,7 @@ public final class LookupTableConsumptionRateCalculator implements
 	 *            Inclusive max speed
 	 * @param calc
 	 */
-	public LookupTableConsumptionRateCalculator(final int minSpeed,
-			final int maxSpeed, final IConsumptionRateCalculator calc) {
+	public LookupTableConsumptionRateCalculator(final int minSpeed, final int maxSpeed, final IConsumptionRateCalculator calc) {
 		this.minSpeed = minSpeed;
 		this.maxSpeed = maxSpeed;
 
@@ -47,15 +43,17 @@ public final class LookupTableConsumptionRateCalculator implements
 	}
 
 	@Override
-	public int getSpeed(long rate) {
-		for (int i = 0; i<table.length; i++) {
-			if (table[i] == rate) return i + minSpeed;
+	public int getSpeed(final long rate) {
+		for (int i = 0; i < table.length; i++) {
+			if (table[i] == rate) {
+				return i + minSpeed;
+			}
 		}
 		return 0;
 	}
-	
+
 	private void init(final IConsumptionRateCalculator calc) {
-		final int s = maxSpeed - minSpeed + 1;
+		final int s = (maxSpeed - minSpeed) + 1;
 
 		table = new long[s];
 

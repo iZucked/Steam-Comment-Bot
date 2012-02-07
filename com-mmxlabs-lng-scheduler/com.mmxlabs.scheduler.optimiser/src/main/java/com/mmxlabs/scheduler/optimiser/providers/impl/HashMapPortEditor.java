@@ -12,8 +12,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 
 /**
- * Implementation of {@link IPortProviderEditor} using a {@link HashMap} as the
- * backing implementation.
+ * Implementation of {@link IPortProviderEditor} using a {@link HashMap} as the backing implementation.
  * 
  * @author Simon Goodall
  * 

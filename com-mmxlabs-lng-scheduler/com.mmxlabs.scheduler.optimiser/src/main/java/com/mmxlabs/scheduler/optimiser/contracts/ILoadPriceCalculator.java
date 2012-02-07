@@ -14,9 +14,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
  * 
  */
 public interface ILoadPriceCalculator {
-	public int calculateLoadUnitPrice(final int loadTime,
-			final long loadVolume, final int dischargeTime,
-			final int actualSalesPrice, final int cvValue,
-			final VoyageDetails ladenLeg, final VoyageDetails ballastLeg,
-			final IVesselClass vesselClass);
+	public int calculateLoadUnitPrice(final int loadTime, final long loadVolume, final int dischargeTime, final int actualSalesPrice, final int cvValue, final VoyageDetails ladenLeg,
+			final VoyageDetails ballastLeg, final IVesselClass vesselClass);
 }

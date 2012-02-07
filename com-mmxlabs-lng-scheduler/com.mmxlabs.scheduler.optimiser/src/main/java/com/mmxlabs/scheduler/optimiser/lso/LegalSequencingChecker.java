@@ -92,8 +92,9 @@ public class LegalSequencingChecker {
 
 	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2) {
 		for (final IResource r : resources) {
-			if (allowSequence(e1, e2, r))
+			if (allowSequence(e1, e2, r)) {
 				return true;
+			}
 		}
 		return false;
 	}

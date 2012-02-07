@@ -12,8 +12,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public final class ScheduledSequence {
 	final int startTime;
 	final List<VoyagePlan> voyagePlans;
-	private IResource resource;
-	
+	private final IResource resource;
+
 	public ScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans) {
 		super();
 		this.startTime = startTime;
@@ -24,7 +24,7 @@ public final class ScheduledSequence {
 	public IResource getResource() {
 		return resource;
 	}
-	
+
 	public int getStartTime() {
 		return startTime;
 	}

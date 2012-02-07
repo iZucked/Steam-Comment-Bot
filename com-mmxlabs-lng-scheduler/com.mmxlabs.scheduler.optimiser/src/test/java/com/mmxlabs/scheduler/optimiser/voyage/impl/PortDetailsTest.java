@@ -68,7 +68,7 @@ public class PortDetailsTest {
 		final PortDetails details1 = make(1, slot1, fuel1, 5);
 		final PortDetails details2 = make(1, slot1, fuel1, 5);
 
-		final PortDetails details3 = make(21,  slot1, fuel1, 5);
+		final PortDetails details3 = make(21, slot1, fuel1, 5);
 		final PortDetails details4 = make(1, slot2, fuel1, 5);
 		final PortDetails details5 = make(1, slot1, fuel2, 5);
 		final PortDetails details6 = make(1, slot1, fuel1, 25);
@@ -90,9 +90,7 @@ public class PortDetailsTest {
 		Assert.assertFalse(details1.equals(new Object()));
 	}
 
-	PortDetails make(final int duration,
-			final IPortSlot portSlot, final FuelComponent fuel,
-			final long consumption) {
+	PortDetails make(final int duration, final IPortSlot portSlot, final FuelComponent fuel, final long consumption) {
 
 		final PortDetails d = new PortDetails();
 

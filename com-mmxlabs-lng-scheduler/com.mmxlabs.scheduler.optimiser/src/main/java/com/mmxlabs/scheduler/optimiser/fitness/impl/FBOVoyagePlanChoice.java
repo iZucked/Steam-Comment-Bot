@@ -8,9 +8,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
- * Implementation of {@link IVoyagePlanChoice} to alter FBO choice during
- * journey events. If FBO is true, then this implies that the NBO choice is
- * true, otherwise {@link #apply(int)} will fail.
+ * Implementation of {@link IVoyagePlanChoice} to alter FBO choice during journey events. If FBO is true, then this implies that the NBO choice is true, otherwise {@link #apply(int)} will fail.
  * 
  * @author Simon Goodall
  * 
@@ -38,7 +36,7 @@ public final class FBOVoyagePlanChoice implements IVoyagePlanChoice {
 	@Override
 	public final boolean nextChoice() {
 		while (true) {
-			if (choice + 1 == numChoices()) {
+			if ((choice + 1) == numChoices()) {
 				return true;
 			}
 			if (apply(choice + 1)) {

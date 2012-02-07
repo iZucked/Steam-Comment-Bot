@@ -91,9 +91,9 @@ public class CostComponentTest {
 		voyage.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), NBOConsumption);
 		voyage.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), FBOConsumption);
 		// set unit prices
-		voyage.setFuelUnitPrice(FuelComponent.Base, (int)baseUnit);
-		voyage.setFuelUnitPrice(FuelComponent.NBO, (int)NBOUnit);
-		voyage.setFuelUnitPrice(FuelComponent.FBO, (int)FBOUnit);
+		voyage.setFuelUnitPrice(FuelComponent.Base, (int) baseUnit);
+		voyage.setFuelUnitPrice(FuelComponent.NBO, (int) NBOUnit);
+		voyage.setFuelUnitPrice(FuelComponent.FBO, (int) FBOUnit);
 
 		final Object[] voyageSequence = new Object[] { voyage };
 		final VoyagePlan voyagePlan = new VoyagePlan();

@@ -13,14 +13,14 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 public interface IPortExclusionProvider extends IDataComponentProvider {
 	/**
 	 * Get the set of ports which vessels of this class cannot visit.
+	 * 
 	 * @param vesselClass
 	 * @return
 	 */
 	public Set<IPort> getExcludedPorts(IVesselClass vesselClass);
 
 	/**
-	 * If there are no exclusions set at all, this returns true. Useful
-	 * for quickly avoiding execution if this is empty.
+	 * If there are no exclusions set at all, this returns true. Useful for quickly avoiding execution if this is empty.
 	 * 
 	 * @return
 	 */

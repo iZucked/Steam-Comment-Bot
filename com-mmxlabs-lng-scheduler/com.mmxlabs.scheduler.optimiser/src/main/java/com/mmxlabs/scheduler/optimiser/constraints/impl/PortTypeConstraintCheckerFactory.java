@@ -22,7 +22,7 @@ public final class PortTypeConstraintCheckerFactory implements IConstraintChecke
 
 	private final String key;
 
-	private String vesselKey;
+	private final String vesselKey;
 
 	/**
 	 * Constructor taking the keys to use in {@link IOptimisationData} to find the {@link IPortTypeProvider} and {@link IVesselProvider}.

@@ -94,14 +94,14 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			final IVessel vessel = vesselProvider.getVessel(resource);
 			if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
 				assert sequence.size() == 4 : "A virtual sequence should always contain 4 elements (Start - Load - Discharge - End)";
-				
-				result.addVirtualCargo((ILoadOption) portSlotProvider.getPortSlot(sequence.get(1)), 
-						(IDischargeOption)portSlotProvider.getPortSlot(sequence.get(2)),
-						arrivalTimes[i][1], arrivalTimes[i][2]);
+
+				result.addVirtualCargo((ILoadOption) portSlotProvider.getPortSlot(sequence.get(1)), (IDischargeOption) portSlotProvider.getPortSlot(sequence.get(2)), arrivalTimes[i][1],
+						arrivalTimes[i][2]);
 			} else {
 				final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
-				if (scheduledSequence == null)
+				if (scheduledSequence == null) {
 					return null;
+				}
 				result.add(scheduledSequence);
 			}
 		}
@@ -128,7 +128,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			// but contracts need this kind of information to make up numbers with.
 			return null;
 		}
-		
+
 		// Get start time
 		final int startTime = arrivalTimes[0];
 
@@ -156,7 +156,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
 			if (prevPort != null) {
-				if (prevPortType == PortType.Load || prevPortType == PortType.CharterOut) {
+				if ((prevPortType == PortType.Load) || (prevPortType == PortType.CharterOut)) {
 					useNBO = true;
 				}
 
@@ -271,7 +271,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			currentSequence.add(portDetails);
 
 			final PortType portType = portTypeProvider.getPortType(element);
-			if (currentSequence.size() > 1 && (portType == PortType.Load) || portType == PortType.CharterOut || portType == PortType.DryDock) {
+			if (((currentSequence.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock)) {
 
 				if (!optimiseSequence(voyagePlans, currentSequence, currentTimes, voyagePlanOptimiser)) {
 					return null;
@@ -297,7 +297,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			// Update vessel state
 			if (portType == PortType.Load) {
 				vesselState = VesselState.Laden;
-			} else if (portType == PortType.Discharge || portType == PortType.CharterOut || portType == PortType.DryDock) {
+			} else if ((portType == PortType.Discharge) || (portType == PortType.CharterOut) || (portType == PortType.DryDock)) {
 				vesselState = VesselState.Ballast;
 			} else {
 				// No change in state
@@ -464,8 +464,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	}
 
 	protected final void createLog() {
-		if (!loggingEnabled)
+		if (!loggingEnabled) {
 			return;
+		}
 		try {
 			final String name = getClass().getSimpleName() + "_log_" + getTag();
 			final File f = new File("./" + name + ".py");
@@ -477,8 +478,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	}
 
 	protected final void startLogEntry(final int sequenceSize) {
-		if (!loggingEnabled)
+		if (!loggingEnabled) {
 			return;
+		}
 		try {
 			logWriter.write("Schedule(" + sequenceSize + ",[");
 		} catch (final IOException e) {
@@ -487,8 +489,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	}
 
 	protected final void logValue(final long fitness) {
-		if (!loggingEnabled)
+		if (!loggingEnabled) {
 			return;
+		}
 		try {
 			logWriter.write(fitness + ", ");
 		} catch (final IOException e) {
@@ -496,8 +499,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	}
 
 	protected final void endLogEntry() {
-		if (!loggingEnabled)
+		if (!loggingEnabled) {
 			return;
+		}
 		try {
 			logWriter.write("])\n");
 			logWriter.flush();
@@ -506,8 +510,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	}
 
 	protected final void closeLog() {
-		if (!loggingEnabled)
+		if (!loggingEnabled) {
 			return;
+		}
 		try {
 			logWriter.flush();
 			logWriter.close();

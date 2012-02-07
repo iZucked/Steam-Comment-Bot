@@ -156,19 +156,19 @@ public class SimpleSchedulerTest {
 		final IInitialSequenceBuilder sequenceBuilder = new ConstrainedInitialSequenceBuilder(constraintRegistry.getConstraintCheckerFactories());
 		final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null);
 
-		final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()),
-				fitnessRegistry, new ArrayList<String>(constraintRegistry.getConstraintCheckerNames()), constraintRegistry);
+		final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()), fitnessRegistry, new ArrayList<String>(
+				constraintRegistry.getConstraintCheckerNames()), constraintRegistry);
 
 		final IOptimiserProgressMonitor monitor = new IOptimiserProgressMonitor() {
 
 			@Override
-			public void begin(final IOptimiser optimiser, final long initialFitness, IAnnotatedSolution initialState) {
+			public void begin(final IOptimiser optimiser, final long initialFitness, final IAnnotatedSolution initialState) {
 				System.out.println("Initial Fitness: " + initialFitness);
 			}
 
 			@Override
-			public void report(final IOptimiser optimiser, final int iteration, final long currentFitness, final long bestFitness,
-					final IAnnotatedSolution currentState, final IAnnotatedSolution bestState) {
+			public void report(final IOptimiser optimiser, final int iteration, final long currentFitness, final long bestFitness, final IAnnotatedSolution currentState,
+					final IAnnotatedSolution bestState) {
 				System.out.println("Iter: " + iteration + " Fitness: " + bestFitness);
 			}
 

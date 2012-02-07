@@ -107,7 +107,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * Resize one of the integer buffers above
 	 */
 	private final void resize(final int[][] arrays, final int arrayIndex, final int size) {
-		if (arrays[arrayIndex] == null || arrays[arrayIndex].length < (size)) {
+		if ((arrays[arrayIndex] == null) || (arrays[arrayIndex].length < (size))) {
 			arrays[arrayIndex] = new int[(size)];
 		}
 	}
@@ -116,7 +116,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * Resize one of the boolean buffers above.
 	 */
 	private void resize(final boolean[][] arrays, final int arrayIndex, final int size) {
-		if (arrays[arrayIndex] == null || arrays[arrayIndex].length < (size)) {
+		if ((arrays[arrayIndex] == null) || (arrays[arrayIndex].length < (size))) {
 			arrays[arrayIndex] = new boolean[(size)];
 		}
 	}
@@ -238,7 +238,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	protected final void prepare(final int[] indices) {
 		final int size = sequences.size();
 
-		if (arrivalTimes == null || arrivalTimes.length != size) {
+		if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
 			prepare();
 			return;
 		}
@@ -256,7 +256,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	protected final void prepare() {
 		final int size = sequences.size();
 
-		if (arrivalTimes == null || arrivalTimes.length != size) {
+		if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
 			arrivalTimes = new int[size][];
 			windowStartTime = new int[size][];
 			windowEndTime = new int[size][];
@@ -403,7 +403,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * @param index
 	 */
 	protected void enumerate(final int seq, final int index) {
-		if (seq == arrivalTimes.length && index < sizes[seq]) {
+		if ((seq == arrivalTimes.length) && (index < sizes[seq])) {
 			evaluate();
 			return;
 		} else if (seq == arrivalTimes.length) {
@@ -536,7 +536,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * @return
 	 */
 	protected final int getMaxArrivalTime(final int seq, final int index) {
-		if (index > 0 && (isVirtual[seq][index] || isVirtual[seq][index - 1])) {
+		if ((index > 0) && (isVirtual[seq][index] || isVirtual[seq][index - 1])) {
 			// if this is a virtual element, or the previous element was
 			// virtual, enforce zero travel time
 			return arrivalTimes[seq][index - 1];
@@ -576,9 +576,10 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	protected final long getApproximateCombinations(final int seq, final int firstIndex, final int lastIndex, final long maxValue) {
 		long accumulator = 1;
 		for (int i = firstIndex; i <= lastIndex; i++) {
-			accumulator *= (windowEndTime[seq][i] - windowStartTime[seq][i] + 1);
-			if (accumulator > maxValue)
+			accumulator *= ((windowEndTime[seq][i] - windowStartTime[seq][i]) + 1);
+			if (accumulator > maxValue) {
 				return maxValue;
+			}
 		}
 		return accumulator;
 	}

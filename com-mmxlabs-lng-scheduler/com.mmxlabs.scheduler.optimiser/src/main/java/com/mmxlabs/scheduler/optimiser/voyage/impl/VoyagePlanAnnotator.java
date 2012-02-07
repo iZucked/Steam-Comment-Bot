@@ -29,22 +29,19 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 
 /**
- * The {@link VoyagePlanAnnotator} annotates a {@link IAnnotatedSequence} object
- * from a sequence of {@link VoyagePlan}s.
+ * The {@link VoyagePlanAnnotator} annotates a {@link IAnnotatedSequence} object from a sequence of {@link VoyagePlan}s.
  * 
  * @author Simon Goodall
  * 
- * @param 
- *            Sequence element type.
+ * @param Sequence
+ *            element type.
  */
 public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 	private IPortSlotProvider portSlotProvider;
 
-	private final FuelComponent[] idleFuelComponents = FuelComponent
-			.getIdleFuelComponents();
-	private final FuelComponent[] travelFuelComponents = FuelComponent
-			.getTravelFuelComponents();
+	private final FuelComponent[] idleFuelComponents = FuelComponent.getIdleFuelComponents();
+	private final FuelComponent[] travelFuelComponents = FuelComponent.getTravelFuelComponents();
 
 	public void annotateFromScheduledSequences(final ScheduledSequences scheduledSequences, final IAnnotatedSolution solution) {
 		for (final ScheduledSequence s : scheduledSequences) {
@@ -53,19 +50,13 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 		// add volume annotations
 	}
 
-	public void annotateFromScheduledSequence(
-			final ScheduledSequence scheduledSequence,
-			final IAnnotatedSolution solution) {
-		annotateFromVoyagePlan(scheduledSequence.getResource(),
-				scheduledSequence.getVoyagePlans(),
-				scheduledSequence.getStartTime(), solution);
+	public void annotateFromScheduledSequence(final ScheduledSequence scheduledSequence, final IAnnotatedSolution solution) {
+		annotateFromVoyagePlan(scheduledSequence.getResource(), scheduledSequence.getVoyagePlans(), scheduledSequence.getStartTime(), solution);
 	}
 
 	@Override
-	public void annotateFromVoyagePlan(final IResource resource,
-			final List<VoyagePlan> plans, final int startTime,
-			final IAnnotatedSolution solution) {
-		VoyagePlanIterator vpi = new VoyagePlanIterator();
+	public void annotateFromVoyagePlan(final IResource resource, final List<VoyagePlan> plans, final int startTime, final IAnnotatedSolution solution) {
+		final VoyagePlanIterator vpi = new VoyagePlanIterator();
 		vpi.setVoyagePlans(plans, startTime);
 
 		vpi.reset();

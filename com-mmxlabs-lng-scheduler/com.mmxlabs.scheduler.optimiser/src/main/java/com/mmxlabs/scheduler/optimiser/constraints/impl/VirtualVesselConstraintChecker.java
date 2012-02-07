@@ -49,8 +49,9 @@ public class VirtualVesselConstraintChecker implements IConstraintChecker {
 		for (final IResource resource : sequences.getResources()) {
 			final IVessel vessel = vesselProvider.getVessel(resource);
 			if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
-				if (isInvalid(sequences.getSequence(resource)))
+				if (isInvalid(sequences.getSequence(resource))) {
 					return false;
+				}
 			}
 		}
 		return true;
@@ -64,8 +65,9 @@ public class VirtualVesselConstraintChecker implements IConstraintChecker {
 	 * @return true if there is a problem with this sequence, false if the sequence is OK.
 	 */
 	private boolean isInvalid(final ISequence sequence) {
-		if (sequence.size() > 4)
+		if (sequence.size() > 4) {
 			return true;
+		}
 
 		// TODO check that at least one of the slots on the sequence is unshipped.
 

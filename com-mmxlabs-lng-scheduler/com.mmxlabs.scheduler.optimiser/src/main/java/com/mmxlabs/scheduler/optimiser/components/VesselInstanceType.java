@@ -5,9 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
 /**
- * The {@link VesselInstanceType} indicates what the {@link IVessel} instance
- * is. For example, is it a core fleet vessel, or is it an instance created to
- * handle spot charters?
+ * The {@link VesselInstanceType} indicates what the {@link IVessel} instance is. For example, is it a core fleet vessel, or is it an instance created to handle spot charters?
  * 
  * @author Simon Goodall
  * 
@@ -25,15 +23,12 @@ public enum VesselInstanceType {
 	FLEET,
 
 	/**
-	 * Long term charter vessel. May have a specific start or end time and port,
-	 * depending on the overlap of contracted period with the optimisation
-	 * period.
+	 * Long term charter vessel. May have a specific start or end time and port, depending on the overlap of contracted period with the optimisation period.
 	 */
 	TIME_CHARTER,
 
 	/**
-	 * Short term charter to deal with one or two cargoes. Start and end time
-	 * and port needs to be determined by optimiser.
+	 * Short term charter to deal with one or two cargoes. Start and end time and port needs to be determined by optimiser.
 	 */
 	SPOT_CHARTER,
 

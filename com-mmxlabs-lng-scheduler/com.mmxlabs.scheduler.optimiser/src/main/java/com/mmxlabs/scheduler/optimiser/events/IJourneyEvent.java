@@ -61,8 +61,7 @@ public interface IJourneyEvent extends IScheduledEvent {
 	long getFuelConsumption(FuelComponent fuel, FuelUnit unit);
 
 	/**
-	 * Returns the total cost of the fuel consumed per {@link FuelComponent}
-	 * during this event. TODO: What about making this the unit cost?
+	 * Returns the total cost of the fuel consumed per {@link FuelComponent} during this event. TODO: What about making this the unit cost?
 	 * 
 	 * @param fuel
 	 * @return
@@ -75,9 +74,10 @@ public interface IJourneyEvent extends IScheduledEvent {
 	 * @return
 	 */
 	String getRoute();
-	
+
 	/**
 	 * Returns the cost of the route undertaken in this journey
+	 * 
 	 * @return
 	 */
 	long getRouteCost();

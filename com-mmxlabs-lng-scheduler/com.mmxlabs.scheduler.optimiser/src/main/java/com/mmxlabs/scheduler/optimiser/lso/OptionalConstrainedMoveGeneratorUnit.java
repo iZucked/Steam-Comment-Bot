@@ -28,14 +28,14 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 	private final ConstrainedMoveGenerator owner;
 	private final IOptionalElementsProvider optionalElementsProvider;
 
-	public OptionalConstrainedMoveGeneratorUnit(ConstrainedMoveGenerator owner) {
+	public OptionalConstrainedMoveGeneratorUnit(final ConstrainedMoveGenerator owner) {
 		super();
 		this.owner = owner;
 		this.optionalElementsProvider = owner.context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, IOptionalElementsProvider.class);
 	}
 
 	@Override
-	public void setSequences(ISequences sequences) {
+	public void setSequences(final ISequences sequences) {
 	}
 
 	@Override
@@ -135,8 +135,8 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 			final Pair<Integer, Integer> followerPosition = owner.reverseLookup.get(follower);
 			if (followerPosition.getFirst() != null) {
 				// follower is not currently unused, so we need to find what's before it
-				int sequence = followerPosition.getFirst();
-				int position = followerPosition.getSecond();
+				final int sequence = followerPosition.getFirst();
+				final int position = followerPosition.getSecond();
 				// this is the element currently before the follower
 				final ISequenceElement beforeFollower = owner.sequences.getSequence(sequence).get(position);
 				// these are the elements which can go after what's currently before the follower
@@ -188,11 +188,11 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 			} else {
 				// follower is currently unused, so we can pop both new elements in somewhere
 				// add [unused, follower] to solution somewhere feasible.
-				
+
 				// pick something live and insert next to it.
 				// these are the things which can come after follower
 				final ConstrainedMoveGenerator.Followers<ISequenceElement> followerFollowers = owner.validFollowers.get(follower);
-				final ISequenceElement insertElement = followerFollowers.get(RandomHelper.nextIntBetween(owner.random, 0, followerFollowers.size()-1));
+				final ISequenceElement insertElement = followerFollowers.get(RandomHelper.nextIntBetween(owner.random, 0, followerFollowers.size() - 1));
 				final Pair<Integer, Integer> insertPosition = owner.reverseLookup.get(insertElement);
 				if (insertPosition.getFirst() != null) {
 					final int insertSequence = insertPosition.getFirst();

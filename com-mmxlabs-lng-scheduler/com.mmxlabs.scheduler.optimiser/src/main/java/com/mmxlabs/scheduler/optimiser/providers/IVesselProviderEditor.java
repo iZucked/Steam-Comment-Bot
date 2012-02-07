@@ -10,5 +10,5 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 public interface IVesselProviderEditor extends IVesselProvider {
 
 	void setVesselResource(IResource resource, IVessel vessel);
-	
+
 }

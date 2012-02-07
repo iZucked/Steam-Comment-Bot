@@ -688,8 +688,8 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 		Assert.assertEquals(
-		/* route cost consumption */1000 * 24 * 2 + // * 2 because of base fuel conversion factor
-				/* standard consumption */150 * 24 * Calculator.ScaleFactor, details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
+		/* route cost consumption */(1000 * 24 * 2) + // * 2 because of base fuel conversion factor
+				(/* standard consumption */150 * 24 * Calculator.ScaleFactor), details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
@@ -749,8 +749,8 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(0, details.getIdleTime());
 		Assert.assertEquals(48, details.getTravelTime());
 
-		Assert.assertEquals(/* route cost consumption */1000 * 24 +
-		/* standard consumption */75 * 24 * Calculator.ScaleFactor, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
+		Assert.assertEquals(/* route cost consumption */(1000 * 24) + (/* standard consumption */75 * 24 * Calculator.ScaleFactor),
+				details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
@@ -801,7 +801,7 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		final int[] arrivalTimes = new int[1 + sequence.length / 2];
+		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -873,7 +873,7 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		final int[] arrivalTimes = new int[1 + sequence.length / 2];
+		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -953,7 +953,7 @@ public class LNGVoyageCalculatorTest {
 
 		// Expect to throw a RuntimeException here for a capacity violation
 		fail("Better to return object, recording the error");
-		final int[] arrivalTimes = new int[1 + sequence.length / 2];
+		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		context.assertIsSatisfied();
@@ -1035,7 +1035,7 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		final int[] arrivalTimes = new int[1 + sequence.length / 2];
+		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -1115,7 +1115,7 @@ public class LNGVoyageCalculatorTest {
 			}
 		});
 
-		final int[] arrivalTimes = new int[1 + sequence.length / 2];
+		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();

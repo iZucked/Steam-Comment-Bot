@@ -18,8 +18,7 @@ public class InterpolatingConsumptionRateCalculatorTest {
 		keypoints.put(5, 500l);
 		keypoints.put(10, 1000l);
 
-		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(
-				keypoints);
+		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		// Test exact values
 		Assert.assertEquals(500l, calc.getRate(5));
@@ -39,8 +38,7 @@ public class InterpolatingConsumptionRateCalculatorTest {
 		keypoints.put(5, 500l);
 		keypoints.put(10, 1000l);
 
-		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(
-				keypoints);
+		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		// Lower bound check
 		calc.getRate(4);
@@ -53,8 +51,7 @@ public class InterpolatingConsumptionRateCalculatorTest {
 		keypoints.put(5, 500l);
 		keypoints.put(10, 1000l);
 
-		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(
-				keypoints);
+		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		// Upper bound check
 		calc.getRate(11);

@@ -20,13 +20,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
- * A constraint checker which determines whether every port in the sequence is legal for the given
- * vessel. Whether this is the best possible solution is debatable, as it involves a few more lookups
- * than the minimum possible number; we could instead store a map from vessels to excluded <em>elements</em>
- * instead of <em>ports</em>, saving a lookup at the expense of builder complexity.
+ * A constraint checker which determines whether every port in the sequence is legal for the given vessel. Whether this is the best possible solution is debatable, as it involves a few more lookups
+ * than the minimum possible number; we could instead store a map from vessels to excluded <em>elements</em> instead of <em>ports</em>, saving a lookup at the expense of builder complexity.
+ * 
  * @author hinton
- *
- * @param 
+ * 
+ * @param
  */
 public class PortExclusionConstraintChecker implements IPairwiseConstraintChecker {
 
@@ -38,10 +37,8 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 	private final String exclusionProviderKey;
 	private final String vesselProviderKey;
 	private final String portProviderKey;
-	
-	public PortExclusionConstraintChecker(final String name,
-			final String exclusionProviderKey, final String vesselProviderKey,
-			final String portProviderKey) {
+
+	public PortExclusionConstraintChecker(final String name, final String exclusionProviderKey, final String vesselProviderKey, final String portProviderKey) {
 		super();
 		this.name = name;
 		this.exclusionProviderKey = exclusionProviderKey;
@@ -57,31 +54,31 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 	public boolean checkSequence(final ISequence sequence, final IResource resource) {
 		return checkSequence(sequence, resource, null);
 	}
-	
+
 	public boolean checkSequence(final ISequence sequence, final IResource resource, final List<String> messages) {
-		if (portExclusionProvider.hasNoExclusions()) return true;
-		
-		final Set<IPort> excludedPorts = 
-			portExclusionProvider.getExcludedPorts(
-				vesselProvider.getVessel(resource).getVesselClass()
-			);
-		
-		if (excludedPorts.isEmpty()) return true;
+		if (portExclusionProvider.hasNoExclusions()) {
+			return true;
+		}
+
+		final Set<IPort> excludedPorts = portExclusionProvider.getExcludedPorts(vesselProvider.getVessel(resource).getVesselClass());
+
+		if (excludedPorts.isEmpty()) {
+			return true;
+		}
 		boolean valid = true;
-		for (int j = 0; j<sequence.size(); j++) {
+		for (int j = 0; j < sequence.size(); j++) {
 			if (excludedPorts.contains(portProvider.getPortForElement(sequence.get(j)))) {
 				if (messages == null) {
-					return false; //fail fast.
+					return false; // fail fast.
 				} else {
-					messages.add("Vessel " + vesselProvider.getVessel(resource).getName() + " is excluded from port " + 
-							portProvider.getPortForElement(sequence.get(j)).getName());
+					messages.add("Vessel " + vesselProvider.getVessel(resource).getName() + " is excluded from port " + portProvider.getPortForElement(sequence.get(j)).getName());
 					valid = false;
 				}
 			}
 		}
 		return valid || messages.isEmpty();
 	}
-	
+
 	/*
 	 * This is a fail-fast version of the method below
 	 */
@@ -91,22 +88,24 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences,
-			final List<String> messages) {
-		if (portExclusionProvider.hasNoExclusions()) return true;
+	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+		if (portExclusionProvider.hasNoExclusions()) {
+			return true;
+		}
 		final List<IResource> resources = sequences.getResources();
-	
+
 		boolean valid = true;
-		
-		for (int i = 0; i<sequences.size(); i++) {
+
+		for (int i = 0; i < sequences.size(); i++) {
 			if (!checkSequence(sequences.getSequence(i), resources.get(i), messages)) {
-				if (messages == null)
+				if (messages == null) {
 					return false;
-				else
+				} else {
 					valid = false;
+				}
 			}
 		}
-		
+
 		return valid;
 	}
 
@@ -121,8 +120,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		return portExclusionProvider;
 	}
 
-	public void setPortExclusionProvider(
-			final IPortExclusionProvider portExclusionProvider) {
+	public void setPortExclusionProvider(final IPortExclusionProvider portExclusionProvider) {
 		this.portExclusionProvider = portExclusionProvider;
 	}
 
@@ -144,15 +142,18 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		if (portExclusionProvider.hasNoExclusions()) return true;
-		
+		if (portExclusionProvider.hasNoExclusions()) {
+			return true;
+		}
+
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		final Set<IPort> exclusions = portExclusionProvider.getExcludedPorts(vessel.getVesselClass());
-		
-		if (exclusions.isEmpty()) return true;
-		
-		return !(exclusions.contains(portProvider.getPortForElement(first)) ||
-			exclusions.contains(portProvider.getPortForElement(second)));
+
+		if (exclusions.isEmpty()) {
+			return true;
+		}
+
+		return !(exclusions.contains(portProvider.getPortForElement(first)) || exclusions.contains(portProvider.getPortForElement(second)));
 	}
 
 	@Override

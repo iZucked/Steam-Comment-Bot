@@ -9,8 +9,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
- * Implementation of {@link IVoyagePlanChoice} to alter NBO choice during
- * journey events.
+ * Implementation of {@link IVoyagePlanChoice} to alter NBO choice during journey events.
  * 
  * @author Simon Goodall
  * 
@@ -23,8 +22,7 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final VoyageOptions options;
 
-	public NBOTravelVoyagePlanChoice(final VoyageOptions previousOptions,
-			final VoyageOptions options) {
+	public NBOTravelVoyagePlanChoice(final VoyageOptions previousOptions, final VoyageOptions options) {
 		this.previousOptions = previousOptions;
 		this.options = options;
 	}
@@ -42,7 +40,7 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 	@Override
 	public final boolean nextChoice() {
 		while (true) {
-			if (choice + 1 == numChoices()) {
+			if ((choice + 1) == numChoices()) {
 				return true;
 			}
 			if (apply(choice + 1)) {
@@ -64,12 +62,12 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 
 		options.setUseNBOForTravel(useNBO);
 
-		if (useNBO && previousOptions != null) {
+		if (useNBO && (previousOptions != null)) {
 			return previousOptions.useNBOForTravel();
 		}
 
 		// Ensure NBO is always true when state is laden
-		if (!useNBO && options.getVesselState() == VesselState.Laden) {
+		if (!useNBO && (options.getVesselState() == VesselState.Laden)) {
 			return false;
 		}
 

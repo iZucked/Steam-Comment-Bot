@@ -49,7 +49,7 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 			final PortDetails detail = (PortDetails) object;
 			final ITimeWindow tw = detail.getPortSlot().getTimeWindow();
 
-			if (tw != null && time > tw.getEnd()) {
+			if ((tw != null) && (time > tw.getEnd())) {
 				// addDiscountedValue(time, 1000000*(time - tw.getEnd()));
 				accumulator += getDiscountedValue(time, (long) PENALTY * (time - tw.getEnd()));
 			}

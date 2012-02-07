@@ -28,10 +28,11 @@ public class HashMapPortExclusionProvider implements IPortExclusionProviderEdito
 	@Override
 	public Set<IPort> getExcludedPorts(final IVesselClass vesselClass) {
 		final Set<IPort> ports = exclusions.get(vesselClass);
-		if (ports == null)
+		if (ports == null) {
 			return EMPTY;
-		else
+		} else {
 			return ports;
+		}
 	}
 
 	@Override
@@ -48,9 +49,9 @@ public class HashMapPortExclusionProvider implements IPortExclusionProviderEdito
 	@Override
 	public void setExcludedPorts(final IVesselClass vesselClass, final Set<IPort> excludedPorts) {
 		exclusions.put(vesselClass, new HashSet<IPort>(excludedPorts));
-		if (excludedPorts.isEmpty() == false)
+		if (excludedPorts.isEmpty() == false) {
 			isEmpty = false;
-		else {
+		} else {
 			for (final Set<IPort> ex : exclusions.values()) {
 				if (ex.isEmpty() == false) {
 					isEmpty = false;

@@ -77,8 +77,9 @@ public class SequencesManipulatorUtil {
 				// however, fleet vessels which do not have an end location requirement
 				// should return to their last load port.
 
-				if (!startEndProvider.getEndRequirement(resource).hasPortRequirement())
+				if (!startEndProvider.getEndRequirement(resource).hasPortRequirement()) {
 					endLocationManipulator.setEndLocationRule(resource, EndLocationRule.RETURN_TO_LAST_LOAD);
+				}
 			}
 		}
 

@@ -13,11 +13,11 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 public class VesselEventPortSlot extends PortSlot implements IVesselEventPortSlot {
 	private final IVesselEvent charterOut;
 
-	public VesselEventPortSlot(String id, IPort port, ITimeWindow timeWindow, IVesselEvent charterOut) {
+	public VesselEventPortSlot(final String id, final IPort port, final ITimeWindow timeWindow, final IVesselEvent charterOut) {
 		super(id, port, timeWindow);
 		this.charterOut = charterOut;
-	}	
-	
+	}
+
 	@Override
 	public IVesselEvent getVesselEvent() {
 		return charterOut;

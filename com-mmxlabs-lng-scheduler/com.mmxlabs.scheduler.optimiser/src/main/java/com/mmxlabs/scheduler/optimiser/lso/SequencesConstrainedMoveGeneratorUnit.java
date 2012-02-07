@@ -96,7 +96,6 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 
 	}
 
-
 	@Override
 	public IMove generateMove() {
 		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(owner.random, owner.validBreaks);
@@ -106,8 +105,9 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		// Check for special case; elements are not in a sequence
 		// in this case, we typically need something clever to happen anyway
 		// so this MG will just bail out and give up.
-		if (pos1.getFirst() == null || pos2.getFirst() == null)
+		if ((pos1.getFirst() == null) || (pos2.getFirst() == null)) {
 			return null;
+		}
 
 		final List<IResource> resources = owner.sequences.getResources();
 
@@ -149,7 +149,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				if (posPrecursor.getFirst().equals(sequence1)) {
 					// check for stupidity
 					final int position3 = posPrecursor.getSecond();
-					if (position3 >= beforeFirstCut && position3 <= beforeSecondCut) {
+					if ((position3 >= beforeFirstCut) && (position3 <= beforeSecondCut)) {
 						return null; // stupidity has happened.
 					}
 				}
@@ -184,7 +184,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 
 			boolean valid2opt2 = owner.validFollowers.get(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 
-			while (!valid2opt2 && position2 > 1) {
+			while (!valid2opt2 && (position2 > 1)) {
 				// rewind position 2? after all if we don't have a valid 2opt2
 				// we probably won't get a valid 4opt2 out of it either?
 				position2--;
@@ -192,7 +192,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			}
 
 			// if it would be, maybe do it
-			if (valid2opt2 && owner.random.nextDouble() < 0.05) {
+			if (valid2opt2 && (owner.random.nextDouble() < 0.05)) {
 				// make 2opt2
 				final Move2over2 result = new Move2over2A();
 				result.setResource1(resources.get(sequence1));
@@ -214,9 +214,9 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				final ConstrainedMoveGenerator.Followers<ISequenceElement> followersOfSecondElementsPredecessor = owner.validFollowers.get(seq2.get(position2 - 1));
 
 				final List<Pair<Integer, Integer>> viableSecondBreaks = new ArrayList<Pair<Integer, Integer>>();
-				for (int i = position2 + 1; i < seq2.size() - 1; i++) { // ignore
-																		// last
-																		// element
+				for (int i = position2 + 1; i < (seq2.size() - 1); i++) { // ignore
+																			// last
+																			// element
 					final ISequenceElement here = seq2.get(i);
 					for (final ISequenceElement elt : owner.validFollowers.get(here)) {
 						final Pair<Integer, Integer> loc = owner.reverseLookup.get(elt);
@@ -228,14 +228,16 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 								// now we need to check that we can put the
 								// chunk cut out of S1 into S2 here
 
-								if (loc.getSecond() == position1 + 1) {
+								if (loc.getSecond() == (position1 + 1)) {
 									// 3opt1 check
-									if (followersOfSecondElementsPredecessor.contains(seq2.get(i + 1)))
+									if (followersOfSecondElementsPredecessor.contains(seq2.get(i + 1))) {
 										viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));
+									}
 								} else {
 									// 4opt2 check
-									if (valid2opt2 && owner.validFollowers.get(owner.sequences.getSequence(loc.getFirst()).get(loc.getSecond() - 1)).contains(seq2.get(i + 1)))
+									if (valid2opt2 && owner.validFollowers.get(owner.sequences.getSequence(loc.getFirst()).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
 										viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));
+									}
 								}
 
 							}
@@ -279,7 +281,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				final int secondPosition1 = selectedSecondBreak.getSecond();
 				final int secondPosition2 = selectedSecondBreak.getFirst();
 
-				if (secondPosition1 == position1 + 1) {
+				if (secondPosition1 == (position1 + 1)) {
 					// 3opt2
 					final Move3over2 result = new Move3over2();
 

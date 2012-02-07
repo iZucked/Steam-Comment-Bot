@@ -255,7 +255,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		}
 
 		// Store cheapest cost
-		if (currentPlan != null &&
+		if ((currentPlan != null) &&
 		// this plan is valid, but the other is not, who cares about cost
 				((currentPlanFitsInAvailableTime && !bestPlanFitsInAvailableTime) ||
 				// this plan is valid, or the other is not, and it's cheaper
@@ -291,22 +291,23 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	public long evaluatePlan(final VoyagePlan plan) {
-		if (plan == null)
+		if (plan == null) {
 			return Long.MAX_VALUE;
-		// System.err.println("Evaluating a plan");
-		// for (final Object o : plan.getSequence()) {
-		// if (o instanceof VoyageDetails) {
-		// final VoyageDetails vd = (VoyageDetails) o;
-		// System.err.println("\tvoyage from " + vd.getOptions().getFromPortSlot().getPort().getName() + " to " + vd.getOptions().getToPortSlot().getPort().getName());
-		// System.err.println(vd.getOptions());
-		// System.err.println("idle:" + vd.getIdleTime() + ", journey" + vd.getTravelTime());
-		// for (final FuelComponent fc : FuelComponent.values()) {
-		// final long consumption = vd.getFuelConsumption(fc, fc.getDefaultFuelUnit());
-		// final long up = vd.getFuelUnitPrice(fc);
-		// System.err.println("\t\t" + fc + " = " + consumption + ", " + Calculator.multiply(consumption, up));
-		// }
-		// }
-		// }
+			// System.err.println("Evaluating a plan");
+			// for (final Object o : plan.getSequence()) {
+			// if (o instanceof VoyageDetails) {
+			// final VoyageDetails vd = (VoyageDetails) o;
+			// System.err.println("\tvoyage from " + vd.getOptions().getFromPortSlot().getPort().getName() + " to " + vd.getOptions().getToPortSlot().getPort().getName());
+			// System.err.println(vd.getOptions());
+			// System.err.println("idle:" + vd.getIdleTime() + ", journey" + vd.getTravelTime());
+			// for (final FuelComponent fc : FuelComponent.values()) {
+			// final long consumption = vd.getFuelConsumption(fc, fc.getDefaultFuelUnit());
+			// final long up = vd.getFuelUnitPrice(fc);
+			// System.err.println("\t\t" + fc + " = " + consumption + ", " + Calculator.multiply(consumption, up));
+			// }
+			// }
+			// }
+		}
 
 		// long revenue = currentPlan.getSalesRevenue() -
 		// currentPlan.getSalesRevenue();

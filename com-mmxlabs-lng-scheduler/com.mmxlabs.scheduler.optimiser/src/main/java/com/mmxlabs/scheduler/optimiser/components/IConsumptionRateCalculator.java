@@ -5,8 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
 /**
- * Implementations of {@link IConsumptionRateCalculator} calculate vessel fuel
- * consumption rates based on an input speed.
+ * Implementations of {@link IConsumptionRateCalculator} calculate vessel fuel consumption rates based on an input speed.
  * 
  * @author Simon Goodall
  * 
@@ -20,10 +19,12 @@ public interface IConsumptionRateCalculator {
 	 * @return
 	 */
 	long getRate(int speed);
-	
+
 	/**
 	 * Return the speed for this consumption rate
-	 * @param rate the consumption rate
+	 * 
+	 * @param rate
+	 *            the consumption rate
 	 * @return a speed so that getRate(speed) == rate
 	 */
 	int getSpeed(long rate);

@@ -51,10 +51,11 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 	 *            if true, start location will be removed, otherwise not.
 	 */
 	public void setShouldRemoveStartLocation(final IResource resource, final boolean shouldRemoveStartLocation) {
-		if (shouldRemoveStartLocation)
+		if (shouldRemoveStartLocation) {
 			resourcesToManipulate.add(resource);
-		else
+		} else {
 			resourcesToManipulate.remove(resource);
+		}
 	}
 
 	public boolean getShouldRemoveStartLocation(final IResource resource) {

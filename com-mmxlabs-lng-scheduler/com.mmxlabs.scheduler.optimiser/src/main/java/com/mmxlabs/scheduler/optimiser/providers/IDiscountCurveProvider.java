@@ -9,7 +9,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
 /**
  * @author Tom Hinton
- *
+ * 
  */
 public interface IDiscountCurveProvider extends IDataComponentProvider {
 	public ICurve getDiscountCurve(final String componentName);

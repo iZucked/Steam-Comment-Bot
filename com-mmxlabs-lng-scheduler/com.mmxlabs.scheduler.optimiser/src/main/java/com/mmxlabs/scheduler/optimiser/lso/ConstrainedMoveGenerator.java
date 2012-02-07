@@ -21,7 +21,6 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
@@ -152,8 +151,9 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			final LinkedHashSet<ISequenceElement> followers = new LinkedHashSet<ISequenceElement>();
 
 			for (final ISequenceElement e2 : data.getSequenceElements()) {
-				if (e1 == e2)
+				if (e1 == e2) {
 					continue;
+				}
 				if (checker.allowSequence(e1, e2)) {
 					if (followers.size() == 1) {
 						validBreaks.add(new Pair<ISequenceElement, ISequenceElement>(e1, followers.iterator().next()));
@@ -184,7 +184,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	@Override
 	public IMove generateMove() {
-		if (optionalMoveGenerator != null && random.nextDouble() < optionalMoveFrequency) {
+		if ((optionalMoveGenerator != null) && (random.nextDouble() < optionalMoveFrequency)) {
 			return optionalMoveGenerator.generateMove();
 		} else {
 			return sequencesMoveGenerator.generateMove();

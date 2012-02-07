@@ -8,7 +8,7 @@ import com.mmxlabs.common.curves.ICurve;
 
 /**
  * @author Tom Hinton
- *
+ * 
  */
 public interface IDiscountCurveProviderEditor extends IDiscountCurveProvider {
 	public void setDiscountCurve(final String componentName, final ICurve discountCurve);

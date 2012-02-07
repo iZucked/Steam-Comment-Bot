@@ -12,8 +12,8 @@ public class StartEndRequirement implements IStartEndRequirement {
 	IPort port;
 	boolean portIsSpecified;
 	ITimeWindow timeWindow;
-	
-	public StartEndRequirement(IPort port, boolean portIsSpecified, ITimeWindow timeWindow) {
+
+	public StartEndRequirement(final IPort port, final boolean portIsSpecified, final ITimeWindow timeWindow) {
 		super();
 		this.port = port;
 		this.portIsSpecified = portIsSpecified;

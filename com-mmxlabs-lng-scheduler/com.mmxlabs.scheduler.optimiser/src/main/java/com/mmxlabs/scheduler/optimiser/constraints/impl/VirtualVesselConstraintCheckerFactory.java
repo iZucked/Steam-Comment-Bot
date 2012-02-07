@@ -15,8 +15,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * @author Tom Hinton
  * 
  */
-public final class VirtualVesselConstraintCheckerFactory implements
-		IConstraintCheckerFactory {
+public final class VirtualVesselConstraintCheckerFactory implements IConstraintCheckerFactory {
 
 	public static final String NAME = "VirtualVesselConstraintChecker";
 
@@ -27,8 +26,7 @@ public final class VirtualVesselConstraintCheckerFactory implements
 	 * 
 	 * @param key
 	 */
-	public VirtualVesselConstraintCheckerFactory(
-			final String vesselKey) {
+	public VirtualVesselConstraintCheckerFactory(final String vesselKey) {
 		this.vesselProviderKey = vesselKey;
 	}
 

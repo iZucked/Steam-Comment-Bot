@@ -58,7 +58,8 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	 * @param cargoCVValue
 	 *            - the CV value for gas here.
 	 */
-	public LoadOption(String id, IPort port, ITimeWindow timeWindow, long minLoadVolume, long maxLoadVolume, ILoadPriceCalculator2 loadPriceCalculator, int cargoCVValue) {
+	public LoadOption(final String id, final IPort port, final ITimeWindow timeWindow, final long minLoadVolume, final long maxLoadVolume, final ILoadPriceCalculator2 loadPriceCalculator,
+			final int cargoCVValue) {
 		super(id, port, timeWindow);
 		this.minLoadVolume = minLoadVolume;
 		this.maxLoadVolume = maxLoadVolume;
@@ -103,9 +104,10 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
+		}
 
 		if (obj instanceof LoadOption) {
 			final LoadOption lo = (LoadOption) obj;

@@ -73,8 +73,6 @@ public class VoyageDetailsTest {
 		Assert.assertEquals(value, details.getTravelTime());
 	}
 
-	
-
 	@Test
 	public void testGetSetFuelCost() {
 
@@ -97,21 +95,21 @@ public class VoyageDetailsTest {
 
 		final FuelComponent fuel1 = FuelComponent.Base;
 		final FuelComponent fuel2 = FuelComponent.NBO;
-		
+
 		final FuelUnit unit1 = FuelUnit.MT;
 		final FuelUnit unit2 = FuelUnit.M3;
 
 		final VoyageDetails details1 = make(1, 2, 3, options1, fuel1, unit1, 5, 10);
-		final VoyageDetails details2 = make(1, 2, 3,  options1, fuel1, unit1, 5, 10);
-		final VoyageDetails details3 = make(21, 2, 3,  options1, fuel1, unit1, 5, 10);
-		final VoyageDetails details4 = make(1, 22, 3,  options1, fuel1, unit1, 5, 10);
-		final VoyageDetails details5 = make(1, 2, 23,  options1, fuel1, unit1, 5, 10);
-		final VoyageDetails details6 = make(1, 2, 3,  options1, fuel1, unit1, 5, 10);
-		final VoyageDetails details7 = make(1, 2, 3,  options2, fuel1, unit1, 5, 10);
-		final VoyageDetails details8 = make(1, 2, 3,  options1, fuel2, unit1, 5, 10);
-		final VoyageDetails details9 = make(1, 2, 3,  options1, fuel1, unit2, 5, 10);
-		final VoyageDetails details10 = make(1, 2, 3,  options1, fuel1, unit1, 25, 10);
-		final VoyageDetails details11 = make(1, 2, 3,  options1, fuel1, unit1, 5, 15);
+		final VoyageDetails details2 = make(1, 2, 3, options1, fuel1, unit1, 5, 10);
+		final VoyageDetails details3 = make(21, 2, 3, options1, fuel1, unit1, 5, 10);
+		final VoyageDetails details4 = make(1, 22, 3, options1, fuel1, unit1, 5, 10);
+		final VoyageDetails details5 = make(1, 2, 23, options1, fuel1, unit1, 5, 10);
+		final VoyageDetails details6 = make(1, 2, 3, options1, fuel1, unit1, 5, 10);
+		final VoyageDetails details7 = make(1, 2, 3, options2, fuel1, unit1, 5, 10);
+		final VoyageDetails details8 = make(1, 2, 3, options1, fuel2, unit1, 5, 10);
+		final VoyageDetails details9 = make(1, 2, 3, options1, fuel1, unit2, 5, 10);
+		final VoyageDetails details10 = make(1, 2, 3, options1, fuel1, unit1, 25, 10);
+		final VoyageDetails details11 = make(1, 2, 3, options1, fuel1, unit1, 5, 15);
 
 		Assert.assertTrue(details1.equals(details1));
 		Assert.assertTrue(details1.equals(details2));
@@ -139,17 +137,15 @@ public class VoyageDetailsTest {
 		Assert.assertFalse(details1.equals(new Object()));
 	}
 
-	 VoyageDetails make(final int idleTime, final int travelTime,
-			final int speed,  final VoyageOptions options,
-			final FuelComponent fuel, final FuelUnit unit,
-			final long consumption, final int unitPrice) {
+	VoyageDetails make(final int idleTime, final int travelTime, final int speed, final VoyageOptions options, final FuelComponent fuel, final FuelUnit unit, final long consumption,
+			final int unitPrice) {
 
 		final VoyageDetails d = new VoyageDetails();
 
 		d.setIdleTime(idleTime);
 		d.setTravelTime(travelTime);
 		d.setSpeed(speed);
-//		d.setStartTime(startTime);
+		// d.setStartTime(startTime);
 		d.setOptions(options);
 
 		d.setFuelConsumption(fuel, unit, consumption);

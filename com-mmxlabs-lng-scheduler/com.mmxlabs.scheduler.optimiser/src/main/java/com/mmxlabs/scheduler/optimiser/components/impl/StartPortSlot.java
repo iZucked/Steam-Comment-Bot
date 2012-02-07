@@ -38,7 +38,7 @@ public final class StartPortSlot extends PortSlot implements IHeelOptionsPortSlo
 		this.heelCVValue = heelCVValue;
 	}
 
-	public StartPortSlot(long heelLimit, int heelUnitPrice, int heelCVValue) {
+	public StartPortSlot(final long heelLimit, final int heelUnitPrice, final int heelCVValue) {
 		setPortType(PortType.Start);
 		this.heelLimit = heelLimit;
 		this.heelUnitPrice = heelUnitPrice;
@@ -61,12 +61,15 @@ public final class StartPortSlot extends PortSlot implements IHeelOptionsPortSlo
 			final StartPortSlot other = (StartPortSlot) obj;
 
 			if (super.equals(other)) {
-				if (other.heelCVValue != heelCVValue)
+				if (other.heelCVValue != heelCVValue) {
 					return false;
-				if (other.heelLimit != heelLimit)
+				}
+				if (other.heelLimit != heelLimit) {
 					return false;
-				if (other.heelUnitPrice != heelUnitPrice)
+				}
+				if (other.heelUnitPrice != heelUnitPrice) {
 					return false;
+				}
 
 				return true;
 			}

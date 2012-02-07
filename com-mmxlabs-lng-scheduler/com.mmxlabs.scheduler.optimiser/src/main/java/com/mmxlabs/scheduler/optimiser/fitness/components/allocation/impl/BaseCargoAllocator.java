@@ -155,9 +155,9 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 						dischargeTime = planIterator.getCurrentTime();
 					}
 				} else if (object instanceof VoyageDetails) {
-					if (dischargeDetails == null && loadDetails != null) {
+					if ((dischargeDetails == null) && (loadDetails != null)) {
 						ladenVoyage = (VoyageDetails) object;
-					} else if (dischargeDetails != null && loadDetails != null) {
+					} else if ((dischargeDetails != null) && (loadDetails != null)) {
 						ballastVoyage = (VoyageDetails) object;
 						addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vesselClass);
 						loadDetails = null;
@@ -166,15 +166,16 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 				}
 			}
 		}
-		
+
 		for (final VirtualCargo virtual : sequences.getVirtualCargoes()) {
 			// add virtual cargo, somehow; contracts need to know how to price this, because we need the load price.
 		}
-		
+
 		solve();
 		final LinkedList<IAllocationAnnotation> result = new LinkedList<IAllocationAnnotation>();
-		for (final IAllocationAnnotation aa : getAllocations())
+		for (final IAllocationAnnotation aa : getAllocations()) {
 			result.add(aa);
+		}
 		return result;
 	}
 
@@ -185,10 +186,10 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 	public void addCargo(final VoyagePlan plan, final PortDetails loadDetails, final VoyageDetails ladenLeg, final PortDetails dischargeDetails, final VoyageDetails ballastLeg, final int loadTime,
 			final int dischargeTime, final long requiredLoadVolume, final IVesselClass vesselClass) {
-//		if (requiredLoadVolume > vesselClass.getCargoCapacity() / 10) {
-//			System.err.println("Using a whole lot of gas for fuel here");
-//		}
-		
+		// if (requiredLoadVolume > vesselClass.getCargoCapacity() / 10) {
+		// System.err.println("Using a whole lot of gas for fuel here");
+		// }
+
 		final long vesselCapacity = vesselClass.getCargoCapacity();
 		final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getPortSlot();
 		final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getPortSlot();
@@ -263,8 +264,9 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 	public long getAllocation(final IPortSlot slot) {
 		final int index = variableForSlot(slot);
-		if (index == -1)
+		if (index == -1) {
 			return 0;
+		}
 		return allocation[index];
 	}
 

@@ -209,9 +209,7 @@ public class VoyagePlanAnnotatorTest {
 			// Assert.assertEquals(400, loadEvent.getLoadVolume());
 		}
 		{
-			final IJourneyEvent journey = annotatedSolution.getElementAnnotations()
-					.getAnnotation(element2, SchedulerConstants.AI_journeyInfo,
-							IJourneyEvent.class);
+			final IJourneyEvent journey = annotatedSolution.getElementAnnotations().getAnnotation(element2, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
 			Assert.assertNotNull(journey);
 
 			Assert.assertSame(element2, journey.getSequenceElement());
@@ -281,9 +279,7 @@ public class VoyagePlanAnnotatorTest {
 		}
 
 		{
-			final IJourneyEvent journey = annotatedSolution.getElementAnnotations()
-					.getAnnotation(element3, SchedulerConstants.AI_journeyInfo,
-							IJourneyEvent.class);
+			final IJourneyEvent journey = annotatedSolution.getElementAnnotations().getAnnotation(element3, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
 			Assert.assertNotNull(journey);
 
 			Assert.assertSame(element3, journey.getSequenceElement());
@@ -353,9 +349,7 @@ public class VoyagePlanAnnotatorTest {
 		}
 
 		{
-			final IJourneyEvent journey = annotatedSolution.getElementAnnotations()
-					.getAnnotation(element4, SchedulerConstants.AI_journeyInfo,
-							IJourneyEvent.class);
+			final IJourneyEvent journey = annotatedSolution.getElementAnnotations().getAnnotation(element4, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
 			Assert.assertNotNull(journey);
 
 			Assert.assertSame(element4, journey.getSequenceElement());

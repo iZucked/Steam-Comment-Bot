@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
-import javax.naming.OperationNotSupportedException;
-
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -38,7 +36,7 @@ public class NetbackContract implements ILoadPriceCalculator2 {
 		return marginScaled;
 	}
 
-	public final void setMarginScaled(int marginScaled) {
+	public final void setMarginScaled(final int marginScaled) {
 		this.marginScaled = marginScaled;
 	}
 
@@ -46,11 +44,11 @@ public class NetbackContract implements ILoadPriceCalculator2 {
 		return distanceProvider;
 	}
 
-	public final void setDistanceProvider(IMultiMatrixProvider<IPort, Integer> distanceProvider) {
+	public final void setDistanceProvider(final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
 		this.distanceProvider = distanceProvider;
 	}
 
-	public NetbackContract(int marginScaled, final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
+	public NetbackContract(final int marginScaled, final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
 		super();
 		setMarginScaled(marginScaled);
 		setDistanceProvider(distanceProvider);
@@ -69,14 +67,15 @@ public class NetbackContract implements ILoadPriceCalculator2 {
 	 * @see com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2#prepareEvaluation(com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences)
 	 */
 	@Override
-	public void prepareEvaluation(ScheduledSequences sequences) {
+	public void prepareEvaluation(final ScheduledSequences sequences) {
 
 	}
 
 	@Override
-	public int calculateLoadUnitPrice(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int salesPrice, int loadVolume, IVesselClass vesselClass, VoyagePlan plan) {
+	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int salesPrice, final int loadVolume,
+			final IVesselClass vesselClass, final VoyagePlan plan) {
 		final VoyageDetails ladenLeg = (VoyageDetails) plan.getSequence()[1];
-//		final VoyageDetails ballastLeg = (VoyageDetails) plan.getSequence()[3];
+		// final VoyageDetails ballastLeg = (VoyageDetails) plan.getSequence()[3];
 
 		// get transportation costs
 		// suez cost
@@ -112,14 +111,14 @@ public class NetbackContract implements ILoadPriceCalculator2 {
 
 		final long transportCostPerMMBTU = Calculator.divide(notionalTransportCosts + totalRealTransportCosts, Calculator.multiply(loadSlot.getCargoCVValue(), loadVolume));
 
-		int result = (int) (salesPrice - transportCostPerMMBTU - marginScaled);
+		final int result = (int) (salesPrice - transportCostPerMMBTU - marginScaled);
 		// System.err.println("netback cost " + actualSalesPrice + " => " + result);
 		return result;
 	}
 
 	@Override
-	public int calculateLoadUnitPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int loadTime, int dischargeTime, int salesPrice) {
-		//TODO implement me
+	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice) {
+		// TODO implement me
 		throw new RuntimeException("A netback requires shipping costs - not yet handled");
 	}
 }

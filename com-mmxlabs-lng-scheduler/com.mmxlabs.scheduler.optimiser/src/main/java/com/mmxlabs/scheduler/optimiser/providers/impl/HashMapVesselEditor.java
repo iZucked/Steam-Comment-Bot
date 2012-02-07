@@ -12,8 +12,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 
 /**
- * Implementation of {@link IVesselProviderEditor} using a {@link HashMap} as
- * the backing implementation.
+ * Implementation of {@link IVesselProviderEditor} using a {@link HashMap} as the backing implementation.
  * 
  * @author Simon Goodall
  * 
@@ -50,7 +49,7 @@ public final class HashMapVesselEditor implements IVesselProviderEditor {
 	}
 
 	@Override
-	public void setVesselResource(IResource resource, IVessel vessel) {
+	public void setVesselResource(final IResource resource, final IVessel vessel) {
 		vesselResourceMap.put(vessel, resource);
 		resourceVesselMap.put(resource, vessel);
 	}

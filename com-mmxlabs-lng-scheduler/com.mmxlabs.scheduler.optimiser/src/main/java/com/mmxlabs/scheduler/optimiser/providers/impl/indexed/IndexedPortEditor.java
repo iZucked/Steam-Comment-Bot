@@ -15,7 +15,7 @@ public class IndexedPortEditor implements IPortProviderEditor {
 
 	final String name;
 
-	public IndexedPortEditor(String name) {
+	public IndexedPortEditor(final String name) {
 		super();
 		this.name = name;
 	}
@@ -31,12 +31,12 @@ public class IndexedPortEditor implements IPortProviderEditor {
 	}
 
 	@Override
-	public IPort getPortForElement(ISequenceElement element) {
+	public IPort getPortForElement(final ISequenceElement element) {
 		return ports.maybeGet(element);
 	}
 
 	@Override
-	public void setPortForElement(IPort port, ISequenceElement element) {
+	public void setPortForElement(final IPort port, final ISequenceElement element) {
 		ports.set(element, port);
 	}
 

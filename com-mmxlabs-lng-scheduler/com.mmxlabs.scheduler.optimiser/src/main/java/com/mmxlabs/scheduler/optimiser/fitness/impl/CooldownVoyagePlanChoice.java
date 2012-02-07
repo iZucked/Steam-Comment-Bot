@@ -14,7 +14,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
  * 
  */
 public class CooldownVoyagePlanChoice implements IVoyagePlanChoice {
-	private int choice = 0;
+	private final int choice = 0;
 	private final VoyageOptions options;
 
 	public CooldownVoyagePlanChoice(final VoyageOptions options) {
@@ -27,7 +27,7 @@ public class CooldownVoyagePlanChoice implements IVoyagePlanChoice {
 	}
 
 	@Override
-	public boolean apply(int choice) {
+	public boolean apply(final int choice) {
 		final boolean cooldown = choice == 0;
 		options.setAllowCooldown(cooldown);
 
@@ -53,7 +53,7 @@ public class CooldownVoyagePlanChoice implements IVoyagePlanChoice {
 	@Override
 	public boolean nextChoice() {
 		while (true) {
-			if (choice + 1 == numChoices()) {
+			if ((choice + 1) == numChoices()) {
 				return true;
 			}
 			if (apply(choice + 1)) {

@@ -6,7 +6,7 @@ package com.mmxlabs.trading.optimiser;
 
 /**
  * @author hinton
- *
+ * 
  */
 public class TradingConstants {
 

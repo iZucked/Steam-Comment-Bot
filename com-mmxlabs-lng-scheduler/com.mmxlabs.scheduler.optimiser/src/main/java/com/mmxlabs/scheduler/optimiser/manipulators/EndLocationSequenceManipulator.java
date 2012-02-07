@@ -77,8 +77,9 @@ public final class EndLocationSequenceManipulator implements ISequencesManipulat
 	public void manipulate(final IResource resource, final IModifiableSequence sequence) {
 
 		final EndLocationRule rule = ruleMap.get(resource);
-		if (rule == null)
+		if (rule == null) {
 			return;
+		}
 		switch (rule) {
 		case RETURN_TO_FIRST_LOAD:
 			adjustLastElement(resource, sequence, getFirstLoadElement(sequence));
@@ -121,8 +122,9 @@ public final class EndLocationSequenceManipulator implements ISequencesManipulat
 	 * @param location
 	 */
 	private final void adjustLastElement(final IResource resource, final IModifiableSequence sequence, final ISequenceElement returnElement) {
-		if (returnElement == null)
+		if (returnElement == null) {
 			return;
+		}
 		/*
 		 * Look up the port we are returning to, and then set that as the port for the dummy element.
 		 */
@@ -166,7 +168,7 @@ public final class EndLocationSequenceManipulator implements ISequencesManipulat
 		return portProvider;
 	}
 
-	public void setPortProvider(IPortProvider portProvider) {
+	public void setPortProvider(final IPortProvider portProvider) {
 		this.portProvider = portProvider;
 	}
 
@@ -174,7 +176,7 @@ public final class EndLocationSequenceManipulator implements ISequencesManipulat
 		return returnElementProvider;
 	}
 
-	public void setReturnElementProvider(IReturnElementProvider returnElementProvider) {
+	public void setReturnElementProvider(final IReturnElementProvider returnElementProvider) {
 		this.returnElementProvider = returnElementProvider;
 	}
 

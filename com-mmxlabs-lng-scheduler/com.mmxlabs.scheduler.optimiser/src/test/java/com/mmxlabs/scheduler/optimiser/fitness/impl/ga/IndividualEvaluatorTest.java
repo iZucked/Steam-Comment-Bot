@@ -62,13 +62,13 @@ public class IndividualEvaluatorTest {
 	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
 
 		@Override
-		public ScheduledSequences schedule(ISequences sequences, boolean b) {
+		public ScheduledSequences schedule(final ISequences sequences, final boolean b) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 
 		}
 
 		@Override
-		public ScheduledSequences schedule(ISequences sequences, Collection<IResource> affectedResources, boolean forExport) {
+		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 
@@ -309,7 +309,7 @@ public class IndividualEvaluatorTest {
 
 		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>("default");
 		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("distanceProvider");
-		distanceProvider.set(IMultiMatrixEditor.Default_Key, matrix);
+		distanceProvider.set(IMultiMatrixProvider.Default_Key, matrix);
 		evaluator.setDistanceProvider(distanceProvider);
 
 		final IResource resource = context.mock(IResource.class);
@@ -337,7 +337,6 @@ public class IndividualEvaluatorTest {
 		final ISequenceElement element2 = context.mock(ISequenceElement.class, "2");
 		final ISequenceElement element3 = context.mock(ISequenceElement.class, "3");
 		final ISequenceElement element4 = context.mock(ISequenceElement.class, "4");
-
 
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
@@ -406,7 +405,7 @@ public class IndividualEvaluatorTest {
 
 		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>("default");
 		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("distanceProvider");
-		distanceProvider.set(IMultiMatrixEditor.Default_Key, matrix);
+		distanceProvider.set(IMultiMatrixProvider.Default_Key, matrix);
 		evaluator.setDistanceProvider(distanceProvider);
 
 		final IResource resource = context.mock(IResource.class);
@@ -510,7 +509,7 @@ public class IndividualEvaluatorTest {
 
 		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>("default");
 		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("distanceProvider");
-		distanceProvider.set(IMultiMatrixEditor.Default_Key, matrix);
+		distanceProvider.set(IMultiMatrixProvider.Default_Key, matrix);
 		evaluator.setDistanceProvider(distanceProvider);
 
 		final IResource resource = context.mock(IResource.class);
@@ -538,7 +537,6 @@ public class IndividualEvaluatorTest {
 		final ISequenceElement element2 = context.mock(ISequenceElement.class, "2");
 		final ISequenceElement element3 = context.mock(ISequenceElement.class, "3");
 		final ISequenceElement element4 = context.mock(ISequenceElement.class, "4");
-
 
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
@@ -619,7 +617,7 @@ public class IndividualEvaluatorTest {
 
 		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>("default");
 		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("distanceProvider");
-		distanceProvider.set(IMultiMatrixEditor.Default_Key, matrix);
+		distanceProvider.set(IMultiMatrixProvider.Default_Key, matrix);
 		evaluator.setDistanceProvider(distanceProvider);
 
 		final IResource resource = context.mock(IResource.class);
@@ -723,7 +721,7 @@ public class IndividualEvaluatorTest {
 
 		final IMatrixEditor<IPort, Integer> matrix = new HashMapMatrixProvider<IPort, Integer>("default");
 		final IMultiMatrixEditor<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("distanceProvider");
-		distanceProvider.set(IMultiMatrixEditor.Default_Key, matrix);
+		distanceProvider.set(IMultiMatrixProvider.Default_Key, matrix);
 		evaluator.setDistanceProvider(distanceProvider);
 
 		final IResource resource = context.mock(IResource.class);
@@ -793,7 +791,7 @@ public class IndividualEvaluatorTest {
 			}
 		});
 
-		int numBytes = evaluator.setup(resource, sequence);
+		final int numBytes = evaluator.setup(resource, sequence);
 
 		Assert.assertSame(resource, evaluator.getResource());
 		Assert.assertSame(sequence, evaluator.getSequence());
@@ -819,14 +817,14 @@ public class IndividualEvaluatorTest {
 		Assert.assertEquals(4, windowStarts.length);
 		Assert.assertArrayEquals(expectedWindowStarts, windowStarts);
 
-		int[] arrivalTimes = new int[4];
-		byte[] bytes = new byte[numBytes];
-		ByteArrayIndividual individual = new ByteArrayIndividual(bytes);
+		final int[] arrivalTimes = new int[4];
+		final byte[] bytes = new byte[numBytes];
+		final ByteArrayIndividual individual = new ByteArrayIndividual(bytes);
 		{
 			Arrays.fill(arrivalTimes, 0);
 			Arrays.fill(bytes, (byte) 0);
 			evaluator.decode(individual, arrivalTimes);
-			int[] expectedArrivalTimes = new int[] { 0, 6, 12, 20 };
+			final int[] expectedArrivalTimes = new int[] { 0, 6, 12, 20 };
 			Assert.assertArrayEquals(expectedArrivalTimes, arrivalTimes);
 		}
 		{
@@ -834,7 +832,7 @@ public class IndividualEvaluatorTest {
 			Arrays.fill(bytes, (byte) 0);
 			bytes[0] = 0x30;
 			evaluator.decode(individual, arrivalTimes);
-			int[] expectedArrivalTimes = new int[] { 0, 6, 13, 20 };
+			final int[] expectedArrivalTimes = new int[] { 0, 6, 13, 20 };
 			Assert.assertArrayEquals(expectedArrivalTimes, arrivalTimes);
 		}
 		{
@@ -843,7 +841,7 @@ public class IndividualEvaluatorTest {
 			bytes[0] = 0x30;
 			bytes[1] = 0x30;
 			evaluator.decode(individual, arrivalTimes);
-			int[] expectedArrivalTimes = new int[] { 0, 6, 13, 21 };
+			final int[] expectedArrivalTimes = new int[] { 0, 6, 13, 21 };
 			Assert.assertArrayEquals(expectedArrivalTimes, arrivalTimes);
 		}
 

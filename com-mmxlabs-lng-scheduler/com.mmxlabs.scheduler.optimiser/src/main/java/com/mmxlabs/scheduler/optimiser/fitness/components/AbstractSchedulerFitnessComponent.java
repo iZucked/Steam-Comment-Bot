@@ -84,8 +84,9 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 
 	@Override
 	public void init(final IOptimisationData data) {
-		if (data != null)
+		if (data != null) {
 			discountCurve = data.getDataComponentProvider(SchedulerConstants.DCP_discountCurveProvider, IDiscountCurveProvider.class).getDiscountCurve(getName());
+		}
 	}
 
 	@Override

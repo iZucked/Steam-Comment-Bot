@@ -15,11 +15,12 @@ import com.mmxlabs.trading.optimiser.IEntity;
 public abstract class Entity implements IEntity {
 	private final String name;
 
-	public Entity(String name) {
+	public Entity(final String name) {
 		super();
 		this.name = name;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}

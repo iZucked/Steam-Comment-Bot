@@ -44,7 +44,7 @@ public class RemoveAndFill implements IMove {
 	 * @param element2
 	 *            The index of the second element to be removed.
 	 */
-	public RemoveAndFill(IResource resource1, IResource resource2, int element1, int element2) {
+	public RemoveAndFill(final IResource resource1, final IResource resource2, final int element1, final int element2) {
 		super();
 		this.resource1 = resource1;
 		this.resource2 = resource2;
@@ -57,7 +57,9 @@ public class RemoveAndFill implements IMove {
 		return CollectionsUtil.makeArrayList(resource1, resource2);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.optimiser.lso.IMove#apply(com.mmxlabs.optimiser.core.IModifiableSequences)
 	 */
 	@Override
@@ -81,11 +83,13 @@ public class RemoveAndFill implements IMove {
 		seq2.remove(element2 - 1);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.optimiser.lso.IMove#validate(com.mmxlabs.optimiser.core.ISequences)
 	 */
 	@Override
-	public boolean validate(ISequences sequences) {
+	public boolean validate(final ISequences sequences) {
 		// TODO Auto-generated method stub
 		return false;
 	}

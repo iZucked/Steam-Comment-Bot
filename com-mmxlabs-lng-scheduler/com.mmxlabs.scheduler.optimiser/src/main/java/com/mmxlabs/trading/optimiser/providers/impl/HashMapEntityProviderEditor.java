@@ -25,7 +25,7 @@ public class HashMapEntityProviderEditor implements IEntityProvider {
 	private final String name;
 	private IEntity shippingEntity;
 
-	public HashMapEntityProviderEditor(String name) {
+	public HashMapEntityProviderEditor(final String name) {
 		super();
 		this.name = name;
 	}

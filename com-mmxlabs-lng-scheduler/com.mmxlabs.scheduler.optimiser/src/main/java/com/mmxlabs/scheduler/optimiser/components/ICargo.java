@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
-
 /**
  * A cargo ties together a load and discharge pairing.
  * 
@@ -21,6 +20,6 @@ public interface ICargo {
 	String getId();
 
 	ILoadOption getLoadOption();
-	
+
 	IDischargeOption getDischargeOption();
 }

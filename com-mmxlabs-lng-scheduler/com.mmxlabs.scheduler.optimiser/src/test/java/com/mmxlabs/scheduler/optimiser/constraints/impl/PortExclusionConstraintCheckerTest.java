@@ -29,9 +29,9 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
 @RunWith(JMock.class)
 public class PortExclusionConstraintCheckerTest {
-	
+
 	Mockery context = new JUnit4Mockery();
-	
+
 	@Test
 	public void testName() {
 		final String name = "checker";

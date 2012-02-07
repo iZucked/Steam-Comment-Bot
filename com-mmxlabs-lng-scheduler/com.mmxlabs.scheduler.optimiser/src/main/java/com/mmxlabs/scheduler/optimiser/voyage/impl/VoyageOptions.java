@@ -52,7 +52,7 @@ public final class VoyageOptions implements Cloneable {
 
 	}
 
-	public VoyageOptions(VoyageOptions options) {
+	public VoyageOptions(final VoyageOptions options) {
 		setAvailableTime(options.getAvailableTime());
 		setDistance(options.getDistance());
 		setVessel(options.getVessel());
@@ -161,7 +161,7 @@ public final class VoyageOptions implements Cloneable {
 		return availableLNG;
 	}
 
-	public void setAvailableLNG(long availableLNG) {
+	public void setAvailableLNG(final long availableLNG) {
 		assert availableLNG >= 0 : "available LNG should be non-negative for every voyage";
 		this.availableLNG = availableLNG;
 	}
@@ -183,7 +183,7 @@ public final class VoyageOptions implements Cloneable {
 		return shouldBeCold;
 	}
 
-	public final void setShouldBeCold(boolean shouldBeCold) {
+	public final void setShouldBeCold(final boolean shouldBeCold) {
 		this.shouldBeCold = shouldBeCold;
 	}
 
@@ -191,7 +191,7 @@ public final class VoyageOptions implements Cloneable {
 		return startWarm;
 	}
 
-	public final void setWarm(boolean startWarm) {
+	public final void setWarm(final boolean startWarm) {
 		this.startWarm = startWarm;
 	}
 
@@ -201,10 +201,12 @@ public final class VoyageOptions implements Cloneable {
 		if (obj instanceof VoyageOptions) {
 			final VoyageOptions vo = (VoyageOptions) obj;
 
-			if (useNBOForIdle != vo.useNBOForIdle)
+			if (useNBOForIdle != vo.useNBOForIdle) {
 				return false;
-			if (useNBOForTravel != vo.useNBOForTravel)
+			}
+			if (useNBOForTravel != vo.useNBOForTravel) {
 				return false;
+			}
 			if (useFBOForSupplement != vo.useFBOForSupplement) {
 				return false;
 			}
@@ -236,17 +238,21 @@ public final class VoyageOptions implements Cloneable {
 				return false;
 			}
 
-			if (availableLNG != vo.availableLNG)
+			if (availableLNG != vo.availableLNG) {
 				return false;
+			}
 
-			if (cooldown != vo.cooldown)
+			if (cooldown != vo.cooldown) {
 				return false;
+			}
 
-			if (shouldBeCold != vo.shouldBeCold)
+			if (shouldBeCold != vo.shouldBeCold) {
 				return false;
+			}
 
-			if (startWarm != vo.startWarm)
+			if (startWarm != vo.startWarm) {
 				return false;
+			}
 
 			return true;
 		}

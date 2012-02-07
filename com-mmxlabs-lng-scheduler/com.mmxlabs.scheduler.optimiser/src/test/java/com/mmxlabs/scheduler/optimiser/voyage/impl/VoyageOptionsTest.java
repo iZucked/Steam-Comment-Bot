@@ -70,7 +70,7 @@ public class VoyageOptionsTest {
 	@Test
 	public void testGetSetRoute() {
 
-		String route = "route";
+		final String route = "route";
 		final VoyageOptions options = new VoyageOptions();
 		Assert.assertNull(options.getRoute());
 		options.setRoute(route);
@@ -128,52 +128,39 @@ public class VoyageOptionsTest {
 	@Test
 	public void testEquals() {
 
-		IVessel vessel1 = context.mock(IVessel.class, "v1");
-		IVessel vessel2 = context.mock(IVessel.class, "v2");
-		IPortSlot portSlot1 = context.mock(IPortSlot.class, "s1");
-		IPortSlot portSlot2 = context.mock(IPortSlot.class, "s2");
-		IPortSlot portSlot3 = context.mock(IPortSlot.class, "s3");
-		IPortSlot portSlot4 = context.mock(IPortSlot.class, "s4");
+		final IVessel vessel1 = context.mock(IVessel.class, "v1");
+		final IVessel vessel2 = context.mock(IVessel.class, "v2");
+		final IPortSlot portSlot1 = context.mock(IPortSlot.class, "s1");
+		final IPortSlot portSlot2 = context.mock(IPortSlot.class, "s2");
+		final IPortSlot portSlot3 = context.mock(IPortSlot.class, "s3");
+		final IPortSlot portSlot4 = context.mock(IPortSlot.class, "s4");
 
-		String route1 = "r1";
-		String route2 = "r2";
+		final String route1 = "r1";
+		final String route2 = "r2";
 
-		VesselState state1 = VesselState.Laden;
-		VesselState state2 = VesselState.Ballast;
+		final VesselState state1 = VesselState.Laden;
+		final VesselState state2 = VesselState.Ballast;
 
-		VoyageOptions options1 = make(1, 2, vessel1, portSlot1, portSlot2, 3,
-				true, true, true, route1, state1);
-		
-		VoyageOptions options2 = make(1, 2, vessel1, portSlot1, portSlot2, 3,
-				true, true, true, route1, state1);
-		
-		VoyageOptions options3 = make(21, 2, vessel1, portSlot1, portSlot2, 3,
-				true, true, true, route1, state1);
-		VoyageOptions options4 = make(1, 22, vessel1, portSlot1, portSlot2, 3,
-				true, true, true, route1, state1);
-		VoyageOptions options5 = make(1, 2, vessel2, portSlot1, portSlot2, 3,
-				true, true, true, route1, state1);
-		VoyageOptions options6 = make(1, 2, vessel1, portSlot3, portSlot2, 3,
-				true, true, true, route1, state1);
-		VoyageOptions options7 = make(1, 2, vessel1, portSlot1, portSlot4, 3,
-				true, true, true, route1, state1);
-		VoyageOptions options8 = make(1, 2, vessel1, portSlot1, portSlot2, 23,
-				true, true, true, route1, state1);
-		VoyageOptions options9 = make(1, 2, vessel1, portSlot1, portSlot2, 3,
-				false, true, true, route1, state1);
-		VoyageOptions options10 = make(1, 2, vessel1, portSlot1, portSlot2, 3,
-				true, false, true, route1, state1);
-		VoyageOptions options11 = make(1, 2, vessel1, portSlot1, portSlot2, 3,
-				true, true, false, route1, state1);
-		VoyageOptions options12 = make(1, 2, vessel1, portSlot1, portSlot2, 3,
-				true, true, true, route2, state1);
-		VoyageOptions options13 = make(1, 2, vessel1, portSlot1, portSlot2, 3,
-				true, true, true, route1, state2);
-		
+		final VoyageOptions options1 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, state1);
+
+		final VoyageOptions options2 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, state1);
+
+		final VoyageOptions options3 = make(21, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, state1);
+		final VoyageOptions options4 = make(1, 22, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, state1);
+		final VoyageOptions options5 = make(1, 2, vessel2, portSlot1, portSlot2, 3, true, true, true, route1, state1);
+		final VoyageOptions options6 = make(1, 2, vessel1, portSlot3, portSlot2, 3, true, true, true, route1, state1);
+		final VoyageOptions options7 = make(1, 2, vessel1, portSlot1, portSlot4, 3, true, true, true, route1, state1);
+		final VoyageOptions options8 = make(1, 2, vessel1, portSlot1, portSlot2, 23, true, true, true, route1, state1);
+		final VoyageOptions options9 = make(1, 2, vessel1, portSlot1, portSlot2, 3, false, true, true, route1, state1);
+		final VoyageOptions options10 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, false, true, route1, state1);
+		final VoyageOptions options11 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, false, route1, state1);
+		final VoyageOptions options12 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route2, state1);
+		final VoyageOptions options13 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, state2);
+
 		Assert.assertTrue(options1.equals(options1));
 		Assert.assertTrue(options1.equals(options2));
 		Assert.assertTrue(options2.equals(options1));
-		
+
 		Assert.assertFalse(options1.equals(options3));
 		Assert.assertFalse(options1.equals(options4));
 		Assert.assertFalse(options1.equals(options5));
@@ -185,7 +172,7 @@ public class VoyageOptionsTest {
 		Assert.assertFalse(options1.equals(options11));
 		Assert.assertFalse(options1.equals(options12));
 		Assert.assertFalse(options1.equals(options13));
-		
+
 		Assert.assertFalse(options3.equals(options1));
 		Assert.assertFalse(options4.equals(options1));
 		Assert.assertFalse(options5.equals(options1));
@@ -197,16 +184,14 @@ public class VoyageOptionsTest {
 		Assert.assertFalse(options11.equals(options1));
 		Assert.assertFalse(options12.equals(options1));
 		Assert.assertFalse(options13.equals(options1));
-		
+
 		Assert.assertFalse(options1.equals(new Object()));
 	}
 
-	VoyageOptions make(int availableTime, int distance, IVessel vessel,
-			IPortSlot fromPortSlot, IPortSlot toPortSlot, int nboSpeed,
-			boolean useNBOForIdle, boolean useNBOForTravel,
-			boolean useFBOForSupplement, String route, VesselState vesselState) {
+	VoyageOptions make(final int availableTime, final int distance, final IVessel vessel, final IPortSlot fromPortSlot, final IPortSlot toPortSlot, final int nboSpeed, final boolean useNBOForIdle,
+			final boolean useNBOForTravel, final boolean useFBOForSupplement, final String route, final VesselState vesselState) {
 
-		VoyageOptions o = new VoyageOptions();
+		final VoyageOptions o = new VoyageOptions();
 		o.setAvailableTime(availableTime);
 		o.setDistance(distance);
 		o.setVessel(vessel);

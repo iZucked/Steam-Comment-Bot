@@ -12,6 +12,7 @@ package com.mmxlabs.trading.optimiser;
  */
 public interface IEntity {
 	public String getName();
+
 	/**
 	 * Get the price which we would buy from shipping for, if we were selling at this price.
 	 * 

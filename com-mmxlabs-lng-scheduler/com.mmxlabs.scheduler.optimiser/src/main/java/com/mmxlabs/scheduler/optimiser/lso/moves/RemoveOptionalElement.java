@@ -22,7 +22,7 @@ public class RemoveOptionalElement implements IMove {
 	final IResource resource;
 	final int elementIndex;
 
-	public RemoveOptionalElement(IResource resource, int elementIndex) {
+	public RemoveOptionalElement(final IResource resource, final int elementIndex) {
 		super();
 		this.resource = resource;
 		this.elementIndex = elementIndex;
@@ -33,20 +33,24 @@ public class RemoveOptionalElement implements IMove {
 		return Collections.singleton(resource);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.optimiser.lso.IMove#apply(com.mmxlabs.optimiser.core.IModifiableSequences)
 	 */
 	@Override
-	public void apply(IModifiableSequences sequences) {
+	public void apply(final IModifiableSequences sequences) {
 		sequences.getModifiableUnusedElements().add(sequences.getSequence(resource).get(elementIndex));
 		sequences.getModifiableSequence(resource).remove(elementIndex);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.optimiser.lso.IMove#validate(com.mmxlabs.optimiser.core.ISequences)
 	 */
 	@Override
-	public boolean validate(ISequences sequences) {
+	public boolean validate(final ISequences sequences) {
 		return true;
 	}
 

@@ -17,8 +17,7 @@ public enum VesselState {
 	Laden,
 
 	/**
-	 * Vessel has no cargo loaded. However, a small quantitymay remain for use a
-	 * fuel.
+	 * Vessel has no cargo loaded. However, a small quantitymay remain for use a fuel.
 	 */
 	Ballast
 }

@@ -50,23 +50,24 @@ public class RelaxingSequenceScheduler extends EnumeratingSequenceScheduler {
 		// + ",  " + max);
 		int lastArrivalTime;
 		for (int step = 0; step < steps; step++) {
-			final int i = min + 1 + (step * (max - min + 1)) / steps;
+			final int i = min + 1 + ((step * ((max - min) + 1)) / steps);
 			lastArrivalTime = arrivalTimes[seq][pos];
 			arrivalTimes[seq][pos] = i;
 			int next;
 			// push later arrival times in this sequence
 			for (next = pos + 1; next < arrivalTimes[seq].length; next++) {
 				final int mat = getMinArrivalTime(seq, next);
-				if (mat == arrivalTimes[seq][next])
+				if (mat == arrivalTimes[seq][next]) {
 					break;
+				}
 				arrivalTimes[seq][next] = mat;
 			}
 			final long prevValue = getLastValue();
 			evaluate();
-			if (prevValue <= getLastValue() && prevValue != Long.MAX_VALUE) {
+			if ((prevValue <= getLastValue()) && (prevValue != Long.MAX_VALUE)) {
 				// roll back change
 				arrivalTimes[seq][pos] = lastArrivalTime;
-				for (int fix = pos; fix < next && fix < arrivalTimes[seq].length; fix++) {
+				for (int fix = pos; (fix < next) && (fix < arrivalTimes[seq].length); fix++) {
 					arrivalTimes[seq][fix] = getMinArrivalTime(seq, fix);
 				}
 				evaluate();

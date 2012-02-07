@@ -84,7 +84,7 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 	 */
 	private int[] windowStarts;
 
-	private VoyagePlanIterator voyagePlanIterator = new VoyagePlanIterator();
+	private final VoyagePlanIterator voyagePlanIterator = new VoyagePlanIterator();
 	private ICargoSchedulerFitnessComponent[] iteratingComponents;
 
 	// private List<ICargoSchedulerFitnessComponent> iteratingComponents =
@@ -106,7 +106,7 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 		// }
 		//
 		// // Evaluate fitness
-		long totalFitness = 0;
+		final long totalFitness = 0;
 		//
 		// // voyagePlanIterator.iterateComponents(voyagePlans.getSecond(),
 		// // voyagePlans.getFirst().intValue(), resource,
@@ -205,7 +205,7 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 
 					// TODO: We are not handling values outside of the range! -
 					// lets just wrap!
-					arrivalTimes[i] = windowStarts[i] + (offset * multiplier[i]) % range;
+					arrivalTimes[i] = windowStarts[i] + ((offset * multiplier[i]) % range);
 				}
 			} else {
 				// No time window, so do nothing here. Let evaluator work out
@@ -276,7 +276,7 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 
 			final ITimeWindow tw = timeWindows.isEmpty() ? null : timeWindows.get(0);
 
-			if (idx < travelTimes.length - 1) {
+			if (idx < (travelTimes.length - 1)) {
 				// Add Visit duration to "travel" time between elements
 				final int duration = durationsProvider.getElementDuration(t, resource);
 				travelTimes[idx + 1] = duration;
@@ -432,7 +432,7 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 			numBytes += (ranges[idx] / 8);
 
 			// Use a whole byte to represent any excess bits
-			if (ranges[idx] % 8 != 0) {
+			if ((ranges[idx] % 8) != 0) {
 				++numBytes;
 			}
 		}

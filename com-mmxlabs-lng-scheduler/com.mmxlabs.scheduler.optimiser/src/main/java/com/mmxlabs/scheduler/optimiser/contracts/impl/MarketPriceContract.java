@@ -13,16 +13,18 @@ import com.mmxlabs.common.curves.ICurve;
 public class MarketPriceContract extends SimpleContract {
 	private final ICurve market;
 
-	public MarketPriceContract(ICurve market) {
+	public MarketPriceContract(final ICurve market) {
 		super();
 		this.market = market;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator#calculateSimpleLoadUnitPrice(int)
 	 */
 	@Override
-	public int calculateSimpleLoadUnitPrice(int loadTime) {
+	public int calculateSimpleLoadUnitPrice(final int loadTime) {
 		return (int) market.getValueAtPoint(loadTime);
 	}
 }

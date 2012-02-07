@@ -12,18 +12,19 @@ import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 
 public class XYPortTest {
 	final IIndexingContext index = new SimpleIndexingContext();
+
 	@Test
 	public void testXYPort() {
 		final String name = "name";
 		final float x = 1.0f;
 		final float y = 2.0f;
-		
+
 		final XYPort port = new XYPort(index, name, x, y);
 		Assert.assertSame(name, port.getName());
 		Assert.assertEquals(x, port.getX(), 0.0f);
 		Assert.assertEquals(y, port.getY(), 0.0f);
 	}
-	
+
 	@Test
 	public void testGetSetName() {
 		final XYPort port = new XYPort(index);
@@ -51,22 +52,22 @@ public class XYPortTest {
 
 	@Test
 	public void testEquals() {
-		
-		XYPort port1 = new XYPort(index, "name", 1.0f, 2.0f);
-		XYPort port2 = new XYPort(index, "name", 1.0f, 2.0f);
-		
-		XYPort port3 = new XYPort(index, "name2", 1.0f, 2.0f);
-		XYPort port4 = new XYPort(index, "name", 2.0f, 2.0f);
-		XYPort port5 = new XYPort(index, "name", 1.0f, 1.0f);
-		
+
+		final XYPort port1 = new XYPort(index, "name", 1.0f, 2.0f);
+		final XYPort port2 = new XYPort(index, "name", 1.0f, 2.0f);
+
+		final XYPort port3 = new XYPort(index, "name2", 1.0f, 2.0f);
+		final XYPort port4 = new XYPort(index, "name", 2.0f, 2.0f);
+		final XYPort port5 = new XYPort(index, "name", 1.0f, 1.0f);
+
 		Assert.assertTrue(port1.equals(port1));
 		Assert.assertTrue(port1.equals(port2));
 		Assert.assertTrue(port2.equals(port1));
-		
+
 		Assert.assertFalse(port1.equals(port3));
 		Assert.assertFalse(port1.equals(port4));
 		Assert.assertFalse(port1.equals(port5));
-		
+
 		Assert.assertFalse(port1.equals(new Object()));
 	}
 }

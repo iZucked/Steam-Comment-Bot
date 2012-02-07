@@ -31,7 +31,9 @@ public class SwapOptionalElements implements IMove {
 		this.unusedElementIndex = unusedElementIndex;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.optimiser.lso.IMove#getAffectedResources()
 	 */
 	@Override
@@ -39,7 +41,9 @@ public class SwapOptionalElements implements IMove {
 		return Collections.singleton(resource);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.optimiser.lso.IMove#apply(com.mmxlabs.optimiser.core.IModifiableSequences)
 	 */
 	@Override
@@ -50,7 +54,9 @@ public class SwapOptionalElements implements IMove {
 		sequences.getModifiableUnusedElements().set(unusedElementIndex, liveElement);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.optimiser.lso.IMove#validate(com.mmxlabs.optimiser.core.ISequences)
 	 */
 	@Override

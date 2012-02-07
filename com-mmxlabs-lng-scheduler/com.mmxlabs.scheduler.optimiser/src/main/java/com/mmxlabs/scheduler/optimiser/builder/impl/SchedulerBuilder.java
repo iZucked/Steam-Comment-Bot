@@ -572,8 +572,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IVessel createVessel(final String name, final IVesselClass vesselClass, final int hourlyCharterOutRate, final IStartEndRequirement start, final IStartEndRequirement end, final long heelLimit,
-			final int heelCVValue, final int heelUnitPrice) {
+	public IVessel createVessel(final String name, final IVesselClass vesselClass, final int hourlyCharterOutRate, final IStartEndRequirement start, final IStartEndRequirement end,
+			final long heelLimit, final int heelCVValue, final int heelUnitPrice) {
 		return this.createVessel(name, vesselClass, hourlyCharterOutRate, VesselInstanceType.FLEET, start, end, heelLimit, heelCVValue, heelUnitPrice);
 	}
 
@@ -669,8 +669,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		if (end.hasTimeRequirement() == false) {
 			// put end slot into list of slots to patch up later.
 			// Fleet vessels and spot vessels both run to the end of the optimisation if they don't have an end date.
-			if (!vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER))
+			if (!vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
 				endSlots.add(new Pair<ISequenceElement, PortSlot>(endElement, endSlot));
+			}
 		} else {
 			endSlot.setTimeWindow(end.getTimeWindow());
 		}
@@ -789,8 +790,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					}
 				}
 			}
-		}	
-		
+		}
+
 		// setup fake vessels for virtual elements.
 		final IVesselClass virtualClass = createVesselClass("virtual", 0, 1000000000, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0, 0);
 		final Set<IVesselClass> virtualClassSet = Collections.singleton(virtualClass);
@@ -828,7 +829,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			}
 		}
 		final int maxFastReturnTime;
-		if (dischargePort != null && loadPort != null) {
+		if ((dischargePort != null) && (loadPort != null)) {
 			final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadPort);
 			// what's the slowest vessel class
 			int slowestMaxSpeed = Integer.MAX_VALUE;
@@ -841,7 +842,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			maxFastReturnTime = 0;
 			latestDischarge = 0;
 		}
-		final int latestTime = Math.max(endOfLatestWindow + 24 * 10, maxFastReturnTime + latestDischarge);
+		final int latestTime = Math.max(endOfLatestWindow + (24 * 10), maxFastReturnTime + latestDischarge);
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
 			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + 1);
 			elementAndSlot.getSecond().setTimeWindow(endWindow);
@@ -907,8 +908,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		data.addDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, optionalElements);
 
 		for (final IBuilderExtension extension : extensions) {
-			for (final Pair<String, IDataComponentProvider> provider : extension.createDataComponentProviders(data))
+			for (final Pair<String, IDataComponentProvider> provider : extension.createDataComponentProviders(data)) {
 				data.addDataComponentProvider(provider.getFirst(), provider.getSecond());
+			}
 		}
 
 		for (final IBuilderExtension extension : extensions) {
@@ -998,6 +1000,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param idleConsumptionRateInMTPerHour
 	 * @param consumptionCalculatorInMTPerHour
 	 */
+	@Override
 	public void setVesselClassStateParamaters(final IVesselClass vc, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour, final int idleConsumptionRateInMTPerHour,
 			final IConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
 
@@ -1159,16 +1162,18 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		for (final IPort port : ports) {
 			if (loads) {
 				List<TotalVolumeLimit> limits = loadLimits.get(port);
-				if (limits == null)
+				if (limits == null) {
 					limits = new ArrayList<TotalVolumeLimit>();
+				}
 				limits.add(limit);
 				loadLimits.put(port, limits);
 			}
 
 			if (discharges) {
 				List<TotalVolumeLimit> limits = dischargeLimits.get(port);
-				if (limits == null)
+				if (limits == null) {
 					limits = new ArrayList<TotalVolumeLimit>();
+				}
 				limits.add(limit);
 				dischargeLimits.put(port, limits);
 			}
@@ -1182,8 +1187,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	private void addSlotToVolumeConstraints(final IPortSlot slot) {
-		if (slot == null)
+		if (slot == null) {
 			return;
+		}
 		final IPort port = slot.getPort();
 		final List<TotalVolumeLimit> limits;
 		if (slot instanceof ILoadSlot) {
@@ -1250,8 +1256,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				allowedVesselClasses = Collections.emptySet();
 			}
 
-			if (allowedVesselClasses.isEmpty() && allowedVessels.isEmpty())
+			if (allowedVesselClasses.isEmpty() && allowedVessels.isEmpty()) {
 				continue;
+			}
 
 			final HashSet<IResource> allowedResources = new HashSet<IResource>();
 
@@ -1261,8 +1268,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					 * If this is a vessel event, and it's a spot vessel, don't allow it. In future this should probably be handled as a separate kind of constraint (a vessel instance type
 					 * restriction, saying slot X can only go on vessels of types Y and Z)
 					 */
-					if (slot instanceof IVesselEventPortSlot && vessel.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER)
+					if ((slot instanceof IVesselEventPortSlot) && (vessel.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER)) {
 						continue;
+					}
 					allowedResources.add(vesselProvider.getResource(vessel));
 				}
 			}
@@ -1273,18 +1281,20 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void constrainSlotToVessels(final IPortSlot slot, final Set<IVessel> vessels) {
-		if (vessels == null || vessels.isEmpty())
+		if ((vessels == null) || vessels.isEmpty()) {
 			slotVesselRestrictions.remove(slot);
-		else
+		} else {
 			slotVesselRestrictions.put(slot, vessels);
+		}
 	}
 
 	@Override
 	public void constrainSlotToVesselClasses(final IPortSlot slot, final Set<IVesselClass> vesselClasses) {
-		if (vesselClasses == null || vesselClasses.isEmpty())
+		if ((vesselClasses == null) || vesselClasses.isEmpty()) {
 			slotVesselClassRestrictions.remove(slot);
-		else
+		} else {
 			slotVesselClassRestrictions.put(slot, vesselClasses);
+		}
 	}
 
 	@Override

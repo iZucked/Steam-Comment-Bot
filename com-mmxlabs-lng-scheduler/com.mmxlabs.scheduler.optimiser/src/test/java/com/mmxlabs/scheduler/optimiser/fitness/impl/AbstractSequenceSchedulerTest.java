@@ -405,47 +405,36 @@ public final class AbstractSequenceSchedulerTest {
 		final ISequenceElement element2 = new SequenceElement(index, "element2");
 		final ISequenceElement element3 = new SequenceElement(index, "element3");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(
-				SchedulerConstants.DCP_timeWindowProvider);
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider);
 
-		timeWindowProvider.setTimeWindows(element1,
-				Collections.singletonList(timeWindow1));
-		timeWindowProvider.setTimeWindows(element2,
-				Collections.singletonList(timeWindow2));
-		timeWindowProvider.setTimeWindows(element3,
-				Collections.singletonList(timeWindow3));
+		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(timeWindow1));
+		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(timeWindow2));
+		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(timeWindow3));
 
-		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(
-				SchedulerConstants.DCP_portDistanceProvider);
+		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider);
 
-		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(
-				SchedulerConstants.DCP_portDistanceProvider);
-		distanceProvider.set(IMultiMatrixProvider.Default_Key,
-				defaultDistanceProvider);
+		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider);
+		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
 		defaultDistanceProvider.set(port1, port2, 400);
 		defaultDistanceProvider.set(port2, port3, 400);
 
 		final int duration = 1;
-		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor(
-				SchedulerConstants.DCP_elementDurationsProvider);
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor(SchedulerConstants.DCP_elementDurationsProvider);
 		durationsProvider.setDefaultValue(duration);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor(
-				SchedulerConstants.DCP_portProvider);
+		final IPortProviderEditor portProvider = new HashMapPortEditor(SchedulerConstants.DCP_portProvider);
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
 		portProvider.setPortForElement(port3, element3);
 
-		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor(
-				SchedulerConstants.DCP_portSlotsProvider);
+		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor(SchedulerConstants.DCP_portSlotsProvider);
 		portSlotProvider.setPortSlot(element1, loadSlot1);
 		portSlotProvider.setPortSlot(element2, dischargeSlot1);
 		portSlotProvider.setPortSlot(element3, loadSlot2);
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor(
-				SchedulerConstants.DCP_portTypeProvider);
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor(SchedulerConstants.DCP_portTypeProvider);
 		portTypeProvider.setPortType(element1, PortType.Load);
 		portTypeProvider.setPortType(element2, PortType.Discharge);
 		portTypeProvider.setPortType(element3, PortType.Load);
@@ -943,13 +932,13 @@ public final class AbstractSequenceSchedulerTest {
 	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
 
 		@Override
-		public ScheduledSequences schedule(ISequences sequences, boolean b) {
+		public ScheduledSequences schedule(final ISequences sequences, final boolean b) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 
 		}
 
 		@Override
-		public ScheduledSequences schedule(ISequences sequences, Collection<IResource> affectedResources, boolean forExport) {
+		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 

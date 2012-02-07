@@ -18,11 +18,10 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public final class LoadSlot extends LoadOption implements ILoadSlot {
 
-
 	private boolean cooldownSet;
-	
+
 	private boolean cooldownForbidden;
-	
+
 	public LoadSlot() {
 		setPortType(PortType.Load);
 	}
@@ -34,10 +33,10 @@ public final class LoadSlot extends LoadOption implements ILoadSlot {
 		this.cooldownForbidden = cooldownForbidden;
 	}
 
-//	@Override
-//	public int getPurchasePriceAtTime(final int time) {
-//		return (int) purchasePriceCurve.getValueAtPoint(time);
-//	}
+	// @Override
+	// public int getPurchasePriceAtTime(final int time) {
+	// return (int) purchasePriceCurve.getValueAtPoint(time);
+	// }
 
 	@Override
 	public boolean equals(final Object obj) {
@@ -45,11 +44,10 @@ public final class LoadSlot extends LoadOption implements ILoadSlot {
 		if (obj instanceof LoadSlot) {
 			final LoadSlot slot = (LoadSlot) obj;
 
-			
 			if (cooldownSet != slot.cooldownSet) {
 				return false;
 			}
-			
+
 			if (cooldownForbidden != slot.cooldownForbidden) {
 				return false;
 			}
@@ -59,13 +57,12 @@ public final class LoadSlot extends LoadOption implements ILoadSlot {
 		return false;
 	}
 
-
 	@Override
 	public final boolean isCooldownSet() {
 		return cooldownSet;
 	}
 
-	public final void setCooldownSet(boolean cooldownSet) {
+	public final void setCooldownSet(final boolean cooldownSet) {
 		this.cooldownSet = cooldownSet;
 	}
 
@@ -74,7 +71,7 @@ public final class LoadSlot extends LoadOption implements ILoadSlot {
 		return cooldownForbidden;
 	}
 
-	public final void setCooldownForbidden(boolean cooldownForbidden) {
+	public final void setCooldownForbidden(final boolean cooldownForbidden) {
 		this.cooldownForbidden = cooldownForbidden;
 	}
 }

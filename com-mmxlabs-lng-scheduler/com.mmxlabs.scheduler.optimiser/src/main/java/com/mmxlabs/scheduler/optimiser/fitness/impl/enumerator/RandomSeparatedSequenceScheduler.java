@@ -4,29 +4,17 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
-import java.util.List;
-import java.util.Random;
-
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.RandomHelper;
-import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * A subclass of {@link SeparatedSequenceScheduler} which randomly searches each
- * sub-sequence independently. Produces better results than an equivalent
- * quantity of sampling, and could be pretty quick if we partially
- * planned/evaluated the sequence.
+ * A subclass of {@link SeparatedSequenceScheduler} which randomly searches each sub-sequence independently. Produces better results than an equivalent quantity of sampling, and could be pretty quick
+ * if we partially planned/evaluated the sequence.
  * 
- * We could do that by feeding small 'fake' routes to the ScheduleEvaluator I
- * guess.
+ * We could do that by feeding small 'fake' routes to the ScheduleEvaluator I guess.
  * 
  * @author hinton
  * 
  */
-public final class RandomSeparatedSequenceScheduler extends
-		SeparatedSequenceScheduler {
+public final class RandomSeparatedSequenceScheduler extends SeparatedSequenceScheduler {
 	// private long randomSeed = 1;
 	// private int maxSamples = 1024;
 	// private int minSamples = 256;

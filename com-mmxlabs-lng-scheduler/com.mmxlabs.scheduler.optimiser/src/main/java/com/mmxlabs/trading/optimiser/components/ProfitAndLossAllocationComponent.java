@@ -79,8 +79,9 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 		this.entityProvider = data.getDataComponentProvider(entityProviderKey, IEntityProvider.class);
 		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
 		this.slotProvider = data.getDataComponentProvider(slotProviderKey, IPortSlotProvider.class);
-		if (entityProvider != null)
+		if (entityProvider != null) {
 			this.shippingEntity = entityProvider.getShippingEntity();
+		}
 	}
 
 	@Override
@@ -118,12 +119,14 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 	}
 
 	private long evaluateAndMaybeAnnotate(final ScheduledSequences solution, final Collection<IAllocationAnnotation> allocations, final IAnnotatedSolution annotatedSolution) {
-		if (entityProvider == null)
+		if (entityProvider == null) {
 			return 0;
+		}
 		final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
 		IAllocationAnnotation currentAllocation = null;
-		if (allocationIterator.hasNext())
+		if (allocationIterator.hasNext()) {
 			currentAllocation = allocationIterator.next();
+		}
 		long accumulator = 0;
 
 		for (final ScheduledSequence sequence : solution) {
@@ -132,7 +135,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 			for (final VoyagePlan plan : sequence.getVoyagePlans()) {
 				final PortDetails firstDetails = (PortDetails) plan.getSequence()[0];
 				final PortDetails lastDetails = (PortDetails) plan.getSequence()[2];
-				if (currentAllocation != null && (firstDetails.getPortSlot() == currentAllocation.getLoadSlot() && lastDetails.getPortSlot() == currentAllocation.getDischargeSlot())) {
+				if ((currentAllocation != null) && ((firstDetails.getPortSlot() == currentAllocation.getLoadSlot()) && (lastDetails.getPortSlot() == currentAllocation.getDischargeSlot()))) {
 					final long cargoGroupValue = evaluate(plan, currentAllocation, vessel, annotatedSolution);
 					accumulator += cargoGroupValue;
 					if (allocationIterator.hasNext()) {
@@ -324,8 +327,9 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 
 	@Override
 	public void annotate(final ScheduledSequences solution, final IAnnotatedSolution annotatedSolution) {
-		if (entityProvider == null)
+		if (entityProvider == null) {
 			return;
+		}
 		evaluateAndMaybeAnnotate(solution, solution.getAllocations(), annotatedSolution);
 	}
 

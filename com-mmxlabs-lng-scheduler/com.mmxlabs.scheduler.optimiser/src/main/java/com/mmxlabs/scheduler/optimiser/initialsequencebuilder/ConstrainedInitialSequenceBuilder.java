@@ -131,8 +131,9 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 	@Override
 	public ISequences createInitialSequences(final IOptimisationData data, final ISequences suggestion, Map<ISequenceElement, IResource> resourceSuggestion) {
 
-		if (resourceSuggestion == null)
+		if (resourceSuggestion == null) {
 			resourceSuggestion = Collections.emptyMap();
+		}
 
 		final IPortTypeProvider portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 
@@ -148,8 +149,9 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		final int initialMaxLateness = (travelTimeChecker == null) ? 0 : travelTimeChecker.getMaxLateness();
 
-		if (travelTimeChecker != null)
+		if (travelTimeChecker != null) {
 			travelTimeChecker.setMaxLateness(INITIAL_MAX_LATENESS);
+		}
 
 		// stick together elements which must be stuck together
 		final Map<ISequenceElement, Set<ISequenceElement>> followerCache = new LinkedHashMap<ISequenceElement, Set<ISequenceElement>>();
@@ -160,8 +162,9 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		unsequencedElements.addAll(data.getSequenceElements());
 		if (suggestion != null) {
 			for (final ISequence seq : suggestion.getSequences().values()) {
-				for (final ISequenceElement element : seq)
+				for (final ISequenceElement element : seq) {
 					unsequencedElements.remove(element);
+				}
 			}
 		}
 
@@ -176,14 +179,15 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			final Set<ISequenceElement> after1 = new LinkedHashSet<ISequenceElement>();
 			followerCache.put(element1, after1);
 			for (final ISequenceElement element2 : data.getSequenceElements()) {
-				if (element1 == element2)
+				if (element1 == element2) {
 					continue;
+				}
 				if (checker.allowSequence(element1, element2)) {
 					after1.add(element2);
 				}
 			}
 			// part of a chain
-			if (after1.size() == 1 && portTypeProvider.getPortType(element1) != PortType.Start) {
+			if ((after1.size() == 1) && (portTypeProvider.getPortType(element1) != PortType.Start)) {
 				if (!tails.contains(element1)) {
 					heads.add(element1);
 				}
@@ -205,11 +209,9 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					final VesselInstanceType vit1 = vessel1.getVesselInstanceType();
 					final VesselInstanceType vit2 = vessel2.getVesselInstanceType();
 
-					
 					int x = vit1.compareTo(vit2);
 					if (x == 0) {
-						x = ((Integer) vessel1.getVesselClass().getMaxSpeed()).compareTo(
-								vessel2.getVesselClass().getMaxSpeed());
+						x = ((Integer) vessel1.getVesselClass().getMaxSpeed()).compareTo(vessel2.getVesselClass().getMaxSpeed());
 					}
 					return x;
 				}
@@ -233,8 +235,9 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			chunk.add(head);
 			while (followerCache.get(head).size() == 1) {
 				head = followerCache.get(head).iterator().next();
-				if (!unsequencedElements.contains(head))
+				if (!unsequencedElements.contains(head)) {
 					break;
+				}
 				chunk.add(head);
 				if (portTypeProvider.getPortType(head) == PortType.End) {
 					chunk.setEndElement(true);
@@ -249,14 +252,15 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			int rc = 0;
 			for (final IResource resource : resources) {
 				boolean ok = true;
-				for (int c = 0; c < chunk.size() - 1; c++) {
+				for (int c = 0; c < (chunk.size() - 1); c++) {
 					if (checker.allowSequence(chunk.get(c), chunk.get(c + 1), resource) == false) {
 						ok = false;
 						break;
 					}
 				}
-				if (ok)
+				if (ok) {
 					rc++;
+				}
 			}
 			chunk.setResourceCount(rc);
 		}
@@ -392,12 +396,13 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 						// now check for resource advice
 						for (final ISequenceElement element : there) {
 							final IResource suggestedResource = resourceSuggestion.get(element);
-							if (suggestedResource != null && suggestedResource != resource)
+							if ((suggestedResource != null) && (suggestedResource != resource)) {
 								continue INITIAL_SEQUENCING_LOOP; // process
 																	// this
 																	// chunk at
 																	// a later
 																	// date.
+							}
 						}
 						sequence.add(there);
 						log.info("Adding chunk " + there);
@@ -436,8 +441,9 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 						for (final ISequenceElement element : there) {
 							final IResource suggestedResource = resourceSuggestion.get(resource);
-							if (suggestedResource != null && suggestedResource != resource)
+							if ((suggestedResource != null) && (suggestedResource != resource)) {
 								continue SECOND_INSERT_LOOP;
+							}
 						}
 
 						if (chunkChecker.canFollow(here, there, resource)) {
@@ -467,7 +473,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					IResource suggestedResource = null;
 					for (final ISequenceElement element : here) {
 						final IResource suggestionForElement = resourceSuggestion.get(element);
-						if (suggestionForElement != null && suggestedResource != null && suggestionForElement != suggestedResource) {
+						if ((suggestionForElement != null) && (suggestedResource != null) && (suggestionForElement != suggestedResource)) {
 							suggestedResource = null;
 							break;
 						}
@@ -479,24 +485,28 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 						final List<SequenceChunk> sequence = sequences.get(suggestedResource);
 
-						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, suggestedResource))
+						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, suggestedResource)) {
 							break top;
+						}
 					}
 
 					for (final Map.Entry<IResource, List<SequenceChunk>> entry : sequences.entrySet()) {
 						final IResource res = entry.getKey();
 						final List<SequenceChunk> sequence = entry.getValue();
-						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, res))
+						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, res)) {
 							break top;
+						}
 					}
 				}
 			}
-			if (travelTimeChecker == null)
+			if (travelTimeChecker == null) {
 				break;
+			}
 			// relax constraint
 			final int maxLateness = travelTimeChecker.getMaxLateness();
-			if (maxLateness == initialMaxLateness)
+			if (maxLateness == initialMaxLateness) {
 				break;
+			}
 
 			travelTimeChecker.setMaxLateness(maxLateness + 1);
 			// log.info("Lateness constraint relaxed to " + maxLateness + " as "
@@ -538,7 +548,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				// break top;
 			}
 		} else {
-			for (int i = 0; i < sequence.size() - 1; i++) {
+			for (int i = 0; i < (sequence.size() - 1); i++) {
 				if (chunkChecker.canInsert(sequence.get(i), here, sequence.get(i + 1), res)) {
 					sequence.add(i + 1, here);
 					iterator.remove();
