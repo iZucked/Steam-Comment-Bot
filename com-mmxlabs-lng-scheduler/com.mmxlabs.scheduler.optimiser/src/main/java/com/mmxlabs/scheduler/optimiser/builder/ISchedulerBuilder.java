@@ -97,6 +97,23 @@ public interface ISchedulerBuilder {
 			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed);
 
 	/**
+	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
+	 * 
+	 * @param vesselClass
+	 * @param state
+	 * @param nboRateInM3PerHour
+	 *            Hourly scaled M3 of LNG rate of boil-off when travelling
+	 * @param idleNBORateInM3PerHour
+	 *            Hourly scaled M3 of LNG rate of boil-off when idling
+	 * @param idleConsumptionRateInMTPerHour
+	 *            Hourly scaled MT of base fuel consumption rate when idle
+	 * @param consumptionRateCalculatorInMTPerHour
+	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
+	 */
+	void setVesselClassStateParamaters(IVesselClass vc, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
+			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour);
+
+	/**
 	 * Create a charter out event
 	 * 
 	 * @param id
