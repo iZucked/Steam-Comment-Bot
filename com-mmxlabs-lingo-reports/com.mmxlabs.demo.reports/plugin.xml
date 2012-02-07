@@ -16,7 +16,7 @@
       </category>
       
       <view
-            name="Cargo Report"
+            name="Cargo"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.demo.reports"
             class="com.mmxlabs.demo.reports.views.CargoReportView"
@@ -27,7 +27,7 @@
             class="com.mmxlabs.demo.reports.views.FitnessReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.demo.reports.views.FitnessReportView"
-            name="Fitness Report">
+            name="Fitness">
       </view>
       <view
             category="com.mmxlabs.demo.reports"
@@ -41,7 +41,7 @@
             class="com.mmxlabs.demo.reports.views.TotalsReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.demo.reports.views.TotalsReportView"
-            name="Totals Report">
+            name="Totals">
       </view>
       
        <view
@@ -49,7 +49,7 @@
             class="com.mmxlabs.demo.reports.views.PortRotationReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.demo.reports.views.PortRotationReportView"
-            name="Port Rotation Report">
+            name="Port Rotation">
       </view>
       
       <view
@@ -57,7 +57,7 @@
             class="com.mmxlabs.demo.reports.views.LatenessReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.demo.reports.views.LatenessReportView"
-            name="Lateness Report">
+            name="Lateness">
       </view>
       
        <view
@@ -65,7 +65,7 @@
              class="com.mmxlabs.demo.reports.views.CooldownReportView"
              icon="icons/cview16/exec_flow_view.gif"
              id="com.mmxlabs.demo.reports.views.CooldownReportView"
-             name="Cooldown Report">
+             name="Cooldown">
        </view>
    </extension>
    <extension
