@@ -9,7 +9,9 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 import com.mmxlabs.demo.reports.views.CargoReportView;
+import com.mmxlabs.demo.reports.views.CooldownReportView;
 import com.mmxlabs.demo.reports.views.FitnessReportView;
+import com.mmxlabs.demo.reports.views.LatenessReportView;
 import com.mmxlabs.demo.reports.views.PortRotationReportView;
 import com.mmxlabs.demo.reports.views.TotalsReportView;
 import com.mmxlabs.scheduleview.views.SchedulerView;
@@ -21,32 +23,27 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 
 		layout.setEditorAreaVisible(false);
 
-		final IFolderLayout navFolder = layout.createFolder("navFolder",
-				IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
+		final IFolderLayout navFolder = layout.createFolder("navFolder", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
 		navFolder.addView("com.mmxlabs.rcp.navigator");
 
-		layout.addView(SchedulerView.ID, IPageLayout.BOTTOM, 0.3f,
-				IPageLayout.ID_EDITOR_AREA);
+		layout.addView(SchedulerView.ID, IPageLayout.BOTTOM, 0.3f, IPageLayout.ID_EDITOR_AREA);
 
-		final IFolderLayout reportsFolder = layout.createFolder(
-				"reportsFolder", IPageLayout.BOTTOM, 0.5f, SchedulerView.ID);
+		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.BOTTOM, 0.5f, SchedulerView.ID);
 
 		reportsFolder.addView(TotalsReportView.ID);
-		reportsFolder
-				.addView("com.mmxlabs.demo.reports.views.TotalsHierarchyView");
-		reportsFolder.addView(FitnessReportView.ID);
+		reportsFolder.addView("com.mmxlabs.demo.reports.views.TotalsHierarchyView");
 		reportsFolder.addView(CargoReportView.ID);
-		reportsFolder.addView(PortRotationReportView.ID);
-		reportsFolder.addView("org.eclipse.pde.runtime.LogView");
-
-		layout.addView(IPageLayout.ID_PROP_SHEET, IPageLayout.BOTTOM, 0.3f,
-				"navFolder");
+		reportsFolder.addView(LatenessReportView.ID);
+		reportsFolder.addView(CooldownReportView.ID);
+		reportsFolder.addView(FitnessReportView.ID);
 
 		layout.addShowViewShortcut(SchedulerView.ID);
 		layout.addShowViewShortcut(TotalsReportView.ID);
 		layout.addShowViewShortcut("com.mmxlabs.demo.reports.views.TotalsHierarchyView");
 		layout.addShowViewShortcut(CargoReportView.ID);
 		layout.addShowViewShortcut(FitnessReportView.ID);
+		layout.addShowViewShortcut(LatenessReportView.ID);
+		layout.addShowViewShortcut(CooldownReportView.ID);
 		layout.addShowViewShortcut(PortRotationReportView.ID);
 
 		layout.addShowViewShortcut("com.mmxlabs.rcp.navigator");
