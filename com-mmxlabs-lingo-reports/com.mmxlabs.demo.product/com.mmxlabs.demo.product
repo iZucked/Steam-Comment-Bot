@@ -7,7 +7,7 @@
    </configIni>
 
    <launcherArgs>
-      <vmArgs>-ea -server</vmArgs>
+      <vmArgs>-ea -server -Xmx768m</vmArgs>
    </launcherArgs>
 
    <windowImages i16="/com.mmxlabs.demo.app/icons/alt_window_16.gif" i32="/com.mmxlabs.demo.app/icons/alt_window_16.gif"/>
