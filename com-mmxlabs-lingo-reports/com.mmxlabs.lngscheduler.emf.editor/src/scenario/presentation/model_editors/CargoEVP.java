@@ -55,8 +55,9 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 		}
 
 		{
+			// Type is read-only here as cargoes need some additional slot manipulation to change type
 			final EnumAttributeManipulator type = new EnumAttributeManipulator(cargoPackage.getCargo_CargoType(), part.getEditingDomain());
-			addColumn("Type", type, type);
+			addColumn("Type", type, null);
 		}
 
 		{
