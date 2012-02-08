@@ -37,7 +37,7 @@ public class VesselEVP extends NamedObjectEVP {
 
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
-		// TODO Auto-generated method stub
+
 		super.init(path, adapterFactory);
 
 		{
