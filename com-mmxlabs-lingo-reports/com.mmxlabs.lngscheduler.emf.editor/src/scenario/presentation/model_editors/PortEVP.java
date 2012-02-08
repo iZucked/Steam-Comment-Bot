@@ -449,7 +449,7 @@ public class PortEVP extends NamedObjectEVP {
 		}
 
 		for (final PortCapability capability : PortCapability.values()) {
-			addTypicalColumn("Can " + capability.getName(), new CapabilityManipulator(capability, part.getEditingDomain()));
+			addTypicalColumn(capability.getName(), new CapabilityManipulator(capability, part.getEditingDomain()));
 		}
 	}
 }
