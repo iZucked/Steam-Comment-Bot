@@ -31,15 +31,13 @@ public abstract class AddAction extends LockableAction implements IMenuCreator {
 		super("Add " + name, IAction.AS_DROP_DOWN_MENU);
 		this.editingDomain = editingDomain;
 
-		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-				.getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		setToolTipText("Add " + name);
 		setText("Add " + name);
 	}
 
 	/**
-	 * Create an instance of the object to add, or return null to cancel the
-	 * action
+	 * Create an instance of the object to add, or return null to cancel the action
 	 * 
 	 * @return
 	 */
@@ -62,11 +60,10 @@ public abstract class AddAction extends LockableAction implements IMenuCreator {
 
 	protected void run(final boolean usingSelection) {
 		final EObject object = createObject(usingSelection);
-		if (object == null)
+		if (object == null) {
 			return; // if cancelled, subclasses return null
-		editingDomain.getCommandStack().execute(
-				AddCommand.create(editingDomain, getOwner(), getFeature(),
-						object));
+		}
+		editingDomain.getCommandStack().execute(AddCommand.create(editingDomain, getOwner(), getFeature(), object));
 	}
 
 	@Override
@@ -75,7 +72,7 @@ public abstract class AddAction extends LockableAction implements IMenuCreator {
 	}
 
 	@Override
-	public Menu getMenu(Control parent) {
+	public Menu getMenu(final Control parent) {
 		if (lastMenu != null) {
 			lastMenu.dispose();
 		}
@@ -87,7 +84,7 @@ public abstract class AddAction extends LockableAction implements IMenuCreator {
 	}
 
 	@Override
-	public Menu getMenu(Menu parent) {
+	public Menu getMenu(final Menu parent) {
 		if (lastMenu != null) {
 			lastMenu.dispose();
 		}
@@ -101,11 +98,10 @@ public abstract class AddAction extends LockableAction implements IMenuCreator {
 	 */
 	private void createMenuItems(final Menu menu) {
 		{
-			final Action a = new Action("Duplicate",
-					IAction.AS_RADIO_BUTTON) {
+			final Action a = new Action("Duplicate", IAction.AS_RADIO_BUTTON) {
 				@Override
 				public void run() {
-//					AddAction.this.run(true);
+					// AddAction.this.run(true);
 
 					defaultToCopy = true;
 				}
@@ -117,20 +113,18 @@ public abstract class AddAction extends LockableAction implements IMenuCreator {
 
 			};
 
-			final ActionContributionItem actionContributionItem = new ActionContributionItem(
-					a);
+			final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
 			actionContributionItem.fill(menu, -1);
 			a.setChecked(defaultToCopy);
 
 			copySubAction = a;
 		}
 		{
-			final Action a = new Action("Add Blank",
-					IAction.AS_RADIO_BUTTON) {
+			final Action a = new Action("Add New", IAction.AS_RADIO_BUTTON) {
 
 				@Override
 				public void run() {
-//					AddAction.this.run(false);
+					// AddAction.this.run(false);
 					defaultToCopy = false;
 				}
 
@@ -139,8 +133,7 @@ public abstract class AddAction extends LockableAction implements IMenuCreator {
 					return !defaultToCopy;
 				}
 			};
-			final ActionContributionItem actionContributionItem = new ActionContributionItem(
-					a);
+			final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
 			actionContributionItem.fill(menu, -1);
 			a.setChecked(!defaultToCopy);
 			addSubAction = a;
