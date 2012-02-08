@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import scenario.Scenario;
 import scenario.ScenarioPackage;
@@ -64,7 +65,6 @@ import com.mmxlabs.shiplingo.ui.tableview.ICellManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
 import com.mmxlabs.shiplingo.ui.tableview.ValueListAttributeManipulator;
 
-
 /**
  * A {@link ScenarioObjectEditorViewerPane} for editing a port model
  * 
@@ -74,18 +74,17 @@ import com.mmxlabs.shiplingo.ui.tableview.ValueListAttributeManipulator;
  * 
  */
 public class PortEVP extends NamedObjectEVP {
-	public PortEVP(IWorkbenchPage page, ScenarioEditor part) {
+	public PortEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
 
 	private class DefaultContractManipulator extends ContractManipulator {
-		public DefaultContractManipulator(EditingDomain editingDomain,
-				IReferenceValueProvider valueProvider) {
+		public DefaultContractManipulator(final EditingDomain editingDomain, final IReferenceValueProvider valueProvider) {
 			super(editingDomain, valueProvider);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Column for editing port capabilities.
 	 * 
@@ -101,8 +100,8 @@ public class PortEVP extends NamedObjectEVP {
 		}
 
 		@Override
-		public void setValue(Object object, Object value) {
-			
+		public void setValue(final Object object, final Object value) {
+
 			final Port p = (Port) object;
 			if ((Integer) value == 0) {
 				editingDomain.getCommandStack().execute(AddCommand.create(editingDomain, object, PortPackage.eINSTANCE.getPort_Capabilities(), capability));
@@ -112,8 +111,8 @@ public class PortEVP extends NamedObjectEVP {
 		}
 
 		@Override
-		public CellEditor getCellEditor(Composite parent, Object object) {
-			return new ComboBoxCellEditor(parent, new String[] {"Yes", "No"});
+		public CellEditor getCellEditor(final Composite parent, final Object object) {
+			return new ComboBoxCellEditor(parent, new String[] { "Yes", "No" });
 		}
 
 		@Override
@@ -123,44 +122,40 @@ public class PortEVP extends NamedObjectEVP {
 		}
 
 		@Override
-		public boolean canEdit(Object object) {
+		public boolean canEdit(final Object object) {
 			return true;
 		}
 
 		@Override
-		public String render(Object object) {
+		public String render(final Object object) {
 			return ((Integer) getValue(object)) == 0 ? "Yes" : "No";
 		}
 
 		@Override
-		public Comparable getComparable(Object object) {
+		public Comparable getComparable(final Object object) {
 			return render(object);
 		}
 
 		@Override
-		public Object getFilterValue(Object object) {
+		public Object getFilterValue(final Object object) {
 			return getComparable(object);
 		}
 
 		@Override
-		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 			return Collections.emptySet();
 		}
 	}
-	
-	
+
 	/**
-	 * A special-case column for specifying default contract from the port even
-	 * though it's an attribute on the contract really.
+	 * A special-case column for specifying default contract from the port even though it's an attribute on the contract really.
 	 * 
 	 * @author Tom Hinton
 	 * 
 	 */
-	private class ContractManipulator implements ICellRenderer,
-			ICellManipulator {
-		
-		public ContractManipulator(final EditingDomain editingDomain,
-				final IReferenceValueProvider valueProvider) {
+	private class ContractManipulator implements ICellRenderer, ICellManipulator {
+
+		public ContractManipulator(final EditingDomain editingDomain, final IReferenceValueProvider valueProvider) {
 			super();
 			this.editingDomain = editingDomain;
 			this.valueProvider = valueProvider;
@@ -171,15 +166,16 @@ public class PortEVP extends NamedObjectEVP {
 		private final IReferenceValueProvider valueProvider;
 
 		@Override
-		public CellEditor getCellEditor(Composite parent, Object object) {
+		public CellEditor getCellEditor(final Composite parent, final Object object) {
 			editor = new ComboBoxCellEditor(parent, new String[] { "empty" });
 			setEditorNames(editor);
 			return editor;
 		}
 
 		private void setEditorNames(final ComboBoxCellEditor editor) {
-			if (editor != null)
+			if (editor != null) {
 				editor.setItems(names.toArray(new String[names.size()]));
+			}
 		}
 
 		@Override
@@ -189,8 +185,7 @@ public class PortEVP extends NamedObjectEVP {
 				final Port p = (Port) object;
 
 				if (part.getScenario().getContractModel() != null) {
-					c = part.getScenario().getContractModel()
-							.getDefaultContract(p);
+					c = part.getScenario().getContractModel().getDefaultContract(p);
 				}
 			}
 
@@ -199,26 +194,22 @@ public class PortEVP extends NamedObjectEVP {
 
 		@Override
 		public void setValue(final Object object, final Object value) {
-			if (object instanceof Port && value instanceof Integer) {
+			if ((object instanceof Port) && (value instanceof Integer)) {
 				final Port port = (Port) object;
 				final int index = (Integer) value;
 				if (index != -1) {
 					final Contract c2 = (Contract) values.get(index);
-					final ContractModel cm = part.getScenario()
-							.getContractModel();
+					final ContractModel cm = part.getScenario().getContractModel();
 					if (cm != null) {
 						final CompoundCommand cc = new CompoundCommand();
 						final Contract c1 = cm.getDefaultContract(port);
-						if (c1 == c2)
+						if (c1 == c2) {
 							return;
-						if (c1 != null) {
-							cc.append(RemoveCommand.create(editingDomain, c1,
-									ContractPackage.eINSTANCE
-											.getContract_DefaultPorts(), port));
 						}
-						cc.append(AddCommand.create(editingDomain, c2,
-								ContractPackage.eINSTANCE
-										.getContract_DefaultPorts(), port));
+						if (c1 != null) {
+							cc.append(RemoveCommand.create(editingDomain, c1, ContractPackage.eINSTANCE.getContract_DefaultPorts(), port));
+						}
+						cc.append(AddCommand.create(editingDomain, c2, ContractPackage.eINSTANCE.getContract_DefaultPorts(), port));
 						editingDomain.getCommandStack().execute(cc);
 					}
 				}
@@ -230,8 +221,7 @@ public class PortEVP extends NamedObjectEVP {
 
 		@Override
 		public boolean canEdit(final Object object) {
-			final List<Pair<String, EObject>> both = valueProvider
-					.getAllowedValues(null, null);
+			final List<Pair<String, EObject>> both = valueProvider.getAllowedValues(null, null);
 
 			names.clear();
 			values.clear();
@@ -244,35 +234,35 @@ public class PortEVP extends NamedObjectEVP {
 
 			return true;
 		}
-		
+
 		@Override
-		public Object getFilterValue(Object object) {
+		public Object getFilterValue(final Object object) {
 			return getComparable(object);
 		}
 
 		@Override
-		public String render(Object object) {
+		public String render(final Object object) {
 			if (object instanceof Port) {
 				final Port p = (Port) object;
 				final Scenario scenario = part.getScenario();
 				if (scenario.getContractModel() != null) {
 					final ContractModel cm = scenario.getContractModel();
 					final Contract c = cm.getDefaultContract(p);
-					if (c != null)
+					if (c != null) {
 						return c.getName();
+					}
 				}
 			}
 			return "empty";
 		}
 
 		@Override
-		public Comparable getComparable(Object object) {
+		public Comparable getComparable(final Object object) {
 			return render(object);
 		}
 
 		@Override
-		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
-				Object object) {
+		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 			return Collections.emptySet();
 		}
 
@@ -281,12 +271,11 @@ public class PortEVP extends NamedObjectEVP {
 	class DistanceMatrixEditorAction extends AbstractMenuAction {
 		public DistanceMatrixEditorAction() {
 			super("Edit distances");
-			setImageDescriptor(LngEditorPlugin.Implementation
-					.imageDescriptorFromPlugin(LngEditorPlugin.getPlugin()
-							.getSymbolicName(), "/icons/table.gif"));
+			setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(LngEditorPlugin.getPlugin().getSymbolicName(), "/icons/table.gif"));
 			setToolTipText("Edit distance matrices and canals");
 		}
 
+		@Override
 		protected void populate(final Menu menu) {
 			final Action editDefault = createMatrixEditor("direct", part.getScenario().getDistanceModel());
 			addActionToMenu(editDefault, menu);
@@ -306,19 +295,22 @@ public class PortEVP extends NamedObjectEVP {
 										existingNames.add(c.getName());
 									}
 								}
-								final InputDialog input = new InputDialog(part.getEditorSite().getShell(), "Rename canal " + canal.getName(), "Enter a new name for the canal " + canal.getName(), canal.getName(), 
-										new IInputValidator() {
+								final InputDialog input = new InputDialog(part.getEditorSite().getShell(), "Rename canal " + canal.getName(), "Enter a new name for the canal " + canal.getName(),
+										canal.getName(), new IInputValidator() {
 											@Override
 											public String isValid(final String newText) {
-												if (newText.trim().isEmpty()) return "The canal must have a name";
-												if (existingNames.contains(newText)) return "Another canal already has the name " + newText;
+												if (newText.trim().isEmpty()) {
+													return "The canal must have a name";
+												}
+												if (existingNames.contains(newText)) {
+													return "Another canal already has the name " + newText;
+												}
 												return null;
 											}
 										});
-								if (input.open() == Window.OK){ 
+								if (input.open() == Window.OK) {
 									final String newName = input.getValue();
-									part.getEditingDomain().getCommandStack().execute(
-											SetCommand.create(part.getEditingDomain(), canal, ScenarioPackage.eINSTANCE.getNamedObject_Name(), newName));
+									part.getEditingDomain().getCommandStack().execute(SetCommand.create(part.getEditingDomain(), canal, ScenarioPackage.eINSTANCE.getNamedObject_Name(), newName));
 								}
 							}
 						};
@@ -326,7 +318,8 @@ public class PortEVP extends NamedObjectEVP {
 						final Action deleteCanal = new Action("Delete " + canal.getName() + "...") {
 							@Override
 							public void run() {
-								if (MessageDialog.openQuestion(part.getEditorSite().getShell(), "Delete canal " + canal.getName(), "Are you sure you want to delete the canal \"" + canal.getName() + "\"?")) {
+								if (MessageDialog.openQuestion(part.getEditorSite().getShell(), "Delete canal " + canal.getName(), "Are you sure you want to delete the canal \"" + canal.getName()
+										+ "\"?")) {
 									part.getEditingDomain().getCommandStack().execute(DeleteHelper.createDeleteCommand(part.getEditingDomain(), Collections.singleton(canal)));
 								}
 							}
@@ -336,26 +329,29 @@ public class PortEVP extends NamedObjectEVP {
 				};
 				addActionToMenu(canalEditor, menu);
 			}
-			
+
 			new MenuItem(menu, SWT.SEPARATOR);
-			
-			addActionToMenu(new Action("Add new canal..."){
+
+			addActionToMenu(new Action("Add new canal...") {
 				@Override
 				public void run() {
 					final HashSet<String> existingNames = new HashSet<String>();
 					for (final Canal c : part.getScenario().getCanalModel().getCanals()) {
 						existingNames.add(c.getName());
 					}
-					final InputDialog input = new InputDialog(part.getEditorSite().getShell(), "Create canal", "Enter a name for the new canal", "", 
-							new IInputValidator() {
-								@Override
-								public String isValid(final String newText) {
-									if (newText.trim().isEmpty()) return "The canal must have a name";
-									if (existingNames.contains(newText)) return "Another canal already has the name " + newText;
-									return null;
-								}
-							});
-					if (input.open() == Window.OK){
+					final InputDialog input = new InputDialog(part.getEditorSite().getShell(), "Create canal", "Enter a name for the new canal", "", new IInputValidator() {
+						@Override
+						public String isValid(final String newText) {
+							if (newText.trim().isEmpty()) {
+								return "The canal must have a name";
+							}
+							if (existingNames.contains(newText)) {
+								return "Another canal already has the name " + newText;
+							}
+							return null;
+						}
+					});
+					if (input.open() == Window.OK) {
 						final CompoundCommand cc = new CompoundCommand();
 						final String newName = input.getValue();
 						final Canal c = PortFactory.eINSTANCE.createCanal();
@@ -368,16 +364,16 @@ public class PortEVP extends NamedObjectEVP {
 						c.setDistanceModel(dm);
 						final VesselClassCost prototype = FleetFactory.eINSTANCE.createVesselClassCost();
 						prototype.setCanal(c);
-						
+
 						final DetailCompositeDialog editor = new DetailCompositeDialog(part.getEditorSite().getShell(), part, part.getEditingDomain());
-						
+
 						editor.open(Collections.singletonList((EObject) prototype));
 						for (final VesselClass vc : part.getScenario().getFleetModel().getVesselClasses()) {
 							cc.append(AddCommand.create(part.getEditingDomain(), vc, FleetPackage.eINSTANCE.getVesselClass_CanalCosts(), EcoreUtil.copy(prototype)));
 						}
 						cc.append(AddCommand.create(part.getEditingDomain(), part.getScenario().getCanalModel(), PortPackage.eINSTANCE.getCanalModel_Canals(), c));
 						part.getEditingDomain().getCommandStack().execute(cc);
-						
+
 					}
 				}
 			}, menu);
@@ -391,7 +387,9 @@ public class PortEVP extends NamedObjectEVP {
 					final EditingDomain domain = part.getEditingDomain();
 					if (distanceModel.eContainer() == scenario) {
 						final DistanceModel newModel = edit(distanceModel);
-						if (newModel == null) return;
+						if (newModel == null) {
+							return;
+						}
 						final CompoundCommand cc = new CompoundCommand();
 						cc.append(DeleteCommand.create(domain, distanceModel));
 						cc.append(AddCommand.create(domain, distanceModel.eContainer(), distanceModel.eContainingFeature(), newModel));
@@ -400,17 +398,18 @@ public class PortEVP extends NamedObjectEVP {
 					} else if (distanceModel.eContainer() instanceof Canal) {
 						if (distanceModel.eContainer().eContainer().eContainer() == scenario) {
 							final DistanceModel newModel = edit(distanceModel);
-							if (newModel == null) return;
+							if (newModel == null) {
+								return;
+							}
 							domain.getCommandStack().execute(SetCommand.create(domain, distanceModel.eContainer(), distanceModel.eContainingFeature(), newModel));
 						}
 					}
-					
+
 					// display error
 				}
 
-				private DistanceModel edit(DistanceModel distanceModel) {
-					final DistanceEditorDialog ded = new DistanceEditorDialog(
-							part.getEditorSite().getShell());
+				private DistanceModel edit(final DistanceModel distanceModel) {
+					final DistanceEditorDialog ded = new DistanceEditorDialog(part.getEditorSite().getShell());
 					if (ded.open(part, part.getEditingDomain(), distanceModel) == Window.OK) {
 						return ded.getResult();
 					}
@@ -419,48 +418,41 @@ public class PortEVP extends NamedObjectEVP {
 			};
 		}
 	}
-	
+
 	@Override
-	public EObjectTableViewer createViewer(Composite parent) {
+	public EObjectTableViewer createViewer(final Composite parent) {
 		final EObjectTableViewer v = super.createViewer(parent);
 		{
-			//TODO find image for editor.
-			
+			// TODO find image for editor.
+
 			final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
 			getToolBarManager().appendToGroup("pack", dmaAction);
-			
-//						MessageDialog
-//								.openError(
-//										v.getControl().getShell(),
-//										"Distance model is linked",
-//										"The distance model is stored in linked data, and so cannot be edited - open the static data model and edit it from there");
+
+			// MessageDialog
+			// .openError(
+			// v.getControl().getShell(),
+			// "Distance model is linked",
+			// "The distance model is stored in linked data, and so cannot be edited - open the static data model and edit it from there");
 
 		}
 		return v;
 	}
-	
+
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		// add columns
 		final PortPackage pp = PortPackage.eINSTANCE;
 
-		final BasicAttributeManipulator manipulator = new ValueListAttributeManipulator(
-				pp.getPort_TimeZone(), part.getEditingDomain(),
-				TimezoneInlineEditor.getTimezones()
-				);
+		final BasicAttributeManipulator manipulator = new ValueListAttributeManipulator(pp.getPort_TimeZone(), part.getEditingDomain(), TimezoneInlineEditor.getTimezones());
 		addColumn("Timezone", manipulator, manipulator);
-		
+
 		if (part.getScenario().getContractModel() != null) {
-			addTypicalColumn("Default Contract",
-					new DefaultContractManipulator(part.getEditingDomain(),
-							part.getContractProvider()));
+			addTypicalColumn("Default Contract", new DefaultContractManipulator(part.getEditingDomain(), part.getContractProvider()));
 		}
-		
+
 		for (final PortCapability capability : PortCapability.values()) {
 			addTypicalColumn("Can " + capability.getName(), new CapabilityManipulator(capability, part.getEditingDomain()));
 		}
 	}
 }
-
-

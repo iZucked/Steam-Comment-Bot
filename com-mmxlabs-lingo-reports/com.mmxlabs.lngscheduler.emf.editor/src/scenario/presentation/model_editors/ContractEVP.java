@@ -17,21 +17,18 @@ import com.mmxlabs.shiplingo.ui.tableview.SingleReferenceManipulator;
 
 /**
  * Base for contract editor viewer panes
+ * 
  * @author Tom Hinton
- *
+ * 
  */
 public abstract class ContractEVP extends NamedObjectEVP {
-	public ContractEVP(IWorkbenchPage page, ScenarioEditor part) {
+	public ContractEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-		addTypicalColumn(
-				"Entity",
-				new SingleReferenceManipulator(ContractPackage.eINSTANCE
-						.getContract_Entity(), part.getEntityProvider(),
-						part.getEditingDomain()));
+		addTypicalColumn("Entity", new SingleReferenceManipulator(ContractPackage.eINSTANCE.getContract_Entity(), part.getEntityProvider(), part.getEditingDomain()));
 	}
 }

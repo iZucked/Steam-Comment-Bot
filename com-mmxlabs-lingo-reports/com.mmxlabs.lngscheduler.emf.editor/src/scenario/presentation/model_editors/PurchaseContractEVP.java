@@ -20,15 +20,15 @@ import com.mmxlabs.shiplingo.ui.tableview.NonEditableColumn;
 
 /**
  * @author Tom Hinton
- *
+ * 
  */
 public class PurchaseContractEVP extends ContractEVP {
-	public PurchaseContractEVP(IWorkbenchPage page, ScenarioEditor part) {
+	public PurchaseContractEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		addTypicalColumn("Type", new NonEditableColumn() {
 			@Override
 			public String render(final Object object) {

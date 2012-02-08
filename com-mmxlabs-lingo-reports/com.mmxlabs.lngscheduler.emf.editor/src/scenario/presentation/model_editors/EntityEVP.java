@@ -32,12 +32,12 @@ import com.mmxlabs.shiplingo.importer.importers.ImportCSVAction;
  * 
  */
 public class EntityEVP extends NamedObjectEVP {
-	public EntityEVP(IWorkbenchPage page, ScenarioEditor part) {
+	public EntityEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 
 		// add
@@ -55,7 +55,7 @@ public class EntityEVP extends NamedObjectEVP {
 	}
 
 	@Override
-	protected Action createExportAction(GridTableViewer viewer, EMFPath ePath) {
+	protected Action createExportAction(final GridTableViewer viewer, final EMFPath ePath) {
 		final ExportCSVAction delegate = (ExportCSVAction) super.createExportAction(viewer, ePath);
 		return new ExportCSVAction() {
 			@Override
@@ -75,7 +75,7 @@ public class EntityEVP extends NamedObjectEVP {
 	}
 
 	@Override
-	protected Action createImportAction(GridTableViewer viewer, EditingDomain editingDomain, EMFPath ePath) {
+	protected Action createImportAction(final GridTableViewer viewer, final EditingDomain editingDomain, final EMFPath ePath) {
 		final ImportCSVAction delegate = (ImportCSVAction) super.createImportAction(viewer, editingDomain, ePath);
 		return new ImportCSVAction() {
 			@Override
@@ -89,7 +89,7 @@ public class EntityEVP extends NamedObjectEVP {
 			}
 
 			@Override
-			public void addObjects(Collection<EObject> newObjects) {
+			public void addObjects(final Collection<EObject> newObjects) {
 				delegate.addObjects(newObjects);
 				final Scenario scenario = part.getScenario();
 				scenario.getContractModel().setShippingEntity((GroupEntity) scenario.getContractModel().getEntities().get(scenario.getContractModel().getEntities().size() - 1));

@@ -16,22 +16,20 @@ import scenario.presentation.ScenarioEditor;
 import com.mmxlabs.shiplingo.ui.tableview.BasicAttributeManipulator;
 
 /**
- * An editor for {@link NamedObject}s, which just has a name column,
- * and default behaviour otherwise.
+ * An editor for {@link NamedObject}s, which just has a name column, and default behaviour otherwise.
  * 
  * @author Tom Hinton
- *
+ * 
  */
 public class NamedObjectEVP extends ScenarioObjectEditorViewerPane {
-	public NamedObjectEVP(IWorkbenchPage page, ScenarioEditor part) {
+	public NamedObjectEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-		BasicAttributeManipulator manipulator = new BasicAttributeManipulator(
-				namedObjectName, part.getEditingDomain());
+		final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(namedObjectName, part.getEditingDomain());
 		addColumn("Name", manipulator, manipulator);
 	}
 }

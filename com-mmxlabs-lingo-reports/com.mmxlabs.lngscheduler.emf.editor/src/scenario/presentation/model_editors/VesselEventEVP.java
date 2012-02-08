@@ -23,16 +23,17 @@ import com.mmxlabs.shiplingo.ui.tableview.SingleReferenceManipulator;
 
 /**
  * EVP for vessel events
+ * 
  * @author Tom Hinton
- *
+ * 
  */
 public class VesselEventEVP extends ScenarioObjectEditorViewerPane {
-	public VesselEventEVP(IWorkbenchPage page, ScenarioEditor part) {
+	public VesselEventEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		// TODO Auto-generated method stub
 		super.init(path, adapterFactory);
 		final FleetPackage fp = FleetPackage.eINSTANCE;
@@ -50,39 +51,29 @@ public class VesselEventEVP extends ScenarioObjectEditorViewerPane {
 
 		addTypicalColumn("Event Type", type);
 
-		final BasicAttributeManipulator id = new BasicAttributeManipulator(
-				fp.getVesselEvent_Id(), part.getEditingDomain());
+		final BasicAttributeManipulator id = new BasicAttributeManipulator(fp.getVesselEvent_Id(), part.getEditingDomain());
 
 		addColumn("ID", id, id);
 
-		final DateManipulator start = new DateManipulator(
-				fp.getVesselEvent_StartDate(), part.getEditingDomain());
+		final DateManipulator start = new DateManipulator(fp.getVesselEvent_StartDate(), part.getEditingDomain());
 		addColumn("Start Date", start, start);
 
-		final DateManipulator end = new DateManipulator(
-				fp.getVesselEvent_EndDate(), part.getEditingDomain());
+		final DateManipulator end = new DateManipulator(fp.getVesselEvent_EndDate(), part.getEditingDomain());
 		addColumn("End Date", end, end);
 
-		final NumericAttributeManipulator duration = new NumericAttributeManipulator(
-				fp.getVesselEvent_Duration(), part.getEditingDomain());
+		final NumericAttributeManipulator duration = new NumericAttributeManipulator(fp.getVesselEvent_Duration(), part.getEditingDomain());
 		addColumn("Duration (days)", duration, duration);
 
-		final SingleReferenceManipulator port = new SingleReferenceManipulator(
-				fp.getVesselEvent_StartPort(), part.getPortProvider(), part.getEditingDomain());
+		final SingleReferenceManipulator port = new SingleReferenceManipulator(fp.getVesselEvent_StartPort(), part.getPortProvider(), part.getEditingDomain());
 		addColumn("Start Port", port, port);
 
-		final MultipleReferenceManipulator vessels = new MultipleReferenceManipulator(
-				fp.getVesselEvent_Vessels(), part.getEditingDomain(),part.getVesselProvider(),
-				namedObjectName);
+		final MultipleReferenceManipulator vessels = new MultipleReferenceManipulator(fp.getVesselEvent_Vessels(), part.getEditingDomain(), part.getVesselProvider(), namedObjectName);
 
 		addColumn("Vessels", vessels, vessels);
 
-		final MultipleReferenceManipulator classes = new MultipleReferenceManipulator(
-				fp.getVesselEvent_VesselClasses(), part.getEditingDomain(),
-				part.getVesselClassProvider(), namedObjectName);
+		final MultipleReferenceManipulator classes = new MultipleReferenceManipulator(fp.getVesselEvent_VesselClasses(), part.getEditingDomain(), part.getVesselClassProvider(), namedObjectName);
 
 		addColumn("Classes", classes, classes);
 	}
 
-	
 }

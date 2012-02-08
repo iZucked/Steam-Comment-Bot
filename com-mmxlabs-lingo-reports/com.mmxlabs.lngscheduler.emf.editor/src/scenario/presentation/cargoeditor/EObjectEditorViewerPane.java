@@ -4,7 +4,6 @@
  */
 package scenario.presentation.cargoeditor;
 
-import java.awt.Dialog;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,7 +62,6 @@ import scenario.presentation.cargoeditor.handlers.debug.RemoveTimePartsAction;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
-import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.importer.importers.ExportCSVAction;
@@ -103,14 +101,15 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	 * @param pass
 	 *            true to disable editing, false to re-enable it.
 	 */
-	public void setLockedForEditing(boolean lockedForEditing) {
+	public void setLockedForEditing(final boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
-		if (eObjectTableViewer != null)
+		if (eObjectTableViewer != null) {
 			eObjectTableViewer.setLockedForEditing(isLockedForEditing());
+		}
 
 		for (final IContributionItem item : getToolBarManager().getItems()) {
 			if (item instanceof ActionContributionItem) {
-				final IAction action = (IAction) ((ActionContributionItem) item).getAction();
+				final IAction action = ((ActionContributionItem) item).getAction();
 				if (action instanceof LockableAction) {
 					((LockableAction) action).setLockedForEditing(lockedForEditing);
 				}
@@ -198,7 +197,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 			@Override
 			public EObject createObject(final boolean usingSelection) {
-				if (usingSelection && viewer.getSelection().isEmpty() == false) {
+				if (usingSelection && (viewer.getSelection().isEmpty() == false)) {
 					if (viewer.getSelection() instanceof IStructuredSelection) {
 						final IStructuredSelection sel = (IStructuredSelection) viewer.getSelection();
 						if (sel.size() == 1) {
@@ -222,7 +221,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					for (final EClassifier classifier : p.getEClassifiers()) {
 						if (classifier instanceof EClass) {
 							final EClass possibleSubClass = (EClass) classifier;
-							if (ec.isSuperTypeOf(possibleSubClass) && possibleSubClass.isAbstract() == false) {
+							if (ec.isSuperTypeOf(possibleSubClass) && (possibleSubClass.isAbstract() == false)) {
 								subClasses.add(possibleSubClass);
 							}
 						}
@@ -264,28 +263,29 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			final ToolBarManager x = getToolBarManager();
 			final EMFPath ePath = new EMFPath(true, path);
 			{
-				Action addAction = createAddAction(eObjectTableViewer, part.getEditingDomain(), ePath);
+				final Action addAction = createAddAction(eObjectTableViewer, part.getEditingDomain(), ePath);
 				if (addAction != null) {
 					x.appendToGroup("edit", LockableAction.wrap(addAction));
 				}
 			}
 			{
-				Action deleteAction = createDeleteAction(eObjectTableViewer, part.getEditingDomain());
+				final Action deleteAction = createDeleteAction(eObjectTableViewer, part.getEditingDomain());
 				if (deleteAction != null) {
 					x.appendToGroup("edit", LockableAction.wrap(deleteAction));
 
 				}
 			}
 			{
-				Action importAction = createImportAction(eObjectTableViewer, part.getEditingDomain(), ePath);
+				final Action importAction = createImportAction(eObjectTableViewer, part.getEditingDomain(), ePath);
 				if (importAction != null) {
 					x.appendToGroup("importers", LockableAction.wrap(importAction));
 				}
 			}
 			{
 				final Action a = createExportAction(eObjectTableViewer, ePath);
-				if (a != null)
+				if (a != null) {
 					x.appendToGroup("exporters", a);
+				}
 			}
 
 			x.update(true);
@@ -361,8 +361,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 						// object existed before, so we have to replace it
 						final EObject oldObject = objectsWithNames.get(newId);
 						final Command fixrefs = createFixReferencesAndContainments(oldObject, newObject);
-						if (fixrefs != null)
+						if (fixrefs != null) {
 							cc.append(fixrefs);
+						}
 
 						// fix references to contained objects as well, or we
 						// get a dangling reference
@@ -402,21 +403,23 @@ public class EObjectEditorViewerPane extends ViewerPane {
 			private Command createFixReferencesAndContainments(final EObject oldObject, final EObject newObject) {
 				final CompoundCommand cc = new CompoundCommand();
 				final Command fixReferences = createFixReferences(oldObject, newObject);
-				if (fixReferences != null)
+				if (fixReferences != null) {
 					cc.append(fixReferences);
+				}
 
 				for (final EReference reference : oldObject.eClass().getEAllContainments()) {
 					if (reference.isMany() == false) {
 						if (newObject.eClass().getEAllContainments().contains(reference)) {
 							final Command recur = createFixReferencesAndContainments((EObject) oldObject.eGet(reference), (EObject) newObject.eGet(reference));
-							if (recur != null)
+							if (recur != null) {
 								cc.append(recur);
+							}
 						}
 					}
 				}
-				if (cc.getCommandList().isEmpty())
+				if (cc.getCommandList().isEmpty()) {
 					return null;
-				else {
+				} else {
 					if (cc.canExecute() == false) {
 						log.error("Cannot execute ref fixer from " + oldObject + " to " + newObject);
 					}
@@ -468,8 +471,9 @@ public class EObjectEditorViewerPane extends ViewerPane {
 					cc.append(SetCommand.create(editingDomain, setting.getEObject(), setting.getEStructuralFeature(), newObject));
 				}
 
-				if (cc.getCommandList().isEmpty())
+				if (cc.getCommandList().isEmpty()) {
 					return null;
+				}
 
 				if (cc.canExecute() == false) {
 					log.error("Cannot fix references from " + oldObject + " to " + newObject);
@@ -506,25 +510,28 @@ public class EObjectEditorViewerPane extends ViewerPane {
 	@Override
 	protected void requestActivation() {
 		final Control c = eObjectTableViewer.getControl();
-		if (c.isDisposed() || c.getDisplay() == null)
+		if (c.isDisposed() || (c.getDisplay() == null)) {
 			return;
+		}
 		super.requestActivation();
 		part.setCurrentViewerPane(this);
 	}
 
 	@Override
-	public void showFocus(boolean inFocus) {
+	public void showFocus(final boolean inFocus) {
 		final Control c = eObjectTableViewer.getControl();
-		if (c.isDisposed() || c.getDisplay() == null)
+		if (c.isDisposed() || (c.getDisplay() == null)) {
 			return;
+		}
 		super.showFocus(inFocus);
 	}
 
 	@Override
 	public void setFocus() {
 		final Control c = eObjectTableViewer.getControl();
-		if (c.isDisposed() || c.getDisplay() == null)
+		if (c.isDisposed() || (c.getDisplay() == null)) {
 			return;
+		}
 		super.setFocus();
 	}
 
@@ -539,7 +546,7 @@ public class EObjectEditorViewerPane extends ViewerPane {
 
 	public void refresh() {
 		if (eObjectTableViewer != null) {
-			if (eObjectTableViewer.getControl() != null && eObjectTableViewer.getControl().isDisposed() == false) {
+			if ((eObjectTableViewer.getControl() != null) && (eObjectTableViewer.getControl().isDisposed() == false)) {
 				eObjectTableViewer.refresh();
 			}
 		}

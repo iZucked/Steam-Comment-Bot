@@ -16,40 +16,41 @@ import org.eclipse.swt.widgets.Event;
  * An action which adds some extra locking properties
  * 
  * @author hinton
- *
+ * 
  */
 public abstract class LockableAction extends Action {
 	protected boolean lockedForEditing;
 	protected boolean enabledIfUnlocked = true;
-	
+
 	public LockableAction() {
 		super();
 	}
 
-	public LockableAction(String text, ImageDescriptor image) {
+	public LockableAction(final String text, final ImageDescriptor image) {
 		super(text, image);
 	}
 
-	public LockableAction(String text, int style) {
+	public LockableAction(final String text, final int style) {
 		super(text, style);
 	}
 
-	public LockableAction(String text) {
+	public LockableAction(final String text) {
 		super(text);
 	}
 
+	@Override
 	public void setEnabled(final boolean enabled) {
 		this.enabledIfUnlocked = enabled;
 		if (!lockedForEditing) {
 			super.setEnabled(enabled);
 		}
 	}
-	
+
 	public boolean isLockedForEditing() {
 		return lockedForEditing;
 	}
 
-	public void setLockedForEditing(boolean lockedForEditing) {
+	public void setLockedForEditing(final boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
 		if (lockedForEditing) {
 			super.setEnabled(false);
@@ -57,18 +58,22 @@ public abstract class LockableAction extends Action {
 			super.setEnabled(enabledIfUnlocked);
 		}
 	}
-	
+
 	public static LockableAction wrap(final IAction action) {
-		if (action instanceof LockableAction) return (LockableAction) action;
+		if (action instanceof LockableAction) {
+			return (LockableAction) action;
+		}
 		return new LockableAction() {
-			public void setEnabled(boolean enabled) {
+			@Override
+			public void setEnabled(final boolean enabled) {
 				this.enabledIfUnlocked = enabled;
 				if (!lockedForEditing) {
 					action.setEnabled(enabled);
 				}
 			}
 
-			public void setLockedForEditing(boolean lockedForEditing) {
+			@Override
+			public void setLockedForEditing(final boolean lockedForEditing) {
 				this.lockedForEditing = lockedForEditing;
 				if (lockedForEditing) {
 					action.setEnabled(false);
@@ -76,126 +81,156 @@ public abstract class LockableAction extends Action {
 					action.setEnabled(enabledIfUnlocked);
 				}
 			}
-			
+
 			// delegate methods follow; not interesting
-			
-			public void addPropertyChangeListener(IPropertyChangeListener listener) {
+
+			@Override
+			public void addPropertyChangeListener(final IPropertyChangeListener listener) {
 				action.addPropertyChangeListener(listener);
 			}
 
+			@Override
 			public int getAccelerator() {
 				return action.getAccelerator();
 			}
 
+			@Override
 			public String getActionDefinitionId() {
 				return action.getActionDefinitionId();
 			}
 
+			@Override
 			public String getDescription() {
 				return action.getDescription();
 			}
 
+			@Override
 			public ImageDescriptor getDisabledImageDescriptor() {
 				return action.getDisabledImageDescriptor();
 			}
 
+			@Override
 			public HelpListener getHelpListener() {
 				return action.getHelpListener();
 			}
 
+			@Override
 			public ImageDescriptor getHoverImageDescriptor() {
 				return action.getHoverImageDescriptor();
 			}
 
+			@Override
 			public String getId() {
 				return action.getId();
 			}
 
+			@Override
 			public ImageDescriptor getImageDescriptor() {
 				return action.getImageDescriptor();
 			}
 
+			@Override
 			public IMenuCreator getMenuCreator() {
 				return action.getMenuCreator();
 			}
 
+			@Override
 			public int getStyle() {
 				return action.getStyle();
 			}
 
+			@Override
 			public String getText() {
 				return action.getText();
 			}
 
+			@Override
 			public String getToolTipText() {
 				return action.getToolTipText();
 			}
 
+			@Override
 			public boolean isChecked() {
 				return action.isChecked();
 			}
 
+			@Override
 			public boolean isHandled() {
 				return action.isHandled();
 			}
 
-			public void removePropertyChangeListener(IPropertyChangeListener listener) {
+			@Override
+			public void removePropertyChangeListener(final IPropertyChangeListener listener) {
 				action.removePropertyChangeListener(listener);
 			}
 
+			@Override
 			public void run() {
 				action.run();
 			}
 
-			public void runWithEvent(Event event) {
+			@Override
+			public void runWithEvent(final Event event) {
 				action.runWithEvent(event);
 			}
 
-			public void setActionDefinitionId(String id) {
+			@Override
+			public void setActionDefinitionId(final String id) {
 				action.setActionDefinitionId(id);
 			}
 
-			public void setChecked(boolean checked) {
+			@Override
+			public void setChecked(final boolean checked) {
 				action.setChecked(checked);
 			}
 
-			public void setDescription(String text) {
+			@Override
+			public void setDescription(final String text) {
 				action.setDescription(text);
 			}
 
-			public void setDisabledImageDescriptor(ImageDescriptor newImage) {
+			@Override
+			public void setDisabledImageDescriptor(final ImageDescriptor newImage) {
 				action.setDisabledImageDescriptor(newImage);
 			}
 
-			public void setHelpListener(HelpListener listener) {
+			@Override
+			public void setHelpListener(final HelpListener listener) {
 				action.setHelpListener(listener);
 			}
 
-			public void setHoverImageDescriptor(ImageDescriptor newImage) {
+			@Override
+			public void setHoverImageDescriptor(final ImageDescriptor newImage) {
 				action.setHoverImageDescriptor(newImage);
 			}
 
-			public void setId(String id) {
+			@Override
+			public void setId(final String id) {
 				action.setId(id);
 			}
 
-			public void setImageDescriptor(ImageDescriptor newImage) {
+			@Override
+			public void setImageDescriptor(final ImageDescriptor newImage) {
 				action.setImageDescriptor(newImage);
 			}
 
-			public void setMenuCreator(IMenuCreator creator) {
+			@Override
+			public void setMenuCreator(final IMenuCreator creator) {
 				action.setMenuCreator(creator);
 			}
 
-			public void setText(String text) {
+			@Override
+			public void setText(final String text) {
 				action.setText(text);
 			}
 
-			public void setToolTipText(String text) {
+			@Override
+			public void setToolTipText(final String text) {
 				action.setToolTipText(text);
 			}
 
-			public void setAccelerator(int keycode) {
+			@Override
+			public void setAccelerator(final int keycode) {
 				action.setAccelerator(keycode);
 			}
 

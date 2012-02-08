@@ -13,19 +13,16 @@ import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 
 /**
- * A composite for editing a schedule. Contains a simplified gantt chart view,
- * which just displays the cargos, but no journey information.
+ * A composite for editing a schedule. Contains a simplified gantt chart view, which just displays the cargos, but no journey information.
  * 
- * Should let you assign cargos from one vessel to another, and also display
- * cargos not allocated to a vessel somewhere.
+ * Should let you assign cargos from one vessel to another, and also display cargos not allocated to a vessel somewhere.
  * 
  * Could also let you change cargo properties?
  * 
  * @author Tom Hinton
  * 
  */
-public class ScheduleEditor extends Composite implements
-		IGanttChartContentProvider {
+public class ScheduleEditor extends Composite implements IGanttChartContentProvider {
 	public ScheduleEditor(final Composite parent, final int style) {
 		super(parent, style);
 
@@ -42,53 +39,52 @@ public class ScheduleEditor extends Composite implements
 	}
 
 	@Override
-	public Object[] getElements(Object inputElement) {
+	public Object[] getElements(final Object inputElement) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	/**
-	 * Get children; this will return the vessels in the selected schedule, and
-	 * their children will be the <em>cargos</em> their elements correspond to.
+	 * Get children; this will return the vessels in the selected schedule, and their children will be the <em>cargos</em> their elements correspond to.
 	 */
 	@Override
-	public Object[] getChildren(Object parentElement) {
+	public Object[] getChildren(final Object parentElement) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object getParent(Object element) {
+	public Object getParent(final Object element) {
 		return null;
 	}
 
 	@Override
-	public boolean hasChildren(Object element) {
+	public boolean hasChildren(final Object element) {
 		return false;
 	}
 
 	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 	}
 
 	@Override
-	public Calendar getElementStartTime(Object element) {
+	public Calendar getElementStartTime(final Object element) {
 		return null;
 	}
 
 	@Override
-	public Calendar getElementEndTime(Object element) {
+	public Calendar getElementEndTime(final Object element) {
 		return null;
 	}
 
 	@Override
-	public Calendar getElementPlannedStartTime(Object element) {
+	public Calendar getElementPlannedStartTime(final Object element) {
 		return null;
 	}
 
 	@Override
-	public Calendar getElementPlannedEndTime(Object element) {
+	public Calendar getElementPlannedEndTime(final Object element) {
 		return null;
 	}
 }

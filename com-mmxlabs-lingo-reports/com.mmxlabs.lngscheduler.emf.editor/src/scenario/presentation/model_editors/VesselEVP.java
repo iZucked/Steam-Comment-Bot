@@ -31,29 +31,24 @@ import com.mmxlabs.shiplingo.ui.tableview.SingleReferenceManipulator;
  * 
  */
 public class VesselEVP extends NamedObjectEVP {
-	public VesselEVP(IWorkbenchPage page, ScenarioEditor part) {
+	public VesselEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		// TODO Auto-generated method stub
 		super.init(path, adapterFactory);
 
 		{
-			final SingleReferenceManipulator vclass = new SingleReferenceManipulator(
-					FleetPackage.eINSTANCE.getVessel_Class(),
-					part.getVesselClassProvider(), part.getEditingDomain());
+			final SingleReferenceManipulator vclass = new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_Class(), part.getVesselClassProvider(), part.getEditingDomain());
 			addColumn("Class", vclass, vclass);
 		}
 
 		{
-			class RequirementFeatureManipulator extends
-					DialogFeatureManipulator {
+			class RequirementFeatureManipulator extends DialogFeatureManipulator {
 
-				public RequirementFeatureManipulator(
-						final EStructuralFeature field,
-						final EditingDomain editingDomain) {
+				public RequirementFeatureManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
 					super(field, editingDomain);
 				}
 
@@ -71,15 +66,13 @@ public class VesselEVP extends NamedObjectEVP {
 					final TimeZone zone;
 					if (pat.isSetPort()) {
 						port = pat.getPort().getName();
-						zone = TimeZone.getTimeZone(pat.getPort()
-								.getTimeZone());
+						zone = TimeZone.getTimeZone(pat.getPort().getTimeZone());
 					} else {
 						zone = TimeZone.getTimeZone("GMT");
 						port = "Anywhere";
 					}
 
-					final DateFormat df = DateFormat.getDateTimeInstance(
-							DateFormat.SHORT, DateFormat.SHORT);
+					final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 					df.setTimeZone(zone);
 
 					if (pat.isSetStartTime()) {
@@ -98,13 +91,10 @@ public class VesselEVP extends NamedObjectEVP {
 				}
 
 				@Override
-				protected Object openDialogBox(
-						final Control cellEditorWindow, final Object object) {
-					
-					final DetailCompositeDialog dcd = new DetailCompositeDialog(
-							cellEditorWindow.getShell(), part,
-							part.getEditingDomain());
-					
+				protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
+
+					final DetailCompositeDialog dcd = new DetailCompositeDialog(cellEditorWindow.getShell(), part, part.getEditingDomain());
+
 					final int result = dcd.open(Collections.singletonList((EObject) getValue(object)));
 					if (result == Window.OK) {
 						return object;
@@ -113,19 +103,13 @@ public class VesselEVP extends NamedObjectEVP {
 					}
 				}
 			}
-			final DialogFeatureManipulator startRequirement = new RequirementFeatureManipulator(
-					FleetPackage.eINSTANCE.getVessel_StartRequirement(),
-					part.getEditingDomain());
+			final DialogFeatureManipulator startRequirement = new RequirementFeatureManipulator(FleetPackage.eINSTANCE.getVessel_StartRequirement(), part.getEditingDomain());
 
-			addColumn("Start constraint", startRequirement,
-					startRequirement);
+			addColumn("Start constraint", startRequirement, startRequirement);
 
-			final DialogFeatureManipulator endRequirement = new RequirementFeatureManipulator(
-					FleetPackage.eINSTANCE.getVessel_EndRequirement(),
-					part.getEditingDomain());
+			final DialogFeatureManipulator endRequirement = new RequirementFeatureManipulator(FleetPackage.eINSTANCE.getVessel_EndRequirement(), part.getEditingDomain());
 
-			addColumn("End constraint", endRequirement,
-					endRequirement);
+			addColumn("End constraint", endRequirement, endRequirement);
 		}
 
 	}

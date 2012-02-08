@@ -15,7 +15,6 @@ import scenario.market.MarketPackage;
 import scenario.presentation.LngEditorPlugin;
 import scenario.presentation.ScenarioEditor;
 import scenario.presentation.cargoeditor.handlers.debug.GenerateIndicesAction;
-import scenario.presentation.cargoeditor.handlers.debug.PerturbCargoesAction;
 
 import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
 import com.mmxlabs.shiplingo.ui.tableview.NumericAttributeManipulator;
@@ -24,37 +23,33 @@ import com.mmxlabs.shiplingo.ui.tableview.NumericAttributeManipulator;
  * EVP for indices.
  * 
  * @author Tom Hinton
- *
+ * 
  */
 public class IndexEVP extends NamedObjectEVP {
-	public IndexEVP(IWorkbenchPage page, ScenarioEditor part) {
+	public IndexEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 
-		final NumericAttributeManipulator defaultValue = new NumericAttributeManipulator(
-				MarketPackage.eINSTANCE.getStepwisePriceCurve_DefaultValue(),
-				part.getEditingDomain());
+		final NumericAttributeManipulator defaultValue = new NumericAttributeManipulator(MarketPackage.eINSTANCE.getStepwisePriceCurve_DefaultValue(), part.getEditingDomain());
 
-		addColumn("Default Value", defaultValue, defaultValue,
-				MarketPackage.eINSTANCE.getIndex_PriceCurve());
+		addColumn("Default Value", defaultValue, defaultValue, MarketPackage.eINSTANCE.getIndex_PriceCurve());
 	}
 
 	@Override
-	public EObjectTableViewer createViewer(Composite parent) {
+	public EObjectTableViewer createViewer(final Composite parent) {
 		final EObjectTableViewer v = super.createViewer(parent);
-		
+
 		if (LngEditorPlugin.DEBUG_UI_ENABLED) {
-			GenerateIndicesAction gen = new GenerateIndicesAction();
+			final GenerateIndicesAction gen = new GenerateIndicesAction();
 			getToolBarManager().appendToGroup("edit", gen);
 			v.addSelectionChangedListener(gen);
 		}
-		
+
 		return v;
 	}
-	
-	
+
 }

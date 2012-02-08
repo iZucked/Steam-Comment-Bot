@@ -26,29 +26,30 @@ import com.mmxlabs.shiplingo.ui.tableview.DialogFeatureManipulator;
  * 
  */
 public class CanalEVP extends NamedObjectEVP {
-	public CanalEVP(IWorkbenchPage page, ScenarioEditor part) {
+	public CanalEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
 
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-		
-		addTypicalColumn("Distance Matrix", 
-				new DialogFeatureManipulator(PortPackage.eINSTANCE.getCanal_DistanceModel(), part.getEditingDomain()) {
-			
+
+		addTypicalColumn("Distance Matrix", new DialogFeatureManipulator(PortPackage.eINSTANCE.getCanal_DistanceModel(), part.getEditingDomain()) {
+
 			@Override
-			protected String renderValue(Object value) {
+			protected String renderValue(final Object value) {
 				return "Double-click to edit";
 			}
-			
+
 			@Override
-			protected Object openDialogBox(Control cellEditorWindow, Object object) {
+			protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
 				final DistanceModel dm = (DistanceModel) getValue(object);
 				final DistanceEditorDialog ded = new DistanceEditorDialog(cellEditorWindow.getShell());
-				
-				if (ded.open(part, part.getEditingDomain(), dm) == Window.OK) return ded.getResult();
-				
+
+				if (ded.open(part, part.getEditingDomain(), dm) == Window.OK) {
+					return ded.getResult();
+				}
+
 				return null;
 			}
 		});

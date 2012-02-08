@@ -53,54 +53,46 @@ import com.mmxlabs.shiplingo.ui.tableview.NumericAttributeManipulator;
  * 
  */
 public class VesselClassEVP extends NamedObjectEVP {
-	public VesselClassEVP(IWorkbenchPage page, ScenarioEditor part) {
+	public VesselClassEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
 
 	/**
-	 * Because vessel classes are split into two files we need some custom code
-	 * here to ask the user to select both.
+	 * Because vessel classes are split into two files we need some custom code here to ask the user to select both.
 	 * 
-	 * For now it just displays two open dialogs, one for each file and then
-	 * runs two import sessions. The second import session is customized to hook
-	 * up fuel consumption curves.
+	 * For now it just displays two open dialogs, one for each file and then runs two import sessions. The second import session is customized to hook up fuel consumption curves.
 	 */
 	@Override
-	protected Action createImportAction(final GridTableViewer viewer,
-			final EditingDomain editingDomain, final EMFPath ePath) {
-		final ImportCSVAction delegate = (ImportCSVAction) super
-				.createImportAction(viewer, editingDomain, ePath);
+	protected Action createImportAction(final GridTableViewer viewer, final EditingDomain editingDomain, final EMFPath ePath) {
+		final ImportCSVAction delegate = (ImportCSVAction) super.createImportAction(viewer, editingDomain, ePath);
 		return new ImportCSVAction() {
 			@Override
 			public void run() {
 				final WarningCollector warningCollector = new WarningCollector();
 				try {
 					ImportUI.beginImport();
-					final FileDialog dialog = new FileDialog(PlatformUI
-							.getWorkbench().getActiveWorkbenchWindow()
-							.getShell(), SWT.OPEN);
+					final FileDialog dialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
 
 					dialog.setFilterExtensions(new String[] { "*.csv" });
 					dialog.setText("Select the vessel class file");
 					final String vcFile = dialog.open();
-					if (vcFile == null)
+					if (vcFile == null) {
 						return;
+					}
 					dialog.setText("Now select the fuel curves file");
 					final String fcFile = dialog.open();
-					if (fcFile == null)
+					if (fcFile == null) {
 						return;
+					}
 
 					final ArrayList<DeferredReference> defer = new ArrayList<DeferredReference>();
 					final NamedObjectRegistry reg = new NamedObjectRegistry();
 					reg.addEObjects((EObject) viewer.getInput());
 
-					final EObjectImporter vci = EObjectImporterFactory
-							.getInstance().getImporter(
-									FleetPackage.eINSTANCE.getVesselClass());
+					final EObjectImporter vci = EObjectImporterFactory.getInstance().getImporter(FleetPackage.eINSTANCE.getVesselClass());
 					vci.addImportWarningListener(warningCollector);
 					final CSVReader reader = new CSVReader(vcFile);
-					final Collection<EObject> vesselClasses = vci
-							.importObjects(reader, defer, reg);
+					final Collection<EObject> vesselClasses = vci.importObjects(reader, defer, reg);
 
 					// register new objects
 					for (final EObject object : vesselClasses) {
@@ -108,10 +100,7 @@ public class VesselClassEVP extends NamedObjectEVP {
 					}
 					// add stuff to scenario and re-register names
 
-					final EObjectImporter fcImporter = EObjectImporterFactory
-							.getInstance().getImporter(
-									FleetPackage.eINSTANCE
-											.getFuelConsumptionLine());
+					final EObjectImporter fcImporter = EObjectImporterFactory.getInstance().getImporter(FleetPackage.eINSTANCE.getFuelConsumptionLine());
 					fcImporter.addImportWarningListener(warningCollector);
 					final CSVReader reader2 = new CSVReader(fcFile);
 					fcImporter.importObjects(reader2, defer, reg);
@@ -130,19 +119,16 @@ public class VesselClassEVP extends NamedObjectEVP {
 				} catch (final IOException ex) {
 					ImportUI.endImport();
 				}
-				
+
 				if (warningCollector.getWarnings().isEmpty() == false) {
-					final ImportWarningDialog iwd = new ImportWarningDialog(
-							PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-									.getShell());
+					final ImportWarningDialog iwd = new ImportWarningDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
 					iwd.setWarnings(warningCollector.getWarnings());
 					iwd.open();
 				}
 			}
 
 			/*
-			 * Because I've over-ridden the run method up there, these methods
-			 * can safely return null.
+			 * Because I've over-ridden the run method up there, these methods can safely return null.
 			 */
 
 			@Override
@@ -163,40 +149,32 @@ public class VesselClassEVP extends NamedObjectEVP {
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		{
-			final BasicAttributeManipulator capacity = new NumericAttributeManipulator(
-					FleetPackage.eINSTANCE.getVesselClass_Capacity(),
-					part.getEditingDomain());
+			final BasicAttributeManipulator capacity = new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClass_Capacity(), part.getEditingDomain());
 			addColumn("Capacity", capacity, capacity);
 		}
 
 		{
-			final MultipleReferenceManipulator capacity = new MultipleReferenceManipulator(
-					FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts(),
-					part.getEditingDomain(), part.getPortSelectionProvider(),
-					namedObjectName);
+			final MultipleReferenceManipulator capacity = new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts(), part.getEditingDomain(),
+					part.getPortSelectionProvider(), namedObjectName);
 			addColumn("Inaccessible Ports", capacity, capacity);
 		}
 
 		{
-			final DialogFeatureManipulator laden = new DialogFeatureManipulator(
-					FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(),
-					part.getEditingDomain()) {
+			final DialogFeatureManipulator laden = new DialogFeatureManipulator(FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(), part.getEditingDomain()) {
 				@Override
 				protected String renderValue(final Object object) {
 					final VesselStateAttributes a = (VesselStateAttributes) object;
-					if (a == null)
+					if (a == null) {
 						return "";
-					return "NBO: " + a.getNboRate() + " Idle NBO: "
-							+ a.getIdleNBORate() + " Idle Base:"
-							+ a.getIdleConsumptionRate();
+					}
+					return "NBO: " + a.getNboRate() + " Idle NBO: " + a.getIdleNBORate() + " Idle Base:" + a.getIdleConsumptionRate();
 				}
 
 				@Override
-				protected Object openDialogBox(final Control cellEditorWindow,
-						final Object object) {
+				protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
 					final VesselStateAttributesDialog2 dialog = new VesselStateAttributesDialog2(cellEditorWindow.getShell());
 
 					if (dialog.open((VesselStateAttributes) getValue(object), false) == Window.OK) {
@@ -211,17 +189,11 @@ public class VesselClassEVP extends NamedObjectEVP {
 		}
 
 		{
-			final DialogFeatureManipulator laden = new DialogFeatureManipulator(
-					FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(),
-					part.getEditingDomain()) {
+			final DialogFeatureManipulator laden = new DialogFeatureManipulator(FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(), part.getEditingDomain()) {
 
 				@Override
-				protected Object openDialogBox(final Control cellEditorWindow,
-						final Object object) {
-					final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(
-							cellEditorWindow.getShell(),
-							(SWT.DIALOG_TRIM & ~SWT.CLOSE)
-									| SWT.APPLICATION_MODAL);
+				protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
+					final VesselStateAttributesDialog dlg = new VesselStateAttributesDialog(cellEditorWindow.getShell(), (SWT.DIALOG_TRIM & ~SWT.CLOSE) | SWT.APPLICATION_MODAL);
 
 					return dlg.open((VesselStateAttributes) getValue(object));
 				}
@@ -229,11 +201,10 @@ public class VesselClassEVP extends NamedObjectEVP {
 				@Override
 				protected String renderValue(final Object object) {
 					final VesselStateAttributes a = (VesselStateAttributes) object;
-					if (a == null)
+					if (a == null) {
 						return "";
-					return "NBO: " + a.getNboRate() + " Idle NBO: "
-							+ a.getIdleNBORate() + " Idle Base:"
-							+ a.getIdleConsumptionRate();
+					}
+					return "NBO: " + a.getNboRate() + " Idle NBO: " + a.getIdleNBORate() + " Idle Base:" + a.getIdleConsumptionRate();
 				}
 
 			};
@@ -241,25 +212,18 @@ public class VesselClassEVP extends NamedObjectEVP {
 		}
 
 		{
-			final DialogFeatureManipulator canals = new DialogFeatureManipulator(
-					FleetPackage.eINSTANCE.getVesselClass_CanalCosts(),
-					part.getEditingDomain()) {
+			final DialogFeatureManipulator canals = new DialogFeatureManipulator(FleetPackage.eINSTANCE.getVesselClass_CanalCosts(), part.getEditingDomain()) {
 
 				@Override
-				protected String renderValue(Object value) {
+				protected String renderValue(final Object value) {
 					return "";
 				}
 
 				@Override
-				protected Object openDialogBox(Control cellEditorWindow,
-						Object object) {
-					final CanalCostsDialog ccd = new CanalCostsDialog(
-							cellEditorWindow.getShell());
-					if (ccd.open(part.getAdapterFactory(), part
-							.getEditingDomain(), part.getScenario()
-							.getCanalModel(),
-							(EObject)object, (EReference) this.field) == Window.OK) {
-						return ccd.getResult(); //????
+				protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
+					final CanalCostsDialog ccd = new CanalCostsDialog(cellEditorWindow.getShell());
+					if (ccd.open(part.getAdapterFactory(), part.getEditingDomain(), part.getScenario().getCanalModel(), (EObject) object, (EReference) this.field) == Window.OK) {
+						return ccd.getResult(); // ????
 					}
 
 					return null;

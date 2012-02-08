@@ -17,51 +17,47 @@ import scenario.ScenarioPackage;
 import com.mmxlabs.common.Pair;
 
 public abstract class SimpleRVP extends ScenarioRVP {
-		protected List<Pair<String, EObject>> cachedValues = null;
-		private final EReference containingReference;
+	protected List<Pair<String, EObject>> cachedValues = null;
+	private final EReference containingReference;
 
-		public SimpleRVP(final EReference containingReference) {
-			super(ScenarioPackage.eINSTANCE.getNamedObject_Name());
-			this.containingReference = containingReference;
-		}
-
-		public SimpleRVP(final EReference containingReference,
-				final EAttribute name) {
-			super(name);
-			this.containingReference = containingReference;
-		}
-
-		@Override
-		public List<Pair<String, EObject>> getAllowedValues(EObject target,
-				EStructuralFeature field) {
-			if (cachedValues == null) {
-				install();
-				cacheValues();
-			}
-			return cachedValues;
-		}
-
-		protected abstract void install();
-
-		@Override
-		protected boolean isRelevantTarget(Object target, Object feature) {
-			return (super.isRelevantTarget(target, feature) && (containingReference
-					.getEReferenceType().isSuperTypeOf(((EObject) target)
-					.eClass())))
-					|| feature == containingReference;
-		}
-
-		@Override
-		protected void cacheValues() {
-			cachedValues = getSortedNames(getObjects(), nameAttribute);
-			final Pair<String, EObject> none = getEmptyObject();
-			if (none != null)
-				cachedValues.add(0, none);
-		}
-
-		protected Pair<String, EObject> getEmptyObject() {
-			return null;
-		}
-
-		protected abstract EList<? extends EObject> getObjects();
+	public SimpleRVP(final EReference containingReference) {
+		super(ScenarioPackage.eINSTANCE.getNamedObject_Name());
+		this.containingReference = containingReference;
 	}
+
+	public SimpleRVP(final EReference containingReference, final EAttribute name) {
+		super(name);
+		this.containingReference = containingReference;
+	}
+
+	@Override
+	public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+		if (cachedValues == null) {
+			install();
+			cacheValues();
+		}
+		return cachedValues;
+	}
+
+	protected abstract void install();
+
+	@Override
+	protected boolean isRelevantTarget(final Object target, final Object feature) {
+		return (super.isRelevantTarget(target, feature) && (containingReference.getEReferenceType().isSuperTypeOf(((EObject) target).eClass()))) || (feature == containingReference);
+	}
+
+	@Override
+	protected void cacheValues() {
+		cachedValues = getSortedNames(getObjects(), nameAttribute);
+		final Pair<String, EObject> none = getEmptyObject();
+		if (none != null) {
+			cachedValues.add(0, none);
+		}
+	}
+
+	protected Pair<String, EObject> getEmptyObject() {
+		return null;
+	}
+
+	protected abstract EList<? extends EObject> getObjects();
+}

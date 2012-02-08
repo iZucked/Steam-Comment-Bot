@@ -21,19 +21,15 @@ import com.mmxlabs.shiplingo.ui.tableview.SingleReferenceManipulator;
  * 
  */
 public class SalesContractEVP extends ContractEVP {
-	public SalesContractEVP(IWorkbenchPage page, ScenarioEditor part) {
+	public SalesContractEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		// TODO Auto-generated method stub
 		super.init(path, adapterFactory);
-		addTypicalColumn(
-				"Index",
-				new SingleReferenceManipulator(ContractPackage.eINSTANCE
-						.getSalesContract_Index(), part.getIndexProvider(),
-						part.getEditingDomain()));
+		addTypicalColumn("Index", new SingleReferenceManipulator(ContractPackage.eINSTANCE.getSalesContract_Index(), part.getIndexProvider(), part.getEditingDomain()));
 
 		// salesPane.addTypicalColumn(
 		// "Regas Efficiency",
@@ -41,10 +37,7 @@ public class SalesContractEVP extends ContractEVP {
 		// .getSalesContract_RegasEfficiency(),
 		// getEditingDomain()));
 
-		addTypicalColumn(
-				"Sales Mark-up",
-				new NumericAttributeManipulator(ContractPackage.eINSTANCE
-						.getSalesContract_Markup(), part.getEditingDomain()));
+		addTypicalColumn("Sales Mark-up", new NumericAttributeManipulator(ContractPackage.eINSTANCE.getSalesContract_Markup(), part.getEditingDomain()));
 
 	}
 
