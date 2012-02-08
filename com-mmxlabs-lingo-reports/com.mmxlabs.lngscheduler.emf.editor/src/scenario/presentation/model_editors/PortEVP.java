@@ -109,7 +109,7 @@ public class PortEVP extends NamedObjectEVP {
 
 		@Override
 		public CellEditor getCellEditor(final Composite parent, final Object object) {
-			return new ComboBoxCellEditor(parent, new String[] { "Yes", "No" });
+			return new ComboBoxCellEditor(parent, new String[] { "Y", "N" });
 		}
 
 		@Override
@@ -125,7 +125,7 @@ public class PortEVP extends NamedObjectEVP {
 
 		@Override
 		public String render(final Object object) {
-			return ((Integer) getValue(object)) == 0 ? "Yes" : "No";
+			return ((Integer) getValue(object)) == 0 ? "Y" : "N";
 		}
 
 		@Override
@@ -439,11 +439,6 @@ public class PortEVP extends NamedObjectEVP {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		// add columns
-		final PortPackage pp = PortPackage.eINSTANCE;
-
-		// final BasicAttributeManipulator manipulator = new ValueListAttributeManipulator(pp.getPort_TimeZone(), part.getEditingDomain(), TimezoneInlineEditor.getTimezones());
-		// addColumn("Timezone", manipulator, manipulator);
-
 		if (part.getScenario().getContractModel() != null) {
 			addTypicalColumn("Default Contract", new DefaultContractManipulator(part.getEditingDomain(), part.getContractProvider()));
 		}
