@@ -24,6 +24,7 @@ import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
+import com.mmxlabs.lngscheduler.emf.extras.inject.LNGTransformerModule;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -61,7 +62,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		entities.setScenario(scenario);
 
-		final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
+		final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
 
 		final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 

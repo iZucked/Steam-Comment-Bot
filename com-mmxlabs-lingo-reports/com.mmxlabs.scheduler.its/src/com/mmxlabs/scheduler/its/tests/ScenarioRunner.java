@@ -15,6 +15,7 @@ import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.contracts.SimpleContractTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
+import com.mmxlabs.lngscheduler.emf.extras.inject.LNGTransformerModule;
 import com.mmxlabs.lngscheduler.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -67,7 +68,7 @@ public class ScenarioRunner {
 
 		entities.setScenario(scenario);
 
-		final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
+		final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
 
 		if (!lst.addPlatformTransformerExtensions()) {
 			// add extensions manually; TODO improve this later.

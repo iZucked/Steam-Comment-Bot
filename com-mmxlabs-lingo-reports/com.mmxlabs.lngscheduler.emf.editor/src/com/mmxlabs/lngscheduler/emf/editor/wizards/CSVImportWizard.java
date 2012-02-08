@@ -77,6 +77,7 @@ import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.ScenarioUtils;
 import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
+import com.mmxlabs.lngscheduler.emf.extras.inject.LNGTransformerModule;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -121,15 +122,17 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 		try {
 			getContainer().run(true, true, new IRunnableWithProgress() {
 				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+				public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 					monitor.beginTask("Import CSV Files", inputFilePaths.size() + 6);
 
 					for (final Map.Entry<EClass, String> job : inputFilePaths.entrySet()) {
-						if (job.getKey().equals(FleetPackage.eINSTANCE.getFuelConsumptionLine()))
+						if (job.getKey().equals(FleetPackage.eINSTANCE.getFuelConsumptionLine())) {
 							continue;
-						if (job.getValue() == null || job.getValue().isEmpty())
+						}
+						if ((job.getValue() == null) || job.getValue().isEmpty()) {
 							continue;
+						}
 						try {
 							monitor.subTask("Import " + new File(job.getValue()).getName());
 							monitor.worked(1);
@@ -152,7 +155,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					// process fuel curves
 					if (inputFilePaths.containsKey(FleetPackage.eINSTANCE.getFuelConsumptionLine())) {
 						final String pth = inputFilePaths.get(FleetPackage.eINSTANCE.getFuelConsumptionLine());
-						if (pth != null && pth.isEmpty() == false) {
+						if ((pth != null) && (pth.isEmpty() == false)) {
 							try {
 								final CSVReader reader = new CSVReader(pth);
 								final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(FleetPackage.eINSTANCE.getFuelConsumptionLine());
@@ -218,7 +221,8 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 
 					postProcess(scenario);
 
-					if (scenario.getOptimisation() != null && scenario.getOptimisation().getCurrentSettings() != null && scenario.getOptimisation().getCurrentSettings().getInitialSchedule() != null) {
+					if ((scenario.getOptimisation() != null) && (scenario.getOptimisation().getCurrentSettings() != null)
+							&& (scenario.getOptimisation().getCurrentSettings().getInitialSchedule() != null)) {
 						// evaluate initial schedule
 						monitor.subTask("Evaluating initial schedule...");
 						try {
@@ -228,7 +232,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 
 							set.getPackageRegistry().put(scenario.eClass().getEPackage().getNsURI(), scenario.eClass().getEPackage());
 
-							URI nonsenseURI = URI.createGenericURI("invalid", "invalid", "").trimFragment();
+							final URI nonsenseURI = URI.createGenericURI("invalid", "invalid", "").trimFragment();
 
 							final Resource resource = set.createResource(nonsenseURI);
 
@@ -240,7 +244,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							// for things to
 							// function.
 
-							final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
+							final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
 							final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 							final ModelEntityMap entities = new ResourcelessModelEntityMap();
 							entities.setScenario(scenario);
@@ -252,7 +256,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
 							final IOptimisationContext context = optAndContext.getFirst();
-							LocalSearchOptimiser optimiser = optAndContext.getSecond();
+							final LocalSearchOptimiser optimiser = optAndContext.getSecond();
 
 							// because we are driving the optimiser ourself, so
 							// we can be paused, we
@@ -260,7 +264,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 							optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 
 							optimiser.init();
-							IAnnotatedSolution startSolution = optimiser.start(context);
+							final IAnnotatedSolution startSolution = optimiser.start(context);
 							monitor.worked(1);
 							final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 							exporter.addPlatformExporterExtensions();
@@ -273,7 +277,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 
 							scenario.getOptimisation().getCurrentSettings().setInitialSchedule(schedule);
 							monitor.worked(1);
-						} catch (Exception ex) {
+						} catch (final Exception ex) {
 							monitor.worked(3);
 							ex.printStackTrace();
 						}
@@ -283,19 +287,20 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 					monitor.done();
 				}
 			});
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			e.printStackTrace();
 			return false;
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 			return false;
 		}
 
 		scenario.setName(destinationPage.getFileName());
 
-		IFile file = destinationPage.createNewFile();
-		if (file == null)
+		final IFile file = destinationPage.createNewFile();
+		if (file == null) {
 			return false;
+		}
 
 		if (warningCollector.getWarnings().isEmpty() == false) {
 			// TODO is it OK to use getShell() or should it be the parent shell?
@@ -313,12 +318,12 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 	 * 
 	 * @param scenario2
 	 */
-	protected void postProcess(Scenario scenario2) {
+	protected void postProcess(final Scenario scenario2) {
 		ScenarioUtils.addDefaultSettings(scenario);
 
 		// copy shipping entity from last entity.
 		if (scenario.getContractModel().getEntities().isEmpty() == false) {
-			final Entity possiblyGroupEntity = scenario.getContractModel().getEntities().get(scenario.getContractModel().getEntities().size()-1);
+			final Entity possiblyGroupEntity = scenario.getContractModel().getEntities().get(scenario.getContractModel().getEntities().size() - 1);
 			if (possiblyGroupEntity instanceof GroupEntity) {
 				final GroupEntity groupEntity = (GroupEntity) possiblyGroupEntity;
 				scenario.getContractModel().setShippingEntity(groupEntity);
@@ -427,7 +432,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 
 			pickAll.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(final SelectionEvent e) {
 					final DirectoryDialog dd = new DirectoryDialog(getShell());
 					final String s = dd.open();
 					if (s == null) {
@@ -459,7 +464,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 			setControl(topLevel);
 		}
 
-		void makeEditor(Group group, String name, EClass ec, String[] extensions) {
+		void makeEditor(final Group group, final String name, final EClass ec, final String[] extensions) {
 			final FileFieldEditor portsEditor = new FileFieldEditor(name + "Select", name, group);
 			portsEditor.setFileExtensions(extensions);
 			portsEditor.setEmptyStringAllowed(true);
@@ -476,7 +481,7 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
 	 */
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		setWindowTitle("File Import Wizard"); // NON-NLS-1
 		setNeedsProgressMonitor(true);
 		destinationPage = new WizardNewFileCreationPage("Choose Scenario Destination", selection) {

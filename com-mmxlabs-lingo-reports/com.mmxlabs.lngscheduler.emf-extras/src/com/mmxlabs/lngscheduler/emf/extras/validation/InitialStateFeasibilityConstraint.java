@@ -16,6 +16,7 @@ import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
+import com.mmxlabs.lngscheduler.emf.extras.inject.LNGTransformerModule;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
@@ -42,7 +43,7 @@ public class InitialStateFeasibilityConstraint extends AbstractModelConstraint {
 			final ModelEntityMap entities = new ResourcelessModelEntityMap();
 			entities.setScenario(scenario);
 
-			final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
+			final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
 
 			final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
 

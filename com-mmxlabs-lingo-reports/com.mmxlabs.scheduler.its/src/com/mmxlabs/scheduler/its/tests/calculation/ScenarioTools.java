@@ -64,6 +64,7 @@ import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
 import com.mmxlabs.lngscheduler.emf.extras.ScenarioUtils;
 import com.mmxlabs.lngscheduler.emf.extras.contracts.SimpleContractTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
+import com.mmxlabs.lngscheduler.emf.extras.inject.LNGTransformerModule;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -631,7 +632,7 @@ public class ScenarioTools {
 	 */
 	public static Schedule evaluate(final Scenario scenario) {
 		// final LNGScenarioTransformer transformer = new LNGScenarioTransformer(scenario);
-		final LNGScenarioTransformer lst = new LNGScenarioTransformer(scenario);
+		final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
 
 		final ModelEntityMap entities = new ResourcelessModelEntityMap();
 		final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());

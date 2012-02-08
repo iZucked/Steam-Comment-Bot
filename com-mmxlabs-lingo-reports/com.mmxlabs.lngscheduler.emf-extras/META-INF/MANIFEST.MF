@@ -17,12 +17,17 @@ Require-Bundle: com.mmxlabs.lngscheduler.emf;bundle-version="1.0.0",
  com.mmxlabs.common.common-util;bundle-version="1.0.0",
  com.mmxlabs.optimiser.optimiser-common;bundle-version="1.0.0",
  com.mmxlabs.optimiser.optimiser-core;bundle-version="1.0.0",
- com.mmxlabs.optimiser.optimiser-lso;bundle-version="1.0.0"
+ com.mmxlabs.optimiser.optimiser-lso;bundle-version="1.0.0",
+ com.google.inject;bundle-version="3.0.0";visibility:=reexport,
+ org.ops4j.peaberry;bundle-version="1.2.0",
+ org.ops4j.peaberry.eclipse;bundle-version="1.1.1"
 Export-Package: com.mmxlabs.lngscheduler.emf.extras,
  com.mmxlabs.lngscheduler.emf.extras.contracts,
  com.mmxlabs.lngscheduler.emf.extras.export,
+ com.mmxlabs.lngscheduler.emf.extras.inject,
  com.mmxlabs.lngscheduler.emf.extras.validation,
  com.mmxlabs.lngscheduler.emf.extras.validation.context,
  com.mmxlabs.lngscheduler.emf.extras.validation.status
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngscheduler.emf.extras.plugin.ExtrasPlugin
+Import-Package: javax.inject;version="1.0.0"
