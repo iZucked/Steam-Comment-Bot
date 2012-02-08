@@ -73,7 +73,7 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 		{
 			final SingleReferenceManipulator port = new SingleReferenceManipulator(cargoPackage.getSlot_Contract(), part.getContractProvider(), part.getEditingDomain());
 
-			addColumn("Load Contract", port, port, cargoPackage.getCargo_LoadSlot());
+			addColumn("Purchase Contract", port, port, cargoPackage.getCargo_LoadSlot());
 		}
 
 		{
@@ -87,7 +87,7 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 
 		{
 			final SingleReferenceManipulator port = new SingleReferenceManipulator(cargoPackage.getSlot_Contract(), part.getContractProvider(), part.getEditingDomain());
-			addColumn("Discharge Contract", port, port, cargoPackage.getCargo_DischargeSlot());
+			addColumn("Sales Contract", port, port, cargoPackage.getCargo_DischargeSlot());
 		}
 
 		{
