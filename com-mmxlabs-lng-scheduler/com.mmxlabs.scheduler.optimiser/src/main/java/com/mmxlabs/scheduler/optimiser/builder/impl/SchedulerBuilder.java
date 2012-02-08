@@ -49,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
+import com.mmxlabs.scheduler.optimiser.builder.impl.XYPortEuclideanDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -116,10 +117,12 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEdi
  * 
  */
 public final class SchedulerBuilder implements ISchedulerBuilder {
+	/**
+	 * For debug & timing purposes. Switches the indexing DCPs on or off.
+	 */
+	private static final boolean USE_INDEXED_DCPS = true;
 
 	private final List<IBuilderExtension> extensions = new LinkedList<IBuilderExtension>();
-
-	private final IXYPortDistanceCalculator distanceProvider = new XYPortEuclideanDistanceCalculator();
 
 	private final List<IResource> resources = new ArrayList<IResource>();
 
@@ -131,7 +134,64 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final List<ICargo> cargoes = new LinkedList<ICargo>();
 
+	private final List<ILoadOption> loadSlots = new LinkedList<ILoadOption>();
+
+	private final List<IDischargeOption> dischargeSlots = new LinkedList<IDischargeOption>();
+
+	private final List<ITimeWindow> timeWindows = new LinkedList<ITimeWindow>();
+
+	/**
+	 * List of end slots, which need to be corrected in getOptimisationData to have the latest time in them
+	 */
+	private final List<Pair<ISequenceElement, PortSlot>> endSlots = new LinkedList<Pair<ISequenceElement, PortSlot>>();
+
+	/**
+	 * A "virtual" port which is zero distance from all other ports, to be used in cases where a vessel can be in any location. This can be replaced with a real location at a later date, after running
+	 * an optimisation.
+	 */
+	private IPort ANYWHERE;
+
 	private final List<IPort> ports = new LinkedList<IPort>();
+
+	/**
+	 * A field for tracking the time at which the last time window closes
+	 */
+	private int endOfLatestWindow = 0;
+
+	/**
+	 * Tracks elements that are not shipped.
+	 */
+	private final List<ISequenceElement> unshippedElements = new ArrayList<ISequenceElement>();
+	/*
+	 * Constraint-tracking data structures; constraints created through the builder are applied at the very end, in case they affect things created after them.
+	 */
+
+	/**
+	 * Tracks forward adjacency constraints; value must follow key. The reverse of {@link #reverseAdjacencyConstraints}
+	 */
+	private final Map<IPortSlot, IPortSlot> forwardAdjacencyConstraints = new HashMap<IPortSlot, IPortSlot>();
+
+	/**
+	 * Tracks forward adjacency constraints; key must follow value. The reverse of {@link #forwardAdjacencyConstraints}
+	 */
+	private final Map<IPortSlot, IPortSlot> reverseAdjacencyConstraints = new HashMap<IPortSlot, IPortSlot>();
+
+	private final Map<IPort, List<TotalVolumeLimit>> loadLimits = new HashMap<IPort, List<TotalVolumeLimit>>();
+
+	private final Map<IPort, List<TotalVolumeLimit>> dischargeLimits = new HashMap<IPort, List<TotalVolumeLimit>>();
+
+	/**
+	 * The slots for vessel events which have been generated; these are stored so that in {@link #buildVesselEvents()} they can have some extra post-processing done to set up any constraints
+	 */
+	private final List<VesselEventPortSlot> vesselEvents = new LinkedList<VesselEventPortSlot>();
+
+	private final Map<IPortSlot, Set<IVessel>> slotVesselRestrictions = new HashMap<IPortSlot, Set<IVessel>>();
+
+	private final Map<IPortSlot, Set<IVesselClass>> slotVesselClassRestrictions = new HashMap<IPortSlot, Set<IVesselClass>>();
+
+	private final IIndexingContext indexingContext = new SimpleIndexingContext();
+
+	private final IXYPortDistanceCalculator distanceProvider = new XYPortEuclideanDistanceCalculator();
 
 	private final IVesselProviderEditor vesselProvider;
 
@@ -151,73 +211,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider;
 
-	private final List<ILoadOption> loadSlots = new LinkedList<ILoadOption>();
-
-	private final List<IDischargeOption> dischargeSlots = new LinkedList<IDischargeOption>();
-
-	private final List<ITimeWindow> timeWindows = new LinkedList<ITimeWindow>();
-
-	/**
-	 * List of end slots, which need to be corrected in getOptimisationData to have the latest time in them
-	 */
-	private final List<Pair<ISequenceElement, PortSlot>> endSlots = new LinkedList<Pair<ISequenceElement, PortSlot>>();
-
-	/**
-	 * A "virtual" port which is zero distance from all other ports, to be used in cases where a vessel can be in any location. This can be replaced with a real location at a later date, after running
-	 * an optimisation.
-	 */
-	private final IPort ANYWHERE;
-
 	private final IStartEndRequirementProviderEditor startEndRequirementProvider;
 
-	/**
-	 * A field for tracking the time at which the last time window closes
-	 */
-	private int endOfLatestWindow = 0;
-
 	private final IPortExclusionProviderEditor portExclusionProvider;
-
-	/**
-	 * The slots for vessel events which have been generated; these are stored so that in {@link #buildVesselEvents()} they can have some extra post-processing done to set up any constraints
-	 */
-	private final List<VesselEventPortSlot> vesselEvents = new LinkedList<VesselEventPortSlot>();
-
-	private final Map<IPortSlot, Set<IVessel>> slotVesselRestrictions = new HashMap<IPortSlot, Set<IVessel>>();
-
-	private final Map<IPortSlot, Set<IVesselClass>> slotVesselClassRestrictions = new HashMap<IPortSlot, Set<IVesselClass>>();
 
 	private final IReturnElementProviderEditor returnElementProvider;
 
 	private final HashMapRouteCostProviderEditor routeCostProvider;
 
-	private final IIndexingContext indexingContext = new SimpleIndexingContext();
-
-	/**
-	 * For debug & timing purposes. Switches the indexing DCPs on or off.
-	 */
-	private static final boolean USE_INDEXED_DCPS = true;
-
-	private final Map<IPort, List<TotalVolumeLimit>> loadLimits = new HashMap<IPort, List<TotalVolumeLimit>>();
-
-	private final Map<IPort, List<TotalVolumeLimit>> dischargeLimits = new HashMap<IPort, List<TotalVolumeLimit>>();
-
 	private final ITotalVolumeLimitEditor totalVolumeLimits;
 
 	private final IDiscountCurveProviderEditor discountCurveProvider = new HashMapDiscountCurveEditor(SchedulerConstants.DCP_discountCurveProvider);
-
-	/*
-	 * Constraint-tracking data structures; constraints created through the builder are applied at the very end, in case they affect things created after them.
-	 */
-
-	/**
-	 * Tracks forward adjacency constraints; value must follow key. The reverse of {@link #reverseAdjacencyConstraints}
-	 */
-	private final Map<IPortSlot, IPortSlot> forwardAdjacencyConstraints = new HashMap<IPortSlot, IPortSlot>();
-
-	/**
-	 * Tracks forward adjacency constraints; key must follow value. The reverse of {@link #forwardAdjacencyConstraints}
-	 */
-	private final Map<IPortSlot, IPortSlot> reverseAdjacencyConstraints = new HashMap<IPortSlot, IPortSlot>();
 
 	/**
 	 * Keeps track of calculators
@@ -225,11 +229,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final HashSetCalculatorProviderEditor calculatorProvider;
 
 	private final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor(SchedulerConstants.DCP_optionalElementsProvider);
-
-	/**
-	 * Tracks elements that are not shipped.
-	 */
-	private final List<ISequenceElement> unshippedElements = new ArrayList<ISequenceElement>();
 
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
