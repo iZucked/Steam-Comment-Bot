@@ -41,11 +41,11 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 			} else if (type == i) {
 				return Integer.valueOf(spinnerValue);
 			} else if (type == p) {
-				return ((double) );
+				return (Double) ((double) (spinnerValue * Math.pow(10, -(digits + 2))));
 			} else if (type == f) {
 				return ((float) (spinnerValue * Math.pow(10, -digits)));
 			} else if (type == d) {
-				return ((double) );
+				return (Double) ((double) (spinnerValue * Math.pow(10, -digits)));
 			} else {
 				throw new RuntimeException("Unknown type of numeric field");
 			}
