@@ -91,13 +91,13 @@ public class CargoEVP extends ScenarioObjectEditorViewerPane {
 		}
 
 		{
-			final MultipleReferenceManipulator av = new MultipleReferenceManipulator(cargoPackage.getCargo_AllowedVessels(), part.getEditingDomain(), part.getVesselProvider(), namedObjectName);
-			addTypicalColumn("Restrict To", av);
+			final CargoInitialVesselManipulator civm = new CargoInitialVesselManipulator(part.getEditingDomain());
+			addTypicalColumn("Initial Vessel", civm);
 		}
 
 		{
-			final CargoInitialVesselManipulator civm = new CargoInitialVesselManipulator(part.getEditingDomain());
-			addTypicalColumn("Initial Vessel", civm);
+			final MultipleReferenceManipulator av = new MultipleReferenceManipulator(cargoPackage.getCargo_AllowedVessels(), part.getEditingDomain(), part.getVesselProvider(), namedObjectName);
+			addTypicalColumn("Restrict To", av);
 		}
 	}
 
