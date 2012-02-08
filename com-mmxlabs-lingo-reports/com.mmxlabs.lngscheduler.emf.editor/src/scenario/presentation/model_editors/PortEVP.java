@@ -57,13 +57,10 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.shiplingo.ui.detailview.base.IReferenceValueProvider;
 import com.mmxlabs.shiplingo.ui.detailview.containers.DetailCompositeDialog;
-import com.mmxlabs.shiplingo.ui.detailview.editors.TimezoneInlineEditor;
 import com.mmxlabs.shiplingo.ui.detailview.editors.dialogs.DistanceEditorDialog;
-import com.mmxlabs.shiplingo.ui.tableview.BasicAttributeManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
 import com.mmxlabs.shiplingo.ui.tableview.ICellManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
-import com.mmxlabs.shiplingo.ui.tableview.ValueListAttributeManipulator;
 
 /**
  * A {@link ScenarioObjectEditorViewerPane} for editing a port model
@@ -444,8 +441,8 @@ public class PortEVP extends NamedObjectEVP {
 		// add columns
 		final PortPackage pp = PortPackage.eINSTANCE;
 
-		final BasicAttributeManipulator manipulator = new ValueListAttributeManipulator(pp.getPort_TimeZone(), part.getEditingDomain(), TimezoneInlineEditor.getTimezones());
-		addColumn("Timezone", manipulator, manipulator);
+		// final BasicAttributeManipulator manipulator = new ValueListAttributeManipulator(pp.getPort_TimeZone(), part.getEditingDomain(), TimezoneInlineEditor.getTimezones());
+		// addColumn("Timezone", manipulator, manipulator);
 
 		if (part.getScenario().getContractModel() != null) {
 			addTypicalColumn("Default Contract", new DefaultContractManipulator(part.getEditingDomain(), part.getContractProvider()));
