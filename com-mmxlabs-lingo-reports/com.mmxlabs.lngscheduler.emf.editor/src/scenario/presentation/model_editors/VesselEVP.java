@@ -69,7 +69,7 @@ public class VesselEVP extends NamedObjectEVP {
 						zone = TimeZone.getTimeZone(pat.getPort().getTimeZone());
 					} else {
 						zone = TimeZone.getTimeZone("GMT");
-						port = "Anywhere";
+						port = null;
 					}
 
 					final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
@@ -78,16 +78,31 @@ public class VesselEVP extends NamedObjectEVP {
 					if (pat.isSetStartTime()) {
 						startTime = df.format(pat.getStartTime());
 					} else {
-						startTime = "any time";
+						startTime = null;
 					}
 
 					if (pat.isSetEndTime()) {
 						endTime = df.format(pat.getEndTime());
 					} else {
-						endTime = "any time";
+						endTime = null;
 					}
 
-					return port + " from " + startTime + " to " + endTime;
+					final StringBuilder sb = new StringBuilder();
+					if (port != null) {
+						sb.append(port);
+						sb.append(" ");
+					}
+					if (startTime != null) {
+						sb.append("from ");
+						sb.append(startTime);
+						sb.append(" ");
+					}
+					if (endTime != null) {
+						sb.append("to ");
+						sb.append(endTime);
+					}
+
+					return sb.toString();
 				}
 
 				@Override
