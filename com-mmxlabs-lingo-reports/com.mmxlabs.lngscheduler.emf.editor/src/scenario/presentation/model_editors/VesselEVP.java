@@ -56,7 +56,7 @@ public class VesselEVP extends NamedObjectEVP {
 				protected String renderValue(final Object value) {
 					final PortAndTime pat = (PortAndTime) value;
 					if (pat == null) {
-						return "No constraint";
+						return "No requirement";
 					}
 
 					final String port;
@@ -105,11 +105,11 @@ public class VesselEVP extends NamedObjectEVP {
 			}
 			final DialogFeatureManipulator startRequirement = new RequirementFeatureManipulator(FleetPackage.eINSTANCE.getVessel_StartRequirement(), part.getEditingDomain());
 
-			addColumn("Start constraint", startRequirement, startRequirement);
+			addColumn("Start requirement", startRequirement, startRequirement);
 
 			final DialogFeatureManipulator endRequirement = new RequirementFeatureManipulator(FleetPackage.eINSTANCE.getVessel_EndRequirement(), part.getEditingDomain());
 
-			addColumn("End constraint", endRequirement, endRequirement);
+			addColumn("End requirement", endRequirement, endRequirement);
 		}
 
 	}
