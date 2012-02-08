@@ -10,10 +10,12 @@ import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IDisplayCompositeFactoryRegistry;
 import com.mmxlabs.models.ui.registries.IEditorFactoryRegistry;
+import com.mmxlabs.models.ui.registries.IJointModelEditorContributionRegistry;
 import com.mmxlabs.models.ui.registries.IReferenceValueProviderFactoryRegistry;
 import com.mmxlabs.models.ui.registries.impl.ComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.impl.DisplayCompositeFactoryRegistry;
 import com.mmxlabs.models.ui.registries.impl.EditorFactoryRegistry;
+import com.mmxlabs.models.ui.registries.impl.JointModelEditorContributionRegistry;
 import com.mmxlabs.models.ui.registries.impl.ReferenceValueProviderFactoryRegistry;
 
 /**
@@ -29,12 +31,22 @@ public class ExtensionConfigurationModule extends AbstractModule {
 		install(osgiModule(Activator.getDefault().getBundle()
 				.getBundleContext(), eclipseRegistry()));
 
-		bind(iterable(IDisplayCompositeFactoryExtension.class)).toProvider(
-				service(IDisplayCompositeFactoryExtension.class).multiple());
+		// extension point com.mmxlabs.models.ui.displaycompositefactories
+		bind(iterable(IDisplayCompositeFactoryExtension.class)).toProvider(service(IDisplayCompositeFactoryExtension.class).multiple());
+		// extension point com.mmxlabs.models.ui.componenthelpers
+		bind(iterable(IComponentHelperExtension.class)).toProvider(service(IComponentHelperExtension.class).multiple());
+		// extension point com.mmxlabs.models.ui.editorfactories
+		bind(iterable(IInlineEditorFactoryExtension.class)).toProvider(service(IInlineEditorFactoryExtension.class).multiple());
+		// extension point com.mmxlabs.models.ui.valueproviders
+		bind(iterable(IReferenceValueProviderExtension.class)).toProvider(service(IReferenceValueProviderExtension.class).multiple());
+		// extension point com.mmxlabs.models.ui.jointmodeleditor.contributions
+		bind(iterable(IJointModelEditorExtension.class)).toProvider(service(IJointModelEditorExtension.class).multiple());
 		
+		//registry implementation bindings; they all have extensions injected by the above bindings.
 		bind(IDisplayCompositeFactoryRegistry.class).to(DisplayCompositeFactoryRegistry.class);
 		bind(IComponentHelperRegistry.class).to(ComponentHelperRegistry.class);
 		bind(IEditorFactoryRegistry.class).to(EditorFactoryRegistry.class);
 		bind(IReferenceValueProviderFactoryRegistry.class).to(ReferenceValueProviderFactoryRegistry.class);
+		bind(IJointModelEditorContributionRegistry.class).to(JointModelEditorContributionRegistry.class);
 	}
 }
