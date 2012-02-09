@@ -10,19 +10,19 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 /**
- * Provides information about the tolls, fuel usage, and travel time associated with traveling by a non-default route
+ * Provides information about the tolls, fuel usage, and travel time associated with travelling by a non-default route
  * 
  * @author hinton
  * 
  */
 public interface IRouteCostProvider extends IDataComponentProvider {
 	/**
-	 * Gets the cost in dollars incurred by vessels of class {@code vesselClass} traveling via {@code route} in state {@code vesselState}.
+	 * Gets the cost in dollars incurred by vessels of class {@code vesselClass} travelling via {@code route} in state {@code vesselState}.
 	 * 
 	 * @param route
-	 *            route traveled
+	 *            route travelled
 	 * @param vesselClass
-	 *            class of traveling vessel
+	 *            class of travelling vessel
 	 * @param vesselState
 	 *            vessel state during travel`
 	 * @return toll in dollars
@@ -34,9 +34,9 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	 * total fuel used is then this value multiplied by {@link #getRouteTransitTime(String, IVesselClass)}.
 	 * 
 	 * @param route
-	 *            route traveled
+	 *            route travelled
 	 * @param vesselClass
-	 *            class of traveling vessel
+	 *            class of travelling vessel
 	 * @return extra fuel used by vessel, in scaled MT BF(E) per hour
 	 */
 	public long getRouteFuelUsage(final String route, final IVesselClass vesselClass);
@@ -45,9 +45,9 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	 * Gets the extra time, in hours, which vessels of class {@code vesselClass} must spend to travel via {@code route}.
 	 * 
 	 * @param route
-	 *            route traveled
+	 *            route travelled
 	 * @param vesselClass
-	 *            class of traveling vessel
+	 *            class of travelling vessel
 	 * @return Time to pass through canal, in hours. This is independent of the journey time spent getting from point A to canal entrance and canal exit to point B.
 	 */
 	public int getRouteTransitTime(final String route, final IVesselClass vesselClass);
