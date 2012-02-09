@@ -7,7 +7,7 @@ package com.mmxlabs.optimiser.core.scenario.common.impl;
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
 
-public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrixEditor<T, U> {
+public final class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrixEditor<T, U> {
 	private final String name;
 	private final U defaultValue;
 	private U[][] matrix;
@@ -23,7 +23,7 @@ public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrix
 	}
 
 	@Override
-	public U get(final T x, final T y) {
+	public final U get(final T x, final T y) {
 		// added bounds check - we may not have seen all indexed objects possible.
 		final int xi = x.getIndex();
 		if (xi >= matrix.length) {
@@ -38,17 +38,17 @@ public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrix
 	}
 
 	@Override
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 
 	@Override
-	public void dispose() {
+	public final void dispose() {
 		matrix = null;
 	}
 
 	@Override
-	public void set(final T x, final T y, final U v) {
+	public final void set(final T x, final T y, final U v) {
 		// the resizing mechanism is quite unpleasant, but slow set / fast get
 		// seems like a reasonable tradeoff.
 		final int xi, yi;
@@ -82,7 +82,7 @@ public class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrix
 	}
 
 	@Override
-	public boolean has(final T x, final T y) {
+	public final boolean has(final T x, final T y) {
 		return get(x, y) != defaultValue;
 	}
 }
