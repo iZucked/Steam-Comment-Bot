@@ -121,7 +121,7 @@ public class LNGScenarioTransformer {
 	private Date earliestTime;
 	private Date latestTime;
 
-	@Inject
+	@Inject(optional = true)
 	private Iterable<ContractTransformer> transformerExtensions;
 
 	@Inject
