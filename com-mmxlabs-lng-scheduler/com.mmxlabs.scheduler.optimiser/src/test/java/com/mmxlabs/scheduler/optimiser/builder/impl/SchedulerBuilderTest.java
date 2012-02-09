@@ -14,6 +14,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -21,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 @RunWith(JMock.class)
 public class SchedulerBuilderTest {
@@ -47,7 +50,7 @@ public class SchedulerBuilderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateLoadSlot2() {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final IPort port = context.mock(IPort.class);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
@@ -60,7 +63,7 @@ public class SchedulerBuilderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateLoadSlot3() {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = context.mock(ITimeWindow.class);
@@ -79,7 +82,7 @@ public class SchedulerBuilderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateDischargeSlot2() {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final IPort port = context.mock(IPort.class);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
@@ -92,7 +95,7 @@ public class SchedulerBuilderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateDischargeSlot3() {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = context.mock(ITimeWindow.class);
@@ -111,7 +114,7 @@ public class SchedulerBuilderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateCargo2() {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
@@ -128,7 +131,7 @@ public class SchedulerBuilderTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateCargo3() {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
@@ -156,7 +159,7 @@ public class SchedulerBuilderTest {
 	@Test
 	public void testCreateTimeWindow() {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 		final ITimeWindow window = builder.createTimeWindow(10, 20);
 
 		Assert.assertEquals(10, window.getStart());
@@ -199,7 +202,7 @@ public class SchedulerBuilderTest {
 	@Test
 	public void testCreateVesselClass() {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final int minSpeed = 1;
 		final int maxSpeed = 2;
@@ -235,9 +238,15 @@ public class SchedulerBuilderTest {
 	public void testSetVesselClassStateParamaters2() {
 		final IVesselClass vc = context.mock(IVesselClass.class);
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 
 		builder.setVesselClassStateParamaters(vc, null, 0, 0, 0, null, 0);
 	}
 
+	private SchedulerBuilder createScheduleBuilder() {
+		final SchedulerBuilder builder = new SchedulerBuilder();
+		final Injector injector = Guice.createInjector(new DataComponentProviderModule());
+		injector.injectMembers(builder);
+		return builder;
+	}
 }

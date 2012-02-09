@@ -906,7 +906,6 @@ public class LNGVoyageCalculatorTest {
 	@Test(expected = RuntimeException.class)
 	public void testCalculateVoyagePlan3() {
 
-		final VoyagePlan plan = new VoyagePlan();
 		final IVessel vessel = context.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
@@ -954,6 +953,7 @@ public class LNGVoyageCalculatorTest {
 		// Expect to throw a RuntimeException here for a capacity violation
 		fail("Better to return object, recording the error");
 		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
+		final VoyagePlan plan = new VoyagePlan();
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		context.assertIsSatisfied();

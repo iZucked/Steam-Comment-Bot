@@ -11,6 +11,8 @@ import java.util.TreeMap;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
@@ -49,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
@@ -74,7 +77,7 @@ public class TestCalculations {
 	@Test
 	public void testCalculations1() {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final IPort port1 = builder.createPort("port-1", false, null);
 		final IPort port2 = builder.createPort("port-2", false, null);
@@ -488,7 +491,7 @@ public class TestCalculations {
 	@Test
 	public void testCalculations2() {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final IPort port1 = builder.createPort("port-1", false, null);
 		final IPort port2 = builder.createPort("port-2", false, null);
@@ -902,7 +905,7 @@ public class TestCalculations {
 	@Test
 	public void testCalculations3() {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
+		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final IPort port1 = builder.createPort("port-1", false, null);
 		final IPort port2 = builder.createPort("port-2", false, null);
@@ -1340,5 +1343,12 @@ public class TestCalculations {
 		public void acceptLastSchedule() {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
+	}
+
+	private SchedulerBuilder createScheduleBuilder() {
+		final SchedulerBuilder builder = new SchedulerBuilder();
+		final Injector injector = Guice.createInjector(new DataComponentProviderModule());
+		injector.injectMembers(builder);
+		return builder;
 	}
 }
