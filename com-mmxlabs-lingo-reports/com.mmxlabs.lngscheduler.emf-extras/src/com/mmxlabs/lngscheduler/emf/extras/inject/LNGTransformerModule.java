@@ -36,7 +36,7 @@ public class LNGTransformerModule extends AbstractModule {
 	 * @return
 	 */
 	public static LNGScenarioTransformer createLNGScenarioTransformer(final Scenario scenario) {
-		final Injector injector = Guice.createInjector(new LNGTransformerModule(scenario));
+		final Injector injector = Guice.createInjector(new LNGTransformerModule(scenario), new DataComponentProviderModule());
 
 		return injector.getInstance(LNGScenarioTransformer.class);
 	}
