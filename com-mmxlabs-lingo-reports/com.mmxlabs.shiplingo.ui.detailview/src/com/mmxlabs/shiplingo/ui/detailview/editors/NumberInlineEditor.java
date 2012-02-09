@@ -4,21 +4,26 @@
  */
 package com.mmxlabs.shiplingo.ui.detailview.editors;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.text.ParseException;
+
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.Text;
 
 import scenario.ScenarioPackage;
 
@@ -34,36 +39,56 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 		public final static EDataType i = EcorePackage.eINSTANCE.getEInt();
 		public final static EDataType p = ScenarioPackage.eINSTANCE.getPercentage();
 
-		public static Object create(final EDataType type, final int spinnerValue) {
-			final int digits = getDigits(type);
+		public static NumberFormat getFormatter(final EDataType type) {
+			final NumberFormat formatter;
+
 			if (type == l) {
-				return Long.valueOf(spinnerValue);
+				formatter = DecimalFormat.getIntegerInstance();
 			} else if (type == i) {
-				return Integer.valueOf(spinnerValue);
+				formatter = DecimalFormat.getIntegerInstance();
 			} else if (type == p) {
-				return (Double) ((double) (spinnerValue * Math.pow(10, -(digits + 2))));
+				formatter = DecimalFormat.getNumberInstance();
 			} else if (type == f) {
-				return ((float) (spinnerValue * Math.pow(10, -digits)));
+				formatter = DecimalFormat.getNumberInstance();
 			} else if (type == d) {
-				return (Double) ((double) (spinnerValue * Math.pow(10, -digits)));
+				formatter = DecimalFormat.getNumberInstance();
 			} else {
 				throw new RuntimeException("Unknown type of numeric field");
 			}
+
+			formatter.setMaximumFractionDigits(getDigits(type));
+			return formatter;
 		}
 
-		public static int convert(final EDataType type, final Object value) {
-			final int digits = getDigits(type);
-			if ((type == l) || (type == i)) {
-				return ((Number) value).intValue();
-			} else if (type == f) {
-				return ((int) (((Number) value).floatValue() * Math.pow(10, digits)));
-			} else if (type == d) {
-				return ((int) (((Number) value).doubleValue() * Math.pow(10, digits)));
-			} else if (type == p) {
-				return ((int) (((Number) value).doubleValue() * Math.pow(10, digits + 2)));
-			} else {
-				throw new RuntimeException("Unknown type of numeric field");
+		public static Object toNumber(final EDataType type, final String textValue) throws ParseException {
+
+			final NumberFormat formatter = getFormatter(type);
+
+			final Object num = formatter.parse(textValue);
+
+			if (type == p) {
+				if (num instanceof Number) {
+					double d = ((Number) num).doubleValue();
+					d /= 100.0;
+					return d;
+				}
 			}
+
+			return num;
+		}
+
+		public static String toString(final EDataType type, final Object value) {
+
+			final NumberFormat formatter = getFormatter(type);
+
+			if (type == p) {
+				if (value instanceof Number) {
+					double d = ((Number) value).doubleValue();
+					d *= 100.0;
+					return formatter.format(d);
+				}
+			}
+			return formatter.format(value);
 		}
 
 		public static int getDigits(final EDataType type) {
@@ -75,22 +100,6 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 				return 1;
 			} else {
 				return 0;
-			}
-		}
-
-		public static void setupSpinner(final EDataType type, final Spinner spinner) {
-			if ((type == l) || (type == i)) {
-				spinner.setDigits(0);
-				spinner.setMaximum(Integer.MAX_VALUE);
-				spinner.setMinimum(0);
-			} else if ((type == f) || (type == d)) {
-				spinner.setDigits(2);
-				spinner.setMaximum(Integer.MAX_VALUE);
-				spinner.setMinimum(0);
-			} else if (type == p) {
-				spinner.setDigits(1);
-				spinner.setMaximum(1000);
-				spinner.setMinimum(0);
 			}
 		}
 
@@ -117,7 +126,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 		type = (EDataType) feature.getEType();
 	}
 
-	private Spinner spinner;
+	private Text text;
 
 	@Override
 	public Control createValueControl(final Composite parent) {
@@ -126,33 +135,94 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 		boxLayout.marginHeight = 0;
 		boxLayout.marginWidth = 0;
 		box.setLayout(boxLayout);
-		final Spinner spinner = new Spinner(box, SWT.BORDER);
+		final Text spinner = new Text(box, SWT.BORDER);
 
-		spinner.addSelectionListener(new SelectionListener() {
-			{
-				final SelectionListener sl = this;
-				spinner.addDisposeListener(new DisposeListener() {
-					@Override
-					public void widgetDisposed(final DisposeEvent e) {
-						spinner.removeSelectionListener(sl);
+		// Verifier to restrict value text entry
+		spinner.addVerifyListener(new VerifyListener() {
+
+			/**
+			 * Locale equivalent of period character
+			 */
+			final char period = DecimalFormatSymbols.getInstance().getDecimalSeparator();
+
+			@Override
+			public void verifyText(final VerifyEvent e) {
+
+				// Stage 1: Verify Key presses
+				if ((e.character >= '0') && (e.character <= '9')) {
+					e.doit = true;
+				} else if (e.character == period) {
+					// Allow single period
+					e.doit = !spinner.getText().contains("" + period);
+					// Handle Backspace
+				} else if (e.character == '\b') {
+					e.doit = true;
+					// Always allow it
+					return;
+				} else {
+					e.doit = false;
+				}
+
+				// Step 2. parse number.
+				if (e.doit) {
+					// Check number of dp is valid
+					final String newText = spinner.getText() + e.character;
+					final int idx = newText.indexOf(period);
+					if (idx != -1) {
+						final int digits = NumberTypes.getDigits(type);
+						if (digits == 0) {
+							e.doit = false;
+							return;
+						}
+
+						// Handle .xxx case
+						if (idx == 0) {
+							if ((newText.length() - 1) > digits) {
+								e.doit = false;
+								return;
+							}
+							// Handle xxx. case
+						} else if (idx == (newText.length() - 1)) {
+							// Ok
+						} else {
+							final String[] nums = newText.split(period == '.' ? "\\." : "" + period);
+							if (nums[1].length() > digits) {
+								e.doit = false;
+								return;
+							}
+						}
 					}
-				});
-			}
+					try {
+						// Finally attempt to parse the number
+						NumberTypes.toNumber(type, newText);
 
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				doSetValue(NumberTypes.create(type, spinner.getSelection()));
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-				doSetValue(NumberTypes.create(type, spinner.getSelection()));
+					} catch (final ParseException e1) {
+						e.doit = false;
+						throw new RuntimeException(e1);
+					}
+				}
 			}
 		});
 
-		NumberTypes.setupSpinner(type, spinner);
+		spinner.addModifyListener(new ModifyListener() {
 
-		this.spinner = spinner;
+			@Override
+			public void modifyText(final ModifyEvent e) {
+				final String text = spinner.getText();
+				if (text.isEmpty()) {
+					unsetValue();
+				} else {
+					try {
+						doSetValue(NumberTypes.toNumber(type, text));
+					} catch (final ParseException e1) {
+						// We do not expect to get here - the verify listener should have taken care of ensuring valid input
+						throw new RuntimeException(e1);
+					}
+				}
+			}
+		});
+
+		this.text = spinner;
 		spinner.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		if (type == NumberTypes.p) {
@@ -165,18 +235,24 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		if (spinner.isDisposed()) {
+		if (text.isDisposed()) {
 			return;
 		}
 		if (value == null) {
-			spinner.setSelection(0);
+			text.setText("");
 		} else {
-			spinner.setSelection(NumberTypes.convert(type, value));
+			text.setText(NumberTypes.toString(type, value));
 		}
 	}
 
 	@Override
 	protected Object getInitialUnsetValue() {
 		return NumberTypes.getDefaultValue(type);
+	}
+
+	@Override
+	protected Object getValue() {
+		// TODO Auto-generated method stub
+		return super.getValue();
 	}
 }
