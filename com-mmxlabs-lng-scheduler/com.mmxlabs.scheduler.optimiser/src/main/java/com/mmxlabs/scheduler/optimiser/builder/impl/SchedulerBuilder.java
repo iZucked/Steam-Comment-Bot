@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
@@ -24,14 +27,6 @@ import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
-import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEditor;
-import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
-import com.mmxlabs.optimiser.common.dcproviders.impl.ResourceAllocationConstraintProvider;
-import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedElementDurationEditor;
-import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOptionalElementsEditor;
-import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOrderedSequenceElementsEditor;
-import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedTimeWindowEditor;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -40,8 +35,6 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -49,7 +42,6 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
-import com.mmxlabs.scheduler.optimiser.builder.impl.XYPortEuclideanDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -86,29 +78,17 @@ import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListCargoAllocationEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapReturnElementProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetCalculatorProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEditor;
 
 /**
  * Implementation of {@link ISchedulerBuilder}
@@ -120,7 +100,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 * For debug & timing purposes. Switches the indexing DCPs on or off.
 	 */
-	private static final boolean USE_INDEXED_DCPS = true;
+	// private static final boolean USE_INDEXED_DCPS = true;
 
 	private final List<IBuilderExtension> extensions = new LinkedList<IBuilderExtension>();
 
@@ -191,99 +171,76 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final IIndexingContext indexingContext = new SimpleIndexingContext();
 
-	private final IXYPortDistanceCalculator distanceProvider = new XYPortEuclideanDistanceCalculator();
+	@Inject
+	private IXYPortDistanceCalculator distanceProvider;
 
-	private final IVesselProviderEditor vesselProvider;
+	@Inject
+	private IVesselProviderEditor vesselProvider;
 
-	private final IPortProviderEditor portProvider;
+	@Inject
+	private IPortProviderEditor portProvider;
 
-	private final IPortSlotProviderEditor portSlotsProvider;
+	@Inject
+	private IPortSlotProviderEditor portSlotsProvider;
 
-	private final IOrderedSequenceElementsDataComponentProviderEditor orderedSequenceElementsEditor;
+	@Inject
+	private IOrderedSequenceElementsDataComponentProviderEditor orderedSequenceElementsEditor;
 
-	private final ITimeWindowDataComponentProviderEditor timeWindowProvider;
+	@Inject
+	private ITimeWindowDataComponentProviderEditor timeWindowProvider;
 
-	private final IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
+	@Inject
+	private IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
 
-	private final IPortTypeProviderEditor portTypeProvider;
+	@Inject
+	private IPortTypeProviderEditor portTypeProvider;
 
-	private final IElementDurationProviderEditor elementDurationsProvider;
+	@Inject
+	private IElementDurationProviderEditor elementDurationsProvider;
 
-	private final IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider;
+	@Inject
+	private IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider;
 
-	private final IStartEndRequirementProviderEditor startEndRequirementProvider;
+	@Inject
+	private IStartEndRequirementProviderEditor startEndRequirementProvider;
 
-	private final IPortExclusionProviderEditor portExclusionProvider;
+	@Inject
+	private IPortExclusionProviderEditor portExclusionProvider;
 
-	private final IReturnElementProviderEditor returnElementProvider;
+	@Inject
+	private IReturnElementProviderEditor returnElementProvider;
 
-	private final HashMapRouteCostProviderEditor routeCostProvider;
+	@Inject
+	private IRouteCostProviderEditor routeCostProvider;
 
-	private final ITotalVolumeLimitEditor totalVolumeLimits;
+	@Inject
+	private ITotalVolumeLimitEditor totalVolumeLimits;
 
-	private final IDiscountCurveProviderEditor discountCurveProvider = new HashMapDiscountCurveEditor(SchedulerConstants.DCP_discountCurveProvider);
+	@Inject
+	private IDiscountCurveProviderEditor discountCurveProvider;
 
 	/**
 	 * Keeps track of calculators
 	 */
-	private final HashSetCalculatorProviderEditor calculatorProvider;
+	@Inject
+	private ICalculatorProviderEditor calculatorProvider;
 
-	private final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor(SchedulerConstants.DCP_optionalElementsProvider);
+	@Inject
+	private IOptionalElementsProviderEditor optionalElements;
+
+	@Inject
+	private Provider<IMatrixEditor<IPort, Integer>> matrixEditorProvider;
 
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
 		indexingContext.registerType(Port.class);
 		indexingContext.registerType(Resource.class);
 		indexingContext.registerType(Vessel.class);
+	}
 
-		vesselProvider = new HashMapVesselEditor(SchedulerConstants.DCP_vesselProvider);
-
-		portDistanceProvider = new IndexedMultiMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider);
-
-		if (USE_INDEXED_DCPS) {
-			portProvider = new IndexedPortEditor(SchedulerConstants.DCP_portProvider);
-			portSlotsProvider = new IndexedPortSlotEditor(SchedulerConstants.DCP_portSlotsProvider);
-			portTypeProvider = new IndexedPortTypeEditor(SchedulerConstants.DCP_portTypeProvider);
-
-			timeWindowProvider = new IndexedTimeWindowEditor(SchedulerConstants.DCP_timeWindowProvider);
-			orderedSequenceElementsEditor = new IndexedOrderedSequenceElementsEditor(SchedulerConstants.DCP_orderedElementsProvider);
-
-			elementDurationsProvider = new IndexedElementDurationEditor(SchedulerConstants.DCP_elementDurationsProvider);
-
-			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new IndexedMatrixEditor<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider, Integer.MAX_VALUE));
-		} else {
-
-			elementDurationsProvider = new HashMapElementDurationEditor(SchedulerConstants.DCP_elementDurationsProvider);
-
-			orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider);
-
-			timeWindowProvider = new TimeWindowDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider);
-
-			portTypeProvider = new HashMapPortTypeEditor(SchedulerConstants.DCP_portTypeProvider);
-
-			portSlotsProvider = new HashMapPortSlotEditor(SchedulerConstants.DCP_portSlotsProvider);
-
-			portProvider = new HashMapPortEditor(SchedulerConstants.DCP_portProvider);
-
-			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new HashMapMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider, Integer.MAX_VALUE));
-		}
-
-		totalVolumeLimits = new ArrayListCargoAllocationEditor(SchedulerConstants.DCP_totalVolumeLimitProvider);
-
-		resourceAllocationProvider = new ResourceAllocationConstraintProvider(SchedulerConstants.DCP_resourceAllocationProvider);
-
-		startEndRequirementProvider = new HashMapStartEndRequirementEditor(SchedulerConstants.DCP_startEndRequirementProvider);
-
-		portExclusionProvider = new HashMapPortExclusionProvider(SchedulerConstants.DCP_portExclusionProvider);
-
-		returnElementProvider = new HashMapReturnElementProviderEditor(SchedulerConstants.DCP_returnElementProvider);
-
-		routeCostProvider = new HashMapRouteCostProviderEditor(SchedulerConstants.DCP_routePriceProvider, IMultiMatrixProvider.Default_Key);
-
-		calculatorProvider = new HashSetCalculatorProviderEditor(SchedulerConstants.DCP_calculatorProvider);
-
+	// @Inject to trigger call after constructor
+	@Inject
+	public void createAnywherePort() {
 		// Create the anywhere port
 		ANYWHERE = createPort("ANYWHERE", false, new IShippingPriceCalculator() {
 			@Override
@@ -738,11 +695,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			/*
 			 * This route has not previously been added to the PDP; initialise a blank matrix here?
 			 */
-			if (USE_INDEXED_DCPS) {
-				portDistanceProvider.set(route, new IndexedMatrixEditor<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider, Integer.MAX_VALUE));
-			} else {
-				portDistanceProvider.set(route, new HashMapMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider, Integer.MAX_VALUE));
-			}
+			portDistanceProvider.set(route, matrixEditorProvider.get());
 		}
 
 		final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(route);
