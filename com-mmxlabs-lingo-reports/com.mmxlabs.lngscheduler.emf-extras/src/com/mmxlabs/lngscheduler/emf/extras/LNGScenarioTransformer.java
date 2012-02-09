@@ -72,7 +72,6 @@ import scenario.schedule.fleetallocation.FleetVessel;
 import scenario.schedule.fleetallocation.SpotVessel;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
@@ -107,8 +106,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 
 /**
- * Wrapper for an EMF LNG Scheduling {@link scenario.Scenario}, providing utility methods to coSnvert it into an optimisation job. Typical usage is to construct an LNGScenarioTransformer with a given
- * Scenario, and then call the {@link createOptimisationData} method
+ * Wrapper for an EMF LNG Scheduling {@link scenario.Scenario}, providing utility methods to convert it into an optimisation job. Typical usage is to construct an LNGScenarioTransformer with a given
+ * Scenario, and then call the {@link createOptimisationData} method. It is only expected that an instance will be used once. I.e. a single call to {@link #createOptimisationData(ModelEntityMap)}
  * 
  * @author hinton
  * 
@@ -125,7 +124,7 @@ public class LNGScenarioTransformer {
 	private Iterable<ContractTransformer> transformerExtensions;
 
 	@Inject
-	private Injector injector;
+	private ISchedulerBuilder builder;
 
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
@@ -258,8 +257,6 @@ public class LNGScenarioTransformer {
 
 			indexAssociation.add(index, curve);
 		}
-
-		final ISchedulerBuilder builder = injector.getInstance(ISchedulerBuilder.class);
 
 		// set up the contract transformers
 		for (final ITransformerExtension extension : allTransformerExtensions) {
