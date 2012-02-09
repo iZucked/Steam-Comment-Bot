@@ -41,8 +41,6 @@ public final class VesselClass implements IVesselClass {
 
 	private final EnumMap<VesselState, IConsumptionRateCalculator> consumptionRate = new EnumMap<VesselState, IConsumptionRateCalculator>(VesselState.class);
 
-	private final EnumMap<VesselState, Integer> nboSpeeds = new EnumMap<VesselState, Integer>(VesselState.class);
-
 	/**
 	 * The price per hour to charter vessels of this class.
 	 */
@@ -153,17 +151,6 @@ public final class VesselClass implements IVesselClass {
 	public void setConsumptionRate(final VesselState vesselState, final IConsumptionRateCalculator calc) {
 		consumptionRate.put(vesselState, calc);
 	}
-
-	// @Override
-	// public int getNBOSpeed(final VesselState state) {
-	//
-	// return CollectionsUtil.getValue(nboSpeeds, state, 0);
-	// }
-	//
-	// @Override
-	// public void setNBOSpeed(final VesselState vesselState, final int nboSpeed) {
-	// nboSpeeds.put(vesselState, nboSpeed);
-	// }
 
 	@Override
 	public int getBaseFuelUnitPrice() {
