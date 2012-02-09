@@ -107,7 +107,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 
 /**
- * Wrapper for an EMF LNG Scheduling {@link scenario.Scenario}, providing utility methods to coSnvert it into an optimization job. Typical usage is to construct an LNGScenarioTransformer with a given
+ * Wrapper for an EMF LNG Scheduling {@link scenario.Scenario}, providing utility methods to coSnvert it into an optimisation job. Typical usage is to construct an LNGScenarioTransformer with a given
  * Scenario, and then call the {@link createOptimisationData} method
  * 
  * @author hinton
