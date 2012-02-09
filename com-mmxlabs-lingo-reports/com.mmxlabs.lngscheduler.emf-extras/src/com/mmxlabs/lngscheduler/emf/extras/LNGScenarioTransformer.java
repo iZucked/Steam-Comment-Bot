@@ -180,6 +180,11 @@ public class LNGScenarioTransformer {
 	 * Get any {@link ITransformerExtension} and {@link IContractTransformer}s from the platform's registry.
 	 */
 	public boolean addPlatformTransformerExtensions() {
+
+		if (transformerExtensions == null) {
+			return false;
+		}
+
 		final Map<String, EClass> contracts = new HashMap<String, EClass>();
 
 		for (final Contract c : scenario.getContractModel().getSalesContracts()) {
