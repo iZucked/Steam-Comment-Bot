@@ -28,6 +28,8 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -93,6 +95,18 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements 
 	protected final FieldDecoration decorationError = FieldDecorationRegistry
 			.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 
+	private final DisposeListener disposeListener = new DisposeListener() {
+		@Override
+		public void widgetDisposed(final DisposeEvent e) {
+			if (e.widget == tooltipControl) {
+				if (input != null) {
+					input.eAdapters().remove(this);
+				}
+				e.widget.removeDisposeListener(this);
+			}
+		}
+	};
+	
 	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
 		this.feature = feature;
 	}
@@ -347,6 +361,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements 
 
 		// Store reference to this control so we can display tool tips.
 		tooltipControl = c;
+		c.addDisposeListener(disposeListener);
 		return c;
 	}
 
@@ -380,4 +395,6 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements 
 		// TODO try and get this from descriptor above.
 		return null;
 	}
+	
+	
 }
