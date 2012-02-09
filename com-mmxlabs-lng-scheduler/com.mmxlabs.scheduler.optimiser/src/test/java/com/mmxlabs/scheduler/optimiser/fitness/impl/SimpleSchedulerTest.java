@@ -12,6 +12,8 @@ import java.util.TreeMap;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
@@ -47,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**
  * Test class to run a "system" test of the LSO to optimise a sequence of elements based upon distance. I.e. find minimum travel distance for each resource.
@@ -59,6 +62,8 @@ public class SimpleSchedulerTest {
 	IOptimisationData createProblem() {
 
 		final SchedulerBuilder builder = new SchedulerBuilder();
+		final Injector injector = Guice.createInjector(new DataComponentProviderModule());
+		injector.injectMembers(builder);
 
 		// Build XY ports so distance is automatically populated`
 		// TODO: Add API to determine which distance provider to use
