@@ -46,7 +46,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author Adam
  * 
  */
-public class VesselEventConstraintCheck {
+public class VesselEventConstraintCheckTest {
 
 	private static final int dischargePrice = 1;
 	private final static int cvValue = 10;

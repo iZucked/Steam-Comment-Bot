@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author Adam Semenenko
  * 
  */
-public class FuelChoiceBoundaryTests {
+public class FuelChoiceBoundaryTest {
 
 	/**
 	 * Check that the base fuel is just cheaper, and so FBO is never used.

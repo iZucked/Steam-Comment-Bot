@@ -32,7 +32,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author Adam
  * 
  */
-public class DryDockTests {
+public class DryDockTest {
 
 	/**
 	 * Test lots of dry docks.

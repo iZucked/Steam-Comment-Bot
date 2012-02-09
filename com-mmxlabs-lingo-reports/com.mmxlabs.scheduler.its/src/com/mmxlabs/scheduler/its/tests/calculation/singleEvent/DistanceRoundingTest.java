@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author Adam Semenenko
  * 
  */
-public class DistanceRoundingTests {
+public class DistanceRoundingTest {
 
 	/**
 	 * Test that a distance of 9 and speed of 10 between two ports gives sensible results.

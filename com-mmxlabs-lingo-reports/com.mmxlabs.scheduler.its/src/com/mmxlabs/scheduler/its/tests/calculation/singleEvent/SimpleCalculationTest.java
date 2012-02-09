@@ -25,7 +25,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author hinton
  * 
  */
-public class SimpleCalculationTests {
+public class SimpleCalculationTest {
 
 	// Create a dummy scenario
 	private static final float baseFuelPriceCheap = 0; // $/MT -- very cheap, normally around 700

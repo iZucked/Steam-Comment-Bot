@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author Adam Semenenko
  * 
  */
-public class MinTravelHeelTests {
+public class MinTravelHeelTest {
 
 	/**
 	 * Min heel is zero. Test that ballast leg is NBO, idle is cheaper on BF. TODO test result of non-zero min heel

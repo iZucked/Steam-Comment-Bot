@@ -32,7 +32,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author Adam
  * 
  */
-public class VesselClassInaccessiblePortConstraintCheck {
+public class VesselClassInaccessiblePortConstraintCheckTest {
 
 	private static final int dischargePrice = 1;
 	private final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);

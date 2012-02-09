@@ -31,7 +31,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author Adam Semenenko
  * 
  */
-public class MultipleCargoFuelConsumptionTests {
+public class MultipleCargoFuelConsumptionTest {
 
 	private static final int dischargePrice = 1;
 	private static final int loadPrice = 1;

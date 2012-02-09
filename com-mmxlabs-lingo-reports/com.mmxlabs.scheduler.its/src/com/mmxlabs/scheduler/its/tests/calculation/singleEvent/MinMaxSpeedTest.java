@@ -28,7 +28,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author Adam Semenenko
  * 
  */
-public class MinMaxSpeedTests {
+public class MinMaxSpeedTest {
 
 	// The min and max speed of the vessel class.
 	private static final int minSpeed = 10;

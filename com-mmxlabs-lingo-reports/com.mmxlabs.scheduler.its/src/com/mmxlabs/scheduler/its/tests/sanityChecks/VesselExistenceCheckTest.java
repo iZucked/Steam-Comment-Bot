@@ -28,7 +28,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author Adam
  * 
  */
-public class VesselExistenceCheck {
+public class VesselExistenceCheckTest {
 
 	private static final int dischargePrice = 1;
 	private final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);

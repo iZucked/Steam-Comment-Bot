@@ -23,7 +23,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author Adam Semenenko
  * 
  */
-public class CanalBoundaryTests {
+public class CanalBoundaryTest {
 
 	private static final String canalName = "Suez canal";
 

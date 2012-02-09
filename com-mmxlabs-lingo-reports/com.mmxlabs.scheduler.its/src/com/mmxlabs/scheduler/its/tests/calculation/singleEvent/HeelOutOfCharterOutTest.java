@@ -43,7 +43,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * @author Adam Semenenko
  * 
  */
-public class HeelOutOfCharterOutTests {
+public class HeelOutOfCharterOutTest {
 
 	/**
 	 * LNG is available but BF is used as LNG is slightly more expensive

@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
  * 
  * @author Adam Semenenko
  */
-public class CharterOutTests {
+public class CharterOutTest {
 
 	/**
 	 * There are two charter outs in a row. The first has heel available, the second does not. Check that the first uses heel and the second doesn't.
