@@ -26,9 +26,13 @@ public class ScheduleBuilderModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		install(osgiModule(ExtrasPlugin.getDefault().getBundle().getBundleContext(), eclipseRegistry()));
 
-		bind(iterable(ContractTransformer.class)).toProvider(service(ContractTransformer.class).multiple());
+		final ExtrasPlugin plugin = ExtrasPlugin.getDefault();
+		if (plugin != null) {
+			install(osgiModule(plugin.getBundle().getBundleContext(), eclipseRegistry()));
+
+			bind(iterable(ContractTransformer.class)).toProvider(service(ContractTransformer.class).multiple());
+		}
 
 		bind(ISchedulerBuilder.class).to(SchedulerBuilder.class);
 	}
