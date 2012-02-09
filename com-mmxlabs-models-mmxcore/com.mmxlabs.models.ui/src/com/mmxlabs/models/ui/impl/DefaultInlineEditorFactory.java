@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
+import com.mmxlabs.models.ui.editors.impl.MultiReferenceInlineEditor;
 
 /**
  * The inline editor factory which creates the normal editors
@@ -23,10 +24,8 @@ public class DefaultInlineEditorFactory implements IInlineEditorFactory {
 		if (feature instanceof EReference) {
 			final EReference reference = (EReference) feature;
 			final EClass referenceClass = reference.getEReferenceType();
-			
-			// what shall we do about containment?
 			if (reference.isMany()) {
-				
+				return new MultiReferenceInlineEditor(feature);
 			} else {
 				
 			}
