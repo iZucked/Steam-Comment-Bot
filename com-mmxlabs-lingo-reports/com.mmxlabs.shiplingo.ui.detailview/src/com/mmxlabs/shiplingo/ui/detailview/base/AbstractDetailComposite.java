@@ -58,6 +58,15 @@ import com.mmxlabs.shiplingo.ui.detailview.editors.ValueListInlineEditor;
  */
 public abstract class AbstractDetailComposite extends Composite {
 	/**
+	 * Key used to associate a label with it's control for tool tips
+	 */
+	private static final String LABEL_CONTROL_KEY = "label-control";
+
+	public static final String getLabelControlKey() {
+		return LABEL_CONTROL_KEY;
+	}
+
+	/**
 	 * Provides value providers for objects of a given EClass
 	 */
 	protected IValueProviderProvider valueProviderProvider = null;
@@ -330,6 +339,9 @@ public abstract class AbstractDetailComposite extends Composite {
 			labelControl.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 			control.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			addEditor(editor);
+
+			control.setData(LABEL_CONTROL_KEY, labelControl);
+
 			return control;
 		}
 		return null;

@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.IDetailConstraintStatus;
+import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
 import com.mmxlabs.shiplingo.ui.detailview.utils.EditorUtils;
 
 /**
@@ -152,6 +153,10 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements 
 			for (final Control sub : ((Composite) control).getChildren()) {
 				setToolTipText(sub, toolTipText);
 			}
+		}
+		final Object data = control.getData(AbstractDetailComposite.getLabelControlKey());
+		if (data instanceof Control) {
+			((Control) data).setToolTipText(toolTipText);
 		}
 	}
 
