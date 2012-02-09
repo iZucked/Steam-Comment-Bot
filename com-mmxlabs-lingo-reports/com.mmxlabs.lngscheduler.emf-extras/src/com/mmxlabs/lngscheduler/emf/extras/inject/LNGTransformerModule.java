@@ -11,6 +11,9 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
 
+/**
+ * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
+ */
 public class LNGTransformerModule extends AbstractModule {
 
 	private final Scenario scenario;
@@ -26,6 +29,12 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(LNGScenarioTransformer.class).toInstance(new LNGScenarioTransformer(scenario));
 	}
 
+	/**
+	 * Helper method to create a {@link LNGScenarioTransformer} instance using injection. TODO: This should not really be part of the module.
+	 * 
+	 * @param scenario
+	 * @return
+	 */
 	public static LNGScenarioTransformer createLNGScenarioTransformer(final Scenario scenario) {
 		final Injector injector = Guice.createInjector(new LNGTransformerModule(scenario));
 

@@ -10,11 +10,18 @@ import static org.ops4j.peaberry.eclipse.EclipseRegistry.eclipseRegistry;
 import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 import com.mmxlabs.lngscheduler.emf.extras.inject.extensions.ContractTransformer;
 import com.mmxlabs.lngscheduler.emf.extras.plugin.ExtrasPlugin;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 
+/**
+ * Simple {@link Module} implementation to manage {@link ISchedulerBuilder} and {@link ContractTransformer} based extensions.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class ScheduleBuilderModule extends AbstractModule {
 
 	@Override
@@ -25,5 +32,4 @@ public class ScheduleBuilderModule extends AbstractModule {
 
 		bind(ISchedulerBuilder.class).to(SchedulerBuilder.class);
 	}
-
 }
