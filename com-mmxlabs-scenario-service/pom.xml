@@ -127,13 +127,17 @@
 			<url>https://s3-proxy.appspot.com/p2-repo/repositories/mmxlabs-p2-snapshots/</url>
 			<layout>p2</layout>
 		</repository>
+		<repository>
+			<id>mmxlabs-p2-external</id>
+			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/</url>
+			<layout>p2</layout>
+		</repository>
 
 		<repository>
 			<id>com.mmxlabs.shiplingo.demo.nightly</id>
 			<url>https://s3-proxy.appspot.com/p2-repo/repositories/com.mmxlabs.shiplingo.demo/nightly</url>
 			<layout>p2</layout>
 		</repository>
-
 
 	</repositories>
 
