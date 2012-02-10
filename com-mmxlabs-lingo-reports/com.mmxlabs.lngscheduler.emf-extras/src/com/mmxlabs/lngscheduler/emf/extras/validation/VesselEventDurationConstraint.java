@@ -16,9 +16,9 @@ import scenario.fleet.VesselEvent;
 import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
 
 /**
- * Checks that vessel events have a duration geater than zero.
+ * Checks that vessel events have a duration greater than zero.
  * 
- * @author Tom Hinton
+ * @author Simon Goodall
  * 
  */
 public class VesselEventDurationConstraint extends AbstractModelConstraint {
