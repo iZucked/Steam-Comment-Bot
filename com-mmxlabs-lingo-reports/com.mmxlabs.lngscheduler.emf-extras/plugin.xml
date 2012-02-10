@@ -356,6 +356,23 @@
                </target>
             </constraint>
             
+            <constraint
+                class="com.mmxlabs.lngscheduler.emf.extras.validation.VesselDateConstraint"
+                id="com.mmxlabs.lngscheduler.emf-extras.constraints.vessel_date_order"
+                lang="Java"
+                mode="Batch"
+                name="Vessel date order"
+                severity="ERROR"
+                statusCode="1">
+                <message>
+                    Vessel {0} has invalid start and end requirement dates - the start occurs after the end.
+                </message>
+                <description>
+                    The end requirement of the vessel should be after the start requirement.
+                </description>
+                <target class="Vessel" />
+            </constraint>
+            
              <constraint
             	class="com.mmxlabs.lngscheduler.emf.extras.validation.StartEndRequirementDateConstraint"
             	id="com.mmxlabs.lngscheduler.emf-extras.constraints.start_end_requirement_date_order"
