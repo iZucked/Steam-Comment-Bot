@@ -45,7 +45,9 @@ import scenario.contract.SalesContract;
 import scenario.contract.SimplePurchaseContract;
 import scenario.contract.TotalVolumeLimit;
 import scenario.fleet.CharterOut;
+import scenario.fleet.Drydock;
 import scenario.fleet.FuelConsumptionLine;
+import scenario.fleet.Maintenance;
 import scenario.fleet.PortAndTime;
 import scenario.fleet.Vessel;
 import scenario.fleet.VesselClass;
@@ -452,8 +454,13 @@ public class LNGScenarioTransformer {
 				final long maxHeel = charterOut.isSetHeelLimit() ? (charterOut.getHeelLimit() * Calculator.ScaleFactor) : Long.MAX_VALUE;
 				builderSlot = builder.createCharterOutEvent(event.getId(), window, port, endPort, durationHours, maxHeel, Calculator.scaleToInt(charterOut.getHeelCVValue()),
 						Calculator.scaleToInt(charterOut.getHeelUnitPrice()));
-			} else {
+
+			} else if (event instanceof Drydock) {
 				builderSlot = builder.createDrydockEvent(event.getId(), window, port, durationHours);
+			} else if (event instanceof Maintenance) {
+				builderSlot = builder.createMaintenanceEvent(event.getId(), window, port, durationHours);
+			} else {
+				throw new RuntimeException("Unknown event type: " + event.getClass().getName());
 			}
 
 			for (final Vessel v : event.getVessels()) {
