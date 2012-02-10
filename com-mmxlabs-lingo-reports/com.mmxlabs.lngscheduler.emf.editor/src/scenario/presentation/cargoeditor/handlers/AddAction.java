@@ -49,16 +49,14 @@ public abstract class AddAction extends LockableAction implements IMenuCreator {
 
 	private final EditingDomain editingDomain;
 
-	private Action addSubAction, copySubAction;
-
 	private boolean defaultToCopy = true;
 
 	@Override
 	public final void run() {
-		run(defaultToCopy);
+		runAction(defaultToCopy);
 	}
 
-	protected void run(final boolean usingSelection) {
+	public void runAction(final boolean usingSelection) {
 		final EObject object = createObject(usingSelection);
 		if (object == null) {
 			return; // if cancelled, subclasses return null
@@ -101,9 +99,10 @@ public abstract class AddAction extends LockableAction implements IMenuCreator {
 			final Action a = new Action("Duplicate", IAction.AS_RADIO_BUTTON) {
 				@Override
 				public void run() {
-					// AddAction.this.run(true);
-
-					defaultToCopy = true;
+					if (super.isChecked()) {
+						runAction(true);
+						defaultToCopy = true;
+					}
 				}
 
 				@Override
@@ -117,15 +116,16 @@ public abstract class AddAction extends LockableAction implements IMenuCreator {
 			actionContributionItem.fill(menu, -1);
 			a.setChecked(defaultToCopy);
 
-			copySubAction = a;
 		}
 		{
 			final Action a = new Action("Add New", IAction.AS_RADIO_BUTTON) {
 
 				@Override
 				public void run() {
-					// AddAction.this.run(false);
-					defaultToCopy = false;
+					if (super.isChecked()) {
+						runAction(false);
+						defaultToCopy = false;
+					}
 				}
 
 				@Override
@@ -136,7 +136,6 @@ public abstract class AddAction extends LockableAction implements IMenuCreator {
 			final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
 			actionContributionItem.fill(menu, -1);
 			a.setChecked(!defaultToCopy);
-			addSubAction = a;
 		}
 	}
 
