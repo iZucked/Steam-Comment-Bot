@@ -406,6 +406,23 @@
             	<target class="VesselEvent" />
             </constraint>
             
+            <constraint
+                class="com.mmxlabs.lngscheduler.emf.extras.validation.VesselEventDurationConstraint"
+                id="com.mmxlabs.lngscheduler.emf-extras.constraints.vessel_event_duration"
+                lang="Java"
+                mode="Batch"
+                name="Vessel Event Duration"
+                severity="ERROR"
+                statusCode="1">
+                <message>
+                    Vessel Event {0} has no duration set.
+                </message>
+                <description>
+                    The event duration must be greater than zero.
+                </description>
+                <target class="VesselEvent" />
+            </constraint>
+            
 			<constraint
             	class="com.mmxlabs.lngscheduler.emf.extras.validation.CanalCostConstraint"
             	id="com.mmxlabs.lngscheduler.emf-extras.constraints.canal_costs_present"
