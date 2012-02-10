@@ -754,6 +754,9 @@ public class ScenarioTools {
 
 				final Idle i = (Idle) e;
 
+				/**
+				 * If you have a vessel which doesn't go anywhere at all and has no start/end conditions it will have an idle event with a null port.
+				 */
 				final String portName = i.getPort() == null ? "null" : i.getPort().getName();
 
 				System.err.println("Idle:");
