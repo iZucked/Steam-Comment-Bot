@@ -56,8 +56,10 @@ public class VesselEventExistenceTest {
 		final int numOfClassTwo = 2;
 		final int numOfClassThree = 1;
 
+		// Fleet
 		csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500, false);
 		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false);
+		// Time charter
 		csc.addVesselSimple("classThree", numOfClassThree, 11, 12, 500000, 13, 15, 15, 0, true);
 
 		// add some VesselEvents, i.e. CharterOuts and DryDocks in a random-ish manner.
