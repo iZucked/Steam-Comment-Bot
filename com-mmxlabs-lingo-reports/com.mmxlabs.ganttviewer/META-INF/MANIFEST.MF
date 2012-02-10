@@ -7,7 +7,8 @@ Bundle-Activator: com.mmxlabs.ganttviewer.Activator
 Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- com.mmxlabs.org.eclipse.nebula.widgets.ganttchart;bundle-version="1.0.0";visibility:=reexport
+ com.mmxlabs.org.eclipse.nebula.widgets.ganttchart;bundle-version="1.0.0";visibility:=reexport,
+ org.slf4j.api;bundle-version="1.6.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.ganttviewer

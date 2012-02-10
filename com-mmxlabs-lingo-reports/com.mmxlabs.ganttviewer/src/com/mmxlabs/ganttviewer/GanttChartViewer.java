@@ -38,6 +38,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A {@link Viewer} implementation to wrap around a {@link GanttChart} with the aim of showing schedules. Content providers should implement {@link IGanttChartContentProvider} to pass in
@@ -48,6 +50,8 @@ import org.eclipse.swt.widgets.Widget;
  * 
  */
 public class GanttChartViewer extends StructuredViewer {
+
+	private static final Logger log = LoggerFactory.getLogger(GanttChartViewer.class);
 
 	private GanttChart ganttChart;
 
@@ -312,8 +316,7 @@ public class GanttChartViewer extends StructuredViewer {
 					layer++;
 				}
 			} catch (final Exception ex) {
-				System.err.println(ex);
-				ex.printStackTrace();
+				log.error(ex.getMessage(), ex);
 			}
 		} else {
 			throw new IllegalArgumentException("ContentProvider should be an instance of " + ITreeContentProvider.class.getCanonicalName());
