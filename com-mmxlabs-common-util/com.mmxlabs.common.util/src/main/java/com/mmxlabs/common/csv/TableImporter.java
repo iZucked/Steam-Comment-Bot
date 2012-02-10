@@ -44,9 +44,12 @@ public class TableImporter {
 					rowKeys.add(cells[0].trim());
 					final HashMap<String, String> map = new HashMap<String, String>();
 					for (int i = 1; i < cells.length; i++) {
-						map.put(colKeys.get(i - 1), cells[i].trim());
+						final String str = cells[i].trim();
+						if (!str.isEmpty()) {
+							map.put(colKeys.get(i - 1), str);
+						}
 					}
-					contents.put(cells[0], map);
+					contents.put(cells[0].trim(), map);
 				}
 			}
 		} finally {

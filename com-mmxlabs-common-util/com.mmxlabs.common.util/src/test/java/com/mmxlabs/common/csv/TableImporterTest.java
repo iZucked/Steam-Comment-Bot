@@ -212,7 +212,7 @@ public class TableImporterTest {
 
 		Assert.assertFalse(ti.contains("row1", "col1"));
 		Assert.assertTrue(ti.contains("row1", "col2"));
-		Assert.assertTrue(ti.contains("row1", "col3"));
+		Assert.assertFalse(ti.contains("row1", "col3"));
 		Assert.assertFalse(ti.contains("row2", "col1"));
 		Assert.assertTrue(ti.contains("row2", "col2"));
 		Assert.assertTrue(ti.contains("row2", "col3"));
