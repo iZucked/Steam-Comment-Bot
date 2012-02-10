@@ -59,7 +59,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 		final int numOfClassThree = 12;
 		final int numOfClassFour = 1;
 
-		// createVessels creates and adds the vessesl to the scenario.
+		// createVessels creates and adds the vessels to the scenario.
 		csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false);
 		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false);
 		csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false);
@@ -76,7 +76,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 		final Scenario scenario = csc.buildScenario();
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
-		// get the cargo that was constraned out of the results.
+		// get the cargo that was constrained out of the results.
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
 			final Cargo c = (Cargo) (ca.getLoadSlot().eContainer());
