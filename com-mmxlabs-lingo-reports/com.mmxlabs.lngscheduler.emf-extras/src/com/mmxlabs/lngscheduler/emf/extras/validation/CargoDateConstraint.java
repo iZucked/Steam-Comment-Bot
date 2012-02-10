@@ -22,7 +22,6 @@ import scenario.cargo.CargoType;
 import scenario.cargo.Slot;
 import scenario.fleet.VesselClass;
 import scenario.fleet.VesselClassCost;
-import scenario.port.Canal;
 import scenario.port.DistanceLine;
 import scenario.port.DistanceModel;
 import scenario.port.Port;
@@ -76,13 +75,11 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 	 */
 	private IStatus validateSlotTravelTime(final IValidationContext ctx, final Cargo cargo, final int availableTime) {
 		if (availableTime >= 0) {
-			final Slot loadSlot = cargo.getLoadSlot();
-			final Slot dischargeSlot = cargo.getDischargeSlot();
 
 			final ValidationSupport validationSupport = ValidationSupport.getInstance();
 
 			EObject container = validationSupport.getContainer(cargo).getFirst();
-			while (container != null && !(container instanceof Scenario)) {
+			while ((container != null) && !(container instanceof Scenario)) {
 				container = validationSupport.getContainer(container).getFirst();
 			}
 			if (container instanceof Scenario) {
@@ -93,13 +90,14 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
 				}
 
+				@SuppressWarnings("unchecked")
 				Map<Pair<Port, Port>, Integer> minTimes = (Map<Pair<Port, Port>, Integer>) ctx.getCurrentConstraintData();
 				final Pair<Port, Port> key = new Pair<Port, Port>(cargo.getLoadSlot().getPort(), cargo.getDischargeSlot().getPort());
 				if (minTimes == null) {
 					minTimes = new HashMap<Pair<Port, Port>, Integer>();
 
 					collectMinTimes(minTimes, scenario.getDistanceModel(), 0, maxSpeedKnots);
-					
+
 					for (final VesselClass vc : scenario.getFleetModel().getVesselClasses()) {
 						for (final VesselClassCost vcc : vc.getCanalCosts()) {
 							collectMinTimes(minTimes, vcc.getCanal().getDistanceModel(), vcc.getTransitTime(), vc.getMaxSpeed());
@@ -131,11 +129,11 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 		return ctx.createSuccessStatus();
 	}
 
-	private void collectMinTimes(Map<Pair<Port, Port>, Integer> minTimes, final DistanceModel d, int extraTime, float maxSpeed) {
+	private void collectMinTimes(final Map<Pair<Port, Port>, Integer> minTimes, final DistanceModel d, final int extraTime, final float maxSpeed) {
 		for (final DistanceLine dl : d.getDistances()) {
 			final Pair<Port, Port> p = new Pair<Port, Port>(dl.getFromPort(), dl.getToPort());
 			final int time = Calculator.getTimeFromSpeedDistance(Calculator.scaleToInt(maxSpeed), dl.getDistance()) + extraTime;
-			if (!minTimes.containsKey(p) || minTimes.get(p) > time) {
+			if (!minTimes.containsKey(p) || (minTimes.get(p) > time)) {
 				minTimes.put(p, time);
 			}
 		}
@@ -150,7 +148,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 	 * @return
 	 */
 	private IStatus validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, final int availableTime) {
-		if (availableTime / 24 > SENSIBLE_TRAVEL_TIME) {
+		if ((availableTime / 24) > SENSIBLE_TRAVEL_TIME) {
 
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getId(), availableTime / 24, SENSIBLE_TRAVEL_TIME));
 			status.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart());
@@ -172,19 +170,22 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 			final Cargo cargo = (Cargo) object;
 			final Slot loadSlot = cargo.getLoadSlot();
 			final Slot dischargeSlot = cargo.getDischargeSlot();
-			if (cargo.getCargoType().equals(CargoType.FLEET) && loadSlot != null && dischargeSlot != null && cargo.getLoadSlot().getWindowStart() != null
-					&& cargo.getDischargeSlot().getWindowStart() != null) {
+			if (cargo.getCargoType().equals(CargoType.FLEET) && (loadSlot != null) && (dischargeSlot != null) && (loadSlot.getWindowStart() != null) && (dischargeSlot.getWindowStart() != null)) {
 				final String constraintID = ctx.getCurrentConstraintId();
 
-				final int availableTime = (int) ((dischargeSlot.getWindowEnd().getTime() - loadSlot.getWindowStart().getDateWithDefaults(loadSlot.getPort()).getTime()) / Timer.ONE_HOUR)
-						- (loadSlot.getSlotOrPortDuration());
+				final Port loadPort = loadSlot.getPort();
+				final Port dischargePort = dischargeSlot.getPort();
+				if ((loadPort != null) && (dischargePort != null)) {
+					final int availableTime = (int) ((dischargeSlot.getWindowEnd().getTime() - loadSlot.getWindowStart().getDateWithDefaults(loadPort).getTime()) / Timer.ONE_HOUR)
+							- (loadSlot.getSlotOrPortDuration());
 
-				if (constraintID.equals(DATE_ORDER_ID)) {
-					return validateSlotOrder(ctx, cargo, availableTime);
-				} else if (constraintID.equals(TRAVEL_TIME_ID)) {
-					return validateSlotTravelTime(ctx, cargo, availableTime);
-				} else if (constraintID.equals(AVAILABLE_TIME_ID)) {
-					return validateSlotAvailableTime(ctx, cargo, availableTime);
+					if (constraintID.equals(DATE_ORDER_ID)) {
+						return validateSlotOrder(ctx, cargo, availableTime);
+					} else if (constraintID.equals(TRAVEL_TIME_ID)) {
+						return validateSlotTravelTime(ctx, cargo, availableTime);
+					} else if (constraintID.equals(AVAILABLE_TIME_ID)) {
+						return validateSlotAvailableTime(ctx, cargo, availableTime);
+					}
 				}
 			}
 		}
