@@ -10,6 +10,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 
@@ -20,6 +22,9 @@ import com.mmxlabs.common.Pair;
  * 
  */
 public class DeferredReference implements Runnable {
+
+	private static final Logger log = LoggerFactory.getLogger(DeferredReference.class);
+
 	protected final Pair<EClass, String> key;
 	protected EObject target;
 	private final EReference reference;
@@ -83,9 +88,10 @@ public class DeferredReference implements Runnable {
 			}
 		} else {
 			if (key.getSecond().isEmpty() == false) {
-				// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
-				// TODO generate proper warning, with line # and filename.
-				System.err.println("Warning: no value for " + key.getFirst().getName() + " named " + key.getSecond() + " (setting " + reference.getName() + " on a " + target.eClass().getName() + ")");
+				if (log.isWarnEnabled()) {
+					log.warn("Warning: no value for " + key.getFirst().getName() + " named " + key.getSecond() + " (setting " + reference.getName() + " on a " + target.eClass().getName() + ")",
+							new RuntimeException());
+				}
 			}
 		}
 	}
