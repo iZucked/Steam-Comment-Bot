@@ -130,7 +130,7 @@ public class DerivedScenarioWizardPage extends WizardPage {
 	 * @return
 	 */
 	public Scenario createScenario() {
-		log.debug(sourceMap, new RuntimeException());
+		log.debug(sourceMap.toString(), new RuntimeException());
 		final Scenario result = ScenarioFactory.eINSTANCE.createScenario();
 
 		final ResourceSet resourceSet = new ResourceSetImpl();
