@@ -1,7 +1,14 @@
 target/
 .classpath
-.project
 .settings/
 
 syntax: regexp
-^com\.mmxlabs\.common\.util/META-INF$
+^com\.mmxlabs.*/target$
+syntax: regexp
+^com\.mmxlabs.*/\.settings$
+syntax: regexp
+^com\.mmxlabs-.*/\.classpath$
+syntax: regexp
+^com\.mmxlabs.*/\.project$
+syntax: regexp
+^com\.mmxlabs.*/META-INF$
