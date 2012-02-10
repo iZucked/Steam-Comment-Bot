@@ -80,6 +80,7 @@ public class VesselEventExistenceTest {
 
 				inputVesselEvents.add(csc.addCharterOut("CharterOut " + portA.getName() + " to " + portB.getName(), portA, portB, start, 1000, charterOutDurationDays, cvValue, numOfClassOne, 100, 0));
 
+				// FIXME: What is the point of this? This will be set to zero on first invocation?
 				if (portA.equals(portB)) {
 					charterOutDurationDays /= 2;
 				}
