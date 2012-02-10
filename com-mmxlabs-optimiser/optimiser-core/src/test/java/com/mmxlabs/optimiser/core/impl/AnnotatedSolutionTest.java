@@ -57,8 +57,6 @@ public class AnnotatedSolutionTest {
 		final IAnnotations elementAnnotations = solution.getElementAnnotations();
 
 		Assert.assertNotNull(elementAnnotations);
-
-		// How to test this further?
 	}
 
 	@Test
