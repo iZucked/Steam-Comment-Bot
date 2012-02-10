@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import scenario.optimiser.*;
 import scenario.optimiser.Constraint;
 import scenario.optimiser.Discount;
 import scenario.optimiser.DiscountCurve;
@@ -21,30 +22,30 @@ import scenario.optimiser.OptimiserPackage;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
- * 
  * @generated
  */
 public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFactory {
 	/**
-	 * Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Creates the default factory implementation.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static OptimiserFactory init() {
 		try {
-			final OptimiserFactory theOptimiserFactory = (OptimiserFactory) EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/optimiser");
+			OptimiserFactory theOptimiserFactory = (OptimiserFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/optimiser"); 
 			if (theOptimiserFactory != null) {
 				return theOptimiserFactory;
 			}
-		} catch (final Exception exception) {
+		}
+		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new OptimiserFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Creates an instance of the factory.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public OptimiserFactoryImpl() {
@@ -53,108 +54,93 @@ public class OptimiserFactoryImpl extends EFactoryImpl implements OptimiserFacto
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public EObject create(final EClass eClass) {
+	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-		case OptimiserPackage.OPTIMISATION_SETTINGS:
-			return createOptimisationSettings();
-		case OptimiserPackage.OPTIMISATION:
-			return createOptimisation();
-		case OptimiserPackage.CONSTRAINT:
-			return createConstraint();
-		case OptimiserPackage.OBJECTIVE:
-			return createObjective();
-		case OptimiserPackage.DISCOUNT_CURVE:
-			return createDiscountCurve();
-		case OptimiserPackage.DISCOUNT:
-			return createDiscount();
-		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			case OptimiserPackage.OPTIMISATION_SETTINGS: return createOptimisationSettings();
+			case OptimiserPackage.OPTIMISATION: return createOptimisation();
+			case OptimiserPackage.CONSTRAINT: return createConstraint();
+			case OptimiserPackage.OBJECTIVE: return createObjective();
+			case OptimiserPackage.DISCOUNT_CURVE: return createDiscountCurve();
+			case OptimiserPackage.DISCOUNT: return createDiscount();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public OptimisationSettings createOptimisationSettings() {
-		final OptimisationSettingsImpl optimisationSettings = new OptimisationSettingsImpl();
+		OptimisationSettingsImpl optimisationSettings = new OptimisationSettingsImpl();
 		return optimisationSettings;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Optimisation createOptimisation() {
-		final OptimisationImpl optimisation = new OptimisationImpl();
+		OptimisationImpl optimisation = new OptimisationImpl();
 		return optimisation;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Constraint createConstraint() {
-		final ConstraintImpl constraint = new ConstraintImpl();
+		ConstraintImpl constraint = new ConstraintImpl();
 		return constraint;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Objective createObjective() {
-		final ObjectiveImpl objective = new ObjectiveImpl();
+		ObjectiveImpl objective = new ObjectiveImpl();
 		return objective;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public DiscountCurve createDiscountCurve() {
-		final DiscountCurveImpl discountCurve = new DiscountCurveImpl();
+		DiscountCurveImpl discountCurve = new DiscountCurveImpl();
 		return discountCurve;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Discount createDiscount() {
-		final DiscountImpl discount = new DiscountImpl();
+		DiscountImpl discount = new DiscountImpl();
 		return discount;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public OptimiserPackage getOptimiserPackage() {
-		return (OptimiserPackage) getEPackage();
+		return (OptimiserPackage)getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @deprecated
 	 * @generated
 	 */

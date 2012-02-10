@@ -31,33 +31,33 @@ import scenario.port.PortSelection;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getNotes <em>Notes</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getCapacity <em>Capacity</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getMinSpeed <em>Min Speed</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getMaxSpeed <em>Max Speed</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getMinHeelVolume <em>Min Heel Volume</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getFillCapacity <em>Fill Capacity</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getDailyCharterInPrice <em>Daily Charter In Price</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getBaseFuel <em>Base Fuel</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getCanalCosts <em>Canal Costs</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getWarmupTime <em>Warmup Time</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getCooldownTime <em>Cooldown Time</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselClassImpl#getCooldownVolume <em>Cooldown Volume</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getNotes <em>Notes</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCapacity <em>Capacity</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMinSpeed <em>Min Speed</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMaxSpeed <em>Max Speed</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getMinHeelVolume <em>Min Heel Volume</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getDailyCharterInPrice <em>Daily Charter In Price</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getDailyCharterOutPrice <em>Daily Charter Out Price</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getBaseFuel <em>Base Fuel</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCanalCosts <em>Canal Costs</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getWarmupTime <em>Warmup Time</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCooldownTime <em>Cooldown Time</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselClassImpl#getCooldownVolume <em>Cooldown Volume</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	/**
-	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getNotes()
 	 * @generated
 	 * @ordered
@@ -65,8 +65,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final String NOTES_EDEFAULT = "";
 
 	/**
-	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getNotes()
 	 * @generated
 	 * @ordered
@@ -74,8 +74,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected String notes = NOTES_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCapacity()
 	 * @generated
 	 * @ordered
@@ -83,8 +83,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final long CAPACITY_EDEFAULT = 0L;
 
 	/**
-	 * The cached value of the '{@link #getCapacity() <em>Capacity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCapacity()
 	 * @generated
 	 * @ordered
@@ -92,8 +92,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected long capacity = CAPACITY_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getMinSpeed() <em>Min Speed</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getMinSpeed() <em>Min Speed</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMinSpeed()
 	 * @generated
 	 * @ordered
@@ -101,8 +101,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final float MIN_SPEED_EDEFAULT = 0.0F;
 
 	/**
-	 * The cached value of the '{@link #getMinSpeed() <em>Min Speed</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getMinSpeed() <em>Min Speed</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMinSpeed()
 	 * @generated
 	 * @ordered
@@ -110,8 +110,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected float minSpeed = MIN_SPEED_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getMaxSpeed() <em>Max Speed</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getMaxSpeed() <em>Max Speed</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMaxSpeed()
 	 * @generated
 	 * @ordered
@@ -119,8 +119,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final float MAX_SPEED_EDEFAULT = 0.0F;
 
 	/**
-	 * The cached value of the '{@link #getMaxSpeed() <em>Max Speed</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getMaxSpeed() <em>Max Speed</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMaxSpeed()
 	 * @generated
 	 * @ordered
@@ -128,8 +128,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected float maxSpeed = MAX_SPEED_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getMinHeelVolume() <em>Min Heel Volume</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getMinHeelVolume() <em>Min Heel Volume</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMinHeelVolume()
 	 * @generated
 	 * @ordered
@@ -137,8 +137,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final long MIN_HEEL_VOLUME_EDEFAULT = 0L;
 
 	/**
-	 * The cached value of the '{@link #getMinHeelVolume() <em>Min Heel Volume</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getMinHeelVolume() <em>Min Heel Volume</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMinHeelVolume()
 	 * @generated
 	 * @ordered
@@ -146,8 +146,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected long minHeelVolume = MIN_HEEL_VOLUME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFillCapacity()
 	 * @generated
 	 * @ordered
@@ -155,8 +155,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final Double FILL_CAPACITY_EDEFAULT = new Double(0.958);
 
 	/**
-	 * The cached value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFillCapacity()
 	 * @generated
 	 * @ordered
@@ -164,8 +164,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected Double fillCapacity = FILL_CAPACITY_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getSpotCharterCount()
 	 * @generated
 	 * @ordered
@@ -173,8 +173,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final int SPOT_CHARTER_COUNT_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getSpotCharterCount()
 	 * @generated
 	 * @ordered
@@ -182,8 +182,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected int spotCharterCount = SPOT_CHARTER_COUNT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDailyCharterInPrice() <em>Daily Charter In Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getDailyCharterInPrice() <em>Daily Charter In Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDailyCharterInPrice()
 	 * @generated
 	 * @ordered
@@ -191,8 +191,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final int DAILY_CHARTER_IN_PRICE_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDailyCharterInPrice() <em>Daily Charter In Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDailyCharterInPrice() <em>Daily Charter In Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDailyCharterInPrice()
 	 * @generated
 	 * @ordered
@@ -200,8 +200,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected int dailyCharterInPrice = DAILY_CHARTER_IN_PRICE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDailyCharterOutPrice() <em>Daily Charter Out Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getDailyCharterOutPrice() <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDailyCharterOutPrice()
 	 * @generated
 	 * @ordered
@@ -209,8 +209,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final int DAILY_CHARTER_OUT_PRICE_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDailyCharterOutPrice() <em>Daily Charter Out Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDailyCharterOutPrice() <em>Daily Charter Out Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDailyCharterOutPrice()
 	 * @generated
 	 * @ordered
@@ -218,16 +218,16 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected int dailyCharterOutPrice = DAILY_CHARTER_OUT_PRICE_EDEFAULT;
 
 	/**
-	 * This is true if the Daily Charter Out Price attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This is true if the Daily Charter Out Price attribute has been set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean dailyCharterOutPriceESet;
 
 	/**
-	 * The cached value of the '{@link #getLadenAttributes() <em>Laden Attributes</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getLadenAttributes() <em>Laden Attributes</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getLadenAttributes()
 	 * @generated
 	 * @ordered
@@ -235,8 +235,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected VesselStateAttributes ladenAttributes;
 
 	/**
-	 * The cached value of the '{@link #getBallastAttributes() <em>Ballast Attributes</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getBallastAttributes() <em>Ballast Attributes</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getBallastAttributes()
 	 * @generated
 	 * @ordered
@@ -244,8 +244,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected VesselStateAttributes ballastAttributes;
 
 	/**
-	 * The cached value of the '{@link #getBaseFuel() <em>Base Fuel</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getBaseFuel() <em>Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getBaseFuel()
 	 * @generated
 	 * @ordered
@@ -253,8 +253,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected VesselFuel baseFuel;
 
 	/**
-	 * The default value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPilotLightRate()
 	 * @generated
 	 * @ordered
@@ -262,8 +262,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final int PILOT_LIGHT_RATE_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPilotLightRate()
 	 * @generated
 	 * @ordered
@@ -271,8 +271,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected int pilotLightRate = PILOT_LIGHT_RATE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getInaccessiblePorts() <em>Inaccessible Ports</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getInaccessiblePorts() <em>Inaccessible Ports</em>}' reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getInaccessiblePorts()
 	 * @generated
 	 * @ordered
@@ -280,8 +280,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected EList<PortSelection> inaccessiblePorts;
 
 	/**
-	 * The cached value of the '{@link #getCanalCosts() <em>Canal Costs</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getCanalCosts() <em>Canal Costs</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCanalCosts()
 	 * @generated
 	 * @ordered
@@ -289,8 +289,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected EList<VesselClassCost> canalCosts;
 
 	/**
-	 * The default value of the '{@link #getWarmupTime() <em>Warmup Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getWarmupTime() <em>Warmup Time</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWarmupTime()
 	 * @generated
 	 * @ordered
@@ -298,8 +298,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final int WARMUP_TIME_EDEFAULT = 24;
 
 	/**
-	 * The cached value of the '{@link #getWarmupTime() <em>Warmup Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getWarmupTime() <em>Warmup Time</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWarmupTime()
 	 * @generated
 	 * @ordered
@@ -307,8 +307,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected int warmupTime = WARMUP_TIME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getCooldownTime() <em>Cooldown Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getCooldownTime() <em>Cooldown Time</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCooldownTime()
 	 * @generated
 	 * @ordered
@@ -316,8 +316,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final int COOLDOWN_TIME_EDEFAULT = 12;
 
 	/**
-	 * The cached value of the '{@link #getCooldownTime() <em>Cooldown Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getCooldownTime() <em>Cooldown Time</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCooldownTime()
 	 * @generated
 	 * @ordered
@@ -325,8 +325,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected int cooldownTime = COOLDOWN_TIME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getCooldownVolume() <em>Cooldown Volume</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getCooldownVolume() <em>Cooldown Volume</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCooldownVolume()
 	 * @generated
 	 * @ordered
@@ -334,8 +334,8 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 	protected static final int COOLDOWN_VOLUME_EDEFAULT = 500;
 
 	/**
-	 * The cached value of the '{@link #getCooldownVolume() <em>Cooldown Volume</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getCooldownVolume() <em>Cooldown Volume</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCooldownVolume()
 	 * @generated
 	 * @ordered
@@ -344,7 +344,6 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected VesselClassImpl() {
@@ -353,7 +352,6 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -363,7 +361,6 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -373,21 +370,18 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setNotes(final String newNotes) {
-		final String oldNotes = notes;
+	public void setNotes(String newNotes) {
+		String oldNotes = notes;
 		notes = newNotes;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__NOTES, oldNotes, notes));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -397,21 +391,18 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setCapacity(final long newCapacity) {
-		final long oldCapacity = capacity;
+	public void setCapacity(long newCapacity) {
+		long oldCapacity = capacity;
 		capacity = newCapacity;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__CAPACITY, oldCapacity, capacity));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -421,21 +412,18 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setMinSpeed(final float newMinSpeed) {
-		final float oldMinSpeed = minSpeed;
+	public void setMinSpeed(float newMinSpeed) {
+		float oldMinSpeed = minSpeed;
 		minSpeed = newMinSpeed;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__MIN_SPEED, oldMinSpeed, minSpeed));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -445,40 +433,34 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setMaxSpeed(final float newMaxSpeed) {
-		final float oldMaxSpeed = maxSpeed;
+	public void setMaxSpeed(float newMaxSpeed) {
+		float oldMaxSpeed = maxSpeed;
 		maxSpeed = newMaxSpeed;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__MAX_SPEED, oldMaxSpeed, maxSpeed));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public VesselStateAttributes getLadenAttributes() {
-		if ((ladenAttributes != null) && ladenAttributes.eIsProxy()) {
-			final InternalEObject oldLadenAttributes = (InternalEObject) ladenAttributes;
-			ladenAttributes = (VesselStateAttributes) eResolveProxy(oldLadenAttributes);
+		if (ladenAttributes != null && ladenAttributes.eIsProxy()) {
+			InternalEObject oldLadenAttributes = (InternalEObject)ladenAttributes;
+			ladenAttributes = (VesselStateAttributes)eResolveProxy(oldLadenAttributes);
 			if (ladenAttributes != oldLadenAttributes) {
-				final InternalEObject newLadenAttributes = (InternalEObject) ladenAttributes;
+				InternalEObject newLadenAttributes = (InternalEObject)ladenAttributes;
 				NotificationChain msgs = oldLadenAttributes.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES, null, null);
 				if (newLadenAttributes.eInternalContainer() == null) {
 					msgs = newLadenAttributes.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES, null, msgs);
 				}
-				if (msgs != null) {
-					msgs.dispatch();
-				}
-				if (eNotificationRequired()) {
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES, oldLadenAttributes, ladenAttributes));
-				}
 			}
 		}
 		return ladenAttributes;
@@ -486,7 +468,6 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public VesselStateAttributes basicGetLadenAttributes() {
@@ -495,69 +476,55 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	public NotificationChain basicSetLadenAttributes(final VesselStateAttributes newLadenAttributes, NotificationChain msgs) {
-		final VesselStateAttributes oldLadenAttributes = ladenAttributes;
+	public NotificationChain basicSetLadenAttributes(VesselStateAttributes newLadenAttributes, NotificationChain msgs) {
+		VesselStateAttributes oldLadenAttributes = ladenAttributes;
 		ladenAttributes = newLadenAttributes;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES, oldLadenAttributes, newLadenAttributes);
-			if (msgs == null) {
-				msgs = notification;
-			} else {
-				msgs.add(notification);
-			}
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES, oldLadenAttributes, newLadenAttributes);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setLadenAttributes(final VesselStateAttributes newLadenAttributes) {
+	public void setLadenAttributes(VesselStateAttributes newLadenAttributes) {
 		if (newLadenAttributes != ladenAttributes) {
 			NotificationChain msgs = null;
-			if (ladenAttributes != null) {
-				msgs = ((InternalEObject) ladenAttributes).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES, null, msgs);
-			}
-			if (newLadenAttributes != null) {
-				msgs = ((InternalEObject) newLadenAttributes).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES, null, msgs);
-			}
+			if (ladenAttributes != null)
+				msgs = ((InternalEObject)ladenAttributes).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES, null, msgs);
+			if (newLadenAttributes != null)
+				msgs = ((InternalEObject)newLadenAttributes).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES, null, msgs);
 			msgs = basicSetLadenAttributes(newLadenAttributes, msgs);
-			if (msgs != null) {
-				msgs.dispatch();
-			}
-		} else if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES, newLadenAttributes, newLadenAttributes));
+			if (msgs != null) msgs.dispatch();
 		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES, newLadenAttributes, newLadenAttributes));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public VesselStateAttributes getBallastAttributes() {
-		if ((ballastAttributes != null) && ballastAttributes.eIsProxy()) {
-			final InternalEObject oldBallastAttributes = (InternalEObject) ballastAttributes;
-			ballastAttributes = (VesselStateAttributes) eResolveProxy(oldBallastAttributes);
+		if (ballastAttributes != null && ballastAttributes.eIsProxy()) {
+			InternalEObject oldBallastAttributes = (InternalEObject)ballastAttributes;
+			ballastAttributes = (VesselStateAttributes)eResolveProxy(oldBallastAttributes);
 			if (ballastAttributes != oldBallastAttributes) {
-				final InternalEObject newBallastAttributes = (InternalEObject) ballastAttributes;
+				InternalEObject newBallastAttributes = (InternalEObject)ballastAttributes;
 				NotificationChain msgs = oldBallastAttributes.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES, null, null);
 				if (newBallastAttributes.eInternalContainer() == null) {
 					msgs = newBallastAttributes.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES, null, msgs);
 				}
-				if (msgs != null) {
-					msgs.dispatch();
-				}
-				if (eNotificationRequired()) {
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES, oldBallastAttributes, ballastAttributes));
-				}
 			}
 		}
 		return ballastAttributes;
@@ -565,7 +532,6 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public VesselStateAttributes basicGetBallastAttributes() {
@@ -574,50 +540,39 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	public NotificationChain basicSetBallastAttributes(final VesselStateAttributes newBallastAttributes, NotificationChain msgs) {
-		final VesselStateAttributes oldBallastAttributes = ballastAttributes;
+	public NotificationChain basicSetBallastAttributes(VesselStateAttributes newBallastAttributes, NotificationChain msgs) {
+		VesselStateAttributes oldBallastAttributes = ballastAttributes;
 		ballastAttributes = newBallastAttributes;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES, oldBallastAttributes, newBallastAttributes);
-			if (msgs == null) {
-				msgs = notification;
-			} else {
-				msgs.add(notification);
-			}
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES, oldBallastAttributes, newBallastAttributes);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setBallastAttributes(final VesselStateAttributes newBallastAttributes) {
+	public void setBallastAttributes(VesselStateAttributes newBallastAttributes) {
 		if (newBallastAttributes != ballastAttributes) {
 			NotificationChain msgs = null;
-			if (ballastAttributes != null) {
-				msgs = ((InternalEObject) ballastAttributes).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES, null, msgs);
-			}
-			if (newBallastAttributes != null) {
-				msgs = ((InternalEObject) newBallastAttributes).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES, null, msgs);
-			}
+			if (ballastAttributes != null)
+				msgs = ((InternalEObject)ballastAttributes).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES, null, msgs);
+			if (newBallastAttributes != null)
+				msgs = ((InternalEObject)newBallastAttributes).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES, null, msgs);
 			msgs = basicSetBallastAttributes(newBallastAttributes, msgs);
-			if (msgs != null) {
-				msgs.dispatch();
-			}
-		} else if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES, newBallastAttributes, newBallastAttributes));
+			if (msgs != null) msgs.dispatch();
 		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES, newBallastAttributes, newBallastAttributes));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -627,21 +582,18 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setMinHeelVolume(final long newMinHeelVolume) {
-		final long oldMinHeelVolume = minHeelVolume;
+	public void setMinHeelVolume(long newMinHeelVolume) {
+		long oldMinHeelVolume = minHeelVolume;
 		minHeelVolume = newMinHeelVolume;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME, oldMinHeelVolume, minHeelVolume));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -651,21 +603,18 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setFillCapacity(final Double newFillCapacity) {
-		final Double oldFillCapacity = fillCapacity;
+	public void setFillCapacity(Double newFillCapacity) {
+		Double oldFillCapacity = fillCapacity;
 		fillCapacity = newFillCapacity;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__FILL_CAPACITY, oldFillCapacity, fillCapacity));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -675,40 +624,34 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setDailyCharterOutPrice(final int newDailyCharterOutPrice) {
-		final int oldDailyCharterOutPrice = dailyCharterOutPrice;
+	public void setDailyCharterOutPrice(int newDailyCharterOutPrice) {
+		int oldDailyCharterOutPrice = dailyCharterOutPrice;
 		dailyCharterOutPrice = newDailyCharterOutPrice;
-		final boolean oldDailyCharterOutPriceESet = dailyCharterOutPriceESet;
+		boolean oldDailyCharterOutPriceESet = dailyCharterOutPriceESet;
 		dailyCharterOutPriceESet = true;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE, oldDailyCharterOutPrice, dailyCharterOutPrice, !oldDailyCharterOutPriceESet));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void unsetDailyCharterOutPrice() {
-		final int oldDailyCharterOutPrice = dailyCharterOutPrice;
-		final boolean oldDailyCharterOutPriceESet = dailyCharterOutPriceESet;
+		int oldDailyCharterOutPrice = dailyCharterOutPrice;
+		boolean oldDailyCharterOutPriceESet = dailyCharterOutPriceESet;
 		dailyCharterOutPrice = DAILY_CHARTER_OUT_PRICE_EDEFAULT;
 		dailyCharterOutPriceESet = false;
-		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE, oldDailyCharterOutPrice, DAILY_CHARTER_OUT_PRICE_EDEFAULT,
-					oldDailyCharterOutPriceESet));
-		}
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE, oldDailyCharterOutPrice, DAILY_CHARTER_OUT_PRICE_EDEFAULT, oldDailyCharterOutPriceESet));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -718,7 +661,6 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -728,21 +670,18 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setSpotCharterCount(final int newSpotCharterCount) {
-		final int oldSpotCharterCount = spotCharterCount;
+	public void setSpotCharterCount(int newSpotCharterCount) {
+		int oldSpotCharterCount = spotCharterCount;
 		spotCharterCount = newSpotCharterCount;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT, oldSpotCharterCount, spotCharterCount));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -752,21 +691,18 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setDailyCharterInPrice(final int newDailyCharterInPrice) {
-		final int oldDailyCharterInPrice = dailyCharterInPrice;
+	public void setDailyCharterInPrice(int newDailyCharterInPrice) {
+		int oldDailyCharterInPrice = dailyCharterInPrice;
 		dailyCharterInPrice = newDailyCharterInPrice;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE, oldDailyCharterInPrice, dailyCharterInPrice));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -779,7 +715,6 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -792,7 +727,6 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -802,21 +736,18 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setWarmupTime(final int newWarmupTime) {
-		final int oldWarmupTime = warmupTime;
+	public void setWarmupTime(int newWarmupTime) {
+		int oldWarmupTime = warmupTime;
 		warmupTime = newWarmupTime;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__WARMUP_TIME, oldWarmupTime, warmupTime));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -826,21 +757,18 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setCooldownTime(final int newCooldownTime) {
-		final int oldCooldownTime = cooldownTime;
+	public void setCooldownTime(int newCooldownTime) {
+		int oldCooldownTime = cooldownTime;
 		cooldownTime = newCooldownTime;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__COOLDOWN_TIME, oldCooldownTime, cooldownTime));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -850,32 +778,28 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setCooldownVolume(final int newCooldownVolume) {
-		final int oldCooldownVolume = cooldownVolume;
+	public void setCooldownVolume(int newCooldownVolume) {
+		int oldCooldownVolume = cooldownVolume;
 		cooldownVolume = newCooldownVolume;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME, oldCooldownVolume, cooldownVolume));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public VesselFuel getBaseFuel() {
-		if ((baseFuel != null) && baseFuel.eIsProxy()) {
-			final InternalEObject oldBaseFuel = (InternalEObject) baseFuel;
-			baseFuel = (VesselFuel) eResolveProxy(oldBaseFuel);
+		if (baseFuel != null && baseFuel.eIsProxy()) {
+			InternalEObject oldBaseFuel = (InternalEObject)baseFuel;
+			baseFuel = (VesselFuel)eResolveProxy(oldBaseFuel);
 			if (baseFuel != oldBaseFuel) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_CLASS__BASE_FUEL, oldBaseFuel, baseFuel));
-				}
 			}
 		}
 		return baseFuel;
@@ -883,7 +807,6 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public VesselFuel basicGetBaseFuel() {
@@ -892,21 +815,18 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setBaseFuel(final VesselFuel newBaseFuel) {
-		final VesselFuel oldBaseFuel = baseFuel;
+	public void setBaseFuel(VesselFuel newBaseFuel) {
+		VesselFuel oldBaseFuel = baseFuel;
 		baseFuel = newBaseFuel;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__BASE_FUEL, oldBaseFuel, baseFuel));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -916,289 +836,273 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setPilotLightRate(final int newPilotLightRate) {
-		final int oldPilotLightRate = pilotLightRate;
+	public void setPilotLightRate(int newPilotLightRate) {
+		int oldPilotLightRate = pilotLightRate;
 		pilotLightRate = newPilotLightRate;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE, oldPilotLightRate, pilotLightRate));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
-			return basicSetLadenAttributes(null, msgs);
-		case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
-			return basicSetBallastAttributes(null, msgs);
-		case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
-			return ((InternalEList<?>) getCanalCosts()).basicRemove(otherEnd, msgs);
+			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
+				return basicSetLadenAttributes(null, msgs);
+			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
+				return basicSetBallastAttributes(null, msgs);
+			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
+				return ((InternalEList<?>)getCanalCosts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case FleetPackage.VESSEL_CLASS__NOTES:
-			return getNotes();
-		case FleetPackage.VESSEL_CLASS__CAPACITY:
-			return getCapacity();
-		case FleetPackage.VESSEL_CLASS__MIN_SPEED:
-			return getMinSpeed();
-		case FleetPackage.VESSEL_CLASS__MAX_SPEED:
-			return getMaxSpeed();
-		case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
-			return getMinHeelVolume();
-		case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
-			return getFillCapacity();
-		case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
-			return getSpotCharterCount();
-		case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
-			return getDailyCharterInPrice();
-		case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
-			return getDailyCharterOutPrice();
-		case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
-			if (resolve) {
-				return getLadenAttributes();
-			}
-			return basicGetLadenAttributes();
-		case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
-			if (resolve) {
-				return getBallastAttributes();
-			}
-			return basicGetBallastAttributes();
-		case FleetPackage.VESSEL_CLASS__BASE_FUEL:
-			if (resolve) {
-				return getBaseFuel();
-			}
-			return basicGetBaseFuel();
-		case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
-			return getPilotLightRate();
-		case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
-			return getInaccessiblePorts();
-		case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
-			return getCanalCosts();
-		case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
-			return getWarmupTime();
-		case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
-			return getCooldownTime();
-		case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
-			return getCooldownVolume();
+			case FleetPackage.VESSEL_CLASS__NOTES:
+				return getNotes();
+			case FleetPackage.VESSEL_CLASS__CAPACITY:
+				return getCapacity();
+			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
+				return getMinSpeed();
+			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
+				return getMaxSpeed();
+			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
+				return getMinHeelVolume();
+			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
+				return getFillCapacity();
+			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
+				return getSpotCharterCount();
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
+				return getDailyCharterInPrice();
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
+				return getDailyCharterOutPrice();
+			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
+				if (resolve) return getLadenAttributes();
+				return basicGetLadenAttributes();
+			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
+				if (resolve) return getBallastAttributes();
+				return basicGetBallastAttributes();
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
+				if (resolve) return getBaseFuel();
+				return basicGetBaseFuel();
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				return getPilotLightRate();
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
+				return getInaccessiblePorts();
+			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
+				return getCanalCosts();
+			case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
+				return getWarmupTime();
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
+				return getCooldownTime();
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
+				return getCooldownVolume();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case FleetPackage.VESSEL_CLASS__NOTES:
-			setNotes((String) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__CAPACITY:
-			setCapacity((Long) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__MIN_SPEED:
-			setMinSpeed((Float) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__MAX_SPEED:
-			setMaxSpeed((Float) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
-			setMinHeelVolume((Long) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
-			setFillCapacity((Double) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
-			setSpotCharterCount((Integer) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
-			setDailyCharterInPrice((Integer) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
-			setDailyCharterOutPrice((Integer) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
-			setLadenAttributes((VesselStateAttributes) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
-			setBallastAttributes((VesselStateAttributes) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__BASE_FUEL:
-			setBaseFuel((VesselFuel) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
-			setPilotLightRate((Integer) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
-			getInaccessiblePorts().clear();
-			getInaccessiblePorts().addAll((Collection<? extends PortSelection>) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
-			getCanalCosts().clear();
-			getCanalCosts().addAll((Collection<? extends VesselClassCost>) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
-			setWarmupTime((Integer) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
-			setCooldownTime((Integer) newValue);
-			return;
-		case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
-			setCooldownVolume((Integer) newValue);
-			return;
+			case FleetPackage.VESSEL_CLASS__NOTES:
+				setNotes((String)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__CAPACITY:
+				setCapacity((Long)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
+				setMinSpeed((Float)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
+				setMaxSpeed((Float)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
+				setMinHeelVolume((Long)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
+				setFillCapacity((Double)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
+				setSpotCharterCount((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
+				setDailyCharterInPrice((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
+				setDailyCharterOutPrice((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
+				setLadenAttributes((VesselStateAttributes)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
+				setBallastAttributes((VesselStateAttributes)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
+				setBaseFuel((VesselFuel)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				setPilotLightRate((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
+				getInaccessiblePorts().clear();
+				getInaccessiblePorts().addAll((Collection<? extends PortSelection>)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
+				getCanalCosts().clear();
+				getCanalCosts().addAll((Collection<? extends VesselClassCost>)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
+				setWarmupTime((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
+				setCooldownTime((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
+				setCooldownVolume((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case FleetPackage.VESSEL_CLASS__NOTES:
-			setNotes(NOTES_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_CLASS__CAPACITY:
-			setCapacity(CAPACITY_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_CLASS__MIN_SPEED:
-			setMinSpeed(MIN_SPEED_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_CLASS__MAX_SPEED:
-			setMaxSpeed(MAX_SPEED_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
-			setMinHeelVolume(MIN_HEEL_VOLUME_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
-			setFillCapacity(FILL_CAPACITY_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
-			setSpotCharterCount(SPOT_CHARTER_COUNT_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
-			setDailyCharterInPrice(DAILY_CHARTER_IN_PRICE_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
-			unsetDailyCharterOutPrice();
-			return;
-		case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
-			setLadenAttributes((VesselStateAttributes) null);
-			return;
-		case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
-			setBallastAttributes((VesselStateAttributes) null);
-			return;
-		case FleetPackage.VESSEL_CLASS__BASE_FUEL:
-			setBaseFuel((VesselFuel) null);
-			return;
-		case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
-			setPilotLightRate(PILOT_LIGHT_RATE_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
-			getInaccessiblePorts().clear();
-			return;
-		case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
-			getCanalCosts().clear();
-			return;
-		case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
-			setWarmupTime(WARMUP_TIME_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
-			setCooldownTime(COOLDOWN_TIME_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
-			setCooldownVolume(COOLDOWN_VOLUME_EDEFAULT);
-			return;
+			case FleetPackage.VESSEL_CLASS__NOTES:
+				setNotes(NOTES_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__CAPACITY:
+				setCapacity(CAPACITY_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
+				setMinSpeed(MIN_SPEED_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
+				setMaxSpeed(MAX_SPEED_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
+				setMinHeelVolume(MIN_HEEL_VOLUME_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
+				setFillCapacity(FILL_CAPACITY_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
+				setSpotCharterCount(SPOT_CHARTER_COUNT_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
+				setDailyCharterInPrice(DAILY_CHARTER_IN_PRICE_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
+				unsetDailyCharterOutPrice();
+				return;
+			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
+				setLadenAttributes((VesselStateAttributes)null);
+				return;
+			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
+				setBallastAttributes((VesselStateAttributes)null);
+				return;
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
+				setBaseFuel((VesselFuel)null);
+				return;
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				setPilotLightRate(PILOT_LIGHT_RATE_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
+				getInaccessiblePorts().clear();
+				return;
+			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
+				getCanalCosts().clear();
+				return;
+			case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
+				setWarmupTime(WARMUP_TIME_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
+				setCooldownTime(COOLDOWN_TIME_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
+				setCooldownVolume(COOLDOWN_VOLUME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case FleetPackage.VESSEL_CLASS__NOTES:
-			return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
-		case FleetPackage.VESSEL_CLASS__CAPACITY:
-			return capacity != CAPACITY_EDEFAULT;
-		case FleetPackage.VESSEL_CLASS__MIN_SPEED:
-			return minSpeed != MIN_SPEED_EDEFAULT;
-		case FleetPackage.VESSEL_CLASS__MAX_SPEED:
-			return maxSpeed != MAX_SPEED_EDEFAULT;
-		case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
-			return minHeelVolume != MIN_HEEL_VOLUME_EDEFAULT;
-		case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
-			return FILL_CAPACITY_EDEFAULT == null ? fillCapacity != null : !FILL_CAPACITY_EDEFAULT.equals(fillCapacity);
-		case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
-			return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
-		case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
-			return dailyCharterInPrice != DAILY_CHARTER_IN_PRICE_EDEFAULT;
-		case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
-			return isSetDailyCharterOutPrice();
-		case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
-			return ladenAttributes != null;
-		case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
-			return ballastAttributes != null;
-		case FleetPackage.VESSEL_CLASS__BASE_FUEL:
-			return baseFuel != null;
-		case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
-			return pilotLightRate != PILOT_LIGHT_RATE_EDEFAULT;
-		case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
-			return (inaccessiblePorts != null) && !inaccessiblePorts.isEmpty();
-		case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
-			return (canalCosts != null) && !canalCosts.isEmpty();
-		case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
-			return warmupTime != WARMUP_TIME_EDEFAULT;
-		case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
-			return cooldownTime != COOLDOWN_TIME_EDEFAULT;
-		case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
-			return cooldownVolume != COOLDOWN_VOLUME_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__NOTES:
+				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
+			case FleetPackage.VESSEL_CLASS__CAPACITY:
+				return capacity != CAPACITY_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
+				return minSpeed != MIN_SPEED_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
+				return maxSpeed != MAX_SPEED_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__MIN_HEEL_VOLUME:
+				return minHeelVolume != MIN_HEEL_VOLUME_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
+				return FILL_CAPACITY_EDEFAULT == null ? fillCapacity != null : !FILL_CAPACITY_EDEFAULT.equals(fillCapacity);
+			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
+				return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_IN_PRICE:
+				return dailyCharterInPrice != DAILY_CHARTER_IN_PRICE_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__DAILY_CHARTER_OUT_PRICE:
+				return isSetDailyCharterOutPrice();
+			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
+				return ladenAttributes != null;
+			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
+				return ballastAttributes != null;
+			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
+				return baseFuel != null;
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				return pilotLightRate != PILOT_LIGHT_RATE_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
+				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
+			case FleetPackage.VESSEL_CLASS__CANAL_COSTS:
+				return canalCosts != null && !canalCosts.isEmpty();
+			case FleetPackage.VESSEL_CLASS__WARMUP_TIME:
+				return warmupTime != WARMUP_TIME_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_TIME:
+				return cooldownTime != COOLDOWN_TIME_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__COOLDOWN_VOLUME:
+				return cooldownVolume != COOLDOWN_VOLUME_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public int eBaseStructuralFeatureID(final int derivedFeatureID, final Class<?> baseClass) {
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == AnnotatedObject.class) {
 			switch (derivedFeatureID) {
-			case FleetPackage.VESSEL_CLASS__NOTES:
-				return ScenarioPackage.ANNOTATED_OBJECT__NOTES;
-			default:
-				return -1;
+				case FleetPackage.VESSEL_CLASS__NOTES: return ScenarioPackage.ANNOTATED_OBJECT__NOTES;
+				default: return -1;
 			}
 		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
@@ -1206,17 +1110,14 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public int eDerivedStructuralFeatureID(final int baseFeatureID, final Class<?> baseClass) {
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == AnnotatedObject.class) {
 			switch (baseFeatureID) {
-			case ScenarioPackage.ANNOTATED_OBJECT__NOTES:
-				return FleetPackage.VESSEL_CLASS__NOTES;
-			default:
-				return -1;
+				case ScenarioPackage.ANNOTATED_OBJECT__NOTES: return FleetPackage.VESSEL_CLASS__NOTES;
+				default: return -1;
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
@@ -1224,16 +1125,13 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (notes: ");
 		result.append(notes);
 		result.append(", capacity: ");
@@ -1251,11 +1149,7 @@ public class VesselClassImpl extends NamedObjectImpl implements VesselClass {
 		result.append(", dailyCharterInPrice: ");
 		result.append(dailyCharterInPrice);
 		result.append(", dailyCharterOutPrice: ");
-		if (dailyCharterOutPriceESet) {
-			result.append(dailyCharterOutPrice);
-		} else {
-			result.append("<unset>");
-		}
+		if (dailyCharterOutPriceESet) result.append(dailyCharterOutPrice); else result.append("<unset>");
 		result.append(", pilotLightRate: ");
 		result.append(pilotLightRate);
 		result.append(", warmupTime: ");

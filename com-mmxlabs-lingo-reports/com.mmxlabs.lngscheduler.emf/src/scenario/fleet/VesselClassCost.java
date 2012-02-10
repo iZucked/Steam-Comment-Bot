@@ -10,20 +10,22 @@ import scenario.port.Canal;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>Vessel Class Cost</b></em>'. <!-- end-user-doc -->
- * 
- * <!-- begin-model-doc --> Describes the various costs and delays associated with a given vessel class for a given canal. <!-- end-model-doc -->
- * 
+ *
+ * <!-- begin-model-doc -->
+ * Describes the various costs and delays associated with a given vessel class for a given canal.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link scenario.fleet.VesselClassCost#getCanal <em>Canal</em>}</li>
- * <li>{@link scenario.fleet.VesselClassCost#getLadenCost <em>Laden Cost</em>}</li>
- * <li>{@link scenario.fleet.VesselClassCost#getUnladenCost <em>Unladen Cost</em>}</li>
- * <li>{@link scenario.fleet.VesselClassCost#getTransitTime <em>Transit Time</em>}</li>
- * <li>{@link scenario.fleet.VesselClassCost#getTransitFuel <em>Transit Fuel</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClassCost#getCanal <em>Canal</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClassCost#getLadenCost <em>Laden Cost</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClassCost#getUnladenCost <em>Unladen Cost</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClassCost#getTransitTime <em>Transit Time</em>}</li>
+ *   <li>{@link scenario.fleet.VesselClassCost#getTransitFuel <em>Transit Fuel</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see scenario.fleet.FleetPackage#getVesselClassCost()
  * @model
  * @generated
@@ -42,10 +44,9 @@ public interface VesselClassCost extends EObject {
 	Canal getCanal();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClassCost#getCanal <em>Canal</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Canal</em>' reference.
+	 * Sets the value of the '{@link scenario.fleet.VesselClassCost#getCanal <em>Canal</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Canal</em>' reference.
 	 * @see #getCanal()
 	 * @generated
 	 */
@@ -64,10 +65,9 @@ public interface VesselClassCost extends EObject {
 	int getLadenCost();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClassCost#getLadenCost <em>Laden Cost</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Laden Cost</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClassCost#getLadenCost <em>Laden Cost</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Laden Cost</em>' attribute.
 	 * @see #getLadenCost()
 	 * @generated
 	 */
@@ -86,10 +86,9 @@ public interface VesselClassCost extends EObject {
 	int getUnladenCost();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClassCost#getUnladenCost <em>Unladen Cost</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Unladen Cost</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClassCost#getUnladenCost <em>Unladen Cost</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Unladen Cost</em>' attribute.
 	 * @see #getUnladenCost()
 	 * @generated
 	 */
@@ -108,10 +107,9 @@ public interface VesselClassCost extends EObject {
 	int getTransitTime();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClassCost#getTransitTime <em>Transit Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Transit Time</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClassCost#getTransitTime <em>Transit Time</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Transit Time</em>' attribute.
 	 * @see #getTransitTime()
 	 * @generated
 	 */
@@ -131,10 +129,9 @@ public interface VesselClassCost extends EObject {
 	float getTransitFuel();
 
 	/**
-	 * Sets the value of the '{@link scenario.fleet.VesselClassCost#getTransitFuel <em>Transit Fuel</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Transit Fuel</em>' attribute.
+	 * Sets the value of the '{@link scenario.fleet.VesselClassCost#getTransitFuel <em>Transit Fuel</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Transit Fuel</em>' attribute.
 	 * @see #getTransitFuel()
 	 * @generated
 	 */

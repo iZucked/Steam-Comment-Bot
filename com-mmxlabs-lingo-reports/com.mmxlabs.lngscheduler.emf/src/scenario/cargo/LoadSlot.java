@@ -6,15 +6,15 @@ package scenario.cargo;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>Load Slot</b></em>'. <!-- end-user-doc -->
- * 
+ *
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}</li>
- * <li>{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}</li>
+ *   <li>{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}</li>
+ *   <li>{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see scenario.cargo.CargoPackage#getLoadSlot()
  * @model
  * @generated
@@ -35,10 +35,9 @@ public interface LoadSlot extends Slot {
 	float getCargoCVvalue();
 
 	/**
-	 * Sets the value of the '{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Cargo CVvalue</em>' attribute.
+	 * Sets the value of the '{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo CVvalue</em>' attribute.
 	 * @see #isSetCargoCVvalue()
 	 * @see #unsetCargoCVvalue()
 	 * @see #getCargoCVvalue()
@@ -47,8 +46,8 @@ public interface LoadSlot extends Slot {
 	void setCargoCVvalue(float value);
 
 	/**
-	 * Unsets the value of the '{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Unsets the value of the '{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #isSetCargoCVvalue()
 	 * @see #getCargoCVvalue()
 	 * @see #setCargoCVvalue(float)
@@ -57,8 +56,8 @@ public interface LoadSlot extends Slot {
 	void unsetCargoCVvalue();
 
 	/**
-	 * Returns whether the value of the '{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}' attribute is set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns whether the value of the '{@link scenario.cargo.LoadSlot#getCargoCVvalue <em>Cargo CVvalue</em>}' attribute is set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Cargo CVvalue</em>' attribute is set.
 	 * @see #unsetCargoCVvalue()
 	 * @see #getCargoCVvalue()
@@ -68,12 +67,12 @@ public interface LoadSlot extends Slot {
 	boolean isSetCargoCVvalue();
 
 	/**
-	 * Returns the value of the '<em><b>Arrive Cold</b></em>' attribute. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Arrive Cold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Arrive Cold</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Arrive Cold</em>' attribute.
 	 * @see #isSetArriveCold()
 	 * @see #unsetArriveCold()
@@ -85,10 +84,9 @@ public interface LoadSlot extends Slot {
 	boolean isArriveCold();
 
 	/**
-	 * Sets the value of the '{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Arrive Cold</em>' attribute.
+	 * Sets the value of the '{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Arrive Cold</em>' attribute.
 	 * @see #isSetArriveCold()
 	 * @see #unsetArriveCold()
 	 * @see #isArriveCold()
@@ -97,8 +95,8 @@ public interface LoadSlot extends Slot {
 	void setArriveCold(boolean value);
 
 	/**
-	 * Unsets the value of the '{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Unsets the value of the '{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #isSetArriveCold()
 	 * @see #isArriveCold()
 	 * @see #setArriveCold(boolean)
@@ -107,8 +105,8 @@ public interface LoadSlot extends Slot {
 	void unsetArriveCold();
 
 	/**
-	 * Returns whether the value of the '{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}' attribute is set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns whether the value of the '{@link scenario.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}' attribute is set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Arrive Cold</em>' attribute is set.
 	 * @see #unsetArriveCold()
 	 * @see #isArriveCold()
@@ -119,16 +117,14 @@ public interface LoadSlot extends Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @model kind="operation" required="true" annotation=
-	 *        "http://www.eclipse.org/emf/2002/GenModel body='if (isSetCargoCVvalue()) \r\n\treturn getCargoCVvalue();\r\nelse if (getPort()!=null)\r\n\treturn getPort().getDefaultCVvalue();\r\nelse\r\n\treturn 0;'"
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetCargoCVvalue()) \r\n\treturn getCargoCVvalue();\r\nelse if (getPort()!=null)\r\n\treturn getPort().getDefaultCVvalue();\r\nelse\r\n\treturn 0;'"
 	 * @generated
 	 */
 	float getCargoOrPortCVValue();
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" required="true"
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (isSetSlotDuration())\n\treturn getSlotDuration();\nelse\n\treturn getPort().getDefaultLoadDuration();'"
 	 * @generated

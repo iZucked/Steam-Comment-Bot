@@ -27,17 +27,17 @@ import scenario.market.StepwisePriceCurve;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.market.impl.StepwisePriceCurveImpl#getDefaultValue <em>Default Value</em>}</li>
- * <li>{@link scenario.market.impl.StepwisePriceCurveImpl#getPrices <em>Prices</em>}</li>
+ *   <li>{@link scenario.market.impl.StepwisePriceCurveImpl#getDefaultValue <em>Default Value</em>}</li>
+ *   <li>{@link scenario.market.impl.StepwisePriceCurveImpl#getPrices <em>Prices</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePriceCurve {
 	/**
-	 * The default value of the '{@link #getDefaultValue() <em>Default Value</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getDefaultValue() <em>Default Value</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultValue()
 	 * @generated
 	 * @ordered
@@ -45,8 +45,8 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	protected static final float DEFAULT_VALUE_EDEFAULT = 0.0F;
 
 	/**
-	 * The cached value of the '{@link #getDefaultValue() <em>Default Value</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDefaultValue() <em>Default Value</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultValue()
 	 * @generated
 	 * @ordered
@@ -54,8 +54,8 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 	protected float defaultValue = DEFAULT_VALUE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getPrices() <em>Prices</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getPrices() <em>Prices</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPrices()
 	 * @generated
 	 * @ordered
@@ -64,7 +64,6 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected StepwisePriceCurveImpl() {
@@ -73,7 +72,6 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -83,7 +81,6 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -96,7 +93,6 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -106,34 +102,31 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setDefaultValue(final float newDefaultValue) {
-		final float oldDefaultValue = defaultValue;
+	public void setDefaultValue(float newDefaultValue) {
+		float oldDefaultValue = defaultValue;
 		defaultValue = newDefaultValue;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE, oldDefaultValue, defaultValue));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public float getValueAtDate(final Date date) {
+	public float getValueAtDate(Date date) {
 		final EList<StepwisePrice> prices = getPrices();
-
-		java.util.Collections.sort(prices, new java.util.Comparator<StepwisePrice>() {
-			@Override
-			public int compare(final StepwisePrice a, final StepwisePrice b) {
+		
+		java.util.Collections.sort(prices,
+		new java.util.Comparator<StepwisePrice>() {
+			public int compare(StepwisePrice a, StepwisePrice b) {
 				return a.getDate().compareTo(b.getDate());
 			}
 		});
-
+		
 		float previousPrice = getDefaultValue();
 		for (final StepwisePrice p : prices) {
 			if (p.getDate().after(date)) {
@@ -146,114 +139,105 @@ public class StepwisePriceCurveImpl extends EObjectImpl implements StepwisePrice
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
-			return ((InternalEList<?>) getPrices()).basicRemove(otherEnd, msgs);
+			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
+				return ((InternalEList<?>)getPrices()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
-			return getDefaultValue();
-		case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
-			return getPrices();
+			case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
+				return getDefaultValue();
+			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
+				return getPrices();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
-			setDefaultValue((Float) newValue);
-			return;
-		case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
-			getPrices().clear();
-			getPrices().addAll((Collection<? extends StepwisePrice>) newValue);
-			return;
+			case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
+				setDefaultValue((Float)newValue);
+				return;
+			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
+				getPrices().clear();
+				getPrices().addAll((Collection<? extends StepwisePrice>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
-			setDefaultValue(DEFAULT_VALUE_EDEFAULT);
-			return;
-		case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
-			getPrices().clear();
-			return;
+			case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
+				setDefaultValue(DEFAULT_VALUE_EDEFAULT);
+				return;
+			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
+				getPrices().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
-			return defaultValue != DEFAULT_VALUE_EDEFAULT;
-		case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
-			return (prices != null) && !prices.isEmpty();
+			case MarketPackage.STEPWISE_PRICE_CURVE__DEFAULT_VALUE:
+				return defaultValue != DEFAULT_VALUE_EDEFAULT;
+			case MarketPackage.STEPWISE_PRICE_CURVE__PRICES:
+				return prices != null && !prices.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-		case MarketPackage.STEPWISE_PRICE_CURVE___GET_VALUE_AT_DATE__DATE:
-			return getValueAtDate((Date) arguments.get(0));
+			case MarketPackage.STEPWISE_PRICE_CURVE___GET_VALUE_AT_DATE__DATE:
+				return getValueAtDate((Date)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (defaultValue: ");
 		result.append(defaultValue);
 		result.append(')');

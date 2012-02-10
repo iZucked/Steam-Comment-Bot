@@ -17,18 +17,18 @@ import scenario.fleet.HeelOptions;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.fleet.impl.HeelOptionsImpl#getHeelLimit <em>Heel Limit</em>}</li>
- * <li>{@link scenario.fleet.impl.HeelOptionsImpl#getHeelCVValue <em>Heel CV Value</em>}</li>
- * <li>{@link scenario.fleet.impl.HeelOptionsImpl#getHeelUnitPrice <em>Heel Unit Price</em>}</li>
+ *   <li>{@link scenario.fleet.impl.HeelOptionsImpl#getHeelLimit <em>Heel Limit</em>}</li>
+ *   <li>{@link scenario.fleet.impl.HeelOptionsImpl#getHeelCVValue <em>Heel CV Value</em>}</li>
+ *   <li>{@link scenario.fleet.impl.HeelOptionsImpl#getHeelUnitPrice <em>Heel Unit Price</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 	/**
-	 * The default value of the '{@link #getHeelLimit() <em>Heel Limit</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getHeelLimit() <em>Heel Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getHeelLimit()
 	 * @generated
 	 * @ordered
@@ -36,8 +36,8 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 	protected static final int HEEL_LIMIT_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getHeelLimit() <em>Heel Limit</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getHeelLimit() <em>Heel Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getHeelLimit()
 	 * @generated
 	 * @ordered
@@ -45,16 +45,16 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 	protected int heelLimit = HEEL_LIMIT_EDEFAULT;
 
 	/**
-	 * This is true if the Heel Limit attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This is true if the Heel Limit attribute has been set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean heelLimitESet;
 
 	/**
-	 * The default value of the '{@link #getHeelCVValue() <em>Heel CV Value</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getHeelCVValue() <em>Heel CV Value</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getHeelCVValue()
 	 * @generated
 	 * @ordered
@@ -62,8 +62,8 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 	protected static final float HEEL_CV_VALUE_EDEFAULT = 22.8F;
 
 	/**
-	 * The cached value of the '{@link #getHeelCVValue() <em>Heel CV Value</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getHeelCVValue() <em>Heel CV Value</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getHeelCVValue()
 	 * @generated
 	 * @ordered
@@ -71,8 +71,8 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 	protected float heelCVValue = HEEL_CV_VALUE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getHeelUnitPrice() <em>Heel Unit Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getHeelUnitPrice() <em>Heel Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getHeelUnitPrice()
 	 * @generated
 	 * @ordered
@@ -80,8 +80,8 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 	protected static final float HEEL_UNIT_PRICE_EDEFAULT = 0.0F;
 
 	/**
-	 * The cached value of the '{@link #getHeelUnitPrice() <em>Heel Unit Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getHeelUnitPrice() <em>Heel Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getHeelUnitPrice()
 	 * @generated
 	 * @ordered
@@ -90,7 +90,6 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected HeelOptionsImpl() {
@@ -99,7 +98,6 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -109,7 +107,6 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -119,39 +116,34 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setHeelLimit(final int newHeelLimit) {
-		final int oldHeelLimit = heelLimit;
+	public void setHeelLimit(int newHeelLimit) {
+		int oldHeelLimit = heelLimit;
 		heelLimit = newHeelLimit;
-		final boolean oldHeelLimitESet = heelLimitESet;
+		boolean oldHeelLimitESet = heelLimitESet;
 		heelLimitESet = true;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.HEEL_OPTIONS__HEEL_LIMIT, oldHeelLimit, heelLimit, !oldHeelLimitESet));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void unsetHeelLimit() {
-		final int oldHeelLimit = heelLimit;
-		final boolean oldHeelLimitESet = heelLimitESet;
+		int oldHeelLimit = heelLimit;
+		boolean oldHeelLimitESet = heelLimitESet;
 		heelLimit = HEEL_LIMIT_EDEFAULT;
 		heelLimitESet = false;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.HEEL_OPTIONS__HEEL_LIMIT, oldHeelLimit, HEEL_LIMIT_EDEFAULT, oldHeelLimitESet));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -161,7 +153,6 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -171,21 +162,18 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setHeelCVValue(final float newHeelCVValue) {
-		final float oldHeelCVValue = heelCVValue;
+	public void setHeelCVValue(float newHeelCVValue) {
+		float oldHeelCVValue = heelCVValue;
 		heelCVValue = newHeelCVValue;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.HEEL_OPTIONS__HEEL_CV_VALUE, oldHeelCVValue, heelCVValue));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -195,114 +183,101 @@ public class HeelOptionsImpl extends EObjectImpl implements HeelOptions {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setHeelUnitPrice(final float newHeelUnitPrice) {
-		final float oldHeelUnitPrice = heelUnitPrice;
+	public void setHeelUnitPrice(float newHeelUnitPrice) {
+		float oldHeelUnitPrice = heelUnitPrice;
 		heelUnitPrice = newHeelUnitPrice;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.HEEL_OPTIONS__HEEL_UNIT_PRICE, oldHeelUnitPrice, heelUnitPrice));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case FleetPackage.HEEL_OPTIONS__HEEL_LIMIT:
-			return getHeelLimit();
-		case FleetPackage.HEEL_OPTIONS__HEEL_CV_VALUE:
-			return getHeelCVValue();
-		case FleetPackage.HEEL_OPTIONS__HEEL_UNIT_PRICE:
-			return getHeelUnitPrice();
+			case FleetPackage.HEEL_OPTIONS__HEEL_LIMIT:
+				return getHeelLimit();
+			case FleetPackage.HEEL_OPTIONS__HEEL_CV_VALUE:
+				return getHeelCVValue();
+			case FleetPackage.HEEL_OPTIONS__HEEL_UNIT_PRICE:
+				return getHeelUnitPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case FleetPackage.HEEL_OPTIONS__HEEL_LIMIT:
-			setHeelLimit((Integer) newValue);
-			return;
-		case FleetPackage.HEEL_OPTIONS__HEEL_CV_VALUE:
-			setHeelCVValue((Float) newValue);
-			return;
-		case FleetPackage.HEEL_OPTIONS__HEEL_UNIT_PRICE:
-			setHeelUnitPrice((Float) newValue);
-			return;
+			case FleetPackage.HEEL_OPTIONS__HEEL_LIMIT:
+				setHeelLimit((Integer)newValue);
+				return;
+			case FleetPackage.HEEL_OPTIONS__HEEL_CV_VALUE:
+				setHeelCVValue((Float)newValue);
+				return;
+			case FleetPackage.HEEL_OPTIONS__HEEL_UNIT_PRICE:
+				setHeelUnitPrice((Float)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case FleetPackage.HEEL_OPTIONS__HEEL_LIMIT:
-			unsetHeelLimit();
-			return;
-		case FleetPackage.HEEL_OPTIONS__HEEL_CV_VALUE:
-			setHeelCVValue(HEEL_CV_VALUE_EDEFAULT);
-			return;
-		case FleetPackage.HEEL_OPTIONS__HEEL_UNIT_PRICE:
-			setHeelUnitPrice(HEEL_UNIT_PRICE_EDEFAULT);
-			return;
+			case FleetPackage.HEEL_OPTIONS__HEEL_LIMIT:
+				unsetHeelLimit();
+				return;
+			case FleetPackage.HEEL_OPTIONS__HEEL_CV_VALUE:
+				setHeelCVValue(HEEL_CV_VALUE_EDEFAULT);
+				return;
+			case FleetPackage.HEEL_OPTIONS__HEEL_UNIT_PRICE:
+				setHeelUnitPrice(HEEL_UNIT_PRICE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case FleetPackage.HEEL_OPTIONS__HEEL_LIMIT:
-			return isSetHeelLimit();
-		case FleetPackage.HEEL_OPTIONS__HEEL_CV_VALUE:
-			return heelCVValue != HEEL_CV_VALUE_EDEFAULT;
-		case FleetPackage.HEEL_OPTIONS__HEEL_UNIT_PRICE:
-			return heelUnitPrice != HEEL_UNIT_PRICE_EDEFAULT;
+			case FleetPackage.HEEL_OPTIONS__HEEL_LIMIT:
+				return isSetHeelLimit();
+			case FleetPackage.HEEL_OPTIONS__HEEL_CV_VALUE:
+				return heelCVValue != HEEL_CV_VALUE_EDEFAULT;
+			case FleetPackage.HEEL_OPTIONS__HEEL_UNIT_PRICE:
+				return heelUnitPrice != HEEL_UNIT_PRICE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (heelLimit: ");
-		if (heelLimitESet) {
-			result.append(heelLimit);
-		} else {
-			result.append("<unset>");
-		}
+		if (heelLimitESet) result.append(heelLimit); else result.append("<unset>");
 		result.append(", heelCVValue: ");
 		result.append(heelCVValue);
 		result.append(", heelUnitPrice: ");

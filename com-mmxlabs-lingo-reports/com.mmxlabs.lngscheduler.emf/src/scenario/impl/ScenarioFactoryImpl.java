@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import scenario.*;
 import scenario.AnnotatedObject;
 import scenario.Detail;
 import scenario.Scenario;
@@ -25,30 +26,30 @@ import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
- * 
  * @generated
  */
 public class ScenarioFactoryImpl extends EFactoryImpl implements ScenarioFactory {
 	/**
-	 * Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Creates the default factory implementation.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static ScenarioFactory init() {
 		try {
-			final ScenarioFactory theScenarioFactory = (ScenarioFactory) EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2");
+			ScenarioFactory theScenarioFactory = (ScenarioFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2"); 
 			if (theScenarioFactory != null) {
 				return theScenarioFactory;
 			}
-		} catch (final Exception exception) {
+		}
+		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new ScenarioFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Creates an instance of the factory.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public ScenarioFactoryImpl() {
@@ -57,87 +58,78 @@ public class ScenarioFactoryImpl extends EFactoryImpl implements ScenarioFactory
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public EObject create(final EClass eClass) {
+	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-		case ScenarioPackage.SCENARIO:
-			return createScenario();
-		case ScenarioPackage.ANNOTATED_OBJECT:
-			return createAnnotatedObject();
-		case ScenarioPackage.DETAIL:
-			return createDetail();
-		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			case ScenarioPackage.SCENARIO: return createScenario();
+			case ScenarioPackage.ANNOTATED_OBJECT: return createAnnotatedObject();
+			case ScenarioPackage.DETAIL: return createDetail();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object createFromString(final EDataType eDataType, final String initialValue) {
+	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-		case ScenarioPackage.DATE_AND_OPTIONAL_TIME:
-			return createDateAndOptionalTimeFromString(eDataType, initialValue);
-		case ScenarioPackage.PERCENTAGE:
-			return createPercentageFromString(eDataType, initialValue);
-		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			case ScenarioPackage.DATE_AND_OPTIONAL_TIME:
+				return createDateAndOptionalTimeFromString(eDataType, initialValue);
+			case ScenarioPackage.PERCENTAGE:
+				return createPercentageFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public String convertToString(final EDataType eDataType, final Object instanceValue) {
+	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-		case ScenarioPackage.DATE_AND_OPTIONAL_TIME:
-			return convertDateAndOptionalTimeToString(eDataType, instanceValue);
-		case ScenarioPackage.PERCENTAGE:
-			return convertPercentageToString(eDataType, instanceValue);
-		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			case ScenarioPackage.DATE_AND_OPTIONAL_TIME:
+				return convertDateAndOptionalTimeToString(eDataType, instanceValue);
+			case ScenarioPackage.PERCENTAGE:
+				return convertPercentageToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Scenario createScenario() {
-		final ScenarioImpl scenario = new ScenarioImpl();
+		ScenarioImpl scenario = new ScenarioImpl();
 		return scenario;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public AnnotatedObject createAnnotatedObject() {
-		final AnnotatedObjectImpl annotatedObject = new AnnotatedObjectImpl();
+		AnnotatedObjectImpl annotatedObject = new AnnotatedObjectImpl();
 		return annotatedObject;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Detail createDetail() {
-		final DetailImpl detail = new DetailImpl();
+		DetailImpl detail = new DetailImpl();
 		return detail;
 	}
 
@@ -196,17 +188,15 @@ public class ScenarioFactoryImpl extends EFactoryImpl implements ScenarioFactory
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public ScenarioPackage getScenarioPackage() {
-		return (ScenarioPackage) getEPackage();
+		return (ScenarioPackage)getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @deprecated
 	 * @generated
 	 */

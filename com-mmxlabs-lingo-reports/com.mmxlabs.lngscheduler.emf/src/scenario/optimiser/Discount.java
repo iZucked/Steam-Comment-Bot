@@ -8,18 +8,19 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>Discount</b></em>'. <!-- end-user-doc -->
- * 
- * <!-- begin-model-doc --> A discount value, which gives a time from the start of its containing curve and a discount factor for fitnesses from that time up to the next specified time (if any) <!--
- * end-model-doc -->
- * 
+ *
+ * <!-- begin-model-doc -->
+ * A discount value, which gives a time from the start of its containing curve and a discount factor for fitnesses from that time up to the next specified time (if any)
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link scenario.optimiser.Discount#getTime <em>Time</em>}</li>
- * <li>{@link scenario.optimiser.Discount#getDiscountFactor <em>Discount Factor</em>}</li>
+ *   <li>{@link scenario.optimiser.Discount#getTime <em>Time</em>}</li>
+ *   <li>{@link scenario.optimiser.Discount#getDiscountFactor <em>Discount Factor</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see scenario.optimiser.OptimiserPackage#getDiscount()
  * @model
  * @generated
@@ -38,10 +39,9 @@ public interface Discount extends EObject {
 	int getTime();
 
 	/**
-	 * Sets the value of the '{@link scenario.optimiser.Discount#getTime <em>Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Time</em>' attribute.
+	 * Sets the value of the '{@link scenario.optimiser.Discount#getTime <em>Time</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Time</em>' attribute.
 	 * @see #getTime()
 	 * @generated
 	 */
@@ -60,10 +60,9 @@ public interface Discount extends EObject {
 	float getDiscountFactor();
 
 	/**
-	 * Sets the value of the '{@link scenario.optimiser.Discount#getDiscountFactor <em>Discount Factor</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Discount Factor</em>' attribute.
+	 * Sets the value of the '{@link scenario.optimiser.Discount#getDiscountFactor <em>Discount Factor</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Discount Factor</em>' attribute.
 	 * @see #getDiscountFactor()
 	 * @generated
 	 */

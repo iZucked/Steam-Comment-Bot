@@ -17,13 +17,12 @@ import scenario.schedule.fleetallocation.FleetallocationPackage;
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Allocated Vessel</b></em>'. <!-- end-user-doc -->
  * <p>
  * </p>
- * 
+ *
  * @generated
  */
 public class AllocatedVesselImpl extends EObjectImpl implements AllocatedVessel {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected AllocatedVesselImpl() {
@@ -32,7 +31,6 @@ public class AllocatedVesselImpl extends EObjectImpl implements AllocatedVessel 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -42,7 +40,6 @@ public class AllocatedVesselImpl extends EObjectImpl implements AllocatedVessel 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -52,7 +49,6 @@ public class AllocatedVesselImpl extends EObjectImpl implements AllocatedVessel 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -64,16 +60,15 @@ public class AllocatedVesselImpl extends EObjectImpl implements AllocatedVessel 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-		case FleetallocationPackage.ALLOCATED_VESSEL___GET_HOURLY_CHARTER_PRICE:
-			return getHourlyCharterPrice();
-		case FleetallocationPackage.ALLOCATED_VESSEL___GET_NAME:
-			return getName();
+			case FleetallocationPackage.ALLOCATED_VESSEL___GET_HOURLY_CHARTER_PRICE:
+				return getHourlyCharterPrice();
+			case FleetallocationPackage.ALLOCATED_VESSEL___GET_NAME:
+				return getName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

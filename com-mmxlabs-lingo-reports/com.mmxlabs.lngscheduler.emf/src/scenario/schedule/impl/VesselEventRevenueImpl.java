@@ -21,16 +21,16 @@ import scenario.schedule.events.VesselEventVisit;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.schedule.impl.VesselEventRevenueImpl#getVesselEventVisit <em>Vessel Event Visit</em>}</li>
+ *   <li>{@link scenario.schedule.impl.VesselEventRevenueImpl#getVesselEventVisit <em>Vessel Event Visit</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class VesselEventRevenueImpl extends BookedRevenueImpl implements VesselEventRevenue {
 	/**
-	 * The cached value of the '{@link #getVesselEventVisit() <em>Vessel Event Visit</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getVesselEventVisit() <em>Vessel Event Visit</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getVesselEventVisit()
 	 * @generated
 	 * @ordered
@@ -39,7 +39,6 @@ public class VesselEventRevenueImpl extends BookedRevenueImpl implements VesselE
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected VesselEventRevenueImpl() {
@@ -48,7 +47,6 @@ public class VesselEventRevenueImpl extends BookedRevenueImpl implements VesselE
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -58,18 +56,16 @@ public class VesselEventRevenueImpl extends BookedRevenueImpl implements VesselE
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public VesselEventVisit getVesselEventVisit() {
-		if ((vesselEventVisit != null) && vesselEventVisit.eIsProxy()) {
-			final InternalEObject oldVesselEventVisit = (InternalEObject) vesselEventVisit;
-			vesselEventVisit = (VesselEventVisit) eResolveProxy(oldVesselEventVisit);
+		if (vesselEventVisit != null && vesselEventVisit.eIsProxy()) {
+			InternalEObject oldVesselEventVisit = (InternalEObject)vesselEventVisit;
+			vesselEventVisit = (VesselEventVisit)eResolveProxy(oldVesselEventVisit);
 			if (vesselEventVisit != oldVesselEventVisit) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.VESSEL_EVENT_REVENUE__VESSEL_EVENT_VISIT, oldVesselEventVisit, vesselEventVisit));
-				}
 			}
 		}
 		return vesselEventVisit;
@@ -77,7 +73,6 @@ public class VesselEventRevenueImpl extends BookedRevenueImpl implements VesselE
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public VesselEventVisit basicGetVesselEventVisit() {
@@ -86,21 +81,18 @@ public class VesselEventRevenueImpl extends BookedRevenueImpl implements VesselE
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setVesselEventVisit(final VesselEventVisit newVesselEventVisit) {
-		final VesselEventVisit oldVesselEventVisit = vesselEventVisit;
+	public void setVesselEventVisit(VesselEventVisit newVesselEventVisit) {
+		VesselEventVisit oldVesselEventVisit = vesselEventVisit;
 		vesselEventVisit = newVesselEventVisit;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_REVENUE__VESSEL_EVENT_VISIT, oldVesselEventVisit, vesselEventVisit));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -110,75 +102,68 @@ public class VesselEventRevenueImpl extends BookedRevenueImpl implements VesselE
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case SchedulePackage.VESSEL_EVENT_REVENUE__VESSEL_EVENT_VISIT:
-			if (resolve) {
-				return getVesselEventVisit();
-			}
-			return basicGetVesselEventVisit();
+			case SchedulePackage.VESSEL_EVENT_REVENUE__VESSEL_EVENT_VISIT:
+				if (resolve) return getVesselEventVisit();
+				return basicGetVesselEventVisit();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case SchedulePackage.VESSEL_EVENT_REVENUE__VESSEL_EVENT_VISIT:
-			setVesselEventVisit((VesselEventVisit) newValue);
-			return;
+			case SchedulePackage.VESSEL_EVENT_REVENUE__VESSEL_EVENT_VISIT:
+				setVesselEventVisit((VesselEventVisit)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case SchedulePackage.VESSEL_EVENT_REVENUE__VESSEL_EVENT_VISIT:
-			setVesselEventVisit((VesselEventVisit) null);
-			return;
+			case SchedulePackage.VESSEL_EVENT_REVENUE__VESSEL_EVENT_VISIT:
+				setVesselEventVisit((VesselEventVisit)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case SchedulePackage.VESSEL_EVENT_REVENUE__VESSEL_EVENT_VISIT:
-			return vesselEventVisit != null;
+			case SchedulePackage.VESSEL_EVENT_REVENUE__VESSEL_EVENT_VISIT:
+				return vesselEventVisit != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-		case SchedulePackage.VESSEL_EVENT_REVENUE___GET_NAME:
-			return getName();
+			case SchedulePackage.VESSEL_EVENT_REVENUE___GET_NAME:
+				return getName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

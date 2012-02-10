@@ -9,27 +9,28 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>Model</b></em>'. <!-- end-user-doc -->
- * 
+ *
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link scenario.port.PortModel#getPorts <em>Ports</em>}</li>
- * <li>{@link scenario.port.PortModel#getPortGroups <em>Port Groups</em>}</li>
+ *   <li>{@link scenario.port.PortModel#getPorts <em>Ports</em>}</li>
+ *   <li>{@link scenario.port.PortModel#getPortGroups <em>Port Groups</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see scenario.port.PortPackage#getPortModel()
  * @model
  * @generated
  */
 public interface PortModel extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Ports</b></em>' containment reference list. The list contents are of type {@link scenario.port.Port}. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Ports</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.port.Port}.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Ports</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Ports</em>' containment reference list.
 	 * @see scenario.port.PortPackage#getPortModel_Ports()
 	 * @model containment="true" resolveProxies="true"
@@ -38,12 +39,13 @@ public interface PortModel extends EObject {
 	EList<Port> getPorts();
 
 	/**
-	 * Returns the value of the '<em><b>Port Groups</b></em>' containment reference list. The list contents are of type {@link scenario.port.PortGroup}. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Port Groups</b></em>' containment reference list.
+	 * The list contents are of type {@link scenario.port.PortGroup}.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Port Groups</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Port Groups</em>' containment reference list.
 	 * @see scenario.port.PortPackage#getPortModel_PortGroups()
 	 * @model containment="true" resolveProxies="true"

@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import scenario.port.*;
 import scenario.port.Canal;
 import scenario.port.CanalModel;
 import scenario.port.DistanceLine;
@@ -24,30 +25,30 @@ import scenario.port.PortPackage;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
- * 
  * @generated
  */
 public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	/**
-	 * Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Creates the default factory implementation.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static PortFactory init() {
 		try {
-			final PortFactory thePortFactory = (PortFactory) EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/port");
+			PortFactory thePortFactory = (PortFactory)EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.lng.emf2/port"); 
 			if (thePortFactory != null) {
 				return thePortFactory;
 			}
-		} catch (final Exception exception) {
+		}
+		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new PortFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Creates an instance of the factory.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public PortFactoryImpl() {
@@ -56,173 +57,150 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public EObject create(final EClass eClass) {
+	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-		case PortPackage.PORT_MODEL:
-			return createPortModel();
-		case PortPackage.PORT:
-			return createPort();
-		case PortPackage.DISTANCE_MODEL:
-			return createDistanceModel();
-		case PortPackage.DISTANCE_LINE:
-			return createDistanceLine();
-		case PortPackage.CANAL:
-			return createCanal();
-		case PortPackage.CANAL_MODEL:
-			return createCanalModel();
-		case PortPackage.PORT_GROUP:
-			return createPortGroup();
-		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			case PortPackage.PORT_MODEL: return createPortModel();
+			case PortPackage.PORT: return createPort();
+			case PortPackage.DISTANCE_MODEL: return createDistanceModel();
+			case PortPackage.DISTANCE_LINE: return createDistanceLine();
+			case PortPackage.CANAL: return createCanal();
+			case PortPackage.CANAL_MODEL: return createCanalModel();
+			case PortPackage.PORT_GROUP: return createPortGroup();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object createFromString(final EDataType eDataType, final String initialValue) {
+	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-		case PortPackage.PORT_CAPABILITY:
-			return createPortCapabilityFromString(eDataType, initialValue);
-		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			case PortPackage.PORT_CAPABILITY:
+				return createPortCapabilityFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public String convertToString(final EDataType eDataType, final Object instanceValue) {
+	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-		case PortPackage.PORT_CAPABILITY:
-			return convertPortCapabilityToString(eDataType, instanceValue);
-		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			case PortPackage.PORT_CAPABILITY:
+				return convertPortCapabilityToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public PortModel createPortModel() {
-		final PortModelImpl portModel = new PortModelImpl();
+		PortModelImpl portModel = new PortModelImpl();
 		return portModel;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Port createPort() {
-		final PortImpl port = new PortImpl();
+		PortImpl port = new PortImpl();
 		return port;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public DistanceModel createDistanceModel() {
-		final DistanceModelImpl distanceModel = new DistanceModelImpl();
+		DistanceModelImpl distanceModel = new DistanceModelImpl();
 		return distanceModel;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public DistanceLine createDistanceLine() {
-		final DistanceLineImpl distanceLine = new DistanceLineImpl();
+		DistanceLineImpl distanceLine = new DistanceLineImpl();
 		return distanceLine;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Canal createCanal() {
-		final CanalImpl canal = new CanalImpl();
+		CanalImpl canal = new CanalImpl();
 		return canal;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public CanalModel createCanalModel() {
-		final CanalModelImpl canalModel = new CanalModelImpl();
+		CanalModelImpl canalModel = new CanalModelImpl();
 		return canalModel;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public PortGroup createPortGroup() {
-		final PortGroupImpl portGroup = new PortGroupImpl();
+		PortGroupImpl portGroup = new PortGroupImpl();
 		return portGroup;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	public PortCapability createPortCapabilityFromString(final EDataType eDataType, final String initialValue) {
-		final PortCapability result = PortCapability.get(initialValue);
-		if (result == null) {
-			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-		}
+	public PortCapability createPortCapabilityFromString(EDataType eDataType, String initialValue) {
+		PortCapability result = PortCapability.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
 		return result;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	public String convertPortCapabilityToString(final EDataType eDataType, final Object instanceValue) {
+	public String convertPortCapabilityToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public PortPackage getPortPackage() {
-		return (PortPackage) getEPackage();
+		return (PortPackage)getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @deprecated
 	 * @generated
 	 */

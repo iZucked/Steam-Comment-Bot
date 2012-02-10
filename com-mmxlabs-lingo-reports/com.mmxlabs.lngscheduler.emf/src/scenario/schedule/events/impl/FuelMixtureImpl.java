@@ -24,16 +24,16 @@ import scenario.schedule.events.FuelQuantity;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.schedule.events.impl.FuelMixtureImpl#getFuelUsage <em>Fuel Usage</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.FuelMixtureImpl#getFuelUsage <em>Fuel Usage</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 	/**
-	 * The cached value of the '{@link #getFuelUsage() <em>Fuel Usage</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getFuelUsage() <em>Fuel Usage</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFuelUsage()
 	 * @generated
 	 * @ordered
@@ -42,7 +42,6 @@ public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected FuelMixtureImpl() {
@@ -51,7 +50,6 @@ public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -61,7 +59,6 @@ public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -74,104 +71,97 @@ public class FuelMixtureImpl extends EObjectImpl implements FuelMixture {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public long getTotalFuelCost() {
 		long totalCost = 0;
-
+		
 		for (final FuelQuantity quantity : getFuelUsage()) {
 			totalCost += quantity.getTotalPrice();
 		}
-
+		
 		return totalCost;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
-			return ((InternalEList<?>) getFuelUsage()).basicRemove(otherEnd, msgs);
+			case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
+				return ((InternalEList<?>)getFuelUsage()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
-			return getFuelUsage();
+			case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
+				return getFuelUsage();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
-			getFuelUsage().clear();
-			getFuelUsage().addAll((Collection<? extends FuelQuantity>) newValue);
-			return;
+			case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
+				getFuelUsage().clear();
+				getFuelUsage().addAll((Collection<? extends FuelQuantity>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
-			getFuelUsage().clear();
-			return;
+			case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
+				getFuelUsage().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
-			return (fuelUsage != null) && !fuelUsage.isEmpty();
+			case EventsPackage.FUEL_MIXTURE__FUEL_USAGE:
+				return fuelUsage != null && !fuelUsage.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-		case EventsPackage.FUEL_MIXTURE___GET_TOTAL_FUEL_COST:
-			return getTotalFuelCost();
+			case EventsPackage.FUEL_MIXTURE___GET_TOTAL_FUEL_COST:
+				return getTotalFuelCost();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

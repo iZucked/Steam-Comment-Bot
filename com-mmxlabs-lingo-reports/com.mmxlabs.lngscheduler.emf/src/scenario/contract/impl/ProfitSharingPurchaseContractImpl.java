@@ -18,20 +18,20 @@ import scenario.market.Index;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getAlpha <em>Alpha</em>}</li>
- * <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getBeta <em>Beta</em>}</li>
- * <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getGamma <em>Gamma</em>}</li>
- * <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getIndex <em>Index</em>}</li>
- * <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getReferenceIndex <em>Reference Index</em>}</li>
+ *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getAlpha <em>Alpha</em>}</li>
+ *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getBeta <em>Beta</em>}</li>
+ *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getGamma <em>Gamma</em>}</li>
+ *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link scenario.contract.impl.ProfitSharingPurchaseContractImpl#getReferenceIndex <em>Reference Index</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl implements ProfitSharingPurchaseContract {
 	/**
-	 * The default value of the '{@link #getAlpha() <em>Alpha</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getAlpha() <em>Alpha</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getAlpha()
 	 * @generated
 	 * @ordered
@@ -39,8 +39,8 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	protected static final float ALPHA_EDEFAULT = 0.0F;
 
 	/**
-	 * The cached value of the '{@link #getAlpha() <em>Alpha</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getAlpha() <em>Alpha</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getAlpha()
 	 * @generated
 	 * @ordered
@@ -48,8 +48,8 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	protected float alpha = ALPHA_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getBeta() <em>Beta</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getBeta() <em>Beta</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getBeta()
 	 * @generated
 	 * @ordered
@@ -57,8 +57,8 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	protected static final float BETA_EDEFAULT = 0.0F;
 
 	/**
-	 * The cached value of the '{@link #getBeta() <em>Beta</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getBeta() <em>Beta</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getBeta()
 	 * @generated
 	 * @ordered
@@ -66,8 +66,8 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	protected float beta = BETA_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getGamma() <em>Gamma</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getGamma() <em>Gamma</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getGamma()
 	 * @generated
 	 * @ordered
@@ -75,8 +75,8 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	protected static final float GAMMA_EDEFAULT = 0.0F;
 
 	/**
-	 * The cached value of the '{@link #getGamma() <em>Gamma</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getGamma() <em>Gamma</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getGamma()
 	 * @generated
 	 * @ordered
@@ -84,8 +84,8 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	protected float gamma = GAMMA_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getIndex()
 	 * @generated
 	 * @ordered
@@ -93,8 +93,8 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 	protected Index index;
 
 	/**
-	 * The cached value of the '{@link #getReferenceIndex() <em>Reference Index</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getReferenceIndex() <em>Reference Index</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getReferenceIndex()
 	 * @generated
 	 * @ordered
@@ -103,7 +103,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ProfitSharingPurchaseContractImpl() {
@@ -112,7 +111,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -122,18 +120,16 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Index getIndex() {
-		if ((index != null) && index.eIsProxy()) {
-			final InternalEObject oldIndex = (InternalEObject) index;
-			index = (Index) eResolveProxy(oldIndex);
+		if (index != null && index.eIsProxy()) {
+			InternalEObject oldIndex = (InternalEObject)index;
+			index = (Index)eResolveProxy(oldIndex);
 			if (index != oldIndex) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX, oldIndex, index));
-				}
 			}
 		}
 		return index;
@@ -141,7 +137,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Index basicGetIndex() {
@@ -150,32 +145,28 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setIndex(final Index newIndex) {
-		final Index oldIndex = index;
+	public void setIndex(Index newIndex) {
+		Index oldIndex = index;
 		index = newIndex;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX, oldIndex, index));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Index getReferenceIndex() {
-		if ((referenceIndex != null) && referenceIndex.eIsProxy()) {
-			final InternalEObject oldReferenceIndex = (InternalEObject) referenceIndex;
-			referenceIndex = (Index) eResolveProxy(oldReferenceIndex);
+		if (referenceIndex != null && referenceIndex.eIsProxy()) {
+			InternalEObject oldReferenceIndex = (InternalEObject)referenceIndex;
+			referenceIndex = (Index)eResolveProxy(oldReferenceIndex);
 			if (referenceIndex != oldReferenceIndex) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX, oldReferenceIndex, referenceIndex));
-				}
 			}
 		}
 		return referenceIndex;
@@ -183,7 +174,6 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Index basicGetReferenceIndex() {
@@ -192,21 +182,18 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setReferenceIndex(final Index newReferenceIndex) {
-		final Index oldReferenceIndex = referenceIndex;
+	public void setReferenceIndex(Index newReferenceIndex) {
+		Index oldReferenceIndex = referenceIndex;
 		referenceIndex = newReferenceIndex;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX, oldReferenceIndex, referenceIndex));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -216,21 +203,18 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setAlpha(final float newAlpha) {
-		final float oldAlpha = alpha;
+	public void setAlpha(float newAlpha) {
+		float oldAlpha = alpha;
 		alpha = newAlpha;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA, oldAlpha, alpha));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -240,21 +224,18 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setBeta(final float newBeta) {
-		final float oldBeta = beta;
+	public void setBeta(float newBeta) {
+		float oldBeta = beta;
 		beta = newBeta;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA, oldBeta, beta));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -264,134 +245,121 @@ public class ProfitSharingPurchaseContractImpl extends PurchaseContractImpl impl
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setGamma(final float newGamma) {
-		final float oldGamma = gamma;
+	public void setGamma(float newGamma) {
+		float oldGamma = gamma;
 		gamma = newGamma;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA, oldGamma, gamma));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
-			return getAlpha();
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
-			return getBeta();
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
-			return getGamma();
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
-			if (resolve) {
-				return getIndex();
-			}
-			return basicGetIndex();
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
-			if (resolve) {
-				return getReferenceIndex();
-			}
-			return basicGetReferenceIndex();
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
+				return getAlpha();
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
+				return getBeta();
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
+				return getGamma();
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				if (resolve) return getIndex();
+				return basicGetIndex();
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				if (resolve) return getReferenceIndex();
+				return basicGetReferenceIndex();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
-			setAlpha((Float) newValue);
-			return;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
-			setBeta((Float) newValue);
-			return;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
-			setGamma((Float) newValue);
-			return;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
-			setIndex((Index) newValue);
-			return;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
-			setReferenceIndex((Index) newValue);
-			return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
+				setAlpha((Float)newValue);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
+				setBeta((Float)newValue);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
+				setGamma((Float)newValue);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				setIndex((Index)newValue);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				setReferenceIndex((Index)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
-			setAlpha(ALPHA_EDEFAULT);
-			return;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
-			setBeta(BETA_EDEFAULT);
-			return;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
-			setGamma(GAMMA_EDEFAULT);
-			return;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
-			setIndex((Index) null);
-			return;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
-			setReferenceIndex((Index) null);
-			return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
+				setAlpha(ALPHA_EDEFAULT);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
+				setBeta(BETA_EDEFAULT);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
+				setGamma(GAMMA_EDEFAULT);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				setIndex((Index)null);
+				return;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				setReferenceIndex((Index)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
-			return alpha != ALPHA_EDEFAULT;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
-			return beta != BETA_EDEFAULT;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
-			return gamma != GAMMA_EDEFAULT;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
-			return index != null;
-		case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
-			return referenceIndex != null;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__ALPHA:
+				return alpha != ALPHA_EDEFAULT;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__BETA:
+				return beta != BETA_EDEFAULT;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__GAMMA:
+				return gamma != GAMMA_EDEFAULT;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__INDEX:
+				return index != null;
+			case ContractPackage.PROFIT_SHARING_PURCHASE_CONTRACT__REFERENCE_INDEX:
+				return referenceIndex != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (alpha: ");
 		result.append(alpha);
 		result.append(", beta: ");

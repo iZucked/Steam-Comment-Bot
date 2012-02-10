@@ -12,15 +12,14 @@ import org.eclipse.emf.common.util.Enumerator;
 
 /**
  * <!-- begin-user-doc --> A representation of the literals of the enumeration '<em><b>Type</b></em>', and utility methods for working with them. <!-- end-user-doc -->
- * 
  * @see scenario.cargo.CargoPackage#getCargoType()
  * @model
  * @generated
  */
 public enum CargoType implements Enumerator {
 	/**
-	 * The '<em><b>Fleet</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The '<em><b>Fleet</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #FLEET_VALUE
 	 * @generated
 	 * @ordered
@@ -28,8 +27,8 @@ public enum CargoType implements Enumerator {
 	FLEET(0, "Fleet", "FLEET"),
 
 	/**
-	 * The '<em><b>FOB</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The '<em><b>FOB</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #FOB_VALUE
 	 * @generated
 	 * @ordered
@@ -37,8 +36,8 @@ public enum CargoType implements Enumerator {
 	FOB(1, "FOB", "FOB"),
 
 	/**
-	 * The '<em><b>DES</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The '<em><b>DES</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #DES_VALUE
 	 * @generated
 	 * @ordered
@@ -46,12 +45,12 @@ public enum CargoType implements Enumerator {
 	DES(2, "DES", "DES");
 
 	/**
-	 * The '<em><b>Fleet</b></em>' literal value. <!-- begin-user-doc -->
+	 * The '<em><b>Fleet</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>Fleet</b></em>' literal object isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #FLEET
 	 * @model name="Fleet" literal="FLEET"
 	 * @generated
@@ -60,12 +59,12 @@ public enum CargoType implements Enumerator {
 	public static final int FLEET_VALUE = 0;
 
 	/**
-	 * The '<em><b>FOB</b></em>' literal value. <!-- begin-user-doc -->
+	 * The '<em><b>FOB</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>FOB</b></em>' literal object isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #FOB
 	 * @model
 	 * @generated
@@ -74,12 +73,12 @@ public enum CargoType implements Enumerator {
 	public static final int FOB_VALUE = 1;
 
 	/**
-	 * The '<em><b>DES</b></em>' literal value. <!-- begin-user-doc -->
+	 * The '<em><b>DES</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>DES</b></em>' literal object isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #DES
 	 * @model
 	 * @generated
@@ -88,27 +87,31 @@ public enum CargoType implements Enumerator {
 	public static final int DES_VALUE = 2;
 
 	/**
-	 * An array of all the '<em><b>Type</b></em>' enumerators. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * An array of all the '<em><b>Type</b></em>' enumerators.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final CargoType[] VALUES_ARRAY = new CargoType[] { FLEET, FOB, DES, };
+	private static final CargoType[] VALUES_ARRAY = new CargoType[] {
+			FLEET,
+			FOB,
+			DES,
+		};
 
 	/**
-	 * A public read-only list of all the '<em><b>Type</b></em>' enumerators. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * A public read-only list of all the '<em><b>Type</b></em>' enumerators.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final List<CargoType> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
-	 * Returns the '<em><b>Type</b></em>' literal with the specified literal value. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the '<em><b>Type</b></em>' literal with the specified literal value.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static CargoType get(final String literal) {
+	public static CargoType get(String literal) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			final CargoType result = VALUES_ARRAY[i];
+			CargoType result = VALUES_ARRAY[i];
 			if (result.toString().equals(literal)) {
 				return result;
 			}
@@ -117,13 +120,13 @@ public enum CargoType implements Enumerator {
 	}
 
 	/**
-	 * Returns the '<em><b>Type</b></em>' literal with the specified name. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the '<em><b>Type</b></em>' literal with the specified name.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static CargoType getByName(final String name) {
+	public static CargoType getByName(String name) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			final CargoType result = VALUES_ARRAY[i];
+			CargoType result = VALUES_ARRAY[i];
 			if (result.getName().equals(name)) {
 				return result;
 			}
@@ -132,49 +135,43 @@ public enum CargoType implements Enumerator {
 	}
 
 	/**
-	 * Returns the '<em><b>Type</b></em>' literal with the specified integer value. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the '<em><b>Type</b></em>' literal with the specified integer value.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static CargoType get(final int value) {
+	public static CargoType get(int value) {
 		switch (value) {
-		case FLEET_VALUE:
-			return FLEET;
-		case FOB_VALUE:
-			return FOB;
-		case DES_VALUE:
-			return DES;
+			case FLEET_VALUE: return FLEET;
+			case FOB_VALUE: return FOB;
+			case DES_VALUE: return DES;
 		}
 		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private final int value;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private final String name;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private final String literal;
 
 	/**
-	 * Only this class can construct instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Only this class can construct instances.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	private CargoType(final int value, final String name, final String literal) {
+	private CargoType(int value, String name, String literal) {
 		this.value = value;
 		this.name = name;
 		this.literal = literal;
@@ -182,37 +179,34 @@ public enum CargoType implements Enumerator {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public int getValue() {
-		return value;
+	  return value;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getName() {
-		return name;
+	  return name;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getLiteral() {
-		return literal;
+	  return literal;
 	}
 
 	/**
-	 * Returns the literal value of the enumerator, which is its string representation. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the literal value of the enumerator, which is its string representation.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override

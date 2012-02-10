@@ -24,17 +24,17 @@ import scenario.schedule.events.SlotVisit;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.schedule.events.impl.SlotVisitImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
- * <li>{@link scenario.schedule.events.impl.SlotVisitImpl#getSlot <em>Slot</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.SlotVisitImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.SlotVisitImpl#getSlot <em>Slot</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	/**
-	 * The cached value of the '{@link #getCargoAllocation() <em>Cargo Allocation</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getCargoAllocation() <em>Cargo Allocation</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCargoAllocation()
 	 * @generated
 	 * @ordered
@@ -42,8 +42,8 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 	protected CargoAllocation cargoAllocation;
 
 	/**
-	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getSlot()
 	 * @generated
 	 * @ordered
@@ -52,7 +52,6 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected SlotVisitImpl() {
@@ -61,7 +60,6 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -71,18 +69,16 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Slot getSlot() {
-		if ((slot != null) && slot.eIsProxy()) {
-			final InternalEObject oldSlot = (InternalEObject) slot;
-			slot = (Slot) eResolveProxy(oldSlot);
+		if (slot != null && slot.eIsProxy()) {
+			InternalEObject oldSlot = (InternalEObject)slot;
+			slot = (Slot)eResolveProxy(oldSlot);
 			if (slot != oldSlot) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, EventsPackage.SLOT_VISIT__SLOT, oldSlot, slot));
-				}
 			}
 		}
 		return slot;
@@ -90,7 +86,6 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Slot basicGetSlot() {
@@ -99,32 +94,28 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setSlot(final Slot newSlot) {
-		final Slot oldSlot = slot;
+	public void setSlot(Slot newSlot) {
+		Slot oldSlot = slot;
 		slot = newSlot;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.SLOT_VISIT__SLOT, oldSlot, slot));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public CargoAllocation getCargoAllocation() {
-		if ((cargoAllocation != null) && cargoAllocation.eIsProxy()) {
-			final InternalEObject oldCargoAllocation = (InternalEObject) cargoAllocation;
-			cargoAllocation = (CargoAllocation) eResolveProxy(oldCargoAllocation);
+		if (cargoAllocation != null && cargoAllocation.eIsProxy()) {
+			InternalEObject oldCargoAllocation = (InternalEObject)cargoAllocation;
+			cargoAllocation = (CargoAllocation)eResolveProxy(oldCargoAllocation);
 			if (cargoAllocation != oldCargoAllocation) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, EventsPackage.SLOT_VISIT__CARGO_ALLOCATION, oldCargoAllocation, cargoAllocation));
-				}
 			}
 		}
 		return cargoAllocation;
@@ -132,7 +123,6 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public CargoAllocation basicGetCargoAllocation() {
@@ -141,21 +131,18 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setCargoAllocation(final CargoAllocation newCargoAllocation) {
-		final CargoAllocation oldCargoAllocation = cargoAllocation;
+	public void setCargoAllocation(CargoAllocation newCargoAllocation) {
+		CargoAllocation oldCargoAllocation = cargoAllocation;
 		cargoAllocation = newCargoAllocation;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.SLOT_VISIT__CARGO_ALLOCATION, oldCargoAllocation, cargoAllocation));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -165,21 +152,16 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getDisplayTypeName() {
-		if (getSlot() instanceof scenario.cargo.LoadSlot) {
-			return "Load";
-		} else {
-			return "Discharge";
-		}
+		if (getSlot() instanceof scenario.cargo.LoadSlot) return "Load";
+		else return "Discharge";
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -189,103 +171,88 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
-			if (resolve) {
-				return getCargoAllocation();
-			}
-			return basicGetCargoAllocation();
-		case EventsPackage.SLOT_VISIT__SLOT:
-			if (resolve) {
-				return getSlot();
-			}
-			return basicGetSlot();
+			case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
+				if (resolve) return getCargoAllocation();
+				return basicGetCargoAllocation();
+			case EventsPackage.SLOT_VISIT__SLOT:
+				if (resolve) return getSlot();
+				return basicGetSlot();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
-			setCargoAllocation((CargoAllocation) newValue);
-			return;
-		case EventsPackage.SLOT_VISIT__SLOT:
-			setSlot((Slot) newValue);
-			return;
+			case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
+				setCargoAllocation((CargoAllocation)newValue);
+				return;
+			case EventsPackage.SLOT_VISIT__SLOT:
+				setSlot((Slot)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
-			setCargoAllocation((CargoAllocation) null);
-			return;
-		case EventsPackage.SLOT_VISIT__SLOT:
-			setSlot((Slot) null);
-			return;
+			case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
+				setCargoAllocation((CargoAllocation)null);
+				return;
+			case EventsPackage.SLOT_VISIT__SLOT:
+				setSlot((Slot)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
-			return cargoAllocation != null;
-		case EventsPackage.SLOT_VISIT__SLOT:
-			return slot != null;
+			case EventsPackage.SLOT_VISIT__CARGO_ALLOCATION:
+				return cargoAllocation != null;
+			case EventsPackage.SLOT_VISIT__SLOT:
+				return slot != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public int eDerivedOperationID(final int baseOperationID, final Class<?> baseClass) {
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
 		if (baseClass == ScheduledEvent.class) {
 			switch (baseOperationID) {
-			case EventsPackage.SCHEDULED_EVENT___GET_NAME:
-				return EventsPackage.SLOT_VISIT___GET_NAME;
-			case EventsPackage.SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME:
-				return EventsPackage.SLOT_VISIT___GET_DISPLAY_TYPE_NAME;
-			default:
-				return super.eDerivedOperationID(baseOperationID, baseClass);
+				case EventsPackage.SCHEDULED_EVENT___GET_NAME: return EventsPackage.SLOT_VISIT___GET_NAME;
+				case EventsPackage.SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME: return EventsPackage.SLOT_VISIT___GET_DISPLAY_TYPE_NAME;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
 			}
 		}
 		if (baseClass == PortVisit.class) {
 			switch (baseOperationID) {
-			case EventsPackage.PORT_VISIT___GET_ID:
-				return EventsPackage.SLOT_VISIT___GET_ID;
-			case EventsPackage.PORT_VISIT___GET_DISPLAY_TYPE_NAME:
-				return EventsPackage.SLOT_VISIT___GET_DISPLAY_TYPE_NAME;
-			default:
-				return super.eDerivedOperationID(baseOperationID, baseClass);
+				case EventsPackage.PORT_VISIT___GET_ID: return EventsPackage.SLOT_VISIT___GET_ID;
+				case EventsPackage.PORT_VISIT___GET_DISPLAY_TYPE_NAME: return EventsPackage.SLOT_VISIT___GET_DISPLAY_TYPE_NAME;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
 			}
 		}
 		return super.eDerivedOperationID(baseOperationID, baseClass);
@@ -293,18 +260,17 @@ public class SlotVisitImpl extends PortVisitImpl implements SlotVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-		case EventsPackage.SLOT_VISIT___GET_ID:
-			return getId();
-		case EventsPackage.SLOT_VISIT___GET_DISPLAY_TYPE_NAME:
-			return getDisplayTypeName();
-		case EventsPackage.SLOT_VISIT___GET_NAME:
-			return getName();
+			case EventsPackage.SLOT_VISIT___GET_ID:
+				return getId();
+			case EventsPackage.SLOT_VISIT___GET_DISPLAY_TYPE_NAME:
+				return getDisplayTypeName();
+			case EventsPackage.SLOT_VISIT___GET_NAME:
+				return getName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

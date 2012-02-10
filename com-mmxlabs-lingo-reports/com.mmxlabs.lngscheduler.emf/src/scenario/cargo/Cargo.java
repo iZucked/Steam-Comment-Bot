@@ -11,31 +11,31 @@ import scenario.fleet.Vessel;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>Cargo</b></em>'. <!-- end-user-doc -->
- * 
+ *
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link scenario.cargo.Cargo#getId <em>Id</em>}</li>
- * <li>{@link scenario.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
- * <li>{@link scenario.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
- * <li>{@link scenario.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
- * <li>{@link scenario.cargo.Cargo#getCargoType <em>Cargo Type</em>}</li>
- * <li>{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#getId <em>Id</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#getCargoType <em>Cargo Type</em>}</li>
+ *   <li>{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see scenario.cargo.CargoPackage#getCargo()
  * @model
  * @generated
  */
 public interface Cargo extends AnnotatedObject {
 	/**
-	 * Returns the value of the '<em><b>Id</b></em>' attribute. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Id</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see scenario.cargo.CargoPackage#getCargo_Id()
@@ -45,22 +45,21 @@ public interface Cargo extends AnnotatedObject {
 	String getId();
 
 	/**
-	 * Sets the value of the '{@link scenario.cargo.Cargo#getId <em>Id</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Id</em>' attribute.
+	 * Sets the value of the '{@link scenario.cargo.Cargo#getId <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Id</em>' attribute.
 	 * @see #getId()
 	 * @generated
 	 */
 	void setId(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Load Slot</b></em>' containment reference. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Load Slot</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Load Slot</em>' containment reference isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Load Slot</em>' containment reference.
 	 * @see #setLoadSlot(LoadSlot)
 	 * @see scenario.cargo.CargoPackage#getCargo_LoadSlot()
@@ -70,22 +69,21 @@ public interface Cargo extends AnnotatedObject {
 	LoadSlot getLoadSlot();
 
 	/**
-	 * Sets the value of the '{@link scenario.cargo.Cargo#getLoadSlot <em>Load Slot</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Load Slot</em>' containment reference.
+	 * Sets the value of the '{@link scenario.cargo.Cargo#getLoadSlot <em>Load Slot</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Load Slot</em>' containment reference.
 	 * @see #getLoadSlot()
 	 * @generated
 	 */
 	void setLoadSlot(LoadSlot value);
 
 	/**
-	 * Returns the value of the '<em><b>Discharge Slot</b></em>' containment reference. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Discharge Slot</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Discharge Slot</em>' containment reference isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Discharge Slot</em>' containment reference.
 	 * @see #setDischargeSlot(Slot)
 	 * @see scenario.cargo.CargoPackage#getCargo_DischargeSlot()
@@ -95,22 +93,22 @@ public interface Cargo extends AnnotatedObject {
 	Slot getDischargeSlot();
 
 	/**
-	 * Sets the value of the '{@link scenario.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Discharge Slot</em>' containment reference.
+	 * Sets the value of the '{@link scenario.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}' containment reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Discharge Slot</em>' containment reference.
 	 * @see #getDischargeSlot()
 	 * @generated
 	 */
 	void setDischargeSlot(Slot value);
 
 	/**
-	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list. The list contents are of type {@link scenario.fleet.Vessel}. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * The list contents are of type {@link scenario.fleet.Vessel}.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Allowed Vessels</em>' reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Allowed Vessels</em>' reference list.
 	 * @see scenario.cargo.CargoPackage#getCargo_AllowedVessels()
 	 * @model
@@ -136,10 +134,9 @@ public interface Cargo extends AnnotatedObject {
 	CargoType getCargoType();
 
 	/**
-	 * Sets the value of the '{@link scenario.cargo.Cargo#getCargoType <em>Cargo Type</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Cargo Type</em>' attribute.
+	 * Sets the value of the '{@link scenario.cargo.Cargo#getCargoType <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo Type</em>' attribute.
 	 * @see scenario.cargo.CargoType
 	 * @see #getCargoType()
 	 * @generated
@@ -147,12 +144,12 @@ public interface Cargo extends AnnotatedObject {
 	void setCargoType(CargoType value);
 
 	/**
-	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Allow Rewiring</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Allow Rewiring</em>' attribute.
 	 * @see #isSetAllowRewiring()
 	 * @see #unsetAllowRewiring()
@@ -164,10 +161,9 @@ public interface Cargo extends AnnotatedObject {
 	boolean isAllowRewiring();
 
 	/**
-	 * Sets the value of the '{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Allow Rewiring</em>' attribute.
+	 * Sets the value of the '{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Allow Rewiring</em>' attribute.
 	 * @see #isSetAllowRewiring()
 	 * @see #unsetAllowRewiring()
 	 * @see #isAllowRewiring()
@@ -176,8 +172,8 @@ public interface Cargo extends AnnotatedObject {
 	void setAllowRewiring(boolean value);
 
 	/**
-	 * Unsets the value of the '{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Unsets the value of the '{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #isSetAllowRewiring()
 	 * @see #isAllowRewiring()
 	 * @see #setAllowRewiring(boolean)
@@ -186,8 +182,8 @@ public interface Cargo extends AnnotatedObject {
 	void unsetAllowRewiring();
 
 	/**
-	 * Returns whether the value of the '{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute is set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns whether the value of the '{@link scenario.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute is set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Allow Rewiring</em>' attribute is set.
 	 * @see #unsetAllowRewiring()
 	 * @see #isAllowRewiring()

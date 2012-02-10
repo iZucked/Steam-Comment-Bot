@@ -24,17 +24,17 @@ import scenario.port.PortPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.port.impl.PortModelImpl#getPorts <em>Ports</em>}</li>
- * <li>{@link scenario.port.impl.PortModelImpl#getPortGroups <em>Port Groups</em>}</li>
+ *   <li>{@link scenario.port.impl.PortModelImpl#getPorts <em>Ports</em>}</li>
+ *   <li>{@link scenario.port.impl.PortModelImpl#getPortGroups <em>Port Groups</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class PortModelImpl extends EObjectImpl implements PortModel {
 	/**
-	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPorts()
 	 * @generated
 	 * @ordered
@@ -42,8 +42,8 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 	protected EList<Port> ports;
 
 	/**
-	 * The cached value of the '{@link #getPortGroups() <em>Port Groups</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getPortGroups() <em>Port Groups</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPortGroups()
 	 * @generated
 	 * @ordered
@@ -52,7 +52,6 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected PortModelImpl() {
@@ -61,7 +60,6 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -71,7 +69,6 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -84,7 +81,6 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -97,87 +93,82 @@ public class PortModelImpl extends EObjectImpl implements PortModel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case PortPackage.PORT_MODEL__PORTS:
-			return ((InternalEList<?>) getPorts()).basicRemove(otherEnd, msgs);
-		case PortPackage.PORT_MODEL__PORT_GROUPS:
-			return ((InternalEList<?>) getPortGroups()).basicRemove(otherEnd, msgs);
+			case PortPackage.PORT_MODEL__PORTS:
+				return ((InternalEList<?>)getPorts()).basicRemove(otherEnd, msgs);
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				return ((InternalEList<?>)getPortGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case PortPackage.PORT_MODEL__PORTS:
-			return getPorts();
-		case PortPackage.PORT_MODEL__PORT_GROUPS:
-			return getPortGroups();
+			case PortPackage.PORT_MODEL__PORTS:
+				return getPorts();
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				return getPortGroups();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case PortPackage.PORT_MODEL__PORTS:
-			getPorts().clear();
-			getPorts().addAll((Collection<? extends Port>) newValue);
-			return;
-		case PortPackage.PORT_MODEL__PORT_GROUPS:
-			getPortGroups().clear();
-			getPortGroups().addAll((Collection<? extends PortGroup>) newValue);
-			return;
+			case PortPackage.PORT_MODEL__PORTS:
+				getPorts().clear();
+				getPorts().addAll((Collection<? extends Port>)newValue);
+				return;
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				getPortGroups().clear();
+				getPortGroups().addAll((Collection<? extends PortGroup>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case PortPackage.PORT_MODEL__PORTS:
-			getPorts().clear();
-			return;
-		case PortPackage.PORT_MODEL__PORT_GROUPS:
-			getPortGroups().clear();
-			return;
+			case PortPackage.PORT_MODEL__PORTS:
+				getPorts().clear();
+				return;
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				getPortGroups().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case PortPackage.PORT_MODEL__PORTS:
-			return (ports != null) && !ports.isEmpty();
-		case PortPackage.PORT_MODEL__PORT_GROUPS:
-			return (portGroups != null) && !portGroups.isEmpty();
+			case PortPackage.PORT_MODEL__PORTS:
+				return ports != null && !ports.isEmpty();
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				return portGroups != null && !portGroups.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

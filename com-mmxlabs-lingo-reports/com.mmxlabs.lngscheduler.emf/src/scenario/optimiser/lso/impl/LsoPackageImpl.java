@@ -40,51 +40,48 @@ import scenario.schedule.impl.SchedulePackageImpl;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!-- end-user-doc -->
- * 
  * @generated
  */
 public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass lsoSettingsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass thresholderSettingsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass moveGeneratorSettingsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass randomMoveGeneratorSettingsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass constrainedMoveGeneratorSettingsEClass = null;
 
 	/**
-	 * Creates an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package package URI value.
-	 * <p>
-	 * Note: the correct way to create the package is via the static factory method {@link #init init()}, which also performs initialization of the package, or returns the registered package, if one
-	 * already exists. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Creates an instance of the model <b>Package</b>, registered with
+	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
+	 * package URI value.
+	 * <p>Note: the correct way to create the package is via the static
+	 * factory method {@link #init init()}, which also performs
+	 * initialization of the package, or returns the registered package,
+	 * if one already exists.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see scenario.optimiser.lso.LsoPackage#eNS_URI
 	 * @see #init()
@@ -96,7 +93,6 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private static boolean isInited = false;
@@ -104,46 +100,33 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 * 
-	 * <p>
-	 * This method is used to initialize {@link LsoPackage#eINSTANCE} when that field is accessed. Clients should not invoke it directly. Instead, they should simply access that field to obtain the
-	 * package. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * <p>This method is used to initialize {@link LsoPackage#eINSTANCE} when that field is accessed.
+	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
 	public static LsoPackage init() {
-		if (isInited) {
-			return (LsoPackage) EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI);
-		}
+		if (isInited) return (LsoPackage)EPackage.Registry.INSTANCE.getEPackage(LsoPackage.eNS_URI);
 
 		// Obtain or create and register package
-		final LsoPackageImpl theLsoPackage = (LsoPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof LsoPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new LsoPackageImpl());
+		LsoPackageImpl theLsoPackage = (LsoPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof LsoPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new LsoPackageImpl());
 
 		isInited = true;
 
 		// Obtain or create and register interdependencies
-		final ScenarioPackageImpl theScenarioPackage = (ScenarioPackageImpl) (EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) instanceof ScenarioPackageImpl ? EPackage.Registry.INSTANCE
-				.getEPackage(ScenarioPackage.eNS_URI) : ScenarioPackage.eINSTANCE);
-		final FleetPackageImpl theFleetPackage = (FleetPackageImpl) (EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE
-				.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
-		final SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl) (EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE
-				.getEPackage(SchedulePackage.eNS_URI) : SchedulePackage.eINSTANCE);
-		final EventsPackageImpl theEventsPackage = (EventsPackageImpl) (EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE
-				.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
-		final FleetallocationPackageImpl theFleetallocationPackage = (FleetallocationPackageImpl) (EPackage.Registry.INSTANCE.getEPackage(FleetallocationPackage.eNS_URI) instanceof FleetallocationPackageImpl ? EPackage.Registry.INSTANCE
-				.getEPackage(FleetallocationPackage.eNS_URI) : FleetallocationPackage.eINSTANCE);
-		final PortPackageImpl thePortPackage = (PortPackageImpl) (EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE
-				.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
-		final CargoPackageImpl theCargoPackage = (CargoPackageImpl) (EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE
-				.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
-		final ContractPackageImpl theContractPackage = (ContractPackageImpl) (EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE
-				.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
-		final MarketPackageImpl theMarketPackage = (MarketPackageImpl) (EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) instanceof MarketPackageImpl ? EPackage.Registry.INSTANCE
-				.getEPackage(MarketPackage.eNS_URI) : MarketPackage.eINSTANCE);
-		final OptimiserPackageImpl theOptimiserPackage = (OptimiserPackageImpl) (EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) instanceof OptimiserPackageImpl ? EPackage.Registry.INSTANCE
-				.getEPackage(OptimiserPackage.eNS_URI) : OptimiserPackage.eINSTANCE);
+		ScenarioPackageImpl theScenarioPackage = (ScenarioPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) instanceof ScenarioPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ScenarioPackage.eNS_URI) : ScenarioPackage.eINSTANCE);
+		FleetPackageImpl theFleetPackage = (FleetPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) instanceof FleetPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI) : FleetPackage.eINSTANCE);
+		SchedulePackageImpl theSchedulePackage = (SchedulePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) instanceof SchedulePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI) : SchedulePackage.eINSTANCE);
+		EventsPackageImpl theEventsPackage = (EventsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) instanceof EventsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(EventsPackage.eNS_URI) : EventsPackage.eINSTANCE);
+		FleetallocationPackageImpl theFleetallocationPackage = (FleetallocationPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FleetallocationPackage.eNS_URI) instanceof FleetallocationPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FleetallocationPackage.eNS_URI) : FleetallocationPackage.eINSTANCE);
+		PortPackageImpl thePortPackage = (PortPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) instanceof PortPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI) : PortPackage.eINSTANCE);
+		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI) : CargoPackage.eINSTANCE);
+		ContractPackageImpl theContractPackage = (ContractPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) instanceof ContractPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ContractPackage.eNS_URI) : ContractPackage.eINSTANCE);
+		MarketPackageImpl theMarketPackage = (MarketPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) instanceof MarketPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(MarketPackage.eNS_URI) : MarketPackage.eINSTANCE);
+		OptimiserPackageImpl theOptimiserPackage = (OptimiserPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) instanceof OptimiserPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI) : OptimiserPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theLsoPackage.createPackageContents();
@@ -174,6 +157,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 		// Mark meta-data to indicate it can't be changed
 		theLsoPackage.freeze();
 
+  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(LsoPackage.eNS_URI, theLsoPackage);
 		return theLsoPackage;
@@ -181,7 +165,6 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -191,37 +174,33 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getLSOSettings_NumberOfSteps() {
-		return (EAttribute) lsoSettingsEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)lsoSettingsEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getLSOSettings_ThresholderSettings() {
-		return (EReference) lsoSettingsEClass.getEStructuralFeatures().get(1);
+		return (EReference)lsoSettingsEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getLSOSettings_MoveGeneratorSettings() {
-		return (EReference) lsoSettingsEClass.getEStructuralFeatures().get(2);
+		return (EReference)lsoSettingsEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -231,37 +210,33 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getThresholderSettings_Alpha() {
-		return (EAttribute) thresholderSettingsEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)thresholderSettingsEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getThresholderSettings_InitialAcceptanceRate() {
-		return (EAttribute) thresholderSettingsEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)thresholderSettingsEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getThresholderSettings_EpochLength() {
-		return (EAttribute) thresholderSettingsEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)thresholderSettingsEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -271,7 +246,6 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -281,87 +255,78 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getRandomMoveGeneratorSettings_Using2over2() {
-		return (EAttribute) randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getRandomMoveGeneratorSettings_Using3over2() {
-		return (EAttribute) randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getRandomMoveGeneratorSettings_Using4over1() {
-		return (EAttribute) randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getRandomMoveGeneratorSettings_Using4over2() {
-		return (EAttribute) randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getRandomMoveGeneratorSettings_WeightFor2opt2() {
-		return (EAttribute) randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getRandomMoveGeneratorSettings_WeightFor3opt2() {
-		return (EAttribute) randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getRandomMoveGeneratorSettings_WeightFor4opt1() {
-		return (EAttribute) randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getRandomMoveGeneratorSettings_WeightFor4opt2() {
-		return (EAttribute) randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)randomMoveGeneratorSettingsEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -371,30 +336,27 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public LsoFactory getLsoFactory() {
-		return (LsoFactory) getEFactoryInstance();
+		return (LsoFactory)getEFactoryInstance();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isCreated = false;
 
 	/**
-	 * Creates the meta-model objects for the package. This method is guarded to have no affect on any invocation but its first. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Creates the meta-model objects for the package.  This method is
+	 * guarded to have no affect on any invocation but its first.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated) {
-			return;
-		}
+		if (isCreated) return;
 		isCreated = true;
 
 		// Create classes and their features
@@ -425,20 +387,18 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isInitialized = false;
 
 	/**
-	 * Complete the initialization of the package and its meta-model. This method is guarded to have no affect on any invocation but its first. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Complete the initialization of the package and its meta-model.  This
+	 * method is guarded to have no affect on any invocation but its first.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized) {
-			return;
-		}
+		if (isInitialized) return;
 		isInitialized = true;
 
 		// Initialize package
@@ -447,7 +407,7 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		final OptimiserPackage theOptimiserPackage = (OptimiserPackage) EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI);
+		OptimiserPackage theOptimiserPackage = (OptimiserPackage)EPackage.Registry.INSTANCE.getEPackage(OptimiserPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -460,40 +420,26 @@ public class LsoPackageImpl extends EPackageImpl implements LsoPackage {
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(lsoSettingsEClass, LSOSettings.class, "LSOSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getLSOSettings_NumberOfSteps(), ecorePackage.getEInt(), "numberOfSteps", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLSOSettings_ThresholderSettings(), this.getThresholderSettings(), null, "thresholderSettings", null, 1, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLSOSettings_MoveGeneratorSettings(), this.getMoveGeneratorSettings(), null, "moveGeneratorSettings", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLSOSettings_NumberOfSteps(), ecorePackage.getEInt(), "numberOfSteps", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLSOSettings_ThresholderSettings(), this.getThresholderSettings(), null, "thresholderSettings", null, 1, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLSOSettings_MoveGeneratorSettings(), this.getMoveGeneratorSettings(), null, "moveGeneratorSettings", null, 0, 1, LSOSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(thresholderSettingsEClass, ThresholderSettings.class, "ThresholderSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getThresholderSettings_Alpha(), ecorePackage.getEDouble(), "alpha", "0.95", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getThresholderSettings_InitialAcceptanceRate(), ecorePackage.getEDouble(), "initialAcceptanceRate", "0.75", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getThresholderSettings_EpochLength(), ecorePackage.getEInt(), "epochLength", "1000", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getThresholderSettings_Alpha(), ecorePackage.getEDouble(), "alpha", "0.95", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getThresholderSettings_InitialAcceptanceRate(), ecorePackage.getEDouble(), "initialAcceptanceRate", "0.75", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getThresholderSettings_EpochLength(), ecorePackage.getEInt(), "epochLength", "1000", 0, 1, ThresholderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(moveGeneratorSettingsEClass, MoveGeneratorSettings.class, "MoveGeneratorSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(randomMoveGeneratorSettingsEClass, RandomMoveGeneratorSettings.class, "RandomMoveGeneratorSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getRandomMoveGeneratorSettings_Using2over2(), ecorePackage.getEBoolean(), "using2over2", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRandomMoveGeneratorSettings_Using3over2(), ecorePackage.getEBoolean(), "using3over2", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRandomMoveGeneratorSettings_Using4over1(), ecorePackage.getEBoolean(), "using4over1", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRandomMoveGeneratorSettings_Using4over2(), ecorePackage.getEBoolean(), "using4over2", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRandomMoveGeneratorSettings_WeightFor2opt2(), ecorePackage.getEDouble(), "weightFor2opt2", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRandomMoveGeneratorSettings_WeightFor3opt2(), ecorePackage.getEDouble(), "weightFor3opt2", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRandomMoveGeneratorSettings_WeightFor4opt1(), ecorePackage.getEDouble(), "weightFor4opt1", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRandomMoveGeneratorSettings_WeightFor4opt2(), ecorePackage.getEDouble(), "weightFor4opt2", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_Using2over2(), ecorePackage.getEBoolean(), "using2over2", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_Using3over2(), ecorePackage.getEBoolean(), "using3over2", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_Using4over1(), ecorePackage.getEBoolean(), "using4over1", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_Using4over2(), ecorePackage.getEBoolean(), "using4over2", null, 0, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_WeightFor2opt2(), ecorePackage.getEDouble(), "weightFor2opt2", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_WeightFor3opt2(), ecorePackage.getEDouble(), "weightFor3opt2", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_WeightFor4opt1(), ecorePackage.getEDouble(), "weightFor4opt1", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRandomMoveGeneratorSettings_WeightFor4opt2(), ecorePackage.getEDouble(), "weightFor4opt2", "1", 1, 1, RandomMoveGeneratorSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(constrainedMoveGeneratorSettingsEClass, ConstrainedMoveGeneratorSettings.class, "ConstrainedMoveGeneratorSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 	}

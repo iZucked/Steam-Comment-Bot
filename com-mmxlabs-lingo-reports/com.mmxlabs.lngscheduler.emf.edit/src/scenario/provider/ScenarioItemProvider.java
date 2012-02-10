@@ -364,6 +364,11 @@ public class ScenarioItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
+				 FleetFactory.eINSTANCE.createMaintenance()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScenarioPackage.Literals.SCENARIO__CONTAINED_MODELS,
 				 ScheduleFactory.eINSTANCE.createScheduleModel()));
 
 		newChildDescriptors.add

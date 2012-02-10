@@ -373,6 +373,29 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link scenario.fleet.Maintenance} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MaintenanceItemProvider maintenanceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link scenario.fleet.Maintenance}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMaintenanceAdapter() {
+		if (maintenanceItemProvider == null) {
+			maintenanceItemProvider = new MaintenanceItemProvider(this);
+		}
+
+		return maintenanceItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -484,6 +507,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (vesselClassCostItemProvider != null) vesselClassCostItemProvider.dispose();
 		if (portTimeAndHeelItemProvider != null) portTimeAndHeelItemProvider.dispose();
 		if (heelOptionsItemProvider != null) heelOptionsItemProvider.dispose();
+		if (maintenanceItemProvider != null) maintenanceItemProvider.dispose();
 	}
 
 }

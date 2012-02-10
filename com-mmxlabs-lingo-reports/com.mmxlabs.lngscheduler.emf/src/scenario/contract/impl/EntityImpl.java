@@ -14,13 +14,12 @@ import scenario.impl.NamedObjectImpl;
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Entity</b></em>'. <!-- end-user-doc -->
  * <p>
  * </p>
- * 
+ *
  * @generated
  */
 public class EntityImpl extends NamedObjectImpl implements Entity {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected EntityImpl() {
@@ -29,7 +28,6 @@ public class EntityImpl extends NamedObjectImpl implements Entity {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

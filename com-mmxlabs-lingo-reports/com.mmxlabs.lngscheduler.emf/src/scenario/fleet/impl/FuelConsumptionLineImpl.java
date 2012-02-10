@@ -17,17 +17,17 @@ import scenario.fleet.FuelConsumptionLine;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.fleet.impl.FuelConsumptionLineImpl#getSpeed <em>Speed</em>}</li>
- * <li>{@link scenario.fleet.impl.FuelConsumptionLineImpl#getConsumption <em>Consumption</em>}</li>
+ *   <li>{@link scenario.fleet.impl.FuelConsumptionLineImpl#getSpeed <em>Speed</em>}</li>
+ *   <li>{@link scenario.fleet.impl.FuelConsumptionLineImpl#getConsumption <em>Consumption</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumptionLine {
 	/**
-	 * The default value of the '{@link #getSpeed() <em>Speed</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getSpeed() <em>Speed</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getSpeed()
 	 * @generated
 	 * @ordered
@@ -35,8 +35,8 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	protected static final float SPEED_EDEFAULT = 0.0F;
 
 	/**
-	 * The cached value of the '{@link #getSpeed() <em>Speed</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getSpeed() <em>Speed</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getSpeed()
 	 * @generated
 	 * @ordered
@@ -44,8 +44,8 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	protected float speed = SPEED_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getConsumption() <em>Consumption</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getConsumption() <em>Consumption</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getConsumption()
 	 * @generated
 	 * @ordered
@@ -53,8 +53,8 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 	protected static final float CONSUMPTION_EDEFAULT = 0.0F;
 
 	/**
-	 * The cached value of the '{@link #getConsumption() <em>Consumption</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getConsumption() <em>Consumption</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getConsumption()
 	 * @generated
 	 * @ordered
@@ -63,7 +63,6 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected FuelConsumptionLineImpl() {
@@ -72,7 +71,6 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -82,7 +80,6 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -92,21 +89,18 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setSpeed(final float newSpeed) {
-		final float oldSpeed = speed;
+	public void setSpeed(float newSpeed) {
+		float oldSpeed = speed;
 		speed = newSpeed;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FUEL_CONSUMPTION_LINE__SPEED, oldSpeed, speed));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -116,98 +110,89 @@ public class FuelConsumptionLineImpl extends EObjectImpl implements FuelConsumpt
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setConsumption(final float newConsumption) {
-		final float oldConsumption = consumption;
+	public void setConsumption(float newConsumption) {
+		float oldConsumption = consumption;
 		consumption = newConsumption;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FUEL_CONSUMPTION_LINE__CONSUMPTION, oldConsumption, consumption));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case FleetPackage.FUEL_CONSUMPTION_LINE__SPEED:
-			return getSpeed();
-		case FleetPackage.FUEL_CONSUMPTION_LINE__CONSUMPTION:
-			return getConsumption();
+			case FleetPackage.FUEL_CONSUMPTION_LINE__SPEED:
+				return getSpeed();
+			case FleetPackage.FUEL_CONSUMPTION_LINE__CONSUMPTION:
+				return getConsumption();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case FleetPackage.FUEL_CONSUMPTION_LINE__SPEED:
-			setSpeed((Float) newValue);
-			return;
-		case FleetPackage.FUEL_CONSUMPTION_LINE__CONSUMPTION:
-			setConsumption((Float) newValue);
-			return;
+			case FleetPackage.FUEL_CONSUMPTION_LINE__SPEED:
+				setSpeed((Float)newValue);
+				return;
+			case FleetPackage.FUEL_CONSUMPTION_LINE__CONSUMPTION:
+				setConsumption((Float)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case FleetPackage.FUEL_CONSUMPTION_LINE__SPEED:
-			setSpeed(SPEED_EDEFAULT);
-			return;
-		case FleetPackage.FUEL_CONSUMPTION_LINE__CONSUMPTION:
-			setConsumption(CONSUMPTION_EDEFAULT);
-			return;
+			case FleetPackage.FUEL_CONSUMPTION_LINE__SPEED:
+				setSpeed(SPEED_EDEFAULT);
+				return;
+			case FleetPackage.FUEL_CONSUMPTION_LINE__CONSUMPTION:
+				setConsumption(CONSUMPTION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case FleetPackage.FUEL_CONSUMPTION_LINE__SPEED:
-			return speed != SPEED_EDEFAULT;
-		case FleetPackage.FUEL_CONSUMPTION_LINE__CONSUMPTION:
-			return consumption != CONSUMPTION_EDEFAULT;
+			case FleetPackage.FUEL_CONSUMPTION_LINE__SPEED:
+				return speed != SPEED_EDEFAULT;
+			case FleetPackage.FUEL_CONSUMPTION_LINE__CONSUMPTION:
+				return consumption != CONSUMPTION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (speed: ");
 		result.append(speed);
 		result.append(", consumption: ");

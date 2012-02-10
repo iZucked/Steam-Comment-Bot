@@ -23,16 +23,16 @@ import scenario.port.PortSelection;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.port.impl.PortGroupImpl#getContents <em>Contents</em>}</li>
+ *   <li>{@link scenario.port.impl.PortGroupImpl#getContents <em>Contents</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class PortGroupImpl extends PortSelectionImpl implements PortGroup {
 	/**
-	 * The cached value of the '{@link #getContents() <em>Contents</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getContents() <em>Contents</em>}' reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getContents()
 	 * @generated
 	 * @ordered
@@ -41,7 +41,6 @@ public class PortGroupImpl extends PortSelectionImpl implements PortGroup {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected PortGroupImpl() {
@@ -50,7 +49,6 @@ public class PortGroupImpl extends PortSelectionImpl implements PortGroup {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -60,7 +58,6 @@ public class PortGroupImpl extends PortSelectionImpl implements PortGroup {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -73,96 +70,88 @@ public class PortGroupImpl extends PortSelectionImpl implements PortGroup {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public EList<Port> getClosure(final EList<PortSelection> ignoreSelections) {
-		if (ignoreSelections.contains(this)) {
-			return org.eclipse.emf.common.util.ECollections.emptyEList();
-		}
-
+	public EList<Port> getClosure(EList<PortSelection> ignoreSelections) {
+		if (ignoreSelections.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
+		
 		final org.eclipse.emf.common.util.UniqueEList<Port> result = new org.eclipse.emf.common.util.UniqueEList<Port>();
 		ignoreSelections.add(this);
-
+		
 		for (final PortSelection selection : getContents()) {
 			result.addAll(selection.getClosure(ignoreSelections));
 		}
-
+		
 		return result;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case PortPackage.PORT_GROUP__CONTENTS:
-			return getContents();
+			case PortPackage.PORT_GROUP__CONTENTS:
+				return getContents();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case PortPackage.PORT_GROUP__CONTENTS:
-			getContents().clear();
-			getContents().addAll((Collection<? extends PortSelection>) newValue);
-			return;
+			case PortPackage.PORT_GROUP__CONTENTS:
+				getContents().clear();
+				getContents().addAll((Collection<? extends PortSelection>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case PortPackage.PORT_GROUP__CONTENTS:
-			getContents().clear();
-			return;
+			case PortPackage.PORT_GROUP__CONTENTS:
+				getContents().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case PortPackage.PORT_GROUP__CONTENTS:
-			return (contents != null) && !contents.isEmpty();
+			case PortPackage.PORT_GROUP__CONTENTS:
+				return contents != null && !contents.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-		case PortPackage.PORT_GROUP___GET_CLOSURE__ELIST:
-			return getClosure((EList<PortSelection>) arguments.get(0));
+			case PortPackage.PORT_GROUP___GET_CLOSURE__ELIST:
+				return getClosure((EList<PortSelection>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

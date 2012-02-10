@@ -13,13 +13,12 @@ import scenario.contract.PurchaseContract;
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Purchase Contract</b></em>'. <!-- end-user-doc -->
  * <p>
  * </p>
- * 
+ *
  * @generated
  */
 public abstract class PurchaseContractImpl extends ContractImpl implements PurchaseContract {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected PurchaseContractImpl() {
@@ -28,7 +27,6 @@ public abstract class PurchaseContractImpl extends ContractImpl implements Purch
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

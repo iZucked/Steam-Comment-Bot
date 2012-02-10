@@ -10,26 +10,27 @@ import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>Group</b></em>'. <!-- end-user-doc -->
- * 
+ *
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link scenario.port.PortGroup#getContents <em>Contents</em>}</li>
+ *   <li>{@link scenario.port.PortGroup#getContents <em>Contents</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see scenario.port.PortPackage#getPortGroup()
  * @model
  * @generated
  */
 public interface PortGroup extends PortSelection {
 	/**
-	 * Returns the value of the '<em><b>Contents</b></em>' reference list. The list contents are of type {@link scenario.port.PortSelection}. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Contents</b></em>' reference list.
+	 * The list contents are of type {@link scenario.port.PortSelection}.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Contents</em>' reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Contents</em>' reference list.
 	 * @see scenario.port.PortPackage#getPortGroup_Contents()
 	 * @model

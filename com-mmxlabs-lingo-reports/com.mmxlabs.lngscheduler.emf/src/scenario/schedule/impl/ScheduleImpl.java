@@ -29,21 +29,21 @@ import scenario.schedule.fleetallocation.AllocatedVessel;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.schedule.impl.ScheduleImpl#getName <em>Name</em>}</li>
- * <li>{@link scenario.schedule.impl.ScheduleImpl#getSequences <em>Sequences</em>}</li>
- * <li>{@link scenario.schedule.impl.ScheduleImpl#getCargoAllocations <em>Cargo Allocations</em>}</li>
- * <li>{@link scenario.schedule.impl.ScheduleImpl#getFitness <em>Fitness</em>}</li>
- * <li>{@link scenario.schedule.impl.ScheduleImpl#getRevenue <em>Revenue</em>}</li>
- * <li>{@link scenario.schedule.impl.ScheduleImpl#getFleet <em>Fleet</em>}</li>
+ *   <li>{@link scenario.schedule.impl.ScheduleImpl#getName <em>Name</em>}</li>
+ *   <li>{@link scenario.schedule.impl.ScheduleImpl#getSequences <em>Sequences</em>}</li>
+ *   <li>{@link scenario.schedule.impl.ScheduleImpl#getCargoAllocations <em>Cargo Allocations</em>}</li>
+ *   <li>{@link scenario.schedule.impl.ScheduleImpl#getFitness <em>Fitness</em>}</li>
+ *   <li>{@link scenario.schedule.impl.ScheduleImpl#getRevenue <em>Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.impl.ScheduleImpl#getFleet <em>Fleet</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class ScheduleImpl extends EObjectImpl implements Schedule {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -51,8 +51,8 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	protected static final String NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -60,8 +60,8 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getSequences() <em>Sequences</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getSequences() <em>Sequences</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getSequences()
 	 * @generated
 	 * @ordered
@@ -69,8 +69,8 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	protected EList<Sequence> sequences;
 
 	/**
-	 * The cached value of the '{@link #getCargoAllocations() <em>Cargo Allocations</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getCargoAllocations() <em>Cargo Allocations</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCargoAllocations()
 	 * @generated
 	 * @ordered
@@ -78,8 +78,8 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	protected EList<CargoAllocation> cargoAllocations;
 
 	/**
-	 * The cached value of the '{@link #getFitness() <em>Fitness</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getFitness() <em>Fitness</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFitness()
 	 * @generated
 	 * @ordered
@@ -87,8 +87,8 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	protected EList<ScheduleFitness> fitness;
 
 	/**
-	 * The cached value of the '{@link #getRevenue() <em>Revenue</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getRevenue() <em>Revenue</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getRevenue()
 	 * @generated
 	 * @ordered
@@ -96,8 +96,8 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 	protected EList<BookedRevenue> revenue;
 
 	/**
-	 * The cached value of the '{@link #getFleet() <em>Fleet</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getFleet() <em>Fleet</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFleet()
 	 * @generated
 	 * @ordered
@@ -106,7 +106,6 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ScheduleImpl() {
@@ -115,7 +114,6 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -125,7 +123,6 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -138,7 +135,6 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -148,21 +144,18 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setName(final String newName) {
-		final String oldName = name;
+	public void setName(String newName) {
+		String oldName = name;
 		name = newName;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE__NAME, oldName, name));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -175,7 +168,6 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -188,7 +180,6 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -201,7 +192,6 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -214,152 +204,144 @@ public class ScheduleImpl extends EObjectImpl implements Schedule {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case SchedulePackage.SCHEDULE__SEQUENCES:
-			return ((InternalEList<?>) getSequences()).basicRemove(otherEnd, msgs);
-		case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
-			return ((InternalEList<?>) getCargoAllocations()).basicRemove(otherEnd, msgs);
-		case SchedulePackage.SCHEDULE__FITNESS:
-			return ((InternalEList<?>) getFitness()).basicRemove(otherEnd, msgs);
-		case SchedulePackage.SCHEDULE__REVENUE:
-			return ((InternalEList<?>) getRevenue()).basicRemove(otherEnd, msgs);
-		case SchedulePackage.SCHEDULE__FLEET:
-			return ((InternalEList<?>) getFleet()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__SEQUENCES:
+				return ((InternalEList<?>)getSequences()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
+				return ((InternalEList<?>)getCargoAllocations()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__FITNESS:
+				return ((InternalEList<?>)getFitness()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__REVENUE:
+				return ((InternalEList<?>)getRevenue()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__FLEET:
+				return ((InternalEList<?>)getFleet()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case SchedulePackage.SCHEDULE__NAME:
-			return getName();
-		case SchedulePackage.SCHEDULE__SEQUENCES:
-			return getSequences();
-		case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
-			return getCargoAllocations();
-		case SchedulePackage.SCHEDULE__FITNESS:
-			return getFitness();
-		case SchedulePackage.SCHEDULE__REVENUE:
-			return getRevenue();
-		case SchedulePackage.SCHEDULE__FLEET:
-			return getFleet();
+			case SchedulePackage.SCHEDULE__NAME:
+				return getName();
+			case SchedulePackage.SCHEDULE__SEQUENCES:
+				return getSequences();
+			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
+				return getCargoAllocations();
+			case SchedulePackage.SCHEDULE__FITNESS:
+				return getFitness();
+			case SchedulePackage.SCHEDULE__REVENUE:
+				return getRevenue();
+			case SchedulePackage.SCHEDULE__FLEET:
+				return getFleet();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case SchedulePackage.SCHEDULE__NAME:
-			setName((String) newValue);
-			return;
-		case SchedulePackage.SCHEDULE__SEQUENCES:
-			getSequences().clear();
-			getSequences().addAll((Collection<? extends Sequence>) newValue);
-			return;
-		case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
-			getCargoAllocations().clear();
-			getCargoAllocations().addAll((Collection<? extends CargoAllocation>) newValue);
-			return;
-		case SchedulePackage.SCHEDULE__FITNESS:
-			getFitness().clear();
-			getFitness().addAll((Collection<? extends ScheduleFitness>) newValue);
-			return;
-		case SchedulePackage.SCHEDULE__REVENUE:
-			getRevenue().clear();
-			getRevenue().addAll((Collection<? extends BookedRevenue>) newValue);
-			return;
-		case SchedulePackage.SCHEDULE__FLEET:
-			getFleet().clear();
-			getFleet().addAll((Collection<? extends AllocatedVessel>) newValue);
-			return;
+			case SchedulePackage.SCHEDULE__NAME:
+				setName((String)newValue);
+				return;
+			case SchedulePackage.SCHEDULE__SEQUENCES:
+				getSequences().clear();
+				getSequences().addAll((Collection<? extends Sequence>)newValue);
+				return;
+			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
+				getCargoAllocations().clear();
+				getCargoAllocations().addAll((Collection<? extends CargoAllocation>)newValue);
+				return;
+			case SchedulePackage.SCHEDULE__FITNESS:
+				getFitness().clear();
+				getFitness().addAll((Collection<? extends ScheduleFitness>)newValue);
+				return;
+			case SchedulePackage.SCHEDULE__REVENUE:
+				getRevenue().clear();
+				getRevenue().addAll((Collection<? extends BookedRevenue>)newValue);
+				return;
+			case SchedulePackage.SCHEDULE__FLEET:
+				getFleet().clear();
+				getFleet().addAll((Collection<? extends AllocatedVessel>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case SchedulePackage.SCHEDULE__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case SchedulePackage.SCHEDULE__SEQUENCES:
-			getSequences().clear();
-			return;
-		case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
-			getCargoAllocations().clear();
-			return;
-		case SchedulePackage.SCHEDULE__FITNESS:
-			getFitness().clear();
-			return;
-		case SchedulePackage.SCHEDULE__REVENUE:
-			getRevenue().clear();
-			return;
-		case SchedulePackage.SCHEDULE__FLEET:
-			getFleet().clear();
-			return;
+			case SchedulePackage.SCHEDULE__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case SchedulePackage.SCHEDULE__SEQUENCES:
+				getSequences().clear();
+				return;
+			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
+				getCargoAllocations().clear();
+				return;
+			case SchedulePackage.SCHEDULE__FITNESS:
+				getFitness().clear();
+				return;
+			case SchedulePackage.SCHEDULE__REVENUE:
+				getRevenue().clear();
+				return;
+			case SchedulePackage.SCHEDULE__FLEET:
+				getFleet().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case SchedulePackage.SCHEDULE__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case SchedulePackage.SCHEDULE__SEQUENCES:
-			return (sequences != null) && !sequences.isEmpty();
-		case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
-			return (cargoAllocations != null) && !cargoAllocations.isEmpty();
-		case SchedulePackage.SCHEDULE__FITNESS:
-			return (fitness != null) && !fitness.isEmpty();
-		case SchedulePackage.SCHEDULE__REVENUE:
-			return (revenue != null) && !revenue.isEmpty();
-		case SchedulePackage.SCHEDULE__FLEET:
-			return (fleet != null) && !fleet.isEmpty();
+			case SchedulePackage.SCHEDULE__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case SchedulePackage.SCHEDULE__SEQUENCES:
+				return sequences != null && !sequences.isEmpty();
+			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
+				return cargoAllocations != null && !cargoAllocations.isEmpty();
+			case SchedulePackage.SCHEDULE__FITNESS:
+				return fitness != null && !fitness.isEmpty();
+			case SchedulePackage.SCHEDULE__REVENUE:
+				return revenue != null && !revenue.isEmpty();
+			case SchedulePackage.SCHEDULE__FLEET:
+				return fleet != null && !fleet.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(')');

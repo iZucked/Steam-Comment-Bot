@@ -14,13 +14,12 @@ import scenario.optimiser.lso.MoveGeneratorSettings;
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Move Generator Settings</b></em>'. <!-- end-user-doc -->
  * <p>
  * </p>
- * 
+ *
  * @generated
  */
 public class MoveGeneratorSettingsImpl extends EObjectImpl implements MoveGeneratorSettings {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected MoveGeneratorSettingsImpl() {
@@ -29,7 +28,6 @@ public class MoveGeneratorSettingsImpl extends EObjectImpl implements MoveGenera
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

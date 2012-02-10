@@ -24,18 +24,18 @@ import scenario.ScenarioPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.impl.DetailImpl#getName <em>Name</em>}</li>
- * <li>{@link scenario.impl.DetailImpl#getChildren <em>Children</em>}</li>
- * <li>{@link scenario.impl.DetailImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link scenario.impl.DetailImpl#getName <em>Name</em>}</li>
+ *   <li>{@link scenario.impl.DetailImpl#getChildren <em>Children</em>}</li>
+ *   <li>{@link scenario.impl.DetailImpl#getValue <em>Value</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class DetailImpl extends EObjectImpl implements Detail {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -43,8 +43,8 @@ public class DetailImpl extends EObjectImpl implements Detail {
 	protected static final String NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -52,8 +52,8 @@ public class DetailImpl extends EObjectImpl implements Detail {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getChildren() <em>Children</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getChildren() <em>Children</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getChildren()
 	 * @generated
 	 * @ordered
@@ -61,8 +61,8 @@ public class DetailImpl extends EObjectImpl implements Detail {
 	protected EList<Detail> children;
 
 	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -70,8 +70,8 @@ public class DetailImpl extends EObjectImpl implements Detail {
 	protected static final String VALUE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -80,7 +80,6 @@ public class DetailImpl extends EObjectImpl implements Detail {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected DetailImpl() {
@@ -89,7 +88,6 @@ public class DetailImpl extends EObjectImpl implements Detail {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -99,7 +97,6 @@ public class DetailImpl extends EObjectImpl implements Detail {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -109,21 +106,18 @@ public class DetailImpl extends EObjectImpl implements Detail {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setName(final String newName) {
-		final String oldName = name;
+	public void setName(String newName) {
+		String oldName = name;
 		name = newName;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.DETAIL__NAME, oldName, name));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -136,7 +130,6 @@ public class DetailImpl extends EObjectImpl implements Detail {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -146,124 +139,114 @@ public class DetailImpl extends EObjectImpl implements Detail {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setValue(final String newValue) {
-		final String oldValue = value;
+	public void setValue(String newValue) {
+		String oldValue = value;
 		value = newValue;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioPackage.DETAIL__VALUE, oldValue, value));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case ScenarioPackage.DETAIL__CHILDREN:
-			return ((InternalEList<?>) getChildren()).basicRemove(otherEnd, msgs);
+			case ScenarioPackage.DETAIL__CHILDREN:
+				return ((InternalEList<?>)getChildren()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case ScenarioPackage.DETAIL__NAME:
-			return getName();
-		case ScenarioPackage.DETAIL__CHILDREN:
-			return getChildren();
-		case ScenarioPackage.DETAIL__VALUE:
-			return getValue();
+			case ScenarioPackage.DETAIL__NAME:
+				return getName();
+			case ScenarioPackage.DETAIL__CHILDREN:
+				return getChildren();
+			case ScenarioPackage.DETAIL__VALUE:
+				return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case ScenarioPackage.DETAIL__NAME:
-			setName((String) newValue);
-			return;
-		case ScenarioPackage.DETAIL__CHILDREN:
-			getChildren().clear();
-			getChildren().addAll((Collection<? extends Detail>) newValue);
-			return;
-		case ScenarioPackage.DETAIL__VALUE:
-			setValue((String) newValue);
-			return;
+			case ScenarioPackage.DETAIL__NAME:
+				setName((String)newValue);
+				return;
+			case ScenarioPackage.DETAIL__CHILDREN:
+				getChildren().clear();
+				getChildren().addAll((Collection<? extends Detail>)newValue);
+				return;
+			case ScenarioPackage.DETAIL__VALUE:
+				setValue((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case ScenarioPackage.DETAIL__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case ScenarioPackage.DETAIL__CHILDREN:
-			getChildren().clear();
-			return;
-		case ScenarioPackage.DETAIL__VALUE:
-			setValue(VALUE_EDEFAULT);
-			return;
+			case ScenarioPackage.DETAIL__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case ScenarioPackage.DETAIL__CHILDREN:
+				getChildren().clear();
+				return;
+			case ScenarioPackage.DETAIL__VALUE:
+				setValue(VALUE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case ScenarioPackage.DETAIL__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case ScenarioPackage.DETAIL__CHILDREN:
-			return (children != null) && !children.isEmpty();
-		case ScenarioPackage.DETAIL__VALUE:
-			return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+			case ScenarioPackage.DETAIL__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case ScenarioPackage.DETAIL__CHILDREN:
+				return children != null && !children.isEmpty();
+			case ScenarioPackage.DETAIL__VALUE:
+				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", value: ");

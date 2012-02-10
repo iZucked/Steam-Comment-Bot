@@ -24,17 +24,17 @@ import scenario.schedule.events.VesselEventVisit;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.schedule.events.impl.VesselEventVisitImpl#getVesselEvent <em>Vessel Event</em>}</li>
- * <li>{@link scenario.schedule.events.impl.VesselEventVisitImpl#getRevenue <em>Revenue</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.VesselEventVisitImpl#getVesselEvent <em>Vessel Event</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.VesselEventVisitImpl#getRevenue <em>Revenue</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVisit {
 	/**
-	 * The cached value of the '{@link #getVesselEvent() <em>Vessel Event</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getVesselEvent() <em>Vessel Event</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getVesselEvent()
 	 * @generated
 	 * @ordered
@@ -42,8 +42,8 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 	protected VesselEvent vesselEvent;
 
 	/**
-	 * The cached value of the '{@link #getRevenue() <em>Revenue</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getRevenue() <em>Revenue</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getRevenue()
 	 * @generated
 	 * @ordered
@@ -52,7 +52,6 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected VesselEventVisitImpl() {
@@ -61,7 +60,6 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -71,18 +69,16 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public VesselEvent getVesselEvent() {
-		if ((vesselEvent != null) && vesselEvent.eIsProxy()) {
-			final InternalEObject oldVesselEvent = (InternalEObject) vesselEvent;
-			vesselEvent = (VesselEvent) eResolveProxy(oldVesselEvent);
+		if (vesselEvent != null && vesselEvent.eIsProxy()) {
+			InternalEObject oldVesselEvent = (InternalEObject)vesselEvent;
+			vesselEvent = (VesselEvent)eResolveProxy(oldVesselEvent);
 			if (vesselEvent != oldVesselEvent) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT, oldVesselEvent, vesselEvent));
-				}
 			}
 		}
 		return vesselEvent;
@@ -90,7 +86,6 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public VesselEvent basicGetVesselEvent() {
@@ -99,32 +94,28 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setVesselEvent(final VesselEvent newVesselEvent) {
-		final VesselEvent oldVesselEvent = vesselEvent;
+	public void setVesselEvent(VesselEvent newVesselEvent) {
+		VesselEvent oldVesselEvent = vesselEvent;
 		vesselEvent = newVesselEvent;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT, oldVesselEvent, vesselEvent));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public VesselEventRevenue getRevenue() {
-		if ((revenue != null) && revenue.eIsProxy()) {
-			final InternalEObject oldRevenue = (InternalEObject) revenue;
-			revenue = (VesselEventRevenue) eResolveProxy(oldRevenue);
+		if (revenue != null && revenue.eIsProxy()) {
+			InternalEObject oldRevenue = (InternalEObject)revenue;
+			revenue = (VesselEventRevenue)eResolveProxy(oldRevenue);
 			if (revenue != oldRevenue) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, EventsPackage.VESSEL_EVENT_VISIT__REVENUE, oldRevenue, revenue));
-				}
 			}
 		}
 		return revenue;
@@ -132,7 +123,6 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public VesselEventRevenue basicGetRevenue() {
@@ -141,21 +131,18 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setRevenue(final VesselEventRevenue newRevenue) {
-		final VesselEventRevenue oldRevenue = revenue;
+	public void setRevenue(VesselEventRevenue newRevenue) {
+		VesselEventRevenue oldRevenue = revenue;
 		revenue = newRevenue;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.VESSEL_EVENT_VISIT__REVENUE, oldRevenue, revenue));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -165,7 +152,6 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -175,7 +161,6 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -185,103 +170,88 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
-			if (resolve) {
-				return getVesselEvent();
-			}
-			return basicGetVesselEvent();
-		case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
-			if (resolve) {
-				return getRevenue();
-			}
-			return basicGetRevenue();
+			case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
+				if (resolve) return getVesselEvent();
+				return basicGetVesselEvent();
+			case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
+				if (resolve) return getRevenue();
+				return basicGetRevenue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
-			setVesselEvent((VesselEvent) newValue);
-			return;
-		case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
-			setRevenue((VesselEventRevenue) newValue);
-			return;
+			case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
+				setVesselEvent((VesselEvent)newValue);
+				return;
+			case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
+				setRevenue((VesselEventRevenue)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
-			setVesselEvent((VesselEvent) null);
-			return;
-		case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
-			setRevenue((VesselEventRevenue) null);
-			return;
+			case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
+				setVesselEvent((VesselEvent)null);
+				return;
+			case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
+				setRevenue((VesselEventRevenue)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
-			return vesselEvent != null;
-		case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
-			return revenue != null;
+			case EventsPackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
+				return vesselEvent != null;
+			case EventsPackage.VESSEL_EVENT_VISIT__REVENUE:
+				return revenue != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public int eDerivedOperationID(final int baseOperationID, final Class<?> baseClass) {
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
 		if (baseClass == ScheduledEvent.class) {
 			switch (baseOperationID) {
-			case EventsPackage.SCHEDULED_EVENT___GET_NAME:
-				return EventsPackage.VESSEL_EVENT_VISIT___GET_NAME;
-			case EventsPackage.SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME:
-				return EventsPackage.VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME;
-			default:
-				return super.eDerivedOperationID(baseOperationID, baseClass);
+				case EventsPackage.SCHEDULED_EVENT___GET_NAME: return EventsPackage.VESSEL_EVENT_VISIT___GET_NAME;
+				case EventsPackage.SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME: return EventsPackage.VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
 			}
 		}
 		if (baseClass == PortVisit.class) {
 			switch (baseOperationID) {
-			case EventsPackage.PORT_VISIT___GET_ID:
-				return EventsPackage.VESSEL_EVENT_VISIT___GET_ID;
-			case EventsPackage.PORT_VISIT___GET_DISPLAY_TYPE_NAME:
-				return EventsPackage.VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME;
-			default:
-				return super.eDerivedOperationID(baseOperationID, baseClass);
+				case EventsPackage.PORT_VISIT___GET_ID: return EventsPackage.VESSEL_EVENT_VISIT___GET_ID;
+				case EventsPackage.PORT_VISIT___GET_DISPLAY_TYPE_NAME: return EventsPackage.VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
 			}
 		}
 		return super.eDerivedOperationID(baseOperationID, baseClass);
@@ -289,18 +259,17 @@ public class VesselEventVisitImpl extends PortVisitImpl implements VesselEventVi
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-		case EventsPackage.VESSEL_EVENT_VISIT___GET_ID:
-			return getId();
-		case EventsPackage.VESSEL_EVENT_VISIT___GET_NAME:
-			return getName();
-		case EventsPackage.VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME:
-			return getDisplayTypeName();
+			case EventsPackage.VESSEL_EVENT_VISIT___GET_ID:
+				return getId();
+			case EventsPackage.VESSEL_EVENT_VISIT___GET_NAME:
+				return getName();
+			case EventsPackage.VESSEL_EVENT_VISIT___GET_DISPLAY_TYPE_NAME:
+				return getDisplayTypeName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

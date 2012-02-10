@@ -257,6 +257,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelUnitPrice" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Maintenance" eSuperTypes="#//fleet/VesselEvent"/>
   </eSubpackages>
   <eSubpackages name="schedule" nsURI="http://com.mmxlabs.lng.emf2/schedule" nsPrefix="com.mmxlabs.lng.emf.schedule">
     <eClassifiers xsi:type="ecore:EClass" name="ScheduleModel">

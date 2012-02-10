@@ -13,13 +13,12 @@ import scenario.optimiser.lso.LsoPackage;
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Constrained Move Generator Settings</b></em>'. <!-- end-user-doc -->
  * <p>
  * </p>
- * 
+ *
  * @generated
  */
 public class ConstrainedMoveGeneratorSettingsImpl extends MoveGeneratorSettingsImpl implements ConstrainedMoveGeneratorSettings {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ConstrainedMoveGeneratorSettingsImpl() {
@@ -28,7 +27,6 @@ public class ConstrainedMoveGeneratorSettingsImpl extends MoveGeneratorSettingsI
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

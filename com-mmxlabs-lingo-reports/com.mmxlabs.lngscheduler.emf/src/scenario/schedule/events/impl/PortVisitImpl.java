@@ -22,16 +22,16 @@ import scenario.schedule.events.ScheduledEvent;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.schedule.events.impl.PortVisitImpl#getPort <em>Port</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.PortVisitImpl#getPort <em>Port</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPort()
 	 * @generated
 	 * @ordered
@@ -40,7 +40,6 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected PortVisitImpl() {
@@ -49,7 +48,6 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -59,18 +57,16 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Port getPort() {
-		if ((port != null) && port.eIsProxy()) {
-			final InternalEObject oldPort = (InternalEObject) port;
-			port = (Port) eResolveProxy(oldPort);
+		if (port != null && port.eIsProxy()) {
+			InternalEObject oldPort = (InternalEObject)port;
+			port = (Port)eResolveProxy(oldPort);
 			if (port != oldPort) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, EventsPackage.PORT_VISIT__PORT, oldPort, port));
-				}
 			}
 		}
 		return port;
@@ -78,7 +74,6 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Port basicGetPort() {
@@ -87,45 +82,44 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setPort(final Port newPort) {
-		final Port oldPort = port;
+	public void setPort(Port newPort) {
+		Port oldPort = port;
 		port = newPort;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.PORT_VISIT__PORT, oldPort, port));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object getLocalStartTime() {
-		final java.util.Calendar calendar = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone(getPort().getTimeZone()));
+		final java.util.Calendar calendar = java.util.Calendar.getInstance(
+		java.util.TimeZone.getTimeZone(getPort().getTimeZone())
+		);
 		calendar.setTime(getStartTime());
 		return calendar;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object getLocalEndTime() {
-		final java.util.Calendar calendar = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone(getPort().getTimeZone()));
+		final java.util.Calendar calendar = java.util.Calendar.getInstance(
+		java.util.TimeZone.getTimeZone(getPort().getTimeZone())
+		);
 		calendar.setTime(getEndTime());
 		return calendar;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -135,7 +129,6 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -145,82 +138,71 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case EventsPackage.PORT_VISIT__PORT:
-			if (resolve) {
-				return getPort();
-			}
-			return basicGetPort();
+			case EventsPackage.PORT_VISIT__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case EventsPackage.PORT_VISIT__PORT:
-			setPort((Port) newValue);
-			return;
+			case EventsPackage.PORT_VISIT__PORT:
+				setPort((Port)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case EventsPackage.PORT_VISIT__PORT:
-			setPort((Port) null);
-			return;
+			case EventsPackage.PORT_VISIT__PORT:
+				setPort((Port)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case EventsPackage.PORT_VISIT__PORT:
-			return port != null;
+			case EventsPackage.PORT_VISIT__PORT:
+				return port != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public int eDerivedOperationID(final int baseOperationID, final Class<?> baseClass) {
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
 		if (baseClass == ScheduledEvent.class) {
 			switch (baseOperationID) {
-			case EventsPackage.SCHEDULED_EVENT___GET_LOCAL_START_TIME:
-				return EventsPackage.PORT_VISIT___GET_LOCAL_START_TIME;
-			case EventsPackage.SCHEDULED_EVENT___GET_LOCAL_END_TIME:
-				return EventsPackage.PORT_VISIT___GET_LOCAL_END_TIME;
-			case EventsPackage.SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME:
-				return EventsPackage.PORT_VISIT___GET_DISPLAY_TYPE_NAME;
-			default:
-				return super.eDerivedOperationID(baseOperationID, baseClass);
+				case EventsPackage.SCHEDULED_EVENT___GET_LOCAL_START_TIME: return EventsPackage.PORT_VISIT___GET_LOCAL_START_TIME;
+				case EventsPackage.SCHEDULED_EVENT___GET_LOCAL_END_TIME: return EventsPackage.PORT_VISIT___GET_LOCAL_END_TIME;
+				case EventsPackage.SCHEDULED_EVENT___GET_DISPLAY_TYPE_NAME: return EventsPackage.PORT_VISIT___GET_DISPLAY_TYPE_NAME;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
 			}
 		}
 		return super.eDerivedOperationID(baseOperationID, baseClass);
@@ -228,20 +210,19 @@ public class PortVisitImpl extends ScheduledEventImpl implements PortVisit {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-		case EventsPackage.PORT_VISIT___GET_LOCAL_START_TIME:
-			return getLocalStartTime();
-		case EventsPackage.PORT_VISIT___GET_LOCAL_END_TIME:
-			return getLocalEndTime();
-		case EventsPackage.PORT_VISIT___GET_ID:
-			return getId();
-		case EventsPackage.PORT_VISIT___GET_DISPLAY_TYPE_NAME:
-			return getDisplayTypeName();
+			case EventsPackage.PORT_VISIT___GET_LOCAL_START_TIME:
+				return getLocalStartTime();
+			case EventsPackage.PORT_VISIT___GET_LOCAL_END_TIME:
+				return getLocalEndTime();
+			case EventsPackage.PORT_VISIT___GET_ID:
+				return getId();
+			case EventsPackage.PORT_VISIT___GET_DISPLAY_TYPE_NAME:
+				return getDisplayTypeName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

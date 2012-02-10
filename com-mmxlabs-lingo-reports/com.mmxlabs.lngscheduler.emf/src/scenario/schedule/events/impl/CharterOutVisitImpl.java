@@ -18,16 +18,16 @@ import scenario.schedule.events.EventsPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.schedule.events.impl.CharterOutVisitImpl#getCharterOut <em>Charter Out</em>}</li>
+ *   <li>{@link scenario.schedule.events.impl.CharterOutVisitImpl#getCharterOut <em>Charter Out</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class CharterOutVisitImpl extends VesselEventVisitImpl implements CharterOutVisit {
 	/**
-	 * The cached value of the '{@link #getCharterOut() <em>Charter Out</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getCharterOut() <em>Charter Out</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCharterOut()
 	 * @generated
 	 * @ordered
@@ -36,7 +36,6 @@ public class CharterOutVisitImpl extends VesselEventVisitImpl implements Charter
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected CharterOutVisitImpl() {
@@ -45,7 +44,6 @@ public class CharterOutVisitImpl extends VesselEventVisitImpl implements Charter
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -55,18 +53,16 @@ public class CharterOutVisitImpl extends VesselEventVisitImpl implements Charter
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public CharterOut getCharterOut() {
-		if ((charterOut != null) && charterOut.eIsProxy()) {
-			final InternalEObject oldCharterOut = (InternalEObject) charterOut;
-			charterOut = (CharterOut) eResolveProxy(oldCharterOut);
+		if (charterOut != null && charterOut.eIsProxy()) {
+			InternalEObject oldCharterOut = (InternalEObject)charterOut;
+			charterOut = (CharterOut)eResolveProxy(oldCharterOut);
 			if (charterOut != oldCharterOut) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT, oldCharterOut, charterOut));
-				}
 			}
 		}
 		return charterOut;
@@ -74,7 +70,6 @@ public class CharterOutVisitImpl extends VesselEventVisitImpl implements Charter
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public CharterOut basicGetCharterOut() {
@@ -83,75 +78,67 @@ public class CharterOutVisitImpl extends VesselEventVisitImpl implements Charter
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setCharterOut(final CharterOut newCharterOut) {
-		final CharterOut oldCharterOut = charterOut;
+	public void setCharterOut(CharterOut newCharterOut) {
+		CharterOut oldCharterOut = charterOut;
 		charterOut = newCharterOut;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT, oldCharterOut, charterOut));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
-			if (resolve) {
-				return getCharterOut();
-			}
-			return basicGetCharterOut();
+			case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
+				if (resolve) return getCharterOut();
+				return basicGetCharterOut();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
-			setCharterOut((CharterOut) newValue);
-			return;
+			case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
+				setCharterOut((CharterOut)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
-			setCharterOut((CharterOut) null);
-			return;
+			case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
+				setCharterOut((CharterOut)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
-			return charterOut != null;
+			case EventsPackage.CHARTER_OUT_VISIT__CHARTER_OUT:
+				return charterOut != null;
 		}
 		return super.eIsSet(featureID);
 	}

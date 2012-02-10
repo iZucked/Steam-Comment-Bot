@@ -26,22 +26,22 @@ import scenario.port.Port;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.fleet.impl.VesselEventImpl#getId <em>Id</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselEventImpl#getStartDate <em>Start Date</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselEventImpl#getEndDate <em>End Date</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselEventImpl#getDuration <em>Duration</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselEventImpl#getVessels <em>Vessels</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselEventImpl#getVesselClasses <em>Vessel Classes</em>}</li>
- * <li>{@link scenario.fleet.impl.VesselEventImpl#getStartPort <em>Start Port</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselEventImpl#getId <em>Id</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselEventImpl#getStartDate <em>Start Date</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselEventImpl#getEndDate <em>End Date</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselEventImpl#getDuration <em>Duration</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselEventImpl#getVessels <em>Vessels</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselEventImpl#getVesselClasses <em>Vessel Classes</em>}</li>
+ *   <li>{@link scenario.fleet.impl.VesselEventImpl#getStartPort <em>Start Port</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public abstract class VesselEventImpl extends AnnotatedObjectImpl implements VesselEvent {
 	/**
-	 * The default value of the '{@link #getId() <em>Id</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -49,8 +49,8 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 	protected static final String ID_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -58,8 +58,8 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 	protected String id = ID_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getStartDate()
 	 * @generated
 	 * @ordered
@@ -67,8 +67,8 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 	protected static final Date START_DATE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getStartDate() <em>Start Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getStartDate()
 	 * @generated
 	 * @ordered
@@ -76,8 +76,8 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 	protected Date startDate = START_DATE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getEndDate() <em>End Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getEndDate() <em>End Date</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getEndDate()
 	 * @generated
 	 * @ordered
@@ -85,8 +85,8 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 	protected static final Date END_DATE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getEndDate() <em>End Date</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getEndDate() <em>End Date</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getEndDate()
 	 * @generated
 	 * @ordered
@@ -94,8 +94,8 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 	protected Date endDate = END_DATE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDuration() <em>Duration</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getDuration() <em>Duration</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDuration()
 	 * @generated
 	 * @ordered
@@ -103,8 +103,8 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 	protected static final int DURATION_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDuration() <em>Duration</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDuration() <em>Duration</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDuration()
 	 * @generated
 	 * @ordered
@@ -112,8 +112,8 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 	protected int duration = DURATION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getVessels()
 	 * @generated
 	 * @ordered
@@ -121,8 +121,8 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 	protected EList<Vessel> vessels;
 
 	/**
-	 * The cached value of the '{@link #getVesselClasses() <em>Vessel Classes</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getVesselClasses() <em>Vessel Classes</em>}' reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getVesselClasses()
 	 * @generated
 	 * @ordered
@@ -130,8 +130,8 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 	protected EList<VesselClass> vesselClasses;
 
 	/**
-	 * The cached value of the '{@link #getStartPort() <em>Start Port</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getStartPort() <em>Start Port</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getStartPort()
 	 * @generated
 	 * @ordered
@@ -140,7 +140,6 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected VesselEventImpl() {
@@ -149,7 +148,6 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -159,7 +157,6 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -169,21 +166,18 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setId(final String newId) {
-		final String oldId = id;
+	public void setId(String newId) {
+		String oldId = id;
 		id = newId;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__ID, oldId, id));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -193,21 +187,18 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setStartDate(final Date newStartDate) {
-		final Date oldStartDate = startDate;
+	public void setStartDate(Date newStartDate) {
+		Date oldStartDate = startDate;
 		startDate = newStartDate;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__START_DATE, oldStartDate, startDate));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -217,21 +208,18 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setEndDate(final Date newEndDate) {
-		final Date oldEndDate = endDate;
+	public void setEndDate(Date newEndDate) {
+		Date oldEndDate = endDate;
 		endDate = newEndDate;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__END_DATE, oldEndDate, endDate));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -241,32 +229,28 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setDuration(final int newDuration) {
-		final int oldDuration = duration;
+	public void setDuration(int newDuration) {
+		int oldDuration = duration;
 		duration = newDuration;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__DURATION, oldDuration, duration));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Port getStartPort() {
-		if ((startPort != null) && startPort.eIsProxy()) {
-			final InternalEObject oldStartPort = (InternalEObject) startPort;
-			startPort = (Port) eResolveProxy(oldStartPort);
+		if (startPort != null && startPort.eIsProxy()) {
+			InternalEObject oldStartPort = (InternalEObject)startPort;
+			startPort = (Port)eResolveProxy(oldStartPort);
 			if (startPort != oldStartPort) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_EVENT__START_PORT, oldStartPort, startPort));
-				}
 			}
 		}
 		return startPort;
@@ -274,7 +258,6 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Port basicGetStartPort() {
@@ -283,21 +266,18 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setStartPort(final Port newStartPort) {
-		final Port oldStartPort = startPort;
+	public void setStartPort(Port newStartPort) {
+		Port oldStartPort = startPort;
 		startPort = newStartPort;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__START_PORT, oldStartPort, startPort));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -310,7 +290,6 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -323,140 +302,131 @@ public abstract class VesselEventImpl extends AnnotatedObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case FleetPackage.VESSEL_EVENT__ID:
-			return getId();
-		case FleetPackage.VESSEL_EVENT__START_DATE:
-			return getStartDate();
-		case FleetPackage.VESSEL_EVENT__END_DATE:
-			return getEndDate();
-		case FleetPackage.VESSEL_EVENT__DURATION:
-			return getDuration();
-		case FleetPackage.VESSEL_EVENT__VESSELS:
-			return getVessels();
-		case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
-			return getVesselClasses();
-		case FleetPackage.VESSEL_EVENT__START_PORT:
-			if (resolve) {
-				return getStartPort();
-			}
-			return basicGetStartPort();
+			case FleetPackage.VESSEL_EVENT__ID:
+				return getId();
+			case FleetPackage.VESSEL_EVENT__START_DATE:
+				return getStartDate();
+			case FleetPackage.VESSEL_EVENT__END_DATE:
+				return getEndDate();
+			case FleetPackage.VESSEL_EVENT__DURATION:
+				return getDuration();
+			case FleetPackage.VESSEL_EVENT__VESSELS:
+				return getVessels();
+			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
+				return getVesselClasses();
+			case FleetPackage.VESSEL_EVENT__START_PORT:
+				if (resolve) return getStartPort();
+				return basicGetStartPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case FleetPackage.VESSEL_EVENT__ID:
-			setId((String) newValue);
-			return;
-		case FleetPackage.VESSEL_EVENT__START_DATE:
-			setStartDate((Date) newValue);
-			return;
-		case FleetPackage.VESSEL_EVENT__END_DATE:
-			setEndDate((Date) newValue);
-			return;
-		case FleetPackage.VESSEL_EVENT__DURATION:
-			setDuration((Integer) newValue);
-			return;
-		case FleetPackage.VESSEL_EVENT__VESSELS:
-			getVessels().clear();
-			getVessels().addAll((Collection<? extends Vessel>) newValue);
-			return;
-		case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
-			getVesselClasses().clear();
-			getVesselClasses().addAll((Collection<? extends VesselClass>) newValue);
-			return;
-		case FleetPackage.VESSEL_EVENT__START_PORT:
-			setStartPort((Port) newValue);
-			return;
+			case FleetPackage.VESSEL_EVENT__ID:
+				setId((String)newValue);
+				return;
+			case FleetPackage.VESSEL_EVENT__START_DATE:
+				setStartDate((Date)newValue);
+				return;
+			case FleetPackage.VESSEL_EVENT__END_DATE:
+				setEndDate((Date)newValue);
+				return;
+			case FleetPackage.VESSEL_EVENT__DURATION:
+				setDuration((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL_EVENT__VESSELS:
+				getVessels().clear();
+				getVessels().addAll((Collection<? extends Vessel>)newValue);
+				return;
+			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
+				getVesselClasses().clear();
+				getVesselClasses().addAll((Collection<? extends VesselClass>)newValue);
+				return;
+			case FleetPackage.VESSEL_EVENT__START_PORT:
+				setStartPort((Port)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case FleetPackage.VESSEL_EVENT__ID:
-			setId(ID_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_EVENT__START_DATE:
-			setStartDate(START_DATE_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_EVENT__END_DATE:
-			setEndDate(END_DATE_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_EVENT__DURATION:
-			setDuration(DURATION_EDEFAULT);
-			return;
-		case FleetPackage.VESSEL_EVENT__VESSELS:
-			getVessels().clear();
-			return;
-		case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
-			getVesselClasses().clear();
-			return;
-		case FleetPackage.VESSEL_EVENT__START_PORT:
-			setStartPort((Port) null);
-			return;
+			case FleetPackage.VESSEL_EVENT__ID:
+				setId(ID_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_EVENT__START_DATE:
+				setStartDate(START_DATE_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_EVENT__END_DATE:
+				setEndDate(END_DATE_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_EVENT__DURATION:
+				setDuration(DURATION_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_EVENT__VESSELS:
+				getVessels().clear();
+				return;
+			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
+				getVesselClasses().clear();
+				return;
+			case FleetPackage.VESSEL_EVENT__START_PORT:
+				setStartPort((Port)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case FleetPackage.VESSEL_EVENT__ID:
-			return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
-		case FleetPackage.VESSEL_EVENT__START_DATE:
-			return START_DATE_EDEFAULT == null ? startDate != null : !START_DATE_EDEFAULT.equals(startDate);
-		case FleetPackage.VESSEL_EVENT__END_DATE:
-			return END_DATE_EDEFAULT == null ? endDate != null : !END_DATE_EDEFAULT.equals(endDate);
-		case FleetPackage.VESSEL_EVENT__DURATION:
-			return duration != DURATION_EDEFAULT;
-		case FleetPackage.VESSEL_EVENT__VESSELS:
-			return (vessels != null) && !vessels.isEmpty();
-		case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
-			return (vesselClasses != null) && !vesselClasses.isEmpty();
-		case FleetPackage.VESSEL_EVENT__START_PORT:
-			return startPort != null;
+			case FleetPackage.VESSEL_EVENT__ID:
+				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+			case FleetPackage.VESSEL_EVENT__START_DATE:
+				return START_DATE_EDEFAULT == null ? startDate != null : !START_DATE_EDEFAULT.equals(startDate);
+			case FleetPackage.VESSEL_EVENT__END_DATE:
+				return END_DATE_EDEFAULT == null ? endDate != null : !END_DATE_EDEFAULT.equals(endDate);
+			case FleetPackage.VESSEL_EVENT__DURATION:
+				return duration != DURATION_EDEFAULT;
+			case FleetPackage.VESSEL_EVENT__VESSELS:
+				return vessels != null && !vessels.isEmpty();
+			case FleetPackage.VESSEL_EVENT__VESSEL_CLASSES:
+				return vesselClasses != null && !vesselClasses.isEmpty();
+			case FleetPackage.VESSEL_EVENT__START_PORT:
+				return startPort != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (id: ");
 		result.append(id);
 		result.append(", startDate: ");

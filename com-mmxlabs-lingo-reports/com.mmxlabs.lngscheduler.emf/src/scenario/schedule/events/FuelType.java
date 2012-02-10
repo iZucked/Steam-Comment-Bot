@@ -12,15 +12,14 @@ import org.eclipse.emf.common.util.Enumerator;
 
 /**
  * <!-- begin-user-doc --> A representation of the literals of the enumeration '<em><b>Fuel Type</b></em>', and utility methods for working with them. <!-- end-user-doc -->
- * 
  * @see scenario.schedule.events.EventsPackage#getFuelType()
  * @model
  * @generated
  */
 public enum FuelType implements Enumerator {
 	/**
-	 * The '<em><b>FBO</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The '<em><b>FBO</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #FBO_VALUE
 	 * @generated
 	 * @ordered
@@ -28,8 +27,8 @@ public enum FuelType implements Enumerator {
 	FBO(0, "FBO", "FBO"),
 
 	/**
-	 * The '<em><b>NBO</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The '<em><b>NBO</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #NBO_VALUE
 	 * @generated
 	 * @ordered
@@ -37,15 +36,15 @@ public enum FuelType implements Enumerator {
 	NBO(1, "NBO", "NBO"),
 
 	/**
-	 * The '<em><b>Base Fuel</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The '<em><b>Base Fuel</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #BASE_FUEL_VALUE
 	 * @generated
 	 * @ordered
 	 */
 	BASE_FUEL(2, "BaseFuel", "BaseFuel"), /**
-	 * The '<em><b>Cooldown</b></em>' literal object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The '<em><b>Cooldown</b></em>' literal object.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #COOLDOWN_VALUE
 	 * @generated
 	 * @ordered
@@ -53,12 +52,12 @@ public enum FuelType implements Enumerator {
 	COOLDOWN(3, "Cooldown", "Cooldown");
 
 	/**
-	 * The '<em><b>FBO</b></em>' literal value. <!-- begin-user-doc -->
+	 * The '<em><b>FBO</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>FBO</b></em>' literal object isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #FBO
 	 * @model
 	 * @generated
@@ -67,12 +66,12 @@ public enum FuelType implements Enumerator {
 	public static final int FBO_VALUE = 0;
 
 	/**
-	 * The '<em><b>NBO</b></em>' literal value. <!-- begin-user-doc -->
+	 * The '<em><b>NBO</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>NBO</b></em>' literal object isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #NBO
 	 * @model
 	 * @generated
@@ -81,12 +80,12 @@ public enum FuelType implements Enumerator {
 	public static final int NBO_VALUE = 1;
 
 	/**
-	 * The '<em><b>Base Fuel</b></em>' literal value. <!-- begin-user-doc -->
+	 * The '<em><b>Base Fuel</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>Base Fuel</b></em>' literal object isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #BASE_FUEL
 	 * @model name="BaseFuel"
 	 * @generated
@@ -95,12 +94,12 @@ public enum FuelType implements Enumerator {
 	public static final int BASE_FUEL_VALUE = 2;
 
 	/**
-	 * The '<em><b>Cooldown</b></em>' literal value. <!-- begin-user-doc -->
+	 * The '<em><b>Cooldown</b></em>' literal value.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>Cooldown</b></em>' literal object isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #COOLDOWN
 	 * @model name="Cooldown"
 	 * @generated
@@ -109,27 +108,32 @@ public enum FuelType implements Enumerator {
 	public static final int COOLDOWN_VALUE = 3;
 
 	/**
-	 * An array of all the '<em><b>Fuel Type</b></em>' enumerators. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * An array of all the '<em><b>Fuel Type</b></em>' enumerators.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final FuelType[] VALUES_ARRAY = new FuelType[] { FBO, NBO, BASE_FUEL, COOLDOWN, };
+	private static final FuelType[] VALUES_ARRAY = new FuelType[] {
+			FBO,
+			NBO,
+			BASE_FUEL,
+			COOLDOWN,
+		};
 
 	/**
-	 * A public read-only list of all the '<em><b>Fuel Type</b></em>' enumerators. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * A public read-only list of all the '<em><b>Fuel Type</b></em>' enumerators.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final List<FuelType> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
-	 * Returns the '<em><b>Fuel Type</b></em>' literal with the specified literal value. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the '<em><b>Fuel Type</b></em>' literal with the specified literal value.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static FuelType get(final String literal) {
+	public static FuelType get(String literal) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			final FuelType result = VALUES_ARRAY[i];
+			FuelType result = VALUES_ARRAY[i];
 			if (result.toString().equals(literal)) {
 				return result;
 			}
@@ -138,13 +142,13 @@ public enum FuelType implements Enumerator {
 	}
 
 	/**
-	 * Returns the '<em><b>Fuel Type</b></em>' literal with the specified name. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the '<em><b>Fuel Type</b></em>' literal with the specified name.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static FuelType getByName(final String name) {
+	public static FuelType getByName(String name) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			final FuelType result = VALUES_ARRAY[i];
+			FuelType result = VALUES_ARRAY[i];
 			if (result.getName().equals(name)) {
 				return result;
 			}
@@ -153,51 +157,44 @@ public enum FuelType implements Enumerator {
 	}
 
 	/**
-	 * Returns the '<em><b>Fuel Type</b></em>' literal with the specified integer value. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the '<em><b>Fuel Type</b></em>' literal with the specified integer value.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static FuelType get(final int value) {
+	public static FuelType get(int value) {
 		switch (value) {
-		case FBO_VALUE:
-			return FBO;
-		case NBO_VALUE:
-			return NBO;
-		case BASE_FUEL_VALUE:
-			return BASE_FUEL;
-		case COOLDOWN_VALUE:
-			return COOLDOWN;
+			case FBO_VALUE: return FBO;
+			case NBO_VALUE: return NBO;
+			case BASE_FUEL_VALUE: return BASE_FUEL;
+			case COOLDOWN_VALUE: return COOLDOWN;
 		}
 		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private final int value;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private final String name;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private final String literal;
 
 	/**
-	 * Only this class can construct instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Only this class can construct instances.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	private FuelType(final int value, final String name, final String literal) {
+	private FuelType(int value, String name, String literal) {
 		this.value = value;
 		this.name = name;
 		this.literal = literal;
@@ -205,37 +202,34 @@ public enum FuelType implements Enumerator {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public int getValue() {
-		return value;
+	  return value;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getName() {
-		return name;
+	  return name;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getLiteral() {
-		return literal;
+	  return literal;
 	}
 
 	/**
-	 * Returns the literal value of the enumerator, which is its string representation. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the literal value of the enumerator, which is its string representation.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override

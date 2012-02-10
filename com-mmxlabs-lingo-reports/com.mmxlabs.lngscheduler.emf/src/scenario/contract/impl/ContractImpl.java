@@ -24,19 +24,19 @@ import scenario.port.PortSelection;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.contract.impl.ContractImpl#getEntity <em>Entity</em>}</li>
- * <li>{@link scenario.contract.impl.ContractImpl#getDefaultPorts <em>Default Ports</em>}</li>
- * <li>{@link scenario.contract.impl.ContractImpl#getMinQuantity <em>Min Quantity</em>}</li>
- * <li>{@link scenario.contract.impl.ContractImpl#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link scenario.contract.impl.ContractImpl#getEntity <em>Entity</em>}</li>
+ *   <li>{@link scenario.contract.impl.ContractImpl#getDefaultPorts <em>Default Ports</em>}</li>
+ *   <li>{@link scenario.contract.impl.ContractImpl#getMinQuantity <em>Min Quantity</em>}</li>
+ *   <li>{@link scenario.contract.impl.ContractImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	/**
-	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getEntity()
 	 * @generated
 	 * @ordered
@@ -44,8 +44,8 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	protected Entity entity;
 
 	/**
-	 * The cached value of the '{@link #getDefaultPorts() <em>Default Ports</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDefaultPorts() <em>Default Ports</em>}' reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultPorts()
 	 * @generated
 	 * @ordered
@@ -53,8 +53,8 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	protected EList<PortSelection> defaultPorts;
 
 	/**
-	 * The default value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMinQuantity()
 	 * @generated
 	 * @ordered
@@ -62,8 +62,8 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	protected static final int MIN_QUANTITY_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMinQuantity()
 	 * @generated
 	 * @ordered
@@ -71,8 +71,8 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	protected int minQuantity = MIN_QUANTITY_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMaxQuantity()
 	 * @generated
 	 * @ordered
@@ -80,8 +80,8 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 	protected static final int MAX_QUANTITY_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMaxQuantity()
 	 * @generated
 	 * @ordered
@@ -90,7 +90,6 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ContractImpl() {
@@ -99,7 +98,6 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -109,18 +107,16 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Entity getEntity() {
-		if ((entity != null) && entity.eIsProxy()) {
-			final InternalEObject oldEntity = (InternalEObject) entity;
-			entity = (Entity) eResolveProxy(oldEntity);
+		if (entity != null && entity.eIsProxy()) {
+			InternalEObject oldEntity = (InternalEObject)entity;
+			entity = (Entity)eResolveProxy(oldEntity);
 			if (entity != oldEntity) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractPackage.CONTRACT__ENTITY, oldEntity, entity));
-				}
 			}
 		}
 		return entity;
@@ -128,7 +124,6 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Entity basicGetEntity() {
@@ -137,21 +132,18 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setEntity(final Entity newEntity) {
-		final Entity oldEntity = entity;
+	public void setEntity(Entity newEntity) {
+		Entity oldEntity = entity;
 		entity = newEntity;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.CONTRACT__ENTITY, oldEntity, entity));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -164,7 +156,6 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -174,21 +165,18 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setMinQuantity(final int newMinQuantity) {
-		final int oldMinQuantity = minQuantity;
+	public void setMinQuantity(int newMinQuantity) {
+		int oldMinQuantity = minQuantity;
 		minQuantity = newMinQuantity;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.CONTRACT__MIN_QUANTITY, oldMinQuantity, minQuantity));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -198,123 +186,112 @@ public abstract class ContractImpl extends NamedObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setMaxQuantity(final int newMaxQuantity) {
-		final int oldMaxQuantity = maxQuantity;
+	public void setMaxQuantity(int newMaxQuantity) {
+		int oldMaxQuantity = maxQuantity;
 		maxQuantity = newMaxQuantity;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ContractPackage.CONTRACT__MAX_QUANTITY, oldMaxQuantity, maxQuantity));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case ContractPackage.CONTRACT__ENTITY:
-			if (resolve) {
-				return getEntity();
-			}
-			return basicGetEntity();
-		case ContractPackage.CONTRACT__DEFAULT_PORTS:
-			return getDefaultPorts();
-		case ContractPackage.CONTRACT__MIN_QUANTITY:
-			return getMinQuantity();
-		case ContractPackage.CONTRACT__MAX_QUANTITY:
-			return getMaxQuantity();
+			case ContractPackage.CONTRACT__ENTITY:
+				if (resolve) return getEntity();
+				return basicGetEntity();
+			case ContractPackage.CONTRACT__DEFAULT_PORTS:
+				return getDefaultPorts();
+			case ContractPackage.CONTRACT__MIN_QUANTITY:
+				return getMinQuantity();
+			case ContractPackage.CONTRACT__MAX_QUANTITY:
+				return getMaxQuantity();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case ContractPackage.CONTRACT__ENTITY:
-			setEntity((Entity) newValue);
-			return;
-		case ContractPackage.CONTRACT__DEFAULT_PORTS:
-			getDefaultPorts().clear();
-			getDefaultPorts().addAll((Collection<? extends PortSelection>) newValue);
-			return;
-		case ContractPackage.CONTRACT__MIN_QUANTITY:
-			setMinQuantity((Integer) newValue);
-			return;
-		case ContractPackage.CONTRACT__MAX_QUANTITY:
-			setMaxQuantity((Integer) newValue);
-			return;
+			case ContractPackage.CONTRACT__ENTITY:
+				setEntity((Entity)newValue);
+				return;
+			case ContractPackage.CONTRACT__DEFAULT_PORTS:
+				getDefaultPorts().clear();
+				getDefaultPorts().addAll((Collection<? extends PortSelection>)newValue);
+				return;
+			case ContractPackage.CONTRACT__MIN_QUANTITY:
+				setMinQuantity((Integer)newValue);
+				return;
+			case ContractPackage.CONTRACT__MAX_QUANTITY:
+				setMaxQuantity((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case ContractPackage.CONTRACT__ENTITY:
-			setEntity((Entity) null);
-			return;
-		case ContractPackage.CONTRACT__DEFAULT_PORTS:
-			getDefaultPorts().clear();
-			return;
-		case ContractPackage.CONTRACT__MIN_QUANTITY:
-			setMinQuantity(MIN_QUANTITY_EDEFAULT);
-			return;
-		case ContractPackage.CONTRACT__MAX_QUANTITY:
-			setMaxQuantity(MAX_QUANTITY_EDEFAULT);
-			return;
+			case ContractPackage.CONTRACT__ENTITY:
+				setEntity((Entity)null);
+				return;
+			case ContractPackage.CONTRACT__DEFAULT_PORTS:
+				getDefaultPorts().clear();
+				return;
+			case ContractPackage.CONTRACT__MIN_QUANTITY:
+				setMinQuantity(MIN_QUANTITY_EDEFAULT);
+				return;
+			case ContractPackage.CONTRACT__MAX_QUANTITY:
+				setMaxQuantity(MAX_QUANTITY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case ContractPackage.CONTRACT__ENTITY:
-			return entity != null;
-		case ContractPackage.CONTRACT__DEFAULT_PORTS:
-			return (defaultPorts != null) && !defaultPorts.isEmpty();
-		case ContractPackage.CONTRACT__MIN_QUANTITY:
-			return minQuantity != MIN_QUANTITY_EDEFAULT;
-		case ContractPackage.CONTRACT__MAX_QUANTITY:
-			return maxQuantity != MAX_QUANTITY_EDEFAULT;
+			case ContractPackage.CONTRACT__ENTITY:
+				return entity != null;
+			case ContractPackage.CONTRACT__DEFAULT_PORTS:
+				return defaultPorts != null && !defaultPorts.isEmpty();
+			case ContractPackage.CONTRACT__MIN_QUANTITY:
+				return minQuantity != MIN_QUANTITY_EDEFAULT;
+			case ContractPackage.CONTRACT__MAX_QUANTITY:
+				return maxQuantity != MAX_QUANTITY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (minQuantity: ");
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");

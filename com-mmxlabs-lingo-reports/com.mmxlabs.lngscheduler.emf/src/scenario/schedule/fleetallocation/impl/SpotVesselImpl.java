@@ -22,17 +22,17 @@ import scenario.schedule.fleetallocation.SpotVessel;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.schedule.fleetallocation.impl.SpotVesselImpl#getIndex <em>Index</em>}</li>
- * <li>{@link scenario.schedule.fleetallocation.impl.SpotVesselImpl#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link scenario.schedule.fleetallocation.impl.SpotVesselImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link scenario.schedule.fleetallocation.impl.SpotVesselImpl#getVesselClass <em>Vessel Class</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	/**
-	 * The default value of the '{@link #getIndex() <em>Index</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getIndex() <em>Index</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getIndex()
 	 * @generated
 	 * @ordered
@@ -40,8 +40,8 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	protected static final int INDEX_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getIndex()
 	 * @generated
 	 * @ordered
@@ -49,8 +49,8 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 	protected int index = INDEX_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getVesselClass() <em>Vessel Class</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getVesselClass() <em>Vessel Class</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getVesselClass()
 	 * @generated
 	 * @ordered
@@ -59,7 +59,6 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected SpotVesselImpl() {
@@ -68,7 +67,6 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -78,7 +76,6 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -88,32 +85,28 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setIndex(final int newIndex) {
-		final int oldIndex = index;
+	public void setIndex(int newIndex) {
+		int oldIndex = index;
 		index = newIndex;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetallocationPackage.SPOT_VESSEL__INDEX, oldIndex, index));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public VesselClass getVesselClass() {
-		if ((vesselClass != null) && vesselClass.eIsProxy()) {
-			final InternalEObject oldVesselClass = (InternalEObject) vesselClass;
-			vesselClass = (VesselClass) eResolveProxy(oldVesselClass);
+		if (vesselClass != null && vesselClass.eIsProxy()) {
+			InternalEObject oldVesselClass = (InternalEObject)vesselClass;
+			vesselClass = (VesselClass)eResolveProxy(oldVesselClass);
 			if (vesselClass != oldVesselClass) {
-				if (eNotificationRequired()) {
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS, oldVesselClass, vesselClass));
-				}
 			}
 		}
 		return vesselClass;
@@ -121,7 +114,6 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public VesselClass basicGetVesselClass() {
@@ -130,31 +122,28 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setVesselClass(final VesselClass newVesselClass) {
-		final VesselClass oldVesselClass = vesselClass;
+	public void setVesselClass(VesselClass newVesselClass) {
+		VesselClass oldVesselClass = vesselClass;
 		vesselClass = newVesselClass;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS, oldVesselClass, vesselClass));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public double getHourlyCharterPrice() {
-		return ((getVesselClass().getDailyCharterInPrice() * 1000) / 24) / 1000.0;
+		return 
+		((getVesselClass().getDailyCharterInPrice() * 1000) / 24) / 1000.0;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -164,90 +153,80 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case FleetallocationPackage.SPOT_VESSEL__INDEX:
-			return getIndex();
-		case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
-			if (resolve) {
-				return getVesselClass();
-			}
-			return basicGetVesselClass();
+			case FleetallocationPackage.SPOT_VESSEL__INDEX:
+				return getIndex();
+			case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
+				if (resolve) return getVesselClass();
+				return basicGetVesselClass();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case FleetallocationPackage.SPOT_VESSEL__INDEX:
-			setIndex((Integer) newValue);
-			return;
-		case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
-			setVesselClass((VesselClass) newValue);
-			return;
+			case FleetallocationPackage.SPOT_VESSEL__INDEX:
+				setIndex((Integer)newValue);
+				return;
+			case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
+				setVesselClass((VesselClass)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case FleetallocationPackage.SPOT_VESSEL__INDEX:
-			setIndex(INDEX_EDEFAULT);
-			return;
-		case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
-			setVesselClass((VesselClass) null);
-			return;
+			case FleetallocationPackage.SPOT_VESSEL__INDEX:
+				setIndex(INDEX_EDEFAULT);
+				return;
+			case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
+				setVesselClass((VesselClass)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case FleetallocationPackage.SPOT_VESSEL__INDEX:
-			return index != INDEX_EDEFAULT;
-		case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
-			return vesselClass != null;
+			case FleetallocationPackage.SPOT_VESSEL__INDEX:
+				return index != INDEX_EDEFAULT;
+			case FleetallocationPackage.SPOT_VESSEL__VESSEL_CLASS:
+				return vesselClass != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public int eDerivedOperationID(final int baseOperationID, final Class<?> baseClass) {
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
 		if (baseClass == AllocatedVessel.class) {
 			switch (baseOperationID) {
-			case FleetallocationPackage.ALLOCATED_VESSEL___GET_HOURLY_CHARTER_PRICE:
-				return FleetallocationPackage.SPOT_VESSEL___GET_HOURLY_CHARTER_PRICE;
-			case FleetallocationPackage.ALLOCATED_VESSEL___GET_NAME:
-				return FleetallocationPackage.SPOT_VESSEL___GET_NAME;
-			default:
-				return super.eDerivedOperationID(baseOperationID, baseClass);
+				case FleetallocationPackage.ALLOCATED_VESSEL___GET_HOURLY_CHARTER_PRICE: return FleetallocationPackage.SPOT_VESSEL___GET_HOURLY_CHARTER_PRICE;
+				case FleetallocationPackage.ALLOCATED_VESSEL___GET_NAME: return FleetallocationPackage.SPOT_VESSEL___GET_NAME;
+				default: return super.eDerivedOperationID(baseOperationID, baseClass);
 			}
 		}
 		return super.eDerivedOperationID(baseOperationID, baseClass);
@@ -255,32 +234,28 @@ public class SpotVesselImpl extends AllocatedVesselImpl implements SpotVessel {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-		case FleetallocationPackage.SPOT_VESSEL___GET_HOURLY_CHARTER_PRICE:
-			return getHourlyCharterPrice();
-		case FleetallocationPackage.SPOT_VESSEL___GET_NAME:
-			return getName();
+			case FleetallocationPackage.SPOT_VESSEL___GET_HOURLY_CHARTER_PRICE:
+				return getHourlyCharterPrice();
+			case FleetallocationPackage.SPOT_VESSEL___GET_NAME:
+				return getName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (index: ");
 		result.append(index);
 		result.append(')');

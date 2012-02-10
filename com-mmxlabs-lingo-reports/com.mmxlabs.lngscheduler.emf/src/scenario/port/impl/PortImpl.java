@@ -29,25 +29,25 @@ import scenario.port.PortSelection;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link scenario.port.impl.PortImpl#getName <em>Name</em>}</li>
- * <li>{@link scenario.port.impl.PortImpl#getNotes <em>Notes</em>}</li>
- * <li>{@link scenario.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
- * <li>{@link scenario.port.impl.PortImpl#getDefaultCVvalue <em>Default CVvalue</em>}</li>
- * <li>{@link scenario.port.impl.PortImpl#getDefaultWindowStart <em>Default Window Start</em>}</li>
- * <li>{@link scenario.port.impl.PortImpl#getDefaultSlotDuration <em>Default Slot Duration</em>}</li>
- * <li>{@link scenario.port.impl.PortImpl#isShouldArriveCold <em>Should Arrive Cold</em>}</li>
- * <li>{@link scenario.port.impl.PortImpl#getDefaultLoadDuration <em>Default Load Duration</em>}</li>
- * <li>{@link scenario.port.impl.PortImpl#getDefaultDischargeDuration <em>Default Discharge Duration</em>}</li>
- * <li>{@link scenario.port.impl.PortImpl#getCapabilities <em>Capabilities</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getName <em>Name</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getNotes <em>Notes</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultCVvalue <em>Default CVvalue</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultWindowStart <em>Default Window Start</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultSlotDuration <em>Default Slot Duration</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#isShouldArriveCold <em>Should Arrive Cold</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultLoadDuration <em>Default Load Duration</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getDefaultDischargeDuration <em>Default Discharge Duration</em>}</li>
+ *   <li>{@link scenario.port.impl.PortImpl#getCapabilities <em>Capabilities</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class PortImpl extends UUIDObjectImpl implements Port {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -55,8 +55,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected static final String NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -64,8 +64,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getNotes()
 	 * @generated
 	 * @ordered
@@ -73,8 +73,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected static final String NOTES_EDEFAULT = "";
 
 	/**
-	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getNotes()
 	 * @generated
 	 * @ordered
@@ -82,8 +82,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected String notes = NOTES_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getTimeZone() <em>Time Zone</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getTimeZone() <em>Time Zone</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getTimeZone()
 	 * @generated
 	 * @ordered
@@ -91,8 +91,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected static final String TIME_ZONE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getTimeZone() <em>Time Zone</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getTimeZone() <em>Time Zone</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getTimeZone()
 	 * @generated
 	 * @ordered
@@ -100,8 +100,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected String timeZone = TIME_ZONE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDefaultCVvalue() <em>Default CVvalue</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getDefaultCVvalue() <em>Default CVvalue</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultCVvalue()
 	 * @generated
 	 * @ordered
@@ -109,8 +109,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected static final float DEFAULT_CVVALUE_EDEFAULT = 22.8F;
 
 	/**
-	 * The cached value of the '{@link #getDefaultCVvalue() <em>Default CVvalue</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDefaultCVvalue() <em>Default CVvalue</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultCVvalue()
 	 * @generated
 	 * @ordered
@@ -118,8 +118,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected float defaultCVvalue = DEFAULT_CVVALUE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDefaultWindowStart() <em>Default Window Start</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getDefaultWindowStart() <em>Default Window Start</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultWindowStart()
 	 * @generated
 	 * @ordered
@@ -127,8 +127,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected static final int DEFAULT_WINDOW_START_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDefaultWindowStart() <em>Default Window Start</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDefaultWindowStart() <em>Default Window Start</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultWindowStart()
 	 * @generated
 	 * @ordered
@@ -136,8 +136,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected int defaultWindowStart = DEFAULT_WINDOW_START_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDefaultSlotDuration() <em>Default Slot Duration</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getDefaultSlotDuration() <em>Default Slot Duration</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultSlotDuration()
 	 * @generated
 	 * @ordered
@@ -145,8 +145,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected static final int DEFAULT_SLOT_DURATION_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDefaultSlotDuration() <em>Default Slot Duration</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDefaultSlotDuration() <em>Default Slot Duration</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultSlotDuration()
 	 * @generated
 	 * @ordered
@@ -154,8 +154,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected int defaultSlotDuration = DEFAULT_SLOT_DURATION_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isShouldArriveCold() <em>Should Arrive Cold</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #isShouldArriveCold() <em>Should Arrive Cold</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #isShouldArriveCold()
 	 * @generated
 	 * @ordered
@@ -163,8 +163,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected static final boolean SHOULD_ARRIVE_COLD_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isShouldArriveCold() <em>Should Arrive Cold</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #isShouldArriveCold() <em>Should Arrive Cold</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #isShouldArriveCold()
 	 * @generated
 	 * @ordered
@@ -172,8 +172,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected boolean shouldArriveCold = SHOULD_ARRIVE_COLD_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDefaultLoadDuration() <em>Default Load Duration</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getDefaultLoadDuration() <em>Default Load Duration</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultLoadDuration()
 	 * @generated
 	 * @ordered
@@ -181,8 +181,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected static final int DEFAULT_LOAD_DURATION_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDefaultLoadDuration() <em>Default Load Duration</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDefaultLoadDuration() <em>Default Load Duration</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultLoadDuration()
 	 * @generated
 	 * @ordered
@@ -190,8 +190,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected int defaultLoadDuration = DEFAULT_LOAD_DURATION_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDefaultDischargeDuration() <em>Default Discharge Duration</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getDefaultDischargeDuration() <em>Default Discharge Duration</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultDischargeDuration()
 	 * @generated
 	 * @ordered
@@ -199,8 +199,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected static final int DEFAULT_DISCHARGE_DURATION_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDefaultDischargeDuration() <em>Default Discharge Duration</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDefaultDischargeDuration() <em>Default Discharge Duration</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultDischargeDuration()
 	 * @generated
 	 * @ordered
@@ -208,8 +208,8 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 	protected int defaultDischargeDuration = DEFAULT_DISCHARGE_DURATION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getCapabilities() <em>Capabilities</em>}' attribute list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getCapabilities() <em>Capabilities</em>}' attribute list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCapabilities()
 	 * @generated
 	 * @ordered
@@ -218,7 +218,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected PortImpl() {
@@ -227,7 +226,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -237,7 +235,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -247,21 +244,18 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setName(final String newName) {
-		final String oldName = name;
+	public void setName(String newName) {
+		String oldName = name;
 		name = newName;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__NAME, oldName, name));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -271,21 +265,18 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setNotes(final String newNotes) {
-		final String oldNotes = notes;
+	public void setNotes(String newNotes) {
+		String oldNotes = notes;
 		notes = newNotes;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__NOTES, oldNotes, notes));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -295,7 +286,6 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -305,21 +295,18 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setTimeZone(final String newTimeZone) {
-		final String oldTimeZone = timeZone;
+	public void setTimeZone(String newTimeZone) {
+		String oldTimeZone = timeZone;
 		timeZone = newTimeZone;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__TIME_ZONE, oldTimeZone, timeZone));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -329,21 +316,18 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setDefaultCVvalue(final float newDefaultCVvalue) {
-		final float oldDefaultCVvalue = defaultCVvalue;
+	public void setDefaultCVvalue(float newDefaultCVvalue) {
+		float oldDefaultCVvalue = defaultCVvalue;
 		defaultCVvalue = newDefaultCVvalue;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_CVVALUE, oldDefaultCVvalue, defaultCVvalue));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -353,21 +337,18 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setDefaultWindowStart(final int newDefaultWindowStart) {
-		final int oldDefaultWindowStart = defaultWindowStart;
+	public void setDefaultWindowStart(int newDefaultWindowStart) {
+		int oldDefaultWindowStart = defaultWindowStart;
 		defaultWindowStart = newDefaultWindowStart;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_WINDOW_START, oldDefaultWindowStart, defaultWindowStart));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -377,21 +358,18 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setDefaultSlotDuration(final int newDefaultSlotDuration) {
-		final int oldDefaultSlotDuration = defaultSlotDuration;
+	public void setDefaultSlotDuration(int newDefaultSlotDuration) {
+		int oldDefaultSlotDuration = defaultSlotDuration;
 		defaultSlotDuration = newDefaultSlotDuration;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_SLOT_DURATION, oldDefaultSlotDuration, defaultSlotDuration));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -401,21 +379,18 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setShouldArriveCold(final boolean newShouldArriveCold) {
-		final boolean oldShouldArriveCold = shouldArriveCold;
+	public void setShouldArriveCold(boolean newShouldArriveCold) {
+		boolean oldShouldArriveCold = shouldArriveCold;
 		shouldArriveCold = newShouldArriveCold;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__SHOULD_ARRIVE_COLD, oldShouldArriveCold, shouldArriveCold));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -425,21 +400,18 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setDefaultLoadDuration(final int newDefaultLoadDuration) {
-		final int oldDefaultLoadDuration = defaultLoadDuration;
+	public void setDefaultLoadDuration(int newDefaultLoadDuration) {
+		int oldDefaultLoadDuration = defaultLoadDuration;
 		defaultLoadDuration = newDefaultLoadDuration;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_LOAD_DURATION, oldDefaultLoadDuration, defaultLoadDuration));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -449,21 +421,18 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void setDefaultDischargeDuration(final int newDefaultDischargeDuration) {
-		final int oldDefaultDischargeDuration = defaultDischargeDuration;
+	public void setDefaultDischargeDuration(int newDefaultDischargeDuration) {
+		int oldDefaultDischargeDuration = defaultDischargeDuration;
 		defaultDischargeDuration = newDefaultDischargeDuration;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_DISCHARGE_DURATION, oldDefaultDischargeDuration, defaultDischargeDuration));
-		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -476,202 +445,190 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public EList<Port> getClosure(final EList<PortSelection> ignoreSelections) {
+	public EList<Port> getClosure(EList<PortSelection> ignoreSelections) {
 		if (ignoreSelections.contains(this)) {
 			return org.eclipse.emf.common.util.ECollections.emptyEList();
 		} else {
 			ignoreSelections.add(this);
-			return (EList<Port>) org.eclipse.emf.common.util.ECollections.singletonEList((Port) this);
+			return (EList<Port>) org.eclipse.emf.common.util.ECollections.singletonEList((Port)this);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case PortPackage.PORT__NAME:
-			return getName();
-		case PortPackage.PORT__NOTES:
-			return getNotes();
-		case PortPackage.PORT__TIME_ZONE:
-			return getTimeZone();
-		case PortPackage.PORT__DEFAULT_CVVALUE:
-			return getDefaultCVvalue();
-		case PortPackage.PORT__DEFAULT_WINDOW_START:
-			return getDefaultWindowStart();
-		case PortPackage.PORT__DEFAULT_SLOT_DURATION:
-			return getDefaultSlotDuration();
-		case PortPackage.PORT__SHOULD_ARRIVE_COLD:
-			return isShouldArriveCold();
-		case PortPackage.PORT__DEFAULT_LOAD_DURATION:
-			return getDefaultLoadDuration();
-		case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
-			return getDefaultDischargeDuration();
-		case PortPackage.PORT__CAPABILITIES:
-			return getCapabilities();
+			case PortPackage.PORT__NAME:
+				return getName();
+			case PortPackage.PORT__NOTES:
+				return getNotes();
+			case PortPackage.PORT__TIME_ZONE:
+				return getTimeZone();
+			case PortPackage.PORT__DEFAULT_CVVALUE:
+				return getDefaultCVvalue();
+			case PortPackage.PORT__DEFAULT_WINDOW_START:
+				return getDefaultWindowStart();
+			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
+				return getDefaultSlotDuration();
+			case PortPackage.PORT__SHOULD_ARRIVE_COLD:
+				return isShouldArriveCold();
+			case PortPackage.PORT__DEFAULT_LOAD_DURATION:
+				return getDefaultLoadDuration();
+			case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
+				return getDefaultDischargeDuration();
+			case PortPackage.PORT__CAPABILITIES:
+				return getCapabilities();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case PortPackage.PORT__NAME:
-			setName((String) newValue);
-			return;
-		case PortPackage.PORT__NOTES:
-			setNotes((String) newValue);
-			return;
-		case PortPackage.PORT__TIME_ZONE:
-			setTimeZone((String) newValue);
-			return;
-		case PortPackage.PORT__DEFAULT_CVVALUE:
-			setDefaultCVvalue((Float) newValue);
-			return;
-		case PortPackage.PORT__DEFAULT_WINDOW_START:
-			setDefaultWindowStart((Integer) newValue);
-			return;
-		case PortPackage.PORT__DEFAULT_SLOT_DURATION:
-			setDefaultSlotDuration((Integer) newValue);
-			return;
-		case PortPackage.PORT__SHOULD_ARRIVE_COLD:
-			setShouldArriveCold((Boolean) newValue);
-			return;
-		case PortPackage.PORT__DEFAULT_LOAD_DURATION:
-			setDefaultLoadDuration((Integer) newValue);
-			return;
-		case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
-			setDefaultDischargeDuration((Integer) newValue);
-			return;
-		case PortPackage.PORT__CAPABILITIES:
-			getCapabilities().clear();
-			getCapabilities().addAll((Collection<? extends PortCapability>) newValue);
-			return;
+			case PortPackage.PORT__NAME:
+				setName((String)newValue);
+				return;
+			case PortPackage.PORT__NOTES:
+				setNotes((String)newValue);
+				return;
+			case PortPackage.PORT__TIME_ZONE:
+				setTimeZone((String)newValue);
+				return;
+			case PortPackage.PORT__DEFAULT_CVVALUE:
+				setDefaultCVvalue((Float)newValue);
+				return;
+			case PortPackage.PORT__DEFAULT_WINDOW_START:
+				setDefaultWindowStart((Integer)newValue);
+				return;
+			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
+				setDefaultSlotDuration((Integer)newValue);
+				return;
+			case PortPackage.PORT__SHOULD_ARRIVE_COLD:
+				setShouldArriveCold((Boolean)newValue);
+				return;
+			case PortPackage.PORT__DEFAULT_LOAD_DURATION:
+				setDefaultLoadDuration((Integer)newValue);
+				return;
+			case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
+				setDefaultDischargeDuration((Integer)newValue);
+				return;
+			case PortPackage.PORT__CAPABILITIES:
+				getCapabilities().clear();
+				getCapabilities().addAll((Collection<? extends PortCapability>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case PortPackage.PORT__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case PortPackage.PORT__NOTES:
-			setNotes(NOTES_EDEFAULT);
-			return;
-		case PortPackage.PORT__TIME_ZONE:
-			setTimeZone(TIME_ZONE_EDEFAULT);
-			return;
-		case PortPackage.PORT__DEFAULT_CVVALUE:
-			setDefaultCVvalue(DEFAULT_CVVALUE_EDEFAULT);
-			return;
-		case PortPackage.PORT__DEFAULT_WINDOW_START:
-			setDefaultWindowStart(DEFAULT_WINDOW_START_EDEFAULT);
-			return;
-		case PortPackage.PORT__DEFAULT_SLOT_DURATION:
-			setDefaultSlotDuration(DEFAULT_SLOT_DURATION_EDEFAULT);
-			return;
-		case PortPackage.PORT__SHOULD_ARRIVE_COLD:
-			setShouldArriveCold(SHOULD_ARRIVE_COLD_EDEFAULT);
-			return;
-		case PortPackage.PORT__DEFAULT_LOAD_DURATION:
-			setDefaultLoadDuration(DEFAULT_LOAD_DURATION_EDEFAULT);
-			return;
-		case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
-			setDefaultDischargeDuration(DEFAULT_DISCHARGE_DURATION_EDEFAULT);
-			return;
-		case PortPackage.PORT__CAPABILITIES:
-			getCapabilities().clear();
-			return;
+			case PortPackage.PORT__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case PortPackage.PORT__NOTES:
+				setNotes(NOTES_EDEFAULT);
+				return;
+			case PortPackage.PORT__TIME_ZONE:
+				setTimeZone(TIME_ZONE_EDEFAULT);
+				return;
+			case PortPackage.PORT__DEFAULT_CVVALUE:
+				setDefaultCVvalue(DEFAULT_CVVALUE_EDEFAULT);
+				return;
+			case PortPackage.PORT__DEFAULT_WINDOW_START:
+				setDefaultWindowStart(DEFAULT_WINDOW_START_EDEFAULT);
+				return;
+			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
+				setDefaultSlotDuration(DEFAULT_SLOT_DURATION_EDEFAULT);
+				return;
+			case PortPackage.PORT__SHOULD_ARRIVE_COLD:
+				setShouldArriveCold(SHOULD_ARRIVE_COLD_EDEFAULT);
+				return;
+			case PortPackage.PORT__DEFAULT_LOAD_DURATION:
+				setDefaultLoadDuration(DEFAULT_LOAD_DURATION_EDEFAULT);
+				return;
+			case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
+				setDefaultDischargeDuration(DEFAULT_DISCHARGE_DURATION_EDEFAULT);
+				return;
+			case PortPackage.PORT__CAPABILITIES:
+				getCapabilities().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case PortPackage.PORT__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case PortPackage.PORT__NOTES:
-			return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
-		case PortPackage.PORT__TIME_ZONE:
-			return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
-		case PortPackage.PORT__DEFAULT_CVVALUE:
-			return defaultCVvalue != DEFAULT_CVVALUE_EDEFAULT;
-		case PortPackage.PORT__DEFAULT_WINDOW_START:
-			return defaultWindowStart != DEFAULT_WINDOW_START_EDEFAULT;
-		case PortPackage.PORT__DEFAULT_SLOT_DURATION:
-			return defaultSlotDuration != DEFAULT_SLOT_DURATION_EDEFAULT;
-		case PortPackage.PORT__SHOULD_ARRIVE_COLD:
-			return shouldArriveCold != SHOULD_ARRIVE_COLD_EDEFAULT;
-		case PortPackage.PORT__DEFAULT_LOAD_DURATION:
-			return defaultLoadDuration != DEFAULT_LOAD_DURATION_EDEFAULT;
-		case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
-			return defaultDischargeDuration != DEFAULT_DISCHARGE_DURATION_EDEFAULT;
-		case PortPackage.PORT__CAPABILITIES:
-			return (capabilities != null) && !capabilities.isEmpty();
+			case PortPackage.PORT__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case PortPackage.PORT__NOTES:
+				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
+			case PortPackage.PORT__TIME_ZONE:
+				return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
+			case PortPackage.PORT__DEFAULT_CVVALUE:
+				return defaultCVvalue != DEFAULT_CVVALUE_EDEFAULT;
+			case PortPackage.PORT__DEFAULT_WINDOW_START:
+				return defaultWindowStart != DEFAULT_WINDOW_START_EDEFAULT;
+			case PortPackage.PORT__DEFAULT_SLOT_DURATION:
+				return defaultSlotDuration != DEFAULT_SLOT_DURATION_EDEFAULT;
+			case PortPackage.PORT__SHOULD_ARRIVE_COLD:
+				return shouldArriveCold != SHOULD_ARRIVE_COLD_EDEFAULT;
+			case PortPackage.PORT__DEFAULT_LOAD_DURATION:
+				return defaultLoadDuration != DEFAULT_LOAD_DURATION_EDEFAULT;
+			case PortPackage.PORT__DEFAULT_DISCHARGE_DURATION:
+				return defaultDischargeDuration != DEFAULT_DISCHARGE_DURATION_EDEFAULT;
+			case PortPackage.PORT__CAPABILITIES:
+				return capabilities != null && !capabilities.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public int eBaseStructuralFeatureID(final int derivedFeatureID, final Class<?> baseClass) {
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == ScenarioObject.class) {
 			switch (derivedFeatureID) {
-			default:
-				return -1;
+				default: return -1;
 			}
 		}
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
-			case PortPackage.PORT__NAME:
-				return ScenarioPackage.NAMED_OBJECT__NAME;
-			default:
-				return -1;
+				case PortPackage.PORT__NAME: return ScenarioPackage.NAMED_OBJECT__NAME;
+				default: return -1;
 			}
 		}
 		if (baseClass == AnnotatedObject.class) {
 			switch (derivedFeatureID) {
-			case PortPackage.PORT__NOTES:
-				return ScenarioPackage.ANNOTATED_OBJECT__NOTES;
-			default:
-				return -1;
+				case PortPackage.PORT__NOTES: return ScenarioPackage.ANNOTATED_OBJECT__NOTES;
+				default: return -1;
 			}
 		}
 		if (baseClass == PortSelection.class) {
 			switch (derivedFeatureID) {
-			default:
-				return -1;
+				default: return -1;
 			}
 		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
@@ -679,37 +636,30 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public int eDerivedStructuralFeatureID(final int baseFeatureID, final Class<?> baseClass) {
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == ScenarioObject.class) {
 			switch (baseFeatureID) {
-			default:
-				return -1;
+				default: return -1;
 			}
 		}
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
-			case ScenarioPackage.NAMED_OBJECT__NAME:
-				return PortPackage.PORT__NAME;
-			default:
-				return -1;
+				case ScenarioPackage.NAMED_OBJECT__NAME: return PortPackage.PORT__NAME;
+				default: return -1;
 			}
 		}
 		if (baseClass == AnnotatedObject.class) {
 			switch (baseFeatureID) {
-			case ScenarioPackage.ANNOTATED_OBJECT__NOTES:
-				return PortPackage.PORT__NOTES;
-			default:
-				return -1;
+				case ScenarioPackage.ANNOTATED_OBJECT__NOTES: return PortPackage.PORT__NOTES;
+				default: return -1;
 			}
 		}
 		if (baseClass == PortSelection.class) {
 			switch (baseFeatureID) {
-			default:
-				return -1;
+				default: return -1;
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
@@ -717,37 +667,30 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
-	public int eDerivedOperationID(final int baseOperationID, final Class<?> baseClass) {
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
 		if (baseClass == ScenarioObject.class) {
 			switch (baseOperationID) {
-			case ScenarioPackage.SCENARIO_OBJECT___GET_CONTAINER:
-				return PortPackage.PORT___GET_CONTAINER;
-			default:
-				return -1;
+				case ScenarioPackage.SCENARIO_OBJECT___GET_CONTAINER: return PortPackage.PORT___GET_CONTAINER;
+				default: return -1;
 			}
 		}
 		if (baseClass == NamedObject.class) {
 			switch (baseOperationID) {
-			default:
-				return -1;
+				default: return -1;
 			}
 		}
 		if (baseClass == AnnotatedObject.class) {
 			switch (baseOperationID) {
-			default:
-				return -1;
+				default: return -1;
 			}
 		}
 		if (baseClass == PortSelection.class) {
 			switch (baseOperationID) {
-			case PortPackage.PORT_SELECTION___GET_CLOSURE__ELIST:
-				return PortPackage.PORT___GET_CLOSURE__ELIST;
-			default:
-				return -1;
+				case PortPackage.PORT_SELECTION___GET_CLOSURE__ELIST: return PortPackage.PORT___GET_CLOSURE__ELIST;
+				default: return -1;
 			}
 		}
 		return super.eDerivedOperationID(baseOperationID, baseClass);
@@ -755,33 +698,29 @@ public class PortImpl extends UUIDObjectImpl implements Port {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-		case PortPackage.PORT___GET_CLOSURE__ELIST:
-			return getClosure((EList<PortSelection>) arguments.get(0));
-		case PortPackage.PORT___GET_CONTAINER:
-			return getContainer();
+			case PortPackage.PORT___GET_CLOSURE__ELIST:
+				return getClosure((EList<PortSelection>)arguments.get(0));
+			case PortPackage.PORT___GET_CONTAINER:
+				return getContainer();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", notes: ");
