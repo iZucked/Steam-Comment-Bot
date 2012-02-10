@@ -388,11 +388,11 @@ public class Range extends Composite {
 			// System.err.println("lost focus : " + e);
 			// }
 			// };
-			comp.addFocusListener(fl);
-			shell.addFocusListener(fl);
-			text.addFocusListener(fl);
-			text2.addFocusListener(fl);
-			text3.addFocusListener(fl);
+			// comp.addFocusListener(fl);
+			// shell.addFocusListener(fl);
+			// text.addFocusListener(fl);
+			// text2.addFocusListener(fl);
+			// text3.addFocusListener(fl);
 			shell.pack();
 			shell.open();
 
