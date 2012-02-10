@@ -42,6 +42,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.ResourceListSelectionDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.Scenario;
 import scenario.ScenarioFactory;
@@ -53,31 +55,33 @@ import scenario.market.MarketPackage;
 import scenario.port.PortPackage;
 
 /**
- * The "New" wizard page allows setting the container for the new file as well
- * as the file name. The page will only accept file name without the extension
- * OR with the extension that matches the expected one (scenario).
+ * The "New" wizard page allows setting the container for the new file as well as the file name. The page will only accept file name without the extension OR with the extension that matches the
+ * expected one (scenario).
  */
 
 public class DerivedScenarioWizardPage extends WizardPage {
+
+	private static final Logger log = LoggerFactory.getLogger(DerivedScenarioWizard.class);
+
 	private Text containerText;
 
 	private Text fileText;
 
-	private ISelection selection;
+	private final ISelection selection;
 
 	/**
 	 * Constructor for SampleNewWizardPage.
 	 * 
 	 * @param pageName
 	 */
-	public DerivedScenarioWizardPage(ISelection selection) {
+	public DerivedScenarioWizardPage(final ISelection selection) {
 		super("wizardPage");
 		setTitle("Create Derived Scenario");
 		setDescription("This wizard creates a new scenario derived from static data in other scenarios or model files.");
 		this.selection = selection;
 	}
 
-	private Map<EClass, String> sourceMap = new HashMap<EClass, String>();
+	private final Map<EClass, String> sourceMap = new HashMap<EClass, String>();
 
 	private ModifyListener createModifyListener(final EClass typeToImport) {
 		return new ModifyListener() {
@@ -89,85 +93,72 @@ public class DerivedScenarioWizardPage extends WizardPage {
 		};
 	}
 
-	private SelectionListener createSelectionListener(final String caption,
-			final Text linkedText, final Set<String> extensions) {
+	private SelectionListener createSelectionListener(final String caption, final Text linkedText, final Set<String> extensions) {
 		return new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				final ResourceListSelectionDialog rlsd = new ResourceListSelectionDialog(
-						getShell(), ResourcesPlugin.getWorkspace().getRoot(),
-						IResource.FILE | IResource.DEPTH_INFINITE) {
+			public void widgetSelected(final SelectionEvent e) {
+				final ResourceListSelectionDialog rlsd = new ResourceListSelectionDialog(getShell(), ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE | IResource.DEPTH_INFINITE) {
 					@Override
 					protected boolean select(final IResource resource) {
-						return super.select(resource)
-								&& extensions.contains(resource
-										.getFileExtension().toLowerCase());
+						return super.select(resource) && extensions.contains(resource.getFileExtension().toLowerCase());
 					}
 				};
 
 				rlsd.setMessage("Select a " + caption + " source");
 
 				if (rlsd.open() == ResourceListSelectionDialog.OK) {
-					linkedText.setText(((IResource) rlsd.getResult()[0])
-							.getFullPath().toString());
+					linkedText.setText(((IResource) rlsd.getResult()[0]).getFullPath().toString());
 				}
 			}
 		};
 	}
 
-	private EObject getFirstElementWithClass(final EObject top,
-			final EClass eClass) {
+	private EObject getFirstElementWithClass(final EObject top, final EClass eClass) {
 		final TreeIterator<EObject> iterator = top.eAllContents();
 		while (iterator.hasNext()) {
 			final EObject el = iterator.next();
-			if (el.eClass().equals(eClass))
+			if (el.eClass().equals(eClass)) {
 				return el;
+			}
 		}
 		return null;
 	}
 
 	/**
-	 * Load all the referenced files into a resource set and then copy any stuff
-	 * that is produced into a scenario. This probably won't work.
+	 * Load all the referenced files into a resource set and then copy any stuff that is produced into a scenario. This probably won't work.
 	 * 
 	 * @return
 	 */
 	public Scenario createScenario() {
-		// FIXME: Use e.g. log.debug(xxx, new RuntimeException());
-		System.err.println(sourceMap);
+		log.debug(sourceMap, new RuntimeException());
 		final Scenario result = ScenarioFactory.eINSTANCE.createScenario();
 
 		final ResourceSet resourceSet = new ResourceSetImpl();
 
-		resourceSet
-				.getResourceFactoryRegistry()
-				.getExtensionToFactoryMap()
-				.put(Resource.Factory.Registry.DEFAULT_EXTENSION,
-						new XMIResourceFactoryImpl());
-		resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI,
-				ScenarioPackage.eINSTANCE);
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
+		resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI, ScenarioPackage.eINSTANCE);
 
 		final Set<String> loadedResources = new HashSet<String>();
-		
+
 		// read all the elements which we've imported
 		for (final Map.Entry<EClass, String> entry : sourceMap.entrySet()) {
 			// try and read entry
-			if (loadedResources.contains(entry.getValue())) continue;
+			if (loadedResources.contains(entry.getValue())) {
+				continue;
+			}
 			loadedResources.add(entry.getValue());
 			resourceSet.getResource(URI.createPlatformResourceURI(entry.getValue(), true), true);
-//			System.err.println(resourceSet.createResource(URI.createPlatformResourceURI(entry.getValue(), true)));
+			// System.err.println(resourceSet.createResource(URI.createPlatformResourceURI(entry.getValue(), true)));
 		}
 
 		here: for (final Map.Entry<EClass, String> entry : sourceMap.entrySet()) {
 			for (final Resource resource : resourceSet.getResources()) {
 				for (final EObject e : resource.getContents()) {
-					
-					final EObject e2 = getFirstElementWithClass(e,
-							entry.getKey());
+
+					final EObject e2 = getFirstElementWithClass(e, entry.getKey());
 					if (e2 != null) {
 						// insert e2
-						for (final EReference ref : result.eClass()
-								.getEAllReferences()) {
+						for (final EReference ref : result.eClass().getEAllReferences()) {
 							if (ref.getEType().equals(entry.getKey())) {
 								result.eSet(ref, e2);
 							}
@@ -182,13 +173,11 @@ public class DerivedScenarioWizardPage extends WizardPage {
 		}
 
 		result.createMissingModels();
-		
+
 		return result;
 	}
 
-	private void createSourcePicker(final Composite container,
-			final String caption, final EClass typeToImport,
-			final String[] extensions) {
+	private void createSourcePicker(final Composite container, final String caption, final EClass typeToImport, final String[] extensions) {
 		new Label(container, SWT.NONE).setText(caption + ":");
 		final Text text = new Text(container, SWT.BORDER | SWT.SINGLE);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -197,13 +186,13 @@ public class DerivedScenarioWizardPage extends WizardPage {
 		final Button b = new Button(container, SWT.PUSH);
 		b.setText("Browse...");
 
-		b.addSelectionListener(createSelectionListener(caption, text,
-				new HashSet<String>(Arrays.asList(extensions))));
+		b.addSelectionListener(createSelectionListener(caption, text, new HashSet<String>(Arrays.asList(extensions))));
 	}
 
 	/**
 	 * @see IDialogPage#createControl(Composite)
 	 */
+	@Override
 	public void createControl(final Composite parent) {
 		final Composite container = new Composite(parent, SWT.NULL);
 		container.setLayout(new GridLayout());
@@ -216,24 +205,12 @@ public class DerivedScenarioWizardPage extends WizardPage {
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
 
-		createSourcePicker(sources, "&Ports",
-				PortPackage.eINSTANCE.getPortModel(), new String[] {
-						"scenario", "port" });
-		createSourcePicker(sources, "&Distances",
-				PortPackage.eINSTANCE.getDistanceModel(), new String[] {
-						"scenario", "distancemodel" });
-		createSourcePicker(sources, "&Fleet",
-				FleetPackage.eINSTANCE.getFleetModel(), new String[] {
-						"scenario", "fleet" });
-		createSourcePicker(sources, "&Indices",
-				MarketPackage.eINSTANCE.getMarketModel(), new String[] {
-						"scenario", "market" });
-		createSourcePicker(sources, "&Contracts",
-				ContractPackage.eINSTANCE.getContractModel(), new String[] {
-						"scenario", "contract" });
-		createSourcePicker(sources, "C&argos",
-				CargoPackage.eINSTANCE.getCargoModel(), new String[] {
-						"scenario", "cargo" });
+		createSourcePicker(sources, "&Ports", PortPackage.eINSTANCE.getPortModel(), new String[] { "scenario", "port" });
+		createSourcePicker(sources, "&Distances", PortPackage.eINSTANCE.getDistanceModel(), new String[] { "scenario", "distancemodel" });
+		createSourcePicker(sources, "&Fleet", FleetPackage.eINSTANCE.getFleetModel(), new String[] { "scenario", "fleet" });
+		createSourcePicker(sources, "&Indices", MarketPackage.eINSTANCE.getMarketModel(), new String[] { "scenario", "market" });
+		createSourcePicker(sources, "&Contracts", ContractPackage.eINSTANCE.getContractModel(), new String[] { "scenario", "contract" });
+		createSourcePicker(sources, "C&argos", CargoPackage.eINSTANCE.getCargoModel(), new String[] { "scenario", "cargo" });
 
 		final Group destination = new Group(container, SWT.NONE);
 		destination.setText("Destination");
@@ -251,15 +228,17 @@ public class DerivedScenarioWizardPage extends WizardPage {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		containerText.setLayoutData(gd);
 		containerText.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
+			@Override
+			public void modifyText(final ModifyEvent e) {
 				dialogChanged();
 			}
 		});
 
-		Button button = new Button(destination, SWT.PUSH);
+		final Button button = new Button(destination, SWT.PUSH);
 		button.setText("Browse...");
 		button.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
 				handleBrowse();
 			}
 		});
@@ -270,7 +249,8 @@ public class DerivedScenarioWizardPage extends WizardPage {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		fileText.setLayoutData(gd);
 		fileText.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
+			@Override
+			public void modifyText(final ModifyEvent e) {
 				dialogChanged();
 			}
 		});
@@ -284,18 +264,19 @@ public class DerivedScenarioWizardPage extends WizardPage {
 	 */
 
 	private void initialize() {
-		if (selection != null && selection.isEmpty() == false
-				&& selection instanceof IStructuredSelection) {
-			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() > 1)
+		if ((selection != null) && (selection.isEmpty() == false) && (selection instanceof IStructuredSelection)) {
+			final IStructuredSelection ssel = (IStructuredSelection) selection;
+			if (ssel.size() > 1) {
 				return;
-			Object obj = ssel.getFirstElement();
+			}
+			final Object obj = ssel.getFirstElement();
 			if (obj instanceof IResource) {
 				IContainer container;
-				if (obj instanceof IContainer)
+				if (obj instanceof IContainer) {
 					container = (IContainer) obj;
-				else
+				} else {
 					container = ((IResource) obj).getParent();
+				}
 				containerText.setText(container.getFullPath().toString());
 			}
 		}
@@ -303,16 +284,13 @@ public class DerivedScenarioWizardPage extends WizardPage {
 	}
 
 	/**
-	 * Uses the standard container selection dialog to choose the new value for
-	 * the container field.
+	 * Uses the standard container selection dialog to choose the new value for the container field.
 	 */
 
 	private void handleBrowse() {
-		ContainerSelectionDialog dialog = new ContainerSelectionDialog(
-				getShell(), ResourcesPlugin.getWorkspace().getRoot(), false,
-				"Select new file container");
+		final ContainerSelectionDialog dialog = new ContainerSelectionDialog(getShell(), ResourcesPlugin.getWorkspace().getRoot(), false, "Select new file container");
 		if (dialog.open() == ContainerSelectionDialog.OK) {
-			Object[] result = dialog.getResult();
+			final Object[] result = dialog.getResult();
 			if (result.length == 1) {
 				containerText.setText(((Path) result[0]).toString());
 			}
@@ -324,16 +302,14 @@ public class DerivedScenarioWizardPage extends WizardPage {
 	 */
 
 	private void dialogChanged() {
-		IResource container = ResourcesPlugin.getWorkspace().getRoot()
-				.findMember(new Path(getContainerName()));
-		String fileName = getFileName();
+		final IResource container = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(getContainerName()));
+		final String fileName = getFileName();
 
 		if (getContainerName().length() == 0) {
 			updateStatus("File container must be specified");
 			return;
 		}
-		if (container == null
-				|| (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
+		if ((container == null) || ((container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0)) {
 			updateStatus("File container must exist");
 			return;
 		}
@@ -349,9 +325,9 @@ public class DerivedScenarioWizardPage extends WizardPage {
 			updateStatus("File name must be valid");
 			return;
 		}
-		int dotLoc = fileName.lastIndexOf('.');
+		final int dotLoc = fileName.lastIndexOf('.');
 		if (dotLoc != -1) {
-			String ext = fileName.substring(dotLoc + 1);
+			final String ext = fileName.substring(dotLoc + 1);
 			if (ext.equalsIgnoreCase("scenario") == false) {
 				updateStatus("File extension must be \"scenario\"");
 				return;
@@ -360,7 +336,7 @@ public class DerivedScenarioWizardPage extends WizardPage {
 		updateStatus(null);
 	}
 
-	private void updateStatus(String message) {
+	private void updateStatus(final String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
 	}
