@@ -118,6 +118,24 @@
                </description>
                <target class="Slot" />
             </constraint>
+            
+            <constraint
+                  class="com.mmxlabs.lngscheduler.emf.extras.validation.SlotContractConstraint"
+                  id="com.mmxlabs.lngscheduler.emf-extras.constraints.slot_contract"
+                  lang="Java"
+                  mode="Batch"
+                  name="Slot Contract"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  A slot has no contract.
+               </message>
+               <description>
+                  Every slot needs a contract.
+               </description>
+               <target class="Slot" />
+            </constraint>
+            
 			<!--
            	<constraint
                   class="com.mmxlabs.lngscheduler.emf.extras.validation.InitialStateFeasibilityConstraint"
