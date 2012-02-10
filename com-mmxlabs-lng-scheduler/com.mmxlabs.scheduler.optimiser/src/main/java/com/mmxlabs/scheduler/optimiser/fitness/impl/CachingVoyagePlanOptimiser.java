@@ -110,15 +110,18 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		 */
 		@Override
 		public final boolean equals(final Object obj) {
-			final CacheKey other = (CacheKey) obj;
-			// if (getClass() != obj.getClass())
-			// return false;
-			// CacheKey other = (CacheKey) obj;
-			// if (!getOuterType().equals(other.getOuterType()))
-			// return false;
+			if (obj instanceof CacheKey) {
+				final CacheKey other = (CacheKey) obj;
+				// if (getClass() != obj.getClass())
+				// return false;
+				// CacheKey other = (CacheKey) obj;
+				// if (!getOuterType().equals(other.getOuterType()))
+				// return false;
 
-			return Equality.shallowEquals(slots, other.slots) && (vessel == other.vessel) && Arrays.equals(times, other.times) && (// loadPrice == other.loadPrice &&
-					dischargePrice == other.dischargePrice);
+				return Equality.shallowEquals(slots, other.slots) && (vessel == other.vessel) && Arrays.equals(times, other.times) && (// loadPrice == other.loadPrice &&
+						dischargePrice == other.dischargePrice);
+			}
+			return false;
 		}
 	}
 
