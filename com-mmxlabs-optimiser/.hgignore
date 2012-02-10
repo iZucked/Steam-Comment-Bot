@@ -4,7 +4,6 @@ target/
 
 syntax: regexp
 ^optimiser-.*/target$
-
 syntax: regexp
 ^optimiser-.*/\.settings$
 syntax: regexp
@@ -13,5 +12,3 @@ syntax: regexp
 ^optimiser-.*/\.project$
 syntax: regexp
 ^optimiser-.*/META-INF$
-syntax: regexp
-^optimiser-.*/\.project$
