@@ -150,6 +150,21 @@ public interface ISchedulerBuilder {
 	IVesselEventPortSlot createDrydockEvent(String id, ITimeWindow arrivalTimeWindow, IPort port, int durationHours);
 
 	/**
+	 * Create a maintenance event
+	 * 
+	 * @param id
+	 *            the ID of the maintenance
+	 * @param arrivalTimeWindow
+	 *            the time window in which the vessel must arrive at the port
+	 * @param port
+	 *            the port where the maintenance is
+	 * @param durationHours
+	 *            the number of hours the maintenance will take
+	 * @return
+	 */
+	IVesselEventPortSlot createMaintenanceEvent(String id, ITimeWindow arrival, IPort port, int durationHours);
+
+	/**
 	 * Add a single vessel to the list of vessels which can service the given {@link IVesselEventPortSlot}
 	 * 
 	 * @param charterOut

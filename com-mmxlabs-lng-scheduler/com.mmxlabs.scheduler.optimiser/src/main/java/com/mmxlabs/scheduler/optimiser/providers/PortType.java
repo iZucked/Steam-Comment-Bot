@@ -46,6 +46,11 @@ public enum PortType {
 	DryDock,
 
 	/**
+	 * Port type is a maintenance event.
+	 */
+	Maintenance,
+
+	/**
 	 * Port type is a waypoint, i.e. a routing point optionally associated with a {@link ITimeWindow}
 	 */
 	Waypoint,

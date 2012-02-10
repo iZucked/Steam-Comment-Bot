@@ -188,7 +188,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 					useNBO = false;
 				}
 
-				if (prevPortType == PortType.DryDock) {
+				if ((prevPortType == PortType.DryDock) || (prevPortType == PortType.Maintenance)) {
 					options.setWarm(true);
 				} else {
 					options.setWarm(false);
@@ -271,7 +271,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			currentSequence.add(portDetails);
 
 			final PortType portType = portTypeProvider.getPortType(element);
-			if (((currentSequence.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock)) {
+			if (((currentSequence.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance)) {
 
 				if (!optimiseSequence(voyagePlans, currentSequence, currentTimes, voyagePlanOptimiser)) {
 					return null;
@@ -297,7 +297,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			// Update vessel state
 			if (portType == PortType.Load) {
 				vesselState = VesselState.Laden;
-			} else if ((portType == PortType.Discharge) || (portType == PortType.CharterOut) || (portType == PortType.DryDock)) {
+			} else if ((portType == PortType.Discharge) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance)) {
 				vesselState = VesselState.Ballast;
 			} else {
 				// No change in state

@@ -165,6 +165,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 				break;
 			case CharterOut:
 			case DryDock:
+			case Maintenance:
 			case Other:
 			case Virtual:
 				if (seenLoad) {

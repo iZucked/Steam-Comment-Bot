@@ -696,4 +696,75 @@ public class PortTypeConstraintCheckerTest {
 
 		Assert.assertEquals(1, messages.size());
 	}
+
+	/**
+	 * Test maintenance between load and discharge fails
+	 */
+	@Test
+	public void testCheckSequence14() {
+
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
+		checker.setPortTypeProvider(portTypeProvider);
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+
+		checker.setVesselProvider(vesselProvider);
+
+		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement o3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement o4 = context.mock(ISequenceElement.class, "4");
+		final ISequenceElement o5 = context.mock(ISequenceElement.class, "5");
+
+		portTypeProvider.setPortType(o1, PortType.Start);
+		portTypeProvider.setPortType(o2, PortType.Load);
+		portTypeProvider.setPortType(o3, PortType.Maintenance);
+		portTypeProvider.setPortType(o4, PortType.Discharge);
+		portTypeProvider.setPortType(o5, PortType.End);
+
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5));
+
+		final List<String> messages = new ArrayList<String>(1);
+		Assert.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET));
+
+		Assert.assertEquals(1, messages.size());
+	}
+
+	/**
+	 * Test maintenance outside load and discharge is ok
+	 */
+	@Test
+	public void testCheckSequence15() {
+
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
+		checker.setPortTypeProvider(portTypeProvider);
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+
+		checker.setVesselProvider(vesselProvider);
+
+		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
+		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
+		final ISequenceElement o3 = context.mock(ISequenceElement.class, "3");
+		final ISequenceElement o4 = context.mock(ISequenceElement.class, "4");
+		final ISequenceElement o5 = context.mock(ISequenceElement.class, "5");
+		final ISequenceElement o6 = context.mock(ISequenceElement.class, "6");
+
+		portTypeProvider.setPortType(o1, PortType.Start);
+		portTypeProvider.setPortType(o2, PortType.DryDock);
+		portTypeProvider.setPortType(o3, PortType.Load);
+		portTypeProvider.setPortType(o4, PortType.Discharge);
+		portTypeProvider.setPortType(o5, PortType.Maintenance);
+		portTypeProvider.setPortType(o6, PortType.End);
+
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
+
+		final List<String> messages = new ArrayList<String>(1);
+		Assert.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET));
+
+		Assert.assertEquals(0, messages.size());
+	}
+
 }
