@@ -35,7 +35,6 @@ public class CostComponentTest {
 		final List<FuelComponent> fuelComponents = Collections.emptyList();
 		final CostComponent c = new CostComponent(name, fuelComponents, core);
 
-		@SuppressWarnings("unchecked")
 		final IOptimisationData data = context.mock(IOptimisationData.class);
 
 		final String key = "provider-discount-curve";
