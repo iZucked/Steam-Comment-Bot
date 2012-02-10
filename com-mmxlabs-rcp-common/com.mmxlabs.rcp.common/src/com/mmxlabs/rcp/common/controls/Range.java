@@ -5,8 +5,6 @@
 package com.mmxlabs.rcp.common.controls;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
@@ -378,18 +376,18 @@ public class Range extends Composite {
 			text2.setText("text 1");
 			final Text text3 = new Text(shell, SWT.NONE);
 			text3.setText("text 3");
-			// These printlns are OK - this main is just a test.
-			final FocusListener fl = new FocusListener() {
-				@Override
-				public void focusGained(final FocusEvent e) {
-					System.err.println("got focus : " + e);
-				}
-
-				@Override
-				public void focusLost(final FocusEvent e) {
-					System.err.println("lost focus : " + e);
-				}
-			};
+			// // These printlns are OK - this main is just a test.
+			// final FocusListener fl = new FocusListener() {
+			// @Override
+			// public void focusGained(final FocusEvent e) {
+			// System.err.println("got focus : " + e);
+			// }
+			//
+			// @Override
+			// public void focusLost(final FocusEvent e) {
+			// System.err.println("lost focus : " + e);
+			// }
+			// };
 			comp.addFocusListener(fl);
 			shell.addFocusListener(fl);
 			text.addFocusListener(fl);
