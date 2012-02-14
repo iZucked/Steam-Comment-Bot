@@ -60,21 +60,10 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case TypesPackage.TIME_WINDOW: return createTimeWindow();
 			case TypesPackage.AVESSEL_SET: return createAVesselSet();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public TimeWindow createTimeWindow() {
-		TimeWindowImpl timeWindow = new TimeWindowImpl();
-		return timeWindow;
 	}
 
 	/**

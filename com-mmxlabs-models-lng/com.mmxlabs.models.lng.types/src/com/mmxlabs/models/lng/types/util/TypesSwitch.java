@@ -176,18 +176,18 @@ public class TypesSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case TypesPackage.TIME_WINDOW: {
-				TimeWindow timeWindow = (TimeWindow)theEObject;
-				T result = caseTimeWindow(timeWindow);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case TypesPackage.AVESSEL_SET: {
 				AVesselSet aVesselSet = (AVesselSet)theEObject;
 				T result = caseAVesselSet(aVesselSet);
 				if (result == null) result = caseUUIDObject(aVesselSet);
 				if (result == null) result = caseNamedObject(aVesselSet);
 				if (result == null) result = caseMMXObject(aVesselSet);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case TypesPackage.ITIMEZONE_PROVIDER: {
+				ITimezoneProvider iTimezoneProvider = (ITimezoneProvider)theEObject;
+				T result = caseITimezoneProvider(iTimezoneProvider);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -361,21 +361,6 @@ public class TypesSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Time Window</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Time Window</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseTimeWindow(TimeWindow object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>AVessel Set</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -387,6 +372,21 @@ public class TypesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAVesselSet(AVesselSet object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseITimezoneProvider(ITimezoneProvider object) {
 		return null;
 	}
 

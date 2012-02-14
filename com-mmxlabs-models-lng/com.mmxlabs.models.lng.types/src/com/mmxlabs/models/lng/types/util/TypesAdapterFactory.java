@@ -120,12 +120,12 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 				return createASlotAdapter();
 			}
 			@Override
-			public Adapter caseTimeWindow(TimeWindow object) {
-				return createTimeWindowAdapter();
-			}
-			@Override
 			public Adapter caseAVesselSet(AVesselSet object) {
 				return createAVesselSetAdapter();
+			}
+			@Override
+			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
+				return createITimezoneProviderAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -314,20 +314,6 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.TimeWindow <em>Time Window</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.TimeWindow
-	 * @generated
-	 */
-	public Adapter createTimeWindowAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AVesselSet <em>AVessel Set</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -338,6 +324,20 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAVesselSetAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.ITimezoneProvider
+	 * @generated
+	 */
+	public Adapter createITimezoneProviderAdapter() {
 		return null;
 	}
 

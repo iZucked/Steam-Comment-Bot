@@ -76,29 +76,6 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.types.TimeWindow} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected TimeWindowItemProvider timeWindowItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.types.TimeWindow}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createTimeWindowAdapter() {
-		if (timeWindowItemProvider == null) {
-			timeWindowItemProvider = new TimeWindowItemProvider(this);
-		}
-
-		return timeWindowItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.types.AVesselSet} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -220,7 +197,6 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 	 * @generated
 	 */
 	public void dispose() {
-		if (timeWindowItemProvider != null) timeWindowItemProvider.dispose();
 		if (aVesselSetItemProvider != null) aVesselSetItemProvider.dispose();
 	}
 
