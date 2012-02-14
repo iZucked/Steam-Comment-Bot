@@ -1,5 +1,7 @@
 package com.mmxlabs.models.ui;
 
+import org.eclipse.emf.ecore.EClass;
+
 /**
  * Instances of this interface are used to populate AbstractDetailComposite
  * 
@@ -8,7 +10,12 @@ package com.mmxlabs.models.ui;
  */
 public interface IComponentHelper {
 	/**
-	 * Called when a composite is being filled with editors for a particular type.
+	 * The default method
 	 */
 	public void addEditorsToComposite(IInlineEditorContainer detailComposite);
+	
+	/**
+	 * Called when a composite is being filled with editors for a particular type.
+	 */
+	public void addEditorsToComposite(IInlineEditorContainer detailComposite, final EClass displayedClass);
 }

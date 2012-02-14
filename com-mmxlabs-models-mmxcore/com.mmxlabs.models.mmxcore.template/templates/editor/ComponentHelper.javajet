@@ -18,6 +18,7 @@ package <%=genPackage.getPresentationPackageName()%>.composites;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
@@ -45,10 +46,11 @@ public class <%=thisClassName%> implements IComponentHelper {
 	 * @generated
 	 */
 	public <%=thisClassName%>(IAdapterManager adapterManager) {
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 <% for (final GenClass superGenClass : genClass.getBaseGenClasses()) { %>
+		
 		{
-			IComponentHelper helper = adapterManager.getAdapter(<%=superGenClass.getQualifiedClassifierAccessor()%>, IComponentHelper.class);
-			if (helper == null) = adapterManager.loadAdapter(<%=superGenClass.getQualifiedClassifierAccessor()%>, IComponentHelper.class.getCanonicalName());
+			final IComponentHelper helper = registry.getComponentHelper(<%=superGenClass.getQualifiedClassifierAccessor()%>);
 			if (helper != null) superClassesHelpers.add(helper);
 		}
 <% } // for superclasses %>
@@ -60,7 +62,7 @@ public class <%=thisClassName%> implements IComponentHelper {
 	 * @generated
 	 */
 	 @Override
-	public void addEditorsToComposite(final IDealComposite detailComposite) {
+	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
 		addEditorsToComposite(detailComposite, <%=genClass.getQualifiedClassifierAccessor()%>);	
 	}
 	
@@ -70,7 +72,7 @@ public class <%=thisClassName%> implements IComponentHelper {
 	 * @generated
 	 */
 	@Override
-	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
+	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final <%=genModel.getImportedName("org.eclipse.emf.ecore.EClass")%> topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 <% for (final GenFeature genFeature : genClass.getGenFeatures()) { %>
 		add_<%=genFeature.getName()%>Editor(detailComposite, topClass);
@@ -82,8 +84,8 @@ public class <%=thisClassName%> implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	protected void add_<%=genFeature.getName()%>Editor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(<%=genFeature.getQualifiedFeatureAccessor()%>, topClass));
+	protected void add_<%=genFeature.getName()%>Editor(final IInlineEditorContainer detailComposite, final <%=genModel.getImportedName("org.eclipse.emf.ecore.EClass")%> topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, <%=genFeature.getQualifiedFeatureAccessor()%>));
 	}
 <% } %>
 }
