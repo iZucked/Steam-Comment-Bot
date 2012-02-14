@@ -64,11 +64,11 @@ public final class NumberTypes {
 		// Convert formatter output to required type
 		if (type == i) {
 			num = Integer.valueOf(((Number) num).intValue());
-		} else if (type == i) {
+		} else if (type == l) {
 			num = Long.valueOf(((Number) num).longValue());
 		} else if (type == f) {
 			num = Float.valueOf(((Number) num).floatValue());
-		} else if (type == f) {
+		} else if (type == d) {
 			num = Double.valueOf(((Number) num).doubleValue());
 		}
 
