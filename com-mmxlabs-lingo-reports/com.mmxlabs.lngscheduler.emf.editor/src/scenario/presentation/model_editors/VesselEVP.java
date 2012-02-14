@@ -23,6 +23,7 @@ import scenario.fleet.PortAndTime;
 import scenario.presentation.ScenarioEditor;
 
 import com.mmxlabs.shiplingo.ui.detailview.containers.DetailCompositeDialog;
+import com.mmxlabs.shiplingo.ui.tableview.BasicAttributeManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.DialogFeatureManipulator;
 import com.mmxlabs.shiplingo.ui.tableview.SingleReferenceManipulator;
 
@@ -43,6 +44,11 @@ public class VesselEVP extends NamedObjectEVP {
 		{
 			final SingleReferenceManipulator vclass = new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_Class(), part.getVesselClassProvider(), part.getEditingDomain());
 			addColumn("Class", vclass, vclass);
+		}
+
+		{
+			final BasicAttributeManipulator timeChartered = new BasicAttributeManipulator(FleetPackage.eINSTANCE.getVessel_TimeChartered(), part.getEditingDomain());
+			addColumn("Time Chartered", timeChartered, timeChartered);
 		}
 
 		{
