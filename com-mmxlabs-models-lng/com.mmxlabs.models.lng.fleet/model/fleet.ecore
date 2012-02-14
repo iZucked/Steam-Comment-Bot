@@ -16,16 +16,22 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="finalPort" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="startWindow" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimeWindow"
-        unsettable="true" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="endWindow" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimeWindow"
-        unsettable="true" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
         eType="#//HeelOptions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="availability" lowerBound="1"
+        eType="#//VesselAvailablility" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeChartered" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeCharterRate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VesselClass" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselClass">
+    <eOperations name="collect" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVessel">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();&#xA;&#x9;final org.eclipse.emf.common.util.UniqueEList&lt;com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList&lt;com.mmxlabs.models.lng.types.AVessel>();&#xA;&#x9;marked.add(this);&#xA;&#x9;&#xA;&#x9;final FleetModel myModel = (FleetModel) eContainer();&#xA;&#x9;for (final Vesssel v : myModel.getVessels()) {&#xA;&#x9;&#x9;if (v.getVesselClass() == this) {&#xA;&#x9;&#x9;&#x9;result.add(v);&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;&#xA;return result;"/>
+      </eAnnotations>
+      <eParameters name="marked" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuel" upperBound="-1"
@@ -42,16 +48,31 @@
         eType="#//VesselStateAttributes" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ballastAttributes" lowerBound="1"
         eType="#//VesselStateAttributes" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fuelConsumption" upperBound="-1"
+        eType="#//FuelConsumption" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minSpeed" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxSpeed" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minHeel" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="warmingTime" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coolingTime" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coolingVolume" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VesselEvent" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselEvent">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="startTimeWindow" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimeWindow"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="durationInDays" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="earliestStartDate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestStartDate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FleetModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
@@ -89,16 +110,26 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canalNBORate" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="canalCosts" upperBound="-1"
-        eType="#//CanalCost" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inPortBaseRate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CanalCost" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="canal" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ARoute"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="toll" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extraTime" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseRate" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselAvailablility" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startAt" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startAfter" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startBefore" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endAt" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endAfter" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endBefore" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FuelConsumption">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="consumption" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
 </ecore:EPackage>

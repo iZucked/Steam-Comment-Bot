@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.cargo/src"
+    modelPluginID="com.mmxlabs.models.lng.cargo" templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
+    dynamicTemplates="true" modelName="Cargo" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
+  <foreignModel>cargo.ecore</foreignModel>
+  <genPackages prefix="Cargo" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
+      ecorePackage="cargo.ecore#/">
+    <genClasses ecoreClass="cargo.ecore#//Cargo">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Cargo/loadSlot"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Cargo/dischargeSlot"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//Slot">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowStart"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowStartTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowSize"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/port"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/contract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/duration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/minQuantity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/maxQuantity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/fixedPrice"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//LoadSlot">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/arriveCold"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//DischargeSlot"/>
+    <genClasses ecoreClass="cargo.ecore#//CargoModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/loadSlots"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dischargeSlots"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/cargos"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//SpotSlot">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//SpotSlot/market"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//SpotLoadSlot"/>
+    <genClasses ecoreClass="cargo.ecore#//SpotDischargeSlot"/>
+  </genPackages>
+</genmodel:GenModel>

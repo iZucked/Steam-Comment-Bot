@@ -120,13 +120,67 @@ public interface PortPackage extends EPackage {
 	int PORT__CAPABILITIES = TypesPackage.APORT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Time Zone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__TIME_ZONE = TypesPackage.APORT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Load Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__LOAD_DURATION = TypesPackage.APORT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DISCHARGE_DURATION = TypesPackage.APORT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__CV_VALUE = TypesPackage.APORT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Default Start Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DEFAULT_START_TIME = TypesPackage.APORT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Allow Cooldown</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__ALLOW_COOLDOWN = TypesPackage.APORT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_FEATURE_COUNT + 1;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -248,13 +302,22 @@ public interface PortPackage extends EPackage {
 	int PORT_GROUP__NAME = TypesPackage.APORT_SET__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Contents</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP__CONTENTS = TypesPackage.APORT_SET_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Group</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_GROUP_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 0;
+	int PORT_GROUP_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl <em>Route Line</em>}' class.
@@ -427,6 +490,72 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_Capabilities();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getTimeZone <em>Time Zone</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time Zone</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getTimeZone()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_TimeZone();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getLoadDuration <em>Load Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Load Duration</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getLoadDuration()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_LoadDuration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getDischargeDuration <em>Discharge Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Discharge Duration</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getDischargeDuration()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_DischargeDuration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getCvValue <em>Cv Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cv Value</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getCvValue()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_CvValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getDefaultStartTime <em>Default Start Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default Start Time</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getDefaultStartTime()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_DefaultStartTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#isAllowCooldown <em>Allow Cooldown</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Allow Cooldown</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#isAllowCooldown()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_AllowCooldown();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Route <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -467,6 +596,17 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPortGroup();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.port.PortGroup#getContents <em>Contents</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Contents</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortGroup#getContents()
+	 * @see #getPortGroup()
+	 * @generated
+	 */
+	EReference getPortGroup_Contents();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.RouteLine <em>Route Line</em>}'.
@@ -594,6 +734,54 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT__CAPABILITIES = eINSTANCE.getPort_Capabilities();
 
 		/**
+		 * The meta object literal for the '<em><b>Time Zone</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__TIME_ZONE = eINSTANCE.getPort_TimeZone();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__LOAD_DURATION = eINSTANCE.getPort_LoadDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Discharge Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__DISCHARGE_DURATION = eINSTANCE.getPort_DischargeDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Cv Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__CV_VALUE = eINSTANCE.getPort_CvValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Start Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__DEFAULT_START_TIME = eINSTANCE.getPort_DefaultStartTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Allow Cooldown</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__ALLOW_COOLDOWN = eINSTANCE.getPort_AllowCooldown();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -628,6 +816,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PORT_GROUP = eINSTANCE.getPortGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Contents</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_GROUP__CONTENTS = eINSTANCE.getPortGroup_Contents();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl <em>Route Line</em>}' class.

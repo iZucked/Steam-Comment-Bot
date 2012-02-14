@@ -6,8 +6,8 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
@@ -23,7 +23,7 @@ import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.TimeWindow;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -117,14 +117,14 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass timeWindowEClass = null;
+	private EClass aVesselSetEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass aVesselSetEClass = null;
+	private EClass iTimezoneProviderEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -294,35 +294,17 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getTimeWindow() {
-		return timeWindowEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getTimeWindow_StartDate() {
-		return (EAttribute)timeWindowEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getTimeWindow_Length() {
-		return (EAttribute)timeWindowEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getAVesselSet() {
 		return aVesselSetEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getITimezoneProvider() {
+		return iTimezoneProviderEClass;
 	}
 
 	/**
@@ -375,11 +357,9 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		aSlotEClass = createEClass(ASLOT);
 
-		timeWindowEClass = createEClass(TIME_WINDOW);
-		createEAttribute(timeWindowEClass, TIME_WINDOW__START_DATE);
-		createEAttribute(timeWindowEClass, TIME_WINDOW__LENGTH);
-
 		aVesselSetEClass = createEClass(AVESSEL_SET);
+
+		iTimezoneProviderEClass = createEClass(ITIMEZONE_PROVIDER);
 	}
 
 	/**
@@ -438,11 +418,20 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		// Initialize classes and features; add operations and parameters
 		initEClass(aPortEClass, APort.class, "APort", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+		EOperation op = addEOperation(aPortEClass, this.getAPort(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, this.getAPortSet(), "marked", 0, -1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(aPortSetEClass, APortSet.class, "APortSet", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		op = addEOperation(aPortSetEClass, this.getAPort(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, this.getAPortSet(), "marked", 0, -1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(aRouteEClass, ARoute.class, "ARoute", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(aVesselEClass, AVessel.class, "AVessel", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		op = addEOperation(aVesselEClass, this.getAVessel(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, this.getAVesselSet(), "marked", 0, -1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(aVesselClassEClass, AVesselClass.class, "AVesselClass", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -458,11 +447,15 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		initEClass(aSlotEClass, ASlot.class, "ASlot", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(timeWindowEClass, TimeWindow.class, "TimeWindow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTimeWindow_StartDate(), ecorePackage.getEDate(), "startDate", null, 1, 1, TimeWindow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTimeWindow_Length(), ecorePackage.getEInt(), "length", null, 1, 1, TimeWindow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(aVesselSetEClass, AVesselSet.class, "AVesselSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		op = addEOperation(aVesselSetEClass, this.getAVessel(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, this.getAVesselSet(), "marked", 0, -1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(iTimezoneProviderEClass, ITimezoneProvider.class, "ITimezoneProvider", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		op = addEOperation(iTimezoneProviderEClass, ecorePackage.getEString(), "getTimeZone", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEAttribute(), "attribute", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -485,7 +478,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		   source, 
 		   new String[] {
 			 "generatedType", "com.mmxlabs.models.lng.port.Port"
-		   });
+		   });		
 	}
 
 } //TypesPackageImpl

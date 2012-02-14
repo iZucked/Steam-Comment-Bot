@@ -26,15 +26,6 @@ public interface TypesFactory extends EFactory {
 	TypesFactory eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Time Window</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Time Window</em>'.
-	 * @generated
-	 */
-	TimeWindow createTimeWindow();
-
-	/**
 	 * Returns a new object of class '<em>AVessel Set</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

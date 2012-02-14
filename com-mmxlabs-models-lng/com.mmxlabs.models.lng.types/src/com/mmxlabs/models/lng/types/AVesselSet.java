@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.types;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,4 +21,12 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @generated
  */
 public interface AVesselSet extends UUIDObject, NamedObject {
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model markedMany="true"
+	 * @generated
+	 */
+	EList<AVessel> collect(EList<AVesselSet> marked);
 } // AVesselSet

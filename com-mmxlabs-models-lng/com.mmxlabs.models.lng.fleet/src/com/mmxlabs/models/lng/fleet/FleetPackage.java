@@ -1,0 +1,2344 @@
+/**
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
+package com.mmxlabs.models.lng.fleet;
+
+import com.mmxlabs.models.lng.types.TypesPackage;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+
+/**
+ * <!-- begin-user-doc -->
+ * The <b>Package</b> for the model.
+ * It contains accessors for the meta objects to represent
+ * <ul>
+ *   <li>each class,</li>
+ *   <li>each feature of each class,</li>
+ *   <li>each enum,</li>
+ *   <li>and each data type</li>
+ * </ul>
+ * <!-- end-user-doc -->
+ * @see com.mmxlabs.models.lng.fleet.FleetFactory
+ * @model kind="package"
+ * @generated
+ */
+public interface FleetPackage extends EPackage {
+	/**
+	 * The package name.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	String eNAME = "fleet";
+
+	/**
+	 * The package namespace URI.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	String eNS_URI = "http://www.mmxlabs.com/models/lng/fleet/1/";
+
+	/**
+	 * The package namespace name.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	String eNS_PREFIX = "lng.fleet";
+
+	/**
+	 * The singleton instance of the package.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	FleetPackage eINSTANCE = com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl.init();
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl <em>Vessel</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVessel()
+	 * @generated
+	 */
+	int VESSEL = 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__EXTENSIONS = TypesPackage.AVESSEL__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__PROXIES = TypesPackage.AVESSEL__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__UUID = TypesPackage.AVESSEL__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__NAME = TypesPackage.AVESSEL__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__VESSEL_CLASS = TypesPackage.AVESSEL_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Daily Hire Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__DAILY_HIRE_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Initial Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__INITIAL_PORT = TypesPackage.AVESSEL_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Final Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__FINAL_PORT = TypesPackage.AVESSEL_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Start Heel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__START_HEEL = TypesPackage.AVESSEL_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__AVAILABILITY = TypesPackage.AVESSEL_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Time Chartered</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__TIME_CHARTERED = TypesPackage.AVESSEL_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 8;
+
+	/**
+	 * The number of structural features of the '<em>Vessel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 9;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselClassImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClass()
+	 * @generated
+	 */
+	int VESSEL_CLASS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__EXTENSIONS = TypesPackage.AVESSEL_CLASS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__PROXIES = TypesPackage.AVESSEL_CLASS__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__UUID = TypesPackage.AVESSEL_CLASS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__NAME = TypesPackage.AVESSEL_CLASS__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Base Fuel</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__BASE_FUEL = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__CAPACITY = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__FILL_CAPACITY = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__SPOT_CHARTER_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Spot Charter Day Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__SPOT_CHARTER_DAY_RATE = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Consumption</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__FUEL_CONSUMPTION = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Min Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__MIN_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Max Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__MAX_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Min Heel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Warming Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Cooling Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__COOLING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 13;
+
+	/**
+	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 14;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Class</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 15;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl <em>Vessel Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselEventImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselEvent()
+	 * @generated
+	 */
+	int VESSEL_EVENT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__EXTENSIONS = TypesPackage.AVESSEL_EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__PROXIES = TypesPackage.AVESSEL_EVENT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__UUID = TypesPackage.AVESSEL_EVENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__NAME = TypesPackage.AVESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__DURATION_IN_DAYS = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__ALLOWED_VESSELS = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__PORT = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Earliest Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__EARLIEST_START_DATE = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Latest Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__LATEST_START_DATE = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 4;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_FEATURE_COUNT = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 5;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetModelImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFleetModel()
+	 * @generated
+	 */
+	int FLEET_MODEL = 3;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Classes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__VESSEL_CLASSES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Base Fuels</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__BASE_FUELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The number of structural features of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getBaseFuel()
+	 * @generated
+	 */
+	int BASE_FUEL = 4;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Base Fuel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getDryDockEvent()
+	 * @generated
+	 */
+	int DRY_DOCK_EVENT = 5;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__EXTENSIONS = VESSEL_EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__PROXIES = VESSEL_EVENT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__UUID = VESSEL_EVENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__DURATION_IN_DAYS = VESSEL_EVENT__DURATION_IN_DAYS;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__ALLOWED_VESSELS = VESSEL_EVENT__ALLOWED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__PORT = VESSEL_EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Earliest Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__EARLIEST_START_DATE = VESSEL_EVENT__EARLIEST_START_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Latest Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__LATEST_START_DATE = VESSEL_EVENT__LATEST_START_DATE;
+
+	/**
+	 * The number of structural features of the '<em>Dry Dock Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl <em>Charter Out Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getCharterOutEvent()
+	 * @generated
+	 */
+	int CHARTER_OUT_EVENT = 6;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__EXTENSIONS = VESSEL_EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__PROXIES = VESSEL_EVENT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__UUID = VESSEL_EVENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__DURATION_IN_DAYS = VESSEL_EVENT__DURATION_IN_DAYS;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__ALLOWED_VESSELS = VESSEL_EVENT__ALLOWED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__PORT = VESSEL_EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Earliest Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__EARLIEST_START_DATE = VESSEL_EVENT__EARLIEST_START_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Latest Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__LATEST_START_DATE = VESSEL_EVENT__LATEST_START_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Relocate To</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__RELOCATE_TO = VESSEL_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Heel Options</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__HEEL_OPTIONS = VESSEL_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Charter Out Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getHeelOptions()
+	 * @generated
+	 */
+	int HEEL_OPTIONS = 7;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Volume Available</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__VOLUME_AVAILABLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__CV_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__PRICE_PER_MMBTU = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Heel Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselStateAttributes()
+	 * @generated
+	 */
+	int VESSEL_STATE_ATTRIBUTES = 8;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Nbo Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Idle NBO Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Idle Base Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Canal NBO Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>In Port Base Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The number of structural features of the '<em>Vessel State Attributes</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl <em>Vessel Availablility</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselAvailablility()
+	 * @generated
+	 */
+	int VESSEL_AVAILABLILITY = 9;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABLILITY__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABLILITY__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Start At</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABLILITY__START_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABLILITY__START_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Start Before</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABLILITY__START_BEFORE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>End At</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABLILITY__END_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>End After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABLILITY__END_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>End Before</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABLILITY__END_BEFORE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Availablility</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABLILITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFuelConsumption()
+	 * @generated
+	 */
+	int FUEL_CONSUMPTION = 10;
+
+	/**
+	 * The feature id for the '<em><b>Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_CONSUMPTION__SPEED = 0;
+
+	/**
+	 * The feature id for the '<em><b>Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_CONSUMPTION__CONSUMPTION = 1;
+
+	/**
+	 * The number of structural features of the '<em>Fuel Consumption</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_CONSUMPTION_FEATURE_COUNT = 2;
+
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.Vessel <em>Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel
+	 * @generated
+	 */
+	EClass getVessel();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselClass <em>Vessel Class</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel Class</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getVesselClass()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_VesselClass();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Inaccessible Ports</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_InaccessiblePorts();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getDailyHireRate <em>Daily Hire Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Daily Hire Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getDailyHireRate()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_DailyHireRate();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getInitialPort <em>Initial Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Initial Port</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getInitialPort()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_InitialPort();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getFinalPort <em>Final Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Final Port</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getFinalPort()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_FinalPort();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Start Heel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getStartHeel()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_StartHeel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getAvailability <em>Availability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Availability</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getAvailability()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_Availability();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isTimeChartered <em>Time Chartered</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time Chartered</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#isTimeChartered()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_TimeChartered();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time Charter Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_TimeCharterRate();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselClass <em>Vessel Class</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Class</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass
+	 * @generated
+	 */
+	EClass getVesselClass();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Inaccessible Ports</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getInaccessiblePorts()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EReference getVesselClass_InaccessiblePorts();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Base Fuel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getBaseFuel()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EReference getVesselClass_BaseFuel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getCapacity <em>Capacity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Capacity</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getCapacity()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_Capacity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fill Capacity</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getFillCapacity()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_FillCapacity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Spot Charter Count</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterCount()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_SpotCharterCount();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterDayRate <em>Spot Charter Day Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Spot Charter Day Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterDayRate()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_SpotCharterDayRate();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Laden Attributes</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getLadenAttributes()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EReference getVesselClass_LadenAttributes();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Ballast Attributes</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getBallastAttributes()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EReference getVesselClass_BallastAttributes();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.VesselClass#getFuelConsumption <em>Fuel Consumption</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fuel Consumption</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getFuelConsumption()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EReference getVesselClass_FuelConsumption();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Speed</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getMinSpeed()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_MinSpeed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Speed</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getMaxSpeed()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_MaxSpeed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinHeel <em>Min Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Heel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getMinHeel()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_MinHeel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getWarmingTime <em>Warming Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Warming Time</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getWarmingTime()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_WarmingTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingTime <em>Cooling Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cooling Time</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getCoolingTime()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_CoolingTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingVolume <em>Cooling Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cooling Volume</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getCoolingVolume()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_CoolingVolume();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselEvent <em>Vessel Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Event</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselEvent
+	 * @generated
+	 */
+	EClass getVesselEvent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getDurationInDays <em>Duration In Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Duration In Days</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselEvent#getDurationInDays()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_DurationInDays();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getAllowedVessels <em>Allowed Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Allowed Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselEvent#getAllowedVessels()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EReference getVesselEvent_AllowedVessels();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselEvent#getPort()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EReference getVesselEvent_Port();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getEarliestStartDate <em>Earliest Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Earliest Start Date</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselEvent#getEarliestStartDate()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_EarliestStartDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getLatestStartDate <em>Latest Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Latest Start Date</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselEvent#getLatestStartDate()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_LatestStartDate();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FleetModel <em>Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Model</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel
+	 * @generated
+	 */
+	EClass getFleetModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.FleetModel#getVessels <em>Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getVessels()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EReference getFleetModel_Vessels();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselClasses <em>Vessel Classes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Classes</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getVesselClasses()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EReference getFleetModel_VesselClasses();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselEvents <em>Vessel Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getVesselEvents()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EReference getFleetModel_VesselEvents();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.FleetModel#getBaseFuels <em>Base Fuels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Base Fuels</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getBaseFuels()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EReference getFleetModel_BaseFuels();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.BaseFuel <em>Base Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Base Fuel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.BaseFuel
+	 * @generated
+	 */
+	EClass getBaseFuel();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.DryDockEvent <em>Dry Dock Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Dry Dock Event</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.DryDockEvent
+	 * @generated
+	 */
+	EClass getDryDockEvent();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.CharterOutEvent <em>Charter Out Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Charter Out Event</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CharterOutEvent
+	 * @generated
+	 */
+	EClass getCharterOutEvent();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.CharterOutEvent#getRelocateTo <em>Relocate To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Relocate To</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CharterOutEvent#getRelocateTo()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EReference getCharterOutEvent_RelocateTo();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.CharterOutEvent#getHeelOptions <em>Heel Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Heel Options</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CharterOutEvent#getHeelOptions()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EReference getCharterOutEvent_HeelOptions();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.HeelOptions <em>Heel Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Heel Options</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.HeelOptions
+	 * @generated
+	 */
+	EClass getHeelOptions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.HeelOptions#getVolumeAvailable <em>Volume Available</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Available</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.HeelOptions#getVolumeAvailable()
+	 * @see #getHeelOptions()
+	 * @generated
+	 */
+	EAttribute getHeelOptions_VolumeAvailable();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.HeelOptions#getCvValue <em>Cv Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cv Value</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.HeelOptions#getCvValue()
+	 * @see #getHeelOptions()
+	 * @generated
+	 */
+	EAttribute getHeelOptions_CvValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.HeelOptions#getPricePerMMBTU <em>Price Per MMBTU</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Per MMBTU</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.HeelOptions#getPricePerMMBTU()
+	 * @see #getHeelOptions()
+	 * @generated
+	 */
+	EAttribute getHeelOptions_PricePerMMBTU();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes <em>Vessel State Attributes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel State Attributes</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes
+	 * @generated
+	 */
+	EClass getVesselStateAttributes();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getNboRate <em>Nbo Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Nbo Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#getNboRate()
+	 * @see #getVesselStateAttributes()
+	 * @generated
+	 */
+	EAttribute getVesselStateAttributes_NboRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getIdleNBORate <em>Idle NBO Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Idle NBO Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#getIdleNBORate()
+	 * @see #getVesselStateAttributes()
+	 * @generated
+	 */
+	EAttribute getVesselStateAttributes_IdleNBORate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getIdleBaseRate <em>Idle Base Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Idle Base Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#getIdleBaseRate()
+	 * @see #getVesselStateAttributes()
+	 * @generated
+	 */
+	EAttribute getVesselStateAttributes_IdleBaseRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getCanalNBORate <em>Canal NBO Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Canal NBO Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#getCanalNBORate()
+	 * @see #getVesselStateAttributes()
+	 * @generated
+	 */
+	EAttribute getVesselStateAttributes_CanalNBORate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortBaseRate <em>In Port Base Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>In Port Base Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortBaseRate()
+	 * @see #getVesselStateAttributes()
+	 * @generated
+	 */
+	EAttribute getVesselStateAttributes_InPortBaseRate();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility <em>Vessel Availablility</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Availablility</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility
+	 * @generated
+	 */
+	EClass getVesselAvailablility();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAt <em>Start At</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Start At</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAt()
+	 * @see #getVesselAvailablility()
+	 * @generated
+	 */
+	EReference getVesselAvailablility_StartAt();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAfter <em>Start After</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start After</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAfter()
+	 * @see #getVesselAvailablility()
+	 * @generated
+	 */
+	EAttribute getVesselAvailablility_StartAfter();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBefore <em>Start Before</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Before</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBefore()
+	 * @see #getVesselAvailablility()
+	 * @generated
+	 */
+	EAttribute getVesselAvailablility_StartBefore();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAt <em>End At</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>End At</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAt()
+	 * @see #getVesselAvailablility()
+	 * @generated
+	 */
+	EReference getVesselAvailablility_EndAt();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAfter <em>End After</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End After</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAfter()
+	 * @see #getVesselAvailablility()
+	 * @generated
+	 */
+	EAttribute getVesselAvailablility_EndAfter();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBefore <em>End Before</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End Before</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBefore()
+	 * @see #getVesselAvailablility()
+	 * @generated
+	 */
+	EAttribute getVesselAvailablility_EndBefore();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FuelConsumption <em>Fuel Consumption</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Fuel Consumption</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FuelConsumption
+	 * @generated
+	 */
+	EClass getFuelConsumption();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.FuelConsumption#getSpeed <em>Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Speed</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FuelConsumption#getSpeed()
+	 * @see #getFuelConsumption()
+	 * @generated
+	 */
+	EAttribute getFuelConsumption_Speed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.FuelConsumption#getConsumption <em>Consumption</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Consumption</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FuelConsumption#getConsumption()
+	 * @see #getFuelConsumption()
+	 * @generated
+	 */
+	EAttribute getFuelConsumption_Consumption();
+
+	/**
+	 * Returns the factory that creates the instances of the model.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the factory that creates the instances of the model.
+	 * @generated
+	 */
+	FleetFactory getFleetFactory();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Defines literals for the meta objects that represent
+	 * <ul>
+	 *   <li>each class,</li>
+	 *   <li>each feature of each class,</li>
+	 *   <li>each enum,</li>
+	 *   <li>and each data type</li>
+	 * </ul>
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	interface Literals {
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl <em>Vessel</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.VesselImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVessel()
+		 * @generated
+		 */
+		EClass VESSEL = eINSTANCE.getVessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__VESSEL_CLASS = eINSTANCE.getVessel_VesselClass();
+
+		/**
+		 * The meta object literal for the '<em><b>Inaccessible Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__INACCESSIBLE_PORTS = eINSTANCE.getVessel_InaccessiblePorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Daily Hire Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__DAILY_HIRE_RATE = eINSTANCE.getVessel_DailyHireRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Initial Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__INITIAL_PORT = eINSTANCE.getVessel_InitialPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Final Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__FINAL_PORT = eINSTANCE.getVessel_FinalPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Heel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__START_HEEL = eINSTANCE.getVessel_StartHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Availability</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__AVAILABILITY = eINSTANCE.getVessel_Availability();
+
+		/**
+		 * The meta object literal for the '<em><b>Time Chartered</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__TIME_CHARTERED = eINSTANCE.getVessel_TimeChartered();
+
+		/**
+		 * The meta object literal for the '<em><b>Time Charter Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__TIME_CHARTER_RATE = eINSTANCE.getVessel_TimeCharterRate();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.VesselClassImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClass()
+		 * @generated
+		 */
+		EClass VESSEL_CLASS = eINSTANCE.getVesselClass();
+
+		/**
+		 * The meta object literal for the '<em><b>Inaccessible Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS__INACCESSIBLE_PORTS = eINSTANCE.getVesselClass_InaccessiblePorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Fuel</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS__BASE_FUEL = eINSTANCE.getVesselClass_BaseFuel();
+
+		/**
+		 * The meta object literal for the '<em><b>Capacity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__CAPACITY = eINSTANCE.getVesselClass_Capacity();
+
+		/**
+		 * The meta object literal for the '<em><b>Fill Capacity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__FILL_CAPACITY = eINSTANCE.getVesselClass_FillCapacity();
+
+		/**
+		 * The meta object literal for the '<em><b>Spot Charter Count</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__SPOT_CHARTER_COUNT = eINSTANCE.getVesselClass_SpotCharterCount();
+
+		/**
+		 * The meta object literal for the '<em><b>Spot Charter Day Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__SPOT_CHARTER_DAY_RATE = eINSTANCE.getVesselClass_SpotCharterDayRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Attributes</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS__LADEN_ATTRIBUTES = eINSTANCE.getVesselClass_LadenAttributes();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Attributes</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS__BALLAST_ATTRIBUTES = eINSTANCE.getVesselClass_BallastAttributes();
+
+		/**
+		 * The meta object literal for the '<em><b>Fuel Consumption</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS__FUEL_CONSUMPTION = eINSTANCE.getVesselClass_FuelConsumption();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__MIN_SPEED = eINSTANCE.getVesselClass_MinSpeed();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__MAX_SPEED = eINSTANCE.getVesselClass_MaxSpeed();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Heel</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__MIN_HEEL = eINSTANCE.getVesselClass_MinHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Warming Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__WARMING_TIME = eINSTANCE.getVesselClass_WarmingTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Cooling Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__COOLING_TIME = eINSTANCE.getVesselClass_CoolingTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Cooling Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__COOLING_VOLUME = eINSTANCE.getVesselClass_CoolingVolume();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl <em>Vessel Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.VesselEventImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselEvent()
+		 * @generated
+		 */
+		EClass VESSEL_EVENT = eINSTANCE.getVesselEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Duration In Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__DURATION_IN_DAYS = eINSTANCE.getVesselEvent_DurationInDays();
+
+		/**
+		 * The meta object literal for the '<em><b>Allowed Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT__ALLOWED_VESSELS = eINSTANCE.getVesselEvent_AllowedVessels();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT__PORT = eINSTANCE.getVesselEvent_Port();
+
+		/**
+		 * The meta object literal for the '<em><b>Earliest Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__EARLIEST_START_DATE = eINSTANCE.getVesselEvent_EarliestStartDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Latest Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__LATEST_START_DATE = eINSTANCE.getVesselEvent_LatestStartDate();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetModelImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFleetModel()
+		 * @generated
+		 */
+		EClass FLEET_MODEL = eINSTANCE.getFleetModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessels</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_MODEL__VESSELS = eINSTANCE.getFleetModel_Vessels();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Classes</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_MODEL__VESSEL_CLASSES = eINSTANCE.getFleetModel_VesselClasses();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_MODEL__VESSEL_EVENTS = eINSTANCE.getFleetModel_VesselEvents();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Fuels</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_MODEL__BASE_FUELS = eINSTANCE.getFleetModel_BaseFuels();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getBaseFuel()
+		 * @generated
+		 */
+		EClass BASE_FUEL = eINSTANCE.getBaseFuel();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getDryDockEvent()
+		 * @generated
+		 */
+		EClass DRY_DOCK_EVENT = eINSTANCE.getDryDockEvent();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl <em>Charter Out Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getCharterOutEvent()
+		 * @generated
+		 */
+		EClass CHARTER_OUT_EVENT = eINSTANCE.getCharterOutEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Relocate To</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_OUT_EVENT__RELOCATE_TO = eINSTANCE.getCharterOutEvent_RelocateTo();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel Options</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_OUT_EVENT__HEEL_OPTIONS = eINSTANCE.getCharterOutEvent_HeelOptions();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getHeelOptions()
+		 * @generated
+		 */
+		EClass HEEL_OPTIONS = eINSTANCE.getHeelOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Available</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HEEL_OPTIONS__VOLUME_AVAILABLE = eINSTANCE.getHeelOptions_VolumeAvailable();
+
+		/**
+		 * The meta object literal for the '<em><b>Cv Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HEEL_OPTIONS__CV_VALUE = eINSTANCE.getHeelOptions_CvValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Per MMBTU</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HEEL_OPTIONS__PRICE_PER_MMBTU = eINSTANCE.getHeelOptions_PricePerMMBTU();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselStateAttributes()
+		 * @generated
+		 */
+		EClass VESSEL_STATE_ATTRIBUTES = eINSTANCE.getVesselStateAttributes();
+
+		/**
+		 * The meta object literal for the '<em><b>Nbo Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_STATE_ATTRIBUTES__NBO_RATE = eINSTANCE.getVesselStateAttributes_NboRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Idle NBO Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE = eINSTANCE.getVesselStateAttributes_IdleNBORate();
+
+		/**
+		 * The meta object literal for the '<em><b>Idle Base Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE = eINSTANCE.getVesselStateAttributes_IdleBaseRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal NBO Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE = eINSTANCE.getVesselStateAttributes_CanalNBORate();
+
+		/**
+		 * The meta object literal for the '<em><b>In Port Base Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE = eINSTANCE.getVesselStateAttributes_InPortBaseRate();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl <em>Vessel Availablility</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselAvailablility()
+		 * @generated
+		 */
+		EClass VESSEL_AVAILABLILITY = eINSTANCE.getVesselAvailablility();
+
+		/**
+		 * The meta object literal for the '<em><b>Start At</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABLILITY__START_AT = eINSTANCE.getVesselAvailablility_StartAt();
+
+		/**
+		 * The meta object literal for the '<em><b>Start After</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABLILITY__START_AFTER = eINSTANCE.getVesselAvailablility_StartAfter();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Before</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABLILITY__START_BEFORE = eINSTANCE.getVesselAvailablility_StartBefore();
+
+		/**
+		 * The meta object literal for the '<em><b>End At</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABLILITY__END_AT = eINSTANCE.getVesselAvailablility_EndAt();
+
+		/**
+		 * The meta object literal for the '<em><b>End After</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABLILITY__END_AFTER = eINSTANCE.getVesselAvailablility_EndAfter();
+
+		/**
+		 * The meta object literal for the '<em><b>End Before</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABLILITY__END_BEFORE = eINSTANCE.getVesselAvailablility_EndBefore();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFuelConsumption()
+		 * @generated
+		 */
+		EClass FUEL_CONSUMPTION = eINSTANCE.getFuelConsumption();
+
+		/**
+		 * The meta object literal for the '<em><b>Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUEL_CONSUMPTION__SPEED = eINSTANCE.getFuelConsumption_Speed();
+
+		/**
+		 * The meta object literal for the '<em><b>Consumption</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUEL_CONSUMPTION__CONSUMPTION = eINSTANCE.getFuelConsumption_Consumption();
+
+	}
+
+} //FleetPackage

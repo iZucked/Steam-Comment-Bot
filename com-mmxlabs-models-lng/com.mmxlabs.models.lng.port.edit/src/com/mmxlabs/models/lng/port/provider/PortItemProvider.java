@@ -66,6 +66,12 @@ public class PortItemProvider
 			super.getPropertyDescriptors(object);
 
 			addCapabilitiesPropertyDescriptor(object);
+			addTimeZonePropertyDescriptor(object);
+			addLoadDurationPropertyDescriptor(object);
+			addDischargeDurationPropertyDescriptor(object);
+			addCvValuePropertyDescriptor(object);
+			addDefaultStartTimePropertyDescriptor(object);
+			addAllowCooldownPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -88,6 +94,138 @@ public class PortItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Time Zone feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTimeZonePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_timeZone_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_timeZone_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__TIME_ZONE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Load Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLoadDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_loadDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_loadDuration_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__LOAD_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Discharge Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDischargeDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_dischargeDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_dischargeDuration_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__DISCHARGE_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cv Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCvValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_cvValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_cvValue_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__CV_VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Default Start Time feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultStartTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_defaultStartTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultStartTime_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__DEFAULT_START_TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Allow Cooldown feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowCooldownPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_allowCooldown_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_allowCooldown_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__ALLOW_COOLDOWN,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -130,6 +268,12 @@ public class PortItemProvider
 
 		switch (notification.getFeatureID(Port.class)) {
 			case PortPackage.PORT__CAPABILITIES:
+			case PortPackage.PORT__TIME_ZONE:
+			case PortPackage.PORT__LOAD_DURATION:
+			case PortPackage.PORT__DISCHARGE_DURATION:
+			case PortPackage.PORT__CV_VALUE:
+			case PortPackage.PORT__DEFAULT_START_TIME:
+			case PortPackage.PORT__ALLOW_COOLDOWN:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

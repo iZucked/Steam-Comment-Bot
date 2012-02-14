@@ -234,7 +234,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVesselSet()
 	 * @generated
 	 */
-	int AVESSEL_SET = 12;
+	int AVESSEL_SET = 11;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -723,42 +723,23 @@ public interface TypesPackage extends EPackage {
 
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.TimeWindowImpl <em>Time Window</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.TimeWindowImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getTimeWindow()
+	 * @see com.mmxlabs.models.lng.types.ITimezoneProvider
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getITimezoneProvider()
 	 * @generated
 	 */
-	int TIME_WINDOW = 11;
+	int ITIMEZONE_PROVIDER = 12;
 
 	/**
-	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * The number of structural features of the '<em>ITimezone Provider</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TIME_WINDOW__START_DATE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Length</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TIME_WINDOW__LENGTH = 1;
-
-	/**
-	 * The number of structural features of the '<em>Time Window</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TIME_WINDOW_FEATURE_COUNT = 2;
-
+	int ITIMEZONE_PROVIDER_FEATURE_COUNT = 0;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APort <em>APort</em>}'.
@@ -871,38 +852,6 @@ public interface TypesPackage extends EPackage {
 	EClass getASlot();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.TimeWindow <em>Time Window</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Time Window</em>'.
-	 * @see com.mmxlabs.models.lng.types.TimeWindow
-	 * @generated
-	 */
-	EClass getTimeWindow();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.TimeWindow#getStartDate <em>Start Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Start Date</em>'.
-	 * @see com.mmxlabs.models.lng.types.TimeWindow#getStartDate()
-	 * @see #getTimeWindow()
-	 * @generated
-	 */
-	EAttribute getTimeWindow_StartDate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.TimeWindow#getLength <em>Length</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Length</em>'.
-	 * @see com.mmxlabs.models.lng.types.TimeWindow#getLength()
-	 * @see #getTimeWindow()
-	 * @generated
-	 */
-	EAttribute getTimeWindow_Length();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AVesselSet <em>AVessel Set</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -911,6 +860,16 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getAVesselSet();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ITimezone Provider</em>'.
+	 * @see com.mmxlabs.models.lng.types.ITimezoneProvider
+	 * @generated
+	 */
+	EClass getITimezoneProvider();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1045,32 +1004,6 @@ public interface TypesPackage extends EPackage {
 		EClass ASLOT = eINSTANCE.getASlot();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.TimeWindowImpl <em>Time Window</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.TimeWindowImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getTimeWindow()
-		 * @generated
-		 */
-		EClass TIME_WINDOW = eINSTANCE.getTimeWindow();
-
-		/**
-		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TIME_WINDOW__START_DATE = eINSTANCE.getTimeWindow_StartDate();
-
-		/**
-		 * The meta object literal for the '<em><b>Length</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TIME_WINDOW__LENGTH = eINSTANCE.getTimeWindow_Length();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AVesselSetImpl <em>AVessel Set</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1079,6 +1012,16 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EClass AVESSEL_SET = eINSTANCE.getAVesselSet();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.ITimezoneProvider
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getITimezoneProvider()
+		 * @generated
+		 */
+		EClass ITIMEZONE_PROVIDER = eINSTANCE.getITimezoneProvider();
 
 	}
 
