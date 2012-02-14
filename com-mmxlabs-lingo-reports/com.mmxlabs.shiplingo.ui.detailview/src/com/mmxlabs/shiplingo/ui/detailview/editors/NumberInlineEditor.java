@@ -91,7 +91,6 @@ public class NumberInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected Object getValue() {
-		// TODO Auto-generated method stub
 		return super.getValue();
 	}
 }
