@@ -54,6 +54,12 @@ public final class NumberTypes {
 				return d;
 			}
 		}
+		// int overflow check!
+		if ((type == i)) {
+			if (num.longValue() > getMaximum(type)) {
+				return num;
+			}
+		}
 
 		// Convert formatter output to required type
 		if (type == i) {
