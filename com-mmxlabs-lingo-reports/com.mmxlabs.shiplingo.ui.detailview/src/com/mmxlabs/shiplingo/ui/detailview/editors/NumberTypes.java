@@ -118,7 +118,7 @@ public final class NumberTypes {
 		} else if ((type == f) || (type == d)) {
 			return (long) Integer.MAX_VALUE;
 		} else if (type == p) {
-			// % is 0 -> 1
+			// % is 0.0 -> 1.0
 			return 1l;
 		}
 		// Error?
