@@ -50,7 +50,7 @@ public class DateAndOptionalTimeCellEditor extends CellEditor {
 
 	@Override
 	protected Control createControl(final Composite parent) {
-		popup = new DateAndComboTime(parent, SWT.DROP_DOWN, false, 0, true);
+		popup = new DateAndComboTime(parent, SWT.NONE, false, 0, false);
 		popup.addListener(SWT.Selection, getSelectionListener());
 		popup.addKeyListener(getKeyListener());
 		popup.addDisposeListener(new DisposeListener() {
@@ -105,8 +105,10 @@ public class DateAndOptionalTimeCellEditor extends CellEditor {
 
 	@Override
 	protected void doSetValue(final Object value) {
-		final Pair<Calendar, Boolean> p = (Pair<Calendar, Boolean>) value;
-		popup.setValue(p.getFirst(), p.getSecond());
+		if (value != null) {
+			final Pair<Calendar, Boolean> p = (Pair<Calendar, Boolean>) value;
+			popup.setValue(p.getFirst(), p.getSecond());
+		}
 	}
 
 	@Override
