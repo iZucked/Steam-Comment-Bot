@@ -48,11 +48,11 @@ public class ScenarioRunner {
 		this.scenario = scenario;
 	}
 
-	protected final Schedule getFinalSchedule() {
+	public final Schedule getFinalSchedule() {
 		return finalSchedule;
 	}
 
-	protected final Schedule getIntialSchedule() {
+	public final Schedule getIntialSchedule() {
 		return intialSchedule;
 	}
 
