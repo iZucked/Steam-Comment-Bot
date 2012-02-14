@@ -41,11 +41,11 @@ public final class NumberTypes {
 		return formatter;
 	}
 
-	public static Object toNumber(final EDataType type, final String textValue) throws ParseException {
+	public static Number toNumber(final EDataType type, final String textValue) throws ParseException {
 
 		final NumberFormat formatter = getFormatter(type);
 
-		Object num = formatter.parse(textValue);
+		Number num = formatter.parse(textValue);
 
 		if (type == p) {
 			if (num instanceof Number) {
