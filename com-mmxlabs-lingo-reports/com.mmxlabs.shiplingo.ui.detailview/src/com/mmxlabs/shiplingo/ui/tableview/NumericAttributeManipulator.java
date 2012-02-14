@@ -4,13 +4,18 @@
  */
 package com.mmxlabs.shiplingo.ui.tableview;
 
+import java.text.ParseException;
+
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
+import com.mmxlabs.rcp.common.celleditors.NumberCellEditor;
+import com.mmxlabs.shiplingo.ui.detailview.editors.NumberTypes;
+import com.mmxlabs.shiplingo.ui.detailview.editors.NumberVerifyListener;
 
 /**
  * @author hinton
@@ -19,6 +24,13 @@ import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
 public class NumericAttributeManipulator extends BasicAttributeManipulator {
 	public NumericAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
 		super(field, editingDomain);
+	}
+
+	@Override
+	public Object getValue(final Object object) {
+		// TODO Auto-generated method stub
+		final Object value = super.getValue(object);
+		return value;
 	}
 
 	@Override
@@ -36,15 +48,23 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public CellEditor getCellEditor(final Composite c, final Object object) {
-		final SpinnerCellEditor editor = new SpinnerCellEditor(c);
+		final EDataType eType = (EDataType) field.getEType();
+		final NumberCellEditor editor = new NumberCellEditor(c, new NumberVerifyListener(eType), null, new NumberCellEditor.INumberConvertor() {
 
-		if (field.getEType().equals(EcorePackage.eINSTANCE.getEInt()) || field.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
-			editor.setDigits(0);
-		} else {
-			editor.setDigits(3);
-		}
+			@Override
+			public String toString(final Number number) {
+				return NumberTypes.toString(eType, number);
+			}
 
-		editor.setMaximumValue(10000000);
+			@Override
+			public Number toNumber(final String string) {
+				try {
+					return NumberTypes.toNumber(eType, string);
+				} catch (final ParseException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		});
 		return editor;
 	}
 
