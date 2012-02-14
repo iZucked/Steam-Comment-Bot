@@ -6,6 +6,7 @@ import java.text.ParseException;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.widgets.Text;
 
 public class NumberVerifyListener implements VerifyListener {
 	private final EDataType type;
@@ -21,7 +22,11 @@ public class NumberVerifyListener implements VerifyListener {
 	@Override
 	public void verifyText(final VerifyEvent e) {
 
-		final String newText = e.text;
+		// Reconstruct new text
+		final String txt = ((Text) e.getSource()).getText();
+		final StringBuilder sb = new StringBuilder(txt);
+		sb.insert(e.start, e.text);
+		final String newText = sb.toString();
 
 		// When the control calls setText, no char will be set, but the text string will be
 		if (!((e.keyCode == 0) && (e.keyLocation == 0) && (e.character == 0))) {
