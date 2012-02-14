@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.scheduler.its.tests;
+package com.mmxlabs.scheduler.its.tests.scenarios;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,12 +17,13 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
-import org.junit.Test;
 
 import scenario.Scenario;
+import scenario.ScenarioPackage;
 import scenario.schedule.ScheduleFitness;
 
 import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
+import com.mmxlabs.scheduler.its.tests.ScenarioRunner;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?220">Case 220: Optimisation Result Test</a>
@@ -30,15 +31,24 @@ import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
  * @author Adam Semenenko
  * 
  */
-public class OptimisationResultTest {
+public class AbstractOptimisationResultTester {
+
+	static {
+		// Trigger EMF initialisation outside of eclipse environment.
+		@SuppressWarnings("unused")
+		final ScenarioPackage einstance = ScenarioPackage.eINSTANCE;
+	}
 
 	/**
 	 * Toggle between printing a map of fitness names to fitness values to testing the map against the fitnesses generated at runtime.
 	 */
 	private static final boolean printFitnessMap = false;
-
 	private static final String originalFitnessesMapName = "originalFitnesses";
 	private static final String endFitnessesMapName = "endFitnesses";
+
+	public AbstractOptimisationResultTester() {
+		super();
+	}
 
 	/**
 	 * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the fitness
@@ -48,11 +58,7 @@ public class OptimisationResultTest {
 	 * @throws IncompleteScenarioException
 	 * @throws InterruptedException
 	 */
-	@Test
-	public void testFitnessRepeatability() throws IOException, IncompleteScenarioException, InterruptedException {
-
-		// Load the scenaio to test
-		final URL url = getClass().getResource("/test.scenario");
+	public void runScenario(final URL url, final HashMap<String, Long> originalFitnesses, final HashMap<String, Long> endFitnesses) throws IOException, IncompleteScenarioException {
 		final Resource resource = new XMIResourceImpl(URI.createURI(url.toString()));
 		resource.load(Collections.emptyMap());
 
@@ -85,27 +91,6 @@ public class OptimisationResultTest {
 			printFitnessesAsMap(originalFitnessesMapName, currentOriginalFitnesses);
 			printFitnessesAsMap(endFitnessesMapName, currentEndFitnesses);
 		} else {
-			// ↓ ↓ PASTE PRINTED MAP HERE ↓ ↓ //
-			final HashMap<String, Long> originalFitnesses = new HashMap<String, Long>();
-			originalFitnesses.put("cargo-scheduler-canal-cost", 8955000L);
-			originalFitnesses.put("cargo-scheduler-group-profit", 0L);
-			originalFitnesses.put("cargo-scheduler-cost-cooldown", 30692220L);
-			originalFitnesses.put("cargo-scheduler-charter-revenue", 0L);
-			originalFitnesses.put("cargo-scheduler-lateness", 726000000L);
-			originalFitnesses.put("cargo-scheduler-cost-base", 44256952L);
-			originalFitnesses.put("cargo-scheduler-cost-lng", 257191648L);
-			originalFitnesses.put("cargo-scheduler-charter-cost", 0L);
-
-			final HashMap<String, Long> endFitnesses = new HashMap<String, Long>();
-			endFitnesses.put("cargo-scheduler-canal-cost", 1725000L);
-			endFitnesses.put("cargo-scheduler-group-profit", 0L);
-			endFitnesses.put("cargo-scheduler-cost-cooldown", 30692220L);
-			endFitnesses.put("cargo-scheduler-charter-revenue", 0L);
-			endFitnesses.put("cargo-scheduler-lateness", 0L);
-			endFitnesses.put("cargo-scheduler-cost-base", 25029537L);
-			endFitnesses.put("cargo-scheduler-cost-lng", 212223263L);
-			endFitnesses.put("cargo-scheduler-charter-cost", 0L);
-			// ↑ ↑ PASTE PRINTED MAP HERE ↑ ↑ //
 
 			// print them to console (for manual checking)
 			printOldAndNew("original", originalFitnesses, currentOriginalFitnesses);
@@ -181,4 +166,5 @@ public class OptimisationResultTest {
 		}
 		System.out.println();
 	}
+
 }
