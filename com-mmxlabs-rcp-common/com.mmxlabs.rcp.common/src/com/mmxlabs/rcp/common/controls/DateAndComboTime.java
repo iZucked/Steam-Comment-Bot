@@ -133,7 +133,11 @@ public class DateAndComboTime extends Composite {
 	}
 
 	public boolean isTimeSet() {
-		return setTime.getSelection();
+		if (optionalTime) {
+			return setTime.getSelection();
+		} else {
+			return false;
+		}
 	}
 
 	public synchronized Calendar getValue() {
