@@ -66,10 +66,14 @@ public class DateManipulator extends BasicAttributeManipulator {
 			return "";
 		}
 		final Calendar calendar;
+		final Object value = getValue(object);
+		if (value == null) {
+			return "";
+		}
 		if (optionalTime) {
-			calendar = ((Pair<Calendar, Boolean>) getValue(object)).getFirst();
+			calendar = ((Pair<Calendar, Boolean>) value).getFirst();
 		} else {
-			calendar = (Calendar) getValue(object);
+			calendar = (Calendar) value;
 		}
 
 		final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
