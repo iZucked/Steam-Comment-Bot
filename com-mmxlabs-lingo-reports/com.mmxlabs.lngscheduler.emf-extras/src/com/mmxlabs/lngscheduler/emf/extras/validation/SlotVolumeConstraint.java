@@ -11,16 +11,15 @@ import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
-import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
-
 import scenario.Scenario;
 import scenario.cargo.CargoPackage;
 import scenario.cargo.Slot;
 
+import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
+import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
+
 /**
- * A model constraint for checking that a slot's minimum and maximum volumes are
- * sensible (0 <= min <= max)
+ * A model constraint for checking that a slot's minimum and maximum volumes are sensible (0 <= min <= max)
  * 
  * @author Tom Hinton
  * 
@@ -29,9 +28,7 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse
-	 * .emf.validation.IValidationContext)
+	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
 	 */
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
@@ -39,37 +36,34 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 		if (object instanceof Slot) {
 			final EMFEventType eventType = ctx.getEventType();
 			if (eventType == EMFEventType.NULL) {
-				final Scenario scenario = ValidationSupport.getInstance()
-						.getScenario(object);
-				
-				if (scenario == null) return ctx.createSuccessStatus();
-				
+				final Scenario scenario = ValidationSupport.getInstance().getScenario(object);
+
+				if (scenario == null) {
+					return ctx.createSuccessStatus();
+				}
+
 				// This is being triggered by a batch mode validation.
 				final Slot slot = (Slot) object;
-				//TODO return some placeholders for the error message
+				// TODO return some placeholders for the error message
 				if (slot.getSlotOrContractMinQuantity(scenario) < 0) {
-					final DetailConstraintStatusDecorator dsd = 
-						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
-	
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());
+
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 					return dsd;
-					
 				}
 				if (slot.getSlotOrContractMaxQuantity(scenario) < 0) {
-					final DetailConstraintStatusDecorator dsd = 
-						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());
 
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 					return dsd;
 				}
 				if (slot.getSlotOrContractMinQuantity(scenario) > slot.getSlotOrContractMaxQuantity(scenario)) {
-					final DetailConstraintStatusDecorator dsd = 
-						new DetailConstraintStatusDecorator((IConstraintStatus)ctx.createFailureStatus());
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());
 
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
-					
+
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
-					
+
 					return dsd;
 				}
 			}

@@ -35,7 +35,6 @@ import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.BasicDiagnostic;
-import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -141,7 +140,6 @@ import scenario.optimiser.lso.provider.LsoItemProviderAdapterFactory;
 import scenario.optimiser.provider.OptimiserItemProviderAdapterFactory;
 import scenario.port.Port;
 import scenario.port.PortCapability;
-import scenario.port.PortModel;
 import scenario.port.PortPackage;
 import scenario.port.PortSelection;
 import scenario.port.provider.PortItemProviderAdapterFactory;
@@ -203,8 +201,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 
 		@Override
 		public String getName(final EObject referer, final EReference reference, final EObject target) {
-			if (target == null)
+			if (target == null) {
 				return "none";
+			}
 			return ((Schedule) target).getName();
 		}
 
@@ -272,33 +271,33 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		protected void install() {
 			getScenario().getPortModel().eAdapters().add(this);
 		}
-		
+
 		@Override
 		protected EList<? extends EObject> getObjects() {
 			return getScenario().getPortModel().getPortGroups();
 		}
 
 		@Override
-		public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
-			List<Pair<String, EObject>> groups = super.getAllowedValues(target, field);
-			List<Pair<String, EObject>> ports = portProvider.getAllowedValues(target, field);
-			
+		public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+			final List<Pair<String, EObject>> groups = super.getAllowedValues(target, field);
+			final List<Pair<String, EObject>> ports = portProvider.getAllowedValues(target, field);
+
 			final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>(groups.size() + ports.size());
 			result.addAll(groups);
 			result.addAll(ports);
-			
+
 			return result;
 		}
 
 		@Override
-		protected boolean isRelevantTarget(Object target, Object feature) {
-			return super.isRelevantTarget(target, feature) || feature == PortPackage.eINSTANCE.getPortModel_Ports();
+		protected boolean isRelevantTarget(final Object target, final Object feature) {
+			return super.isRelevantTarget(target, feature) || (feature == PortPackage.eINSTANCE.getPortModel_Ports());
 		}
 	};
-	
+
 	final ScenarioRVP portProvider = new SimpleRVP(PortPackage.eINSTANCE.getPortModel_Ports()) {
 		private final Map<PortCapability, List<Pair<String, EObject>>> matchingValues = new HashMap<PortCapability, List<Pair<String, EObject>>>();
-		
+
 		@Override
 		protected void install() {
 			getScenario().getPortModel().eAdapters().add(this);
@@ -317,7 +316,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			if (target instanceof Slot) {
 				return filterByContract((Slot) target);
 			}
-			
+
 			if (target instanceof PurchaseContract) {
 				return matchingValues.get(PortCapability.LOAD);
 			} else if (target instanceof SalesContract) {
@@ -325,18 +324,18 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			} else if (target instanceof Drydock) {
 				return matchingValues.get(PortCapability.DRYDOCK);
 			}
-			
+
 			return allValues;
 		}
 
 		private List<Pair<String, EObject>> filterByContract(final Slot slot) {
 			final Contract contract = slot.getContract();
-			
+
 			List<Pair<String, EObject>> m;
 			if (slot instanceof LoadSlot) {
 				m = matchingValues.get(PortCapability.LOAD);
 			} else {
-				m =  matchingValues.get(PortCapability.DISCHARGE);
+				m = matchingValues.get(PortCapability.DISCHARGE);
 			}
 			if (contract == null) {
 				return m;
@@ -345,9 +344,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 				for (final PortSelection p : contract.getDefaultPorts()) {
 					ports.addAll(p.getClosure(new UniqueEList<PortSelection>()));
 				}
-				if (ports.isEmpty()) return m;
+				if (ports.isEmpty()) {
+					return m;
+				}
 				final List<Pair<String, EObject>> filter = new ArrayList<Pair<String, EObject>>();
-				Iterator<Pair<String, EObject>> iterator = m.iterator();
+				final Iterator<Pair<String, EObject>> iterator = m.iterator();
 				while (iterator.hasNext()) {
 					final Pair<String, EObject> value = iterator.next();
 					if (ports.contains(value.getSecond())) {
@@ -357,7 +358,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 				return filter;
 			}
 		}
-		
+
 		@Override
 		protected void cacheValues() {
 			super.cacheValues();
@@ -367,9 +368,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 				for (final Pair<String, EObject> value : cachedValues) {
 					if (value.getSecond() != null) {
 						final Port p = (Port) value.getSecond();
-						if (p.getCapabilities().isEmpty()) matches.add(value); //TODO this is a hack, possibly;
-						if (p.getCapabilities().contains(pc)) // this will be slow; may need to persuade EMF to use a hashset to be more sensible.
+						if (p.getCapabilities().isEmpty()) {
+							matches.add(value); // TODO this is a hack, possibly;
+						}
+						if (p.getCapabilities().contains(pc)) {
 							matches.add(value);
+						}
 					}
 				}
 				matchingValues.put(pc, matches);
@@ -377,21 +381,19 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		}
 
 		@Override
-		protected boolean isRelevantTarget(Object target, Object feature) {
-			return super.isRelevantTarget(target, feature) || feature == PortPackage.eINSTANCE.getPort_Capabilities() || feature == CargoPackage.eINSTANCE.getSlot_Contract();
-		}
-
-		
-		
-		@Override
-		public boolean updateOnChangeToFeature(Object changedFeature) {
-			return super.updateOnChangeToFeature(changedFeature) || changedFeature == CargoPackage.eINSTANCE.getSlot_Contract();
+		protected boolean isRelevantTarget(final Object target, final Object feature) {
+			return super.isRelevantTarget(target, feature) || (feature == PortPackage.eINSTANCE.getPort_Capabilities()) || (feature == CargoPackage.eINSTANCE.getSlot_Contract());
 		}
 
 		@Override
-		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(EObject referer, EReference feature, EObject referenceValue) {
+		public boolean updateOnChangeToFeature(final Object changedFeature) {
+			return super.updateOnChangeToFeature(changedFeature) || (changedFeature == CargoPackage.eINSTANCE.getSlot_Contract());
+		}
+
+		@Override
+		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(final EObject referer, final EReference feature, final EObject referenceValue) {
 			if (referer instanceof Slot) {
-				return Collections.singleton(new Pair<Notifier, List<Object>>(referer, Collections.singletonList((Object)CargoPackage.eINSTANCE.getSlot_Contract())));
+				return Collections.singleton(new Pair<Notifier, List<Object>>(referer, Collections.singletonList((Object) CargoPackage.eINSTANCE.getSlot_Contract())));
 			}
 			return super.getNotifiers(referer, feature, referenceValue);
 		}
@@ -430,12 +432,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			if (scenario != null) {
 				if (target instanceof LoadSlot) {
 					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>(purchaseContracts);
-					result.get(0).setFirst(getName(target, null, null));
+					// result.get(0).setFirst(getName(target, null, null));
 					return result;
 				} else if (target instanceof Slot) {
 					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>(salesContracts);
 
-					result.get(0).setFirst(getName(target, null, null));
+					// result.get(0).setFirst(getName(target, null, null));
 					return result;
 				} else {
 					return allContracts;
@@ -446,27 +448,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		}
 
 		@Override
-		public String getName(EObject referer, EReference reference, EObject target) {
+		public String getName(final EObject referer, final EReference reference, final EObject target) {
 			if (target == null) {
-				if (referer instanceof Slot) {
-					final Port port = ((Slot) referer).getPort();
-					Contract portContract = null;
-					final Scenario scenario = getScenario();
-					if (scenario != null) {
-						final ContractModel cm = scenario.getContractModel();
-						if (cm != null) {
-							portContract = cm.getDefaultContract(port);
-						}
-					}
-
-					if (portContract != null) {
-						return "Default at " + port.getName() + " (" + portContract.getName() + ")";
-					} else {
-						return "empty";
-					}
-				} else {
-					return "empty";
-				}
+				return "";
 			} else {
 				return (String) target.eGet(nameAttribute);
 			}
@@ -479,28 +463,29 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			purchaseContracts = getSortedNames(scenario.getContractModel().getPurchaseContracts(), nameAttribute);
 			allContracts = getSortedNames(scenario.getContractModel().getSalesContracts(), nameAttribute);
 			allContracts.addAll(purchaseContracts);
-			allContracts.add(0, new Pair<String, EObject>("empty", null));
-			salesContracts.add(0, new Pair<String, EObject>("empty", null));
-			purchaseContracts.add(0, new Pair<String, EObject>("empty", null));
+			// allContracts.add(0, new Pair<String, EObject>("empty", null));
+			// salesContracts.add(0, new Pair<String, EObject>("empty", null));
+			// purchaseContracts.add(0, new Pair<String, EObject>("empty", null));
 		}
 
 		@Override
-		protected boolean isRelevantTarget(Object target, Object feature) {
-			return (feature == nameAttribute && target instanceof Contract) || feature == ContractPackage.eINSTANCE.getContractModel_PurchaseContracts()
-					|| feature == ContractPackage.eINSTANCE.getContractModel_SalesContracts();
+		protected boolean isRelevantTarget(final Object target, final Object feature) {
+			return ((feature == nameAttribute) && (target instanceof Contract)) || (feature == ContractPackage.eINSTANCE.getContractModel_PurchaseContracts())
+					|| (feature == ContractPackage.eINSTANCE.getContractModel_SalesContracts());
 		}
 
 		@Override
-		public boolean updateOnChangeToFeature(Object changedFeature) {
+		public boolean updateOnChangeToFeature(final Object changedFeature) {
 			return changedFeature == CargoPackage.eINSTANCE.getSlot_Port();
 		}
 
 		@Override
-		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(EObject referer, EReference feature, EObject referenceValue) {
-			if (referenceValue == null && referer instanceof Slot) {
+		public Iterable<Pair<Notifier, List<Object>>> getNotifiers(final EObject referer, final EReference feature, final EObject referenceValue) {
+			if ((referenceValue == null) && (referer instanceof Slot)) {
 				final Port port = ((Slot) referer).getPort();
-				if (port == null)
+				if (port == null) {
 					return Collections.emptySet();
+				}
 
 				final List<Pair<Notifier, List<Object>>> notifiers = new LinkedList<Pair<Notifier, List<Object>>>();
 				final Scenario s = getScenario();
@@ -538,9 +523,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	private static List<String> prefixExtensions(List<String> extensions, String prefix) {
-		List<String> result = new ArrayList<String>();
-		for (String extension : extensions) {
+	private static List<String> prefixExtensions(final List<String> extensions, final String prefix) {
+		final List<String> result = new ArrayList<String>();
+		for (final String extension : extensions) {
 			result.add(prefix + extension);
 		}
 		return Collections.unmodifiableList(result);
@@ -636,7 +621,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * @generated
 	 */
 	protected IPartListener partListener = new IPartListener() {
-		public void partActivated(IWorkbenchPart p) {
+		@Override
+		public void partActivated(final IWorkbenchPart p) {
 			if (p instanceof ContentOutline) {
 				if (((ContentOutline) p).getCurrentPage() == contentOutlinePage) {
 					getActionBarContributor().setActiveEditor(ScenarioEditor.this);
@@ -653,19 +639,23 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			}
 		}
 
-		public void partBroughtToTop(IWorkbenchPart p) {
+		@Override
+		public void partBroughtToTop(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
-		public void partClosed(IWorkbenchPart p) {
+		@Override
+		public void partClosed(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
-		public void partDeactivated(IWorkbenchPart p) {
+		@Override
+		public void partDeactivated(final IWorkbenchPart p) {
 			// Ignore.
 		}
 
-		public void partOpened(IWorkbenchPart p) {
+		@Override
+		public void partOpened(final IWorkbenchPart p) {
 			// Ignore.
 		}
 	};
@@ -712,14 +702,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 */
 	protected EContentAdapter problemIndicationAdapter = new EContentAdapter() {
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			if (notification.getNotifier() instanceof Resource) {
 				switch (notification.getFeatureID(Resource.class)) {
 				case Resource.RESOURCE__IS_LOADED:
 				case Resource.RESOURCE__ERRORS:
 				case Resource.RESOURCE__WARNINGS: {
-					Resource resource = (Resource) notification.getNotifier();
-					Diagnostic diagnostic = analyzeResourceProblems(resource, null);
+					final Resource resource = (Resource) notification.getNotifier();
+					final Diagnostic diagnostic = analyzeResourceProblems(resource, null);
 					if (diagnostic.getSeverity() != Diagnostic.OK) {
 						resourceToDiagnosticMap.put(resource, diagnostic);
 					} else {
@@ -728,6 +718,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 
 					if (updateProblemIndication) {
 						getSite().getShell().getDisplay().asyncExec(new Runnable() {
+							@Override
 							public void run() {
 								updateProblemIndication();
 							}
@@ -742,12 +733,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		}
 
 		@Override
-		protected void setTarget(Resource target) {
+		protected void setTarget(final Resource target) {
 			basicSetTarget(target);
 		}
 
 		@Override
-		protected void unsetTarget(Resource target) {
+		protected void unsetTarget(final Resource target) {
 			basicUnsetTarget(target);
 		}
 	};
@@ -821,12 +812,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			editingDomain.getCommandStack().flush();
 
 			updateProblemIndication = false;
-			for (Resource resource : changedResources) {
+			for (final Resource resource : changedResources) {
 				if (resource.isLoaded()) {
 					resource.unload();
 					try {
 						resource.load(Collections.EMPTY_MAP);
-					} catch (IOException exception) {
+					} catch (final IOException exception) {
 						if (!resourceToDiagnosticMap.containsKey(resource)) {
 							resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
 						}
@@ -850,28 +841,28 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 */
 	protected void updateProblemIndication() {
 		if (updateProblemIndication) {
-			BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK, "com.mmxlabs.lngscheduler.emf.editor", 0, null, new Object[] { editingDomain.getResourceSet() });
-			for (Diagnostic childDiagnostic : resourceToDiagnosticMap.values()) {
+			final BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK, "com.mmxlabs.lngscheduler.emf.editor", 0, null, new Object[] { editingDomain.getResourceSet() });
+			for (final Diagnostic childDiagnostic : resourceToDiagnosticMap.values()) {
 				if (childDiagnostic.getSeverity() != Diagnostic.OK) {
 					diagnostic.add(childDiagnostic);
 				}
 			}
 
 			int lastEditorPage = getPageCount() - 1;
-			if (lastEditorPage >= 0 && getEditor(lastEditorPage) instanceof ProblemEditorPart) {
+			if ((lastEditorPage >= 0) && (getEditor(lastEditorPage) instanceof ProblemEditorPart)) {
 				((ProblemEditorPart) getEditor(lastEditorPage)).setDiagnostic(diagnostic);
 				if (diagnostic.getSeverity() != Diagnostic.OK) {
 					setActivePage(lastEditorPage);
 				}
 			} else if (diagnostic.getSeverity() != Diagnostic.OK) {
-				ProblemEditorPart problemEditorPart = new ProblemEditorPart();
+				final ProblemEditorPart problemEditorPart = new ProblemEditorPart();
 				problemEditorPart.setDiagnostic(diagnostic);
 				try {
 					addPage(++lastEditorPage, problemEditorPart, getEditorInput());
 					setPageText(lastEditorPage, problemEditorPart.getPartName());
 					setActivePage(lastEditorPage);
 					showTabs();
-				} catch (PartInitException exception) {
+				} catch (final PartInitException exception) {
 					LngEditorPlugin.INSTANCE.log(exception);
 				}
 			}
@@ -924,24 +915,26 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		// Create the command stack that will notify this editor as commands are
 		// executed.
 		//
-		BasicCommandStack commandStack = new BasicCommandStack();
+		final BasicCommandStack commandStack = new BasicCommandStack();
 
 		// Add a listener to set the most recent command's affected objects to
 		// be the selection of the viewer with focus.
 		//
 		commandStack.addCommandStackListener(new CommandStackListener() {
+			@Override
 			public void commandStackChanged(final EventObject event) {
 				getContainer().getDisplay().asyncExec(new Runnable() {
+					@Override
 					public void run() {
 						firePropertyChange(IEditorPart.PROP_DIRTY);
 
 						// Try to select the affected objects.
 						//
-						Command mostRecentCommand = ((CommandStack) event.getSource()).getMostRecentCommand();
+						final Command mostRecentCommand = ((CommandStack) event.getSource()).getMostRecentCommand();
 						if (mostRecentCommand != null) {
 							setSelectionToViewer(mostRecentCommand.getAffectedObjects());
 						}
-						if (propertySheetPage != null && !propertySheetPage.getControl().isDisposed()) {
+						if ((propertySheetPage != null) && !propertySheetPage.getControl().isDisposed()) {
 							propertySheetPage.refresh();
 						}
 					}
@@ -960,7 +953,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * @generated
 	 */
 	@Override
-	protected void firePropertyChange(int action) {
+	protected void firePropertyChange(final int action) {
 		super.firePropertyChange(action);
 	}
 
@@ -969,12 +962,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	public void setSelectionToViewer(Collection<?> collection) {
+	public void setSelectionToViewer(final Collection<?> collection) {
 		final Collection<?> theSelection = collection;
 		// Make sure it's okay.
 		//
-		if (theSelection != null && !theSelection.isEmpty()) {
-			Runnable runnable = new Runnable() {
+		if ((theSelection != null) && !theSelection.isEmpty()) {
+			final Runnable runnable = new Runnable() {
+				@Override
 				public void run() {
 					// Try to select the items in the current content viewer of
 					// the editor.
@@ -1010,7 +1004,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		 * 
 		 * @generated
 		 */
-		public ReverseAdapterFactoryContentProvider(AdapterFactory adapterFactory) {
+		public ReverseAdapterFactoryContentProvider(final AdapterFactory adapterFactory) {
 			super(adapterFactory);
 		}
 
@@ -1020,8 +1014,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		 * @generated
 		 */
 		@Override
-		public Object[] getElements(Object object) {
-			Object parent = super.getParent(object);
+		public Object[] getElements(final Object object) {
+			final Object parent = super.getParent(object);
 			return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
 		}
 
@@ -1031,8 +1025,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		 * @generated
 		 */
 		@Override
-		public Object[] getChildren(Object object) {
-			Object parent = super.getParent(object);
+		public Object[] getChildren(final Object object) {
+			final Object parent = super.getParent(object);
 			return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
 		}
 
@@ -1042,8 +1036,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		 * @generated
 		 */
 		@Override
-		public boolean hasChildren(Object object) {
-			Object parent = super.getParent(object);
+		public boolean hasChildren(final Object object) {
+			final Object parent = super.getParent(object);
 			return parent != null;
 		}
 
@@ -1053,7 +1047,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		 * @generated
 		 */
 		@Override
-		public Object getParent(Object object) {
+		public Object getParent(final Object object) {
 			return null;
 		}
 	}
@@ -1063,7 +1057,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	public void setCurrentViewerPane(ViewerPane viewerPane) {
+	public void setCurrentViewerPane(final ViewerPane viewerPane) {
 		if (currentViewerPane != viewerPane) {
 			if (currentViewerPane != null) {
 				currentViewerPane.showFocus(false);
@@ -1078,7 +1072,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	public void setCurrentViewer(Viewer viewer) {
+	public void setCurrentViewer(final Viewer viewer) {
 		// If it is changing...
 		//
 		if (currentViewer != viewer) {
@@ -1089,7 +1083,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 					// This just notifies those things that are affected by the
 					// section.
 					//
-					public void selectionChanged(SelectionChangedEvent selectionChangedEvent) {
+					@Override
+					public void selectionChanged(final SelectionChangedEvent selectionChangedEvent) {
 						setSelection(selectionChangedEvent.getSelection());
 					}
 				};
@@ -1133,17 +1128,17 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	protected void createContextMenuFor(StructuredViewer viewer) {
-		MenuManager contextMenu = new MenuManager("#PopUp");
+	protected void createContextMenuFor(final StructuredViewer viewer) {
+		final MenuManager contextMenu = new MenuManager("#PopUp");
 		contextMenu.add(new Separator("additions"));
 		contextMenu.setRemoveAllWhenShown(true);
 		contextMenu.addMenuListener(this);
-		Menu menu = contextMenu.createContextMenu(viewer.getControl());
+		final Menu menu = contextMenu.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
 
-		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-		Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance() };
+		final int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
+		final Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance() };
 		viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(viewer));
 		viewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(editingDomain, viewer));
 	}
@@ -1154,13 +1149,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * @generated
 	 */
 	public void createModel() {
-		URI resourceURI = EditUIUtil.getURI(getEditorInput());
+		final URI resourceURI = EditUIUtil.getURI(getEditorInput());
 
 		final IEclipseJobManager manager = LngEditorPlugin.getPlugin().getJobManager();
 		for (final IJobDescriptor descriptor : manager.getJobs()) {
 			final Object resource = manager.findResourceForJob(descriptor);
 			if (resource instanceof IResource) {
-				if (URI.createPlatformResourceURI(((IResource)resource).getFullPath().toString(), true).equals(resourceURI)) {
+				if (URI.createPlatformResourceURI(((IResource) resource).getFullPath().toString(), true).equals(resourceURI)) {
 					final IJobControl control = manager.getControlForJob(descriptor);
 					control.addListener(this);
 					jobControl = control;
@@ -1180,25 +1175,25 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, new XMLResource.ResourceHandler() {
 
 				@Override
-				public void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
+				public void preLoad(final XMLResource resource, final InputStream inputStream, final Map<?, ?> options) {
 					if (resource instanceof ResourceImpl) {
 						((ResourceImpl) resource).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
 					}
 				}
 
 				@Override
-				public void postLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options) {
+				public void postLoad(final XMLResource resource, final InputStream inputStream, final Map<?, ?> options) {
 					if (resource instanceof ResourceImpl) {
 						((ResourceImpl) resource).setIntrinsicIDToEObjectMap(null);
 					}
 				}
 
 				@Override
-				public void preSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {
+				public void preSave(final XMLResource resource, final OutputStream outputStream, final Map<?, ?> options) {
 				}
 
 				@Override
-				public void postSave(XMLResource resource, OutputStream outputStream, Map<?, ?> options) {
+				public void postSave(final XMLResource resource, final OutputStream outputStream, final Map<?, ?> options) {
 				}
 			});
 		}
@@ -1207,12 +1202,12 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			// Load the resource through the editing domain.
 			//
 			resource = editingDomain.getResourceSet().getResource(resourceURI, true);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			exception = e;
 			resource = editingDomain.getResourceSet().getResource(resourceURI, false);
 		}
 
-		Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
+		final Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
 		if (diagnostic.getSeverity() != Diagnostic.OK) {
 			resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
 		}
@@ -1224,9 +1219,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	public Diagnostic analyzeResourceProblems(Resource resource, Exception exception) {
+	public Diagnostic analyzeResourceProblems(final Resource resource, final Exception exception) {
 		if (!resource.getErrors().isEmpty() || !resource.getWarnings().isEmpty()) {
-			BasicDiagnostic basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR, "com.mmxlabs.lngscheduler.emf.editor", 0, getString("_UI_CreateModelError_message", resource.getURI()),
+			final BasicDiagnostic basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR, "com.mmxlabs.lngscheduler.emf.editor", 0, getString("_UI_CreateModelError_message", resource.getURI()),
 					new Object[] { exception == null ? (Object) resource : exception });
 			basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
 			return basicDiagnostic;
@@ -1254,27 +1249,32 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		//
 		if (!getEditingDomain().getResourceSet().getResources().isEmpty()) {
 			final Scenario scenario = getScenario();
-			if (scenario.getCargoModel() != null)
+			if (scenario.getCargoModel() != null) {
 				createCargoEditor(portProvider, contractProvider, contractProvider);
+			}
 
 			if (scenario.getFleetModel() != null) {
 				createFleetEditor(vesselClassProvider, portProvider);
 				createEventsEditor();
 			}
 
-			if (scenario.getPortModel() != null)
+			if (scenario.getPortModel() != null) {
 				createPortEditor(contractProvider, indexProvider);
+			}
 
-			if (scenario.getMarketModel() != null)
+			if (scenario.getMarketModel() != null) {
 				createIndexEditor();
+			}
 
-			if (scenario.getContractModel() != null)
+			if (scenario.getContractModel() != null) {
 				createContractEditor();
+			}
 
 			// add autocorrector
 
-			if (scenario.getScheduleModel() != null)
+			if (scenario.getScheduleModel() != null) {
 				createScheduleEditor();
+			}
 
 			autoCorrector = new AutoCorrector(getEditingDomain());
 			autoCorrector.addCorrector(new SlotVolumeCorrector());
@@ -1464,8 +1464,9 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				if (notification.isTouch() == false)
+				if (notification.isTouch() == false) {
 					chart.refresh();
+				}
 			}
 		});
 
@@ -1571,14 +1572,14 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		// // createContextMenuFor(portEditor.getViewer());
 		//
 		// canalEditorViewerPane = new CanalEVP(getSite().getPage(), this);
-//
-//		canalEditorViewerPane.createControl(sash);
-//		canalEditorViewerPane.setTitle("Canals", getTitleImage());
-//
-//		canalEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_CanalModel(), PortPackage.eINSTANCE.getCanalModel_Canals());
-//
-//		canalEditorViewerPane.getViewer().setInput(getScenario());
-//		// createContextMenuFor(canalEVP.getViewer());
+		//
+		// canalEditorViewerPane.createControl(sash);
+		// canalEditorViewerPane.setTitle("Canals", getTitleImage());
+		//
+		// canalEditorViewerPane.init(getAdapterFactory(), ScenarioPackage.eINSTANCE.getScenario_CanalModel(), PortPackage.eINSTANCE.getCanalModel_Canals());
+		//
+		// canalEditorViewerPane.getViewer().setInput(getScenario());
+		// // createContextMenuFor(canalEVP.getViewer());
 
 		final int pageIndex = addPage(sash);
 		setPageText(pageIndex, "Ports and Distances");
@@ -1628,7 +1629,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			setPageText(0, "");
 			if (getContainer() instanceof CTabFolder) {
 				((CTabFolder) getContainer()).setTabHeight(1);
-				Point point = getContainer().getSize();
+				final Point point = getContainer().getSize();
 				getContainer().setSize(point.x, point.y + 6);
 			}
 		}
@@ -1644,7 +1645,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			setPageText(0, getString("_UI_SelectionPage_label"));
 			if (getContainer() instanceof CTabFolder) {
 				((CTabFolder) getContainer()).setTabHeight(SWT.DEFAULT);
-				Point point = getContainer().getSize();
+				final Point point = getContainer().getSize();
 				getContainer().setSize(point.x, point.y - 6);
 			}
 		}
@@ -1656,7 +1657,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * @generated
 	 */
 	@Override
-	protected void pageChange(int pageIndex) {
+	protected void pageChange(final int pageIndex) {
 		super.pageChange(pageIndex);
 
 		if (contentOutlinePage != null) {
@@ -1671,7 +1672,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Object getAdapter(Class key) {
+	public Object getAdapter(final Class key) {
 		if (key.equals(IContentOutlinePage.class)) {
 			return showOutlineView() ? getContentOutlinePage() : null;
 		} else if (key.equals(IPropertySheetPage.class)) {
@@ -1692,7 +1693,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			//
 			class MyContentOutlinePage extends ContentOutlinePage {
 				@Override
-				public void createControl(Composite parent) {
+				public void createControl(final Composite parent) {
 					super.createControl(parent);
 					contentOutlineViewer = getTreeViewer();
 					contentOutlineViewer.addSelectionChangedListener(this);
@@ -1715,13 +1716,13 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 				}
 
 				@Override
-				public void makeContributions(IMenuManager menuManager, IToolBarManager toolBarManager, IStatusLineManager statusLineManager) {
+				public void makeContributions(final IMenuManager menuManager, final IToolBarManager toolBarManager, final IStatusLineManager statusLineManager) {
 					super.makeContributions(menuManager, toolBarManager, statusLineManager);
 					contentOutlineStatusLineManager = statusLineManager;
 				}
 
 				@Override
-				public void setActionBars(IActionBars actionBars) {
+				public void setActionBars(final IActionBars actionBars) {
 					super.setActionBars(actionBars);
 					getActionBarContributor().shareGlobalActions(this, actionBars);
 				}
@@ -1734,7 +1735,8 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			contentOutlinePage.addSelectionChangedListener(new ISelectionChangedListener() {
 				// This ensures that we handle selections correctly.
 				//
-				public void selectionChanged(SelectionChangedEvent event) {
+				@Override
+				public void selectionChanged(final SelectionChangedEvent event) {
 					handleContentOutlineSelection(event.getSelection());
 				}
 			});
@@ -1743,7 +1745,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		return contentOutlinePage;
 	}
 
-	private WeakHashMap<DetailCompositePropertySheetPage, Boolean> propertySheetPages = new WeakHashMap<DetailCompositePropertySheetPage, Boolean>();
+	private final WeakHashMap<DetailCompositePropertySheetPage, Boolean> propertySheetPages = new WeakHashMap<DetailCompositePropertySheetPage, Boolean>();
 
 	/**
 	 * This accesses a cached version of the property sheet. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1786,19 +1788,19 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	public void handleContentOutlineSelection(ISelection selection) {
-		if (currentViewerPane != null && !selection.isEmpty() && selection instanceof IStructuredSelection) {
-			Iterator<?> selectedElements = ((IStructuredSelection) selection).iterator();
+	public void handleContentOutlineSelection(final ISelection selection) {
+		if ((currentViewerPane != null) && !selection.isEmpty() && (selection instanceof IStructuredSelection)) {
+			final Iterator<?> selectedElements = ((IStructuredSelection) selection).iterator();
 			if (selectedElements.hasNext()) {
 				// Get the first selected element.
 				//
-				Object selectedElement = selectedElements.next();
+				final Object selectedElement = selectedElements.next();
 
 				// If it's the selection viewer, then we want it to select the
 				// same selection as this selection.
 				//
 				if (currentViewerPane.getViewer() == selectionViewer) {
-					ArrayList<Object> selectionList = new ArrayList<Object>();
+					final ArrayList<Object> selectionList = new ArrayList<Object>();
 					selectionList.add(selectedElement);
 					while (selectedElements.hasNext()) {
 						selectionList.add(selectedElements.next());
@@ -1840,14 +1842,30 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				if (cargoEditorViewerPane != null) cargoEditorViewerPane.setLockedForEditing(lockedForEditing);
-				if (vesselClassEditorViewerPane != null) vesselClassEditorViewerPane.setLockedForEditing(lockedForEditing);
-				if (vesselEditorViewerPane != null) vesselEditorViewerPane.setLockedForEditing(lockedForEditing);
-				if (purchaseContractEditorViewerPane != null) purchaseContractEditorViewerPane.setLockedForEditing(lockedForEditing);
-				if (salesContractEditorViewerPane != null) salesContractEditorViewerPane.setLockedForEditing(lockedForEditing);
-				if (entityEditorViewerPane != null) entityEditorViewerPane.setLockedForEditing(lockedForEditing);
-				if (indexEditorViewerPane != null) indexEditorViewerPane.setLockedForEditing(lockedForEditing);
-				if (portGroupEditorViewerPane != null) portGroupEditorViewerPane.setLockedForEditing(lockedForEditing);	
+				if (cargoEditorViewerPane != null) {
+					cargoEditorViewerPane.setLockedForEditing(lockedForEditing);
+				}
+				if (vesselClassEditorViewerPane != null) {
+					vesselClassEditorViewerPane.setLockedForEditing(lockedForEditing);
+				}
+				if (vesselEditorViewerPane != null) {
+					vesselEditorViewerPane.setLockedForEditing(lockedForEditing);
+				}
+				if (purchaseContractEditorViewerPane != null) {
+					purchaseContractEditorViewerPane.setLockedForEditing(lockedForEditing);
+				}
+				if (salesContractEditorViewerPane != null) {
+					salesContractEditorViewerPane.setLockedForEditing(lockedForEditing);
+				}
+				if (entityEditorViewerPane != null) {
+					entityEditorViewerPane.setLockedForEditing(lockedForEditing);
+				}
+				if (indexEditorViewerPane != null) {
+					indexEditorViewerPane.setLockedForEditing(lockedForEditing);
+				}
+				if (portGroupEditorViewerPane != null) {
+					portGroupEditorViewerPane.setLockedForEditing(lockedForEditing);
+				}
 				for (final DetailCompositePropertySheetPage page : propertySheetPages.keySet()) {
 					page.setLockedForEditing(lockedForEditing);
 				}
@@ -1861,7 +1879,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * @generated NO
 	 */
 	@Override
-	public void doSave(IProgressMonitor progressMonitor) {
+	public void doSave(final IProgressMonitor progressMonitor) {
 		// // run validation on save
 		// TODO fix this - doesn't work, presumably because of resource mismatch
 		// final IStatus status = (IStatus) Platform.getAdapterManager().getAdapter(getScenario().eResource(), IStatus.class);
@@ -1886,22 +1904,23 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 		// Do the work within an operation because this is a long running
 		// activity that modifies the workbench.
 		//
-		IRunnableWithProgress operation = new IRunnableWithProgress() {
+		final IRunnableWithProgress operation = new IRunnableWithProgress() {
 			// This is the method that gets invoked when the operation runs.
 			//
-			public void run(IProgressMonitor monitor) {
+			@Override
+			public void run(final IProgressMonitor monitor) {
 				// Save the resources to the file system.
 				//
 				boolean first = true;
-				for (Resource resource : editingDomain.getResourceSet().getResources()) {
+				for (final Resource resource : editingDomain.getResourceSet().getResources()) {
 					if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !editingDomain.isReadOnly(resource)) {
 						try {
-							long timeStamp = resource.getTimeStamp();
+							final long timeStamp = resource.getTimeStamp();
 							resource.save(saveOptions);
 							if (resource.getTimeStamp() != timeStamp) {
 								savedResources.add(resource);
 							}
-						} catch (Exception exception) {
+						} catch (final Exception exception) {
 							resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
 						}
 						first = false;
@@ -1910,7 +1929,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			}
 		};
 
-		if (jobControl != null && jobControl.getJobState() == EJobState.COMPLETED) {
+		if ((jobControl != null) && (jobControl.getJobState() == EJobState.COMPLETED)) {
 			// nuke job as we have to start again
 			jobControl.cancel();
 		}
@@ -1925,7 +1944,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 			//
 			((BasicCommandStack) editingDomain.getCommandStack()).saveIsDone();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
-		} catch (Exception exception) {
+		} catch (final Exception exception) {
 			// Something went wrong that shouldn't.
 			//
 			LngEditorPlugin.INSTANCE.log(exception);
@@ -1940,15 +1959,15 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	protected boolean isPersisted(Resource resource) {
+	protected boolean isPersisted(final Resource resource) {
 		boolean result = false;
 		try {
-			InputStream stream = editingDomain.getResourceSet().getURIConverter().createInputStream(resource.getURI());
+			final InputStream stream = editingDomain.getResourceSet().getURIConverter().createInputStream(resource.getURI());
 			if (stream != null) {
 				result = true;
 				stream.close();
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// Ignore
 		}
 		return result;
@@ -1971,10 +1990,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 */
 	@Override
 	public void doSaveAs() {
-		String[] filters = FILE_EXTENSION_FILTERS.toArray(new String[FILE_EXTENSION_FILTERS.size()]);
-		String[] files = LngEditorAdvisor.openFilePathDialog(getSite().getShell(), SWT.SAVE, filters);
+		final String[] filters = FILE_EXTENSION_FILTERS.toArray(new String[FILE_EXTENSION_FILTERS.size()]);
+		final String[] files = LngEditorAdvisor.openFilePathDialog(getSite().getShell(), SWT.SAVE, filters);
 		if (files.length > 0) {
-			URI uri = URI.createFileURI(files[0]);
+			final URI uri = URI.createFileURI(files[0]);
 			doSaveAs(uri, new URIEditorInput(uri));
 		}
 	}
@@ -1984,11 +2003,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	protected void doSaveAs(URI uri, IEditorInput editorInput) {
+	protected void doSaveAs(final URI uri, final IEditorInput editorInput) {
 		(editingDomain.getResourceSet().getResources().get(0)).setURI(uri);
 		setInputWithNotify(editorInput);
 		setPartName(editorInput.getName());
-		IProgressMonitor progressMonitor = getActionBars().getStatusLineManager() != null ? getActionBars().getStatusLineManager().getProgressMonitor() : new NullProgressMonitor();
+		final IProgressMonitor progressMonitor = getActionBars().getStatusLineManager() != null ? getActionBars().getStatusLineManager().getProgressMonitor() : new NullProgressMonitor();
 		doSave(progressMonitor);
 	}
 
@@ -1998,7 +2017,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * @generated
 	 */
 	@Override
-	public void init(IEditorSite site, IEditorInput editorInput) {
+	public void init(final IEditorSite site, final IEditorInput editorInput) {
 		setSite(site);
 		setInputWithNotify(editorInput);
 		setPartName(editorInput.getName());
@@ -2026,7 +2045,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * @generated
 	 */
 	@Override
-	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+	public void addSelectionChangedListener(final ISelectionChangedListener listener) {
 		selectionChangedListeners.add(listener);
 	}
 
@@ -2036,7 +2055,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * @generated
 	 */
 	@Override
-	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+	public void removeSelectionChangedListener(final ISelectionChangedListener listener) {
 		selectionChangedListeners.remove(listener);
 	}
 
@@ -2057,10 +2076,10 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * @generated
 	 */
 	@Override
-	public void setSelection(ISelection selection) {
+	public void setSelection(final ISelection selection) {
 		editorSelection = selection;
 
-		for (ISelectionChangedListener listener : selectionChangedListeners) {
+		for (final ISelectionChangedListener listener : selectionChangedListeners) {
 			listener.selectionChanged(new SelectionChangedEvent(this, selection));
 		}
 		setStatusLineManager(selection);
@@ -2071,19 +2090,19 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	public void setStatusLineManager(ISelection selection) {
-		IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager : getActionBars().getStatusLineManager();
+	public void setStatusLineManager(final ISelection selection) {
+		final IStatusLineManager statusLineManager = (currentViewer != null) && (currentViewer == contentOutlineViewer) ? contentOutlineStatusLineManager : getActionBars().getStatusLineManager();
 
 		if (statusLineManager != null) {
 			if (selection instanceof IStructuredSelection) {
-				Collection<?> collection = ((IStructuredSelection) selection).toList();
+				final Collection<?> collection = ((IStructuredSelection) selection).toList();
 				switch (collection.size()) {
 				case 0: {
 					statusLineManager.setMessage(getString("_UI_NoObjectSelected"));
 					break;
 				}
 				case 1: {
-					String text = new AdapterFactoryItemDelegator(adapterFactory).getText(collection.iterator().next());
+					final String text = new AdapterFactoryItemDelegator(adapterFactory).getText(collection.iterator().next());
 					statusLineManager.setMessage(getString("_UI_SingleObjectSelected", text));
 					break;
 				}
@@ -2103,7 +2122,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	private static String getString(String key) {
+	private static String getString(final String key) {
 		return LngEditorPlugin.INSTANCE.getString(key);
 	}
 
@@ -2112,7 +2131,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * 
 	 * @generated
 	 */
-	private static String getString(String key, Object s1) {
+	private static String getString(final String key, final Object s1) {
 		return LngEditorPlugin.INSTANCE.getString(key, new Object[] { s1 });
 	}
 
@@ -2122,7 +2141,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	 * @generated
 	 */
 	@Override
-	public void menuAboutToShow(IMenuManager menuManager) {
+	public void menuAboutToShow(final IMenuManager menuManager) {
 		((IMenuListener) getEditorSite().getActionBarContributor()).menuAboutToShow(menuManager);
 	}
 
@@ -2162,9 +2181,11 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	public void dispose() {
 		final IEclipseJobManager manager = LngEditorPlugin.getPlugin().getJobManager();
 		manager.removeEclipseJobManagerListener(this);
-		
-		if (jobControl != null) jobControl.removeListener(this);
-		
+
+		if (jobControl != null) {
+			jobControl.removeListener(this);
+		}
+
 		updateProblemIndication = false;
 
 		getSite().getPage().removePartListener(partListener);
@@ -2249,14 +2270,15 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	}
 
 	private IJobControl jobControl = null;
-	
+
 	@Override
-	public void jobAdded(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
+	public void jobAdded(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 		final URI uri = EditUIUtil.getURI(getEditorInput());
 		if (resource instanceof IResource) {
-			final URI resourceURI = URI.createPlatformResourceURI(((IResource)resource).getFullPath().toString(), true);
-			if (jobControl != null)
+			final URI resourceURI = URI.createPlatformResourceURI(((IResource) resource).getFullPath().toString(), true);
+			if (jobControl != null) {
 				jobControl.removeListener(this);
+			}
 			if (uri.equals(resourceURI)) {
 				control.addListener(this);
 				jobControl = control;
@@ -2265,7 +2287,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	}
 
 	@Override
-	public void jobRemoved(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
+	public void jobRemoved(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 		if (control == jobControl) {
 			control.removeListener(this);
 			jobControl = null;
@@ -2273,27 +2295,27 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	}
 
 	@Override
-	public void jobSelected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource) {
+	public void jobSelected(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
 
 	}
 
 	@Override
-	public void jobDeselected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource) {
+	public void jobDeselected(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
 
 	}
 
 	@Override
-	public void jobManagerAdded(IEclipseJobManager eclipseJobManager, IJobManager jobManager) {
+	public void jobManagerAdded(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
 
 	}
 
 	@Override
-	public void jobManagerRemoved(IEclipseJobManager eclipseJobManager, IJobManager jobManager) {
+	public void jobManagerRemoved(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
 
 	}
 
 	@Override
-	public boolean jobStateChanged(IJobControl job, EJobState oldState, EJobState newState) {
+	public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
 		switch (newState) {
 		case INITIALISING:
 		case INITIALISED:
@@ -2307,7 +2329,7 @@ public class ScenarioEditor extends MultiPageEditorPart implements IEditingDomai
 	}
 
 	@Override
-	public boolean jobProgressUpdated(IJobControl job, int progressDelta) {
+	public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
 		return true;
 	}
 

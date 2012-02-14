@@ -33,29 +33,20 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintSta
  * 
  */
 public class NullReferenceConstraint extends AbstractModelConstraint {
-	private static final List<EReference> checkedReferences = CollectionsUtil
-			.makeArrayList(
-					PortPackage.eINSTANCE.getDistanceLine_FromPort(),
-					PortPackage.eINSTANCE.getDistanceLine_ToPort(),
-					// PortPackage.eINSTANCE.getPort_DefaultContract(),
-					CargoPackage.eINSTANCE.getCargo_LoadSlot(),
-					CargoPackage.eINSTANCE.getCargo_DischargeSlot(),
-					CargoPackage.eINSTANCE.getSlot_Port(),
-					FleetPackage.eINSTANCE.getVessel_Class(),
-					FleetPackage.eINSTANCE.getVesselClass_BaseFuel(),
-					FleetPackage.eINSTANCE.getCharterOut_EndPort(),
-					FleetPackage.eINSTANCE.getVesselEvent_StartPort(),
-					FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(),
-					FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(),
-					FleetPackage.eINSTANCE.getPortAndTime_Port(),
-					ContractPackage.eINSTANCE.getContract_Entity()
-			// TODO add any more refs to check here
+	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(
+			PortPackage.eINSTANCE.getDistanceLine_FromPort(),
+			PortPackage.eINSTANCE.getDistanceLine_ToPort(),
+			// PortPackage.eINSTANCE.getPort_DefaultContract(),
+			CargoPackage.eINSTANCE.getCargo_LoadSlot(), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), CargoPackage.eINSTANCE.getSlot_Contract(),
+			FleetPackage.eINSTANCE.getVessel_Class(), FleetPackage.eINSTANCE.getVesselClass_BaseFuel(), FleetPackage.eINSTANCE.getCharterOut_EndPort(),
+			FleetPackage.eINSTANCE.getVesselEvent_StartPort(), FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(), FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(),
+			FleetPackage.eINSTANCE.getPortAndTime_Port(), ContractPackage.eINSTANCE.getContract_Entity()
+	// TODO add any more refs to check here
 			);
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 
-	private static synchronized Set<EReference> getReferencesToCheck(
-			final EClass targetClass) {
+	private static synchronized Set<EReference> getReferencesToCheck(final EClass targetClass) {
 		Set<EReference> result = cacheByClass.get(targetClass);
 		if (result == null) {
 			result = new HashSet<EReference>(targetClass.getEAllReferences());
@@ -73,16 +64,15 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 		final LinkedList<EReference> errors = new LinkedList<EReference>();
 		final Set<EReference> targetRefs = getReferencesToCheck(target.eClass());
 		for (final EReference ref : targetRefs) {
-			if (target.eGet(ref) == null
-					&& !(ref.isUnsettable() && target.eIsSet(ref) == false))
+			if ((target.eGet(ref) == null) && !(ref.isUnsettable() && (target.eIsSet(ref) == false))) {
 				errors.add(ref);
+			}
 		}
 
 		if (errors.isEmpty()) {
 			return ctx.createSuccessStatus();
 		} else {
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus());
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());
 			for (final EReference ref : errors) {
 				dcsd.addEObjectAndFeature(target, ref);
 			}

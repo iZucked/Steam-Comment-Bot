@@ -122,6 +122,9 @@ public abstract class AbstractDetailComposite extends Composite {
 	public AbstractDetailComposite(final Composite parent, final int style, final boolean shouldValidate) {
 		super(parent, style);
 		if (shouldValidate) {
+
+			// Hook into the editor?
+
 			validator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 
 			validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);

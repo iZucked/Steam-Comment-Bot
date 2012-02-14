@@ -320,6 +320,9 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 
 			private boolean hasValidationError(final EObject object) {
+
+				// PErhaps store error as adapter?
+
 				final Resource r = object.eResource();
 				if (r == null) {
 					return false;
