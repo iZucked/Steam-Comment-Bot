@@ -43,12 +43,15 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 	 * @return
 	 */
 	private int overlaps(final Slot o1, final Slot o2) {
-		if (o1.getWindowStart() == o2.getWindowStart())
+		if (o1.getWindowStart() == o2.getWindowStart()) {
 			return 0;
-		if (o1.getWindowStart() == null)
+		}
+		if (o1.getWindowStart() == null) {
 			return -1;
-		if (o2.getWindowStart() == null)
+		}
+		if (o2.getWindowStart() == null) {
 			return 1;
+		}
 
 		// if o1 or o2 overlap anywhere, they are equal
 		// otherwise, normal rules apply.
@@ -75,8 +78,7 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 			final Slot slot = (Slot) target;
 			final Port port = slot.getPort();
 
-			Map<Port, SortedSet<Slot>> slotsByPort = (Map<Port, SortedSet<Slot>>) ctx
-					.getCurrentConstraintData();
+			Map<Port, SortedSet<Slot>> slotsByPort = (Map<Port, SortedSet<Slot>>) ctx.getCurrentConstraintData();
 			if (slotsByPort == null) {
 				slotsByPort = new HashMap<Port, SortedSet<Slot>>();
 				ctx.putCurrentConstraintData(slotsByPort);
@@ -86,31 +88,31 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 			if (slotsAtPort == null) {
 				slotsAtPort = new TreeSet<Slot>(new Comparator<Slot>() {
 					@Override
-					public int compare(Slot o1, Slot o2) {
-						return o1.getWindowStart().compareTo(
-								o2.getWindowStart());
+					public int compare(final Slot o1, final Slot o2) {
+
+						if ((o1 == null) || (o1.getWindowStart() == null)) {
+							return -1;
+						}
+						if ((o2 == null) || (o2.getWindowStart() == null)) {
+							return 1;
+						}
+
+						return o1.getWindowStart().compareTo(o2.getWindowStart());
 					}
 				});
 				// locate other slots
-				EObject container = ValidationSupport.getInstance()
-						.getContainer(slot).getFirst();
-				while (container != null && !(container instanceof CargoModel)) {
+				EObject container = ValidationSupport.getInstance().getContainer(slot).getFirst();
+				while ((container != null) && !(container instanceof CargoModel)) {
 					container = container.eContainer();
 				}
 				if (container instanceof CargoModel) {
-					final List<EObject> objects = ValidationSupport
-							.getInstance().getContents(
-									container,
-									CargoPackage.eINSTANCE
-											.getCargoModel_Cargoes());
+					final List<EObject> objects = ValidationSupport.getInstance().getContents(container, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
 					for (final EObject o : objects) {
 						final Cargo c = (Cargo) o;
-						if (c.getLoadSlot() != null
-								&& c.getLoadSlot().getPort() == port) {
+						if ((c.getLoadSlot() != null) && (c.getLoadSlot().getPort() == port)) {
 							slotsAtPort.add(c.getLoadSlot());
 						}
-						if (c.getDischargeSlot() != null
-								&& c.getDischargeSlot().getPort() == port) {
+						if ((c.getDischargeSlot() != null) && (c.getDischargeSlot().getPort() == port)) {
 							slotsAtPort.add(c.getDischargeSlot());
 						}
 					}
@@ -133,26 +135,20 @@ public class PortContentionConstraint extends AbstractModelConstraint {
 				final int order = overlaps(s, slot);
 				if (order == 0) {
 					if (s != slot) {
-						message.append((message.length() > 0 ? ", " : "")
-								+ s.getId());
+						message.append((message.length() > 0 ? ", " : "") + s.getId());
 					}
-					if (s.getWindowStart() != null
-							&& slot.getWindowEnd() != null
-							&& s.getWindowStart().after(slot.getWindowEnd()))
+					if ((s.getWindowStart() != null) && (slot.getWindowEnd() != null) && s.getWindowStart().after(slot.getWindowEnd())) {
 						break;
+					}
 				} // else {
 					// break;
 					// }
 			}
 
 			if (message.length() > 0) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(
-								slot.getId(), port.getName(),
-								message.toString()));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getId(), port.getName(), message.toString()));
 
-				dsd.addEObjectAndFeature(slot,
-						CargoPackage.eINSTANCE.getSlot_Port());
+				dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 				return dsd;
 			}
 		}
