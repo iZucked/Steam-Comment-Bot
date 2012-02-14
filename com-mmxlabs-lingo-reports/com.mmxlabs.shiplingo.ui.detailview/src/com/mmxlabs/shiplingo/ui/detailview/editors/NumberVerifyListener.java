@@ -78,7 +78,11 @@ public class NumberVerifyListener implements VerifyListener {
 			}
 			try {
 				// Finally attempt to parse the number
-				NumberTypes.toNumber(type, newText);
+				final Number number = NumberTypes.toNumber(type, newText);
+				final long max = NumberTypes.getMaximum(type);
+				if (number.longValue() > max) {
+					e.doit = false;
+				}
 
 			} catch (final ParseException e1) {
 				e.doit = false;

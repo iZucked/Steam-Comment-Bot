@@ -111,4 +111,17 @@ public final class NumberTypes {
 
 		throw new RuntimeException("Unknown type for number : " + type.getName());
 	}
+
+	public static long getMaximum(final EDataType type) {
+		if ((type == l) || (type == i)) {
+			return (long) Integer.MAX_VALUE;
+		} else if ((type == f) || (type == d)) {
+			return (long) Integer.MAX_VALUE;
+		} else if (type == p) {
+			// % is 0 -> 1
+			return 1l;
+		}
+		// Error?
+		return 0l;
+	}
 }
