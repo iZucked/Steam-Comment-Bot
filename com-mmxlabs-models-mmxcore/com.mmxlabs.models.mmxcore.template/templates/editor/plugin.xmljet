@@ -255,12 +255,13 @@
 <%for (final GenPackage genPackage : genModel.getAllGenPackagesWithClassifiers()) {%>
 	<%if (!genPackage.getGenClasses().isEmpty()) {%>
 	<extension
-		<point="com.mmxlabs.models.ui.componenthelpers">
+		point="com.mmxlabs.models.ui.componenthelpers">
 		<%for (final GenClass genClass : genPackage.getGenClasses()) { %>
 		<componentHelper
+			id="<%=genPackage.getQualifiedPackageName()%>.helpers.<%=genClass.getName()%>"
 			helperClass="<%=genPackage.getPresentationPackageName()%>.composites.<%=genClass.getName()%>ComponentHelper"
 			inheritable="false"
-			modelClass=<%=genClass.getQualifiedInterfaceName()%> />
+			modelClass="<%=genClass.getQualifiedInterfaceName()%>" />
 		<% } // for genClasses %>
 	</extension>
     <%} // if genclasses is empty %>

@@ -121,14 +121,16 @@ public class PluginXML
   protected final String TEXT_104 = NL + "      </editor>" + NL + "   </extension>";
   protected final String TEXT_105 = NL;
   protected final String TEXT_106 = NL + "\t";
-  protected final String TEXT_107 = NL + "\t<extension" + NL + "\t\t<point=\"com.mmxlabs.models.ui.componenthelpers\">" + NL + "\t\t";
-  protected final String TEXT_108 = NL + "\t\t<componentHelper" + NL + "\t\t\thelperClass=\"";
-  protected final String TEXT_109 = ".composites.";
-  protected final String TEXT_110 = "ComponentHelper\"" + NL + "\t\t\tinheritable=\"false\"" + NL + "\t\t\tmodelClass=";
-  protected final String TEXT_111 = " />" + NL + "\t\t";
-  protected final String TEXT_112 = NL + "\t</extension>";
-  protected final String TEXT_113 = NL + "</plugin>";
-  protected final String TEXT_114 = NL;
+  protected final String TEXT_107 = NL + "\t<extension" + NL + "\t\tpoint=\"com.mmxlabs.models.ui.componenthelpers\">" + NL + "\t\t";
+  protected final String TEXT_108 = NL + "\t\t<componentHelper" + NL + "\t\t\tid=\"";
+  protected final String TEXT_109 = ".helpers.";
+  protected final String TEXT_110 = "\"" + NL + "\t\t\thelperClass=\"";
+  protected final String TEXT_111 = ".composites.";
+  protected final String TEXT_112 = "ComponentHelper\"" + NL + "\t\t\tinheritable=\"false\"" + NL + "\t\t\tmodelClass=\"";
+  protected final String TEXT_113 = "\" />" + NL + "\t\t";
+  protected final String TEXT_114 = NL + "\t</extension>";
+  protected final String TEXT_115 = NL + "</plugin>";
+  protected final String TEXT_116 = NL;
 
   public String generate(Object argument)
   {
@@ -389,18 +391,22 @@ public class PluginXML
     stringBuffer.append(TEXT_107);
     for (final GenClass genClass : genPackage.getGenClasses()) { 
     stringBuffer.append(TEXT_108);
-    stringBuffer.append(genPackage.getPresentationPackageName());
+    stringBuffer.append(genPackage.getQualifiedPackageName());
     stringBuffer.append(TEXT_109);
     stringBuffer.append(genClass.getName());
     stringBuffer.append(TEXT_110);
-    stringBuffer.append(genClass.getQualifiedInterfaceName());
+    stringBuffer.append(genPackage.getPresentationPackageName());
     stringBuffer.append(TEXT_111);
-     } // for genClasses 
+    stringBuffer.append(genClass.getName());
     stringBuffer.append(TEXT_112);
+    stringBuffer.append(genClass.getQualifiedInterfaceName());
+    stringBuffer.append(TEXT_113);
+     } // for genClasses 
+    stringBuffer.append(TEXT_114);
     } // if genclasses is empty 
      } // for genpackages with classifiers 
-    stringBuffer.append(TEXT_113);
-    stringBuffer.append(TEXT_114);
+    stringBuffer.append(TEXT_115);
+    stringBuffer.append(TEXT_116);
     return stringBuffer.toString();
   }
 }
