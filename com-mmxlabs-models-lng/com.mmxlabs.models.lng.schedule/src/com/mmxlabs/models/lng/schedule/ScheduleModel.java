@@ -1,0 +1,85 @@
+
+
+/**
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
+package com.mmxlabs.models.lng.schedule;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
+
+/**
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>Model</b></em>'.
+ * <!-- end-user-doc -->
+ *
+ * <p>
+ * The following features are supported:
+ * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getInitialSchedule <em>Initial Schedule</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getOptimisedSchedule <em>Optimised Schedule</em>}</li>
+ * </ul>
+ * </p>
+ *
+ * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getScheduleModel()
+ * @model
+ * @generated
+ */
+public interface ScheduleModel extends UUIDObject, NamedObject {
+	/**
+	 * Returns the value of the '<em><b>Initial Schedule</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Initial Schedule</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Initial Schedule</em>' containment reference.
+	 * @see #setInitialSchedule(Schedule)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getScheduleModel_InitialSchedule()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	Schedule getInitialSchedule();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getInitialSchedule <em>Initial Schedule</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Initial Schedule</em>' containment reference.
+	 * @see #getInitialSchedule()
+	 * @generated
+	 */
+	void setInitialSchedule(Schedule value);
+
+	/**
+	 * Returns the value of the '<em><b>Optimised Schedule</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Optimised Schedule</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Optimised Schedule</em>' containment reference.
+	 * @see #setOptimisedSchedule(Schedule)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getScheduleModel_OptimisedSchedule()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	Schedule getOptimisedSchedule();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getOptimisedSchedule <em>Optimised Schedule</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Optimised Schedule</em>' containment reference.
+	 * @see #getOptimisedSchedule()
+	 * @generated
+	 */
+	void setOptimisedSchedule(Schedule value);
+
+} // end of  ScheduleModel
+
+// finish type fixing

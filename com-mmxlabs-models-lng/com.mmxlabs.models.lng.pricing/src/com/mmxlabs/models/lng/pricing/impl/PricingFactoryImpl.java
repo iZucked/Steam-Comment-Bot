@@ -1,0 +1,260 @@
+/**
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
+package com.mmxlabs.models.lng.pricing.impl;
+
+import com.mmxlabs.models.lng.pricing.*;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+
+import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model <b>Factory</b>.
+ * <!-- end-user-doc -->
+ * @generated
+ */
+public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
+	/**
+	 * Creates the default factory implementation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static PricingFactory init() {
+		try {
+			PricingFactory thePricingFactory = (PricingFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/pricing/1/"); 
+			if (thePricingFactory != null) {
+				return thePricingFactory;
+			}
+		}
+		catch (Exception exception) {
+			EcorePlugin.INSTANCE.log(exception);
+		}
+		return new PricingFactoryImpl();
+	}
+
+	/**
+	 * Creates an instance of the factory.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PricingFactoryImpl() {
+		super();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EObject create(EClass eClass) {
+		switch (eClass.getClassifierID()) {
+			case PricingPackage.PRICING_MODEL: return createPricingModel();
+			case PricingPackage.DATA_INDEX: return createDataIndex();
+			case PricingPackage.DERIVED_INDEX: return createDerivedIndex();
+			case PricingPackage.INDEX_POINT: return createIndexPoint();
+			case PricingPackage.INDEX: return createIndex();
+			case PricingPackage.FLEET_COST_MODEL: return createFleetCostModel();
+			case PricingPackage.ROUTE_COST: return createRouteCost();
+			case PricingPackage.CHARTER_COST_MODEL: return createCharterCostModel();
+			case PricingPackage.BASE_FUEL_COST: return createBaseFuelCost();
+			case PricingPackage.SPOT_MARKET: return createSpotMarket();
+			case PricingPackage.PORT_COST: return createPortCost();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case PricingPackage.SPOT_TYPE:
+				return createSpotTypeFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case PricingPackage.SPOT_TYPE:
+				return convertSpotTypeToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PricingModel createPricingModel() {
+		PricingModelImpl pricingModel = new PricingModelImpl();
+		return pricingModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public <Value> DataIndex<Value> createDataIndex() {
+		DataIndexImpl<Value> dataIndex = new DataIndexImpl<Value>();
+		return dataIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public <Value> DerivedIndex<Value> createDerivedIndex() {
+		DerivedIndexImpl<Value> derivedIndex = new DerivedIndexImpl<Value>();
+		return derivedIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public <Value> IndexPoint<Value> createIndexPoint() {
+		IndexPointImpl<Value> indexPoint = new IndexPointImpl<Value>();
+		return indexPoint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public <Value> Index<Value> createIndex() {
+		IndexImpl<Value> index = new IndexImpl<Value>();
+		return index;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FleetCostModel createFleetCostModel() {
+		FleetCostModelImpl fleetCostModel = new FleetCostModelImpl();
+		return fleetCostModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RouteCost createRouteCost() {
+		RouteCostImpl routeCost = new RouteCostImpl();
+		return routeCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterCostModel createCharterCostModel() {
+		CharterCostModelImpl charterCostModel = new CharterCostModelImpl();
+		return charterCostModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuelCost createBaseFuelCost() {
+		BaseFuelCostImpl baseFuelCost = new BaseFuelCostImpl();
+		return baseFuelCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SpotMarket createSpotMarket() {
+		SpotMarketImpl spotMarket = new SpotMarketImpl();
+		return spotMarket;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortCost createPortCost() {
+		PortCostImpl portCost = new PortCostImpl();
+		return portCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SpotType createSpotTypeFromString(EDataType eDataType, String initialValue) {
+		SpotType result = SpotType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSpotTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PricingPackage getPricingPackage() {
+		return (PricingPackage)getEPackage();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @deprecated
+	 * @generated
+	 */
+	@Deprecated
+	public static PricingPackage getPackage() {
+		return PricingPackage.eINSTANCE;
+	}
+
+} //PricingFactoryImpl

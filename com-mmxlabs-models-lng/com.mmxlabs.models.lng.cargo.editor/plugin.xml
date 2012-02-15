@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="com.mmxlabs.models.lng.cargo.presentation.CargoModelWizardID"
+            name="%_UI_CargoModelWizard_label"
+            class="com.mmxlabs.models.lng.cargo.presentation.CargoModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/CargoModelFile.gif">
+         <description>%_UI_CargoModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="com.mmxlabs.models.lng.cargo.presentation.CargoEditorID"
+            name="%_UI_CargoEditor_label"
+            icon="icons/full/obj16/CargoModelFile.gif"
+            extensions="cargo"
+            class="com.mmxlabs.models.lng.cargo.presentation.CargoEditor"
+            contributorClass="com.mmxlabs.models.lng.cargo.presentation.CargoActionBarContributor">
+      </editor>
+   </extension>
+
+	
+	<extension
+		point="com.mmxlabs.models.ui.componenthelpers">
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.Cargo"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CargoComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.Cargo" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.Slot"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SlotComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.Slot" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.LoadSlot"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.LoadSlotComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.LoadSlot" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.DischargeSlot"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.DischargeSlotComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.DischargeSlot" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.CargoModel"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CargoModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.CargoModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.SpotSlot"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SpotSlotComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.SpotSlot" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.SpotLoadSlot"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SpotLoadSlotComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.SpotLoadSlot" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.SpotDischargeSlot"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SpotDischargeSlotComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.SpotDischargeSlot" />
+		
+	</extension>
+</plugin>

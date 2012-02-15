@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="com.mmxlabs.models.lng.input.presentation.InputModelWizardID"
+            name="%_UI_InputModelWizard_label"
+            class="com.mmxlabs.models.lng.input.presentation.InputModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/InputModelFile.gif">
+         <description>%_UI_InputModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="com.mmxlabs.models.lng.input.presentation.InputEditorID"
+            name="%_UI_InputEditor_label"
+            icon="icons/full/obj16/InputModelFile.gif"
+            extensions="input"
+            class="com.mmxlabs.models.lng.input.presentation.InputEditor"
+            contributorClass="com.mmxlabs.models.lng.input.presentation.InputActionBarContributor">
+      </editor>
+   </extension>
+
+	
+	<extension
+		point="com.mmxlabs.models.ui.componenthelpers">
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.input.helpers.InputModel"
+			helperClass="com.mmxlabs.models.lng.input.presentation.composites.InputModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.input.InputModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.input.helpers.Assignment"
+			helperClass="com.mmxlabs.models.lng.input.presentation.composites.AssignmentComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.input.Assignment" />
+		
+	</extension>
+</plugin>

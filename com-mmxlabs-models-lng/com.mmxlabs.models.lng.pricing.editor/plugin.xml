@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="com.mmxlabs.models.lng.pricing.presentation.PricingModelWizardID"
+            name="%_UI_PricingModelWizard_label"
+            class="com.mmxlabs.models.lng.pricing.presentation.PricingModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/PricingModelFile.gif">
+         <description>%_UI_PricingModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="com.mmxlabs.models.lng.pricing.presentation.PricingEditorID"
+            name="%_UI_PricingEditor_label"
+            icon="icons/full/obj16/PricingModelFile.gif"
+            extensions="pricing"
+            class="com.mmxlabs.models.lng.pricing.presentation.PricingEditor"
+            contributorClass="com.mmxlabs.models.lng.pricing.presentation.PricingActionBarContributor">
+      </editor>
+   </extension>
+
+	
+	<extension
+		point="com.mmxlabs.models.ui.componenthelpers">
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.PricingModel"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PricingModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.PricingModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.DataIndex"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.DataIndexComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.DataIndex" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.DerivedIndex"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.DerivedIndexComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.DerivedIndex" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.IndexPoint"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.IndexPointComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.IndexPoint" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.Index"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.IndexComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.Index" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.FleetCostModel"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.FleetCostModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.FleetCostModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.RouteCost"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.RouteCostComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.RouteCost" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.CharterCostModel"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CharterCostModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.CharterCostModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.BaseFuelCost"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.BaseFuelCostComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.BaseFuelCost" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.SpotMarket"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SpotMarketComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.SpotMarket" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.PortCost"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortCostComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.PortCost" />
+		
+	</extension>
+</plugin>

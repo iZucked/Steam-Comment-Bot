@@ -1,0 +1,103 @@
+/**
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
+package com.mmxlabs.models.lng.cargo.presentation.composites;
+
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+
+/**
+ * A component helper for CargoModel instances
+ *
+ * @generated
+ */
+public class CargoModelComponentHelper implements IComponentHelper {
+	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
+
+	/**
+	 * Construct a new instance, using the platform adapter manager
+	 *
+	 * @generated
+	 */
+	public CargoModelComponentHelper() {
+		this(Platform.getAdapterManager());
+	}
+
+	/**
+	 * Construct a new instance of this helper
+	 *
+	 * @generated
+	 */
+	public CargoModelComponentHelper(IAdapterManager adapterManager) {
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
+			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.UUID_OBJECT);
+			if (helper != null) superClassesHelpers.add(helper);
+		} {
+			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.NAMED_OBJECT);
+			if (helper != null) superClassesHelpers.add(helper);
+		}
+	}
+	
+	/**
+	 * add editors to a composite, using CargoModel as the supertype
+	 *
+	 * @generated
+	 */
+	 @Override
+	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO_MODEL);	
+	}
+	
+	/**
+	 * Create the editors for features on this class directly, and superclass' features.
+	 *
+	 * @generated
+	 */
+	@Override
+	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_loadSlotsEditor(detailComposite, topClass);
+		add_dischargeSlotsEditor(detailComposite, topClass);
+		add_cargosEditor(detailComposite, topClass);
+	}
+	/**
+	 * Create the editor for the loadSlots feature on CargoModel
+	 *
+	 * @generated
+	 */
+	protected void add_loadSlotsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS));
+	}
+	/**
+	 * Create the editor for the dischargeSlots feature on CargoModel
+	 *
+	 * @generated
+	 */
+	protected void add_dischargeSlotsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS));
+	}
+	/**
+	 * Create the editor for the cargos feature on CargoModel
+	 *
+	 * @generated
+	 */
+	protected void add_cargosEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__CARGOS));
+	}
+}

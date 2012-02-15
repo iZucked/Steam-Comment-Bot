@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="com.mmxlabs.models.lng.commercial.presentation.CommercialModelWizardID"
+            name="%_UI_CommercialModelWizard_label"
+            class="com.mmxlabs.models.lng.commercial.presentation.CommercialModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/CommercialModelFile.gif">
+         <description>%_UI_CommercialModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="com.mmxlabs.models.lng.commercial.presentation.CommercialEditorID"
+            name="%_UI_CommercialEditor_label"
+            icon="icons/full/obj16/CommercialModelFile.gif"
+            extensions="commercial"
+            class="com.mmxlabs.models.lng.commercial.presentation.CommercialEditor"
+            contributorClass="com.mmxlabs.models.lng.commercial.presentation.CommercialActionBarContributor">
+      </editor>
+   </extension>
+
+	
+	<extension
+		point="com.mmxlabs.models.ui.componenthelpers">
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.CommercialModel"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.CommercialModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.CommercialModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.LegalEntity"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.LegalEntityComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.LegalEntity" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.Contract"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ContractComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.Contract" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.SalesContract"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.SalesContractComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.SalesContract" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.DischargeContract"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.DischargeContractComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.DischargeContract" />
+		
+	</extension>
+</plugin>
