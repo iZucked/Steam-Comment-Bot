@@ -8,8 +8,10 @@
  */
 package com.mmxlabs.models.lng.fleet.impl;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 
@@ -675,7 +677,7 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 			marked.add(this);
 			
 			final FleetModel myModel = (FleetModel) eContainer();
-			for (final Vesssel v : myModel.getVessels()) {
+			for (final Vessel v : myModel.getVessels()) {
 				if (v.getVesselClass() == this) {
 					result.add(v);
 				}

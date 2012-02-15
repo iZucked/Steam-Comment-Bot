@@ -35,6 +35,15 @@ public interface TypesFactory extends EFactory {
 	AVesselSet createAVesselSet();
 
 	/**
+	 * Returns a new object of class '<em>ABase Fuel</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ABase Fuel</em>'.
+	 * @generated
+	 */
+	ABaseFuel createABaseFuel();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

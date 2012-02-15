@@ -8,7 +8,6 @@
  */
 package com.mmxlabs.models.lng.cargo;
 import com.mmxlabs.models.lng.types.ASpotMarket;
-
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**

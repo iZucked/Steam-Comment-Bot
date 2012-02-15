@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
+import com.mmxlabs.models.lng.types.ABaseFuel;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
@@ -19,6 +20,7 @@ import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.ARoute;
 import com.mmxlabs.models.lng.types.ASlot;
+import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselEvent;
@@ -125,6 +127,20 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * @generated
 	 */
 	private EClass iTimezoneProviderEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass aBaseFuelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass aSpotMarketEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -312,6 +328,24 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getABaseFuel() {
+		return aBaseFuelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getASpotMarket() {
+		return aSpotMarketEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public TypesFactory getTypesFactory() {
 		return (TypesFactory)getEFactoryInstance();
 	}
@@ -360,6 +394,10 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		aVesselSetEClass = createEClass(AVESSEL_SET);
 
 		iTimezoneProviderEClass = createEClass(ITIMEZONE_PROVIDER);
+
+		aBaseFuelEClass = createEClass(ABASE_FUEL);
+
+		aSpotMarketEClass = createEClass(ASPOT_MARKET);
 	}
 
 	/**
@@ -414,6 +452,10 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		aSlotEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		aVesselSetEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		aVesselSetEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		aBaseFuelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		aBaseFuelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		aSpotMarketEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		aSpotMarketEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(aPortEClass, APort.class, "APort", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -457,6 +499,10 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		op = addEOperation(iTimezoneProviderEClass, ecorePackage.getEString(), "getTimeZone", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEAttribute(), "attribute", 1, 1, IS_UNIQUE, IS_ORDERED);
 
+		initEClass(aBaseFuelEClass, ABaseFuel.class, "ABaseFuel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(aSpotMarketEClass, ASpotMarket.class, "ASpotMarket", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
 		// Create resource
 		createResource(eNS_URI);
 
@@ -478,7 +524,73 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		   source, 
 		   new String[] {
 			 "generatedType", "com.mmxlabs.models.lng.port.Port"
+		   });			
+		addAnnotation
+		  (aRouteEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.port.Route"
 		   });		
+		addAnnotation
+		  (aVesselEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.fleet.Vessel"
+		   });			
+		addAnnotation
+		  (aVesselClassEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.fleet.VesselClass"
+		   });		
+		addAnnotation
+		  (aVesselEventEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.fleet.VesselEvent"
+		   });		
+		addAnnotation
+		  (aContractEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.commercial.Contract"
+		   });		
+		addAnnotation
+		  (aLegalEntityEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.commercial.LegalEntity"
+		   });		
+		addAnnotation
+		  (aIndexEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.pricing.Index"
+		   });		
+		addAnnotation
+		  (aCargoEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.cargo.Cargo"
+		   });		
+		addAnnotation
+		  (aSlotEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.cargo.Slot"
+		   });		
+		addAnnotation
+		  (aBaseFuelEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.fleet.BaseFuel"
+		   });		
+		addAnnotation
+		  (aSpotMarketEClass, 
+		   source, 
+		   new String[] {
+			 "generatedType", "com.mmxlabs.models.lng.pricing.SpotMarket"
+		   });
 	}
 
 } //TypesPackageImpl

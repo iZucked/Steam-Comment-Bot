@@ -9,6 +9,7 @@
 package com.mmxlabs.models.lng.cargo;
 import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.types.ASlot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 
 import java.util.Date;
@@ -205,12 +206,12 @@ public interface Slot extends ASlot {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Contract</em>' reference.
-	 * @see #setContract(AContract)
+	 * @see #setContract(Contract)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Contract()
 	 * @model required="true"
 	 * @generated
 	 */
-	AContract getContract();
+	Contract getContract();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference.
@@ -220,7 +221,7 @@ public interface Slot extends ASlot {
 	 * @see #getContract()
 	 * @generated
 	 */
-	void setContract(AContract value);
+	void setContract(Contract value);
 
 	/**
 	 * Returns the value of the '<em><b>Duration</b></em>' attribute.

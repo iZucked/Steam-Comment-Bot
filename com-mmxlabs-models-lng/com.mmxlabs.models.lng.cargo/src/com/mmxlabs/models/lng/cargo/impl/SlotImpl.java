@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.cargo.impl;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.port.Port;
 
@@ -142,7 +143,7 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected AContract contract;
+	protected Contract contract;
 
 	/**
 	 * The default value of the '{@link #getDuration() <em>Duration</em>}' attribute.
@@ -435,10 +436,10 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AContract getContract() {
+	public Contract getContract() {
 		if (contract != null && contract.eIsProxy()) {
 			InternalEObject oldContract = (InternalEObject)contract;
-			contract = (AContract)eResolveProxy(oldContract);
+			contract = (Contract)eResolveProxy(oldContract);
 			if (contract != oldContract) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__CONTRACT, oldContract, contract));
@@ -452,7 +453,7 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AContract basicGetContract() {
+	public Contract basicGetContract() {
 		return contract;
 	}
 
@@ -461,8 +462,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setContract(AContract newContract) {
-		AContract oldContract = contract;
+	public void setContract(Contract newContract) {
+		Contract oldContract = contract;
 		contract = newContract;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CONTRACT, oldContract, contract));
@@ -705,7 +706,7 @@ public class SlotImpl extends ASlotImpl implements Slot {
 				setPort((Port)newValue);
 				return;
 			case CargoPackage.SLOT__CONTRACT:
-				setContract((AContract)newValue);
+				setContract((Contract)newValue);
 				return;
 			case CargoPackage.SLOT__DURATION:
 				setDuration((Integer)newValue);
@@ -744,7 +745,7 @@ public class SlotImpl extends ASlotImpl implements Slot {
 				setPort((Port)null);
 				return;
 			case CargoPackage.SLOT__CONTRACT:
-				setContract((AContract)null);
+				setContract((Contract)null);
 				return;
 			case CargoPackage.SLOT__DURATION:
 				unsetDuration();
