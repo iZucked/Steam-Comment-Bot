@@ -17,6 +17,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * @see com.mmxlabs.models.lng.types.TypesPackage#getAVesselEvent()
  * @model abstract="true"
+ *        annotation="http://www.mmxlabs.com/mmxcore/1/MMXCore generatedType='com.mmxlabs.models.lng.fleet.VesselEvent'"
  * @generated
  */
 public interface AVesselEvent extends UUIDObject, NamedObject {

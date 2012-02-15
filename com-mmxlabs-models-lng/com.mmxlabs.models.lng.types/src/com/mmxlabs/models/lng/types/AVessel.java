@@ -18,6 +18,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * @see com.mmxlabs.models.lng.types.TypesPackage#getAVessel()
  * @model abstract="true"
+ *        annotation="http://www.mmxlabs.com/mmxcore/1/MMXCore generatedType='com.mmxlabs.models.lng.fleet.Vessel'"
  * @generated
  */
 public interface AVessel extends AVesselSet {

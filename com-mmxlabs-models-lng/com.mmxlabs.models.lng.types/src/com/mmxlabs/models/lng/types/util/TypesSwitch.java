@@ -191,6 +191,24 @@ public class TypesSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case TypesPackage.ABASE_FUEL: {
+				ABaseFuel aBaseFuel = (ABaseFuel)theEObject;
+				T result = caseABaseFuel(aBaseFuel);
+				if (result == null) result = caseUUIDObject(aBaseFuel);
+				if (result == null) result = caseNamedObject(aBaseFuel);
+				if (result == null) result = caseMMXObject(aBaseFuel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case TypesPackage.ASPOT_MARKET: {
+				ASpotMarket aSpotMarket = (ASpotMarket)theEObject;
+				T result = caseASpotMarket(aSpotMarket);
+				if (result == null) result = caseUUIDObject(aSpotMarket);
+				if (result == null) result = caseNamedObject(aSpotMarket);
+				if (result == null) result = caseMMXObject(aSpotMarket);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -387,6 +405,36 @@ public class TypesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseITimezoneProvider(ITimezoneProvider object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ABase Fuel</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ABase Fuel</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseABaseFuel(ABaseFuel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ASpot Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ASpot Market</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseASpotMarket(ASpotMarket object) {
 		return null;
 	}
 

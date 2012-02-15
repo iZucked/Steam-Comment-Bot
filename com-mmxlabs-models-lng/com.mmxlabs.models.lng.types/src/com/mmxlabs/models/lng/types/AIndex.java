@@ -17,6 +17,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * @see com.mmxlabs.models.lng.types.TypesPackage#getAIndex()
  * @model abstract="true"
+ *        annotation="http://www.mmxlabs.com/mmxcore/1/MMXCore generatedType='com.mmxlabs.models.lng.pricing.Index'"
  * @generated
  */
 public interface AIndex extends UUIDObject, NamedObject {

@@ -128,6 +128,14 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 				return createITimezoneProviderAdapter();
 			}
 			@Override
+			public Adapter caseABaseFuel(ABaseFuel object) {
+				return createABaseFuelAdapter();
+			}
+			@Override
+			public Adapter caseASpotMarket(ASpotMarket object) {
+				return createASpotMarketAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -338,6 +346,34 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createITimezoneProviderAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ABaseFuel <em>ABase Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.ABaseFuel
+	 * @generated
+	 */
+	public Adapter createABaseFuelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ASpotMarket <em>ASpot Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.ASpotMarket
+	 * @generated
+	 */
+	public Adapter createASpotMarketAdapter() {
 		return null;
 	}
 

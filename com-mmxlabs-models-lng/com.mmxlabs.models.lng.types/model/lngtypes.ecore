@@ -85,9 +85,5 @@
       <details key="generatedType" value="com.mmxlabs.models.lng.fleet.BaseFuel"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ASpotMarket" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
-    <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
-      <details key="generatedType" value="com.mmxlabs.models.lng.pricing.SpotMarket"/>
-    </eAnnotations>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ASpotMarket" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
 </ecore:EPackage>

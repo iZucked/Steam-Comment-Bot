@@ -99,6 +99,29 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.types.ABaseFuel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ABaseFuelItemProvider aBaseFuelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.types.ABaseFuel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createABaseFuelAdapter() {
+		if (aBaseFuelItemProvider == null) {
+			aBaseFuelItemProvider = new ABaseFuelItemProvider(this);
+		}
+
+		return aBaseFuelItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -198,6 +221,7 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 	 */
 	public void dispose() {
 		if (aVesselSetItemProvider != null) aVesselSetItemProvider.dispose();
+		if (aBaseFuelItemProvider != null) aBaseFuelItemProvider.dispose();
 	}
 
 }
