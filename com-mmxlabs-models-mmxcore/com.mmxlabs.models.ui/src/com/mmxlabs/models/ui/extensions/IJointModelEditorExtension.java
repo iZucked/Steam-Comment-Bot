@@ -9,5 +9,5 @@ import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
 public interface IJointModelEditorExtension {
 	@MapName("id") String getID();
 	@MapName("subModelClass") String getSubModelClassName();
-	@MapName("factory") IJointModelEditorContribution instantiate();
+	@MapName("implementation") IJointModelEditorContribution instantiate();
 }

@@ -25,7 +25,7 @@ public class MMXRootObjectValueProviderCacheAdapterFactory implements IAdapterFa
 				synchronized (this) {
 					final MMXRootObject rootObject = (MMXRootObject) adaptableObject;
 					final WeakReference<ReferenceValueProviderCache> existingReference = cacheCache.get(rootObject);
-					final ReferenceValueProviderCache existingValue = (existingReference == null) ? null : existingReference.get();
+					final IReferenceValueProviderProvider existingValue = (existingReference == null) ? null : existingReference.get();
 					if (existingValue == null) {
 						final ReferenceValueProviderCache newCache = new ReferenceValueProviderCache(rootObject);
 						cacheCache.put(rootObject, new WeakReference<ReferenceValueProviderCache>(newCache));

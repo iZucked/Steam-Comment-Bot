@@ -33,6 +33,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 
 /**
@@ -59,7 +60,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	public void display(MMXRootObject context, EObject input) {
 		// TODO; is this the best way of doing this?
 		valueProvider = 
-				((ReferenceValueProviderCache)
+				((IReferenceValueProviderProvider)
 				Platform.getAdapterManager().loadAdapter(context, ReferenceValueProviderCache.class.getCanonicalName()))
 				.getReferenceValueProvider(input.eClass(), (EReference) feature);
 		super.display(context, input);

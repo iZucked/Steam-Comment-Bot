@@ -18,7 +18,7 @@ import com.mmxlabs.models.ui.registries.IReferenceValueProviderFactoryRegistry;
  * @author hinton
  *
  */
-public class ReferenceValueProviderCache {
+public class ReferenceValueProviderCache implements IReferenceValueProviderProvider {
 	private final IReferenceValueProviderFactoryRegistry registry;
 	private final MMXRootObject rootObject;
 	private final HashMap<Pair<EClass, EReference>, IReferenceValueProvider> cache = 
@@ -33,6 +33,10 @@ public class ReferenceValueProviderCache {
 		this(root, Activator.getDefault().getReferenceValueProviderFactoryRegistry());
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider#getReferenceValueProvider(org.eclipse.emf.ecore.EClass, org.eclipse.emf.ecore.EReference)
+	 */
+	@Override
 	public synchronized IReferenceValueProvider getReferenceValueProvider(final EClass owner, final EReference reference) {
 		final Pair<EClass, EReference> p = new Pair<EClass, EReference>(owner, reference);
 		if (cache.containsKey(p)) {

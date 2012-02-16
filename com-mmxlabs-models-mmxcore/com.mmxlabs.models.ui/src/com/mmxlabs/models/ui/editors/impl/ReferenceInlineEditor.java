@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Control;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 
 /**
@@ -45,7 +46,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	public void display(MMXRootObject context, EObject input) {
-		((ReferenceValueProviderCache) Platform.getAdapterManager()
+		((IReferenceValueProviderProvider) Platform.getAdapterManager()
 				.loadAdapter(MMXRootObject.class,
 						ReferenceValueProviderCache.class.getCanonicalName()))
 				.getReferenceValueProvider(input.eClass(), (EReference) feature);

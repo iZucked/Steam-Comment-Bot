@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -23,6 +26,9 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 
 /**
  * An editor part for editing MMX Root Objects.
@@ -39,6 +45,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	private AdapterFactoryEditingDomain editingDomain;
 	private ComposedAdapterFactory adapterFactory;
 	private BasicCommandStack commandStack;
+	private  IReferenceValueProviderProvider referenceValueProviderCache = null;
 	
 	private List<IJointModelEditorContribution> contributions = new LinkedList<IJointModelEditorContribution>();
 	
@@ -87,6 +94,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 						contributions.add(contribution);
 					}
 				}
+				referenceValueProviderCache = new ReferenceValueProviderCache(rootObject);
 			} catch (MigrationException e) {
 				throw new PartInitException("Error migrating joint model", e);
 			} catch (IOException e) {
@@ -118,7 +126,29 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	@Override
 	protected void createPages() {
 		for (final IJointModelEditorContribution contribution : contributions) {
-			contribution.addPages();
+			contribution.addPages(getContainer());
 		}
+	}
+	
+	public AdapterFactory getAdapterFactory() {
+		return adapterFactory;
+	}
+
+	public IReferenceValueProviderProvider getReferenceValueProviderCache() {
+		return referenceValueProviderCache;
+	}
+
+	/**
+	 * Get a reference value provider for the given reference on the given EClass. Delegates to the result of
+	 * {@link #getReferenceValueProviderCache()}
+	 * 
+	 * @param owner
+	 * @param reference
+	 * @return
+	 */
+	public IReferenceValueProvider getReferenceValueProvider(EClass owner,
+			EReference reference) {
+		return referenceValueProviderCache.getReferenceValueProvider(owner,
+				reference);
 	}
 }
