@@ -89,4 +89,12 @@
 			modelClass="com.mmxlabs.models.lng.cargo.SpotDischargeSlot" />
 		
 	</extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.cargo.editor.jointModelEditor1"
+          implementation="com.mmxlabs.models.lng.cargo.editor.JointModelEditorContribution1"
+          subModelClass="com.mmxlabs.models.lng.cargo.editor.JointModelEditor1">
+    </jointModelEditor>
+ </extension>
 </plugin>
