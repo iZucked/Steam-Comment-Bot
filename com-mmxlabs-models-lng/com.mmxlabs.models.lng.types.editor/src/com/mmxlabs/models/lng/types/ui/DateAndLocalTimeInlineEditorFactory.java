@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.types.ui;
 
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
@@ -10,7 +11,19 @@ public class DateAndLocalTimeInlineEditorFactory implements
 		IInlineEditorFactory {
 	@Override
 	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {
+		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/lng/ui/datetime");
+		boolean showTime = true;
+		if (annotation != null) {
+			final String showTimeAnnotation = annotation.getDetails().get("showTime");
+			if (showTimeAnnotation != null) {
+				showTime = Boolean.parseBoolean(showTimeAnnotation);
+			}
+		}
 		
-		return null;
+		if (showTime) {
+			return new DateInlineEditor(feature); 
+		} else {
+			return new DateInlineEditor(feature);
+		}
 	}
 }
