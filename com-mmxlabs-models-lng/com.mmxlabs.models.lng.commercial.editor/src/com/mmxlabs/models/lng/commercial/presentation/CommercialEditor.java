@@ -615,7 +615,7 @@ public class CommercialEditor
 			BasicDiagnostic diagnostic =
 				new BasicDiagnostic
 					(Diagnostic.OK,
-					 "com.mmxlabs.models.commercial.editor",
+					 "com.mmxlabs.models.lng.commercial.editor",
 					 0,
 					 null,
 					 new Object [] { editingDomain.getResourceSet() });
@@ -974,7 +974,7 @@ public class CommercialEditor
 			BasicDiagnostic basicDiagnostic =
 				new BasicDiagnostic
 					(Diagnostic.ERROR,
-					 "com.mmxlabs.models.commercial.editor",
+					 "com.mmxlabs.models.lng.commercial.editor",
 					 0,
 					 getString("_UI_CreateModelError_message", resource.getURI()),
 					 new Object [] { exception == null ? (Object)resource : exception });
@@ -985,7 +985,7 @@ public class CommercialEditor
 			return
 				new BasicDiagnostic
 					(Diagnostic.ERROR,
-					 "com.mmxlabs.models.commercial.editor",
+					 "com.mmxlabs.models.lng.commercial.editor",
 					 0,
 					 getString("_UI_CreateModelError_message", resource.getURI()),
 					 new Object[] { exception });
