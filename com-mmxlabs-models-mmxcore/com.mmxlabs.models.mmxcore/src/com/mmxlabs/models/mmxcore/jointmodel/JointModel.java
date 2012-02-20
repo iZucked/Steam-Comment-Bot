@@ -48,7 +48,7 @@ import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
  * 
  */
 public abstract class JointModel {
-	private final Map<String, URI> subModels = new HashMap<String, URI>();
+	protected final Map<String, URI> subModels = new HashMap<String, URI>();
 	private final MMXCoreResourceFactoryImpl resourceFactory = new MMXCoreResourceFactoryImpl();
 	final ResourceSet resourceSet = new ResourceSetImpl();
 	private MMXRootObject rootObject;
@@ -113,7 +113,7 @@ public abstract class JointModel {
 	 * @param object
 	 * @return
 	 */
-	protected abstract URI createURI(final MMXObject object);
+	protected abstract URI createURI(final UUIDObject object);
 
 	/**
 	 * Load the root object and return it, upgrading if necessary.
@@ -148,6 +148,7 @@ public abstract class JointModel {
 	 * @throws IOException
 	 */
 	public void save() throws IOException {
+		createResources(rootObject, true);
 		rootObject.restoreSubModels(); // put sub models back in their resources
 		// save each resource
 		for (final Resource resource : resourceSet.getResources()) {
@@ -177,11 +178,12 @@ public abstract class JointModel {
 		for (final String key : subModels.keySet()) {
 			final URI uri = subModels.get(key);
 			final Migrator m = MigratorRegistry.getInstance().getMigrator(uri);
+			if (m == null) continue;
 			migrators.put(uri, m);
 			final Set<Release> releases = m.getRelease(uri);
 			if (releases.size() != 1) {
 				throw new RuntimeException(uri + " has " + releases.size()
-						+ " matchin releases");
+						+ " matching releases");
 			}
 			final Release release = releases.iterator().next();
 			initialVersions.put(key, release.getNumber());
@@ -205,6 +207,7 @@ public abstract class JointModel {
 					final URI uri = entry.getValue();
 					final String key = entry.getKey();
 					final Migrator migrator = migrators.get(uri);
+					if (migrator == null) continue;
 					final Release currentRelease = currentReleases.get(uri);
 					Release targetRelease = currentRelease;
 					while (targetRelease != null
@@ -261,4 +264,16 @@ public abstract class JointModel {
 	 * @return
 	 */
 	protected abstract List<IJointModelRelease> getReleases();
+	
+	protected void setRootObject(final MMXRootObject newRootObject) {
+		this.rootObject = newRootObject;
+	}
+	
+	protected MMXRootObject getRootObject() {
+		return rootObject;
+	}
+	
+	protected ResourceSet getResourceSet() {
+		return resourceSet;
+	}
 }
