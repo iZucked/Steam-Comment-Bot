@@ -1,0 +1,198 @@
+package com.mmxlabs.models.lng.demo;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipOutputStream;
+
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.emf.edapt.migration.MigrationException;
+
+import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.demo.manifest.Entry;
+import com.mmxlabs.models.lng.demo.manifest.Manifest;
+import com.mmxlabs.models.lng.demo.manifest.ManifestFactory;
+import com.mmxlabs.models.lng.demo.manifest.ManifestPackage;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.input.InputFactory;
+import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.jointmodel.EmptyJointModelRelease;
+import com.mmxlabs.models.mmxcore.jointmodel.IJointModelRelease;
+import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
+
+/**
+ * This is an example LNG joint model; each client will have a different implementation of this.
+ * 
+ * In this simple example, we have a very simple ecore model which is placed in a zip archive, called manifest.xmi
+ * 
+ * @author hinton
+ *
+ */
+public class DemoJointModel extends JointModel {
+	private static final List<IJointModelRelease> releases = 
+			new LinkedList<IJointModelRelease>();
+	private static final String PORT_MODEL_KEY = "port-model";
+	private static final String FLEET_MODEL_KEY = "fleet-model";
+	private static final String CARGO_MODEL_KEY = "cargo-model";
+	private static final String PRICING_MODEL_KEY = "pricing-model";
+	private static final String INPUT_MODEL_KEY = "input-model";
+	private static final String SCHEDULE_MODEL_KEY = "schedule-model";
+	private static final String COMMERCIAL_MODEL_KEY = "commercial-model";
+	private static final String ROOT_MODEL_KEY = "root-model";
+	
+	private static final Map<EClass, String> modelClassKeys = new HashMap<EClass, String>();
+	
+	static {
+		releases.add(new EmptyJointModelRelease(
+				PORT_MODEL_KEY, 0,
+				FLEET_MODEL_KEY, 0,
+				CARGO_MODEL_KEY, 0,
+				PRICING_MODEL_KEY, 0,
+				INPUT_MODEL_KEY, 0,
+				SCHEDULE_MODEL_KEY, 0,
+				COMMERCIAL_MODEL_KEY, 0));
+		
+		modelClassKeys.put(PortPackage.eINSTANCE.getPortModel(), PORT_MODEL_KEY);
+		modelClassKeys.put(FleetPackage.eINSTANCE.getFleetModel(), FLEET_MODEL_KEY);
+		modelClassKeys.put(CargoPackage.eINSTANCE.getCargoModel(), CARGO_MODEL_KEY);
+		modelClassKeys.put(PricingPackage.eINSTANCE.getPricingModel(), PRICING_MODEL_KEY);
+		modelClassKeys.put(InputPackage.eINSTANCE.getInputModel(), INPUT_MODEL_KEY);
+		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
+		modelClassKeys.put(CommercialPackage.eINSTANCE.getCommercialModel(), COMMERCIAL_MODEL_KEY);
+		
+		/*
+		 * There is no migration history for MMXCore, but this is not a problem; the joint model
+		 * will ignore submodels which have no release history and leave them out of the upgrade process. 
+		 */
+		modelClassKeys.put(MMXCorePackage.eINSTANCE.getMMXRootObject(), ROOT_MODEL_KEY);
+	}
+
+	private File file;
+	private Manifest manifest;
+	private String prefix;
+	
+	protected void setFile(final File newFile) throws IOException {
+		this.file = newFile;
+		prefix = "archive:" + URI.createFileURI(file.getCanonicalPath().toString()) + "!";
+	}
+	
+	protected Resource createManifestResource() {
+		ManifestPackage.eINSTANCE.getEntry(); // trigger load of package?
+		return getResourceSet().createResource(getArchiveURI("MANIFEST.xmi"));
+	}
+	
+	protected URI getArchiveURI(final String relativePath) {
+		return URI.createURI(prefix + "/" + relativePath);
+	}
+	
+	public static DemoJointModel createEmptyModel(final File target) throws IOException {
+		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
+		rootObject.setVersion(releases.size());
+		//TODO sort out how to create blank models; should there be an extension for this?
+		rootObject.addSubModel(PortFactory.eINSTANCE.createPortModel());
+		rootObject.addSubModel(FleetFactory.eINSTANCE.createFleetModel());
+		rootObject.addSubModel(CargoFactory.eINSTANCE.createCargoModel());
+		rootObject.addSubModel(PricingFactory.eINSTANCE.createPricingModel());
+		rootObject.addSubModel(InputFactory.eINSTANCE.createInputModel());
+		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
+		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
+		
+		final DemoJointModel result = new DemoJointModel(rootObject, target);
+		return result;
+	}
+	
+	public DemoJointModel(final MMXRootObject rootObject, final File file_) throws IOException {
+		setFile(file_);
+		final Resource resource = createManifestResource();
+		manifest = ManifestFactory.eINSTANCE.createManifest();
+		resource.getContents().add(manifest);
+		setRootObject(rootObject);
+	}
+	
+	public DemoJointModel(final File file_) throws FileNotFoundException, IOException, MigrationException {
+		setFile(file_);
+		final Resource resource = createManifestResource();
+		resource.load(null);
+		manifest = (Manifest) resource.getContents().iterator().next();
+		
+		for (final Entry e : manifest.getEntries()) {
+			addSubModel(e.getSubModelKey(), getArchiveURI(e.getRelativePath()));
+		}
+		
+		load();
+	}
+	
+	public void save() throws IOException {
+		if (!file.exists()) {
+			// create empty zipfile
+			file.getParentFile().mkdirs();
+			final ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(file));
+			zos.setComment("See MANIFEST.xmi for more information");
+			zos.flush();
+			zos.close();
+		}
+		super.save();
+		manifest.getEntries().clear();
+		for (final Map.Entry<String, URI> keyAndURI : subModels.entrySet()) {
+			final Entry e = ManifestFactory.eINSTANCE.createEntry();
+			e.setSubModelKey(keyAndURI.getKey());
+			e.setRelativePath(getRelativePath(keyAndURI.getValue()));
+		}
+		manifest.eResource().save(null);
+	}
+	
+	/**
+	 * Find the path within archive of the given URI.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private String getRelativePath(final URI value) {
+		final String[] parts = value.toString().split("!");
+		return parts[parts.length-1];
+	}
+
+	@Override
+	protected URI createURI(final UUIDObject object) {
+		final String modelKey = modelClassKeys.get(object.eClass());
+		final URI result = getArchiveURI(object.eClass().getName() + "-" + object.getUuid() + ".xmi");
+		
+		if (modelKey != null) 
+			addSubModel(modelKey, result);
+		
+		return result;
+	}
+
+	@Override
+	protected List<IJointModelRelease> getReleases() {
+		return releases;
+	}
+	
+	public MMXRootObject getRootObject() {
+		return super.getRootObject();
+	}
+}
