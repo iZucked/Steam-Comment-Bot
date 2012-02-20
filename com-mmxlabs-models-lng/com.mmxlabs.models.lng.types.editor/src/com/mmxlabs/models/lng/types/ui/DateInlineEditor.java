@@ -1,7 +1,6 @@
 package com.mmxlabs.models.lng.types.ui;
 
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -12,11 +11,12 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.types.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editors.impl.UnsettableInlineEditor;
 
 public class DateInlineEditor extends UnsettableInlineEditor {
 	private FormattedText formattedText;
+	private DateTimeFormatter dateFormatter;
 
 	public DateInlineEditor(EStructuralFeature feature) {
 		super(feature);
@@ -24,7 +24,8 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	
 	@Override
 	protected void updateValueDisplay(Object value) {
-		formattedText.setValue(value); // TODO localize
+		dateFormatter.setTimeZone(LocalDateUtil.getTimeZone(value, (EAttribute) this.feature));
+		formattedText.setValue(value);
 	}
 
 	@Override
@@ -35,33 +36,18 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	@Override
 	protected Control createValueControl(Composite parent) {
 		formattedText = new FormattedText(parent);
-		formattedText.setFormatter(new DateTimeFormatter());
+		dateFormatter = new DateTimeFormatter();
+		
+		formattedText.setFormatter(dateFormatter);
 		
 		formattedText.getControl().addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
 				if (formattedText.isValid()) {
-					doSetValue(localize((Date)formattedText.getValue()));
+					doSetValue((Date)formattedText.getValue());
 				}
 			}
 		});
 		return formattedText.getControl();
-	}
-
-	/**
-	 * Handle timezones
-	 * @param value
-	 * @return
-	 */
-	protected Object localize(final Date value) {
-		return value;
-	}
-	
-	protected TimeZone getTimeZone() {
-		if (input instanceof ITimezoneProvider) {
-			return TimeZone.getTimeZone(((ITimezoneProvider) input).getTimeZone((EAttribute) feature));
-		} else {
-			return TimeZone.getTimeZone("GMT");
-		}
 	}
 }
