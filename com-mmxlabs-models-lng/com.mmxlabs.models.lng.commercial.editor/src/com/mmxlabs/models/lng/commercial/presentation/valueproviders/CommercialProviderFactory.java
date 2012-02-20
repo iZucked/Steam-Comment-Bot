@@ -11,6 +11,6 @@ public class CommercialProviderFactory implements IReferenceValueProviderFactory
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(EClass owner,
 			EReference reference, MMXRootObject rootObject) {
-		
+		return null;
 	}
 }
