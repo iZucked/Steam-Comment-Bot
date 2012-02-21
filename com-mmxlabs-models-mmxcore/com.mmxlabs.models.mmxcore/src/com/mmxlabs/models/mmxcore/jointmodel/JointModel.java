@@ -4,7 +4,11 @@
  */
 package com.mmxlabs.models.mmxcore.jointmodel;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,18 +17,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.edapt.history.Release;
 import org.eclipse.emf.edapt.migration.Metamodel;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.migration.execution.Migrator;
 import org.eclipse.emf.edapt.migration.execution.MigratorRegistry;
+
 
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -157,92 +165,145 @@ public abstract class JointModel {
 		// put sub models back how they were, making the change transparent
 		for (final Resource resource : resourceSet.getResources()) {
 			EObject top = resource.getContents().get(0);
-			if (top != rootObject)
+			if (top != rootObject && top instanceof UUIDObject)
 				rootObject.addSubModel((UUIDObject) top);
 		}
 	}
 
+	private void copy(final InputStream in, final OutputStream out) throws IOException {
+		int c;
+		while ((c=in.read())!=-1) {
+			out.write(c);
+		}
+	}
+	
 	/**
 	 * Upgrade to the latest release, if necessary.
 	 * 
+	 * Interjects some extra URI mangling stages because EDapt only works with files
+	 * 
 	 * @throws MigrationException
+	 * @throws IOException 
 	 */
-	public void upgrade() throws MigrationException {
+	public void upgrade() throws MigrationException, IOException {
 		final Map<String, Integer> initialVersions = new HashMap<String, Integer>();
 		final Map<URI, Migrator> migrators = new HashMap<URI, Migrator>();
 
 		final Map<URI, Metamodel> currentMetamodels = new HashMap<URI, Metamodel>();
 		final Map<URI, Release> currentReleases = new HashMap<URI, Release>();
 
-		// first we detect the current release, and get the data for it
+		final URIConverter converter = new ExtensibleURIConverterImpl();
+		final Map<String, URI> temporarySubModels = new HashMap<String, URI>();
+		
 		for (final String key : subModels.keySet()) {
 			final URI uri = subModels.get(key);
-			final Migrator m = MigratorRegistry.getInstance().getMigrator(uri);
-			if (m == null) continue;
-			migrators.put(uri, m);
-			final Set<Release> releases = m.getRelease(uri);
-			if (releases.size() != 1) {
-				throw new RuntimeException(uri + " has " + releases.size()
-						+ " matching releases");
-			}
-			final Release release = releases.iterator().next();
-			initialVersions.put(key, release.getNumber());
-			currentReleases.put(uri, release);
-			currentMetamodels.put(uri, m.getMetamodel(release));
+			final File tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp");
+			final InputStream modelInputStream = converter.createInputStream(uri);
+			final FileOutputStream fos = new FileOutputStream(tempFile);
+			copy(modelInputStream, fos);
+			fos.close();
+			modelInputStream.close();
+			temporarySubModels.put(key, URI.createFileURI(tempFile.getCanonicalPath()));
+			tempFile.deleteOnExit();
 		}
-
-		final List<IJointModelRelease> jointReleases = getReleases();
+				
 		/**
-		 * This is true if we have found the start release and begun upgrading
+		 * This is true if we have found the start release and begun
+		 * upgrading
 		 */
 		boolean upgrading = false;
-		for (final IJointModelRelease jointRelease : jointReleases) {
-			if (upgrading) {
-				// at this point, the releases should be happening in order
-				// and the state of the submodels should be correct for the
-				// joint release before this one.
-				jointRelease.prepare(subModels, currentMetamodels);
-
-				for (final Map.Entry<String, URI> entry : subModels.entrySet()) {
-					final URI uri = entry.getValue();
-					final String key = entry.getKey();
-					final Migrator migrator = migrators.get(uri);
-					if (migrator == null) continue;
-					final Release currentRelease = currentReleases.get(uri);
-					Release targetRelease = currentRelease;
-					while (targetRelease != null
-							&& targetRelease.getNumber() != jointRelease
-									.getReleaseVersion(key)) {
-						targetRelease = targetRelease.getNextRelease();
-					}
-					if (targetRelease == null) {
-						throw new RuntimeException(
-								"Cannot find release version "
-										+ jointRelease.getReleaseVersion(key)
-										+ " for model with key " + key);
-					}
-					migrator.migrateAndSave(Collections.singletonList(uri),
-							currentRelease, targetRelease,
-							new NullProgressMonitor());
-					currentReleases.put(uri, targetRelease);
-					currentMetamodels.put(uri,
-							migrator.getMetamodel(targetRelease));
+		{
+			// alias temporary submodels to submodels, for migration purposes
+			final Map<String, URI> subModels = temporarySubModels;
+		
+			// first we detect the current release, and get the data for it
+			for (final String key : subModels.keySet()) {
+				final URI uri = subModels.get(key);
+				final Migrator m = MigratorRegistry.getInstance().getMigrator(
+						uri);
+				if (m == null)
+					continue;
+				migrators.put(uri, m);
+				final Set<Release> releases = m.getRelease(uri);
+				if (releases.size() != 1) {
+					throw new RuntimeException(uri + " has " + releases.size()
+							+ " matching releases");
 				}
+				final Release release = releases.iterator().next();
+				initialVersions.put(key, release.getNumber());
+				currentReleases.put(uri, release);
+				currentMetamodels.put(uri, m.getMetamodel(release));
+			}
 
-				jointRelease.integrate(subModels, currentMetamodels);
-			} else {
-				// check whether the initial version matches this joint release;
-				// if it does
-				// set upgrading to true, and the next time around this loop we
-				// will do an upgrade.
-				upgrading = true;
-				for (final String key : subModels.keySet()) {
-					upgrading = upgrading
-							&& jointRelease.getReleaseVersion(key) == initialVersions
-									.get(key).intValue();
-					if (!upgrading)
-						break;
+			final List<IJointModelRelease> jointReleases = getReleases();
+			for (final IJointModelRelease jointRelease : jointReleases) {
+				if (upgrading) {
+					// at this point, the releases should be happening in order
+					// and the state of the submodels should be correct for the
+					// joint release before this one.
+					jointRelease.prepare(subModels, currentMetamodels);
+
+					for (final Map.Entry<String, URI> entry : subModels
+							.entrySet()) {
+						final URI uri = entry.getValue();
+						final String key = entry.getKey();
+						final Migrator migrator = migrators.get(uri);
+						if (migrator == null)
+							continue;
+						final Release currentRelease = currentReleases.get(uri);
+						Release targetRelease = currentRelease;
+						while (targetRelease != null
+								&& targetRelease.getNumber() != jointRelease
+										.getReleaseVersion(key)) {
+							targetRelease = targetRelease.getNextRelease();
+						}
+						if (targetRelease == null) {
+							throw new RuntimeException(
+									"Cannot find release version "
+											+ jointRelease
+													.getReleaseVersion(key)
+											+ " for model with key " + key);
+						}
+						migrator.migrateAndSave(Collections.singletonList(uri),
+								currentRelease, targetRelease,
+								new NullProgressMonitor());
+						currentReleases.put(uri, targetRelease);
+						currentMetamodels.put(uri,
+								migrator.getMetamodel(targetRelease));
+					}
+
+					jointRelease.integrate(subModels, currentMetamodels);
+				} else {
+					// check whether the initial version matches this joint
+					// release;
+					// if it does
+					// set upgrading to true, and the next time around this loop
+					// we
+					// will do an upgrade.
+					upgrading = true;
+					for (final String key : subModels.keySet()) {
+						if (initialVersions.get(key) != null) {
+							upgrading = upgrading
+									&& jointRelease.getReleaseVersion(key) == initialVersions
+											.get(key).intValue();
+							if (!upgrading)
+								break;
+						}
+					}
 				}
+			}
+		}
+		
+		if (upgrading) {
+			// we just did an upgrade, so we have to undo the file-switcheroo that happened above
+			for (final String key : subModels.keySet()) {
+				final URI uri = subModels.get(key);
+				final URI tempURI = temporarySubModels.get(key);
+				final InputStream tempIS = converter.createInputStream(tempURI);
+				final OutputStream realOS = converter.createOutputStream(uri);
+				copy(tempIS, realOS);
+				tempIS.close();
+				realOS.close();
 			}
 		}
 	}

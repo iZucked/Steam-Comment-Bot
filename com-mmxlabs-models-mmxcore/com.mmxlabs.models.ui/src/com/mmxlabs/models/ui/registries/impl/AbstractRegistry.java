@@ -5,8 +5,6 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 
-import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
-
 public abstract class AbstractRegistry<Key, Factory> {
 	protected final Map<Key, Factory> cache = new HashMap<Key, Factory>();
 	protected final Map<String, Factory> cacheByID = new HashMap<String, Factory>();

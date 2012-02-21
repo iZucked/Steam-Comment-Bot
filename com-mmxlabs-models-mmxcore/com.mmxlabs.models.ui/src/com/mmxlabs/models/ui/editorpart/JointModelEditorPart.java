@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EClass;
@@ -16,6 +17,7 @@ import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -66,7 +68,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input)
 			throws PartInitException {
-		final JointModel jointModel = (JointModel) input.getAdapter(JointModel.class);
+		super.init(site, input);
+		JointModel jointModel = (JointModel) input.getAdapter(JointModel.class);
+		if (jointModel == null)
+			jointModel = (JointModel) Platform.getAdapterManager().loadAdapter(input, JointModel.class.getCanonicalName());
 		if (jointModel == null) {
 			throw new PartInitException("Could not adapt input to JointModel");
 		} else {
@@ -88,7 +93,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 				// initialize extensions
 				for (final MMXSubModel subModel : root.getSubModels()) {
-					final IJointModelEditorContribution contribution = Activator.getDefault().getJointModelEditorContributionRegistry().createEditorContribution(subModel.eClass());
+					final IJointModelEditorContribution contribution = Activator.getDefault().getJointModelEditorContributionRegistry().createEditorContribution(subModel.getSubModelInstance().eClass());
 					if (contribution != null) {
 						contribution.init(this, root, subModel.getSubModelInstance());
 						contributions.add(contribution);
@@ -115,7 +120,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	@Override
 	public void setFocus() {
-
+		
 	}
 
 	@Override
@@ -130,6 +135,16 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		}
 	}
 	
+	@Override
+	public void setPageImage(int pageIndex, Image image) {
+		super.setPageImage(pageIndex, image);
+	}
+
+	@Override
+	public void setPageText(int pageIndex, String text) {
+		super.setPageText(pageIndex, text);
+	}
+
 	public AdapterFactory getAdapterFactory() {
 		return adapterFactory;
 	}

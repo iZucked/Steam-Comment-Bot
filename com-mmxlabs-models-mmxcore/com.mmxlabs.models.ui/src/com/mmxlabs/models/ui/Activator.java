@@ -34,8 +34,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
-		Injector injector = Guice.createInjector(new ExtensionConfigurationModule());
-		injector.injectMembers(this);
+
 	}
 
 	/*
@@ -45,6 +44,9 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		
+		Injector injector = Guice.createInjector(new ExtensionConfigurationModule(this));
+		injector.injectMembers(this);
 	}
 
 	/*

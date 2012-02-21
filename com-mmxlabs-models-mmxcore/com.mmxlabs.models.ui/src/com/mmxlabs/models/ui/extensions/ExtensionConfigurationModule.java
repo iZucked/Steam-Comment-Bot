@@ -26,9 +26,16 @@ import com.mmxlabs.models.ui.registries.impl.ReferenceValueProviderFactoryRegist
  *
  */
 public class ExtensionConfigurationModule extends AbstractModule {
+	private final Activator activator;
+	
+	public ExtensionConfigurationModule(Activator activator) {
+		super();
+		this.activator = activator;
+	}
+
 	@Override
 	protected void configure() {
-		install(osgiModule(Activator.getDefault().getBundle()
+		install(osgiModule(activator.getBundle()
 				.getBundleContext(), eclipseRegistry()));
 
 		// extension point com.mmxlabs.models.ui.displaycompositefactories

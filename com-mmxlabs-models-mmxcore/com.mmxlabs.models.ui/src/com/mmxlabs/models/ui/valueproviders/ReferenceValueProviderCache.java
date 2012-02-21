@@ -44,7 +44,7 @@ public class ReferenceValueProviderCache implements IReferenceValueProviderProvi
 		}
 		
 		final IReferenceValueProviderFactory factory = registry.getValueProviderFactory(owner, reference);
-		final IReferenceValueProvider provider = factory.createReferenceValueProvider(owner, reference, rootObject);
+		final IReferenceValueProvider provider = factory == null ? null : factory.createReferenceValueProvider(owner, reference, rootObject);
 		cache.put(p, provider);
 		
 		return provider;

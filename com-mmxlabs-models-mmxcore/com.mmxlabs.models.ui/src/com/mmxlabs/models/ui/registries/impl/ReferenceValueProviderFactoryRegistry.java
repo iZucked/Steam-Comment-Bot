@@ -22,7 +22,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
  * @author hinton
  *
  */
-public class ReferenceValueProviderFactoryRegistry extends AbstractRegistry<Pair<EClass, EReference>, IReferenceValueProviderFactory> implements IReferenceValueProviderFactoryRegistry {
+public class ReferenceValueProviderFactoryRegistry extends AbstractRegistry<Pair<EClass, EClass>, IReferenceValueProviderFactory> implements IReferenceValueProviderFactoryRegistry {
 	@Inject Iterable<IReferenceValueProviderExtension> extensions;
 	
 	public ReferenceValueProviderFactoryRegistry() {
@@ -34,20 +34,29 @@ public class ReferenceValueProviderFactoryRegistry extends AbstractRegistry<Pair
 	 */
 	@Override
 	public synchronized IReferenceValueProviderFactory getValueProviderFactory(final EClass owner, final EReference reference) {
-		return get(new Pair<EClass, EReference>(owner, reference));
+		return getValueProviderFactory(owner, reference.getEReferenceType());
 	}
 
+	public synchronized IReferenceValueProviderFactory getValueProviderFactory(final EClass owner, final EClass type) {
+		return get(new Pair<EClass, EClass>(owner, type));
+	}
+	
 	@Override
-	protected IReferenceValueProviderFactory match(final Pair<EClass, EReference> key) {
+	protected IReferenceValueProviderFactory match(final Pair<EClass, EClass> key) {
 		IReferenceValueProviderExtension winner = null;
 		int minOwnerDistance = Integer.MAX_VALUE;
 		int minReferenceDistance = Integer.MAX_VALUE;
 		final EClass owner = key.getFirst();
-		final EReference reference = key.getSecond();
+		final EClass reference = key.getSecond();
 		for (final IReferenceValueProviderExtension extension : extensions) {
+			final String ocn = extension.getOwnerEClassName();
+			final String rcn = extension.getReferenceEClassName();
+
 			// match by owner eClass and reference eClass. owner eClass is more important for tie breaking
-			final int ownerDistance = getMinimumGenerations(owner, extension.getOwnerEClassName());
-			final int referenceDistance = getMinimumGenerations(reference.getEReferenceType(), extension.getReferenceEClassName());
+			final int ownerDistance = getMinimumGenerations(owner, ocn);
+			if (ownerDistance == Integer.MAX_VALUE && ocn != null) continue; // fail fast if an owner class is specified but is not a superclass of this type
+			final int referenceDistance = getMinimumGenerations(reference, rcn);
+			if (referenceDistance == Integer.MAX_VALUE && rcn != null) continue; // fail if reference class is specced but is not a superclass of this type.
 			if ((ownerDistance < minOwnerDistance)
 					|| (ownerDistance == minOwnerDistance && referenceDistance < minReferenceDistance)) {
 				winner = extension;
