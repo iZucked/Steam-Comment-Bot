@@ -1,6 +1,7 @@
 package com.mmxlabs.models.lng.cargo.presentation.editorpart;
 
-import org.eclipse.swt.SWT;
+import java.util.Collections;
+
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -14,7 +15,7 @@ public class CargoModelEditorContribution implements IJointModelEditorContributi
 	private MMXRootObject rootObject;
 	private JointModelEditorPart editorPart;
 	private int pageNumber;
-	private CargoModelViewer viewer;
+	private CargoModelViewer viewerPane;
 
 	@Override
 	public void init(final JointModelEditorPart editorPart, final MMXRootObject rootObject,
@@ -26,10 +27,12 @@ public class CargoModelEditorContribution implements IJointModelEditorContributi
 
 	@Override
 	public void addPages(final Composite parent) {
-		this.viewer = new CargoModelViewer(parent, SWT.NONE, editorPart);
-		viewer.init(editorPart.getAdapterFactory(), CargoPackage.eINSTANCE.getCargoModel_Cargos());
-		viewer.setInput(modelObject);
-		this.pageNumber = editorPart.addPage(viewer.getControl());
-		
-	}	
+		this.viewerPane = new CargoModelViewer(editorPart.getSite().getPage(), editorPart);
+		viewerPane.createControl(parent);
+		viewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_Cargos()),
+				editorPart.getAdapterFactory());
+		viewerPane.getViewer().setInput(modelObject);
+		this.pageNumber = editorPart.addPage(viewerPane.getControl());
+		editorPart.setPageText(pageNumber, "Cargos");
+	}
 }

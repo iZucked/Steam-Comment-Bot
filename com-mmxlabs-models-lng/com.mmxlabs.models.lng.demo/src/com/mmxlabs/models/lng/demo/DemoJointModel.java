@@ -13,9 +13,6 @@ import java.util.zip.ZipOutputStream;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.edapt.migration.MigrationException;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -47,7 +44,9 @@ import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 /**
  * This is an example LNG joint model; each client will have a different implementation of this.
  * 
- * In this simple example, we have a very simple ecore model which is placed in a zip archive, called manifest.xmi
+ * In this simple example, we have a very simple ecore model which is placed in a zip archive, called manifest.xmi.
+ * 
+ * This in turn contains relative references to each submodel part. It is not all that LNG specific really.
  * 
  * @author hinton
  *
@@ -64,6 +63,9 @@ public class DemoJointModel extends JointModel {
 	private static final String COMMERCIAL_MODEL_KEY = "commercial-model";
 	private static final String ROOT_MODEL_KEY = "root-model";
 	
+	/**
+	 * This map lets us know what kind of model class has what key.
+	 */
 	private static final Map<EClass, String> modelClassKeys = new HashMap<EClass, String>();
 	
 	static {
@@ -161,6 +163,7 @@ public class DemoJointModel extends JointModel {
 			final Entry e = ManifestFactory.eINSTANCE.createEntry();
 			e.setSubModelKey(keyAndURI.getKey());
 			e.setRelativePath(getRelativePath(keyAndURI.getValue()));
+			manifest.getEntries().add(e);
 		}
 		manifest.eResource().save(null);
 	}
@@ -173,7 +176,7 @@ public class DemoJointModel extends JointModel {
 	 */
 	private String getRelativePath(final URI value) {
 		final String[] parts = value.toString().split("!");
-		return parts[parts.length-1];
+		return parts[parts.length-1].substring(1);//strip off leading slash
 	}
 
 	@Override

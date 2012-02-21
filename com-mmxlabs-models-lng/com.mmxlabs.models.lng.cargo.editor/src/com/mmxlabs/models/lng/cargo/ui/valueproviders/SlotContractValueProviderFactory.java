@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -38,13 +39,14 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 				.getDefault()
 				.getReferenceValueProviderFactoryRegistry()
 				.getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(),
-						CargoPackage.eINSTANCE.getSlot_Contract());
+						TypesPackage.eINSTANCE.getAContract());
 	}
 
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(
 			final EClass owner, final EReference reference,
 			final MMXRootObject rootObject) {
+		if (delegate == null) return null;
 		final IReferenceValueProvider delegateFactory = delegate
 				.createReferenceValueProvider(owner, reference, rootObject);
 		if (reference == CargoPackage.eINSTANCE.getSlot_Contract()) {

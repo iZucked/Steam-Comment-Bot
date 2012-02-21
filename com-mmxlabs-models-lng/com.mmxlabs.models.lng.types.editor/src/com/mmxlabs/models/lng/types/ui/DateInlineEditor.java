@@ -36,6 +36,7 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	@Override
 	protected Control createValueControl(Composite parent) {
 		formattedText = new FormattedText(parent);
+		//TODO update the date time formatter to fix to zero.
 		dateFormatter = new DateTimeFormatter();
 		
 		formattedText.setFormatter(dateFormatter);

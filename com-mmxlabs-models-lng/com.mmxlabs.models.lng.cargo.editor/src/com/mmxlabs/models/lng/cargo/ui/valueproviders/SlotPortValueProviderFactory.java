@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -38,13 +39,14 @@ public class SlotPortValueProviderFactory implements
 				.getDefault()
 				.getReferenceValueProviderFactoryRegistry()
 				.getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(),
-						CargoPackage.eINSTANCE.getSlot_Port());
+						TypesPackage.eINSTANCE.getAPort());
 	}
 
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(
 			final EClass owner, final EReference reference,
 			final MMXRootObject rootObject) {
+		if (delegate == null) return null;
 		final IReferenceValueProvider delegateFactory = delegate
 				.createReferenceValueProvider(owner, reference, rootObject);
 		if (reference == CargoPackage.eINSTANCE.getSlot_Port()) {
