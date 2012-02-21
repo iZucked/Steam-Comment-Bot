@@ -255,13 +255,31 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__ENTITY = TypesPackage.ACONTRACT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__ALLOWED_PORTS = TypesPackage.ACONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Preferred Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PREFERRED_PORT = TypesPackage.ACONTRACT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = TypesPackage.ACONTRACT_FEATURE_COUNT + 1;
+	int CONTRACT_FEATURE_COUNT = TypesPackage.ACONTRACT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -317,6 +335,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__ENTITY = CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__ALLOWED_PORTS = CONTRACT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Preferred Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__PREFERRED_PORT = CONTRACT__PREFERRED_PORT;
 
 	/**
 	 * The number of structural features of the '<em>Sales Contract</em>' class.
@@ -381,6 +417,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_CONTRACT__ENTITY = CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_CONTRACT__ALLOWED_PORTS = CONTRACT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Preferred Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_CONTRACT__PREFERRED_PORT = CONTRACT__PREFERRED_PORT;
 
 	/**
 	 * The number of structural features of the '<em>Discharge Contract</em>' class.
@@ -465,6 +519,28 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getContract_Entity();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.Contract#getAllowedPorts <em>Allowed Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Allowed Ports</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getAllowedPorts()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EReference getContract_AllowedPorts();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.Contract#getPreferredPort <em>Preferred Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Preferred Port</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getPreferredPort()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EReference getContract_PreferredPort();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Sales Contract</em>}'.
@@ -569,6 +645,22 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONTRACT__ENTITY = eINSTANCE.getContract_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Allowed Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT__ALLOWED_PORTS = eINSTANCE.getContract_AllowedPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Preferred Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT__PREFERRED_PORT = eINSTANCE.getContract_PreferredPort();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.

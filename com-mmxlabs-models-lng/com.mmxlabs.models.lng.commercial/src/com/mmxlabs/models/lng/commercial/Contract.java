@@ -8,6 +8,9 @@
  */
 package com.mmxlabs.models.lng.commercial;
 import com.mmxlabs.models.lng.types.AContract;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.port.Port;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,6 +21,8 @@ import com.mmxlabs.models.lng.types.AContract;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getAllowedPorts <em>Allowed Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPreferredPort <em>Preferred Port</em>}</li>
  * </ul>
  * </p>
  *
@@ -51,6 +56,48 @@ public interface Contract extends AContract {
 	 * @generated
 	 */
 	void setEntity(LegalEntity value);
+
+	/**
+	 * Returns the value of the '<em><b>Allowed Ports</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Allowed Ports</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allowed Ports</em>' reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_AllowedPorts()
+	 * @model
+	 * @generated
+	 */
+	EList<APortSet> getAllowedPorts();
+
+	/**
+	 * Returns the value of the '<em><b>Preferred Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Preferred Port</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Preferred Port</em>' reference.
+	 * @see #setPreferredPort(Port)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_PreferredPort()
+	 * @model required="true"
+	 * @generated
+	 */
+	Port getPreferredPort();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getPreferredPort <em>Preferred Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Preferred Port</em>' reference.
+	 * @see #getPreferredPort()
+	 * @generated
+	 */
+	void setPreferredPort(Port value);
 
 } // end of  Contract
 
