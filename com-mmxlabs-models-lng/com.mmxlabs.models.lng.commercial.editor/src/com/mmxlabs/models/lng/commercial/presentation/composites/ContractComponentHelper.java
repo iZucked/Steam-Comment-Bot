@@ -70,6 +70,8 @@ public class ContractComponentHelper implements IComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
+		add_allowedPortsEditor(detailComposite, topClass);
+		add_preferredPortEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the entity feature on Contract
@@ -78,5 +80,23 @@ public class ContractComponentHelper implements IComponentHelper {
 	 */
 	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__ENTITY));
+	}
+
+	/**
+	 * Create the editor for the allowedPorts feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_allowedPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__ALLOWED_PORTS));
+	}
+
+	/**
+	 * Create the editor for the preferredPort feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_preferredPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PREFERRED_PORT));
 	}
 }

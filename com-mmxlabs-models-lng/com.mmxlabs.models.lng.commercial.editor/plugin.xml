@@ -71,4 +71,17 @@
 			modelClass="com.mmxlabs.models.lng.commercial.DischargeContract" />
 		
 	</extension>
+ <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.CommercialProviderFactory"
+          id="com.mmxlabs.models.lng.commercial.editor.contractProvider"
+          referenceEClass="com.mmxlabs.models.lng.types.AContract">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.CommercialProviderFactory"
+          id="com.mmxlabs.models.lng.commercial.editor.entityProvider"
+          referenceEClass="com.mmxlabs.models.lng.types.ALegalEntity">
+    </valueProvider>
+ </extension>
 </plugin>

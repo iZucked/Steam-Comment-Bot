@@ -21,11 +21,11 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * A component helper for DischargeContract instances
+ * A component helper for PurchaseContract instances
  *
  * @generated
  */
-public class DischargeContractComponentHelper implements IComponentHelper {
+public class PurchaseContractComponentHelper implements IComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -33,7 +33,7 @@ public class DischargeContractComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public DischargeContractComponentHelper() {
+	public PurchaseContractComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -42,7 +42,7 @@ public class DischargeContractComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public DischargeContractComponentHelper(IAdapterManager adapterManager) {
+	public PurchaseContractComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
 			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.CONTRACT);
 			if (helper != null) superClassesHelpers.add(helper);
@@ -50,13 +50,13 @@ public class DischargeContractComponentHelper implements IComponentHelper {
 	}
 	
 	/**
-	 * add editors to a composite, using DischargeContract as the supertype
+	 * add editors to a composite, using PurchaseContract as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CommercialPackage.Literals.DISCHARGE_CONTRACT);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.PURCHASE_CONTRACT);	
 	}
 	
 	/**
