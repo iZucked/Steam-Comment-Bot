@@ -120,4 +120,13 @@
           referenceEClass="com.mmxlabs.models.lng.types.ABaseFuel">
     </valueProvider>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.fleet.editor.jointModelEditorContribution"
+          implementation="com.mmxlabs.models.lng.fleet.ui.editorpart.FleetModelEditorContribution"
+          priority="3"
+          subModelClass="com.mmxlabs.models.lng.fleet.FleetModel">
+    </jointModelEditor>
+ </extension>
 </plugin>
