@@ -48,6 +48,9 @@ public class VesselEventComponentHelper implements IComponentHelper {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
 			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.AVESSEL_EVENT);
 			if (helper != null) superClassesHelpers.add(helper);
+		} {
+			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ITIMEZONE_PROVIDER);
+			if (helper != null) superClassesHelpers.add(helper);
 		}
 	}
 	
