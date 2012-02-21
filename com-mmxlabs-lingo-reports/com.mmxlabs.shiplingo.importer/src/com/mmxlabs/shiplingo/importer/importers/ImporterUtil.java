@@ -45,8 +45,9 @@ public class ImporterUtil {
 	 * @param value
 	 */
 	public void writeObjects(final String filename, final Collection<Map<String, String>> value) {
+		BufferedWriter bw = null;
 		try {
-			final BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+			bw = new BufferedWriter(new FileWriter(filename));
 
 			final LinkedHashSet<String> keys = new LinkedHashSet<String>();
 			for (final Map<String, String> map : value) {
@@ -73,9 +74,16 @@ public class ImporterUtil {
 			}
 
 			bw.flush();
-			bw.close();
 		} catch (final IOException ex) {
 			return;
+		} finally {
+			if (bw != null) {
+				try {
+					bw.close();
+				} catch (IOException e) {
+					
+				}
+			}
 		}
 	}
 }
