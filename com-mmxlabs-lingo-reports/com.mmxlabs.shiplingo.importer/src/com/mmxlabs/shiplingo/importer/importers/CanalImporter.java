@@ -34,7 +34,7 @@ public class CanalImporter extends EObjectImporter {
 			final String referenceName = prefix + reference.getName().toLowerCase();
 
 			if (fields.containsKey(referenceName)) {
-				CSVReader reader;
+				CSVReader reader = null;
 				try {
 					reader = getCurrentReader().getAdjacentReader(fields.get(referenceName));
 					final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(reference.getEReferenceType());
@@ -43,6 +43,14 @@ public class CanalImporter extends EObjectImporter {
 				} catch (final IOException e) {
 					log.error("Unable to import " + referenceName + " from " + fields.get(referenceName) + ": " + e.getMessage(), e);
 					super.warn("Unable to import " + referenceName + " from " + fields.get(referenceName) + ": " + e.getMessage(), true, referenceName);
+				} finally {
+					if (reader != null) {
+						try {
+							reader.close();
+						} catch (IOException e) {
+							log.error(e.getMessage(), e);
+						}
+					}
 				}
 			}
 		} else {
