@@ -89,6 +89,10 @@ public final class PortDetails implements Cloneable {
 			if (visitDuration != d.visitDuration) {
 				return false;
 			}
+			
+			if (!Equality.isEqual(capacityViolations, d.capacityViolations)) {
+				return false;
+			}
 
 			if (!Equality.isEqual(fuelConsumption, d.fuelConsumption)) {
 				return false;
