@@ -22,6 +22,8 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 	public static final String FITNESS_CORE_NAME = "CargoSchedulerCore";
 
 	public static final String LATENESS_COMPONENT_NAME = "cargo-scheduler-lateness";
+	
+	public static final String CAPACITY_COMPONENT_NAME = "cargo-scheduler-capacity";
 
 	public static final String COST_BASE_COMPONENT_NAME = "cargo-scheduler-cost-base";
 
