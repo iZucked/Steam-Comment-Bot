@@ -62,20 +62,30 @@ public interface VesselClass extends AVesselClass {
 	EList<APortSet> getInaccessiblePorts();
 
 	/**
-	 * Returns the value of the '<em><b>Base Fuel</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.BaseFuel}.
+	 * Returns the value of the '<em><b>Base Fuel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Base Fuel</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Fuel</em>' reference list.
+	 * @return the value of the '<em>Base Fuel</em>' reference.
+	 * @see #setBaseFuel(BaseFuel)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_BaseFuel()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
-	EList<BaseFuel> getBaseFuel();
+	BaseFuel getBaseFuel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Base Fuel</em>' reference.
+	 * @see #getBaseFuel()
+	 * @generated
+	 */
+	void setBaseFuel(BaseFuel value);
 
 	/**
 	 * Returns the value of the '<em><b>Capacity</b></em>' attribute.
@@ -409,7 +419,7 @@ public interface VesselClass extends AVesselClass {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model markedMany="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();\n\tfinal org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();\n\tmarked.add(this);\n\t\n\tfinal FleetModel myModel = (FleetModel) eContainer();\n\tfor (final Vesssel v : myModel.getVessels()) {\n\t\tif (v.getVesselClass() == this) {\n\t\t\tresult.add(v);\n\t\t}\n\t}\n\nreturn result;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();\n\tfinal org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();\n\tmarked.add(this);\n\t\n\tfinal FleetModel myModel = (FleetModel) eContainer();\n\tfor (final Vessel v : myModel.getVessels()) {\n\t\tif (v.getVesselClass() == this) {\n\t\t\tresult.add(v);\n\t\t}\n\t}\n\nreturn result;'"
 	 * @generated
 	 */
 	EList<AVessel> collect(EList<AVesselSet> marked);

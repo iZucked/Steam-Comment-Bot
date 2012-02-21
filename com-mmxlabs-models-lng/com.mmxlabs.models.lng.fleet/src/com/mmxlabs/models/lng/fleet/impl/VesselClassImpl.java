@@ -76,14 +76,14 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	protected EList<APortSet> inaccessiblePorts;
 
 	/**
-	 * The cached value of the '{@link #getBaseFuel() <em>Base Fuel</em>}' reference list.
+	 * The cached value of the '{@link #getBaseFuel() <em>Base Fuel</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getBaseFuel()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<BaseFuel> baseFuel;
+	protected BaseFuel baseFuel;
 
 	/**
 	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
@@ -351,11 +351,37 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<BaseFuel> getBaseFuel() {
-		if (baseFuel == null) {
-			baseFuel = new EObjectResolvingEList<BaseFuel>(BaseFuel.class, this, FleetPackage.VESSEL_CLASS__BASE_FUEL);
+	public BaseFuel getBaseFuel() {
+		if (baseFuel != null && baseFuel.eIsProxy()) {
+			InternalEObject oldBaseFuel = (InternalEObject)baseFuel;
+			baseFuel = (BaseFuel)eResolveProxy(oldBaseFuel);
+			if (baseFuel != oldBaseFuel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_CLASS__BASE_FUEL, oldBaseFuel, baseFuel));
+			}
 		}
 		return baseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuel basicGetBaseFuel() {
+		return baseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBaseFuel(BaseFuel newBaseFuel) {
+		BaseFuel oldBaseFuel = baseFuel;
+		baseFuel = newBaseFuel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__BASE_FUEL, oldBaseFuel, baseFuel));
 	}
 
 	/**
@@ -715,7 +741,8 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				return getInaccessiblePorts();
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
-				return getBaseFuel();
+				if (resolve) return getBaseFuel();
+				return basicGetBaseFuel();
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				return getCapacity();
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
@@ -760,8 +787,7 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				getInaccessiblePorts().addAll((Collection<? extends APortSet>)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
-				getBaseFuel().clear();
-				getBaseFuel().addAll((Collection<? extends BaseFuel>)newValue);
+				setBaseFuel((BaseFuel)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				setCapacity((Integer)newValue);
@@ -819,7 +845,7 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				getInaccessiblePorts().clear();
 				return;
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
-				getBaseFuel().clear();
+				setBaseFuel((BaseFuel)null);
 				return;
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				setCapacity(CAPACITY_EDEFAULT);
@@ -875,7 +901,7 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
-				return baseFuel != null && !baseFuel.isEmpty();
+				return baseFuel != null;
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 				return capacity != CAPACITY_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:

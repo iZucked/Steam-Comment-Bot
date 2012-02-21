@@ -7,6 +7,7 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.fleet;
+import com.mmxlabs.models.lng.types.ABaseFuel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -20,7 +21,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model
  * @generated
  */
-public interface BaseFuel extends UUIDObject, NamedObject {
+public interface BaseFuel extends ABaseFuel {
 } // end of  BaseFuel
 
 // finish type fixing

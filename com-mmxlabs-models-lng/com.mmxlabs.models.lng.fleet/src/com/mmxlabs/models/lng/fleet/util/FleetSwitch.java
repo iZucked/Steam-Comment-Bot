@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.fleet.util;
 
 import com.mmxlabs.models.lng.fleet.*;
 
+import com.mmxlabs.models.lng.types.ABaseFuel;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselEvent;
@@ -125,6 +126,7 @@ public class FleetSwitch<T> extends Switch<T> {
 			case FleetPackage.BASE_FUEL: {
 				BaseFuel baseFuel = (BaseFuel)theEObject;
 				T result = caseBaseFuel(baseFuel);
+				if (result == null) result = caseABaseFuel(baseFuel);
 				if (result == null) result = caseUUIDObject(baseFuel);
 				if (result == null) result = caseNamedObject(baseFuel);
 				if (result == null) result = caseMMXObject(baseFuel);
@@ -468,6 +470,21 @@ public class FleetSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseITimezoneProvider(ITimezoneProvider object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ABase Fuel</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ABase Fuel</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseABaseFuel(ABaseFuel object) {
 		return null;
 	}
 

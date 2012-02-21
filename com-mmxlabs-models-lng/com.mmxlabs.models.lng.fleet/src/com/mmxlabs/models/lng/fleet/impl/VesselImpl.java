@@ -142,7 +142,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	protected boolean finalPortESet;
 
 	/**
-	 * The cached value of the '{@link #getStartHeel() <em>Start Heel</em>}' reference.
+	 * The cached value of the '{@link #getStartHeel() <em>Start Heel</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getStartHeel()
@@ -448,14 +448,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * @generated
 	 */
 	public HeelOptions getStartHeel() {
-		if (startHeel != null && startHeel.eIsProxy()) {
-			InternalEObject oldStartHeel = (InternalEObject)startHeel;
-			startHeel = (HeelOptions)eResolveProxy(oldStartHeel);
-			if (startHeel != oldStartHeel) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL__START_HEEL, oldStartHeel, startHeel));
-			}
-		}
 		return startHeel;
 	}
 
@@ -464,8 +456,14 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public HeelOptions basicGetStartHeel() {
-		return startHeel;
+	public NotificationChain basicSetStartHeel(HeelOptions newStartHeel, NotificationChain msgs) {
+		HeelOptions oldStartHeel = startHeel;
+		startHeel = newStartHeel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__START_HEEL, oldStartHeel, newStartHeel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -474,10 +472,17 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * @generated
 	 */
 	public void setStartHeel(HeelOptions newStartHeel) {
-		HeelOptions oldStartHeel = startHeel;
-		startHeel = newStartHeel;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__START_HEEL, oldStartHeel, startHeel));
+		if (newStartHeel != startHeel) {
+			NotificationChain msgs = null;
+			if (startHeel != null)
+				msgs = ((InternalEObject)startHeel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL__START_HEEL, null, msgs);
+			if (newStartHeel != null)
+				msgs = ((InternalEObject)newStartHeel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL__START_HEEL, null, msgs);
+			msgs = basicSetStartHeel(newStartHeel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__START_HEEL, newStartHeel, newStartHeel));
 	}
 
 	/**
@@ -573,6 +578,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case FleetPackage.VESSEL__START_HEEL:
+				return basicSetStartHeel(null, msgs);
 			case FleetPackage.VESSEL__AVAILABILITY:
 				return basicSetAvailability(null, msgs);
 		}
@@ -601,8 +608,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				if (resolve) return getFinalPort();
 				return basicGetFinalPort();
 			case FleetPackage.VESSEL__START_HEEL:
-				if (resolve) return getStartHeel();
-				return basicGetStartHeel();
+				return getStartHeel();
 			case FleetPackage.VESSEL__AVAILABILITY:
 				return getAvailability();
 			case FleetPackage.VESSEL__TIME_CHARTERED:

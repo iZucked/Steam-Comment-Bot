@@ -155,7 +155,7 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__FINAL_PORT = TypesPackage.AVESSEL_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Start Heel</b></em>' reference.
+	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -255,7 +255,7 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Base Fuel</b></em>' reference list.
+	 * The feature id for the '<em><b>Base Fuel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -597,7 +597,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+	int BASE_FUEL__EXTENSIONS = TypesPackage.ABASE_FUEL__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
@@ -606,7 +606,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+	int BASE_FUEL__PROXIES = TypesPackage.ABASE_FUEL__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -615,7 +615,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+	int BASE_FUEL__UUID = TypesPackage.ABASE_FUEL__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -624,7 +624,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int BASE_FUEL__NAME = TypesPackage.ABASE_FUEL__NAME;
 
 	/**
 	 * The number of structural features of the '<em>Base Fuel</em>' class.
@@ -633,7 +633,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int BASE_FUEL_FEATURE_COUNT = TypesPackage.ABASE_FUEL_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
@@ -1194,10 +1194,10 @@ public interface FleetPackage extends EPackage {
 	EReference getVessel_FinalPort();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Start Heel</em>'.
+	 * @return the meta object for the containment reference '<em>Start Heel</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.Vessel#getStartHeel()
 	 * @see #getVessel()
 	 * @generated
@@ -1259,10 +1259,10 @@ public interface FleetPackage extends EPackage {
 	EReference getVesselClass_InaccessiblePorts();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Base Fuel</em>'.
+	 * @return the meta object for the reference '<em>Base Fuel</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getBaseFuel()
 	 * @see #getVesselClass()
 	 * @generated
@@ -1872,7 +1872,7 @@ public interface FleetPackage extends EPackage {
 		EReference VESSEL__FINAL_PORT = eINSTANCE.getVessel_FinalPort();
 
 		/**
-		 * The meta object literal for the '<em><b>Start Heel</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Start Heel</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1922,7 +1922,7 @@ public interface FleetPackage extends EPackage {
 		EReference VESSEL_CLASS__INACCESSIBLE_PORTS = eINSTANCE.getVesselClass_InaccessiblePorts();
 
 		/**
-		 * The meta object literal for the '<em><b>Base Fuel</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Base Fuel</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

@@ -240,26 +240,26 @@ public interface Vessel extends AVessel {
 	boolean isSetFinalPort();
 
 	/**
-	 * Returns the value of the '<em><b>Start Heel</b></em>' reference.
+	 * Returns the value of the '<em><b>Start Heel</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Start Heel</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Start Heel</em>' reference.
+	 * @return the value of the '<em>Start Heel</em>' containment reference.
 	 * @see #setStartHeel(HeelOptions)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_StartHeel()
-	 * @model required="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	HeelOptions getStartHeel();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Start Heel</em>' reference.
+	 * @param value the new value of the '<em>Start Heel</em>' containment reference.
 	 * @see #getStartHeel()
 	 * @generated
 	 */
