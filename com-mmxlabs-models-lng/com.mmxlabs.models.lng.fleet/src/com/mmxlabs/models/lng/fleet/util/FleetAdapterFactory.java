@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
 
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -151,6 +152,10 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseAVesselEvent(AVesselEvent object) {
 				return createAVesselEventAdapter();
+			}
+			@Override
+			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
+				return createITimezoneProviderAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -421,6 +426,20 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAVesselEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.ITimezoneProvider
+	 * @generated
+	 */
+	public Adapter createITimezoneProviderAdapter() {
 		return null;
 	}
 

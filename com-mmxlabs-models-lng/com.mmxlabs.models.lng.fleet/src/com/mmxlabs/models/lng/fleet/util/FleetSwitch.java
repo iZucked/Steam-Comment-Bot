@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
 
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -105,6 +106,7 @@ public class FleetSwitch<T> extends Switch<T> {
 				VesselEvent vesselEvent = (VesselEvent)theEObject;
 				T result = caseVesselEvent(vesselEvent);
 				if (result == null) result = caseAVesselEvent(vesselEvent);
+				if (result == null) result = caseITimezoneProvider(vesselEvent);
 				if (result == null) result = caseUUIDObject(vesselEvent);
 				if (result == null) result = caseNamedObject(vesselEvent);
 				if (result == null) result = caseMMXObject(vesselEvent);
@@ -134,6 +136,7 @@ public class FleetSwitch<T> extends Switch<T> {
 				T result = caseDryDockEvent(dryDockEvent);
 				if (result == null) result = caseVesselEvent(dryDockEvent);
 				if (result == null) result = caseAVesselEvent(dryDockEvent);
+				if (result == null) result = caseITimezoneProvider(dryDockEvent);
 				if (result == null) result = caseUUIDObject(dryDockEvent);
 				if (result == null) result = caseNamedObject(dryDockEvent);
 				if (result == null) result = caseMMXObject(dryDockEvent);
@@ -145,6 +148,7 @@ public class FleetSwitch<T> extends Switch<T> {
 				T result = caseCharterOutEvent(charterOutEvent);
 				if (result == null) result = caseVesselEvent(charterOutEvent);
 				if (result == null) result = caseAVesselEvent(charterOutEvent);
+				if (result == null) result = caseITimezoneProvider(charterOutEvent);
 				if (result == null) result = caseUUIDObject(charterOutEvent);
 				if (result == null) result = caseNamedObject(charterOutEvent);
 				if (result == null) result = caseMMXObject(charterOutEvent);
@@ -449,6 +453,21 @@ public class FleetSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAVesselEvent(AVesselEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseITimezoneProvider(ITimezoneProvider object) {
 		return null;
 	}
 

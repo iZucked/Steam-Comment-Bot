@@ -22,6 +22,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -257,6 +258,16 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 		latestStartDate = newLatestStartDate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__LATEST_START_DATE, oldLatestStartDate, latestStartDate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getTimeZone(EAttribute attribute) {
+		if (getPort() != null) return getPort().getTimeZone();
+		return "UTC";
 	}
 
 	/**

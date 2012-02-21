@@ -875,6 +875,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		vesselEClass.getESuperTypes().add(theTypesPackage.getAVessel());
 		vesselClassEClass.getESuperTypes().add(theTypesPackage.getAVesselClass());
 		vesselEventEClass.getESuperTypes().add(theTypesPackage.getAVesselEvent());
+		vesselEventEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
 		fleetModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		fleetModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		baseFuelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());

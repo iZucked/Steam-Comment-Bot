@@ -9,6 +9,7 @@
 package com.mmxlabs.models.lng.fleet;
 import com.mmxlabs.models.lng.types.AVesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.port.Port;
 
 import java.util.Date;
@@ -35,7 +36,7 @@ import org.eclipse.emf.common.util.EList;
  * @model abstract="true"
  * @generated
  */
-public interface VesselEvent extends AVesselEvent {
+public interface VesselEvent extends AVesselEvent, ITimezoneProvider {
 	/**
 	 * Returns the value of the '<em><b>Duration In Days</b></em>' attribute.
 	 * <!-- begin-user-doc -->
