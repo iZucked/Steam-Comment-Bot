@@ -71,4 +71,17 @@
 			modelClass="com.mmxlabs.models.lng.port.PortModel" />
 		
 	</extension>
+ <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.port.ui.valueproviders.PortValueProviderFactory"
+          id="com.mmxlabs.models.lng.port.editor.portValueProvider"
+          referenceEClass="com.mmxlabs.models.lng.types.APortSet">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.port.ui.valueproviders.RouteValueProviderFactory"
+          id="com.mmxlabs.models.lng.port.editor.routeValueProvider"
+          referenceEClass="com.mmxlabs.models.lng.types.ARoute">
+    </valueProvider>
+ </extension>
 </plugin>

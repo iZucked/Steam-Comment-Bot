@@ -72,6 +72,7 @@ public class PortModelComponentHelper implements IComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_portsEditor(detailComposite, topClass);
+		add_portGroupsEditor(detailComposite, topClass);
 		add_routesEditor(detailComposite, topClass);
 	}
 	/**
@@ -82,6 +83,15 @@ public class PortModelComponentHelper implements IComponentHelper {
 	protected void add_portsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__PORTS));
 	}
+	/**
+	 * Create the editor for the portGroups feature on PortModel
+	 *
+	 * @generated
+	 */
+	protected void add_portGroupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__PORT_GROUPS));
+	}
+
 	/**
 	 * Create the editor for the routes feature on PortModel
 	 *
