@@ -35,7 +35,7 @@ public class CargoModelViewer extends ScenarioTableViewer {
 		addTypicalColumn(
 				"ID",
 				new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain));
-		// and so on
+		
 		addTypicalColumn(
 				"Load Port",
 				new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), pkg.getCargo_LoadSlot());
@@ -46,6 +46,7 @@ public class CargoModelViewer extends ScenarioTableViewer {
 		addTypicalColumn(
 				"Discharge Port",
 				new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), pkg.getCargo_DischargeSlot());
+		
 		addTypicalColumn(
 				"Discharge Contract",
 				new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_DischargeSlot());
