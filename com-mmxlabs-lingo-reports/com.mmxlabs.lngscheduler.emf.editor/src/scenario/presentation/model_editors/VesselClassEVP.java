@@ -22,6 +22,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.fleet.FleetPackage;
 import scenario.fleet.VesselStateAttributes;
@@ -53,6 +55,9 @@ import com.mmxlabs.shiplingo.ui.tableview.NumericAttributeManipulator;
  * 
  */
 public class VesselClassEVP extends NamedObjectEVP {
+	
+	private static final Logger log = LoggerFactory.getLogger(VesselClassEVP.class);
+	
 	public VesselClassEVP(final IWorkbenchPage page, final ScenarioEditor part) {
 		super(page, part);
 	}
@@ -69,6 +74,7 @@ public class VesselClassEVP extends NamedObjectEVP {
 			@Override
 			public void run() {
 				final WarningCollector warningCollector = new WarningCollector();
+				CSVReader reader = null;
 				try {
 					ImportUI.beginImport();
 					final FileDialog dialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
@@ -91,7 +97,7 @@ public class VesselClassEVP extends NamedObjectEVP {
 
 					final EObjectImporter vci = EObjectImporterFactory.getInstance().getImporter(FleetPackage.eINSTANCE.getVesselClass());
 					vci.addImportWarningListener(warningCollector);
-					final CSVReader reader = new CSVReader(vcFile);
+					reader = new CSVReader(vcFile);
 					final Collection<EObject> vesselClasses = vci.importObjects(reader, defer, reg);
 
 					// register new objects
@@ -118,6 +124,14 @@ public class VesselClassEVP extends NamedObjectEVP {
 					ImportUI.endImport();
 				} catch (final IOException ex) {
 					ImportUI.endImport();
+				} finally {
+					if (reader != null) {
+						try {
+							reader.close();
+						} catch (Exception e) {
+							log.error(e.getMessage(), e);
+						}
+					}
 				}
 
 				if (warningCollector.getWarnings().isEmpty() == false) {
