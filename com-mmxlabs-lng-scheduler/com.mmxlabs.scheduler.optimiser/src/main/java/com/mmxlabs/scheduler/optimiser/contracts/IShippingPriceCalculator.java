@@ -23,7 +23,7 @@ public interface IShippingPriceCalculator extends ICalculator {
 	public void prepareEvaluation(ISequences sequences);
 
 	/**
-	 * Find the unit price in dollars per cubic metre for gas at the given slot, at the given time.
+	 * Find the unit price in dollars per mmbtu for gas at the given slot, at the given time.
 	 * 
 	 * @param slot
 	 * @param time
