@@ -459,11 +459,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			if (minLoadVolumeInM3 - lngConsumedInM3 > maxDischargeVolumeInM3) {
 				if (minLoadVolumeInM3 - lngConsumedInM3 < 0) {
 					// discharge breach
-					voyagePlan.setCapacityViolation(CapacityViolationType.MAX_DISCHARGE, (minLoadVolumeInM3 - lngConsumedInM3) - maxDischargeVolumeInM3);
+					dischargeDetails.setCapacityViolation(CapacityViolationType.MAX_DISCHARGE, (minLoadVolumeInM3 - lngConsumedInM3) - maxDischargeVolumeInM3);
 					++problemCounter;
 				} else {
 					// load breach
-					voyagePlan.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - (maxDischargeVolumeInM3 + lngConsumedInM3));
+					loadDetails.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - (maxDischargeVolumeInM3 + lngConsumedInM3));
 					++problemCounter;
 				}
 			}
@@ -472,11 +472,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				
 				if (upperLoadLimitInM3 - lngConsumedInM3 < 0) {
 					// load breach
-					voyagePlan.setCapacityViolation(CapacityViolationType.MAX_LOAD, lngConsumedInM3 - upperLoadLimitInM3);
+					loadDetails.setCapacityViolation(CapacityViolationType.MAX_LOAD, lngConsumedInM3 - upperLoadLimitInM3);
 					++problemCounter;
 				} else {
 					// discharge breach
-					voyagePlan.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, upperLoadLimitInM3 - lngConsumedInM3);
+					dischargeDetails.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, upperLoadLimitInM3 - lngConsumedInM3);
 					++problemCounter;
 				}
 			}
@@ -488,7 +488,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		} else {
 			lngConsumedInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
 			if (lngConsumedInM3 > availableHeelinM3) {
-				voyagePlan.setCapacityViolation(CapacityViolationType.MAX_HEEL, lngConsumedInM3 - availableHeelinM3);
+				final PortDetails portDetails = (PortDetails) sequence[2];
+				portDetails.setCapacityViolation(CapacityViolationType.MAX_HEEL, lngConsumedInM3 - availableHeelinM3);
 				++problemCounter;
 			}
 		}
@@ -536,7 +537,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 					if ((loadIdx != -1) && (dischargeIdx != -1) && port.shouldVesselsArriveCold()) {
 						// Cooldown violation!
-						voyagePlan.setCapacityViolation(CapacityViolationType.FORCED_COOLDOWN, 1);
+						final PortDetails portDetails = (PortDetails) sequence[5];
+						portDetails.setCapacityViolation(CapacityViolationType.FORCED_COOLDOWN, 1);
 						++problemCounter;
 					}
 

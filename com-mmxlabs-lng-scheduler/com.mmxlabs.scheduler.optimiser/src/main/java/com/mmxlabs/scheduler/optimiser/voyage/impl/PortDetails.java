@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 import java.util.EnumMap;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
@@ -21,6 +22,8 @@ public final class PortDetails implements Cloneable {
 
 	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(FuelComponent.class);
 
+	private final LongFastEnumMap<CapacityViolationType> capacityViolations = new LongFastEnumMap<CapacityViolationType>(CapacityViolationType.values().length);
+	
 	private int visitDuration;
 
 	private IPortSlot portSlot;
@@ -29,10 +32,11 @@ public final class PortDetails implements Cloneable {
 
 	}
 
-	private PortDetails(final int visitDuration, final IPortSlot portSlot, final EnumMap<FuelComponent, Long> fuelConsumption) {
+	private PortDetails(final int visitDuration, final IPortSlot portSlot, final EnumMap<FuelComponent, Long> fuelConsumption, LongFastEnumMap<CapacityViolationType> capacityViolations) {
 		this.visitDuration = visitDuration;
 		this.portSlot = portSlot;
 		this.fuelConsumption.putAll(fuelConsumption);
+		this.capacityViolations.putAll(capacityViolations);
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel) {
@@ -46,6 +50,14 @@ public final class PortDetails implements Cloneable {
 
 	public final void setFuelConsumption(final FuelComponent fuel, final long consumption) {
 		fuelConsumption.put(fuel, consumption);
+	}
+
+	public final long getCapacityViolation(final CapacityViolationType type) {
+		return capacityViolations.get(type);
+	}
+
+	public final void setCapacityViolation(final CapacityViolationType type, final long quantity) {
+		capacityViolations.put(type, quantity);
 	}
 
 	public final int getVisitDuration() {
@@ -93,11 +105,11 @@ public final class PortDetails implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "PortDetails [fuelConsumption=" + fuelConsumption + ", visitDuration=" + visitDuration + ", portSlot=" + portSlot + "]";
+		return "PortDetails [fuelConsumption=" + fuelConsumption + ", visitDuration=" + visitDuration + ", portSlot=" + portSlot + ", capacityViolations=" + capacityViolations + "]";
 	}
 
 	@Override
 	public PortDetails clone() {
-		return new PortDetails(visitDuration, portSlot, fuelConsumption);
+		return new PortDetails(visitDuration, portSlot, fuelConsumption, capacityViolations);
 	}
 }

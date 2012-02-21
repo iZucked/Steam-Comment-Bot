@@ -22,20 +22,20 @@ public final class VoyagePlan implements Cloneable {
 	private final LongFastEnumMap<FuelComponent> fuelConsumptions;
 	private final LongFastEnumMap<FuelComponent> fuelCosts;
 	private long lngFuelVolume;
-	private final LongFastEnumMap<CapacityViolationType> capacityViolations = new LongFastEnumMap<CapacityViolationType>(CapacityViolationType.values().length);
+	private int capacityViolations;
 
 	public VoyagePlan() {
 		fuelConsumptions = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 		fuelCosts = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 	}
 
-	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> fuelCosts, LongFastEnumMap<CapacityViolationType> capacityViolations) {
+	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> fuelCosts, final int capacityViolations) {
 		super();
 		this.sequence = sequence;
 		this.fuelConsumptions = fuelConsumptions;
 		this.fuelCosts = fuelCosts;
 		this.lngFuelVolume = fuelVolume;
-		this.capacityViolations.putAll(capacityViolations);
+		this.capacityViolations = capacityViolations;
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel) {
@@ -54,12 +54,12 @@ public final class VoyagePlan implements Cloneable {
 		fuelCosts.put(fuel, cost);
 	}
 	
-	public final long getCapacityViolation(final CapacityViolationType type) {
-		return capacityViolations.get(type);
+	public final int getCapacityViolations() {
+		return capacityViolations;
 	}
 
-	public final void setCapacityViolation(final CapacityViolationType type, final long quantity) {
-		capacityViolations.put(type, quantity);
+	public final void setCapacityViolations(final int number) {
+		capacityViolations = number;
 	}
 
 	public final Object[] getSequence() {
@@ -100,7 +100,7 @@ public final class VoyagePlan implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", fuelConsumptions=" + fuelConsumptions + ", fuelCosts=" + fuelCosts + ", capacityViolations=" + capacityViolations + "]";
+		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", fuelConsumptions=" + fuelConsumptions + ", fuelCosts=" + fuelCosts + "]";
 	}
 
 	@Override

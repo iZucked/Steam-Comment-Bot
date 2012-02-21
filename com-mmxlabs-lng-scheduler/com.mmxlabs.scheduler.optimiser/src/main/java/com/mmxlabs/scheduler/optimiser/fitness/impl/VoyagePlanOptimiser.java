@@ -40,7 +40,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private IVessel vessel;
 
-	private short bestProblemCount = Short.MAX_VALUE;
+	private int bestProblemCount = Integer.MAX_VALUE;
 	
 	private long bestCost = Long.MAX_VALUE;
 
@@ -157,7 +157,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 */
 	private void evaluateVoyagePlan(final boolean optimiseLastLeg) {
 
-		short currentProblemCount;
+		int currentProblemCount;
 		long cost;
 		VoyagePlan currentPlan;
 
@@ -187,8 +187,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			availableTimeToRestore = originalTime;
 			VoyagePlan bestLastLegPlan = null;
 			long bestLastLegCost = Long.MAX_VALUE;
-//			long lastCost = Long.MAX_VALUE;
-			short bestLastProblemCount = Short.MAX_VALUE;
+			int bestLastProblemCount = Short.MAX_VALUE;
 			int bestAvailableTime = options.getAvailableTime();
 
 			final int hireRate = vessel.getVesselInstanceType() == VesselInstanceType.FLEET ? 0 : vessel.getVesselClass().getHourlyCharterInPrice();
@@ -210,12 +209,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					currentCost += hireCost;
 
 					// Check for capacity violations, prefer solutions with fewer violations
-					currentProblemCount = (short)0;
-					for (CapacityViolationType cvt : CapacityViolationType.values()) {
-						if (currentPlan.getCapacityViolation(cvt) != 0) {
-							++currentProblemCount;
-						}
-					}
+					currentProblemCount = currentPlan.getCapacityViolations();
 					
 					if (currentProblemCount < bestLastProblemCount || (currentProblemCount == bestLastProblemCount && currentCost < bestLastLegCost)) {
 						bestLastLegCost = currentCost;
@@ -245,12 +239,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			// are good
 			currentPlan = calculateVoyagePlan();
 			cost = evaluatePlan(currentPlan);
-			currentProblemCount = 0;
-			for (CapacityViolationType cvt : CapacityViolationType.values()) {
-				if (currentPlan.getCapacityViolation(cvt) != 0) {
-					++currentProblemCount;
-				}
-			}
+			currentProblemCount = currentPlan.getCapacityViolations();
 		}
 
 		// this way could be cheaper, but we need to add in a sanity check

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -22,6 +23,10 @@ import com.mmxlabs.scheduler.optimiser.events.impl.LoadEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntry;
+import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.CapacityAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.CapacityEntry;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -90,6 +95,17 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					// load.setPurchasePrice(plan.getPurchaseCost());
 
 					visit = load;
+
+					List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
+					recordCapacityViolation(details, entries, CapacityViolationType.MIN_LOAD);
+					recordCapacityViolation(details, entries, CapacityViolationType.MAX_LOAD);
+					recordCapacityViolation(details, entries, CapacityViolationType.FORCED_COOLDOWN);
+
+					if (!entries.isEmpty()) {
+						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
+						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, annotation);
+					}
+
 				} else if (currentPortSlot instanceof IDischargeSlot) {
 					final DischargeEventImpl discharge = new DischargeEventImpl();
 
@@ -98,11 +114,39 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					// TODO: Check unit vs. actual
 					// discharge.setSalesPrice(plan.getSalesRevenue());
 
+					List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
+					recordCapacityViolation(details, entries, CapacityViolationType.MIN_DISCHARGE);
+					recordCapacityViolation(details, entries, CapacityViolationType.MAX_DISCHARGE);
+
+					if (!entries.isEmpty()) {
+						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
+						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, annotation);
+					}
+
 					visit = discharge;
 
 				} else if (currentPortSlot instanceof IVesselEventPortSlot) {
+
+					List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
+					recordCapacityViolation(details, entries, CapacityViolationType.MAX_HEEL);
+					recordCapacityViolation(details, entries, CapacityViolationType.FORCED_COOLDOWN);
+
+					if (!entries.isEmpty()) {
+						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
+						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, annotation);
+					}
+
 					visit = new PortVisitEventImpl();
 				} else {
+					List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
+					recordCapacityViolation(details, entries, CapacityViolationType.MAX_HEEL);
+					recordCapacityViolation(details, entries, CapacityViolationType.FORCED_COOLDOWN);
+
+					if (!entries.isEmpty()) {
+						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
+						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, annotation);
+					}
+
 					visit = new PortVisitEventImpl();
 				}
 
@@ -197,6 +241,16 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 			}
 		}
 
+	}
+
+	public void recordCapacityViolation(PortDetails plan, List<ICapacityEntry> entries, CapacityViolationType cvt) {
+		{
+			long quantity = plan.getCapacityViolation(cvt);
+			if (quantity > 0) {
+				final ICapacityEntry e = new CapacityEntry(cvt.getDisplayName(), quantity);
+				entries.add(e);
+			}
+		}
 	}
 
 	public void setPortSlotProvider(final IPortSlotProvider portSlotProvider) {
