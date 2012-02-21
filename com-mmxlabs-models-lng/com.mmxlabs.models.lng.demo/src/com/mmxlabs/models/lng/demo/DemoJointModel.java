@@ -15,8 +15,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edapt.migration.MigrationException;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.demo.manifest.Entry;
@@ -24,10 +28,15 @@ import com.mmxlabs.models.lng.demo.manifest.Manifest;
 import com.mmxlabs.models.lng.demo.manifest.ManifestFactory;
 import com.mmxlabs.models.lng.demo.manifest.ManifestPackage;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -122,6 +131,37 @@ public class DemoJointModel extends JointModel {
 		rootObject.addSubModel(InputFactory.eINSTANCE.createInputModel());
 		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
+		
+		{
+		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
+		final LoadSlot ls = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot ds = CargoFactory.eINSTANCE.createDischargeSlot();
+		final Cargo c = CargoFactory.eINSTANCE.createCargo();
+		c.setLoadSlot(ls);
+		c.setDischargeSlot(ds);
+		
+		cargoModel.getCargos().add(c);
+		cargoModel.getLoadSlots().add(ls);
+		cargoModel.getDischargeSlots().add(ds);
+		}
+		
+		{
+		final PortModel portModel = rootObject.getSubModel(PortModel.class);
+		final Port p = PortFactory.eINSTANCE.createPort();
+		p.setName("my fav. port");
+		portModel.getPorts().add(p);
+		}
+		
+		{
+			final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+			final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
+			vc.setName("VC 1");
+			final Vessel v = FleetFactory.eINSTANCE.createVessel();
+			v.setVesselClass(vc);
+			v.setName("V1");
+			fleetModel.getVessels().add(v);
+			fleetModel.getVesselClasses().add(vc);
+		}
 		
 		final DemoJointModel result = new DemoJointModel(rootObject, target);
 		return result;
