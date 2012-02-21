@@ -1,9 +1,11 @@
 package com.mmxlabs.models.ui.registries;
 
-import org.eclipse.emf.ecore.EClass;
+import java.util.List;
 
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
+import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 public interface IJointModelEditorContributionRegistry {
-	public IJointModelEditorContribution createEditorContribution(final EClass subModelClass);
+	public List<IJointModelEditorContribution> initEditorContributions(final JointModelEditorPart part, final MMXRootObject root);
 }

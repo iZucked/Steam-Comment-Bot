@@ -10,4 +10,5 @@ public interface IJointModelEditorExtension {
 	@MapName("id") String getID();
 	@MapName("subModelClass") String getSubModelClassName();
 	@MapName("implementation") IJointModelEditorContribution instantiate();
+	@MapName("priority") String getPriority();
 }

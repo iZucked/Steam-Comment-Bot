@@ -1,6 +1,7 @@
 package com.mmxlabs.models.ui.editorpart;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -92,13 +93,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				// create editing domain
 				editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 				// initialize extensions
-				for (final MMXSubModel subModel : root.getSubModels()) {
-					final IJointModelEditorContribution contribution = Activator.getDefault().getJointModelEditorContributionRegistry().createEditorContribution(subModel.getSubModelInstance().eClass());
-					if (contribution != null) {
-						contribution.init(this, root, subModel.getSubModelInstance());
-						contributions.add(contribution);
-					}
-				}
+				
+				contributions = Activator.getDefault().getJointModelEditorContributionRegistry().initEditorContributions(this, root);
+				
 				referenceValueProviderCache = new ReferenceValueProviderCache(rootObject);
 			} catch (MigrationException e) {
 				throw new PartInitException("Error migrating joint model", e);
