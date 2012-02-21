@@ -5,18 +5,22 @@
 package com.mmxlabs.shiplingo.importer.importers;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -164,21 +168,22 @@ public class EObjectImporter {
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
 			final Object value = (!attribute.isUnsettable() || object.eIsSet(attribute)) ? object.eGet(attribute) : null;
-			String svalue = "";
-			if (value instanceof Date) {
-				svalue = DateTimeParser.getInstance().formatDate((Date) value, timezone);
-			} else if (attribute.getEType() == ScenarioPackage.eINSTANCE.getPercentage()) {
-				if ((value == null) || (((Number) value).doubleValue() == 0)) {
-					svalue = "0";
-				} else {
-					svalue = String.format("%.1g", ((Number) value).doubleValue() * 100.0);
+			if (attribute.isMany()) {
+				final List<?> values = (List) value;
+
+				final StringBuffer sb = new StringBuffer();
+				boolean comma = false;
+				for (final Object v : values) {
+					final String svalue = attributeValueToString(timezone, attribute, v);
+					sb.append((comma ? "," : "") + svalue);
+					comma = true;
 				}
-			} else if ((value instanceof Float) || (value instanceof Double)) {
-				svalue = String.format("%3g", ((Number) value).doubleValue());
-			} else if (value != null) {
-				svalue = value.toString();
+				output.put(prefix + attribute.getName(), sb.toString());
+			} else {
+				final String svalue = attributeValueToString(timezone, attribute, value);
+				output.put(prefix + attribute.getName(), svalue);
 			}
-			output.put(prefix + attribute.getName(), svalue);
+			
 		}
 
 		for (final EReference reference : object.eClass().getEAllReferences()) {
@@ -200,6 +205,24 @@ public class EObjectImporter {
 				output.put(prefix + reference.getName(), NamedObjectRegistry.getName(value));
 			}
 		}
+	}
+
+	public String attributeValueToString(final String timezone, final EAttribute attribute, final Object value) {
+		String svalue = "";
+		if (value instanceof Date) {
+			svalue = DateTimeParser.getInstance().formatDate((Date) value, timezone);
+		} else if (attribute.getEType() == ScenarioPackage.eINSTANCE.getPercentage()) {
+			if ((value == null) || (((Number) value).doubleValue() == 0)) {
+				svalue = "0";
+			} else {
+				svalue = String.format("%.1g", ((Number) value).doubleValue() * 100.0);
+			}
+		} else if ((value instanceof Float) || (value instanceof Double)) {
+			svalue = String.format("%3g", ((Number) value).doubleValue());
+		} else if (value != null) {
+			svalue = value.toString();
+		}
+		return svalue;
 	}
 
 	/**
@@ -355,12 +378,21 @@ public class EObjectImporter {
 			if (fields.containsKey(referenceName)) {
 				final String filePath = fields.get(referenceName);
 
+				CSVReader reader = null;
 				try {
-					final CSVReader reader = currentReader.getAdjacentReader(filePath);
+					reader = currentReader.getAdjacentReader(filePath);
 					final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(reference.getEReferenceType());
 					((EList<EObject>) result.eGet(reference)).addAll(importer.importObjects(reader, deferredReferences, registry));
 				} catch (final IOException e) {
 
+				} finally {
+					if (reader != null) {
+						try {
+							reader.close();
+						} catch (final IOException e) {
+							log.error(e.getMessage(), e);
+						}
+					}
 				}
 			}
 		} else {
@@ -422,24 +454,19 @@ public class EObjectImporter {
 			// fix them.
 			Object obj;
 			try {
-				if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
-					obj = DateTimeParser.getInstance().parseDate(value);
-				} else if (dataType.equals(ScenarioPackage.eINSTANCE.getDateAndOptionalTime())) {
-					obj = DateTimeParser.getInstance().parseDateAndOptionalTime(value);
-				} else if (dataType.equals(ScenarioPackage.eINSTANCE.getPercentage())) {
-					obj = dataType.getEPackage().getEFactoryInstance().createFromString(dataType, value);
-					double d = (Double) obj;
-					d /= 100.0;
-					if (d < 0) {
-						d = 0d;
-						warn("Percentage value " + value + " is negative. It has been clamped to zero.", true, attributeName);
-					} else if (d > 1) {
-						d = 1d;
-						warn("Percentage value " + value + " is more than 100%. It has been clamped to 100%.", true, attributeName);
+
+				if (attribute.isMany() && value != null) {
+					final List<Object> list = new LinkedList<Object>();
+					final String[] values = value.split(",");
+					for (final String value2 : values) {
+						final String trim = value2.trim();
+						if (!trim.isEmpty()) {
+							list.add(stringToAttributeValue(attributeName, trim, dataType));
+						}
 					}
-					obj = d;
+					obj = list;
 				} else {
-					obj = dataType.getEPackage().getEFactoryInstance().createFromString(dataType, value);
+					obj = stringToAttributeValue(attributeName, value, dataType);
 				}
 				if (!attribute.isUnsettable() || (obj != null)) {
 					target.eSet(attribute, obj);
@@ -457,5 +484,29 @@ public class EObjectImporter {
 			final String attributeNameCased = prefix + attribute.getName();
 			warn("Column " + attributeNameCased + " omitted", false, attributeNameCased);
 		}
+	}
+
+	public Object stringToAttributeValue(final String attributeName, final String value, final EDataType dataType) throws ParseException {
+		Object obj;
+		if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
+			obj = DateTimeParser.getInstance().parseDate(value);
+		} else if (dataType.equals(ScenarioPackage.eINSTANCE.getDateAndOptionalTime())) {
+			obj = DateTimeParser.getInstance().parseDateAndOptionalTime(value);
+		} else if (dataType.equals(ScenarioPackage.eINSTANCE.getPercentage())) {
+			obj = dataType.getEPackage().getEFactoryInstance().createFromString(dataType, value);
+			double d = (Double) obj;
+			d /= 100.0;
+			if (d < 0) {
+				d = 0d;
+				warn("Percentage value " + value + " is negative. It has been clamped to zero.", true, attributeName);
+			} else if (d > 1) {
+				d = 1d;
+				warn("Percentage value " + value + " is more than 100%. It has been clamped to 100%.", true, attributeName);
+			}
+			obj = d;
+		} else {
+			obj = dataType.getEPackage().getEFactoryInstance().createFromString(dataType, value);
+		}
+		return obj;
 	}
 }
