@@ -326,7 +326,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param loadTime
 	 */
 	@Override
-	public final boolean calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final int[] arrivalTimes, final Object... sequence) {
+	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final int[] arrivalTimes, final Object... sequence) {
 
 		// Ensure odd number of elements
 		assert (sequence.length % 2) == 1;
@@ -398,27 +398,31 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 		}
 
+		int problemCounter = 0;
+		
 		// If load or discharge has been set, then the other must be too.
 		assert (loadIdx == -1) || (dischargeIdx != -1);
 		assert (dischargeIdx == -1) || (loadIdx != -1);
 
-		long loadVolumeInM3 = 0;
-		long dischargeVolumeInM3 = 0;
-
-		final int loadUnitPrice = 0;
+//		long loadVolumeInM3 = 0;
+//		long dischargeVolumeInM3 = 0;
+//
+//		final int loadUnitPrice = 0;
 		int dischargeUnitPrice = 0;
 
-		final int loadM3Price = 0;
+//		final int loadM3Price = 0;
 		int dischargeM3Price = 0;
 
 		int cargoCVValue = 0;
 
-		final long lngConsumed;
+		final long lngConsumedInM3;
 
 		// Load/Discharge sequence
 		if ((loadIdx != -1) && (dischargeIdx != -1)) {
-			final ILoadSlot loadSlot = (ILoadSlot) ((PortDetails) sequence[loadIdx]).getPortSlot();
-			final IDischargeSlot dischargeSlot = (IDischargeSlot) ((PortDetails) sequence[dischargeIdx]).getPortSlot();
+			final PortDetails loadDetails = (PortDetails) sequence[loadIdx];
+			final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getPortSlot();
+			final PortDetails dischargeDetails = (PortDetails) sequence[dischargeIdx];
+			final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getPortSlot();
 
 			// Store unit prices for later on
 			// loadUnitPrice = loadSlot
@@ -429,63 +433,63 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			dischargeM3Price = (int) Calculator.multiply(dischargeUnitPrice, cargoCVValue);
 
-			lngConsumed = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
+			lngConsumedInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
 
-			final long cargoCapacity = vesselClass.getCargoCapacity();
-
-			final long minLoadVolume = loadSlot.getMinLoadVolume();
-			final long maxLoadVolume = loadSlot.getMaxLoadVolume();
-			final long minDischargeVolume = dischargeSlot.getMinDischargeVolume();
-			final long maxDischargeVolume = dischargeSlot.getMaxDischargeVolume();
+			final long cargoCapacityInM3 = vesselClass.getCargoCapacity();
+			
+			
+			if (lngConsumedInM3 > cargoCapacityInM3) {
+				// This is a real issue - hit physical constraints - reject
+//				dischargeDetails.setCapacityViolation(CapacityViolationType.VESSEL_CAPACITY, lngConsumed - cargoCapacity);
+				// Should we do this? - Could continue calculations and return a large number
+				return -1;
+			}
+			
+			// Any violations after this point are slot constraint violations
+			final long minLoadVolumeInM3 = loadSlot.getMinLoadVolume();
+//			final long maxLoadVolume = loadSlot.getMaxLoadVolume();
+			
+			final long minDischargeVolumeInM3 = dischargeSlot.getMinDischargeVolume();
+			final long maxDischargeVolumeInM3 = dischargeSlot.getMaxDischargeVolume();
 
 			// We cannot load more than is available or which would exceed
 			// vessel capacity.
-			final long upperLoadLimit = Math.min(cargoCapacity, maxLoadVolume);
-
-			// Now find the amount of leeway we have between limits. By
-			// subtracting lngConsumed from the load limits, we bring the load
-			// and discharge limits into the same range. We can then find the
-			// highest intersecting point as the additional amount of lng we can
-			// load to max out load and discharge. This is the sales quantity.
-
-			dischargeVolumeInM3 = Math.min(upperLoadLimit - lngConsumed, maxDischargeVolume);
-
-			if (dischargeVolumeInM3 < 0) {
-				throw new RuntimeException("Capacity violation on cargo " + loadSlot.getId() + "-" + dischargeSlot.getId() + " : discharge volume = " + dischargeVolumeInM3 + ", but " + lngConsumed
-						+ " LNG used for fuel, max load volume = " + upperLoadLimit + "(capacity = " + cargoCapacity + ", slot max load = " + maxLoadVolume + ") and slot max discharge = "
-						+ maxDischargeVolume);
+			final long upperLoadLimitInM3 = Math.min(cargoCapacityInM3,  loadSlot.getMaxLoadVolume());
+			
+			if (minLoadVolumeInM3 - lngConsumedInM3 > maxDischargeVolumeInM3) {
+				if (minLoadVolumeInM3 - lngConsumedInM3 < 0) {
+					// discharge breach
+					voyagePlan.setCapacityViolation(CapacityViolationType.MAX_DISCHARGE, (minLoadVolumeInM3 - lngConsumedInM3) - maxDischargeVolumeInM3);
+					++problemCounter;
+				} else {
+					// load breach
+					voyagePlan.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - (maxDischargeVolumeInM3 + lngConsumedInM3));
+					++problemCounter;
+				}
 			}
-			loadVolumeInM3 = dischargeVolumeInM3 + lngConsumed;
-
-			// These should be guaranteed by the Math.min call above
-			assert (loadVolumeInM3 <= upperLoadLimit);
-			assert (dischargeVolumeInM3 <= maxDischargeVolume);
-
-			// TODO: Make these exceptions more informative!
-
-			// Check the bounds
-			if (loadVolumeInM3 < minLoadVolume) {
-				// problem
-				throw new RuntimeException("Capacity violation");
+			
+			if (minDischargeVolumeInM3 + lngConsumedInM3 > upperLoadLimitInM3) {
+				
+				if (upperLoadLimitInM3 - lngConsumedInM3 < 0) {
+					// load breach
+					voyagePlan.setCapacityViolation(CapacityViolationType.MAX_LOAD, lngConsumedInM3 - upperLoadLimitInM3);
+					++problemCounter;
+				} else {
+					// discharge breach
+					voyagePlan.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, upperLoadLimitInM3 - lngConsumedInM3);
+					++problemCounter;
+				}
 			}
-
-			if (dischargeVolumeInM3 < minDischargeVolume) {
-				// problem
-				throw new RuntimeException("Capacity violation");
-			}
-
+			
+			
 			// Sanity checks
-			assert loadVolumeInM3 <= cargoCapacity;
-			assert loadVolumeInM3 <= maxLoadVolume;
-			assert loadVolumeInM3 >= minLoadVolume;
-			assert dischargeVolumeInM3 <= maxDischargeVolume;
-			assert dischargeVolumeInM3 >= minDischargeVolume;
-
+			assert lngConsumedInM3 >= 0;
+			assert lngConsumedInM3 <= cargoCapacityInM3;
 		} else {
-			lngConsumed = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
-			if (lngConsumed > availableHeelinM3) {
-				return false;
-				// throw new RuntimeException(lngConsumed + " M3 of LNG required, but only " + availableHeelinM3 + " available");
+			lngConsumedInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
+			if (lngConsumedInM3 > availableHeelinM3) {
+				voyagePlan.setCapacityViolation(CapacityViolationType.MAX_HEEL, lngConsumedInM3 - availableHeelinM3);
+				++problemCounter;
 			}
 		}
 
@@ -531,8 +535,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					final IPort port = details.getOptions().getToPortSlot().getPort();
 
 					if ((loadIdx != -1) && (dischargeIdx != -1) && port.shouldVesselsArriveCold()) {
-						// TODO trap this as a violation and respond to violation count in the outer loop.
-						return false;
+						// Cooldown violation!
+						voyagePlan.setCapacityViolation(CapacityViolationType.FORCED_COOLDOWN, 1);
+						++problemCounter;
 					}
 
 					final int cooldownTime = arrivalTimes[i / 2] - vesselClass.getCooldownTime();
@@ -568,52 +573,17 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		voyagePlan.setTotalFuelCost(FuelComponent.PilotLight, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.PilotLight.ordinal()], baseFuelPricePerMT));
 		voyagePlan.setTotalFuelCost(FuelComponent.IdlePilotLight, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.IdlePilotLight.ordinal()], baseFuelPricePerMT));
 
-		/**
-		 * The opportunity cost of burning a unit of LNG for fuel; it doesn't cost 1 discharge unit to burn some fuel, it costs whatever sales opportunity we lost on this leg.
-		 * 
-		 * TODO check this, have restored it to how it was.
-		 */
-		// final int lngM3OpportunityCost = dischargeM3Price - loadM3Price;
-
 		voyagePlan.setTotalFuelCost(FuelComponent.NBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.NBO.ordinal()], dischargeM3Price));
 		voyagePlan.setTotalFuelCost(FuelComponent.FBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.FBO.ordinal()], dischargeM3Price));
 		voyagePlan.setTotalFuelCost(FuelComponent.IdleNBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.IdleNBO.ordinal()], dischargeM3Price));
 
 		voyagePlan.setTotalFuelCost(FuelComponent.Cooldown, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Cooldown.ordinal()], cooldownM3Price));
 
-		voyagePlan.setLNGFuelVolume(lngConsumed);
-
-		// // TODO remove this, after checking it's OK
-		// voyagePlan.setLoadVolume(loadVolumeInM3);
-		//
-		// // compute load price after everything else, because it needs to know
-		// // about
-		// // the previous fields
-		// if (loadIdx != -1 && dischargeIdx != -1) {
-		// final ILoadPriceCalculator loadPriceCalculator = ((ILoadSlot) ((PortDetails) sequence[loadIdx]).getPortSlot()).getLoadPriceCalculator();
-		// loadUnitPrice = loadPriceCalculator.calculateLoadUnitPrice(arrivalTimes[loadIdx / 2], loadVolumeInM3, arrivalTimes[dischargeIdx / 2], dischargeUnitPrice, cargoCVValue,
-		// (VoyageDetails) sequence[loadIdx + 1],
-		//
-		// (dischargeIdx + 1 < sequence.length) ?
-		//
-		// (VoyageDetails) sequence[dischargeIdx + 1] : null,
-		//
-		// vesselClass);
-		// // .calculateLoadUnitPrice(voyagePlan, arrivalTimes[loadIdx / 2],
-		// // arrivalTimes[dischargeIdx / 2]);
-		// loadM3Price = (int) Calculator.multiply(loadUnitPrice, cargoCVValue);
-		// }
-		//
-		// long purchaseCost = Calculator.multiply(loadM3Price, loadVolumeInM3);
-		// voyagePlan.setPurchaseCost(purchaseCost);
-		//
-		// voyagePlan.setDischargeVolume(dischargeVolumeInM3);
-		// long salesRevenue = Calculator.multiply(dischargeM3Price, dischargeVolumeInM3);
-		// voyagePlan.setSalesRevenue(salesRevenue);
+		voyagePlan.setLNGFuelVolume(lngConsumedInM3);
 
 		voyagePlan.setTotalRouteCost(routeCostAccumulator);
 
-		return true;
+		return problemCounter;
 	}
 
 	@Override

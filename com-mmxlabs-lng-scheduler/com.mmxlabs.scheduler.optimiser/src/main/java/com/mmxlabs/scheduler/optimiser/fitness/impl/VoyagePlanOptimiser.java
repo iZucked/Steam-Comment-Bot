@@ -17,6 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -39,6 +40,8 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private IVessel vessel;
 
+	private short bestProblemCount = Short.MAX_VALUE;
+	
 	private long bestCost = Long.MAX_VALUE;
 
 	private VoyagePlan bestPlan = null;
@@ -154,6 +157,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 */
 	private void evaluateVoyagePlan(final boolean optimiseLastLeg) {
 
+		short currentProblemCount;
 		long cost;
 		VoyagePlan currentPlan;
 
@@ -183,10 +187,14 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			availableTimeToRestore = originalTime;
 			VoyagePlan bestLastLegPlan = null;
 			long bestLastLegCost = Long.MAX_VALUE;
-			long lastCost = Long.MAX_VALUE;
+//			long lastCost = Long.MAX_VALUE;
+			short bestLastProblemCount = Short.MAX_VALUE;
+			int bestAvailableTime = options.getAvailableTime();
 
 			final int hireRate = vessel.getVesselInstanceType() == VesselInstanceType.FLEET ? 0 : vessel.getVesselClass().getHourlyCharterInPrice();
 
+			// TODO: Turn into a parameter -- probably want this to be longer than slightly over one day - could also scale it to 6/12 hours etc.
+			final int step = 6; // 6 hours
 			for (int i = 0; i < 30; i++) {
 
 				currentPlan = calculateVoyagePlan();
@@ -196,25 +204,40 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 					long currentCost = evaluatePlan(currentPlan);
 
+					// Only add in hire cost for last leg evaluation. It is constant otherwise and does not need to be part of the cost comparison.
+					// Hire cost will be properly calculated in a different step.
 					final long hireCost = Calculator.multiply(hireRate, lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
 					currentCost += hireCost;
 
-					if (currentCost < bestLastLegCost) {
+					// Check for capacity violations, prefer solutions with fewer violations
+					currentProblemCount = (short)0;
+					for (CapacityViolationType cvt : CapacityViolationType.values()) {
+						if (currentPlan.getCapacityViolation(cvt) != 0) {
+							++currentProblemCount;
+						}
+					}
+					
+					if (currentProblemCount < bestLastProblemCount || (currentProblemCount == bestLastProblemCount && currentCost < bestLastLegCost)) {
 						bestLastLegCost = currentCost;
 						bestLastLegPlan = currentPlan;
+						bestLastProblemCount = currentProblemCount;
+						bestAvailableTime = options.getAvailableTime();
 					}
-
-					if (currentCost > lastCost) {
-						// back out one step. this is ugly.
-						options.setAvailableTime(options.getAvailableTime() - 1);
-						break; // presume minimum.
-					} else {
-						lastCost = currentCost;
-					}
+//
+//					if (currentCost > lastCost) {
+////						// back out one step. this is ugly.
+////						options.setAvailableTime(options.getAvailableTime() - 1);
+//						// TODO: This is not really all that good.
+////						break; // presume minimum.
+//					} else {
+//						lastCost = currentCost;
+//					}
 				}
-				options.setAvailableTime(options.getAvailableTime() + 1);
+				options.setAvailableTime(options.getAvailableTime() + step);
 			}
 
+			options.setAvailableTime(bestAvailableTime);
+			currentProblemCount = bestLastProblemCount;
 			cost = bestLastLegCost;
 			currentPlan = bestLastLegPlan;
 		} else {
@@ -222,6 +245,12 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			// are good
 			currentPlan = calculateVoyagePlan();
 			cost = evaluatePlan(currentPlan);
+			currentProblemCount = 0;
+			for (CapacityViolationType cvt : CapacityViolationType.values()) {
+				if (currentPlan.getCapacityViolation(cvt) != 0) {
+					++currentProblemCount;
+				}
+			}
 		}
 
 		// this way could be cheaper, but we need to add in a sanity check
@@ -254,15 +283,30 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			}
 		}
 
-		// Store cheapest cost
-		if ((currentPlan != null) &&
-		// this plan is valid, but the other is not, who cares about cost
-				((currentPlanFitsInAvailableTime && !bestPlanFitsInAvailableTime) ||
+		
+		boolean storePlan = false;
+		// Store cheapest cost, but take into account time or capacity problems
+		if (currentPlan != null) {
+			
+			// this plan is valid, but the other is not, who cares about cost
+			if (currentPlanFitsInAvailableTime && !bestPlanFitsInAvailableTime) {
+				storePlan = true;
 				// this plan is valid, or the other is not, and it's cheaper
-				((currentPlanFitsInAvailableTime || !bestPlanFitsInAvailableTime) && (cost < bestCost)))) {
+			} else if (currentPlanFitsInAvailableTime || !bestPlanFitsInAvailableTime) {
+				
+				if (currentProblemCount < bestProblemCount) {
+					storePlan = true;
+				} else if ((currentProblemCount == bestProblemCount) && (cost < bestCost)) {
+					storePlan = true;
+				}
+			}
+		}
+		
+		if (storePlan) {
 			bestPlanFitsInAvailableTime = currentPlanFitsInAvailableTime;
 			bestCost = cost;
 			bestPlan = currentPlan;
+			bestProblemCount = currentProblemCount;
 
 			// We need to ensure the best plan as a set of options which are not
 			// changed by further iterations through choices, so lets loop
@@ -352,9 +396,9 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
-		final boolean feasible = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, CollectionsUtil.integersToIntArray(arrivalTimes), currentSequence.toArray());
+		final int feasiblity = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, CollectionsUtil.integersToIntArray(arrivalTimes), currentSequence.toArray());
 
-		if (feasible) {
+		if (feasiblity >= 0) {
 			return currentPlan;
 		} else {
 			return null;

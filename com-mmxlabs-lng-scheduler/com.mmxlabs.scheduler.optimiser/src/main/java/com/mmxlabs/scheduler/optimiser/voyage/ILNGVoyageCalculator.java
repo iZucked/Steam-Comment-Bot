@@ -49,9 +49,9 @@ public interface ILNGVoyageCalculator {
 	 *            ...
 	 * </pre>
 	 * @param sequence
-	 * @return
+	 * @return Returns zero for a feasible journey, or a positive integer indicating a relative ranking of problems due to e.g. capacity violations. Returns a negative for a infeasible journey.
 	 */
-	boolean calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel, int[] arrivalTimes, Object... sequence);
+	int calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel, int[] arrivalTimes, Object... sequence);
 
 	/**
 	 * Set the route cost DCP ( {@link IRouteCostProvider} ) which is needed to determine the influence of canal costs on voyage plan decisions.
