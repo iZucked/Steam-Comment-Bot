@@ -52,7 +52,7 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, IComponent
 		int bestExtensionMatch = Integer.MAX_VALUE;
 		for (final IComponentHelperExtension extension : extensions) {
 			final int closeness = getMinimumGenerations(key, extension.getEClassName());
-			if (extension.isInheritable() || closeness == 0) {
+			if ( Boolean.valueOf(extension.isInheritable()) || closeness == 0) {
 				if (closeness < bestExtensionMatch) {
 					bestExtensionMatch = closeness;
 					bestExtension = extension;

@@ -24,4 +24,9 @@ public interface IDisplayComposite {
 	 * @param value
 	 */
 	public void display(final MMXRootObject root, final EObject value);
+	/**
+	 * Sets the command handler for any stuff that goes on in this composite.
+	 * @param commandHandler
+	 */
+	public void setCommandHandler(ICommandHandler commandHandler);
 }

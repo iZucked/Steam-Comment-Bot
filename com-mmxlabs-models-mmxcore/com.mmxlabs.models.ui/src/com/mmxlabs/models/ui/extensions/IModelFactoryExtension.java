@@ -8,6 +8,6 @@ import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 public interface IModelFactoryExtension {
 	public String getID();
 	public String getTargetEClass();
-	public boolean isInheritable();
+	public String isInheritable();
 	public IModelFactory createFactory();
 }

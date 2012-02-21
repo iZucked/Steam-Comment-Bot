@@ -22,7 +22,7 @@ public class ModelFactoryRegistry extends
 			if (matchCloseness == 0) {
 				bestMatch = extension;
 				break;
-			} else if (matchCloseness < bestCloseness && extension.isInheritable()) {
+			} else if (matchCloseness < bestCloseness && Boolean.valueOf(extension.isInheritable())) {
 				bestMatch = extension;
 				bestCloseness = matchCloseness;
 			}

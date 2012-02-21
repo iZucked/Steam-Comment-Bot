@@ -16,8 +16,9 @@ public interface IDisplayCompositeFactoryExtension {
 	public String getID();
 	@MapName("eClass")
 	public String getEClassName();
+	// there is a bug here in peaberry;;
 	@MapName("inheritable")
-	public boolean isInheritable();
+	public String isInheritable();
 	@MapName("factory")
 	public IDisplayCompositeFactory instantiate();
 }

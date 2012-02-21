@@ -32,6 +32,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.validation.IDetailConstraintStatus;
@@ -107,7 +108,9 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements 
 		}
 	};
 	
-	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
+
+
+	private Label label;	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
 		this.feature = feature;
 	}
 
@@ -128,7 +131,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements 
 			// Set to blank by default - and replace below if the feature is
 			// found
 			String toolTip = "";
-
+			String labelText = "";
 			// This will fetch the property source of the input object
 			final IItemPropertySource inputPropertySource = (IItemPropertySource) FACTORY
 					.adapt(input, IItemPropertySource.class);
@@ -145,12 +148,15 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements 
 							"{0}",
 							EditorUtils.unmangle(input.eClass().getName())
 									.toLowerCase());
+					
+					labelText = descriptor.getDisplayName(input);
 					break;
 				}
 			}
 			// Update tooltip text
 //			tooltipControl.setToolTipText(toolTip);
 			setToolTipText(tooltipControl, toolTip);
+			if (label != null) label.setText(labelText);
 		}
 	}
 	
@@ -388,13 +394,9 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements 
 	public void setCommandHandler(final ICommandHandler handler) {
 		this.commandHandler = handler;
 	}
-
+	
 	@Override
-	public String getLabel() {
-		// TODO Auto-generated method stub
-		// TODO try and get this from descriptor above.
-		return null;
+	public void setLabel(final Label label) {
+		this.label = label;
 	}
-	
-	
 }

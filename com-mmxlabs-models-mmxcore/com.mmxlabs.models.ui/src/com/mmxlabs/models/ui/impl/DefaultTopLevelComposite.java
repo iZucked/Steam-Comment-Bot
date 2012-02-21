@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 
 /**
@@ -27,6 +28,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	private DefaultDetailComposite topLevel = null;
 	private List<EReference> childReferences = new LinkedList<EReference>();
 	private List<DefaultDetailComposite> childComposites = new LinkedList<DefaultDetailComposite>();
+	private ICommandHandler commandHandler;
 
 	public DefaultTopLevelComposite(final Composite parent, final int style) {
 		super(parent, style);
@@ -39,7 +41,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		g.setText(eClass.getName());
 		g.setLayout(new FillLayout());
 		topLevel = new DefaultDetailComposite(g, SWT.NONE);
-		
+		topLevel.setCommandHandler(commandHandler);
 		for (final EReference ref : eClass.getEAllReferences()) {
 			if (ref.isContainment() && !ref.isMany()) {
 				final EObject value = (EObject) object.eGet(ref);
@@ -49,6 +51,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 					g2.setLayout(new FillLayout());
 					final DefaultDetailComposite sub = new DefaultDetailComposite(
 							g2, SWT.NONE);
+					sub.setCommandHandler(commandHandler);
 					childReferences.add(ref);
 					childComposites.add(sub);
 				}
@@ -70,5 +73,10 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	@Override
 	public Composite getComposite() {
 		return this;
+	}
+
+	@Override
+	public void setCommandHandler(ICommandHandler commandHandler) {
+		this.commandHandler = commandHandler;
 	}
 }
