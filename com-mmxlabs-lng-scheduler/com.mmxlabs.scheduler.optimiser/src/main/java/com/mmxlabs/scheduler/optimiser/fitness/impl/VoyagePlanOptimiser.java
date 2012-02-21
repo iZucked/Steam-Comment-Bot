@@ -377,6 +377,9 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				// Calculate voyage cost
 				voyageCalculator.calculateVoyageFuelRequirements(options, voyageDetails);
 				currentSequence.add(voyageDetails);
+			} else if (element instanceof PortDetails) {
+				// Clone as violations will modify this data structure
+				currentSequence.add(((PortDetails) element).clone());
 			} else {
 				currentSequence.add(element);
 			}
