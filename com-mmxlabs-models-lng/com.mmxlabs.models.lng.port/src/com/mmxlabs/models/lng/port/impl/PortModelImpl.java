@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.port.impl;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
@@ -40,6 +41,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPorts <em>Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortGroups <em>Port Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getRoutes <em>Routes</em>}</li>
  * </ul>
  * </p>
@@ -76,6 +78,16 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * @ordered
 	 */
 	protected EList<Port> ports;
+
+	/**
+	 * The cached value of the '{@link #getPortGroups() <em>Port Groups</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortGroups()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PortGroup> portGroups;
 
 	/**
 	 * The cached value of the '{@link #getRoutes() <em>Routes</em>}' containment reference list.
@@ -144,6 +156,18 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<PortGroup> getPortGroups() {
+		if (portGroups == null) {
+			portGroups = new EObjectContainmentEList<PortGroup>(PortGroup.class, this, PortPackage.PORT_MODEL__PORT_GROUPS);
+		}
+		return portGroups;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<Route> getRoutes() {
 		if (routes == null) {
 			routes = new EObjectContainmentEList<Route>(Route.class, this, PortPackage.PORT_MODEL__ROUTES);
@@ -161,6 +185,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 		switch (featureID) {
 			case PortPackage.PORT_MODEL__PORTS:
 				return ((InternalEList<?>)getPorts()).basicRemove(otherEnd, msgs);
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				return ((InternalEList<?>)getPortGroups()).basicRemove(otherEnd, msgs);
 			case PortPackage.PORT_MODEL__ROUTES:
 				return ((InternalEList<?>)getRoutes()).basicRemove(otherEnd, msgs);
 		}
@@ -179,6 +205,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return getName();
 			case PortPackage.PORT_MODEL__PORTS:
 				return getPorts();
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				return getPortGroups();
 			case PortPackage.PORT_MODEL__ROUTES:
 				return getRoutes();
 		}
@@ -200,6 +228,10 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__PORTS:
 				getPorts().clear();
 				getPorts().addAll((Collection<? extends Port>)newValue);
+				return;
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				getPortGroups().clear();
+				getPortGroups().addAll((Collection<? extends PortGroup>)newValue);
 				return;
 			case PortPackage.PORT_MODEL__ROUTES:
 				getRoutes().clear();
@@ -223,6 +255,9 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__PORTS:
 				getPorts().clear();
 				return;
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				getPortGroups().clear();
+				return;
 			case PortPackage.PORT_MODEL__ROUTES:
 				getRoutes().clear();
 				return;
@@ -242,6 +277,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case PortPackage.PORT_MODEL__PORTS:
 				return ports != null && !ports.isEmpty();
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
+				return portGroups != null && !portGroups.isEmpty();
 			case PortPackage.PORT_MODEL__ROUTES:
 				return routes != null && !routes.isEmpty();
 		}

@@ -317,8 +317,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPortModel_Routes() {
+	public EReference getPortModel_PortGroups() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPortModel_Routes() {
+		return (EReference)portModelEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -381,6 +390,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		portModelEClass = createEClass(PORT_MODEL);
 		createEReference(portModelEClass, PORT_MODEL__PORTS);
+		createEReference(portModelEClass, PORT_MODEL__PORT_GROUPS);
 		createEReference(portModelEClass, PORT_MODEL__ROUTES);
 
 		// Create enums
@@ -453,6 +463,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		initEClass(portModelEClass, PortModel.class, "PortModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortModel_Ports(), this.getPort(), null, "ports", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortModel_PortGroups(), this.getPortGroup(), null, "portGroups", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortModel_Routes(), this.getRoute(), null, "routes", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
