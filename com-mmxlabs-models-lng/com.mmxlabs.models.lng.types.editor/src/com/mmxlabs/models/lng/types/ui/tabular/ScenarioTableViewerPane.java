@@ -5,25 +5,56 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
 
+import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 public class ScenarioTableViewerPane extends ViewerPane {
 	private ScenarioTableViewer scenarioViewer;
+	private JointModelEditorPart jointModelEditorPart;
 
-	public ScenarioTableViewerPane(IWorkbenchPage page, IWorkbenchPart part) {
+	public ScenarioTableViewerPane(IWorkbenchPage page, JointModelEditorPart part) {
 		super(page, part);
+		this.jointModelEditorPart = part;
 	}
 
 	@Override
 	public ScenarioTableViewer createViewer(Composite parent) {
-		return (scenarioViewer = new ScenarioTableViewer(parent, SWT.BORDER));
+		if (scenarioViewer == null) {
+			scenarioViewer = new ScenarioTableViewer(parent, SWT.BORDER);
+			scenarioViewer.addDoubleClickListener(new IDoubleClickListener() {
+				
+				@Override
+				public void doubleClick(DoubleClickEvent event) {
+
+					if (event.getSelection() instanceof IStructuredSelection) {
+						final IStructuredSelection structuredSelection = (IStructuredSelection) event
+								.getSelection();
+						if (structuredSelection.isEmpty() == false) {
+							final DetailCompositeDialog dcd = new DetailCompositeDialog(
+									event.getViewer().getControl().getShell(),
+									jointModelEditorPart
+											.getDefaultCommandHandler());
+							dcd.open(jointModelEditorPart.getRootObject(), structuredSelection.toList());
+						}
+					}
+
+				}
+			});
+			return scenarioViewer;
+		} else {
+			throw new RuntimeException("Did not expect two calls to createViewer()");
+		}
+
 	}
 
 	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final Object... path) {
