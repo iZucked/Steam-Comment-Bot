@@ -5,6 +5,7 @@
 package com.mmxlabs.shiplingo.importer.importers;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.util.Set;
  * @author Tom Hinton
  * 
  */
-public class CSVReader {
+public class CSVReader implements Closeable {
 	private enum State {
 		NORMAL, ESCAPED, AFTER_QUOTE
 	}
@@ -153,5 +154,12 @@ public class CSVReader {
 	 */
 	public int getLineNumber() {
 		return lineNumber;
+	}
+	
+	@Override
+	public void close() throws IOException {
+		if (reader != null) {
+			reader.close();
+		}
 	}
 }
