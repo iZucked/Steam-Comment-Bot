@@ -135,7 +135,7 @@
 
 		<repository>
 			<id>com.mmxlabs.shiplingo.demo.nightly</id>
-			<url>https://s3-proxy.appspot.com/p2-repo/repositories/com.mmxlabs.shiplingo.demo/nightly</url>
+			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.shiplingo.demo/nightly</url>
 			<layout>p2</layout>
 		</repository>
 
