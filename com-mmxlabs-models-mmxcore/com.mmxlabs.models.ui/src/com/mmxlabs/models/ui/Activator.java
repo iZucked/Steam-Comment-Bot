@@ -12,6 +12,7 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IDisplayCompositeFactoryRegistry;
 import com.mmxlabs.models.ui.registries.IEditorFactoryRegistry;
 import com.mmxlabs.models.ui.registries.IJointModelEditorContributionRegistry;
+import com.mmxlabs.models.ui.registries.IModelFactoryRegistry;
 import com.mmxlabs.models.ui.registries.IReferenceValueProviderFactoryRegistry;
 
 /**
@@ -26,6 +27,7 @@ public class Activator extends AbstractUIPlugin {
 	@Inject IComponentHelperRegistry componentHelperRegistry;
 	@Inject IReferenceValueProviderFactoryRegistry referenceValueProviderFactoryRegistry;
 	@Inject IJointModelEditorContributionRegistry jointModelEditorContributionRegistry;
+	@Inject IModelFactoryRegistry modelFactoryRegistry;
 	
 	// The shared instance
 	private static Activator plugin;
@@ -85,5 +87,9 @@ public class Activator extends AbstractUIPlugin {
 
 	public IJointModelEditorContributionRegistry getJointModelEditorContributionRegistry() {
 		return jointModelEditorContributionRegistry;
+	}
+
+	public IModelFactoryRegistry getModelFactoryRegistry() {
+		return modelFactoryRegistry;
 	}
 }

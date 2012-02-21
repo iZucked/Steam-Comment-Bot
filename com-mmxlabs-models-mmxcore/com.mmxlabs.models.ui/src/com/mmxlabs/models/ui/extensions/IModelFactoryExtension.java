@@ -1,0 +1,13 @@
+package com.mmxlabs.models.ui.extensions;
+
+import org.ops4j.peaberry.eclipse.ExtensionBean;
+
+import com.mmxlabs.models.ui.modelfactories.IModelFactory;
+
+@ExtensionBean("com.mmxlabs.models.ui.modelfactories")
+public interface IModelFactoryExtension {
+	public String getID();
+	public String getTargetEClass();
+	public boolean isInheritable();
+	public IModelFactory createFactory();
+}
