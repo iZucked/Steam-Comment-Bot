@@ -32,6 +32,16 @@ public class VoyagePlanTest {
 	}
 
 	@Test
+	public void testGetSetCapacityViolationType() {
+		final CapacityViolationType cvt = CapacityViolationType.FORCED_COOLDOWN;
+		final long value = 100l;
+		final VoyagePlan plan = new VoyagePlan();
+		Assert.assertEquals(0, plan.getCapacityViolation(cvt));
+		plan.setCapacityViolation(cvt, value);
+		Assert.assertEquals(value, plan.getCapacityViolation(cvt));
+	}
+	
+	@Test
 	public void testGetSetSequence() {
 		final Object[] value = new Object[0];
 		final VoyagePlan plan = new VoyagePlan();
@@ -48,14 +58,19 @@ public class VoyagePlanTest {
 		final FuelComponent fuel2 = FuelComponent.Base_Supplemental;
 		final FuelComponent fuel3 = FuelComponent.NBO;
 		final FuelComponent fuel4 = FuelComponent.FBO;
+		
+		final CapacityViolationType cvt1 = CapacityViolationType.FORCED_COOLDOWN;
+		final CapacityViolationType cvt2 = CapacityViolationType.VESSEL_CAPACITY;
 
-		final VoyagePlan plan1 = make(seq1, fuel1, 5, fuel2, 6);
-		final VoyagePlan plan2 = make(seq1, fuel1, 5, fuel2, 6);
+		final VoyagePlan plan1 = make(seq1, fuel1, 5, fuel2, 6, cvt1, 100);
+		final VoyagePlan plan2 = make(seq1, fuel1, 5, fuel2, 6, cvt1, 100);
 
-		final VoyagePlan plan3 = make(seq1, fuel3, 5, fuel2, 6);
-		final VoyagePlan plan4 = make(seq1, fuel1, 25, fuel2, 6);
-		final VoyagePlan plan5 = make(seq1, fuel1, 5, fuel4, 6);
-		final VoyagePlan plan6 = make(seq1, fuel1, 5, fuel2, 26);
+		final VoyagePlan plan3 = make(seq1, fuel3, 5, fuel2, 6, cvt1, 100);
+		final VoyagePlan plan4 = make(seq1, fuel1, 25, fuel2, 6, cvt1, 100);
+		final VoyagePlan plan5 = make(seq1, fuel1, 5, fuel4, 6, cvt1, 100);
+		final VoyagePlan plan6 = make(seq1, fuel1, 5, fuel2, 26, cvt1, 100);
+		final VoyagePlan plan7 = make(seq1, fuel1, 5, fuel2, 26, cvt2, 100);
+		final VoyagePlan plan8 = make(seq1, fuel1, 5, fuel2, 26, cvt1, 200);
 
 		Assert.assertTrue(plan1.equals(plan1));
 		Assert.assertTrue(plan1.equals(plan2));
@@ -65,22 +80,27 @@ public class VoyagePlanTest {
 		Assert.assertFalse(plan1.equals(plan4));
 		Assert.assertFalse(plan1.equals(plan5));
 		Assert.assertFalse(plan1.equals(plan6));
+		Assert.assertFalse(plan1.equals(plan7));
+		Assert.assertFalse(plan1.equals(plan8));
 
 		Assert.assertFalse(plan3.equals(plan1));
 		Assert.assertFalse(plan4.equals(plan1));
 		Assert.assertFalse(plan5.equals(plan1));
 		Assert.assertFalse(plan6.equals(plan1));
+		Assert.assertFalse(plan7.equals(plan1));
+		Assert.assertFalse(plan8.equals(plan1));
 
 		Assert.assertFalse(plan1.equals(new Object()));
 	}
 
-	VoyagePlan make(final Object[] sequence, final FuelComponent fuel1, final long consumption, final FuelComponent fuel2, final long cost) {
+	VoyagePlan make(final Object[] sequence, final FuelComponent fuel1, final long consumption, final FuelComponent fuel2, final long cost, CapacityViolationType cvt, final long cvtQty) {
 
 		final VoyagePlan p = new VoyagePlan();
 
 		p.setSequence(sequence);
 		p.setFuelConsumption(fuel1, consumption);
 		p.setTotalFuelCost(fuel2, cost);
+		p.setCapacityViolation(cvt, cvtQty);
 
 		return p;
 	}
