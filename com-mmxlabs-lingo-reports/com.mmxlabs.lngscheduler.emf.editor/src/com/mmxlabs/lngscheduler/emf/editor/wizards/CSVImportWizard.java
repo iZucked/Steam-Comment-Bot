@@ -44,6 +44,8 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.Scenario;
 import scenario.ScenarioFactory;
@@ -93,6 +95,9 @@ import com.mmxlabs.shiplingo.importer.importers.WarningCollector;
 import com.mmxlabs.shiplingo.importer.ui.ImportWarningDialog;
 
 public class CSVImportWizard extends Wizard implements IImportWizard {
+
+	private static final Logger log = LoggerFactory.getLogger(CSVImportWizard.class);
+
 	WizardNewFileCreationPage destinationPage;
 	WizardPage inputPage;
 
@@ -125,166 +130,182 @@ public class CSVImportWizard extends Wizard implements IImportWizard {
 				public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 					monitor.beginTask("Import CSV Files", inputFilePaths.size() + 6);
-
-					for (final Map.Entry<EClass, String> job : inputFilePaths.entrySet()) {
-						if (job.getKey().equals(FleetPackage.eINSTANCE.getFuelConsumptionLine())) {
-							continue;
-						}
-						if ((job.getValue() == null) || job.getValue().isEmpty()) {
-							continue;
-						}
-						try {
-							monitor.subTask("Import " + new File(job.getValue()).getName());
-							monitor.worked(1);
-							final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(job.getKey());
-							importer.addImportWarningListener(warningCollector);
-							final CSVReader reader = new CSVReader(job.getValue());
-
-							importedObjects.addAll(importer.importObjects(reader, refs, nor));
-						} catch (final IOException ex) {
-						}
-					}
-
-					// do final postprocessing
-					// first add names for all the new objects
-					monitor.subTask("Linking new objects");
-					monitor.worked(1);
-					for (final EObject object : importedObjects) {
-						nor.addEObjects(object);
-					}
-					// process fuel curves
-					if (inputFilePaths.containsKey(FleetPackage.eINSTANCE.getFuelConsumptionLine())) {
-						final String pth = inputFilePaths.get(FleetPackage.eINSTANCE.getFuelConsumptionLine());
-						if ((pth != null) && (pth.isEmpty() == false)) {
+					try {
+						for (final Map.Entry<EClass, String> job : inputFilePaths.entrySet()) {
+							if (job.getKey().equals(FleetPackage.eINSTANCE.getFuelConsumptionLine())) {
+								continue;
+							}
+							if ((job.getValue() == null) || job.getValue().isEmpty()) {
+								continue;
+							}
+							CSVReader reader = null;
 							try {
-								final CSVReader reader = new CSVReader(pth);
-								final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(FleetPackage.eINSTANCE.getFuelConsumptionLine());
-								importer.importObjects(reader, refs, nor);
+								monitor.subTask("Import " + new File(job.getValue()).getName());
+								monitor.worked(1);
+								final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(job.getKey());
+								importer.addImportWarningListener(warningCollector);
+								reader = new CSVReader(job.getValue());
+								importedObjects.addAll(importer.importObjects(reader, refs, nor));
 							} catch (final IOException ex) {
+							} finally {
+								if (reader != null) {
+									try {
+										reader.close();
+									} catch (final IOException e) {
+										log.error(e.getMessage(), e);
+									}
+								}
 							}
 						}
-					}
 
-					// next link everything up
-					monitor.worked(1);
-					for (final DeferredReference ref : refs) {
-						ref.setRegistry(nor.getContents());
-						ref.run();
-					}
-					monitor.subTask("Post-processing");
-					monitor.worked(1);
-					// finally tidy up dates etc
-					for (final EObject object : importedObjects) {
-						Postprocessor.getInstance().postprocess(object);
-					}
-
-					scenario = ScenarioFactory.eINSTANCE.createScenario();
-
-					createScenarioModels(scenario);
-
-					// and last of all put all the results into a new scenario
-					// according to
-					// their kind.
-					for (final EObject object : importedObjects) {
-						if (object != null) {
-							if (object instanceof Cargo) {
-								scenario.getCargoModel().getCargoes().add((Cargo) object);
-							} else if (object instanceof VesselClass) {
-								scenario.getFleetModel().getVesselClasses().add((VesselClass) object);
-							} else if (object instanceof Vessel) {
-								scenario.getFleetModel().getFleet().add((Vessel) object);
-							} else if (object instanceof Index) {
-								scenario.getMarketModel().getIndices().add((Index) object);
-							} else if (object instanceof SalesContract) {
-								scenario.getContractModel().getSalesContracts().add((SalesContract) object);
-							} else if (object instanceof PurchaseContract) {
-								scenario.getContractModel().getPurchaseContracts().add((PurchaseContract) object);
-							} else if (object instanceof DistanceModel) {
-								// don't add distance model, because of
-								// containment relationship.
-								scenario.getDistanceModel().getDistances().addAll(((DistanceModel) object).getDistances());
-							} else if (object instanceof Port) {
-								scenario.getPortModel().getPorts().add((Port) object);
-							} else if (object instanceof Entity) {
-								scenario.getContractModel().getEntities().add((Entity) object);
-							} else if (object instanceof VesselEvent) {
-								scenario.getFleetModel().getVesselEvents().add((VesselEvent) object);
-							} else if (object instanceof VesselFuel) {
-								scenario.getFleetModel().getFuels().add((VesselFuel) object);
-							} else if (object instanceof Canal) {
-								scenario.getCanalModel().getCanals().add((Canal) object);
-							} else if (object instanceof Schedule) {
-								scenario.getScheduleModel().getSchedules().add((Schedule) object);
+						// do final postprocessing
+						// first add names for all the new objects
+						monitor.subTask("Linking new objects");
+						monitor.worked(1);
+						for (final EObject object : importedObjects) {
+							nor.addEObjects(object);
+						}
+						// process fuel curves
+						if (inputFilePaths.containsKey(FleetPackage.eINSTANCE.getFuelConsumptionLine())) {
+							final String pth = inputFilePaths.get(FleetPackage.eINSTANCE.getFuelConsumptionLine());
+							if ((pth != null) && (pth.isEmpty() == false)) {
+								CSVReader reader = null;
+								try {
+									reader = new CSVReader(pth);
+									final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(FleetPackage.eINSTANCE.getFuelConsumptionLine());
+									importer.importObjects(reader, refs, nor);
+								} catch (final IOException ex) {
+								} finally {
+									if (reader != null) {
+										try {
+											reader.close();
+										} catch (final IOException e) {
+											log.error(e.getMessage(), e);
+										}
+									}
+								}
 							}
 						}
-					}
 
-					postProcess(scenario);
+						// next link everything up
+						monitor.worked(1);
+						for (final DeferredReference ref : refs) {
+							ref.setRegistry(nor.getContents());
+							ref.run();
+						}
+						monitor.subTask("Post-processing");
+						monitor.worked(1);
+						// finally tidy up dates etc
+						for (final EObject object : importedObjects) {
+							Postprocessor.getInstance().postprocess(object);
+						}
 
-					if ((scenario.getOptimisation() != null) && (scenario.getOptimisation().getCurrentSettings() != null)
-							&& (scenario.getOptimisation().getCurrentSettings().getInitialSchedule() != null)) {
-						// evaluate initial schedule
-						monitor.subTask("Evaluating initial schedule...");
-						try {
-							final ResourceSet set = new ResourceSetImpl();
-							final XMIResourceFactoryImpl rf = new XMIResourceFactoryImpl();
-							set.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", rf);
+						scenario = ScenarioFactory.eINSTANCE.createScenario();
 
-							set.getPackageRegistry().put(scenario.eClass().getEPackage().getNsURI(), scenario.eClass().getEPackage());
+						createScenarioModels(scenario);
 
-							final URI nonsenseURI = URI.createGenericURI("invalid", "invalid", "").trimFragment();
+						// and last of all put all the results into a new scenario
+						// according to
+						// their kind.
+						for (final EObject object : importedObjects) {
+							if (object != null) {
+								if (object instanceof Cargo) {
+									scenario.getCargoModel().getCargoes().add((Cargo) object);
+								} else if (object instanceof VesselClass) {
+									scenario.getFleetModel().getVesselClasses().add((VesselClass) object);
+								} else if (object instanceof Vessel) {
+									scenario.getFleetModel().getFleet().add((Vessel) object);
+								} else if (object instanceof Index) {
+									scenario.getMarketModel().getIndices().add((Index) object);
+								} else if (object instanceof SalesContract) {
+									scenario.getContractModel().getSalesContracts().add((SalesContract) object);
+								} else if (object instanceof PurchaseContract) {
+									scenario.getContractModel().getPurchaseContracts().add((PurchaseContract) object);
+								} else if (object instanceof DistanceModel) {
+									// don't add distance model, because of
+									// containment relationship.
+									scenario.getDistanceModel().getDistances().addAll(((DistanceModel) object).getDistances());
+								} else if (object instanceof Port) {
+									scenario.getPortModel().getPorts().add((Port) object);
+								} else if (object instanceof Entity) {
+									scenario.getContractModel().getEntities().add((Entity) object);
+								} else if (object instanceof VesselEvent) {
+									scenario.getFleetModel().getVesselEvents().add((VesselEvent) object);
+								} else if (object instanceof VesselFuel) {
+									scenario.getFleetModel().getFuels().add((VesselFuel) object);
+								} else if (object instanceof Canal) {
+									scenario.getCanalModel().getCanals().add((Canal) object);
+								} else if (object instanceof Schedule) {
+									scenario.getScheduleModel().getSchedules().add((Schedule) object);
+								}
+							}
+						}
 
-							final Resource resource = set.createResource(nonsenseURI);
+						postProcess(scenario);
 
-							resource.setURI(nonsenseURI.trimFragment());
+						if ((scenario.getOptimisation() != null) && (scenario.getOptimisation().getCurrentSettings() != null)
+								&& (scenario.getOptimisation().getCurrentSettings().getInitialSchedule() != null)) {
+							// evaluate initial schedule
+							monitor.subTask("Evaluating initial schedule...");
+							try {
+								final ResourceSet set = new ResourceSetImpl();
+								final XMIResourceFactoryImpl rf = new XMIResourceFactoryImpl();
+								set.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", rf);
 
-							resource.getContents().add(scenario); // scenario
-																	// must be
-							// in a resourceset
-							// for things to
-							// function.
+								set.getPackageRegistry().put(scenario.eClass().getEPackage().getNsURI(), scenario.eClass().getEPackage());
 
-							final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
-							final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
-							final ModelEntityMap entities = new ResourcelessModelEntityMap();
-							entities.setScenario(scenario);
-							IOptimisationData data;
-							lst.addPlatformTransformerExtensions();
-							data = lst.createOptimisationData(entities);
-							monitor.worked(1);
+								final URI nonsenseURI = URI.createGenericURI("invalid", "invalid", "").trimFragment();
 
-							final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
+								final Resource resource = set.createResource(nonsenseURI);
 
-							final IOptimisationContext context = optAndContext.getFirst();
-							final LocalSearchOptimiser optimiser = optAndContext.getSecond();
+								resource.setURI(nonsenseURI.trimFragment());
 
-							// because we are driving the optimiser ourself, so
-							// we can be paused, we
-							// don't actually get progress callbacks.
-							optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
+								resource.getContents().add(scenario); 
+								// scenario must be in a resourceset for things to function.
 
-							optimiser.init();
-							final IAnnotatedSolution startSolution = optimiser.start(context);
-							monitor.worked(1);
-							final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-							exporter.addPlatformExporterExtensions();
-							final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);
+								final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
+								final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
+								final ModelEntityMap entities = new ResourcelessModelEntityMap();
+								entities.setScenario(scenario);
+								IOptimisationData data;
+								lst.addPlatformTransformerExtensions();
+								data = lst.createOptimisationData(entities);
+								monitor.worked(1);
 
-							schedule.setName(scenario.getOptimisation().getCurrentSettings().getInitialSchedule().getName());
+								final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
-							scenario.getScheduleModel().getSchedules().clear();
-							scenario.getScheduleModel().getSchedules().add(schedule);
+								final IOptimisationContext context = optAndContext.getFirst();
+								final LocalSearchOptimiser optimiser = optAndContext.getSecond();
 
-							scenario.getOptimisation().getCurrentSettings().setInitialSchedule(schedule);
-							monitor.worked(1);
-						} catch (final Exception ex) {
+								// because we are driving the optimiser ourself, so
+								// we can be paused, we
+								// don't actually get progress callbacks.
+								optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
+
+								optimiser.init();
+								final IAnnotatedSolution startSolution = optimiser.start(context);
+								monitor.worked(1);
+								final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+								exporter.addPlatformExporterExtensions();
+								final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);
+
+								schedule.setName(scenario.getOptimisation().getCurrentSettings().getInitialSchedule().getName());
+
+								scenario.getScheduleModel().getSchedules().clear();
+								scenario.getScheduleModel().getSchedules().add(schedule);
+
+								scenario.getOptimisation().getCurrentSettings().setInitialSchedule(schedule);
+								monitor.worked(1);
+							} catch (final Exception ex) {
+								monitor.worked(3);
+								ex.printStackTrace();
+							}
+						} else {
 							monitor.worked(3);
-							ex.printStackTrace();
 						}
-					} else {
-						monitor.worked(3);
+					} finally {
+						monitor.done();
 					}
-					monitor.done();
 				}
 			});
 		} catch (final InvocationTargetException e) {
