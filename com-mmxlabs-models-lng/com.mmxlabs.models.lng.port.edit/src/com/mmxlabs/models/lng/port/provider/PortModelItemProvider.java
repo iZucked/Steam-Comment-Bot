@@ -110,6 +110,7 @@ public class PortModelItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__PORTS);
+			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__PORT_GROUPS);
 			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__ROUTES);
 		}
 		return childrenFeatures;
@@ -169,6 +170,7 @@ public class PortModelItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.PORT_MODEL__PORTS:
+			case PortPackage.PORT_MODEL__PORT_GROUPS:
 			case PortPackage.PORT_MODEL__ROUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -191,6 +193,11 @@ public class PortModelItemProvider
 			(createChildParameter
 				(PortPackage.Literals.PORT_MODEL__PORTS,
 				 PortFactory.eINSTANCE.createPort()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PortPackage.Literals.PORT_MODEL__PORT_GROUPS,
+				 PortFactory.eINSTANCE.createPortGroup()));
 
 		newChildDescriptors.add
 			(createChildParameter
