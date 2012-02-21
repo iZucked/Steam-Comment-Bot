@@ -168,26 +168,26 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.DischargeContract} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PurchaseContract} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected DischargeContractItemProvider dischargeContractItemProvider;
+	protected PurchaseContractItemProvider purchaseContractItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.DischargeContract}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.PurchaseContract}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createDischargeContractAdapter() {
-		if (dischargeContractItemProvider == null) {
-			dischargeContractItemProvider = new DischargeContractItemProvider(this);
+	public Adapter createPurchaseContractAdapter() {
+		if (purchaseContractItemProvider == null) {
+			purchaseContractItemProvider = new PurchaseContractItemProvider(this);
 		}
 
-		return dischargeContractItemProvider;
+		return purchaseContractItemProvider;
 	}
 
 	/**
@@ -293,7 +293,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (legalEntityItemProvider != null) legalEntityItemProvider.dispose();
 		if (contractItemProvider != null) contractItemProvider.dispose();
 		if (salesContractItemProvider != null) salesContractItemProvider.dispose();
-		if (dischargeContractItemProvider != null) dischargeContractItemProvider.dispose();
+		if (purchaseContractItemProvider != null) purchaseContractItemProvider.dispose();
 	}
 
 }

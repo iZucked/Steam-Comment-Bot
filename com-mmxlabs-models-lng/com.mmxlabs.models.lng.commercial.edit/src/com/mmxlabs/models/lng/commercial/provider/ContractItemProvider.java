@@ -64,6 +64,8 @@ public class ContractItemProvider
 			super.getPropertyDescriptors(object);
 
 			addEntityPropertyDescriptor(object);
+			addAllowedPortsPropertyDescriptor(object);
+			addPreferredPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -82,6 +84,50 @@ public class ContractItemProvider
 				 getString("_UI_Contract_entity_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_entity_feature", "_UI_Contract_type"),
 				 CommercialPackage.Literals.CONTRACT__ENTITY,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Allowed Ports feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowedPortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_allowedPorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_allowedPorts_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__ALLOWED_PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Preferred Port feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPreferredPortPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_preferredPort_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_preferredPort_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__PREFERRED_PORT,
 				 true,
 				 false,
 				 true,

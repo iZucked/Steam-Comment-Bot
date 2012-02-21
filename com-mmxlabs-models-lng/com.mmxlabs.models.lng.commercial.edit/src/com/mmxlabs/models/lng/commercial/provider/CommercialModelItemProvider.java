@@ -228,7 +228,7 @@ public class CommercialModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACTS,
-				 CommercialFactory.eINSTANCE.createDischargeContract()));
+				 CommercialFactory.eINSTANCE.createPurchaseContract()));
 	}
 
 	/**
