@@ -84,4 +84,13 @@
           referenceEClass="com.mmxlabs.models.lng.types.ARoute">
     </valueProvider>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.port.portModelEditorContribution"
+          implementation="com.mmxlabs.models.lng.port.ui.editorpart.PortModelEditorContribution"
+          priority="2"
+          subModelClass="com.mmxlabs.models.lng.port.PortModel">
+    </jointModelEditor>
+ </extension>
 </plugin>
