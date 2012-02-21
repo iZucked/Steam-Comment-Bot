@@ -25,10 +25,11 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 
 /**
- * This is a restricted case reference value provider which filters the port list on slots to those allowed
- * by the slots' contract.
+ * This is a restricted case reference value provider which filters the port
+ * list on slots to those allowed by the slots' contract.
+ * 
  * @author hinton
- *
+ * 
  */
 public class SlotPortValueProviderFactory implements
 		IReferenceValueProviderFactory {
@@ -46,7 +47,8 @@ public class SlotPortValueProviderFactory implements
 	public IReferenceValueProvider createReferenceValueProvider(
 			final EClass owner, final EReference reference,
 			final MMXRootObject rootObject) {
-		if (delegate == null) return null;
+		if (delegate == null)
+			return null;
 		final IReferenceValueProvider delegateFactory = delegate
 				.createReferenceValueProvider(owner, reference, rootObject);
 		if (reference == CargoPackage.eINSTANCE.getSlot_Port()) {
@@ -82,12 +84,12 @@ public class SlotPortValueProviderFactory implements
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						final Slot slot = (Slot) target;
 						final Contract contract = slot.getContract();
+						if (contract == null) return delegateValue;
 						final UniqueEList<APortSet> marks = new UniqueEList<APortSet>();
 						final HashSet<APort> ports = new HashSet<APort>();
-							for (final APortSet set : contract
-									.getAllowedPorts()) {
-								ports.addAll(set.collect(marks));
-							}
+						for (final APortSet set : contract.getAllowedPorts()) {
+							ports.addAll(set.collect(marks));
+						}
 						for (final Pair<String, EObject> value : delegateValue) {
 							if (ports.contains(value.getSecond())) {
 								filteredList.add(value);

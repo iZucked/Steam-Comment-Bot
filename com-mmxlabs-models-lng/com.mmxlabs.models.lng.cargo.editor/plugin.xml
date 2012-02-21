@@ -94,6 +94,7 @@
     <jointModelEditor
           id="com.mmxlabs.models.lng.cargo.editor.cargoeditor"
           implementation="com.mmxlabs.models.lng.cargo.presentation.editorpart.CargoModelEditorContribution"
+          priority="0"
           subModelClass="com.mmxlabs.models.lng.cargo.CargoModel">
     </jointModelEditor>
  </extension>

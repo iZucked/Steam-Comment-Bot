@@ -14,7 +14,7 @@ public class CargoModelEditorContribution implements IJointModelEditorContributi
 	private UUIDObject modelObject;
 	private MMXRootObject rootObject;
 	private JointModelEditorPart editorPart;
-	private int pageNumber;
+	private int pageNumber = 0;
 	private CargoModelViewer viewerPane;
 
 	@Override
@@ -32,7 +32,7 @@ public class CargoModelEditorContribution implements IJointModelEditorContributi
 		viewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_Cargos()),
 				editorPart.getAdapterFactory());
 		viewerPane.getViewer().setInput(modelObject);
-		this.pageNumber = editorPart.addPage(viewerPane.getControl());
+		pageNumber = editorPart.addPage(viewerPane.getControl());
 		editorPart.setPageText(pageNumber, "Cargos");
 	}
 }
