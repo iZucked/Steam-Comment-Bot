@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.shiplingo.importer.importers;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +22,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import scenario.fleet.FleetPackage;
 import scenario.port.PortPackage;
@@ -40,6 +39,9 @@ import com.mmxlabs.shiplingo.importer.ui.ImportWarningDialog;
  * 
  */
 public abstract class ImportCSVAction extends Action {
+
+	private static final Logger log = LoggerFactory.getLogger(ImportCSVAction.class);
+
 	public ImportCSVAction() {
 		super("Import from CSV", AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
 	}
@@ -68,16 +70,9 @@ public abstract class ImportCSVAction extends Action {
 
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-				// count lines in file
-				BufferedReader br;
+
+				CSVReader reader = null;
 				try {
-					ImportUI.beginImport();
-					br = new BufferedReader(new FileReader(new File(inputFileName)));
-					int lineCount = 0;
-					while (br.readLine() != null) {
-						lineCount++;
-					}
-					br.close();
 					monitor.beginTask("Import CSV Data", 4);
 
 					final List<DeferredReference> deferments = new ArrayList<DeferredReference>();
@@ -88,7 +83,7 @@ public abstract class ImportCSVAction extends Action {
 					monitor.subTask("Read CSV");
 					final EObjectImporter importer = EObjectImporterFactory.getInstance().getImporter(getImportClass());
 					importer.addImportWarningListener(warningCollector);
-					final CSVReader reader = new CSVReader(inputFileName);
+					reader = new CSVReader(inputFileName);
 					final Collection<EObject> importedObjects = importer.importObjects(reader, deferments, registry);
 					monitor.worked(1);
 					// Tell implementation to add these objects
@@ -121,6 +116,17 @@ public abstract class ImportCSVAction extends Action {
 				} catch (final IOException e) {
 					ImportUI.endImport();
 					return Status.CANCEL_STATUS;
+				} finally {
+
+					monitor.done();
+
+					if (reader != null) {
+						try {
+							reader.close();
+						} catch (final IOException e) {
+							log.error(e.getMessage(), e);
+						}
+					}
 				}
 			}
 		};
@@ -137,6 +143,7 @@ public abstract class ImportCSVAction extends Action {
 				iwd.open();
 			}
 		} catch (final InterruptedException e) {
+
 		}
 	}
 
