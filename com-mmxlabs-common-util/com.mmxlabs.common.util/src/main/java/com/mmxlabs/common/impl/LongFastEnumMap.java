@@ -32,6 +32,18 @@ public final class LongFastEnumMap<K extends Enum<K>> {
 		values[key.ordinal()] = value;
 	}
 
+	/**
+	 * Copy the values from the given map into this instance. Both this instance and map should have been created with the same size.
+	 * 
+	 * @param map
+	 */
+	public final void putAll(final LongFastEnumMap<K> map) {
+		// We assume map.values has the same length array.
+		for (int k = 0; k < values.length; ++k) {
+			values[k] = map.values[k];
+		}
+	}
+
 	@Override
 	public final boolean equals(final Object obj) {
 		if (obj instanceof LongFastEnumMap) {
@@ -43,5 +55,10 @@ public final class LongFastEnumMap<K extends Enum<K>> {
 	@Override
 	public final int hashCode() {
 		return Arrays.hashCode(values);
+	}
+
+	@Override
+	public String toString() {
+		return Arrays.toString(values);
 	}
 }
