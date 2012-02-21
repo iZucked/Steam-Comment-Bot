@@ -398,7 +398,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 		}
 
-		int problemCounter = 0;
+		int capacityViolations = 0;
 		
 		// If load or discharge has been set, then the other must be too.
 		assert (loadIdx == -1) || (dischargeIdx != -1);
@@ -460,11 +460,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				if (minLoadVolumeInM3 - lngConsumedInM3 < 0) {
 					// discharge breach
 					dischargeDetails.setCapacityViolation(CapacityViolationType.MAX_DISCHARGE, (minLoadVolumeInM3 - lngConsumedInM3) - maxDischargeVolumeInM3);
-					++problemCounter;
+					++capacityViolations;
 				} else {
 					// load breach
 					loadDetails.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - (maxDischargeVolumeInM3 + lngConsumedInM3));
-					++problemCounter;
+					++capacityViolations;
 				}
 			}
 			
@@ -473,11 +473,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				if (upperLoadLimitInM3 - lngConsumedInM3 < 0) {
 					// load breach
 					loadDetails.setCapacityViolation(CapacityViolationType.MAX_LOAD, lngConsumedInM3 - upperLoadLimitInM3);
-					++problemCounter;
+					++capacityViolations;
 				} else {
 					// discharge breach
 					dischargeDetails.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, upperLoadLimitInM3 - lngConsumedInM3);
-					++problemCounter;
+					++capacityViolations;
 				}
 			}
 			
@@ -490,7 +490,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			if (lngConsumedInM3 > availableHeelinM3) {
 				final PortDetails portDetails = (PortDetails) sequence[2];
 				portDetails.setCapacityViolation(CapacityViolationType.MAX_HEEL, lngConsumedInM3 - availableHeelinM3);
-				++problemCounter;
+				++capacityViolations;
 			}
 		}
 
@@ -539,7 +539,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						// Cooldown violation!
 						final PortDetails portDetails = (PortDetails) sequence[5];
 						portDetails.setCapacityViolation(CapacityViolationType.FORCED_COOLDOWN, 1);
-						++problemCounter;
+						++capacityViolations;
 					}
 
 					final int cooldownTime = arrivalTimes[i / 2] - vesselClass.getCooldownTime();
@@ -585,7 +585,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		voyagePlan.setTotalRouteCost(routeCostAccumulator);
 
-		return problemCounter;
+		voyagePlan.setCapacityViolations(capacityViolations);
+		
+		return capacityViolations;
 	}
 
 	@Override
