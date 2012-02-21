@@ -95,8 +95,8 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createSalesContractAdapter();
 			}
 			@Override
-			public Adapter caseDischargeContract(DischargeContract object) {
-				return createDischargeContractAdapter();
+			public Adapter casePurchaseContract(PurchaseContract object) {
+				return createPurchaseContractAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -195,16 +195,16 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.DischargeContract <em>Discharge Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.PurchaseContract <em>Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.DischargeContract
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract
 	 * @generated
 	 */
-	public Adapter createDischargeContractAdapter() {
+	public Adapter createPurchaseContractAdapter() {
 		return null;
 	}
 

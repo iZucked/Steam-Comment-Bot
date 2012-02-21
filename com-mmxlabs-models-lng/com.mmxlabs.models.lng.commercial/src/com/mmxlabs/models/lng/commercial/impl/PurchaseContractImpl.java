@@ -8,26 +8,26 @@
  */
 package com.mmxlabs.models.lng.commercial.impl;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.DischargeContract;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 
 import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Discharge Contract</b></em>'.
+ * An implementation of the model object '<em><b>Purchase Contract</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * </p>
  *
  * @generated
  */
-public class DischargeContractImpl extends ContractImpl implements DischargeContract {
+public class PurchaseContractImpl extends ContractImpl implements PurchaseContract {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected DischargeContractImpl() {
+	protected PurchaseContractImpl() {
 		super();
 	}
 
@@ -38,9 +38,9 @@ public class DischargeContractImpl extends ContractImpl implements DischargeCont
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return CommercialPackage.Literals.DISCHARGE_CONTRACT;
+		return CommercialPackage.Literals.PURCHASE_CONTRACT;
 	}
 
-} // end of DischargeContractImpl
+} // end of PurchaseContractImpl
 
 // finish type fixing

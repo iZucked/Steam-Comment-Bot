@@ -64,7 +64,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.LEGAL_ENTITY: return createLegalEntity();
 			case CommercialPackage.CONTRACT: return createContract();
 			case CommercialPackage.SALES_CONTRACT: return createSalesContract();
-			case CommercialPackage.DISCHARGE_CONTRACT: return createDischargeContract();
+			case CommercialPackage.PURCHASE_CONTRACT: return createPurchaseContract();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -115,9 +115,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DischargeContract createDischargeContract() {
-		DischargeContractImpl dischargeContract = new DischargeContractImpl();
-		return dischargeContract;
+	public PurchaseContract createPurchaseContract() {
+		PurchaseContractImpl purchaseContract = new PurchaseContractImpl();
+		return purchaseContract;
 	}
 
 	/**

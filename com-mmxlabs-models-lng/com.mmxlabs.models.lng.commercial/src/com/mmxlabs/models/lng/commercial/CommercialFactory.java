@@ -62,13 +62,13 @@ public interface CommercialFactory extends EFactory {
 	SalesContract createSalesContract();
 
 	/**
-	 * Returns a new object of class '<em>Discharge Contract</em>'.
+	 * Returns a new object of class '<em>Purchase Contract</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Discharge Contract</em>'.
+	 * @return a new object of class '<em>Purchase Contract</em>'.
 	 * @generated
 	 */
-	DischargeContract createDischargeContract();
+	PurchaseContract createPurchaseContract();
 
 	/**
 	 * Returns the package supported by this factory.

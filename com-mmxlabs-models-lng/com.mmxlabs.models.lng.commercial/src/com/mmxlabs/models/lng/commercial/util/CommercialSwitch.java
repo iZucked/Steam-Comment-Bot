@@ -117,14 +117,14 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.DISCHARGE_CONTRACT: {
-				DischargeContract dischargeContract = (DischargeContract)theEObject;
-				T result = caseDischargeContract(dischargeContract);
-				if (result == null) result = caseContract(dischargeContract);
-				if (result == null) result = caseAContract(dischargeContract);
-				if (result == null) result = caseUUIDObject(dischargeContract);
-				if (result == null) result = caseNamedObject(dischargeContract);
-				if (result == null) result = caseMMXObject(dischargeContract);
+			case CommercialPackage.PURCHASE_CONTRACT: {
+				PurchaseContract purchaseContract = (PurchaseContract)theEObject;
+				T result = casePurchaseContract(purchaseContract);
+				if (result == null) result = caseContract(purchaseContract);
+				if (result == null) result = caseAContract(purchaseContract);
+				if (result == null) result = caseUUIDObject(purchaseContract);
+				if (result == null) result = caseNamedObject(purchaseContract);
+				if (result == null) result = caseMMXObject(purchaseContract);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -193,17 +193,17 @@ public class CommercialSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Discharge Contract</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Purchase Contract</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Discharge Contract</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Purchase Contract</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDischargeContract(DischargeContract object) {
+	public T casePurchaseContract(PurchaseContract object) {
 		return null;
 	}
 

@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.DischargeContract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -64,7 +65,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass dischargeContractEClass = null;
+	private EClass purchaseContractEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -225,8 +226,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getDischargeContract() {
-		return dischargeContractEClass;
+	public EClass getPurchaseContract() {
+		return purchaseContractEClass;
 	}
 
 	/**
@@ -271,7 +272,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		salesContractEClass = createEClass(SALES_CONTRACT);
 
-		dischargeContractEClass = createEClass(DISCHARGE_CONTRACT);
+		purchaseContractEClass = createEClass(PURCHASE_CONTRACT);
 	}
 
 	/**
@@ -311,7 +312,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		legalEntityEClass.getESuperTypes().add(theTypesPackage.getALegalEntity());
 		contractEClass.getESuperTypes().add(theTypesPackage.getAContract());
 		salesContractEClass.getESuperTypes().add(this.getContract());
-		dischargeContractEClass.getESuperTypes().add(this.getContract());
+		purchaseContractEClass.getESuperTypes().add(this.getContract());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -328,7 +329,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(dischargeContractEClass, DischargeContract.class, "DischargeContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(purchaseContractEClass, PurchaseContract.class, "PurchaseContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

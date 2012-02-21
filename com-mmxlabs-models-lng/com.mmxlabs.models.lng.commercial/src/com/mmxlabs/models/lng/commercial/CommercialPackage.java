@@ -364,14 +364,14 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.DischargeContractImpl <em>Discharge Contract</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.DischargeContractImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getDischargeContract()
+	 * @see com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPurchaseContract()
 	 * @generated
 	 */
-	int DISCHARGE_CONTRACT = 4;
+	int PURCHASE_CONTRACT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -380,7 +380,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_CONTRACT__EXTENSIONS = CONTRACT__EXTENSIONS;
+	int PURCHASE_CONTRACT__EXTENSIONS = CONTRACT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
@@ -389,7 +389,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_CONTRACT__PROXIES = CONTRACT__PROXIES;
+	int PURCHASE_CONTRACT__PROXIES = CONTRACT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -398,7 +398,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_CONTRACT__UUID = CONTRACT__UUID;
+	int PURCHASE_CONTRACT__UUID = CONTRACT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -407,7 +407,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_CONTRACT__NAME = CONTRACT__NAME;
+	int PURCHASE_CONTRACT__NAME = CONTRACT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -416,7 +416,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_CONTRACT__ENTITY = CONTRACT__ENTITY;
+	int PURCHASE_CONTRACT__ENTITY = CONTRACT__ENTITY;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
@@ -425,7 +425,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_CONTRACT__ALLOWED_PORTS = CONTRACT__ALLOWED_PORTS;
+	int PURCHASE_CONTRACT__ALLOWED_PORTS = CONTRACT__ALLOWED_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Preferred Port</b></em>' reference.
@@ -434,17 +434,16 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_CONTRACT__PREFERRED_PORT = CONTRACT__PREFERRED_PORT;
+	int PURCHASE_CONTRACT__PREFERRED_PORT = CONTRACT__PREFERRED_PORT;
 
 	/**
-	 * The number of structural features of the '<em>Discharge Contract</em>' class.
+	 * The number of structural features of the '<em>Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 0;
-
+	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 0;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -553,14 +552,14 @@ public interface CommercialPackage extends EPackage {
 	EClass getSalesContract();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.DischargeContract <em>Discharge Contract</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PurchaseContract <em>Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Discharge Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.DischargeContract
+	 * @return the meta object for class '<em>Purchase Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract
 	 * @generated
 	 */
-	EClass getDischargeContract();
+	EClass getPurchaseContract();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -673,14 +672,14 @@ public interface CommercialPackage extends EPackage {
 		EClass SALES_CONTRACT = eINSTANCE.getSalesContract();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.DischargeContractImpl <em>Discharge Contract</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.DischargeContractImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getDischargeContract()
+		 * @see com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPurchaseContract()
 		 * @generated
 		 */
-		EClass DISCHARGE_CONTRACT = eINSTANCE.getDischargeContract();
+		EClass PURCHASE_CONTRACT = eINSTANCE.getPurchaseContract();
 
 	}
 
