@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.cargo.*;
 import com.mmxlabs.models.lng.types.ACargo;
 import com.mmxlabs.models.lng.types.ASlot;
 
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -129,6 +130,10 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseASlot(ASlot object) {
 				return createASlotAdapter();
+			}
+			@Override
+			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
+				return createITimezoneProviderAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -329,6 +334,20 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createASlotAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.ITimezoneProvider
+	 * @generated
+	 */
+	public Adapter createITimezoneProviderAdapter() {
 		return null;
 	}
 

@@ -9,7 +9,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" lowerBound="1"
         eType="#//DischargeSlot"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Slot" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASlot">
+  <eClassifiers xsi:type="ecore:EClass" name="Slot" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASlot platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStartTime" lowerBound="1"

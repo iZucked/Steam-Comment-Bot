@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.cargo.*;
 import com.mmxlabs.models.lng.types.ACargo;
 import com.mmxlabs.models.lng.types.ASlot;
 
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -91,6 +92,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				Slot slot = (Slot)theEObject;
 				T result = caseSlot(slot);
 				if (result == null) result = caseASlot(slot);
+				if (result == null) result = caseITimezoneProvider(slot);
 				if (result == null) result = caseUUIDObject(slot);
 				if (result == null) result = caseNamedObject(slot);
 				if (result == null) result = caseMMXObject(slot);
@@ -102,6 +104,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				T result = caseLoadSlot(loadSlot);
 				if (result == null) result = caseSlot(loadSlot);
 				if (result == null) result = caseASlot(loadSlot);
+				if (result == null) result = caseITimezoneProvider(loadSlot);
 				if (result == null) result = caseUUIDObject(loadSlot);
 				if (result == null) result = caseNamedObject(loadSlot);
 				if (result == null) result = caseMMXObject(loadSlot);
@@ -113,6 +116,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				T result = caseDischargeSlot(dischargeSlot);
 				if (result == null) result = caseSlot(dischargeSlot);
 				if (result == null) result = caseASlot(dischargeSlot);
+				if (result == null) result = caseITimezoneProvider(dischargeSlot);
 				if (result == null) result = caseUUIDObject(dischargeSlot);
 				if (result == null) result = caseNamedObject(dischargeSlot);
 				if (result == null) result = caseMMXObject(dischargeSlot);
@@ -142,6 +146,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				if (result == null) result = caseSpotSlot(spotLoadSlot);
 				if (result == null) result = caseSlot(spotLoadSlot);
 				if (result == null) result = caseASlot(spotLoadSlot);
+				if (result == null) result = caseITimezoneProvider(spotLoadSlot);
 				if (result == null) result = caseUUIDObject(spotLoadSlot);
 				if (result == null) result = caseNamedObject(spotLoadSlot);
 				if (result == null) result = caseMMXObject(spotLoadSlot);
@@ -155,6 +160,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				if (result == null) result = caseSpotSlot(spotDischargeSlot);
 				if (result == null) result = caseSlot(spotDischargeSlot);
 				if (result == null) result = caseASlot(spotDischargeSlot);
+				if (result == null) result = caseITimezoneProvider(spotDischargeSlot);
 				if (result == null) result = caseUUIDObject(spotDischargeSlot);
 				if (result == null) result = caseNamedObject(spotDischargeSlot);
 				if (result == null) result = caseMMXObject(spotDischargeSlot);
@@ -357,6 +363,21 @@ public class CargoSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseASlot(ASlot object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseITimezoneProvider(ITimezoneProvider object) {
 		return null;
 	}
 

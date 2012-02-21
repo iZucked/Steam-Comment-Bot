@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.cargo;
 import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.types.ASlot;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.port.Port;
 
 import java.util.Date;
@@ -38,7 +39,7 @@ import java.util.Date;
  * @model
  * @generated
  */
-public interface Slot extends ASlot {
+public interface Slot extends ASlot, ITimezoneProvider {
 	/**
 	 * Returns the value of the '<em><b>Window Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->

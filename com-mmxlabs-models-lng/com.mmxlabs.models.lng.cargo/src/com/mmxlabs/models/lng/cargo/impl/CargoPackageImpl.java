@@ -476,6 +476,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Add supertypes to classes
 		cargoEClass.getESuperTypes().add(theTypesPackage.getACargo());
 		slotEClass.getESuperTypes().add(theTypesPackage.getASlot());
+		slotEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
 		loadSlotEClass.getESuperTypes().add(this.getSlot());
 		dischargeSlotEClass.getESuperTypes().add(this.getSlot());
 		cargoModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());

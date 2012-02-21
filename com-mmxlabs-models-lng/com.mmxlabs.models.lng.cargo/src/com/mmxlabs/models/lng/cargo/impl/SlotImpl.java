@@ -20,6 +20,7 @@ import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -651,6 +652,17 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	 */
 	public boolean isSetFixedPrice() {
 		return fixedPriceESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getTimeZone(EAttribute attribute) {
+		final Port p = getPort();
+		if (p == null) return "UTC";
+		return p.getTimeZone();
 	}
 
 	/**
