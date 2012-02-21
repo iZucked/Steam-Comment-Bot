@@ -536,8 +536,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					final IPort port = details.getOptions().getToPortSlot().getPort();
 
 					if ((loadIdx != -1) && (dischargeIdx != -1) && port.shouldVesselsArriveCold()) {
-						// Cooldown violation!
-						final PortDetails portDetails = (PortDetails) sequence[5];
+						// Cooldown violation! -- Assume index 4 is next load
+						
+						final PortDetails portDetails = (PortDetails) sequence[4];
 						portDetails.setCapacityViolation(CapacityViolationType.FORCED_COOLDOWN, 1);
 						++capacityViolations;
 					}
