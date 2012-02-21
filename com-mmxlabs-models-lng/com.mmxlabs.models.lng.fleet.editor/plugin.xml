@@ -107,4 +107,17 @@
 			modelClass="com.mmxlabs.models.lng.fleet.FuelConsumption" />
 		
 	</extension>
+ <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider"
+          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.BaseFuelValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.baseFuelProvider"
+          referenceEClass="com.mmxlabs.models.lng.types.ABaseFuel">
+    </valueProvider>
+ </extension>
 </plugin>
