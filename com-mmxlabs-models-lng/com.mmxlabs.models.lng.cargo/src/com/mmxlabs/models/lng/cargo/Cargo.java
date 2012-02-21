@@ -62,12 +62,12 @@ public interface Cargo extends ACargo {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Discharge Slot</em>' reference.
-	 * @see #setDischargeSlot(LoadSlot)
+	 * @see #setDischargeSlot(DischargeSlot)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_DischargeSlot()
 	 * @model required="true"
 	 * @generated
 	 */
-	LoadSlot getDischargeSlot();
+	DischargeSlot getDischargeSlot();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}' reference.
@@ -77,7 +77,7 @@ public interface Cargo extends ACargo {
 	 * @see #getDischargeSlot()
 	 * @generated
 	 */
-	void setDischargeSlot(LoadSlot value);
+	void setDischargeSlot(DischargeSlot value);
 
 } // end of  Cargo
 

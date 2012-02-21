@@ -9,6 +9,7 @@
 package com.mmxlabs.models.lng.cargo.impl;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 
 import com.mmxlabs.models.lng.types.impl.ACargoImpl;
@@ -53,7 +54,7 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * @generated
 	 * @ordered
 	 */
-	protected LoadSlot dischargeSlot;
+	protected DischargeSlot dischargeSlot;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -117,10 +118,10 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot getDischargeSlot() {
+	public DischargeSlot getDischargeSlot() {
 		if (dischargeSlot != null && dischargeSlot.eIsProxy()) {
 			InternalEObject oldDischargeSlot = (InternalEObject)dischargeSlot;
-			dischargeSlot = (LoadSlot)eResolveProxy(oldDischargeSlot);
+			dischargeSlot = (DischargeSlot)eResolveProxy(oldDischargeSlot);
 			if (dischargeSlot != oldDischargeSlot) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO__DISCHARGE_SLOT, oldDischargeSlot, dischargeSlot));
@@ -134,7 +135,7 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot basicGetDischargeSlot() {
+	public DischargeSlot basicGetDischargeSlot() {
 		return dischargeSlot;
 	}
 
@@ -143,8 +144,8 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDischargeSlot(LoadSlot newDischargeSlot) {
-		LoadSlot oldDischargeSlot = dischargeSlot;
+	public void setDischargeSlot(DischargeSlot newDischargeSlot) {
+		DischargeSlot oldDischargeSlot = dischargeSlot;
 		dischargeSlot = newDischargeSlot;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__DISCHARGE_SLOT, oldDischargeSlot, dischargeSlot));
@@ -180,7 +181,7 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				setLoadSlot((LoadSlot)newValue);
 				return;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				setDischargeSlot((LoadSlot)newValue);
+				setDischargeSlot((DischargeSlot)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -198,7 +199,7 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				setLoadSlot((LoadSlot)null);
 				return;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				setDischargeSlot((LoadSlot)null);
+				setDischargeSlot((DischargeSlot)null);
 				return;
 		}
 		super.eUnset(featureID);
