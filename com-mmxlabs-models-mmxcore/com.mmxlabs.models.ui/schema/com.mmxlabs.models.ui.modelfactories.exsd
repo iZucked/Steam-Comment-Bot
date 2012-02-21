@@ -17,6 +17,9 @@
          </appinfo>
       </annotation>
       <complexType>
+         <sequence>
+            <element ref="factory" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -75,54 +78,10 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="implementation" type="string">
+         <attribute name="factory" type="string">
             <annotation>
                <documentation>
                   The implementation of this factory
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="java"/>
-               </appinfo>
-            </annotation>
-         </attribute>
-      </complexType>
-   </element>
-
-   <element name="compositor">
-      <annotation>
-         <documentation>
-            A compositor creates extensions to MMXObjects which are handled by composition.
-         </documentation>
-      </annotation>
-      <complexType>
-         <attribute name="targetEClass" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.emf.ecore.EObject"/>
-               </appinfo>
-            </annotation>
-         </attribute>
-         <attribute name="inheritable" type="boolean" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="ID" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="implementation" type="string">
-            <annotation>
-               <documentation>
-                  
                </documentation>
                <appinfo>
                   <meta.attribute kind="java"/>

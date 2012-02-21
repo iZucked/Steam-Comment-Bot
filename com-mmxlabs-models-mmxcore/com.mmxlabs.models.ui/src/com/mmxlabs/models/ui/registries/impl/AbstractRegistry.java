@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EcorePackage;
 
 public abstract class AbstractRegistry<Key, Factory> {
 	protected final Map<Key, Factory> cache = new HashMap<Key, Factory>();
@@ -11,9 +12,17 @@ public abstract class AbstractRegistry<Key, Factory> {
 	
 	protected int getMinimumGenerations(final EClass eClass,
 			final String canonicalNameOfSuper) {
+		if (canonicalNameOfSuper == null) return Integer.MAX_VALUE;
 		if (eClass.getInstanceClass().getCanonicalName()
 				.equals(canonicalNameOfSuper)) {
 			return 0;
+		}
+		if (eClass.getESuperTypes().isEmpty()) {
+			if (canonicalNameOfSuper.equals(EcorePackage.eINSTANCE.getEObject().getInstanceClass().getCanonicalName())) {
+				return 1;
+			} else {
+				return Integer.MAX_VALUE;
+			}
 		}
 		int result = Integer.MAX_VALUE;
 		for (final EClass superClass : eClass.getESuperTypes()) {

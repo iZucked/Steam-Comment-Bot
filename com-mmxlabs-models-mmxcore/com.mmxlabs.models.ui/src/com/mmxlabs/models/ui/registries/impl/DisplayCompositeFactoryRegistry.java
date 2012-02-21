@@ -28,7 +28,7 @@ public class DisplayCompositeFactoryRegistry extends AbstractRegistry<EClass, ID
 		int bestExtensionMatch = Integer.MAX_VALUE;
 		for (final IDisplayCompositeFactoryExtension extension : extensions) {
 			final int closeness = getMinimumGenerations(key, extension.getEClassName());
-			if (extension.isInheritable() || closeness == 0) {
+			if (Boolean.valueOf(extension.isInheritable()) || closeness == 0) {
 				if (closeness < bestExtensionMatch) {
 					bestExtensionMatch = closeness;
 					bestExtension = extension;

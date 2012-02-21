@@ -56,7 +56,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	public void createControls() {
 		for (final IInlineEditor editor : editors) {
 			final Label label = new Label(this, SWT.NONE);
-			label.setText(editor.getLabel());
+			editor.setLabel(label);
 			label.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 			final Control control = editor.createControl(this);
 			control.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));			
@@ -96,5 +96,10 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	@Override
 	public Composite getComposite() {
 		return this;
+	}
+
+	@Override
+	public void setCommandHandler(ICommandHandler commandHandler) {
+		this.commandHandler = commandHandler;
 	}
 }

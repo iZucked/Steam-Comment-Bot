@@ -8,9 +8,12 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -29,6 +32,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
@@ -51,6 +55,23 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	private  IReferenceValueProviderProvider referenceValueProviderCache = null;
 	
 	private List<IJointModelEditorContribution> contributions = new LinkedList<IJointModelEditorContribution>();
+	private ICommandHandler defaultCommandHandler = new ICommandHandler() {
+		@Override
+		public void handleCommand(Command command, EObject target,
+				EStructuralFeature feature) {
+			getEditingDomain().getCommandStack().execute(command);
+		}
+		
+		@Override
+		public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
+			return JointModelEditorPart.this.getReferenceValueProviderCache();
+		}
+		
+		@Override
+		public EditingDomain getEditingDomain() {
+			return JointModelEditorPart.this.getEditingDomain();
+		}
+	};
 	
 	public JointModelEditorPart() {
 		
@@ -162,5 +183,13 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			EReference reference) {
 		return referenceValueProviderCache.getReferenceValueProvider(owner,
 				reference);
+	}
+
+	public ICommandHandler getDefaultCommandHandler() {
+		return defaultCommandHandler;
+	}
+
+	public MMXRootObject getRootObject() {
+		return rootObject;
 	}
 }

@@ -10,7 +10,6 @@ package com.mmxlabs.models.ui.editors.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -22,18 +21,19 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
-import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
-import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 
 /**
  * @author hinton
  * 
  */
 public class ReferenceInlineEditor extends UnsettableInlineEditor {
+	private static final Logger log = LoggerFactory.getLogger(ReferenceInlineEditor.class);
 	private Combo combo;
 	private IReferenceValueProvider valueProvider;
 
@@ -46,10 +46,10 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	public void display(MMXRootObject context, EObject input) {
-		((IReferenceValueProviderProvider) Platform.getAdapterManager()
-				.loadAdapter(MMXRootObject.class,
-						ReferenceValueProviderCache.class.getCanonicalName()))
-				.getReferenceValueProvider(input.eClass(), (EReference) feature);
+		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
+		if (valueProvider == null) {
+			log.error("Could not get a value provider for " + input.eClass().getName() + "." + feature.getName());
+		}
 		super.display(context, input);
 	}
 

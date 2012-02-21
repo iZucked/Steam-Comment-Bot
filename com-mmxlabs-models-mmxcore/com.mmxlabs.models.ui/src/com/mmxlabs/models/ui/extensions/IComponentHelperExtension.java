@@ -10,5 +10,5 @@ public interface IComponentHelperExtension {
 	@MapName("id") public String getID();
 	@MapName("helperClass") public IComponentHelper instantiate();
 	@MapName("modelClass") public String getEClassName();
-	@MapName("inheritable") public boolean isInheritable();
+	@MapName("inheritable") public String isInheritable();
 }

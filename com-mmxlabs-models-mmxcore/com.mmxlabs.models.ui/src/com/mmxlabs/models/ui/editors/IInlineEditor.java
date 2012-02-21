@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -28,5 +29,5 @@ public interface IInlineEditor {
 	public Control createControl(final Composite parent);
 	void processValidation(IStatus status);	
 	public EStructuralFeature getFeature();
-	public String getLabel();
+	void setLabel(Label label);
 }

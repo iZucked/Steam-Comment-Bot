@@ -58,10 +58,8 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	public void display(MMXRootObject context, EObject input) {
-		// TODO; is this the best way of doing this?
-		valueProvider = 
-				((IReferenceValueProviderProvider)
-				Platform.getAdapterManager().loadAdapter(context, ReferenceValueProviderCache.class.getCanonicalName()))
+		valueProvider = commandHandler
+				.getReferenceValueProviderProvider()
 				.getReferenceValueProvider(input.eClass(), (EReference) feature);
 		super.display(context, input);
 	}
@@ -98,7 +96,8 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	@Override
 	protected Command createSetCommand(Object value) {
 		final CompoundCommand setter = CommandUtil
-				.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature,
+				.createMultipleAttributeSetter(
+						commandHandler.getEditingDomain(), input, feature,
 						(Collection) value);
 		return setter;
 	}
@@ -149,30 +148,34 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 				return ((Pair<String, ?>) element).getFirst();
 			}
 		});
-		
-//		if (((EReference)feature).getEReferenceType().isSuperTypeOf(PortPackage.eINSTANCE.getPort())) {
-//			for (final PortCapability pc : PortCapability.values()) {
-//				dlg.addColumn(pc.getName(), new ColumnLabelProvider(){
-//					@Override
-//					public String getText(Object element) {
-//						final Pair<?, EObject> p = (Pair<?, EObject>)element;
-//						if (p.getSecond() instanceof Port) {
-//							return ((Port)p.getSecond()).getCapabilities().contains(pc) ? "Yes" : "No";
-//						} else {
-//							return "";
-//						}
-//					}
-//				});
-//			}
-//		}
-		
-		dlg.groupBy(new ColumnLabelProvider(){
+
+		// if
+		// (((EReference)feature).getEReferenceType().isSuperTypeOf(PortPackage.eINSTANCE.getPort()))
+		// {
+		// for (final PortCapability pc : PortCapability.values()) {
+		// dlg.addColumn(pc.getName(), new ColumnLabelProvider(){
+		// @Override
+		// public String getText(Object element) {
+		// final Pair<?, EObject> p = (Pair<?, EObject>)element;
+		// if (p.getSecond() instanceof Port) {
+		// return ((Port)p.getSecond()).getCapabilities().contains(pc) ? "Yes" :
+		// "No";
+		// } else {
+		// return "";
+		// }
+		// }
+		// });
+		// }
+		// }
+
+		dlg.groupBy(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return ((Pair<?, EObject>) element).getSecond().eClass().getName();
+				return ((Pair<?, EObject>) element).getSecond().eClass()
+						.getName();
 			}
 		});
-		
+
 		if (dlg.open() == Window.OK) {
 			final Object[] result = dlg.getResult();
 
@@ -182,7 +185,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 			}
 			return resultList;
 		}
-		
+
 		return null;
 	}
 }

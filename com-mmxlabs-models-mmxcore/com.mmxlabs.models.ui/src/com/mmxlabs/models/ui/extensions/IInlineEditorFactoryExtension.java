@@ -5,7 +5,7 @@ import org.ops4j.peaberry.eclipse.MapName;
 
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 
-@ExtensionBean("com.mmxlabs.models.editorfactories")
+@ExtensionBean("com.mmxlabs.models.ui.editorfactories")
 public interface IInlineEditorFactoryExtension {
 	@MapName("id") public String getID();
 	@MapName("factoryClass") public IInlineEditorFactory instantiate();
