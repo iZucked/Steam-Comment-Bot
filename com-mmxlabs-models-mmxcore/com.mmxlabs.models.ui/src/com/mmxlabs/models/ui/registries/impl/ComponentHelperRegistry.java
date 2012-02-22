@@ -1,17 +1,14 @@
 package com.mmxlabs.models.ui.registries.impl;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.extensions.IComponentHelperExtension;
-import com.mmxlabs.models.ui.extensions.IDisplayCompositeFactoryExtension;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -33,6 +30,38 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
  */
 public class ComponentHelperRegistry extends AbstractRegistry<EClass, IComponentHelper> implements IComponentHelperRegistry {
 	@Inject Iterable<IComponentHelperExtension> extensions;
+	
+	/**
+	 * If an EClass has no component helper registered that will match it, but its supertypes do have registered component helpers,
+	 * we will still want to invoke those on the supertypes. This method returns a component helper to do that job.
+	 * 
+	 * @param eClass
+	 * @return
+	 */
+	private IComponentHelper reflector(final EClass eClass) {
+		final ArrayList<IComponentHelper> superHelpers = new ArrayList<IComponentHelper>();
+		
+		for (final EClass eSuper : eClass.getESuperTypes()) {
+			final IComponentHelper h = getComponentHelper(eSuper);
+			if (h != null) superHelpers.add(h);
+		}
+		
+		// This check should ensure that pointless reflectors are not created.
+		if (superHelpers.isEmpty()) return null;
+		
+		return new IComponentHelper() {
+			@Override
+			public void addEditorsToComposite(IInlineEditorContainer detailComposite,
+					EClass displayedClass) {
+				for (final IComponentHelper h : superHelpers) h.addEditorsToComposite(detailComposite, displayedClass);
+			}
+			
+			@Override
+			public void addEditorsToComposite(IInlineEditorContainer detailComposite) {
+				addEditorsToComposite(detailComposite, eClass);
+			}
+		};
+	}
 	
 	public ComponentHelperRegistry() {
 
@@ -60,7 +89,10 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, IComponent
 			}
 		}
 		
-		if (bestExtension == null) return null;
+		if (bestExtension == null) {
+			if (key.getESuperTypes().isEmpty()) return null;
+			else return reflector(key);
+		}
 		
 		if (factoryExistsForID(bestExtension.getID())) {
 			return getFactoryForID(bestExtension.getID());

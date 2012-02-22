@@ -49,6 +49,10 @@
             <EClassExtends
                   EClass="org.eclipse.emf.ecore.EObject">
             </EClassExtends>
+            <EDataTypeIs
+                  EDataTypeName="EString"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
          </FeatureAnyOf>
       </editorFactory>
    </extension>

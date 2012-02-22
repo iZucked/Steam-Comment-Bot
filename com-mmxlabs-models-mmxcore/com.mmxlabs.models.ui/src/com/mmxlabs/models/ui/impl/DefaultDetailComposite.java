@@ -12,6 +12,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.internal.ILayoutContainer;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
@@ -19,17 +20,22 @@ import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 
 /**
- * The default detail composite implementation; does not do anything about having child composites.
+ * The default detail composite implementation; does not do anything about
+ * having child composites.
+ * 
  * @author hinton
- *
+ * 
  */
-public class DefaultDetailComposite extends Composite implements IInlineEditorContainer, IDisplayComposite {
+public class DefaultDetailComposite extends Composite implements
+		IInlineEditorContainer, IDisplayComposite {
 	private ICommandHandler commandHandler;
 	private EClass displayedClass;
+	private IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
 	private IInlineEditorWrapper wrapper = new IInlineEditorWrapper() {
 		@Override
 		public IInlineEditor wrap(IInlineEditor editor) {
@@ -37,15 +43,13 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		}
 	};
 	private GridLayout gridLayout;
-	
+
 	public DefaultDetailComposite(final Composite parent, final int style) {
 		super(parent, style);
-		this.gridLayout = new GridLayout(2, false);
-		setLayout(gridLayout);
 	}
 
 	private final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
-	
+
 	@Override
 	public void addInlineEditor(IInlineEditor editor) {
 		editor = wrapper.wrap(editor);
@@ -54,30 +58,34 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 			editors.add(editor);
 		}
 	}
-	
-	public void createControls() {
+
+	public void createControls(MMXRootObject root, EObject object) {
 		for (final IInlineEditor editor : editors) {
-			final Label label = new Label(this, SWT.NONE);
+			final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(this, SWT.NONE):null;
 			editor.setLabel(label);
-			label.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 			final Control control = editor.createControl(this);
-			control.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));			
+			control.setLayoutData(layoutProvider.createEditorLayoutData(root, object, editor, control));
+			if (label != null) {
+				label.setLayoutData(layoutProvider.createLabelLayoutData(root, object, editor, control, label));
+			}			
 		}
 	}
-	
+
 	/**
 	 * Display the given EObject in this container.
 	 * 
-	 * Recreates the controls if the object's eClass is different to what we had before.
+	 * Recreates the controls if the object's eClass is different to what we had
+	 * before.
 	 * 
 	 * @param object
 	 */
 	public void display(final MMXRootObject root, final EObject object) {
 		final EClass eClass = object.eClass();
-		if (eClass != displayedClass) {			
+		setLayout(layoutProvider.createDetailLayout(root, object));
+		if (eClass != displayedClass) {
 			clear();
 			initialize(eClass);
-			createControls();
+			createControls(root, object);
 		}
 		for (final IInlineEditor editor : editors) {
 			editor.display(root, object);
@@ -86,12 +94,15 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 
 	private void clear() {
 		editors.clear();
-		for (final Control c : getChildren()) c.dispose();
+		for (final Control c : getChildren())
+			c.dispose();
 	}
-	
+
 	private void initialize(final EClass eClass) {
 		this.displayedClass = eClass;
-		final IComponentHelper helper = Activator.getDefault().getComponentHelperRegistry().getComponentHelper(displayedClass);
+		final IComponentHelper helper = Activator.getDefault()
+				.getComponentHelperRegistry()
+				.getComponentHelper(displayedClass);
 		helper.addEditorsToComposite(this);
 	}
 

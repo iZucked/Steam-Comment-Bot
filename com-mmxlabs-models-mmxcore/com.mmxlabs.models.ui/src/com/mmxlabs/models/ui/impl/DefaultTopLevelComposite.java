@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Group;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 
 /**
  * The default composite used to display an EObject
@@ -31,10 +32,10 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	private List<EReference> childReferences = new LinkedList<EReference>();
 	private List<DefaultDetailComposite> childComposites = new LinkedList<DefaultDetailComposite>();
 	private ICommandHandler commandHandler;
+	private IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
 
 	public DefaultTopLevelComposite(final Composite parent, final int style) {
 		super(parent, style);
-		setLayout(new GridLayout(1, false));
 	}
 
 	public void display(final MMXRootObject root, final EObject object) {
@@ -42,7 +43,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		final Group g = new Group(this, SWT.NONE);
 		g.setText(eClass.getName());
 		g.setLayout(new FillLayout());
-		g.setLayoutData(new GridData(GridData.FILL_BOTH));
+		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
 		topLevel = new DefaultDetailComposite(g, SWT.NONE);
 		topLevel.setCommandHandler(commandHandler);
 		for (final EReference ref : eClass.getEAllReferences()) {
@@ -52,8 +53,10 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 					final Group g2 = new Group(this, SWT.NONE);
 					g2.setText(value.eClass().getName());
 					g2.setLayout(new FillLayout());
+					g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
 					final DefaultDetailComposite sub = new DefaultDetailComposite(
 							g2, SWT.NONE);
+					
 					sub.setCommandHandler(commandHandler);
 					childReferences.add(ref);
 					childComposites.add(sub);
@@ -70,7 +73,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 			children.next().display(root, (EObject) object.eGet(refs.next()));
 		}
 		
-		((GridLayout)getLayout()).numColumns = childComposites.size() + 1;
+		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));
 	}
 
 	protected boolean shouldDisplay(EReference ref) {
