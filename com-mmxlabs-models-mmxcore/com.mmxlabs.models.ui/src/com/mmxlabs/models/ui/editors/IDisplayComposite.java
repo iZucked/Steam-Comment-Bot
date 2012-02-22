@@ -1,5 +1,7 @@
 package com.mmxlabs.models.ui.editors;
 
+import java.util.Collection;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Composite;
 
@@ -29,4 +31,16 @@ public interface IDisplayComposite {
 	 * @param commandHandler
 	 */
 	public void setCommandHandler(ICommandHandler commandHandler);
+	
+	/**
+	 * Should return a collection of the EObject that this object might edit in its display.
+	 * 
+	 * This is useful for the editor dialogs, which need to take copies of any objects that might be edited
+	 * before they get edited, without taking a copy of all the scenario just in case.
+	 * 
+	 * @param root
+	 * @param value
+	 * @return a list of objects which might be modified when this display composite is displaying value
+	 */
+	public Collection<EObject> getEditingRange(final MMXRootObject root, final EObject value);
 }

@@ -1,5 +1,6 @@
 package com.mmxlabs.models.ui.impl;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -40,10 +42,11 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		final Group g = new Group(this, SWT.NONE);
 		g.setText(eClass.getName());
 		g.setLayout(new FillLayout());
+		g.setLayoutData(new GridData(GridData.FILL_BOTH));
 		topLevel = new DefaultDetailComposite(g, SWT.NONE);
 		topLevel.setCommandHandler(commandHandler);
 		for (final EReference ref : eClass.getEAllReferences()) {
-			if (ref.isContainment() && !ref.isMany()) {
+			if (shouldDisplay(ref)) {
 				final EObject value = (EObject) object.eGet(ref);
 				if (value != null) {
 					final Group g2 = new Group(this, SWT.NONE);
@@ -70,6 +73,10 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		((GridLayout)getLayout()).numColumns = childComposites.size() + 1;
 	}
 
+	protected boolean shouldDisplay(EReference ref) {
+		return ref.isContainment() && !ref.isMany();
+	}
+
 	@Override
 	public Composite getComposite() {
 		return this;
@@ -78,5 +85,10 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	@Override
 	public void setCommandHandler(ICommandHandler commandHandler) {
 		this.commandHandler = commandHandler;
+	}
+
+	@Override
+	public Collection<EObject> getEditingRange(MMXRootObject root, EObject value) {
+		return value.eContents();
 	}
 }

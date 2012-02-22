@@ -1,5 +1,7 @@
 package com.mmxlabs.models.ui.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import org.eclipse.emf.ecore.EClass;
@@ -101,5 +103,10 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	@Override
 	public void setCommandHandler(ICommandHandler commandHandler) {
 		this.commandHandler = commandHandler;
+	}
+
+	@Override
+	public Collection<EObject> getEditingRange(MMXRootObject root, EObject value) {
+		return Collections.singleton(value);
 	}
 }
