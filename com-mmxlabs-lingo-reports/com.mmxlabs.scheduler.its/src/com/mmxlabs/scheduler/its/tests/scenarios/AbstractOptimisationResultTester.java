@@ -4,10 +4,16 @@
  */
 package com.mmxlabs.scheduler.its.tests.scenarios;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 import junit.framework.Assert;
 
@@ -26,6 +32,12 @@ import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
 import com.mmxlabs.scheduler.its.tests.ScenarioRunner;
 
 /**
+ * 
+ * Abstract class to test the optimisation reproducibility of a scenario. Super classes pass in a URL to a scenario resource. There are two modes of operation, determined by the boolean
+ * {@link #storeFitnessMap}. When set to false (default) a properties file (located at the input URL with ".properties" appended) contains the expected initial and final fitness values of the
+ * scenario. The second mode ({@link #storeFitnessMap} set to true) will generate the properties file. Note this mode will only work for file:// URLs. It is expected that a JUnit test run will provide
+ * file based URLs. It is expected JUnit plugin tests will not.
+ * 
  * <a href="https://mmxlabs.fogbugz.com/default.asp?220">Case 220: Optimisation Result Test</a>
  * 
  * @author Adam Semenenko
@@ -40,9 +52,12 @@ public class AbstractOptimisationResultTester {
 	}
 
 	/**
-	 * Toggle between printing a map of fitness names to fitness values to testing the map against the fitnesses generated at runtime.
+	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Note if this value is true, this should be run as part of a
+	 * JUnit test rather than a plugin test as the URL to File conversion may not work as expected.
 	 */
-	private static final boolean printFitnessMap = false;
+	private static final boolean storeFitnessMap = false;
+
+	// Key prefixes used in the properties file.
 	private static final String originalFitnessesMapName = "originalFitnesses";
 	private static final String endFitnessesMapName = "endFitnesses";
 
@@ -58,7 +73,7 @@ public class AbstractOptimisationResultTester {
 	 * @throws IncompleteScenarioException
 	 * @throws InterruptedException
 	 */
-	public void runScenario(final URL url, final HashMap<String, Long> originalFitnesses, final HashMap<String, Long> endFitnesses) throws IOException, IncompleteScenarioException {
+	public void runScenario(final URL url) throws IOException, IncompleteScenarioException {
 		final Resource resource = new XMIResourceImpl(URI.createURI(url.toString()));
 		resource.load(Collections.emptyMap());
 
@@ -87,45 +102,67 @@ public class AbstractOptimisationResultTester {
 		final EList<ScheduleFitness> currentOriginalFitnesses = originalScenarioRunner.getIntialSchedule().getFitness();
 		final EList<ScheduleFitness> currentEndFitnesses = endScenarioRunner.getFinalSchedule().getFitness();
 
-		if (printFitnessMap) {
-			printFitnessesAsMap(originalFitnessesMapName, currentOriginalFitnesses);
-			printFitnessesAsMap(endFitnessesMapName, currentEndFitnesses);
+		if (storeFitnessMap) {
+
+			/**
+			 * Extend to save properties in a sorted order for ease of reading
+			 */
+			@SuppressWarnings("serial")
+			Properties props = new Properties() {
+				@Override
+				public Set<Object> keySet() {
+					return Collections.unmodifiableSet(new TreeSet<Object>(super.keySet()));
+				}
+
+				@Override
+				public synchronized Enumeration<Object> keys() {
+					return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+				}
+			};
+
+			storeFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
+			storeFitnesses(props, endFitnessesMapName, currentEndFitnesses);
+
+			File f;
+			try {
+				f = new File(new File(url.toURI()).getAbsoluteFile() + ".properties");
+				props.store(new FileOutputStream(f), "Created by " + AbstractOptimisationResultTester.class.getName());
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		} else {
 
-			// print them to console (for manual checking)
-			printOldAndNew("original", originalFitnesses, currentOriginalFitnesses);
-			printOldAndNew("end", endFitnesses, currentEndFitnesses);
+			Properties props = new Properties();
+			props.load(new URL(url.toString() + ".properties").openStream());
 
 			// Assert old and new are equal
-			testOriginalAndCurrentFitnesses(originalFitnesses, currentOriginalFitnesses);
-			testOriginalAndCurrentFitnesses(endFitnesses, currentEndFitnesses);
+			testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
+			testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
 		}
 	}
 
 	/**
-	 * Prints the given EList as a Map to the console.
+	 * Stores the fitness values into the {@link Properties} object.
 	 * 
 	 * @param mapName
-	 *            The variable name of the map.
+	 *            The variable name prefix.
 	 * @param fitnesses
-	 *            A list of fitnesses to print.
+	 *            A list of fitnesses to store.
 	 */
-	private void printFitnessesAsMap(final String mapName, final EList<ScheduleFitness> fitnesses) {
 
-		System.out.println();
-		System.out.println("final HashMap<String, Long> " + mapName + " = new HashMap<String, Long>();");
+	private void storeFitnesses(Properties props, final String mapName, final EList<ScheduleFitness> fitnesses) {
 
 		for (final ScheduleFitness f : fitnesses) {
-			System.out.println(mapName + ".put(\"" + f.getName() + "\", " + f.getValue() + "L);");
+			props.setProperty(mapName + "." + f.getName(), Long.toString(f.getValue()));
 		}
-
-		System.out.println();
 	}
 
 	/**
 	 * Test the original (previously generated) fitnesses against the current. Also test that the total of the original and current are equal.
 	 */
-	private void testOriginalAndCurrentFitnesses(final HashMap<String, Long> originalFitnesses, final EList<ScheduleFitness> currentFitnesses) {
+	private void testOriginalAndCurrentFitnesses(Properties props, String mapName, final EList<ScheduleFitness> currentFitnesses) {
 
 		long totalOriginalFitness = 0;
 		long totalCurrentFitness = 0;
@@ -133,7 +170,7 @@ public class AbstractOptimisationResultTester {
 		for (final ScheduleFitness f : currentFitnesses) {
 
 			// get the values
-			final long originalFitnessValue = originalFitnesses.get(f.getName()).longValue();
+			final long originalFitnessValue = Long.parseLong(props.getProperty(mapName + "." + f.getName(), "0"));
 			final long currentFitness = f.getValue();
 
 			// test they are equal
@@ -147,24 +184,4 @@ public class AbstractOptimisationResultTester {
 		// test totals are equal
 		Assert.assertEquals("Total original fitnesses equal current fitnesses", totalOriginalFitness, totalCurrentFitness);
 	}
-
-	/**
-	 * Print the old and new fitnesses to the console.
-	 * 
-	 * @param name
-	 *            The name of the fitnesses (for identification in the console).
-	 * @param originalFitnesses
-	 *            The fitnesses previously generated.
-	 * @param currentFitnesses
-	 *            The fitnesses generated in this execution.
-	 */
-	private void printOldAndNew(final String name, final HashMap<String, Long> originalFitnesses, final EList<ScheduleFitness> currentFitnesses) {
-
-		System.out.println(name);
-		for (final ScheduleFitness f : currentFitnesses) {
-			System.out.println(f.getName() + ": " + originalFitnesses.get(f.getName()).longValue() + ", " + f.getValue());
-		}
-		System.out.println();
-	}
-
 }
