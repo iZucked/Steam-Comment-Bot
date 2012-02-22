@@ -33,10 +33,12 @@ public interface IDisplayComposite {
 	public void setCommandHandler(ICommandHandler commandHandler);
 	
 	/**
-	 * Should return a collection of the EObject that this object might edit in its display.
+	 * Should return a collection of the branches that this object might edit in its display.
 	 * 
 	 * This is useful for the editor dialogs, which need to take copies of any objects that might be edited
 	 * before they get edited, without taking a copy of all the scenario just in case.
+	 * 
+	 * Please don't return a list whose members contain one another, as this won't work properly.
 	 * 
 	 * @param root
 	 * @param value

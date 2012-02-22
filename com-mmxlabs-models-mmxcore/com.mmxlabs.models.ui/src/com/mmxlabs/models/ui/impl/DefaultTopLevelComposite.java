@@ -1,6 +1,7 @@
 package com.mmxlabs.models.ui.impl;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -92,6 +93,6 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 
 	@Override
 	public Collection<EObject> getEditingRange(MMXRootObject root, EObject value) {
-		return value.eContents();
+		return Collections.singleton(value);
 	}
 }
