@@ -37,6 +37,8 @@ public class VesselViewerPane extends ScenarioTableViewerPane {
 				jointModelEditor.getReferenceValueProviderCache(),
 				editingDomain));
 		
+		addTypicalColumn("Time Chartered", new BasicAttributeManipulator(FleetPackage.eINSTANCE.getVessel_TimeChartered(), editingDomain));
+		
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 }
