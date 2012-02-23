@@ -116,11 +116,13 @@ public class CSVReader implements Closeable {
 		return result;
 	}
 
+	private FieldMap currentLine;
+	
 	/**
 	 * @return
 	 * @throws IOException
 	 */
-	public Map<String, String> readRow() throws IOException {
+	public IFieldMap readRow() throws IOException {
 		final Map<String, String> row = new HashMap<String, String>() {
 			private static final long serialVersionUID = -4630946181378550729L;
 
@@ -137,7 +139,7 @@ public class CSVReader implements Closeable {
 		for (int i = 0; (i < headerLine.length) && (i < fields.length); i++) {
 			row.put(headerLine[i], fields[i]);
 		}
-		return row;
+		return (currentLine = new FieldMap(row));
 	}
 
 	/**
@@ -160,6 +162,14 @@ public class CSVReader implements Closeable {
 	public void close() throws IOException {
 		if (reader != null) {
 			reader.close();
+		}
+	}
+
+	public String getLastField() {
+		if (currentLine != null) {
+			return currentLine.getLastAccessedKey();
+		} else {
+			return "";
 		}
 	}
 }
