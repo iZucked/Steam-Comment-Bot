@@ -131,4 +131,12 @@
 			modelClass="com.mmxlabs.models.lng.schedule.FuelAmount" />
 		
 	</extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.schedule.editor.scheduleModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.schedule.ScheduleModel"
+          subModelImporterClass="com.mmxlabs.models.lng.schedule.importers.ScheduleModelImporter">
+    </submodelImporter>
+ </extension>
 </plugin>
