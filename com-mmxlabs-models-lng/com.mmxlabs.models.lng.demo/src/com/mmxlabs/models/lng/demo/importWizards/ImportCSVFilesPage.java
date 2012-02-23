@@ -83,11 +83,10 @@ public class ImportCSVFilesPage extends WizardPage {
 					final CSVReader r = new CSVReader(c.keys.get(key));
 					readers.put(key, r);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				root.addSubModel(c.importer.importModel(readers, context));
 			}
+			root.addSubModel(c.importer.importModel(readers, context));
 		}
 		
 		context.run();
