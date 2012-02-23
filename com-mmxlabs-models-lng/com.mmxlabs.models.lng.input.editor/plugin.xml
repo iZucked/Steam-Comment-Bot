@@ -53,4 +53,12 @@
 			modelClass="com.mmxlabs.models.lng.input.Assignment" />
 		
 	</extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.input.editor.inputModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.input.InputModel"
+          subModelImporterClass="com.mmxlabs.models.lng.input.importers.InputModelImporter">
+    </submodelImporter>
+ </extension>
 </plugin>
