@@ -5,18 +5,24 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 public class ScenarioTableViewerPane extends ViewerPane {
 	private ScenarioTableViewer scenarioViewer;
@@ -30,7 +36,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	@Override
 	public ScenarioTableViewer createViewer(Composite parent) {
 		if (scenarioViewer == null) {
-			scenarioViewer = new ScenarioTableViewer(parent, SWT.BORDER);
+			scenarioViewer = new ScenarioTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 			scenarioViewer.addDoubleClickListener(new IDoubleClickListener() {
 				
 				@Override
@@ -63,6 +69,30 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	
 	public void addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
 		scenarioViewer.addColumn(columnName, renderer, manipulator, pathObjects);
+	}
+
+	public EditingDomain getEditingDomain() {
+		return jointModelEditorPart.getEditingDomain();
+	}
+
+	public AdapterFactory getAdapterFactory() {
+		return jointModelEditorPart.getAdapterFactory();
+	}
+
+	public IReferenceValueProviderProvider getReferenceValueProviderCache() {
+		return jointModelEditorPart.getReferenceValueProviderCache();
+	}
+	
+	public JointModelEditorPart getJointModelEditorPart() {
+		return jointModelEditorPart;
+	}
+	
+	protected void addNameManipulator(final String nameName) {
+		addTypicalColumn(nameName, new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()));
+	}
+	
+	protected void defaultSetTitle(final String string) {
+		setTitle(string, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
