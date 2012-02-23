@@ -32,11 +32,16 @@ public class SetReference implements IDeferment {
 				final NamedObject no = context.getNamedObject(name.trim(), linkType);
 				if (no != null) {
 					((EList) (container.eGet(reference))).add(no);
+				} else {
+					context.addProblem("Could not resolve " + linkType.eClass() + " named " + name, false, false);
 				}
 			}
 		} else {
 			final NamedObject no = context.getNamedObject(name.trim(), linkType);
 			if (no != null) container.eSet(reference, no);
+			else {
+				context.addProblem("Could not resolve " + linkType.eClass() + " named " + name, false, false);
+			}
 		}
 	}
 	@Override

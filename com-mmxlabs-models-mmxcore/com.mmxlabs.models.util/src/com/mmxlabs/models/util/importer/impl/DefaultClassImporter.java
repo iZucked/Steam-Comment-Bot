@@ -22,8 +22,10 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.models.util.importer.CSVReader;
+import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IFieldMap;
 import com.mmxlabs.models.util.importer.IImportContext;
 
 public class DefaultClassImporter implements IClassImporter {
@@ -86,7 +88,11 @@ public class DefaultClassImporter implements IClassImporter {
 		final LinkedList<EObject> results = new LinkedList<EObject>();
 		results.add(instance);
 		importAttributes(row, context, rowClass, instance);
-		importReferences(row, context, rowClass, instance, results);
+		if (row instanceof IFieldMap) {
+			importReferences((IFieldMap) row, context, rowClass, instance, results);
+		} else {
+			importReferences(new FieldMap(row), context, rowClass, instance, results);	
+		}
 		return results;
 	}
 
@@ -101,7 +107,7 @@ public class DefaultClassImporter implements IClassImporter {
 		return reference.getEReferenceType();
 	}
 
-	protected void importReferences(final Map<String, String> row,
+	protected void importReferences(final IFieldMap row,
 			IImportContext context, final EClass rowClass,
 			final EObject instance, final LinkedList<EObject> results) {
 		for (final EReference reference : rowClass.getEAllReferences()) {
@@ -116,13 +122,8 @@ public class DefaultClassImporter implements IClassImporter {
 			} else {
 				if (reference.isMany())
 					continue;
-				final HashMap<String, String> subKeys = new HashMap<String, String>();
-				for (final String key : row.keySet()) {
-					if (key.startsWith(lcrn + DOT)) {
-						subKeys.put(key.substring(lcrn.length() + 1),
-								row.get(key));
-					}
-				}
+				final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
+				
 				if (subKeys.isEmpty()) {
 					// TODO WARNING
 				} else {
@@ -155,7 +156,7 @@ public class DefaultClassImporter implements IClassImporter {
 					ai.setAttribute(instance, attribute,
 							row.get(attribute.getName().toLowerCase()), context);
 			} else {
-				// TODO WARN
+				context.addProblem("Field not present", true, true);
 			}
 		}
 	}
