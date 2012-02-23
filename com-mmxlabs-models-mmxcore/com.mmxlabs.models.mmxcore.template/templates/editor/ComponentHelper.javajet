@@ -47,8 +47,23 @@ public class <%=thisClassName%> implements IComponentHelper {
 	 */
 	public <%=thisClassName%>(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+<!-- <% final List<GenClass> baseClasses = new LinkedList<GenClass>(); %>
+<% final HashSet<GenClass> markedClasses = new HashSet<GenClass>(); %>
+<% baseClasses.addAll(genClass.getBaseGenClasses()); %>
+<% final Iterator<GenClass> iterator = baseClasses.iterator(); %>
+<% while (iterator.hasNext()) {%>
+<% final GenClass base = iterator.next(); %>
+<% if (!markedClasses.contains(base)) { %>
+<% markedClasses.add(base); %>
+{
+	final IComponentHelper helper = registry.getComponentHelper(<%=base.getQualifiedClassifierAccessor()%>);
+	if (helper != null) superClassesHelpers.add(helper);
+}
+<% baseClasses.addAll(base.getBaseGenClasses()); %>
+<% } %>
+<% iterator.remove(); %>
+<% } %> --%>
 <% for (final GenClass superGenClass : genClass.getBaseGenClasses()) { %>
-		
 		{
 			final IComponentHelper helper = registry.getComponentHelper(<%=superGenClass.getQualifiedClassifierAccessor()%>);
 			if (helper != null) superClassesHelpers.add(helper);
