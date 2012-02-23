@@ -108,8 +108,11 @@ public class DefaultClassImporter implements IClassImporter {
 			final String lcrn = reference.getName().toLowerCase();
 			if (row.containsKey(lcrn)) {
 				// defer lookup
+				final String referentName = row.get(lcrn).trim();
+				if (!referentName.isEmpty()) {
 				context.doLater(new SetReference(instance, reference,
 						getEReferenceLinkType(reference), row.get(lcrn)));
+				}
 			} else {
 				if (reference.isMany())
 					continue;
