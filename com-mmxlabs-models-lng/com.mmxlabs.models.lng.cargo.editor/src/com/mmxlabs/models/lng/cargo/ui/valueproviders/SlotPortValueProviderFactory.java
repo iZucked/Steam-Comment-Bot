@@ -14,8 +14,11 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortCapability;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -81,6 +84,14 @@ public class SlotPortValueProviderFactory implements
 							.getAllowedValues(target, field);
 
 					if (target instanceof Slot) {
+						final PortCapability capability = 
+								(target instanceof LoadSlot ? PortCapability.LOAD :PortCapability.DISCHARGE);
+						final ArrayList<Pair<String, EObject>> filterOne = new ArrayList<Pair<String, EObject>>();
+						for (final Pair<String, EObject> p : delegateValue) {
+							if (((Port)p.getSecond()).getCapabilities().contains(capability)) {
+								filterOne.add(p);
+							}
+						}
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						final Slot slot = (Slot) target;
 						final Contract contract = slot.getContract();
@@ -90,11 +101,13 @@ public class SlotPortValueProviderFactory implements
 						for (final APortSet set : contract.getAllowedPorts()) {
 							ports.addAll(set.collect(marks));
 						}
-						for (final Pair<String, EObject> value : delegateValue) {
+						for (final Pair<String, EObject> value : filterOne) {
 							if (ports.contains(value.getSecond())) {
 								filteredList.add(value);
 							}
 						}
+						// don't allow an empty list as the option if we can avoid it
+						if (filteredList.isEmpty()) return filterOne.isEmpty() ? delegateValue : filterOne;
 						return filteredList;
 					}
 					return delegateValue;
