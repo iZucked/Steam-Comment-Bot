@@ -37,6 +37,24 @@ import com.mmxlabs.common.Pair;
  * 
  */
 public class EMFUtils {
+	public static int getMinimumGenerations(final EClass child,
+			final EClass parent) {
+		if (parent == null) return Integer.MAX_VALUE;
+		if (parent == child) return 0;
+		if (child.getESuperTypes().isEmpty()) {
+			if (parent == EcorePackage.eINSTANCE.getEObject()) return 1;
+		}
+		int result = Integer.MAX_VALUE;
+		for (final EClass superClass : child.getESuperTypes()) {
+			final int d = getMinimumGenerations(superClass,
+					parent);
+			if (d - 1 < result - 1) {
+				result = d + 1;
+			}
+		}
+		return result;
+	}
+	
 	/**
 	 * Serialize an EObject into a byte array; currently EMF generated models do
 	 * not serialize properly, particularly models with complicated containment
