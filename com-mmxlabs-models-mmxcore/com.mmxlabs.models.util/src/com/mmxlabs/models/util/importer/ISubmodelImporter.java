@@ -1,5 +1,6 @@
 package com.mmxlabs.models.util.importer;
 
+import java.util.Collection;
 import java.util.Map;
 
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -28,5 +29,5 @@ public interface ISubmodelImporter {
 	 * @param model
 	 * @param output
 	 */
-	public void exportModel(final UUIDObject model, final Map<String, Map<String, String>> output);
+	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output);
 }

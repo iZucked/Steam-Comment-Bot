@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
+import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
 
 public class DefaultImportContext implements IImportContext {
@@ -83,9 +85,15 @@ public class DefaultImportContext implements IImportContext {
 	}
 
 	@Override
-	public void addProblem(String filename, String column, String value,
-			int lineNumber, String message) {
-		// TODO Auto-generated method stub
+	public void addProblem(String column, String value, String message) {
 		
+	}
+	
+	private Stack<CSVReader> readerStack = new Stack<CSVReader>();
+	public void pushReader(final CSVReader reader) {
+		readerStack.push(reader);
+	}
+	public void popReader() {
+		readerStack.pop();
 	}
 }

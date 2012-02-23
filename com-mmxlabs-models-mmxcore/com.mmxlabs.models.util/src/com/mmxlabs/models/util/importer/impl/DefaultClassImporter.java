@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
+import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
@@ -31,17 +32,18 @@ public class DefaultClassImporter implements IClassImporter {
 
 	@Override
 	public Collection<EObject> importObjects(EClass importClass,
-			String filename, IImportContext context) {
+			CSVReader reader, IImportContext context) {
 		final LinkedList<EObject> results = new LinkedList<EObject>();
 		try {
-			final CSVReader reader = new CSVReader(filename);
 			try {
+				context.pushReader(reader);
 				Map<String, String> row;
 				while ((row = reader.readRow()) != null) {
 					results.addAll(importObject(importClass, row, context));
 				}
 			} finally {
 				reader.close();
+				context.popReader();
 			}
 		} catch (IOException e) {
 
@@ -89,14 +91,16 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	/**
-	 * Opportunity to specialise a reference type which is too general in the model. Contracts, etc.
+	 * Opportunity to specialise a reference type which is too general in the
+	 * model. Contracts, etc.
+	 * 
 	 * @param reference
 	 * @return
 	 */
 	protected EClass getEReferenceLinkType(final EReference reference) {
 		return reference.getEReferenceType();
 	}
-	
+
 	protected void importReferences(final Map<String, String> row,
 			IImportContext context, final EClass rowClass,
 			final EObject instance, final LinkedList<EObject> results) {
@@ -104,8 +108,8 @@ public class DefaultClassImporter implements IClassImporter {
 			final String lcrn = reference.getName().toLowerCase();
 			if (row.containsKey(lcrn)) {
 				// defer lookup
-				context.doLater(new SetReference(instance, reference, getEReferenceLinkType(reference), row
-						.get(lcrn)));
+				context.doLater(new SetReference(instance, reference,
+						getEReferenceLinkType(reference), row.get(lcrn)));
 			} else {
 				if (reference.isMany())
 					continue;
@@ -117,7 +121,7 @@ public class DefaultClassImporter implements IClassImporter {
 					}
 				}
 				if (subKeys.isEmpty()) {
-					//TODO WARNING
+					// TODO WARNING
 				} else {
 					final IClassImporter classImporter = Activator.getDefault()
 							.getImporterRegistry()
@@ -144,8 +148,9 @@ public class DefaultClassImporter implements IClassImporter {
 				final IAttributeImporter ai = Activator.getDefault()
 						.getImporterRegistry()
 						.getAttributeImporter(attribute.getEAttributeType());
-				ai.setAttribute(instance, attribute,
-						row.get(attribute.getName().toLowerCase()), context);
+				if (ai != null)
+					ai.setAttribute(instance, attribute,
+							row.get(attribute.getName().toLowerCase()), context);
 			} else {
 				// TODO WARN
 			}
@@ -154,10 +159,14 @@ public class DefaultClassImporter implements IClassImporter {
 
 	@Override
 	public Collection<Map<String, String>> exportObjects(
-			Collection<EObject> objects) {
+			Collection<? extends EObject> objects) {
 		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
+		final boolean addKind = !EMFUtils.allSameEClass(objects);
 		for (final EObject object : objects) {
-			result.add(exportObject(object));
+			final Map<String, String> flattened = exportObject(object);
+			if (addKind)
+				flattened.put(KIND_KEY, object.eClass().getName());
+			result.add(flattened);
 		}
 		return result;
 	}
@@ -180,8 +189,9 @@ public class DefaultClassImporter implements IClassImporter {
 		final IAttributeImporter ai = Activator.getDefault()
 				.getImporterRegistry()
 				.getAttributeImporter(attribute.getEAttributeType());
-		result.put(attribute.getName(),
-				ai.writeAttribute(object, attribute, object.eGet(attribute)));
+		if (ai != null)
+			result.put(attribute.getName(), ai.writeAttribute(object,
+					attribute, object.eGet(attribute)));
 	}
 
 	protected void exportReference(EObject object, EReference reference,
@@ -228,7 +238,7 @@ public class DefaultClassImporter implements IClassImporter {
 	protected boolean shouldExportFeature(final EStructuralFeature feature) {
 		return true;
 	}
-	
+
 	protected boolean shouldFlattenReference(final EReference reference) {
 		return reference.isMany() == false && reference.isContainment() == true;
 	}

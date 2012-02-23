@@ -22,8 +22,14 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 						context));
 			}
 		} else {
-			container.eSet(attribute,
-					attributeFromString(container, attribute, value, context));
+			if (attribute.isUnsettable() && value.trim().isEmpty()) {
+				container.eUnset(attribute);
+			} else {
+				container.eSet(
+						attribute,
+						attributeFromString(container, attribute, value,
+								context));
+			}
 		}
 	}
 
@@ -57,13 +63,13 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 			} else if (dt == ecp.getEInt() || dt == ecp.getEIntegerObject()) {
 				return Integer.parseInt(value);
 			} else if (dt == ecp.getEBoolean() || dt == ecp.getEBooleanObject()) {
-				
+				return Boolean.parseBoolean(value);
 			} else if (dt == ecp.getEDouble() || dt == ecp.getEDoubleObject()) {
-				
+				return Double.parseDouble(value);
 			} else if (dt == ecp.getELong() || dt == ecp.getELongObject()) {
-				
-			} else if (dt == ecp.getEEnumerator()) {
-				
+				return Long.parseLong(value);
+			} else {
+				return dt.getEPackage().getEFactoryInstance().createFromString(dt, value);
 			}
 		} catch (Exception ex) {
 			// TODO WARN
@@ -73,6 +79,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 
 	protected String stringFromAttribute(final EObject container,
 			final EAttribute attribute, final Object value) {
-		return "";
+		if (attribute.isUnsettable() && container.eIsSet(attribute) == false) return "";
+		return attribute.getEAttributeType().getEPackage().getEFactoryInstance().convertToString(attribute.getEAttributeType(), value);
 	}
 }

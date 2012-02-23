@@ -51,7 +51,7 @@ public class Join implements IDeferment {
 
 	@Override
 	public int getStage() {
-		return 0;
+		return secondAttempt ? 2 : 1;
 	}
 
 }

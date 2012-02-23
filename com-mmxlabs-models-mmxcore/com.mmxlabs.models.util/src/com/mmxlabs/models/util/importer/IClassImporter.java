@@ -38,5 +38,5 @@ public interface IClassImporter {
 	 * @param objects
 	 * @return
 	 */
-	public Collection<Map<String, String>> exportObjects(final Collection<EObject> objects);
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects);
 }

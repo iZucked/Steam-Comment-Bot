@@ -8,7 +8,10 @@ import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 import org.osgi.framework.BundleContext;
 
 import com.google.inject.AbstractModule;
+import com.mmxlabs.models.util.importer.registry.impl.AttributeImporterRegistry;
+import com.mmxlabs.models.util.importer.registry.impl.ClassImporterRegistry;
 import com.mmxlabs.models.util.importer.registry.impl.ImporterRegistry;
+import com.mmxlabs.models.util.importer.registry.impl.SubmodelImporterRegistry;
 
 /**
  * A guice module which wires up the various extension point registries to
@@ -36,5 +39,6 @@ public class ExtensionConfigurationModule extends AbstractModule {
 		
 		//registry implementation bindings; they all have extensions injected by the above bindings.
 		bind(IImporterRegistry.class).to(ImporterRegistry.class);
+		
 	}
 }
