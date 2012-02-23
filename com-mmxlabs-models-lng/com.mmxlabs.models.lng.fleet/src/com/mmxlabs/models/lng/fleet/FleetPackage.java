@@ -309,22 +309,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 7;
 
 	/**
-	 * The feature id for the '<em><b>Fuel Consumption</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__FUEL_CONSUMPTION = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 8;
-
-	/**
 	 * The feature id for the '<em><b>Min Speed</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 9;
+	int VESSEL_CLASS__MIN_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Max Speed</b></em>' attribute.
@@ -333,7 +324,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MAX_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 10;
+	int VESSEL_CLASS__MAX_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Min Heel</b></em>' attribute.
@@ -342,7 +333,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 11;
+	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Warming Time</b></em>' attribute.
@@ -351,7 +342,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 12;
+	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Cooling Time</b></em>' attribute.
@@ -360,7 +351,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__COOLING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 13;
+	int VESSEL_CLASS__COOLING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
@@ -369,7 +360,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 14;
+	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 13;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
@@ -378,7 +369,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 15;
+	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl <em>Vessel Event</em>}' class.
@@ -982,13 +973,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Fuel Consumption</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Vessel State Attributes</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl <em>Vessel Availablility</em>}' class.
@@ -1314,17 +1314,6 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVesselClass_BallastAttributes();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.VesselClass#getFuelConsumption <em>Fuel Consumption</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Fuel Consumption</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getFuelConsumption()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EReference getVesselClass_FuelConsumption();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}'.
@@ -1672,6 +1661,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselStateAttributes_InPortBaseRate();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getFuelConsumption <em>Fuel Consumption</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fuel Consumption</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#getFuelConsumption()
+	 * @see #getVesselStateAttributes()
+	 * @generated
+	 */
+	EReference getVesselStateAttributes_FuelConsumption();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility <em>Vessel Availablility</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1950,14 +1950,6 @@ public interface FleetPackage extends EPackage {
 		EReference VESSEL_CLASS__BALLAST_ATTRIBUTES = eINSTANCE.getVesselClass_BallastAttributes();
 
 		/**
-		 * The meta object literal for the '<em><b>Fuel Consumption</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL_CLASS__FUEL_CONSUMPTION = eINSTANCE.getVesselClass_FuelConsumption();
-
-		/**
 		 * The meta object literal for the '<em><b>Min Speed</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2226,6 +2218,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE = eINSTANCE.getVesselStateAttributes_InPortBaseRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Fuel Consumption</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION = eINSTANCE.getVesselStateAttributes_FuelConsumption();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl <em>Vessel Availablility</em>}' class.

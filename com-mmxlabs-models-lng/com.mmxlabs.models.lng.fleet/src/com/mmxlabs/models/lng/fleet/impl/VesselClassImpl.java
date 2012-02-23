@@ -52,7 +52,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getSpotCharterDayRate <em>Spot Charter Day Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getFuelConsumption <em>Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinSpeed <em>Min Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMaxSpeed <em>Max Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinHeel <em>Min Heel</em>}</li>
@@ -184,16 +183,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * @ordered
 	 */
 	protected VesselStateAttributes ballastAttributes;
-
-	/**
-	 * The cached value of the '{@link #getFuelConsumption() <em>Fuel Consumption</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFuelConsumption()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<FuelConsumption> fuelConsumption;
 
 	/**
 	 * The default value of the '{@link #getMinSpeed() <em>Min Speed</em>}' attribute.
@@ -559,18 +548,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<FuelConsumption> getFuelConsumption() {
-		if (fuelConsumption == null) {
-			fuelConsumption = new EObjectContainmentEList<FuelConsumption>(FuelConsumption.class, this, FleetPackage.VESSEL_CLASS__FUEL_CONSUMPTION);
-		}
-		return fuelConsumption;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public double getMinSpeed() {
 		return minSpeed;
 	}
@@ -724,8 +701,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return basicSetLadenAttributes(null, msgs);
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 				return basicSetBallastAttributes(null, msgs);
-			case FleetPackage.VESSEL_CLASS__FUEL_CONSUMPTION:
-				return ((InternalEList<?>)getFuelConsumption()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -755,8 +730,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return getLadenAttributes();
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 				return getBallastAttributes();
-			case FleetPackage.VESSEL_CLASS__FUEL_CONSUMPTION:
-				return getFuelConsumption();
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
 				return getMinSpeed();
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
@@ -806,10 +779,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return;
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 				setBallastAttributes((VesselStateAttributes)newValue);
-				return;
-			case FleetPackage.VESSEL_CLASS__FUEL_CONSUMPTION:
-				getFuelConsumption().clear();
-				getFuelConsumption().addAll((Collection<? extends FuelConsumption>)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
 				setMinSpeed((Double)newValue);
@@ -865,9 +834,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 				setBallastAttributes((VesselStateAttributes)null);
 				return;
-			case FleetPackage.VESSEL_CLASS__FUEL_CONSUMPTION:
-				getFuelConsumption().clear();
-				return;
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
 				setMinSpeed(MIN_SPEED_EDEFAULT);
 				return;
@@ -914,8 +880,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return ladenAttributes != null;
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 				return ballastAttributes != null;
-			case FleetPackage.VESSEL_CLASS__FUEL_CONSUMPTION:
-				return fuelConsumption != null && !fuelConsumption.isEmpty();
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
 				return minSpeed != MIN_SPEED_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:

@@ -8,6 +8,7 @@
  */
 package com.mmxlabs.models.lng.fleet;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,6 +23,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getIdleBaseRate <em>Idle Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getCanalNBORate <em>Canal NBO Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortBaseRate <em>In Port Base Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getFuelConsumption <em>Fuel Consumption</em>}</li>
  * </ul>
  * </p>
  *
@@ -159,6 +161,22 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @generated
 	 */
 	void setInPortBaseRate(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Fuel Consumption</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.FuelConsumption}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fuel Consumption</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fuel Consumption</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_FuelConsumption()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<FuelConsumption> getFuelConsumption();
 
 } // end of  VesselStateAttributes
 

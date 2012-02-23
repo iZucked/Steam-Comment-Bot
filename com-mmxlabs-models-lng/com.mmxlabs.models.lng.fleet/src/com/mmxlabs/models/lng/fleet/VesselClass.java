@@ -30,7 +30,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterDayRate <em>Spot Charter Day Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getFuelConsumption <em>Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinHeel <em>Min Heel</em>}</li>
@@ -242,22 +241,6 @@ public interface VesselClass extends AVesselClass {
 	 * @generated
 	 */
 	void setBallastAttributes(VesselStateAttributes value);
-
-	/**
-	 * Returns the value of the '<em><b>Fuel Consumption</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.FuelConsumption}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Fuel Consumption</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Fuel Consumption</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_FuelConsumption()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<FuelConsumption> getFuelConsumption();
 
 	/**
 	 * Returns the value of the '<em><b>Min Speed</b></em>' attribute.
