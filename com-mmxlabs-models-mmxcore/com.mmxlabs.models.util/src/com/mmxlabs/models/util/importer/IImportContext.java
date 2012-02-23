@@ -55,12 +55,20 @@ public interface IImportContext {
 	public void doLater(final IDeferment deferment);
 	
 	/**
-	 * Identify a problem in the import, to be flagged up for the user somehow.
-	 * @param column
-	 * @param value
-	 * @param message
+	 * Add a reader to the reader stack; this is used to find error locations in {@link #addProblem(String, boolean, boolean)}
+	 * @param reader
 	 */
-	public void addProblem(String column, String value, String message);
 	public void pushReader(CSVReader reader);
+	/**
+	 * Pop a reader from the reader stack; see also {@link #pushReader(CSVReader)}
+	 */
 	public void popReader();
+	
+	/**
+	 * Add a problem message to the list of problems. See also {@link #pushReader(CSVReader)} and {@link #popReader()}
+	 * @param string
+	 * @param trackFile if true record the file that was open when this happened
+	 * @param trackField if true record the last field read when this happened
+	 */
+	public void addProblem(final String string, final boolean trackFile, final boolean trackField);
 }

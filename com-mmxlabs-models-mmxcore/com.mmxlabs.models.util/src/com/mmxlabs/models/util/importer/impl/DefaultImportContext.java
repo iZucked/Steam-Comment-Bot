@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.emf.ecore.EClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
@@ -21,6 +23,7 @@ public class DefaultImportContext implements IImportContext {
 	private boolean running = false;
 	
 	private HashMap<String, List<NamedObject>> namedObjects = new HashMap<String, List<NamedObject>>();
+	private static final Logger log = LoggerFactory.getLogger(DefaultImportContext.class);
 	
 	@Override
 	public NamedObject getNamedObject(String name, EClass preferredType) {
@@ -62,7 +65,7 @@ public class DefaultImportContext implements IImportContext {
 
 	public void run() {
 		running = true;
-		while (deferments.isEmpty() == false && reschedule.isEmpty() == false) {
+		while (deferments.isEmpty() == false || reschedule.isEmpty() == false) {
 			final Iterator<IDeferment> iterator = deferments.iterator();
 			deferments.addAll(reschedule);
 			reschedule.clear();
@@ -84,16 +87,23 @@ public class DefaultImportContext implements IImportContext {
 		running = false;
 	}
 
-	@Override
-	public void addProblem(String column, String value, String message) {
-		
-	}
-	
 	private Stack<CSVReader> readerStack = new Stack<CSVReader>();
 	public void pushReader(final CSVReader reader) {
 		readerStack.push(reader);
 	}
 	public void popReader() {
 		readerStack.pop();
+	}
+	
+	@Override
+	public void addProblem(String string, boolean trackFile, boolean trackField) {
+		String tracking = "";
+		if (trackFile || trackField) {
+			final CSVReader reader = readerStack.peek();
+			tracking = 
+					(trackFile ? reader.getFileName() + ":" + reader.getLineNumber() : "" ) + 
+					(trackField ? ", field " + reader.getLastField() : "");
+		}
+		log.warn(string + " " + tracking);
 	}
 }
