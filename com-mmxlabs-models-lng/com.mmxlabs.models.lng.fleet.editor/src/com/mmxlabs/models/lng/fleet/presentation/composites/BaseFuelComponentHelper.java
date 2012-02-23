@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.fleet.presentation.composites;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import java.util.ArrayList;
@@ -46,10 +47,7 @@ public class BaseFuelComponentHelper implements IComponentHelper {
 	 */
 	public BaseFuelComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.UUID_OBJECT);
-			if (helper != null) superClassesHelpers.add(helper);
-		} {
-			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.NAMED_OBJECT);
+			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ABASE_FUEL);
 			if (helper != null) superClassesHelpers.add(helper);
 		}
 	}

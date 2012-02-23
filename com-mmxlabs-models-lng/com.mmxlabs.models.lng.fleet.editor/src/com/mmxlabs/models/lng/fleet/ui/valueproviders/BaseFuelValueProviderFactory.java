@@ -16,7 +16,8 @@ public class BaseFuelValueProviderFactory implements IReferenceValueProviderFact
 	public IReferenceValueProvider createReferenceValueProvider(EClass owner,
 			EReference reference, MMXRootObject rootObject) {
 		final EClass referenceClass = reference.getEReferenceType();
-		if (referenceClass == FleetPackage.eINSTANCE.getBaseFuel() || referenceClass == TypesPackage.eINSTANCE.getABaseFuel()) {
+		if (referenceClass == FleetPackage.eINSTANCE.getBaseFuel() || 
+				referenceClass == TypesPackage.eINSTANCE.getABaseFuel()) {
 			return new SimpleReferenceValueProvider(rootObject.getSubModel(FleetModel.class), FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
 		}
 		return null;
