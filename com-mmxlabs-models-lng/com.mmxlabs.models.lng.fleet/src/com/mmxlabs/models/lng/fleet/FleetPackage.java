@@ -173,22 +173,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__AVAILABILITY = TypesPackage.AVESSEL_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Time Chartered</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__TIME_CHARTERED = TypesPackage.AVESSEL_FEATURE_COUNT + 7;
-
-	/**
 	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 8;
+	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -197,7 +188,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 9;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
@@ -1216,17 +1207,6 @@ public interface FleetPackage extends EPackage {
 	EReference getVessel_Availability();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isTimeChartered <em>Time Chartered</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Time Chartered</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#isTimeChartered()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EAttribute getVessel_TimeChartered();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1886,14 +1866,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL__AVAILABILITY = eINSTANCE.getVessel_Availability();
-
-		/**
-		 * The meta object literal for the '<em><b>Time Chartered</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL__TIME_CHARTERED = eINSTANCE.getVessel_TimeChartered();
 
 		/**
 		 * The meta object literal for the '<em><b>Time Charter Rate</b></em>' attribute feature.

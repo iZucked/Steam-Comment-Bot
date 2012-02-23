@@ -46,7 +46,6 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getFinalPort <em>Final Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getAvailability <em>Availability</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isTimeChartered <em>Time Chartered</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  * </ul>
  * </p>
@@ -162,26 +161,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	protected VesselAvailablility availability;
 
 	/**
-	 * The default value of the '{@link #isTimeChartered() <em>Time Chartered</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isTimeChartered()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean TIME_CHARTERED_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isTimeChartered() <em>Time Chartered</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isTimeChartered()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean timeChartered = TIME_CHARTERED_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -200,6 +179,15 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * @ordered
 	 */
 	protected int timeCharterRate = TIME_CHARTER_RATE_EDEFAULT;
+
+	/**
+	 * This is true if the Time Charter Rate attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean timeCharterRateESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -533,27 +521,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isTimeChartered() {
-		return timeChartered;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setTimeChartered(boolean newTimeChartered) {
-		boolean oldTimeChartered = timeChartered;
-		timeChartered = newTimeChartered;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__TIME_CHARTERED, oldTimeChartered, timeChartered));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getTimeCharterRate() {
 		return timeCharterRate;
 	}
@@ -566,8 +533,33 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	public void setTimeCharterRate(int newTimeCharterRate) {
 		int oldTimeCharterRate = timeCharterRate;
 		timeCharterRate = newTimeCharterRate;
+		boolean oldTimeCharterRateESet = timeCharterRateESet;
+		timeCharterRateESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__TIME_CHARTER_RATE, oldTimeCharterRate, timeCharterRate));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__TIME_CHARTER_RATE, oldTimeCharterRate, timeCharterRate, !oldTimeCharterRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetTimeCharterRate() {
+		int oldTimeCharterRate = timeCharterRate;
+		boolean oldTimeCharterRateESet = timeCharterRateESet;
+		timeCharterRate = TIME_CHARTER_RATE_EDEFAULT;
+		timeCharterRateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__TIME_CHARTER_RATE, oldTimeCharterRate, TIME_CHARTER_RATE_EDEFAULT, oldTimeCharterRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetTimeCharterRate() {
+		return timeCharterRateESet;
 	}
 
 	/**
@@ -611,8 +603,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return getStartHeel();
 			case FleetPackage.VESSEL__AVAILABILITY:
 				return getAvailability();
-			case FleetPackage.VESSEL__TIME_CHARTERED:
-				return isTimeChartered();
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				return getTimeCharterRate();
 		}
@@ -650,9 +640,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 			case FleetPackage.VESSEL__AVAILABILITY:
 				setAvailability((VesselAvailablility)newValue);
 				return;
-			case FleetPackage.VESSEL__TIME_CHARTERED:
-				setTimeChartered((Boolean)newValue);
-				return;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				setTimeCharterRate((Integer)newValue);
 				return;
@@ -689,11 +676,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 			case FleetPackage.VESSEL__AVAILABILITY:
 				setAvailability((VesselAvailablility)null);
 				return;
-			case FleetPackage.VESSEL__TIME_CHARTERED:
-				setTimeChartered(TIME_CHARTERED_EDEFAULT);
-				return;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
-				setTimeCharterRate(TIME_CHARTER_RATE_EDEFAULT);
+				unsetTimeCharterRate();
 				return;
 		}
 		super.eUnset(featureID);
@@ -721,10 +705,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return startHeel != null;
 			case FleetPackage.VESSEL__AVAILABILITY:
 				return availability != null;
-			case FleetPackage.VESSEL__TIME_CHARTERED:
-				return timeChartered != TIME_CHARTERED_EDEFAULT;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
-				return timeCharterRate != TIME_CHARTER_RATE_EDEFAULT;
+				return isSetTimeCharterRate();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -741,10 +723,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (dailyHireRate: ");
 		if (dailyHireRateESet) result.append(dailyHireRate); else result.append("<unset>");
-		result.append(", timeChartered: ");
-		result.append(timeChartered);
 		result.append(", timeCharterRate: ");
-		result.append(timeCharterRate);
+		if (timeCharterRateESet) result.append(timeCharterRate); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

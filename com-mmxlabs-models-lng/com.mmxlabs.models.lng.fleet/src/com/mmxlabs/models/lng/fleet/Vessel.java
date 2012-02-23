@@ -28,7 +28,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getFinalPort <em>Final Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getAvailability <em>Availability</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isTimeChartered <em>Time Chartered</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  * </ul>
  * </p>
@@ -292,32 +291,6 @@ public interface Vessel extends AVessel {
 	void setAvailability(VesselAvailablility value);
 
 	/**
-	 * Returns the value of the '<em><b>Time Chartered</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Time Chartered</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Time Chartered</em>' attribute.
-	 * @see #setTimeChartered(boolean)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_TimeChartered()
-	 * @model required="true"
-	 * @generated
-	 */
-	boolean isTimeChartered();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#isTimeChartered <em>Time Chartered</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Time Chartered</em>' attribute.
-	 * @see #isTimeChartered()
-	 * @generated
-	 */
-	void setTimeChartered(boolean value);
-
-	/**
 	 * Returns the value of the '<em><b>Time Charter Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -326,9 +299,11 @@ public interface Vessel extends AVessel {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Time Charter Rate</em>' attribute.
+	 * @see #isSetTimeCharterRate()
+	 * @see #unsetTimeCharterRate()
 	 * @see #setTimeCharterRate(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_TimeCharterRate()
-	 * @model required="true"
+	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
 	int getTimeCharterRate();
@@ -338,10 +313,35 @@ public interface Vessel extends AVessel {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Time Charter Rate</em>' attribute.
+	 * @see #isSetTimeCharterRate()
+	 * @see #unsetTimeCharterRate()
 	 * @see #getTimeCharterRate()
 	 * @generated
 	 */
 	void setTimeCharterRate(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetTimeCharterRate()
+	 * @see #getTimeCharterRate()
+	 * @see #setTimeCharterRate(int)
+	 * @generated
+	 */
+	void unsetTimeCharterRate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Time Charter Rate</em>' attribute is set.
+	 * @see #unsetTimeCharterRate()
+	 * @see #getTimeCharterRate()
+	 * @see #setTimeCharterRate(int)
+	 * @generated
+	 */
+	boolean isSetTimeCharterRate();
 
 } // end of  Vessel
 
