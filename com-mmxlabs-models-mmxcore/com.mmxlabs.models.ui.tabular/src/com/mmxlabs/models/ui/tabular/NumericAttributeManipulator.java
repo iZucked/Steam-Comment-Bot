@@ -12,7 +12,10 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
+import org.eclipse.nebula.widgets.formattedtext.FloatFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
+import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
+import org.eclipse.nebula.widgets.formattedtext.LongFormatter;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.rcp.common.celleditors.NumberCellEditor;
@@ -49,27 +52,21 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 	@Override
 	public CellEditor createCellEditor(final Composite c, final Object object) {
 		final EDataType eType = (EDataType) field.getEType();
-		//TODO fixme
-//		final NumberCellEditor editor = new NumberCellEditor(c, new NumberVerifyListener(eType), null, new NumberCellEditor.INumberConvertor() {
-//
-//			@Override
-//			public String toString(final Number number) {
-//				return NumberTypes.toString(eType, number);
-//			}
-//
-//			@Override
-//			public Number toNumber(final String string) {
-//				try {
-//					return NumberTypes.toNumber(eType, string);
-//				} catch (final ParseException e) {
-//					throw new RuntimeException(e);
-//				}
-//			}
-//		});
-//		return editor;
+		
 		
 		final FormattedTextCellEditor result = new FormattedTextCellEditor(c);
-		result.setFormatter(new DoubleFormatter());
+		
+		if (field.getEType().equals(EcorePackage.eINSTANCE.getEInt())) {
+			result.setFormatter(new IntegerFormatter());
+		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
+			result.setFormatter(new LongFormatter());
+		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEFloat())) {
+			result.setFormatter(new FloatFormatter());
+		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEDouble())) {
+			result.setFormatter(new DoubleFormatter());
+		}
+		
+		
 		return result;
 	}
 
