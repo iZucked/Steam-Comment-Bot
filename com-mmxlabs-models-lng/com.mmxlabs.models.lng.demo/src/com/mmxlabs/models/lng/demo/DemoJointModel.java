@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +76,7 @@ public class DemoJointModel extends JointModel {
 	/**
 	 * This map lets us know what kind of model class has what key.
 	 */
-	private static final Map<EClass, String> modelClassKeys = new HashMap<EClass, String>();
+	private static final Map<EClass, String> modelClassKeys = new LinkedHashMap<EClass, String>();
 	
 	static {
 		releases.add(new EmptyJointModelRelease(
@@ -91,10 +91,10 @@ public class DemoJointModel extends JointModel {
 		modelClassKeys.put(PortPackage.eINSTANCE.getPortModel(), PORT_MODEL_KEY);
 		modelClassKeys.put(FleetPackage.eINSTANCE.getFleetModel(), FLEET_MODEL_KEY);
 		modelClassKeys.put(CargoPackage.eINSTANCE.getCargoModel(), CARGO_MODEL_KEY);
+		modelClassKeys.put(CommercialPackage.eINSTANCE.getCommercialModel(), COMMERCIAL_MODEL_KEY);
 		modelClassKeys.put(PricingPackage.eINSTANCE.getPricingModel(), PRICING_MODEL_KEY);
 		modelClassKeys.put(InputPackage.eINSTANCE.getInputModel(), INPUT_MODEL_KEY);
 		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
-		modelClassKeys.put(CommercialPackage.eINSTANCE.getCommercialModel(), COMMERCIAL_MODEL_KEY);
 		
 		/*
 		 * There is no migration history for MMXCore, but this is not a problem; the joint model
