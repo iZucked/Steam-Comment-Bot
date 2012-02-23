@@ -20,5 +20,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.ui;bundle-version="1.0.0",
  com.mmxlabs.models.lng.types.editor;bundle-version="1.0.0",
  com.mmxlabs.rcp.common;bundle-version="1.0.0",
- org.swtchart;bundle-version="0.7.0"
+ org.swtchart;bundle-version="0.7.0",
+ com.mmxlabs.models.util;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy

@@ -11,10 +11,13 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.types.ui.tabular.DateAttributeManipulator;
 import com.mmxlabs.models.lng.types.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.MultipleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
 public class VesselViewerPane extends ScenarioTableViewerPane {
@@ -37,7 +40,25 @@ public class VesselViewerPane extends ScenarioTableViewerPane {
 				FleetPackage.eINSTANCE.getVessel_VesselClass(),
 				jointModelEditor.getReferenceValueProviderCache(),
 				editingDomain));
-				
+		
+		addTypicalColumn("Time Charter", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_TimeCharterRate(), jointModelEditor.getEditingDomain()));
+		
+		addTypicalColumn("Start Port", 
+				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()),
+				FleetPackage.eINSTANCE.getVessel_Availability());
+		
+		addTypicalColumn("Start Before", 
+				new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_StartBefore(), jointModelEditor.getEditingDomain()),
+				FleetPackage.eINSTANCE.getVessel_Availability());
+		
+		addTypicalColumn("End Port", 
+				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_EndAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()),
+				FleetPackage.eINSTANCE.getVessel_Availability());
+		
+		addTypicalColumn("End After", 
+				new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_EndAfter(), jointModelEditor.getEditingDomain()),
+				FleetPackage.eINSTANCE.getVessel_Availability());
+		
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 }

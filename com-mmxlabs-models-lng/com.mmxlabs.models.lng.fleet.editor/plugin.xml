@@ -129,4 +129,12 @@
           subModelClass="com.mmxlabs.models.lng.fleet.FleetModel">
     </jointModelEditor>
  </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.fleet.editor.fleetModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.fleet.FleetModel"
+          subModelImporterClass="com.mmxlabs.models.lng.fleet.importer.FleetModelImporter">
+    </submodelImporter>
+ </extension>
 </plugin>

@@ -51,10 +51,6 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 						.getVesselClass_InaccessiblePorts(), jointModelEditor
 						.getReferenceValueProviderCache(), editingDomain,
 						MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		
-		setTitle("Vessel Classes", PlatformUI.getWorkbench().getSharedImages()
-				.getImage(ISharedImages.IMG_DEF_VIEW));
-		
 		{
 			final DialogFeatureManipulator laden = new DialogFeatureManipulator(FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(), editingDomain) {
 				@Override
@@ -103,6 +99,8 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 			};
 			addColumn("Ballast Fuel Usage", laden, laden);
 		}
-
+		
+		setTitle("Vessel Classes", PlatformUI.getWorkbench().getSharedImages()
+				.getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 }
