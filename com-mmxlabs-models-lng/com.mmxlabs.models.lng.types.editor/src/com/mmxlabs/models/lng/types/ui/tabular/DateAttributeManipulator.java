@@ -28,7 +28,7 @@ public class DateAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public CellEditor getCellEditor(Composite c, Object object) {
+	public CellEditor createCellEditor(Composite c, Object object) {
 		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
 		final DateFormatter formatter = new DateFormatter();
 		formatter.setTimeZone(LocalDateUtil.getTimeZone(object, (EAttribute) field));
@@ -37,7 +37,7 @@ public class DateAttributeManipulator extends BasicAttributeManipulator {
 	}
 	
 	@Override
-	public String render(Object object) {
+	public String doRender(Object object) {
 		if (object == null) return "";
 		final Date date = (Date) super.getValue(object);
 		if (date == null) return "";

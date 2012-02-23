@@ -62,5 +62,22 @@
          </adapter>
       </factory>
    </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="com.mmxlabs.models.lng.demo.importWizards.sampleCategory"
+            name="LNG Scenario Import">
+      </category>
+      <wizard
+            category="com.mmxlabs.models.lng.demo.importWizards.sampleCategory"
+            class="com.mmxlabs.models.lng.demo.importWizards.ImportCSVWizard"
+            icon="icons/sample.gif"
+            id="com.mmxlabs.models.lng.demo.importWizards.ImportCSVWizard"
+            name="Import CSV">
+         <description>
+            Import a file from the local file system into the workspace.
+         </description>
+      </wizard>
+   </extension>
 
 </plugin>
