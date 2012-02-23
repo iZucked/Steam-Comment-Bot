@@ -65,10 +65,10 @@
 			modelClass="com.mmxlabs.models.lng.commercial.SalesContract" />
 		
 		<componentHelper
-			id="com.mmxlabs.models.lng.commercial.helpers.DischargeContract"
-			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.DischargeContractComponentHelper"
+			id="com.mmxlabs.models.lng.commercial.helpers.PurchaseContract"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.PurchaseContractComponentHelper"
 			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.commercial.DischargeContract" />
+			modelClass="com.mmxlabs.models.lng.commercial.PurchaseContract" />
 		
 	</extension>
  <extension
@@ -83,5 +83,22 @@
           id="com.mmxlabs.models.lng.commercial.editor.entityProvider"
           referenceEClass="com.mmxlabs.models.lng.types.ALegalEntity">
     </valueProvider>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.commercial.editor.commercialModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.commercial.CommercialModel"
+          subModelImporterClass="com.mmxlabs.models.lng.commercial.importer.CommercialModelImporter">
+    </submodelImporter>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.commercial.editor.jointModelEditorContribution"
+          implementation="com.mmxlabs.models.lng.commercial.ui.editorpart.CommercialModelEditorContribution"
+          priority="5"
+          subModelClass="com.mmxlabs.models.lng.commercial.CommercialModel">
+    </jointModelEditor>
  </extension>
 </plugin>
