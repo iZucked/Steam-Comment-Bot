@@ -6,21 +6,17 @@
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-
-import com.mmxlabs.models.lng.types.TypesPackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EClass;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
 
 /**
  * A component helper for Slot instances
@@ -42,16 +38,18 @@ public class SlotComponentHelper implements IComponentHelper {
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated
+	 * @generated NO there are no superclass fields we want here.
+	 * 
+	 * TODO this could be an editor factory override instead.
 	 */
 	public SlotComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ASLOT);
-			if (helper != null) superClassesHelpers.add(helper);
-		} {
-			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ITIMEZONE_PROVIDER);
-			if (helper != null) superClassesHelpers.add(helper);
-		}
+//		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
+//			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ASLOT);
+//			if (helper != null) superClassesHelpers.add(helper);
+//		} {
+//			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ITIMEZONE_PROVIDER);
+//			if (helper != null) superClassesHelpers.add(helper);
+//		}
 	}
 	
 	/**
