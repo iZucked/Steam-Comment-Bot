@@ -54,10 +54,10 @@ public class MMXUIGeneratorAdapterFactory extends GenBaseGeneratorAdapter {
 	protected Diagnostic generateEditor(Object object, Monitor monitor) {
 		final GenPackage genPackage = (GenPackage) object;
 		final GenModel genModel = genPackage.getGenModel();
-		if (genPackage.hasConcreteClasses()) {
+		
 			monitor.beginTask("Generating detail composites", genPackage
 					.getGenClasses().size());
-
+			
 			final JETEmitter emitter = createJETEmitter(new JETEmitterDescriptor(
 					"editor/ComponentHelper.javajet",
 					ComponentHelper.class.getName()));
@@ -72,7 +72,7 @@ public class MMXUIGeneratorAdapterFactory extends GenBaseGeneratorAdapter {
 						createMonitor(monitor, 1));
 				monitor.worked(1);
 			}
-		}
+		
 
 		return Diagnostic.OK_INSTANCE;
 	}
