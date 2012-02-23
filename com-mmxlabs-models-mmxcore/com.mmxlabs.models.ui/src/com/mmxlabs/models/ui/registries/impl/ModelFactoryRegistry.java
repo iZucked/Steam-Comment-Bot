@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.extensions.IModelFactoryExtension;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.registries.IModelFactoryRegistry;
+import com.mmxlabs.models.util.importer.registry.impl.AbstractRegistry;
 
 public class ModelFactoryRegistry extends
 		AbstractRegistry<EClass, IModelFactory> implements IModelFactoryRegistry{

@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.extensions.IDisplayCompositeFactoryExtension;
 import com.mmxlabs.models.ui.registries.IDisplayCompositeFactoryRegistry;
+import com.mmxlabs.models.util.importer.registry.impl.AbstractRegistry;
 
 public class DisplayCompositeFactoryRegistry extends AbstractRegistry<EClass, IDisplayCompositeFactory> implements IDisplayCompositeFactoryRegistry {
 	@Inject Iterable<IDisplayCompositeFactoryExtension> extensions;

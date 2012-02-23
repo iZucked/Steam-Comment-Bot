@@ -20,6 +20,7 @@ import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 import com.mmxlabs.models.ui.extensions.IInlineEditorFactoryExtension;
 import com.mmxlabs.models.ui.extensions.IInlineEditorFactoryExtension.IEClassMatcher;
 import com.mmxlabs.models.ui.registries.IEditorFactoryRegistry;
+import com.mmxlabs.models.util.importer.registry.impl.AbstractRegistry;
 
 /**
  * The editor factory registry matches {@link IInlineEditorFactory}s to

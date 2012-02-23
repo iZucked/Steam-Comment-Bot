@@ -10,6 +10,7 @@ import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.extensions.IComponentHelperExtension;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.util.importer.registry.impl.AbstractRegistry;
 
 /**
  * Handles the extension point com.mmxlabs.models.ui.componenthelpers. When

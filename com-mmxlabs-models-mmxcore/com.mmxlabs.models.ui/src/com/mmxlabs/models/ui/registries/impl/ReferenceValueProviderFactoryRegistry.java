@@ -14,6 +14,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.extensions.IReferenceValueProviderExtension;
 import com.mmxlabs.models.ui.registries.IReferenceValueProviderFactoryRegistry;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
+import com.mmxlabs.models.util.importer.registry.impl.AbstractRegistry;
 
 
 /**
