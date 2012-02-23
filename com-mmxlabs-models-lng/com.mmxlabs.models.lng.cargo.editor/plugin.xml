@@ -122,4 +122,22 @@
           inheritable="true">
     </displayCompositeFactory>
  </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.cargo.editor.cargoModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.cargo.CargoModel"
+          subModelImporterClass="com.mmxlabs.models.lng.cargo.importer.CargoModelImporter">
+    </submodelImporter>
+ </extension>
+ <extension
+       id="com.mmxlabs.models.lng.cargo.import.classes"
+       point="com.mmxlabs.models.util.import.classes">
+    <classImporter
+          ID="com.mmxlabs.models.lng.cargo.editor.CargoImporter"
+          classImporterClass="com.mmxlabs.models.lng.cargo.importer.CargoImporter"
+          eClassName="com.mmxlabs.models.lng.cargo.Cargo"
+          inheritable="true">
+    </classImporter>
+ </extension>
 </plugin>
