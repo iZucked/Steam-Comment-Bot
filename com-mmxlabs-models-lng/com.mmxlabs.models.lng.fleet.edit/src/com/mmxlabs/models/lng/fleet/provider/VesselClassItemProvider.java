@@ -362,7 +362,6 @@ public class VesselClassItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__LADEN_ATTRIBUTES);
 			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__BALLAST_ATTRIBUTES);
-			childrenFeatures.add(FleetPackage.Literals.VESSEL_CLASS__FUEL_CONSUMPTION);
 		}
 		return childrenFeatures;
 	}
@@ -431,7 +430,6 @@ public class VesselClassItemProvider
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
-			case FleetPackage.VESSEL_CLASS__FUEL_CONSUMPTION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -458,11 +456,6 @@ public class VesselClassItemProvider
 			(createChildParameter
 				(FleetPackage.Literals.VESSEL_CLASS__BALLAST_ATTRIBUTES,
 				 FleetFactory.eINSTANCE.createVesselStateAttributes()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.VESSEL_CLASS__FUEL_CONSUMPTION,
-				 FleetFactory.eINSTANCE.createFuelConsumption()));
 	}
 
 	/**

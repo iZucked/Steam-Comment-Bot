@@ -77,7 +77,6 @@ public class VesselClassComponentHelper implements IComponentHelper {
 		add_spotCharterDayRateEditor(detailComposite, topClass);
 		add_ladenAttributesEditor(detailComposite, topClass);
 		add_ballastAttributesEditor(detailComposite, topClass);
-		add_fuelConsumptionEditor(detailComposite, topClass);
 		add_minSpeedEditor(detailComposite, topClass);
 		add_maxSpeedEditor(detailComposite, topClass);
 		add_minHeelEditor(detailComposite, topClass);
@@ -148,14 +147,6 @@ public class VesselClassComponentHelper implements IComponentHelper {
 	 */
 	protected void add_ballastAttributesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__BALLAST_ATTRIBUTES));
-	}
-	/**
-	 * Create the editor for the fuelConsumption feature on VesselClass
-	 *
-	 * @generated
-	 */
-	protected void add_fuelConsumptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__FUEL_CONSUMPTION));
 	}
 	/**
 	 * Create the editor for the minSpeed feature on VesselClass

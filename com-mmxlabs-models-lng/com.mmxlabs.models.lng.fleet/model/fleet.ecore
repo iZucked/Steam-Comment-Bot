@@ -20,10 +20,8 @@
         eType="#//HeelOptions" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="availability" lowerBound="1"
         eType="#//VesselAvailablility" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeChartered" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeCharterRate" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VesselClass" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselClass">
     <eOperations name="collect" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVessel">

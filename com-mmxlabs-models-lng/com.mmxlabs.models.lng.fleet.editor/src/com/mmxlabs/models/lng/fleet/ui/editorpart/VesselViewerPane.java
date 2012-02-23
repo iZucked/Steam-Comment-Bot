@@ -1,28 +1,23 @@
 package com.mmxlabs.models.lng.fleet.ui.editorpart;
 
 
-import java.text.DateFormat;
-import java.util.Collections;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.types.ui.tabular.DateAttributeManipulator;
 import com.mmxlabs.models.lng.types.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.DialogFeatureManipulator;
+import com.mmxlabs.models.ui.tabular.MultipleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
 public class VesselViewerPane extends ScenarioTableViewerPane {
@@ -46,7 +41,23 @@ public class VesselViewerPane extends ScenarioTableViewerPane {
 				jointModelEditor.getReferenceValueProviderCache(),
 				editingDomain));
 		
-		addTypicalColumn("Time Chartered", new BasicAttributeManipulator(FleetPackage.eINSTANCE.getVessel_TimeChartered(), editingDomain));
+		addTypicalColumn("Time Charter", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_TimeCharterRate(), jointModelEditor.getEditingDomain()));
+		
+		addTypicalColumn("Start Port", 
+				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()),
+				FleetPackage.eINSTANCE.getVessel_Availability());
+		
+		addTypicalColumn("Start Before", 
+				new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_StartBefore(), jointModelEditor.getEditingDomain()),
+				FleetPackage.eINSTANCE.getVessel_Availability());
+		
+		addTypicalColumn("End Port", 
+				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_EndAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()),
+				FleetPackage.eINSTANCE.getVessel_Availability());
+		
+		addTypicalColumn("End After", 
+				new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_EndAfter(), jointModelEditor.getEditingDomain()),
+				FleetPackage.eINSTANCE.getVessel_Availability());
 		
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}

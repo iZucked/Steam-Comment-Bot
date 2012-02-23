@@ -8,15 +8,22 @@
  */
 package com.mmxlabs.models.lng.fleet.impl;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,6 +37,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getIdleBaseRate <em>Idle Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getCanalNBORate <em>Canal NBO Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getInPortBaseRate <em>In Port Base Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getFuelConsumption <em>Fuel Consumption</em>}</li>
  * </ul>
  * </p>
  *
@@ -135,6 +143,16 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @ordered
 	 */
 	protected int inPortBaseRate = IN_PORT_BASE_RATE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getFuelConsumption() <em>Fuel Consumption</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFuelConsumption()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<FuelConsumption> fuelConsumption;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -265,6 +283,32 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<FuelConsumption> getFuelConsumption() {
+		if (fuelConsumption == null) {
+			fuelConsumption = new EObjectContainmentEList<FuelConsumption>(FuelConsumption.class, this, FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION);
+		}
+		return fuelConsumption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
+				return ((InternalEList<?>)getFuelConsumption()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -278,6 +322,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return getCanalNBORate();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
 				return getInPortBaseRate();
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
+				return getFuelConsumption();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -287,6 +333,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -304,6 +351,10 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
 				setInPortBaseRate((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
+				getFuelConsumption().clear();
+				getFuelConsumption().addAll((Collection<? extends FuelConsumption>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -332,6 +383,9 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
 				setInPortBaseRate(IN_PORT_BASE_RATE_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
+				getFuelConsumption().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -354,6 +408,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return canalNBORate != CANAL_NBO_RATE_EDEFAULT;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
 				return inPortBaseRate != IN_PORT_BASE_RATE_EDEFAULT;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
+				return fuelConsumption != null && !fuelConsumption.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

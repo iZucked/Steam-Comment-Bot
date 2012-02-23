@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailablility;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputPackage;
@@ -161,6 +162,8 @@ public class DemoJointModel extends JointModel {
 			v.setName("V1");
 			fleetModel.getVessels().add(v);
 			fleetModel.getVesselClasses().add(vc);
+			final VesselAvailablility a = FleetFactory.eINSTANCE.createVesselAvailablility();
+			v.setAvailability(a);
 		}
 		
 		final DemoJointModel result = new DemoJointModel(rootObject, target);
@@ -237,5 +240,9 @@ public class DemoJointModel extends JointModel {
 	
 	public MMXRootObject getRootObject() {
 		return super.getRootObject();
+	}
+
+	public static Iterable<EClass> getSubmodelClasses() {
+		return modelClassKeys.keySet();
 	}
 }

@@ -16,6 +16,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.edit.ui;visibility:=reexport,
  org.eclipse.ui.ide;visibility:=reexport,
  com.mmxlabs.models.lng.types.edit;visibility:=reexport,
- com.mmxlabs.models.mmxcore.edit;visibility:=reexport,
- com.mmxlabs.models.ui
+ com.mmxlabs.models.ui,
+ com.mmxlabs.models.mmxcore.edit
 Bundle-ActivationPolicy: lazy

@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.cargo.presentation.editorpart;
+package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.List;
 

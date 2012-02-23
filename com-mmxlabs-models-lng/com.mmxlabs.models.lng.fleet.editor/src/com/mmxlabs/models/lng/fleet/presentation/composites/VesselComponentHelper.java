@@ -76,7 +76,6 @@ public class VesselComponentHelper implements IComponentHelper {
 		add_finalPortEditor(detailComposite, topClass);
 		add_startHeelEditor(detailComposite, topClass);
 		add_availabilityEditor(detailComposite, topClass);
-		add_timeCharteredEditor(detailComposite, topClass);
 		add_timeCharterRateEditor(detailComposite, topClass);
 	}
 	/**
@@ -134,14 +133,6 @@ public class VesselComponentHelper implements IComponentHelper {
 	 */
 	protected void add_availabilityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__AVAILABILITY));
-	}
-	/**
-	 * Create the editor for the timeChartered feature on Vessel
-	 *
-	 * @generated
-	 */
-	protected void add_timeCharteredEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__TIME_CHARTERED));
 	}
 	/**
 	 * Create the editor for the timeCharterRate feature on Vessel
