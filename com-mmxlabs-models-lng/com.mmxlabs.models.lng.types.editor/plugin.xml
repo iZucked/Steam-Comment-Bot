@@ -47,5 +47,15 @@
          </FeatureAnyOf>
       </editorFactory>
    </extension>
-
+	<extension
+         point="com.mmxlabs.models.util.import.attributes">
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.types.dateAttributeImporter"
+            attributeImporterClass="com.mmxlabs.models.lng.types.importer.DateAttributeImporter">
+         <dataType
+               attributeTypeName="EDate"
+               attributeTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+         </dataType>
+     </attributeImporter>
+     </extension>
 </plugin>
