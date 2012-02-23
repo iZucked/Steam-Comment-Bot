@@ -42,7 +42,6 @@ public class DefaultDetailComposite extends Composite implements
 			return editor;
 		}
 	};
-	private GridLayout gridLayout;
 
 	public DefaultDetailComposite(final Composite parent, final int style) {
 		super(parent, style);
