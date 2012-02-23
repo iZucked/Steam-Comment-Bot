@@ -23,7 +23,7 @@ public class PercentageAttributeManipulator extends NumericAttributeManipulator 
 	}
 
 	@Override
-	public String render(final Object object) {
+	public String doRender(final Object object) {
 		final Object val = getValue(object);
 		if (val == null) {
 			return "";
@@ -33,7 +33,7 @@ public class PercentageAttributeManipulator extends NumericAttributeManipulator 
 	}
 
 	@Override
-	public CellEditor getCellEditor(final Composite c, final Object object) {
+	public CellEditor createCellEditor(final Composite c, final Object object) {
 		final SpinnerCellEditor editor = (SpinnerCellEditor) super.getCellEditor(c, object);
 
 		editor.setDigits(1);
@@ -51,10 +51,10 @@ public class PercentageAttributeManipulator extends NumericAttributeManipulator 
 	}
 
 	@Override
-	public void setValue(final Object object, Object value) {
+	public void doSetValue(final Object object, Object value) {
 		value = Double.valueOf(((Number) value).doubleValue() / 100.0);
 
-		super.setValue(object, value);
+		super.runSetCommand(object, value);
 	}
 
 	@Override

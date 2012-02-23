@@ -11,6 +11,8 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
+import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.rcp.common.celleditors.NumberCellEditor;
@@ -32,7 +34,7 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public String render(final Object object) {
+	public String doRender(final Object object) {
 		final Object val = getValue(object);
 		if (val == null) {
 			return "";
@@ -45,7 +47,7 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public CellEditor getCellEditor(final Composite c, final Object object) {
+	public CellEditor createCellEditor(final Composite c, final Object object) {
 		final EDataType eType = (EDataType) field.getEType();
 		//TODO fixme
 //		final NumberCellEditor editor = new NumberCellEditor(c, new NumberVerifyListener(eType), null, new NumberCellEditor.INumberConvertor() {
@@ -65,11 +67,14 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 //			}
 //		});
 //		return editor;
-		return null;
+		
+		final FormattedTextCellEditor result = new FormattedTextCellEditor(c);
+		result.setFormatter(new DoubleFormatter());
+		return result;
 	}
 
 	@Override
-	public void setValue(final Object object, Object value) {
+	public void doSetValue(final Object object, Object value) {
 		if (field.getEType().equals(EcorePackage.eINSTANCE.getEInt())) {
 			value = Integer.valueOf(((Number) value).intValue());
 		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
@@ -79,7 +84,7 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEDouble())) {
 			value = Double.valueOf(((Number) value).doubleValue());
 		}
-		super.setValue(object, value);
+		super.runSetCommand(object, value);
 	}
 
 	@Override

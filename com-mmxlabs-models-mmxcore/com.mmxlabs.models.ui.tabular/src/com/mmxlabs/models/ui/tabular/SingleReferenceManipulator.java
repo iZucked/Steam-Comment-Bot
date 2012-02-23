@@ -59,7 +59,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public String render(final Object object) {
+	public String doRender(final Object object) {
 		final Object value = super.getValue(object);
 		if ((value instanceof EObject) || (value == null)) {
 			return valueProvider.getName((EObject) object, (EReference) field, (EObject) value);
@@ -69,13 +69,13 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public void setValue(final Object object, final Object value) {
+	public void doSetValue(final Object object, final Object value) {
 		final EObject newValue = valueList.get((Integer) value);
-		super.setValue(object, newValue);
+		super.runSetCommand(object, newValue);
 	}
 
 	@Override
-	public CellEditor getCellEditor(final Composite c, final Object object) {
+	public CellEditor createCellEditor(final Composite c, final Object object) {
 		editor = new ComboBoxCellEditor(c, new String[0], SWT.READ_ONLY | SWT.FLAT | SWT.BORDER);
 		// editor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		setEditorNames();

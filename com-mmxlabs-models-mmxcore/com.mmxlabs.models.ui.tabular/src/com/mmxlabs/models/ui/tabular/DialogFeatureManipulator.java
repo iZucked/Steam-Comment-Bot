@@ -26,7 +26,7 @@ public abstract class DialogFeatureManipulator extends BasicAttributeManipulator
 	}
 
 	@Override
-	public CellEditor getCellEditor(final Composite c, final Object object) {
+	protected CellEditor createCellEditor(final Composite c, final Object object) {
 		return new CellEditor(c) {
 			private Object value;
 			private Composite editor;
@@ -102,7 +102,7 @@ public abstract class DialogFeatureManipulator extends BasicAttributeManipulator
 	}
 
 	@Override
-	public String render(final Object object) {
+	public String doRender(final Object object) {
 		return renderValue(getValue(object));
 	}
 

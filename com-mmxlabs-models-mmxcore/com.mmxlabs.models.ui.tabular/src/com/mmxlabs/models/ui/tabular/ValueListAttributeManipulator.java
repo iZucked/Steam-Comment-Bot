@@ -38,18 +38,18 @@ public class ValueListAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public CellEditor getCellEditor(final Composite c, final Object object) {
+	public CellEditor createCellEditor(final Composite c, final Object object) {
 		return new ComboBoxCellEditor(c, names.toArray(new String[values.size()]));
 	}
 
 	@Override
-	public void setValue(final Object object, final Object value) {
+	public void doSetValue(final Object object, final Object value) {
 		// value is an Integer
 		final int intValue = ((Integer) value).intValue();
 
 		if (intValue == -1) {
 		} else {
-			super.setValue(object, values.get(intValue));
+			super.runSetCommand(object, values.get(intValue));
 		}
 	}
 
@@ -59,7 +59,7 @@ public class ValueListAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public String render(final Object object) {
+	public String doRender(final Object object) {
 		final Object value = super.getValue(object);
 		final int index = values.indexOf(value);
 		if (index == -1) {

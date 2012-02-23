@@ -22,7 +22,7 @@ public class NumericSpinnerAttributeManipulator extends BasicAttributeManipulato
 	}
 
 	@Override
-	public String render(final Object object) {
+	public String doRender(final Object object) {
 		final Object val = getValue(object);
 		if (val == null) {
 			return "";
@@ -35,7 +35,7 @@ public class NumericSpinnerAttributeManipulator extends BasicAttributeManipulato
 	}
 
 	@Override
-	public CellEditor getCellEditor(final Composite c, final Object object) {
+	public CellEditor createCellEditor(final Composite c, final Object object) {
 		final SpinnerCellEditor editor = new SpinnerCellEditor(c);
 
 		if (field.getEType().equals(EcorePackage.eINSTANCE.getEInt()) || field.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
@@ -49,7 +49,7 @@ public class NumericSpinnerAttributeManipulator extends BasicAttributeManipulato
 	}
 
 	@Override
-	public void setValue(final Object object, Object value) {
+	public void doSetValue(final Object object, Object value) {
 		if (field.getEType().equals(EcorePackage.eINSTANCE.getEInt())) {
 			value = Integer.valueOf(((Number) value).intValue());
 		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
@@ -59,7 +59,7 @@ public class NumericSpinnerAttributeManipulator extends BasicAttributeManipulato
 		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEDouble())) {
 			value = Double.valueOf(((Number) value).doubleValue());
 		}
-		super.setValue(object, value);
+		super.runSetCommand(object, value);
 	}
 
 	@Override

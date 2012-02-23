@@ -29,6 +29,8 @@ import com.mmxlabs.common.Pair;
  */
 public class BasicAttributeManipulator implements ICellManipulator, ICellRenderer {
 
+	
+	
 	protected final EStructuralFeature field;
 	protected final EditingDomain editingDomain;
 
@@ -39,7 +41,15 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 	}
 
 	@Override
-	public String render(final Object object) {
+	public final String render(final Object object) {
+		if (getValue(object) == SetCommand.UNSET_VALUE) {
+			return "";
+		} else {
+			return doRender(object);
+		}
+	}
+	
+	public String doRender(final Object object) {
 		final Object value = getValue(object);
 		if (value == null) {
 			return "";
@@ -49,7 +59,15 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 	}
 
 	@Override
-	public void setValue(final Object object, final Object value) {
+	public final void setValue(final Object object, final Object value) {
+		if (value == SetCommand.UNSET_VALUE && field.isUnsettable()) {
+			runSetCommand(object, value);
+		} else {
+			doSetValue(object, value);
+		}
+	}
+
+	public void runSetCommand(final Object object, final Object value) {
 		final Object currentValue = reallyGetValue(object);
 		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
 			return;
@@ -59,9 +77,22 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		((SetCommand) command).setLabel("Set " + field.getName() + " to " + (value == null ? "null" : value.toString()));
 		editingDomain.getCommandStack().execute(command);
 	}
-
+	
+	public void doSetValue(final Object object, final Object value) {
+		runSetCommand(object, value);
+	}
+	
 	@Override
-	public CellEditor getCellEditor(final Composite c, final Object object) {
+	public final CellEditor getCellEditor(final Composite c, final Object object) {
+		if (field.isUnsettable()) {
+			final CellEditorWrapper wrapper = new CellEditorWrapper(c);
+			wrapper.setDelegate(createCellEditor(wrapper.getInnerComposite(), object));
+			return wrapper;
+		}
+		return createCellEditor(c, object);
+	}
+	
+	protected CellEditor createCellEditor(final Composite c, final Object object) {
 		return new TextCellEditor(c);
 	}
 
@@ -79,6 +110,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		if (object == null) {
 			return "";
 		}
+		if (field.isUnsettable() && ((EObject)object).eIsSet(field) == false) return SetCommand.UNSET_VALUE;
 		final Object result = ((EObject) object).eGet(field);
 		if ((result == null) && (field.getEType() == EcorePackage.eINSTANCE.getEString())) {
 			return "";

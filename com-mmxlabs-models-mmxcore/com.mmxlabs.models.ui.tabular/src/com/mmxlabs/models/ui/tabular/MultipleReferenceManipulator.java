@@ -49,7 +49,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 
 	@Override
 	protected String renderValue(final Object value) {
-		if (value == null) {
+		if (! (value instanceof List)) {
 			return "";
 		}
 		final List<? extends EObject> selectedValues = (List<? extends EObject>) value;
@@ -64,7 +64,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 	}
 
 	@Override
-	public void setValue(final Object object, final Object value) {
+	public void doSetValue(final Object object, final Object value) {
 		final Object currentValue = getValue(object);
 		if (Equality.isEqual(currentValue, value)) {
 			return;
