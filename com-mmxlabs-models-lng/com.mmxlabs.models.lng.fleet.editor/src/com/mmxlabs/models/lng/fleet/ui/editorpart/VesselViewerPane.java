@@ -1,18 +1,11 @@
 package com.mmxlabs.models.lng.fleet.ui.editorpart;
 
 
-import java.text.DateFormat;
-import java.util.Collections;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -22,7 +15,6 @@ import com.mmxlabs.models.lng.types.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.DialogFeatureManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
 public class VesselViewerPane extends ScenarioTableViewerPane {
