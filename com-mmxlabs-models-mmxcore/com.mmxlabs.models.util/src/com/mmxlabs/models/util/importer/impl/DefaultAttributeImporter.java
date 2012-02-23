@@ -18,17 +18,17 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 			final String[] values = value.split(",");
 			final EList eValues = (EList) container.eGet(attribute);
 			for (final String v : values) {
+				if (v.trim().isEmpty()) continue;
 				eValues.add(attributeFromString(container, attribute, v.trim(),
 						context));
 			}
 		} else {
 			if (attribute.isUnsettable() && value.trim().isEmpty()) {
 				container.eUnset(attribute);
-			} else {
-				container.eSet(
-						attribute,
-						attributeFromString(container, attribute, value,
-								context));
+			} else if (!value.isEmpty()) {
+				final Object oValue = attributeFromString(container, attribute, value,
+						context);
+				if (oValue != null) container.eSet(attribute, oValue);
 			}
 		}
 	}
@@ -60,19 +60,22 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		try {
 			if (dt == ecp.getEString()) {
 				return value;
-			} else if (dt == ecp.getEInt() || dt == ecp.getEIntegerObject()) {
-				return Integer.parseInt(value);
-			} else if (dt == ecp.getEBoolean() || dt == ecp.getEBooleanObject()) {
-				return Boolean.parseBoolean(value);
-			} else if (dt == ecp.getEDouble() || dt == ecp.getEDoubleObject()) {
-				return Double.parseDouble(value);
-			} else if (dt == ecp.getELong() || dt == ecp.getELongObject()) {
-				return Long.parseLong(value);
+//			} else if (dt == ecp.getEInt() || dt == ecp.getEIntegerObject()) {
+//				return Integer.parseInt(value);
+//			} else if (dt == ecp.getEBoolean() || dt == ecp.getEBooleanObject()) {
+//				return Boolean.parseBoolean(value);
+//			} else if (dt == ecp.getEDouble() || dt == ecp.getEDoubleObject()) {
+//				return Double.parseDouble(value);
+//			} else if (dt == ecp.getEFloat() || dt == ecp.getEFloatObject()) {
+//				return Float.parseFloat(value);
+//			} else if (dt == ecp.getELong() || dt == ecp.getELongObject()) {
+//				return Long.parseLong(value);
 			} else {
 				return dt.getEPackage().getEFactoryInstance().createFromString(dt, value);
 			}
 		} catch (Exception ex) {
 			// TODO WARN
+			context.addProblem("Error parsing value " + value + " for " + attribute.getName() + ":" + ex.toString());
 		}
 		return null;
 	}
