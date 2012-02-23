@@ -19,6 +19,7 @@ public class FleetModelEditorContribution implements IJointModelEditorContributi
 	private VesselViewerPane vesselViewerPane;
 	private VesselClassViewerPane vesselClassViewerPane;
 	private int pageNumber;
+	private VesselEventViewerPane eventViewerPane;
 
 	@Override
 	public void init(JointModelEditorPart editorPart, MMXRootObject rootObject,
@@ -29,6 +30,14 @@ public class FleetModelEditorContribution implements IJointModelEditorContributi
 
 	@Override
 	public void addPages(final Composite parent) {
+		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart);
+		eventViewerPane.createControl(parent);
+		eventViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_VesselEvents()), editorPart.getAdapterFactory());
+		
+		int eventPage = editorPart.addPage(eventViewerPane.getControl());
+		editorPart.setPageText(eventPage, "Events");
+
+		
 		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
 		vesselViewerPane = new VesselViewerPane(editorPart.getSite().getPage(), editorPart);
 		vesselViewerPane.createControl(sash);
@@ -42,6 +51,7 @@ public class FleetModelEditorContribution implements IJointModelEditorContributi
 		
 		vesselViewerPane.getViewer().setInput(modelObject);
 		vesselClassViewerPane.getViewer().setInput(modelObject);
+		eventViewerPane.getViewer().setInput(modelObject);
 		
 		pageNumber = editorPart.addPage(sash);
 		editorPart.setPageText(pageNumber, "Fleet");
