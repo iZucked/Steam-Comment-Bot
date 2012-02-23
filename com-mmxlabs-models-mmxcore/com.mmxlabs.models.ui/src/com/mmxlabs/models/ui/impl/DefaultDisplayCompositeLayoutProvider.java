@@ -28,7 +28,7 @@ public class DefaultDisplayCompositeLayoutProvider implements
 
 	@Override
 	public Layout createDetailLayout(MMXRootObject root, EObject value) {
-		return new GridLayout(2, true);
+		return new GridLayout(2, false);
 	}
 
 	@Override
