@@ -93,4 +93,15 @@
           subModelClass="com.mmxlabs.models.lng.port.PortModel">
     </jointModelEditor>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+ </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.port.editor.portModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.port.PortModel"
+          subModelImporterClass="com.mmxlabs.models.lng.port.importer.PortModelImporter">
+    </submodelImporter>
+ </extension>
 </plugin>
