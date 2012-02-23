@@ -115,4 +115,21 @@
           referenceEClass="com.mmxlabs.models.lng.types.AIndex">
     </valueProvider>
  </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.pricing.editor.pricingModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.pricing.PricingModel"
+          subModelImporterClass="com.mmxlabs.models.lng.pricing.importers.PricingModelImporter">
+    </submodelImporter>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.pricing.editor.pricingModelEditor"
+          implementation="com.mmxlabs.models.lng.pricing.ui.editorpart.PricingModelEditorContribution"
+          priority="6"
+          subModelClass="com.mmxlabs.models.lng.pricing.PricingModel">
+    </jointModelEditor>
+ </extension>
 </plugin>
