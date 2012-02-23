@@ -375,6 +375,9 @@ public class DetailCompositeDialog extends Dialog {
 	 */
 	private Command makeEqualizer(final EObject original,
 			final EObject duplicate) {
+		if (original == null && duplicate == null) {
+			return IdentityCommand.INSTANCE;
+		}
 		final EditingDomain editingDomain = commandHandler.getEditingDomain();
 		final CompoundCommand compound = new CompoundCommand();
 		compound.append(new IdentityCommand());
