@@ -93,7 +93,7 @@
        point="com.mmxlabs.models.ui.jointmodeleditors">
     <jointModelEditor
           id="com.mmxlabs.models.lng.cargo.editor.cargoeditor"
-          implementation="com.mmxlabs.models.lng.cargo.presentation.editorpart.CargoModelEditorContribution"
+          implementation="com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelEditorContribution"
           priority="0"
           subModelClass="com.mmxlabs.models.lng.cargo.CargoModel">
     </jointModelEditor>
@@ -112,5 +112,14 @@
           ownerEClass="com.mmxlabs.models.lng.types.ASlot"
           referenceEClass="com.mmxlabs.models.lng.types.AContract">
     </valueProvider>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.types.ACargo"
+          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.CargoModelCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.cargoCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
 </plugin>
