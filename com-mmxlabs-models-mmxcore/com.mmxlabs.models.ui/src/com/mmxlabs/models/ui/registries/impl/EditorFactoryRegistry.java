@@ -1,12 +1,7 @@
 package com.mmxlabs.models.ui.registries.impl;
 
-import java.util.WeakHashMap;
-
 import javax.inject.Inject;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
@@ -78,7 +73,7 @@ public class EditorFactoryRegistry extends AbstractRegistry<Pair<EClass, EStruct
 
 		private boolean matchesFeatureName;
 		private boolean matchesDataType;
-		private boolean badMatch;
+		private boolean badMatch = false;
 
 		private int referenceTypeMinGenerations = Integer.MAX_VALUE;
 
