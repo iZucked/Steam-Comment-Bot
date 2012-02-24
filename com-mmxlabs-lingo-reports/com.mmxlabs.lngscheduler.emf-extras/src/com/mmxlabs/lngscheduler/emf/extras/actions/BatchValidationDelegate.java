@@ -45,7 +45,7 @@ public class BatchValidationDelegate
 	implements IEditorActionDelegate, IActionDelegate2 {
 
 	/**
-	 * Error message to display when an exception occured
+	 * Error message to display when an exception occurred
 	 */
 	protected static final String MESSAGE_EXCEPTION = "Exception happened";
 
@@ -87,12 +87,14 @@ public class BatchValidationDelegate
 			MessageDialog.openInformation(shell, title, MESSAGE_EXCEPTION);
 			throw new RuntimeException(e);
 		} finally {
-			action.setEnabled((null != selectedEObjects));
+			action.setEnabled(null != selectedEObjects);
 		}
 		
-		for (Object next : selectedEObjects) {
-			if (!(next instanceof EObject)) {
-				action.setEnabled(false);
+		if (selectedEObjects != null) {
+			for (final Object next : selectedEObjects) {
+				if (!(next instanceof EObject)) {
+					action.setEnabled(false);
+				}
 			}
 		}
 	}
