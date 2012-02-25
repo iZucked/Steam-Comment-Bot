@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 /**
  * <!-- begin-user-doc -->
@@ -41,6 +42,14 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 		return CargoPackage.Literals.DISCHARGE_SLOT;
 	}
 
+	@Override
+	public Object getUnsetValue(EStructuralFeature feature) {
+		if (feature == CargoPackage.Literals.SLOT__DURATION) {
+			return getPort().getDischargeDuration();
+		}
+		return super.getUnsetValue(feature);
+	}
+	
 } // end of DischargeSlotImpl
 
 // finish type fixing

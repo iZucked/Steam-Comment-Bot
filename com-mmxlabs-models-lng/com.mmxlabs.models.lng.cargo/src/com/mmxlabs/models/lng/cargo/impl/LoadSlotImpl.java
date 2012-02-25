@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -286,6 +287,15 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		return result.toString();
 	}
 
+	@Override
+	public Object getUnsetValue(EStructuralFeature feature) {
+		if (feature == CargoPackage.Literals.SLOT__DURATION) {
+			return getPort().getLoadDuration();
+		}
+		return super.getUnsetValue(feature);
+	}
+
+	
 } // end of LoadSlotImpl
 
 // finish type fixing
