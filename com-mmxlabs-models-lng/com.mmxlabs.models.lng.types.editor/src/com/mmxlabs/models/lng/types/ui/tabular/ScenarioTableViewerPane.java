@@ -36,7 +36,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	@Override
 	public ScenarioTableViewer createViewer(Composite parent) {
 		if (scenarioViewer == null) {
-			scenarioViewer = new ScenarioTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+			scenarioViewer = new ScenarioTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
 			scenarioViewer.addDoubleClickListener(new IDoubleClickListener() {
 				
 				@Override
@@ -94,7 +94,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected void defaultSetTitle(final String string) {
 		setTitle(string, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
-
+	
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		scenarioViewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
 		final Grid table = scenarioViewer.getGrid();
