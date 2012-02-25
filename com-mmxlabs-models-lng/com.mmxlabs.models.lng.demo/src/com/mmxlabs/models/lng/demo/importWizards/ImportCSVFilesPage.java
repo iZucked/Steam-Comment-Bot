@@ -53,11 +53,14 @@ public class ImportCSVFilesPage extends WizardPage {
 			final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(subModelClass);
 			if (importer == null) continue;
 			final Chunk chunk = new Chunk(subModelClass, importer);
+			final Map<String, String> parts = importer.getRequiredInputs();
+			chunks.add(chunk);
+
+			if (parts.keySet().isEmpty()) continue;
 			final Group g = new Group(top, SWT.NONE);
 			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			g.setLayout(new RowLayout(SWT.VERTICAL));
 			g.setText(subModelClass.getName());	
-			final Map<String, String> parts = importer.getRequiredInputs();
 			for (final Map.Entry<String, String> entry : parts.entrySet()) {
 				final FileFieldEditor ffe = new FileFieldEditor(entry.getKey(), entry.getValue(), g);
 				ffe.getTextControl(g).addModifyListener(new ModifyListener() {	
@@ -67,7 +70,6 @@ public class ImportCSVFilesPage extends WizardPage {
 					}
 				});
 			}
-			chunks.add(chunk);
 		}
 		setControl(top);
 	}
