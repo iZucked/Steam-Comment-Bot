@@ -17,9 +17,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.ide;visibility:=reexport,
  com.mmxlabs.models.lng.types.edit;visibility:=reexport,
  com.mmxlabs.models.mmxcore.edit;visibility:=reexport,
- com.mmxlabs.models.ui;bundle-version="1.0.0",
  org.slf4j.api;bundle-version="1.6.1",
  com.mmxlabs.models.ui.tabular;bundle-version="1.0.0",
  com.mmxlabs.models.lng.types.editor;bundle-version="1.0.0",
- com.mmxlabs.models.util;bundle-version="1.0.0"
+ com.mmxlabs.models.util;bundle-version="1.0.0",
+ com.mmxlabs.models.ui;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
