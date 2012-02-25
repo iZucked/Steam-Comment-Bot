@@ -5,8 +5,10 @@ import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdapterFactory;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IURIEditorInput;
 
 import com.mmxlabs.models.lng.demo.DemoJointModel;
 
@@ -23,19 +25,19 @@ public class JointModelAdapterFactory implements IAdapterFactory {
 		if (adaptableObject instanceof IEditorInput) {
 			if (adapterType.isAssignableFrom(DemoJointModel.class)) {
 				final IEditorInput input = (IEditorInput) adaptableObject;
-				final IFile file = (IFile) input.getAdapter(IFile.class);
-				if (file != null) {
+				final IURIEditorInput uriInput = (IURIEditorInput) input.getAdapter(IURIEditorInput.class);
+				if (uriInput != null) {
 					try {
-						//TODO update demo joint model to work with workspace URIs rather than absolute paths?
-						// Since it just uses resource sets we can use workspace URIs everywhere, hopefully.
-						return new DemoJointModel(file.getLocation().toFile());
+						return new DemoJointModel(URI.createURI(uriInput.getURI().toString()));
 					} catch (FileNotFoundException e) {
-						
+						return null;
 					} catch (IOException e) {
-						
+						return null;
 					} catch (MigrationException e) {
-						
+						return null; 
 					}
+				} else {
+					return null;
 				}
 			}
 		}

@@ -13,6 +13,9 @@ import java.util.zip.ZipOutputStream;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ArchiveURIHandlerImpl;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.edapt.migration.MigrationException;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -103,13 +106,14 @@ public class DemoJointModel extends JointModel {
 		modelClassKeys.put(MMXCorePackage.eINSTANCE.getMMXRootObject(), ROOT_MODEL_KEY);
 	}
 
-	private File file;
-	private Manifest manifest;
-	private String prefix;
+	private URIConverter uriConverter = new ExtensibleURIConverterImpl();
+	private URI rootURI;
 	
-	protected void setFile(final File newFile) throws IOException {
-		this.file = newFile;
-		prefix = "archive:" + URI.createFileURI(file.getCanonicalPath().toString()) + "!";
+	private Manifest manifest;
+	
+	
+	protected void setFile(final URI rootURI) throws IOException {
+		this.rootURI = rootURI;
 	}
 	
 	protected Resource createManifestResource() {
@@ -118,10 +122,10 @@ public class DemoJointModel extends JointModel {
 	}
 	
 	protected URI getArchiveURI(final String relativePath) {
-		return URI.createURI(prefix + "/" + relativePath);
+		return URI.createURI("archive:" + rootURI.toString() + "!/" + relativePath);
 	}
 	
-	public static DemoJointModel createEmptyModel(final File target) throws IOException {
+	public static DemoJointModel createEmptyModel(final URI target) throws IOException {
 		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 		rootObject.setVersion(releases.size());
 		//TODO sort out how to create blank models; should there be an extension for this?
@@ -170,7 +174,7 @@ public class DemoJointModel extends JointModel {
 		return result;
 	}
 	
-	public DemoJointModel(final MMXRootObject rootObject, final File file_) throws IOException {
+	public DemoJointModel(final MMXRootObject rootObject, final URI file_) throws IOException {
 		setFile(file_);
 		final Resource resource = createManifestResource();
 		manifest = ManifestFactory.eINSTANCE.createManifest();
@@ -178,7 +182,7 @@ public class DemoJointModel extends JointModel {
 		setRootObject(rootObject);
 	}
 	
-	public DemoJointModel(final File file_) throws FileNotFoundException, IOException, MigrationException {
+	public DemoJointModel(final URI file_) throws FileNotFoundException, IOException, MigrationException {
 		setFile(file_);
 		final Resource resource = createManifestResource();
 		resource.load(null);
@@ -192,14 +196,14 @@ public class DemoJointModel extends JointModel {
 	}
 	
 	public void save() throws IOException {
-		if (!file.exists()) {
-			// create empty zipfile
-			file.getParentFile().mkdirs();
-			final ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(file));
-			zos.setComment("See MANIFEST.xmi for more information");
-			zos.flush();
-			zos.close();
-		}
+//		if (!file.exists()) {
+//			// create empty zipfile
+//			file.getParentFile().mkdirs();
+//			final ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(file));
+//			zos.setComment("See MANIFEST.xmi for more information");
+//			zos.flush();
+//			zos.close();
+//		}
 		super.save();
 		manifest.getEntries().clear();
 		for (final Map.Entry<String, URI> keyAndURI : subModels.entrySet()) {
