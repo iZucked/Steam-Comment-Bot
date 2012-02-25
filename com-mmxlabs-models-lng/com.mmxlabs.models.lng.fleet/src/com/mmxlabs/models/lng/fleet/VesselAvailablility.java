@@ -25,10 +25,10 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAt <em>Start At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAfter <em>Start After</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBefore <em>Start Before</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy <em>Start By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAt <em>End At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAfter <em>End After</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBefore <em>End Before</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy <em>End By</em>}</li>
  * </ul>
  * </p>
  *
@@ -107,57 +107,57 @@ public interface VesselAvailablility extends MMXObject {
 	boolean isSetStartAfter();
 
 	/**
-	 * Returns the value of the '<em><b>Start Before</b></em>' attribute.
+	 * Returns the value of the '<em><b>Start By</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Start Before</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Start By</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Start Before</em>' attribute.
-	 * @see #isSetStartBefore()
-	 * @see #unsetStartBefore()
-	 * @see #setStartBefore(Date)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailablility_StartBefore()
+	 * @return the value of the '<em>Start By</em>' attribute.
+	 * @see #isSetStartBy()
+	 * @see #unsetStartBy()
+	 * @see #setStartBy(Date)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailablility_StartBy()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	Date getStartBefore();
+	Date getStartBy();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBefore <em>Start Before</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy <em>Start By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Start Before</em>' attribute.
-	 * @see #isSetStartBefore()
-	 * @see #unsetStartBefore()
-	 * @see #getStartBefore()
+	 * @param value the new value of the '<em>Start By</em>' attribute.
+	 * @see #isSetStartBy()
+	 * @see #unsetStartBy()
+	 * @see #getStartBy()
 	 * @generated
 	 */
-	void setStartBefore(Date value);
+	void setStartBy(Date value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBefore <em>Start Before</em>}' attribute.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy <em>Start By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isSetStartBefore()
-	 * @see #getStartBefore()
-	 * @see #setStartBefore(Date)
+	 * @see #isSetStartBy()
+	 * @see #getStartBy()
+	 * @see #setStartBy(Date)
 	 * @generated
 	 */
-	void unsetStartBefore();
+	void unsetStartBy();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBefore <em>Start Before</em>}' attribute is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy <em>Start By</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Start Before</em>' attribute is set.
-	 * @see #unsetStartBefore()
-	 * @see #getStartBefore()
-	 * @see #setStartBefore(Date)
+	 * @return whether the value of the '<em>Start By</em>' attribute is set.
+	 * @see #unsetStartBy()
+	 * @see #getStartBy()
+	 * @see #setStartBy(Date)
 	 * @generated
 	 */
-	boolean isSetStartBefore();
+	boolean isSetStartBy();
 
 	/**
 	 * Returns the value of the '<em><b>End At</b></em>' reference list.
@@ -229,57 +229,57 @@ public interface VesselAvailablility extends MMXObject {
 	boolean isSetEndAfter();
 
 	/**
-	 * Returns the value of the '<em><b>End Before</b></em>' attribute.
+	 * Returns the value of the '<em><b>End By</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>End Before</em>' attribute isn't clear,
+	 * If the meaning of the '<em>End By</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>End Before</em>' attribute.
-	 * @see #isSetEndBefore()
-	 * @see #unsetEndBefore()
-	 * @see #setEndBefore(Date)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailablility_EndBefore()
+	 * @return the value of the '<em>End By</em>' attribute.
+	 * @see #isSetEndBy()
+	 * @see #unsetEndBy()
+	 * @see #setEndBy(Date)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailablility_EndBy()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	Date getEndBefore();
+	Date getEndBy();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBefore <em>End Before</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy <em>End By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>End Before</em>' attribute.
-	 * @see #isSetEndBefore()
-	 * @see #unsetEndBefore()
-	 * @see #getEndBefore()
+	 * @param value the new value of the '<em>End By</em>' attribute.
+	 * @see #isSetEndBy()
+	 * @see #unsetEndBy()
+	 * @see #getEndBy()
 	 * @generated
 	 */
-	void setEndBefore(Date value);
+	void setEndBy(Date value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBefore <em>End Before</em>}' attribute.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy <em>End By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isSetEndBefore()
-	 * @see #getEndBefore()
-	 * @see #setEndBefore(Date)
+	 * @see #isSetEndBy()
+	 * @see #getEndBy()
+	 * @see #setEndBy(Date)
 	 * @generated
 	 */
-	void unsetEndBefore();
+	void unsetEndBy();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBefore <em>End Before</em>}' attribute is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy <em>End By</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>End Before</em>' attribute is set.
-	 * @see #unsetEndBefore()
-	 * @see #getEndBefore()
-	 * @see #setEndBefore(Date)
+	 * @return whether the value of the '<em>End By</em>' attribute is set.
+	 * @see #unsetEndBy()
+	 * @see #getEndBy()
+	 * @see #setEndBy(Date)
 	 * @generated
 	 */
-	boolean isSetEndBefore();
+	boolean isSetEndBy();
 
 } // end of  VesselAvailablility
 

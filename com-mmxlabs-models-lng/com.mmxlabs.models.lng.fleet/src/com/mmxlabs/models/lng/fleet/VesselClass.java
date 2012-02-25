@@ -26,8 +26,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterDayRate <em>Spot Charter Day Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}</li>
@@ -137,58 +135,6 @@ public interface VesselClass extends AVesselClass {
 	 * @generated
 	 */
 	void setFillCapacity(double value);
-
-	/**
-	 * Returns the value of the '<em><b>Spot Charter Count</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Spot Charter Count</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Spot Charter Count</em>' attribute.
-	 * @see #setSpotCharterCount(int)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_SpotCharterCount()
-	 * @model required="true"
-	 * @generated
-	 */
-	int getSpotCharterCount();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Spot Charter Count</em>' attribute.
-	 * @see #getSpotCharterCount()
-	 * @generated
-	 */
-	void setSpotCharterCount(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Spot Charter Day Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Spot Charter Day Rate</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Spot Charter Day Rate</em>' attribute.
-	 * @see #setSpotCharterDayRate(int)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_SpotCharterDayRate()
-	 * @model required="true"
-	 * @generated
-	 */
-	int getSpotCharterDayRate();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterDayRate <em>Spot Charter Day Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Spot Charter Day Rate</em>' attribute.
-	 * @see #getSpotCharterDayRate()
-	 * @generated
-	 */
-	void setSpotCharterDayRate(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Laden Attributes</b></em>' containment reference.

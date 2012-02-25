@@ -40,8 +40,8 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getDurationInDays <em>Duration In Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getPort <em>Port</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getEarliestStartDate <em>Earliest Start Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getLatestStartDate <em>Latest Start Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getStartAfter <em>Start After</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getStartBy <em>Start By</em>}</li>
  * </ul>
  * </p>
  *
@@ -89,44 +89,44 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	protected Port port;
 
 	/**
-	 * The default value of the '{@link #getEarliestStartDate() <em>Earliest Start Date</em>}' attribute.
+	 * The default value of the '{@link #getStartAfter() <em>Start After</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEarliestStartDate()
+	 * @see #getStartAfter()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date EARLIEST_START_DATE_EDEFAULT = null;
+	protected static final Date START_AFTER_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getEarliestStartDate() <em>Earliest Start Date</em>}' attribute.
+	 * The cached value of the '{@link #getStartAfter() <em>Start After</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEarliestStartDate()
+	 * @see #getStartAfter()
 	 * @generated
 	 * @ordered
 	 */
-	protected Date earliestStartDate = EARLIEST_START_DATE_EDEFAULT;
+	protected Date startAfter = START_AFTER_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getLatestStartDate() <em>Latest Start Date</em>}' attribute.
+	 * The default value of the '{@link #getStartBy() <em>Start By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLatestStartDate()
+	 * @see #getStartBy()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date LATEST_START_DATE_EDEFAULT = null;
+	protected static final Date START_BY_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getLatestStartDate() <em>Latest Start Date</em>}' attribute.
+	 * The cached value of the '{@link #getStartBy() <em>Start By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLatestStartDate()
+	 * @see #getStartBy()
 	 * @generated
 	 * @ordered
 	 */
-	protected Date latestStartDate = LATEST_START_DATE_EDEFAULT;
+	protected Date startBy = START_BY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -223,8 +223,8 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getEarliestStartDate() {
-		return earliestStartDate;
+	public Date getStartAfter() {
+		return startAfter;
 	}
 
 	/**
@@ -232,11 +232,11 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEarliestStartDate(Date newEarliestStartDate) {
-		Date oldEarliestStartDate = earliestStartDate;
-		earliestStartDate = newEarliestStartDate;
+	public void setStartAfter(Date newStartAfter) {
+		Date oldStartAfter = startAfter;
+		startAfter = newStartAfter;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__EARLIEST_START_DATE, oldEarliestStartDate, earliestStartDate));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__START_AFTER, oldStartAfter, startAfter));
 	}
 
 	/**
@@ -244,8 +244,8 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getLatestStartDate() {
-		return latestStartDate;
+	public Date getStartBy() {
+		return startBy;
 	}
 
 	/**
@@ -253,11 +253,11 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLatestStartDate(Date newLatestStartDate) {
-		Date oldLatestStartDate = latestStartDate;
-		latestStartDate = newLatestStartDate;
+	public void setStartBy(Date newStartBy) {
+		Date oldStartBy = startBy;
+		startBy = newStartBy;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__LATEST_START_DATE, oldLatestStartDate, latestStartDate));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__START_BY, oldStartBy, startBy));
 	}
 
 	/**
@@ -285,10 +285,10 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 			case FleetPackage.VESSEL_EVENT__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
-			case FleetPackage.VESSEL_EVENT__EARLIEST_START_DATE:
-				return getEarliestStartDate();
-			case FleetPackage.VESSEL_EVENT__LATEST_START_DATE:
-				return getLatestStartDate();
+			case FleetPackage.VESSEL_EVENT__START_AFTER:
+				return getStartAfter();
+			case FleetPackage.VESSEL_EVENT__START_BY:
+				return getStartBy();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -312,11 +312,11 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 			case FleetPackage.VESSEL_EVENT__PORT:
 				setPort((Port)newValue);
 				return;
-			case FleetPackage.VESSEL_EVENT__EARLIEST_START_DATE:
-				setEarliestStartDate((Date)newValue);
+			case FleetPackage.VESSEL_EVENT__START_AFTER:
+				setStartAfter((Date)newValue);
 				return;
-			case FleetPackage.VESSEL_EVENT__LATEST_START_DATE:
-				setLatestStartDate((Date)newValue);
+			case FleetPackage.VESSEL_EVENT__START_BY:
+				setStartBy((Date)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -339,11 +339,11 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 			case FleetPackage.VESSEL_EVENT__PORT:
 				setPort((Port)null);
 				return;
-			case FleetPackage.VESSEL_EVENT__EARLIEST_START_DATE:
-				setEarliestStartDate(EARLIEST_START_DATE_EDEFAULT);
+			case FleetPackage.VESSEL_EVENT__START_AFTER:
+				setStartAfter(START_AFTER_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_EVENT__LATEST_START_DATE:
-				setLatestStartDate(LATEST_START_DATE_EDEFAULT);
+			case FleetPackage.VESSEL_EVENT__START_BY:
+				setStartBy(START_BY_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -363,10 +363,10 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 				return allowedVessels != null && !allowedVessels.isEmpty();
 			case FleetPackage.VESSEL_EVENT__PORT:
 				return port != null;
-			case FleetPackage.VESSEL_EVENT__EARLIEST_START_DATE:
-				return EARLIEST_START_DATE_EDEFAULT == null ? earliestStartDate != null : !EARLIEST_START_DATE_EDEFAULT.equals(earliestStartDate);
-			case FleetPackage.VESSEL_EVENT__LATEST_START_DATE:
-				return LATEST_START_DATE_EDEFAULT == null ? latestStartDate != null : !LATEST_START_DATE_EDEFAULT.equals(latestStartDate);
+			case FleetPackage.VESSEL_EVENT__START_AFTER:
+				return START_AFTER_EDEFAULT == null ? startAfter != null : !START_AFTER_EDEFAULT.equals(startAfter);
+			case FleetPackage.VESSEL_EVENT__START_BY:
+				return START_BY_EDEFAULT == null ? startBy != null : !START_BY_EDEFAULT.equals(startBy);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -383,10 +383,10 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (durationInDays: ");
 		result.append(durationInDays);
-		result.append(", earliestStartDate: ");
-		result.append(earliestStartDate);
-		result.append(", latestStartDate: ");
-		result.append(latestStartDate);
+		result.append(", startAfter: ");
+		result.append(startAfter);
+		result.append(", startBy: ");
+		result.append(startBy);
 		result.append(')');
 		return result.toString();
 	}

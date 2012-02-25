@@ -48,8 +48,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getBaseFuel <em>Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getFillCapacity <em>Fill Capacity</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getSpotCharterDayRate <em>Spot Charter Day Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinSpeed <em>Min Speed</em>}</li>
@@ -123,46 +121,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * @ordered
 	 */
 	protected double fillCapacity = FILL_CAPACITY_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSpotCharterCount()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int SPOT_CHARTER_COUNT_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSpotCharterCount()
-	 * @generated
-	 * @ordered
-	 */
-	protected int spotCharterCount = SPOT_CHARTER_COUNT_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getSpotCharterDayRate() <em>Spot Charter Day Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSpotCharterDayRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int SPOT_CHARTER_DAY_RATE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getSpotCharterDayRate() <em>Spot Charter Day Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSpotCharterDayRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected int spotCharterDayRate = SPOT_CHARTER_DAY_RATE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getLadenAttributes() <em>Laden Attributes</em>}' containment reference.
@@ -413,48 +371,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 		fillCapacity = newFillCapacity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__FILL_CAPACITY, oldFillCapacity, fillCapacity));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getSpotCharterCount() {
-		return spotCharterCount;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setSpotCharterCount(int newSpotCharterCount) {
-		int oldSpotCharterCount = spotCharterCount;
-		spotCharterCount = newSpotCharterCount;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT, oldSpotCharterCount, spotCharterCount));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getSpotCharterDayRate() {
-		return spotCharterDayRate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setSpotCharterDayRate(int newSpotCharterDayRate) {
-		int oldSpotCharterDayRate = spotCharterDayRate;
-		spotCharterDayRate = newSpotCharterDayRate;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__SPOT_CHARTER_DAY_RATE, oldSpotCharterDayRate, spotCharterDayRate));
 	}
 
 	/**
@@ -722,10 +638,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return getCapacity();
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
 				return getFillCapacity();
-			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
-				return getSpotCharterCount();
-			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_DAY_RATE:
-				return getSpotCharterDayRate();
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 				return getLadenAttributes();
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
@@ -767,12 +679,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return;
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
 				setFillCapacity((Double)newValue);
-				return;
-			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
-				setSpotCharterCount((Integer)newValue);
-				return;
-			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_DAY_RATE:
-				setSpotCharterDayRate((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 				setLadenAttributes((VesselStateAttributes)newValue);
@@ -822,12 +728,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
 				setFillCapacity(FILL_CAPACITY_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
-				setSpotCharterCount(SPOT_CHARTER_COUNT_EDEFAULT);
-				return;
-			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_DAY_RATE:
-				setSpotCharterDayRate(SPOT_CHARTER_DAY_RATE_EDEFAULT);
-				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 				setLadenAttributes((VesselStateAttributes)null);
 				return;
@@ -872,10 +772,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return capacity != CAPACITY_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
 				return fillCapacity != FILL_CAPACITY_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_COUNT:
-				return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS__SPOT_CHARTER_DAY_RATE:
-				return spotCharterDayRate != SPOT_CHARTER_DAY_RATE_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:
 				return ladenAttributes != null;
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
@@ -910,10 +806,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 		result.append(capacity);
 		result.append(", fillCapacity: ");
 		result.append(fillCapacity);
-		result.append(", spotCharterCount: ");
-		result.append(spotCharterCount);
-		result.append(", spotCharterDayRate: ");
-		result.append(spotCharterDayRate);
 		result.append(", minSpeed: ");
 		result.append(minSpeed);
 		result.append(", maxSpeed: ");

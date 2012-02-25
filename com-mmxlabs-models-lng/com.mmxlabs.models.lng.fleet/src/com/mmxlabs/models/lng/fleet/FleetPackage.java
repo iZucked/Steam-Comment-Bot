@@ -128,40 +128,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Daily Hire Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__DAILY_HIRE_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Initial Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__INITIAL_PORT = TypesPackage.AVESSEL_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Final Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__FINAL_PORT = TypesPackage.AVESSEL_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__START_HEEL = TypesPackage.AVESSEL_FEATURE_COUNT + 5;
+	int VESSEL__START_HEEL = TypesPackage.AVESSEL_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
@@ -170,7 +143,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__AVAILABILITY = TypesPackage.AVESSEL_FEATURE_COUNT + 6;
+	int VESSEL__AVAILABILITY = TypesPackage.AVESSEL_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
@@ -179,7 +152,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 7;
+	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -188,7 +161,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 8;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
@@ -273,31 +246,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__FILL_CAPACITY = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__SPOT_CHARTER_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Spot Charter Day Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__SPOT_CHARTER_DAY_RATE = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 5;
-
-	/**
 	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 6;
+	int VESSEL_CLASS__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
@@ -306,7 +261,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 7;
+	int VESSEL_CLASS__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Min Speed</b></em>' attribute.
@@ -315,7 +270,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 8;
+	int VESSEL_CLASS__MIN_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Max Speed</b></em>' attribute.
@@ -324,7 +279,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MAX_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 9;
+	int VESSEL_CLASS__MAX_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Min Heel</b></em>' attribute.
@@ -333,7 +288,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 10;
+	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Warming Time</b></em>' attribute.
@@ -342,7 +297,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 11;
+	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Cooling Time</b></em>' attribute.
@@ -351,7 +306,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__COOLING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 12;
+	int VESSEL_CLASS__COOLING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
@@ -360,7 +315,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 13;
+	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 11;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
@@ -369,7 +324,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 14;
+	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl <em>Vessel Event</em>}' class.
@@ -445,22 +400,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_EVENT__PORT = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Earliest Start Date</b></em>' attribute.
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__EARLIEST_START_DATE = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 3;
+	int VESSEL_EVENT__START_AFTER = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Latest Start Date</b></em>' attribute.
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__LATEST_START_DATE = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 4;
+	int VESSEL_EVENT__START_BY = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event</em>' class.
@@ -691,22 +646,22 @@ public interface FleetPackage extends EPackage {
 	int DRY_DOCK_EVENT__PORT = VESSEL_EVENT__PORT;
 
 	/**
-	 * The feature id for the '<em><b>Earliest Start Date</b></em>' attribute.
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DRY_DOCK_EVENT__EARLIEST_START_DATE = VESSEL_EVENT__EARLIEST_START_DATE;
+	int DRY_DOCK_EVENT__START_AFTER = VESSEL_EVENT__START_AFTER;
 
 	/**
-	 * The feature id for the '<em><b>Latest Start Date</b></em>' attribute.
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DRY_DOCK_EVENT__LATEST_START_DATE = VESSEL_EVENT__LATEST_START_DATE;
+	int DRY_DOCK_EVENT__START_BY = VESSEL_EVENT__START_BY;
 
 	/**
 	 * The number of structural features of the '<em>Dry Dock Event</em>' class.
@@ -791,22 +746,22 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT_EVENT__PORT = VESSEL_EVENT__PORT;
 
 	/**
-	 * The feature id for the '<em><b>Earliest Start Date</b></em>' attribute.
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT__EARLIEST_START_DATE = VESSEL_EVENT__EARLIEST_START_DATE;
+	int CHARTER_OUT_EVENT__START_AFTER = VESSEL_EVENT__START_AFTER;
 
 	/**
-	 * The feature id for the '<em><b>Latest Start Date</b></em>' attribute.
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT__LATEST_START_DATE = VESSEL_EVENT__LATEST_START_DATE;
+	int CHARTER_OUT_EVENT__START_BY = VESSEL_EVENT__START_BY;
 
 	/**
 	 * The feature id for the '<em><b>Relocate To</b></em>' reference.
@@ -1037,13 +992,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_AVAILABLILITY__START_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Start Before</b></em>' attribute.
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABLILITY__START_BEFORE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int VESSEL_AVAILABLILITY__START_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>End At</b></em>' reference list.
@@ -1064,13 +1019,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_AVAILABLILITY__END_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>End Before</b></em>' attribute.
+	 * The feature id for the '<em><b>End By</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABLILITY__END_BEFORE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int VESSEL_AVAILABLILITY__END_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Availablility</em>' class.
@@ -1150,39 +1105,6 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVessel_InaccessiblePorts();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getDailyHireRate <em>Daily Hire Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Daily Hire Rate</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getDailyHireRate()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EAttribute getVessel_DailyHireRate();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getInitialPort <em>Initial Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Initial Port</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getInitialPort()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EReference getVessel_InitialPort();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getFinalPort <em>Final Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Final Port</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getFinalPort()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EReference getVessel_FinalPort();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}'.
@@ -1270,28 +1192,6 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselClass_FillCapacity();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterCount <em>Spot Charter Count</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Spot Charter Count</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterCount()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_SpotCharterCount();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterDayRate <em>Spot Charter Day Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Spot Charter Day Rate</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getSpotCharterDayRate()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_SpotCharterDayRate();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}'.
@@ -1425,26 +1325,26 @@ public interface FleetPackage extends EPackage {
 	EReference getVesselEvent_Port();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getEarliestStartDate <em>Earliest Start Date</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getStartAfter <em>Start After</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Earliest Start Date</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselEvent#getEarliestStartDate()
+	 * @return the meta object for the attribute '<em>Start After</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselEvent#getStartAfter()
 	 * @see #getVesselEvent()
 	 * @generated
 	 */
-	EAttribute getVesselEvent_EarliestStartDate();
+	EAttribute getVesselEvent_StartAfter();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getLatestStartDate <em>Latest Start Date</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getStartBy <em>Start By</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Latest Start Date</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselEvent#getLatestStartDate()
+	 * @return the meta object for the attribute '<em>Start By</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselEvent#getStartBy()
 	 * @see #getVesselEvent()
 	 * @generated
 	 */
-	EAttribute getVesselEvent_LatestStartDate();
+	EAttribute getVesselEvent_StartBy();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FleetModel <em>Model</em>}'.
@@ -1704,15 +1604,15 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselAvailablility_StartAfter();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBefore <em>Start Before</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy <em>Start By</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Start Before</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBefore()
+	 * @return the meta object for the attribute '<em>Start By</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy()
 	 * @see #getVesselAvailablility()
 	 * @generated
 	 */
-	EAttribute getVesselAvailablility_StartBefore();
+	EAttribute getVesselAvailablility_StartBy();
 
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAt <em>End At</em>}'.
@@ -1737,15 +1637,15 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselAvailablility_EndAfter();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBefore <em>End Before</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy <em>End By</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>End Before</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBefore()
+	 * @return the meta object for the attribute '<em>End By</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy()
 	 * @see #getVesselAvailablility()
 	 * @generated
 	 */
-	EAttribute getVesselAvailablility_EndBefore();
+	EAttribute getVesselAvailablility_EndBy();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FuelConsumption <em>Fuel Consumption</em>}'.
@@ -1828,30 +1728,6 @@ public interface FleetPackage extends EPackage {
 		EReference VESSEL__INACCESSIBLE_PORTS = eINSTANCE.getVessel_InaccessiblePorts();
 
 		/**
-		 * The meta object literal for the '<em><b>Daily Hire Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL__DAILY_HIRE_RATE = eINSTANCE.getVessel_DailyHireRate();
-
-		/**
-		 * The meta object literal for the '<em><b>Initial Port</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL__INITIAL_PORT = eINSTANCE.getVessel_InitialPort();
-
-		/**
-		 * The meta object literal for the '<em><b>Final Port</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL__FINAL_PORT = eINSTANCE.getVessel_FinalPort();
-
-		/**
 		 * The meta object literal for the '<em><b>Start Heel</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1916,22 +1792,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS__FILL_CAPACITY = eINSTANCE.getVesselClass_FillCapacity();
-
-		/**
-		 * The meta object literal for the '<em><b>Spot Charter Count</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__SPOT_CHARTER_COUNT = eINSTANCE.getVesselClass_SpotCharterCount();
-
-		/**
-		 * The meta object literal for the '<em><b>Spot Charter Day Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__SPOT_CHARTER_DAY_RATE = eINSTANCE.getVesselClass_SpotCharterDayRate();
 
 		/**
 		 * The meta object literal for the '<em><b>Laden Attributes</b></em>' containment reference feature.
@@ -2032,20 +1892,20 @@ public interface FleetPackage extends EPackage {
 		EReference VESSEL_EVENT__PORT = eINSTANCE.getVesselEvent_Port();
 
 		/**
-		 * The meta object literal for the '<em><b>Earliest Start Date</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Start After</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL_EVENT__EARLIEST_START_DATE = eINSTANCE.getVesselEvent_EarliestStartDate();
+		EAttribute VESSEL_EVENT__START_AFTER = eINSTANCE.getVesselEvent_StartAfter();
 
 		/**
-		 * The meta object literal for the '<em><b>Latest Start Date</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Start By</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL_EVENT__LATEST_START_DATE = eINSTANCE.getVesselEvent_LatestStartDate();
+		EAttribute VESSEL_EVENT__START_BY = eINSTANCE.getVesselEvent_StartBy();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.
@@ -2254,12 +2114,12 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL_AVAILABLILITY__START_AFTER = eINSTANCE.getVesselAvailablility_StartAfter();
 
 		/**
-		 * The meta object literal for the '<em><b>Start Before</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Start By</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL_AVAILABLILITY__START_BEFORE = eINSTANCE.getVesselAvailablility_StartBefore();
+		EAttribute VESSEL_AVAILABLILITY__START_BY = eINSTANCE.getVesselAvailablility_StartBy();
 
 		/**
 		 * The meta object literal for the '<em><b>End At</b></em>' reference list feature.
@@ -2278,12 +2138,12 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL_AVAILABLILITY__END_AFTER = eINSTANCE.getVesselAvailablility_EndAfter();
 
 		/**
-		 * The meta object literal for the '<em><b>End Before</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>End By</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL_AVAILABLILITY__END_BEFORE = eINSTANCE.getVesselAvailablility_EndBefore();
+		EAttribute VESSEL_AVAILABLILITY__END_BY = eINSTANCE.getVesselAvailablility_EndBy();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.

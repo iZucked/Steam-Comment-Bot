@@ -36,10 +36,10 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getStartAt <em>Start At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getStartAfter <em>Start After</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getStartBefore <em>Start Before</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getStartBy <em>Start By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getEndAt <em>End At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getEndAfter <em>End After</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getEndBefore <em>End Before</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getEndBy <em>End By</em>}</li>
  * </ul>
  * </p>
  *
@@ -86,33 +86,33 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	protected boolean startAfterESet;
 
 	/**
-	 * The default value of the '{@link #getStartBefore() <em>Start Before</em>}' attribute.
+	 * The default value of the '{@link #getStartBy() <em>Start By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getStartBefore()
+	 * @see #getStartBy()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date START_BEFORE_EDEFAULT = null;
+	protected static final Date START_BY_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getStartBefore() <em>Start Before</em>}' attribute.
+	 * The cached value of the '{@link #getStartBy() <em>Start By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getStartBefore()
+	 * @see #getStartBy()
 	 * @generated
 	 * @ordered
 	 */
-	protected Date startBefore = START_BEFORE_EDEFAULT;
+	protected Date startBy = START_BY_EDEFAULT;
 
 	/**
-	 * This is true if the Start Before attribute has been set.
+	 * This is true if the Start By attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean startBeforeESet;
+	protected boolean startByESet;
 
 	/**
 	 * The cached value of the '{@link #getEndAt() <em>End At</em>}' reference list.
@@ -154,33 +154,33 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	protected boolean endAfterESet;
 
 	/**
-	 * The default value of the '{@link #getEndBefore() <em>End Before</em>}' attribute.
+	 * The default value of the '{@link #getEndBy() <em>End By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEndBefore()
+	 * @see #getEndBy()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date END_BEFORE_EDEFAULT = null;
+	protected static final Date END_BY_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getEndBefore() <em>End Before</em>}' attribute.
+	 * The cached value of the '{@link #getEndBy() <em>End By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEndBefore()
+	 * @see #getEndBy()
 	 * @generated
 	 * @ordered
 	 */
-	protected Date endBefore = END_BEFORE_EDEFAULT;
+	protected Date endBy = END_BY_EDEFAULT;
 
 	/**
-	 * This is true if the End Before attribute has been set.
+	 * This is true if the End By attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean endBeforeESet;
+	protected boolean endByESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -264,8 +264,8 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getStartBefore() {
-		return startBefore;
+	public Date getStartBy() {
+		return startBy;
 	}
 
 	/**
@@ -273,13 +273,13 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setStartBefore(Date newStartBefore) {
-		Date oldStartBefore = startBefore;
-		startBefore = newStartBefore;
-		boolean oldStartBeforeESet = startBeforeESet;
-		startBeforeESet = true;
+	public void setStartBy(Date newStartBy) {
+		Date oldStartBy = startBy;
+		startBy = newStartBy;
+		boolean oldStartByESet = startByESet;
+		startByESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABLILITY__START_BEFORE, oldStartBefore, startBefore, !oldStartBeforeESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABLILITY__START_BY, oldStartBy, startBy, !oldStartByESet));
 	}
 
 	/**
@@ -287,13 +287,13 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetStartBefore() {
-		Date oldStartBefore = startBefore;
-		boolean oldStartBeforeESet = startBeforeESet;
-		startBefore = START_BEFORE_EDEFAULT;
-		startBeforeESet = false;
+	public void unsetStartBy() {
+		Date oldStartBy = startBy;
+		boolean oldStartByESet = startByESet;
+		startBy = START_BY_EDEFAULT;
+		startByESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABLILITY__START_BEFORE, oldStartBefore, START_BEFORE_EDEFAULT, oldStartBeforeESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABLILITY__START_BY, oldStartBy, START_BY_EDEFAULT, oldStartByESet));
 	}
 
 	/**
@@ -301,8 +301,8 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isSetStartBefore() {
-		return startBeforeESet;
+	public boolean isSetStartBy() {
+		return startByESet;
 	}
 
 	/**
@@ -368,8 +368,8 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getEndBefore() {
-		return endBefore;
+	public Date getEndBy() {
+		return endBy;
 	}
 
 	/**
@@ -377,13 +377,13 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEndBefore(Date newEndBefore) {
-		Date oldEndBefore = endBefore;
-		endBefore = newEndBefore;
-		boolean oldEndBeforeESet = endBeforeESet;
-		endBeforeESet = true;
+	public void setEndBy(Date newEndBy) {
+		Date oldEndBy = endBy;
+		endBy = newEndBy;
+		boolean oldEndByESet = endByESet;
+		endByESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABLILITY__END_BEFORE, oldEndBefore, endBefore, !oldEndBeforeESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABLILITY__END_BY, oldEndBy, endBy, !oldEndByESet));
 	}
 
 	/**
@@ -391,13 +391,13 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetEndBefore() {
-		Date oldEndBefore = endBefore;
-		boolean oldEndBeforeESet = endBeforeESet;
-		endBefore = END_BEFORE_EDEFAULT;
-		endBeforeESet = false;
+	public void unsetEndBy() {
+		Date oldEndBy = endBy;
+		boolean oldEndByESet = endByESet;
+		endBy = END_BY_EDEFAULT;
+		endByESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABLILITY__END_BEFORE, oldEndBefore, END_BEFORE_EDEFAULT, oldEndBeforeESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABLILITY__END_BY, oldEndBy, END_BY_EDEFAULT, oldEndByESet));
 	}
 
 	/**
@@ -405,8 +405,8 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isSetEndBefore() {
-		return endBeforeESet;
+	public boolean isSetEndBy() {
+		return endByESet;
 	}
 
 	/**
@@ -421,14 +421,14 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 				return getStartAt();
 			case FleetPackage.VESSEL_AVAILABLILITY__START_AFTER:
 				return getStartAfter();
-			case FleetPackage.VESSEL_AVAILABLILITY__START_BEFORE:
-				return getStartBefore();
+			case FleetPackage.VESSEL_AVAILABLILITY__START_BY:
+				return getStartBy();
 			case FleetPackage.VESSEL_AVAILABLILITY__END_AT:
 				return getEndAt();
 			case FleetPackage.VESSEL_AVAILABLILITY__END_AFTER:
 				return getEndAfter();
-			case FleetPackage.VESSEL_AVAILABLILITY__END_BEFORE:
-				return getEndBefore();
+			case FleetPackage.VESSEL_AVAILABLILITY__END_BY:
+				return getEndBy();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -449,8 +449,8 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 			case FleetPackage.VESSEL_AVAILABLILITY__START_AFTER:
 				setStartAfter((Date)newValue);
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__START_BEFORE:
-				setStartBefore((Date)newValue);
+			case FleetPackage.VESSEL_AVAILABLILITY__START_BY:
+				setStartBy((Date)newValue);
 				return;
 			case FleetPackage.VESSEL_AVAILABLILITY__END_AT:
 				getEndAt().clear();
@@ -459,8 +459,8 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 			case FleetPackage.VESSEL_AVAILABLILITY__END_AFTER:
 				setEndAfter((Date)newValue);
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__END_BEFORE:
-				setEndBefore((Date)newValue);
+			case FleetPackage.VESSEL_AVAILABLILITY__END_BY:
+				setEndBy((Date)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -480,8 +480,8 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 			case FleetPackage.VESSEL_AVAILABLILITY__START_AFTER:
 				unsetStartAfter();
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__START_BEFORE:
-				unsetStartBefore();
+			case FleetPackage.VESSEL_AVAILABLILITY__START_BY:
+				unsetStartBy();
 				return;
 			case FleetPackage.VESSEL_AVAILABLILITY__END_AT:
 				getEndAt().clear();
@@ -489,8 +489,8 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 			case FleetPackage.VESSEL_AVAILABLILITY__END_AFTER:
 				unsetEndAfter();
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__END_BEFORE:
-				unsetEndBefore();
+			case FleetPackage.VESSEL_AVAILABLILITY__END_BY:
+				unsetEndBy();
 				return;
 		}
 		super.eUnset(featureID);
@@ -508,14 +508,14 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 				return startAt != null && !startAt.isEmpty();
 			case FleetPackage.VESSEL_AVAILABLILITY__START_AFTER:
 				return isSetStartAfter();
-			case FleetPackage.VESSEL_AVAILABLILITY__START_BEFORE:
-				return isSetStartBefore();
+			case FleetPackage.VESSEL_AVAILABLILITY__START_BY:
+				return isSetStartBy();
 			case FleetPackage.VESSEL_AVAILABLILITY__END_AT:
 				return endAt != null && !endAt.isEmpty();
 			case FleetPackage.VESSEL_AVAILABLILITY__END_AFTER:
 				return isSetEndAfter();
-			case FleetPackage.VESSEL_AVAILABLILITY__END_BEFORE:
-				return isSetEndBefore();
+			case FleetPackage.VESSEL_AVAILABLILITY__END_BY:
+				return isSetEndBy();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -532,12 +532,12 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (startAfter: ");
 		if (startAfterESet) result.append(startAfter); else result.append("<unset>");
-		result.append(", startBefore: ");
-		if (startBeforeESet) result.append(startBefore); else result.append("<unset>");
+		result.append(", startBy: ");
+		if (startByESet) result.append(startBy); else result.append("<unset>");
 		result.append(", endAfter: ");
 		if (endAfterESet) result.append(endAfter); else result.append("<unset>");
-		result.append(", endBefore: ");
-		if (endBeforeESet) result.append(endBefore); else result.append("<unset>");
+		result.append(", endBy: ");
+		if (endByESet) result.append(endBy); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

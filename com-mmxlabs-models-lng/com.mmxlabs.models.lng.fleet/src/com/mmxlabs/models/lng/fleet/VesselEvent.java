@@ -27,8 +27,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselEvent#getDurationInDays <em>Duration In Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselEvent#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselEvent#getPort <em>Port</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselEvent#getEarliestStartDate <em>Earliest Start Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselEvent#getLatestStartDate <em>Latest Start Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselEvent#getStartAfter <em>Start After</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselEvent#getStartBy <em>Start By</em>}</li>
  * </ul>
  * </p>
  *
@@ -106,56 +106,56 @@ public interface VesselEvent extends AVesselEvent, ITimezoneProvider {
 	void setPort(Port value);
 
 	/**
-	 * Returns the value of the '<em><b>Earliest Start Date</b></em>' attribute.
+	 * Returns the value of the '<em><b>Start After</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Earliest Start Date</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Start After</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Earliest Start Date</em>' attribute.
-	 * @see #setEarliestStartDate(Date)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselEvent_EarliestStartDate()
+	 * @return the value of the '<em>Start After</em>' attribute.
+	 * @see #setStartAfter(Date)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselEvent_StartAfter()
 	 * @model required="true"
 	 * @generated
 	 */
-	Date getEarliestStartDate();
+	Date getStartAfter();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getEarliestStartDate <em>Earliest Start Date</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getStartAfter <em>Start After</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Earliest Start Date</em>' attribute.
-	 * @see #getEarliestStartDate()
+	 * @param value the new value of the '<em>Start After</em>' attribute.
+	 * @see #getStartAfter()
 	 * @generated
 	 */
-	void setEarliestStartDate(Date value);
+	void setStartAfter(Date value);
 
 	/**
-	 * Returns the value of the '<em><b>Latest Start Date</b></em>' attribute.
+	 * Returns the value of the '<em><b>Start By</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Latest Start Date</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Start By</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Latest Start Date</em>' attribute.
-	 * @see #setLatestStartDate(Date)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselEvent_LatestStartDate()
+	 * @return the value of the '<em>Start By</em>' attribute.
+	 * @see #setStartBy(Date)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselEvent_StartBy()
 	 * @model required="true"
 	 * @generated
 	 */
-	Date getLatestStartDate();
+	Date getStartBy();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getLatestStartDate <em>Latest Start Date</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselEvent#getStartBy <em>Start By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Latest Start Date</em>' attribute.
-	 * @see #getLatestStartDate()
+	 * @param value the new value of the '<em>Start By</em>' attribute.
+	 * @see #getStartBy()
 	 * @generated
 	 */
-	void setLatestStartDate(Date value);
+	void setStartBy(Date value);
 
 } // end of  VesselEvent
 
