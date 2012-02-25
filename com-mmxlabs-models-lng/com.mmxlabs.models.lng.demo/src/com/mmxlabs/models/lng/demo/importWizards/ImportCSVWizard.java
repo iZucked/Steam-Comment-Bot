@@ -53,5 +53,4 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
         addPage(filesPage);
         addPage(mainPage);
     }
-
 }
