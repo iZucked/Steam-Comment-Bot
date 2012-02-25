@@ -13,6 +13,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.URI;
+
 import java.io.*;
 
 import org.eclipse.ui.*;
@@ -137,7 +139,7 @@ public class EmptyScenarioWizard extends Wizard implements INewWizard {
 	private InputStream openContentStream() {
 		try {
 			final File tempFile = File.createTempFile(UUID.randomUUID() + "", "scn");
-			final DemoJointModel model = DemoJointModel.createEmptyModel(tempFile);
+			final DemoJointModel model = DemoJointModel.createEmptyModel(URI.createFileURI(tempFile.getCanonicalPath()));
 			model.save();
 			tempFile.deleteOnExit();
 			return new FileInputStream(tempFile);
