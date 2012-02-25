@@ -71,9 +71,6 @@ public class VesselComponentHelper implements IComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_vesselClassEditor(detailComposite, topClass);
 		add_inaccessiblePortsEditor(detailComposite, topClass);
-		add_dailyHireRateEditor(detailComposite, topClass);
-		add_initialPortEditor(detailComposite, topClass);
-		add_finalPortEditor(detailComposite, topClass);
 		add_startHeelEditor(detailComposite, topClass);
 		add_availabilityEditor(detailComposite, topClass);
 		add_timeCharterRateEditor(detailComposite, topClass);
@@ -93,30 +90,6 @@ public class VesselComponentHelper implements IComponentHelper {
 	 */
 	protected void add_inaccessiblePortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS));
-	}
-	/**
-	 * Create the editor for the dailyHireRate feature on Vessel
-	 *
-	 * @generated
-	 */
-	protected void add_dailyHireRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__DAILY_HIRE_RATE));
-	}
-	/**
-	 * Create the editor for the initialPort feature on Vessel
-	 *
-	 * @generated
-	 */
-	protected void add_initialPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__INITIAL_PORT));
-	}
-	/**
-	 * Create the editor for the finalPort feature on Vessel
-	 *
-	 * @generated
-	 */
-	protected void add_finalPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__FINAL_PORT));
 	}
 	/**
 	 * Create the editor for the startHeel feature on Vessel

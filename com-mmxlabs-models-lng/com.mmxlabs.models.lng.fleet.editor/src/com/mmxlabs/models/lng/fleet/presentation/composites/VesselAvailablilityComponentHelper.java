@@ -71,10 +71,10 @@ public class VesselAvailablilityComponentHelper implements IComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_startAtEditor(detailComposite, topClass);
 		add_startAfterEditor(detailComposite, topClass);
-		add_startBeforeEditor(detailComposite, topClass);
+		add_startByEditor(detailComposite, topClass);
 		add_endAtEditor(detailComposite, topClass);
 		add_endAfterEditor(detailComposite, topClass);
-		add_endBeforeEditor(detailComposite, topClass);
+		add_endByEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the startAt feature on VesselAvailablility
@@ -93,13 +93,14 @@ public class VesselAvailablilityComponentHelper implements IComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__START_AFTER));
 	}
 	/**
-	 * Create the editor for the startBefore feature on VesselAvailablility
+	 * Create the editor for the startBy feature on VesselAvailablility
 	 *
 	 * @generated
 	 */
-	protected void add_startBeforeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__START_BEFORE));
+	protected void add_startByEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__START_BY));
 	}
+
 	/**
 	 * Create the editor for the endAt feature on VesselAvailablility
 	 *
@@ -117,11 +118,11 @@ public class VesselAvailablilityComponentHelper implements IComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__END_AFTER));
 	}
 	/**
-	 * Create the editor for the endBefore feature on VesselAvailablility
+	 * Create the editor for the endBy feature on VesselAvailablility
 	 *
 	 * @generated
 	 */
-	protected void add_endBeforeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__END_BEFORE));
+	protected void add_endByEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__END_BY));
 	}
 }

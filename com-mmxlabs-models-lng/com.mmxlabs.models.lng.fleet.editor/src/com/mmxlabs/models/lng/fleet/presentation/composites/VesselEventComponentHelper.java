@@ -75,8 +75,8 @@ public class VesselEventComponentHelper implements IComponentHelper {
 		add_durationInDaysEditor(detailComposite, topClass);
 		add_allowedVesselsEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
-		add_earliestStartDateEditor(detailComposite, topClass);
-		add_latestStartDateEditor(detailComposite, topClass);
+		add_startAfterEditor(detailComposite, topClass);
+		add_startByEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the durationInDays feature on VesselEvent
@@ -103,19 +103,20 @@ public class VesselEventComponentHelper implements IComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_EVENT__PORT));
 	}
 	/**
-	 * Create the editor for the earliestStartDate feature on VesselEvent
+	 * Create the editor for the startAfter feature on VesselEvent
 	 *
 	 * @generated
 	 */
-	protected void add_earliestStartDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_EVENT__EARLIEST_START_DATE));
+	protected void add_startAfterEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_EVENT__START_AFTER));
 	}
+
 	/**
-	 * Create the editor for the latestStartDate feature on VesselEvent
+	 * Create the editor for the startBy feature on VesselEvent
 	 *
 	 * @generated
 	 */
-	protected void add_latestStartDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_EVENT__LATEST_START_DATE));
+	protected void add_startByEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_EVENT__START_BY));
 	}
 }

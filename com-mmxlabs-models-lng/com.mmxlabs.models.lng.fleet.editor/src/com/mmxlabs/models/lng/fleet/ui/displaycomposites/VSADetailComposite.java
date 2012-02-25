@@ -1,0 +1,322 @@
+package com.mmxlabs.models.lng.fleet.ui.displaycomposites;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
+import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Table;
+
+import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
+
+/**
+ * Detail composite for vessel state attributes; adds an additional bit to the bottom of the
+ * composite which contains a fuel curve table.
+ * 
+ * @author hinton
+ *
+ */
+public class VSADetailComposite extends Composite implements IDisplayComposite {
+	private IDisplayComposite delegate;
+	private ICommandHandler commandHandler;
+	private TableViewer tableViewer;
+	
+	public VSADetailComposite(final Composite parent, final int style) {
+		super(parent, style);
+		setLayout(new GridLayout(1, false));
+		delegate = new DefaultDetailComposite(this, style);
+		delegate.getComposite().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		final Label consumptionCurve = new Label(this, SWT.NONE);
+		consumptionCurve.setText("Fuel Consumption");
+		
+		final TableViewer tableViewer = new TableViewer(this);
+		final Table table = tableViewer.getTable();
+		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		table.setLinesVisible(true);
+		table.setHeaderVisible(true);
+		table.setLayout(new TableLayout());
+		
+		final TableViewerColumn speedColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		final TableViewerColumn fuelColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		
+		speedColumn.getColumn().setText("Speed (knots)");
+		fuelColumn.getColumn().setText("Consumption (MT/day)");
+		
+		table.addListener(SWT.Resize, 
+				new Listener() {
+					@Override
+					public void handleEvent(Event event) {
+						speedColumn.getColumn().pack();
+						fuelColumn.getColumn().pack();
+					}
+				});
+		
+		speedColumn.setEditingSupport(new EditingSupport(tableViewer) {
+			final EAttribute attr = FleetPackage.eINSTANCE.getFuelConsumption_Speed();
+			@Override
+			protected void setValue(Object element, Object value) {
+				final EditingDomain ed = commandHandler.getEditingDomain();
+				commandHandler.handleCommand(
+						SetCommand.create(ed, element, 
+								attr
+								, value)
+						, (EObject) element, attr);
+			}
+			
+			@Override
+			protected Object getValue(Object element) {
+				return ((EObject)element).eGet(attr);
+			}
+			
+			@Override
+			protected CellEditor getCellEditor(Object element) {
+				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
+				ed.setFormatter(new DoubleFormatter());
+				return ed;
+			}
+			
+			@Override
+			protected boolean canEdit(Object element) {
+				return true;
+			}
+		});
+		
+		fuelColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return element == null ? "" : 
+					String.format("%.2f",
+					((FuelConsumption) element).getConsumption());
+			}
+		});
+		
+		speedColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return element == null ? "" : 
+					String.format("%.2f",
+					((FuelConsumption) element).getSpeed());
+			}
+		});
+		
+		fuelColumn.setEditingSupport(new EditingSupport(tableViewer) {
+			final EAttribute attr = FleetPackage.eINSTANCE.getFuelConsumption_Consumption();
+			@Override
+			protected void setValue(Object element, Object value) {
+				final EditingDomain ed = commandHandler.getEditingDomain();
+				commandHandler.handleCommand(
+						SetCommand.create(ed, element, 
+								attr
+								, value)
+						
+						, (EObject) element, attr);
+			}
+			
+			@Override
+			protected Object getValue(Object element) {
+				return ((EObject)element).eGet(attr);
+			}
+			
+			@Override
+			protected CellEditor getCellEditor(Object element) {
+				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
+				ed.setFormatter(new DoubleFormatter());
+				return ed;
+			}
+			
+			@Override
+			protected boolean canEdit(Object element) {
+				return true;
+			}
+		});
+		
+		VSADetailComposite.this.tableViewer = tableViewer;
+		tableViewer.setContentProvider(new IStructuredContentProvider() {
+			@Override
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+				
+			}
+			
+			@Override
+			public void dispose() {
+				
+			}
+			
+			@Override
+			public Object[] getElements(Object inputElement) {
+				Object[] things = ((VesselStateAttributes) inputElement).getFuelConsumption().toArray();
+				Arrays.sort(things, new Comparator() {
+
+					@Override
+					public int compare(Object arg0, Object arg1) {
+						return ((Double)((FuelConsumption) arg0).getSpeed()).compareTo(((FuelConsumption) arg1).getSpeed());
+					}});
+				
+				return things;
+			}
+		});
+		
+		final Composite buttons = new Composite(this, SWT.NONE);
+		
+		buttons.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false));
+		final GridLayout buttonLayout = new GridLayout(2, true);
+		buttons.setLayout(buttonLayout);
+		buttonLayout.marginHeight = 0;
+		buttonLayout.marginWidth = 0;
+		final Button remove = new Button(buttons, SWT.NONE);
+		remove.setText("-");
+		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
+		remove.setEnabled(false);
+		table.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				remove.setEnabled(table.getSelectionIndex() > -1);
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				remove.setEnabled(table.getSelectionIndex() > -1);
+			}
+			
+		});
+		
+		remove.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				final ISelection sel = tableViewer.getSelection();
+				if (sel.isEmpty()) return;
+				if (sel instanceof IStructuredSelection) {					
+					commandHandler.handleCommand(DeleteCommand.create(commandHandler.getEditingDomain(), 
+							((IStructuredSelection) sel).getFirstElement()),
+							oldValue,FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption());
+				}
+			}
+		});
+		final Button add = new Button(buttons, SWT.NONE);
+		add.setText("+");
+		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
+		
+		add.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				final ISelection sel = tableViewer.getSelection();
+				
+				FuelConsumption selection;
+				if (!sel.isEmpty() && sel instanceof IStructuredSelection) {	
+					selection = (FuelConsumption) ((IStructuredSelection) sel).getFirstElement();
+				} else {
+					selection = null;
+					for (final FuelConsumption c : oldValue.getFuelConsumption()) {
+						if (selection == null || selection.getSpeed() < c.getSpeed())
+							selection = c;
+					}
+				}
+				final FuelConsumption newConsumption = FleetFactory.eINSTANCE.createFuelConsumption();
+				newConsumption.setConsumption(selection == null ? 0 : selection.getConsumption() + 1);
+				newConsumption.setSpeed(selection == null ? 15 : selection.getSpeed() + 1);
+				commandHandler.handleCommand(
+						AddCommand.create(commandHandler.getEditingDomain(), oldValue, FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), newConsumption),
+						oldValue, FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption());
+				tableViewer.setSelection(new StructuredSelection(newConsumption));
+			}
+		});
+	}
+	
+	@Override
+	public Composite getComposite() {
+		return this;
+	}
+
+	VesselStateAttributes oldValue = null;
+	final Adapter adapter = new EContentAdapter() {
+
+		@Override
+		public void notifyChanged(Notification notification) {
+			super.notifyChanged(notification);
+			if (!isDisposed() && isVisible()) {
+				if (tableViewer != null && tableViewer.getTable().isDisposed() == false) tableViewer.refresh();
+			} else {
+				VSADetailComposite.this.removeAdapter();
+			}
+		}
+		
+	};
+	
+	void removeAdapter() {
+		if (oldValue != null) {
+			oldValue.eAdapters().remove(adapter);
+			oldValue = null;
+		}
+	}
+	
+	@Override
+	public void display(final MMXRootObject root, final EObject value) {
+		delegate.display(root, value);
+		tableViewer.setInput(value);
+		removeAdapter();
+		oldValue = (VesselStateAttributes) value;
+		value.eAdapters().add(adapter);
+	}
+
+	@Override
+	public void dispose() {
+		removeAdapter();
+		super.dispose();
+	}
+
+	@Override
+	public void setCommandHandler(final ICommandHandler commandHandler) {
+		delegate.setCommandHandler(commandHandler);
+		this.commandHandler = commandHandler;
+	}
+
+	@Override
+	public Collection<EObject> getEditingRange(final MMXRootObject root, final EObject value) {
+		return delegate.getEditingRange(root, value);
+	}
+
+	@Override
+	public void displayValidationStatus(final IStatus status) {
+		delegate.displayValidationStatus(status);
+	}
+}

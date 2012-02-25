@@ -137,4 +137,13 @@
           subModelImporterClass="com.mmxlabs.models.lng.fleet.importer.FleetModelImporter">
     </submodelImporter>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.fleet.VesselStateAttributes"
+          factory="com.mmxlabs.models.lng.fleet.ui.displaycomposites.VSADisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.attributesDisplayCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+ </extension>
 </plugin>

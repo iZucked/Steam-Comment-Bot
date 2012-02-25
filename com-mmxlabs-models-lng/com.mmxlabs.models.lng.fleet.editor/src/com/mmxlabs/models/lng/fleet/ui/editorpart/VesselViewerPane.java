@@ -48,7 +48,7 @@ public class VesselViewerPane extends ScenarioTableViewerPane {
 				FleetPackage.eINSTANCE.getVessel_Availability());
 		
 		addTypicalColumn("Start Before", 
-				new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_StartBefore(), jointModelEditor.getEditingDomain()),
+				new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_StartBy(), jointModelEditor.getEditingDomain()),
 				FleetPackage.eINSTANCE.getVessel_Availability());
 		
 		addTypicalColumn("End Port", 

@@ -73,8 +73,6 @@ public class VesselClassComponentHelper implements IComponentHelper {
 		add_baseFuelEditor(detailComposite, topClass);
 		add_capacityEditor(detailComposite, topClass);
 		add_fillCapacityEditor(detailComposite, topClass);
-		add_spotCharterCountEditor(detailComposite, topClass);
-		add_spotCharterDayRateEditor(detailComposite, topClass);
 		add_ladenAttributesEditor(detailComposite, topClass);
 		add_ballastAttributesEditor(detailComposite, topClass);
 		add_minSpeedEditor(detailComposite, topClass);
@@ -115,22 +113,6 @@ public class VesselClassComponentHelper implements IComponentHelper {
 	 */
 	protected void add_fillCapacityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__FILL_CAPACITY));
-	}
-	/**
-	 * Create the editor for the spotCharterCount feature on VesselClass
-	 *
-	 * @generated
-	 */
-	protected void add_spotCharterCountEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__SPOT_CHARTER_COUNT));
-	}
-	/**
-	 * Create the editor for the spotCharterDayRate feature on VesselClass
-	 *
-	 * @generated
-	 */
-	protected void add_spotCharterDayRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__SPOT_CHARTER_DAY_RATE));
 	}
 	/**
 	 * Create the editor for the ladenAttributes feature on VesselClass
