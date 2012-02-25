@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -15,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
@@ -26,10 +28,9 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
  * 
  */
 public class DefaultTopLevelComposite extends Composite implements IDisplayComposite {
-
-	private DefaultDetailComposite topLevel = null;
+	private IDisplayComposite topLevel = null;
 	private List<EReference> childReferences = new LinkedList<EReference>();
-	private List<DefaultDetailComposite> childComposites = new LinkedList<DefaultDetailComposite>();
+	private List<IDisplayComposite> childComposites = new LinkedList<IDisplayComposite>();
 	private ICommandHandler commandHandler;
 	private IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
 
@@ -43,7 +44,8 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		g.setText(eClass.getName());
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
-		topLevel = new DefaultDetailComposite(g, SWT.NONE);
+		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().
+				getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass);
 		topLevel.setCommandHandler(commandHandler);
 		for (final EReference ref : eClass.getEAllReferences()) {
 			if (shouldDisplay(ref)) {
@@ -53,8 +55,9 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 					g2.setText(value.eClass().getName());
 					g2.setLayout(new FillLayout());
 					g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
-					final DefaultDetailComposite sub = new DefaultDetailComposite(
-							g2, SWT.NONE);
+					
+					final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().
+							getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass());
 					
 					sub.setCommandHandler(commandHandler);
 					childReferences.add(ref);
@@ -65,7 +68,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 
 		topLevel.display(root, object);
 		final Iterator<EReference> refs = childReferences.iterator();
-		final Iterator<DefaultDetailComposite> children = childComposites
+		final Iterator<IDisplayComposite> children = childComposites
 				.iterator();
 
 		while (refs.hasNext()) {
@@ -92,5 +95,13 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	@Override
 	public Collection<EObject> getEditingRange(MMXRootObject root, EObject value) {
 		return Collections.singleton(value);
+	}
+
+	@Override
+	public void displayValidationStatus(IStatus status) {
+		topLevel.displayValidationStatus(status);
+		for (final IDisplayComposite child : childComposites) {
+			child.displayValidationStatus(status);
+		}
 	}
 }

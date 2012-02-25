@@ -4,15 +4,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.internal.ILayoutContainer;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
@@ -118,5 +116,10 @@ public class DefaultDetailComposite extends Composite implements
 	@Override
 	public Collection<EObject> getEditingRange(MMXRootObject root, EObject value) {
 		return Collections.singleton(value);
+	}
+
+	@Override
+	public void displayValidationStatus(IStatus status) {
+		for (final IInlineEditor editor : editors) editor.processValidation(status);
 	}
 }
