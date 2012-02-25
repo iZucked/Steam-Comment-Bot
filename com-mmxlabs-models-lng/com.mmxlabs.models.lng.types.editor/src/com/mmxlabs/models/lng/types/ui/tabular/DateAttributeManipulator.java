@@ -37,10 +37,13 @@ public class DateAttributeManipulator extends BasicAttributeManipulator {
 	}
 	
 	@Override
-	public String doRender(Object object) {
-		if (object == null) return "";
-		final Date date = (Date) super.getValue(object);
-		if (date == null) return "";
+	public String renderSetValue(Object object) {
+		if (!(object instanceof Date)) {
+			return "";
+		}
+		
+		final Date date = (Date) object;
+		
 		final Calendar calendar = Calendar.getInstance(LocalDateUtil.getTimeZone(object, (EAttribute) field));
 		calendar.setTime(date);
 		
