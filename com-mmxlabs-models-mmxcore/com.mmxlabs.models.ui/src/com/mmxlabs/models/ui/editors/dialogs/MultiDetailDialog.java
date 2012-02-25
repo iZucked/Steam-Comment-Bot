@@ -38,23 +38,16 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 
-import scenario.ScenarioPackage;
-import scenario.cargo.CargoPackage;
-import scenario.fleet.FleetPackage;
-
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
-import com.mmxlabs.lngscheduler.emf.extras.EMFUtils;
-import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
+import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
+import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
+import com.mmxlabs.models.ui.editors.util.ControlUtils;
+import com.mmxlabs.models.util.emfpath.EMFPath;
+import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
-import com.mmxlabs.shiplingo.ui.autocorrector.AutoCorrector;
-import com.mmxlabs.shiplingo.ui.detailview.base.AbstractDetailComposite;
-import com.mmxlabs.shiplingo.ui.detailview.base.IInlineEditorWrapper;
-import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
-import com.mmxlabs.shiplingo.ui.detailview.editors.ICommandProcessor;
-import com.mmxlabs.shiplingo.ui.detailview.editors.IInlineEditor;
-import com.mmxlabs.shiplingo.ui.detailview.utils.ControlUtils;
 
 /**
  * A dialog for editing the same field on several objects simultaneously.
@@ -63,7 +56,8 @@ import com.mmxlabs.shiplingo.ui.detailview.utils.ControlUtils;
  * 
  */
 public class MultiDetailDialog extends Dialog {
-	private final DetailCompositeContainer dcc;
+	private final IDisplayComposite displayComposite;
+	
 	/**
 	 * Track all the controls that have been created, so we can disable them after setInput(), which will re-enable them otherwise.
 	 */
