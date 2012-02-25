@@ -10,6 +10,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
@@ -58,14 +60,26 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 		this(field, valueProviderProvider.getReferenceValueProvider(field.getEContainingClass(), field), editingDomain);
 	}
 
+
 	@Override
-	public String doRender(final Object object) {
-		final Object value = super.getValue(object);
-		if ((value instanceof EObject) || (value == null)) {
-			return valueProvider.getName((EObject) object, (EReference) field, (EObject) value);
+	public String render(final Object object) {
+		Object superValue = super.getValue(object);
+		if (super.getValue(object) == SetCommand.UNSET_VALUE) {
+			if (object instanceof MMXObject) {
+				final Object defaultValue = ((MMXObject) object).getUnsetValue(field);
+				if (defaultValue instanceof EObject || defaultValue == null) {
+					return valueProvider.getName((EObject) object, (EReference) field, (EObject) defaultValue);
+				}
+			}
 		} else {
-			return "";
+			final Object value = super.getValue(object);
+			if ((value instanceof EObject) || (value == null)) {
+				return valueProvider.getName((EObject) object, (EReference) field, (EObject) value);
+			} else {
+				return "";
+			}	
 		}
+		return "";
 	}
 
 	@Override

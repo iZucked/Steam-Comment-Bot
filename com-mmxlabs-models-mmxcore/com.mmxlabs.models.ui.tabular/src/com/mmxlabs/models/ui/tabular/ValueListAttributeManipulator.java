@@ -59,7 +59,7 @@ public class ValueListAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public String doRender(final Object object) {
+	public String renderSetValue(final Object object) {
 		final Object value = super.getValue(object);
 		final int index = values.indexOf(value);
 		if (index == -1) {

@@ -22,8 +22,7 @@ public class NumericSpinnerAttributeManipulator extends BasicAttributeManipulato
 	}
 
 	@Override
-	public String doRender(final Object object) {
-		final Object val = getValue(object);
+	public String renderSetValue(final Object val) {
 		if (val == null) {
 			return "";
 		}

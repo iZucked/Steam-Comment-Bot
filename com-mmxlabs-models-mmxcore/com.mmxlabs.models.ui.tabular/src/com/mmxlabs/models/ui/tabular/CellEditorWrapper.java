@@ -98,7 +98,7 @@ class CellEditorWrapper<T extends Control> extends CellEditor {
 		protected void doSetFocus() {
 			inner.setFocus();
 		}
-
+		
 		@Override
 		protected void doSetValue(Object value) {
 			if (value == SetCommand.UNSET_VALUE) {

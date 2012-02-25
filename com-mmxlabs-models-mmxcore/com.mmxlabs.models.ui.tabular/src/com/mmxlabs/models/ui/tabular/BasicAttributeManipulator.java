@@ -20,6 +20,8 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.ui.impl.MMXObjectDetailComposite;
 
 /**
  * Displays a textbox for editing an EAttribute.
@@ -28,9 +30,6 @@ import com.mmxlabs.common.Pair;
  * 
  */
 public class BasicAttributeManipulator implements ICellManipulator, ICellRenderer {
-
-	
-	
 	protected final EStructuralFeature field;
 	protected final EditingDomain editingDomain;
 
@@ -39,23 +38,25 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		this.field = field;
 		this.editingDomain = editingDomain;
 	}
-
-	@Override
-	public final String render(final Object object) {
-		if (getValue(object) == SetCommand.UNSET_VALUE) {
-			return "";
+	
+	public String render(final Object object) {
+		if ((object instanceof EObject) && !((EObject) object).eIsSet(field)) {
+			return renderUnsetValue(
+					(object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) :
+						null);
 		} else {
-			return doRender(object);
+			return renderSetValue(
+					getValue(object)
+					);
 		}
 	}
 	
-	public String doRender(final Object object) {
-		final Object value = getValue(object);
-		if (value == null) {
-			return "";
-		} else {
-			return value.toString();
-		}
+	protected String renderUnsetValue(final Object unsetDefault) {
+		return renderSetValue(unsetDefault);
+	}
+	
+	protected String renderSetValue(final Object setValue) {
+		return setValue == null ? "":setValue.toString();
 	}
 
 	@Override
@@ -108,7 +109,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 
 	private Object reallyGetValue(final Object object) {
 		if (object == null) {
-			return "";
+			return null;
 		}
 		if (field.isUnsettable() && ((EObject)object).eIsSet(field) == false) return SetCommand.UNSET_VALUE;
 		final Object result = ((EObject) object).eGet(field);

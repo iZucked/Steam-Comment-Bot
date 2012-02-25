@@ -101,9 +101,11 @@ public abstract class DialogFeatureManipulator extends BasicAttributeManipulator
 		// };
 	}
 
+	
+	
 	@Override
-	public String doRender(final Object object) {
-		return renderValue(getValue(object));
+	protected String renderSetValue(Object setValue) {
+		return renderValue(setValue);
 	}
 
 	protected abstract Object openDialogBox(Control cellEditorWindow, Object object);
