@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.port.presentation.composites;
 
+import com.mmxlabs.models.lng.port.PortCapability;
 import com.mmxlabs.models.lng.port.PortPackage;
 
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -16,6 +17,10 @@ import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.BooleanInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.EnumCheckboxEditor;
+import com.mmxlabs.models.ui.editors.impl.MultiEnumInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.TimezoneInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 import org.eclipse.core.runtime.IAdapterManager;
@@ -79,18 +84,23 @@ public class PortComponentHelper implements IComponentHelper {
 	/**
 	 * Create the editor for the capabilities feature on Port
 	 *
-	 * @generated
+	 * @generated NO port capability enum editor factory not connected up, and the NSURI will change each release so will just override here.
 	 */
 	protected void add_capabilitiesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__CAPABILITIES));
+		for (final PortCapability capability : PortCapability.values()) {
+			detailComposite.addInlineEditor(
+					new EnumCheckboxEditor(PortPackage.Literals.PORT__CAPABILITIES, capability, "Can ")
+					);
+		}
 	}
 	/**
 	 * Create the editor for the timeZone feature on Port
 	 *
-	 * @generated
+	 * @generated NO
 	 */
 	protected void add_timeZoneEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__TIME_ZONE));
+		detailComposite.addInlineEditor(
+				new TimezoneInlineEditor(PortPackage.Literals.PORT__TIME_ZONE));
 	}
 	/**
 	 * Create the editor for the loadDuration feature on Port
