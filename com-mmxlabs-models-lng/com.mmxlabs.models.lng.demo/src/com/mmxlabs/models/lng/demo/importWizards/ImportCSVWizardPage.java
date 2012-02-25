@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
@@ -52,7 +53,7 @@ public class ImportCSVWizardPage extends WizardNewFileCreationPage {
 			final MMXRootObject root = previousPage.doImport();
 			final File tempFile = File.createTempFile(UUID.randomUUID().toString(), "scn");
 			tempFile.deleteOnExit();
-			final DemoJointModel djm = new DemoJointModel(root, tempFile);
+			final DemoJointModel djm = new DemoJointModel(root, URI.createFileURI(tempFile.getCanonicalPath()));
 			djm.save();
 			return new FileInputStream(tempFile);
 		} catch (FileNotFoundException e) {
