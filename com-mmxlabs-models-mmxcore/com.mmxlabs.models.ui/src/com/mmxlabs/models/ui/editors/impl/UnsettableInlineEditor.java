@@ -17,6 +17,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.mmxlabs.models.mmxcore.MMXObject;
+
 public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor {
 	private Button setButton;
 	private Object lastSetValue;
@@ -86,6 +88,11 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 						// unset value
 						unsetValue();
 						setControlEnabled(inner, false);
+						if (input instanceof MMXObject) {
+							currentlySettingValue = true;
+							updateValueDisplay(getValue());
+							currentlySettingValue = false;
+						}
 					}
 				}
 			});
@@ -109,12 +116,17 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (!feature.isUnsettable() || input.eIsSet(feature)) {
 			return super.getValue();
 		} else {
-			return null;
+			if (input instanceof MMXObject) {
+				return ((MMXObject) input).getUnsetValue(getFeature());
+			} else {
+				return null;
+			}
 		}
 	}
 
 	@Override
 	protected synchronized void doSetValue(final Object value) {
+		if (currentlySettingValue) return;
 		if (value != null) 
 			lastSetValue = value; // hold for later checking and unchecking.
 		// maybe set button when value is changed
@@ -126,6 +138,11 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		}
 	}
 
+	protected boolean valueIsSet() {
+		if (input == null) return false;
+		return input.eIsSet(getFeature());
+	}
+	
 	@Override
 	protected void updateDisplay(final Object value) {
 		updateControl();
@@ -133,7 +150,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			updateValueDisplay(value);
 		}
 		if (setButton != null && !setButton.isDisposed()) {
-			setButton.setSelection(value != null);
+			setButton.setSelection(valueIsSet());
 		}
 		setControlEnabled(inner, setButton == null || setButton.getSelection());
 	}

@@ -110,7 +110,8 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements 
 	
 
 
-	private Label label;	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
+	protected Label label;	
+	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
 		this.feature = feature;
 	}
 
