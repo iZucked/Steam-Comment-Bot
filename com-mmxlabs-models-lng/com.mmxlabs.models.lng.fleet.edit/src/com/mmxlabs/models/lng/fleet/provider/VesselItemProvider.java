@@ -70,9 +70,6 @@ public class VesselItemProvider
 
 			addVesselClassPropertyDescriptor(object);
 			addInaccessiblePortsPropertyDescriptor(object);
-			addDailyHireRatePropertyDescriptor(object);
-			addInitialPortPropertyDescriptor(object);
-			addFinalPortPropertyDescriptor(object);
 			addStartHeelPropertyDescriptor(object);
 			addTimeCharterRatePropertyDescriptor(object);
 		}
@@ -115,72 +112,6 @@ public class VesselItemProvider
 				 getString("_UI_Vessel_inaccessiblePorts_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_inaccessiblePorts_feature", "_UI_Vessel_type"),
 				 FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Daily Hire Rate feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDailyHireRatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Vessel_dailyHireRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_dailyHireRate_feature", "_UI_Vessel_type"),
-				 FleetPackage.Literals.VESSEL__DAILY_HIRE_RATE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Initial Port feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addInitialPortPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Vessel_initialPort_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_initialPort_feature", "_UI_Vessel_type"),
-				 FleetPackage.Literals.VESSEL__INITIAL_PORT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Final Port feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addFinalPortPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Vessel_finalPort_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_finalPort_feature", "_UI_Vessel_type"),
-				 FleetPackage.Literals.VESSEL__FINAL_PORT,
 				 true,
 				 false,
 				 true,
@@ -300,7 +231,6 @@ public class VesselItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Vessel.class)) {
-			case FleetPackage.VESSEL__DAILY_HIRE_RATE:
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

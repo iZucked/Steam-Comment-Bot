@@ -68,10 +68,10 @@ public class VesselAvailablilityItemProvider
 
 			addStartAtPropertyDescriptor(object);
 			addStartAfterPropertyDescriptor(object);
-			addStartBeforePropertyDescriptor(object);
+			addStartByPropertyDescriptor(object);
 			addEndAtPropertyDescriptor(object);
 			addEndAfterPropertyDescriptor(object);
-			addEndBeforePropertyDescriptor(object);
+			addEndByPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -121,19 +121,19 @@ public class VesselAvailablilityItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Start Before feature.
+	 * This adds a property descriptor for the Start By feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addStartBeforePropertyDescriptor(Object object) {
+	protected void addStartByPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselAvailablility_startBefore_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailablility_startBefore_feature", "_UI_VesselAvailablility_type"),
-				 FleetPackage.Literals.VESSEL_AVAILABLILITY__START_BEFORE,
+				 getString("_UI_VesselAvailablility_startBy_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailablility_startBy_feature", "_UI_VesselAvailablility_type"),
+				 FleetPackage.Literals.VESSEL_AVAILABLILITY__START_BY,
 				 true,
 				 false,
 				 false,
@@ -187,19 +187,19 @@ public class VesselAvailablilityItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the End Before feature.
+	 * This adds a property descriptor for the End By feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addEndBeforePropertyDescriptor(Object object) {
+	protected void addEndByPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselAvailablility_endBefore_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailablility_endBefore_feature", "_UI_VesselAvailablility_type"),
-				 FleetPackage.Literals.VESSEL_AVAILABLILITY__END_BEFORE,
+				 getString("_UI_VesselAvailablility_endBy_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailablility_endBy_feature", "_UI_VesselAvailablility_type"),
+				 FleetPackage.Literals.VESSEL_AVAILABLILITY__END_BY,
 				 true,
 				 false,
 				 false,
@@ -247,9 +247,9 @@ public class VesselAvailablilityItemProvider
 
 		switch (notification.getFeatureID(VesselAvailablility.class)) {
 			case FleetPackage.VESSEL_AVAILABLILITY__START_AFTER:
-			case FleetPackage.VESSEL_AVAILABLILITY__START_BEFORE:
+			case FleetPackage.VESSEL_AVAILABLILITY__START_BY:
 			case FleetPackage.VESSEL_AVAILABLILITY__END_AFTER:
-			case FleetPackage.VESSEL_AVAILABLILITY__END_BEFORE:
+			case FleetPackage.VESSEL_AVAILABLILITY__END_BY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

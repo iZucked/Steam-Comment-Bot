@@ -68,8 +68,8 @@ public class VesselEventItemProvider
 			addDurationInDaysPropertyDescriptor(object);
 			addAllowedVesselsPropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
-			addEarliestStartDatePropertyDescriptor(object);
-			addLatestStartDatePropertyDescriptor(object);
+			addStartAfterPropertyDescriptor(object);
+			addStartByPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -141,19 +141,19 @@ public class VesselEventItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Earliest Start Date feature.
+	 * This adds a property descriptor for the Start After feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addEarliestStartDatePropertyDescriptor(Object object) {
+	protected void addStartAfterPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselEvent_earliestStartDate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEvent_earliestStartDate_feature", "_UI_VesselEvent_type"),
-				 FleetPackage.Literals.VESSEL_EVENT__EARLIEST_START_DATE,
+				 getString("_UI_VesselEvent_startAfter_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEvent_startAfter_feature", "_UI_VesselEvent_type"),
+				 FleetPackage.Literals.VESSEL_EVENT__START_AFTER,
 				 true,
 				 false,
 				 false,
@@ -163,19 +163,19 @@ public class VesselEventItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Latest Start Date feature.
+	 * This adds a property descriptor for the Start By feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLatestStartDatePropertyDescriptor(Object object) {
+	protected void addStartByPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselEvent_latestStartDate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEvent_latestStartDate_feature", "_UI_VesselEvent_type"),
-				 FleetPackage.Literals.VESSEL_EVENT__LATEST_START_DATE,
+				 getString("_UI_VesselEvent_startBy_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEvent_startBy_feature", "_UI_VesselEvent_type"),
+				 FleetPackage.Literals.VESSEL_EVENT__START_BY,
 				 true,
 				 false,
 				 false,
@@ -211,8 +211,8 @@ public class VesselEventItemProvider
 
 		switch (notification.getFeatureID(VesselEvent.class)) {
 			case FleetPackage.VESSEL_EVENT__DURATION_IN_DAYS:
-			case FleetPackage.VESSEL_EVENT__EARLIEST_START_DATE:
-			case FleetPackage.VESSEL_EVENT__LATEST_START_DATE:
+			case FleetPackage.VESSEL_EVENT__START_AFTER:
+			case FleetPackage.VESSEL_EVENT__START_BY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
