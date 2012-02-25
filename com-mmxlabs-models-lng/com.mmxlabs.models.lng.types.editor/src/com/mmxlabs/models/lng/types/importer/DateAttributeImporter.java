@@ -124,7 +124,7 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 			final Date date = parseDate(value);
 			return date;
 		} catch (ParseException ex) {
-			context.addProblem("Could not parse date " + value, true, true);
+			context.addProblem(context.createProblem("Could not parse date " + value, true, true, true));
 			return null;
 		}
 	}
