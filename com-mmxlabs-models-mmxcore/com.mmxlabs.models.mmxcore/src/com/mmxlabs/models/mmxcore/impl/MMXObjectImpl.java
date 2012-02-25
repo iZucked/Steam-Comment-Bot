@@ -15,6 +15,7 @@ import java.util.Map;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -236,6 +237,15 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 		final HashMap<String, UUIDObject> collection = new HashMap<String, UUIDObject>();
 		collectUUIDObjects(collection);
 		return collection;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NO
+	 */
+	public Object getUnsetValue(EStructuralFeature feature) {
+		return eGet(feature);
 	}
 
 	/**
