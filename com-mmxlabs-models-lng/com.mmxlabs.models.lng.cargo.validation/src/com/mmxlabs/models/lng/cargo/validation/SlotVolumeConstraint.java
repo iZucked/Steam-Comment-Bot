@@ -13,6 +13,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
 
@@ -34,7 +35,7 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 		if (object instanceof Slot) {
 			final EMFEventType eventType = ctx.getEventType();
 			if (eventType == EMFEventType.NULL) {
-				final Scenario scenario = ValidationSupport.getInstance().getScenario(object);
+				final MMXRootObject scenario = ValidationSupport.getInstance().getParentObjectType(MMXRootObject.class, object);
 
 				if (scenario == null) {
 					return ctx.createSuccessStatus();

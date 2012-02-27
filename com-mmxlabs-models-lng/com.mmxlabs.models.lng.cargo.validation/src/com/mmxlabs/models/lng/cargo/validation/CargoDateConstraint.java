@@ -20,12 +20,16 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
  * Check that the end of any cargo's discharge window is not before the start of its load window.
@@ -75,14 +79,18 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 			final ValidationSupport validationSupport = ValidationSupport.getInstance();
 
 			EObject container = validationSupport.getContainer(cargo).getFirst();
-			while ((container != null) && !(container instanceof Scenario)) {
+			while ((container != null) && !(container instanceof MMXRootObject)) {
 				container = validationSupport.getContainer(container).getFirst();
 			}
-			if (container instanceof Scenario) {
-				final Scenario scenario = (Scenario) container;
+			if (container instanceof MMXRootObject) {
+				final MMXRootObject scenario = (MMXRootObject) container;
 
 				double maxSpeedKnots = 0;
-				for (final VesselClass vc : scenario.getFleetModel().getVesselClasses()) {
+				final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
+				final PortModel portModel = scenario.getSubModel(PortModel.class);
+				
+				
+				for (final VesselClass vc : fleetModel.getVesselClasses()) {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
 				}
 
@@ -92,9 +100,12 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 				if (minTimes == null) {
 					minTimes = new HashMap<Pair<Port, Port>, Integer>();
 
-					collectMinTimes(minTimes, scenario.getDistanceModel(), 0, maxSpeedKnots);
+					for (Route r : portModel.getRoutes()) {
+						int extraTime = 0;
+						collectMinTimes(minTimes, r, extraTime, maxSpeedKnots);
+					}
 
-					for (final VesselClass vc : scenario.getFleetModel().getVesselClasses()) {
+					for (final VesselClass vc : fleetModel.getVesselClasses()) {
 						for (final VesselClassCost vcc : vc.getCanalCosts()) {
 							collectMinTimes(minTimes, vcc.getCanal().getDistanceModel(), vcc.getTransitTime(), vc.getMaxSpeed());
 						}
@@ -125,8 +136,8 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 		return ctx.createSuccessStatus();
 	}
 
-	private void collectMinTimes(final Map<Pair<Port, Port>, Integer> minTimes, final Route d, final int extraTime, final float maxSpeed) {
-		for (final RouteLine dl : d.getRoutes()) {
+	private void collectMinTimes(final Map<Pair<Port, Port>, Integer> minTimes, final Route d, final int extraTime, final double maxSpeed) {
+		for (final RouteLine dl : d.getLines()) {
 			final Pair<Port, Port> p = new Pair<Port, Port>(dl.getFrom(), dl.getTo());
 			final int time = Calculator.getTimeFromSpeedDistance(Calculator.scaleToInt(maxSpeed), dl.getDistance()) + extraTime;
 			if (!minTimes.containsKey(p) || (minTimes.get(p) > time)) {
