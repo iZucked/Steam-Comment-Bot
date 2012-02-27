@@ -95,8 +95,12 @@ public class DefaultImportContext implements IImportContext {
 		readerStack.pop();
 	}
 	
+	public void addProblem(final IImportProblem problem) {
+		problems.add(problem);
+	}
+	
 	@Override
-	public void addProblem(String string, boolean trackFile, boolean trackField) {
+	public IImportProblem createProblem(final String string, boolean trackFile, boolean trackLine, boolean trackField) {
 		String tracking = "";
 		if (trackFile || trackField) {
 			final CSVReader reader = readerStack.peek();
@@ -105,5 +109,39 @@ public class DefaultImportContext implements IImportContext {
 					(trackField ? ", field " + reader.getLastField() : "");
 		}
 		log.warn(string + " " + tracking);
+		
+		final Integer line = trackLine ? readerStack.peek().getLineNumber() : null;
+		final String field = trackField ? readerStack.peek().getCasedColumnName(readerStack.peek().getLastField().toLowerCase()) : null;
+		final String file = trackFile ? readerStack.peek().getFileName() : null;
+		
+		return (
+				new IImportProblem() {
+					@Override
+					public String getProblemDescription() {
+						return string;
+					}
+					
+					@Override
+					public Integer getLineNumber() {
+						return line;
+					}
+					
+					@Override
+					public String getFilename() {
+						return file;
+					}
+					
+					@Override
+					public String getField() {
+						return field;
+					}
+				});
+	}
+
+	private List<IImportProblem> problems = new LinkedList<IImportContext.IImportProblem>();
+	
+	@Override
+	public List<IImportProblem> getProblems() {
+		return problems;
 	}
 }

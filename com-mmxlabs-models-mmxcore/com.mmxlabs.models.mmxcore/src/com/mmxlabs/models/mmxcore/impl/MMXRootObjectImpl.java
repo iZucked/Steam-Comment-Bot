@@ -146,16 +146,14 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	 * @generated NO
 	 */
 	public void restoreSubModels() {
-		final Iterator<MMXSubModel> iterator = getSubModels().iterator();
-		while (iterator.hasNext()) {
-			final MMXSubModel sub = iterator.next();
+		for (final MMXSubModel sub : getSubModels()) {
 			sub.getOriginalResource().getContents().add(sub.getSubModelInstance());
-			iterator.remove();
 		}
+		getSubModels().clear();
 	}
 
 	/**
-	 * Get a submodel which implements the given class.
+	 * Get a submodel which implements the given class, or null if there isn't one
 	 * @generated NO
 	 */
 	public <T> T getSubModel(final Class<T> subModelClass) {
@@ -164,7 +162,7 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 				return subModelClass.cast(subModel.getSubModelInstance());
 			}
 		}
-		throw new NoSuchElementException("No submodel of class " + subModelClass.getCanonicalName() + " could be found");
+		return null;
 	}
 
 	/**

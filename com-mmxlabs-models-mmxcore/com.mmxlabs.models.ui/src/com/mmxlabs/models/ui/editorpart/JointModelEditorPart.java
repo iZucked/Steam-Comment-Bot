@@ -1,14 +1,18 @@
 package com.mmxlabs.models.ui.editorpart;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -27,9 +31,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
@@ -46,6 +51,7 @@ import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
  *
  */
 public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider {
+	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
 	private JointModel jointModel;
 	private MMXRootObject rootObject;
 	
@@ -72,25 +78,54 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			return JointModelEditorPart.this.getEditingDomain();
 		}
 	};
+	private boolean saving = false;
 	
 	public JointModelEditorPart() {
 		
 	}
 	
+	public boolean isSaving() {
+		return saving ;
+	}
+	
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		
+		//TODO use other invocation with scheduling rule
+		try {
+			ResourcesPlugin.getWorkspace().run(
+					new IWorkspaceRunnable() {
+						@Override
+						public void run(IProgressMonitor monitor) throws CoreException {
+							try {
+								saving = true;
+								monitor.beginTask("Saving", 1);
+								jointModel.save();
+								monitor.worked(1);
+							} catch (IOException e) {
+								log.error("IO Error during save", e);
+							} finally {
+								monitor.done();
+								saving = false;
+								commandStack.saveIsDone();
+								firePropertyChange(PROP_DIRTY);
+							}
+						}
+					}, monitor);
+		} catch (CoreException e) {
+			log.error("Error during save", e);
+		}
 	}
 
 	@Override
 	public void doSaveAs() {
-
+		
 	}
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input)
 			throws PartInitException {
 		super.init(site, input);
+		setPartName(input.getName());
 		JointModel jointModel = (JointModel) input.getAdapter(JointModel.class);
 		if (jointModel == null)
 			jointModel = (JointModel) Platform.getAdapterManager().loadAdapter(input, JointModel.class.getCanonicalName());
@@ -111,6 +146,16 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				//TODO do we need more stuff here? I (tom) am not currently sure what this stuff really does.
 				
 				commandStack = new BasicCommandStack();
+				commandStack.addCommandStackListener(
+						new CommandStackListener() {
+							@Override
+							public void commandStackChanged(EventObject event) {
+								if (commandStack.isSaveNeeded()) {
+									firePropertyChange(IEditorPart.PROP_DIRTY);
+								}
+							}
+						}
+						);
 				// create editing domain
 				editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 				// initialize extensions
@@ -128,14 +173,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	@Override
 	public boolean isDirty() {
-		return false;
+		return commandStack.isSaveNeeded();
 	}
 
 	@Override
 	public boolean isSaveAsAllowed() {
 		return false;
 	}
-
+	
 	@Override
 	public void setFocus() {
 		

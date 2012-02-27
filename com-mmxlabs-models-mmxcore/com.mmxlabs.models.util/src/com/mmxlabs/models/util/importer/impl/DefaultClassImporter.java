@@ -89,9 +89,11 @@ public class DefaultClassImporter implements IClassImporter {
 		results.add(instance);
 		importAttributes(row, context, rowClass, instance);
 		if (row instanceof IFieldMap) {
-			importReferences((IFieldMap) row, context, rowClass, instance, results);
+			importReferences((IFieldMap) row, context, rowClass, instance,
+					results);
 		} else {
-			importReferences(new FieldMap(row), context, rowClass, instance, results);	
+			importReferences(new FieldMap(row), context, rowClass, instance,
+					results);
 		}
 		return results;
 	}
@@ -116,16 +118,20 @@ public class DefaultClassImporter implements IClassImporter {
 				// defer lookup
 				final String referentName = row.get(lcrn).trim();
 				if (!referentName.isEmpty()) {
-				context.doLater(new SetReference(instance, reference,
-						getEReferenceLinkType(reference), row.get(lcrn)));
+					context.doLater(new SetReference(instance, reference,
+							getEReferenceLinkType(reference), row.get(lcrn),
+							context));
 				}
 			} else {
 				if (reference.isMany())
 					continue;
 				final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
-				
+
 				if (subKeys.isEmpty()) {
-					// TODO WARNING
+					context.addProblem(
+							context.createProblem(reference.getName() + " is missing from "
+									+ instance.eClass().getName()
+									, true, false, true));
 				} else {
 					final IClassImporter classImporter = Activator.getDefault()
 							.getImporterRegistry()
@@ -156,7 +162,8 @@ public class DefaultClassImporter implements IClassImporter {
 					ai.setAttribute(instance, attribute,
 							row.get(attribute.getName().toLowerCase()), context);
 			} else {
-				context.addProblem("Field not present", true, true);
+				context.addProblem(context.createProblem("Field not present",
+						true, false, true));
 			}
 		}
 	}

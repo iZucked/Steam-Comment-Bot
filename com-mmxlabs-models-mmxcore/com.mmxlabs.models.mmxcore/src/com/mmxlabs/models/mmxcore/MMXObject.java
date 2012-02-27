@@ -11,6 +11,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 /**
  * <!-- begin-user-doc -->
@@ -101,5 +102,13 @@ public interface MMXObject extends EObject {
 	 * @generated
 	 */
 	Map<String, UUIDObject> collectUUIDObjects();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" featureRequired="true"
+	 * @generated
+	 */
+	Object getUnsetValue(EStructuralFeature feature);
 
 } // MMXObject

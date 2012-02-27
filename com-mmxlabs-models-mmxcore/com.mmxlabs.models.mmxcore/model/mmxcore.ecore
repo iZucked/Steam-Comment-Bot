@@ -28,6 +28,9 @@
         <eTypeArguments eClassifier="#//UUIDObject"/>
       </eGenericType>
     </eOperations>
+    <eOperations name="getUnsetValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="feature" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" ordered="false"
         upperBound="-1" eType="#//UUIDObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="proxies" upperBound="-1"

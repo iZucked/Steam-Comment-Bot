@@ -20,6 +20,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -32,7 +34,8 @@ import org.eclipse.emf.edapt.migration.Metamodel;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.migration.execution.Migrator;
 import org.eclipse.emf.edapt.migration.execution.MigratorRegistry;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -56,6 +59,7 @@ import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
  * 
  */
 public abstract class JointModel {
+	private static final Logger log = LoggerFactory.getLogger(JointModel.class);
 	protected final Map<String, URI> subModels = new HashMap<String, URI>();
 	private final MMXCoreResourceFactoryImpl resourceFactory = new MMXCoreResourceFactoryImpl();
 	final ResourceSet resourceSet = new ResourceSetImpl();
@@ -67,9 +71,11 @@ public abstract class JointModel {
 	}
 
 	/**
-	 * Equivalent to {@link #createResources(MMXRootObject, boolean)} with the existing root, assigning a new resource to every part.
+	 * Equivalent to {@link #createResources(MMXRootObject, boolean)} with the
+	 * existing root, assigning a new resource to every part.
 	 * 
-	 * If some parts are stored in remote URIs, this could allow a subclass to move the instances from remote URIs to local URIs.
+	 * If some parts are stored in remote URIs, this could allow a subclass to
+	 * move the instances from remote URIs to local URIs.
 	 * 
 	 */
 	public void consolidate() {
@@ -77,8 +83,10 @@ public abstract class JointModel {
 	}
 	
 	/**
-	 * Initialize a joint model from a handmade MMXRootObject. Uses {@link #createURI(MMXObject)} to find URIs for each part.
-	 * If skipExistingResources is true, only finds URIs for parts which don't have an existing resource.
+	 * Initialize a joint model from a handmade MMXRootObject. Uses
+	 * {@link #createURI(MMXObject)} to find URIs for each part. If
+	 * skipExistingResources is true, only finds URIs for parts which don't have
+	 * an existing resource.
 	 * 
 	 * @param root
 	 * @param skipExistingResources
@@ -156,34 +164,41 @@ public abstract class JointModel {
 	 * @throws IOException
 	 */
 	public void save() throws IOException {
-		createResources(rootObject, true);
-		rootObject.restoreSubModels(); // put sub models back in their resources
-		// save each resource
-		for (final Resource resource : resourceSet.getResources()) {
-			resource.save(null);
-		}
-		// put sub models back how they were, making the change transparent
-		for (final Resource resource : resourceSet.getResources()) {
-			EObject top = resource.getContents().get(0);
-			if (top != rootObject && top instanceof UUIDObject)
-				rootObject.addSubModel((UUIDObject) top);
-		}
+			createResources(rootObject, true);
+			rootObject.restoreSubModels(); // put sub models back in their
+											// resources
+			// save each resource
+			for (final Resource resource : resourceSet.getResources()) {
+				resource.save(null);
+			}
+			// put sub models back how they were, making the change transparent
+			for (final Resource resource : resourceSet.getResources()) {
+				if (resource.getContents().size() != 1) {
+					log.warn("Resource " + resource.getURI() + " does not contain exactly one element");
+				} else {
+					EObject top = resource.getContents().get(0);
+					if (top != rootObject && top instanceof UUIDObject)
+						rootObject.addSubModel((UUIDObject) top);
+				}
+			}
 	}
 
-	private void copy(final InputStream in, final OutputStream out) throws IOException {
+	private void copy(final InputStream in, final OutputStream out)
+			throws IOException {
 		int c;
-		while ((c=in.read())!=-1) {
+		while ((c = in.read()) != -1) {
 			out.write(c);
 		}
 	}
-	
+
 	/**
 	 * Upgrade to the latest release, if necessary.
 	 * 
-	 * Interjects some extra URI mangling stages because EDapt only works with files
+	 * Interjects some extra URI mangling stages because EDapt only works with
+	 * files
 	 * 
 	 * @throws MigrationException
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public void upgrade() throws MigrationException, IOException {
 		final Map<String, Integer> initialVersions = new HashMap<String, Integer>();
@@ -194,28 +209,30 @@ public abstract class JointModel {
 
 		final URIConverter converter = new ExtensibleURIConverterImpl();
 		final Map<String, URI> temporarySubModels = new HashMap<String, URI>();
-		
+
 		for (final String key : subModels.keySet()) {
 			final URI uri = subModels.get(key);
-			final File tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp");
-			final InputStream modelInputStream = converter.createInputStream(uri);
+			final File tempFile = File.createTempFile(UUID.randomUUID()
+					.toString(), "tmp");
+			final InputStream modelInputStream = converter
+					.createInputStream(uri);
 			final FileOutputStream fos = new FileOutputStream(tempFile);
 			copy(modelInputStream, fos);
 			fos.close();
 			modelInputStream.close();
-			temporarySubModels.put(key, URI.createFileURI(tempFile.getCanonicalPath()));
+			temporarySubModels.put(key,
+					URI.createFileURI(tempFile.getCanonicalPath()));
 			tempFile.deleteOnExit();
 		}
-				
+
 		/**
-		 * This is true if we have found the start release and begun
-		 * upgrading
+		 * This is true if we have found the start release and begun upgrading
 		 */
 		boolean upgrading = false;
 		{
 			// alias temporary submodels to submodels, for migration purposes
 			final Map<String, URI> subModels = temporarySubModels;
-		
+
 			// first we detect the current release, and get the data for it
 			for (final String key : subModels.keySet()) {
 				final URI uri = subModels.get(key);
@@ -293,9 +310,10 @@ public abstract class JointModel {
 				}
 			}
 		}
-		
+
 		if (upgrading) {
-			// we just did an upgrade, so we have to undo the file-switcheroo that happened above
+			// we just did an upgrade, so we have to undo the file-switcheroo
+			// that happened above
 			for (final String key : subModels.keySet()) {
 				final URI uri = subModels.get(key);
 				final URI tempURI = temporarySubModels.get(key);
@@ -306,6 +324,9 @@ public abstract class JointModel {
 				realOS.close();
 			}
 		}
+		
+		// clear the resource set, to prevent empty duplicate resources flailing around
+		resourceSet.getResources().clear();
 	}
 
 	/**
@@ -325,15 +346,15 @@ public abstract class JointModel {
 	 * @return
 	 */
 	protected abstract List<IJointModelRelease> getReleases();
-	
+
 	protected void setRootObject(final MMXRootObject newRootObject) {
 		this.rootObject = newRootObject;
 	}
-	
+
 	protected MMXRootObject getRootObject() {
 		return rootObject;
 	}
-	
+
 	protected ResourceSet getResourceSet() {
 		return resourceSet;
 	}

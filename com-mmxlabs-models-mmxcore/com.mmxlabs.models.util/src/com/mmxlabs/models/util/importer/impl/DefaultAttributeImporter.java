@@ -75,7 +75,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 			}
 		} catch (Exception ex) {
 			// TODO WARN
-			context.addProblem("Error parsing value " + value + " for " + attribute.getName() + ":" + ex.toString(), true, true);
+			context.addProblem(context.createProblem("Error parsing value " + value + " for " + attribute.getName() + ":" + ex.toString(), true, true, true));
 		}
 		return null;
 	}

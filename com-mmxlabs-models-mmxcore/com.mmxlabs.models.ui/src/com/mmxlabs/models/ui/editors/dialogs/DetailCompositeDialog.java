@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
@@ -39,11 +40,13 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 /**
  * A dialog for editing scenario objects using the generated detail views.
@@ -66,14 +69,9 @@ public class DetailCompositeDialog extends Dialog {
 	private Button backButton, nextButton;
 
 	/**
-	 * The index in {@link #originals} of the displayed object
+	 * The index in {@link #inputs} of the displayed object
 	 */
 	private int selectedObjectIndex = 0;
-
-	/**
-	 * An array of booleans indicating which objects are valid (true = valid)
-	 */
-	private boolean[] objectValidity;
 
 	/**
 	 * A validator used to check whether the OK button should be enabled.
@@ -86,7 +84,8 @@ public class DetailCompositeDialog extends Dialog {
 	/**
 	 * This is the list of all input objects passed in for editing
 	 */
-	private List<EObject> originals = new ArrayList<EObject>();
+	private List<EObject> inputs = new ArrayList<EObject>();
+	
 	/**
 	 * A map from duplicated input objects to original input objects
 	 */
@@ -96,6 +95,16 @@ public class DetailCompositeDialog extends Dialog {
 	 */
 	private Map<EObject, EObject> originalToDuplicate = new HashMap<EObject, EObject>();
 
+	/**
+	 * A map from objects to validity; says whether the current state is valid
+	 */
+	private Map<EObject, Boolean> objectValidity = new HashMap<EObject, Boolean>();
+	
+	/**
+	 * The objects which are currently being edited (duplicates)
+	 */
+	private List<EObject> currentEditorTargets = new ArrayList<EObject>();
+	
 	/**
 	 * Get the duplicate object (for editing) corresponding to the given input
 	 * object.
@@ -122,47 +131,11 @@ public class DetailCompositeDialog extends Dialog {
 				duplicateToOriginal.put(duplicateOne, originalOne);
 				originalToDuplicate.put(originalOne, duplicateOne);
 			}
+			
+			ValidationSupport.getInstance().startEditingObjects(range,duplicateRange);
 		}
 		return originalToDuplicate.get(original);
 	}
-
-	// final Runnable postValidationRunnable = new Runnable() {
-	// @Override
-	// public void run() {
-	// final boolean isNowValid = displayComposite.isCurrentStateValid();
-	// if (isNowValid && !objectValidity[selectedObjectIndex]) {
-	// // has become valid, revalidate other objects.
-	// // this is based on an assumption that all sibling-related constraints
-	// // are symmetrically invalidating.
-	// Arrays.fill(objectValidity, true);
-	// final IStatus globalValidity = validator.validate(duplicates);
-	// for (final IStatus s : globalValidity.getChildren()) {
-	// if (s.matches(IStatus.ERROR) == false) {
-	// continue;
-	// }
-	// if (s instanceof DetailConstraintStatusDecorator) {
-	// for (EObject o : ((DetailConstraintStatusDecorator) s).getObjects()) {
-	// int index = duplicates.indexOf(o);
-	// while (index < 0) {
-	// index = duplicates.indexOf(o);
-	// o = o.eContainer();
-	// if (o == null) {
-	// break;
-	// }
-	// }
-	// if (index >= 0) {
-	// objectValidity[index] = false;
-	// }
-	// }
-	// }
-	// }
-	// } else {
-	// objectValidity[selectedObjectIndex] = isNowValid;
-	// }
-	//
-	// checkValidity();
-	// }
-	// };
 
 	/**
 	 * Construct a new detail composite dialog.
@@ -174,7 +147,26 @@ public class DetailCompositeDialog extends Dialog {
 	public DetailCompositeDialog(final Shell parentShell,
 			final ICommandHandler commandHandler) {
 		super(parentShell);
-		this.commandHandler = commandHandler;
+		this.commandHandler = 
+				new ICommandHandler() {
+
+					@Override
+					public void handleCommand(final Command command, final EObject target,
+							final EStructuralFeature feature) {
+						commandHandler.handleCommand(command, target, feature);
+						validate();
+					}
+					
+					@Override
+					public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
+						return commandHandler.getReferenceValueProviderProvider();
+					}
+					
+					@Override
+					public EditingDomain getEditingDomain() {
+						return commandHandler.getEditingDomain();
+					}
+				};
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS,
 				true);
 	}
@@ -188,32 +180,44 @@ public class DetailCompositeDialog extends Dialog {
 		resizeAndCenter();
 	}
 
-	private void checkValidity() {
-		for (final boolean b : objectValidity) {
+	private void validate() {
+		IStatus status = validator.validate(currentEditorTargets);
+		final boolean problem = status.matches(IStatus.ERROR);
+		for (final EObject object : currentEditorTargets)
+			objectValidity.put(object, !problem);
+		
+		if (displayComposite != null)
+			displayComposite.displayValidationStatus(status);
+		
+		checkButtonEnablement();
+	}
+	
+	private void checkButtonEnablement() {
+		for (final boolean b : objectValidity.values()) {
 			if (!b) {
-				// validity is false
 				getButton(IDialogConstants.OK_ID).setEnabled(false);
-				// setErrorMessage("Something is not valid");
-				// btnOk.setEnabled(false);
 				return;
 			}
 		}
-		// btnOk.setEnabled(true);
 		getButton(IDialogConstants.OK_ID).setEnabled(!lockedForEditing);
-		// setMessage("All fields are valid");
 	}
-
+	
 	/**
 	 * Create an editor view for the selected object and display it.
 	 */
 	private void updateEditor() {
-		final EObject selection = originals.get(selectedObjectIndex);
+		final EObject selection = inputs.get(selectedObjectIndex);
 	
 		getShell().setText(
 				"Editing " + EditorUtils.unmangle(selection.eClass().getName())
 						+ " " + (1 + selectedObjectIndex) + " of "
-						+ originals.size());
+						+ inputs.size());
 
+		if (displayComposite != null) {
+			displayComposite.getComposite().dispose();
+			displayComposite = null;
+		}
+		
 		displayComposite = Activator.getDefault()
 				.getDisplayCompositeFactoryRegistry()
 				.getDisplayCompositeFactory(selection.eClass())
@@ -221,12 +225,19 @@ public class DetailCompositeDialog extends Dialog {
 		
 		final EObject duplicate = getDuplicate(selection, displayComposite);
 		
+		currentEditorTargets.clear();
+		final Collection<EObject> range = displayComposite.getEditingRange(rootObject, selection);
+		
+		for (final EObject o : range) {
+			currentEditorTargets.add(originalToDuplicate.get(o));
+		}
+		
 		displayComposite.setCommandHandler(commandHandler);
 		displayComposite.display(rootObject, duplicate);
-		displayComposite.getComposite().setLayoutData(
-				new GridData(GridData.FILL_BOTH));
-
-		// detailComposite.setPostValidationRunnable(postValidationRunnable);
+		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		// handle enablement
+		
 	}
 
 	private void resizeAndCenter() {
@@ -268,7 +279,7 @@ public class DetailCompositeDialog extends Dialog {
 
 	private void enableButtons() {
 		backButton.setEnabled(selectedObjectIndex > 0);
-		nextButton.setEnabled(selectedObjectIndex < (originals.size() - 1));
+		nextButton.setEnabled(selectedObjectIndex < (inputs.size() - 1));
 	}
 
 	@Override
@@ -301,24 +312,11 @@ public class DetailCompositeDialog extends Dialog {
 			final List<EObject> objects, final boolean locked) {
 		this.rootObject = rootObject;
 		lockedForEditing = locked;
-		this.originals.clear();
-		this.originals.addAll(objects);
+		this.inputs.clear();
+		this.inputs.addAll(objects);
 		this.originalToDuplicate.clear();
 		this.duplicateToOriginal.clear();
 		try {
-			// tell validation support to ignore the originals and see the
-			// duplicates
-
-			// ValidationSupport.getInstance().startEditingObjects(objects,
-			// duplicates);
-
-			objectValidity = new boolean[originals.size()];
-			
-			for (int i = 0; i < originals.size(); i++) {
-				objectValidity[i] = validator.validate(originals.get(i))
-						.isOK();
-			}
-
 			final int value = open();
 			if (value == OK) {
 				final CompoundCommand cc = new CompoundCommand();
@@ -348,8 +346,13 @@ public class DetailCompositeDialog extends Dialog {
 			}
 			return value;
 		} finally {
-			// ValidationSupport.getInstance().endEditingObjects(objects,
-			// duplicates);
+			final List<EObject> duplicateObjects = new ArrayList<EObject>(duplicateToOriginal.keySet().size());
+			final List<EObject> originalObjects = new ArrayList<EObject>(duplicateToOriginal.keySet().size());
+			for (final Map.Entry<EObject, EObject> entry : duplicateToOriginal.entrySet()) {
+				duplicateObjects.add(entry.getKey());
+				originalObjects.add(entry.getValue());
+			}
+			ValidationSupport.getInstance().endEditingObjects(originalObjects, duplicateObjects);
 		}
 	}
 

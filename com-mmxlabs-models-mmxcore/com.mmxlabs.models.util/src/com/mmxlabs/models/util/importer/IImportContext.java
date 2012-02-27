@@ -1,5 +1,7 @@
 package com.mmxlabs.models.util.importer;
 
+import java.util.List;
+
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -31,6 +33,38 @@ public interface IImportContext {
 		 * @return
 		 */
 		public int getStage();
+	}
+	
+	/**
+	 * Describes an import problem
+	 * @author hinton
+	 *
+	 */
+	public interface IImportProblem {
+		/**
+		 * If this problem is file-specific, returns the filename of the problematic file
+		 * 
+		 * Otherwise returns null
+		 * @return
+		 */
+		public String getFilename();
+		/**
+		 * If this problem is line-specific, returns the line number of the problem. Otherwise null.
+		 * 
+		 * @return
+		 */
+		public Integer getLineNumber();
+		/**
+		 * If this problem is field-specific, returns the field name of the problem. Otherwise null.
+		 * 
+		 * @return
+		 */
+		public String getField();
+		/**
+		 * Returns the problem message; should not be null.
+		 * @return
+		 */
+		public String getProblemDescription();
 	}
 	
 	/**
@@ -70,5 +104,13 @@ public interface IImportContext {
 	 * @param trackFile if true record the file that was open when this happened
 	 * @param trackField if true record the last field read when this happened
 	 */
-	public void addProblem(final String string, final boolean trackFile, final boolean trackField);
+	public IImportProblem createProblem(final String string, final boolean trackFile, final boolean trackLine, final boolean trackField);
+	
+	public void addProblem(IImportProblem problem);
+	
+	/**
+	 * Returns a list of the problems which have happened so far
+	 * @return
+	 */
+	public List<IImportProblem> getProblems();
 }
