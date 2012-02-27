@@ -1,5 +1,6 @@
 [patterns]
 **.java = native
+**.ecore = native
 **.txt = native
 **.ini = native
 **.product = native
