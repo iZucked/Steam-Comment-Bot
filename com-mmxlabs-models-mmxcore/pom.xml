@@ -34,6 +34,8 @@
 		<module>com.mmxlabs.models.ui</module>
 		<module>com.mmxlabs.models.ui.tabular</module>
 		<module>com.mmxlabs.models.util</module>
+
+		<module>com.mmxlabs.models.mmxcore.feature</module>
 	</modules>
 
 	<build>
