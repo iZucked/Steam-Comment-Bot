@@ -118,4 +118,5 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="consumption" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MaintenanceEvent" eSuperTypes="#//VesselEvent"/>
 </ecore:EPackage>

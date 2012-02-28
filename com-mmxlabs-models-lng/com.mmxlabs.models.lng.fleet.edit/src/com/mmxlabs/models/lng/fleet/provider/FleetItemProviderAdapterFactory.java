@@ -306,6 +306,29 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.MaintenanceEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MaintenanceEventItemProvider maintenanceEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.MaintenanceEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMaintenanceEventAdapter() {
+		if (maintenanceEventItemProvider == null) {
+			maintenanceEventItemProvider = new MaintenanceEventItemProvider(this);
+		}
+
+		return maintenanceEventItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -414,6 +437,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (vesselStateAttributesItemProvider != null) vesselStateAttributesItemProvider.dispose();
 		if (vesselAvailablilityItemProvider != null) vesselAvailablilityItemProvider.dispose();
 		if (fuelConsumptionItemProvider != null) fuelConsumptionItemProvider.dispose();
+		if (maintenanceEventItemProvider != null) maintenanceEventItemProvider.dispose();
 	}
 
 }

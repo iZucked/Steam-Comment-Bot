@@ -213,6 +213,11 @@ public class FleetModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(FleetPackage.Literals.FLEET_MODEL__VESSEL_EVENTS,
+				 FleetFactory.eINSTANCE.createMaintenanceEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(FleetPackage.Literals.FLEET_MODEL__BASE_FUELS,
 				 FleetFactory.eINSTANCE.createBaseFuel()));
 	}

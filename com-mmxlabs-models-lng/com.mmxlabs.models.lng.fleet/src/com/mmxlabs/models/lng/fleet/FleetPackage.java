@@ -1075,6 +1075,107 @@ public interface FleetPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.MaintenanceEventImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getMaintenanceEvent()
+	 * @generated
+	 */
+	int MAINTENANCE_EVENT = 11;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__EXTENSIONS = VESSEL_EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__PROXIES = VESSEL_EVENT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__UUID = VESSEL_EVENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__DURATION_IN_DAYS = VESSEL_EVENT__DURATION_IN_DAYS;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__ALLOWED_VESSELS = VESSEL_EVENT__ALLOWED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__PORT = VESSEL_EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__START_AFTER = VESSEL_EVENT__START_AFTER;
+
+	/**
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__START_BY = VESSEL_EVENT__START_BY;
+
+	/**
+	 * The number of structural features of the '<em>Maintenance Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.Vessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1680,6 +1781,16 @@ public interface FleetPackage extends EPackage {
 	EAttribute getFuelConsumption_Consumption();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.MaintenanceEvent <em>Maintenance Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Maintenance Event</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.MaintenanceEvent
+	 * @generated
+	 */
+	EClass getMaintenanceEvent();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2170,6 +2281,16 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute FUEL_CONSUMPTION__CONSUMPTION = eINSTANCE.getFuelConsumption_Consumption();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.MaintenanceEventImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getMaintenanceEvent()
+		 * @generated
+		 */
+		EClass MAINTENANCE_EVENT = eINSTANCE.getMaintenanceEvent();
 
 	}
 

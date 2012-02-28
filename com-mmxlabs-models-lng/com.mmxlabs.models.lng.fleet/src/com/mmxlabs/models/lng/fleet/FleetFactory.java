@@ -116,6 +116,15 @@ public interface FleetFactory extends EFactory {
 	FuelConsumption createFuelConsumption();
 
 	/**
+	 * Returns a new object of class '<em>Maintenance Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Maintenance Event</em>'.
+	 * @generated
+	 */
+	MaintenanceEvent createMaintenanceEvent();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

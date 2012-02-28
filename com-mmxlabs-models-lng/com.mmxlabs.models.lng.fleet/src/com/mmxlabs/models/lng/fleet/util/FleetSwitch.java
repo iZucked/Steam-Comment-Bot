@@ -184,6 +184,18 @@ public class FleetSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case FleetPackage.MAINTENANCE_EVENT: {
+				MaintenanceEvent maintenanceEvent = (MaintenanceEvent)theEObject;
+				T result = caseMaintenanceEvent(maintenanceEvent);
+				if (result == null) result = caseVesselEvent(maintenanceEvent);
+				if (result == null) result = caseAVesselEvent(maintenanceEvent);
+				if (result == null) result = caseITimezoneProvider(maintenanceEvent);
+				if (result == null) result = caseUUIDObject(maintenanceEvent);
+				if (result == null) result = caseNamedObject(maintenanceEvent);
+				if (result == null) result = caseMMXObject(maintenanceEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -350,6 +362,21 @@ public class FleetSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseFuelConsumption(FuelConsumption object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Maintenance Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Maintenance Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMaintenanceEvent(MaintenanceEvent object) {
 		return null;
 	}
 
