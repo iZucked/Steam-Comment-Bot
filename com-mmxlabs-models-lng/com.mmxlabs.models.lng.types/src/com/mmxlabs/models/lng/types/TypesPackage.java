@@ -8,10 +8,8 @@ package com.mmxlabs.models.lng.types;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->

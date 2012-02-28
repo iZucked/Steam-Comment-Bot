@@ -7,8 +7,6 @@
 package com.mmxlabs.models.lng.types;
 
 import org.eclipse.emf.common.util.EList;
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->

@@ -6,9 +6,6 @@
  */
 package com.mmxlabs.models.lng.types;
 
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>AVessel Class</b></em>'.
