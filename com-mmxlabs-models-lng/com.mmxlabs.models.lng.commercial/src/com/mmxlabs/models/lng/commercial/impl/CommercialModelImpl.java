@@ -9,7 +9,6 @@
 package com.mmxlabs.models.lng.commercial.impl;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 
 import com.mmxlabs.models.lng.commercial.PurchaseContract;

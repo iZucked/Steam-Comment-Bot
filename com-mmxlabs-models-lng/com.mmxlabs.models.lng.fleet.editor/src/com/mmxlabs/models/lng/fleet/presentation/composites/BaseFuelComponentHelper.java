@@ -9,14 +9,11 @@ package com.mmxlabs.models.lng.fleet.presentation.composites;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 
 import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 

@@ -14,8 +14,6 @@ import com.mmxlabs.models.lng.fleet.VesselAvailablility;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.port.Port;
-
 import com.mmxlabs.models.lng.types.impl.AVesselImpl;
 
 import java.util.Collection;

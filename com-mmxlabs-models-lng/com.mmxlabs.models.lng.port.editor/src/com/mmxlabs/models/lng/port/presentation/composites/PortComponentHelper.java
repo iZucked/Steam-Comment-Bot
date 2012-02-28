@@ -17,9 +17,7 @@ import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editors.impl.BooleanInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.EnumCheckboxEditor;
-import com.mmxlabs.models.ui.editors.impl.MultiEnumInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.TimezoneInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 

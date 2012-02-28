@@ -3,7 +3,6 @@ package com.mmxlabs.models.lng.demo.adapters;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.edapt.migration.MigrationException;

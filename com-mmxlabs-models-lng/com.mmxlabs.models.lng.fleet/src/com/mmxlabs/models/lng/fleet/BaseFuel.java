@@ -8,8 +8,6 @@
  */
 package com.mmxlabs.models.lng.fleet;
 import com.mmxlabs.models.lng.types.ABaseFuel;
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->

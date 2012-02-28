@@ -21,8 +21,6 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
 
 import com.mmxlabs.models.lng.demo.DemoJointModel;
-import com.mmxlabs.models.mmxcore.MMXCoreFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * This is a sample new wizard. Its role is to create a new file 
