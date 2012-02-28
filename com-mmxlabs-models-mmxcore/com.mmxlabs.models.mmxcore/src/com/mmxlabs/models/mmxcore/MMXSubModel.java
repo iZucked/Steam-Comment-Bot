@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.models.mmxcore;
 
-import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.resource.Resource;
 
 /**
