@@ -63,6 +63,7 @@
 
 		<module>com.mmxlabs.models.lng.feature</module>
 
+		<module>com.mmxlabs.models.lng.cargo.validation.tests</module>
 		<module>com.mmxlabs.models.lng.fleet.validation.tests</module>
 	</modules>
 
