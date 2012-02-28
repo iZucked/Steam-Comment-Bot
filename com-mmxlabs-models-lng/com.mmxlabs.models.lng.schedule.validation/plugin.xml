@@ -4,32 +4,36 @@
    <extension
          point="org.eclipse.emf.validation.constraintProviders">
       <category
-            id="com.mmxlabs.models.lng.commercial.validation.base"
+            id="com.mmxlabs.models.lng.schedule.validation.base"
             mandatory="true"
-            name="Commercial Validation">
+            name="Schedule Validation">
       </category>
       <constraintProvider
             cache="true">
          <package
-               namespaceUri="http://www.mmxlabs.com/models/lng/commercial/1/">
+               namespaceUri="http://www.mmxlabs.com/models/lng/schedule/1/">
          </package>
          <constraints
-               categories=" com.mmxlabs.models.lng.commercial.validation.base">
-            <constraint
-                  class="com.mmxlabs.models.lng.schedule.validation.NullReferenceConstraint"
-                  id="com.mmxlabs.models.lng.commercial.validation"
-                  isEnabledByDefault="true"
-                  lang="Java"
-                  mode="Batch"
-                  name="Null Reference Constraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  Reference cannot be null
-               </message>
-               <target
-                     class="Contract">
-               </target>
+               categories=" com.mmxlabs.models.lng.schedule.validation.base">
+               
+                <constraint
+                      class="com.mmxlabs.models.lng.schedule.validation.SequenceNoGapsConstraint"
+                      id="com.mmxlabs.models.lng.schedule.validation.SequenceNoGapsConstraint"
+                      isEnabledByDefault="false"
+                      lang="Java"
+                      mode="Batch"
+                      name="Sequence Gaps"
+                      severity="ERROR"
+                      statusCode="1">
+                <message>
+                    Vessel {0}'s schedule has gaps between events
+                </message>
+                <description>
+                    There should be no time in a vessel's schedule which has not been accounted for. If you have
+                    deleted something from the problem definition you may need to re-evaluate the scenario to ensure
+                    that no schedules have gaps in them.
+                </description>
+                <target class="Sequence" />
             </constraint>
          </constraints>
       </constraintProvider>

@@ -11,8 +11,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 
-import scenario.schedule.Sequence;
-import scenario.schedule.events.ScheduledEvent;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Sequence;
 
 /**
  * Check that output sequences have no un-accounted for time in them.
@@ -29,11 +29,11 @@ public class SequenceNoGapsConstraint extends AbstractModelConstraint {
 		
 		if (object instanceof Sequence) {
 			final Sequence sequence = (Sequence) object;
-			Date lastEndDate = (sequence.getEvents().isEmpty() ? null : sequence.getEvents().get(0).getStartTime());
+			Date lastEndDate = (sequence.getEvents().isEmpty() ? null : sequence.getEvents().get(0).getStart());
 
-			for (final ScheduledEvent event : sequence.getEvents()) {
-				final Date eventStart = event.getStartTime();
-				final Date eventEnd = event.getEndTime();
+			for (final Event event : sequence.getEvents()) {
+				final Date eventStart = event.getStart();
+				final Date eventEnd = event.getEnd();
 				if (eventStart == null || eventEnd == null)
 					continue;
 				if (eventStart.before(lastEndDate)) {

@@ -19,6 +19,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -39,9 +40,9 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
  */
 public class CargoDateConstraint extends AbstractModelConstraint {
 //	FIX UP THESE ID STRING
-	private static final String DATE_ORDER_ID = "com.mmxlabs.lngscheduler.emf-extras.constraints.cargo_order";
-	private static final String TRAVEL_TIME_ID = "com.mmxlabs.lngscheduler.emf-extras.constraints.cargo_travel_time";
-	private static final String AVAILABLE_TIME_ID = "com.mmxlabs.lngscheduler.emf-extras.constraints.cargo_available_time";
+	private static final String DATE_ORDER_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_orderr";
+	private static final String TRAVEL_TIME_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_travel_time";
+	private static final String AVAILABLE_TIME_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_available_time";
 
 	/**
 	 * This is the maximum sensible amount of travel time in a cargo, in days
@@ -184,7 +185,8 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 				final Port loadPort = loadSlot.getPort();
 				final Port dischargePort = dischargeSlot.getPort();
 				if ((loadPort != null) && (dischargePort != null)) {
-					final int availableTime = (int) ((dischargeSlot.getWindowEnd().getTime() - loadSlot.getWindowStart().getDateWithDefaults(loadPort).getTime()) / Timer.ONE_HOUR)
+					
+					final int availableTime = (int) ((dischargeSlot.getWindowEndWithSlotOrPortTime().getTime() - loadSlot.getWindowStartWithSlotOrPortTime().getTime()) / Timer.ONE_HOUR)
 							- (loadSlot.getSlotOrPortDuration());
 
 					if (constraintID.equals(DATE_ORDER_ID)) {

@@ -18,8 +18,7 @@ import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
 
 /**
- * A constraint which checks that the load and discharge quantities for a cargo
- * are compatible, so min discharge volume < max load volume
+ * A constraint which checks that the load and discharge quantities for a cargo are compatible, so min discharge volume < max load volume
  * 
  * @author Tom Hinton
  * 
@@ -29,9 +28,7 @@ public class CargoVolumeConstraint extends AbstractModelConstraint {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse
-	 * .emf.validation.IValidationContext)
+	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
 	 */
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
@@ -41,33 +38,18 @@ public class CargoVolumeConstraint extends AbstractModelConstraint {
 			final Slot loadSlot = cargo.getLoadSlot();
 			final Slot dischargeSlot = cargo.getDischargeSlot();
 
-			final MMXRootObject scenario = ValidationSupport.getInstance()
-					.getParentObjectType(MMXRootObject.class, object);
-			
-			if (scenario == null) return ctx.createSuccessStatus();
-
 			if (loadSlot != null && dischargeSlot != null) {
 
-				if (loadSlot.getSlotOrContractMaxQuantity(scenario) < dischargeSlot
-						.getSlotOrContractMinQuantity(scenario)) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus(cargo
-									.getName()));
-					status.addEObjectAndFeature(loadSlot,
-							CargoPackage.eINSTANCE.getSlot_MaxQuantity());
-					status.addEObjectAndFeature(dischargeSlot,
-							CargoPackage.eINSTANCE.getSlot_MinQuantity());
+				if (loadSlot.getSlotOrContractMaxQuantity() < dischargeSlot.getSlotOrContractMinQuantity()) {
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName()));
+					status.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+					status.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 					return status;
 				}
-				if (loadSlot.getSlotOrContractMinQuantity(scenario) > dischargeSlot
-						.getSlotOrContractMaxQuantity(scenario)) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus(cargo
-									.getName()));
-					status.addEObjectAndFeature(loadSlot,
-							CargoPackage.eINSTANCE.getSlot_MinQuantity());
-					status.addEObjectAndFeature(dischargeSlot,
-							CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+				if (loadSlot.getSlotOrContractMinQuantity() > dischargeSlot.getSlotOrContractMaxQuantity()) {
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName()));
+					status.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					status.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 					return status;
 				}
 			}

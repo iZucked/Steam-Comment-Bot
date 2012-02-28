@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.emf.validation.constraintProviders">
       <category
-            id="com.mmxlabs.models.lng.cargo.validation.category1"
+            id="com.mmxlabs.models.lng.cargo.validation.base"
             mandatory="true"
             name="Cargo Validation">
       </category>
@@ -14,7 +14,7 @@
                namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
          </package>
          <constraints
-               categories=" com.mmxlabs.models.lng.cargo.validation.category1">
+               categories=" com.mmxlabs.models.lng.cargo.validation.base">
             <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CargoVolumeConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CargoVolumeConstraint"
@@ -122,9 +122,6 @@
                </target>
             </constraint>
          </constraints>
-         <package
-               namespaceUri="com.mmxlabs.models.lng.cargo.validation.package2">
-         </package>
       </constraintProvider>
    </extension>
 
