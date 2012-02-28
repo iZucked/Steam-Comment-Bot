@@ -17,10 +17,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import com.mmxlabs.models.ui.editors.ICommandHandler;
-
 public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
-	public DialogInlineEditor(EStructuralFeature feature) {
+	public DialogInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 	}
 	private Button button;
@@ -47,21 +45,21 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 						button.addDisposeListener(
 								new DisposeListener() {
 									@Override
-									public void widgetDisposed(DisposeEvent e) {
+									public void widgetDisposed(final DisposeEvent e) {
 										button.removeSelectionListener(sl);
 									}
 								});
 					}
 					
 					@Override
-					public void widgetSelected(SelectionEvent e) {
+					public void widgetSelected(final SelectionEvent e) {
 						final Object o = displayDialog(getValue());
 						if (o != null)
 							doSetValue(o);
 					}
 					
 					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {}
+					public void widgetDefaultSelected(final SelectionEvent e) {}
 				}
 				);
 		
@@ -69,7 +67,7 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	protected void updateDisplay(Object value) {
+	protected void updateDisplay(final Object value) {
 		if (!label.isDisposed())
 			label.setText(render(value));
 	}
