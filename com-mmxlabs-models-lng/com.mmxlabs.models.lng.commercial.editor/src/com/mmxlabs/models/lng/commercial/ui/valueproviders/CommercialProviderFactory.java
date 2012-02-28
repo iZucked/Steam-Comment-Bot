@@ -20,8 +20,10 @@ public class CommercialProviderFactory implements IReferenceValueProviderFactory
 		final TypesPackage types = TypesPackage.eINSTANCE;
 		final CommercialPackage commercial = CommercialPackage.eINSTANCE;
 		
-		if (types.getAContract().isSuperTypeOf(referenceClass)) {
-			return new SimpleReferenceValueProvider(model, commercial.getCommercialModel_Contracts());
+		if (commercial.getPurchaseContract().isSuperTypeOf(referenceClass)) {
+			return new SimpleReferenceValueProvider(model, commercial.getCommercialModel_PurchaseContracts());
+		} else if (commercial.getSalesContract().isSuperTypeOf(referenceClass)) {
+				return new SimpleReferenceValueProvider(model, commercial.getCommercialModel_SalesContracts());
 		} else if (types.getALegalEntity().isSuperTypeOf(referenceClass)) {
 			return new SimpleReferenceValueProvider(model, commercial.getCommercialModel_Entities());
 		}

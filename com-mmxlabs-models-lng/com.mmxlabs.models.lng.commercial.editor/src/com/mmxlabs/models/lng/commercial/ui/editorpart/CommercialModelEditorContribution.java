@@ -37,7 +37,8 @@ public class CommercialModelEditorContribution implements IJointModelEditorContr
 		conEp.createControl(sash);
 		
 		entEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), part.getAdapterFactory());
-		conEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Contracts()), part.getAdapterFactory());
+		conEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), part.getAdapterFactory());
+		conEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), part.getAdapterFactory());
 		
 		entEp.getViewer().setInput(subModel);
 		conEp.getViewer().setInput(subModel);

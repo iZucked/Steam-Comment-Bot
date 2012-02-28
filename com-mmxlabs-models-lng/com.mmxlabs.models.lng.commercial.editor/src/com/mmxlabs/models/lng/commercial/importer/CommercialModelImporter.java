@@ -54,14 +54,14 @@ public class CommercialModelImporter implements ISubmodelImporter {
 			}
 		}
 		if (inputs.containsKey(SALES_CON_KEY)) {
-			commercial.getContracts().addAll(
-					(Collection<? extends Contract>) 
+			commercial.getSalesContracts().addAll(
+					(Collection<? extends SalesContract>) 
 					salesImporter.importObjects(CommercialPackage.eINSTANCE.getSalesContract(), inputs.get(SALES_CON_KEY), context)
 					);
 		}
 		if (inputs.containsKey(PURCHASE_CON_KEY)) {
-			commercial.getContracts().addAll(
-					(Collection<? extends Contract>) 
+			commercial.getPurchaseContracts().addAll(
+					(Collection<? extends PurchaseContract>) 
 					purchaseImporter.importObjects(CommercialPackage.eINSTANCE.getPurchaseContract(), inputs.get(PURCHASE_CON_KEY), context)
 					);
 		}
@@ -75,9 +75,11 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		output.put(ENTITIES_KEY, entityImporter.exportObjects(cm.getEntities()));
 		final LinkedList<PurchaseContract> purchase = new LinkedList<PurchaseContract>();
 		final LinkedList<SalesContract> sales = new LinkedList<SalesContract>();
-		for (final Contract c : cm.getContracts()) {
-			if (c instanceof PurchaseContract) purchase.add((PurchaseContract) c);
-			if (c instanceof SalesContract) sales.add((SalesContract) c);
+		for (final SalesContract c : cm.getSalesContracts()) {
+			sales.add(c);
+		} 
+		for (final PurchaseContract c : cm.getPurchaseContracts()) {
+			purchase.add(c);
 		}
 		output.put(SALES_CON_KEY, salesImporter.exportObjects(sales));
 		output.put(PURCHASE_CON_KEY, purchaseImporter.exportObjects(purchase));
