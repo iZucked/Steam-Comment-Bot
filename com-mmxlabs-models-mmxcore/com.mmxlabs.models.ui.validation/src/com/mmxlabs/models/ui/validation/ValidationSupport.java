@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.models.mmxcore.validation.context;
+package com.mmxlabs.models.ui.validation;
 
 import java.util.Collection;
 import java.util.Collections;

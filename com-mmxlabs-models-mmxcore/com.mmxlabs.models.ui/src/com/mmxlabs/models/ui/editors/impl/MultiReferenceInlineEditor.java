@@ -26,12 +26,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
+import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 
 /**
  * An inline editor for editing multi-value references. Pops up a dialog.

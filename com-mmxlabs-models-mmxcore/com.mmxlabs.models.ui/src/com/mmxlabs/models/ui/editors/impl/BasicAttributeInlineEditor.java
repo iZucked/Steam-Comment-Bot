@@ -35,10 +35,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
+import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 
 /**
  * 

@@ -34,6 +34,7 @@
 		<module>com.mmxlabs.models.mmxcore.validation</module>
 
 		<module>com.mmxlabs.models.ui</module>
+		<module>com.mmxlabs.models.ui.validation</module>
 		<module>com.mmxlabs.models.ui.tabular</module>
 		<module>com.mmxlabs.models.util</module>
 

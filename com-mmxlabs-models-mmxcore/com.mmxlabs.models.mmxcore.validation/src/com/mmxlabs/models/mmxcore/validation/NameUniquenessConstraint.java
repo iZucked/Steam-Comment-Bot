@@ -22,7 +22,8 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.ValidationSupport;
 
 /**
  * Ensures that the name attribute of all {@link NamedObject}s in a collection are unique.

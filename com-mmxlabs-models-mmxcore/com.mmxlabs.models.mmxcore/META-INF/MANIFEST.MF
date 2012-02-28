@@ -9,9 +9,7 @@ Bundle-Localization: plugin
 Export-Package: com.mmxlabs.models.mmxcore,
  com.mmxlabs.models.mmxcore.impl,
  com.mmxlabs.models.mmxcore.jointmodel,
- com.mmxlabs.models.mmxcore.util,
- com.mmxlabs.models.mmxcore.validation,
- com.mmxlabs.models.mmxcore.validation.context
+ com.mmxlabs.models.mmxcore.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;bundle-version="2.7.0",

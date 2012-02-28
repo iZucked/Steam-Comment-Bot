@@ -40,12 +40,12 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
+import com.mmxlabs.models.ui.validation.ValidationSupport;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 /**
