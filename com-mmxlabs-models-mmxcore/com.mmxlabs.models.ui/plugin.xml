@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2011
+    All rights reserved.
+
+-->
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="com.mmxlabs.models.ui.editorfactories" name="Inline Editor Factories" schema="schema/com.mmxlabs.models.ui.editorfactories.exsd"/>
