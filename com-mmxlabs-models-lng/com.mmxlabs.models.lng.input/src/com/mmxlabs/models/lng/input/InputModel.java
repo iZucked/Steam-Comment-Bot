@@ -1,10 +1,6 @@
-
-
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * All rights reserved.
  */
 package com.mmxlabs.models.lng.input;
 import com.mmxlabs.models.mmxcore.NamedObject;

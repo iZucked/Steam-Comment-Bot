@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.input.validation;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;

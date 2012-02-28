@@ -1,6 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2012
- * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation.tests;

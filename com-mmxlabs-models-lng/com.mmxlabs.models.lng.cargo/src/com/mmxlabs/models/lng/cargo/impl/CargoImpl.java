@@ -1,10 +1,6 @@
-
-
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
 import com.mmxlabs.models.lng.cargo.Cargo;
