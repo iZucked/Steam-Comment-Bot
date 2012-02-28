@@ -23,8 +23,7 @@ public class RouteImporter {
 
 	}
 
-	public Route importRoute(final CSVReader reader,
-			final IImportContext context) {
+	public Route importRoute(final CSVReader reader, final IImportContext context) {
 		final Route result = PortFactory.eINSTANCE.createRoute();
 
 		try {
@@ -39,12 +38,9 @@ public class RouteImporter {
 					}
 					try {
 						final int distance = Integer.parseInt(entry.getValue());
-						final RouteLine line = PortFactory.eINSTANCE
-								.createRouteLine();
+						final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
 						line.setDistance(distance);
-						context.doLater(new SetReference(line,
-								PortPackage.eINSTANCE.getRouteLine_To(), reader
-										.getCasedColumnName(entry.getKey())));
+						context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
 						lines.add(line);
 					} catch (final NumberFormatException nfe) {
 						if (entry.getValue().isEmpty() == false) {
@@ -55,9 +51,7 @@ public class RouteImporter {
 
 				if (fromName != null) {
 					for (final RouteLine line : lines) {
-						context.doLater(new SetReference(line,
-								PortPackage.eINSTANCE.getRouteLine_From(),
-								fromName));
+						context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_From(), fromName, context));
 						result.getLines().add(line);
 					}
 				} else {
@@ -66,13 +60,13 @@ public class RouteImporter {
 
 				lines.clear();
 			}
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 
 		} finally {
 			context.popReader();
 			try {
 				reader.close();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 			}
 		}
 
