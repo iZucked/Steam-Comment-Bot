@@ -4,127 +4,268 @@
    <extension
          point="org.eclipse.emf.validation.constraintProviders">
       <category
-            id="com.mmxlabs.models.lng.cargo.validation.category1"
+            id="com.mmxlabs.models.lng.fleet.validation.base"
             mandatory="true"
-            name="Cargo Validation">
+            name="Fleet Validation">
       </category>
       <constraintProvider
             cache="true">
          <package
-               namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
+               namespaceUri="http://www.mmxlabs.com/models/lng/fleet/1/">
          </package>
          <constraints
-               categories=" com.mmxlabs.models.lng.cargo.validation.category1">
+               categories=" com.mmxlabs.models.lng.fleet.validation.base">
+          
             <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.CargoVolumeConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.CargoVolumeConstraint"
+                  class="com.mmxlabs.models.lng.fleet.validation.NullReferenceConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.NullReferenceConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Null References"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  This attribute must be set.
+               </message>
+               <description>
+                  Some references should not be null.
+               </description>
+               <target
+                     class="Port">
+               </target>
+               <target
+                     class="Cargo">
+               </target>
+               <target
+                     class="Contract">
+               </target>
+               <target
+                     class="DistanceLine">
+               </target>
+               <target
+                     class="Vessel">
+               </target>
+               <target
+                     class="VesselClass">
+               </target>
+               <target
+                     class="CharterOut">
+               </target>
+               <target
+                     class="VesselEvent">
+               </target>
+               <target
+                     class="PortAndTime">
+               </target>
+               <target
+                     class="VesselEvent">
+               </target>
+            </constraint>
+          
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint.min_speed"
                   isEnabledByDefault="true"
                   lang="Java"
                   mode="Batch"
-                  name="Cargo Volumes"
+                  name="Minimum Speed Within Curve"
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  message body text
-               </message>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.CargoDateConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_order"
-                  lang="Java"
-                  mode="Batch"
-                  name="Load and discharge order"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  Cargo {0} has invalid load and discharge dates - the load occurs after the discharge.
+                  The minimum speed of {0} knots is outside the range of speeds in the fuel consumption curve ({1} to {2} knots).
                </message>
                <description>
-                  The end of the discharge slot's time window should be after the start of the load slot's time window.
+                  The minimum speed of a vessel class must be somewhere within the upper bounds of its fuel consumption curve.
                </description>
                <target
-                     class="Cargo">
+                     class="VesselClass">
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.CargoDateConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_available_time"
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint.max_speed"
+                  isEnabledByDefault="true"
                   lang="Java"
                   mode="Batch"
-                  name="Cargo Travel Time"
+                  name="Maximum Speed Within Curve"
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Cargo {0} has a very large amount of travel time allocated - {1} days are allocated, and {2} is a sensible upper bound.
+                  The maximum speed of {0} knots is outside the range of speeds in the fuel consumption curve ({1} to {2} knots).
                </message>
                <description>
-                  If a cargo has a very large amount of slack in its travel time, lots of fuel will be wasted idling at the destination
-            		port. This often indicates a typographical error when entering dates.
+                  The maximum speed of a vessel class must be somewhere within the upper bounds of its fuel consumption curve.
                </description>
                <target
-                     class="Cargo">
+                     class="VesselClass">
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.SlotVolumeConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.SlotVolumeConstraint"
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint.speed_order"
+                  isEnabledByDefault="true"
                   lang="Java"
                   mode="Batch"
-                  name="Slot Volumes"
+                  name="Minimum Speed is Lower than Maximum Speed"
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  A slot has invalid minimum and maximum load volumes.
+                  Vessel class {0} has a minimum speed of {1}, which is not lower than its maximum speed of {2}.
                </message>
                <description>
-                  Every slot's minimum and maximum volume should be non-negative, and the minimum should not exceed the maximum.
+                  The minimum speed of a vessel class should be lower than its maximum speed.
                </description>
                <target
-                     class="Slot">
+                     class="VesselClass">
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.SlotContractConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.SlotContractConstraint"
+                  class="com.mmxlabs.models.lng.fleet.validation.ShipFillPercentageConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.ShipFillPercentageConstraint.validity"
+                  isEnabledByDefault="true"
                   lang="Java"
                   mode="Batch"
-                  name="Slot Contract"
+                  name="Ship Fill Percentage is Valid"
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  A slot has no contract.
+                  Vessel {0} has a fill capacity of {1} percent, which is not between 0 (exclusive) and 100 (inclusive).
                </message>
                <description>
-                  Every slot needs a contract.
+                  Fill capacity should not be zero, negative or exceed 100 percent.
                </description>
                <target
-                     class="Slot">
+                     class="VesselClass">
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.CargoDateConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_travel_time"
+                  class="com.mmxlabs.models.lng.fleet.validation.ShipFillPercentageConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.ShipFillPercentageConstraint.sanity"
+                  isEnabledByDefault="true"
                   lang="Java"
                   mode="Batch"
-                  name="Cargo Travel Time"
+                  name="Ship Fill Percentage is low"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  Vessel {0} has a fill capacity of {1} percent, which is less than the sensible threshold of {2} percent.
+               </message>
+               <description>
+                  Fill capacity should not be too low.
+               </description>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselDateConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselDateConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel date order"
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Cargo {0} does not have enough travel time - {1} hours are required for the journey, but only {2} hours
-            		are available.
+                  Vessel {0} has invalid start and end requirement dates - the start occurs after the end.
                </message>
                <description>
-                  The load and discharge dates for a cargo should allow enough time between them for
-            		the fastest fleet vessel to make the journey at maximum speed.
+                  The end requirement of the vessel should be after the start requirement.
                </description>
                <target
-                     class="Cargo">
+                     class="Vessel">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementDateConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementDateConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Start / End Date Consistency"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel {0}'s {1} requirement has inconsistent start and end dates set (the start date is after the end date).
+               </message>
+               <description>
+                  The start end end window of a vessel event must be set and consistent.
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementPortConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementPortConstraint.port_access"
+                  lang="Java"
+                  mode="Batch"
+                  name="Start / End Port Accessibility"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel {0}'s {1} requirement is set for port {3}, but the vessel is of class {2} which cannot dock at {3}.
+               </message>
+               <description>
+                  The start or end port of a vessel must be compatible with that vessel's class
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementPortConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementPortConstraint.port_access_2"
+                  lang="Java"
+                  mode="Batch"
+                  name="Start / End Port Accessibility"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  The vessels {0} have start / end requirements at the ports {1}, which are in the inaccessible port list.
+               </message>
+               <description>
+                  The start or end port of a vessel must be compatible with that vessel's class
+               </description>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselEventDateConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselEventDateConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Event Date Consistency"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel Event {0} has invalid start and end dates - they must both be set, and the start date must not be after the end date.
+               </message>
+               <description>
+                  The start end end window of a vessel event must be set and consistent.
+               </description>
+               <target
+                     class="VesselEvent">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselEventDurationConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselEventDurationConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Event Duration"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel Event {0} has no duration set.
+               </message>
+               <description>
+                  The event duration must be greater than zero.
+               </description>
+               <target
+                     class="VesselEvent">
                </target>
             </constraint>
          </constraints>
-         <package
-               namespaceUri="com.mmxlabs.models.lng.cargo.validation.package2">
-         </package>
       </constraintProvider>
    </extension>
 

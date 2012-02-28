@@ -25,11 +25,9 @@ import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
  */
 public class VesselClassSpeedConstraint extends AbstractModelConstraint {
 
-	// TODO: Fix up with new IDs
-
-	private static final String MIN_ID = "com.mmxlabs.lngscheduler.emf-extras.vessel_class_min_speed";
-	private static final String MAX_ID = "com.mmxlabs.lngscheduler.emf-extras.vessel_class_max_speed";
-	private static final String ORDER_ID = "com.mmxlabs.lngscheduler.emf-extras.vessel_class_speed_order";
+	private static final String MIN_ID = "com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint.min_speed";
+	private static final String MAX_ID = "com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint.max_speed";
+	private static final String ORDER_ID = "com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint.speed_order";
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {

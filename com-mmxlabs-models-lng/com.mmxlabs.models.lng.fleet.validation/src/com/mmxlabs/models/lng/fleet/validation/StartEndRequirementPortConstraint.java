@@ -7,8 +7,10 @@ package com.mmxlabs.models.lng.fleet.validation;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -17,13 +19,14 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailablility;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
 
@@ -43,52 +46,103 @@ public class StartEndRequirementPortConstraint extends AbstractModelConstraint {
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof VesselAvailablility) {
-			VesselAvailablility availablility = (VesselAvailablility)target;
-			if (availablility.getStartAt().isEmpty()) {
-				final String startOrEnd = "start";
-				final Pair<EObject, EReference> container = ValidationSupport.getInstance().getContainer(availablility);
-				if (container.getFirst() instanceof Vessel) {
-					final Vessel vessel = (Vessel) container.getFirst();
-					final VesselClass vesselClass = (VesselClass)vessel.getVesselClass();
-					for (final APortSet portSet : availablility.getStartAt()) {
-						for (APort p : portSet.collect(new UniqueEList<APortSet>())) {
-							
-							// No! port match 
-							if (vesselClass.getInaccessiblePorts().contains(portSet)) {
-								
-								
-							}
-							
-						}
-						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vessel.getName(), startOrEnd, vessel.getVesselClass()
-								.getName(), pat.getPort().getName()));
+			final VesselAvailablility availablility = (VesselAvailablility) target;
 
-						dcsd.addEObjectAndFeature(pat, FleetPackage.eINSTANCE.getPortAndTime_Port());
-						return dcsd;
+			final Pair<EObject, EReference> container = ValidationSupport.getInstance().getContainer(availablility);
+			if (container.getFirst() instanceof Vessel) {
+				final Vessel vessel = (Vessel) container.getFirst();
+				final VesselClass vesselClass = (VesselClass) vessel.getVesselClass();
+				final Set<APort> inaccessiblePortSet = new HashSet<APort>();
+				for (final APortSet ps : vesselClass.getInaccessiblePorts()) {
+					inaccessiblePortSet.addAll(ps.collect(new UniqueEList<APortSet>()));
+				}
+				if (!availablility.getStartAt().isEmpty()) {
+					for (final APortSet portSet : availablility.getStartAt()) {
+						final EList<APort> availabilityPortSet = portSet.collect(new UniqueEList<APortSet>());
+						for (final APort p : availabilityPortSet) {
+
+							if (inaccessiblePortSet.contains(p)) {
+
+								final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vessel.getName(), "start", vessel
+										.getVesselClass().getName(), p.getName()));
+
+								dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailablility_StartAt());
+								return dcsd;
+
+							}
+
+						}
+					}
+				}
+				if (!availablility.getEndAt().isEmpty()) {
+					for (final APortSet portSet : availablility.getEndAt()) {
+						final EList<APort> availabilityPortSet = portSet.collect(new UniqueEList<APortSet>());
+						for (final APort p : availabilityPortSet) {
+
+							if (inaccessiblePortSet.contains(p)) {
+
+								final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vessel.getName(), "end", vessel
+										.getVesselClass().getName(), p.getName()));
+
+								dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailablility_EndAt());
+								return dcsd;
+
+							}
+
+						}
 					}
 				}
 			}
-			}
 		} else if (target instanceof VesselClass) {
 			final VesselClass vesselClass = (VesselClass) target;
-			final Scenario scenario = ValidationSupport.getInstance().getScenario(vesselClass);
+			final MMXRootObject rootObject = ValidationSupport.getInstance().getParentObjectType(MMXRootObject.class, vesselClass);
+			if (rootObject == null) {
+				return ctx.createSuccessStatus();
+			}
+
+			final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 
 			final HashSet<String> badPorts = new HashSet<String>();
 			final List<String> badVessels = new LinkedList<String>();
-			if (scenario == null) return ctx.createSuccessStatus();
-			for (final Vessel v : scenario.getFleetModel().getFleet()) {
-				if (ValidationSupport.getInstance().isSame(v.getClass_(), vesselClass)) {
+			for (final Vessel v : fleetModel.getVessels()) {
+				if (ValidationSupport.getInstance().isSame(v.getVesselClass(), vesselClass)) {
+
+					final VesselAvailablility availablility = (VesselAvailablility) target;
+
+					final Set<APort> inaccessiblePortSet = new HashSet<APort>();
+					for (final APortSet ps : vesselClass.getInaccessiblePorts()) {
+						inaccessiblePortSet.addAll(ps.collect(new UniqueEList<APortSet>()));
+					}
+
 					boolean bad = false;
-					if (!isValid(v.getStartRequirement(), vesselClass)) {
-						badPorts.add(v.getStartRequirement().getPort().getName());
-						bad = true;
-						badVessels.add(v.getName());
+
+					for (final APortSet portSet : availablility.getStartAt()) {
+						final EList<APort> availabilityPortSet = portSet.collect(new UniqueEList<APortSet>());
+						for (final APort p : availabilityPortSet) {
+							// No port match
+							if (inaccessiblePortSet.contains(p)) {
+								badPorts.add(p.getName());
+								if (!bad) {
+
+									bad = true;
+									badVessels.add(v.getName());
+								}
+							}
+						}
 					}
-					if (!isValid(v.getEndRequirement(), vesselClass)) {
-						badPorts.add(v.getEndRequirement().getPort().getName());
-						if (!bad)
-							badVessels.add(v.getName());
+
+					for (final APortSet portSet : availablility.getEndAt()) {
+						final EList<APort> availabilityPortSet = portSet.collect(new UniqueEList<APortSet>());
+						for (final APort p : availabilityPortSet) {
+							// No port match
+							if (inaccessiblePortSet.contains(p)) {
+								badPorts.add(p.getName());
+								bad = true;
+								badVessels.add(v.getName());
+							}
+						}
 					}
+
 				}
 
 			}
@@ -100,11 +154,5 @@ public class StartEndRequirementPortConstraint extends AbstractModelConstraint {
 			}
 		}
 		return ctx.createSuccessStatus();
-	}
-
-	private boolean isValid(final List<Port> ports, final VesselClass vc) {
-			return !(vc.getInaccessiblePorts().contains(port));
-		}
-		return true;
 	}
 }

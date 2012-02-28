@@ -42,10 +42,10 @@ public class VesselDateConstraint extends AbstractModelConstraint {
 			if (availability != null) {
 				// Gather dates
 				final Date startStart = availability.getStartAfter();
-				final Date startEnd = availability.getStartBefore();
+				final Date startEnd = availability.getStartBy();
 
 				final Date endStart = availability.getEndAfter();
-				final Date endEnd = availability.getEndBefore();
+				final Date endEnd = availability.getEndBy();
 
 				final Date s = startStart == null ? startEnd : startStart;
 				final Date e = endEnd == null ? endStart : endEnd;
@@ -57,13 +57,13 @@ public class VesselDateConstraint extends AbstractModelConstraint {
 							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailablility_StartAfter());
 						}
 						if (startEnd != null) {
-							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailablility_StartBefore());
+							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailablility_StartBy());
 						}
 						if (endStart != null) {
 							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailablility_EndAfter());
 						}
 						if (endEnd != null) {
-							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailablility_EndBefore());
+							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailablility_EndBy());
 						}
 						return status;
 					}

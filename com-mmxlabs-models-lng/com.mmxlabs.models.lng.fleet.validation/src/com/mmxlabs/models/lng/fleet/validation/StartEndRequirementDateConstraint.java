@@ -25,22 +25,32 @@ import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
  * 
  */
 public class StartEndRequirementDateConstraint extends AbstractModelConstraint {
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse.emf.validation.IValidationContext)
 	 */
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof VesselAvailablility) {
-			final VesselAvailablility pat = (VesselAvailablility) target;
-			if (pat.isSetStartTime() && pat.isSetEndTime()) {
-				if (pat.getStartTime().after(pat.getEndTime())) {
-					final Pair<EObject, EReference> container = ValidationSupport.getInstance().getContainer(pat);
-					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
-							((Vessel)container.getFirst()).getName(),
-							(container.getSecond() == FleetPackage.eINSTANCE.getVessel_StartRequirement() ? "start" : "end")));
-					dcsd.addEObjectAndFeature(pat, FleetPackage.eINSTANCE.getPortAndTime_StartTime());
-					dcsd.addEObjectAndFeature(pat, FleetPackage.eINSTANCE.getPortAndTime_EndTime());
+			final VesselAvailablility va = (VesselAvailablility) target;
+			if (va.isSetStartAfter() && va.isSetStartBy()) {
+				if (va.getStartAfter().after(va.getStartBy())) {
+					final Pair<EObject, EReference> container = ValidationSupport.getInstance().getContainer(va);
+					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(((Vessel) container.getFirst()).getName(), "start"));
+					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailablility_StartAfter());
+					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailablility_StartBy());
+					return dcsd;
+				}
+			}
+
+			if (va.isSetEndAfter() && va.isSetEndBy()) {
+				if (va.getEndAfter().after(va.getEndBy())) {
+					final Pair<EObject, EReference> container = ValidationSupport.getInstance().getContainer(va);
+					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(((Vessel) container.getFirst()).getName(), "end"));
+					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailablility_EndAfter());
+					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailablility_EndBy());
 					return dcsd;
 				}
 			}
