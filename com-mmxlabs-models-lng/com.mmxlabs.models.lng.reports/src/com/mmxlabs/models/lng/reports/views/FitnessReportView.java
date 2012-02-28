@@ -40,11 +40,10 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import scenario.schedule.Schedule;
-
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.models.lng.reports.ScheduleAdapter;
 import com.mmxlabs.models.lng.reports.views.FitnessContentProvider.RowData;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 
