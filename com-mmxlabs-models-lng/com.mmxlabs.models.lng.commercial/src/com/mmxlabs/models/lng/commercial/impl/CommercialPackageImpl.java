@@ -154,7 +154,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCommercialModel_Contracts() {
+	public EReference getCommercialModel_SalesContracts() {
 		return (EReference)commercialModelEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -165,6 +165,15 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 */
 	public EReference getCommercialModel_ShippingEntity() {
 		return (EReference)commercialModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCommercialModel_PurchaseContracts() {
+		return (EReference)commercialModelEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -260,8 +269,9 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		// Create classes and their features
 		commercialModelEClass = createEClass(COMMERCIAL_MODEL);
 		createEReference(commercialModelEClass, COMMERCIAL_MODEL__ENTITIES);
-		createEReference(commercialModelEClass, COMMERCIAL_MODEL__CONTRACTS);
+		createEReference(commercialModelEClass, COMMERCIAL_MODEL__SALES_CONTRACTS);
 		createEReference(commercialModelEClass, COMMERCIAL_MODEL__SHIPPING_ENTITY);
+		createEReference(commercialModelEClass, COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
 
 		legalEntityEClass = createEClass(LEGAL_ENTITY);
 
@@ -317,8 +327,9 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCommercialModel_Entities(), this.getLegalEntity(), null, "entities", null, 0, -1, CommercialModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCommercialModel_Contracts(), this.getContract(), null, "contracts", null, 0, -1, CommercialModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCommercialModel_SalesContracts(), this.getSalesContract(), null, "salesContracts", null, 0, -1, CommercialModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCommercialModel_ShippingEntity(), this.getLegalEntity(), null, "shippingEntity", null, 1, 1, CommercialModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCommercialModel_PurchaseContracts(), this.getPurchaseContract(), null, "purchaseContracts", null, 0, -1, CommercialModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(legalEntityEClass, LegalEntity.class, "LegalEntity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

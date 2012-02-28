@@ -118,13 +118,13 @@ public interface CommercialPackage extends EPackage {
 	int COMMERCIAL_MODEL__ENTITIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Contracts</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Sales Contracts</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL__CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int COMMERCIAL_MODEL__SALES_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Entity</b></em>' reference.
@@ -136,13 +136,22 @@ public interface CommercialPackage extends EPackage {
 	int COMMERCIAL_MODEL__SHIPPING_ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Purchase Contracts</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMERCIAL_MODEL__PURCHASE_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -467,15 +476,15 @@ public interface CommercialPackage extends EPackage {
 	EReference getCommercialModel_Entities();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getContracts <em>Contracts</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getSalesContracts <em>Sales Contracts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Contracts</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.CommercialModel#getContracts()
+	 * @return the meta object for the containment reference list '<em>Sales Contracts</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialModel#getSalesContracts()
 	 * @see #getCommercialModel()
 	 * @generated
 	 */
-	EReference getCommercialModel_Contracts();
+	EReference getCommercialModel_SalesContracts();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getShippingEntity <em>Shipping Entity</em>}'.
@@ -487,6 +496,17 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCommercialModel_ShippingEntity();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getPurchaseContracts <em>Purchase Contracts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Purchase Contracts</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialModel#getPurchaseContracts()
+	 * @see #getCommercialModel()
+	 * @generated
+	 */
+	EReference getCommercialModel_PurchaseContracts();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LegalEntity <em>Legal Entity</em>}'.
@@ -602,12 +622,12 @@ public interface CommercialPackage extends EPackage {
 		EReference COMMERCIAL_MODEL__ENTITIES = eINSTANCE.getCommercialModel_Entities();
 
 		/**
-		 * The meta object literal for the '<em><b>Contracts</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Sales Contracts</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference COMMERCIAL_MODEL__CONTRACTS = eINSTANCE.getCommercialModel_Contracts();
+		EReference COMMERCIAL_MODEL__SALES_CONTRACTS = eINSTANCE.getCommercialModel_SalesContracts();
 
 		/**
 		 * The meta object literal for the '<em><b>Shipping Entity</b></em>' reference feature.
@@ -616,6 +636,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMMERCIAL_MODEL__SHIPPING_ENTITY = eINSTANCE.getCommercialModel_ShippingEntity();
+
+		/**
+		 * The meta object literal for the '<em><b>Purchase Contracts</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMMERCIAL_MODEL__PURCHASE_CONTRACTS = eINSTANCE.getCommercialModel_PurchaseContracts();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.

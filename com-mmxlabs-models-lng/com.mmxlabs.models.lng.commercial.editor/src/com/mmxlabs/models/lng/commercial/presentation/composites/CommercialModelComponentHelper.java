@@ -73,8 +73,9 @@ public class CommercialModelComponentHelper implements IComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_entitiesEditor(detailComposite, topClass);
-		add_contractsEditor(detailComposite, topClass);
+		add_salesContractsEditor(detailComposite, topClass);
 		add_shippingEntityEditor(detailComposite, topClass);
+		add_purchaseContractsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the entities feature on CommercialModel
@@ -85,13 +86,14 @@ public class CommercialModelComponentHelper implements IComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES));
 	}
 	/**
-	 * Create the editor for the contracts feature on CommercialModel
+	 * Create the editor for the salesContracts feature on CommercialModel
 	 *
 	 * @generated
 	 */
-	protected void add_contractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACTS));
+	protected void add_salesContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS));
 	}
+
 	/**
 	 * Create the editor for the shippingEntity feature on CommercialModel
 	 *
@@ -99,5 +101,14 @@ public class CommercialModelComponentHelper implements IComponentHelper {
 	 */
 	protected void add_shippingEntityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.COMMERCIAL_MODEL__SHIPPING_ENTITY));
+	}
+
+	/**
+	 * Create the editor for the purchaseContracts feature on CommercialModel
+	 *
+	 * @generated
+	 */
+	protected void add_purchaseContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS));
 	}
 }

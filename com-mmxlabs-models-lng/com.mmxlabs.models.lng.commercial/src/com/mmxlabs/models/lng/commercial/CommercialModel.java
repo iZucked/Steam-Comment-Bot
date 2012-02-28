@@ -21,8 +21,9 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getEntities <em>Entities</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getContracts <em>Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getSalesContracts <em>Sales Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getShippingEntity <em>Shipping Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getPurchaseContracts <em>Purchase Contracts</em>}</li>
  * </ul>
  * </p>
  *
@@ -48,20 +49,20 @@ public interface CommercialModel extends UUIDObject, NamedObject {
 	EList<LegalEntity> getEntities();
 
 	/**
-	 * Returns the value of the '<em><b>Contracts</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.Contract}.
+	 * Returns the value of the '<em><b>Sales Contracts</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.SalesContract}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Contracts</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Sales Contracts</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Contracts</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getCommercialModel_Contracts()
+	 * @return the value of the '<em>Sales Contracts</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getCommercialModel_SalesContracts()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<Contract> getContracts();
+	EList<SalesContract> getSalesContracts();
 
 	/**
 	 * Returns the value of the '<em><b>Shipping Entity</b></em>' reference.
@@ -88,6 +89,22 @@ public interface CommercialModel extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setShippingEntity(LegalEntity value);
+
+	/**
+	 * Returns the value of the '<em><b>Purchase Contracts</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.PurchaseContract}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Purchase Contracts</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Purchase Contracts</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getCommercialModel_PurchaseContracts()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PurchaseContract> getPurchaseContracts();
 
 } // end of  CommercialModel
 

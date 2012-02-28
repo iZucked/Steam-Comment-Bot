@@ -12,6 +12,8 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
@@ -41,8 +43,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getEntities <em>Entities</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getContracts <em>Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getSalesContracts <em>Sales Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getShippingEntity <em>Shipping Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getPurchaseContracts <em>Purchase Contracts</em>}</li>
  * </ul>
  * </p>
  *
@@ -80,14 +83,14 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	protected EList<LegalEntity> entities;
 
 	/**
-	 * The cached value of the '{@link #getContracts() <em>Contracts</em>}' containment reference list.
+	 * The cached value of the '{@link #getSalesContracts() <em>Sales Contracts</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getContracts()
+	 * @see #getSalesContracts()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Contract> contracts;
+	protected EList<SalesContract> salesContracts;
 
 	/**
 	 * The cached value of the '{@link #getShippingEntity() <em>Shipping Entity</em>}' reference.
@@ -98,6 +101,16 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * @ordered
 	 */
 	protected LegalEntity shippingEntity;
+
+	/**
+	 * The cached value of the '{@link #getPurchaseContracts() <em>Purchase Contracts</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPurchaseContracts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PurchaseContract> purchaseContracts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -156,11 +169,11 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Contract> getContracts() {
-		if (contracts == null) {
-			contracts = new EObjectContainmentEList<Contract>(Contract.class, this, CommercialPackage.COMMERCIAL_MODEL__CONTRACTS);
+	public EList<SalesContract> getSalesContracts() {
+		if (salesContracts == null) {
+			salesContracts = new EObjectContainmentEList<SalesContract>(SalesContract.class, this, CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS);
 		}
-		return contracts;
+		return salesContracts;
 	}
 
 	/**
@@ -206,13 +219,27 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<PurchaseContract> getPurchaseContracts() {
+		if (purchaseContracts == null) {
+			purchaseContracts = new EObjectContainmentEList<PurchaseContract>(PurchaseContract.class, this, CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
+		}
+		return purchaseContracts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
 				return ((InternalEList<?>)getEntities()).basicRemove(otherEnd, msgs);
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACTS:
-				return ((InternalEList<?>)getContracts()).basicRemove(otherEnd, msgs);
+			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
+				return ((InternalEList<?>)getSalesContracts()).basicRemove(otherEnd, msgs);
+			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
+				return ((InternalEList<?>)getPurchaseContracts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -229,11 +256,13 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				return getName();
 			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
 				return getEntities();
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACTS:
-				return getContracts();
+			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
+				return getSalesContracts();
 			case CommercialPackage.COMMERCIAL_MODEL__SHIPPING_ENTITY:
 				if (resolve) return getShippingEntity();
 				return basicGetShippingEntity();
+			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
+				return getPurchaseContracts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -254,12 +283,16 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				getEntities().clear();
 				getEntities().addAll((Collection<? extends LegalEntity>)newValue);
 				return;
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACTS:
-				getContracts().clear();
-				getContracts().addAll((Collection<? extends Contract>)newValue);
+			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
+				getSalesContracts().clear();
+				getSalesContracts().addAll((Collection<? extends SalesContract>)newValue);
 				return;
 			case CommercialPackage.COMMERCIAL_MODEL__SHIPPING_ENTITY:
 				setShippingEntity((LegalEntity)newValue);
+				return;
+			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
+				getPurchaseContracts().clear();
+				getPurchaseContracts().addAll((Collection<? extends PurchaseContract>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -279,11 +312,14 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
 				getEntities().clear();
 				return;
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACTS:
-				getContracts().clear();
+			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
+				getSalesContracts().clear();
 				return;
 			case CommercialPackage.COMMERCIAL_MODEL__SHIPPING_ENTITY:
 				setShippingEntity((LegalEntity)null);
+				return;
+			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
+				getPurchaseContracts().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -301,10 +337,12 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
 				return entities != null && !entities.isEmpty();
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACTS:
-				return contracts != null && !contracts.isEmpty();
+			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
+				return salesContracts != null && !salesContracts.isEmpty();
 			case CommercialPackage.COMMERCIAL_MODEL__SHIPPING_ENTITY:
 				return shippingEntity != null;
+			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
+				return purchaseContracts != null && !purchaseContracts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

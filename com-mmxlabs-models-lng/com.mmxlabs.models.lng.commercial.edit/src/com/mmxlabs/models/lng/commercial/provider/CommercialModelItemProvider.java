@@ -133,7 +133,8 @@ public class CommercialModelItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACTS);
+			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS);
+			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
 		}
 		return childrenFeatures;
 	}
@@ -192,7 +193,8 @@ public class CommercialModelItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACTS:
+			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
+			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -217,17 +219,12 @@ public class CommercialModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACTS,
-				 CommercialFactory.eINSTANCE.createContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACTS,
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
 				 CommercialFactory.eINSTANCE.createSalesContract()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACTS,
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
 				 CommercialFactory.eINSTANCE.createPurchaseContract()));
 	}
 
