@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -418,7 +419,7 @@ public class LNGScenarioTransformer {
 	 * Find the earliest date entry in the model, for relative hours calculations. Uses a slightly naff bit of reflection to find all getters which return a date.
 	 */
 	private void findEarliestAndLatestTimes() {
-		final Pair<Date, Date> a = EMFUtils.findEarliestAndLatestEvents(scenario);
+		final Pair<Date, Date> a = EMFUtils.findEarliestAndLatestEvents(rootObject);
 		earliestTime = a.getFirst();
 		latestTime = a.getSecond();
 	}
@@ -443,9 +444,11 @@ public class LNGScenarioTransformer {
 			if (event instanceof CharterOutEvent) {
 				final CharterOutEvent charterOut = (CharterOutEvent) event;
 				final IPort endPort = portAssociation.lookup(charterOut.getEffectiveEndPort());
-				final long maxHeel = charterOut.isSetHeelLimit() ? (charterOut.getHeelLimit() * Calculator.ScaleFactor) : Long.MAX_VALUE;
-				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, maxHeel, Calculator.scaleToInt(charterOut.getHeelCVValue()),
-						Calculator.scaleToInt(charterOut.getHeelUnitPrice()));
+				
+				HeelOptions heelOptions = charterOut.getHeelOptions();
+				final long maxHeel = heelOptions.isSetVolumeAvailable() ? (heelOptions.getVolumeAvailable() * Calculator.ScaleFactor) : Long.MAX_VALUE;
+				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, maxHeel, Calculator.scaleToInt(heelOptions.getCvValue()),
+						Calculator.scaleToInt(heelOptions.getPricePerMMBTU()));
 
 			} else if (event instanceof DryDockEvent) {
 				builderSlot = builder.createDrydockEvent(event.getName(), window, port, durationHours);
