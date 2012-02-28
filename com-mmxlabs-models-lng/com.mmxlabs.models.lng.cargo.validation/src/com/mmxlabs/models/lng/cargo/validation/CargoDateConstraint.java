@@ -38,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
  * 
  */
 public class CargoDateConstraint extends AbstractModelConstraint {
+//	FIX UP THESE ID STRING
 	private static final String DATE_ORDER_ID = "com.mmxlabs.lngscheduler.emf-extras.constraints.cargo_order";
 	private static final String TRAVEL_TIME_ID = "com.mmxlabs.lngscheduler.emf-extras.constraints.cargo_travel_time";
 	private static final String AVAILABLE_TIME_ID = "com.mmxlabs.lngscheduler.emf-extras.constraints.cargo_available_time";
