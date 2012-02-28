@@ -248,6 +248,22 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 		return eGet(feature);
 	}
 
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * For unsettable values with a default in another object, this method attempts to return the local instance value if present, otherwise the default object.
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public Object eGetWithDefault(EStructuralFeature feature) {
+		
+		if (feature.isUnsettable() && !eIsSet(feature)) {
+			return getUnsetValue(feature);
+		} else {
+			return eGet(feature);
+		}
+	}
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

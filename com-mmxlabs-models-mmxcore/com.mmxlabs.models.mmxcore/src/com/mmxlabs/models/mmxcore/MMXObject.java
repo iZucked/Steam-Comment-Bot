@@ -111,4 +111,12 @@ public interface MMXObject extends EObject {
 	 */
 	Object getUnsetValue(EStructuralFeature feature);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" featureRequired="true"
+	 * @generated
+	 */
+	Object eGetWithDefault(EStructuralFeature feature);
+
 } // MMXObject
