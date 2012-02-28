@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,30 +33,20 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  */
 public interface Sequence extends MMXObject {
 	/**
-	 * Returns the value of the '<em><b>Events</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Events</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.Event}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Events</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Events</em>' containment reference.
-	 * @see #setEvents(Event)
+	 * @return the value of the '<em>Events</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_Events()
-	 * @model containment="true" required="true"
+	 * @model containment="true"
 	 * @generated
 	 */
-	Event getEvents();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getEvents <em>Events</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Events</em>' containment reference.
-	 * @see #getEvents()
-	 * @generated
-	 */
-	void setEvents(Event value);
+	EList<Event> getEvents();
 
 	/**
 	 * Returns the value of the '<em><b>Vessel</b></em>' reference.

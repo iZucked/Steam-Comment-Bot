@@ -16,13 +16,17 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -41,14 +45,14 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	/**
-	 * The cached value of the '{@link #getEvents() <em>Events</em>}' containment reference.
+	 * The cached value of the '{@link #getEvents() <em>Events</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getEvents()
 	 * @generated
 	 * @ordered
 	 */
-	protected Event events;
+	protected EList<Event> events;
 
 	/**
 	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
@@ -112,42 +116,11 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Event getEvents() {
+	public EList<Event> getEvents() {
+		if (events == null) {
+			events = new EObjectContainmentEList<Event>(Event.class, this, SchedulePackage.SEQUENCE__EVENTS);
+		}
 		return events;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetEvents(Event newEvents, NotificationChain msgs) {
-		Event oldEvents = events;
-		events = newEvents;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.SEQUENCE__EVENTS, oldEvents, newEvents);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setEvents(Event newEvents) {
-		if (newEvents != events) {
-			NotificationChain msgs = null;
-			if (events != null)
-				msgs = ((InternalEObject)events).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SEQUENCE__EVENTS, null, msgs);
-			if (newEvents != null)
-				msgs = ((InternalEObject)newEvents).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SEQUENCE__EVENTS, null, msgs);
-			msgs = basicSetEvents(newEvents, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SEQUENCE__EVENTS, newEvents, newEvents));
 	}
 
 	/**
@@ -285,7 +258,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case SchedulePackage.SEQUENCE__EVENTS:
-				return basicSetEvents(null, msgs);
+				return ((InternalEList<?>)getEvents()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -315,11 +288,13 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case SchedulePackage.SEQUENCE__EVENTS:
-				setEvents((Event)newValue);
+				getEvents().clear();
+				getEvents().addAll((Collection<? extends Event>)newValue);
 				return;
 			case SchedulePackage.SEQUENCE__VESSEL:
 				setVessel((Vessel)newValue);
@@ -340,7 +315,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case SchedulePackage.SEQUENCE__EVENTS:
-				setEvents((Event)null);
+				getEvents().clear();
 				return;
 			case SchedulePackage.SEQUENCE__VESSEL:
 				unsetVessel();
@@ -361,7 +336,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case SchedulePackage.SEQUENCE__EVENTS:
-				return events != null;
+				return events != null && !events.isEmpty();
 			case SchedulePackage.SEQUENCE__VESSEL:
 				return isSetVessel();
 			case SchedulePackage.SEQUENCE__VESSEL_CLASS:

@@ -246,7 +246,7 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
-	 * The feature id for the '<em><b>Events</b></em>' containment reference.
+	 * The feature id for the '<em><b>Events</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1177,10 +1177,10 @@ public interface SchedulePackage extends EPackage {
 	EClass getSequence();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getEvents <em>Events</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Sequence#getEvents <em>Events</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Events</em>'.
+	 * @return the meta object for the containment reference list '<em>Events</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Sequence#getEvents()
 	 * @see #getSequence()
 	 * @generated
@@ -1723,7 +1723,7 @@ public interface SchedulePackage extends EPackage {
 		EClass SEQUENCE = eINSTANCE.getSequence();
 
 		/**
-		 * The meta object literal for the '<em><b>Events</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Events</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
