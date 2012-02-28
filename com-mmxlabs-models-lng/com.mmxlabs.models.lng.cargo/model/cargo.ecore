@@ -8,8 +8,19 @@
         eType="#//LoadSlot"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" lowerBound="1"
         eType="#//DischargeSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoType" lowerBound="1"
+        eType="#//CargoType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Slot" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASlot platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
+    <eOperations name="getSlotOrPortDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getSlotOrContractMinQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getSlotOrContractMaxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getWindowEndWithSlotOrPortTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new Date(getWindowStart().getDateWithDefaults(getPort())&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;.getTime()&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;+ javax.management.timer.Timer.ONE_HOUR&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;* getWindowDuration());"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getWindowStartWithSlotOrPortTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStartTime" lowerBound="1"
@@ -49,4 +60,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SpotLoadSlot" eSuperTypes="#//LoadSlot #//SpotSlot"/>
   <eClassifiers xsi:type="ecore:EClass" name="SpotDischargeSlot" eSuperTypes="#//DischargeSlot #//SpotSlot"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="CargoType">
+    <eLiterals name="FLEET" literal="FLEET"/>
+    <eLiterals name="FOB" value="1"/>
+    <eLiterals name="DES" value="2"/>
+  </eClassifiers>
 </ecore:EPackage>

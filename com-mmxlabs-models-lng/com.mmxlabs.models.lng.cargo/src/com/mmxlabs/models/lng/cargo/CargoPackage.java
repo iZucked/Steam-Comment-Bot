@@ -12,6 +12,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -128,13 +129,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO__DISCHARGE_SLOT = TypesPackage.ACARGO_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Cargo Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__CARGO_TYPE = TypesPackage.ACARGO_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 2;
+	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl <em>Slot</em>}' class.
@@ -1000,6 +1010,17 @@ public interface CargoPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.CargoType
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
+	 * @generated
+	 */
+	int CARGO_TYPE = 8;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1030,6 +1051,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCargo_DischargeSlot();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Cargo#getCargoType <em>Cargo Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cargo Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#getCargoType()
+	 * @see #getCargo()
+	 * @generated
+	 */
+	EAttribute getCargo_CargoType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Slot <em>Slot</em>}'.
@@ -1267,6 +1299,16 @@ public interface CargoPackage extends EPackage {
 	EClass getSpotDischargeSlot();
 
 	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoType
+	 * @generated
+	 */
+	EEnum getCargoType();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1313,6 +1355,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO__DISCHARGE_SLOT = eINSTANCE.getCargo_DischargeSlot();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CARGO__CARGO_TYPE = eINSTANCE.getCargo_CargoType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl <em>Slot</em>}' class.
@@ -1503,6 +1553,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EClass SPOT_DISCHARGE_SLOT = eINSTANCE.getSpotDischargeSlot();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.CargoType
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
+		 * @generated
+		 */
+		EEnum CARGO_TYPE = eINSTANCE.getCargoType();
 
 	}
 

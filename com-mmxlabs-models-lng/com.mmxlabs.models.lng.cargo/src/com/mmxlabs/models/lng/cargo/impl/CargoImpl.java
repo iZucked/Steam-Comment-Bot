@@ -9,6 +9,7 @@
 package com.mmxlabs.models.lng.cargo.impl;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 
@@ -30,6 +31,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -55,6 +57,26 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * @ordered
 	 */
 	protected DischargeSlot dischargeSlot;
+
+	/**
+	 * The default value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final CargoType CARGO_TYPE_EDEFAULT = CargoType.FLEET;
+
+	/**
+	 * The cached value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoType()
+	 * @generated
+	 * @ordered
+	 */
+	protected CargoType cargoType = CARGO_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -156,6 +178,27 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CargoType getCargoType() {
+		return cargoType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCargoType(CargoType newCargoType) {
+		CargoType oldCargoType = cargoType;
+		cargoType = newCargoType == null ? CARGO_TYPE_EDEFAULT : newCargoType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__CARGO_TYPE, oldCargoType, cargoType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -165,6 +208,8 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				if (resolve) return getDischargeSlot();
 				return basicGetDischargeSlot();
+			case CargoPackage.CARGO__CARGO_TYPE:
+				return getCargoType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -182,6 +227,9 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				return;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				setDischargeSlot((DischargeSlot)newValue);
+				return;
+			case CargoPackage.CARGO__CARGO_TYPE:
+				setCargoType((CargoType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -201,6 +249,9 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				setDischargeSlot((DischargeSlot)null);
 				return;
+			case CargoPackage.CARGO__CARGO_TYPE:
+				setCargoType(CARGO_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -217,8 +268,26 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				return loadSlot != null;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				return dischargeSlot != null;
+			case CargoPackage.CARGO__CARGO_TYPE:
+				return cargoType != CARGO_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (cargoType: ");
+		result.append(cargoType);
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of CargoImpl
