@@ -28,14 +28,12 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
-import scenario.Scenario;
-import scenario.ScenarioPackage;
-import scenario.cargo.Slot;
-import scenario.fleet.PortAndTime;
-import scenario.fleet.VesselEvent;
-
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.MMXSubModel;
 
 /**
  * Utility class for doing things to scenarios.
@@ -45,9 +43,7 @@ import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
  */
 public class EMFUtils {
 	/**
-	 * Serialize an EObject into a byte array; currently EMF generated models do
-	 * not serialize properly, particularly models with complicated containment
-	 * going on.
+	 * Serialize an EObject into a byte array; currently EMF generated models do not serialize properly, particularly models with complicated containment going on.
 	 * 
 	 * @see #deserialiseEObject(byte[], EClass) - the inverse of this method
 	 * @param object
@@ -57,14 +53,11 @@ public class EMFUtils {
 	public static byte[] serializeEObject(final EObject object) {
 		final ResourceSet set = new ResourceSetImpl();
 		final XMIResourceFactoryImpl rf = new XMIResourceFactoryImpl();
-		set.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put("*", rf);
+		set.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", rf);
 
-		set.getPackageRegistry().put(object.eClass().getEPackage().getNsURI(),
-				object.eClass().getEPackage());
+		set.getPackageRegistry().put(object.eClass().getEPackage().getNsURI(), object.eClass().getEPackage());
 
-		final Resource resource = set.createResource(URI.createGenericURI(
-				"invalid", "invalid", "invalid"));
+		final Resource resource = set.createResource(URI.createGenericURI("invalid", "invalid", "invalid"));
 
 		resource.getContents().add(object);
 
@@ -78,8 +71,7 @@ public class EMFUtils {
 	}
 
 	/**
-	 * Deserialize a byte array produced by {@link #serializeEObject(EObject)}.
-	 * See the doc for that on why this is necessary.
+	 * Deserialize a byte array produced by {@link #serializeEObject(EObject)}. See the doc for that on why this is necessary.
 	 * 
 	 * @param <T>
 	 * @param byteArray
@@ -89,18 +81,14 @@ public class EMFUtils {
 	 * @return the deserialized object
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T deserialiseEObject(final byte[] byteArray,
-			final EClass clazz) {
+	public static <T> T deserialiseEObject(final byte[] byteArray, final EClass clazz) {
 		final ResourceSet set = new ResourceSetImpl();
 		final XMIResourceFactoryImpl rf = new XMIResourceFactoryImpl();
-		set.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put("*", rf);
+		set.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", rf);
 
-		set.getPackageRegistry().put(clazz.getEPackage().getNsURI(),
-				clazz.getEPackage());
+		set.getPackageRegistry().put(clazz.getEPackage().getNsURI(), clazz.getEPackage());
 
-		final Resource resource = set.createResource(URI.createGenericURI(
-				"invalid", "invalid", "invalid"));
+		final Resource resource = set.createResource(URI.createGenericURI("invalid", "invalid", "invalid"));
 
 		final ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
 		try {
@@ -110,19 +98,12 @@ public class EMFUtils {
 		return (T) clazz.getInstanceClass().cast(resource.getContents().get(0));
 	}
 
-	public static <T> T readObjectFromFile(final String filepath,
-			final Class<? extends T> clazz) {
+	public static <T> T readObjectFromFile(final String filepath, final Class<? extends T> clazz) {
 		ResourceSet resourceSet = new ResourceSetImpl();
-		resourceSet
-				.getResourceFactoryRegistry()
-				.getExtensionToFactoryMap()
-				.put(Resource.Factory.Registry.DEFAULT_EXTENSION,
-						new XMIResourceFactoryImpl());
-		resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI,
-				ScenarioPackage.eINSTANCE);
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
+		resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI, ScenarioPackage.eINSTANCE);
 
-		Resource resource = resourceSet.getResource(
-				URI.createFileURI(filepath), true);
+		Resource resource = resourceSet.getResource(URI.createFileURI(filepath), true);
 		for (EObject e : resource.getContents()) {
 			if (clazz.isInstance(e)) {
 				return clazz.cast(e);
@@ -132,12 +113,10 @@ public class EMFUtils {
 	}
 
 	/**
-	 * Iterate through all the attributes of the given EObject and find the
-	 * earliest and latest dates
+	 * Iterate through all the attributes of the given EObject and find the earliest and latest dates
 	 * 
 	 * @param object
-	 * @return a pair, first element containing the earliest date and second the
-	 *         latest
+	 * @return a pair, first element containing the earliest date and second the latest
 	 */
 	public static Pair<Date, Date> findMinMaxDateAttributes(final EObject object) {
 		final Pair<Date, Date> result = new Pair<Date, Date>();
@@ -158,27 +137,29 @@ public class EMFUtils {
 
 	}
 
-	public static Pair<Date, Date> findEarliestAndLatestEvents(
-			final Scenario rootObject) {
+	public static Pair<Date, Date> findEarliestAndLatestEvents(final MMXRootObject rootObject) {
 		final Pair<Date, Date> result = new Pair<Date, Date>(null, null);
 
-		final TreeIterator<EObject> iterator = scenario.eAllContents();
-		while (iterator.hasNext()) {
-			final EObject o = iterator.next();
-			if (o instanceof PortAndTime) {
-				final PortAndTime pat = (PortAndTime) o;
-				updateMinMax(result, pat.getStartTime());
-				updateMinMax(result, pat.getEndTime());
-			} else if (o instanceof Slot) {
-				final Slot slot = (Slot) o;
-				updateMinMax(result, slot.getWindowStart());
-				updateMinMax(result, slot.getWindowEnd());
-			} else if (o instanceof VesselEvent) {
-				updateMinMax(result, ((VesselEvent) o).getStartDate());
-				updateMinMax(result, ((VesselEvent) o).getEndDate());
+		for (MMXSubModel subModel : rootObject.getSubModels()) {
+			final TreeIterator<EObject> iterator = subModel.eAllContents();
+			while (iterator.hasNext()) {
+				final EObject o = iterator.next();
+				if (o instanceof VesselAvailablility) {
+					final VesselAvailablility pat = (VesselAvailablility) o;
+					updateMinMax(result, pat.getStartAfter());
+					updateMinMax(result, pat.getStartBy());
+					updateMinMax(result, pat.getEndAfter());
+					updateMinMax(result, pat.getEndBy());
+				} else if (o instanceof Slot) {
+					final Slot slot = (Slot) o;
+					updateMinMax(result, slot.getWindowStart());
+					updateMinMax(result, slot.getWindowEndWithSlotOrPortTime());
+				} else if (o instanceof VesselEvent) {
+					updateMinMax(result, ((VesselEvent) o).getStartAfter());
+					updateMinMax(result, ((VesselEvent) o).getStartBy());
+				}
 			}
 		}
-
 		return result;
 	}
 
@@ -188,8 +169,7 @@ public class EMFUtils {
 	 * @param object
 	 * @param result
 	 */
-	private static void findMinMaxDateAttributes(final EObject object,
-			final Pair<Date, Date> mm) {
+	private static void findMinMaxDateAttributes(final EObject object, final Pair<Date, Date> mm) {
 
 		final TreeIterator<EObject> iter = object.eAllContents();
 		while (iter.hasNext()) {
@@ -198,8 +178,7 @@ public class EMFUtils {
 
 			for (final EAttribute attribute : eClass.getEAllAttributes()) {
 				if (sub.eIsSet(attribute)) {
-					if (Date.class.isAssignableFrom(attribute
-							.getEAttributeType().getInstanceClass())) {
+					if (Date.class.isAssignableFrom(attribute.getEAttributeType().getInstanceClass())) {
 						final Date dt = (Date) sub.eGet(attribute);
 
 						if (mm.getFirst() == null || dt.before(mm.getFirst()))
@@ -215,11 +194,9 @@ public class EMFUtils {
 
 	public static EClass findConcreteSubclass(final EClass eClass) {
 		if (eClass.isAbstract()) {
-			for (final EClassifier otherClass : eClass.getEPackage()
-					.getEClassifiers()) {
+			for (final EClassifier otherClass : eClass.getEPackage().getEClassifiers()) {
 				if (otherClass instanceof EClass) {
-					if (!(((EClass) otherClass).isAbstract())
-							&& eClass.isSuperTypeOf((EClass) otherClass)) {
+					if (!(((EClass) otherClass).isAbstract()) && eClass.isSuperTypeOf((EClass) otherClass)) {
 						return (EClass) otherClass;
 					}
 				}
@@ -240,8 +217,7 @@ public class EMFUtils {
 		final EClass concrete = findConcreteSubclass(eClass);
 		if (concrete == null)
 			return null;
-		final EObject result = concrete.getEPackage().getEFactoryInstance()
-				.create(concrete);
+		final EObject result = concrete.getEPackage().getEFactoryInstance().create(concrete);
 
 		for (final EReference ref : eClass.getEAllContainments()) {
 			if (ref.isMany())
@@ -254,10 +230,10 @@ public class EMFUtils {
 
 		return result;
 	}
-	
+
 	/**
-	 * For this object and all its contained objects, find all singular attributes with the given data type, and if they are null at the moment
-	 * either (a) unset them if they are unsettable attributes, or (b) set them to the given value if they are not unsettable.
+	 * For this object and all its contained objects, find all singular attributes with the given data type, and if they are null at the moment either (a) unset them if they are unsettable attributes,
+	 * or (b) set them to the given value if they are not unsettable.
 	 * 
 	 * 
 	 * @param object
@@ -270,7 +246,8 @@ public class EMFUtils {
 		final TreeIterator<EObject> iterator = object.eAllContents();
 		while (object != null) {
 			for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
-				if (attribute.isMany()) continue;
+				if (attribute.isMany())
+					continue;
 				if (attribute.getEAttributeType().equals(dataType)) {
 					final Object value = object.eGet(attribute);
 					if (value == null) {
@@ -282,7 +259,7 @@ public class EMFUtils {
 					}
 				}
 			}
-			
+
 			if (iterator.hasNext()) {
 				object = iterator.next();
 			} else {
@@ -309,10 +286,8 @@ public class EMFUtils {
 		return unsetOrSetNullValues(unsetOrSetNullValues(input, ScenarioPackage.eINSTANCE.getDateAndOptionalTime(), daot), EcorePackage.eINSTANCE.getEDate(), date);
 	}
 
-	
 	/**
-	 * Find an EClass which is a common superclass of the given objects NOTE
-	 * this does not work with multiple supertypes
+	 * Find an EClass which is a common superclass of the given objects NOTE this does not work with multiple supertypes
 	 * 
 	 * @param objects
 	 * @return
@@ -341,14 +316,12 @@ public class EMFUtils {
 	}
 
 	/**
-	 * Returns true if all the {@link EObject}s in the given collection have the
-	 * same {@link EClass}.
+	 * Returns true if all the {@link EObject}s in the given collection have the same {@link EClass}.
 	 * 
 	 * @param objects
 	 * @return true if all objects have same {@link EClass}
 	 */
-	public static boolean allSameEClass(
-			final Collection<? extends EObject> objects) {
+	public static boolean allSameEClass(final Collection<? extends EObject> objects) {
 		final Iterator<? extends EObject> it = objects.iterator();
 		if (it.hasNext() == false)
 			return true;
