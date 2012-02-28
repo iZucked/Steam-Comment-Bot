@@ -149,6 +149,7 @@ public class ValidationSupport {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public synchronized List<EObject> getContents(final EObject container,
 			final EReference containment) {
 		final LinkedList<EObject> result = new LinkedList<EObject>();
