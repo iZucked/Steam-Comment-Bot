@@ -7,7 +7,6 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.cargo;
-import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.types.ASlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
