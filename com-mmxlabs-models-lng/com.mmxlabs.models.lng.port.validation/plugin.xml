@@ -4,127 +4,54 @@
    <extension
          point="org.eclipse.emf.validation.constraintProviders">
       <category
-            id="com.mmxlabs.models.lng.cargo.validation.category1"
+            id="com.mmxlabs.models.lng.port.validation.base"
             mandatory="true"
-            name="Cargo Validation">
+            name="Port Validation">
       </category>
       <constraintProvider
             cache="true">
          <package
-               namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
+               namespaceUri="http://www.mmxlabs.com/models/lng/port/1/">
          </package>
          <constraints
-               categories=" com.mmxlabs.models.lng.cargo.validation.category1">
+               categories=" com.mmxlabs.models.lng.port.validation.base">
             <constraint
-                  class="com.mmxlabs.models.lng.port.validation.CargoVolumeConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.CargoVolumeConstraint"
-                  isEnabledByDefault="true"
+                  class="com.mmxlabs.models.lng.port.validation.NullReferenceConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.NullReferenceConstraint"
                   lang="Java"
                   mode="Batch"
-                  name="Cargo Volumes"
+                  name="Null References"
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  message body text
-               </message>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.port.validation.CargoDateConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_order"
-                  lang="Java"
-                  mode="Batch"
-                  name="Load and discharge order"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  Cargo {0} has invalid load and discharge dates - the load occurs after the discharge.
+                  This attribute must be set.
                </message>
                <description>
-                  The end of the discharge slot's time window should be after the start of the load slot's time window.
+                  Some references should not be null.
                </description>
                <target
-                     class="Cargo">
+                     class="RouteLine">
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.port.validation.CargoDateConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_available_time"
+                  class="com.mmxlabs.models.lng.port.validation.RouteLineValidityConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.RouteLineValidityConstraint"
                   lang="Java"
                   mode="Batch"
-                  name="Cargo Travel Time"
+                  name="Distance Line From Port"
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Cargo {0} has a very large amount of travel time allocated - {1} days are allocated, and {2} is a sensible upper bound.
+                  Distance line from {0} to {1} has distance {2}
                </message>
                <description>
-                  If a cargo has a very large amount of slack in its travel time, lots of fuel will be wasted idling at the destination
-            		port. This often indicates a typographical error when entering dates.
+                  Entries in the distance matrix must be non-negative and not exceed 20,000 nautical miles.
                </description>
                <target
-                     class="Cargo">
-               </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.port.validation.SlotVolumeConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.SlotVolumeConstraint"
-                  lang="Java"
-                  mode="Batch"
-                  name="Slot Volumes"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  A slot has invalid minimum and maximum load volumes.
-               </message>
-               <description>
-                  Every slot's minimum and maximum volume should be non-negative, and the minimum should not exceed the maximum.
-               </description>
-               <target
-                     class="Slot">
-               </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.port.validation.SlotContractConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.SlotContractConstraint"
-                  lang="Java"
-                  mode="Batch"
-                  name="Slot Contract"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  A slot has no contract.
-               </message>
-               <description>
-                  Every slot needs a contract.
-               </description>
-               <target
-                     class="Slot">
-               </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.port.validation.CargoDateConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_travel_time"
-                  lang="Java"
-                  mode="Batch"
-                  name="Cargo Travel Time"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  Cargo {0} does not have enough travel time - {1} hours are required for the journey, but only {2} hours
-            		are available.
-               </message>
-               <description>
-                  The load and discharge dates for a cargo should allow enough time between them for
-            		the fastest fleet vessel to make the journey at maximum speed.
-               </description>
-               <target
-                     class="Cargo">
+                     class="RouteLine">
                </target>
             </constraint>
          </constraints>
-         <package
-               namespaceUri="com.mmxlabs.models.lng.cargo.validation.package2">
-         </package>
       </constraintProvider>
    </extension>
 

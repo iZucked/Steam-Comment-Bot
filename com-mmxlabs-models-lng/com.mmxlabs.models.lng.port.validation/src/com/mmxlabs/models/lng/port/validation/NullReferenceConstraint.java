@@ -18,13 +18,9 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import scenario.cargo.CargoPackage;
-import scenario.contract.ContractPackage;
-import scenario.fleet.FleetPackage;
-import scenario.port.PortPackage;
-
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
 
 /**
  * A constraint which checks that references which shouldn't be null aren't.
@@ -34,14 +30,9 @@ import com.mmxlabs.lngscheduler.emf.extras.validation.status.DetailConstraintSta
  */
 public class NullReferenceConstraint extends AbstractModelConstraint {
 	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(
-			PortPackage.eINSTANCE.getDistanceLine_FromPort(),
-			PortPackage.eINSTANCE.getDistanceLine_ToPort(),
-			// PortPackage.eINSTANCE.getPort_DefaultContract(),
-			CargoPackage.eINSTANCE.getCargo_LoadSlot(), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), CargoPackage.eINSTANCE.getSlot_Contract(),
-			FleetPackage.eINSTANCE.getVessel_Class(), FleetPackage.eINSTANCE.getVesselClass_BaseFuel(), FleetPackage.eINSTANCE.getCharterOut_EndPort(),
-			FleetPackage.eINSTANCE.getVesselEvent_StartPort(), FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(), FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(),
-			FleetPackage.eINSTANCE.getPortAndTime_Port(), ContractPackage.eINSTANCE.getContract_Entity()
 	// TODO add any more refs to check here
+			PortPackage.eINSTANCE.getRouteLine_From(),
+			PortPackage.eINSTANCE.getRouteLine_To()
 			);
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
