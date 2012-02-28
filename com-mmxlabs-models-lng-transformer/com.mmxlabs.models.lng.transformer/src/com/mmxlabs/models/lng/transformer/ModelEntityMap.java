@@ -17,8 +17,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
-import scenario.Scenario;
-
 /**
  * Class which maps model entities to classes; the LNGScenarioTransformer should
  * populate one of these, which maps every PortSlot to the URI of a Slot in the
@@ -43,7 +41,7 @@ public class ModelEntityMap {
 	 * @param scenario
 	 */
 	public void setScenario(final MMXRootObject rootObject) {
-		this.resourceSet = scenario.eResource().getResourceSet();
+		this.resourceSet = rootObject.eResource().getResourceSet();
 		earliestDate = EMFUtils.findEarliestAndLatestEvents(rootObject)
 				.getFirst();
 	}
