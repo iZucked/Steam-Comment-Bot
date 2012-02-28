@@ -24,7 +24,7 @@ import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
  * @author hinton
  * 
  */
-public class StartEndRequirementDateConstraint extends AbstractModelConstraint {
+public class VesselAvailabilityDateConstraint extends AbstractModelConstraint {
 	/*
 	 * (non-Javadoc)
 	 * 

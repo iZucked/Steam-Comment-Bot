@@ -176,8 +176,8 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementDateConstraint"
-                  id="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementDateConstraint"
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityDateConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityDateConstraint"
                   lang="Java"
                   mode="Batch"
                   name="Start / End Date Consistency"
@@ -194,8 +194,8 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementPortConstraint"
-                  id="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementPortConstraint.port_access"
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityPortConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityPortConstraint.port_access"
                   lang="Java"
                   mode="Batch"
                   name="Start / End Port Accessibility"
@@ -212,8 +212,8 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementPortConstraint"
-                  id="com.mmxlabs.models.lng.fleet.validation.StartEndRequirementPortConstraint.port_access_2"
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityPortConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityPortConstraint.port_access_2"
                   lang="Java"
                   mode="Batch"
                   name="Start / End Port Accessibility"

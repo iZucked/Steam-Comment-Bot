@@ -36,7 +36,7 @@ import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
  * @author hinton
  * 
  */
-public class StartEndRequirementPortConstraint extends AbstractModelConstraint {
+public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 	/*
 	 * (non-Javadoc)
 	 * 
