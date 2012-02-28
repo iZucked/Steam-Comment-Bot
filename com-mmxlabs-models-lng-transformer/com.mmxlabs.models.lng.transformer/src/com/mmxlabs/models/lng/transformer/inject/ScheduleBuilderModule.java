@@ -12,8 +12,8 @@ import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import com.mmxlabs.models.lng.transformer.Activator;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer;
-import com.mmxlabs.models.lng.transformer.plugin.ExtrasPlugin;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 
@@ -28,7 +28,7 @@ public class ScheduleBuilderModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
-		final ExtrasPlugin plugin = ExtrasPlugin.getDefault();
+		final Activator plugin = Activator.getDefault();
 		if (plugin != null) {
 			install(osgiModule(plugin.getBundle().getBundleContext(), eclipseRegistry()));
 

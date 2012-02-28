@@ -4,12 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.inject;
 
-import scenario.Scenario;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**
@@ -17,9 +16,9 @@ import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModu
  */
 public class LNGTransformerModule extends AbstractModule {
 
-	private final Scenario scenario;
+	private final MMXRootObject scenario;
 
-	public LNGTransformerModule(final Scenario scenario) {
+	public LNGTransformerModule(final MMXRootObject scenario) {
 		this.scenario = scenario;
 	}
 
@@ -36,7 +35,7 @@ public class LNGTransformerModule extends AbstractModule {
 	 * @param scenario
 	 * @return
 	 */
-	public static LNGScenarioTransformer createLNGScenarioTransformer(final Scenario scenario) {
+	public static LNGScenarioTransformer createLNGScenarioTransformer(final MMXRootObject scenario) {
 		final Injector injector = Guice.createInjector(new LNGTransformerModule(scenario), new DataComponentProviderModule());
 
 		return injector.getInstance(LNGScenarioTransformer.class);
