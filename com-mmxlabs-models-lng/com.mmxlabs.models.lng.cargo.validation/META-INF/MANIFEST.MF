@@ -15,3 +15,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.common;version="1.0.0",
  com.mmxlabs.scheduler.optimiser;version="1.0.0"
+Export-Package: com.mmxlabs.models.lng.cargo.validation
