@@ -137,7 +137,7 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 	}
 
 	/**
-	 * This is a callback that will allow us to create the viewer and initialize it.
+	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
