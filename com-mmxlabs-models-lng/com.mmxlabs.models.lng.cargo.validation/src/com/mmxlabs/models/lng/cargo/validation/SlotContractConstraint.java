@@ -12,7 +12,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 
 

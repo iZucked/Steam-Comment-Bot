@@ -12,7 +12,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 
 /**

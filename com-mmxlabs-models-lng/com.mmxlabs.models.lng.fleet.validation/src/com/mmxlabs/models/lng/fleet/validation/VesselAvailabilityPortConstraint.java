@@ -25,8 +25,8 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.ValidationSupport;
 
 /**
  * Check that start/end requirement matches port constraint

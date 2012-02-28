@@ -14,7 +14,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
  * Checks that vessel events have a start time before their end time.

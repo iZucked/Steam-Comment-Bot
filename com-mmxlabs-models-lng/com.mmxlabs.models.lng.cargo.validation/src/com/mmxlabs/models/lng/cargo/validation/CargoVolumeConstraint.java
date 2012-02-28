@@ -13,7 +13,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
  * A constraint which checks that the load and discharge quantities for a cargo are compatible, so min discharge volume < max load volume

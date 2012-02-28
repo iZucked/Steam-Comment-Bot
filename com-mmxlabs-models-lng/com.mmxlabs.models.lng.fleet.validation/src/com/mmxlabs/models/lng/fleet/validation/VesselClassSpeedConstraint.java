@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
  * Checks that the min/max speeds lie within fuel consumption curve range for all vessel classes.

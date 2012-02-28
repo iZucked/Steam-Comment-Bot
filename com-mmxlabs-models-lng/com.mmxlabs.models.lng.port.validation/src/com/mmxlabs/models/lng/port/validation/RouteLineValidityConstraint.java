@@ -12,7 +12,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.RouteLine;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
  * A constraint which checks the reasonableness of entries in the distance matrix.

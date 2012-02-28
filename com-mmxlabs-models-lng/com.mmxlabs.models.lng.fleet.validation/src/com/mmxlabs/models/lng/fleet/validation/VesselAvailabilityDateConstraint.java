@@ -15,8 +15,8 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailablility;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.ValidationSupport;
 
 /**
  * Checks that the dates for start and end requirements are sane.

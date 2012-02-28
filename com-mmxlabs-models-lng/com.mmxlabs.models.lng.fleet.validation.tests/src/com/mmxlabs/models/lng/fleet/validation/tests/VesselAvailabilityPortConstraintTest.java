@@ -27,7 +27,7 @@ import com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityPortConstraint;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
  * Test the {@link VesselAvailabilityPortConstraintTest}. You will need the org.jmock eclipse plugin from our codebase repository to run this, as jmock doesn't currently provide an eclipse plugin.

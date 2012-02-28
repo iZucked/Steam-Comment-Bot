@@ -27,8 +27,8 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.ValidationSupport;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**

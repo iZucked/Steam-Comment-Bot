@@ -20,7 +20,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
  * A constraint which checks that references which shouldn't be null aren't.

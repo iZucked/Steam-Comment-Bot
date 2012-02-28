@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.pricing.validation;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
@@ -16,8 +15,8 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.ValidationSupport;
 
 /**
  * Generates a warning if some canal costs are not set
