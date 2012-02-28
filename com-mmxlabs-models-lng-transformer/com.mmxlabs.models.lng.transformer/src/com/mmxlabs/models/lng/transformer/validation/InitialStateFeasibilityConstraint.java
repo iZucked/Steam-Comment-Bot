@@ -9,14 +9,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 
-import scenario.Scenario;
-
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
-import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
-import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
-import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
-import com.mmxlabs.lngscheduler.emf.extras.inject.LNGTransformerModule;
+import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerModule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;

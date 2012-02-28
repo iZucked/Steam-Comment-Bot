@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -26,12 +27,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  */
 public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	protected IAnnotatedSolution annotatedSolution;
-	protected Scenario inputScenario;
+	protected MMXRootObject inputScenario;
 	protected Schedule output;
 	protected ModelEntityMap entities;
 	protected final ScheduleFactory scheduleFactory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
-	protected final EventsFactory factory = EventsPackage.eINSTANCE.getEventsFactory();
+	protected final ScheduleFactory factory = SchedulePackage.eINSTANCE.getEventsFactory();
 
 	private static final Map<FuelUnit, scenario.schedule.events.FuelUnit> fuelUnits = new HashMap<FuelUnit, scenario.schedule.events.FuelUnit>();
 
@@ -80,7 +81,7 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	}
 
 	@Override
-	public void setScenario(final Scenario inputScenario) {
+	public void setScenario(final MMXRootObject inputScenario) {
 		this.inputScenario = inputScenario;
 	}
 

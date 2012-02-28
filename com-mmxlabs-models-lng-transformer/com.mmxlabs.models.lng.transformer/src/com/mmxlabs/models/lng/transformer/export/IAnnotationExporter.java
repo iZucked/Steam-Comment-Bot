@@ -6,12 +6,10 @@ package com.mmxlabs.models.lng.transformer.export;
 
 import java.util.Map;
 
-import scenario.Scenario;
-import scenario.schedule.Schedule;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.fleetallocation.AllocatedVessel;
-
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
@@ -36,7 +34,7 @@ public interface IAnnotationExporter {
 	/**
 	 * @param inputScenario
 	 */
-	void setScenario(Scenario inputScenario);
+	void setScenario(MMXRootObject inputScenario);
 
 	/**
 	 * @param entities
@@ -55,5 +53,5 @@ public interface IAnnotationExporter {
 	 * @param key
 	 * @return
 	 */
-	ScheduledEvent export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel vessel);
+	Event export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel vessel);
 }

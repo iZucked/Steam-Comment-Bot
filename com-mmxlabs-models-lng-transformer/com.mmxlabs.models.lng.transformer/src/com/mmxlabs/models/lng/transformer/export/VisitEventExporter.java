@@ -7,20 +7,16 @@ package com.mmxlabs.models.lng.transformer.export;
 import java.util.HashMap;
 import java.util.Map;
 
-import scenario.cargo.CargoType;
-import scenario.cargo.LoadSlot;
-import scenario.cargo.Slot;
-import scenario.fleet.CharterOut;
-import scenario.fleet.VesselEvent;
-import scenario.port.Port;
-import scenario.schedule.CargoAllocation;
-import scenario.schedule.events.CharterOutVisit;
-import scenario.schedule.events.PortVisit;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.events.SlotVisit;
-import scenario.schedule.events.VesselEventVisit;
-import scenario.schedule.fleetallocation.AllocatedVessel;
-
+import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -51,7 +47,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public ScheduledEvent export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel vessel) {
+	public Event export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel vessel) {
 
 		final IPortSlot slot = portSlotProvider.getPortSlot(element);
 
@@ -83,7 +79,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 				eAllocation.setCargoType(CargoType.FLEET);
 
-				eAllocation.setLoadSlot(entities.getModelObject(allocation.getLoadSlot(), LoadSlot.class));
+				eAllocation.setLoadVisit(entities.getModelObject(allocation.getLoadSlot(), LoadSlot.class));
 				eAllocation.setDischargeSlot(entities.getModelObject(allocation.getDischargeSlot(), Slot.class));
 
 				eAllocation.setLoadDate(entities.getDateFromHours(allocation.getLoadTime()));
@@ -110,8 +106,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			final VesselEvent event = entities.getModelObject(slot, VesselEvent.class);
 			if (event == null) return null;
 			final VesselEventVisit vev;
-			if (event instanceof CharterOut) {
-				final CharterOut charterOut = (CharterOut) event;
+			if (event instanceof CharterOutEvent) {
+				final CharterOutEvent charterOut = (CharterOutEvent) event;
 				// filter out the charter out slots at the start port (these
 				// will have duration zero anyway)
 				if (ePort != charterOut.getEffectiveEndPort())
