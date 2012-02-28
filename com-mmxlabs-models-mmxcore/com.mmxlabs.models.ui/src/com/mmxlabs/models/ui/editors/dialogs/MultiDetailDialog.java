@@ -4,51 +4,8 @@
  */
 package com.mmxlabs.models.ui.editors.dialogs;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.IShellProvider;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.ToolBar;
-
-import com.mmxlabs.common.Equality;
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.mmxcore.validation.context.ValidationSupport;
-import com.mmxlabs.models.ui.editors.IDisplayComposite;
-import com.mmxlabs.models.ui.editors.IInlineEditor;
-import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
-import com.mmxlabs.models.ui.editors.util.ControlUtils;
-import com.mmxlabs.models.util.emfpath.EMFPath;
-import com.mmxlabs.models.util.emfpath.EMFUtils;
-import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 
 /**
  * A dialog for editing the same field on several objects simultaneously.

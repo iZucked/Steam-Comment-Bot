@@ -1,12 +1,7 @@
 package com.mmxlabs.models.ui.registries.impl;
 
-import java.util.WeakHashMap;
-
 import javax.inject.Inject;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
 

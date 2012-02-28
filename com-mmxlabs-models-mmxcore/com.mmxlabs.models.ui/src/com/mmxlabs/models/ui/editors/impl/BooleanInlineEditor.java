@@ -14,8 +14,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.mmxlabs.models.ui.editors.ICommandHandler;
-
 public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 	private Button button;
 	public BooleanInlineEditor(EStructuralFeature feature) {

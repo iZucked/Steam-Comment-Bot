@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
@@ -33,8 +32,6 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
-import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
-import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 
 /**
  * An inline editor for editing multi-value references. Pops up a dialog.

@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXObject;
-import com.mmxlabs.models.ui.impl.MMXObjectDetailComposite;
 
 /**
  * Displays a textbox for editing an EAttribute.

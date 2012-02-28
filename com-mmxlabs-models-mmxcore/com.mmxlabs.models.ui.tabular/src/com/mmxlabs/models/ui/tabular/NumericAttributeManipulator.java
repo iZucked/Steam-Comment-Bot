@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.ui.tabular;
 
-import java.text.ParseException;
-
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -17,8 +15,6 @@ import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.nebula.widgets.formattedtext.LongFormatter;
 import org.eclipse.swt.widgets.Composite;
-
-import com.mmxlabs.rcp.common.celleditors.NumberCellEditor;
 
 /**
  * @author hinton

@@ -67,7 +67,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.tabular.filter.FilterUtils;
 import com.mmxlabs.models.ui.tabular.filter.IFilter;
-import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 /**
