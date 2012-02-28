@@ -17,6 +17,7 @@ import scenario.optimiser.lso.LsoFactory;
 import scenario.optimiser.lso.LsoPackage;
 import scenario.optimiser.lso.ThresholderSettings;
 
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
@@ -40,7 +41,7 @@ public class ScenarioUtils {
 	 * 
 	 * @param scenario
 	 */
-	public static void addDefaultSettings(Scenario scenario) {
+	public static void addDefaultSettings(MMXRootObject scenario) {
 		final OptimiserFactory of = OptimiserPackage.eINSTANCE.getOptimiserFactory();
 		final LsoFactory lsof = LsoPackage.eINSTANCE.getLsoFactory();
 
