@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Reports"
+            id="com.mmxlabs.models.lng.reports">
+      </category>
+      
+      <view
+            name="Cargo Costs"
+            icon="icons/cview16/exec_statistic_view.gif"
+            category="com.mmxlabs.models.lng.reports"
+            class="com.mmxlabs.models.lng.reports.views.CargoReportView"
+            id="com.mmxlabs.models.lng.reports.views.CargoReportView">
+      </view>
+      
+      <view
+            name="Cargo"
+            icon="icons/cview16/exec_statistic_view.gif"
+            category="com.mmxlabs.models.lng.reports"
+            class="com.mmxlabs.models.lng.reports.views.BasicCargoReportView"
+            id="com.mmxlabs.models.lng.reports.views.BasicCargoReportView">
+      </view>
+      
+      <view
+            category="com.mmxlabs.models.lng.reports"
+            class="com.mmxlabs.models.lng.reports.views.FitnessReportView"
+            icon="icons/cview16/exec_flow_view.gif"
+            id="com.mmxlabs.models.lng.reports.views.FitnessReportView"
+            name="Fitness">
+      </view>
+      <view
+            category="com.mmxlabs.models.lng.reports"
+            class="com.mmxlabs.models.lng.reports.views.TotalsHierarchyView"
+            icon="icons/cview16/exec_flow_view.gif"
+            id="com.mmxlabs.models.lng.reports.views.TotalsHierarchyView"
+            name="Totals Hierarchy">
+      </view>
+      <view
+            category="com.mmxlabs.models.lng.reports"
+            class="com.mmxlabs.models.lng.reports.views.TotalsReportView"
+            icon="icons/cview16/exec_flow_view.gif"
+            id="com.mmxlabs.models.lng.reports.views.TotalsReportView"
+            name="Totals">
+      </view>
+      
+       <view
+            category="com.mmxlabs.models.lng.reports"
+            class="com.mmxlabs.models.lng.reports.views.PortRotationReportView"
+            icon="icons/cview16/exec_flow_view.gif"
+            id="com.mmxlabs.models.lng.reports.views.PortRotationReportView"
+            name="Port Rotation">
+      </view>
+      
+      <view
+            category="com.mmxlabs.models.lng.reports"
+            class="com.mmxlabs.models.lng.reports.views.LatenessReportView"
+            icon="icons/cview16/exec_flow_view.gif"
+            id="com.mmxlabs.models.lng.reports.views.LatenessReportView"
+            name="Lateness">
+      </view>
+      
+       <view
+             category="com.mmxlabs.models.lng.reports"
+             class="com.mmxlabs.models.lng.reports.views.CooldownReportView"
+             icon="icons/cview16/exec_flow_view.gif"
+             id="com.mmxlabs.models.lng.reports.views.CooldownReportView"
+             name="Cooldown">
+       </view>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+
+</plugin>
