@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
  * 
  */
 public class CargoDateConstraint extends AbstractModelConstraint {
-//	FIX UP THESE ID STRING
+
 	private static final String DATE_ORDER_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_orderr";
 	private static final String TRAVEL_TIME_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_travel_time";
 	private static final String AVAILABLE_TIME_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_available_time";
@@ -78,20 +77,13 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 	private IStatus validateSlotTravelTime(final IValidationContext ctx, final Cargo cargo, final int availableTime) {
 		if (availableTime >= 0) {
 
-			final ValidationSupport validationSupport = ValidationSupport.getInstance();
-
-			EObject container = validationSupport.getContainer(cargo).getFirst();
-			while ((container != null) && !(container instanceof MMXRootObject)) {
-				container = validationSupport.getContainer(container).getFirst();
-			}
-			if (container instanceof MMXRootObject) {
-				final MMXRootObject scenario = (MMXRootObject) container;
+			final MMXRootObject scenario = ValidationSupport.getInstance().getParentObjectType(MMXRootObject.class, cargo);
+			if (scenario != null) {
 
 				double maxSpeedKnots = 0;
 				final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
 				final PortModel portModel = scenario.getSubModel(PortModel.class);
-				
-				
+
 				for (final VesselClass vc : fleetModel.getVesselClasses()) {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
 				}
@@ -101,17 +93,19 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 				final Pair<Port, Port> key = new Pair<Port, Port>(cargo.getLoadSlot().getPort(), cargo.getDischargeSlot().getPort());
 				if (minTimes == null) {
 					minTimes = new HashMap<Pair<Port, Port>, Integer>();
-
+	
 					for (Route r : portModel.getRoutes()) {
-						int extraTime = 0;
-						collectMinTimes(minTimes, r, extraTime, maxSpeedKnots);
+						// TODO: Fix ME: BugzId:373
+//						int extraTime = r.getExtraTime();
+//						collectMinTimes(minTimes, r, extraTime, maxSpeedKnots);
 					}
 
-					for (final VesselClass vc : fleetModel.getVesselClasses()) {
-						for (final VesselClassCost vcc : vc.getCanalCosts()) {
-							collectMinTimes(minTimes, vcc.getCanal().getDistanceModel(), vcc.getTransitTime(), vc.getMaxSpeed());
-						}
-					}
+					// TODO: Fix ME: BugzId:373
+//					for (final VesselClass vc : fleetModel.getVesselClasses()) {
+//						for (final VesselClassCost vcc : vc.getgetCanalCosts()) {
+//							collectMinTimes(minTimes, vcc.getCanal().getDistanceModel(), vcc.getTransitTime(), vc.getMaxSpeed());
+//						}
+//					}
 
 					ctx.putCurrentConstraintData(minTimes);
 				}
@@ -185,7 +179,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 				final Port loadPort = loadSlot.getPort();
 				final Port dischargePort = dischargeSlot.getPort();
 				if ((loadPort != null) && (dischargePort != null)) {
-					
+
 					final int availableTime = (int) ((dischargeSlot.getWindowEndWithSlotOrPortTime().getTime() - loadSlot.getWindowStartWithSlotOrPortTime().getTime()) / Timer.ONE_HOUR)
 							- (loadSlot.getSlotOrPortDuration());
 
