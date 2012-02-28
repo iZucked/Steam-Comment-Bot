@@ -38,6 +38,8 @@
 		<module>com.mmxlabs.models.util</module>
 
 		<module>com.mmxlabs.models.mmxcore.feature</module>
+
+		<module>com.mmxlabs.models.mmxcore.p2</module>
 	</modules>
 
 	<build>

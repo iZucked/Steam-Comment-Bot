@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.mmxlabs.models.mmxcore.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.feature" version="1.0.0.qualifier">
+      <category name="all"/>
+   </feature>
+   <category-def name="all" label="Models: MMXCore: p2 Snapshots"/>
+</site>
