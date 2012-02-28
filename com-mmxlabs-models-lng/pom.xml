@@ -55,9 +55,6 @@
 		<module>com.mmxlabs.models.lng.schedule.edit</module>
 		<module>com.mmxlabs.models.lng.schedule.editor</module>
 		<module>com.mmxlabs.models.lng.schedule.validation</module>
-		<module>com.mmxlabs.models.lng.types</module>
-		<module>com.mmxlabs.models.lng.types.edit</module>
-		<module>com.mmxlabs.models.lng.types.editor</module>
 
 		<module>com.mmxlabs.models.lng.demo</module>
 

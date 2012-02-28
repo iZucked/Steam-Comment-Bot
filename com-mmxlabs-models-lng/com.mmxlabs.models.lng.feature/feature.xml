@@ -24,6 +24,10 @@ All rights reserved.
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import feature="com.mmxlabs.models.lng.types.feature" version="1.0.0.qualifier" match="compatible"/>
+   </requires>
+
    <plugin
          id="com.mmxlabs.models.lng.cargo"
          download-size="0"
@@ -53,14 +57,7 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.models.lng.cargo.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.cargo.validation"
+         id="com.mmxlabs.models.lng.cargo.validation.tests"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -82,13 +79,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.lng.commercial.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.commercial.validation"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -130,6 +120,20 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
+         id="com.mmxlabs.models.lng.fleet.validation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.fleet.validation.tests"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="com.mmxlabs.models.lng.input"
          download-size="0"
          install-size="0"
@@ -145,6 +149,13 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.lng.input.editor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.input.validation"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -172,6 +183,13 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
+         id="com.mmxlabs.models.lng.port.validation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="com.mmxlabs.models.lng.pricing"
          download-size="0"
          install-size="0"
@@ -187,6 +205,13 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.lng.pricing.editor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.pricing.validation"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -214,56 +239,7 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.models.lng.types"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.types.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.types.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.pricing.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.mmxlabs.models.lng.schedule.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.fleet.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.input.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.port.validation"
          download-size="0"
          install-size="0"
          version="0.0.0"
