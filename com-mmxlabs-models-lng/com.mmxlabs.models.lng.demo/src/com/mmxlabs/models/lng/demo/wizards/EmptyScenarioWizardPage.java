@@ -48,6 +48,7 @@ public class EmptyScenarioWizardPage extends WizardPage {
 	/**
 	 * @see IDialogPage#createControl(Composite)
 	 */
+	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
@@ -61,6 +62,7 @@ public class EmptyScenarioWizardPage extends WizardPage {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		containerText.setLayoutData(gd);
 		containerText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(ModifyEvent e) {
 				dialogChanged();
 			}
@@ -69,6 +71,7 @@ public class EmptyScenarioWizardPage extends WizardPage {
 		Button button = new Button(container, SWT.PUSH);
 		button.setText("Browse...");
 		button.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleBrowse();
 			}
@@ -80,6 +83,7 @@ public class EmptyScenarioWizardPage extends WizardPage {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		fileText.setLayoutData(gd);
 		fileText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(ModifyEvent e) {
 				dialogChanged();
 			}

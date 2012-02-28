@@ -95,6 +95,7 @@ public class EntryImpl extends EObjectImpl implements Entry {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getSubModelKey() {
 		return subModelKey;
 	}
@@ -104,6 +105,7 @@ public class EntryImpl extends EObjectImpl implements Entry {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSubModelKey(String newSubModelKey) {
 		String oldSubModelKey = subModelKey;
 		subModelKey = newSubModelKey;
@@ -116,6 +118,7 @@ public class EntryImpl extends EObjectImpl implements Entry {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getRelativePath() {
 		return relativePath;
 	}
@@ -125,6 +128,7 @@ public class EntryImpl extends EObjectImpl implements Entry {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRelativePath(String newRelativePath) {
 		String oldRelativePath = relativePath;
 		relativePath = newRelativePath;

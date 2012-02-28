@@ -190,6 +190,7 @@ public class DemoJointModel extends JointModel {
 		load();
 	}
 	
+	@Override
 	public void save() throws IOException {
 //		if (!file.exists()) {
 //			// create empty zipfile
@@ -237,6 +238,7 @@ public class DemoJointModel extends JointModel {
 		return releases;
 	}
 	
+	@Override
 	public MMXRootObject getRootObject() {
 		return super.getRootObject();
 	}

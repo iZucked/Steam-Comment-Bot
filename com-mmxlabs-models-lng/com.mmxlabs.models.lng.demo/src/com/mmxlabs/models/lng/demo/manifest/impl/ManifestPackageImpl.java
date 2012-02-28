@@ -105,6 +105,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getEntry() {
 		return entryEClass;
 	}
@@ -114,6 +115,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEntry_SubModelKey() {
 		return (EAttribute)entryEClass.getEStructuralFeatures().get(0);
 	}
@@ -123,6 +125,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getEntry_RelativePath() {
 		return (EAttribute)entryEClass.getEStructuralFeatures().get(1);
 	}
@@ -132,6 +135,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getManifest() {
 		return manifestEClass;
 	}
@@ -141,6 +145,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getManifest_Entries() {
 		return (EReference)manifestEClass.getEStructuralFeatures().get(0);
 	}
@@ -150,6 +155,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ManifestFactory getManifestFactory() {
 		return (ManifestFactory)getEFactoryInstance();
 	}

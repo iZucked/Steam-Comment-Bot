@@ -72,6 +72,7 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Entry> getEntries() {
 		if (entries == null) {
 			entries = new EObjectContainmentEList<Entry>(Entry.class, this, ManifestPackage.MANIFEST__ENTRIES);
