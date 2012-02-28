@@ -18,7 +18,7 @@ import org.junit.Test;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.validation.NullReferenceConstraint;
+import com.mmxlabs.models.lng.cargo.validation.NullReferenceConstraint;
 import com.mmxlabs.models.lng.port.PortFactory;
 
 /**

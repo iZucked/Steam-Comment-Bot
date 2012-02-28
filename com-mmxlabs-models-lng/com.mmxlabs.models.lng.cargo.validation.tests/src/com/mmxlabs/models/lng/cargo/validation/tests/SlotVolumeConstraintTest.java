@@ -1,13 +1,15 @@
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation.tests;
 
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
@@ -15,6 +17,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.validation.SlotVolumeConstraint;
 
 /**
  * Details from case 171:
@@ -95,56 +98,19 @@ public class SlotVolumeConstraintTest {
 		testSlotVolumeConstraint(false, min, max);
 	}
 
-	/**
-	 * Test that a null scenario still produces a success.
-	 */
-	@Test
-	public void testSlotVolumeConstraintNullScenario() {
-
-		// This is the constraint we will be testing
-		final SlotVolumeConstraint constraint = new SlotVolumeConstraint();
-
-		final Slot slot = mock(Slot.class);
-		final IValidationContext validationContext = mock(IValidationContext.class);
-		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
-
-		// Set up the expected return values of methods.
-		when(slot.eContainer()).thenReturn(null);
-		when(slot.eContainingFeature()).thenReturn(null);
-		when(validationContext.getTarget()).thenReturn(slot);
-		when(validationContext.getEventType()).thenReturn(EMFEventType.NULL);
-		when(validationContext.createSuccessStatus()).thenReturn(successStatus);
-
-		// validate the constraint using the mocked expected values set above
-		constraint.validate(validationContext);
-
-		// verify that the mocked methods are called.
-		verify(slot).eContainer();
-		verify(slot).eContainingFeature();
-		verify(validationContext).getTarget();
-		verify(validationContext).getEventType();
-		verify(validationContext).createSuccessStatus();
-		// verify that only the methods above are called.
-		verifyNoMoreInteractions(slot);
-		verifyNoMoreInteractions(validationContext);
-
-	}
-
 	private void testSlotVolumeConstraint(final boolean expectSuccess, final int min, final int max) {
 
 		// This is the constraint we will be testing
 		final SlotVolumeConstraint constraint = new SlotVolumeConstraint();
 
 		final Slot slot = mock(Slot.class);
-		final Scenario scenario = mock(Scenario.class);
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
 
 		// Set up the expected return values of methods.
-		when(slot.eContainer()).thenReturn(scenario);
 		when(slot.eContainingFeature()).thenReturn(null);
-		when(slot.getSlotOrContractMinQuantity(scenario)).thenReturn(min);
-		when(slot.getSlotOrContractMaxQuantity(scenario)).thenReturn(max);
+		when(slot.getSlotOrContractMinQuantity()).thenReturn(min);
+		when(slot.getSlotOrContractMaxQuantity()).thenReturn(max);
 		when(validationContext.getTarget()).thenReturn(slot);
 		when(validationContext.getEventType()).thenReturn(EMFEventType.NULL);
 
@@ -158,10 +124,8 @@ public class SlotVolumeConstraintTest {
 		constraint.validate(validationContext);
 
 		// verify that the mocked methods are called.
-		verify(slot).eContainer();
-		verify(slot).eContainingFeature();
-		verify(slot, atLeast(0)).getSlotOrContractMinQuantity(scenario);
-		verify(slot, atLeast(0)).getSlotOrContractMaxQuantity(scenario);
+		verify(slot, atLeast(0)).getSlotOrContractMinQuantity();
+		verify(slot, atLeast(0)).getSlotOrContractMaxQuantity();
 		verify(validationContext).getTarget();
 		verify(validationContext).getEventType();
 		verify(validationContext, atLeast(0)).createSuccessStatus();
