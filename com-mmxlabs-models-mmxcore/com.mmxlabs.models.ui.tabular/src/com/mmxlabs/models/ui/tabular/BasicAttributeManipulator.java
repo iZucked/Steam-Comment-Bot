@@ -38,6 +38,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		this.editingDomain = editingDomain;
 	}
 	
+	@Override
 	public String render(final Object object) {
 		if ((object instanceof EObject) && !((EObject) object).eIsSet(field)) {
 			return renderUnsetValue(

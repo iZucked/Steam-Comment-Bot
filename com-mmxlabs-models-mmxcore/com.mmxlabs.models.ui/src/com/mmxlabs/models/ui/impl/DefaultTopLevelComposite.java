@@ -38,6 +38,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		super(parent, style);
 	}
 
+	@Override
 	public void display(final MMXRootObject root, final EObject object) {
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);

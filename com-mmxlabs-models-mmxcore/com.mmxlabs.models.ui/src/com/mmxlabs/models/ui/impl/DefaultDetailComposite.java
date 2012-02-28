@@ -76,6 +76,7 @@ public class DefaultDetailComposite extends Composite implements
 	 * 
 	 * @param object
 	 */
+	@Override
 	public void display(final MMXRootObject root, final EObject object) {
 		final EClass eClass = object.eClass();
 		setLayout(layoutProvider.createDetailLayout(root, object));

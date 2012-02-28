@@ -33,6 +33,7 @@ public class ReferenceValueProviderFactoryRegistry extends AbstractRegistry<Pair
 		return getValueProviderFactory(owner, reference.getEReferenceType());
 	}
 
+	@Override
 	public synchronized IReferenceValueProviderFactory getValueProviderFactory(final EClass owner, final EClass type) {
 		return get(new Pair<EClass, EClass>(owner, type));
 	}
