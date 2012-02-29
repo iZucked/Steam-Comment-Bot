@@ -245,13 +245,22 @@ public interface PortPackage extends EPackage {
 	int ROUTE__CANAL = TypesPackage.AROUTE_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Additional Travel Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE__ADDITIONAL_TRAVEL_TIME = TypesPackage.AROUTE_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Route</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_FEATURE_COUNT = TypesPackage.AROUTE_FEATURE_COUNT + 2;
+	int ROUTE_FEATURE_COUNT = TypesPackage.AROUTE_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.
@@ -595,6 +604,17 @@ public interface PortPackage extends EPackage {
 	EAttribute getRoute_Canal();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Route#getAdditionalTravelTime <em>Additional Travel Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Additional Travel Time</em>'.
+	 * @see com.mmxlabs.models.lng.port.Route#getAdditionalTravelTime()
+	 * @see #getRoute()
+	 * @generated
+	 */
+	EAttribute getRoute_AdditionalTravelTime();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.PortGroup <em>Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -824,6 +844,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ROUTE__CANAL = eINSTANCE.getRoute_Canal();
+
+		/**
+		 * The meta object literal for the '<em><b>Additional Travel Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ROUTE__ADDITIONAL_TRAVEL_TIME = eINSTANCE.getRoute_AdditionalTravelTime();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.

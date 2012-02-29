@@ -243,6 +243,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getRoute_AdditionalTravelTime() {
+		return (EAttribute)routeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPortGroup() {
 		return portGroupEClass;
 	}
@@ -377,6 +386,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		routeEClass = createEClass(ROUTE);
 		createEReference(routeEClass, ROUTE__LINES);
 		createEAttribute(routeEClass, ROUTE__CANAL);
+		createEAttribute(routeEClass, ROUTE__ADDITIONAL_TRAVEL_TIME);
 
 		portGroupEClass = createEClass(PORT_GROUP);
 		createEReference(portGroupEClass, PORT_GROUP__CONTENTS);
@@ -447,6 +457,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEClass(routeEClass, Route.class, "Route", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoute_Lines(), this.getRouteLine(), null, "lines", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoute_Canal(), ecorePackage.getEBoolean(), "canal", null, 1, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRoute_AdditionalTravelTime(), ecorePackage.getEInt(), "additionalTravelTime", null, 1, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portGroupEClass, PortGroup.class, "PortGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortGroup_Contents(), theTypesPackage.getAPortSet(), null, "contents", null, 0, -1, PortGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

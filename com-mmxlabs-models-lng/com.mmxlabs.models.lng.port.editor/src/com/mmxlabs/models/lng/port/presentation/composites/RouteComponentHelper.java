@@ -68,6 +68,7 @@ public class RouteComponentHelper implements IComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_linesEditor(detailComposite, topClass);
 		add_canalEditor(detailComposite, topClass);
+		add_additionalTravelTimeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the lines feature on Route
@@ -84,5 +85,14 @@ public class RouteComponentHelper implements IComponentHelper {
 	 */
 	protected void add_canalEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__CANAL));
+	}
+
+	/**
+	 * Create the editor for the additionalTravelTime feature on Route
+	 *
+	 * @generated
+	 */
+	protected void add_additionalTravelTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__ADDITIONAL_TRAVEL_TIME));
 	}
 }
