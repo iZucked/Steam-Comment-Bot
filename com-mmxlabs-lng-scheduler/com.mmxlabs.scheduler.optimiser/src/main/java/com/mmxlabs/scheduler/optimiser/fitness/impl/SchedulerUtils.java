@@ -115,7 +115,7 @@ public final class SchedulerUtils {
 	 * @param scheduler
 	 */
 	@SuppressWarnings("unchecked")
-	private static void setDataComponentProviders(final IOptimisationData data, final AbstractSequenceScheduler scheduler) {
+	public static void setDataComponentProviders(final IOptimisationData data, final AbstractSequenceScheduler scheduler) {
 		final IMultiMatrixProvider<IPort, Integer> distanceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class);
 
 		scheduler.setDistanceProvider(distanceProvider);
