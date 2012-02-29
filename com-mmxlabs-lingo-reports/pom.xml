@@ -48,7 +48,6 @@
 		<module>com.mmxlabs.lngscheduler.ui</module>
 
 		<module>com.mmxlabs.demo.reports</module>
-		<module>com.mmxlabs.ganttviewer</module>
 		<module>com.mmxlabs.scheduleview</module>
 		<module>com.mmxlabs.rcp.navigator</module>
 		<module>com.mmxlabs.shiplingo.ui.detailview</module>
