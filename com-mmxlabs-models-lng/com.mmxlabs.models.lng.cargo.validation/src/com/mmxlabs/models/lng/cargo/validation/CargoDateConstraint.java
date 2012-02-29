@@ -106,7 +106,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 
 				if (time == null) {
 					// distance line is missing
-					// TODO customize message for this case.
+					// TODO customise message for this case.
 					// seems like a waste to run the same code twice
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), "infinity", availableTime));
 					dsd.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port());
