@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ganttviewer
+Bundle-SymbolicName: com.mmxlabs.ganttviewer
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.mmxlabs.ganttviewer.Activator
+Bundle-Vendor: Minimax Labs
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.mmxlabs.org.eclipse.nebula.widgets.ganttchart;bundle-version="1.0.0";visibility:=reexport,
+ org.slf4j.api;bundle-version="1.6.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: com.mmxlabs.ganttviewer

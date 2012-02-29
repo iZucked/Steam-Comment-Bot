@@ -28,6 +28,7 @@
 
 	<modules>
 		<module>com.mmxlabs.rcp.common</module>
+		<module>com.mmxlabs.ganttviewer</module>
 		
 		<module>com.mmxlabs.rcp.common.p2</module>
 		
