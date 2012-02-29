@@ -93,19 +93,11 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 				final Pair<Port, Port> key = new Pair<Port, Port>(cargo.getLoadSlot().getPort(), cargo.getDischargeSlot().getPort());
 				if (minTimes == null) {
 					minTimes = new HashMap<Pair<Port, Port>, Integer>();
-	
-					for (Route r : portModel.getRoutes()) {
-						// TODO: Fix ME: BugzId:373
-//						int extraTime = r.getExtraTime();
-//						collectMinTimes(minTimes, r, extraTime, maxSpeedKnots);
-					}
 
-					// TODO: Fix ME: BugzId:373
-//					for (final VesselClass vc : fleetModel.getVesselClasses()) {
-//						for (final VesselClassCost vcc : vc.getgetCanalCosts()) {
-//							collectMinTimes(minTimes, vcc.getCanal().getDistanceModel(), vcc.getTransitTime(), vc.getMaxSpeed());
-//						}
-//					}
+					for (final Route r : portModel.getRoutes()) {
+						final int extraTime = r.getAdditionalTravelTime();
+						collectMinTimes(minTimes, r, extraTime, maxSpeedKnots);
+					}
 
 					ctx.putCurrentConstraintData(minTimes);
 				}
