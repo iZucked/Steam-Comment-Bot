@@ -8,8 +8,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
-import scenario.schedule.Sequence;
-import scenario.schedule.fleetallocation.SpotVessel;
+import com.mmxlabs.models.lng.schedule.Sequence;
 
 /**
  * {@link ViewerComparator} to sort the {@link SchedulerView} contents. Implementation sort vessels alphabetically grouped into fleet and spot vessels. There are currently two sort modes on top of

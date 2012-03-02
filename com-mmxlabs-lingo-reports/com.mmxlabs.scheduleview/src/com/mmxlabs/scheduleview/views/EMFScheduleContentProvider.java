@@ -13,13 +13,11 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.Viewer;
 
-import scenario.cargo.Slot;
-import scenario.schedule.Schedule;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.events.SlotVisit;
-
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 /**
  * A gantt chart content provider which provides content for a selected EMF Schedule object.

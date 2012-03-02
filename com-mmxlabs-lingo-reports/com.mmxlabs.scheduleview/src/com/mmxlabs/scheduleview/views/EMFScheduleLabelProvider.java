@@ -13,19 +13,15 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
-import scenario.Scenario;
-import scenario.fleet.VesselState;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.FuelMixture;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.Idle;
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.PortVisit;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.events.SlotVisit;
-
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 
 /**
@@ -54,6 +50,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
 
+			
 			final Scenario s = (Scenario) sequence.eContainer().eContainer().eContainer();
 			final String name = s.getName();
 			// final String name =
@@ -80,15 +77,15 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	public String getToolTipText(final Object element) {
 		if (element instanceof Sequence) {
 			return getText(element);
-		} else if (element instanceof ScheduledEvent) {
+		} else if (element instanceof Event) {
 
 			final DateFormat df = DateFormat.getDateInstance();
 
 			final StringBuilder sb = new StringBuilder();
-			final ScheduledEvent event = (ScheduledEvent) element;
+			final Event event = (Event) element;
 
-			sb.append("Start Time: " + df.format(event.getStartTime()) + "\n");
-			sb.append("End Time: " + df.format(event.getEndTime()) + "\n");
+			sb.append("Start Time: " + df.format(event.getStart()) + "\n");
+			sb.append("End Time: " + df.format(event.getEnd()) + "\n");
 			final int days = event.getEventDuration() / 24;
 			final int hours = event.getEventDuration() % 24;
 			sb.append("Duration: " + days + " days, " + hours + " hours\n");
@@ -109,11 +106,11 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				}
 			} else if (element instanceof Journey) {
 				final Journey journey = (Journey) element;
-				if (journey.getFromPort() != null) {
-					sb.append("From: " + journey.getFromPort().getName() + "\n");
+				if (journey.getFrom() != null) {
+					sb.append("From: " + journey.getFrom().getName() + "\n");
 				}
-				if (journey.getToPort() != null) {
-					sb.append("To: " + journey.getToPort().getName() + "\n");
+				if (journey.getTo() != null) {
+					sb.append("To: " + journey.getTo().getName() + "\n");
 				}
 				// sb.append("Vessel State: " + journey.getVesselState().getName() + "\n");
 				if (!journey.getRoute().equalsIgnoreCase("default")) {

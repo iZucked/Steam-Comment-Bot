@@ -39,7 +39,7 @@ public class BasicCargoReportView extends EMFReportView {
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView";
 
 	public BasicCargoReportView() {
-		super("com.mmxlabs.demo.reports.BasicCargoReportView");
+		super("com.mmxlabs.shiplingo.platform.reports.BasicCargoReportView");
 
 		final CargoPackage c = CargoPackage.eINSTANCE;
 		final SchedulePackage s = SchedulePackage.eINSTANCE;

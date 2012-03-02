@@ -18,20 +18,13 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-import scenario.cargo.CargoPackage;
-import scenario.cargo.LoadSlot;
-import scenario.port.Port;
-import scenario.port.PortPackage;
-import scenario.schedule.SchedulePackage;
-import scenario.schedule.events.EventsPackage;
-import scenario.schedule.events.FuelMixture;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.FuelType;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.events.SlotVisit;
-
-import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
-import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 public class ScheduledEventPropertySourceProvider implements IPropertySourceProvider {
 
@@ -78,10 +71,10 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 	}
 
 	private class EventPropertySource implements IPropertySource {
-		private final ScheduledEvent event;
+		private final Event event;
 		private IPropertyDescriptor[] descriptors = null;
 
-		public EventPropertySource(final ScheduledEvent event) {
+		public EventPropertySource(final Event event) {
 			this.event = event;
 		}
 

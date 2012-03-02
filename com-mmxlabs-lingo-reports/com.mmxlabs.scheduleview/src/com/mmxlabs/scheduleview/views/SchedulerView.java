@@ -40,16 +40,15 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
-import scenario.cargo.Slot;
-import scenario.schedule.CargoAllocation;
-import scenario.schedule.events.SlotVisit;
-
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.PackAction;
 import com.mmxlabs.ganttviewer.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.scheduleview.Activator;
 import com.mmxlabs.scheduleview.views.colourschemes.CooldownColourScheme;
 import com.mmxlabs.scheduleview.views.colourschemes.FuelChoiceColourScheme;
@@ -201,7 +200,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 				// find what we have double-clicked
 				if (selection instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) selection;
-					final Slot slot = slotVisit.getSlot();
+					final Slot slot = slotVisit.getSlot().getSlot();
 					// TODO factor out to somewhere useful:
 					final EObject c = slot.eContainer();
 
@@ -599,10 +598,10 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			for (final Object o : sel.toList()) {
 				if (o instanceof CargoAllocation) {
 					final CargoAllocation allocation = (CargoAllocation) o;
-					objects.add(allocation.getLoadSlotVisit());
+					objects.add(allocation.getLoadVisit());
 					objects.add(allocation.getLadenLeg());
 					objects.add(allocation.getLadenIdle());
-					objects.add(allocation.getDischargeSlotVisit());
+					objects.add(allocation.getDischargeVisit());
 					objects.add(allocation.getBallastLeg());
 					objects.add(allocation.getBallastIdle());
 				} else {
