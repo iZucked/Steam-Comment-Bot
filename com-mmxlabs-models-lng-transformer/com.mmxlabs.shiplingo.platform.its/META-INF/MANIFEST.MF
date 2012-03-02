@@ -22,4 +22,4 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
 Bundle-ClassPath: data/,
  .
 Import-Package: com.mmxlabs.shiplingo.platform.app.wizards
-Export-Package: com.mmxlabs.scheduler.its.tests.calculation
+Export-Package: com.mmxlabs.shiplingo.platform.its.tests.calculation
