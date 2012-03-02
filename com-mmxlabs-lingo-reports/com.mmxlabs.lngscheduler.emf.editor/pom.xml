@@ -10,6 +10,6 @@
 	</parent>
 	<groupId>com.mmxlabs.lngscheduler.emf.editor</groupId>
 	<artifactId>com.mmxlabs.lngscheduler.emf.editor</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
