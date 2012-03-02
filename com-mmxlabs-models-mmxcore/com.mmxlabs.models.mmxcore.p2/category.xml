@@ -3,13 +3,13 @@
    <feature url="features/com.mmxlabs.models.mmxcore.runtime.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.runtime.feature" version="1.0.0.qualifier">
       <category name="all"/>
    </feature>
-   <feature url="features/com.mmxlabs.models.mmxcore.runtime.source.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.runtime.source.feature" version="1.0.0.qualifier">
+   <feature url="features/com.mmxlabs.models.mmxcore.runtime.feature.source_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.runtime.feature.source" version="1.0.0.qualifier">
       <category name="all"/>
    </feature>
    <feature url="features/com.mmxlabs.models.mmxcore.sdk.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.sdk.feature" version="1.0.0.qualifier">
       <category name="all"/>
    </feature>
-   <feature url="features/com.mmxlabs.models.mmxcore.sdk.source.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.sdk.source.feature" version="1.0.0.qualifier">
+   <feature url="features/com.mmxlabs.models.mmxcore.sdk.feature.source_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.sdk.feature.source" version="1.0.0.qualifier">
       <category name="all"/>
    </feature>
    <category-def name="all" label="Models: MMXCore: p2 Snapshots"/>
