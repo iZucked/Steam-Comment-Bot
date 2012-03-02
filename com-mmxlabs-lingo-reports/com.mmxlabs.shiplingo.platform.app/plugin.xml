@@ -97,14 +97,7 @@
             configId="com.mmxlabs.shiplingo.platform.app.configId">
       </configExtension>
    </extension>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <wizard
-            class="com.mmxlabs.shiplingo.platform.app.wizards.RandomScenarioWizard"
-            id="com.mmxlabs.shiplingo.platform.app.randomscenariowizard"
-            name="New Random Scenario">
-      </wizard>
-   </extension>
+ 
 
 
 </plugin>
