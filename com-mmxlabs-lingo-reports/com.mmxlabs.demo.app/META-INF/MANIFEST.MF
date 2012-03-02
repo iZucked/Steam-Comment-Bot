@@ -4,7 +4,7 @@ Bundle-Name: App
 Bundle-SymbolicName: com.mmxlabs.demo.app; singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.mmxlabs.demo.app.Activator
-Bundle-Vendor: MMXLABS
+Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.intro,

@@ -4,7 +4,7 @@ Bundle-Name: LNG Scheduler UI Components
 Bundle-SymbolicName: com.mmxlabs.lngscheduler.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.mmxlabs.lngscheduler.ui.Activator
-Bundle-Vendor: MMXLABS
+Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.navigator;bundle-version="3.5.0",

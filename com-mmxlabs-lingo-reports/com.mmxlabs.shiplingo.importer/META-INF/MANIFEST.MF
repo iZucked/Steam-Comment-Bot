@@ -4,7 +4,7 @@ Bundle-Name: ShipLiNGo CSV Importer
 Bundle-SymbolicName: com.mmxlabs.shiplingo.importer
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.mmxlabs.shiplingo.importer.Activator
-Bundle-Vendor: MMXLABS
+Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.mmxlabs.lngscheduler.emf;bundle-version="1.0.0",
