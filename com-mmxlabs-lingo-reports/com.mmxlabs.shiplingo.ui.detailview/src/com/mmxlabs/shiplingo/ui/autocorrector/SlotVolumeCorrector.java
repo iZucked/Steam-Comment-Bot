@@ -7,15 +7,11 @@ package com.mmxlabs.shiplingo.ui.autocorrector;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
-import scenario.Scenario;
-import scenario.cargo.CargoPackage;
-import scenario.cargo.Slot;
-
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.extras.validation.context.ValidationSupport;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.Slot;
 
 public class SlotVolumeCorrector extends BaseCorrector {
 	final static EAttribute minQuantity = CargoPackage.eINSTANCE.getSlot_MinQuantity();
@@ -26,20 +22,15 @@ public class SlotVolumeCorrector extends BaseCorrector {
 		final Object feature = notification.getFeature();
 		final Object target = notification.getNotifier();
 		// min has changed
-		final ValidationSupport validationSupport = ValidationSupport.getInstance();
-		final Scenario scenario = validationSupport.getScenario((EObject) target);
-		if (scenario == null) {
-			return null;
-		}
 
 		if (minQuantity.equals(feature)) {
 			final Slot slot = (Slot) target;
-			if (slot.getSlotOrContractMaxQuantity(scenario) < slot.getSlotOrContractMinQuantity(scenario)) {
-				return new Pair<String, Command>("Adjust maximum quantity to match minimum quantity", makeSetter(editingDomain, slot, maxQuantity, slot.getSlotOrContractMinQuantity(scenario)));
+			if (slot.getSlotOrContractMaxQuantity() < slot.getSlotOrContractMinQuantity()) {
+				return new Pair<String, Command>("Adjust maximum quantity to match minimum quantity", makeSetter(editingDomain, slot, maxQuantity, slot.getSlotOrContractMinQuantity()));
 			}
 		} else if (maxQuantity.equals(feature)) {
 			final Slot slot = (Slot) target;
-			if (slot.getSlotOrContractMaxQuantity(scenario) < slot.getSlotOrContractMinQuantity(scenario)) {
+			if (slot.getSlotOrContractMaxQuantity() < slot.getSlotOrContractMinQuantity()) {
 				return new Pair<String, Command>("Adjust minimum quantity to match maximum quantity", makeSetter(editingDomain, slot, minQuantity, slot.getMaxQuantity()));
 			}
 		}

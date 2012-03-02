@@ -10,15 +10,13 @@ import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
-import scenario.cargo.CargoPackage;
-import scenario.cargo.LoadSlot;
-import scenario.cargo.Slot;
-import scenario.contract.Contract;
-import scenario.port.Port;
-import scenario.port.PortCapability;
-import scenario.port.PortSelection;
-
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortCapability;
 
 /**
  * An auto-corrector which sets the port to a value from the contract's default port list if necessary

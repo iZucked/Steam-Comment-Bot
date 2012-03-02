@@ -12,11 +12,10 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
-import scenario.cargo.Cargo;
-import scenario.cargo.CargoPackage;
-import scenario.cargo.Slot;
-
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.shiplingo.ui.autocorrector.AutoCorrector.ICorrector;
 
 /**
