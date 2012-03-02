@@ -40,7 +40,7 @@
 		<!-- Proper plugin projects -->
 		<module>com.mmxlabs.shiplingo.platform.app</module>
 		
-
+		<module>com.mmxlabs.shiplingo.platform.models.manifest</module>
 		<module>com.mmxlabs.shiplingo.platform.reports</module>
 		<module>com.mmxlabs.scheduleview</module>
 		<module>com.mmxlabs.rcp.navigator</module>
