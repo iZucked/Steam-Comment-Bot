@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.types.impl;
 
 import com.mmxlabs.models.lng.types.ABaseFuel;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -26,6 +27,7 @@ import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -141,6 +143,13 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * @generated
 	 */
 	private EClass aSpotMarketEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum portCapabilityEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -346,6 +355,15 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getPortCapability() {
+		return portCapabilityEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public TypesFactory getTypesFactory() {
 		return (TypesFactory)getEFactoryInstance();
 	}
@@ -398,6 +416,9 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		aBaseFuelEClass = createEClass(ABASE_FUEL);
 
 		aSpotMarketEClass = createEClass(ASPOT_MARKET);
+
+		// Create enums
+		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
 	}
 
 	/**
@@ -503,6 +524,13 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		initEClass(aSpotMarketEClass, ASpotMarket.class, "ASpotMarket", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+		// Initialize enums and add enum literals
+		initEEnum(portCapabilityEEnum, PortCapability.class, "PortCapability");
+		addEEnumLiteral(portCapabilityEEnum, PortCapability.LOAD);
+		addEEnumLiteral(portCapabilityEEnum, PortCapability.DISCHARGE);
+		addEEnumLiteral(portCapabilityEEnum, PortCapability.DRYDOCK);
+		addEEnumLiteral(portCapabilityEEnum, PortCapability.MAINTENANCE);
+
 		// Create resource
 		createResource(eNS_URI);
 
@@ -584,12 +612,6 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		   source, 
 		   new String[] {
 			 "generatedType", "com.mmxlabs.models.lng.fleet.BaseFuel"
-		   });		
-		addAnnotation
-		  (aSpotMarketEClass, 
-		   source, 
-		   new String[] {
-			 "generatedType", "com.mmxlabs.models.lng.pricing.SpotMarket"
 		   });
 	}
 
