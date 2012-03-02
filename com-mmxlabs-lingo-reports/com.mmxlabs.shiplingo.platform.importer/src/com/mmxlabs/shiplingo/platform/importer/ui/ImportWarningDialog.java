@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.importer.ui;
+package com.mmxlabs.shiplingo.platform.importer.ui;
 
 import java.util.Collection;
 
@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.mmxlabs.shiplingo.importer.importers.ImportWarning;
+import com.mmxlabs.shiplingo.platform.importer.importers.ImportWarning;
 
 /**
  * @author hinton

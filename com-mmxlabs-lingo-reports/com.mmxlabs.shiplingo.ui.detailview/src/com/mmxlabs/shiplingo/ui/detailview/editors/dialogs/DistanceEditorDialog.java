@@ -44,8 +44,8 @@ import scenario.port.PortPackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
-import com.mmxlabs.shiplingo.importer.importers.ExportCSVAction;
-import com.mmxlabs.shiplingo.importer.importers.ImportCSVAction;
+import com.mmxlabs.shiplingo.platform.importer.importers.ExportCSVAction;
+import com.mmxlabs.shiplingo.platform.importer.importers.ImportCSVAction;
 import com.mmxlabs.shiplingo.ui.detailview.base.IValueProviderProvider;
 
 /**

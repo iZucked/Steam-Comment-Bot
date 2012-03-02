@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.importer.importers;
+package com.mmxlabs.shiplingo.platform.importer.importers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import scenario.port.PortPackage;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.shiplingo.importer.ui.ImportWarningDialog;
+import com.mmxlabs.shiplingo.platform.importer.ui.ImportWarningDialog;
 
 /**
  * Imports EObjects from a CSV file.

@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.importer.importers;
+package com.mmxlabs.shiplingo.platform.importer.importers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
