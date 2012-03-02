@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: App
-Bundle-SymbolicName: com.mmxlabs.demo.app; singleton:=true
+Bundle-Name: Shiplingo Platform: Application
+Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.app;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.mmxlabs.demo.app.Activator
+Bundle-Activator: com.mmxlabs.shiplingo.platform.app.Activator
 Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -30,6 +30,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.filesystem;bundle-version="1.3.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.mmxlabs.demo.app,
- com.mmxlabs.demo.app.intro,
- com.mmxlabs.demo.app.wizards
+Export-Package: com.mmxlabs.shiplingo.platform.app,
+ com.mmxlabs.shiplingo.platform.app.intro,
+ com.mmxlabs.shiplingo.platform.app.wizards

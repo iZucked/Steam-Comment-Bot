@@ -19,7 +19,7 @@
             name="Cargo Costs"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.demo.reports"
-            class="com.mmxlabs.demo.reports.views.CargoReportView"
+            class="com.mmxlabs.shiplingo.platform.reports.views.CargoReportView"
             id="com.mmxlabs.demo.reports.views.CargoReportView">
       </view>
       
@@ -27,27 +27,27 @@
             name="Cargo"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.demo.reports"
-            class="com.mmxlabs.demo.reports.views.BasicCargoReportView"
+            class="com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView"
             id="com.mmxlabs.demo.reports.views.BasicCargoReportView">
       </view>
       
       <view
             category="com.mmxlabs.demo.reports"
-            class="com.mmxlabs.demo.reports.views.FitnessReportView"
+            class="com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.demo.reports.views.FitnessReportView"
             name="Fitness">
       </view>
       <view
             category="com.mmxlabs.demo.reports"
-            class="com.mmxlabs.demo.reports.views.TotalsHierarchyView"
+            class="com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.demo.reports.views.TotalsHierarchyView"
             name="Totals Hierarchy">
       </view>
       <view
             category="com.mmxlabs.demo.reports"
-            class="com.mmxlabs.demo.reports.views.TotalsReportView"
+            class="com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.demo.reports.views.TotalsReportView"
             name="Totals">
@@ -55,7 +55,7 @@
       
        <view
             category="com.mmxlabs.demo.reports"
-            class="com.mmxlabs.demo.reports.views.PortRotationReportView"
+            class="com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.demo.reports.views.PortRotationReportView"
             name="Port Rotation">
@@ -63,7 +63,7 @@
       
       <view
             category="com.mmxlabs.demo.reports"
-            class="com.mmxlabs.demo.reports.views.LatenessReportView"
+            class="com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.demo.reports.views.LatenessReportView"
             name="Lateness">
@@ -71,7 +71,7 @@
       
        <view
              category="com.mmxlabs.demo.reports"
-             class="com.mmxlabs.demo.reports.views.CooldownReportView"
+             class="com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView"
              icon="icons/cview16/exec_flow_view.gif"
              id="com.mmxlabs.demo.reports.views.CooldownReportView"
              name="Cooldown">

@@ -13,22 +13,22 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="com.mmxlabs.demo.app.intro.Application">
+               class="com.mmxlabs.shiplingo.platform.app.intro.Application">
          </run>
       </application>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="com.mmxlabs.demo.app.intro.OptimisationPerspective"
+            class="com.mmxlabs.shiplingo.platform.app.intro.OptimisationPerspective"
             icon="icons/launchtrace_wiz.gif"
-            id="com.mmxlabs.demo.app.perspective.optimisation"
+            id="com.mmxlabs.shiplingo.platform.app.perspective.optimisation"
             name="Optimisation">
       </perspective>
       <perspective
-            class="com.mmxlabs.demo.app.intro.EditingPerspective"
+            class="com.mmxlabs.shiplingo.platform.app.intro.EditingPerspective"
             icon="icons/editor_area.gif"
-            id="com.mmxlabs.demo.app.perspective.editing"
+            id="com.mmxlabs.shiplingo.platform.app.perspective.editing"
             name="Editing">
       </perspective>
    </extension>
@@ -36,7 +36,7 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.mmxlabs.demo.app.application"
+            application="com.mmxlabs.shiplingo.platform.app.application"
             name="ShipLiNGO">
          <property
                name="windowImages"
@@ -68,19 +68,19 @@
          point="org.eclipse.ui.intro">
       <intro
             class="org.eclipse.ui.intro.config.CustomizableIntroPart"
-            id="com.mmxlabs.demo.app.intro">
+            id="com.mmxlabs.shiplingo.platform.app.intro">
       </intro>
       <introProductBinding
-            introId="com.mmxlabs.demo.app.intro"
-            productId="com.mmxlabs.demo.app.product">
+            introId="com.mmxlabs.shiplingo.platform.app.intro"
+            productId="com.mmxlabs.shiplingo.platform.app.product">
       </introProductBinding>
    </extension>
    <extension
          point="org.eclipse.ui.intro.config">
       <config
-            introId="com.mmxlabs.demo.app.intro"
+            introId="com.mmxlabs.shiplingo.platform.app.intro"
             content="introContent.xml"
-            id="com.mmxlabs.demo.app.configId">
+            id="com.mmxlabs.shiplingo.platform.app.configId">
          <presentation
                home-page-id="root">
             <implementation
@@ -94,14 +94,14 @@
          point="org.eclipse.ui.intro.configExtension">
       <configExtension
             content="ext.xml"
-            configId="com.mmxlabs.demo.app.configId">
+            configId="com.mmxlabs.shiplingo.platform.app.configId">
       </configExtension>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
-            class="com.mmxlabs.demo.app.wizards.RandomScenarioWizard"
-            id="com.mmxlabs.demo.app.randomscenariowizard"
+            class="com.mmxlabs.shiplingo.platform.app.wizards.RandomScenarioWizard"
+            id="com.mmxlabs.shiplingo.platform.app.randomscenariowizard"
             name="New Random Scenario">
       </wizard>
    </extension>

@@ -44,7 +44,6 @@ import scenario.cargo.Slot;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.events.SlotVisit;
 
-import com.mmxlabs.demo.reports.ScheduleAdapter;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.PackAction;
 import com.mmxlabs.ganttviewer.SaveFullImageAction;
@@ -58,6 +57,7 @@ import com.mmxlabs.scheduleview.views.colourschemes.HighSpeedColourScheme;
 import com.mmxlabs.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 import com.mmxlabs.scheduleview.views.colourschemes.RouteChoiceColourScheme;
 import com.mmxlabs.scheduleview.views.colourschemes.VesselStateColourScheme;
+import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
 
 public class SchedulerView extends ViewPart implements ISelectionListener {
 

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Reports
 Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.reports;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.mmxlabs.demo.reports.Activator
+Bundle-Activator: com.mmxlabs.shiplingo.platform.reports.Activator
 Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -23,5 +23,5 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.shiplingo.ui.detailview;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.mmxlabs.demo.reports,
- com.mmxlabs.demo.reports.views
+Export-Package: com.mmxlabs.shiplingo.platform.reports,
+ com.mmxlabs.shiplingo.platform.reports.views

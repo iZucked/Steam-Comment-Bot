@@ -7,7 +7,7 @@
 -->
 <feature
       id="com.mmxlabs.platform.feature"
-      label="Feature"
+      label="Eclipse Platform Feature"
       version="1.0.0.qualifier"
       provider-name="MMXLABS">
 

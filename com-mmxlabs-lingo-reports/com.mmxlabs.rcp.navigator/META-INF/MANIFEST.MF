@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Navigator
+Bundle-Name: Scenario Navigator
 Bundle-SymbolicName: com.mmxlabs.rcp.navigator;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.mmxlabs.rcp.navigator.Activator
@@ -14,7 +14,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide.application;bundle-version="1.0.201",
  com.mmxlabs.jobmanager.ui;bundle-version="1.0.0",
  com.mmxlabs.jobmanager;bundle-version="1.0.0",
- com.mmxlabs.lngscheduler.emf;bundle-version="1.0.0",
  org.eclipse.emf.edit.ui;bundle-version="2.6.0",
  org.eclipse.equinox.event;bundle-version="1.2.0",
  org.eclipse.osgi.services;bundle-version="3.2.100",
