@@ -23,7 +23,7 @@ import scenario.schedule.events.VesselEventVisit;
  * 
  */
 public class LatenessReportView extends EMFReportView {
-	public static final String ID = "com.mmxlabs.demo.reports.views.LatenessReportView";
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView";
 
 	public LatenessReportView() {
 		super();

@@ -36,7 +36,7 @@ public class BasicCargoReportView extends EMFReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "com.mmxlabs.demo.reports.views.BasicCargoReportView";
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView";
 
 	public BasicCargoReportView() {
 		super("com.mmxlabs.demo.reports.BasicCargoReportView");

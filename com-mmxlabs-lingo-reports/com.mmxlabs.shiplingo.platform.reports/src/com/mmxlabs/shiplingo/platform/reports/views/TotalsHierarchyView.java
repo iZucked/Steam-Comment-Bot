@@ -80,7 +80,7 @@ import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
  * 
  */
 public class TotalsHierarchyView extends ViewPart implements ISelectionListener {
-	public static final String ID = "com.mmxlabs.demo.reports.views.TotalsHierarchyView";
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView";
 
 	protected static final String TREE_DATA_KEY = "THVTreeData";
 

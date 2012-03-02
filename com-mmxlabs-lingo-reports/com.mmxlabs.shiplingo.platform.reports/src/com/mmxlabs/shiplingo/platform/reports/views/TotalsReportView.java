@@ -41,9 +41,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import scenario.schedule.Schedule;
-
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
@@ -56,7 +55,7 @@ public class TotalsReportView extends ViewPart implements ISelectionListener {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "com.mmxlabs.demo.reports.views.TotalsReportView";
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView";
 
 	private TableViewer viewer;
 

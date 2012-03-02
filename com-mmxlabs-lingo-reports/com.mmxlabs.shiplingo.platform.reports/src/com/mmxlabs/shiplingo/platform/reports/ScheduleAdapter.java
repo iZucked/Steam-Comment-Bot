@@ -14,9 +14,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
-import scenario.Scenario;
-import scenario.schedule.Schedule;
-
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.jobmanager.eclipse.manager.impl.EclipseJobManagerAdapter;
@@ -26,7 +23,9 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.jobmanager.manager.IJobManagerListener;
-import com.mmxlabs.lngscheduler.ui.SerializableScenario;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 public class ScheduleAdapter {
 
@@ -140,14 +139,16 @@ public class ScheduleAdapter {
 		return schedules;
 	}
 
-	public static Schedule getLastScheduleFromScenario(final Scenario scenario) {
+	public static Schedule getLastScheduleFromScenario(final MMXRootObject scenario) {
 
 		if (scenario == null) {
 			return null;
 		}
-		if (scenario.getScheduleModel() != null) {
+		
+		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
+		if (scheduleModel != null) {
 
-			final EList<Schedule> schedules = scenario.getScheduleModel().getSchedules();
+			final EList<Schedule> schedules = scheduleModel.getSchedules();
 			if (schedules.isEmpty() == false) {
 				return schedules.get(schedules.size() - 1);
 			}
