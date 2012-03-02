@@ -17,12 +17,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
-import scenario.ScenarioPackage;
-import scenario.port.Port;
-import scenario.port.PortPackage;
-
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortPackage;
 
 public class DateLocalisingCorrector extends BaseCorrector {
 

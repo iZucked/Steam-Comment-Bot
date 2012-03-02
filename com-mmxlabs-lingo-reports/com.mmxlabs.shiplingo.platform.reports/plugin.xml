@@ -12,68 +12,68 @@
          point="org.eclipse.ui.views">
       <category
             name="Reports"
-            id="com.mmxlabs.demo.reports">
+            id="com.mmxlabs.shiplingo.platform.reports">
       </category>
       
       <view
             name="Cargo Costs"
             icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.demo.reports"
+            category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.shiplingo.platform.reports.views.CargoReportView"
-            id="com.mmxlabs.demo.reports.views.CargoReportView">
+            id="com.mmxlabs.shiplingo.platform.reports.views.CargoReportView">
       </view>
       
       <view
             name="Cargo"
             icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.demo.reports"
+            category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView"
-            id="com.mmxlabs.demo.reports.views.BasicCargoReportView">
+            id="com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView">
       </view>
       
       <view
-            category="com.mmxlabs.demo.reports"
+            category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView"
             icon="icons/cview16/exec_flow_view.gif"
-            id="com.mmxlabs.demo.reports.views.FitnessReportView"
+            id="com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView"
             name="Fitness">
       </view>
       <view
-            category="com.mmxlabs.demo.reports"
+            category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView"
             icon="icons/cview16/exec_flow_view.gif"
-            id="com.mmxlabs.demo.reports.views.TotalsHierarchyView"
+            id="com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView"
             name="Totals Hierarchy">
       </view>
       <view
-            category="com.mmxlabs.demo.reports"
+            category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView"
             icon="icons/cview16/exec_flow_view.gif"
-            id="com.mmxlabs.demo.reports.views.TotalsReportView"
+            id="com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView"
             name="Totals">
       </view>
       
        <view
-            category="com.mmxlabs.demo.reports"
+            category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView"
             icon="icons/cview16/exec_flow_view.gif"
-            id="com.mmxlabs.demo.reports.views.PortRotationReportView"
+            id="com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView"
             name="Port Rotation">
       </view>
       
       <view
-            category="com.mmxlabs.demo.reports"
+            category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView"
             icon="icons/cview16/exec_flow_view.gif"
-            id="com.mmxlabs.demo.reports.views.LatenessReportView"
+            id="com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView"
             name="Lateness">
       </view>
       
        <view
-             category="com.mmxlabs.demo.reports"
+             category="com.mmxlabs.shiplingo.platform.reports"
              class="com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView"
              icon="icons/cview16/exec_flow_view.gif"
-             id="com.mmxlabs.demo.reports.views.CooldownReportView"
+             id="com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView"
              name="Cooldown">
        </view>
    </extension>

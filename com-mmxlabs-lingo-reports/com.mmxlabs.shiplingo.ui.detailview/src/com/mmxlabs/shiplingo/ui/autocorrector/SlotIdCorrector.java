@@ -10,10 +10,9 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
-import scenario.cargo.Cargo;
-import scenario.cargo.CargoPackage;
-
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * Make slot ids match cargo ids
@@ -34,14 +33,14 @@ public class SlotIdCorrector extends BaseCorrector {
 			return null;
 		}
 		if (notification.getEventType() == Notification.SET) {
-			if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_Id()) {
+			if (notification.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 				final Cargo target = (Cargo) notification.getNotifier();
 				final CompoundCommand fix = new CompoundCommand();
 				if (target.getLoadSlot() != null) {
-					fix.append(SetCommand.create(editingDomain, target.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Id(), "load-" + target.getId()));
+					fix.append(SetCommand.create(editingDomain, target.getLoadSlot(), MMXCorePackage.eINSTANCE.getNamedObject_Name(), "load-" + target.getName()));
 				}
 				if (target.getDischargeSlot() != null) {
-					fix.append(SetCommand.create(editingDomain, target.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Id(), "discharge-" + target.getId()));
+					fix.append(SetCommand.create(editingDomain, target.getDischargeSlot(), MMXCorePackage.eINSTANCE.getNamedObject_Name(), "discharge-" + target.getName()));
 				}
 			}
 		}

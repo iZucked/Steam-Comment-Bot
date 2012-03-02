@@ -12,11 +12,10 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
-import scenario.cargo.Cargo;
-import scenario.cargo.CargoPackage;
-import scenario.cargo.Slot;
-
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.shiplingo.ui.autocorrector.AutoCorrector.ICorrector;
 
 /**
@@ -43,7 +42,7 @@ public class SlotDateOrderCorrector implements ICorrector {
 			if (cargoLoadSlot.equals(containment)) {
 				final Cargo cargo = (Cargo) slot.eContainer();
 				if (cargo.getDischargeSlot() != null) {
-					final Date latestDischargeDate = cargo.getDischargeSlot().getWindowEnd();
+					final Date latestDischargeDate = cargo.getDischargeSlot().getWindowEndWithSlotOrPortTime();
 					final Date earliestLoadDate = slot.getWindowStart();
 					if ((latestDischargeDate == null) || (earliestLoadDate == null)) {
 						return null;
@@ -56,7 +55,7 @@ public class SlotDateOrderCorrector implements ICorrector {
 			} else if (cargoDischargeSlot.equals(containment)) {
 				final Cargo cargo = (Cargo) slot.eContainer();
 				if (cargo.getLoadSlot() != null) {
-					final Date latestDischargeDate = slot.getWindowEnd();
+					final Date latestDischargeDate = slot.getWindowEndWithSlotOrPortTime();
 					final Date earliestLoadDate = cargo.getLoadSlot().getWindowStart();
 					if ((latestDischargeDate == null) || (earliestLoadDate == null)) {
 						return null;

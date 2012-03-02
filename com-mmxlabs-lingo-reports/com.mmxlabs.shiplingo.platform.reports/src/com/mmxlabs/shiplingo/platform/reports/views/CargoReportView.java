@@ -36,10 +36,10 @@ public class CargoReportView extends EMFReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "com.mmxlabs.demo.reports.views.CargoReportView";
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoReportView";
 
 	public CargoReportView() {
-		super("com.mmxlabs.demo.reports.CargoReportView");
+		super("com.mmxlabs.shiplingo.platform.reports.CargoReportView");
 
 		final CargoPackage c = CargoPackage.eINSTANCE;
 		final SchedulePackage s = SchedulePackage.eINSTANCE;

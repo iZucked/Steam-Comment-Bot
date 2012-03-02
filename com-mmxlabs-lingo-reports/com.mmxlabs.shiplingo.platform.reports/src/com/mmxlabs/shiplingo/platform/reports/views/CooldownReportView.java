@@ -34,10 +34,10 @@ public class CooldownReportView extends EMFReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "com.mmxlabs.demo.reports.views.CooldownReportView";
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView";
 
 	public CooldownReportView() {
-		super("com.mmxlabs.demo.reports.CooldownReportView");
+		super("com.mmxlabs.shiplingo.platform.reports.CooldownReportView");
 
 		addColumn("Schedule", containingScheduleFormatter);
 		addColumn("Vessel", objectFormatter, ScenarioPackage.eINSTANCE.getScenarioObject__GetContainer(), SchedulePackage.eINSTANCE.getSequence_Vessel(),

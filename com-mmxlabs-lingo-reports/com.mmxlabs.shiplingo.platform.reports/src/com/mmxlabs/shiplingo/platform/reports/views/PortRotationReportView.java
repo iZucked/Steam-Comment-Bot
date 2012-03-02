@@ -46,14 +46,14 @@ public class PortRotationReportView extends EMFReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "com.mmxlabs.demo.reports.views.PortRotationReportView";
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView";
 	private ColumnHandler dateColumn;
 	private ColumnHandler vesselColumn;
 	private ColumnHandler durationColumn;
 
 	public PortRotationReportView() {
 
-		super("com.mmxlabs.demo.reports.PortRotationReportView");
+		super("com.mmxlabs.shiplingo.platform.reports.PortRotationReportView");
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 		final EventsPackage ep = EventsPackage.eINSTANCE;

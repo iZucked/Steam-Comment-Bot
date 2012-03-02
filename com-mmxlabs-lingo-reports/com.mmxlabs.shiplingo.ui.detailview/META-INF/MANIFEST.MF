@@ -3,27 +3,22 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Generated-ui
 Bundle-SymbolicName: com.mmxlabs.shiplingo.ui.detailview
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.mmxlabs.shiplingo.ui.detailview.Activator
 Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- com.mmxlabs.lngscheduler.emf-extras;bundle-version="1.0.0",
  com.mmxlabs.common.common-util;bundle-version="1.0.0",
  org.eclipse.emf.ecore;bundle-version="2.7.0",
- com.mmxlabs.lngscheduler.emf.edit;bundle-version="1.0.0",
  org.eclipse.emf.validation;bundle-version="1.4.0",
  com.mmxlabs.rcp.common;bundle-version="1.0.0",
  org.eclipse.emf.edit.ui;visibility:=reexport,
  org.swtchart;bundle-version="0.7.0",
  com.mmxlabs.shiplingo.platform.importer;bundle-version="1.0.0",
  org.slf4j.api;bundle-version="1.6.1",
- org.eclipse.nebula.widgets.grid;bundle-version="1.0.0"
+ org.eclipse.nebula.widgets.grid;bundle-version="1.0.0",
+ com.mmxlabs.models.lng.port;bundle-version="1.0.0",
+ com.mmxlabs.models.lng.commercial;bundle-version="1.0.0",
+ com.mmxlabs.models.lng.cargo;bundle-version="1.0.0",
+ com.mmxlabs.models.ui.validation;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.mmxlabs.shiplingo.ui.autocorrector,
- com.mmxlabs.shiplingo.ui.detailview.base,
- com.mmxlabs.shiplingo.ui.detailview.containers,
- com.mmxlabs.shiplingo.ui.detailview.editors,
- com.mmxlabs.shiplingo.ui.detailview.editors.dialogs,
- com.mmxlabs.shiplingo.ui.tableview,
- com.mmxlabs.shiplingo.ui.tableview.filter
+Export-Package: com.mmxlabs.shiplingo.ui.autocorrector

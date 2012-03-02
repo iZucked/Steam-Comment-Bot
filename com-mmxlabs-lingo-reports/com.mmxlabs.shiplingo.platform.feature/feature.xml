@@ -6,10 +6,10 @@
 
 -->
 <feature
-      id="com.mmxlabs.demo.feature"
-      label="Demo App Feature"
+      id="com.mmxlabs.shiplingo.platform.feature"
+      label="Shiplingo Platform Feature"
       version="1.0.0.qualifier"
-      provider-name="MMXLABS">
+      provider-name="Minimax Labs">
 
    <description url="http://www.minimaxlabs.com/">
       MMX Labs Pugins for ShipLingo Demo
