@@ -85,5 +85,13 @@
          </description>
       </wizard>
    </extension>
+     <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            class="com.mmxlabs.shiplingo.platform.models.manifest.wizards.RandomScenarioWizard"
+            id="com.mmxlabs.shiplingo.platform.models.manifest.wizards.RandomScenarioWizard"
+            name="New Random Scenario">
+      </wizard>
+   </extension>
 
 </plugin>
