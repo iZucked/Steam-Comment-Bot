@@ -20,8 +20,8 @@ import scenario.schedule.Sequence;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.VesselEventVisit;
 
-import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
 import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.shiplingo.platform.app.wizards.CustomScenarioCreator;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?261">Check that all vesselevents in input exist in output.</a>

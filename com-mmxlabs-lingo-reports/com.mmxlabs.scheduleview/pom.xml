@@ -4,9 +4,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>com.mmxlabs.shiplingo.demo</artifactId>
-		<groupId>com.mmxlabs.shiplingo</groupId>
-		<version>0.0.1-SNAPSHOT</version>
+		<groupId>com.mmxlabs.shiplingo.platform</groupId>
+		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
+		<version>1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.mmxlabs.scheduleview</groupId>
 	<artifactId>com.mmxlabs.scheduleview</artifactId>

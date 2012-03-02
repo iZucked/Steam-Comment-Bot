@@ -3,27 +3,26 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.mmxlabs.shiplingo</groupId>
-	<artifactId>com.mmxlabs.shiplingo.demo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<groupId>com.mmxlabs.shiplingo.platform</groupId>
+	<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
+	<version>1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
-		<version>5</version>
+		<version>8</version>
 		<relativePath />
 	</parent>
 
 	<scm>
-		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-demo.hg</connection>
-		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-demo.hg</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-shiplingo-demo</url>
+		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-platform.hg</connection>
+		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-platform.hg</developerConnection>
+		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-shiplingo-platform</url>
 	</scm>
 
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.shiplingo.demo/</url>
+		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.shiplingo.platform/</url>
 	</ciManagement>
 
 	<modules>
@@ -32,32 +31,27 @@
 		<!-- <module>target-definition</module> -->
 
 		<!-- Product file project -->
-		<module>com.mmxlabs.demo.product</module>
+		<module>com.mmxlabs.shiplingo.platform.product</module>
 
 		<!-- Features -->
-		<module>com.mmxlabs.demo.feature</module>
+		<module>com.mmxlabs.shiplingo.platform.feature</module>
 		<module>com.mmxlabs.platform.feature</module>
 
 		<!-- Proper plugin projects -->
-		<module>com.mmxlabs.demo.app</module>
-		<module>com.mmxlabs.lngscheduler.emf</module>
-		<module>com.mmxlabs.lngscheduler.emf-extras</module>
-		<module>com.mmxlabs.lngscheduler.emf-extras.tests</module>
-		<module>com.mmxlabs.lngscheduler.emf.edit</module>
-		<module>com.mmxlabs.lngscheduler.emf.editor</module>
-		<module>com.mmxlabs.lngscheduler.ui</module>
+		<module>com.mmxlabs.shiplingo.platform.app</module>
+		
 
-		<module>com.mmxlabs.demo.reports</module>
+		<module>com.mmxlabs.shiplingo.platform.reports</module>
 		<module>com.mmxlabs.scheduleview</module>
 		<module>com.mmxlabs.rcp.navigator</module>
 		<module>com.mmxlabs.shiplingo.ui.detailview</module>
 		<module>com.mmxlabs.shiplingo.importer</module>
 
 		<!-- Documentation -->
-		<module>com.mmxlabs.demo.doc</module>
+		<module>com.mmxlabs.shiplingo.platform.doc</module>
 
 		<!-- Test Plugins -->
-		<module>com.mmxlabs.scheduler.its</module>
+		<module>com.mmxlabs.shiplingo.platform.its</module>
 	</modules>
 
 	<build>

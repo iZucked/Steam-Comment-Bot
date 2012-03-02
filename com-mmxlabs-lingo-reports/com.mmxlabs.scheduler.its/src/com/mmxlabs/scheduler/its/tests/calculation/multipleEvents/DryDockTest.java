@@ -22,9 +22,9 @@ import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.events.VesselEventVisit;
 
 import com.mmxlabs.common.TimeUnitConvert;
-import com.mmxlabs.demo.app.wizards.CustomScenarioCreator;
 import com.mmxlabs.scheduler.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.scheduler.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.shiplingo.platform.app.wizards.CustomScenarioCreator;
 
 /**
  * Class for tests to do with multiple dry docks.

@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.rcp.common;bundle-version="1.0.0",
  org.eclipse.emf.edit.ui;visibility:=reexport,
  org.swtchart;bundle-version="0.7.0",
- com.mmxlabs.shiplingo.importer;bundle-version="1.0.0",
+ com.mmxlabs.shiplingo.platform.importer;bundle-version="1.0.0",
  org.slf4j.api;bundle-version="1.6.1",
  org.eclipse.nebula.widgets.grid;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

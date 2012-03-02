@@ -1,14 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>com.mmxlabs.shiplingo.demo</artifactId>
-    <groupId>com.mmxlabs.shiplingo</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <groupId>com.mmxlabs.shiplingo</groupId>
-  <artifactId>com.mmxlabs.lngscheduler.ui</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>eclipse-plugin</packaging>
-  <name>LNG Scheduler: UI Components</name>
-  <description>UI Components for LNG Scheduler EMF model in ShipLingo</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mmxlabs.shiplingo.platform</groupId>
+		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
+		<version>1-SNAPSHOT</version>
+	</parent>
+	<artifactId>com.mmxlabs.lngscheduler.ui</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>eclipse-plugin</packaging>
+	<name>LNG Scheduler: UI Components</name>
+	<description>UI Components for LNG Scheduler EMF model in ShipLingo</description>
 </project>
