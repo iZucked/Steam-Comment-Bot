@@ -4,12 +4,12 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
-		<groupId>com.mmxlabs.models.lng</groupId>
+		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
+		<groupId>com.mmxlabs.shiplingo.platform</groupId>
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.mmxlabs.models.lng.demo</artifactId>
+	<artifactId>com.mmxlabs.shiplingo.platform.models.manifest</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
