@@ -22,8 +22,8 @@ import scenario.schedule.events.FuelQuantity;
 import scenario.schedule.events.FuelType;
 
 import com.mmxlabs.common.TimeUnitConvert;
-import com.mmxlabs.shiplingo.platform.app.wizards.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.shiplingo.platform.models.manifest.wizards.CustomScenarioCreator;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?259">Case 259: Scenario with several cargoes</a>

@@ -18,8 +18,8 @@ import org.junit.Test;
 import scenario.Scenario;
 import scenario.port.Port;
 
-import com.mmxlabs.shiplingo.platform.app.wizards.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.shiplingo.platform.models.manifest.wizards.CustomScenarioCreator;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?254">Case 254: Check input attributes have not unexpectedly changed</a>

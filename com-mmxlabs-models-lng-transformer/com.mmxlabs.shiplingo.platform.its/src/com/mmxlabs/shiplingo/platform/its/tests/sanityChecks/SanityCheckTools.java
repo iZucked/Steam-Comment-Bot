@@ -20,7 +20,7 @@ import scenario.schedule.events.PortVisit;
 import scenario.schedule.events.ScheduledEvent;
 import scenario.schedule.fleetallocation.FleetVessel;
 
-import com.mmxlabs.shiplingo.platform.app.wizards.CustomScenarioCreator;
+import com.mmxlabs.shiplingo.platform.models.manifest.wizards.CustomScenarioCreator;
 
 /**
  * Tools that are used in many of the sanity checks.

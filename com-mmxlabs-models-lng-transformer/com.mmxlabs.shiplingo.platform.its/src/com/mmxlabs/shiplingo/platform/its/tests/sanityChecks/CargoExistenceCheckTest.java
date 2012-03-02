@@ -16,8 +16,8 @@ import scenario.port.Port;
 import scenario.schedule.CargoAllocation;
 import scenario.schedule.Schedule;
 
-import com.mmxlabs.shiplingo.platform.app.wizards.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.shiplingo.platform.models.manifest.wizards.CustomScenarioCreator;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?253">BugzID: 253 Check all cargoes in input exist in output (unless spot/optional)</a><br>
