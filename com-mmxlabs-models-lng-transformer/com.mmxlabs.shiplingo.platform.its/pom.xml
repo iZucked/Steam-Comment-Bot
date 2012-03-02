@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mmxlabs.shiplingo.platform</groupId>
+		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
+		<version>1-SNAPSHOT</version>
+	</parent>
+	<artifactId>com.mmxlabs.shiplingo.platform.its</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
+	<version>1.0.0-SNAPSHOT</version>
+
+	<profiles>
+		<!-- The quickTests profile skips the long running scenario tests -->
+		<profile>
+			<id>quickTests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<failIfNoTests>false</failIfNoTests>
+							<!-- Include non-standard test suffix -->
+							<includes>
+								<include>**/*Tests.*</include>
+							</includes>
+							<excludes>
+								<exclude>**/OptimisationRepeatabilityTest.*</exclude>
+								<exclude>**/OptimisationResultTest.*</exclude>
+							</excludes>
+							<product>com.mmxlabs.demo.app.product</product>
+							<application>com.mmxlabs.demo.app.application</application>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
