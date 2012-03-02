@@ -24,15 +24,20 @@ All rights reserved.
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import feature="com.mmxlabs.models.lng.types.feature" version="1.0.0.201202281713"/>
+      <import feature="com.mmxlabs.models.mmxcore.feature" version="1.0.0.201203021635"/>
+   </requires>
+
    <plugin
-         id="com.mmxlabs.demo.app"
+         id="com.mmxlabs.shiplingo.platform.app"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.demo.reports"
+         id="com.mmxlabs.shiplingo.platform.reports"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -54,34 +59,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.jobmanager.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngscheduler.emf"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngscheduler.emf-extras"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngscheduler.emf.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngscheduler.emf.editor"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -159,7 +136,7 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.demo.doc"
+         id="com.mmxlabs.shiplingo.platform.doc"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -167,27 +144,6 @@ All rights reserved.
 
    <plugin
          id="org.objectweb.asm"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.lngscheduler.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.shiplingo.importer"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.shiplingo.ui.detailview"
          download-size="0"
          install-size="0"
          version="0.0.0"

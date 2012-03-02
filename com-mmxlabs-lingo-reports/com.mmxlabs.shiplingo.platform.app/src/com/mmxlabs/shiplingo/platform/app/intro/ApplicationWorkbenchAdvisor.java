@@ -44,7 +44,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	private final DelayedOpenFileProcessor delayedOpenFileProcessor;
 
-	private static final String PERSPECTIVE_ID = "com.mmxlabs.demo.app.perspective.editing";
+	private static final String PERSPECTIVE_ID = "com.mmxlabs.shiplingo.platform.app.perspective.editing";
 
 	public ApplicationWorkbenchAdvisor(final DelayedOpenFileProcessor processor) {
 		super();
