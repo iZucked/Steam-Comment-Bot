@@ -45,7 +45,7 @@
 		<module>com.mmxlabs.scheduleview</module>
 		<module>com.mmxlabs.rcp.navigator</module>
 		<module>com.mmxlabs.shiplingo.ui.detailview</module>
-		<module>com.mmxlabs.shiplingo.importer</module>
+		<module>com.mmxlabs.shiplingo.platform.importer</module>
 
 		<!-- Documentation -->
 		<module>com.mmxlabs.shiplingo.platform.doc</module>
