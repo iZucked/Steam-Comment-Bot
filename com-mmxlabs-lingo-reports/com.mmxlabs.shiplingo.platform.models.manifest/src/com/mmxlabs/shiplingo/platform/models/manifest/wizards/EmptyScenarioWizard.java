@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.wizards;
+package com.mmxlabs.shiplingo.platform.models.manifest.wizards;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -24,7 +24,7 @@ import java.io.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
 
-import com.mmxlabs.models.lng.demo.DemoJointModel;
+import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
 
 /**
  * This is a sample new wizard. Its role is to create a new file 

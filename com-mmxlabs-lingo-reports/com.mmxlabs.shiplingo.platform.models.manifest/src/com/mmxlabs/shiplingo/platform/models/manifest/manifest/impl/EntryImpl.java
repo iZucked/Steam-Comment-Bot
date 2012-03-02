@@ -2,10 +2,10 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.manifest.impl;
+package com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl;
 
-import com.mmxlabs.models.lng.demo.manifest.Entry;
-import com.mmxlabs.models.lng.demo.manifest.ManifestPackage;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -21,8 +21,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.demo.manifest.impl.EntryImpl#getSubModelKey <em>Sub Model Key</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.demo.manifest.impl.EntryImpl#getRelativePath <em>Relative Path</em>}</li>
+ *   <li>{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.EntryImpl#getSubModelKey <em>Sub Model Key</em>}</li>
+ *   <li>{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.EntryImpl#getRelativePath <em>Relative Path</em>}</li>
  * </ul>
  * </p>
  *

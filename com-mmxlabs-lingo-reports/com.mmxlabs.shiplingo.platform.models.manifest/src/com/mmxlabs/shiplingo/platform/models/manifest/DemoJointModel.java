@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo;
+package com.mmxlabs.shiplingo.platform.models.manifest;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,10 +25,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.demo.manifest.Entry;
-import com.mmxlabs.models.lng.demo.manifest.Manifest;
-import com.mmxlabs.models.lng.demo.manifest.ManifestFactory;
-import com.mmxlabs.models.lng.demo.manifest.ManifestPackage;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -52,6 +48,10 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.jointmodel.EmptyJointModelRelease;
 import com.mmxlabs.models.mmxcore.jointmodel.IJointModelRelease;
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestFactory;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage;
 
 /**
  * This is an example LNG joint model; each client will have a different implementation of this.

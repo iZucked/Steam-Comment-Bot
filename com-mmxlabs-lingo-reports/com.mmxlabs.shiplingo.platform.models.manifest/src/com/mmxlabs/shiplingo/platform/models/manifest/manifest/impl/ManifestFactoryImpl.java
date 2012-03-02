@@ -2,9 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.manifest.impl;
+package com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl;
 
-import com.mmxlabs.models.lng.demo.manifest.*;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.*;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;

@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.adapters;
+package com.mmxlabs.shiplingo.platform.models.manifest.adapters;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IURIEditorInput;
 
-import com.mmxlabs.models.lng.demo.DemoJointModel;
+import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
 
 /**
  * Adapts IEditorInputs to DemoJointModels where possible.

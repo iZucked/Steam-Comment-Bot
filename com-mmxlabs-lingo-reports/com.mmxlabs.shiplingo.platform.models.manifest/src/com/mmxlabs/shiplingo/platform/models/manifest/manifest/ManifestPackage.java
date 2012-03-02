@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.manifest;
+package com.mmxlabs.shiplingo.platform.models.manifest.manifest;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * @see com.mmxlabs.models.lng.demo.manifest.ManifestFactory
+ * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestFactory
  * @model kind="package"
  * @generated
  */
@@ -55,14 +55,14 @@ public interface ManifestPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	ManifestPackage eINSTANCE = com.mmxlabs.models.lng.demo.manifest.impl.ManifestPackageImpl.init();
+	ManifestPackage eINSTANCE = com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.ManifestPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.demo.manifest.impl.EntryImpl <em>Entry</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.EntryImpl <em>Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.demo.manifest.impl.EntryImpl
-	 * @see com.mmxlabs.models.lng.demo.manifest.impl.ManifestPackageImpl#getEntry()
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.EntryImpl
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.ManifestPackageImpl#getEntry()
 	 * @generated
 	 */
 	int ENTRY = 0;
@@ -95,11 +95,11 @@ public interface ManifestPackage extends EPackage {
 	int ENTRY_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.demo.manifest.impl.ManifestImpl <em>Manifest</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.ManifestImpl <em>Manifest</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.demo.manifest.impl.ManifestImpl
-	 * @see com.mmxlabs.models.lng.demo.manifest.impl.ManifestPackageImpl#getManifest()
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.ManifestImpl
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.ManifestPackageImpl#getManifest()
 	 * @generated
 	 */
 	int MANIFEST = 1;
@@ -124,53 +124,53 @@ public interface ManifestPackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.demo.manifest.Entry <em>Entry</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry <em>Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Entry</em>'.
-	 * @see com.mmxlabs.models.lng.demo.manifest.Entry
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry
 	 * @generated
 	 */
 	EClass getEntry();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.demo.manifest.Entry#getSubModelKey <em>Sub Model Key</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry#getSubModelKey <em>Sub Model Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Sub Model Key</em>'.
-	 * @see com.mmxlabs.models.lng.demo.manifest.Entry#getSubModelKey()
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry#getSubModelKey()
 	 * @see #getEntry()
 	 * @generated
 	 */
 	EAttribute getEntry_SubModelKey();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.demo.manifest.Entry#getRelativePath <em>Relative Path</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry#getRelativePath <em>Relative Path</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Relative Path</em>'.
-	 * @see com.mmxlabs.models.lng.demo.manifest.Entry#getRelativePath()
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry#getRelativePath()
 	 * @see #getEntry()
 	 * @generated
 	 */
 	EAttribute getEntry_RelativePath();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.demo.manifest.Manifest <em>Manifest</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest <em>Manifest</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Manifest</em>'.
-	 * @see com.mmxlabs.models.lng.demo.manifest.Manifest
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest
 	 * @generated
 	 */
 	EClass getManifest();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.demo.manifest.Manifest#getEntries <em>Entries</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest#getEntries <em>Entries</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Entries</em>'.
-	 * @see com.mmxlabs.models.lng.demo.manifest.Manifest#getEntries()
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest#getEntries()
 	 * @see #getManifest()
 	 * @generated
 	 */
@@ -199,11 +199,11 @@ public interface ManifestPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.demo.manifest.impl.EntryImpl <em>Entry</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.EntryImpl <em>Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.demo.manifest.impl.EntryImpl
-		 * @see com.mmxlabs.models.lng.demo.manifest.impl.ManifestPackageImpl#getEntry()
+		 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.EntryImpl
+		 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.ManifestPackageImpl#getEntry()
 		 * @generated
 		 */
 		EClass ENTRY = eINSTANCE.getEntry();
@@ -225,11 +225,11 @@ public interface ManifestPackage extends EPackage {
 		EAttribute ENTRY__RELATIVE_PATH = eINSTANCE.getEntry_RelativePath();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.demo.manifest.impl.ManifestImpl <em>Manifest</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.ManifestImpl <em>Manifest</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.demo.manifest.impl.ManifestImpl
-		 * @see com.mmxlabs.models.lng.demo.manifest.impl.ManifestPackageImpl#getManifest()
+		 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.ManifestImpl
+		 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.ManifestPackageImpl#getManifest()
 		 * @generated
 		 */
 		EClass MANIFEST = eINSTANCE.getManifest();

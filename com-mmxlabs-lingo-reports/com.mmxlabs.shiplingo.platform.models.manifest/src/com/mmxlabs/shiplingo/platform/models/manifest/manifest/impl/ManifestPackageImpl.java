@@ -2,12 +2,12 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.manifest.impl;
+package com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl;
 
-import com.mmxlabs.models.lng.demo.manifest.Entry;
-import com.mmxlabs.models.lng.demo.manifest.Manifest;
-import com.mmxlabs.models.lng.demo.manifest.ManifestFactory;
-import com.mmxlabs.models.lng.demo.manifest.ManifestPackage;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestFactory;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -48,7 +48,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see com.mmxlabs.models.lng.demo.manifest.ManifestPackage#eNS_URI
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage#eNS_URI
 	 * @see #init()
 	 * @generated
 	 */
