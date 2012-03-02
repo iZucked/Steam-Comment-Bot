@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.manifest;
+package com.mmxlabs.shiplingo.platform.models.manifest.manifest;
 
 import org.eclipse.emf.ecore.EFactory;
 
@@ -11,7 +11,7 @@ import org.eclipse.emf.ecore.EFactory;
  * The <b>Factory</b> for the model.
  * It provides a create method for each non-abstract class of the model.
  * <!-- end-user-doc -->
- * @see com.mmxlabs.models.lng.demo.manifest.ManifestPackage
+ * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage
  * @generated
  */
 public interface ManifestFactory extends EFactory {
@@ -21,7 +21,7 @@ public interface ManifestFactory extends EFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	ManifestFactory eINSTANCE = com.mmxlabs.models.lng.demo.manifest.impl.ManifestFactoryImpl.init();
+	ManifestFactory eINSTANCE = com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.ManifestFactoryImpl.init();
 
 	/**
 	 * Returns a new object of class '<em>Entry</em>'.

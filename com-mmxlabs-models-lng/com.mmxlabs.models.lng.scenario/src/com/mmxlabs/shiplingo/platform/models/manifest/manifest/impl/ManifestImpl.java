@@ -2,11 +2,11 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.manifest.impl;
+package com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl;
 
-import com.mmxlabs.models.lng.demo.manifest.Entry;
-import com.mmxlabs.models.lng.demo.manifest.Manifest;
-import com.mmxlabs.models.lng.demo.manifest.ManifestPackage;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage;
 
 import java.util.Collection;
 
@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.demo.manifest.impl.ManifestImpl#getEntries <em>Entries</em>}</li>
+ *   <li>{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl.ManifestImpl#getEntries <em>Entries</em>}</li>
  * </ul>
  * </p>
  *

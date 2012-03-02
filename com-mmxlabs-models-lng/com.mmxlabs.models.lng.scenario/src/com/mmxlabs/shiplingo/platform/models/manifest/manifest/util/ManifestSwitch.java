@@ -2,9 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.manifest.util;
+package com.mmxlabs.shiplingo.platform.models.manifest.manifest.util;
 
-import com.mmxlabs.models.lng.demo.manifest.*;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.*;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.util.Switch;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see com.mmxlabs.models.lng.demo.manifest.ManifestPackage
+ * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage
  * @generated
  */
 public class ManifestSwitch<T> extends Switch<T> {

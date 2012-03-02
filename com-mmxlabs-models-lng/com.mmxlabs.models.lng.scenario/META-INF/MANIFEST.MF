@@ -7,9 +7,9 @@ Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.mmxlabs.models.lng.demo.manifest,
- com.mmxlabs.models.lng.demo.manifest.impl,
- com.mmxlabs.models.lng.demo.manifest.util
+Export-Package: com.mmxlabs.shiplingo.platform.models.manifest.manifest,
+ com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl,
+ com.mmxlabs.shiplingo.platform.models.manifest.manifest.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  com.mmxlabs.models.mmxcore;bundle-version="1.0.0",

@@ -2,9 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.manifest.util;
+package com.mmxlabs.shiplingo.platform.models.manifest.manifest.util;
 
-import com.mmxlabs.models.lng.demo.manifest.*;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.*;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
@@ -18,7 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see com.mmxlabs.models.lng.demo.manifest.ManifestPackage
+ * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage
  * @generated
  */
 public class ManifestAdapterFactory extends AdapterFactoryImpl {
@@ -98,13 +98,13 @@ public class ManifestAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.demo.manifest.Entry <em>Entry</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry <em>Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.demo.manifest.Entry
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry
 	 * @generated
 	 */
 	public Adapter createEntryAdapter() {
@@ -112,13 +112,13 @@ public class ManifestAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.demo.manifest.Manifest <em>Manifest</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest <em>Manifest</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.demo.manifest.Manifest
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest
 	 * @generated
 	 */
 	public Adapter createManifestAdapter() {

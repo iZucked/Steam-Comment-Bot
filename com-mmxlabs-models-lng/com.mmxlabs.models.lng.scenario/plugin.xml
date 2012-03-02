@@ -19,7 +19,7 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <package
             uri="http://www.mmxlabs.com/models/lng/demo-manifest/1/"
-            class="com.mmxlabs.models.lng.demo.manifest.ManifestPackage"
+            class="com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage"
             genModel="model/manifest.genmodel"/>
    </extension>
    <extension
@@ -30,7 +30,7 @@
       </category>
       <wizard
             category="com.mmxlabs.models.lng.demo"
-            class="com.mmxlabs.models.lng.demo.wizards.EmptyScenarioWizard"
+            class="com.mmxlabs.shiplingo.platform.models.manifest.wizards.EmptyScenarioWizard"
             icon="icons/sample.gif"
             id="com.mmxlabs.models.lng.demo.wizards.EmptyScenarioWizard"
             name="New Empty Scenario">
@@ -62,7 +62,7 @@
          point="org.eclipse.core.runtime.adapters">
       <factory
             adaptableType="org.eclipse.ui.IEditorInput"
-            class="com.mmxlabs.models.lng.demo.adapters.JointModelAdapterFactory">
+            class="com.mmxlabs.shiplingo.platform.models.manifest.adapters.JointModelAdapterFactory">
          <adapter
                type="com.mmxlabs.models.mmxcore.jointmodel.JointModel">
          </adapter>
@@ -76,7 +76,7 @@
       </category>
       <wizard
             category="com.mmxlabs.models.lng.demo.importWizards.sampleCategory"
-            class="com.mmxlabs.models.lng.demo.importWizards.ImportCSVWizard"
+            class="com.mmxlabs.shiplingo.platform.models.manifest.importWizards.ImportCSVWizard"
             icon="icons/sample.gif"
             id="com.mmxlabs.models.lng.demo.importWizards.ImportCSVWizard"
             name="Import CSV">

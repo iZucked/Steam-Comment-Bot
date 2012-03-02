@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.manifest;
+package com.mmxlabs.shiplingo.platform.models.manifest.manifest;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -14,12 +14,12 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.demo.manifest.Entry#getSubModelKey <em>Sub Model Key</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.demo.manifest.Entry#getRelativePath <em>Relative Path</em>}</li>
+ *   <li>{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry#getSubModelKey <em>Sub Model Key</em>}</li>
+ *   <li>{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry#getRelativePath <em>Relative Path</em>}</li>
  * </ul>
  * </p>
  *
- * @see com.mmxlabs.models.lng.demo.manifest.ManifestPackage#getEntry()
+ * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage#getEntry()
  * @model
  * @generated
  */
@@ -34,14 +34,14 @@ public interface Entry extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Sub Model Key</em>' attribute.
 	 * @see #setSubModelKey(String)
-	 * @see com.mmxlabs.models.lng.demo.manifest.ManifestPackage#getEntry_SubModelKey()
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage#getEntry_SubModelKey()
 	 * @model required="true"
 	 * @generated
 	 */
 	String getSubModelKey();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.demo.manifest.Entry#getSubModelKey <em>Sub Model Key</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry#getSubModelKey <em>Sub Model Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Sub Model Key</em>' attribute.
@@ -60,14 +60,14 @@ public interface Entry extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Relative Path</em>' attribute.
 	 * @see #setRelativePath(String)
-	 * @see com.mmxlabs.models.lng.demo.manifest.ManifestPackage#getEntry_RelativePath()
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage#getEntry_RelativePath()
 	 * @model required="true"
 	 * @generated
 	 */
 	String getRelativePath();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.demo.manifest.Entry#getRelativePath <em>Relative Path</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry#getRelativePath <em>Relative Path</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Relative Path</em>' attribute.

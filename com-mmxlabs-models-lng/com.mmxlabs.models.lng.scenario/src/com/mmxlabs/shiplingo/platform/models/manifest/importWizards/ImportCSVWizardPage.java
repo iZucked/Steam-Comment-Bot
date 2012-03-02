@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.importWizards;
+package com.mmxlabs.shiplingo.platform.models.manifest.importWizards;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,8 +18,8 @@ import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
-import com.mmxlabs.models.lng.demo.DemoJointModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
 
 
 public class ImportCSVWizardPage extends WizardNewFileCreationPage {

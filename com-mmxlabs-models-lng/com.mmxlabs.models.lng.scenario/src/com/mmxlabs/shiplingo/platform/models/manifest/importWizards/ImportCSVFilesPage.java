@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.demo.importWizards;
+package com.mmxlabs.shiplingo.platform.models.manifest.importWizards;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,13 +22,13 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
-import com.mmxlabs.models.lng.demo.DemoJointModel;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
+import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
 
 public class ImportCSVFilesPage extends WizardPage {
 	private class Chunk {
