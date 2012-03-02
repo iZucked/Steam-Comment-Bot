@@ -10,6 +10,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -852,6 +853,16 @@ public interface TypesPackage extends EPackage {
 	int ASPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.PortCapability
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getPortCapability()
+	 * @generated
+	 */
+	int PORT_CAPABILITY = 15;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APort <em>APort</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1000,6 +1011,16 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getASpotMarket();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Port Capability</em>'.
+	 * @see com.mmxlabs.models.lng.types.PortCapability
+	 * @generated
+	 */
+	EEnum getPortCapability();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1172,6 +1193,16 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ASPOT_MARKET = eINSTANCE.getASpotMarket();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.PortCapability
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getPortCapability()
+		 * @generated
+		 */
+		EEnum PORT_CAPABILITY = eINSTANCE.getPortCapability();
 
 	}
 
