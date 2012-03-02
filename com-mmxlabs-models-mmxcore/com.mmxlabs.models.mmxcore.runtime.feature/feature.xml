@@ -6,8 +6,8 @@
 
 -->
 <feature
-      id="com.mmxlabs.models.mmxcore.feature"
-      label="Models: MMXCore Feature"
+      id="com.mmxlabs.models.mmxcore.runtime.feature"
+      label="Models: MMXCore Runtime Feature"
       version="1.0.0.qualifier"
       provider-name="Minimax Labs">
 
@@ -40,13 +40,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.mmxcore.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.mmxcore.template"
          download-size="0"
          install-size="0"
          version="0.0.0"

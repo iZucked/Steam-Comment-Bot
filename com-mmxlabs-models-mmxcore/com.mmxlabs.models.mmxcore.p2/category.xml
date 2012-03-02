@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Copyright (C) Minimax Labs Ltd., 2010 - 2011
-    All rights reserved.
-
--->
 <site>
-   <feature url="features/com.mmxlabs.models.mmxcore.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.feature" version="1.0.0.qualifier">
+   <feature url="features/com.mmxlabs.models.mmxcore.runtime.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.runtime.feature" version="1.0.0.qualifier">
       <category name="all"/>
    </feature>
-   <feature url="features/com.mmxlabs.models.mmxcore.feature.source_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.feature.source" version="1.0.0.qualifier">
+   <feature url="features/com.mmxlabs.models.mmxcore.runtime.source.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.runtime.source.feature" version="1.0.0.qualifier">
+      <category name="all"/>
+   </feature>
+   <feature url="features/com.mmxlabs.models.mmxcore.sdk.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.sdk.feature" version="1.0.0.qualifier">
+      <category name="all"/>
+   </feature>
+   <feature url="features/com.mmxlabs.models.mmxcore.sdk.source.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.sdk.source.feature" version="1.0.0.qualifier">
       <category name="all"/>
    </feature>
    <category-def name="all" label="Models: MMXCore: p2 Snapshots"/>
