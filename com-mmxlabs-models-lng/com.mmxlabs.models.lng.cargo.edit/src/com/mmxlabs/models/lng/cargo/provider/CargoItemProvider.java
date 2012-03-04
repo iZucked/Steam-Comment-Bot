@@ -66,6 +66,8 @@ public class CargoItemProvider
 			addLoadSlotPropertyDescriptor(object);
 			addDischargeSlotPropertyDescriptor(object);
 			addCargoTypePropertyDescriptor(object);
+			addAllowRewiringPropertyDescriptor(object);
+			addAllowedVesselsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -137,6 +139,50 @@ public class CargoItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Allow Rewiring feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowRewiringPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Cargo_allowRewiring_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Cargo_allowRewiring_feature", "_UI_Cargo_type"),
+				 CargoPackage.Literals.CARGO__ALLOW_REWIRING,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Allowed Vessels feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowedVesselsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Cargo_allowedVessels_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Cargo_allowedVessels_feature", "_UI_Cargo_type"),
+				 CargoPackage.Literals.CARGO__ALLOWED_VESSELS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Cargo.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -174,6 +220,7 @@ public class CargoItemProvider
 
 		switch (notification.getFeatureID(Cargo.class)) {
 			case CargoPackage.CARGO__CARGO_TYPE:
+			case CargoPackage.CARGO__ALLOW_REWIRING:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

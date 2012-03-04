@@ -30,24 +30,24 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
- * <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStartTime <em>Window Start Time</em>}</li>
- * <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowSize <em>Window Size</em>}</li>
- * <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
- * <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
- * <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getDuration <em>Duration</em>}</li>
- * <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
- * <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
- * <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getFixedPrice <em>Fixed Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStartTime <em>Window Start Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowSize <em>Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getDuration <em>Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getFixedPrice <em>Fixed Price</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class SlotImpl extends ASlotImpl implements Slot {
 	/**
-	 * The default value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWindowStart()
 	 * @generated
 	 * @ordered
@@ -55,8 +55,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected static final Date WINDOW_START_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWindowStart()
 	 * @generated
 	 * @ordered
@@ -64,8 +64,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected Date windowStart = WINDOW_START_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getWindowStartTime() <em>Window Start Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getWindowStartTime() <em>Window Start Time</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWindowStartTime()
 	 * @generated
 	 * @ordered
@@ -73,8 +73,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected static final int WINDOW_START_TIME_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getWindowStartTime() <em>Window Start Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getWindowStartTime() <em>Window Start Time</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWindowStartTime()
 	 * @generated
 	 * @ordered
@@ -82,16 +82,16 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected int windowStartTime = WINDOW_START_TIME_EDEFAULT;
 
 	/**
-	 * This is true if the Window Start Time attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This is true if the Window Start Time attribute has been set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean windowStartTimeESet;
 
 	/**
-	 * The default value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWindowSize()
 	 * @generated
 	 * @ordered
@@ -99,8 +99,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected static final int WINDOW_SIZE_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getWindowSize() <em>Window Size</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWindowSize()
 	 * @generated
 	 * @ordered
@@ -108,16 +108,16 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected int windowSize = WINDOW_SIZE_EDEFAULT;
 
 	/**
-	 * This is true if the Window Size attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This is true if the Window Size attribute has been set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean windowSizeESet;
 
 	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPort()
 	 * @generated
 	 * @ordered
@@ -125,8 +125,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected Port port;
 
 	/**
-	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getContract()
 	 * @generated
 	 * @ordered
@@ -134,8 +134,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected Contract contract;
 
 	/**
-	 * The default value of the '{@link #getDuration() <em>Duration</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getDuration() <em>Duration</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDuration()
 	 * @generated
 	 * @ordered
@@ -143,8 +143,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected static final int DURATION_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDuration() <em>Duration</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getDuration() <em>Duration</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDuration()
 	 * @generated
 	 * @ordered
@@ -152,16 +152,16 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected int duration = DURATION_EDEFAULT;
 
 	/**
-	 * This is true if the Duration attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This is true if the Duration attribute has been set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean durationESet;
 
 	/**
-	 * The default value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMinQuantity()
 	 * @generated
 	 * @ordered
@@ -169,8 +169,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected static final int MIN_QUANTITY_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMinQuantity()
 	 * @generated
 	 * @ordered
@@ -178,16 +178,16 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected int minQuantity = MIN_QUANTITY_EDEFAULT;
 
 	/**
-	 * This is true if the Min Quantity attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This is true if the Min Quantity attribute has been set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean minQuantityESet;
 
 	/**
-	 * The default value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMaxQuantity()
 	 * @generated
 	 * @ordered
@@ -195,8 +195,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected static final int MAX_QUANTITY_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMaxQuantity()
 	 * @generated
 	 * @ordered
@@ -204,16 +204,16 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
 
 	/**
-	 * This is true if the Max Quantity attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This is true if the Max Quantity attribute has been set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean maxQuantityESet;
 
 	/**
-	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFixedPrice()
 	 * @generated
 	 * @ordered
@@ -221,8 +221,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected static final double FIXED_PRICE_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFixedPrice()
 	 * @generated
 	 * @ordered
@@ -230,8 +230,8 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	protected double fixedPrice = FIXED_PRICE_EDEFAULT;
 
 	/**
-	 * This is true if the Fixed Price attribute has been set. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This is true if the Fixed Price attribute has been set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -239,7 +239,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected SlotImpl() {
@@ -248,7 +247,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -258,7 +256,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Date getWindowStart() {
@@ -267,7 +264,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setWindowStart(Date newWindowStart) {
@@ -279,7 +275,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public int getWindowStartTime() {
@@ -288,7 +283,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setWindowStartTime(int newWindowStartTime) {
@@ -302,7 +296,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void unsetWindowStartTime() {
@@ -316,7 +309,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public boolean isSetWindowStartTime() {
@@ -325,7 +317,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public int getWindowSize() {
@@ -334,7 +325,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setWindowSize(int newWindowSize) {
@@ -348,7 +338,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void unsetWindowSize() {
@@ -362,7 +351,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public boolean isSetWindowSize() {
@@ -371,13 +359,12 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
-			InternalEObject oldPort = (InternalEObject) port;
-			port = (Port) eResolveProxy(oldPort);
+			InternalEObject oldPort = (InternalEObject)port;
+			port = (Port)eResolveProxy(oldPort);
 			if (port != oldPort) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__PORT, oldPort, port));
@@ -388,7 +375,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Port basicGetPort() {
@@ -397,7 +383,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setPort(Port newPort) {
@@ -409,13 +394,12 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Contract getContract() {
 		if (contract != null && contract.eIsProxy()) {
-			InternalEObject oldContract = (InternalEObject) contract;
-			contract = (Contract) eResolveProxy(oldContract);
+			InternalEObject oldContract = (InternalEObject)contract;
+			contract = (Contract)eResolveProxy(oldContract);
 			if (contract != oldContract) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__CONTRACT, oldContract, contract));
@@ -426,7 +410,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Contract basicGetContract() {
@@ -435,7 +418,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setContract(Contract newContract) {
@@ -447,7 +429,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public int getDuration() {
@@ -456,7 +437,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setDuration(int newDuration) {
@@ -470,7 +450,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void unsetDuration() {
@@ -484,7 +463,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public boolean isSetDuration() {
@@ -493,7 +471,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public int getMinQuantity() {
@@ -502,7 +479,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setMinQuantity(int newMinQuantity) {
@@ -516,7 +492,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void unsetMinQuantity() {
@@ -530,7 +505,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public boolean isSetMinQuantity() {
@@ -539,7 +513,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public int getMaxQuantity() {
@@ -548,7 +521,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setMaxQuantity(int newMaxQuantity) {
@@ -562,7 +534,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void unsetMaxQuantity() {
@@ -576,7 +547,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public boolean isSetMaxQuantity() {
@@ -585,7 +555,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public double getFixedPrice() {
@@ -594,7 +563,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setFixedPrice(double newFixedPrice) {
@@ -608,7 +576,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void unsetFixedPrice() {
@@ -622,7 +589,6 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public boolean isSetFixedPrice() {
@@ -658,11 +624,12 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Date getWindowEndWithSlotOrPortTime() {
-		return new Date(getWindowStartWithSlotOrPortTime().getTime() + javax.management.timer.Timer.ONE_HOUR * getWindowSize());
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -671,12 +638,20 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	 * @generated NOT
 	 */
 	public Date getWindowStartWithSlotOrPortTime() {
-		
 		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(port.getTimeZone()));
 		final int startTime = (Integer) eGetWithDefault(CargoPackage.eINSTANCE.getSlot_WindowStartTime());
 		calendar.setTime(getWindowStart());
 		calendar.set(Calendar.HOUR_OF_DAY, startTime);
 		return calendar.getTime();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getSlotOrPortWindowSize() {
+		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE);
 	}
 
 	/**
@@ -693,189 +668,163 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case CargoPackage.SLOT__WINDOW_START:
-			return getWindowStart();
-		case CargoPackage.SLOT__WINDOW_START_TIME:
-			return getWindowStartTime();
-		case CargoPackage.SLOT__WINDOW_SIZE:
-			return getWindowSize();
-		case CargoPackage.SLOT__PORT:
-			if (resolve)
-				return getPort();
-			return basicGetPort();
-		case CargoPackage.SLOT__CONTRACT:
-			if (resolve)
-				return getContract();
-			return basicGetContract();
-		case CargoPackage.SLOT__DURATION:
-			return getDuration();
-		case CargoPackage.SLOT__MIN_QUANTITY:
-			return getMinQuantity();
-		case CargoPackage.SLOT__MAX_QUANTITY:
-			return getMaxQuantity();
-		case CargoPackage.SLOT__FIXED_PRICE:
-			return getFixedPrice();
+			case CargoPackage.SLOT__WINDOW_START:
+				return getWindowStart();
+			case CargoPackage.SLOT__WINDOW_START_TIME:
+				return getWindowStartTime();
+			case CargoPackage.SLOT__WINDOW_SIZE:
+				return getWindowSize();
+			case CargoPackage.SLOT__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
+			case CargoPackage.SLOT__CONTRACT:
+				if (resolve) return getContract();
+				return basicGetContract();
+			case CargoPackage.SLOT__DURATION:
+				return getDuration();
+			case CargoPackage.SLOT__MIN_QUANTITY:
+				return getMinQuantity();
+			case CargoPackage.SLOT__MAX_QUANTITY:
+				return getMaxQuantity();
+			case CargoPackage.SLOT__FIXED_PRICE:
+				return getFixedPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case CargoPackage.SLOT__WINDOW_START:
-			setWindowStart((Date) newValue);
-			return;
-		case CargoPackage.SLOT__WINDOW_START_TIME:
-			setWindowStartTime((Integer) newValue);
-			return;
-		case CargoPackage.SLOT__WINDOW_SIZE:
-			setWindowSize((Integer) newValue);
-			return;
-		case CargoPackage.SLOT__PORT:
-			setPort((Port) newValue);
-			return;
-		case CargoPackage.SLOT__CONTRACT:
-			setContract((Contract) newValue);
-			return;
-		case CargoPackage.SLOT__DURATION:
-			setDuration((Integer) newValue);
-			return;
-		case CargoPackage.SLOT__MIN_QUANTITY:
-			setMinQuantity((Integer) newValue);
-			return;
-		case CargoPackage.SLOT__MAX_QUANTITY:
-			setMaxQuantity((Integer) newValue);
-			return;
-		case CargoPackage.SLOT__FIXED_PRICE:
-			setFixedPrice((Double) newValue);
-			return;
+			case CargoPackage.SLOT__WINDOW_START:
+				setWindowStart((Date)newValue);
+				return;
+			case CargoPackage.SLOT__WINDOW_START_TIME:
+				setWindowStartTime((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__WINDOW_SIZE:
+				setWindowSize((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__PORT:
+				setPort((Port)newValue);
+				return;
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)newValue);
+				return;
+			case CargoPackage.SLOT__DURATION:
+				setDuration((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__MIN_QUANTITY:
+				setMinQuantity((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__MAX_QUANTITY:
+				setMaxQuantity((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__FIXED_PRICE:
+				setFixedPrice((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case CargoPackage.SLOT__WINDOW_START:
-			setWindowStart(WINDOW_START_EDEFAULT);
-			return;
-		case CargoPackage.SLOT__WINDOW_START_TIME:
-			unsetWindowStartTime();
-			return;
-		case CargoPackage.SLOT__WINDOW_SIZE:
-			unsetWindowSize();
-			return;
-		case CargoPackage.SLOT__PORT:
-			setPort((Port) null);
-			return;
-		case CargoPackage.SLOT__CONTRACT:
-			setContract((Contract) null);
-			return;
-		case CargoPackage.SLOT__DURATION:
-			unsetDuration();
-			return;
-		case CargoPackage.SLOT__MIN_QUANTITY:
-			unsetMinQuantity();
-			return;
-		case CargoPackage.SLOT__MAX_QUANTITY:
-			unsetMaxQuantity();
-			return;
-		case CargoPackage.SLOT__FIXED_PRICE:
-			unsetFixedPrice();
-			return;
+			case CargoPackage.SLOT__WINDOW_START:
+				setWindowStart(WINDOW_START_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__WINDOW_START_TIME:
+				unsetWindowStartTime();
+				return;
+			case CargoPackage.SLOT__WINDOW_SIZE:
+				unsetWindowSize();
+				return;
+			case CargoPackage.SLOT__PORT:
+				setPort((Port)null);
+				return;
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)null);
+				return;
+			case CargoPackage.SLOT__DURATION:
+				unsetDuration();
+				return;
+			case CargoPackage.SLOT__MIN_QUANTITY:
+				unsetMinQuantity();
+				return;
+			case CargoPackage.SLOT__MAX_QUANTITY:
+				unsetMaxQuantity();
+				return;
+			case CargoPackage.SLOT__FIXED_PRICE:
+				unsetFixedPrice();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case CargoPackage.SLOT__WINDOW_START:
-			return WINDOW_START_EDEFAULT == null ? windowStart != null : !WINDOW_START_EDEFAULT.equals(windowStart);
-		case CargoPackage.SLOT__WINDOW_START_TIME:
-			return isSetWindowStartTime();
-		case CargoPackage.SLOT__WINDOW_SIZE:
-			return isSetWindowSize();
-		case CargoPackage.SLOT__PORT:
-			return port != null;
-		case CargoPackage.SLOT__CONTRACT:
-			return contract != null;
-		case CargoPackage.SLOT__DURATION:
-			return isSetDuration();
-		case CargoPackage.SLOT__MIN_QUANTITY:
-			return isSetMinQuantity();
-		case CargoPackage.SLOT__MAX_QUANTITY:
-			return isSetMaxQuantity();
-		case CargoPackage.SLOT__FIXED_PRICE:
-			return isSetFixedPrice();
+			case CargoPackage.SLOT__WINDOW_START:
+				return WINDOW_START_EDEFAULT == null ? windowStart != null : !WINDOW_START_EDEFAULT.equals(windowStart);
+			case CargoPackage.SLOT__WINDOW_START_TIME:
+				return isSetWindowStartTime();
+			case CargoPackage.SLOT__WINDOW_SIZE:
+				return isSetWindowSize();
+			case CargoPackage.SLOT__PORT:
+				return port != null;
+			case CargoPackage.SLOT__CONTRACT:
+				return contract != null;
+			case CargoPackage.SLOT__DURATION:
+				return isSetDuration();
+			case CargoPackage.SLOT__MIN_QUANTITY:
+				return isSetMinQuantity();
+			case CargoPackage.SLOT__MAX_QUANTITY:
+				return isSetMaxQuantity();
+			case CargoPackage.SLOT__FIXED_PRICE:
+				return isSetFixedPrice();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (windowStart: ");
 		result.append(windowStart);
 		result.append(", windowStartTime: ");
-		if (windowStartTimeESet)
-			result.append(windowStartTime);
-		else
-			result.append("<unset>");
+		if (windowStartTimeESet) result.append(windowStartTime); else result.append("<unset>");
 		result.append(", windowSize: ");
-		if (windowSizeESet)
-			result.append(windowSize);
-		else
-			result.append("<unset>");
+		if (windowSizeESet) result.append(windowSize); else result.append("<unset>");
 		result.append(", duration: ");
-		if (durationESet)
-			result.append(duration);
-		else
-			result.append("<unset>");
+		if (durationESet) result.append(duration); else result.append("<unset>");
 		result.append(", minQuantity: ");
-		if (minQuantityESet)
-			result.append(minQuantity);
-		else
-			result.append("<unset>");
+		if (minQuantityESet) result.append(minQuantity); else result.append("<unset>");
 		result.append(", maxQuantity: ");
-		if (maxQuantityESet)
-			result.append(maxQuantity);
-		else
-			result.append("<unset>");
+		if (maxQuantityESet) result.append(maxQuantity); else result.append("<unset>");
 		result.append(", fixedPrice: ");
-		if (fixedPriceESet)
-			result.append(fixedPrice);
-		else
-			result.append("<unset>");
+		if (fixedPriceESet) result.append(fixedPrice); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
@@ -885,7 +834,10 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 		if (CargoPackage.eINSTANCE.getSlot_WindowStartTime() == feature) {
 			return port.getDefaultStartTime();
+		} else if (CargoPackage.eINSTANCE.getSlot_WindowSize() == feature) {
+			return port.getDefaultWindowSize();
 		}
+		
 		return super.getUnsetValue(feature);
 	}
 } // end of SlotImpl

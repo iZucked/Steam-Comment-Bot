@@ -70,6 +70,8 @@ public class CargoComponentHelper implements IComponentHelper {
 		add_loadSlotEditor(detailComposite, topClass);
 		add_dischargeSlotEditor(detailComposite, topClass);
 		add_cargoTypeEditor(detailComposite, topClass);
+		add_allowRewiringEditor(detailComposite, topClass);
+		add_allowedVesselsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the loadSlot feature on Cargo
@@ -95,5 +97,23 @@ public class CargoComponentHelper implements IComponentHelper {
 	 */
 	protected void add_cargoTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__CARGO_TYPE));
+	}
+
+	/**
+	 * Create the editor for the allowRewiring feature on Cargo
+	 *
+	 * @generated
+	 */
+	protected void add_allowRewiringEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOW_REWIRING));
+	}
+
+	/**
+	 * Create the editor for the allowedVessels feature on Cargo
+	 *
+	 * @generated
+	 */
+	protected void add_allowedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOWED_VESSELS));
 	}
 }

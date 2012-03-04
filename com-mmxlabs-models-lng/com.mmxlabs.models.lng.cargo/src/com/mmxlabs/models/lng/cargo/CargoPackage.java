@@ -136,13 +136,31 @@ public interface CargoPackage extends EPackage {
 	int CARGO__CARGO_TYPE = TypesPackage.ACARGO_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Allow Rewiring</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__ALLOW_REWIRING = TypesPackage.ACARGO_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__ALLOWED_VESSELS = TypesPackage.ACARGO_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 3;
+	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl <em>Slot</em>}' class.
@@ -1062,6 +1080,28 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCargo_CargoType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Allow Rewiring</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring()
+	 * @see #getCargo()
+	 * @generated
+	 */
+	EAttribute getCargo_AllowRewiring();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Allowed Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#getAllowedVessels()
+	 * @see #getCargo()
+	 * @generated
+	 */
+	EReference getCargo_AllowedVessels();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Slot <em>Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1361,6 +1401,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CARGO__CARGO_TYPE = eINSTANCE.getCargo_CargoType();
+
+		/**
+		 * The meta object literal for the '<em><b>Allow Rewiring</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CARGO__ALLOW_REWIRING = eINSTANCE.getCargo_AllowRewiring();
+
+		/**
+		 * The meta object literal for the '<em><b>Allowed Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO__ALLOWED_VESSELS = eINSTANCE.getCargo_AllowedVessels();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl <em>Slot</em>}' class.

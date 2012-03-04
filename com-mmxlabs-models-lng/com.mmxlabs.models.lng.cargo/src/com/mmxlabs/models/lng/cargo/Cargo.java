@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo;
 import com.mmxlabs.models.lng.types.ACargo;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,6 +18,8 @@ import com.mmxlabs.models.lng.types.ACargo;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getCargoType <em>Cargo Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
  * </ul>
  * </p>
  *
@@ -104,6 +108,75 @@ public interface Cargo extends ACargo {
 	 * @generated
 	 */
 	void setCargoType(CargoType value);
+
+	/**
+	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Allow Rewiring</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allow Rewiring</em>' attribute.
+	 * @see #isSetAllowRewiring()
+	 * @see #unsetAllowRewiring()
+	 * @see #setAllowRewiring(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_AllowRewiring()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	boolean isAllowRewiring();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Allow Rewiring</em>' attribute.
+	 * @see #isSetAllowRewiring()
+	 * @see #unsetAllowRewiring()
+	 * @see #isAllowRewiring()
+	 * @generated
+	 */
+	void setAllowRewiring(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetAllowRewiring()
+	 * @see #isAllowRewiring()
+	 * @see #setAllowRewiring(boolean)
+	 * @generated
+	 */
+	void unsetAllowRewiring();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Allow Rewiring</em>' attribute is set.
+	 * @see #unsetAllowRewiring()
+	 * @see #isAllowRewiring()
+	 * @see #setAllowRewiring(boolean)
+	 * @generated
+	 */
+	boolean isSetAllowRewiring();
+
+	/**
+	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Allowed Vessels</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allowed Vessels</em>' reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_AllowedVessels()
+	 * @model
+	 * @generated
+	 */
+	EList<AVesselSet> getAllowedVessels();
 
 } // end of  Cargo
 

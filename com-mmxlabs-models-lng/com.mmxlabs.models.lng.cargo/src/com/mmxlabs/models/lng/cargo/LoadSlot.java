@@ -128,6 +128,14 @@ public interface LoadSlot extends Slot {
 	 */
 	boolean isSetArriveCold();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getSlotOrPortCV();
+
 } // end of  LoadSlot
 
 // finish type fixing

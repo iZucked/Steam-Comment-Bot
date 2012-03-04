@@ -459,7 +459,6 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return new Date(getWindowStart().getDateWithDefaults(getPort())\r\n\t\t\t\t\t\t.getTime()\r\n\t\t\t\t\t\t+ javax.management.timer.Timer.ONE_HOUR\r\n\t\t\t\t\t\t* getWindowDuration());'"
 	 * @generated
 	 */
 	Date getWindowEndWithSlotOrPortTime();
@@ -471,6 +470,14 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	 * @generated
 	 */
 	Date getWindowStartWithSlotOrPortTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getSlotOrPortWindowSize();
 
 } // end of  Slot
 
