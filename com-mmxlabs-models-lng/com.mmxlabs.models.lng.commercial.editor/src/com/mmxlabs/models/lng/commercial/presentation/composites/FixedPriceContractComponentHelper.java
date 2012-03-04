@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.commercial.presentation.composites;
 
@@ -19,11 +21,11 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * A component helper for SalesContract instances
+ * A component helper for FixedPriceContract instances
  *
  * @generated
  */
-public class SalesContractComponentHelper implements IComponentHelper {
+public class FixedPriceContractComponentHelper implements IComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -31,7 +33,7 @@ public class SalesContractComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public SalesContractComponentHelper() {
+	public FixedPriceContractComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -40,21 +42,24 @@ public class SalesContractComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public SalesContractComponentHelper(IAdapterManager adapterManager) {
+	public FixedPriceContractComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.CONTRACT);
+			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.SALES_CONTRACT);
+			if (helper != null) superClassesHelpers.add(helper);
+		} {
+			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.PURCHASE_CONTRACT);
 			if (helper != null) superClassesHelpers.add(helper);
 		}
 	}
 	
 	/**
-	 * add editors to a composite, using SalesContract as the supertype
+	 * add editors to a composite, using FixedPriceContract as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CommercialPackage.Literals.SALES_CONTRACT);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.FIXED_PRICE_CONTRACT);	
 	}
 	
 	/**
@@ -65,5 +70,14 @@ public class SalesContractComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_pricePerMMBTUEditor(detailComposite, topClass);
+	}
+	/**
+	 * Create the editor for the pricePerMMBTU feature on FixedPriceContract
+	 *
+	 * @generated
+	 */
+	protected void add_pricePerMMBTUEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.FIXED_PRICE_CONTRACT__PRICE_PER_MMBTU));
 	}
 }

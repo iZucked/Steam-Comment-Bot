@@ -97,6 +97,14 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createPurchaseContractAdapter();
 			}
 			@Override
+			public Adapter caseFixedPriceContract(FixedPriceContract object) {
+				return createFixedPriceContractAdapter();
+			}
+			@Override
+			public Adapter caseIndexPriceContract(IndexPriceContract object) {
+				return createIndexPriceContractAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -203,6 +211,34 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPurchaseContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.FixedPriceContract <em>Fixed Price Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.FixedPriceContract
+	 * @generated
+	 */
+	public Adapter createFixedPriceContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract <em>Index Price Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.IndexPriceContract
+	 * @generated
+	 */
+	public Adapter createIndexPriceContractAdapter() {
 		return null;
 	}
 

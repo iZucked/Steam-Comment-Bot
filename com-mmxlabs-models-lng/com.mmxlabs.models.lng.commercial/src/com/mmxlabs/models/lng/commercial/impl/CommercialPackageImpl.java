@@ -8,6 +8,8 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.FixedPriceContract;
+import com.mmxlabs.models.lng.commercial.IndexPriceContract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -16,6 +18,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -63,6 +66,20 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass purchaseContractEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass fixedPriceContractEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass indexPriceContractEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -241,6 +258,60 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getFixedPriceContract() {
+		return fixedPriceContractEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFixedPriceContract_PricePerMMBTU() {
+		return (EAttribute)fixedPriceContractEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getIndexPriceContract() {
+		return indexPriceContractEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getIndexPriceContract_Index() {
+		return (EReference)indexPriceContractEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getIndexPriceContract_Constant() {
+		return (EAttribute)indexPriceContractEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getIndexPriceContract_Multiplier() {
+		return (EAttribute)indexPriceContractEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public CommercialFactory getCommercialFactory() {
 		return (CommercialFactory)getEFactoryInstance();
 	}
@@ -280,6 +351,14 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		salesContractEClass = createEClass(SALES_CONTRACT);
 
 		purchaseContractEClass = createEClass(PURCHASE_CONTRACT);
+
+		fixedPriceContractEClass = createEClass(FIXED_PRICE_CONTRACT);
+		createEAttribute(fixedPriceContractEClass, FIXED_PRICE_CONTRACT__PRICE_PER_MMBTU);
+
+		indexPriceContractEClass = createEClass(INDEX_PRICE_CONTRACT);
+		createEReference(indexPriceContractEClass, INDEX_PRICE_CONTRACT__INDEX);
+		createEAttribute(indexPriceContractEClass, INDEX_PRICE_CONTRACT__CONSTANT);
+		createEAttribute(indexPriceContractEClass, INDEX_PRICE_CONTRACT__MULTIPLIER);
 	}
 
 	/**
@@ -320,6 +399,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		contractEClass.getESuperTypes().add(theTypesPackage.getAContract());
 		salesContractEClass.getESuperTypes().add(this.getContract());
 		purchaseContractEClass.getESuperTypes().add(this.getContract());
+		fixedPriceContractEClass.getESuperTypes().add(this.getSalesContract());
+		fixedPriceContractEClass.getESuperTypes().add(this.getPurchaseContract());
+		indexPriceContractEClass.getESuperTypes().add(this.getSalesContract());
+		indexPriceContractEClass.getESuperTypes().add(this.getPurchaseContract());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -338,6 +421,14 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(purchaseContractEClass, PurchaseContract.class, "PurchaseContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(fixedPriceContractEClass, FixedPriceContract.class, "FixedPriceContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getFixedPriceContract_PricePerMMBTU(), ecorePackage.getEDouble(), "pricePerMMBTU", null, 1, 1, FixedPriceContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(indexPriceContractEClass, IndexPriceContract.class, "IndexPriceContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getIndexPriceContract_Index(), theTypesPackage.getAIndex(), null, "index", null, 1, 1, IndexPriceContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIndexPriceContract_Constant(), ecorePackage.getEDouble(), "constant", "0", 1, 1, IndexPriceContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIndexPriceContract_Multiplier(), ecorePackage.getEDouble(), "multiplier", "1", 1, 1, IndexPriceContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -453,6 +454,206 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.FixedPriceContractImpl <em>Fixed Price Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.FixedPriceContractImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getFixedPriceContract()
+	 * @generated
+	 */
+	int FIXED_PRICE_CONTRACT = 5;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__EXTENSIONS = SALES_CONTRACT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__PROXIES = SALES_CONTRACT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__UUID = SALES_CONTRACT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__NAME = SALES_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__ENTITY = SALES_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__ALLOWED_PORTS = SALES_CONTRACT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Preferred Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__PREFERRED_PORT = SALES_CONTRACT__PREFERRED_PORT;
+
+	/**
+	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__PRICE_PER_MMBTU = SALES_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Fixed Price Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT_FEATURE_COUNT = SALES_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceContractImpl <em>Index Price Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.IndexPriceContractImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIndexPriceContract()
+	 * @generated
+	 */
+	int INDEX_PRICE_CONTRACT = 6;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__EXTENSIONS = SALES_CONTRACT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__PROXIES = SALES_CONTRACT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__UUID = SALES_CONTRACT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__NAME = SALES_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__ENTITY = SALES_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__ALLOWED_PORTS = SALES_CONTRACT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Preferred Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__PREFERRED_PORT = SALES_CONTRACT__PREFERRED_PORT;
+
+	/**
+	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__INDEX = SALES_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__CONSTANT = SALES_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Multiplier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__MULTIPLIER = SALES_CONTRACT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Index Price Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT_FEATURE_COUNT = SALES_CONTRACT_FEATURE_COUNT + 3;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -578,6 +779,70 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPurchaseContract();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.FixedPriceContract <em>Fixed Price Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Fixed Price Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.FixedPriceContract
+	 * @generated
+	 */
+	EClass getFixedPriceContract();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.FixedPriceContract#getPricePerMMBTU <em>Price Per MMBTU</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Per MMBTU</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.FixedPriceContract#getPricePerMMBTU()
+	 * @see #getFixedPriceContract()
+	 * @generated
+	 */
+	EAttribute getFixedPriceContract_PricePerMMBTU();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract <em>Index Price Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Index Price Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.IndexPriceContract
+	 * @generated
+	 */
+	EClass getIndexPriceContract();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getIndex <em>Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Index</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.IndexPriceContract#getIndex()
+	 * @see #getIndexPriceContract()
+	 * @generated
+	 */
+	EReference getIndexPriceContract_Index();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getConstant <em>Constant</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Constant</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.IndexPriceContract#getConstant()
+	 * @see #getIndexPriceContract()
+	 * @generated
+	 */
+	EAttribute getIndexPriceContract_Constant();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getMultiplier <em>Multiplier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Multiplier</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.IndexPriceContract#getMultiplier()
+	 * @see #getIndexPriceContract()
+	 * @generated
+	 */
+	EAttribute getIndexPriceContract_Multiplier();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -706,6 +971,58 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PURCHASE_CONTRACT = eINSTANCE.getPurchaseContract();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.FixedPriceContractImpl <em>Fixed Price Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.FixedPriceContractImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getFixedPriceContract()
+		 * @generated
+		 */
+		EClass FIXED_PRICE_CONTRACT = eINSTANCE.getFixedPriceContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Per MMBTU</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FIXED_PRICE_CONTRACT__PRICE_PER_MMBTU = eINSTANCE.getFixedPriceContract_PricePerMMBTU();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceContractImpl <em>Index Price Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.IndexPriceContractImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIndexPriceContract()
+		 * @generated
+		 */
+		EClass INDEX_PRICE_CONTRACT = eINSTANCE.getIndexPriceContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INDEX_PRICE_CONTRACT__INDEX = eINSTANCE.getIndexPriceContract_Index();
+
+		/**
+		 * The meta object literal for the '<em><b>Constant</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INDEX_PRICE_CONTRACT__CONSTANT = eINSTANCE.getIndexPriceContract_Constant();
+
+		/**
+		 * The meta object literal for the '<em><b>Multiplier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INDEX_PRICE_CONTRACT__MULTIPLIER = eINSTANCE.getIndexPriceContract_Multiplier();
 
 	}
 

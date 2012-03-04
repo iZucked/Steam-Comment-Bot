@@ -63,6 +63,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.CONTRACT: return createContract();
 			case CommercialPackage.SALES_CONTRACT: return createSalesContract();
 			case CommercialPackage.PURCHASE_CONTRACT: return createPurchaseContract();
+			case CommercialPackage.FIXED_PRICE_CONTRACT: return createFixedPriceContract();
+			case CommercialPackage.INDEX_PRICE_CONTRACT: return createIndexPriceContract();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -116,6 +118,26 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public PurchaseContract createPurchaseContract() {
 		PurchaseContractImpl purchaseContract = new PurchaseContractImpl();
 		return purchaseContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FixedPriceContract createFixedPriceContract() {
+		FixedPriceContractImpl fixedPriceContract = new FixedPriceContractImpl();
+		return fixedPriceContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public IndexPriceContract createIndexPriceContract() {
+		IndexPriceContractImpl indexPriceContract = new IndexPriceContractImpl();
+		return indexPriceContract;
 	}
 
 	/**

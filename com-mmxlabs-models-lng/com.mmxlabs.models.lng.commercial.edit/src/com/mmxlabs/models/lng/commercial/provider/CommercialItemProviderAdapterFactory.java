@@ -189,6 +189,52 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.FixedPriceContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FixedPriceContractItemProvider fixedPriceContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.FixedPriceContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFixedPriceContractAdapter() {
+		if (fixedPriceContractItemProvider == null) {
+			fixedPriceContractItemProvider = new FixedPriceContractItemProvider(this);
+		}
+
+		return fixedPriceContractItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.IndexPriceContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IndexPriceContractItemProvider indexPriceContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.IndexPriceContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIndexPriceContractAdapter() {
+		if (indexPriceContractItemProvider == null) {
+			indexPriceContractItemProvider = new IndexPriceContractItemProvider(this);
+		}
+
+		return indexPriceContractItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -292,6 +338,8 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (contractItemProvider != null) contractItemProvider.dispose();
 		if (salesContractItemProvider != null) salesContractItemProvider.dispose();
 		if (purchaseContractItemProvider != null) purchaseContractItemProvider.dispose();
+		if (fixedPriceContractItemProvider != null) fixedPriceContractItemProvider.dispose();
+		if (indexPriceContractItemProvider != null) indexPriceContractItemProvider.dispose();
 	}
 
 }

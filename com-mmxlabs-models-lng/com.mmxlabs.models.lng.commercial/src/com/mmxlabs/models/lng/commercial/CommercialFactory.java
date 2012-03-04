@@ -69,6 +69,24 @@ public interface CommercialFactory extends EFactory {
 	PurchaseContract createPurchaseContract();
 
 	/**
+	 * Returns a new object of class '<em>Fixed Price Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fixed Price Contract</em>'.
+	 * @generated
+	 */
+	FixedPriceContract createFixedPriceContract();
+
+	/**
+	 * Returns a new object of class '<em>Index Price Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Index Price Contract</em>'.
+	 * @generated
+	 */
+	IndexPriceContract createIndexPriceContract();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

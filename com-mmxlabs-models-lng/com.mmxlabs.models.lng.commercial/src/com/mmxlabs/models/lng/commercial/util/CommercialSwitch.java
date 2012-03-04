@@ -126,6 +126,32 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.FIXED_PRICE_CONTRACT: {
+				FixedPriceContract fixedPriceContract = (FixedPriceContract)theEObject;
+				T result = caseFixedPriceContract(fixedPriceContract);
+				if (result == null) result = caseSalesContract(fixedPriceContract);
+				if (result == null) result = casePurchaseContract(fixedPriceContract);
+				if (result == null) result = caseContract(fixedPriceContract);
+				if (result == null) result = caseAContract(fixedPriceContract);
+				if (result == null) result = caseUUIDObject(fixedPriceContract);
+				if (result == null) result = caseNamedObject(fixedPriceContract);
+				if (result == null) result = caseMMXObject(fixedPriceContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.INDEX_PRICE_CONTRACT: {
+				IndexPriceContract indexPriceContract = (IndexPriceContract)theEObject;
+				T result = caseIndexPriceContract(indexPriceContract);
+				if (result == null) result = caseSalesContract(indexPriceContract);
+				if (result == null) result = casePurchaseContract(indexPriceContract);
+				if (result == null) result = caseContract(indexPriceContract);
+				if (result == null) result = caseAContract(indexPriceContract);
+				if (result == null) result = caseUUIDObject(indexPriceContract);
+				if (result == null) result = caseNamedObject(indexPriceContract);
+				if (result == null) result = caseMMXObject(indexPriceContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -202,6 +228,36 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePurchaseContract(PurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Fixed Price Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fixed Price Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFixedPriceContract(FixedPriceContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Index Price Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Index Price Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIndexPriceContract(IndexPriceContract object) {
 		return null;
 	}
 
