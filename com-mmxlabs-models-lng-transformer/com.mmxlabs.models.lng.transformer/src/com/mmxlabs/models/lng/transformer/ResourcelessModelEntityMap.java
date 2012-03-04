@@ -9,9 +9,9 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.transformer.EMFUtils;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.util.emfpath.EMFUtils;
 
 /**
  * A model entity map which doesn't use the resourceset.
@@ -41,7 +41,7 @@ public class ResourcelessModelEntityMap extends ModelEntityMap {
 
 	@Override
 	public void setScenario(final MMXRootObject scenario) {
-		earliestDate = EMFUtils.findEarliestAndLatestEvents(scenario).getFirst();
+		earliestDate = EMFUtils.findMinMaxDateAttributes(scenario).getFirst();
 	}
 
 	@Override

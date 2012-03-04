@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.util.emfpath.EMFUtils;
 
 /**
  * Class which maps model entities to classes; the LNGScenarioTransformer should
@@ -42,7 +43,7 @@ public class ModelEntityMap {
 	 */
 	public void setScenario(final MMXRootObject rootObject) {
 		this.resourceSet = rootObject.eResource().getResourceSet();
-		earliestDate = EMFUtils.findEarliestAndLatestEvents(rootObject)
+		earliestDate = EMFUtils.findMinMaxDateAttributes(rootObject)
 				.getFirst();
 	}
 

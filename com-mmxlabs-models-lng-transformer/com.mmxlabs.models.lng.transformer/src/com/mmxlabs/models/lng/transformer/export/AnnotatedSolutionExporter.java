@@ -20,11 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -33,6 +36,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
@@ -101,7 +105,7 @@ public class AnnotatedSolutionExporter {
 		extensions.add(extension);
 	}
 	
-	public Schedule exportAnnotatedSolution(final Scenario inputScenario, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
+	public Schedule exportAnnotatedSolution(final MMXRootObject inputScenario, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
 		final IOptimisationData data = annotatedSolution.getContext().getOptimisationData();
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
@@ -134,73 +138,68 @@ public class AnnotatedSolutionExporter {
 		final Map<IResource, Map<String, Long>> sequenceFitnesses = annotatedSolution.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, Map.class);
 		for (final IResource resource : resources) {
 			final IVessel vessel = vesselProvider.getVessel(resource);
-			final AllocatedVessel outputVessel;
+			
+			final Sequence eSequence = factory.createSequence();
+			sequences.add(eSequence);
+			
 			switch (vessel.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
-				final FleetVessel fv = scenario.schedule.fleetallocation.FleetallocationPackage.eINSTANCE.getFleetallocationFactory().createFleetVessel();
-
-				fv.setVessel(entities.getModelObject(vessel, Vessel.class));
-
-				outputVessel = fv;
+				eSequence.setVessel(entities.getModelObject(vessel, Vessel.class));
+				eSequence.unsetVesselClass();
 				break;
 			case SPOT_CHARTER:
 				if (annotatedSolution.getSequences().getSequence(resource).size() < 2)
 					continue;
-				final SpotVessel sv = scenario.schedule.fleetallocation.FleetallocationPackage.eINSTANCE.getFleetallocationFactory().createSpotVessel();
 
-				final AtomicInteger ai = counter.get(vessel.getVesselClass());
-				int ix = 0;
-
-				if (ai == null) {
-					counter.put(vessel.getVesselClass(), new AtomicInteger(ix));
-				} else {
-					ix = ai.incrementAndGet();
-				}
-
-				sv.setVesselClass(entities.getModelObject(vessel.getVesselClass(), VesselClass.class));
-
-				sv.setIndex(ix);
-
-				outputVessel = sv;
+				eSequence.setVesselClass(entities.getModelObject(vessel.getVesselClass(), VesselClass.class));
+				eSequence.unsetVessel();
+				
+//				final AtomicInteger ai = counter.get(vessel.getVesselClass());
+//				int ix = 0;
+//
+//				if (ai == null) {
+//					counter.put(vessel.getVesselClass(), new AtomicInteger(ix));
+//				} else {
+//					ix = ai.incrementAndGet();
+//				}
+//
+//
+//				sv.setIndex(ix);
 				break;
 			default:
-				outputVessel = null;
 				break;
 			}
 
-			final Sequence eSequence = factory.createSequence();
-			sequences.add(eSequence);
+			
 
 			{
 				// set sequence fitness values
-				final EList<ScheduleFitness> eSequenceFitness = eSequence.getFitness();
+				final EList<Fitness> eSequenceFitness = eSequence.getFitnesses();
 				final Map<String, Long> sequenceFitness = sequenceFitnesses.get(resource);
 				for (final Map.Entry<String, Long> e : sequenceFitness.entrySet()) {
-					final ScheduleFitness sf = ScheduleFactory.eINSTANCE.createScheduleFitness();
+					final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
 					sf.setName(e.getKey());
-					sf.setValue(e.getValue());
+					sf.setFitnessValue(e.getValue());
 					eSequenceFitness.add(sf);
 				}
 			}
-			output.getFleet().add(outputVessel);
-			eSequence.setVessel(outputVessel);
+			
+			final EList<Event> events = eSequence.getEvents();
 
-			final EList<ScheduledEvent> events = eSequence.getEvents();
-
-			final Comparator<ScheduledEvent> eventComparator = new Comparator<ScheduledEvent>() {
+			final Comparator<Event> eventComparator = new Comparator<Event>() {
 				@Override
-				public int compare(final ScheduledEvent arg0, final ScheduledEvent arg1) {
-					if (arg0.getStartTime().before(arg1.getStartTime())) {
+				public int compare(final Event arg0, final Event arg1) {
+					if (arg0.getStart().before(arg1.getStart())) {
 						return -1;
-					} else if (arg0.getStartTime().after(arg1.getStartTime())) {
+					} else if (arg0.getStart().after(arg1.getStart())) {
 						return 1;
 					}
 
 					// idle must come after journey
-					if (arg0 instanceof PortVisit)
-						return (arg1 instanceof PortVisit) ? 0 : -1;
-					if (arg1 instanceof PortVisit)
+					if (arg0 instanceof Idle)
+						return (arg1 instanceof Idle) ? 0 : -1;
+					if (arg1 instanceof Idle)
 						return 1;
 
 					if (arg0 instanceof Journey)
@@ -213,7 +212,7 @@ public class AnnotatedSolutionExporter {
 			};
 
 
-			final List<ScheduledEvent> eventsForElement = new ArrayList<ScheduledEvent>();
+			final List<Event> eventsForElement = new ArrayList<Event>();
 			for (final ISequenceElement element : annotatedSolution.getSequences().getSequence(resource)) {
 				// get annotations for this element
 				final Map<String, Object> annotations = elementAnnotations.getAnnotations(element);
@@ -221,7 +220,7 @@ public class AnnotatedSolutionExporter {
 				// filter virtual ports out here?
 
 				for (final IAnnotationExporter exporter : exporters) {
-					final ScheduledEvent result = exporter.export(element, annotations, outputVessel);
+					final Event result = exporter.export(element, annotations);
 					if (result != null) {
 						eventsForElement.add(result);
 					}
@@ -238,17 +237,14 @@ public class AnnotatedSolutionExporter {
 		// patch up idle events with no port
 		for (final Sequence eSequence : output.getSequences()) {
 			Idle firstIdle = null;
-			for (final ScheduledEvent event : eSequence.getEvents()) {
+			for (final Event event : eSequence.getEvents()) {
 				if (firstIdle != null && firstIdle.getPort() != null)
 					break;
 				if (event instanceof Idle) {
 					firstIdle = (Idle) event;
 				}
-				if (event instanceof PortVisit) {
-					final PortVisit pv = (PortVisit) event;
-					if (firstIdle != null && firstIdle.getPort() == null && pv.getPort() != null) {
-						firstIdle.setPort(pv.getPort());
-					}
+				if (firstIdle != null && firstIdle.getPort() == null && event.getPort() != null) {
+					firstIdle.setPort(event.getPort());
 				}
 			}
 		}
@@ -256,10 +252,10 @@ public class AnnotatedSolutionExporter {
 		// now patch up laden/ballast journey references in the cargos
 		for (final Sequence eSequence : output.getSequences()) {
 			CargoAllocation allocation = null;
-			for (final ScheduledEvent event : eSequence.getEvents()) {
+			for (final Event event : eSequence.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final SlotVisit visit = (SlotVisit) event;
-					allocation = visit.getCargoAllocation();
+					allocation = visit.getSlotAllocation().getCargoAllocation();
 				} else if (event instanceof Journey && allocation != null) {
 					if (allocation.getLadenLeg() == null) {
 						allocation.setLadenLeg((Journey) event);
@@ -284,88 +280,32 @@ public class AnnotatedSolutionExporter {
 		final Long runtime = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_runtime, Long.class);
 		final Integer iterations = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_iterations, Integer.class);
 
-		final EList<ScheduleFitness> outputFitnesses = output.getFitness();
+		final EList<Fitness> outputFitnesses = output.getFitnesses();
 
 		for (final Map.Entry<String, Long> entry : fitnesses.entrySet()) {
-			final ScheduleFitness fitness = factory.createScheduleFitness();
+			final Fitness fitness = factory.createFitness();
 			fitness.setName(entry.getKey());
-			fitness.setValue(entry.getValue());
+			fitness.setFitnessValue(entry.getValue());
 			outputFitnesses.add(fitness);
 		}
 
 		if (isExportRuntimeAndFitness()) {
-			final ScheduleFitness eRuntime = factory.createScheduleFitness();
+			final Fitness eRuntime = factory.createFitness();
 			eRuntime.setName("runtime");
-			eRuntime.setValue(runtime);
+			eRuntime.setFitnessValue(runtime);
 
 			outputFitnesses.add(eRuntime);
 
-			final ScheduleFitness eIters = factory.createScheduleFitness();
+			final Fitness eIters = factory.createFitness();
 			eIters.setName("iterations");
-			eIters.setValue(iterations.longValue());
+			eIters.setFitnessValue(iterations.longValue());
 
 			outputFitnesses.add(eIters);
-		}
-
-		// Process DES cargoes from the input side
-		//TODO this is all outdated now
-
-		for (final Cargo cargo : inputScenario.getCargoModel().getCargoes()) {
-			if (CargoType.DES.equals(cargo.getCargoType())) {
-				// we can create a dummy cargo allocation
-				// for the P&L calculator to work on
-
-				final CargoAllocation allocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
-
-				allocation.setCargoType(CargoType.DES);
-
-				allocation.setLoadSlot(cargo.getLoadSlot());
-				allocation.setLoadDate(cargo.getLoadSlot().getWindowStart());
-				allocation.setDischargeSlot(cargo.getDischargeSlot());
-				allocation.setDischargeDate(cargo.getDischargeSlot().getWindowStart());
-				// TODO check this makes sense
-				allocation.setDischargeVolume(cargo.getDischargeSlot().getMaxQuantity());
-				// find discharge price per mmbtu
-				final SalesContract dischargeContract = (SalesContract) cargo.getDischargeSlot().getSlotOrPortContract(inputScenario);
-				final float salesPricePerMMBTU = cargo.getDischargeSlot().isSetFixedPrice() ? cargo.getDischargeSlot().getFixedPrice() : dischargeContract.getIndex().getPriceCurve()
-						.getValueAtDate(allocation.getDischargeDate());
-				// * dischargeContract.getRegasEfficiency();
-
-				final Contract purchaseContract = cargo.getLoadSlot().getSlotOrPortContract(inputScenario);
-				final float purchasePricePerMMBTU;
-				if (cargo.getLoadSlot().isSetFixedPrice()) {
-					purchasePricePerMMBTU = cargo.getLoadSlot().getFixedPrice();
-				} else if (purchaseContract instanceof FixedPricePurchaseContract) {
-					purchasePricePerMMBTU = ((FixedPricePurchaseContract) purchaseContract).getUnitPrice();
-				} else if (purchaseContract instanceof IndexPricePurchaseContract) {
-					purchasePricePerMMBTU = ((IndexPricePurchaseContract) purchaseContract).getIndex().getPriceCurve().getValueAtDate(allocation.getDischargeDate());
-				} else {
-					// FIXME: for P&L opt - DES cargoes will have a purchase contract (probably based on a price curve) & possibly a fixed price & quantity
-					log.error("A DES load slot should not have a " + purchaseContract.eClass().getName() + " contract");
-					continue;
-				}
-
-				// get MMBTU / M3 (this has to be a notional value to make any
-				// sense)
-				// TODO this may not be a sensible way of doing a DES cargo
-
-				final float salesPricePerM3 = salesPricePerMMBTU / cargo.getLoadSlot().getCargoOrPortCVValue();
-				final float purchasePricePerM3 = purchasePricePerMMBTU / cargo.getLoadSlot().getCargoOrPortCVValue();
-
-				allocation.setDischargePriceM3(Calculator.scaleToInt(salesPricePerM3));
-				allocation.setLoadPriceM3(Calculator.scaleToInt(purchasePricePerM3));
-
-				output.getCargoAllocations().add(allocation);
-			}
 		}
 
 		for (final IExporterExtension extension : extensions) {
 			extension.finishExporting();
 		}
-		//
-		// final ProfitAndLossCalculator pAndL = new ProfitAndLossCalculator();
-		//
-		// pAndL.addProfitAndLoss(inputScenario, output, entities);
 
 		return output;
 	}

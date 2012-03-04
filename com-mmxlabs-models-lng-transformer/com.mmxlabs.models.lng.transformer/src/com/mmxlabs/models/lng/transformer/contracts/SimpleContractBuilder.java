@@ -32,11 +32,11 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.ProfitSharingContract;
 public class SimpleContractBuilder implements IBuilderExtension {
 	private final List<NetbackContract> netbacks = new LinkedList<NetbackContract>();
 
-	ILoadPriceCalculator2 createFixedPriceContract(final int pricePerMMBTU) {
+	FixedPriceContract createFixedPriceContract(final int pricePerMMBTU) {
 		return new FixedPriceContract(pricePerMMBTU);
 	}
 
-	ILoadPriceCalculator2 createMarketPriceContract(final ICurve index) {
+	MarketPriceContract createMarketPriceContract(final ICurve index) {
 		return new MarketPriceContract(index);
 	}
 

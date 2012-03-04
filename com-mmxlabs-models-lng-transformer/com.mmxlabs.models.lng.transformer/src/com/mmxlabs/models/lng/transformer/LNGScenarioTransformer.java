@@ -51,14 +51,22 @@ import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.optimiser.OptimiserModel;
+import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CharterCostModel;
+import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.RouteCostByVesselClass;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -67,7 +75,11 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer.ModelClass;
+import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.types.AVessel;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -89,6 +101,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRat
 import com.mmxlabs.scheduler.optimiser.components.impl.TotalVolumeLimit;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 
 /**
@@ -136,24 +149,6 @@ public class LNGScenarioTransformer {
 
 		init(rootObject);
 	}
-
-	// /*
-	// * Create a transformer by loading a scenario from a URI
-	// */
-	// p LNGScenarioTransformer(final URI uri) {
-	//
-	// final ResourceSet resourceSet = new ResourceSetImpl();
-	// resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
-	// resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI, ScenarioPackage.eINSTANCE);
-	//
-	// final Resource resource = resourceSet.getResource(uri, true);
-	// for (final EObject e : resource.getContents()) {
-	// if (e instanceof Scenario) {
-	// // FIXME: What about multiple instances?
-	// init((Scenario) e);
-	// }
-	// }
-	// }
 
 	protected void init(final MMXRootObject rootObject) {
 
@@ -282,14 +277,23 @@ public class LNGScenarioTransformer {
 		 * Construct ports for each port in the scenario port model, and keep them in a two-way lookup table (the two-way lookup is needed to do things like setting distances later).
 		 */
 		PortModel portModel = rootObject.getSubModel(PortModel.class);
+		
+		
+		final Map<APort, IShippingPriceCalculator> cooldownCalculators = new HashMap<APort, IShippingPriceCalculator>();
+		for (final CooldownPrice price : pricingModel.getCooldownPrices()) {
+			final IShippingPriceCalculator cooldownCalculator = 
+					new MarketPriceContract(indexAssociation.lookup(price.getIndex()));
+			
+			for (final APort port : SetUtils.getPorts(price.getPorts())) {
+				cooldownCalculators.put(port, cooldownCalculator);
+			}
+		}
+		
 		for (final Port ePort : portModel.getPorts()) {
-			final SimplePurchaseContract cooldownContract = commercialModel.getCooldownContract(ePort);
-			final IShippingPriceCalculator cooldownCalculator = entities.getOptimiserObject(cooldownContract, IShippingPriceCalculator.class);
-			final IPort port = builder.createPort(ePort.getName(), ePort.isShouldArriveCold(), cooldownCalculator);
+			final IPort port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort));
 			portAssociation.add(ePort, port);
 			portIndices.put(port, allPorts.size());
 			allPorts.add(port);
-
 			entities.addModelObject(ePort, port);
 		}
 
@@ -297,15 +301,13 @@ public class LNGScenarioTransformer {
 
 		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getFirst());
 
-		buildCargoes(builder, portAssociation, indexAssociation, vesselAssociations.getSecond(), contractTransformers, entities, getOptimisationSettings().isAllowRewiringByDefault());
+		buildCargoes(builder, portAssociation, indexAssociation, vesselAssociations.getSecond(), contractTransformers, entities, getOptimisationSettings().isRewire());
 
 		buildVesselEvents(builder, portAssociation, vesselAssociations.getFirst(), vesselAssociations.getSecond(), entities);
 
-		buildTotalVolumeLimits(builder, portAssociation);
+//		buildDiscountCurves(builder);
 
-		buildDiscountCurves(builder);
-
-		freezeStartSequences(builder, entities);
+//		freezeStartSequences(builder, entities);
 
 		for (final ITransformerExtension extension : allTransformerExtensions) {
 			extension.finishTransforming();
@@ -314,112 +316,78 @@ public class LNGScenarioTransformer {
 		return builder.getOptimisationData();
 	}
 
-	/**
-	 * Create and associate discount curves
-	 * 
-	 * This ought to be in {@link OptimisationTransformer} but that doesn't have access to set up DCPs.
-	 * 
-	 * @param builder
-	 */
-	private void buildDiscountCurves(final ISchedulerBuilder builder) {
-		// set up DCP
+//	/**
+//	 * Create and associate discount curves
+//	 * 
+//	 * This ought to be in {@link OptimisationTransformer} but that doesn't have access to set up DCPs.
+//	 * 
+//	 * @param builder
+//	 */
+//	private void buildDiscountCurves(final ISchedulerBuilder builder) {
+//		// set up DCP
+//
+//		final DiscountCurve defaultCurve = scenario.getOptimisation().getCurrentSettings().isSetDefaultDiscountCurve() ? scenario.getOptimisation().getCurrentSettings().getDefaultDiscountCurve()
+//				: null;
+//
+//		final ICurve realDefaultCurve;
+//		if (defaultCurve == null) {
+//			realDefaultCurve = new ConstantValueCurve(1);
+//		} else {
+//			realDefaultCurve = buildDiscountCurve(defaultCurve);
+//		}
+//
+//		for (final Objective objective : scenario.getOptimisation().getCurrentSettings().getObjectives()) {
+//			if (objective.isSetDiscountCurve()) {
+//				builder.setFitnessComponentDiscountCurve(objective.getName(), buildDiscountCurve(objective.getDiscountCurve()));
+//			} else {
+//				builder.setFitnessComponentDiscountCurve(objective.getName(), realDefaultCurve);
+//			}
+//		}
+//	}
 
-		final DiscountCurve defaultCurve = scenario.getOptimisation().getCurrentSettings().isSetDefaultDiscountCurve() ? scenario.getOptimisation().getCurrentSettings().getDefaultDiscountCurve()
-				: null;
+//	/**
+//	 * @param defaultCurve
+//	 * @return
+//	 */
+//	private ICurve buildDiscountCurve(final DiscountCurve curve) {
+//		final InterpolatingDiscountCurve realCurve = new InterpolatingDiscountCurve();
+//
+//		final int baseTime = curve.isSetStartDate() ? convertTime(curve.getStartDate()) : 0;
+//		if (baseTime > 0) {
+//			realCurve.setValueAtPoint(0, 1);
+//			realCurve.setValueAtPoint(baseTime - 1, 1);
+//		}
+//
+//		for (final Discount d : curve.getDiscounts()) {
+//			realCurve.setValueAtPoint(baseTime + d.getTime(), d.getDiscountFactor());
+//		}
+//		return realCurve;
+//	}
 
-		final ICurve realDefaultCurve;
-		if (defaultCurve == null) {
-			realDefaultCurve = new ConstantValueCurve(1);
-		} else {
-			realDefaultCurve = buildDiscountCurve(defaultCurve);
-		}
-
-		for (final Objective objective : scenario.getOptimisation().getCurrentSettings().getObjectives()) {
-			if (objective.isSetDiscountCurve()) {
-				builder.setFitnessComponentDiscountCurve(objective.getName(), buildDiscountCurve(objective.getDiscountCurve()));
-			} else {
-				builder.setFitnessComponentDiscountCurve(objective.getName(), realDefaultCurve);
-			}
-		}
-	}
-
-	/**
-	 * @param defaultCurve
-	 * @return
-	 */
-	private ICurve buildDiscountCurve(final DiscountCurve curve) {
-		final InterpolatingDiscountCurve realCurve = new InterpolatingDiscountCurve();
-
-		final int baseTime = curve.isSetStartDate() ? convertTime(curve.getStartDate()) : 0;
-		if (baseTime > 0) {
-			realCurve.setValueAtPoint(0, 1);
-			realCurve.setValueAtPoint(baseTime - 1, 1);
-		}
-
-		for (final Discount d : curve.getDiscounts()) {
-			realCurve.setValueAtPoint(baseTime + d.getTime(), d.getDiscountFactor());
-		}
-		return realCurve;
-	}
-
-	private StepwiseIntegerCurve createCurveForIndex(final Index index, final float scale) {
-		final StepwisePriceCurve curveModel = index.getPriceCurve();
+	private StepwiseIntegerCurve createCurveForIndex(final Index<Double> index, final float scale) {
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
-		curve.setDefaultValue(Calculator.scaleToInt(scale * curveModel.getDefaultValue()));
+		curve.setDefaultValue(0);
+		
 		boolean gotOneEarlyDate = false;
-		for (final StepwisePrice price : curveModel.getPrices()) {
-			final int hours = convertTime(price.getDate());
+		for (final Date date : index.getDates()) {
+			final double value = index.getValueAfter(date);
+			final int hours = convertTime(date);
 			if (hours < 0) {
-				if (gotOneEarlyDate) {
-					continue;
-				}
+				if (gotOneEarlyDate) continue;
 				gotOneEarlyDate = true;
 			}
-			curve.setValueAfter(hours, Calculator.scaleToInt(scale * price.getPriceFromDate()));
+			curve.setValueAfter(hours, Calculator.scaleToInt(scale * value));
 		}
+		
 		return curve;
-	}
-
-	/**
-	 * Set up the total volume limits, if there are any
-	 * 
-	 * @param builder
-	 * @param portAssociation
-	 */
-	private void buildTotalVolumeLimits(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation) {
-
-		final int latestTimeAsInt = convertTime(latestTime);
-
-		CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-
-		if (commercialModel != null) {
-			for (final TotalVolumeLimit tvl : commercialModel.getVolumeConstraints()) {
-				final Set<IPort> ports = new HashSet<IPort>();
-				for (final Port ePort : tvl.getPorts()) {
-					ports.add(portAssociation.lookup(ePort));
-				}
-
-				int startTime = convertTime(tvl.getStartDate());
-				final int duration = tvl.getDuration();
-				while (true) {
-					final ITimeWindow window = builder.createTimeWindow(startTime, startTime + duration);
-					builder.addTotalVolumeConstraint(ports, true, true, tvl.getMaximumVolume(), window);
-
-					startTime += (duration + 1);
-					if ((startTime > latestTimeAsInt) || (tvl.isRepeating() == false)) {
-						break;
-					}
-				}
-			}
-		}
 	}
 
 	/**
 	 * Find the earliest date entry in the model, for relative hours calculations. Uses a slightly naff bit of reflection to find all getters which return a date.
 	 */
 	private void findEarliestAndLatestTimes() {
-		final Pair<Date, Date> a = EMFUtils.findEarliestAndLatestEvents(rootObject);
+		final Pair<Date, Date> a = EMFUtils.findMinMaxDateAttributes(rootObject);
 		earliestTime = a.getFirst();
 		latestTime = a.getSecond();
 	}
@@ -427,7 +395,7 @@ public class LNGScenarioTransformer {
 	private void buildVesselEvents(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<VesselClass, IVesselClass> classes,
 			final Association<Vessel, IVessel> vessels, final ModelEntityMap entities) {
 
-		final Date latestDate = scenario.getOptimisation().getCurrentSettings().isSetIgnoreElementsAfter() ? scenario.getOptimisation().getCurrentSettings().getIgnoreElementsAfter() : latestTime;
+		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 
 		FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 
@@ -438,12 +406,12 @@ public class LNGScenarioTransformer {
 			}
 
 			final ITimeWindow window = builder.createTimeWindow(convertTime(event.getStartAfter()), convertTime(event.getStartBy()));
-			final IPort port = portAssociation.lookup(event.getStartPort());
+			final IPort port = portAssociation.lookup(event.getPort());
 			final int durationHours = event.getDurationInDays() * 24;
 			final IVesselEventPortSlot builderSlot;
 			if (event instanceof CharterOutEvent) {
 				final CharterOutEvent charterOut = (CharterOutEvent) event;
-				final IPort endPort = portAssociation.lookup(charterOut.getEffectiveEndPort());
+				final IPort endPort = portAssociation.lookup(charterOut.isSetRelocateTo() ? charterOut.getRelocateTo() : charterOut.getPort());
 				
 				HeelOptions heelOptions = charterOut.getHeelOptions();
 				final long maxHeel = heelOptions.isSetVolumeAvailable() ? (heelOptions.getVolumeAvailable() * Calculator.ScaleFactor) : Long.MAX_VALUE;
@@ -458,12 +426,8 @@ public class LNGScenarioTransformer {
 				throw new RuntimeException("Unknown event type: " + event.getClass().getName());
 			}
 
-			for (final Vessel v : event.getAllowedVessels()) {
-				builder.addVesselEventVessel(builderSlot, vessels.lookup(v));
-			}
-
-			for (final VesselClass vc : event.getVesselClasses()) {
-				builder.addVesselEventVesselClass(builderSlot, classes.lookup(vc));
+			for (final AVessel v : SetUtils.getVessels(event.getAllowedVessels())) {
+				builder.addVesselEventVessel(builderSlot, vessels.lookup((Vessel) v));
 			}
 
 			entities.addModelObject(event, builderSlot);
@@ -483,10 +447,10 @@ public class LNGScenarioTransformer {
 	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> ports, final Association<Index, ICurve> indexAssociation,
 			final Association<Vessel, IVessel> vesselAssociation, final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final boolean defaultRewiring) {
 
-		final Date latestDate = scenario.getOptimisation().getCurrentSettings().isSetIgnoreElementsAfter() ? scenario.getOptimisation().getCurrentSettings().getIgnoreElementsAfter() : latestTime;
+		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 
 		CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-		for (final Cargo eCargo : cargoModel.getCargoes()) {
+		for (final Cargo eCargo : cargoModel.getCargos()) {
 			// ignore all non-fleet cargoes, as far as optimisation goes.
 			if (eCargo.getCargoType().equals(CargoType.FLEET) == false) {
 				continue;
@@ -496,12 +460,10 @@ public class LNGScenarioTransformer {
 				continue;
 			}
 
-			// not escargot.
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
-			final int loadStart = convertTime(earliestTime, loadSlot.getWindowStart(), loadSlot.getPort());
+			final int loadStart = convertTime(earliestTime, loadSlot.getWindowStart());//, loadSlot.getPort());
 
-			// TODO check units again
-			final ITimeWindow loadWindow = builder.createTimeWindow(loadStart, loadStart + loadSlot.getWindowDuration());
+			final ITimeWindow loadWindow = builder.createTimeWindow(loadStart, loadStart + loadSlot.getSlotOrPortWindowSize());
 
 			final ILoadPriceCalculator2 loadPriceCalculator;
 			if (loadSlot.isSetFixedPrice()) {
@@ -520,11 +482,11 @@ public class LNGScenarioTransformer {
 			}
 
 			final ILoadSlot load = builder.createLoadSlot(loadSlot.getName(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
-					Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, (int) Calculator.scale(loadSlot.getCargoOrPortCVValue()), loadSlot.getSlotOrPortDuration(),
+					Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, (int) Calculator.scale(loadSlot.getSlotOrPortCV()), loadSlot.getSlotOrPortDuration(),
 					loadSlot.isSetArriveCold(), loadSlot.isArriveCold(), false);
 
 			final Slot dischargeSlot = eCargo.getDischargeSlot();
-			final int dischargeStart = convertTime(earliestTime, dischargeSlot.getWindowStart(), dischargeSlot.getPort());
+			final int dischargeStart = convertTime(earliestTime, dischargeSlot.getWindowStart());//, dischargeSlot.getPort());
 			final ITimeWindow dischargeWindow = builder.createTimeWindow(dischargeStart, dischargeStart + dischargeSlot.getWindowSize());
 			final IShippingPriceCalculator dischargePriceCalculator;
 
@@ -556,28 +518,17 @@ public class LNGScenarioTransformer {
 				contractTransformer.slotTransformed(dischargeSlot, discharge);
 			}
 
-			final ICargo cargo = builder.createCargo(eCargo.getId(), load, discharge, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
+			final ICargo cargo = builder.createCargo(eCargo.getName(), load, discharge, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
 
-			if (!eCargo.getAllowedVessels().isEmpty()) {
-				final HashSet<IVessel> vesselsForCargo = new HashSet<IVessel>();
-				for (final Vessel v : eCargo.getAllowedVessels()) {
-					vesselsForCargo.add(vesselAssociation.lookup(v));
+			final Set<AVessel> allowedVessels = SetUtils.getVessels(eCargo.getAllowedVessels());
+			if (allowedVessels.isEmpty()) {
+				Set<IVessel> vesselsForCargo = new HashSet<IVessel>();
+				for (final AVessel v : allowedVessels) {
+					vesselsForCargo .add(vesselAssociation.lookup((Vessel) v));
 				}
 				builder.setCargoVesselRestriction(cargo, vesselsForCargo);
 			}
 		}
-	}
-
-	/**
-	 * Convert a date with optional time into a time in hours at a given port
-	 * 
-	 * @param earliestTime2
-	 * @param windowStart
-	 * @param port
-	 * @return
-	 */
-	private int convertTime(final Date earliest, final DateAndOptionalTime windowStart, final Port port) {
-		return convertTime(earliest, windowStart.getDateWithDefaults(port));
 	}
 
 	/**
@@ -631,18 +582,30 @@ public class LNGScenarioTransformer {
 				builder.setPortToPortDistance(from, to, r.getName(), distance);
 			}
 			
-			// set vessel class costs
+			// Set extra time and fuel consumption
 			FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 			for (final VesselClass evc : fleetModel.getVesselClasses()) {
-				for (final scenario.fleet.VesselClassCost classCost : evc.getCanalCosts()) {
-					if (classCost.getCanal() != canal) {
-						continue;
-					}
-					final IVesselClass vc = vesselAssociation.lookup(evc);
-					builder.setVesselClassRouteCost(name, vc, VesselState.Laden, Calculator.scale(classCost.getLadenCost()));
-					builder.setVesselClassRouteCost(name, vc, VesselState.Ballast, Calculator.scale(classCost.getUnladenCost()));
-
-					builder.setVesselClassRouteTimeAndFuel(name, vc, classCost.getTransitTime(), Calculator.scale(classCost.getTransitFuel() / 24));
+				for (final VesselClassRouteParameters routeParameters : evc.getRouteParameters()) {
+					builder.setVesselClassRouteTimeAndFuel(routeParameters.getRoute().getName(), 
+							vesselAssociation.lookup(evc),
+							routeParameters.getExtraTransitTime(),
+							Calculator.scale(routeParameters.getLadenConsumptionRate()));
+					//TODO handle rates properly in optimiser
+				}
+			}
+			
+			// set tolls
+			PricingModel pm = rootObject.getSubModel(PricingModel.class);
+			for (final RouteCost routeCost : pm.getRouteCosts()) {
+				for (RouteCostByVesselClass classCost : routeCost.getCostsByClass()) {
+					builder.setVesselClassRouteCost(routeCost.getRoute().getName(), 
+							vesselAssociation.lookup(classCost.getVesselClass())
+							, VesselState.Laden
+							, classCost.getLadenCost());
+					builder.setVesselClassRouteCost(routeCost.getRoute().getName(), 
+							vesselAssociation.lookup(classCost.getVesselClass())
+							, VesselState.Ballast
+							, classCost.getBallastCost());
 				}
 			}
 		}
@@ -671,17 +634,46 @@ public class LNGScenarioTransformer {
 		// precision
 
 		FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+		PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
+		
+		// look up prices
+		
 		for (final VesselClass eVc : fleetModel.getVesselClasses()) {
-			final IVesselClass vc = builder.createVesselClass(eVc.getName(),
+			int baseFuelPrice = 0;
+			for (BaseFuelCost baseFuelCost : pricingModel.getFleetCost().getBaseFuelPrices()) {
+				if (baseFuelCost.getFuels().contains(eVc.getBaseFuel())) {
+					baseFuelPrice = Calculator.scaleToInt(
+							baseFuelCost.getPrice().getValueAfter(latestTime));
+					break;
+				}
+			}
+			
+			int charterInPrice = 0;
+			
+			int charterCount = 0;
+			for (CharterCostModel charterCost : pricingModel.getFleetCost().getCharterCosts()) {
+				if (SetUtils.getVessels(charterCost.getVessels()).contains(eVc)) {
+					charterInPrice = charterCost.getCharterInPrice().getValueAfter(latestTime);
+//					charterOutPrice = charterCost.getCharterOutPrice().getValueAfter(latestTime);
+					charterCount = charterCost.getSpotCharterCount().getValueAfter(latestTime);
+				}
+			}
+			
+			final IVesselClass vc = builder.createVesselClass(
+					eVc.getName(),
 					Calculator.scaleToInt(eVc.getMinSpeed()),
 					Calculator.scaleToInt(eVc.getMaxSpeed()),
-					Calculator.scale((int) (eVc.getFillCapacity() * eVc.getCapacity())), // TODO is
-					// capacity mean
-					// to be scaled?
-					Calculator.scaleToInt(eVc.getMinHeelVolume()), Calculator.scaleToInt(eVc.getBaseFuel().getUnitPrice()), Calculator.scaleToInt(eVc.getBaseFuel().getEquivalenceFactor()),
+					Calculator.scale((int) (eVc.getFillCapacity() * eVc.getCapacity())), 
+					Calculator.scaleToInt(eVc.getMinHeel()), 
+					baseFuelPrice,
+					Calculator.scaleToInt(eVc.getBaseFuel().getEquivalenceFactor()),
 					Calculator.scaleToInt(eVc.getPilotLightRate()) / 24,
-					// This should be divide?
-					Calculator.scaleToInt(eVc.getDailyCharterInPrice() / 24.0), eVc.getWarmupTime(), eVc.getCooldownTime(), Calculator.scale(eVc.getCooldownVolume()));
+					Calculator.scaleToInt(charterInPrice / 24.0), 
+					eVc.getWarmingTime(), 
+					eVc.getCoolingTime(), 
+					Calculator.scale(eVc.getCoolingVolume())
+					);
+			
 			vesselClassAssociation.add(eVc, vc);
 
 			/*
@@ -694,65 +686,77 @@ public class LNGScenarioTransformer {
 			 * set up inaccessible ports by applying resource allocation constraints
 			 */
 			final Set<IPort> inaccessiblePorts = new HashSet<IPort>();
-			for (final PortSelection ePortSelection : eVc.getInaccessiblePorts()) {
-				for (final Port ePort : ePortSelection.getClosure(new UniqueEList<PortSelection>())) {
-					final IPort port = portAssociation.lookup(ePort);
-					inaccessiblePorts.add(port);
-				}
+			for (final APort ePort : SetUtils.getPorts(eVc.getInaccessiblePorts())) {
+				inaccessiblePorts.add(portAssociation.lookup((Port) ePort));
 			}
-
+			
 			if (inaccessiblePorts.isEmpty() == false) {
 				builder.setVesselClassInaccessiblePorts(vc, inaccessiblePorts);
 			}
 
+			if (charterCount > 0) {
+				for (int i = 0; i<charterCount; i++) {
+					builder.createSpotVessels("SPOT-", vesselClassAssociation.lookup(eVc), charterCount);
+				}
+			}
+			
 			entities.addModelObject(eVc, vc);
 		}
 
 		/*
 		 * Now create each vessel
 		 */
-		for (final Vessel eV : fleetModel.getFleet()) {
-			final IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, eV.getStartRequirement());
-			final IStartEndRequirement endRequirement = createRequirement(builder, portAssociation, eV.getEndRequirement());
+		for (final Vessel eV : fleetModel.getVessels()) {
+			final IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, 
+					eV.getAvailability().getStartAfter(), eV.getAvailability().getStartBy(), 
+					SetUtils.getPorts(eV.getAvailability().getStartAt()));
+			
+			final IStartEndRequirement endRequirement = createRequirement(builder, portAssociation, 
+					eV.getAvailability().getEndAfter(), eV.getAvailability().getEndBy(), 
+					SetUtils.getPorts(eV.getAvailability().getEndAt()));
+			
+			final int dailyCharterPrice = eV.isSetTimeCharterRate() ? eV.getTimeCharterRate(): 
+				vesselClassAssociation.lookup(eV.getVesselClass()).getHourlyCharterInPrice() * 24;
+			
+			final long heelLimit = eV.getStartHeel().isSetVolumeAvailable()
+					? Calculator.scale(eV.getStartHeel().getVolumeAvailable()) : 0;
 
-			final int dailyCharterPrice = eV.isSetDailyCharterOutPrice() ? eV.getDailyCharterOutPrice() : (eV.getClass_().isSetDailyCharterOutPrice() ? eV.getClass_().getDailyCharterOutPrice() : eV
-					.getClass_().getDailyCharterInPrice());
-
-			final long heelLimit = eV.getStartRequirement().isSetHeelLimit() ? (eV.getStartRequirement().getHeelLimit() * (long) Calculator.ScaleFactor) : 0;
-
-			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getClass_()), Calculator.scale(dailyCharterPrice) / 24,
-					eV.isTimeChartered() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
-					Calculator.scaleToInt(eV.getStartRequirement().getHeelCVValue()), Calculator.scaleToInt(eV.getStartRequirement().getHeelUnitPrice()));
+			final IVessel vessel = builder.createVessel(eV.getName(), 
+					vesselClassAssociation.lookup(eV.getVesselClass()), 
+					(int) (Calculator.scale(dailyCharterPrice) / 24),
+					eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, 
+							startRequirement, endRequirement, heelLimit,
+					Calculator.scaleToInt(eV.getStartHeel().getCvValue()), Calculator.scaleToInt(eV.getStartHeel().getPricePerMMBTU()));
 			vesselAssociation.add(eV, vessel);
 
 			entities.addModelObject(eV, vessel);
 		}
-
-		/*
-		 * Create spot charter vessels with no start/end requirements
-		 */
-		for (final VesselClass eVc : fleetModel.getVesselClasses()) {
-			if (eVc.getSpotCharterCount() > 0) {
-				final List<IVessel> spots = builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), eVc.getSpotCharterCount());
-				// TODO this is not necessarily ideal; if there is an initial
-				// solution set we associate all the spot vessels with ones in
-				// that solution.
-				int vesselIndex = 0;
-				if ((scenario.getOptimisation() != null) && (scenario.getOptimisation().getCurrentSettings() != null)) {
-					final Schedule initialSchedule = scenario.getOptimisation().getCurrentSettings().getInitialSchedule();
-					if (initialSchedule != null) {
-						for (final AllocatedVessel allocatedVessel : initialSchedule.getFleet()) {
-							if ((allocatedVessel instanceof SpotVessel) && (((SpotVessel) allocatedVessel).getVesselClass() == eVc)) {
-								// map it to one of the ones we have just made
-								assert vesselIndex < spots.size() : "Initial schedule should not have more spot vessels than fleet suggests";
-								entities.addModelObject(allocatedVessel, spots.get(vesselIndex));
-								vesselIndex++;
-							}
-						}
-					}
-				}
-			}
-		}
+//
+//		/*
+//		 * Create spot charter vessels with no start/end requirements
+//		 */
+//		for (final VesselClass eVc : fleetModel.getVesselClasses()) {
+//			if (eVc.getSpotCharterCount() > 0) {
+//				final List<IVessel> spots = builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), eVc.getSpotCharterCount());
+//				// TODO this is not necessarily ideal; if there is an initial
+//				// solution set we associate all the spot vessels with ones in
+//				// that solution.
+//				int vesselIndex = 0;
+//				if ((scenario.getOptimisation() != null) && (scenario.getOptimisation().getCurrentSettings() != null)) {
+//					final Schedule initialSchedule = scenario.getOptimisation().getCurrentSettings().getInitialSchedule();
+//					if (initialSchedule != null) {
+//						for (final AllocatedVessel allocatedVessel : initialSchedule.getFleet()) {
+//							if ((allocatedVessel instanceof SpotVessel) && (((SpotVessel) allocatedVessel).getVesselClass() == eVc)) {
+//								// map it to one of the ones we have just made
+//								assert vesselIndex < spots.size() : "Initial schedule should not have more spot vessels than fleet suggests";
+//								entities.addModelObject(allocatedVessel, spots.get(vesselIndex));
+//								vesselIndex++;
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
 
 		return new Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>>(vesselClassAssociation, vesselAssociation);
 	}
@@ -765,26 +769,32 @@ public class LNGScenarioTransformer {
 	 * @param pat
 	 * @return
 	 */
-	private IStartEndRequirement createRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final PortAndTime pat) {
-		if (pat == null) {
-			return builder.createStartEndRequirement();
+	private IStartEndRequirement createRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Date from, final Date to, final Set<APort> ports) {
+		ITimeWindow window = null;
+		
+		if (from == null && to != null) {
+			window = builder.createTimeWindow(convertTime(earliestTime), convertTime(to));
+		} else if (from != null && to == null) {
+			window = builder.createTimeWindow(convertTime(from), convertTime(latestTime));
+		} else if (from != null && to != null) {
+			window = builder.createTimeWindow(convertTime(from), convertTime(to));
 		}
-
-		if (pat.isSetPort() && pat.isSetStartTime()) {
-			final int startHours = convertTime(pat.getStartTime());
-			final int endHours = pat.isSetEndTime() ? convertTime(pat.getEndTime()) : startHours + 1;
-			final ITimeWindow window = builder.createTimeWindow(startHours, endHours);
-			return builder.createStartEndRequirement(portAssociation.lookup(pat.getPort()), window);
-		} else if (pat.isSetPort()) {
-			return builder.createStartEndRequirement(portAssociation.lookup(pat.getPort()));
-		} else if (pat.isSetStartTime()) {
-			final int startHours = convertTime(pat.getStartTime());
-			final int endHours = pat.isSetEndTime() ? convertTime(pat.getEndTime()) : startHours + 1;
-			final ITimeWindow window = builder.createTimeWindow(startHours, endHours);
-			return builder.createStartEndRequirement(window);
+		
+		if (ports.isEmpty()) {
+			if (window != null) {
+				return builder.createStartEndRequirement(window);
+			}
 		} else {
-			return builder.createStartEndRequirement();
+			//TODO handle multiple start/end ports
+			final IPort port = portAssociation.lookup((Port) ports.iterator().next());
+			if (window == null) {
+				return builder.createStartEndRequirement(port);
+			} else {
+				return builder.createStartEndRequirement(port, window);
+			}
 		}
+		
+		return builder.createStartEndRequirement();
 	}
 
 	private int convertTime(final Date startTime) {
@@ -821,96 +831,97 @@ public class LNGScenarioTransformer {
 				Calculator.scaleToInt(attrs.getIdleBaseRate()) / 24, cc);
 	}
 
-	public void freezeStartSequences(final ISchedulerBuilder builder, final ModelEntityMap entities) {
-		if ((scenario.getOptimisation() != null) && (scenario.getOptimisation().getCurrentSettings() != null) && (scenario.getOptimisation().getCurrentSettings().getInitialSchedule() != null)) {
-			final int freezeHours = 24 * scenario.getOptimisation().getCurrentSettings().getFreezeDaysFromStart();
-			if (freezeHours <= 0) {
-				return;
-			}
-			final Schedule initialSchedule = scenario.getOptimisation().getCurrentSettings().getInitialSchedule();
-			// set up constraints on elements of initial schedule
-
-			// TODO at the moment OptimisationTransformer also processes the
-			// initial schedule, to create advice for the initial sequence
-			// builder. This isn't ideal, but if we want the ISchedulerBuilder
-			// to be the only way to get an IOptimisationData, and to prevent
-			// post-hoc changes to same it has to be this way.
-
-			final Date freezeDate = entities.getDateFromHours(freezeHours);
-			log.debug("Freezing sequencing decisions before " + freezeDate);
-			for (final Sequence sequence : initialSchedule.getSequences()) {
-				final AllocatedVessel av = sequence.getVessel();
-				final IVessel builderVessel;
-				if (av instanceof SpotVessel) {
-					// reverse lookup hack - see above where I associated spot
-					// vessels with
-					// IVessels in buildFleet(.)
-					builderVessel = entities.getOptimiserObject(av, IVessel.class);
-				} else if (av instanceof FleetVessel) {
-					builderVessel = entities.getOptimiserObject(((FleetVessel) av).getVessel(), IVessel.class);
-				} else {
-					throw new RuntimeException(av.getClass().getSimpleName() + " is a kind of AllocatedVessel this code cannot translate");
-				}
-
-				IPortSlot previousSlot = null;
-				/**
-				 * Used to ensure that if we freeze a load we also freeze the next discharge.
-				 */
-				boolean waitingForDischargeSlot = false;
-				for (final Event event : sequence.getEvents()) {
-					if (event.getStart().before(freezeDate) || waitingForDischargeSlot) {
-						final IPortSlot currentSlot;
-						if (event instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) event;
-							// lock sequence and vessel
-							currentSlot = entities.getOptimiserObject(slotVisit.getSlot(), IPortSlot.class);
-							if (slotVisit.getSlot() instanceof LoadSlot) {
-								waitingForDischargeSlot = true;
-							} else {
-								waitingForDischargeSlot = false;
-							}
-						} else if (event instanceof VesselEventVisit) {
-							final VesselEventVisit vev = (VesselEventVisit) event;
-							currentSlot = entities.getOptimiserObject(vev.getVesselEvent(), IPortSlot.class);
-						} else {
-							currentSlot = null;
-						}
-
-						if (currentSlot != null) {
-							// bind slot to vessel - this overrides any previous
-							// binding
-							builder.constrainSlotToVessels(currentSlot, Collections.singleton(builderVessel));
-
-							// this removes any binding to vessel class, because
-							// the allowed vessels are the union of the above
-							// and the classes.
-							builder.constrainSlotToVesselClasses(currentSlot, null);
-							if (previousSlot != null) {
-								// bind sequencing as well - this forces
-								// previousSlot to come before currentSlot.
-								builder.constrainSlotAdjacency(previousSlot, currentSlot);
-							}
-
-							previousSlot = currentSlot;
-						}
-					} else {
-						break;
-					}
-				}
-			}
-		}
-	}
+//	public void freezeStartSequences(final ISchedulerBuilder builder, final ModelEntityMap entities) {
+//		if ((scenario.getOptimisation() != null) && (scenario.getOptimisation().getCurrentSettings() != null) && (scenario.getOptimisation().getCurrentSettings().getInitialSchedule() != null)) {
+//			final int freezeHours = 24 * scenario.getOptimisation().getCurrentSettings().getFreezeDaysFromStart();
+//			if (freezeHours <= 0) {
+//				return;
+//			}
+//			final Schedule initialSchedule = scenario.getOptimisation().getCurrentSettings().getInitialSchedule();
+//			// set up constraints on elements of initial schedule
+//
+//			// TODO at the moment OptimisationTransformer also processes the
+//			// initial schedule, to create advice for the initial sequence
+//			// builder. This isn't ideal, but if we want the ISchedulerBuilder
+//			// to be the only way to get an IOptimisationData, and to prevent
+//			// post-hoc changes to same it has to be this way.
+//
+//			final Date freezeDate = entities.getDateFromHours(freezeHours);
+//			log.debug("Freezing sequencing decisions before " + freezeDate);
+//			for (final Sequence sequence : initialSchedule.getSequences()) {
+//				final AllocatedVessel av = sequence.getVessel();
+//				final IVessel builderVessel;
+//				if (av instanceof SpotVessel) {
+//					// reverse lookup hack - see above where I associated spot
+//					// vessels with
+//					// IVessels in buildFleet(.)
+//					builderVessel = entities.getOptimiserObject(av, IVessel.class);
+//				} else if (av instanceof FleetVessel) {
+//					builderVessel = entities.getOptimiserObject(((FleetVessel) av).getVessel(), IVessel.class);
+//				} else {
+//					throw new RuntimeException(av.getClass().getSimpleName() + " is a kind of AllocatedVessel this code cannot translate");
+//				}
+//
+//				IPortSlot previousSlot = null;
+//				/**
+//				 * Used to ensure that if we freeze a load we also freeze the next discharge.
+//				 */
+//				boolean waitingForDischargeSlot = false;
+//				for (final Event event : sequence.getEvents()) {
+//					if (event.getStart().before(freezeDate) || waitingForDischargeSlot) {
+//						final IPortSlot currentSlot;
+//						if (event instanceof SlotVisit) {
+//							final SlotVisit slotVisit = (SlotVisit) event;
+//							// lock sequence and vessel
+//							currentSlot = entities.getOptimiserObject(slotVisit.getSlot(), IPortSlot.class);
+//							if (slotVisit.getSlot() instanceof LoadSlot) {
+//								waitingForDischargeSlot = true;
+//							} else {
+//								waitingForDischargeSlot = false;
+//							}
+//						} else if (event instanceof VesselEventVisit) {
+//							final VesselEventVisit vev = (VesselEventVisit) event;
+//							currentSlot = entities.getOptimiserObject(vev.getVesselEvent(), IPortSlot.class);
+//						} else {
+//							currentSlot = null;
+//						}
+//
+//						if (currentSlot != null) {
+//							// bind slot to vessel - this overrides any previous
+//							// binding
+//							builder.constrainSlotToVessels(currentSlot, Collections.singleton(builderVessel));
+//
+//							// this removes any binding to vessel class, because
+//							// the allowed vessels are the union of the above
+//							// and the classes.
+//							builder.constrainSlotToVesselClasses(currentSlot, null);
+//							if (previousSlot != null) {
+//								// bind sequencing as well - this forces
+//								// previousSlot to come before currentSlot.
+//								builder.constrainSlotAdjacency(previousSlot, currentSlot);
+//							}
+//
+//							previousSlot = currentSlot;
+//						}
+//					} else {
+//						break;
+//					}
+//				}
+//			}
+//		}
+//	}
 
 	/**
 	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
 	 * 
 	 * @return
 	 */
-	public OptimisationSettings getOptimisationSettings() {
-		if (scenario.getOptimisation() != null) {
-			return scenario.getOptimisation().getCurrentSettings();
-		} else {
-			return null;
+	public OptimiserSettings getOptimisationSettings() {
+		final OptimiserModel om = rootObject.getSubModel(OptimiserModel.class);
+		if (om != null) {
+			// select settings
+			return om.getActiveSetting();
 		}
+		return null;
 	}
 }

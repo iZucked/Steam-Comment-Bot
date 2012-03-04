@@ -53,5 +53,5 @@ public interface IAnnotationExporter {
 	 * @param key
 	 * @return
 	 */
-	Event export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel vessel);
+	Event export(final ISequenceElement element, final Map<String, Object> annotations);
 }
