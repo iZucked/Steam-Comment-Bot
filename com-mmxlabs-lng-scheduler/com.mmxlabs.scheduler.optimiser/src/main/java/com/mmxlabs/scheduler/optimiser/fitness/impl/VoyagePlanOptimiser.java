@@ -205,7 +205,9 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 					// Only add in hire cost for last leg evaluation. It is constant otherwise and does not need to be part of the cost comparison.
 					// Hire cost will be properly calculated in a different step.
-					final long hireCost = Calculator.multiply(hireRate, lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
+					
+					//This is not calculator.multiply, because hireRate is not scaled.
+					final long hireCost = hireRate * (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
 					currentCost += hireCost;
 
 					// Check for capacity violations, prefer solutions with fewer violations
