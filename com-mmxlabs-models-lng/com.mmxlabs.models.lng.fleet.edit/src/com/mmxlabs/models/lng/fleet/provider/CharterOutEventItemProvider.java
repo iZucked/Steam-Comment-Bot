@@ -24,6 +24,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
@@ -62,6 +63,8 @@ public class CharterOutEventItemProvider
 			super.getPropertyDescriptors(object);
 
 			addRelocateToPropertyDescriptor(object);
+			addRepositioningFeePropertyDescriptor(object);
+			addHireRatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -84,6 +87,50 @@ public class CharterOutEventItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Repositioning Fee feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRepositioningFeePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutEvent_repositioningFee_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutEvent_repositioningFee_feature", "_UI_CharterOutEvent_type"),
+				 FleetPackage.Literals.CHARTER_OUT_EVENT__REPOSITIONING_FEE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Hire Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHireRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutEvent_hireRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutEvent_hireRate_feature", "_UI_CharterOutEvent_type"),
+				 FleetPackage.Literals.CHARTER_OUT_EVENT__HIRE_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -155,6 +202,10 @@ public class CharterOutEventItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CharterOutEvent.class)) {
+			case FleetPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
+			case FleetPackage.CHARTER_OUT_EVENT__HIRE_RATE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case FleetPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;

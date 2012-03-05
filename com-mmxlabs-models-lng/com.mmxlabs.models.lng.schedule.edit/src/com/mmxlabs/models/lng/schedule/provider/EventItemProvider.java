@@ -66,7 +66,7 @@ public class EventItemProvider
 
 			addStartPropertyDescriptor(object);
 			addEndPropertyDescriptor(object);
-			addLocationPropertyDescriptor(object);
+			addPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -116,19 +116,19 @@ public class EventItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Location feature.
+	 * This adds a property descriptor for the Port feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLocationPropertyDescriptor(Object object) {
+	protected void addPortPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Event_location_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Event_location_feature", "_UI_Event_type"),
-				 SchedulePackage.Literals.EVENT__LOCATION,
+				 getString("_UI_Event_port_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Event_port_feature", "_UI_Event_type"),
+				 SchedulePackage.Literals.EVENT__PORT,
 				 true,
 				 false,
 				 true,

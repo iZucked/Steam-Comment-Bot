@@ -67,6 +67,8 @@ public class CharterOutEventComponentHelper implements IComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_relocateToEditor(detailComposite, topClass);
 		add_heelOptionsEditor(detailComposite, topClass);
+		add_repositioningFeeEditor(detailComposite, topClass);
+		add_hireRateEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the relocateTo feature on CharterOutEvent
@@ -83,5 +85,23 @@ public class CharterOutEventComponentHelper implements IComponentHelper {
 	 */
 	protected void add_heelOptionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.CHARTER_OUT_EVENT__HEEL_OPTIONS));
+	}
+
+	/**
+	 * Create the editor for the repositioningFee feature on CharterOutEvent
+	 *
+	 * @generated
+	 */
+	protected void add_repositioningFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.CHARTER_OUT_EVENT__REPOSITIONING_FEE));
+	}
+
+	/**
+	 * Create the editor for the hireRate feature on CharterOutEvent
+	 *
+	 * @generated
+	 */
+	protected void add_hireRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.CHARTER_OUT_EVENT__HIRE_RATE));
 	}
 }

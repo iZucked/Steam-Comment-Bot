@@ -20,6 +20,8 @@
         eType="#//CargoAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocations" upperBound="-1"
         eType="#//SlotAllocation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fitnesses" upperBound="-1"
+        eType="#//Fitness" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Sequence" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
@@ -30,15 +32,17 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselClass"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fitnesses" upperBound="-1"
+        eType="#//Fitness" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="location" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SlotVisit" abstract="true" eSuperTypes="#//Event">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1" eType="#//SlotAllocation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SlotVisit" abstract="true" eSuperTypes="#//Event #//FuelUsage">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
+        eType="#//SlotAllocation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//Event">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" lowerBound="1"
@@ -64,7 +68,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="FuelQuantity">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fuelName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="amounts" upperBound="-1"
         eType="#//FuelAmount" containment="true"/>
   </eClassifiers>
@@ -86,6 +90,14 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputCargo" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ACargo"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ladenLeg" lowerBound="1"
+        eType="#//Journey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastLeg" lowerBound="1"
+        eType="#//Journey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ladenIdle" lowerBound="1"
+        eType="#//Idle"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastIdle" lowerBound="1"
+        eType="#//Idle"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SlotAllocation" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASlot"
@@ -93,12 +105,16 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="spotMarket" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASpotMarket"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" lowerBound="1"
+        eType="#//CargoAllocation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FuelAmount">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" lowerBound="1" eType="#//FuelUnit"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantity" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unitPrice" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fitness" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fitnessValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
 </ecore:EPackage>

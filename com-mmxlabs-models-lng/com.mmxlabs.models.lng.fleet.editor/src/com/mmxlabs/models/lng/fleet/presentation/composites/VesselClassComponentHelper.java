@@ -79,6 +79,8 @@ public class VesselClassComponentHelper implements IComponentHelper {
 		add_warmingTimeEditor(detailComposite, topClass);
 		add_coolingTimeEditor(detailComposite, topClass);
 		add_coolingVolumeEditor(detailComposite, topClass);
+		add_routeParametersEditor(detailComposite, topClass);
+		add_pilotLightRateEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the inaccessiblePorts feature on VesselClass
@@ -175,5 +177,23 @@ public class VesselClassComponentHelper implements IComponentHelper {
 	 */
 	protected void add_coolingVolumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__COOLING_VOLUME));
+	}
+
+	/**
+	 * Create the editor for the routeParameters feature on VesselClass
+	 *
+	 * @generated
+	 */
+	protected void add_routeParametersEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__ROUTE_PARAMETERS));
+	}
+
+	/**
+	 * Create the editor for the pilotLightRate feature on VesselClass
+	 *
+	 * @generated
+	 */
+	protected void add_pilotLightRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__PILOT_LIGHT_RATE));
 	}
 }

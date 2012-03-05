@@ -64,7 +64,6 @@ public class FuelAmountComponentHelper implements IComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_unitEditor(detailComposite, topClass);
 		add_quantityEditor(detailComposite, topClass);
-		add_unitPriceEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the unit feature on FuelAmount
@@ -81,13 +80,5 @@ public class FuelAmountComponentHelper implements IComponentHelper {
 	 */
 	protected void add_quantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.FUEL_AMOUNT__QUANTITY));
-	}
-	/**
-	 * Create the editor for the unitPrice feature on FuelAmount
-	 *
-	 * @generated
-	 */
-	protected void add_unitPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.FUEL_AMOUNT__UNIT_PRICE));
 	}
 }

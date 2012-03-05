@@ -207,13 +207,22 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Fitnesses</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
@@ -271,13 +280,22 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__VESSEL_CLASS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Fitnesses</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEQUENCE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Sequence</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int SEQUENCE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EventImpl <em>Event</em>}' class.
@@ -326,13 +344,13 @@ public interface SchedulePackage extends EPackage {
 	int EVENT__END = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Location</b></em>' reference.
+	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT__LOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int EVENT__PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Event</em>' class.
@@ -390,22 +408,31 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_VISIT__END = EVENT__END;
 
 	/**
-	 * The feature id for the '<em><b>Location</b></em>' reference.
+	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__LOCATION = EVENT__LOCATION;
+	int SLOT_VISIT__PORT = EVENT__PORT;
 
 	/**
-	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__SLOT = EVENT_FEATURE_COUNT + 0;
+	int SLOT_VISIT__FUELS = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Slot Visit</em>' class.
@@ -414,7 +441,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 1;
+	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl <em>Vessel Event Visit</em>}' class.
@@ -463,13 +490,13 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__END = EVENT__END;
 
 	/**
-	 * The feature id for the '<em><b>Location</b></em>' reference.
+	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__LOCATION = EVENT__LOCATION;
+	int VESSEL_EVENT_VISIT__PORT = EVENT__PORT;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
@@ -536,13 +563,13 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__END = EVENT__END;
 
 	/**
-	 * The feature id for the '<em><b>Location</b></em>' reference.
+	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY__LOCATION = EVENT__LOCATION;
+	int JOURNEY__PORT = EVENT__PORT;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -645,13 +672,13 @@ public interface SchedulePackage extends EPackage {
 	int IDLE__END = EVENT__END;
 
 	/**
-	 * The feature id for the '<em><b>Location</b></em>' reference.
+	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int IDLE__LOCATION = EVENT__LOCATION;
+	int IDLE__PORT = EVENT__PORT;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -847,13 +874,13 @@ public interface SchedulePackage extends EPackage {
 	int COOLDOWN__END = EVENT__END;
 
 	/**
-	 * The feature id for the '<em><b>Location</b></em>' reference.
+	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COOLDOWN__LOCATION = EVENT__LOCATION;
+	int COOLDOWN__PORT = EVENT__PORT;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -947,13 +974,49 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Laden Leg</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__LADEN_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Leg</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__BALLAST_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Laden Idle</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__LADEN_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Idle</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__BALLAST_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+
+	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
@@ -1002,13 +1065,22 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_ALLOCATION__SPOT_MARKET = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Cargo Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__CARGO_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Slot Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl <em>Fuel Amount</em>}' class.
@@ -1039,22 +1111,68 @@ public interface SchedulePackage extends EPackage {
 	int FUEL_AMOUNT__QUANTITY = 1;
 
 	/**
-	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_AMOUNT__UNIT_PRICE = 2;
-
-	/**
 	 * The number of structural features of the '<em>Fuel Amount</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FUEL_AMOUNT_FEATURE_COUNT = 3;
+	int FUEL_AMOUNT_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FitnessImpl <em>Fitness</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.FitnessImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFitness()
+	 * @generated
+	 */
+	int FITNESS = 15;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS__PROXIES = MMXCorePackage.NAMED_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Fitness Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS__FITNESS_VALUE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Fitness</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
@@ -1064,7 +1182,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 15;
+	int FUEL_UNIT = 16;
 
 
 	/**
@@ -1165,6 +1283,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getSchedule_SlotAllocations();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getFitnesses <em>Fitnesses</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fitnesses</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Schedule#getFitnesses()
+	 * @see #getSchedule()
+	 * @generated
+	 */
+	EReference getSchedule_Fitnesses();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Sequence <em>Sequence</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1208,6 +1337,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getSequence_VesselClass();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Sequence#getFitnesses <em>Fitnesses</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fitnesses</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Sequence#getFitnesses()
+	 * @see #getSequence()
+	 * @generated
+	 */
+	EReference getSequence_Fitnesses();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Event <em>Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1240,15 +1380,15 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getEvent_End();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Event#getLocation <em>Location</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Event#getPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Location</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Event#getLocation()
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Event#getPort()
 	 * @see #getEvent()
 	 * @generated
 	 */
-	EReference getEvent_Location();
+	EReference getEvent_Port();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SlotVisit <em>Slot Visit</em>}'.
@@ -1261,15 +1401,15 @@ public interface SchedulePackage extends EPackage {
 	EClass getSlotVisit();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.SlotVisit#getSlot <em>Slot</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.SlotVisit#getSlotAllocation <em>Slot Allocation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Slot</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.SlotVisit#getSlot()
+	 * @return the meta object for the reference '<em>Slot Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotVisit#getSlotAllocation()
 	 * @see #getSlotVisit()
 	 * @generated
 	 */
-	EReference getSlotVisit_Slot();
+	EReference getSlotVisit_SlotAllocation();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.VesselEventVisit <em>Vessel Event Visit</em>}'.
@@ -1528,6 +1668,50 @@ public interface SchedulePackage extends EPackage {
 	EReference getCargoAllocation_InputCargo();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenLeg <em>Laden Leg</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Laden Leg</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenLeg()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_LadenLeg();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastLeg <em>Ballast Leg</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Ballast Leg</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastLeg()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_BallastLeg();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenIdle <em>Laden Idle</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Laden Idle</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenIdle()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_LadenIdle();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastIdle <em>Ballast Idle</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Ballast Idle</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastIdle()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EReference getCargoAllocation_BallastIdle();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SlotAllocation <em>Slot Allocation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1558,6 +1742,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSlotAllocation_SpotMarket();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCargoAllocation <em>Cargo Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Cargo Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getCargoAllocation()
+	 * @see #getSlotAllocation()
+	 * @generated
+	 */
+	EReference getSlotAllocation_CargoAllocation();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.FuelAmount <em>Fuel Amount</em>}'.
@@ -1592,15 +1787,25 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getFuelAmount_Quantity();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice <em>Unit Price</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Fitness <em>Fitness</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Unit Price</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice()
-	 * @see #getFuelAmount()
+	 * @return the meta object for class '<em>Fitness</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Fitness
 	 * @generated
 	 */
-	EAttribute getFuelAmount_UnitPrice();
+	EClass getFitness();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Fitness#getFitnessValue <em>Fitness Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fitness Value</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Fitness#getFitnessValue()
+	 * @see #getFitness()
+	 * @generated
+	 */
+	EAttribute getFitness_FitnessValue();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
@@ -1711,6 +1916,14 @@ public interface SchedulePackage extends EPackage {
 		EReference SCHEDULE__SLOT_ALLOCATIONS = eINSTANCE.getSchedule_SlotAllocations();
 
 		/**
+		 * The meta object literal for the '<em><b>Fitnesses</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE__FITNESSES = eINSTANCE.getSchedule_Fitnesses();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1745,6 +1958,14 @@ public interface SchedulePackage extends EPackage {
 		EReference SEQUENCE__VESSEL_CLASS = eINSTANCE.getSequence_VesselClass();
 
 		/**
+		 * The meta object literal for the '<em><b>Fitnesses</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SEQUENCE__FITNESSES = eINSTANCE.getSequence_Fitnesses();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.EventImpl <em>Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1771,12 +1992,12 @@ public interface SchedulePackage extends EPackage {
 		EAttribute EVENT__END = eINSTANCE.getEvent_End();
 
 		/**
-		 * The meta object literal for the '<em><b>Location</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EVENT__LOCATION = eINSTANCE.getEvent_Location();
+		EReference EVENT__PORT = eINSTANCE.getEvent_Port();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl <em>Slot Visit</em>}' class.
@@ -1789,12 +2010,12 @@ public interface SchedulePackage extends EPackage {
 		EClass SLOT_VISIT = eINSTANCE.getSlotVisit();
 
 		/**
-		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Slot Allocation</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SLOT_VISIT__SLOT = eINSTANCE.getSlotVisit_Slot();
+		EReference SLOT_VISIT__SLOT_ALLOCATION = eINSTANCE.getSlotVisit_SlotAllocation();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl <em>Vessel Event Visit</em>}' class.
@@ -2005,6 +2226,38 @@ public interface SchedulePackage extends EPackage {
 		EReference CARGO_ALLOCATION__INPUT_CARGO = eINSTANCE.getCargoAllocation_InputCargo();
 
 		/**
+		 * The meta object literal for the '<em><b>Laden Leg</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__LADEN_LEG = eINSTANCE.getCargoAllocation_LadenLeg();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Leg</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__BALLAST_LEG = eINSTANCE.getCargoAllocation_BallastLeg();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Idle</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__LADEN_IDLE = eINSTANCE.getCargoAllocation_LadenIdle();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Idle</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ALLOCATION__BALLAST_IDLE = eINSTANCE.getCargoAllocation_BallastIdle();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2029,6 +2282,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SLOT_ALLOCATION__SPOT_MARKET = eINSTANCE.getSlotAllocation_SpotMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo Allocation</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_ALLOCATION__CARGO_ALLOCATION = eINSTANCE.getSlotAllocation_CargoAllocation();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl <em>Fuel Amount</em>}' class.
@@ -2057,12 +2318,22 @@ public interface SchedulePackage extends EPackage {
 		EAttribute FUEL_AMOUNT__QUANTITY = eINSTANCE.getFuelAmount_Quantity();
 
 		/**
-		 * The meta object literal for the '<em><b>Unit Price</b></em>' attribute feature.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.FitnessImpl <em>Fitness</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.FitnessImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFitness()
+		 * @generated
+		 */
+		EClass FITNESS = eINSTANCE.getFitness();
+
+		/**
+		 * The meta object literal for the '<em><b>Fitness Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute FUEL_AMOUNT__UNIT_PRICE = eINSTANCE.getFuelAmount_UnitPrice();
+		EAttribute FITNESS__FITNESS_VALUE = eINSTANCE.getFitness_FitnessValue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

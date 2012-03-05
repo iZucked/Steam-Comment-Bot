@@ -170,22 +170,13 @@ public interface InputPackage extends EPackage {
 	int ASSIGNMENT__ASSIGN_TO_SPOT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Next Assignment</b></em>' reference.
+	 * The feature id for the '<em><b>Assigned Objects</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSIGNMENT__NEXT_ASSIGNMENT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Assigned Object</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASSIGNMENT__ASSIGNED_OBJECT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int ASSIGNMENT__ASSIGNED_OBJECTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Assignment</em>' class.
@@ -194,7 +185,7 @@ public interface InputPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ASSIGNMENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int ASSIGNMENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 
 	/**
@@ -251,26 +242,15 @@ public interface InputPackage extends EPackage {
 	EAttribute getAssignment_AssignToSpot();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.input.Assignment#getNextAssignment <em>Next Assignment</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.input.Assignment#getAssignedObjects <em>Assigned Objects</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Next Assignment</em>'.
-	 * @see com.mmxlabs.models.lng.input.Assignment#getNextAssignment()
+	 * @return the meta object for the reference list '<em>Assigned Objects</em>'.
+	 * @see com.mmxlabs.models.lng.input.Assignment#getAssignedObjects()
 	 * @see #getAssignment()
 	 * @generated
 	 */
-	EReference getAssignment_NextAssignment();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.input.Assignment#getAssignedObject <em>Assigned Object</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Assigned Object</em>'.
-	 * @see com.mmxlabs.models.lng.input.Assignment#getAssignedObject()
-	 * @see #getAssignment()
-	 * @generated
-	 */
-	EReference getAssignment_AssignedObject();
+	EReference getAssignment_AssignedObjects();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -339,20 +319,12 @@ public interface InputPackage extends EPackage {
 		EAttribute ASSIGNMENT__ASSIGN_TO_SPOT = eINSTANCE.getAssignment_AssignToSpot();
 
 		/**
-		 * The meta object literal for the '<em><b>Next Assignment</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Assigned Objects</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ASSIGNMENT__NEXT_ASSIGNMENT = eINSTANCE.getAssignment_NextAssignment();
-
-		/**
-		 * The meta object literal for the '<em><b>Assigned Object</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ASSIGNMENT__ASSIGNED_OBJECT = eINSTANCE.getAssignment_AssignedObject();
+		EReference ASSIGNMENT__ASSIGNED_OBJECTS = eINSTANCE.getAssignment_AssignedObjects();
 
 	}
 

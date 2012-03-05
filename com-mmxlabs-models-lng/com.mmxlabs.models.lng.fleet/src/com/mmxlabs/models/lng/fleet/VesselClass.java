@@ -30,6 +30,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getWarmingTime <em>Warming Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingTime <em>Cooling Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingVolume <em>Cooling Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getRouteParameters <em>Route Parameters</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  * </ul>
  * </p>
  *
@@ -339,6 +341,48 @@ public interface VesselClass extends AVesselClass {
 	 * @generated
 	 */
 	void setCoolingVolume(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Route Parameters</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Route Parameters</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Route Parameters</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_RouteParameters()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<VesselClassRouteParameters> getRouteParameters();
+
+	/**
+	 * Returns the value of the '<em><b>Pilot Light Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Pilot Light Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pilot Light Rate</em>' attribute.
+	 * @see #setPilotLightRate(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_PilotLightRate()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getPilotLightRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pilot Light Rate</em>' attribute.
+	 * @see #getPilotLightRate()
+	 * @generated
+	 */
+	void setPilotLightRate(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

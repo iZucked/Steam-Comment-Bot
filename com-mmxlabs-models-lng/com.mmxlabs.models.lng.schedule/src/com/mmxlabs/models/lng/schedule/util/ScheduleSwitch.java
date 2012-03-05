@@ -106,6 +106,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				SlotVisit slotVisit = (SlotVisit)theEObject;
 				T result = caseSlotVisit(slotVisit);
 				if (result == null) result = caseEvent(slotVisit);
+				if (result == null) result = caseFuelUsage(slotVisit);
 				if (result == null) result = caseMMXObject(slotVisit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -181,6 +182,14 @@ public class ScheduleSwitch<T> extends Switch<T> {
 			case SchedulePackage.FUEL_AMOUNT: {
 				FuelAmount fuelAmount = (FuelAmount)theEObject;
 				T result = caseFuelAmount(fuelAmount);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.FITNESS: {
+				Fitness fitness = (Fitness)theEObject;
+				T result = caseFitness(fitness);
+				if (result == null) result = caseNamedObject(fitness);
+				if (result == null) result = caseMMXObject(fitness);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -410,6 +419,21 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseFuelAmount(FuelAmount object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Fitness</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fitness</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFitness(Fitness object) {
 		return null;
 	}
 

@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
@@ -65,5 +66,15 @@ public class BaseFuelComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_equivalenceFactorEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the equivalenceFactor feature on BaseFuel
+	 *
+	 * @generated
+	 */
+	protected void add_equivalenceFactorEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.BASE_FUEL__EQUIVALENCE_FACTOR));
 	}
 }

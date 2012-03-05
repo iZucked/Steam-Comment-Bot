@@ -12,7 +12,7 @@ package com.mmxlabs.models.lng.schedule;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.SlotVisit#getSlot <em>Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotVisit#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
  * </p>
  *
@@ -20,32 +20,32 @@ package com.mmxlabs.models.lng.schedule;
  * @model abstract="true"
  * @generated
  */
-public interface SlotVisit extends Event {
+public interface SlotVisit extends Event, FuelUsage {
 	/**
-	 * Returns the value of the '<em><b>Slot</b></em>' reference.
+	 * Returns the value of the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Slot</em>' reference isn't clear,
+	 * If the meaning of the '<em>Slot Allocation</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Slot</em>' reference.
-	 * @see #setSlot(SlotAllocation)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotVisit_Slot()
+	 * @return the value of the '<em>Slot Allocation</em>' reference.
+	 * @see #setSlotAllocation(SlotAllocation)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotVisit_SlotAllocation()
 	 * @model required="true"
 	 * @generated
 	 */
-	SlotAllocation getSlot();
+	SlotAllocation getSlotAllocation();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotVisit#getSlot <em>Slot</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotVisit#getSlotAllocation <em>Slot Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Slot</em>' reference.
-	 * @see #getSlot()
+	 * @param value the new value of the '<em>Slot Allocation</em>' reference.
+	 * @see #getSlotAllocation()
 	 * @generated
 	 */
-	void setSlot(SlotAllocation value);
+	void setSlotAllocation(SlotAllocation value);
 
 } // end of  SlotVisit
 

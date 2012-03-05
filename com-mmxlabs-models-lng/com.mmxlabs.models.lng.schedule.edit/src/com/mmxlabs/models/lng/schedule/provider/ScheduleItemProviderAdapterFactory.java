@@ -373,6 +373,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.Fitness} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FitnessItemProvider fitnessItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.Fitness}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFitnessAdapter() {
+		if (fitnessItemProvider == null) {
+			fitnessItemProvider = new FitnessItemProvider(this);
+		}
+
+		return fitnessItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -484,6 +507,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (cargoAllocationItemProvider != null) cargoAllocationItemProvider.dispose();
 		if (slotAllocationItemProvider != null) slotAllocationItemProvider.dispose();
 		if (fuelAmountItemProvider != null) fuelAmountItemProvider.dispose();
+		if (fitnessItemProvider != null) fitnessItemProvider.dispose();
 	}
 
 }

@@ -141,6 +141,15 @@ public interface ScheduleFactory extends EFactory {
 	FuelAmount createFuelAmount();
 
 	/**
+	 * Returns a new object of class '<em>Fitness</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fitness</em>'.
+	 * @generated
+	 */
+	Fitness createFitness();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

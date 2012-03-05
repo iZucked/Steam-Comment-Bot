@@ -123,6 +123,15 @@ public interface FleetFactory extends EFactory {
 	MaintenanceEvent createMaintenanceEvent();
 
 	/**
+	 * Returns a new object of class '<em>Vessel Class Route Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Class Route Parameters</em>'.
+	 * @generated
+	 */
+	VesselClassRouteParameters createVesselClassRouteParameters();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

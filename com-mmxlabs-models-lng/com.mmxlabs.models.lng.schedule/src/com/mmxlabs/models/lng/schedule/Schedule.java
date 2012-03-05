@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargos <em>Unscheduled Cargos</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getAllocations <em>Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSlotAllocations <em>Slot Allocations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getFitnesses <em>Fitnesses</em>}</li>
  * </ul>
  * </p>
  *
@@ -117,6 +118,22 @@ public interface Schedule extends MMXObject {
 	 * @generated
 	 */
 	EList<SlotAllocation> getSlotAllocations();
+
+	/**
+	 * Returns the value of the '<em><b>Fitnesses</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.Fitness}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fitnesses</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fitnesses</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_Fitnesses()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Fitness> getFitnesses();
 
 } // end of  Schedule
 

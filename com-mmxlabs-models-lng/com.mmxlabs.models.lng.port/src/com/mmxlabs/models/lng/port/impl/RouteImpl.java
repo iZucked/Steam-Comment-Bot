@@ -34,7 +34,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getLines <em>Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#isCanal <em>Canal</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getAdditionalTravelTime <em>Additional Travel Time</em>}</li>
  * </ul>
  * </p>
  *
@@ -70,26 +69,6 @@ public class RouteImpl extends ARouteImpl implements Route {
 	 * @ordered
 	 */
 	protected boolean canal = CANAL_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getAdditionalTravelTime() <em>Additional Travel Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAdditionalTravelTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int ADDITIONAL_TRAVEL_TIME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getAdditionalTravelTime() <em>Additional Travel Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAdditionalTravelTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected int additionalTravelTime = ADDITIONAL_TRAVEL_TIME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -148,27 +127,6 @@ public class RouteImpl extends ARouteImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getAdditionalTravelTime() {
-		return additionalTravelTime;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAdditionalTravelTime(int newAdditionalTravelTime) {
-		int oldAdditionalTravelTime = additionalTravelTime;
-		additionalTravelTime = newAdditionalTravelTime;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ADDITIONAL_TRAVEL_TIME, oldAdditionalTravelTime, additionalTravelTime));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -190,8 +148,6 @@ public class RouteImpl extends ARouteImpl implements Route {
 				return getLines();
 			case PortPackage.ROUTE__CANAL:
 				return isCanal();
-			case PortPackage.ROUTE__ADDITIONAL_TRAVEL_TIME:
-				return getAdditionalTravelTime();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -212,9 +168,6 @@ public class RouteImpl extends ARouteImpl implements Route {
 			case PortPackage.ROUTE__CANAL:
 				setCanal((Boolean)newValue);
 				return;
-			case PortPackage.ROUTE__ADDITIONAL_TRAVEL_TIME:
-				setAdditionalTravelTime((Integer)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -233,9 +186,6 @@ public class RouteImpl extends ARouteImpl implements Route {
 			case PortPackage.ROUTE__CANAL:
 				setCanal(CANAL_EDEFAULT);
 				return;
-			case PortPackage.ROUTE__ADDITIONAL_TRAVEL_TIME:
-				setAdditionalTravelTime(ADDITIONAL_TRAVEL_TIME_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -252,8 +202,6 @@ public class RouteImpl extends ARouteImpl implements Route {
 				return lines != null && !lines.isEmpty();
 			case PortPackage.ROUTE__CANAL:
 				return canal != CANAL_EDEFAULT;
-			case PortPackage.ROUTE__ADDITIONAL_TRAVEL_TIME:
-				return additionalTravelTime != ADDITIONAL_TRAVEL_TIME_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -270,8 +218,6 @@ public class RouteImpl extends ARouteImpl implements Route {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (canal: ");
 		result.append(canal);
-		result.append(", additionalTravelTime: ");
-		result.append(additionalTravelTime);
 		result.append(')');
 		return result.toString();
 	}

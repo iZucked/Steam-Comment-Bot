@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortCapability;
 import com.mmxlabs.models.lng.port.PortPackage;
 
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.impl.APortImpl;
 
 import java.util.Collection;
@@ -31,6 +32,7 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultStartTime <em>Default Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#isAllowCooldown <em>Allow Cooldown</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultWindowSize <em>Default Window Size</em>}</li>
  * </ul>
  * </p>
  *
@@ -155,6 +157,26 @@ public class PortImpl extends APortImpl implements Port {
 	 * @ordered
 	 */
 	protected boolean allowCooldown = ALLOW_COOLDOWN_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDefaultWindowSize() <em>Default Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultWindowSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DEFAULT_WINDOW_SIZE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getDefaultWindowSize() <em>Default Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultWindowSize()
+	 * @generated
+	 * @ordered
+	 */
+	protected int defaultWindowSize = DEFAULT_WINDOW_SIZE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -318,6 +340,27 @@ public class PortImpl extends APortImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getDefaultWindowSize() {
+		return defaultWindowSize;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDefaultWindowSize(int newDefaultWindowSize) {
+		int oldDefaultWindowSize = defaultWindowSize;
+		defaultWindowSize = newDefaultWindowSize;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_WINDOW_SIZE, oldDefaultWindowSize, defaultWindowSize));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -335,6 +378,8 @@ public class PortImpl extends APortImpl implements Port {
 				return getDefaultStartTime();
 			case PortPackage.PORT__ALLOW_COOLDOWN:
 				return isAllowCooldown();
+			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
+				return getDefaultWindowSize();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -370,6 +415,9 @@ public class PortImpl extends APortImpl implements Port {
 			case PortPackage.PORT__ALLOW_COOLDOWN:
 				setAllowCooldown((Boolean)newValue);
 				return;
+			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
+				setDefaultWindowSize((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -403,6 +451,9 @@ public class PortImpl extends APortImpl implements Port {
 			case PortPackage.PORT__ALLOW_COOLDOWN:
 				setAllowCooldown(ALLOW_COOLDOWN_EDEFAULT);
 				return;
+			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
+				setDefaultWindowSize(DEFAULT_WINDOW_SIZE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -429,6 +480,8 @@ public class PortImpl extends APortImpl implements Port {
 				return defaultStartTime != DEFAULT_START_TIME_EDEFAULT;
 			case PortPackage.PORT__ALLOW_COOLDOWN:
 				return allowCooldown != ALLOW_COOLDOWN_EDEFAULT;
+			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
+				return defaultWindowSize != DEFAULT_WINDOW_SIZE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -457,6 +510,8 @@ public class PortImpl extends APortImpl implements Port {
 		result.append(defaultStartTime);
 		result.append(", allowCooldown: ");
 		result.append(allowCooldown);
+		result.append(", defaultWindowSize: ");
+		result.append(defaultWindowSize);
 		result.append(')');
 		return result.toString();
 	}

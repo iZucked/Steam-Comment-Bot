@@ -76,6 +76,7 @@ public class PortComponentHelper implements IComponentHelper {
 		add_cvValueEditor(detailComposite, topClass);
 		add_defaultStartTimeEditor(detailComposite, topClass);
 		add_allowCooldownEditor(detailComposite, topClass);
+		add_defaultWindowSizeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the capabilities feature on Port
@@ -137,5 +138,14 @@ public class PortComponentHelper implements IComponentHelper {
 	 */
 	protected void add_allowCooldownEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__ALLOW_COOLDOWN));
+	}
+
+	/**
+	 * Create the editor for the defaultWindowSize feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_defaultWindowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE));
 	}
 }

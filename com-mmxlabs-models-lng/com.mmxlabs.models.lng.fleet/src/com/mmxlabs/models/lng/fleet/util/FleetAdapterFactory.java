@@ -129,6 +129,10 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createMaintenanceEventAdapter();
 			}
 			@Override
+			public Adapter caseVesselClassRouteParameters(VesselClassRouteParameters object) {
+				return createVesselClassRouteParametersAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -349,6 +353,20 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMaintenanceEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters <em>Vessel Class Route Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClassRouteParameters
+	 * @generated
+	 */
+	public Adapter createVesselClassRouteParametersAdapter() {
 		return null;
 	}
 

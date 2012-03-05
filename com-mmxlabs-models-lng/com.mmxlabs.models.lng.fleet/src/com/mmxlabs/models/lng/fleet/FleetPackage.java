@@ -316,13 +316,31 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Route Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__ROUTE_PARAMETERS = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Pilot Light Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 12;
+	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl <em>Vessel Event</em>}' class.
@@ -562,13 +580,22 @@ public interface FleetPackage extends EPackage {
 	int BASE_FUEL__NAME = TypesPackage.ABASE_FUEL__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Equivalence Factor</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__EQUIVALENCE_FACTOR = TypesPackage.ABASE_FUEL_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Base Fuel</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL_FEATURE_COUNT = TypesPackage.ABASE_FUEL_FEATURE_COUNT + 0;
+	int BASE_FUEL_FEATURE_COUNT = TypesPackage.ABASE_FUEL_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
@@ -780,13 +807,31 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT_EVENT__HEEL_OPTIONS = VESSEL_EVENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__REPOSITIONING_FEE = VESSEL_EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Hire Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__HIRE_RATE = VESSEL_EVENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Charter Out Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 2;
+	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
@@ -1174,6 +1219,98 @@ public interface FleetPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl <em>Vessel Class Route Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClassRouteParameters()
+	 * @generated
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS = 12;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Route</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extra Transit Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Laden Consumption Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Laden NBO Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Consumption Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Ballast NBO Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Class Route Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.Vessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1381,6 +1518,28 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClass_CoolingVolume();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.VesselClass#getRouteParameters <em>Route Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Route Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getRouteParameters()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EReference getVesselClass_RouteParameters();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pilot Light Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_PilotLightRate();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselEvent <em>Vessel Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1510,6 +1669,17 @@ public interface FleetPackage extends EPackage {
 	EClass getBaseFuel();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.BaseFuel#getEquivalenceFactor <em>Equivalence Factor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Equivalence Factor</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.BaseFuel#getEquivalenceFactor()
+	 * @see #getBaseFuel()
+	 * @generated
+	 */
+	EAttribute getBaseFuel_EquivalenceFactor();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.DryDockEvent <em>Dry Dock Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1550,6 +1720,28 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCharterOutEvent_HeelOptions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CharterOutEvent#getRepositioningFee <em>Repositioning Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CharterOutEvent#getRepositioningFee()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EAttribute getCharterOutEvent_RepositioningFee();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CharterOutEvent#getHireRate <em>Hire Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hire Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CharterOutEvent#getHireRate()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EAttribute getCharterOutEvent_HireRate();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.HeelOptions <em>Heel Options</em>}'.
@@ -1789,6 +1981,82 @@ public interface FleetPackage extends EPackage {
 	EClass getMaintenanceEvent();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters <em>Vessel Class Route Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Class Route Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClassRouteParameters
+	 * @generated
+	 */
+	EClass getVesselClassRouteParameters();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRoute <em>Route</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Route</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRoute()
+	 * @see #getVesselClassRouteParameters()
+	 * @generated
+	 */
+	EReference getVesselClassRouteParameters_Route();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getExtraTransitTime <em>Extra Transit Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Extra Transit Time</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getExtraTransitTime()
+	 * @see #getVesselClassRouteParameters()
+	 * @generated
+	 */
+	EAttribute getVesselClassRouteParameters_ExtraTransitTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenConsumptionRate <em>Laden Consumption Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden Consumption Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenConsumptionRate()
+	 * @see #getVesselClassRouteParameters()
+	 * @generated
+	 */
+	EAttribute getVesselClassRouteParameters_LadenConsumptionRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenNBORate <em>Laden NBO Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden NBO Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenNBORate()
+	 * @see #getVesselClassRouteParameters()
+	 * @generated
+	 */
+	EAttribute getVesselClassRouteParameters_LadenNBORate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getBallastConsumptionRate <em>Ballast Consumption Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Consumption Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getBallastConsumptionRate()
+	 * @see #getVesselClassRouteParameters()
+	 * @generated
+	 */
+	EAttribute getVesselClassRouteParameters_BallastConsumptionRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getBallastNBORate <em>Ballast NBO Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast NBO Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getBallastNBORate()
+	 * @see #getVesselClassRouteParameters()
+	 * @generated
+	 */
+	EAttribute getVesselClassRouteParameters_BallastNBORate();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1967,6 +2235,22 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL_CLASS__COOLING_VOLUME = eINSTANCE.getVesselClass_CoolingVolume();
 
 		/**
+		 * The meta object literal for the '<em><b>Route Parameters</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS__ROUTE_PARAMETERS = eINSTANCE.getVesselClass_RouteParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Pilot Light Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__PILOT_LIGHT_RATE = eINSTANCE.getVesselClass_PilotLightRate();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl <em>Vessel Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2069,6 +2353,14 @@ public interface FleetPackage extends EPackage {
 		EClass BASE_FUEL = eINSTANCE.getBaseFuel();
 
 		/**
+		 * The meta object literal for the '<em><b>Equivalence Factor</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_FUEL__EQUIVALENCE_FACTOR = eINSTANCE.getBaseFuel_EquivalenceFactor();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2103,6 +2395,22 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHARTER_OUT_EVENT__HEEL_OPTIONS = eINSTANCE.getCharterOutEvent_HeelOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_EVENT__REPOSITIONING_FEE = eINSTANCE.getCharterOutEvent_RepositioningFee();
+
+		/**
+		 * The meta object literal for the '<em><b>Hire Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_EVENT__HIRE_RATE = eINSTANCE.getCharterOutEvent_HireRate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
@@ -2289,6 +2597,64 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EClass MAINTENANCE_EVENT = eINSTANCE.getMaintenanceEvent();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl <em>Vessel Class Route Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClassRouteParameters()
+		 * @generated
+		 */
+		EClass VESSEL_CLASS_ROUTE_PARAMETERS = eINSTANCE.getVesselClassRouteParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE = eINSTANCE.getVesselClassRouteParameters_Route();
+
+		/**
+		 * The meta object literal for the '<em><b>Extra Transit Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME = eINSTANCE.getVesselClassRouteParameters_ExtraTransitTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Consumption Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE = eINSTANCE.getVesselClassRouteParameters_LadenConsumptionRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden NBO Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE = eINSTANCE.getVesselClassRouteParameters_LadenNBORate();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Consumption Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE = eINSTANCE.getVesselClassRouteParameters_BallastConsumptionRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast NBO Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE = eINSTANCE.getVesselClassRouteParameters_BallastNBORate();
 
 	}
 

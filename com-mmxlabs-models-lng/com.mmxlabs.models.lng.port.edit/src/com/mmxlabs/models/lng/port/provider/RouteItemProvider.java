@@ -67,7 +67,6 @@ public class RouteItemProvider
 			super.getPropertyDescriptors(object);
 
 			addCanalPropertyDescriptor(object);
-			addAdditionalTravelTimePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -90,28 +89,6 @@ public class RouteItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Additional Travel Time feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAdditionalTravelTimePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Route_additionalTravelTime_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Route_additionalTravelTime_feature", "_UI_Route_type"),
-				 PortPackage.Literals.ROUTE__ADDITIONAL_TRAVEL_TIME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -184,7 +161,6 @@ public class RouteItemProvider
 
 		switch (notification.getFeatureID(Route.class)) {
 			case PortPackage.ROUTE__CANAL:
-			case PortPackage.ROUTE__ADDITIONAL_TRAVEL_TIME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.ROUTE__LINES:

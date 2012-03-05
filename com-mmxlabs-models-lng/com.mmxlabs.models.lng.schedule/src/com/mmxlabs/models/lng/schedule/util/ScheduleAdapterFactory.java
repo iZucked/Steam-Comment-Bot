@@ -134,6 +134,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createFuelAmountAdapter();
 			}
 			@Override
+			public Adapter caseFitness(Fitness object) {
+				return createFitnessAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -372,6 +376,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createFuelAmountAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.Fitness <em>Fitness</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.Fitness
+	 * @generated
+	 */
+	public Adapter createFitnessAdapter() {
 		return null;
 	}
 

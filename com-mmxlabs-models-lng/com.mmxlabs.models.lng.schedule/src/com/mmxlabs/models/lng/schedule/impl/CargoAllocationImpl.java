@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 
@@ -30,6 +32,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLoadVolume <em>Load Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getDischargeVolume <em>Discharge Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getInputCargo <em>Input Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLadenLeg <em>Laden Leg</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getBallastLeg <em>Ballast Leg</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLadenIdle <em>Laden Idle</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getBallastIdle <em>Ballast Idle</em>}</li>
  * </ul>
  * </p>
  *
@@ -114,6 +120,46 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @ordered
 	 */
 	protected boolean inputCargoESet;
+
+	/**
+	 * The cached value of the '{@link #getLadenLeg() <em>Laden Leg</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLadenLeg()
+	 * @generated
+	 * @ordered
+	 */
+	protected Journey ladenLeg;
+
+	/**
+	 * The cached value of the '{@link #getBallastLeg() <em>Ballast Leg</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastLeg()
+	 * @generated
+	 * @ordered
+	 */
+	protected Journey ballastLeg;
+
+	/**
+	 * The cached value of the '{@link #getLadenIdle() <em>Laden Idle</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLadenIdle()
+	 * @generated
+	 * @ordered
+	 */
+	protected Idle ladenIdle;
+
+	/**
+	 * The cached value of the '{@link #getBallastIdle() <em>Ballast Idle</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastIdle()
+	 * @generated
+	 * @ordered
+	 */
+	protected Idle ballastIdle;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -320,6 +366,158 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Journey getLadenLeg() {
+		if (ladenLeg != null && ladenLeg.eIsProxy()) {
+			InternalEObject oldLadenLeg = (InternalEObject)ladenLeg;
+			ladenLeg = (Journey)eResolveProxy(oldLadenLeg);
+			if (ladenLeg != oldLadenLeg) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__LADEN_LEG, oldLadenLeg, ladenLeg));
+			}
+		}
+		return ladenLeg;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Journey basicGetLadenLeg() {
+		return ladenLeg;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLadenLeg(Journey newLadenLeg) {
+		Journey oldLadenLeg = ladenLeg;
+		ladenLeg = newLadenLeg;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__LADEN_LEG, oldLadenLeg, ladenLeg));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Journey getBallastLeg() {
+		if (ballastLeg != null && ballastLeg.eIsProxy()) {
+			InternalEObject oldBallastLeg = (InternalEObject)ballastLeg;
+			ballastLeg = (Journey)eResolveProxy(oldBallastLeg);
+			if (ballastLeg != oldBallastLeg) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG, oldBallastLeg, ballastLeg));
+			}
+		}
+		return ballastLeg;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Journey basicGetBallastLeg() {
+		return ballastLeg;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBallastLeg(Journey newBallastLeg) {
+		Journey oldBallastLeg = ballastLeg;
+		ballastLeg = newBallastLeg;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG, oldBallastLeg, ballastLeg));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Idle getLadenIdle() {
+		if (ladenIdle != null && ladenIdle.eIsProxy()) {
+			InternalEObject oldLadenIdle = (InternalEObject)ladenIdle;
+			ladenIdle = (Idle)eResolveProxy(oldLadenIdle);
+			if (ladenIdle != oldLadenIdle) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE, oldLadenIdle, ladenIdle));
+			}
+		}
+		return ladenIdle;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Idle basicGetLadenIdle() {
+		return ladenIdle;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLadenIdle(Idle newLadenIdle) {
+		Idle oldLadenIdle = ladenIdle;
+		ladenIdle = newLadenIdle;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE, oldLadenIdle, ladenIdle));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Idle getBallastIdle() {
+		if (ballastIdle != null && ballastIdle.eIsProxy()) {
+			InternalEObject oldBallastIdle = (InternalEObject)ballastIdle;
+			ballastIdle = (Idle)eResolveProxy(oldBallastIdle);
+			if (ballastIdle != oldBallastIdle) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE, oldBallastIdle, ballastIdle));
+			}
+		}
+		return ballastIdle;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Idle basicGetBallastIdle() {
+		return ballastIdle;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBallastIdle(Idle newBallastIdle) {
+		Idle oldBallastIdle = ballastIdle;
+		ballastIdle = newBallastIdle;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE, oldBallastIdle, ballastIdle));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -336,6 +534,18 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				if (resolve) return getInputCargo();
 				return basicGetInputCargo();
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
+				if (resolve) return getLadenLeg();
+				return basicGetLadenLeg();
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
+				if (resolve) return getBallastLeg();
+				return basicGetBallastLeg();
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
+				if (resolve) return getLadenIdle();
+				return basicGetLadenIdle();
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
+				if (resolve) return getBallastIdle();
+				return basicGetBallastIdle();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -362,6 +572,18 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				setInputCargo((Cargo)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
+				setLadenLeg((Journey)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
+				setBallastLeg((Journey)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
+				setLadenIdle((Idle)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
+				setBallastIdle((Idle)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -390,6 +612,18 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				unsetInputCargo();
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
+				setLadenLeg((Journey)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
+				setBallastLeg((Journey)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
+				setLadenIdle((Idle)null);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
+				setBallastIdle((Idle)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -412,6 +646,14 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return dischargeVolume != DISCHARGE_VOLUME_EDEFAULT;
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				return isSetInputCargo();
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
+				return ladenLeg != null;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
+				return ballastLeg != null;
+			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
+				return ladenIdle != null;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
+				return ballastIdle != null;
 		}
 		return super.eIsSet(featureID);
 	}

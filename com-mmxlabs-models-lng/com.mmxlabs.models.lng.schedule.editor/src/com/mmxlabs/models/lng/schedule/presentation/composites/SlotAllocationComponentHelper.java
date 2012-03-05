@@ -69,6 +69,7 @@ public class SlotAllocationComponentHelper implements IComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_slotEditor(detailComposite, topClass);
 		add_spotMarketEditor(detailComposite, topClass);
+		add_cargoAllocationEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slot feature on SlotAllocation
@@ -85,5 +86,14 @@ public class SlotAllocationComponentHelper implements IComponentHelper {
 	 */
 	protected void add_spotMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__SPOT_MARKET));
+	}
+
+	/**
+	 * Create the editor for the cargoAllocation feature on SlotAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_cargoAllocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__CARGO_ALLOCATION));
 	}
 }

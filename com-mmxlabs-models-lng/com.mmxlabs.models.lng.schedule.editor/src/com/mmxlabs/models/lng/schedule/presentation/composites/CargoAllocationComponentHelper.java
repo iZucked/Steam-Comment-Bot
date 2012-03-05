@@ -72,6 +72,10 @@ public class CargoAllocationComponentHelper implements IComponentHelper {
 		add_loadVolumeEditor(detailComposite, topClass);
 		add_dischargeVolumeEditor(detailComposite, topClass);
 		add_inputCargoEditor(detailComposite, topClass);
+		add_ladenLegEditor(detailComposite, topClass);
+		add_ballastLegEditor(detailComposite, topClass);
+		add_ladenIdleEditor(detailComposite, topClass);
+		add_ballastIdleEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the loadVisit feature on CargoAllocation
@@ -112,5 +116,41 @@ public class CargoAllocationComponentHelper implements IComponentHelper {
 	 */
 	protected void add_inputCargoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__INPUT_CARGO));
+	}
+
+	/**
+	 * Create the editor for the ladenLeg feature on CargoAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_ladenLegEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__LADEN_LEG));
+	}
+
+	/**
+	 * Create the editor for the ballastLeg feature on CargoAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_ballastLegEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_LEG));
+	}
+
+	/**
+	 * Create the editor for the ladenIdle feature on CargoAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_ladenIdleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__LADEN_IDLE));
+	}
+
+	/**
+	 * Create the editor for the ballastIdle feature on CargoAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_ballastIdleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_IDLE));
 	}
 }

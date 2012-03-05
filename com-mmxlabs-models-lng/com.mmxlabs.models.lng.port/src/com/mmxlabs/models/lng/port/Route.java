@@ -18,7 +18,6 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getLines <em>Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#isCanal <em>Canal</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Route#getAdditionalTravelTime <em>Additional Travel Time</em>}</li>
  * </ul>
  * </p>
  *
@@ -68,31 +67,5 @@ public interface Route extends ARoute {
 	 * @generated
 	 */
 	void setCanal(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Additional Travel Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Additional Travel Time</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Additional Travel Time</em>' attribute.
-	 * @see #setAdditionalTravelTime(int)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_AdditionalTravelTime()
-	 * @model required="true"
-	 * @generated
-	 */
-	int getAdditionalTravelTime();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Route#getAdditionalTravelTime <em>Additional Travel Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Additional Travel Time</em>' attribute.
-	 * @see #getAdditionalTravelTime()
-	 * @generated
-	 */
-	void setAdditionalTravelTime(int value);
 
 } // Route

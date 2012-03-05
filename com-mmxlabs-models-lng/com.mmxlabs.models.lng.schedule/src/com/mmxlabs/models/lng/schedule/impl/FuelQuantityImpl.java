@@ -69,7 +69,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final BigDecimal COST_EDEFAULT = null;
+	protected static final int COST_EDEFAULT = 0;
 
 	/**
 	 * The cached value of the '{@link #getCost() <em>Cost</em>}' attribute.
@@ -79,7 +79,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * @generated
 	 * @ordered
 	 */
-	protected BigDecimal cost = COST_EDEFAULT;
+	protected int cost = COST_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getAmounts() <em>Amounts</em>}' containment reference list.
@@ -136,7 +136,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public BigDecimal getCost() {
+	public int getCost() {
 		return cost;
 	}
 
@@ -145,8 +145,8 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCost(BigDecimal newCost) {
-		BigDecimal oldCost = cost;
+	public void setCost(int newCost) {
+		int oldCost = cost;
 		cost = newCost;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.FUEL_QUANTITY__COST, oldCost, cost));
@@ -209,7 +209,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 				setFuelName((String)newValue);
 				return;
 			case SchedulePackage.FUEL_QUANTITY__COST:
-				setCost((BigDecimal)newValue);
+				setCost((Integer)newValue);
 				return;
 			case SchedulePackage.FUEL_QUANTITY__AMOUNTS:
 				getAmounts().clear();
@@ -251,7 +251,7 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 			case SchedulePackage.FUEL_QUANTITY__FUEL_NAME:
 				return FUEL_NAME_EDEFAULT == null ? fuelName != null : !FUEL_NAME_EDEFAULT.equals(fuelName);
 			case SchedulePackage.FUEL_QUANTITY__COST:
-				return COST_EDEFAULT == null ? cost != null : !COST_EDEFAULT.equals(cost);
+				return cost != COST_EDEFAULT;
 			case SchedulePackage.FUEL_QUANTITY__AMOUNTS:
 				return amounts != null && !amounts.isEmpty();
 		}

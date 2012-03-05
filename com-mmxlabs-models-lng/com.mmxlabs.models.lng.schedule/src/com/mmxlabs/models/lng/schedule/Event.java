@@ -19,7 +19,7 @@ import java.util.Date;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getStart <em>Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getEnd <em>End</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getLocation <em>Location</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getPort <em>Port</em>}</li>
  * </ul>
  * </p>
  *
@@ -81,30 +81,30 @@ public interface Event extends MMXObject {
 	void setEnd(Date value);
 
 	/**
-	 * Returns the value of the '<em><b>Location</b></em>' reference.
+	 * Returns the value of the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Location</em>' reference isn't clear,
+	 * If the meaning of the '<em>Port</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Location</em>' reference.
-	 * @see #setLocation(Port)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_Location()
+	 * @return the value of the '<em>Port</em>' reference.
+	 * @see #setPort(Port)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_Port()
 	 * @model required="true"
 	 * @generated
 	 */
-	Port getLocation();
+	Port getPort();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getLocation <em>Location</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getPort <em>Port</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Location</em>' reference.
-	 * @see #getLocation()
+	 * @param value the new value of the '<em>Port</em>' reference.
+	 * @see #getPort()
 	 * @generated
 	 */
-	void setLocation(Port value);
+	void setPort(Port value);
 
 } // end of  Event
 

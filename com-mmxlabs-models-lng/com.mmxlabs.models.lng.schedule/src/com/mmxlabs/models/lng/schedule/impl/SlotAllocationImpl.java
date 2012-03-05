@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -23,6 +24,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSpotMarket <em>Spot Market</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
  * </ul>
  * </p>
  *
@@ -66,6 +68,16 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @ordered
 	 */
 	protected boolean spotMarketESet;
+
+	/**
+	 * The cached value of the '{@link #getCargoAllocation() <em>Cargo Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoAllocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected CargoAllocation cargoAllocation;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -217,6 +229,44 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CargoAllocation getCargoAllocation() {
+		if (cargoAllocation != null && cargoAllocation.eIsProxy()) {
+			InternalEObject oldCargoAllocation = (InternalEObject)cargoAllocation;
+			cargoAllocation = (CargoAllocation)eResolveProxy(oldCargoAllocation);
+			if (cargoAllocation != oldCargoAllocation) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION, oldCargoAllocation, cargoAllocation));
+			}
+		}
+		return cargoAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CargoAllocation basicGetCargoAllocation() {
+		return cargoAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCargoAllocation(CargoAllocation newCargoAllocation) {
+		CargoAllocation oldCargoAllocation = cargoAllocation;
+		cargoAllocation = newCargoAllocation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION, oldCargoAllocation, cargoAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -226,6 +276,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__SPOT_MARKET:
 				if (resolve) return getSpotMarket();
 				return basicGetSpotMarket();
+			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
+				if (resolve) return getCargoAllocation();
+				return basicGetCargoAllocation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -243,6 +296,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__SPOT_MARKET:
 				setSpotMarket((ASpotMarket)newValue);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
+				setCargoAllocation((CargoAllocation)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -262,6 +318,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__SPOT_MARKET:
 				unsetSpotMarket();
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
+				setCargoAllocation((CargoAllocation)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -278,6 +337,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return isSetSlot();
 			case SchedulePackage.SLOT_ALLOCATION__SPOT_MARKET:
 				return isSetSpotMarket();
+			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
+				return cargoAllocation != null;
 		}
 		return super.eIsSet(featureID);
 	}

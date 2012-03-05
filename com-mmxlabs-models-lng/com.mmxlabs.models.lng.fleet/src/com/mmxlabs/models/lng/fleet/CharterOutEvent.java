@@ -15,6 +15,8 @@ import com.mmxlabs.models.lng.port.Port;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.CharterOutEvent#getRelocateTo <em>Relocate To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.CharterOutEvent#getHeelOptions <em>Heel Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.CharterOutEvent#getRepositioningFee <em>Repositioning Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.CharterOutEvent#getHireRate <em>Hire Rate</em>}</li>
  * </ul>
  * </p>
  *
@@ -101,6 +103,58 @@ public interface CharterOutEvent extends VesselEvent {
 	 * @generated
 	 */
 	void setHeelOptions(HeelOptions value);
+
+	/**
+	 * Returns the value of the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Repositioning Fee</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #setRepositioningFee(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getCharterOutEvent_RepositioningFee()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getRepositioningFee();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.CharterOutEvent#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #getRepositioningFee()
+	 * @generated
+	 */
+	void setRepositioningFee(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Hire Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Hire Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hire Rate</em>' attribute.
+	 * @see #setHireRate(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getCharterOutEvent_HireRate()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getHireRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.CharterOutEvent#getHireRate <em>Hire Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hire Rate</em>' attribute.
+	 * @see #getHireRate()
+	 * @generated
+	 */
+	void setHireRate(int value);
 
 } // end of  CharterOutEvent
 

@@ -20,6 +20,10 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadVolume <em>Load Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeVolume <em>Discharge Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getInputCargo <em>Input Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenLeg <em>Laden Leg</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastLeg <em>Ballast Leg</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenIdle <em>Laden Idle</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastIdle <em>Ballast Idle</em>}</li>
  * </ul>
  * </p>
  *
@@ -184,6 +188,110 @@ public interface CargoAllocation extends MMXObject {
 	 * @generated
 	 */
 	boolean isSetInputCargo();
+
+	/**
+	 * Returns the value of the '<em><b>Laden Leg</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Laden Leg</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Laden Leg</em>' reference.
+	 * @see #setLadenLeg(Journey)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_LadenLeg()
+	 * @model required="true"
+	 * @generated
+	 */
+	Journey getLadenLeg();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenLeg <em>Laden Leg</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Laden Leg</em>' reference.
+	 * @see #getLadenLeg()
+	 * @generated
+	 */
+	void setLadenLeg(Journey value);
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Leg</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ballast Leg</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Leg</em>' reference.
+	 * @see #setBallastLeg(Journey)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_BallastLeg()
+	 * @model required="true"
+	 * @generated
+	 */
+	Journey getBallastLeg();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastLeg <em>Ballast Leg</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Leg</em>' reference.
+	 * @see #getBallastLeg()
+	 * @generated
+	 */
+	void setBallastLeg(Journey value);
+
+	/**
+	 * Returns the value of the '<em><b>Laden Idle</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Laden Idle</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Laden Idle</em>' reference.
+	 * @see #setLadenIdle(Idle)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_LadenIdle()
+	 * @model required="true"
+	 * @generated
+	 */
+	Idle getLadenIdle();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenIdle <em>Laden Idle</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Laden Idle</em>' reference.
+	 * @see #getLadenIdle()
+	 * @generated
+	 */
+	void setLadenIdle(Idle value);
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Idle</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ballast Idle</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Idle</em>' reference.
+	 * @see #setBallastIdle(Idle)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_BallastIdle()
+	 * @model required="true"
+	 * @generated
+	 */
+	Idle getBallastIdle();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastIdle <em>Ballast Idle</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Idle</em>' reference.
+	 * @see #getBallastIdle()
+	 * @generated
+	 */
+	void setBallastIdle(Idle value);
 
 } // end of  CargoAllocation
 

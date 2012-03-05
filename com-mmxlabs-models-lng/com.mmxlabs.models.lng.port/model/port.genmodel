@@ -3,24 +3,30 @@
     xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.port/src"
     modelPluginID="com.mmxlabs.models.lng.port" templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
-    dynamicTemplates="true" modelName="Port" importerID="org.eclipse.emf.importer.ecore"
+    dynamicTemplates="true" redirection="" modelName="Port" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
   <foreignModel>port.ecore</foreignModel>
   <genPackages prefix="Port" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
       ecorePackage="port.ecore#/">
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="port.ecore#//PortCapability">
-      <genEnumLiterals ecoreEnumLiteral="port.ecore#//PortCapability/Load"/>
-      <genEnumLiterals ecoreEnumLiteral="port.ecore#//PortCapability/Discharge"/>
-      <genEnumLiterals ecoreEnumLiteral="port.ecore#//PortCapability/Drydock"/>
-    </genEnums>
     <genClasses ecoreClass="port.ecore#//Port">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/capabilities"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/timeZone"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/loadDuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/dischargeDuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/cvValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/defaultStartTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/allowCooldown"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//Route">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/lines"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Route/canal"/>
     </genClasses>
-    <genClasses ecoreClass="port.ecore#//PortGroup"/>
+    <genClasses ecoreClass="port.ecore#//PortGroup">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//PortGroup/contents"/>
+      <genOperations ecoreOperation="port.ecore#//PortGroup/collect">
+        <genParameters ecoreParameter="port.ecore#//PortGroup/collect/marked"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="port.ecore#//RouteLine">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//RouteLine/from"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//RouteLine/to"/>
@@ -28,6 +34,7 @@
     </genClasses>
     <genClasses ecoreClass="port.ecore#//PortModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/ports"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/portGroups"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/routes"/>
     </genClasses>
   </genPackages>

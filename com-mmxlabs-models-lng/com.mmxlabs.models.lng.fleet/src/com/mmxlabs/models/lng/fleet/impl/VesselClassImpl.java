@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 
 import com.mmxlabs.models.lng.types.APortSet;
@@ -28,7 +29,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -49,6 +52,8 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getWarmingTime <em>Warming Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getCoolingTime <em>Cooling Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getCoolingVolume <em>Cooling Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getRouteParameters <em>Route Parameters</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  * </ul>
  * </p>
  *
@@ -254,6 +259,36 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * @ordered
 	 */
 	protected int coolingVolume = COOLING_VOLUME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getRouteParameters() <em>Route Parameters</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRouteParameters()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselClassRouteParameters> routeParameters;
+
+	/**
+	 * The default value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPilotLightRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PILOT_LIGHT_RATE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPilotLightRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected int pilotLightRate = PILOT_LIGHT_RATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -583,6 +618,39 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<VesselClassRouteParameters> getRouteParameters() {
+		if (routeParameters == null) {
+			routeParameters = new EObjectContainmentEList<VesselClassRouteParameters>(VesselClassRouteParameters.class, this, FleetPackage.VESSEL_CLASS__ROUTE_PARAMETERS);
+		}
+		return routeParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getPilotLightRate() {
+		return pilotLightRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPilotLightRate(int newPilotLightRate) {
+		int oldPilotLightRate = pilotLightRate;
+		pilotLightRate = newPilotLightRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE, oldPilotLightRate, pilotLightRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<AVessel> collect(EList<AVesselSet> marked) {
 		if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
 			final org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();
@@ -610,6 +678,8 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return basicSetLadenAttributes(null, msgs);
 			case FleetPackage.VESSEL_CLASS__BALLAST_ATTRIBUTES:
 				return basicSetBallastAttributes(null, msgs);
+			case FleetPackage.VESSEL_CLASS__ROUTE_PARAMETERS:
+				return ((InternalEList<?>)getRouteParameters()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -647,6 +717,10 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return getCoolingTime();
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				return getCoolingVolume();
+			case FleetPackage.VESSEL_CLASS__ROUTE_PARAMETERS:
+				return getRouteParameters();
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				return getPilotLightRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -697,6 +771,13 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				setCoolingVolume((Integer)newValue);
 				return;
+			case FleetPackage.VESSEL_CLASS__ROUTE_PARAMETERS:
+				getRouteParameters().clear();
+				getRouteParameters().addAll((Collection<? extends VesselClassRouteParameters>)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				setPilotLightRate((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -745,6 +826,12 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				setCoolingVolume(COOLING_VOLUME_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL_CLASS__ROUTE_PARAMETERS:
+				getRouteParameters().clear();
+				return;
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				setPilotLightRate(PILOT_LIGHT_RATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -781,6 +868,10 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return coolingTime != COOLING_TIME_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				return coolingVolume != COOLING_VOLUME_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__ROUTE_PARAMETERS:
+				return routeParameters != null && !routeParameters.isEmpty();
+			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+				return pilotLightRate != PILOT_LIGHT_RATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -811,6 +902,8 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 		result.append(coolingTime);
 		result.append(", coolingVolume: ");
 		result.append(coolingVolume);
+		result.append(", pilotLightRate: ");
+		result.append(pilotLightRate);
 		result.append(')');
 		return result.toString();
 	}

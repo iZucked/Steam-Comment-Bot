@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.port;
 
 import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.types.PortCapability;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -22,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultStartTime <em>Default Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#isAllowCooldown <em>Allow Cooldown</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSize <em>Default Window Size</em>}</li>
  * </ul>
  * </p>
  *
@@ -33,8 +35,8 @@ public interface Port extends APort {
 
 	/**
 	 * Returns the value of the '<em><b>Capabilities</b></em>' attribute list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.port.PortCapability}.
-	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.PortCapability}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.PortCapability}.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.PortCapability}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Capabilities</em>' attribute list isn't clear,
@@ -42,7 +44,7 @@ public interface Port extends APort {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Capabilities</em>' attribute list.
-	 * @see com.mmxlabs.models.lng.port.PortCapability
+	 * @see com.mmxlabs.models.lng.types.PortCapability
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_Capabilities()
 	 * @model
 	 * @generated
@@ -204,4 +206,30 @@ public interface Port extends APort {
 	 * @generated
 	 */
 	void setAllowCooldown(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Default Window Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Default Window Size</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Default Window Size</em>' attribute.
+	 * @see #setDefaultWindowSize(int)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_DefaultWindowSize()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getDefaultWindowSize();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSize <em>Default Window Size</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Default Window Size</em>' attribute.
+	 * @see #getDefaultWindowSize()
+	 * @generated
+	 */
+	void setDefaultWindowSize(int value);
 } // Port

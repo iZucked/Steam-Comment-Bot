@@ -172,13 +172,22 @@ public interface PortPackage extends EPackage {
 	int PORT__ALLOW_COOLDOWN = TypesPackage.APORT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Default Window Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DEFAULT_WINDOW_SIZE = TypesPackage.APORT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_FEATURE_COUNT + 7;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -245,22 +254,13 @@ public interface PortPackage extends EPackage {
 	int ROUTE__CANAL = TypesPackage.AROUTE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Additional Travel Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROUTE__ADDITIONAL_TRAVEL_TIME = TypesPackage.AROUTE_FEATURE_COUNT + 2;
-
-	/**
 	 * The number of structural features of the '<em>Route</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_FEATURE_COUNT = TypesPackage.AROUTE_FEATURE_COUNT + 3;
+	int ROUTE_FEATURE_COUNT = TypesPackage.AROUTE_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.
@@ -474,17 +474,6 @@ public interface PortPackage extends EPackage {
 	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.PortCapability <em>Capability</em>}' enum.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.port.PortCapability
-	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getPortCapability()
-	 * @generated
-	 */
-	int PORT_CAPABILITY = 5;
-
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -572,6 +561,17 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_AllowCooldown();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSize <em>Default Window Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default Window Size</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getDefaultWindowSize()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_DefaultWindowSize();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Route <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -602,17 +602,6 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getRoute_Canal();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Route#getAdditionalTravelTime <em>Additional Travel Time</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Additional Travel Time</em>'.
-	 * @see com.mmxlabs.models.lng.port.Route#getAdditionalTravelTime()
-	 * @see #getRoute()
-	 * @generated
-	 */
-	EAttribute getRoute_AdditionalTravelTime();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.PortGroup <em>Group</em>}'.
@@ -722,16 +711,6 @@ public interface PortPackage extends EPackage {
 	EReference getPortModel_Routes();
 
 	/**
-	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.port.PortCapability <em>Capability</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Capability</em>'.
-	 * @see com.mmxlabs.models.lng.port.PortCapability
-	 * @generated
-	 */
-	EEnum getPortCapability();
-
-	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -820,6 +799,14 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT__ALLOW_COOLDOWN = eINSTANCE.getPort_AllowCooldown();
 
 		/**
+		 * The meta object literal for the '<em><b>Default Window Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__DEFAULT_WINDOW_SIZE = eINSTANCE.getPort_DefaultWindowSize();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -844,14 +831,6 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ROUTE__CANAL = eINSTANCE.getRoute_Canal();
-
-		/**
-		 * The meta object literal for the '<em><b>Additional Travel Time</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ROUTE__ADDITIONAL_TRAVEL_TIME = eINSTANCE.getRoute_AdditionalTravelTime();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.
@@ -938,16 +917,6 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORT_MODEL__ROUTES = eINSTANCE.getPortModel_Routes();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.PortCapability <em>Capability</em>}' enum.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.port.PortCapability
-		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getPortCapability()
-		 * @generated
-		 */
-		EEnum PORT_CAPABILITY = eINSTANCE.getPortCapability();
 
 	}
 

@@ -69,7 +69,7 @@ public class EventComponentHelper implements IComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_startEditor(detailComposite, topClass);
 		add_endEditor(detailComposite, topClass);
-		add_locationEditor(detailComposite, topClass);
+		add_portEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the start feature on Event
@@ -88,11 +88,11 @@ public class EventComponentHelper implements IComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__END));
 	}
 	/**
-	 * Create the editor for the location feature on Event
+	 * Create the editor for the port feature on Event
 	 *
 	 * @generated
 	 */
-	protected void add_locationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__LOCATION));
+	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__PORT));
 	}
 }

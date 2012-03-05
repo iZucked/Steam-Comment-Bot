@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
@@ -34,6 +35,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getFitnesses <em>Fitnesses</em>}</li>
  * </ul>
  * </p>
  *
@@ -87,6 +89,16 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @ordered
 	 */
 	protected boolean vesselClassESet;
+
+	/**
+	 * The cached value of the '{@link #getFitnesses() <em>Fitnesses</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFitnesses()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Fitness> fitnesses;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -250,11 +262,25 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<Fitness> getFitnesses() {
+		if (fitnesses == null) {
+			fitnesses = new EObjectContainmentEList<Fitness>(Fitness.class, this, SchedulePackage.SEQUENCE__FITNESSES);
+		}
+		return fitnesses;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case SchedulePackage.SEQUENCE__EVENTS:
 				return ((InternalEList<?>)getEvents()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SEQUENCE__FITNESSES:
+				return ((InternalEList<?>)getFitnesses()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -275,6 +301,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			case SchedulePackage.SEQUENCE__VESSEL_CLASS:
 				if (resolve) return getVesselClass();
 				return basicGetVesselClass();
+			case SchedulePackage.SEQUENCE__FITNESSES:
+				return getFitnesses();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -298,6 +326,10 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			case SchedulePackage.SEQUENCE__VESSEL_CLASS:
 				setVesselClass((VesselClass)newValue);
 				return;
+			case SchedulePackage.SEQUENCE__FITNESSES:
+				getFitnesses().clear();
+				getFitnesses().addAll((Collection<? extends Fitness>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -319,6 +351,9 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			case SchedulePackage.SEQUENCE__VESSEL_CLASS:
 				unsetVesselClass();
 				return;
+			case SchedulePackage.SEQUENCE__FITNESSES:
+				getFitnesses().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -337,6 +372,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				return isSetVessel();
 			case SchedulePackage.SEQUENCE__VESSEL_CLASS:
 				return isSetVesselClass();
+			case SchedulePackage.SEQUENCE__FITNESSES:
+				return fitnesses != null && !fitnesses.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

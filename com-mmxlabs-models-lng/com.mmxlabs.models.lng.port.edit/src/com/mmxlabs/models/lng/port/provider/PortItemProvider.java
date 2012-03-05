@@ -70,6 +70,7 @@ public class PortItemProvider
 			addCvValuePropertyDescriptor(object);
 			addDefaultStartTimePropertyDescriptor(object);
 			addAllowCooldownPropertyDescriptor(object);
+			addDefaultWindowSizePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -229,6 +230,28 @@ public class PortItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Default Window Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDefaultWindowSizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_defaultWindowSize_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultWindowSize_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Port.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -272,6 +295,7 @@ public class PortItemProvider
 			case PortPackage.PORT__CV_VALUE:
 			case PortPackage.PORT__DEFAULT_START_TIME:
 			case PortPackage.PORT__ALLOW_COOLDOWN:
+			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

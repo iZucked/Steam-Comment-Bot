@@ -44,6 +44,9 @@ public class SlotVisitComponentHelper implements IComponentHelper {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
 			final IComponentHelper helper = registry.getComponentHelper(SchedulePackage.Literals.EVENT);
 			if (helper != null) superClassesHelpers.add(helper);
+		} {
+			final IComponentHelper helper = registry.getComponentHelper(SchedulePackage.Literals.FUEL_USAGE);
+			if (helper != null) superClassesHelpers.add(helper);
 		}
 	}
 	
@@ -65,14 +68,14 @@ public class SlotVisitComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_slotEditor(detailComposite, topClass);
+		add_slotAllocationEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the slot feature on SlotVisit
+	 * Create the editor for the slotAllocation feature on SlotVisit
 	 *
 	 * @generated
 	 */
-	protected void add_slotEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_VISIT__SLOT));
+	protected void add_slotAllocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_VISIT__SLOT_ALLOCATION));
 	}
 }

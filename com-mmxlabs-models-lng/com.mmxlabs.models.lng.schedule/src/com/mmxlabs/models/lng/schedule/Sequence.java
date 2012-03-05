@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getFitnesses <em>Fitnesses</em>}</li>
  * </ul>
  * </p>
  *
@@ -149,6 +150,22 @@ public interface Sequence extends MMXObject {
 	 * @generated
 	 */
 	boolean isSetVesselClass();
+
+	/**
+	 * Returns the value of the '<em><b>Fitnesses</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.Fitness}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fitnesses</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fitnesses</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_Fitnesses()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Fitness> getFitnesses();
 
 } // end of  Sequence
 

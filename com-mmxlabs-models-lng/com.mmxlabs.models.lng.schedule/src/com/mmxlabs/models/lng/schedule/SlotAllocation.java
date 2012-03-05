@@ -17,6 +17,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSpotMarket <em>Spot Market</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCargoAllocation <em>Cargo Allocation</em>}</li>
  * </ul>
  * </p>
  *
@@ -130,6 +131,32 @@ public interface SlotAllocation extends MMXObject {
 	 * @generated
 	 */
 	boolean isSetSpotMarket();
+
+	/**
+	 * Returns the value of the '<em><b>Cargo Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo Allocation</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo Allocation</em>' reference.
+	 * @see #setCargoAllocation(CargoAllocation)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_CargoAllocation()
+	 * @model required="true"
+	 * @generated
+	 */
+	CargoAllocation getCargoAllocation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCargoAllocation <em>Cargo Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo Allocation</em>' reference.
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	void setCargoAllocation(CargoAllocation value);
 
 } // end of  SlotAllocation
 

@@ -28,7 +28,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getStart <em>Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getEnd <em>End</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getLocation <em>Location</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getPort <em>Port</em>}</li>
  * </ul>
  * </p>
  *
@@ -76,14 +76,14 @@ public abstract class EventImpl extends MMXObjectImpl implements Event {
 	protected Date end = END_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getLocation() <em>Location</em>}' reference.
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLocation()
+	 * @see #getPort()
 	 * @generated
 	 * @ordered
 	 */
-	protected Port location;
+	protected Port port;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -151,16 +151,16 @@ public abstract class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port getLocation() {
-		if (location != null && location.eIsProxy()) {
-			InternalEObject oldLocation = (InternalEObject)location;
-			location = (Port)eResolveProxy(oldLocation);
-			if (location != oldLocation) {
+	public Port getPort() {
+		if (port != null && port.eIsProxy()) {
+			InternalEObject oldPort = (InternalEObject)port;
+			port = (Port)eResolveProxy(oldPort);
+			if (port != oldPort) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.EVENT__LOCATION, oldLocation, location));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.EVENT__PORT, oldPort, port));
 			}
 		}
-		return location;
+		return port;
 	}
 
 	/**
@@ -168,8 +168,8 @@ public abstract class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port basicGetLocation() {
-		return location;
+	public Port basicGetPort() {
+		return port;
 	}
 
 	/**
@@ -177,11 +177,11 @@ public abstract class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLocation(Port newLocation) {
-		Port oldLocation = location;
-		location = newLocation;
+	public void setPort(Port newPort) {
+		Port oldPort = port;
+		port = newPort;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__LOCATION, oldLocation, location));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__PORT, oldPort, port));
 	}
 
 	/**
@@ -196,9 +196,9 @@ public abstract class EventImpl extends MMXObjectImpl implements Event {
 				return getStart();
 			case SchedulePackage.EVENT__END:
 				return getEnd();
-			case SchedulePackage.EVENT__LOCATION:
-				if (resolve) return getLocation();
-				return basicGetLocation();
+			case SchedulePackage.EVENT__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -217,8 +217,8 @@ public abstract class EventImpl extends MMXObjectImpl implements Event {
 			case SchedulePackage.EVENT__END:
 				setEnd((Date)newValue);
 				return;
-			case SchedulePackage.EVENT__LOCATION:
-				setLocation((Port)newValue);
+			case SchedulePackage.EVENT__PORT:
+				setPort((Port)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -238,8 +238,8 @@ public abstract class EventImpl extends MMXObjectImpl implements Event {
 			case SchedulePackage.EVENT__END:
 				setEnd(END_EDEFAULT);
 				return;
-			case SchedulePackage.EVENT__LOCATION:
-				setLocation((Port)null);
+			case SchedulePackage.EVENT__PORT:
+				setPort((Port)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -257,8 +257,8 @@ public abstract class EventImpl extends MMXObjectImpl implements Event {
 				return START_EDEFAULT == null ? start != null : !START_EDEFAULT.equals(start);
 			case SchedulePackage.EVENT__END:
 				return END_EDEFAULT == null ? end != null : !END_EDEFAULT.equals(end);
-			case SchedulePackage.EVENT__LOCATION:
-				return location != null;
+			case SchedulePackage.EVENT__PORT:
+				return port != null;
 		}
 		return super.eIsSet(featureID);
 	}

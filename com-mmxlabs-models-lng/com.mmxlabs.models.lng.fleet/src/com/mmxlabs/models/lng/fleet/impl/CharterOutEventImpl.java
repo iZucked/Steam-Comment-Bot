@@ -26,6 +26,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl#getRelocateTo <em>Relocate To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl#getHeelOptions <em>Heel Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl#getHireRate <em>Hire Rate</em>}</li>
  * </ul>
  * </p>
  *
@@ -60,6 +62,46 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * @ordered
 	 */
 	protected HeelOptions heelOptions;
+
+	/**
+	 * The default value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepositioningFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int REPOSITIONING_FEE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepositioningFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected int repositioningFee = REPOSITIONING_FEE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getHireRate() <em>Hire Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHireRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HIRE_RATE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHireRate() <em>Hire Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHireRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected int hireRate = HIRE_RATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -191,6 +233,48 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getRepositioningFee() {
+		return repositioningFee;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRepositioningFee(int newRepositioningFee) {
+		int oldRepositioningFee = repositioningFee;
+		repositioningFee = newRepositioningFee;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE, oldRepositioningFee, repositioningFee));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHireRate() {
+		return hireRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHireRate(int newHireRate) {
+		int oldHireRate = hireRate;
+		hireRate = newHireRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.CHARTER_OUT_EVENT__HIRE_RATE, oldHireRate, hireRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -213,6 +297,10 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 				return basicGetRelocateTo();
 			case FleetPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
 				return getHeelOptions();
+			case FleetPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
+				return getRepositioningFee();
+			case FleetPackage.CHARTER_OUT_EVENT__HIRE_RATE:
+				return getHireRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -230,6 +318,12 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 				return;
 			case FleetPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
 				setHeelOptions((HeelOptions)newValue);
+				return;
+			case FleetPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
+				setRepositioningFee((Integer)newValue);
+				return;
+			case FleetPackage.CHARTER_OUT_EVENT__HIRE_RATE:
+				setHireRate((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -249,6 +343,12 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 			case FleetPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
 				setHeelOptions((HeelOptions)null);
 				return;
+			case FleetPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
+				setRepositioningFee(REPOSITIONING_FEE_EDEFAULT);
+				return;
+			case FleetPackage.CHARTER_OUT_EVENT__HIRE_RATE:
+				setHireRate(HIRE_RATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -265,8 +365,30 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 				return isSetRelocateTo();
 			case FleetPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
 				return heelOptions != null;
+			case FleetPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
+				return repositioningFee != REPOSITIONING_FEE_EDEFAULT;
+			case FleetPackage.CHARTER_OUT_EVENT__HIRE_RATE:
+				return hireRate != HIRE_RATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (repositioningFee: ");
+		result.append(repositioningFee);
+		result.append(", hireRate: ");
+		result.append(hireRate);
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of CharterOutEventImpl

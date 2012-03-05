@@ -155,17 +155,8 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAssignment_NextAssignment() {
+	public EReference getAssignment_AssignedObjects() {
 		return (EReference)assignmentEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getAssignment_AssignedObject() {
-		return (EReference)assignmentEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -202,8 +193,7 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 		assignmentEClass = createEClass(ASSIGNMENT);
 		createEReference(assignmentEClass, ASSIGNMENT__VESSELS);
 		createEAttribute(assignmentEClass, ASSIGNMENT__ASSIGN_TO_SPOT);
-		createEReference(assignmentEClass, ASSIGNMENT__NEXT_ASSIGNMENT);
-		createEReference(assignmentEClass, ASSIGNMENT__ASSIGNED_OBJECT);
+		createEReference(assignmentEClass, ASSIGNMENT__ASSIGNED_OBJECTS);
 	}
 
 	/**
@@ -249,8 +239,7 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 		initEClass(assignmentEClass, Assignment.class, "Assignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAssignment_Vessels(), theTypesPackage.getAVesselSet(), null, "vessels", null, 0, -1, Assignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAssignment_AssignToSpot(), ecorePackage.getEBoolean(), "assignToSpot", null, 1, 1, Assignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAssignment_NextAssignment(), this.getAssignment(), null, "nextAssignment", null, 1, 1, Assignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAssignment_AssignedObject(), theMMXCorePackage.getUUIDObject(), null, "assignedObject", null, 1, 1, Assignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAssignment_AssignedObjects(), theMMXCorePackage.getUUIDObject(), null, "assignedObjects", null, 0, -1, Assignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

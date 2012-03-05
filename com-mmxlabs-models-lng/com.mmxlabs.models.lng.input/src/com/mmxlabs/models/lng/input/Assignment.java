@@ -20,8 +20,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.input.Assignment#getVessels <em>Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.Assignment#isAssignToSpot <em>Assign To Spot</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.input.Assignment#getNextAssignment <em>Next Assignment</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.input.Assignment#getAssignedObject <em>Assigned Object</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.input.Assignment#getAssignedObjects <em>Assigned Objects</em>}</li>
  * </ul>
  * </p>
  *
@@ -73,56 +72,20 @@ public interface Assignment extends MMXObject {
 	void setAssignToSpot(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Next Assignment</b></em>' reference.
+	 * Returns the value of the '<em><b>Assigned Objects</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.mmxcore.UUIDObject}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Next Assignment</em>' reference isn't clear,
+	 * If the meaning of the '<em>Assigned Objects</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Next Assignment</em>' reference.
-	 * @see #setNextAssignment(Assignment)
-	 * @see com.mmxlabs.models.lng.input.InputPackage#getAssignment_NextAssignment()
-	 * @model required="true"
+	 * @return the value of the '<em>Assigned Objects</em>' reference list.
+	 * @see com.mmxlabs.models.lng.input.InputPackage#getAssignment_AssignedObjects()
+	 * @model
 	 * @generated
 	 */
-	Assignment getNextAssignment();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.input.Assignment#getNextAssignment <em>Next Assignment</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Next Assignment</em>' reference.
-	 * @see #getNextAssignment()
-	 * @generated
-	 */
-	void setNextAssignment(Assignment value);
-
-	/**
-	 * Returns the value of the '<em><b>Assigned Object</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Assigned Object</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Assigned Object</em>' reference.
-	 * @see #setAssignedObject(UUIDObject)
-	 * @see com.mmxlabs.models.lng.input.InputPackage#getAssignment_AssignedObject()
-	 * @model required="true"
-	 * @generated
-	 */
-	UUIDObject getAssignedObject();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.input.Assignment#getAssignedObject <em>Assigned Object</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Assigned Object</em>' reference.
-	 * @see #getAssignedObject()
-	 * @generated
-	 */
-	void setAssignedObject(UUIDObject value);
+	EList<UUIDObject> getAssignedObjects();
 
 } // end of  Assignment
 

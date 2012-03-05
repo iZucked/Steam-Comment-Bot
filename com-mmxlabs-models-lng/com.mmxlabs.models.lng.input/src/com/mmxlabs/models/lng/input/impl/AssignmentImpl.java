@@ -34,8 +34,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.input.impl.AssignmentImpl#getVessels <em>Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.impl.AssignmentImpl#isAssignToSpot <em>Assign To Spot</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.input.impl.AssignmentImpl#getNextAssignment <em>Next Assignment</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.input.impl.AssignmentImpl#getAssignedObject <em>Assigned Object</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.input.impl.AssignmentImpl#getAssignedObjects <em>Assigned Objects</em>}</li>
  * </ul>
  * </p>
  *
@@ -73,24 +72,14 @@ public class AssignmentImpl extends MMXObjectImpl implements Assignment {
 	protected boolean assignToSpot = ASSIGN_TO_SPOT_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getNextAssignment() <em>Next Assignment</em>}' reference.
+	 * The cached value of the '{@link #getAssignedObjects() <em>Assigned Objects</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getNextAssignment()
+	 * @see #getAssignedObjects()
 	 * @generated
 	 * @ordered
 	 */
-	protected Assignment nextAssignment;
-
-	/**
-	 * The cached value of the '{@link #getAssignedObject() <em>Assigned Object</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAssignedObject()
-	 * @generated
-	 * @ordered
-	 */
-	protected UUIDObject assignedObject;
+	protected EList<UUIDObject> assignedObjects;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -149,75 +138,11 @@ public class AssignmentImpl extends MMXObjectImpl implements Assignment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Assignment getNextAssignment() {
-		if (nextAssignment != null && nextAssignment.eIsProxy()) {
-			InternalEObject oldNextAssignment = (InternalEObject)nextAssignment;
-			nextAssignment = (Assignment)eResolveProxy(oldNextAssignment);
-			if (nextAssignment != oldNextAssignment) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, InputPackage.ASSIGNMENT__NEXT_ASSIGNMENT, oldNextAssignment, nextAssignment));
-			}
+	public EList<UUIDObject> getAssignedObjects() {
+		if (assignedObjects == null) {
+			assignedObjects = new EObjectResolvingEList<UUIDObject>(UUIDObject.class, this, InputPackage.ASSIGNMENT__ASSIGNED_OBJECTS);
 		}
-		return nextAssignment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Assignment basicGetNextAssignment() {
-		return nextAssignment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setNextAssignment(Assignment newNextAssignment) {
-		Assignment oldNextAssignment = nextAssignment;
-		nextAssignment = newNextAssignment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, InputPackage.ASSIGNMENT__NEXT_ASSIGNMENT, oldNextAssignment, nextAssignment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public UUIDObject getAssignedObject() {
-		if (assignedObject != null && assignedObject.eIsProxy()) {
-			InternalEObject oldAssignedObject = (InternalEObject)assignedObject;
-			assignedObject = (UUIDObject)eResolveProxy(oldAssignedObject);
-			if (assignedObject != oldAssignedObject) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, InputPackage.ASSIGNMENT__ASSIGNED_OBJECT, oldAssignedObject, assignedObject));
-			}
-		}
-		return assignedObject;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public UUIDObject basicGetAssignedObject() {
-		return assignedObject;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAssignedObject(UUIDObject newAssignedObject) {
-		UUIDObject oldAssignedObject = assignedObject;
-		assignedObject = newAssignedObject;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, InputPackage.ASSIGNMENT__ASSIGNED_OBJECT, oldAssignedObject, assignedObject));
+		return assignedObjects;
 	}
 
 	/**
@@ -232,12 +157,8 @@ public class AssignmentImpl extends MMXObjectImpl implements Assignment {
 				return getVessels();
 			case InputPackage.ASSIGNMENT__ASSIGN_TO_SPOT:
 				return isAssignToSpot();
-			case InputPackage.ASSIGNMENT__NEXT_ASSIGNMENT:
-				if (resolve) return getNextAssignment();
-				return basicGetNextAssignment();
-			case InputPackage.ASSIGNMENT__ASSIGNED_OBJECT:
-				if (resolve) return getAssignedObject();
-				return basicGetAssignedObject();
+			case InputPackage.ASSIGNMENT__ASSIGNED_OBJECTS:
+				return getAssignedObjects();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -258,11 +179,9 @@ public class AssignmentImpl extends MMXObjectImpl implements Assignment {
 			case InputPackage.ASSIGNMENT__ASSIGN_TO_SPOT:
 				setAssignToSpot((Boolean)newValue);
 				return;
-			case InputPackage.ASSIGNMENT__NEXT_ASSIGNMENT:
-				setNextAssignment((Assignment)newValue);
-				return;
-			case InputPackage.ASSIGNMENT__ASSIGNED_OBJECT:
-				setAssignedObject((UUIDObject)newValue);
+			case InputPackage.ASSIGNMENT__ASSIGNED_OBJECTS:
+				getAssignedObjects().clear();
+				getAssignedObjects().addAll((Collection<? extends UUIDObject>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -282,11 +201,8 @@ public class AssignmentImpl extends MMXObjectImpl implements Assignment {
 			case InputPackage.ASSIGNMENT__ASSIGN_TO_SPOT:
 				setAssignToSpot(ASSIGN_TO_SPOT_EDEFAULT);
 				return;
-			case InputPackage.ASSIGNMENT__NEXT_ASSIGNMENT:
-				setNextAssignment((Assignment)null);
-				return;
-			case InputPackage.ASSIGNMENT__ASSIGNED_OBJECT:
-				setAssignedObject((UUIDObject)null);
+			case InputPackage.ASSIGNMENT__ASSIGNED_OBJECTS:
+				getAssignedObjects().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -304,10 +220,8 @@ public class AssignmentImpl extends MMXObjectImpl implements Assignment {
 				return vessels != null && !vessels.isEmpty();
 			case InputPackage.ASSIGNMENT__ASSIGN_TO_SPOT:
 				return assignToSpot != ASSIGN_TO_SPOT_EDEFAULT;
-			case InputPackage.ASSIGNMENT__NEXT_ASSIGNMENT:
-				return nextAssignment != null;
-			case InputPackage.ASSIGNMENT__ASSIGNED_OBJECT:
-				return assignedObject != null;
+			case InputPackage.ASSIGNMENT__ASSIGNED_OBJECTS:
+				return assignedObjects != null && !assignedObjects.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

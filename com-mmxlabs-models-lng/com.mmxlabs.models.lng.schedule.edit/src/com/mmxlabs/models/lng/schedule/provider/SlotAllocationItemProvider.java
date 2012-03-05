@@ -62,6 +62,7 @@ public class SlotAllocationItemProvider
 
 			addSlotPropertyDescriptor(object);
 			addSpotMarketPropertyDescriptor(object);
+			addCargoAllocationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -102,6 +103,28 @@ public class SlotAllocationItemProvider
 				 getString("_UI_SlotAllocation_spotMarket_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_SlotAllocation_spotMarket_feature", "_UI_SlotAllocation_type"),
 				 SchedulePackage.Literals.SLOT_ALLOCATION__SPOT_MARKET,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cargo Allocation feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCargoAllocationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotAllocation_cargoAllocation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotAllocation_cargoAllocation_feature", "_UI_SlotAllocation_type"),
+				 SchedulePackage.Literals.SLOT_ALLOCATION__CARGO_ALLOCATION,
 				 true,
 				 false,
 				 true,
