@@ -12,8 +12,13 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.RouteCostByVesselClass;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.ValidationSupport;
@@ -36,50 +41,62 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 			if (scenario != null) {
 				final StringBuffer missingCanalNames = new StringBuffer();
 				
-				PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
-				
-				
-				for (RouteCost routeCost : pricingModel.getRouteCosts()) {
-				}
-				final CanalModel canalModel = scenario.getCanalModel();
-				for (final Canal c : canalModel.getCanals()) {
-					boolean seenCanal = false;
-
-					for (final VesselClassCost vcc : vesselClass.getCanalCosts()) {
-						if (vcc.getCanal() == c) {
-							seenCanal = true;
-							break;
+				final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
+				final PortModel portModel = scenario.getSubModel(PortModel.class);
+				for (final Route route : portModel.getRoutes()) {
+					if (route.isCanal()) {
+						boolean seenCanalCost = false;
+						routeCosts:
+						for (final RouteCost routeCost : pricingModel.getRouteCosts()) {
+							for (final RouteCostByVesselClass classCost : routeCost.getCostsByClass()) {
+								if (classCost.getVesselClass() == vesselClass &&
+										routeCost.getRoute() == route) {
+									seenCanalCost = true;
+									break routeCosts;
+								}
+							}
+						}
+						
+						boolean seenCanalParameters = false;
+						canalParameters:
+							for (final VesselClassRouteParameters routeParameters : vesselClass.getRouteParameters()) {
+								if (route == routeParameters.getRoute()) {
+									seenCanalParameters = true;
+									break canalParameters;
+								}
+							}
+						
+						if (!(seenCanalParameters && seenCanalCost)) {
+							missingCanalNames.append(missingCanalNames.length() > 0 ? ", " : "");
+							missingCanalNames.append(route.getName());
 						}
 					}
-
-					if (!seenCanal) {
-						missingCanalNames.append(missingCanalNames.length() > 0 ? ", " : "");
-						missingCanalNames.append(c.getName());
-					}
 				}
+
 				if (missingCanalNames.length() > 0) {
 					final DetailConstraintStatusDecorator result = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselClass.getName(), missingCanalNames.toString()));
 
-					result.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_CanalCosts());
+					result.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_RouteParameters());
 					return result;
 				}
 			}
-		} else if (target instanceof VesselClassCost) {
-			final VesselClassCost vesselClassCost = (VesselClassCost) target;
-			final VesselClass vesselClass = (VesselClass) vesselClassCost.eContainer();
+		} else if (target instanceof RouteCostByVesselClass) {
+			final RouteCostByVesselClass vesselClassCost = (RouteCostByVesselClass) target;
+			
+			if (vesselClassCost.getLadenCost() == 0 || vesselClassCost.getBallastCost() == 0) {
 
-			if (vesselClassCost.getLadenCost() == 0 || vesselClassCost.getUnladenCost() == 0) {
-
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselClass.getName(), vesselClassCost.getCanal()
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselClassCost.getVesselClass().getName(), 
+						((RouteCost) vesselClassCost.eContainer())
+						.getRoute()
 						.getName()));
 
-				dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_CanalCosts());
+				dcsd.addEObjectAndFeature(target.eContainer(), PricingPackage.eINSTANCE.getRouteCost_CostsByClass());
 
 				if (vesselClassCost.getLadenCost() == 0)
-					dcsd.addEObjectAndFeature(vesselClassCost, FleetPackage.eINSTANCE.getVesselClassCost_LadenCost());
+					dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCostByVesselClass_LadenCost());
 
-				if (vesselClassCost.getUnladenCost() == 0)
-					dcsd.addEObjectAndFeature(vesselClassCost, FleetPackage.eINSTANCE.getVesselClassCost_UnladenCost());
+				if (vesselClassCost.getBallastCost() == 0)
+					dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCostByVesselClass_BallastCost());
 
 				return dcsd;
 			}
