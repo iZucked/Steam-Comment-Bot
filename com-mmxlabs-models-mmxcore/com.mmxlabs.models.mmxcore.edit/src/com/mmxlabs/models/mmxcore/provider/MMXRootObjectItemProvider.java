@@ -62,9 +62,32 @@ public class MMXRootObjectItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addNamePropertyDescriptor(object);
 			addVersionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NamedObject_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -138,7 +161,7 @@ public class MMXRootObjectItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((MMXRootObject)object).getUuid();
+		String label = ((MMXRootObject)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_MMXRootObject_type") :
 			getString("_UI_MMXRootObject_type") + " " + label;
@@ -156,6 +179,7 @@ public class MMXRootObjectItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(MMXRootObject.class)) {
+			case MMXCorePackage.MMX_ROOT_OBJECT__NAME:
 			case MMXCorePackage.MMX_ROOT_OBJECT__VERSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
