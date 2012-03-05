@@ -92,4 +92,6 @@
     <eLiterals name="DRYDOCK" value="2" literal="DRYDOCK"/>
     <eLiterals name="MAINTENANCE" value="3" literal="MAINTENANCE"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AOptimisationSettings" abstract="true"
+      eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
 </ecore:EPackage>
