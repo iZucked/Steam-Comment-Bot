@@ -6,21 +6,19 @@
  */
 package com.mmxlabs.models.lng.optimiser.presentation.composites;
 
-import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EClass;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for OptimiserModel instances
@@ -73,6 +71,7 @@ public class OptimiserModelComponentHelper implements IComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_settingsEditor(detailComposite, topClass);
+		add_activeSettingEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the settings feature on OptimiserModel
@@ -81,5 +80,14 @@ public class OptimiserModelComponentHelper implements IComponentHelper {
 	 */
 	protected void add_settingsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, OptimiserPackage.Literals.OPTIMISER_MODEL__SETTINGS));
+	}
+
+	/**
+	 * Create the editor for the activeSetting feature on OptimiserModel
+	 *
+	 * @generated
+	 */
+	protected void add_activeSettingEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, OptimiserPackage.Literals.OPTIMISER_MODEL__ACTIVE_SETTING));
 	}
 }

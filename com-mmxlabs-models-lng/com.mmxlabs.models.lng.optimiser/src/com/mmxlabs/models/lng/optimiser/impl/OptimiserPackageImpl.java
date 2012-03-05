@@ -6,6 +6,12 @@
  */
 package com.mmxlabs.models.lng.optimiser.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import com.mmxlabs.models.lng.optimiser.AnnealingSettings;
 import com.mmxlabs.models.lng.optimiser.Argument;
 import com.mmxlabs.models.lng.optimiser.Constraint;
@@ -15,15 +21,8 @@ import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
-
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -128,7 +127,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		isInited = true;
 
 		// Initialize simple dependencies
-		MMXCorePackage.eINSTANCE.eClass();
+		TypesPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theOptimiserPackage.createPackageContents();
@@ -476,6 +475,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
+		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -484,7 +484,7 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 		// Add supertypes to classes
 		optimiserModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		optimiserModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
-		optimiserSettingsEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		optimiserSettingsEClass.getESuperTypes().add(theTypesPackage.getAOptimisationSettings());
 		objectiveEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		constraintEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 

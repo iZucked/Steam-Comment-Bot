@@ -7,9 +7,9 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.optimiser;
-import com.mmxlabs.models.mmxcore.NamedObject;
-
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.types.AOptimisationSettings;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,7 +33,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface OptimiserSettings extends NamedObject {
+public interface OptimiserSettings extends AOptimisationSettings {
 	/**
 	 * Returns the value of the '<em><b>Objectives</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.optimiser.Objective}.

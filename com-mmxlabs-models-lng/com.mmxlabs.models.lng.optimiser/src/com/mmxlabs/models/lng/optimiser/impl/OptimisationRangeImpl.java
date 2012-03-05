@@ -7,17 +7,15 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.optimiser.impl;
-import com.mmxlabs.models.lng.optimiser.OptimisationRange;
-import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
-
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.lng.optimiser.OptimisationRange;
+import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 
 /**
  * <!-- begin-user-doc -->

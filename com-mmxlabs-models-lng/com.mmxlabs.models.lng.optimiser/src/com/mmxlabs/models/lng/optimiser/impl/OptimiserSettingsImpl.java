@@ -7,6 +7,17 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.optimiser.impl;
+import java.util.Collection;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import com.mmxlabs.models.lng.optimiser.AnnealingSettings;
 import com.mmxlabs.models.lng.optimiser.Argument;
 import com.mmxlabs.models.lng.optimiser.Constraint;
@@ -14,23 +25,7 @@ import com.mmxlabs.models.lng.optimiser.Objective;
 import com.mmxlabs.models.lng.optimiser.OptimisationRange;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
-
-import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
-
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import com.mmxlabs.models.lng.types.impl.AOptimisationSettingsImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -51,7 +46,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class OptimiserSettingsImpl extends NamedObjectImpl implements OptimiserSettings {
+public class OptimiserSettingsImpl extends AOptimisationSettingsImpl implements OptimiserSettings {
 	/**
 	 * The cached value of the '{@link #getObjectives() <em>Objectives</em>}' containment reference list.
 	 * <!-- begin-user-doc -->

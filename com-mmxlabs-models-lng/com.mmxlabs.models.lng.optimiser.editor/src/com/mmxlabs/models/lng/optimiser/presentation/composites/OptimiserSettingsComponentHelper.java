@@ -6,21 +6,19 @@
  */
 package com.mmxlabs.models.lng.optimiser.presentation.composites;
 
-import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EClass;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for OptimiserSettings instances
@@ -46,7 +44,7 @@ public class OptimiserSettingsComponentHelper implements IComponentHelper {
 	 */
 	public OptimiserSettingsComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.NAMED_OBJECT);
+			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.AOPTIMISATION_SETTINGS);
 			if (helper != null) superClassesHelpers.add(helper);
 		}
 	}
@@ -75,6 +73,7 @@ public class OptimiserSettingsComponentHelper implements IComponentHelper {
 		add_annealingSettingsEditor(detailComposite, topClass);
 		add_seedEditor(detailComposite, topClass);
 		add_argumentsEditor(detailComposite, topClass);
+		add_rewireEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the objectives feature on OptimiserSettings
@@ -123,5 +122,14 @@ public class OptimiserSettingsComponentHelper implements IComponentHelper {
 	 */
 	protected void add_argumentsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, OptimiserPackage.Literals.OPTIMISER_SETTINGS__ARGUMENTS));
+	}
+
+	/**
+	 * Create the editor for the rewire feature on OptimiserSettings
+	 *
+	 * @generated
+	 */
+	protected void add_rewireEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, OptimiserPackage.Literals.OPTIMISER_SETTINGS__REWIRE));
 	}
 }

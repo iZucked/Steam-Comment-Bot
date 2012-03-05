@@ -6,15 +6,21 @@
  */
 package com.mmxlabs.models.lng.optimiser.impl;
 
-import com.mmxlabs.models.lng.optimiser.*;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import com.mmxlabs.models.lng.optimiser.AnnealingSettings;
+import com.mmxlabs.models.lng.optimiser.Argument;
+import com.mmxlabs.models.lng.optimiser.Constraint;
+import com.mmxlabs.models.lng.optimiser.Objective;
+import com.mmxlabs.models.lng.optimiser.OptimisationRange;
+import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
+import com.mmxlabs.models.lng.optimiser.OptimiserModel;
+import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
+import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
 
 /**
  * <!-- begin-user-doc -->

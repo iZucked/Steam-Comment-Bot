@@ -6,18 +6,23 @@
  */
 package com.mmxlabs.models.lng.optimiser.util;
 
-import com.mmxlabs.models.lng.optimiser.*;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.optimiser.AnnealingSettings;
+import com.mmxlabs.models.lng.optimiser.Argument;
+import com.mmxlabs.models.lng.optimiser.Constraint;
+import com.mmxlabs.models.lng.optimiser.Objective;
+import com.mmxlabs.models.lng.optimiser.OptimisationRange;
+import com.mmxlabs.models.lng.optimiser.OptimiserModel;
+import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
+import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
+import com.mmxlabs.models.lng.types.AOptimisationSettings;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notifier;
-
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -114,6 +119,10 @@ public class OptimiserAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseNamedObject(NamedObject object) {
 				return createNamedObjectAdapter();
+			}
+			@Override
+			public Adapter caseAOptimisationSettings(AOptimisationSettings object) {
+				return createAOptimisationSettingsAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -272,6 +281,20 @@ public class OptimiserAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNamedObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AOptimisationSettings <em>AOptimisation Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.AOptimisationSettings
+	 * @generated
+	 */
+	public Adapter createAOptimisationSettingsAdapter() {
 		return null;
 	}
 

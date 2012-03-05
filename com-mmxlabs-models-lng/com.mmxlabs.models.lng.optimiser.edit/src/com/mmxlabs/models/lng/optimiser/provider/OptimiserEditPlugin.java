@@ -6,11 +6,11 @@
  */
 package com.mmxlabs.models.lng.optimiser.provider;
 
-import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
-
 import org.eclipse.emf.common.EMFPlugin;
-
 import org.eclipse.emf.common.util.ResourceLocator;
+
+import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
+import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 
 /**
  * This is the central singleton for the Optimiser edit plugin.
@@ -44,6 +44,7 @@ public final class OptimiserEditPlugin extends EMFPlugin {
 	public OptimiserEditPlugin() {
 		super
 		  (new ResourceLocator [] {
+		     LNGTypesEditPlugin.INSTANCE,
 		     MmxcoreEditPlugin.INSTANCE,
 		   });
 	}

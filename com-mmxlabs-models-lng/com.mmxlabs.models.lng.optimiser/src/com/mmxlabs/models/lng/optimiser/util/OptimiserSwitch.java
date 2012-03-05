@@ -6,16 +6,22 @@
  */
 package com.mmxlabs.models.lng.optimiser.util;
 
-import com.mmxlabs.models.lng.optimiser.*;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.util.Switch;
 
+import com.mmxlabs.models.lng.optimiser.AnnealingSettings;
+import com.mmxlabs.models.lng.optimiser.Argument;
+import com.mmxlabs.models.lng.optimiser.Constraint;
+import com.mmxlabs.models.lng.optimiser.Objective;
+import com.mmxlabs.models.lng.optimiser.OptimisationRange;
+import com.mmxlabs.models.lng.optimiser.OptimiserModel;
+import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
+import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
+import com.mmxlabs.models.lng.types.AOptimisationSettings;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-
-import org.eclipse.emf.ecore.util.Switch;
 
 /**
  * <!-- begin-user-doc -->
@@ -86,6 +92,8 @@ public class OptimiserSwitch<T> extends Switch<T> {
 			case OptimiserPackage.OPTIMISER_SETTINGS: {
 				OptimiserSettings optimiserSettings = (OptimiserSettings)theEObject;
 				T result = caseOptimiserSettings(optimiserSettings);
+				if (result == null) result = caseAOptimisationSettings(optimiserSettings);
+				if (result == null) result = caseUUIDObject(optimiserSettings);
 				if (result == null) result = caseNamedObject(optimiserSettings);
 				if (result == null) result = caseMMXObject(optimiserSettings);
 				if (result == null) result = defaultCase(theEObject);
@@ -276,6 +284,21 @@ public class OptimiserSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>AOptimisation Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>AOptimisation Settings</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAOptimisationSettings(AOptimisationSettings object) {
 		return null;
 	}
 

@@ -4,12 +4,13 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.optimiser/src"
     modelPluginID="com.mmxlabs.models.lng.optimiser" templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
     dynamicTemplates="true" modelName="Optimiser" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
+    complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
   <foreignModel>optimiser.ecore</foreignModel>
   <genPackages prefix="Optimiser" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
       ecorePackage="optimiser.ecore#/">
     <genClasses ecoreClass="optimiser.ecore#//OptimiserModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserModel/settings"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserModel/activeSetting"/>
     </genClasses>
     <genClasses ecoreClass="optimiser.ecore#//OptimiserSettings">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/objectives"/>
@@ -18,6 +19,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/annealingSettings"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimiserSettings/seed"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/arguments"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimiserSettings/rewire"/>
     </genClasses>
     <genClasses ecoreClass="optimiser.ecore#//Objective">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//Objective/weight"/>
