@@ -70,6 +70,10 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.BASE_FUEL_COST: return createBaseFuelCost();
 			case PricingPackage.SPOT_MARKET: return createSpotMarket();
 			case PricingPackage.PORT_COST: return createPortCost();
+			case PricingPackage.ROUTE_COST_BY_VESSEL_CLASS: return createRouteCostByVesselClass();
+			case PricingPackage.PORT_COST_VESSELS: return createPortCostVessels();
+			case PricingPackage.PORT_COST_ENTRY: return createPortCostEntry();
+			case PricingPackage.COOLDOWN_PRICE: return createCooldownPrice();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -213,6 +217,46 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public PortCost createPortCost() {
 		PortCostImpl portCost = new PortCostImpl();
 		return portCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RouteCostByVesselClass createRouteCostByVesselClass() {
+		RouteCostByVesselClassImpl routeCostByVesselClass = new RouteCostByVesselClassImpl();
+		return routeCostByVesselClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortCostVessels createPortCostVessels() {
+		PortCostVesselsImpl portCostVessels = new PortCostVesselsImpl();
+		return portCostVessels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortCostEntry createPortCostEntry() {
+		PortCostEntryImpl portCostEntry = new PortCostEntryImpl();
+		return portCostEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CooldownPrice createCooldownPrice() {
+		CooldownPriceImpl cooldownPrice = new CooldownPriceImpl();
+		return cooldownPrice;
 	}
 
 	/**

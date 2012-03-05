@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getFleetCost <em>Fleet Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getRouteCosts <em>Route Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getPortCosts <em>Port Costs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCooldownPrices <em>Cooldown Prices</em>}</li>
  * </ul>
  * </p>
  *
@@ -118,6 +119,22 @@ public interface PricingModel extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	EList<PortCost> getPortCosts();
+
+	/**
+	 * Returns the value of the '<em><b>Cooldown Prices</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.CooldownPrice}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cooldown Prices</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cooldown Prices</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_CooldownPrices()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<CooldownPrice> getCooldownPrices();
 
 } // end of  PricingModel
 

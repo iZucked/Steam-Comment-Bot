@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
+import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PortCost;
@@ -44,6 +45,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getFleetCost <em>Fleet Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getRouteCosts <em>Route Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getPortCosts <em>Port Costs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCooldownPrices <em>Cooldown Prices</em>}</li>
  * </ul>
  * </p>
  *
@@ -119,6 +121,16 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @ordered
 	 */
 	protected EList<PortCost> portCosts;
+
+	/**
+	 * The cached value of the '{@link #getCooldownPrices() <em>Cooldown Prices</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCooldownPrices()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CooldownPrice> cooldownPrices;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -256,6 +268,18 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<CooldownPrice> getCooldownPrices() {
+		if (cooldownPrices == null) {
+			cooldownPrices = new EObjectContainmentEList<CooldownPrice>(CooldownPrice.class, this, PricingPackage.PRICING_MODEL__COOLDOWN_PRICES);
+		}
+		return cooldownPrices;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -267,6 +291,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return basicSetFleetCost(null, msgs);
 			case PricingPackage.PRICING_MODEL__ROUTE_COSTS:
 				return ((InternalEList<?>)getRouteCosts()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
+				return ((InternalEList<?>)getCooldownPrices()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -291,6 +317,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return getRouteCosts();
 			case PricingPackage.PRICING_MODEL__PORT_COSTS:
 				return getPortCosts();
+			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
+				return getCooldownPrices();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -326,6 +354,10 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				getPortCosts().clear();
 				getPortCosts().addAll((Collection<? extends PortCost>)newValue);
 				return;
+			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
+				getCooldownPrices().clear();
+				getCooldownPrices().addAll((Collection<? extends CooldownPrice>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -356,6 +388,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__PORT_COSTS:
 				getPortCosts().clear();
 				return;
+			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
+				getCooldownPrices().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -380,6 +415,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return routeCosts != null && !routeCosts.isEmpty();
 			case PricingPackage.PRICING_MODEL__PORT_COSTS:
 				return portCosts != null && !portCosts.isEmpty();
+			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
+				return cooldownPrices != null && !cooldownPrices.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

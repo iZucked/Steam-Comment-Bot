@@ -162,6 +162,34 @@ public class PricingSwitch<T> extends Switch<T> {
 			case PricingPackage.PORT_COST: {
 				PortCost portCost = (PortCost)theEObject;
 				T result = casePortCost(portCost);
+				if (result == null) result = caseMMXObject(portCost);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.ROUTE_COST_BY_VESSEL_CLASS: {
+				RouteCostByVesselClass routeCostByVesselClass = (RouteCostByVesselClass)theEObject;
+				T result = caseRouteCostByVesselClass(routeCostByVesselClass);
+				if (result == null) result = caseMMXObject(routeCostByVesselClass);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PORT_COST_VESSELS: {
+				PortCostVessels portCostVessels = (PortCostVessels)theEObject;
+				T result = casePortCostVessels(portCostVessels);
+				if (result == null) result = caseMMXObject(portCostVessels);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PORT_COST_ENTRY: {
+				PortCostEntry portCostEntry = (PortCostEntry)theEObject;
+				T result = casePortCostEntry(portCostEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.COOLDOWN_PRICE: {
+				CooldownPrice cooldownPrice = (CooldownPrice)theEObject;
+				T result = caseCooldownPrice(cooldownPrice);
+				if (result == null) result = caseMMXObject(cooldownPrice);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -331,6 +359,66 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePortCost(PortCost object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Route Cost By Vessel Class</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Route Cost By Vessel Class</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRouteCostByVesselClass(RouteCostByVesselClass object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Port Cost Vessels</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Port Cost Vessels</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePortCostVessels(PortCostVessels object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Port Cost Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Port Cost Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePortCostEntry(PortCostEntry object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Cooldown Price</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Cooldown Price</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCooldownPrice(CooldownPrice object) {
 		return null;
 	}
 

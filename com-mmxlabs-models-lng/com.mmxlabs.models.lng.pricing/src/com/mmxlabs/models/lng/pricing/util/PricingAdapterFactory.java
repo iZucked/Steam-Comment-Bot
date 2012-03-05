@@ -121,6 +121,22 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createPortCostAdapter();
 			}
 			@Override
+			public Adapter caseRouteCostByVesselClass(RouteCostByVesselClass object) {
+				return createRouteCostByVesselClassAdapter();
+			}
+			@Override
+			public Adapter casePortCostVessels(PortCostVessels object) {
+				return createPortCostVesselsAdapter();
+			}
+			@Override
+			public Adapter casePortCostEntry(PortCostEntry object) {
+				return createPortCostEntryAdapter();
+			}
+			@Override
+			public Adapter caseCooldownPrice(CooldownPrice object) {
+				return createCooldownPriceAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -311,6 +327,62 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPortCostAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.RouteCostByVesselClass <em>Route Cost By Vessel Class</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.RouteCostByVesselClass
+	 * @generated
+	 */
+	public Adapter createRouteCostByVesselClassAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.PortCostVessels <em>Port Cost Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.PortCostVessels
+	 * @generated
+	 */
+	public Adapter createPortCostVesselsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.PortCostEntry <em>Port Cost Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.PortCostEntry
+	 * @generated
+	 */
+	public Adapter createPortCostEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CooldownPrice <em>Cooldown Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.CooldownPrice
+	 * @generated
+	 */
+	public Adapter createCooldownPriceAdapter() {
 		return null;
 	}
 

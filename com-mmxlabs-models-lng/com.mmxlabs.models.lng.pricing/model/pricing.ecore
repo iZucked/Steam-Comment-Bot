@@ -22,6 +22,8 @@
         eType="#//RouteCost" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="portCosts" upperBound="-1"
         eType="#//PortCost"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cooldownPrices" upperBound="-1"
+        eType="#//CooldownPrice" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataIndex">
     <eTypeParameters name="Value"/>
@@ -52,6 +54,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Index" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AIndex">
     <eTypeParameters name="Value"/>
+    <eOperations name="getValueAfter" lowerBound="1">
+      <eGenericType eTypeParameter="#//Index/Value"/>
+      <eParameters name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eOperations>
+    <eOperations name="getDates" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FleetCostModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterCosts" upperBound="-1"
@@ -60,8 +67,9 @@
         eType="#//BaseFuelCost" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RouteCost" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="routes" upperBound="-1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ARoute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="route" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ARoute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="costsByClass" upperBound="-1"
+        eType="#//RouteCostByVesselClass" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterCostModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
@@ -110,19 +118,36 @@
     <eLiterals name="DESSale" value="2" literal="DES Sale"/>
     <eLiterals name="FOBPurchase" value="3" literal="FOB Purchase"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PortCost">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PortCost" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselPortCosts" upperBound="-1"
+        eType="#//PortCostVessels" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RouteCostByVesselClass" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenCost" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastCost" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortCostVessels" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ladenCost" lowerBound="1">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portCostEntries" upperBound="-1"
+        eType="#//PortCostEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortCostEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activity" lowerBound="1"
+        eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CooldownPrice" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1">
       <eGenericType eClassifier="#//Index">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-      </eGenericType>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastCost" lowerBound="1">
-      <eGenericType eClassifier="#//Index">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
       </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>

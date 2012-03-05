@@ -123,6 +123,42 @@ public interface PricingFactory extends EFactory {
 	PortCost createPortCost();
 
 	/**
+	 * Returns a new object of class '<em>Route Cost By Vessel Class</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Route Cost By Vessel Class</em>'.
+	 * @generated
+	 */
+	RouteCostByVesselClass createRouteCostByVesselClass();
+
+	/**
+	 * Returns a new object of class '<em>Port Cost Vessels</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Port Cost Vessels</em>'.
+	 * @generated
+	 */
+	PortCostVessels createPortCostVessels();
+
+	/**
+	 * Returns a new object of class '<em>Port Cost Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Port Cost Entry</em>'.
+	 * @generated
+	 */
+	PortCostEntry createPortCostEntry();
+
+	/**
+	 * Returns a new object of class '<em>Cooldown Price</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cooldown Price</em>'.
+	 * @generated
+	 */
+	CooldownPrice createCooldownPrice();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

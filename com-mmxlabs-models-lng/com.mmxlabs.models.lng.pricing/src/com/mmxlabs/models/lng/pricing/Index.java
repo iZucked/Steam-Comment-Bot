@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.pricing;
 import com.mmxlabs.models.lng.types.AIndex;
+import java.util.Date;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,6 +18,22 @@ import com.mmxlabs.models.lng.types.AIndex;
  * @generated
  */
 public interface Index<Value> extends AIndex {
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" dateRequired="true"
+	 * @generated
+	 */
+	Value getValueAfter(Date date);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<Date> getDates();
 } // end of  Index
 
 // finish type fixing

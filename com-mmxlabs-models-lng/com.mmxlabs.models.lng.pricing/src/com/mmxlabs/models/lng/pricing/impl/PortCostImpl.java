@@ -5,21 +5,26 @@
 package com.mmxlabs.models.lng.pricing.impl;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PortCost;
+import com.mmxlabs.models.lng.pricing.PortCostVessels;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import com.mmxlabs.models.lng.types.AVesselSet;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
@@ -31,55 +36,33 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getPorts <em>Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getVessels <em>Vessels</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getLadenCost <em>Laden Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getBallastCost <em>Ballast Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getPort <em>Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getVesselPortCosts <em>Vessel Port Costs</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class PortCostImpl extends EObjectImpl implements PortCost {
+public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	/**
-	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' reference list.
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPorts()
+	 * @see #getPort()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> ports;
+	protected APortSet port;
 
 	/**
-	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
+	 * The cached value of the '{@link #getVesselPortCosts() <em>Vessel Port Costs</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVessels()
+	 * @see #getVesselPortCosts()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<AVesselSet> vessels;
-
-	/**
-	 * The cached value of the '{@link #getLadenCost() <em>Laden Cost</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLadenCost()
-	 * @generated
-	 * @ordered
-	 */
-	protected Index<Integer> ladenCost;
-
-	/**
-	 * The cached value of the '{@link #getBallastCost() <em>Ballast Cost</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBallastCost()
-	 * @generated
-	 * @ordered
-	 */
-	protected Index<Integer> ballastCost;
+	protected EList<PortCostVessels> vesselPortCosts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -105,41 +88,16 @@ public class PortCostImpl extends EObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getPorts() {
-		if (ports == null) {
-			ports = new EObjectResolvingEList<APortSet>(APortSet.class, this, PricingPackage.PORT_COST__PORTS);
-		}
-		return ports;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<AVesselSet> getVessels() {
-		if (vessels == null) {
-			vessels = new EObjectResolvingEList<AVesselSet>(AVesselSet.class, this, PricingPackage.PORT_COST__VESSELS);
-		}
-		return vessels;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	public Index<Integer> getLadenCost() {
-		if (ladenCost != null && ladenCost.eIsProxy()) {
-			InternalEObject oldLadenCost = (InternalEObject)ladenCost;
-			ladenCost = (Index<Integer>)eResolveProxy(oldLadenCost);
-			if (ladenCost != oldLadenCost) {
+	public APortSet getPort() {
+		if (port != null && port.eIsProxy()) {
+			InternalEObject oldPort = (InternalEObject)port;
+			port = (APortSet)eResolveProxy(oldPort);
+			if (port != oldPort) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.PORT_COST__LADEN_COST, oldLadenCost, ladenCost));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.PORT_COST__PORT, oldPort, port));
 			}
 		}
-		return ladenCost;
+		return port;
 	}
 
 	/**
@@ -147,8 +105,8 @@ public class PortCostImpl extends EObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index<Integer> basicGetLadenCost() {
-		return ladenCost;
+	public APortSet basicGetPort() {
+		return port;
 	}
 
 	/**
@@ -156,11 +114,11 @@ public class PortCostImpl extends EObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLadenCost(Index<Integer> newLadenCost) {
-		Index<Integer> oldLadenCost = ladenCost;
-		ladenCost = newLadenCost;
+	public void setPort(APortSet newPort) {
+		APortSet oldPort = port;
+		port = newPort;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PORT_COST__LADEN_COST, oldLadenCost, ladenCost));
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PORT_COST__PORT, oldPort, port));
 	}
 
 	/**
@@ -168,17 +126,11 @@ public class PortCostImpl extends EObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
-	public Index<Integer> getBallastCost() {
-		if (ballastCost != null && ballastCost.eIsProxy()) {
-			InternalEObject oldBallastCost = (InternalEObject)ballastCost;
-			ballastCost = (Index<Integer>)eResolveProxy(oldBallastCost);
-			if (ballastCost != oldBallastCost) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.PORT_COST__BALLAST_COST, oldBallastCost, ballastCost));
-			}
+	public EList<PortCostVessels> getVesselPortCosts() {
+		if (vesselPortCosts == null) {
+			vesselPortCosts = new EObjectContainmentEList<PortCostVessels>(PortCostVessels.class, this, PricingPackage.PORT_COST__VESSEL_PORT_COSTS);
 		}
-		return ballastCost;
+		return vesselPortCosts;
 	}
 
 	/**
@@ -186,20 +138,13 @@ public class PortCostImpl extends EObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index<Integer> basicGetBallastCost() {
-		return ballastCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setBallastCost(Index<Integer> newBallastCost) {
-		Index<Integer> oldBallastCost = ballastCost;
-		ballastCost = newBallastCost;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PORT_COST__BALLAST_COST, oldBallastCost, ballastCost));
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
+				return ((InternalEList<?>)getVesselPortCosts()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -210,16 +155,11 @@ public class PortCostImpl extends EObjectImpl implements PortCost {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PricingPackage.PORT_COST__PORTS:
-				return getPorts();
-			case PricingPackage.PORT_COST__VESSELS:
-				return getVessels();
-			case PricingPackage.PORT_COST__LADEN_COST:
-				if (resolve) return getLadenCost();
-				return basicGetLadenCost();
-			case PricingPackage.PORT_COST__BALLAST_COST:
-				if (resolve) return getBallastCost();
-				return basicGetBallastCost();
+			case PricingPackage.PORT_COST__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
+			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
+				return getVesselPortCosts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -233,19 +173,12 @@ public class PortCostImpl extends EObjectImpl implements PortCost {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PricingPackage.PORT_COST__PORTS:
-				getPorts().clear();
-				getPorts().addAll((Collection<? extends APortSet>)newValue);
+			case PricingPackage.PORT_COST__PORT:
+				setPort((APortSet)newValue);
 				return;
-			case PricingPackage.PORT_COST__VESSELS:
-				getVessels().clear();
-				getVessels().addAll((Collection<? extends AVesselSet>)newValue);
-				return;
-			case PricingPackage.PORT_COST__LADEN_COST:
-				setLadenCost((Index<Integer>)newValue);
-				return;
-			case PricingPackage.PORT_COST__BALLAST_COST:
-				setBallastCost((Index<Integer>)newValue);
+			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
+				getVesselPortCosts().clear();
+				getVesselPortCosts().addAll((Collection<? extends PortCostVessels>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -259,17 +192,11 @@ public class PortCostImpl extends EObjectImpl implements PortCost {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PricingPackage.PORT_COST__PORTS:
-				getPorts().clear();
+			case PricingPackage.PORT_COST__PORT:
+				setPort((APortSet)null);
 				return;
-			case PricingPackage.PORT_COST__VESSELS:
-				getVessels().clear();
-				return;
-			case PricingPackage.PORT_COST__LADEN_COST:
-				setLadenCost((Index<Integer>)null);
-				return;
-			case PricingPackage.PORT_COST__BALLAST_COST:
-				setBallastCost((Index<Integer>)null);
+			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
+				getVesselPortCosts().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -283,14 +210,10 @@ public class PortCostImpl extends EObjectImpl implements PortCost {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PricingPackage.PORT_COST__PORTS:
-				return ports != null && !ports.isEmpty();
-			case PricingPackage.PORT_COST__VESSELS:
-				return vessels != null && !vessels.isEmpty();
-			case PricingPackage.PORT_COST__LADEN_COST:
-				return ladenCost != null;
-			case PricingPackage.PORT_COST__BALLAST_COST:
-				return ballastCost != null;
+			case PricingPackage.PORT_COST__PORT:
+				return port != null;
+			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
+				return vesselPortCosts != null && !vesselPortCosts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

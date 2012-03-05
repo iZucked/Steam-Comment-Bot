@@ -3,21 +3,24 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -42,7 +45,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	 * @ordered
 	 */
 	protected EList<IndexPoint<Value>> points;
-
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -148,6 +151,39 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 		return super.eIsSet(featureID);
 	}
 
+	private List<IndexPoint<Value>> sortedPoints = null;
+	
+	private List<IndexPoint<Value>> getSortedPoints() {
+		if (sortedPoints == null) {
+			sortedPoints = new ArrayList<IndexPoint<Value>>(points);
+			Collections.sort(sortedPoints, new Comparator<IndexPoint<Value>>() {
+				@Override
+				public int compare(IndexPoint<Value> arg0,
+						IndexPoint<Value> arg1) {
+					return arg0.getDate().compareTo(arg1.getDate());
+				}
+			});
+		}
+		return sortedPoints;
+	}
+	
+	@Override
+	public Value getValueAfter(final Date date) {
+		Value lastValue = null;
+		for (final IndexPoint<Value> point : getSortedPoints()) {
+			if (!point.getDate().after(date)) lastValue = point.getValue();
+			else return lastValue;
+		}
+		return lastValue;
+	}
+
+	@Override
+	public EList<Date> getDates() {
+		final EList<Date> result = new BasicEList<Date>();
+		for (final IndexPoint<Value> s : getSortedPoints())
+			result.add(s.getDate());
+		return result;
+	}
 } // end of DataIndexImpl
 
 // finish type fixing

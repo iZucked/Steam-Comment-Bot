@@ -154,13 +154,22 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__PORT_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Cooldown Prices</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__COOLDOWN_PRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.IndexImpl <em>Index</em>}' class.
@@ -466,13 +475,22 @@ public interface PricingPackage extends EPackage {
 	int ROUTE_COST__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
-	 * The feature id for the '<em><b>Routes</b></em>' reference list.
+	 * The feature id for the '<em><b>Route</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_COST__ROUTES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+	int ROUTE_COST__ROUTE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Costs By Class</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_COST__COSTS_BY_CLASS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Route Cost</em>' class.
@@ -481,7 +499,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_COST_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int ROUTE_COST_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterCostModelImpl <em>Charter Cost Model</em>}' class.
@@ -695,40 +713,40 @@ public interface PricingPackage extends EPackage {
 	int PORT_COST = 10;
 
 	/**
-	 * The feature id for the '<em><b>Ports</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_COST__PORTS = 0;
+	int PORT_COST__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_COST__VESSELS = 1;
+	int PORT_COST__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
-	 * The feature id for the '<em><b>Laden Cost</b></em>' reference.
+	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_COST__LADEN_COST = 2;
+	int PORT_COST__PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Ballast Cost</b></em>' reference.
+	 * The feature id for the '<em><b>Vessel Port Costs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_COST__BALLAST_COST = 3;
+	int PORT_COST__VESSEL_PORT_COSTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Port Cost</em>' class.
@@ -737,7 +755,218 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_COST_FEATURE_COUNT = 4;
+	int PORT_COST_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.RouteCostByVesselClassImpl <em>Route Cost By Vessel Class</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.RouteCostByVesselClassImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getRouteCostByVesselClass()
+	 * @generated
+	 */
+	int ROUTE_COST_BY_VESSEL_CLASS = 11;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_COST_BY_VESSEL_CLASS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_COST_BY_VESSEL_CLASS__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_COST_BY_VESSEL_CLASS__VESSEL_CLASS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Laden Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_COST_BY_VESSEL_CLASS__LADEN_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_COST_BY_VESSEL_CLASS__BALLAST_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Route Cost By Vessel Class</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE_COST_BY_VESSEL_CLASS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostVesselsImpl <em>Port Cost Vessels</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.PortCostVesselsImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostVessels()
+	 * @generated
+	 */
+	int PORT_COST_VESSELS = 12;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_VESSELS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_VESSELS__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_VESSELS__VESSELS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Port Cost Entries</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_VESSELS__PORT_COST_ENTRIES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Port Cost Vessels</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_VESSELS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl <em>Port Cost Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostEntry()
+	 * @generated
+	 */
+	int PORT_COST_ENTRY = 13;
+
+	/**
+	 * The feature id for the '<em><b>Activity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_ENTRY__ACTIVITY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_ENTRY__COST = 1;
+
+	/**
+	 * The number of structural features of the '<em>Port Cost Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl <em>Cooldown Price</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCooldownPrice()
+	 * @generated
+	 */
+	int COOLDOWN_PRICE = 14;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE__PORTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE__INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Cooldown Price</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.SpotType <em>Spot Type</em>}' enum.
@@ -747,7 +976,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSpotType()
 	 * @generated
 	 */
-	int SPOT_TYPE = 11;
+	int SPOT_TYPE = 15;
 
 
 	/**
@@ -814,6 +1043,17 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPricingModel_PortCosts();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getCooldownPrices <em>Cooldown Prices</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Cooldown Prices</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getCooldownPrices()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_CooldownPrices();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DataIndex <em>Data Index</em>}'.
@@ -942,15 +1182,26 @@ public interface PricingPackage extends EPackage {
 	EClass getRouteCost();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.RouteCost#getRoutes <em>Routes</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.RouteCost#getRoute <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Routes</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.RouteCost#getRoutes()
+	 * @return the meta object for the reference '<em>Route</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.RouteCost#getRoute()
 	 * @see #getRouteCost()
 	 * @generated
 	 */
-	EReference getRouteCost_Routes();
+	EReference getRouteCost_Route();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.RouteCost#getCostsByClass <em>Costs By Class</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Costs By Class</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.RouteCost#getCostsByClass()
+	 * @see #getRouteCost()
+	 * @generated
+	 */
+	EReference getRouteCost_CostsByClass();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CharterCostModel <em>Charter Cost Model</em>}'.
@@ -1103,48 +1354,165 @@ public interface PricingPackage extends EPackage {
 	EClass getPortCost();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.PortCost#getPorts <em>Ports</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.PortCost#getPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Ports</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortCost#getPorts()
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortCost#getPort()
 	 * @see #getPortCost()
 	 * @generated
 	 */
-	EReference getPortCost_Ports();
+	EReference getPortCost_Port();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.PortCost#getVessels <em>Vessels</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PortCost#getVesselPortCosts <em>Vessel Port Costs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Port Costs</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortCost#getVesselPortCosts()
+	 * @see #getPortCost()
+	 * @generated
+	 */
+	EReference getPortCost_VesselPortCosts();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.RouteCostByVesselClass <em>Route Cost By Vessel Class</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Route Cost By Vessel Class</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.RouteCostByVesselClass
+	 * @generated
+	 */
+	EClass getRouteCostByVesselClass();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.RouteCostByVesselClass#getVesselClass <em>Vessel Class</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel Class</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.RouteCostByVesselClass#getVesselClass()
+	 * @see #getRouteCostByVesselClass()
+	 * @generated
+	 */
+	EReference getRouteCostByVesselClass_VesselClass();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.RouteCostByVesselClass#getLadenCost <em>Laden Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden Cost</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.RouteCostByVesselClass#getLadenCost()
+	 * @see #getRouteCostByVesselClass()
+	 * @generated
+	 */
+	EAttribute getRouteCostByVesselClass_LadenCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.RouteCostByVesselClass#getBallastCost <em>Ballast Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Cost</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.RouteCostByVesselClass#getBallastCost()
+	 * @see #getRouteCostByVesselClass()
+	 * @generated
+	 */
+	EAttribute getRouteCostByVesselClass_BallastCost();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortCostVessels <em>Port Cost Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Port Cost Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortCostVessels
+	 * @generated
+	 */
+	EClass getPortCostVessels();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.PortCostVessels#getVessels <em>Vessels</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Vessels</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortCost#getVessels()
-	 * @see #getPortCost()
+	 * @see com.mmxlabs.models.lng.pricing.PortCostVessels#getVessels()
+	 * @see #getPortCostVessels()
 	 * @generated
 	 */
-	EReference getPortCost_Vessels();
+	EReference getPortCostVessels_Vessels();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.PortCost#getLadenCost <em>Laden Cost</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PortCostVessels#getPortCostEntries <em>Port Cost Entries</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Laden Cost</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortCost#getLadenCost()
-	 * @see #getPortCost()
+	 * @return the meta object for the containment reference list '<em>Port Cost Entries</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortCostVessels#getPortCostEntries()
+	 * @see #getPortCostVessels()
 	 * @generated
 	 */
-	EReference getPortCost_LadenCost();
+	EReference getPortCostVessels_PortCostEntries();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.PortCost#getBallastCost <em>Ballast Cost</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortCostEntry <em>Port Cost Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Ballast Cost</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortCost#getBallastCost()
-	 * @see #getPortCost()
+	 * @return the meta object for class '<em>Port Cost Entry</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortCostEntry
 	 * @generated
 	 */
-	EReference getPortCost_BallastCost();
+	EClass getPortCostEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PortCostEntry#getActivity <em>Activity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Activity</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortCostEntry#getActivity()
+	 * @see #getPortCostEntry()
+	 * @generated
+	 */
+	EAttribute getPortCostEntry_Activity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PortCostEntry#getCost <em>Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cost</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortCostEntry#getCost()
+	 * @see #getPortCostEntry()
+	 * @generated
+	 */
+	EAttribute getPortCostEntry_Cost();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CooldownPrice <em>Cooldown Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Cooldown Price</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CooldownPrice
+	 * @generated
+	 */
+	EClass getCooldownPrice();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#getPorts <em>Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Ports</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CooldownPrice#getPorts()
+	 * @see #getCooldownPrice()
+	 * @generated
+	 */
+	EReference getCooldownPrice_Ports();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#getIndex <em>Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Index</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CooldownPrice#getIndex()
+	 * @see #getCooldownPrice()
+	 * @generated
+	 */
+	EReference getCooldownPrice_Index();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.pricing.SpotType <em>Spot Type</em>}'.
@@ -1227,6 +1595,14 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PRICING_MODEL__PORT_COSTS = eINSTANCE.getPricingModel_PortCosts();
+
+		/**
+		 * The meta object literal for the '<em><b>Cooldown Prices</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__COOLDOWN_PRICES = eINSTANCE.getPricingModel_CooldownPrices();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -1337,12 +1713,20 @@ public interface PricingPackage extends EPackage {
 		EClass ROUTE_COST = eINSTANCE.getRouteCost();
 
 		/**
-		 * The meta object literal for the '<em><b>Routes</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ROUTE_COST__ROUTES = eINSTANCE.getRouteCost_Routes();
+		EReference ROUTE_COST__ROUTE = eINSTANCE.getRouteCost_Route();
+
+		/**
+		 * The meta object literal for the '<em><b>Costs By Class</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROUTE_COST__COSTS_BY_CLASS = eINSTANCE.getRouteCost_CostsByClass();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterCostModelImpl <em>Charter Cost Model</em>}' class.
@@ -1465,12 +1849,64 @@ public interface PricingPackage extends EPackage {
 		EClass PORT_COST = eINSTANCE.getPortCost();
 
 		/**
-		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PORT_COST__PORTS = eINSTANCE.getPortCost_Ports();
+		EReference PORT_COST__PORT = eINSTANCE.getPortCost_Port();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Port Costs</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_COST__VESSEL_PORT_COSTS = eINSTANCE.getPortCost_VesselPortCosts();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.RouteCostByVesselClassImpl <em>Route Cost By Vessel Class</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.RouteCostByVesselClassImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getRouteCostByVesselClass()
+		 * @generated
+		 */
+		EClass ROUTE_COST_BY_VESSEL_CLASS = eINSTANCE.getRouteCostByVesselClass();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROUTE_COST_BY_VESSEL_CLASS__VESSEL_CLASS = eINSTANCE.getRouteCostByVesselClass_VesselClass();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ROUTE_COST_BY_VESSEL_CLASS__LADEN_COST = eINSTANCE.getRouteCostByVesselClass_LadenCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ROUTE_COST_BY_VESSEL_CLASS__BALLAST_COST = eINSTANCE.getRouteCostByVesselClass_BallastCost();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostVesselsImpl <em>Port Cost Vessels</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.PortCostVesselsImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostVessels()
+		 * @generated
+		 */
+		EClass PORT_COST_VESSELS = eINSTANCE.getPortCostVessels();
 
 		/**
 		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
@@ -1478,23 +1914,67 @@ public interface PricingPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PORT_COST__VESSELS = eINSTANCE.getPortCost_Vessels();
+		EReference PORT_COST_VESSELS__VESSELS = eINSTANCE.getPortCostVessels_Vessels();
 
 		/**
-		 * The meta object literal for the '<em><b>Laden Cost</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Port Cost Entries</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PORT_COST__LADEN_COST = eINSTANCE.getPortCost_LadenCost();
+		EReference PORT_COST_VESSELS__PORT_COST_ENTRIES = eINSTANCE.getPortCostVessels_PortCostEntries();
 
 		/**
-		 * The meta object literal for the '<em><b>Ballast Cost</b></em>' reference feature.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl <em>Port Cost Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostEntry()
+		 * @generated
+		 */
+		EClass PORT_COST_ENTRY = eINSTANCE.getPortCostEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Activity</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PORT_COST__BALLAST_COST = eINSTANCE.getPortCost_BallastCost();
+		EAttribute PORT_COST_ENTRY__ACTIVITY = eINSTANCE.getPortCostEntry_Activity();
+
+		/**
+		 * The meta object literal for the '<em><b>Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_COST_ENTRY__COST = eINSTANCE.getPortCostEntry_Cost();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl <em>Cooldown Price</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCooldownPrice()
+		 * @generated
+		 */
+		EClass COOLDOWN_PRICE = eINSTANCE.getCooldownPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COOLDOWN_PRICE__PORTS = eINSTANCE.getCooldownPrice_Ports();
+
+		/**
+		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COOLDOWN_PRICE__INDEX = eINSTANCE.getCooldownPrice_Index();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.SpotType <em>Spot Type</em>}' enum.
