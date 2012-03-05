@@ -3,10 +3,17 @@
     xmlns:xmi="http://www.omg.org/XMI" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.types/src"
     modelPluginID="com.mmxlabs.models.lng.types" templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
     dynamicTemplates="true" modelName="LNGTypes" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
+    complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore"
+    operationReflection="true">
   <foreignModel>lngtypes.ecore</foreignModel>
   <genPackages prefix="Types" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
       ecorePackage="lngtypes.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="lngtypes.ecore#//PortCapability">
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PortCapability/LOAD"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PortCapability/DISCHARGE"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PortCapability/DRYDOCK"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PortCapability/MAINTENANCE"/>
+    </genEnums>
     <genClasses ecoreClass="lngtypes.ecore#//APort">
       <genOperations ecoreOperation="lngtypes.ecore#//APort/collect">
         <genParameters ecoreParameter="lngtypes.ecore#//APort/collect/marked"/>
@@ -40,5 +47,7 @@
         <genParameters ecoreParameter="lngtypes.ecore#//ITimezoneProvider/getTimeZone/attribute"/>
       </genOperations>
     </genClasses>
+    <genClasses ecoreClass="lngtypes.ecore#//ABaseFuel"/>
+    <genClasses image="false" ecoreClass="lngtypes.ecore#//ASpotMarket"/>
   </genPackages>
 </genmodel:GenModel>
