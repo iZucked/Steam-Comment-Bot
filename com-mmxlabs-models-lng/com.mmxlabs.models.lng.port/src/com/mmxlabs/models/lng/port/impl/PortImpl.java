@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.port.impl;
 
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortCapability;
 import com.mmxlabs.models.lng.port.PortPackage;
 
 import com.mmxlabs.models.lng.types.PortCapability;
