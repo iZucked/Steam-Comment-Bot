@@ -83,4 +83,12 @@
 			modelClass="com.mmxlabs.models.lng.optimiser.Argument" />
 		
 	</extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+   `<submodelImporter
+          ID="com.mmxlabs.models.lng.optimiser.editor.optimiserModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.optimiser.OptimiserModel"
+          subModelImporterClass="com.mmxlabs.models.lng.optimiser.importers.OptimiserModelImporter">
+    </submodelImporter>
+ </extension>
 </plugin>
