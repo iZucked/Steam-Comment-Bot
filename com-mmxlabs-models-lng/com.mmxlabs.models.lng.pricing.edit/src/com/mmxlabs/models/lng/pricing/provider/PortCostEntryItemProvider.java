@@ -1,15 +1,17 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.pricing.provider;
 
 
-import com.mmxlabs.models.lng.pricing.PortCost;
-import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
-import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
+import com.mmxlabs.models.lng.types.PortCapability;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -18,7 +20,6 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -26,17 +27,18 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.PortCost} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.PortCostEntry} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class PortCostItemProvider
-	extends MMXObjectItemProvider
+public class PortCostEntryItemProvider
+	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -49,7 +51,7 @@ public class PortCostItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortCostItemProvider(AdapterFactory adapterFactory) {
+	public PortCostEntryItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -64,72 +66,65 @@ public class PortCostItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPortPropertyDescriptor(object);
+			addActivityPropertyDescriptor(object);
+			addCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Port feature.
+	 * This adds a property descriptor for the Activity feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPortPropertyDescriptor(Object object) {
+	protected void addActivityPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PortCost_port_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortCost_port_feature", "_UI_PortCost_type"),
-				 PricingPackage.Literals.PORT_COST__PORT,
+				 getString("_UI_PortCostEntry_activity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortCostEntry_activity_feature", "_UI_PortCostEntry_type"),
+				 PricingPackage.Literals.PORT_COST_ENTRY__ACTIVITY,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * This adds a property descriptor for the Cost feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.PORT_COST__VESSEL_PORT_COSTS);
-		}
-		return childrenFeatures;
+	protected void addCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortCostEntry_cost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortCostEntry_cost_feature", "_UI_PortCostEntry_type"),
+				 PricingPackage.Literals.PORT_COST_ENTRY__COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
-	 * This returns PortCost.gif.
+	 * This returns PortCostEntry.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/PortCost"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/PortCostEntry"));
 	}
 
 	/**
@@ -140,7 +135,11 @@ public class PortCostItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_PortCost_type");
+		PortCapability labelValue = ((PortCostEntry)object).getActivity();
+		String label = labelValue == null ? null : labelValue.toString();
+		return label == null || label.length() == 0 ?
+			getString("_UI_PortCostEntry_type") :
+			getString("_UI_PortCostEntry_type") + " " + label;
 	}
 
 	/**
@@ -154,9 +153,10 @@ public class PortCostItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(PortCost.class)) {
-			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+		switch (notification.getFeatureID(PortCostEntry.class)) {
+			case PricingPackage.PORT_COST_ENTRY__ACTIVITY:
+			case PricingPackage.PORT_COST_ENTRY__COST:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -172,11 +172,6 @@ public class PortCostItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PORT_COST__VESSEL_PORT_COSTS,
-				 PricingFactory.eINSTANCE.createPortCostVessels()));
 	}
 
 	/**

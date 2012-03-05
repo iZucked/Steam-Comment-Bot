@@ -327,6 +327,98 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.RouteCostByVesselClass} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RouteCostByVesselClassItemProvider routeCostByVesselClassItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.RouteCostByVesselClass}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRouteCostByVesselClassAdapter() {
+		if (routeCostByVesselClassItemProvider == null) {
+			routeCostByVesselClassItemProvider = new RouteCostByVesselClassItemProvider(this);
+		}
+
+		return routeCostByVesselClassItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortCostVessels} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortCostVesselsItemProvider portCostVesselsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PortCostVessels}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortCostVesselsAdapter() {
+		if (portCostVesselsItemProvider == null) {
+			portCostVesselsItemProvider = new PortCostVesselsItemProvider(this);
+		}
+
+		return portCostVesselsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortCostEntry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortCostEntryItemProvider portCostEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PortCostEntry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortCostEntryAdapter() {
+		if (portCostEntryItemProvider == null) {
+			portCostEntryItemProvider = new PortCostEntryItemProvider(this);
+		}
+
+		return portCostEntryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CooldownPrice} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CooldownPriceItemProvider cooldownPriceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CooldownPrice}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCooldownPriceAdapter() {
+		if (cooldownPriceItemProvider == null) {
+			cooldownPriceItemProvider = new CooldownPriceItemProvider(this);
+		}
+
+		return cooldownPriceItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -436,6 +528,10 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (baseFuelCostItemProvider != null) baseFuelCostItemProvider.dispose();
 		if (spotMarketItemProvider != null) spotMarketItemProvider.dispose();
 		if (portCostItemProvider != null) portCostItemProvider.dispose();
+		if (routeCostByVesselClassItemProvider != null) routeCostByVesselClassItemProvider.dispose();
+		if (portCostVesselsItemProvider != null) portCostVesselsItemProvider.dispose();
+		if (portCostEntryItemProvider != null) portCostEntryItemProvider.dispose();
+		if (cooldownPriceItemProvider != null) cooldownPriceItemProvider.dispose();
 	}
 
 }

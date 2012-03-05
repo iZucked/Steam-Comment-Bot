@@ -75,6 +75,7 @@ public class PricingModelComponentHelper implements IComponentHelper {
 		add_fleetCostEditor(detailComposite, topClass);
 		add_routeCostsEditor(detailComposite, topClass);
 		add_portCostsEditor(detailComposite, topClass);
+		add_cooldownPricesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the commodityIndices feature on PricingModel
@@ -115,5 +116,14 @@ public class PricingModelComponentHelper implements IComponentHelper {
 	 */
 	protected void add_portCostsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__PORT_COSTS));
+	}
+
+	/**
+	 * Create the editor for the cooldownPrices feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_cooldownPricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES));
 	}
 }

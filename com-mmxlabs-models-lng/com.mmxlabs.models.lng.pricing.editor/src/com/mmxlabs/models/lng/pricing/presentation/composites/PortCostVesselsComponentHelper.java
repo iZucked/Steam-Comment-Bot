@@ -1,12 +1,14 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
-import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +23,11 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * A component helper for Index instances
+ * A component helper for PortCostVessels instances
  *
  * @generated
  */
-public class IndexComponentHelper implements IComponentHelper {
+public class PortCostVesselsComponentHelper implements IComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -33,7 +35,7 @@ public class IndexComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public IndexComponentHelper() {
+	public PortCostVesselsComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -42,21 +44,21 @@ public class IndexComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public IndexComponentHelper(IAdapterManager adapterManager) {
+	public PortCostVesselsComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.AINDEX);
+			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.MMX_OBJECT);
 			if (helper != null) superClassesHelpers.add(helper);
 		}
 	}
 	
 	/**
-	 * add editors to a composite, using Index as the supertype
+	 * add editors to a composite, using PortCostVessels as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PricingPackage.Literals.INDEX);	
+		addEditorsToComposite(detailComposite, PricingPackage.Literals.PORT_COST_VESSELS);	
 	}
 	
 	/**
@@ -67,5 +69,23 @@ public class IndexComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_vesselsEditor(detailComposite, topClass);
+		add_portCostEntriesEditor(detailComposite, topClass);
+	}
+	/**
+	 * Create the editor for the vessels feature on PortCostVessels
+	 *
+	 * @generated
+	 */
+	protected void add_vesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST_VESSELS__VESSELS));
+	}
+	/**
+	 * Create the editor for the portCostEntries feature on PortCostVessels
+	 *
+	 * @generated
+	 */
+	protected void add_portCostEntriesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST_VESSELS__PORT_COST_ENTRIES));
 	}
 }

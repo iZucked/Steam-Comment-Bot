@@ -67,14 +67,24 @@ public class RouteCostComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_routesEditor(detailComposite, topClass);
+		add_routeEditor(detailComposite, topClass);
+		add_costsByClassEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the routes feature on RouteCost
+	 * Create the editor for the route feature on RouteCost
 	 *
 	 * @generated
 	 */
-	protected void add_routesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST__ROUTES));
+	protected void add_routeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST__ROUTE));
+	}
+
+	/**
+	 * Create the editor for the costsByClass feature on RouteCost
+	 *
+	 * @generated
+	 */
+	protected void add_costsByClassEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST__COSTS_BY_CLASS));
 	}
 }

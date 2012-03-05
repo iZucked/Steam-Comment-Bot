@@ -1,12 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +23,11 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * A component helper for PortCost instances
+ * A component helper for RouteCostByVesselClass instances
  *
  * @generated
  */
-public class PortCostComponentHelper implements IComponentHelper {
+public class RouteCostByVesselClassComponentHelper implements IComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -32,7 +35,7 @@ public class PortCostComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public PortCostComponentHelper() {
+	public RouteCostByVesselClassComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -41,7 +44,7 @@ public class PortCostComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public PortCostComponentHelper(IAdapterManager adapterManager) {
+	public RouteCostByVesselClassComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
 			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.MMX_OBJECT);
 			if (helper != null) superClassesHelpers.add(helper);
@@ -49,13 +52,13 @@ public class PortCostComponentHelper implements IComponentHelper {
 	}
 	
 	/**
-	 * add editors to a composite, using PortCost as the supertype
+	 * add editors to a composite, using RouteCostByVesselClass as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PricingPackage.Literals.PORT_COST);	
+		addEditorsToComposite(detailComposite, PricingPackage.Literals.ROUTE_COST_BY_VESSEL_CLASS);	
 	}
 	
 	/**
@@ -66,24 +69,32 @@ public class PortCostComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_portEditor(detailComposite, topClass);
-		add_vesselPortCostsEditor(detailComposite, topClass);
+		add_vesselClassEditor(detailComposite, topClass);
+		add_ladenCostEditor(detailComposite, topClass);
+		add_ballastCostEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the port feature on PortCost
+	 * Create the editor for the vesselClass feature on RouteCostByVesselClass
 	 *
 	 * @generated
 	 */
-	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST__PORT));
+	protected void add_vesselClassEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST_BY_VESSEL_CLASS__VESSEL_CLASS));
 	}
-
 	/**
-	 * Create the editor for the vesselPortCosts feature on PortCost
+	 * Create the editor for the ladenCost feature on RouteCostByVesselClass
 	 *
 	 * @generated
 	 */
-	protected void add_vesselPortCostsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST__VESSEL_PORT_COSTS));
+	protected void add_ladenCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST_BY_VESSEL_CLASS__LADEN_COST));
+	}
+	/**
+	 * Create the editor for the ballastCost feature on RouteCostByVesselClass
+	 *
+	 * @generated
+	 */
+	protected void add_ballastCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST_BY_VESSEL_CLASS__BALLAST_COST));
 	}
 }

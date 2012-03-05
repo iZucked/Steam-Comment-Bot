@@ -134,6 +134,7 @@ public class PricingModelItemProvider
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__FLEET_COST);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES);
 		}
 		return childrenFeatures;
 	}
@@ -195,6 +196,7 @@ public class PricingModelItemProvider
 			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
 			case PricingPackage.PRICING_MODEL__FLEET_COST:
 			case PricingPackage.PRICING_MODEL__ROUTE_COSTS:
+			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -251,6 +253,11 @@ public class PricingModelItemProvider
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS,
 				 PricingFactory.eINSTANCE.createRouteCost()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES,
+				 PricingFactory.eINSTANCE.createCooldownPrice()));
 	}
 
 	/**

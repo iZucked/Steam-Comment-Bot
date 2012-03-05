@@ -1,15 +1,16 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.pricing.provider;
 
 
-import com.mmxlabs.models.lng.pricing.PortCost;
-import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -18,7 +19,6 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -26,16 +26,14 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.PortCost} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.CooldownPrice} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class PortCostItemProvider
+public class CooldownPriceItemProvider
 	extends MMXObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -49,7 +47,7 @@ public class PortCostItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortCostItemProvider(AdapterFactory adapterFactory) {
+	public CooldownPriceItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -64,25 +62,26 @@ public class PortCostItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPortPropertyDescriptor(object);
+			addPortsPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Port feature.
+	 * This adds a property descriptor for the Ports feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPortPropertyDescriptor(Object object) {
+	protected void addPortsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PortCost_port_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortCost_port_feature", "_UI_PortCost_type"),
-				 PricingPackage.Literals.PORT_COST__PORT,
+				 getString("_UI_CooldownPrice_ports_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CooldownPrice_ports_feature", "_UI_CooldownPrice_type"),
+				 PricingPackage.Literals.COOLDOWN_PRICE__PORTS,
 				 true,
 				 false,
 				 true,
@@ -92,44 +91,36 @@ public class PortCostItemProvider
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * This adds a property descriptor for the Index feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.PORT_COST__VESSEL_PORT_COSTS);
-		}
-		return childrenFeatures;
+	protected void addIndexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CooldownPrice_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CooldownPrice_index_feature", "_UI_CooldownPrice_type"),
+				 PricingPackage.Literals.COOLDOWN_PRICE__INDEX,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
-	 * This returns PortCost.gif.
+	 * This returns CooldownPrice.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/PortCost"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CooldownPrice"));
 	}
 
 	/**
@@ -140,7 +131,7 @@ public class PortCostItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_PortCost_type");
+		return getString("_UI_CooldownPrice_type");
 	}
 
 	/**
@@ -153,12 +144,6 @@ public class PortCostItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
-
-		switch (notification.getFeatureID(PortCost.class)) {
-			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-				return;
-		}
 		super.notifyChanged(notification);
 	}
 
@@ -172,11 +157,6 @@ public class PortCostItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PORT_COST__VESSEL_PORT_COSTS,
-				 PricingFactory.eINSTANCE.createPortCostVessels()));
 	}
 
 	/**
