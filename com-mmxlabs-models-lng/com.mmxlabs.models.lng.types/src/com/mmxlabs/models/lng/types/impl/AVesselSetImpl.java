@@ -15,6 +15,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.EList;
@@ -195,6 +196,21 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case TypesPackage.AVESSEL_SET___COLLECT__ELIST:
+				return collect((EList<AVesselSet>)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

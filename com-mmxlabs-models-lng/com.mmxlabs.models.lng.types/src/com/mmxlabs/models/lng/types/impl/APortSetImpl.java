@@ -15,6 +15,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.EList;
@@ -195,6 +196,21 @@ public abstract class APortSetImpl extends UUIDObjectImpl implements APortSet {
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case TypesPackage.APORT_SET___COLLECT__ELIST:
+				return collect((EList<APortSet>)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

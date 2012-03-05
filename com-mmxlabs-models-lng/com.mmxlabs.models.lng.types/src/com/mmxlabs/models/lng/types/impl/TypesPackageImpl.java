@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.types.ACargo;
 import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.types.AIndex;
 import com.mmxlabs.models.lng.types.ALegalEntity;
+import com.mmxlabs.models.lng.types.AOptimisationSettings;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.ARoute;
@@ -149,6 +150,13 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass aOptimisationSettingsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum portCapabilityEEnum = null;
 
 	/**
@@ -229,8 +237,26 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getAPort__Collect__EList() {
+		return aPortEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getAPortSet() {
 		return aPortSetEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getAPortSet__Collect__EList() {
+		return aPortSetEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -249,6 +275,15 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 */
 	public EClass getAVessel() {
 		return aVesselEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getAVessel__Collect__EList() {
+		return aVesselEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -328,8 +363,26 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getAVesselSet__Collect__EList() {
+		return aVesselSetEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getITimezoneProvider() {
 		return iTimezoneProviderEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getITimezoneProvider__GetTimeZone__EAttribute() {
+		return iTimezoneProviderEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -348,6 +401,15 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 */
 	public EClass getASpotMarket() {
 		return aSpotMarketEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getAOptimisationSettings() {
+		return aOptimisationSettingsEClass;
 	}
 
 	/**
@@ -388,12 +450,15 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		// Create classes and their features
 		aPortEClass = createEClass(APORT);
+		createEOperation(aPortEClass, APORT___COLLECT__ELIST);
 
 		aPortSetEClass = createEClass(APORT_SET);
+		createEOperation(aPortSetEClass, APORT_SET___COLLECT__ELIST);
 
 		aRouteEClass = createEClass(AROUTE);
 
 		aVesselEClass = createEClass(AVESSEL);
+		createEOperation(aVesselEClass, AVESSEL___COLLECT__ELIST);
 
 		aVesselClassEClass = createEClass(AVESSEL_CLASS);
 
@@ -410,12 +475,16 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		aSlotEClass = createEClass(ASLOT);
 
 		aVesselSetEClass = createEClass(AVESSEL_SET);
+		createEOperation(aVesselSetEClass, AVESSEL_SET___COLLECT__ELIST);
 
 		iTimezoneProviderEClass = createEClass(ITIMEZONE_PROVIDER);
+		createEOperation(iTimezoneProviderEClass, ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE);
 
 		aBaseFuelEClass = createEClass(ABASE_FUEL);
 
 		aSpotMarketEClass = createEClass(ASPOT_MARKET);
+
+		aOptimisationSettingsEClass = createEClass(AOPTIMISATION_SETTINGS);
 
 		// Create enums
 		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
@@ -477,23 +546,25 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		aBaseFuelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		aSpotMarketEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		aSpotMarketEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		aOptimisationSettingsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		aOptimisationSettingsEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
-		// Initialize classes and features; add operations and parameters
+		// Initialize classes, features, and operations; add parameters
 		initEClass(aPortEClass, APort.class, "APort", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		EOperation op = addEOperation(aPortEClass, this.getAPort(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
+		EOperation op = initEOperation(getAPort__Collect__EList(), this.getAPort(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getAPortSet(), "marked", 0, -1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(aPortSetEClass, APortSet.class, "APortSet", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		op = addEOperation(aPortSetEClass, this.getAPort(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getAPortSet__Collect__EList(), this.getAPort(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getAPortSet(), "marked", 0, -1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(aRouteEClass, ARoute.class, "ARoute", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(aVesselEClass, AVessel.class, "AVessel", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		op = addEOperation(aVesselEClass, this.getAVessel(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getAVessel__Collect__EList(), this.getAVessel(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getAVesselSet(), "marked", 0, -1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(aVesselClassEClass, AVesselClass.class, "AVesselClass", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -512,17 +583,19 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		initEClass(aVesselSetEClass, AVesselSet.class, "AVesselSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		op = addEOperation(aVesselSetEClass, this.getAVessel(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getAVesselSet__Collect__EList(), this.getAVessel(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getAVesselSet(), "marked", 0, -1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(iTimezoneProviderEClass, ITimezoneProvider.class, "ITimezoneProvider", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		op = addEOperation(iTimezoneProviderEClass, ecorePackage.getEString(), "getTimeZone", 1, 1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getITimezoneProvider__GetTimeZone__EAttribute(), ecorePackage.getEString(), "getTimeZone", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEAttribute(), "attribute", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(aBaseFuelEClass, ABaseFuel.class, "ABaseFuel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(aSpotMarketEClass, ASpotMarket.class, "ASpotMarket", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(aOptimisationSettingsEClass, AOptimisationSettings.class, "AOptimisationSettings", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(portCapabilityEEnum, PortCapability.class, "PortCapability");

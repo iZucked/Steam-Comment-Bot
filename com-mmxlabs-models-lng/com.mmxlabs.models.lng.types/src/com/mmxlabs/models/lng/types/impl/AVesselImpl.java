@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
 
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
@@ -55,6 +56,21 @@ public abstract class AVesselImpl extends AVesselSetImpl implements AVessel {
 			return (EList<AVessel>) org.eclipse.emf.common.util.ECollections.singletonEList((AVessel)this);
 		}
 		
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case TypesPackage.AVESSEL___COLLECT__ELIST:
+				return collect((EList<AVesselSet>)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //AVesselImpl

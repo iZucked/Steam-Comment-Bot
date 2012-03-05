@@ -209,6 +209,15 @@ public class TypesSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case TypesPackage.AOPTIMISATION_SETTINGS: {
+				AOptimisationSettings aOptimisationSettings = (AOptimisationSettings)theEObject;
+				T result = caseAOptimisationSettings(aOptimisationSettings);
+				if (result == null) result = caseUUIDObject(aOptimisationSettings);
+				if (result == null) result = caseNamedObject(aOptimisationSettings);
+				if (result == null) result = caseMMXObject(aOptimisationSettings);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -435,6 +444,21 @@ public class TypesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseASpotMarket(ASpotMarket object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>AOptimisation Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>AOptimisation Settings</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAOptimisationSettings(AOptimisationSettings object) {
 		return null;
 	}
 
