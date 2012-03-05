@@ -7,9 +7,9 @@ package com.mmxlabs.scheduleview.views.colourschemes;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.SlotVisit;
-import scenario.schedule.events.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class HighSpeedColourScheme implements IScheduleViewColourScheme {
 
@@ -50,7 +50,7 @@ public class HighSpeedColourScheme implements IScheduleViewColourScheme {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
 
-			if (visit.getSlot().getWindowEnd().before(visit.getStartTime())) {
+			if (visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().before(visit.getStart())) {
 				return ColorCache.getColor(255, 0, 0);
 			}
 		}

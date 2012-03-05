@@ -200,7 +200,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 				// find what we have double-clicked
 				if (selection instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) selection;
-					final Slot slot = slotVisit.getSlot().getSlot();
+					final Slot slot = slotVisit.getSlotAllocation().getSlot();
 					// TODO factor out to somewhere useful:
 					final EObject c = slot.eContainer();
 

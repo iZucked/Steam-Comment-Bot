@@ -7,8 +7,8 @@ package com.mmxlabs.scheduleview.views.colourschemes;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.SlotVisit;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 public class RouteChoiceColourScheme implements IScheduleViewColourScheme {
 
@@ -25,7 +25,7 @@ public class RouteChoiceColourScheme implements IScheduleViewColourScheme {
 	@Override
 	public Color getBackground(final Object element) {
 		if (element instanceof Journey) {
-			if (((Journey) element).getRouteCost() > 0) {
+			if (((Journey) element).getToll() > 0) {
 				return ColorCache.getColor(0, 0, 255);
 			}
 		}
@@ -33,7 +33,7 @@ public class RouteChoiceColourScheme implements IScheduleViewColourScheme {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
 
-			if (visit.getSlot().getWindowEnd().before(visit.getStartTime())) {
+			if (visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().before(visit.getStart())) {
 				return ColorCache.getColor(255, 0, 0);
 			}
 		}

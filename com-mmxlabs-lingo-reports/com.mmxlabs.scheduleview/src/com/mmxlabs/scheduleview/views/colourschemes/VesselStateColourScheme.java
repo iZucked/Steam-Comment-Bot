@@ -7,9 +7,9 @@ package com.mmxlabs.scheduleview.views.colourschemes;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.SlotVisit;
-import scenario.schedule.events.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class VesselStateColourScheme implements IScheduleViewColourScheme {
 
@@ -27,7 +27,7 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 	public Color getBackground(final Object element) {
 		if (element instanceof Journey) {
 			final Journey journey = (Journey) element;
-			if (journey.getVesselState().equals(scenario.fleet.VesselState.LADEN)) {
+			if (journey.isLaden()) {
 				return ColorCache.getColor(0, 255, 0);
 			} else {
 				return ColorCache.getColor(0, 0, 255);
@@ -39,13 +39,13 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 		// else if (mode == Mode.Lateness) {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
-			if (visit.getStartTime().after(visit.getSlot().getWindowEnd())) {
+			if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
 				return ColorCache.getColor(255, 0, 0);
 			}
 			return ColorCache.getColor(0, 0, 0);
 		} else if (element instanceof VesselEventVisit) {
 			final VesselEventVisit vev = (VesselEventVisit) element;
-			if (vev.getStartTime().after(vev.getVesselEvent().getEndDate())) {
+			if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
 				return ColorCache.getColor(255, 0, 0);
 			}
 		}
