@@ -40,7 +40,7 @@ public class FuelCurveImporter {
 				for (final Map.Entry<String, String> column : row.entrySet()) {
 					try {
 						final float speed = Float.parseFloat(column.getKey());
-						final float consumption = Float.parseFloat(column.getValue());
+						final int consumption = Integer.parseInt(column.getValue());
 						final FuelConsumption fcl = FleetFactory.eINSTANCE.createFuelConsumption();
 						fcl.setSpeed(speed);
 						fcl.setConsumption(consumption);
