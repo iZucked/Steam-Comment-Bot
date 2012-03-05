@@ -237,6 +237,15 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getMMXObject__EContainerOp() {
+		return mmxObjectEClass.getEOperations().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getNamedObject() {
 		return namedObjectEClass;
 	}
@@ -459,6 +468,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		createEOperation(mmxObjectEClass, MMX_OBJECT___COLLECT_UUID_OBJECTS);
 		createEOperation(mmxObjectEClass, MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE);
 		createEOperation(mmxObjectEClass, MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE);
+		createEOperation(mmxObjectEClass, MMX_OBJECT___ECONTAINER_OP);
 
 		namedObjectEClass = createEClass(NAMED_OBJECT);
 		createEAttribute(namedObjectEClass, NAMED_OBJECT__NAME);
@@ -520,6 +530,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		namedObjectEClass.getESuperTypes().add(this.getMMXObject());
 		uuidObjectEClass.getESuperTypes().add(this.getMMXObject());
 		mmxRootObjectEClass.getESuperTypes().add(this.getUUIDObject());
+		mmxRootObjectEClass.getESuperTypes().add(this.getNamedObject());
 		mmxSubModelEClass.getESuperTypes().add(this.getMMXObject());
 
 		// Initialize classes, features, and operations; add parameters
@@ -560,6 +571,8 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 		op = initEOperation(getMMXObject__EGetWithDefault__EStructuralFeature(), ecorePackage.getEJavaObject(), "eGetWithDefault", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEStructuralFeature(), "feature", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getMMXObject__EContainerOp(), ecorePackage.getEObject(), "eContainerOp", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(namedObjectEClass, NamedObject.class, "NamedObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNamedObject_Name(), ecorePackage.getEString(), "name", null, 1, 1, NamedObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

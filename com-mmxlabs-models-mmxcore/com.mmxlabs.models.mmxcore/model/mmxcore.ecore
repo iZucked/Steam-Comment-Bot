@@ -34,6 +34,7 @@
     <eOperations name="eGetWithDefault" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
       <eParameters name="feature" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
     </eOperations>
+    <eOperations name="eContainerOp" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" ordered="false"
         upperBound="-1" eType="#//UUIDObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="proxies" upperBound="-1"
@@ -63,7 +64,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referentName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MMXRootObject" eSuperTypes="#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="MMXRootObject" eSuperTypes="#//UUIDObject #//NamedObject">
     <eOperations name="addSubModel" lowerBound="1">
       <eParameters name="subModel" lowerBound="1" eType="#//UUIDObject"/>
     </eOperations>

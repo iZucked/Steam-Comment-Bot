@@ -266,6 +266,15 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public EObject eContainerOp() {
+		return eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -375,6 +384,8 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 				return getUnsetValue((EStructuralFeature)arguments.get(0));
 			case MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE:
 				return eGetWithDefault((EStructuralFeature)arguments.get(0));
+			case MMXCorePackage.MMX_OBJECT___ECONTAINER_OP:
+				return eContainerOp();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

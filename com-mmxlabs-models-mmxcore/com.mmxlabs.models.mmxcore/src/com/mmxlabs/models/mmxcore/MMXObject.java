@@ -117,4 +117,12 @@ public interface MMXObject extends EObject {
 	 */
 	Object eGetWithDefault(EStructuralFeature feature);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true"
+	 * @generated
+	 */
+	EObject eContainerOp();
+
 } // MMXObject

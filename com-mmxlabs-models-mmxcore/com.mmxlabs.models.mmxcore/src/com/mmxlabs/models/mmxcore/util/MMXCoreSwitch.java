@@ -97,6 +97,7 @@ public class MMXCoreSwitch<T> extends Switch<T> {
 				MMXRootObject mmxRootObject = (MMXRootObject)theEObject;
 				T result = caseMMXRootObject(mmxRootObject);
 				if (result == null) result = caseUUIDObject(mmxRootObject);
+				if (result == null) result = caseNamedObject(mmxRootObject);
 				if (result == null) result = caseMMXObject(mmxRootObject);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

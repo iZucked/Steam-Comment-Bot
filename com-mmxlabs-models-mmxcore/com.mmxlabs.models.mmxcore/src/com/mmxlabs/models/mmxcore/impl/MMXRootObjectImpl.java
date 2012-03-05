@@ -19,6 +19,7 @@ import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import java.lang.reflect.InvocationTargetException;
 
@@ -29,6 +30,7 @@ import java.lang.reflect.InvocationTargetException;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl#getSubModels <em>Sub Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl#getVersion <em>Version</em>}</li>
  * </ul>
@@ -37,6 +39,26 @@ import java.lang.reflect.InvocationTargetException;
  * @generated
  */
 public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
+
 	/**
 	 * The cached value of the '{@link #getSubModels() <em>Sub Models</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -84,6 +106,27 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	@Override
 	protected EClass eStaticClass() {
 		return MMXCorePackage.Literals.MMX_ROOT_OBJECT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MMXCorePackage.MMX_ROOT_OBJECT__NAME, oldName, name));
 	}
 
 	/**
@@ -183,6 +226,8 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case MMXCorePackage.MMX_ROOT_OBJECT__NAME:
+				return getName();
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:
 				return getSubModels();
 			case MMXCorePackage.MMX_ROOT_OBJECT__VERSION:
@@ -200,6 +245,9 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case MMXCorePackage.MMX_ROOT_OBJECT__NAME:
+				setName((String)newValue);
+				return;
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:
 				getSubModels().clear();
 				getSubModels().addAll((Collection<? extends MMXSubModel>)newValue);
@@ -219,6 +267,9 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case MMXCorePackage.MMX_ROOT_OBJECT__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:
 				getSubModels().clear();
 				return;
@@ -237,12 +288,46 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case MMXCorePackage.MMX_ROOT_OBJECT__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:
 				return subModels != null && !subModels.isEmpty();
 			case MMXCorePackage.MMX_ROOT_OBJECT__VERSION:
 				return version != VERSION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (derivedFeatureID) {
+				case MMXCorePackage.MMX_ROOT_OBJECT__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (baseFeatureID) {
+				case MMXCorePackage.NAMED_OBJECT__NAME: return MMXCorePackage.MMX_ROOT_OBJECT__NAME;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
@@ -276,7 +361,9 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (version: ");
+		result.append(" (name: ");
+		result.append(name);
+		result.append(", version: ");
 		result.append(version);
 		result.append(')');
 		return result.toString();

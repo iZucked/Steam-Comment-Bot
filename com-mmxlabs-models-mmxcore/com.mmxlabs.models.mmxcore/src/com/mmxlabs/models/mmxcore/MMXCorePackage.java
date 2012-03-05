@@ -160,13 +160,22 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = 6;
 
 	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_OBJECT___ECONTAINER_OP = 7;
+
+	/**
 	 * The number of operations of the '<em>MMX Object</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MMX_OBJECT_OPERATION_COUNT = 7;
+	int MMX_OBJECT_OPERATION_COUNT = 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.mmxcore.impl.NamedObjectImpl <em>Named Object</em>}' class.
@@ -276,6 +285,15 @@ public interface MMXCorePackage extends EPackage {
 	 * @ordered
 	 */
 	int NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT___ECONTAINER_OP = MMX_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>Named Object</em>' class.
@@ -394,6 +412,15 @@ public interface MMXCorePackage extends EPackage {
 	 * @ordered
 	 */
 	int UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT___ECONTAINER_OP = MMX_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>UUID Object</em>' class.
@@ -525,13 +552,22 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_ROOT_OBJECT__UUID = UUID_OBJECT__UUID;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT__NAME = UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Sub Models</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MMX_ROOT_OBJECT__SUB_MODELS = UUID_OBJECT_FEATURE_COUNT + 0;
+	int MMX_ROOT_OBJECT__SUB_MODELS = UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Version</b></em>' attribute.
@@ -540,7 +576,7 @@ public interface MMXCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MMX_ROOT_OBJECT__VERSION = UUID_OBJECT_FEATURE_COUNT + 1;
+	int MMX_ROOT_OBJECT__VERSION = UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>MMX Root Object</em>' class.
@@ -549,7 +585,7 @@ public interface MMXCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MMX_ROOT_OBJECT_FEATURE_COUNT = UUID_OBJECT_FEATURE_COUNT + 2;
+	int MMX_ROOT_OBJECT_FEATURE_COUNT = UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -613,6 +649,15 @@ public interface MMXCorePackage extends EPackage {
 	 * @ordered
 	 */
 	int MMX_ROOT_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT___ECONTAINER_OP = UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Add Sub Model</em>' operation.
@@ -769,6 +814,15 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_SUB_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_SUB_MODEL___ECONTAINER_OP = MMX_OBJECT___ECONTAINER_OP;
+
+	/**
 	 * The number of operations of the '<em>MMX Sub Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -889,6 +943,16 @@ public interface MMXCorePackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getMMXObject__EGetWithDefault__EStructuralFeature();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXObject#eContainerOp() <em>EContainer Op</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>EContainer Op</em>' operation.
+	 * @see com.mmxlabs.models.mmxcore.MMXObject#eContainerOp()
+	 * @generated
+	 */
+	EOperation getMMXObject__EContainerOp();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.NamedObject <em>Named Object</em>}'.
@@ -1216,6 +1280,14 @@ public interface MMXCorePackage extends EPackage {
 		 * @generated
 		 */
 		EOperation MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = eINSTANCE.getMMXObject__EGetWithDefault__EStructuralFeature();
+
+		/**
+		 * The meta object literal for the '<em><b>EContainer Op</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MMX_OBJECT___ECONTAINER_OP = eINSTANCE.getMMXObject__EContainerOp();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.mmxcore.impl.NamedObjectImpl <em>Named Object</em>}' class.
