@@ -69,8 +69,7 @@ public class AssignmentComponentHelper implements IComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_vesselsEditor(detailComposite, topClass);
 		add_assignToSpotEditor(detailComposite, topClass);
-		add_nextAssignmentEditor(detailComposite, topClass);
-		add_assignedObjectEditor(detailComposite, topClass);
+		add_assignedObjectsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessels feature on Assignment
@@ -89,19 +88,11 @@ public class AssignmentComponentHelper implements IComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, InputPackage.Literals.ASSIGNMENT__ASSIGN_TO_SPOT));
 	}
 	/**
-	 * Create the editor for the nextAssignment feature on Assignment
+	 * Create the editor for the assignedObjects feature on Assignment
 	 *
 	 * @generated
 	 */
-	protected void add_nextAssignmentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, InputPackage.Literals.ASSIGNMENT__NEXT_ASSIGNMENT));
-	}
-	/**
-	 * Create the editor for the assignedObject feature on Assignment
-	 *
-	 * @generated
-	 */
-	protected void add_assignedObjectEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, InputPackage.Literals.ASSIGNMENT__ASSIGNED_OBJECT));
+	protected void add_assignedObjectsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, InputPackage.Literals.ASSIGNMENT__ASSIGNED_OBJECTS));
 	}
 }

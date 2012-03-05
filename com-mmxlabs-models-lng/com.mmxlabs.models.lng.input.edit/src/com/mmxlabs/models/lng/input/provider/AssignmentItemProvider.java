@@ -65,8 +65,7 @@ public class AssignmentItemProvider
 
 			addVesselsPropertyDescriptor(object);
 			addAssignToSpotPropertyDescriptor(object);
-			addNextAssignmentPropertyDescriptor(object);
-			addAssignedObjectPropertyDescriptor(object);
+			addAssignedObjectsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -116,41 +115,19 @@ public class AssignmentItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Next Assignment feature.
+	 * This adds a property descriptor for the Assigned Objects feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addNextAssignmentPropertyDescriptor(Object object) {
+	protected void addAssignedObjectsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Assignment_nextAssignment_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Assignment_nextAssignment_feature", "_UI_Assignment_type"),
-				 InputPackage.Literals.ASSIGNMENT__NEXT_ASSIGNMENT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Assigned Object feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAssignedObjectPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Assignment_assignedObject_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Assignment_assignedObject_feature", "_UI_Assignment_type"),
-				 InputPackage.Literals.ASSIGNMENT__ASSIGNED_OBJECT,
+				 getString("_UI_Assignment_assignedObjects_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Assignment_assignedObjects_feature", "_UI_Assignment_type"),
+				 InputPackage.Literals.ASSIGNMENT__ASSIGNED_OBJECTS,
 				 true,
 				 false,
 				 true,
