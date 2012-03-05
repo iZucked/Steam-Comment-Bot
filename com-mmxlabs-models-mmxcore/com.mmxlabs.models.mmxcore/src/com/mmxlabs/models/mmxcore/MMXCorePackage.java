@@ -7,6 +7,7 @@ package com.mmxlabs.models.mmxcore;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -96,6 +97,78 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_OBJECT_FEATURE_COUNT = 2;
 
 	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_OBJECT___MAKE_PROXIES = 0;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_OBJECT___RESOLVE_PROXIES__MAP = 1;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_OBJECT___RESTORE_PROXIES = 2;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP = 3;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_OBJECT___COLLECT_UUID_OBJECTS = 4;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = 5;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = 6;
+
+	/**
+	 * The number of operations of the '<em>MMX Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_OBJECT_OPERATION_COUNT = 7;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.mmxcore.impl.NamedObjectImpl <em>Named Object</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -142,6 +215,78 @@ public interface MMXCorePackage extends EPackage {
 	int NAMED_OBJECT_FEATURE_COUNT = MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT___MAKE_PROXIES = MMX_OBJECT___MAKE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT___RESOLVE_PROXIES__MAP = MMX_OBJECT___RESOLVE_PROXIES__MAP;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT___RESTORE_PROXIES = MMX_OBJECT___RESTORE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT___COLLECT_UUID_OBJECTS__MAP = MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT___COLLECT_UUID_OBJECTS = MMX_OBJECT___COLLECT_UUID_OBJECTS;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The number of operations of the '<em>Named Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT_OPERATION_COUNT = MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl <em>UUID Object</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -186,6 +331,78 @@ public interface MMXCorePackage extends EPackage {
 	 * @ordered
 	 */
 	int UUID_OBJECT_FEATURE_COUNT = MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT___MAKE_PROXIES = MMX_OBJECT___MAKE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT___RESOLVE_PROXIES__MAP = MMX_OBJECT___RESOLVE_PROXIES__MAP;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT___RESTORE_PROXIES = MMX_OBJECT___RESTORE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP = MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT___COLLECT_UUID_OBJECTS = MMX_OBJECT___COLLECT_UUID_OBJECTS;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The number of operations of the '<em>UUID Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UUID_OBJECT_OPERATION_COUNT = MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.mmxcore.impl.MMXProxyImpl <em>MMX Proxy</em>}' class.
@@ -262,6 +479,15 @@ public interface MMXCorePackage extends EPackage {
 
 
 	/**
+	 * The number of operations of the '<em>MMX Proxy</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_PROXY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl <em>MMX Root Object</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -326,6 +552,105 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_ROOT_OBJECT_FEATURE_COUNT = UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT___MAKE_PROXIES = UUID_OBJECT___MAKE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT___RESOLVE_PROXIES__MAP = UUID_OBJECT___RESOLVE_PROXIES__MAP;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT___RESTORE_PROXIES = UUID_OBJECT___RESTORE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT___COLLECT_UUID_OBJECTS__MAP = UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT___COLLECT_UUID_OBJECTS = UUID_OBJECT___COLLECT_UUID_OBJECTS;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>Add Sub Model</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT___ADD_SUB_MODEL__UUIDOBJECT = UUID_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Restore Sub Models</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT___RESTORE_SUB_MODELS = UUID_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Sub Model</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT___GET_SUB_MODEL__CLASS = UUID_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>MMX Root Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT_OPERATION_COUNT = UUID_OBJECT_OPERATION_COUNT + 3;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.mmxcore.impl.MMXSubModelImpl <em>MMX Sub Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -381,6 +706,78 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_SUB_MODEL_FEATURE_COUNT = MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_SUB_MODEL___MAKE_PROXIES = MMX_OBJECT___MAKE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_SUB_MODEL___RESOLVE_PROXIES__MAP = MMX_OBJECT___RESOLVE_PROXIES__MAP;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_SUB_MODEL___RESTORE_PROXIES = MMX_OBJECT___RESTORE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_SUB_MODEL___COLLECT_UUID_OBJECTS__MAP = MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_SUB_MODEL___COLLECT_UUID_OBJECTS = MMX_OBJECT___COLLECT_UUID_OBJECTS;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_SUB_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_SUB_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The number of operations of the '<em>MMX Sub Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_SUB_MODEL_OPERATION_COUNT = MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '<em>MMX Resource</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -422,6 +819,76 @@ public interface MMXCorePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getMMXObject_Proxies();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXObject#makeProxies() <em>Make Proxies</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Make Proxies</em>' operation.
+	 * @see com.mmxlabs.models.mmxcore.MMXObject#makeProxies()
+	 * @generated
+	 */
+	EOperation getMMXObject__MakeProxies();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXObject#resolveProxies(java.util.Map) <em>Resolve Proxies</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Resolve Proxies</em>' operation.
+	 * @see com.mmxlabs.models.mmxcore.MMXObject#resolveProxies(java.util.Map)
+	 * @generated
+	 */
+	EOperation getMMXObject__ResolveProxies__Map();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXObject#restoreProxies() <em>Restore Proxies</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Restore Proxies</em>' operation.
+	 * @see com.mmxlabs.models.mmxcore.MMXObject#restoreProxies()
+	 * @generated
+	 */
+	EOperation getMMXObject__RestoreProxies();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXObject#collectUUIDObjects(java.util.Map) <em>Collect UUID Objects</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Collect UUID Objects</em>' operation.
+	 * @see com.mmxlabs.models.mmxcore.MMXObject#collectUUIDObjects(java.util.Map)
+	 * @generated
+	 */
+	EOperation getMMXObject__CollectUUIDObjects__Map();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXObject#collectUUIDObjects() <em>Collect UUID Objects</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Collect UUID Objects</em>' operation.
+	 * @see com.mmxlabs.models.mmxcore.MMXObject#collectUUIDObjects()
+	 * @generated
+	 */
+	EOperation getMMXObject__CollectUUIDObjects();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXObject#getUnsetValue(org.eclipse.emf.ecore.EStructuralFeature) <em>Get Unset Value</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Unset Value</em>' operation.
+	 * @see com.mmxlabs.models.mmxcore.MMXObject#getUnsetValue(org.eclipse.emf.ecore.EStructuralFeature)
+	 * @generated
+	 */
+	EOperation getMMXObject__GetUnsetValue__EStructuralFeature();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXObject#eGetWithDefault(org.eclipse.emf.ecore.EStructuralFeature) <em>EGet With Default</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>EGet With Default</em>' operation.
+	 * @see com.mmxlabs.models.mmxcore.MMXObject#eGetWithDefault(org.eclipse.emf.ecore.EStructuralFeature)
+	 * @generated
+	 */
+	EOperation getMMXObject__EGetWithDefault__EStructuralFeature();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.NamedObject <em>Named Object</em>}'.
@@ -574,6 +1041,36 @@ public interface MMXCorePackage extends EPackage {
 	EAttribute getMMXRootObject_Version();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXRootObject#addSubModel(com.mmxlabs.models.mmxcore.UUIDObject) <em>Add Sub Model</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Add Sub Model</em>' operation.
+	 * @see com.mmxlabs.models.mmxcore.MMXRootObject#addSubModel(com.mmxlabs.models.mmxcore.UUIDObject)
+	 * @generated
+	 */
+	EOperation getMMXRootObject__AddSubModel__UUIDObject();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXRootObject#restoreSubModels() <em>Restore Sub Models</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Restore Sub Models</em>' operation.
+	 * @see com.mmxlabs.models.mmxcore.MMXRootObject#restoreSubModels()
+	 * @generated
+	 */
+	EOperation getMMXRootObject__RestoreSubModels();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXRootObject#getSubModel(java.lang.Class) <em>Get Sub Model</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Sub Model</em>' operation.
+	 * @see com.mmxlabs.models.mmxcore.MMXRootObject#getSubModel(java.lang.Class)
+	 * @generated
+	 */
+	EOperation getMMXRootObject__GetSubModel__Class();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.MMXSubModel <em>MMX Sub Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -663,6 +1160,62 @@ public interface MMXCorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference MMX_OBJECT__PROXIES = eINSTANCE.getMMXObject_Proxies();
+
+		/**
+		 * The meta object literal for the '<em><b>Make Proxies</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MMX_OBJECT___MAKE_PROXIES = eINSTANCE.getMMXObject__MakeProxies();
+
+		/**
+		 * The meta object literal for the '<em><b>Resolve Proxies</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MMX_OBJECT___RESOLVE_PROXIES__MAP = eINSTANCE.getMMXObject__ResolveProxies__Map();
+
+		/**
+		 * The meta object literal for the '<em><b>Restore Proxies</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MMX_OBJECT___RESTORE_PROXIES = eINSTANCE.getMMXObject__RestoreProxies();
+
+		/**
+		 * The meta object literal for the '<em><b>Collect UUID Objects</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP = eINSTANCE.getMMXObject__CollectUUIDObjects__Map();
+
+		/**
+		 * The meta object literal for the '<em><b>Collect UUID Objects</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MMX_OBJECT___COLLECT_UUID_OBJECTS = eINSTANCE.getMMXObject__CollectUUIDObjects();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Unset Value</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = eINSTANCE.getMMXObject__GetUnsetValue__EStructuralFeature();
+
+		/**
+		 * The meta object literal for the '<em><b>EGet With Default</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = eINSTANCE.getMMXObject__EGetWithDefault__EStructuralFeature();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.mmxcore.impl.NamedObjectImpl <em>Named Object</em>}' class.
@@ -783,6 +1336,30 @@ public interface MMXCorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MMX_ROOT_OBJECT__VERSION = eINSTANCE.getMMXRootObject_Version();
+
+		/**
+		 * The meta object literal for the '<em><b>Add Sub Model</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MMX_ROOT_OBJECT___ADD_SUB_MODEL__UUIDOBJECT = eINSTANCE.getMMXRootObject__AddSubModel__UUIDObject();
+
+		/**
+		 * The meta object literal for the '<em><b>Restore Sub Models</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MMX_ROOT_OBJECT___RESTORE_SUB_MODELS = eINSTANCE.getMMXRootObject__RestoreSubModels();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Sub Model</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MMX_ROOT_OBJECT___GET_SUB_MODEL__CLASS = eINSTANCE.getMMXRootObject__GetSubModel__Class();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.mmxcore.impl.MMXSubModelImpl <em>MMX Sub Model</em>}' class.

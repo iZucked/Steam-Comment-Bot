@@ -20,6 +20,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <!-- begin-user-doc -->
@@ -242,6 +243,27 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 				return version != VERSION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case MMXCorePackage.MMX_ROOT_OBJECT___ADD_SUB_MODEL__UUIDOBJECT:
+				addSubModel((UUIDObject)arguments.get(0));
+				return null;
+			case MMXCorePackage.MMX_ROOT_OBJECT___RESTORE_SUB_MODELS:
+				restoreSubModels();
+				return null;
+			case MMXCorePackage.MMX_ROOT_OBJECT___GET_SUB_MODEL__CLASS:
+				return getSubModel((Class<?>)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

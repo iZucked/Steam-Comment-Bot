@@ -174,6 +174,69 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getMMXObject__MakeProxies() {
+		return mmxObjectEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getMMXObject__ResolveProxies__Map() {
+		return mmxObjectEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getMMXObject__RestoreProxies() {
+		return mmxObjectEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getMMXObject__CollectUUIDObjects__Map() {
+		return mmxObjectEClass.getEOperations().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getMMXObject__CollectUUIDObjects() {
+		return mmxObjectEClass.getEOperations().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getMMXObject__GetUnsetValue__EStructuralFeature() {
+		return mmxObjectEClass.getEOperations().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getMMXObject__EGetWithDefault__EStructuralFeature() {
+		return mmxObjectEClass.getEOperations().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getNamedObject() {
 		return namedObjectEClass;
 	}
@@ -300,6 +363,33 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getMMXRootObject__AddSubModel__UUIDObject() {
+		return mmxRootObjectEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getMMXRootObject__RestoreSubModels() {
+		return mmxRootObjectEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getMMXRootObject__GetSubModel__Class() {
+		return mmxRootObjectEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getMMXSubModel() {
 		return mmxSubModelEClass;
 	}
@@ -362,6 +452,13 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		mmxObjectEClass = createEClass(MMX_OBJECT);
 		createEReference(mmxObjectEClass, MMX_OBJECT__EXTENSIONS);
 		createEReference(mmxObjectEClass, MMX_OBJECT__PROXIES);
+		createEOperation(mmxObjectEClass, MMX_OBJECT___MAKE_PROXIES);
+		createEOperation(mmxObjectEClass, MMX_OBJECT___RESOLVE_PROXIES__MAP);
+		createEOperation(mmxObjectEClass, MMX_OBJECT___RESTORE_PROXIES);
+		createEOperation(mmxObjectEClass, MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP);
+		createEOperation(mmxObjectEClass, MMX_OBJECT___COLLECT_UUID_OBJECTS);
+		createEOperation(mmxObjectEClass, MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE);
+		createEOperation(mmxObjectEClass, MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE);
 
 		namedObjectEClass = createEClass(NAMED_OBJECT);
 		createEAttribute(namedObjectEClass, NAMED_OBJECT__NAME);
@@ -380,6 +477,9 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		mmxRootObjectEClass = createEClass(MMX_ROOT_OBJECT);
 		createEReference(mmxRootObjectEClass, MMX_ROOT_OBJECT__SUB_MODELS);
 		createEAttribute(mmxRootObjectEClass, MMX_ROOT_OBJECT__VERSION);
+		createEOperation(mmxRootObjectEClass, MMX_ROOT_OBJECT___ADD_SUB_MODEL__UUIDOBJECT);
+		createEOperation(mmxRootObjectEClass, MMX_ROOT_OBJECT___RESTORE_SUB_MODELS);
+		createEOperation(mmxRootObjectEClass, MMX_ROOT_OBJECT___GET_SUB_MODEL__CLASS);
 
 		mmxSubModelEClass = createEClass(MMX_SUB_MODEL);
 		createEReference(mmxSubModelEClass, MMX_SUB_MODEL__SUB_MODEL_INSTANCE);
@@ -422,14 +522,14 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		mmxRootObjectEClass.getESuperTypes().add(this.getUUIDObject());
 		mmxSubModelEClass.getESuperTypes().add(this.getMMXObject());
 
-		// Initialize classes and features; add operations and parameters
+		// Initialize classes, features, and operations; add parameters
 		initEClass(mmxObjectEClass, MMXObject.class, "MMXObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMMXObject_Extensions(), this.getUUIDObject(), null, "extensions", null, 0, -1, MMXObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 		initEReference(getMMXObject_Proxies(), this.getMMXProxy(), null, "proxies", null, 0, -1, MMXObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(mmxObjectEClass, null, "makeProxies", 1, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getMMXObject__MakeProxies(), null, "makeProxies", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		EOperation op = addEOperation(mmxObjectEClass, null, "resolveProxies", 1, 1, IS_UNIQUE, IS_ORDERED);
+		EOperation op = initEOperation(getMMXObject__ResolveProxies__Map(), null, "resolveProxies", 1, 1, IS_UNIQUE, IS_ORDERED);
 		EGenericType g1 = createEGenericType(ecorePackage.getEMap());
 		EGenericType g2 = createEGenericType(ecorePackage.getEString());
 		g1.getETypeArguments().add(g2);
@@ -437,9 +537,9 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		g1.getETypeArguments().add(g2);
 		addEParameter(op, g1, "objectsByUUID", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(mmxObjectEClass, null, "restoreProxies", 1, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getMMXObject__RestoreProxies(), null, "restoreProxies", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		op = addEOperation(mmxObjectEClass, null, "collectUUIDObjects", 1, 1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getMMXObject__CollectUUIDObjects__Map(), null, "collectUUIDObjects", 1, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(ecorePackage.getEMap());
 		g2 = createEGenericType(ecorePackage.getEString());
 		g1.getETypeArguments().add(g2);
@@ -447,7 +547,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		g1.getETypeArguments().add(g2);
 		addEParameter(op, g1, "objectsByUUID", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		op = addEOperation(mmxObjectEClass, null, "collectUUIDObjects", 1, 1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getMMXObject__CollectUUIDObjects(), null, "collectUUIDObjects", 1, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(ecorePackage.getEMap());
 		g2 = createEGenericType(ecorePackage.getEString());
 		g1.getETypeArguments().add(g2);
@@ -455,10 +555,10 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		g1.getETypeArguments().add(g2);
 		initEOperation(op, g1);
 
-		op = addEOperation(mmxObjectEClass, ecorePackage.getEJavaObject(), "getUnsetValue", 1, 1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getMMXObject__GetUnsetValue__EStructuralFeature(), ecorePackage.getEJavaObject(), "getUnsetValue", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEStructuralFeature(), "feature", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		op = addEOperation(mmxObjectEClass, ecorePackage.getEJavaObject(), "eGetWithDefault", 1, 1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getMMXObject__EGetWithDefault__EStructuralFeature(), ecorePackage.getEJavaObject(), "eGetWithDefault", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEStructuralFeature(), "feature", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(namedObjectEClass, NamedObject.class, "NamedObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -479,12 +579,12 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		initEReference(getMMXRootObject_SubModels(), this.getMMXSubModel(), null, "subModels", null, 0, -1, MMXRootObject.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMMXRootObject_Version(), ecorePackage.getEInt(), "version", "0", 1, 1, MMXRootObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		op = addEOperation(mmxRootObjectEClass, null, "addSubModel", 1, 1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getMMXRootObject__AddSubModel__UUIDObject(), null, "addSubModel", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getUUIDObject(), "subModel", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(mmxRootObjectEClass, null, "restoreSubModels", 1, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getMMXRootObject__RestoreSubModels(), null, "restoreSubModels", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		op = addEOperation(mmxRootObjectEClass, null, "getSubModel", 1, 1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getMMXRootObject__GetSubModel__Class(), null, "getSubModel", 1, 1, IS_UNIQUE, IS_ORDERED);
 		ETypeParameter t1 = addETypeParameter(op, "T");
 		g1 = createEGenericType(ecorePackage.getEJavaClass());
 		g2 = createEGenericType(t1);

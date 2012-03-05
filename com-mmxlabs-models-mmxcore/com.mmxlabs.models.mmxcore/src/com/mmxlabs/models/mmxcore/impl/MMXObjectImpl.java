@@ -27,6 +27,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXProxy;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <!-- begin-user-doc -->
@@ -345,6 +346,37 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 				return proxies != null && !proxies.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case MMXCorePackage.MMX_OBJECT___MAKE_PROXIES:
+				makeProxies();
+				return null;
+			case MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP:
+				resolveProxies((Map<String, UUIDObject>)arguments.get(0));
+				return null;
+			case MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES:
+				restoreProxies();
+				return null;
+			case MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP:
+				collectUUIDObjects((Map<String, UUIDObject>)arguments.get(0));
+				return null;
+			case MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS:
+				return collectUUIDObjects();
+			case MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE:
+				return getUnsetValue((EStructuralFeature)arguments.get(0));
+			case MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE:
+				return eGetWithDefault((EStructuralFeature)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //MMXObjectImpl
