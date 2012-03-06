@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -81,10 +80,9 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 			final MMXRootObject scenario = ValidationSupport.getInstance().getParentObjectType(MMXRootObject.class, cargo);
 			if (scenario != null) {
 
-				double maxSpeedKnots = 0;
+				double maxSpeedKnots = 0.0;
 				final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
-				final PortModel portModel = scenario.getSubModel(PortModel.class);
-				
+
 				for (final VesselClass vc : fleetModel.getVesselClasses()) {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
 				}
