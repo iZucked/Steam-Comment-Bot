@@ -66,9 +66,11 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 		if (scenario != null) {
 			final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 			if (scheduleModel != null) {
-				final int size = scheduleModel.getSchedules().size();
-				if (size > 0) {
-					return scheduleModel.getSchedules().get(size - 1);
+				
+				if (scheduleModel.getOptimisedSchedule() != null) {
+					return scheduleModel.getOptimisedSchedule();
+				} else {
+					return scheduleModel.getInitialSchedule();
 				}
 			}
 		}
