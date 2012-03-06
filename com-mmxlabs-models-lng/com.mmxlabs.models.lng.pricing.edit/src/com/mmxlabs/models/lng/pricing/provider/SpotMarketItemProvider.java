@@ -67,6 +67,8 @@ public class SpotMarketItemProvider
 			addPortsPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
+			addNotionalPortPropertyDescriptor(object);
+			addTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -160,6 +162,50 @@ public class SpotMarketItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Notional Port feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNotionalPortPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotMarket_notionalPort_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_notionalPort_feature", "_UI_SpotMarket_type"),
+				 PricingPackage.Literals.SPOT_MARKET__NOTIONAL_PORT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotMarket_type_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_type_feature", "_UI_SpotMarket_type"),
+				 PricingPackage.Literals.SPOT_MARKET__TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns SpotMarket.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -198,6 +244,7 @@ public class SpotMarketItemProvider
 		switch (notification.getFeatureID(SpotMarket.class)) {
 			case PricingPackage.SPOT_MARKET__MIN_QUANTITY:
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
+			case PricingPackage.SPOT_MARKET__TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
