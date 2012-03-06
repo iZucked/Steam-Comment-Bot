@@ -62,7 +62,7 @@ public final class SaveJobUtil {
 		// Take copy of scenario
 		// this was wrong
 		// final Scenario scenario = EcoreUtil.copy((job).getJobContext());
-		final MMXRootObject scenario = control.getJobOutput().scenario;
+		final MMXRootObject scenario = control.getJobOutput();
 
 		// Process scenario - prune out intermediate schedules ....
 		ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
