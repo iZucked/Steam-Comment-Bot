@@ -87,7 +87,7 @@
 					<instructions>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
-						<Export-Package>com.mmxlabs.optimiser.common.*;version="${Bundle-UnqualifiedVersion}"</Export-Package>
+						<Export-Package>com.mmxlabs.optimiser.common*;version="${Bundle-UnqualifiedVersion}"</Export-Package>
 						<Bundle-Activator>com.mmxlabs.optimiser.common.Activator</Bundle-Activator>
 					</instructions>
 				</configuration>
