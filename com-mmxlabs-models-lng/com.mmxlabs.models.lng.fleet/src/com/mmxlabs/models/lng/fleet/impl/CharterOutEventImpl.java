@@ -273,6 +273,16 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public Port getEndPort() {
+		if (isSetRelocateTo()) return getRelocateTo();
+		else return getPort();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override

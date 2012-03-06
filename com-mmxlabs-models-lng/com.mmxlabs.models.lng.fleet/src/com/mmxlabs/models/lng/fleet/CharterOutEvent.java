@@ -156,6 +156,14 @@ public interface CharterOutEvent extends VesselEvent {
 	 */
 	void setHireRate(int value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	Port getEndPort();
+
 } // end of  CharterOutEvent
 
 // finish type fixing
