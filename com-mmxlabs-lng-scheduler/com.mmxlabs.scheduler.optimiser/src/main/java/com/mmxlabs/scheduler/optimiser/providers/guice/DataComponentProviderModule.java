@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.providers.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
@@ -75,7 +76,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEdi
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEditor;
 
 /**
- * {@link Module} implementation providing shared {@link IDiscountCurveProvider} instances. This Module will return the same instance for the {@link IDataComponentProvider} and any editor subclasses.
+ * {@link Module} implementation providing shared {@link IDataComponentProvider} instances. This Module will return the same instance for the {@link IDataComponentProvider} and any editor subclasses.
  * 
  * @author Simon Goodall
  * 
@@ -99,6 +100,7 @@ public class DataComponentProviderModule extends AbstractModule {
 	protected void configure() {
 
 		bind(IXYPortDistanceCalculator.class).to(XYPortEuclideanDistanceCalculator.class);
+		bind(XYPortEuclideanDistanceCalculator.class).in(Singleton.class);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(SchedulerConstants.DCP_vesselProvider);
 
@@ -196,7 +198,6 @@ public class DataComponentProviderModule extends AbstractModule {
 		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor(SchedulerConstants.DCP_optionalElementsProvider);
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
-
 	}
 
 	/**
