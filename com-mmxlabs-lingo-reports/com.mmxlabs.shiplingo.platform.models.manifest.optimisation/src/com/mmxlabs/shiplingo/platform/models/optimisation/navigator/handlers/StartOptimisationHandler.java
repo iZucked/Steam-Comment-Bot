@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.optimisation.navigator.handlers;
+package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers;
 
 import java.util.Iterator;
 
@@ -26,7 +26,7 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.shiplingo.platform.models.manifest.optimisation.Activator;
+import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.

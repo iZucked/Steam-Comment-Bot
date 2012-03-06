@@ -2,20 +2,19 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.optimisation.navigator.scenario;
+package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.scenario;
 
 import java.util.Collections;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 
-import scenario.Scenario;
-import scenario.schedule.Schedule;
-import scenario.schedule.ScheduleModel;
-
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.lngscheduler.ui.Activator;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.ecore.EcoreContentProvider;
+import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 /**
  * An {@link IAdapterFactory} used to get {@link Schedule} instances from a {@link Scenario} or {@link IResource}. This should be registered in the plugin.xml for this plugin.
@@ -51,11 +50,11 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 			// }
 
 			// Fall back to directly loading from resource
-			if (Scenario.class.isAssignableFrom(adapterType)) {
-				final Scenario scenario = getScenario((IResource) adaptableObject);
+			if (MMXRootObject.class.isAssignableFrom(adapterType)) {
+				final MMXRootObject scenario = getScenario((IResource) adaptableObject);
 				return scenario;
 			} else if (Schedule.class.isAssignableFrom(adapterType)) {
-				final Scenario scenario = getScenario((IResource) adaptableObject);
+				final MMXRootObject scenario = getScenario((IResource) adaptableObject);
 				return getSchedule(scenario);
 			}
 		}
@@ -63,9 +62,9 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 		return null;
 	}
 
-	private Schedule getSchedule(final Scenario scenario) {
+	private Schedule getSchedule(final MMXRootObject scenario) {
 		if (scenario != null) {
-			final ScheduleModel scheduleModel = scenario.getScheduleModel();
+			final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 			if (scheduleModel != null) {
 				final int size = scheduleModel.getSchedules().size();
 				if (size > 0) {
@@ -76,12 +75,12 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 		return null;
 	}
 
-	private Scenario getScenario(final IResource resource) {
+	private MMXRootObject getScenario(final IResource resource) {
 		final Object[] scenarioObjects = scp.getChildren(resource);
 		if (scenarioObjects != null) {
 			for (final Object o : scenarioObjects) {
-				if (o instanceof Scenario) {
-					final Scenario scenario = (Scenario) o;
+				if (o instanceof MMXRootObject) {
+					final MMXRootObject scenario = (MMXRootObject) o;
 					return scenario;
 				}
 			}
@@ -91,6 +90,6 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 
 	@Override
 	public Class<?>[] getAdapterList() {
-		return new Class[] { Scenario.class, IResource.class };
+		return new Class[] { MMXRootObject.class, IResource.class };
 	}
 }

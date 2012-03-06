@@ -2,13 +2,13 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.optimisation.adapterfactories;
+package com.mmxlabs.shiplingo.platform.models.optimisation.adapterfactories;
 
 import org.eclipse.core.runtime.IAdapterFactory;
 
 import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.shiplingo.platform.models.manifest.optimisation.LNGSchedulerJobControl;
-import com.mmxlabs.shiplingo.platform.models.manifest.optimisation.LNGSchedulerJobDescriptor;
+import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobControl;
+import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor;
 
 /**
  * {@link IAdapterFactory} to convert a {@link LNGSchedulerJobDescriptor} into an {@link IJobControl} - specifically a {@link LNGSchedulerJobControl}.

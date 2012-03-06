@@ -1,4 +1,4 @@
-package com.mmxlabs.shiplingo.platform.models.manifest.optimisation;
+package com.mmxlabs.shiplingo.platform.models.optimisation;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -12,7 +12,7 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.mmxlabs.shiplingo.platform.models.manifest.optimisation"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.mmxlabs.shiplingo.platform.models.optimisation"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;

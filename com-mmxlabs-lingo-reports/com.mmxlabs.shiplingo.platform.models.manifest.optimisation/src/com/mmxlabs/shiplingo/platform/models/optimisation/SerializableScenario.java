@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.optimisation;
+package com.mmxlabs.shiplingo.platform.models.optimisation;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

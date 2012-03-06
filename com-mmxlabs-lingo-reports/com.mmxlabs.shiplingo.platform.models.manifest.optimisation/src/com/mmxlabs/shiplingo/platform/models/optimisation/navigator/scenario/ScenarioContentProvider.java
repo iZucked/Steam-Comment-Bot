@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.optimisation.navigator.scenario;
+package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.scenario;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
@@ -22,7 +22,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.manager.IJobManagerListener;
-import com.mmxlabs.shiplingo.platform.models.manifest.optimisation.Activator;
+import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 /**
  * {@link IContentProvider} implementation providing {@link ScenarioTreeNodeClass} instances where a {@link IContainer} has a child {@link IResource} named ".scenario".

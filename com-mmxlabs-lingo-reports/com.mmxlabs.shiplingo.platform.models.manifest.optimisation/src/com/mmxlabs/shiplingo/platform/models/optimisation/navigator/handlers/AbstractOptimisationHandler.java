@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.optimisation.navigator.handlers;
+package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.HandlerEvent;
@@ -22,7 +22,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.jobs.impl.JobControlAdapter;
 import com.mmxlabs.jobmanager.manager.IJobManagerListener;
-import com.mmxlabs.shiplingo.platform.models.manifest.optimisation.Activator;
+import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 /**
  * Base {@link IHandler} implementation to cause enabled state to be refreshed on job progress updates.

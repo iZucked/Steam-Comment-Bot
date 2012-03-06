@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.optimisation.navigator.scenario;
+package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.scenario;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.lngscheduler.ui.Activator;
+import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 public class ScenarioLabelProvider extends WorkbenchLabelProvider implements ICommonLabelProvider, ITableLabelProvider {
 
@@ -46,28 +46,28 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements ICo
 
 			case COMPLETED:
 
-				desc = Activator.getImageDescriptor("/icons/elcl16/terminate_co.gif");
+				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui", "/icons/elcl16/terminate_co.gif");
 				break;
 			case INITIALISED:
-				desc = Activator.getImageDescriptor("/icons/elcl16/terminate_co.gif");
+				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui","/icons/elcl16/terminate_co.gif");
 				break;
 			case PAUSED:
-				desc = Activator.getImageDescriptor("/icons/elcl16/suspend_co.gif");
+				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui","/icons/elcl16/suspend_co.gif");
 				break;
 			case PAUSING:
-				desc = Activator.getImageDescriptor("/icons/dlcl16/suspend_co.gif");
+				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui","/icons/dlcl16/suspend_co.gif");
 				break;
 			case RESUMING:
-				desc = Activator.getImageDescriptor("/icons/dlcl16/resume_co.gif");
+				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui","/icons/dlcl16/resume_co.gif");
 				break;
 			case RUNNING:
-				desc = Activator.getImageDescriptor("/icons/elcl16/resume_co.gif");
+				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui","/icons/elcl16/resume_co.gif");
 				break;
 			case UNKNOWN:
 				return Display.getDefault().getSystemImage(SWT.ICON_WARNING);
 			}
 		} else {
-			desc = Activator.getImageDescriptor(key.toString());
+			desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui",key.toString());
 		}
 
 		// Cache image

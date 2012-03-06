@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.optimisation.jobmanager.handlers;
+package com.mmxlabs.shiplingo.platform.models.optimisation.jobmanager.handlers;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
