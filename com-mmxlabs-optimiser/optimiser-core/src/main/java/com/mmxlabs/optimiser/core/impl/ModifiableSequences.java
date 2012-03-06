@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -167,6 +168,12 @@ public final class ModifiableSequences implements IModifiableSequences {
 		}
 
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hashCode(this.resources, this.sequenceMap, this.unusedElements);
 	}
 
 	@Override

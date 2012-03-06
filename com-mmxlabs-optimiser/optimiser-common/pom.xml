@@ -20,6 +20,30 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		
+		      <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>${osgi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ops4j</groupId>
+            <artifactId>peaberry</artifactId>
+        </dependency>
+		
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -64,6 +88,7 @@
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
 						<Export-Package>com.mmxlabs.optimiser.common.*;version="${Bundle-UnqualifiedVersion}"</Export-Package>
+						<Bundle-Activator>com.mmxlabs.optimiser.common.Activator</Bundle-Activator>
 					</instructions>
 				</configuration>
 			</plugin>

@@ -13,7 +13,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>bundle-parent</artifactId>
 		<relativePath />
-		<version>5</version>
+		<version>7</version>
 	</parent>
 
 	<scm>
