@@ -28,6 +28,8 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobControl;
@@ -97,17 +99,21 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 								// Prepare should load up the model and evaluate the initial solution.
 								control.prepare();
 
-								final MMXRootObject output = control.getJobOutput().scenario;
+								final MMXRootObject scenario = control.getJobOutput();
 
-								final Iterator<Schedule> iterator = output.getScheduleModel().getSchedules().iterator();
-								Schedule lastSchedule = null;
-								while (iterator.hasNext()) {
-									lastSchedule = iterator.next();
-									if (iterator.hasNext()) {
-										iterator.remove();
-									}
-								}
-								output.getOptimisation().getCurrentSettings().setInitialSchedule(lastSchedule);
+								ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
+								
+								// Clear any existing optimised solution
+								scheduleModel.setOptimisedSchedule(null);
+//								final Iterator<Schedule> iterator = output.getScheduleModel().getSchedules().iterator();
+//								Schedule lastSchedule = null;
+//								while (iterator.hasNext()) {
+//									lastSchedule = iterator.next();
+//									if (iterator.hasNext()) {
+//										iterator.remove();
+//									}
+//								}
+//								output.getOptimisation().getCurrentSettings().setInitialSchedule(lastSchedule);
 
 								// Create new resource using original scenario URI
 								final XMIResourceImpl r = new XMIResourceImpl(scenario.eResource().getURI());
