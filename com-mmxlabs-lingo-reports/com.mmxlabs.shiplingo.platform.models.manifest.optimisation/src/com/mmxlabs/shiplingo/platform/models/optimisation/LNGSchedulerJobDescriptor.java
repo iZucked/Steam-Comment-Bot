@@ -20,14 +20,11 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 
 	private final String name;
 
-	private SerializableScenario scenario;
-
-	// private Scenario scenario;
+	private MMXRootObject scenario;
 
 	public LNGSchedulerJobDescriptor(final String name, final MMXRootObject scenario) {
 		this.name = name;
-		this.scenario = new SerializableScenario(scenario);
-		// this.scenario = scenario;
+		this.scenario = scenario;
 	}
 
 	@Override
@@ -42,7 +39,7 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 
 	@Override
 	public MMXRootObject getJobContext() {
-		return scenario.scenario;
+		return scenario;
 	}
 
 	@Override
