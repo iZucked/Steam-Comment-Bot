@@ -10,9 +10,8 @@ import java.util.List;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import scenario.Scenario;
-import scenario.schedule.Schedule;
-import scenario.schedule.ScheduleFitness;
+import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.Schedule;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -51,13 +50,13 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 			for (final Object o : ((Iterable<?>) newInput)) {
 				if (o instanceof Schedule) {
 					final Schedule schedule = (Schedule) o;
-					final Scenario s = (Scenario) schedule.eContainer().eContainer();
-					final String scheduleName = s.getName();
+//					final Scenario s = (Scenario) schedule.eContainer().eContainer();
+					final String scheduleName = "FIXME";//s.getName();
 					long total = 0l;
-					for (final ScheduleFitness f : schedule.getFitness()) {
-						rowDataList.add(new RowData(scheduleName, f.getName(), f.getValue()));
+					for (final Fitness f : schedule.getFitnesses()) {
+						rowDataList.add(new RowData(scheduleName, f.getName(), f.getFitnessValue()));
 						if (!(f.getName().equals("iterations") || f.getName().equals("runtime"))) {
-							total += f.getValue();
+							total += f.getFitnessValue();
 						}
 					}
 					rowDataList.add(new RowData(scheduleName, "Total", total));

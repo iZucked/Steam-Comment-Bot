@@ -10,13 +10,12 @@ import java.util.Collections;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import scenario.schedule.Schedule;
-import scenario.schedule.SchedulePackage;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.EventsPackage;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.events.SlotVisit;
-import scenario.schedule.events.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 /**
  * @author hinton
@@ -30,17 +29,16 @@ public class LatenessReportView extends EMFReportView {
 		addColumn("Schedule", containingScheduleFormatter);
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
-		final EventsPackage ep = EventsPackage.eINSTANCE;
 
-		addColumn("Type", objectFormatter, ep.getScheduledEvent__GetDisplayTypeName());
+		addColumn("Type", objectFormatter, sp.getEvent__Type());
 
-		addColumn("ID", objectFormatter, ep.getScheduledEvent__GetName());
+		addColumn("ID", objectFormatter, sp.getEvent__Name());
 
-		final ColumnHandler dateColumn = addColumn("Start Date", datePartFormatter, ep.getScheduledEvent__GetLocalStartTime());
-		addColumn("Start Time", timePartFormatter, ep.getScheduledEvent__GetLocalStartTime());
+		final ColumnHandler dateColumn = addColumn("Start Date", datePartFormatter, sp.getEvent__GetLocalStart());
+		addColumn("Start Time", timePartFormatter, sp.getEvent__GetLocalStart());
 
-		addColumn("End Date", datePartFormatter, ep.getScheduledEvent__GetLocalEndTime());
-		addColumn("End Time", timePartFormatter, ep.getScheduledEvent__GetLocalEndTime());
+		addColumn("End Date", datePartFormatter, sp.getEvent__GetLocalEnd());
+		addColumn("End Time", timePartFormatter,sp.getEvent__GetLocalEnd());
 	}
 
 	@Override
@@ -59,23 +57,23 @@ public class LatenessReportView extends EMFReportView {
 
 			@Override
 			public Object[] getElements(final Object object) {
-				final ArrayList<ScheduledEvent> allEvents = new ArrayList<ScheduledEvent>();
+				final ArrayList<Event> allEvents = new ArrayList<Event>();
 				clearInputEquivalents();
 				if (object instanceof Iterable) {
 					for (final Object o : ((Iterable<?>) object)) {
 						if (o instanceof Schedule) {
 							for (final Sequence seq : ((Schedule) o).getSequences()) {
-								for (final ScheduledEvent e : seq.getEvents()) {
+								for (final Event e : seq.getEvents()) {
 									if (e instanceof SlotVisit) {
 										final SlotVisit visit = (SlotVisit) e;
 
-										if (visit.getStartTime().after(visit.getSlot().getWindowEnd())) {
+										if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
 											allEvents.add(e);
 										}
-										setInputEquivalents(visit, Collections.singleton((Object) visit.getCargoAllocation()));
+										setInputEquivalents(visit, Collections.singleton((Object) visit.getSlotAllocation().getCargoAllocation()));
 									} else if (e instanceof VesselEventVisit) {
 										final VesselEventVisit vev = (VesselEventVisit) e;
-										if (vev.getStartTime().after(vev.getVesselEvent().getEndDate())) {
+										if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
 											allEvents.add(e);
 										}
 									}

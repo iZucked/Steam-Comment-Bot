@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -81,11 +82,11 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	@Override
 	public Calendar getElementStartTime(final Object element) {
-		if (element instanceof ScheduledEvent) {
-			final ScheduledEvent event = (ScheduledEvent) element;
+		if (element instanceof Event) {
+			final Event event = (Event) element;
 			final Calendar c = Calendar.getInstance();
 
-			final Date startTime = event.getStartTime();
+			final Date startTime = event.getStart();
 			if (startTime != null) {
 				c.setTime(startTime);
 				return c;
@@ -96,11 +97,11 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	@Override
 	public Calendar getElementEndTime(final Object element) {
-		if (element instanceof ScheduledEvent) {
-			final ScheduledEvent event = (ScheduledEvent) element;
+		if (element instanceof Event) {
+			final Event event = (Event) element;
 			final Calendar c = Calendar.getInstance();
 
-			final Date endTime = event.getEndTime();
+			final Date endTime = event.getEnd();
 			if (endTime != null) {
 				c.setTime(endTime);
 				return c;
@@ -114,7 +115,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
 			final Calendar c = Calendar.getInstance();
-			final Slot slot = visit.getSlot();
+			final Slot slot = visit.getSlotAllocation().getSlot();
 
 			final Date windowStart = slot.getWindowStart();
 			if (windowStart != null) {
@@ -131,11 +132,11 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
 			final Calendar c = Calendar.getInstance();
-			final Slot slot = visit.getSlot();
+			final Slot slot = visit.getSlotAllocation().getSlot();
 			final Date windowStart = slot.getWindowStart();
 			if (windowStart != null) {
 				c.setTime(windowStart);
-				c.add(Calendar.HOUR, slot.getWindowDuration());
+				c.add(Calendar.HOUR, slot.getSlotOrPortDuration());
 				return c;
 			}
 		}

@@ -7,7 +7,6 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,23 +35,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import scenario.Detail;
-import scenario.Scenario;
-import scenario.contract.Entity;
-import scenario.contract.GroupEntity;
-import scenario.schedule.BookedRevenue;
-import scenario.schedule.Schedule;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.FuelMixture;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.FuelType;
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.PortVisit;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.fleetallocation.AllocatedVessel;
-import scenario.schedule.fleetallocation.FleetVessel;
-
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
@@ -188,71 +178,71 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		if (schedules.size() == 1) {
 			final Schedule schedule = schedules.get(0);
 			dummy.addChild(createCostsTreeData(schedule));
-			dummy.addChild(createProfitTreeData(schedule));
+//			dummy.addChild(createProfitTreeData(schedule));
 		} else {
 			for (final Schedule schedule : schedules) {
-				final Scenario s = (Scenario) schedule.eContainer().eContainer();
-				final String scheduleName = s.getName();
+//				final Scenario s = (Scenario) schedule.eContainer().eContainer();
+				final String scheduleName = "FIXME";//s.getName();
 				// final String scheduleName = schedule.getName();
 				// don't sum costs and profits, because it's meaningless
 				// (profits already include costs)
 				final TreeData group = new TreeData(scheduleName, true);
 				group.addChild(createCostsTreeData(schedule));
-				group.addChild(createProfitTreeData(schedule));
+//				group.addChild(createProfitTreeData(schedule));
 				dummy.addChild(group);
 			}
 		}
 		return dummy;
 	}
 
-	private TreeData createProfitTreeData(final Schedule schedule) {
-		final TreeData top = new TreeData("Total Profit");
-		final Map<Entity, TreeData> byEntity = new HashMap<Entity, TreeData>();
-		if (schedule != null) {
-			for (final BookedRevenue revenue : schedule.getRevenue()) {
-				final Entity e = revenue.getEntity();
-				if ((e == null) || !(e instanceof GroupEntity)) {
-					continue;
-				}
+//	private TreeData createProfitTreeData(final Schedule schedule) {
+//		final TreeData top = new TreeData("Total Profit");
+//		final Map<Entity, TreeData> byEntity = new HashMap<Entity, TreeData>();
+//		if (schedule != null) {
+//			for (final BookedRevenue revenue : schedule.getRevenue()) {
+//				final Entity e = revenue.getEntity();
+//				if ((e == null) || !(e instanceof GroupEntity)) {
+//					continue;
+//				}
+//
+//				TreeData td = byEntity.get(e);
+//				if (td == null) {
+//					td = new TreeData(e.getName());
+//					top.addChild(td);
+//					byEntity.put(e, td);
+//				}
+//
+//				final TreeData rd = new TreeData(revenue.getName(), revenue.getValue());
+//				td.addChild(rd);
+//				for (final Detail d : revenue.getDetails().getChildren()) {
+//					rd.addChild(createDetailTreeData(d));
+//				}
+//
+//				// for (final LineItem item : revenue.getLineItems()) {
+//				// final TreeData li = new TreeData(item.getName(),
+//				// item.getValue());
+//				// rd.addChild(li);
+//				// }
+//
+//				// rd.addChild(new TreeData("Tax", -revenue.getTaxCost()));
+//				// assert (rd.getCost() == revenue.getTaxedValue());
+//				// TODO this does not take account of ownership proportion
+//			}
+//		}
+//		return top;
+//	}
 
-				TreeData td = byEntity.get(e);
-				if (td == null) {
-					td = new TreeData(e.getName());
-					top.addChild(td);
-					byEntity.put(e, td);
-				}
-
-				final TreeData rd = new TreeData(revenue.getName(), revenue.getValue());
-				td.addChild(rd);
-				for (final Detail d : revenue.getDetails().getChildren()) {
-					rd.addChild(createDetailTreeData(d));
-				}
-
-				// for (final LineItem item : revenue.getLineItems()) {
-				// final TreeData li = new TreeData(item.getName(),
-				// item.getValue());
-				// rd.addChild(li);
-				// }
-
-				// rd.addChild(new TreeData("Tax", -revenue.getTaxCost()));
-				// assert (rd.getCost() == revenue.getTaxedValue());
-				// TODO this does not take account of ownership proportion
-			}
-		}
-		return top;
-	}
-
-	/**
-	 * @param details
-	 * @return
-	 */
-	private TreeData createDetailTreeData(final Detail details) {
-		final TreeData top = new TreeData(details.getName(), details.getValue());
-		for (final Detail d : details.getChildren()) {
-			top.addChild(createDetailTreeData(d));
-		}
-		return top;
-	}
+//	/**
+//	 * @param details
+//	 * @return
+//	 */
+//	private TreeData createDetailTreeData(final Detail details) {
+//		final TreeData top = new TreeData(details.getName(), details.getValue());
+//		for (final Detail d : details.getChildren()) {
+//			top.addChild(createDetailTreeData(d));
+//		}
+//		return top;
+//	}
 
 	/**
 	 * Extract cost information from the schedule and put it in the treedata
@@ -267,8 +257,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 			return top;
 		}
 
-		final EnumMap<FuelType, TreeData> fleetFuelUsages = new EnumMap<FuelType, TreeData>(FuelType.class);
-		final EnumMap<FuelType, TreeData> spotFuelUsages = new EnumMap<FuelType, TreeData>(FuelType.class);
+		final Map<Fuel, TreeData> fleetFuelUsages = new HashMap<Fuel, TreeData>();
+		final Map<Fuel, TreeData> spotFuelUsages = new HashMap<Fuel, TreeData>();
 
 		final TreeData fleetLNG = new TreeData("Fleet Vessels");
 		final TreeData spotLNG = new TreeData("Spot Vessels");
@@ -280,8 +270,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		lng.addChild(spotLNG);
 
 		// First do fuel costs
-		for (final FuelType t : FuelType.values()) {
-			if (t.equals(FuelType.FBO) || t.equals(FuelType.NBO)) {
+		for (final Fuel t : Fuel.values()) {
+			if (t.equals(Fuel.FBO) || t.equals(Fuel.NBO)) {
 				final TreeData thisFuelFleet = new TreeData(t.getName());
 				final TreeData thisFuelSpot = new TreeData(t.getName());
 
@@ -304,35 +294,34 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		}
 
 		for (final Sequence seq : schedule.getSequences()) {
-			final AllocatedVessel av = seq.getVessel();
-			final EnumMap<FuelType, TreeData> vesselFuelUsage = new EnumMap<FuelType, TreeData>(FuelType.class);
+//			final AllocatedVessel av = seq.getVessel();
+			final Map<Fuel, TreeData> vesselFuelUsage = new HashMap<Fuel, TreeData>();
 
-			final EnumMap<FuelType, TreeData> fuelUsages = (av instanceof FleetVessel) ? fleetFuelUsages : spotFuelUsages;
+			final Map<Fuel, TreeData> fuelUsages = 
+					seq.isSpotVessel() ? spotFuelUsages : fleetFuelUsages;
 
-			for (final FuelType t : FuelType.values()) {
-				final TreeData thisFuelAndVessel = new TreeData(av.getName());
+			for (final Fuel t : Fuel.values()) {
+				final TreeData thisFuelAndVessel = new TreeData(seq.getName());
 				vesselFuelUsage.put(t, thisFuelAndVessel);
 				fuelUsages.get(t).addChild(thisFuelAndVessel);
 			}
 
-			for (final ScheduledEvent evt : seq.getEvents()) {
-				if (evt instanceof FuelMixture) {
+			for (final Event evt : seq.getEvents()) {
+				if (evt instanceof FuelUsage) {
 					final String name;
 					if (evt instanceof Journey) {
 						final Journey j = (Journey) evt;
-						name = j.getFromPort().getName() + " to " + j.getToPort().getName();
-					} else if (evt instanceof PortVisit) {
-						name = ((PortVisit) evt).getDisplayTypeName() + " " + ((PortVisit) evt).getId();
+						name = j.getPort().getName() + " to " + j.getDestination().getName();
 					} else {
-						name = "Unknown";
+						name = evt.type() + " - " + evt.name();
 					}
-					final FuelMixture mix = (FuelMixture) evt;
-					for (final FuelQuantity fq : mix.getFuelUsage()) {
-						if (fq.getTotalPrice() == 0) {
+					final FuelUsage mix = (FuelUsage) evt;
+					for (final FuelQuantity fq : mix.getFuels()) {
+						if (fq.getCost() == 0) {
 							continue;
 						}
-						final TreeData eventUsage = new TreeData(name, fq.getTotalPrice());
-						vesselFuelUsage.get(fq.getFuelType()).addChild(eventUsage);
+						final TreeData eventUsage = new TreeData(name, fq.getCost());
+						vesselFuelUsage.get(fq.getFuel()).addChild(eventUsage);
 					}
 				}
 			}
@@ -350,16 +339,18 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 		// Now do canal costs
 		for (final Sequence seq : schedule.getSequences()) {
-			final AllocatedVessel av = seq.getVessel();
-			final TreeData thisVessel = new TreeData(av.getName());
-			(av instanceof FleetVessel ? fleetCanalCosts : spotCanalCosts).addChild(thisVessel);
+//			final AllocatedVessel av = seq.getVessel();
+			final TreeData thisVessel = new TreeData(seq.getName());
+			(!seq.isSpotVessel() ? fleetCanalCosts : spotCanalCosts).addChild(thisVessel);
 
-			for (final ScheduledEvent event : seq.getEvents()) {
+			for (final Event event : seq.getEvents()) {
 				if (event instanceof Journey) {
 					final Journey j = (Journey) event;
-					if (j.getRouteCost() > 0) {
-						final TreeData thisLeg = new TreeData(j.getVesselState().getName() + " voyage from " + j.getFromPort().getName() + " to " + j.getToPort().getName() + " via " + j.getRoute(),
-								j.getRouteCost());
+					if (j.getToll() > 0) {
+						final TreeData thisLeg = new TreeData(
+								(j.isLaden() ? "Laden" : "Ballast")
+								+ " voyage from " + j.getPort().getName() + " to " + j.getDestination().getName() + " via " + j.getRoute(),
+								j.getToll());
 						thisVessel.addChild(thisLeg);
 					}
 				}
@@ -371,12 +362,11 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		top.addChild(charterCosts);
 
 		for (final Sequence seq : schedule.getSequences()) {
-			final AllocatedVessel av = seq.getVessel();
 			long acc = 0;
-			for (final ScheduledEvent e : seq.getEvents()) {
+			for (final Event e : seq.getEvents()) {
 				acc += e.getHireCost();
 			}
-			charterCosts.addChild(new TreeData(av.getName(), acc));
+			charterCosts.addChild(new TreeData(seq.getName(), acc));
 		}
 
 		return top;

@@ -200,7 +200,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 				// find what we have double-clicked
 				if (selection instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) selection;
-					final Slot slot = slotVisit.getSlot().getSlot();
+					final Slot slot = slotVisit.getSlotAllocation().getSlot();
 					// TODO factor out to somewhere useful:
 					final EObject c = slot.eContainer();
 
@@ -598,10 +598,10 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			for (final Object o : sel.toList()) {
 				if (o instanceof CargoAllocation) {
 					final CargoAllocation allocation = (CargoAllocation) o;
-					objects.add(allocation.getLoadVisit());
+					objects.add(allocation.getLoadAllocation().getSlotVisit());
 					objects.add(allocation.getLadenLeg());
 					objects.add(allocation.getLadenIdle());
-					objects.add(allocation.getDischargeVisit());
+					objects.add(allocation.getDischargeAllocation().getSlotVisit());
 					objects.add(allocation.getBallastLeg());
 					objects.add(allocation.getBallastIdle());
 				} else {

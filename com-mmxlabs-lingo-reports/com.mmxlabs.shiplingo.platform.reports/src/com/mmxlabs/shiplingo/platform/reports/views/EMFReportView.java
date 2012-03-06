@@ -44,21 +44,19 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import scenario.Scenario;
-import scenario.schedule.Schedule;
-
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
-import com.mmxlabs.lngscheduler.emf.extras.CompiledEMFPath;
-import com.mmxlabs.lngscheduler.emf.extras.EMFPath;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.ICellManipulator;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.filter.FilterField;
+import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
+import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
-import com.mmxlabs.shiplingo.ui.tableview.EObjectTableViewer;
-import com.mmxlabs.shiplingo.ui.tableview.ICellManipulator;
-import com.mmxlabs.shiplingo.ui.tableview.ICellRenderer;
-import com.mmxlabs.shiplingo.ui.tableview.filter.FilterField;
 
 /**
  * Base class for views which show things from the EMF output model.
@@ -166,8 +164,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				}
 			}
 			if (object instanceof Schedule) {
-				final Scenario s = (Scenario) ((Schedule) object).eContainer().eContainer();
-				return s.getName();
+//				final Scenario s = (Scenario) ((Schedule) object).eContainer().eContainer();
+//				return s.getName();
+				return "TODO";
 			} else {
 				return "";
 			}

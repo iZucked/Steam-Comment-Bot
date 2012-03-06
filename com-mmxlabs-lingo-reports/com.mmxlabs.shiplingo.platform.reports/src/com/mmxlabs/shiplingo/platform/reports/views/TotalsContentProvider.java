@@ -5,7 +5,6 @@
 package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,17 +13,13 @@ import java.util.Map.Entry;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import scenario.Scenario;
-import scenario.contract.Entity;
-import scenario.contract.GroupEntity;
-import scenario.schedule.BookedRevenue;
-import scenario.schedule.Schedule;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.FuelMixture;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.FuelType;
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.ScheduledEvent;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -61,11 +56,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		/**
 		 * Stores the total fuel costs for each type of fuel - this may not be the detailed output we want, I don't know
 		 */
-		final EnumMap<FuelType, Long> totalFuelCosts = new EnumMap<FuelType, Long>(FuelType.class);
-
-		for (final FuelType t : FuelType.values()) {
-			totalFuelCosts.put(t, 0l);
-		}
+		final Map<Fuel, Long> totalFuelCosts = new HashMap<Fuel, Long>();
 
 		long distance = 0l;
 		long totalCost = 0l;
@@ -73,31 +64,32 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		long hire = 0;
 
 		for (final Sequence seq : schedule.getSequences()) {
-			for (final ScheduledEvent evt : seq.getEvents()) {
+			for (final Event evt : seq.getEvents()) {
 				hire += evt.getHireCost();
 				totalCost += evt.getHireCost();
-				if (evt instanceof FuelMixture) {
-					final FuelMixture mix = (FuelMixture) evt;
+				if (evt instanceof FuelUsage) {
+					final FuelUsage mix = (FuelUsage) evt;
 					// add up fuel components from mixture
-					for (final FuelQuantity fq : mix.getFuelUsage()) {
-						final long sumSoFar = totalFuelCosts.get(fq.getFuelType());
-						totalFuelCosts.put(fq.getFuelType(), sumSoFar + fq.getTotalPrice());
-						totalCost += fq.getTotalPrice();
+					for (final FuelQuantity fq : mix.getFuels()) {
+						Long sumSoFar = totalFuelCosts.get(fq.getFuel());
+						if (sumSoFar == null) sumSoFar = 0l;
+						totalFuelCosts.put(fq.getFuel(), sumSoFar + fq.getCost());
+						totalCost += fq.getCost();
 					}
 				}
 				if (evt instanceof Journey) {
 					final Journey journey = (Journey) evt;
 					distance += journey.getDistance();
-					canals += journey.getRouteCost();
-					totalCost += journey.getRouteCost();
+					canals += journey.getToll();
+					totalCost += journey.getToll();
 				}
 			}
 		}
 
-		final Scenario s = (Scenario) schedule.eContainer().eContainer();
-		final String scheduleName = s.getName();
+//		final Scenario s = (Scenario) schedule.eContainer().eContainer();
+		final String scheduleName = "FIXME"; //s.getName();
 
-		for (final Entry<FuelType, Long> entry : totalFuelCosts.entrySet()) {
+		for (final Entry<Fuel, Long> entry : totalFuelCosts.entrySet()) {
 			output.add(new RowData(scheduleName, entry.getKey().toString(), true, entry.getValue()));
 		}
 
@@ -109,26 +101,26 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 
 		// compute revenues
 
-		final Map<Entity, Long> totalRevenue = new HashMap<Entity, Long>();
-
-		for (final BookedRevenue revenue : schedule.getRevenue()) {
-			if (revenue.getEntity() == null) {
-				continue;
-			}
-			if ((revenue.getEntity() instanceof GroupEntity) == false) {
-				continue;
-			}
-			final Long l = totalRevenue.get(revenue.getEntity());
-			totalRevenue.put(revenue.getEntity(), (l == null ? 0 : l.longValue()) + revenue.getValue());
-		}
-
-		long totalTotalRevenue = 0;
-		for (final Map.Entry<Entity, Long> sum : totalRevenue.entrySet()) {
-			output.add(new RowData(scheduleName, sum.getKey().getName(), false, sum.getValue()));
-			totalTotalRevenue += sum.getValue();
-		}
-
-		output.add(new RowData(scheduleName, "Total Profit", false, totalTotalRevenue));
+//		final Map<Entity, Long> totalRevenue = new HashMap<Entity, Long>();
+//
+//		for (final BookedRevenue revenue : schedule.getRevenue()) {
+//			if (revenue.getEntity() == null) {
+//				continue;
+//			}
+//			if ((revenue.getEntity() instanceof GroupEntity) == false) {
+//				continue;
+//			}
+//			final Long l = totalRevenue.get(revenue.getEntity());
+//			totalRevenue.put(revenue.getEntity(), (l == null ? 0 : l.longValue()) + revenue.getValue());
+//		}
+//
+//		long totalTotalRevenue = 0;
+//		for (final Map.Entry<Entity, Long> sum : totalRevenue.entrySet()) {
+//			output.add(new RowData(scheduleName, sum.getKey().getName(), false, sum.getValue()));
+//			totalTotalRevenue += sum.getValue();
+//		}
+//
+//		output.add(new RowData(scheduleName, "Total Profit", false, totalTotalRevenue));
 	}
 
 	@SuppressWarnings("unchecked")

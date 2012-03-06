@@ -10,19 +10,17 @@ import java.util.Collections;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import scenario.ScenarioPackage;
-import scenario.schedule.Schedule;
-import scenario.schedule.SchedulePackage;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.EventsPackage;
-import scenario.schedule.events.FuelMixture;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.FuelType;
-import scenario.schedule.events.Idle;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.events.SlotVisit;
-import scenario.schedule.events.VesselEventVisit;
-import scenario.schedule.fleetallocation.FleetallocationPackage;
+import com.mmxlabs.models.lng.schedule.Cooldown;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * A report which displays the cooldowns in the selected schedules.
@@ -40,8 +38,9 @@ public class CooldownReportView extends EMFReportView {
 		super("com.mmxlabs.shiplingo.platform.reports.CooldownReportView");
 
 		addColumn("Schedule", containingScheduleFormatter);
-		addColumn("Vessel", objectFormatter, ScenarioPackage.eINSTANCE.getScenarioObject__GetContainer(), SchedulePackage.eINSTANCE.getSequence_Vessel(),
-				FleetallocationPackage.eINSTANCE.getAllocatedVessel__GetName());
+		addColumn("Vessel", objectFormatter, 
+				MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(),
+				SchedulePackage.eINSTANCE.getSequence__GetName());
 		addColumn("Cause ID", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
@@ -51,10 +50,10 @@ public class CooldownReportView extends EMFReportView {
 					int index = sequence.getEvents().indexOf(idle) - 1;
 
 					while (index >= 0) {
-						final ScheduledEvent before = sequence.getEvents().get(index);
+						final Event before = sequence.getEvents().get(index);
 
 						if ((before instanceof SlotVisit) || (before instanceof VesselEventVisit)) {
-							return before.getName();
+							return before.name();
 						}
 
 						index--;
@@ -71,26 +70,22 @@ public class CooldownReportView extends EMFReportView {
 					final Idle idle = (Idle) object;
 					final Sequence sequence = (Sequence) idle.eContainer();
 					final int index = sequence.getEvents().indexOf(idle) + 1;
-					final ScheduledEvent after = sequence.getEvents().get(index);
+					final Event after = sequence.getEvents().get(index);
 
-					return after.getName();
+					return after.name();
 				}
 				return "";
 			}
 		});
 
-		addColumn("Date", datePartFormatter, EventsPackage.eINSTANCE.getScheduledEvent__GetLocalStartTime());
-		addColumn("Time", timePartFormatter, EventsPackage.eINSTANCE.getScheduledEvent__GetLocalStartTime());
-		addColumn("Port", objectFormatter, EventsPackage.eINSTANCE.getPortVisit_Port(), ScenarioPackage.eINSTANCE.getNamedObject_Name());
+		addColumn("Date", datePartFormatter, SchedulePackage.eINSTANCE.getEvent__GetLocalStart());
+		addColumn("Time", timePartFormatter, SchedulePackage.eINSTANCE.getEvent__GetLocalStart());
+		addColumn("Port", objectFormatter, SchedulePackage.eINSTANCE.getEvent_Port(), MMXCorePackage.eINSTANCE.getNamedObject_Name());
 		addColumn("Volume", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
-				if (object instanceof FuelMixture) {
-					for (final FuelQuantity quantity : ((FuelMixture) object).getFuelUsage()) {
-						if (quantity.getFuelType() == FuelType.COOLDOWN) {
-							return (int) quantity.getQuantity();
-						}
-					}
+				if (object instanceof Cooldown) {
+					return ((Cooldown) object).getVolume();
 				}
 				return null;
 			}
@@ -99,12 +94,8 @@ public class CooldownReportView extends EMFReportView {
 		addColumn("Cost", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
-				if (object instanceof FuelMixture) {
-					for (final FuelQuantity quantity : ((FuelMixture) object).getFuelUsage()) {
-						if (quantity.getFuelType() == FuelType.COOLDOWN) {
-							return (int) quantity.getTotalPrice();
-						}
-					}
+				if (object instanceof Cooldown) {
+					return ((Cooldown) object).getCost();
 				}
 				return null;
 			}
@@ -126,26 +117,21 @@ public class CooldownReportView extends EMFReportView {
 
 			@Override
 			public Object[] getElements(final Object inputElement) {
-				final ArrayList<ScheduledEvent> events = new ArrayList<ScheduledEvent>();
+				final ArrayList<Event> events = new ArrayList<Event>();
 				clearInputEquivalents();
 				if (inputElement instanceof Iterable) {
 					for (final Object schedule_ : ((Iterable<?>) inputElement)) {
 						if (schedule_ instanceof Schedule) {
 							final Schedule schedule = (Schedule) schedule_;
 							for (final Sequence sequence : schedule.getSequences()) {
-								Idle lastIdle = null;
-								for (final ScheduledEvent event : sequence.getEvents()) {
-									if (event instanceof Idle) {
-										final Idle idle = (Idle) event;
-										for (final FuelQuantity quantity : idle.getFuelUsage()) {
-											if ((quantity.getFuelType() == FuelType.COOLDOWN) && (quantity.getQuantity() > 0)) {
-												events.add(idle);
-												lastIdle = idle;
-											}
-										}
-									} else if ((event instanceof SlotVisit) && (lastIdle != null)) {
-										setInputEquivalents(event, Collections.singleton((Object) ((SlotVisit) event).getCargoAllocation()));
-										lastIdle = null;
+								Cooldown lastCooldown = null;
+								for (final Event event : sequence.getEvents()) {
+									if (event instanceof Cooldown) {
+										events.add(event);
+										lastCooldown = (Cooldown) event;
+									} else if ((event instanceof SlotVisit) && (lastCooldown != null)) {
+										setInputEquivalents(event, Collections.singleton((Object) ((SlotVisit) event).getSlotAllocation().getCargoAllocation()));
+										lastCooldown = null;
 									}
 								}
 							}

@@ -7,10 +7,8 @@ package com.mmxlabs.scheduleview.views.colourschemes;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
-import scenario.schedule.events.FuelMixture;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.FuelType;
-import scenario.schedule.events.Idle;
+import com.mmxlabs.models.lng.schedule.Cooldown;
+import com.mmxlabs.models.lng.schedule.Idle;
 
 /**
  * A colour scheme which highlights cooldown in red
@@ -31,12 +29,8 @@ public class CooldownColourScheme implements IScheduleViewColourScheme {
 
 	@Override
 	public Color getBackground(final Object element) {
-		if (element instanceof FuelMixture) {
-			for (final FuelQuantity fq : ((FuelMixture) element).getFuelUsage()) {
-				if ((fq.getFuelType() == FuelType.COOLDOWN) && (fq.getQuantity() > 0)) {
-					return ColorCache.getColor(255, 0, 0);
-				}
-			}
+		if (element instanceof Cooldown) {
+			return ColorCache.getColor(255, 0, 0);
 		}
 		if (element instanceof Idle) {
 			return ColorCache.getColor(0, 0, 255);

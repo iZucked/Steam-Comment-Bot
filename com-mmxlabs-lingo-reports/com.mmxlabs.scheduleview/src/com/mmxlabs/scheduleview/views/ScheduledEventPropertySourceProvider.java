@@ -18,13 +18,13 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class ScheduledEventPropertySourceProvider implements IPropertySourceProvider {
 
@@ -97,11 +97,12 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 			for (final EAttribute attribute : eClass.getEAllAttributes()) {
 				// display attributes
 
-				if (attribute.equals(EventsPackage.eINSTANCE.getScheduledEvent_StartTime()) || attribute.equals(EventsPackage.eINSTANCE.getScheduledEvent_EndTime())) {
+				if (attribute.equals(SchedulePackage.eINSTANCE.getEvent_Start()) || 
+						attribute.equals(SchedulePackage.eINSTANCE.getEvent_End())) {
 					continue;
 				}
 
-				final PropertyDescriptor descriptor = new PropertyDescriptor(new CompiledEMFPath(true, attribute), unmangle(attribute.getName()));
+				final PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, attribute), unmangle(attribute.getName()));
 				descriptor.setCategory(eClass.getName());
 				descriptor.setLabelProvider(lp);
 
@@ -113,7 +114,7 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 				if (ref.isContainment() || ref.isMany() || !(ref.getEType().equals(PortPackage.eINSTANCE.getPort()))) {
 					continue;
 				}
-				final PropertyDescriptor descriptor = new PropertyDescriptor(new CompiledEMFPath(true, ref), unmangle(ref.getName()));
+				final PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, ref), unmangle(ref.getName()));
 				descriptor.setCategory(eClass.getName());
 				descriptor.setLabelProvider(lp);
 
@@ -121,31 +122,33 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 			}
 
 			if (event instanceof SlotVisit) {
-				PropertyDescriptor descriptor = new PropertyDescriptor(new CompiledEMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_Slot(), CargoPackage.eINSTANCE.getSlot_Id()), "Slot ID");
+				PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getSlotVisit_SlotAllocation(),
+						SchedulePackage.eINSTANCE.getSlotAllocation_Slot(),
+						MMXCorePackage.eINSTANCE.getNamedObject_Name()), "Slot ID");
 				descriptor.setCategory(eClass.getName());
 				descriptor.setLabelProvider(lp);
 
 				list.add(descriptor);
 
-				if (((SlotVisit) event).getSlot() instanceof LoadSlot) {
-					descriptor = new PropertyDescriptor(
-							new CompiledEMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(), SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()), "Load Volume");
-					descriptor.setCategory(eClass.getName());
-					descriptor.setLabelProvider(lp);
-
-					list.add(descriptor);
-				} else {
-					descriptor = new PropertyDescriptor(new CompiledEMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(),
-							SchedulePackage.eINSTANCE.getCargoAllocation_DischargeVolume()), "Discharge Volume");
-					descriptor.setCategory(eClass.getName());
-					descriptor.setLabelProvider(lp);
-
-					list.add(descriptor);
-				}
+//				if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
+//					descriptor = new PropertyDescriptor(
+//							new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(), SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()), "Load Volume");
+//					descriptor.setCategory(eClass.getName());
+//					descriptor.setLabelProvider(lp);
+//
+//					list.add(descriptor);
+//				} else {
+//					descriptor = new PropertyDescriptor(new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(),
+//							SchedulePackage.eINSTANCE.getCargoAllocation_DischargeVolume()), "Discharge Volume");
+//					descriptor.setCategory(eClass.getName());
+//					descriptor.setLabelProvider(lp);
+//
+//					list.add(descriptor);
+//				}
 			}
 
 			{
-				PropertyDescriptor descriptor = new PropertyDescriptor(new CompiledEMFPath(true, EventsPackage.eINSTANCE.getScheduledEvent__GetEventDuration()), "Duration");
+				PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getEvent__GetDuration()), "Duration");
 				descriptor.setCategory("Time");
 				descriptor.setLabelProvider(new ColumnLabelProvider() {
 
@@ -160,16 +163,16 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 				});
 
 				list.add(descriptor);
+//
+//				if (event.getHireCost() > 0) {
+//					descriptor = new PropertyDescriptor(new EMFPath(true, EventsPackage.eINSTANCE.getScheduledEvent__GetHireCost()), "Hire Cost ($)");
+//					descriptor.setCategory(eClass.getName());
+//					descriptor.setLabelProvider(lp);
+//
+//					list.add(descriptor);
+//				}
 
-				if (event.getHireCost() > 0) {
-					descriptor = new PropertyDescriptor(new CompiledEMFPath(true, EventsPackage.eINSTANCE.getScheduledEvent__GetHireCost()), "Hire Cost ($)");
-					descriptor.setCategory(eClass.getName());
-					descriptor.setLabelProvider(lp);
-
-					list.add(descriptor);
-				}
-
-				descriptor = new PropertyDescriptor(new CompiledEMFPath(true, EventsPackage.eINSTANCE.getScheduledEvent__GetLocalStartTime()),
+				descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getEvent__GetLocalStart()),
 
 				"From Date");
 				descriptor.setCategory("Time");
@@ -177,7 +180,7 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 
 				list.add(descriptor);
 
-				descriptor = new PropertyDescriptor(new CompiledEMFPath(true, EventsPackage.eINSTANCE.getScheduledEvent__GetLocalEndTime()),
+				descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getEvent__GetLocalEnd()),
 
 				"To Date");
 				descriptor.setCategory("Time");
@@ -185,28 +188,28 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 
 				list.add(descriptor);
 			}
-			if (event instanceof FuelMixture) {
-				final ColumnLabelProvider fqlp = new ColumnLabelProvider() {
-					@Override
-					public String getText(final Object element) {
-						if (element instanceof FuelQuantity) {
-							final FuelQuantity fq = (FuelQuantity) element;
-							return String.format("%,d %s ($%,d)", fq.getQuantity(), fq.getFuelUnit().getName(), fq.getTotalPrice());
-						}
-						return super.getText(element);
-					}
-				};
-				for (final FuelQuantity fc : ((FuelMixture) event).getFuelUsage()) {
-					if (fc.getQuantity() == 0) {
-						continue;
-					}
-					final PropertyDescriptor descriptor = new PropertyDescriptor(fc.getFuelType(), fc.getFuelType().getName());
-					descriptor.setLabelProvider(fqlp);
-					descriptor.setCategory("Fuel Usage");
-
-					list.add(descriptor);
-				}
-			}
+//			if (event instanceof FuelMixture) {
+//				final ColumnLabelProvider fqlp = new ColumnLabelProvider() {
+//					@Override
+//					public String getText(final Object element) {
+//						if (element instanceof FuelQuantity) {
+//							final FuelQuantity fq = (FuelQuantity) element;
+//							return String.format("%,d %s ($%,d)", fq.getQuantity(), fq.getFuelUnit().getName(), fq.getTotalPrice());
+//						}
+//						return super.getText(element);
+//					}
+//				};
+//				for (final FuelQuantity fc : ((FuelMixture) event).getFuelUsage()) {
+//					if (fc.getQuantity() == 0) {
+//						continue;
+//					}
+//					final PropertyDescriptor descriptor = new PropertyDescriptor(fc.getFuelType(), fc.getFuelType().getName());
+//					descriptor.setLabelProvider(fqlp);
+//					descriptor.setCategory("Fuel Usage");
+//
+//					list.add(descriptor);
+//				}
+//			}
 
 			descriptors = list.toArray(new IPropertyDescriptor[0]);
 
@@ -217,13 +220,13 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 		public Object getPropertyValue(final Object id) {
 			if (id instanceof EMFPath) {
 				return (((EMFPath) id).get(event));
-			} else if (id instanceof FuelType) {
-				for (final FuelQuantity fq : ((FuelMixture) event).getFuelUsage()) {
-					if (fq.getFuelType().equals(id)) {
-						return fq;
-					}
-				}
-				return null;
+//			} else if (id instanceof FuelType) {
+//				for (final FuelQuantity fq : ((FuelMixture) event).getFuelUsage()) {
+//					if (fq.getFuelType().equals(id)) {
+//						return fq;
+//					}
+//				}
+//				return null;
 			} else {// properties for fuelmix
 				return null;
 			}
@@ -248,8 +251,8 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 
 	@Override
 	public IPropertySource getPropertySource(final Object object) {
-		if (object instanceof ScheduledEvent) {
-			final ScheduledEvent event = (ScheduledEvent) object;
+		if (object instanceof Event) {
+			final Event event = (Event) object;
 			return new EventPropertySource(event);
 		}
 		return null;

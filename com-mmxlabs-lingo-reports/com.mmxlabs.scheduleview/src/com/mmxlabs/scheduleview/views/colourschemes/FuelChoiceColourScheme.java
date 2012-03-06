@@ -7,10 +7,10 @@ package com.mmxlabs.scheduleview.views.colourschemes;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
-import scenario.schedule.events.FuelPurpose;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.SlotVisit;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 public class FuelChoiceColourScheme implements IScheduleViewColourScheme {
 
@@ -33,20 +33,23 @@ public class FuelChoiceColourScheme implements IScheduleViewColourScheme {
 			int g = 0;
 			int b = 0;
 
-			for (final FuelQuantity fq : journey.getFuelUsage()) {
-				if ((fq.getQuantity() > 0) && (fq.getPurpose() == FuelPurpose.TRAVEL)) {
-					switch (fq.getFuelType()) {
-					case BASE_FUEL:
+			for (final FuelQuantity fq : journey.getFuels()) {
+				if (fq.getAmounts().isEmpty() == false) {
+					if (fq.getFuel().equals(Fuel.BASE_FUEL)) {
 						r = 255;
 						break;
-					case FBO:
+					} else if (fq.getFuel().equals(Fuel.FBO)) {
 						b = 255;
 						break;
-					case NBO:
+					} else if (fq.getFuel().equals(Fuel.NBO)) {
 						g = 255;
 						break;
 					}
 				}
+			}
+			
+			if (b > 0) {
+				r = 0; // don't show pilot
 			}
 
 			return ColorCache.getColor(r, g, b);
@@ -55,7 +58,7 @@ public class FuelChoiceColourScheme implements IScheduleViewColourScheme {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
 
-			if (visit.getSlot().getWindowEnd().before(visit.getStartTime())) {
+			if (visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().before(visit.getStart())) {
 				return ColorCache.getColor(255, 0, 0);
 			}
 		}

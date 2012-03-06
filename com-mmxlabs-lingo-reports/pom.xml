@@ -40,18 +40,15 @@
 		<!-- Proper plugin projects -->
 		<module>com.mmxlabs.shiplingo.platform.app</module>
 
-        <!--  More generic stuff: TODO: Break out? -->
-        <module>com.mmxlabs.scheduleview</module>
-        <module>com.mmxlabs.rcp.navigator</module>
+		<!--  More generic stuff: TODO: Break out? -->
+		<module>com.mmxlabs.scheduleview</module>
+		<module>com.mmxlabs.rcp.navigator</module>
 		
 		<module>com.mmxlabs.shiplingo.platform.models.manifest</module>
 		<module>com.mmxlabs.shiplingo.platform.models.manifest.optimisation</module>
 		
 		<module>com.mmxlabs.shiplingo.platform.reports</module>
-		<module>com.mmxlabs.shiplingo.platform.importer</module>
 		
-		<module>com.mmxlabs.shiplingo.ui.detailview</module>
-
 		<!-- Documentation -->
 		<module>com.mmxlabs.shiplingo.platform.doc</module>
 
