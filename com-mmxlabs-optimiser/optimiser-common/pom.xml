@@ -73,11 +73,6 @@
 				<artifactId>build-helper-maven-plugin</artifactId>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-scr-plugin</artifactId>
-			</plugin>
-
 			<!-- Hook bundle manifest generation into build process -->
 			<plugin>
 				<groupId>org.apache.felix</groupId>
