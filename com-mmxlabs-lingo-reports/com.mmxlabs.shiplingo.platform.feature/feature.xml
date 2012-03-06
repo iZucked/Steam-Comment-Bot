@@ -25,8 +25,8 @@ All rights reserved.
    </license>
 
    <requires>
-      <import feature="com.mmxlabs.models.lng.types.feature" version="1.0.0.201202281713"/>
-      <import feature="com.mmxlabs.models.mmxcore.feature" version="1.0.0.201203021635"/>
+      <import feature="com.mmxlabs.models.lng.types.feature" version="1.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="1.0.0" match="compatible"/>
    </requires>
 
    <plugin
