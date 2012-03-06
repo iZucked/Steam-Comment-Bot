@@ -22,8 +22,8 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -80,9 +80,8 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 			final MMXRootObject scenario = ValidationSupport.getInstance().getParentObjectType(MMXRootObject.class, cargo);
 			if (scenario != null) {
 
-				double maxSpeedKnots = 0;
+				double maxSpeedKnots = 0.0;
 				final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
-				final PortModel portModel = scenario.getSubModel(PortModel.class);
 
 				for (final VesselClass vc : fleetModel.getVesselClasses()) {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
@@ -94,9 +93,11 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 				if (minTimes == null) {
 					minTimes = new HashMap<Pair<Port, Port>, Integer>();
 
-					for (final Route r : portModel.getRoutes()) {
-						final int extraTime = r.getAdditionalTravelTime();
-						collectMinTimes(minTimes, r, extraTime, maxSpeedKnots);
+					for (final VesselClass vc : fleetModel.getVesselClasses()) {
+						maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
+						for (final VesselClassRouteParameters rp :  vc.getRouteParameters()) {
+							collectMinTimes(minTimes, rp.getRoute(), rp.getExtraTransitTime(), vc.getMaxSpeed());
+						}
 					}
 
 					ctx.putCurrentConstraintData(minTimes);
