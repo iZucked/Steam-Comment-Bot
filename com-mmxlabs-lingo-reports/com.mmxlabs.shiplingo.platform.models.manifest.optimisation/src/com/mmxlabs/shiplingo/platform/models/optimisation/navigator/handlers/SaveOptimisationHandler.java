@@ -19,14 +19,16 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.lngscheduler.ui.Activator;
-import com.mmxlabs.lngscheduler.ui.LNGSchedulerJobControl;
-import com.mmxlabs.lngscheduler.ui.LNGSchedulerJobDescriptor;
-import com.mmxlabs.lngscheduler.ui.SaveJobUtil;
+import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
+import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobControl;
+import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor;
+import com.mmxlabs.shiplingo.platform.models.optimisation.SaveJobUtil;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -36,6 +38,8 @@ import com.mmxlabs.lngscheduler.ui.SaveJobUtil;
  */
 public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 
+	private final static Logger log = LoggerFactory.getLogger(SaveOptimisationHandler.class);
+	
 	/**
 	 * The constructor.
 	 */
@@ -92,7 +96,7 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 						try {
 							ResourcesPlugin.getWorkspace().run(runnable, null);
 						} catch (final CoreException e) {
-							Activator.error(e.getMessage(), e);
+							log.error(e.getMessage(), e);
 						}
 					}
 				}
