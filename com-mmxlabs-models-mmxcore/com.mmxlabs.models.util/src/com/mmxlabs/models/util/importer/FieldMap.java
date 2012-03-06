@@ -45,6 +45,30 @@ public class FieldMap implements IFieldMap {
 
 	@Override
 	public Set<java.util.Map.Entry<String, String>> entrySet() {
+		final Set<java.util.Map.Entry<String, String>> es = new HashSet<Entry<String, String>>();
+		for (final Entry<String, String> de : delegate.entrySet()) {
+			es.add(new Entry<String, String>() {
+				
+				@Override
+				public String setValue(String value) {
+					return de.setValue(value);
+				}
+				
+				@Override
+				public String getValue() {
+					final String key = de.getKey();
+					notifyAccess(key);
+					return de.getValue();
+				}
+				
+				@Override
+				public String getKey() {
+					final String key = de.getKey();
+					notifyAccess(key);
+					return key;
+				}
+			});
+		}
 		return delegate.entrySet();
 	}
 
@@ -55,6 +79,7 @@ public class FieldMap implements IFieldMap {
 
 	@Override
 	public String get(Object key) {
+		if (key instanceof String) notifyAccess((String) key);
 		return delegate.get(key);
 	}
 
@@ -121,7 +146,7 @@ public class FieldMap implements IFieldMap {
 	
 	private Set<String> missedKeys = new HashSet<String>();
 	
-	private String lastAccessedKey = null;
+	private String lastAccessedKey = "";
 	
 	protected void notifyAccess(final String key) {
 		this.lastAccessedKey = key;
