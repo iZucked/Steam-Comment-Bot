@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule.impl;
 
 import com.mmxlabs.models.lng.schedule.*;
 
+import java.util.Calendar;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -62,6 +63,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.SCHEDULE_MODEL: return createScheduleModel();
 			case SchedulePackage.SCHEDULE: return createSchedule();
 			case SchedulePackage.SEQUENCE: return createSequence();
+			case SchedulePackage.EVENT: return createEvent();
+			case SchedulePackage.SLOT_VISIT: return createSlotVisit();
 			case SchedulePackage.VESSEL_EVENT_VISIT: return createVesselEventVisit();
 			case SchedulePackage.JOURNEY: return createJourney();
 			case SchedulePackage.IDLE: return createIdle();
@@ -88,6 +91,10 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 		switch (eDataType.getClassifierID()) {
 			case SchedulePackage.FUEL_UNIT:
 				return createFuelUnitFromString(eDataType, initialValue);
+			case SchedulePackage.FUEL:
+				return createFuelFromString(eDataType, initialValue);
+			case SchedulePackage.CALENDAR:
+				return createCalendarFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -103,6 +110,10 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 		switch (eDataType.getClassifierID()) {
 			case SchedulePackage.FUEL_UNIT:
 				return convertFuelUnitToString(eDataType, instanceValue);
+			case SchedulePackage.FUEL:
+				return convertFuelToString(eDataType, instanceValue);
+			case SchedulePackage.CALENDAR:
+				return convertCalendarToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -136,6 +147,26 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public Sequence createSequence() {
 		SequenceImpl sequence = new SequenceImpl();
 		return sequence;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Event createEvent() {
+		EventImpl event = new EventImpl();
+		return event;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotVisit createSlotVisit() {
+		SlotVisitImpl slotVisit = new SlotVisitImpl();
+		return slotVisit;
 	}
 
 	/**
@@ -266,6 +297,44 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 */
 	public String convertFuelUnitToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Fuel createFuelFromString(EDataType eDataType, String initialValue) {
+		Fuel result = Fuel.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertFuelToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Calendar createCalendarFromString(EDataType eDataType, String initialValue) {
+		return (Calendar)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertCalendarToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**

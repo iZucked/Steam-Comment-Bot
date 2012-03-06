@@ -9,6 +9,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
@@ -35,7 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public abstract class SlotVisitImpl extends EventImpl implements SlotVisit {
+public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	/**
 	 * The cached value of the '{@link #getFuels() <em>Fuels</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -116,11 +117,60 @@ public abstract class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setSlotAllocation(SlotAllocation newSlotAllocation) {
+	public NotificationChain basicSetSlotAllocation(SlotAllocation newSlotAllocation, NotificationChain msgs) {
 		SlotAllocation oldSlotAllocation = slotAllocation;
 		slotAllocation = newSlotAllocation;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION, oldSlotAllocation, slotAllocation));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION, oldSlotAllocation, newSlotAllocation);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSlotAllocation(SlotAllocation newSlotAllocation) {
+		if (newSlotAllocation != slotAllocation) {
+			NotificationChain msgs = null;
+			if (slotAllocation != null)
+				msgs = ((InternalEObject)slotAllocation).eInverseRemove(this, SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT, SlotAllocation.class, msgs);
+			if (newSlotAllocation != null)
+				msgs = ((InternalEObject)newSlotAllocation).eInverseAdd(this, SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT, SlotAllocation.class, msgs);
+			msgs = basicSetSlotAllocation(newSlotAllocation, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION, newSlotAllocation, newSlotAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getFuelCost() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
+				if (slotAllocation != null)
+					msgs = ((InternalEObject)slotAllocation).eInverseRemove(this, SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT, SlotAllocation.class, msgs);
+				return basicSetSlotAllocation((SlotAllocation)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -133,6 +183,8 @@ public abstract class SlotVisitImpl extends EventImpl implements SlotVisit {
 		switch (featureID) {
 			case SchedulePackage.SLOT_VISIT__FUELS:
 				return ((InternalEList<?>)getFuels()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
+				return basicSetSlotAllocation(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -238,6 +290,36 @@ public abstract class SlotVisitImpl extends EventImpl implements SlotVisit {
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == FuelUsage.class) {
+			switch (baseOperationID) {
+				case SchedulePackage.FUEL_USAGE___GET_FUEL_COST: return SchedulePackage.SLOT_VISIT___GET_FUEL_COST;
+				default: return -1;
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case SchedulePackage.SLOT_VISIT___GET_FUEL_COST:
+				return getFuelCost();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } // end of SlotVisitImpl

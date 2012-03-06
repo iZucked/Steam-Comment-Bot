@@ -17,12 +17,13 @@ package com.mmxlabs.models.lng.schedule;
  * </p>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotVisit()
- * @model abstract="true"
+ * @model
  * @generated
  */
 public interface SlotVisit extends Event, FuelUsage {
 	/**
 	 * Returns the value of the '<em><b>Slot Allocation</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotVisit <em>Slot Visit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Slot Allocation</em>' reference isn't clear,
@@ -32,7 +33,8 @@ public interface SlotVisit extends Event, FuelUsage {
 	 * @return the value of the '<em>Slot Allocation</em>' reference.
 	 * @see #setSlotAllocation(SlotAllocation)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotVisit_SlotAllocation()
-	 * @model required="true"
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotVisit
+	 * @model opposite="slotVisit" required="true"
 	 * @generated
 	 */
 	SlotAllocation getSlotAllocation();

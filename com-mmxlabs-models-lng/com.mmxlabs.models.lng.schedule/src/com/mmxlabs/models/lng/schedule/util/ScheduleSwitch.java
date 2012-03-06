@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule.util;
 
 import com.mmxlabs.models.lng.schedule.*;
 
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -99,6 +100,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				Event event = (Event)theEObject;
 				T result = caseEvent(event);
 				if (result == null) result = caseMMXObject(event);
+				if (result == null) result = caseITimezoneProvider(event);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -108,6 +110,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = caseEvent(slotVisit);
 				if (result == null) result = caseFuelUsage(slotVisit);
 				if (result == null) result = caseMMXObject(slotVisit);
+				if (result == null) result = caseITimezoneProvider(slotVisit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -116,6 +119,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				T result = caseVesselEventVisit(vesselEventVisit);
 				if (result == null) result = caseEvent(vesselEventVisit);
 				if (result == null) result = caseMMXObject(vesselEventVisit);
+				if (result == null) result = caseITimezoneProvider(vesselEventVisit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -125,6 +129,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = caseEvent(journey);
 				if (result == null) result = caseFuelUsage(journey);
 				if (result == null) result = caseMMXObject(journey);
+				if (result == null) result = caseITimezoneProvider(journey);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -134,6 +139,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = caseEvent(idle);
 				if (result == null) result = caseFuelUsage(idle);
 				if (result == null) result = caseMMXObject(idle);
+				if (result == null) result = caseITimezoneProvider(idle);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -162,6 +168,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = caseEvent(cooldown);
 				if (result == null) result = caseFuelUsage(cooldown);
 				if (result == null) result = caseMMXObject(cooldown);
+				if (result == null) result = caseITimezoneProvider(cooldown);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -479,6 +486,21 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseITimezoneProvider(ITimezoneProvider object) {
 		return null;
 	}
 

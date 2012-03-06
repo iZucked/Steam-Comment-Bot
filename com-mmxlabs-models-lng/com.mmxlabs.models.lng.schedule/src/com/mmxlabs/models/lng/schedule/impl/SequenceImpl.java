@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -36,6 +37,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getFitnesses <em>Fitnesses</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getDailyHireRate <em>Daily Hire Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getSpotIndex <em>Spot Index</em>}</li>
  * </ul>
  * </p>
  *
@@ -99,6 +102,55 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @ordered
 	 */
 	protected EList<Fitness> fitnesses;
+
+	/**
+	 * The default value of the '{@link #getDailyHireRate() <em>Daily Hire Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDailyHireRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DAILY_HIRE_RATE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getDailyHireRate() <em>Daily Hire Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDailyHireRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected int dailyHireRate = DAILY_HIRE_RATE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSpotIndex() <em>Spot Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSpotIndex()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SPOT_INDEX_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getSpotIndex() <em>Spot Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSpotIndex()
+	 * @generated
+	 * @ordered
+	 */
+	protected int spotIndex = SPOT_INDEX_EDEFAULT;
+
+	/**
+	 * This is true if the Spot Index attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean spotIndexESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -274,6 +326,110 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getDailyHireRate() {
+		return dailyHireRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDailyHireRate(int newDailyHireRate) {
+		int oldDailyHireRate = dailyHireRate;
+		dailyHireRate = newDailyHireRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SEQUENCE__DAILY_HIRE_RATE, oldDailyHireRate, dailyHireRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getSpotIndex() {
+		return spotIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSpotIndex(int newSpotIndex) {
+		int oldSpotIndex = spotIndex;
+		spotIndex = newSpotIndex;
+		boolean oldSpotIndexESet = spotIndexESet;
+		spotIndexESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SEQUENCE__SPOT_INDEX, oldSpotIndex, spotIndex, !oldSpotIndexESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetSpotIndex() {
+		int oldSpotIndex = spotIndex;
+		boolean oldSpotIndexESet = spotIndexESet;
+		spotIndex = SPOT_INDEX_EDEFAULT;
+		spotIndexESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SchedulePackage.SEQUENCE__SPOT_INDEX, oldSpotIndex, SPOT_INDEX_EDEFAULT, oldSpotIndexESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetSpotIndex() {
+		return spotIndexESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getName() {
+		if (isSetVessel()) return vessel.getName();
+		else return vesselClass.getName();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean isSpotVessel() {
+		return isSetVesselClass();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean isFleetVessel() {
+		return isSetVessel() && !getVessel().isSetTimeCharterRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean isTimeCharterVessel() {
+		return isSetVessel() && getVessel().isSetTimeCharterRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -303,6 +459,10 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				return basicGetVesselClass();
 			case SchedulePackage.SEQUENCE__FITNESSES:
 				return getFitnesses();
+			case SchedulePackage.SEQUENCE__DAILY_HIRE_RATE:
+				return getDailyHireRate();
+			case SchedulePackage.SEQUENCE__SPOT_INDEX:
+				return getSpotIndex();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -330,6 +490,12 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				getFitnesses().clear();
 				getFitnesses().addAll((Collection<? extends Fitness>)newValue);
 				return;
+			case SchedulePackage.SEQUENCE__DAILY_HIRE_RATE:
+				setDailyHireRate((Integer)newValue);
+				return;
+			case SchedulePackage.SEQUENCE__SPOT_INDEX:
+				setSpotIndex((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -354,6 +520,12 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			case SchedulePackage.SEQUENCE__FITNESSES:
 				getFitnesses().clear();
 				return;
+			case SchedulePackage.SEQUENCE__DAILY_HIRE_RATE:
+				setDailyHireRate(DAILY_HIRE_RATE_EDEFAULT);
+				return;
+			case SchedulePackage.SEQUENCE__SPOT_INDEX:
+				unsetSpotIndex();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -374,8 +546,50 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				return isSetVesselClass();
 			case SchedulePackage.SEQUENCE__FITNESSES:
 				return fitnesses != null && !fitnesses.isEmpty();
+			case SchedulePackage.SEQUENCE__DAILY_HIRE_RATE:
+				return dailyHireRate != DAILY_HIRE_RATE_EDEFAULT;
+			case SchedulePackage.SEQUENCE__SPOT_INDEX:
+				return isSetSpotIndex();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case SchedulePackage.SEQUENCE___GET_NAME:
+				return getName();
+			case SchedulePackage.SEQUENCE___IS_SPOT_VESSEL:
+				return isSpotVessel();
+			case SchedulePackage.SEQUENCE___IS_FLEET_VESSEL:
+				return isFleetVessel();
+			case SchedulePackage.SEQUENCE___IS_TIME_CHARTER_VESSEL:
+				return isTimeCharterVessel();
+		}
+		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (dailyHireRate: ");
+		result.append(dailyHireRate);
+		result.append(", spotIndex: ");
+		if (spotIndexESet) result.append(spotIndex); else result.append("<unset>");
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of SequenceImpl

@@ -3,10 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.port.Port;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -24,10 +26,10 @@ import java.util.Date;
  * </p>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent()
- * @model abstract="true"
+ * @model
  * @generated
  */
-public interface Event extends MMXObject {
+public interface Event extends MMXObject, ITimezoneProvider {
 	/**
 	 * Returns the value of the '<em><b>Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -105,6 +107,54 @@ public interface Event extends MMXObject {
 	 * @generated
 	 */
 	void setPort(Port value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getDuration();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.lng.schedule.Calendar" required="true"
+	 * @generated
+	 */
+	Calendar getLocalStart();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.lng.schedule.Calendar" required="true"
+	 * @generated
+	 */
+	Calendar getLocalEnd();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true"
+	 * @generated
+	 */
+	String type();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true"
+	 * @generated
+	 */
+	String name();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getHireCost();
 
 } // end of  Event
 

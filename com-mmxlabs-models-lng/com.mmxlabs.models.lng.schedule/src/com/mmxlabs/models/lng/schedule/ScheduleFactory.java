@@ -51,6 +51,24 @@ public interface ScheduleFactory extends EFactory {
 	Sequence createSequence();
 
 	/**
+	 * Returns a new object of class '<em>Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Event</em>'.
+	 * @generated
+	 */
+	Event createEvent();
+
+	/**
+	 * Returns a new object of class '<em>Slot Visit</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Slot Visit</em>'.
+	 * @generated
+	 */
+	SlotVisit createSlotVisit();
+
+	/**
 	 * Returns a new object of class '<em>Vessel Event Visit</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 import com.mmxlabs.models.lng.port.Port;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 
 import java.util.Collection;
@@ -39,6 +40,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#isLaden <em>Laden</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getToll <em>Toll</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getDistance <em>Distance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getSpeed <em>Speed</em>}</li>
  * </ul>
  * </p>
  *
@@ -113,7 +116,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final BigDecimal TOLL_EDEFAULT = null;
+	protected static final int TOLL_EDEFAULT = 0;
 
 	/**
 	 * The cached value of the '{@link #getToll() <em>Toll</em>}' attribute.
@@ -123,7 +126,47 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * @generated
 	 * @ordered
 	 */
-	protected BigDecimal toll = TOLL_EDEFAULT;
+	protected int toll = TOLL_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDistance() <em>Distance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDistance()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DISTANCE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getDistance() <em>Distance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDistance()
+	 * @generated
+	 * @ordered
+	 */
+	protected int distance = DISTANCE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSpeed() <em>Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSpeed()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double SPEED_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getSpeed() <em>Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSpeed()
+	 * @generated
+	 * @ordered
+	 */
+	protected double speed = SPEED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -241,7 +284,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public BigDecimal getToll() {
+	public int getToll() {
 		return toll;
 	}
 
@@ -250,11 +293,64 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setToll(BigDecimal newToll) {
-		BigDecimal oldToll = toll;
+	public void setToll(int newToll) {
+		int oldToll = toll;
 		toll = newToll;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__TOLL, oldToll, toll));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getDistance() {
+		return distance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDistance(int newDistance) {
+		int oldDistance = distance;
+		distance = newDistance;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__DISTANCE, oldDistance, distance));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getSpeed() {
+		return speed;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSpeed(double newSpeed) {
+		double oldSpeed = speed;
+		speed = newSpeed;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__SPEED, oldSpeed, speed));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getFuelCost() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -290,6 +386,10 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return getRoute();
 			case SchedulePackage.JOURNEY__TOLL:
 				return getToll();
+			case SchedulePackage.JOURNEY__DISTANCE:
+				return getDistance();
+			case SchedulePackage.JOURNEY__SPEED:
+				return getSpeed();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -317,7 +417,13 @@ public class JourneyImpl extends EventImpl implements Journey {
 				setRoute((String)newValue);
 				return;
 			case SchedulePackage.JOURNEY__TOLL:
-				setToll((BigDecimal)newValue);
+				setToll((Integer)newValue);
+				return;
+			case SchedulePackage.JOURNEY__DISTANCE:
+				setDistance((Integer)newValue);
+				return;
+			case SchedulePackage.JOURNEY__SPEED:
+				setSpeed((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -346,6 +452,12 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__TOLL:
 				setToll(TOLL_EDEFAULT);
 				return;
+			case SchedulePackage.JOURNEY__DISTANCE:
+				setDistance(DISTANCE_EDEFAULT);
+				return;
+			case SchedulePackage.JOURNEY__SPEED:
+				setSpeed(SPEED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -367,7 +479,11 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__ROUTE:
 				return ROUTE_EDEFAULT == null ? route != null : !ROUTE_EDEFAULT.equals(route);
 			case SchedulePackage.JOURNEY__TOLL:
-				return TOLL_EDEFAULT == null ? toll != null : !TOLL_EDEFAULT.equals(toll);
+				return toll != TOLL_EDEFAULT;
+			case SchedulePackage.JOURNEY__DISTANCE:
+				return distance != DISTANCE_EDEFAULT;
+			case SchedulePackage.JOURNEY__SPEED:
+				return speed != SPEED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -410,6 +526,36 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * @generated
 	 */
 	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == FuelUsage.class) {
+			switch (baseOperationID) {
+				case SchedulePackage.FUEL_USAGE___GET_FUEL_COST: return SchedulePackage.JOURNEY___GET_FUEL_COST;
+				default: return -1;
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case SchedulePackage.JOURNEY___GET_FUEL_COST:
+				return getFuelCost();
+		}
+		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -420,6 +566,10 @@ public class JourneyImpl extends EventImpl implements Journey {
 		result.append(route);
 		result.append(", toll: ");
 		result.append(toll);
+		result.append(", distance: ");
+		result.append(distance);
+		result.append(", speed: ");
+		result.append(speed);
 		result.append(')');
 		return result.toString();
 	}

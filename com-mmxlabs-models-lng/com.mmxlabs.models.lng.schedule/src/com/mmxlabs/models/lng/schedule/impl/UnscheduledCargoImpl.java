@@ -23,8 +23,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl#getLoad <em>Load</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl#getDischarge <em>Discharge</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl#getLoadAllocation <em>Load Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl#getDischargeAllocation <em>Discharge Allocation</em>}</li>
  * </ul>
  * </p>
  *
@@ -32,24 +32,24 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class UnscheduledCargoImpl extends MMXObjectImpl implements UnscheduledCargo {
 	/**
-	 * The cached value of the '{@link #getLoad() <em>Load</em>}' reference.
+	 * The cached value of the '{@link #getLoadAllocation() <em>Load Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLoad()
+	 * @see #getLoadAllocation()
 	 * @generated
 	 * @ordered
 	 */
-	protected SlotAllocation load;
+	protected SlotAllocation loadAllocation;
 
 	/**
-	 * The cached value of the '{@link #getDischarge() <em>Discharge</em>}' reference.
+	 * The cached value of the '{@link #getDischargeAllocation() <em>Discharge Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDischarge()
+	 * @see #getDischargeAllocation()
 	 * @generated
 	 * @ordered
 	 */
-	protected SlotAllocation discharge;
+	protected SlotAllocation dischargeAllocation;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -75,16 +75,16 @@ public class UnscheduledCargoImpl extends MMXObjectImpl implements UnscheduledCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SlotAllocation getLoad() {
-		if (load != null && load.eIsProxy()) {
-			InternalEObject oldLoad = (InternalEObject)load;
-			load = (SlotAllocation)eResolveProxy(oldLoad);
-			if (load != oldLoad) {
+	public SlotAllocation getLoadAllocation() {
+		if (loadAllocation != null && loadAllocation.eIsProxy()) {
+			InternalEObject oldLoadAllocation = (InternalEObject)loadAllocation;
+			loadAllocation = (SlotAllocation)eResolveProxy(oldLoadAllocation);
+			if (loadAllocation != oldLoadAllocation) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.UNSCHEDULED_CARGO__LOAD, oldLoad, load));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.UNSCHEDULED_CARGO__LOAD_ALLOCATION, oldLoadAllocation, loadAllocation));
 			}
 		}
-		return load;
+		return loadAllocation;
 	}
 
 	/**
@@ -92,8 +92,8 @@ public class UnscheduledCargoImpl extends MMXObjectImpl implements UnscheduledCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SlotAllocation basicGetLoad() {
-		return load;
+	public SlotAllocation basicGetLoadAllocation() {
+		return loadAllocation;
 	}
 
 	/**
@@ -101,11 +101,11 @@ public class UnscheduledCargoImpl extends MMXObjectImpl implements UnscheduledCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLoad(SlotAllocation newLoad) {
-		SlotAllocation oldLoad = load;
-		load = newLoad;
+	public void setLoadAllocation(SlotAllocation newLoadAllocation) {
+		SlotAllocation oldLoadAllocation = loadAllocation;
+		loadAllocation = newLoadAllocation;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.UNSCHEDULED_CARGO__LOAD, oldLoad, load));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.UNSCHEDULED_CARGO__LOAD_ALLOCATION, oldLoadAllocation, loadAllocation));
 	}
 
 	/**
@@ -113,16 +113,16 @@ public class UnscheduledCargoImpl extends MMXObjectImpl implements UnscheduledCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SlotAllocation getDischarge() {
-		if (discharge != null && discharge.eIsProxy()) {
-			InternalEObject oldDischarge = (InternalEObject)discharge;
-			discharge = (SlotAllocation)eResolveProxy(oldDischarge);
-			if (discharge != oldDischarge) {
+	public SlotAllocation getDischargeAllocation() {
+		if (dischargeAllocation != null && dischargeAllocation.eIsProxy()) {
+			InternalEObject oldDischargeAllocation = (InternalEObject)dischargeAllocation;
+			dischargeAllocation = (SlotAllocation)eResolveProxy(oldDischargeAllocation);
+			if (dischargeAllocation != oldDischargeAllocation) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE, oldDischarge, discharge));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION, oldDischargeAllocation, dischargeAllocation));
 			}
 		}
-		return discharge;
+		return dischargeAllocation;
 	}
 
 	/**
@@ -130,8 +130,8 @@ public class UnscheduledCargoImpl extends MMXObjectImpl implements UnscheduledCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SlotAllocation basicGetDischarge() {
-		return discharge;
+	public SlotAllocation basicGetDischargeAllocation() {
+		return dischargeAllocation;
 	}
 
 	/**
@@ -139,11 +139,11 @@ public class UnscheduledCargoImpl extends MMXObjectImpl implements UnscheduledCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDischarge(SlotAllocation newDischarge) {
-		SlotAllocation oldDischarge = discharge;
-		discharge = newDischarge;
+	public void setDischargeAllocation(SlotAllocation newDischargeAllocation) {
+		SlotAllocation oldDischargeAllocation = dischargeAllocation;
+		dischargeAllocation = newDischargeAllocation;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE, oldDischarge, discharge));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION, oldDischargeAllocation, dischargeAllocation));
 	}
 
 	/**
@@ -154,12 +154,12 @@ public class UnscheduledCargoImpl extends MMXObjectImpl implements UnscheduledCa
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.UNSCHEDULED_CARGO__LOAD:
-				if (resolve) return getLoad();
-				return basicGetLoad();
-			case SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE:
-				if (resolve) return getDischarge();
-				return basicGetDischarge();
+			case SchedulePackage.UNSCHEDULED_CARGO__LOAD_ALLOCATION:
+				if (resolve) return getLoadAllocation();
+				return basicGetLoadAllocation();
+			case SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION:
+				if (resolve) return getDischargeAllocation();
+				return basicGetDischargeAllocation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -172,11 +172,11 @@ public class UnscheduledCargoImpl extends MMXObjectImpl implements UnscheduledCa
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.UNSCHEDULED_CARGO__LOAD:
-				setLoad((SlotAllocation)newValue);
+			case SchedulePackage.UNSCHEDULED_CARGO__LOAD_ALLOCATION:
+				setLoadAllocation((SlotAllocation)newValue);
 				return;
-			case SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE:
-				setDischarge((SlotAllocation)newValue);
+			case SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION:
+				setDischargeAllocation((SlotAllocation)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -190,11 +190,11 @@ public class UnscheduledCargoImpl extends MMXObjectImpl implements UnscheduledCa
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.UNSCHEDULED_CARGO__LOAD:
-				setLoad((SlotAllocation)null);
+			case SchedulePackage.UNSCHEDULED_CARGO__LOAD_ALLOCATION:
+				setLoadAllocation((SlotAllocation)null);
 				return;
-			case SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE:
-				setDischarge((SlotAllocation)null);
+			case SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION:
+				setDischargeAllocation((SlotAllocation)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -208,10 +208,10 @@ public class UnscheduledCargoImpl extends MMXObjectImpl implements UnscheduledCa
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.UNSCHEDULED_CARGO__LOAD:
-				return load != null;
-			case SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE:
-				return discharge != null;
+			case SchedulePackage.UNSCHEDULED_CARGO__LOAD_ALLOCATION:
+				return loadAllocation != null;
+			case SchedulePackage.UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION:
+				return dischargeAllocation != null;
 		}
 		return super.eIsSet(featureID);
 	}

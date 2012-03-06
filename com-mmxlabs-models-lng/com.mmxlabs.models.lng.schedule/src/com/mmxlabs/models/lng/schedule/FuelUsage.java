@@ -40,6 +40,14 @@ public interface FuelUsage extends EObject {
 	 */
 	EList<FuelQuantity> getFuels();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getFuelCost();
+
 } // end of  FuelUsage
 
 // finish type fixing

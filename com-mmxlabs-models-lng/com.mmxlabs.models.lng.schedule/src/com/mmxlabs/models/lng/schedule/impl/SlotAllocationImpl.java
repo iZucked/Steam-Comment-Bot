@@ -3,8 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -12,8 +15,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.types.AContract;
+import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,6 +33,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSpotMarket <em>Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSlotVisit <em>Slot Visit</em>}</li>
  * </ul>
  * </p>
  *
@@ -78,6 +87,25 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @ordered
 	 */
 	protected CargoAllocation cargoAllocation;
+
+	/**
+	 * The cached value of the '{@link #getSlotVisit() <em>Slot Visit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSlotVisit()
+	 * @generated
+	 * @ordered
+	 */
+	protected SlotVisit slotVisit;
+
+	/**
+	 * This is true if the Slot Visit reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean slotVisitESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -267,6 +295,219 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public SlotVisit getSlotVisit() {
+		if (slotVisit != null && slotVisit.eIsProxy()) {
+			InternalEObject oldSlotVisit = (InternalEObject)slotVisit;
+			slotVisit = (SlotVisit)eResolveProxy(oldSlotVisit);
+			if (slotVisit != oldSlotVisit) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT, oldSlotVisit, slotVisit));
+			}
+		}
+		return slotVisit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotVisit basicGetSlotVisit() {
+		return slotVisit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSlotVisit(SlotVisit newSlotVisit, NotificationChain msgs) {
+		SlotVisit oldSlotVisit = slotVisit;
+		slotVisit = newSlotVisit;
+		boolean oldSlotVisitESet = slotVisitESet;
+		slotVisitESet = true;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT, oldSlotVisit, newSlotVisit, !oldSlotVisitESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSlotVisit(SlotVisit newSlotVisit) {
+		if (newSlotVisit != slotVisit) {
+			NotificationChain msgs = null;
+			if (slotVisit != null)
+				msgs = ((InternalEObject)slotVisit).eInverseRemove(this, SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION, SlotVisit.class, msgs);
+			if (newSlotVisit != null)
+				msgs = ((InternalEObject)newSlotVisit).eInverseAdd(this, SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION, SlotVisit.class, msgs);
+			msgs = basicSetSlotVisit(newSlotVisit, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldSlotVisitESet = slotVisitESet;
+			slotVisitESet = true;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT, newSlotVisit, newSlotVisit, !oldSlotVisitESet));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicUnsetSlotVisit(NotificationChain msgs) {
+		SlotVisit oldSlotVisit = slotVisit;
+		slotVisit = null;
+		boolean oldSlotVisitESet = slotVisitESet;
+		slotVisitESet = false;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.UNSET, SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT, oldSlotVisit, null, oldSlotVisitESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetSlotVisit() {
+		if (slotVisit != null) {
+			NotificationChain msgs = null;
+			msgs = ((InternalEObject)slotVisit).eInverseRemove(this, SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION, SlotVisit.class, msgs);
+			msgs = basicUnsetSlotVisit(msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldSlotVisitESet = slotVisitESet;
+			slotVisitESet = false;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.UNSET, SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT, null, null, oldSlotVisitESet));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetSlotVisit() {
+		return slotVisitESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public APort getPort() {
+		if (isSetSlot()) {
+			return getSlot().getPort();
+		} else if (isSetSlotVisit()) {
+			return getSlotVisit().getPort();
+		} else if (isSetSpotMarket()) {
+			return ((SpotMarket)getSpotMarket()).getNotionalPort();
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public Calendar getLocalStart() {
+		if (isSetSlotVisit()) {
+			return getSlotVisit().getLocalStart();
+		} else {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public Calendar getLocalEnd() {
+		if (isSetSlotVisit()) {
+			return getSlotVisit().getLocalEnd();
+		}
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public AContract getContract() {
+		if (isSetSlot()) {
+			return slot.getContract();
+		} else if (isSetSpotMarket()) {
+			return ((SpotMarket)getSpotMarket()).getContract();
+		}
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getName() {
+		if (isSetSlot()) {
+			return getSlot().getName();
+		} else if (isSetSpotMarket()) {
+			return getSpotMarket().getName();
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
+				if (slotVisit != null)
+					msgs = ((InternalEObject)slotVisit).eInverseRemove(this, SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION, SlotVisit.class, msgs);
+				return basicSetSlotVisit((SlotVisit)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
+				return basicUnsetSlotVisit(msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -279,6 +520,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
 				if (resolve) return getCargoAllocation();
 				return basicGetCargoAllocation();
+			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
+				if (resolve) return getSlotVisit();
+				return basicGetSlotVisit();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -299,6 +543,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
 				setCargoAllocation((CargoAllocation)newValue);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
+				setSlotVisit((SlotVisit)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -321,6 +568,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
 				setCargoAllocation((CargoAllocation)null);
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
+				unsetSlotVisit();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -339,8 +589,32 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return isSetSpotMarket();
 			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
 				return cargoAllocation != null;
+			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
+				return isSetSlotVisit();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case SchedulePackage.SLOT_ALLOCATION___GET_PORT:
+				return getPort();
+			case SchedulePackage.SLOT_ALLOCATION___GET_LOCAL_START:
+				return getLocalStart();
+			case SchedulePackage.SLOT_ALLOCATION___GET_LOCAL_END:
+				return getLocalEnd();
+			case SchedulePackage.SLOT_ALLOCATION___GET_CONTRACT:
+				return getContract();
+			case SchedulePackage.SLOT_ALLOCATION___GET_NAME:
+				return getName();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } // end of SlotAllocationImpl

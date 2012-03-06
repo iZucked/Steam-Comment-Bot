@@ -21,6 +21,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getFitnesses <em>Fitnesses</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getDailyHireRate <em>Daily Hire Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getSpotIndex <em>Spot Index</em>}</li>
  * </ul>
  * </p>
  *
@@ -166,6 +168,117 @@ public interface Sequence extends MMXObject {
 	 * @generated
 	 */
 	EList<Fitness> getFitnesses();
+
+	/**
+	 * Returns the value of the '<em><b>Daily Hire Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Daily Hire Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Daily Hire Rate</em>' attribute.
+	 * @see #setDailyHireRate(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_DailyHireRate()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getDailyHireRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getDailyHireRate <em>Daily Hire Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Daily Hire Rate</em>' attribute.
+	 * @see #getDailyHireRate()
+	 * @generated
+	 */
+	void setDailyHireRate(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Spot Index</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Spot Index</em>' attribute.
+	 * @see #isSetSpotIndex()
+	 * @see #unsetSpotIndex()
+	 * @see #setSpotIndex(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_SpotIndex()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	int getSpotIndex();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getSpotIndex <em>Spot Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Spot Index</em>' attribute.
+	 * @see #isSetSpotIndex()
+	 * @see #unsetSpotIndex()
+	 * @see #getSpotIndex()
+	 * @generated
+	 */
+	void setSpotIndex(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getSpotIndex <em>Spot Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetSpotIndex()
+	 * @see #getSpotIndex()
+	 * @see #setSpotIndex(int)
+	 * @generated
+	 */
+	void unsetSpotIndex();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getSpotIndex <em>Spot Index</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Spot Index</em>' attribute is set.
+	 * @see #unsetSpotIndex()
+	 * @see #getSpotIndex()
+	 * @see #setSpotIndex(int)
+	 * @generated
+	 */
+	boolean isSetSpotIndex();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	String getName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	boolean isSpotVessel();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	boolean isFleetVessel();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	boolean isTimeCharterVessel();
 
 } // end of  Sequence
 

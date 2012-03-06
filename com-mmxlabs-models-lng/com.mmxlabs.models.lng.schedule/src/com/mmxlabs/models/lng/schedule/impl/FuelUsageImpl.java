@@ -7,6 +7,7 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -81,6 +82,17 @@ public class FuelUsageImpl extends EObjectImpl implements FuelUsage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getFuelCost() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -148,6 +160,20 @@ public class FuelUsageImpl extends EObjectImpl implements FuelUsage {
 				return fuels != null && !fuels.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case SchedulePackage.FUEL_USAGE___GET_FUEL_COST:
+				return getFuelCost();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } // end of FuelUsageImpl

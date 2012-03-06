@@ -3,21 +3,27 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
-import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-
+import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+
+import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.notify.Notification;
-
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,7 +40,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public abstract class EventImpl extends MMXObjectImpl implements Event {
+public class EventImpl extends MMXObjectImpl implements Event {
 	/**
 	 * The default value of the '{@link #getStart() <em>Start</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -187,6 +193,77 @@ public abstract class EventImpl extends MMXObjectImpl implements Event {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getDuration() {
+		return (int)( (getEnd().getTime() - getStart().getTime()) / Timer.ONE_HOUR );
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public Calendar getLocalStart() {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(getStart());
+		calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(SchedulePackage.Literals.EVENT__START)));
+		return calendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public Calendar getLocalEnd() {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(getEnd());
+		calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(SchedulePackage.Literals.EVENT__END)));
+		return calendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String type() {
+		return "Event";
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String name() {
+		return "";
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getHireCost() {
+		return (((Sequence)eContainer()).getDailyHireRate() * getDuration()) / 24;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getTimeZone(EAttribute attribute) {
+		if (getPort() == null) return "GMT";
+		if (getPort().getTimeZone() == null) return "GMT";
+		return getPort().getTimeZone();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -261,6 +338,48 @@ public abstract class EventImpl extends MMXObjectImpl implements Event {
 				return port != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == ITimezoneProvider.class) {
+			switch (baseOperationID) {
+				case TypesPackage.ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE: return SchedulePackage.EVENT___GET_TIME_ZONE__EATTRIBUTE;
+				default: return -1;
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case SchedulePackage.EVENT___GET_DURATION:
+				return getDuration();
+			case SchedulePackage.EVENT___GET_LOCAL_START:
+				return getLocalStart();
+			case SchedulePackage.EVENT___GET_LOCAL_END:
+				return getLocalEnd();
+			case SchedulePackage.EVENT___TYPE:
+				return type();
+			case SchedulePackage.EVENT___NAME:
+				return name();
+			case SchedulePackage.EVENT___GET_HIRE_COST:
+				return getHireCost();
+			case SchedulePackage.EVENT___GET_TIME_ZONE__EATTRIBUTE:
+				return getTimeZone((EAttribute)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

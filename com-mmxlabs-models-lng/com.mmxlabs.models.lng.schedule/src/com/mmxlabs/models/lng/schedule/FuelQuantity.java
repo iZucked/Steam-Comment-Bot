@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getFuelName <em>Fuel Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getFuel <em>Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getCost <em>Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getAmounts <em>Amounts</em>}</li>
  * </ul>
@@ -29,30 +29,33 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface FuelQuantity extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Fuel Name</b></em>' attribute.
+	 * Returns the value of the '<em><b>Fuel</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.schedule.Fuel}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Fuel Name</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Fuel</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Fuel Name</em>' attribute.
-	 * @see #setFuelName(String)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFuelQuantity_FuelName()
+	 * @return the value of the '<em>Fuel</em>' attribute.
+	 * @see com.mmxlabs.models.lng.schedule.Fuel
+	 * @see #setFuel(Fuel)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFuelQuantity_Fuel()
 	 * @model required="true"
 	 * @generated
 	 */
-	String getFuelName();
+	Fuel getFuel();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getFuelName <em>Fuel Name</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getFuel <em>Fuel</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Fuel Name</em>' attribute.
-	 * @see #getFuelName()
+	 * @param value the new value of the '<em>Fuel</em>' attribute.
+	 * @see com.mmxlabs.models.lng.schedule.Fuel
+	 * @see #getFuel()
 	 * @generated
 	 */
-	void setFuelName(String value);
+	void setFuel(Fuel value);
 
 	/**
 	 * Returns the value of the '<em><b>Cost</b></em>' attribute.

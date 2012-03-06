@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -32,7 +33,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl#getFuelName <em>Fuel Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl#getFuel <em>Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl#getCost <em>Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl#getAmounts <em>Amounts</em>}</li>
  * </ul>
@@ -42,24 +43,24 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	/**
-	 * The default value of the '{@link #getFuelName() <em>Fuel Name</em>}' attribute.
+	 * The default value of the '{@link #getFuel() <em>Fuel</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFuelName()
+	 * @see #getFuel()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String FUEL_NAME_EDEFAULT = null;
+	protected static final Fuel FUEL_EDEFAULT = Fuel.BASE_FUEL;
 
 	/**
-	 * The cached value of the '{@link #getFuelName() <em>Fuel Name</em>}' attribute.
+	 * The cached value of the '{@link #getFuel() <em>Fuel</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFuelName()
+	 * @see #getFuel()
 	 * @generated
 	 * @ordered
 	 */
-	protected String fuelName = FUEL_NAME_EDEFAULT;
+	protected Fuel fuel = FUEL_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getCost() <em>Cost</em>}' attribute.
@@ -115,8 +116,8 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getFuelName() {
-		return fuelName;
+	public Fuel getFuel() {
+		return fuel;
 	}
 
 	/**
@@ -124,11 +125,11 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setFuelName(String newFuelName) {
-		String oldFuelName = fuelName;
-		fuelName = newFuelName;
+	public void setFuel(Fuel newFuel) {
+		Fuel oldFuel = fuel;
+		fuel = newFuel == null ? FUEL_EDEFAULT : newFuel;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.FUEL_QUANTITY__FUEL_NAME, oldFuelName, fuelName));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.FUEL_QUANTITY__FUEL, oldFuel, fuel));
 	}
 
 	/**
@@ -186,8 +187,8 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.FUEL_QUANTITY__FUEL_NAME:
-				return getFuelName();
+			case SchedulePackage.FUEL_QUANTITY__FUEL:
+				return getFuel();
 			case SchedulePackage.FUEL_QUANTITY__COST:
 				return getCost();
 			case SchedulePackage.FUEL_QUANTITY__AMOUNTS:
@@ -205,8 +206,8 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.FUEL_QUANTITY__FUEL_NAME:
-				setFuelName((String)newValue);
+			case SchedulePackage.FUEL_QUANTITY__FUEL:
+				setFuel((Fuel)newValue);
 				return;
 			case SchedulePackage.FUEL_QUANTITY__COST:
 				setCost((Integer)newValue);
@@ -227,8 +228,8 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.FUEL_QUANTITY__FUEL_NAME:
-				setFuelName(FUEL_NAME_EDEFAULT);
+			case SchedulePackage.FUEL_QUANTITY__FUEL:
+				setFuel(FUEL_EDEFAULT);
 				return;
 			case SchedulePackage.FUEL_QUANTITY__COST:
 				setCost(COST_EDEFAULT);
@@ -248,8 +249,8 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.FUEL_QUANTITY__FUEL_NAME:
-				return FUEL_NAME_EDEFAULT == null ? fuelName != null : !FUEL_NAME_EDEFAULT.equals(fuelName);
+			case SchedulePackage.FUEL_QUANTITY__FUEL:
+				return fuel != FUEL_EDEFAULT;
 			case SchedulePackage.FUEL_QUANTITY__COST:
 				return cost != COST_EDEFAULT;
 			case SchedulePackage.FUEL_QUANTITY__AMOUNTS:
@@ -268,8 +269,8 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (fuelName: ");
-		result.append(fuelName);
+		result.append(" (fuel: ");
+		result.append(fuel);
 		result.append(", cost: ");
 		result.append(cost);
 		result.append(')');

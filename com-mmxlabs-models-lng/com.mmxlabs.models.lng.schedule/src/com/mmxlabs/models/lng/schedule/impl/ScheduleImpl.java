@@ -39,7 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#isComplete <em>Complete</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getSequences <em>Sequences</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getUnscheduledCargos <em>Unscheduled Cargos</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getAllocations <em>Allocations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getFitnesses <em>Fitnesses</em>}</li>
  * </ul>
@@ -89,14 +89,14 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	protected EList<UnscheduledCargo> unscheduledCargos;
 
 	/**
-	 * The cached value of the '{@link #getAllocations() <em>Allocations</em>}' reference list.
+	 * The cached value of the '{@link #getCargoAllocations() <em>Cargo Allocations</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAllocations()
+	 * @see #getCargoAllocations()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<CargoAllocation> allocations;
+	protected EList<CargoAllocation> cargoAllocations;
 
 	/**
 	 * The cached value of the '{@link #getSlotAllocations() <em>Slot Allocations</em>}' containment reference list.
@@ -187,11 +187,11 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<CargoAllocation> getAllocations() {
-		if (allocations == null) {
-			allocations = new EObjectResolvingEList<CargoAllocation>(CargoAllocation.class, this, SchedulePackage.SCHEDULE__ALLOCATIONS);
+	public EList<CargoAllocation> getCargoAllocations() {
+		if (cargoAllocations == null) {
+			cargoAllocations = new EObjectResolvingEList<CargoAllocation>(CargoAllocation.class, this, SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS);
 		}
-		return allocations;
+		return cargoAllocations;
 	}
 
 	/**
@@ -252,8 +252,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return getSequences();
 			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOS:
 				return getUnscheduledCargos();
-			case SchedulePackage.SCHEDULE__ALLOCATIONS:
-				return getAllocations();
+			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
+				return getCargoAllocations();
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 				return getSlotAllocations();
 			case SchedulePackage.SCHEDULE__FITNESSES:
@@ -282,9 +282,9 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				getUnscheduledCargos().clear();
 				getUnscheduledCargos().addAll((Collection<? extends UnscheduledCargo>)newValue);
 				return;
-			case SchedulePackage.SCHEDULE__ALLOCATIONS:
-				getAllocations().clear();
-				getAllocations().addAll((Collection<? extends CargoAllocation>)newValue);
+			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
+				getCargoAllocations().clear();
+				getCargoAllocations().addAll((Collection<? extends CargoAllocation>)newValue);
 				return;
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 				getSlotAllocations().clear();
@@ -315,8 +315,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOS:
 				getUnscheduledCargos().clear();
 				return;
-			case SchedulePackage.SCHEDULE__ALLOCATIONS:
-				getAllocations().clear();
+			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
+				getCargoAllocations().clear();
 				return;
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 				getSlotAllocations().clear();
@@ -342,8 +342,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return sequences != null && !sequences.isEmpty();
 			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOS:
 				return unscheduledCargos != null && !unscheduledCargos.isEmpty();
-			case SchedulePackage.SCHEDULE__ALLOCATIONS:
-				return allocations != null && !allocations.isEmpty();
+			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
+				return cargoAllocations != null && !cargoAllocations.isEmpty();
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 				return slotAllocations != null && !slotAllocations.isEmpty();
 			case SchedulePackage.SCHEDULE__FITNESSES:

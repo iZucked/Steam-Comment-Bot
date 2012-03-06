@@ -8,8 +8,10 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -17,6 +19,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -28,6 +31,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CooldownImpl#getFuels <em>Fuels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CooldownImpl#getVolume <em>Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CooldownImpl#getCost <em>Cost</em>}</li>
  * </ul>
  * </p>
  *
@@ -43,6 +48,43 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 	 * @ordered
 	 */
 	protected EList<FuelQuantity> fuels;
+
+	/**
+	 * The default value of the '{@link #getVolume() <em>Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VOLUME_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getVolume() <em>Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int volume = VOLUME_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getCost() <em>Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int COST_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getCost() <em>Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int cost = COST_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -80,6 +122,59 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getVolume() {
+		return volume;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolume(int newVolume) {
+		int oldVolume = volume;
+		volume = newVolume;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.COOLDOWN__VOLUME, oldVolume, volume));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCost() {
+		return cost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCost(int newCost) {
+		int oldCost = cost;
+		cost = newCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.COOLDOWN__COST, oldCost, cost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getFuelCost() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -99,6 +194,10 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 		switch (featureID) {
 			case SchedulePackage.COOLDOWN__FUELS:
 				return getFuels();
+			case SchedulePackage.COOLDOWN__VOLUME:
+				return getVolume();
+			case SchedulePackage.COOLDOWN__COST:
+				return getCost();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -116,6 +215,12 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 				getFuels().clear();
 				getFuels().addAll((Collection<? extends FuelQuantity>)newValue);
 				return;
+			case SchedulePackage.COOLDOWN__VOLUME:
+				setVolume((Integer)newValue);
+				return;
+			case SchedulePackage.COOLDOWN__COST:
+				setCost((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -131,6 +236,12 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 			case SchedulePackage.COOLDOWN__FUELS:
 				getFuels().clear();
 				return;
+			case SchedulePackage.COOLDOWN__VOLUME:
+				setVolume(VOLUME_EDEFAULT);
+				return;
+			case SchedulePackage.COOLDOWN__COST:
+				setCost(COST_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -145,6 +256,10 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 		switch (featureID) {
 			case SchedulePackage.COOLDOWN__FUELS:
 				return fuels != null && !fuels.isEmpty();
+			case SchedulePackage.COOLDOWN__VOLUME:
+				return volume != VOLUME_EDEFAULT;
+			case SchedulePackage.COOLDOWN__COST:
+				return cost != COST_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -179,6 +294,54 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == FuelUsage.class) {
+			switch (baseOperationID) {
+				case SchedulePackage.FUEL_USAGE___GET_FUEL_COST: return SchedulePackage.COOLDOWN___GET_FUEL_COST;
+				default: return -1;
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case SchedulePackage.COOLDOWN___GET_FUEL_COST:
+				return getFuelCost();
+		}
+		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (volume: ");
+		result.append(volume);
+		result.append(", cost: ");
+		result.append(cost);
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of CooldownImpl

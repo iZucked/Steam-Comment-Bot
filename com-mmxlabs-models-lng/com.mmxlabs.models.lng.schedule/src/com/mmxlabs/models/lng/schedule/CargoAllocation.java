@@ -15,8 +15,8 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadVisit <em>Load Visit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeVisit <em>Discharge Visit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadAllocation <em>Load Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeAllocation <em>Discharge Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadVolume <em>Load Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeVolume <em>Discharge Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getInputCargo <em>Input Cargo</em>}</li>
@@ -24,6 +24,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastLeg <em>Ballast Leg</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenIdle <em>Laden Idle</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastIdle <em>Ballast Idle</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSequence <em>Sequence</em>}</li>
  * </ul>
  * </p>
  *
@@ -33,56 +34,56 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  */
 public interface CargoAllocation extends MMXObject {
 	/**
-	 * Returns the value of the '<em><b>Load Visit</b></em>' reference.
+	 * Returns the value of the '<em><b>Load Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Load Visit</em>' reference isn't clear,
+	 * If the meaning of the '<em>Load Allocation</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Load Visit</em>' reference.
-	 * @see #setLoadVisit(SlotVisit)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_LoadVisit()
+	 * @return the value of the '<em>Load Allocation</em>' reference.
+	 * @see #setLoadAllocation(SlotAllocation)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_LoadAllocation()
 	 * @model required="true"
 	 * @generated
 	 */
-	SlotVisit getLoadVisit();
+	SlotAllocation getLoadAllocation();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadVisit <em>Load Visit</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadAllocation <em>Load Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Load Visit</em>' reference.
-	 * @see #getLoadVisit()
+	 * @param value the new value of the '<em>Load Allocation</em>' reference.
+	 * @see #getLoadAllocation()
 	 * @generated
 	 */
-	void setLoadVisit(SlotVisit value);
+	void setLoadAllocation(SlotAllocation value);
 
 	/**
-	 * Returns the value of the '<em><b>Discharge Visit</b></em>' reference.
+	 * Returns the value of the '<em><b>Discharge Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Discharge Visit</em>' reference isn't clear,
+	 * If the meaning of the '<em>Discharge Allocation</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Discharge Visit</em>' reference.
-	 * @see #setDischargeVisit(SlotVisit)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_DischargeVisit()
+	 * @return the value of the '<em>Discharge Allocation</em>' reference.
+	 * @see #setDischargeAllocation(SlotAllocation)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_DischargeAllocation()
 	 * @model required="true"
 	 * @generated
 	 */
-	SlotVisit getDischargeVisit();
+	SlotAllocation getDischargeAllocation();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeVisit <em>Discharge Visit</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeAllocation <em>Discharge Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Discharge Visit</em>' reference.
-	 * @see #getDischargeVisit()
+	 * @param value the new value of the '<em>Discharge Allocation</em>' reference.
+	 * @see #getDischargeAllocation()
 	 * @generated
 	 */
-	void setDischargeVisit(SlotVisit value);
+	void setDischargeAllocation(SlotAllocation value);
 
 	/**
 	 * Returns the value of the '<em><b>Load Volume</b></em>' attribute.
@@ -292,6 +293,75 @@ public interface CargoAllocation extends MMXObject {
 	 * @generated
 	 */
 	void setBallastIdle(Idle value);
+
+	/**
+	 * Returns the value of the '<em><b>Sequence</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sequence</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sequence</em>' reference.
+	 * @see #isSetSequence()
+	 * @see #unsetSequence()
+	 * @see #setSequence(Sequence)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_Sequence()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	Sequence getSequence();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSequence <em>Sequence</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sequence</em>' reference.
+	 * @see #isSetSequence()
+	 * @see #unsetSequence()
+	 * @see #getSequence()
+	 * @generated
+	 */
+	void setSequence(Sequence value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSequence <em>Sequence</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetSequence()
+	 * @see #getSequence()
+	 * @see #setSequence(Sequence)
+	 * @generated
+	 */
+	void unsetSequence();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSequence <em>Sequence</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Sequence</em>' reference is set.
+	 * @see #unsetSequence()
+	 * @see #getSequence()
+	 * @see #setSequence(Sequence)
+	 * @generated
+	 */
+	boolean isSetSequence();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	String getName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	String getType();
 
 } // end of  CargoAllocation
 

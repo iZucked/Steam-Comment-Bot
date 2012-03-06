@@ -3,22 +3,22 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import java.util.Collection;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl#getFuels <em>Fuels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl#isLaden <em>Laden</em>}</li>
  * </ul>
  * </p>
  *
@@ -43,6 +44,25 @@ public class IdleImpl extends EventImpl implements Idle {
 	 * @ordered
 	 */
 	protected EList<FuelQuantity> fuels;
+
+	/**
+	 * The default value of the '{@link #isLaden() <em>Laden</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLaden()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LADEN_EDEFAULT = false;
+	/**
+	 * The cached value of the '{@link #isLaden() <em>Laden</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLaden()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean laden = LADEN_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -80,6 +100,38 @@ public class IdleImpl extends EventImpl implements Idle {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isLaden() {
+		return laden;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLaden(boolean newLaden) {
+		boolean oldLaden = laden;
+		laden = newLaden;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.IDLE__LADEN, oldLaden, laden));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getFuelCost() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -99,6 +151,8 @@ public class IdleImpl extends EventImpl implements Idle {
 		switch (featureID) {
 			case SchedulePackage.IDLE__FUELS:
 				return getFuels();
+			case SchedulePackage.IDLE__LADEN:
+				return isLaden();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -116,6 +170,9 @@ public class IdleImpl extends EventImpl implements Idle {
 				getFuels().clear();
 				getFuels().addAll((Collection<? extends FuelQuantity>)newValue);
 				return;
+			case SchedulePackage.IDLE__LADEN:
+				setLaden((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -131,6 +188,9 @@ public class IdleImpl extends EventImpl implements Idle {
 			case SchedulePackage.IDLE__FUELS:
 				getFuels().clear();
 				return;
+			case SchedulePackage.IDLE__LADEN:
+				setLaden(LADEN_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -145,6 +205,8 @@ public class IdleImpl extends EventImpl implements Idle {
 		switch (featureID) {
 			case SchedulePackage.IDLE__FUELS:
 				return fuels != null && !fuels.isEmpty();
+			case SchedulePackage.IDLE__LADEN:
+				return laden != LADEN_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -181,6 +243,53 @@ public class IdleImpl extends EventImpl implements Idle {
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == FuelUsage.class) {
+			switch (baseOperationID) {
+				case SchedulePackage.FUEL_USAGE___GET_FUEL_COST: return SchedulePackage.IDLE___GET_FUEL_COST;
+				default: return -1;
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case SchedulePackage.IDLE___GET_FUEL_COST:
+				return getFuelCost();
+		}
+		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (laden: ");
+		result.append(laden);
+		result.append(')');
+		return result.toString();
+	}
+
+	
 } // end of IdleImpl
 
 // finish type fixing

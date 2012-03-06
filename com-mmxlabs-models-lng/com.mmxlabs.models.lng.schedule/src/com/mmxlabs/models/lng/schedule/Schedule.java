@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#isComplete <em>Complete</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSequences <em>Sequences</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargos <em>Unscheduled Cargos</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getAllocations <em>Allocations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getFitnesses <em>Fitnesses</em>}</li>
  * </ul>
@@ -88,20 +88,20 @@ public interface Schedule extends MMXObject {
 	EList<UnscheduledCargo> getUnscheduledCargos();
 
 	/**
-	 * Returns the value of the '<em><b>Allocations</b></em>' reference list.
+	 * Returns the value of the '<em><b>Cargo Allocations</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.CargoAllocation}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Allocations</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Cargo Allocations</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Allocations</em>' reference list.
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_Allocations()
+	 * @return the value of the '<em>Cargo Allocations</em>' reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_CargoAllocations()
 	 * @model
 	 * @generated
 	 */
-	EList<CargoAllocation> getAllocations();
+	EList<CargoAllocation> getCargoAllocations();
 
 	/**
 	 * Returns the value of the '<em><b>Slot Allocations</b></em>' containment reference list.

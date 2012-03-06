@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#isLaden <em>Laden</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getToll <em>Toll</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getDistance <em>Distance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getSpeed <em>Speed</em>}</li>
  * </ul>
  * </p>
  *
@@ -114,12 +116,12 @@ public interface Journey extends Event, FuelUsage {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Toll</em>' attribute.
-	 * @see #setToll(BigDecimal)
+	 * @see #setToll(int)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_Toll()
 	 * @model required="true"
 	 * @generated
 	 */
-	BigDecimal getToll();
+	int getToll();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getToll <em>Toll</em>}' attribute.
@@ -129,7 +131,59 @@ public interface Journey extends Event, FuelUsage {
 	 * @see #getToll()
 	 * @generated
 	 */
-	void setToll(BigDecimal value);
+	void setToll(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Distance</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Distance</em>' attribute.
+	 * @see #setDistance(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_Distance()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getDistance();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getDistance <em>Distance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Distance</em>' attribute.
+	 * @see #getDistance()
+	 * @generated
+	 */
+	void setDistance(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Speed</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Speed</em>' attribute.
+	 * @see #setSpeed(double)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_Speed()
+	 * @model required="true"
+	 * @generated
+	 */
+	double getSpeed();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getSpeed <em>Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Speed</em>' attribute.
+	 * @see #getSpeed()
+	 * @generated
+	 */
+	void setSpeed(double value);
 
 } // end of  Journey
 
