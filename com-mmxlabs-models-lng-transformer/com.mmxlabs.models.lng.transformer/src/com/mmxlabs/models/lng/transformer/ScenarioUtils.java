@@ -6,17 +6,14 @@ package com.mmxlabs.models.lng.transformer;
 
 import org.eclipse.emf.common.util.EList;
 
-import scenario.Scenario;
-import scenario.optimiser.Constraint;
-import scenario.optimiser.Objective;
-import scenario.optimiser.Optimisation;
-import scenario.optimiser.OptimiserFactory;
-import scenario.optimiser.OptimiserPackage;
-import scenario.optimiser.lso.LSOSettings;
-import scenario.optimiser.lso.LsoFactory;
-import scenario.optimiser.lso.LsoPackage;
-import scenario.optimiser.lso.ThresholderSettings;
-
+import com.mmxlabs.models.lng.optimiser.AnnealingSettings;
+import com.mmxlabs.models.lng.optimiser.Constraint;
+import com.mmxlabs.models.lng.optimiser.Objective;
+import com.mmxlabs.models.lng.optimiser.OptimisationRange;
+import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
+import com.mmxlabs.models.lng.optimiser.OptimiserModel;
+import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
+import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
@@ -43,11 +40,9 @@ public class ScenarioUtils {
 	 */
 	public static void addDefaultSettings(MMXRootObject scenario) {
 		final OptimiserFactory of = OptimiserPackage.eINSTANCE.getOptimiserFactory();
-		final LsoFactory lsof = LsoPackage.eINSTANCE.getLsoFactory();
-
-		Optimisation optimisation = of.createOptimisation();
-
-		LSOSettings settings = lsof.createLSOSettings();
+		OptimiserModel om = scenario.getSubModel(OptimiserModel.class);
+		
+		OptimiserSettings settings = of.createOptimiserSettings();
 
 		settings.setName("Default LSO Settings");
 
@@ -77,20 +72,19 @@ public class ScenarioUtils {
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, 1));
 		}
 
-		settings.setNumberOfSteps(200000);
-		ThresholderSettings thresholderSettings = lsof.createThresholderSettings();
-		thresholderSettings.setAlpha(0.85);
-		thresholderSettings.setEpochLength(20000);
-		thresholderSettings.setInitialAcceptanceRate(45000);
-		settings.setThresholderSettings(thresholderSettings);
+		final AnnealingSettings annealingSettings = of.createAnnealingSettings();
+		annealingSettings.setIterations(200000);
+		annealingSettings.setCooling(0.85);
+		annealingSettings.setEpochLength(20000);
+		annealingSettings.setInitialTemperature(45000);
+		
+		settings.setAnnealingSettings(annealingSettings);
+		
+		final OptimisationRange range = of.createOptimisationRange();
+		settings.setRange(range);
 
-		optimisation.getAllSettings().add(settings);
-		optimisation.setCurrentSettings(settings);
-		scenario.setOptimisation(optimisation);
-
-		if (scenario.getScheduleModel().getSchedules().isEmpty() == false) {
-			settings.setInitialSchedule(scenario.getScheduleModel().getSchedules().get(0));
-		}
+		om.getSettings().add(settings);
+		om.setActiveSetting(settings);
 	}
 
 	private static Constraint createConstraint(OptimiserFactory of, String name, boolean enabled) {

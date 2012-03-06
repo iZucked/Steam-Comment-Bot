@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -142,6 +143,10 @@ public class AnnotatedSolutionExporter {
 			final Sequence eSequence = factory.createSequence();
 			sequences.add(eSequence);
 			
+			// TODO use spot rates correctly.
+			eSequence.setDailyHireRate(
+					(vessel.getVesselClass().getHourlyCharterInPrice() * 24) / 1000);
+			
 			switch (vessel.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
@@ -154,18 +159,16 @@ public class AnnotatedSolutionExporter {
 
 				eSequence.setVesselClass(entities.getModelObject(vessel.getVesselClass(), VesselClass.class));
 				eSequence.unsetVessel();
-				
-//				final AtomicInteger ai = counter.get(vessel.getVesselClass());
-//				int ix = 0;
-//
-//				if (ai == null) {
-//					counter.put(vessel.getVesselClass(), new AtomicInteger(ix));
-//				} else {
-//					ix = ai.incrementAndGet();
-//				}
-//
-//
-//				sv.setIndex(ix);
+				final AtomicInteger ai = counter.get(vessel.getVesselClass());
+				int ix = 0;
+
+				if (ai == null) {
+					counter.put(vessel.getVesselClass(), new AtomicInteger(ix));
+				} else {
+					ix = ai.incrementAndGet();
+				}
+
+				eSequence.setSpotIndex(ix);
 				break;
 			default:
 				break;
@@ -273,7 +276,20 @@ public class AnnotatedSolutionExporter {
 					allocation = null;
 			}
 		}
-
+		
+		// connect back-references to input cargos.
+		final CargoModel cargoModel = inputScenario.getSubModel(CargoModel.class);
+		for (final Cargo cargo : cargoModel.getCargos()) {
+			for (final CargoAllocation allocation : output.getCargoAllocations()) {
+				if (allocation.getLoadAllocation().isSetSlot() &&
+						allocation.getDischargeAllocation().isSetSlot() &&
+						allocation.getLoadAllocation().getSlot() == cargo.getLoadSlot() &&
+						allocation.getDischargeAllocation().getSlot() == cargo.getDischargeSlot()) {
+					allocation.setInputCargo(cargo);
+				}
+			}
+		}
+		
 		@SuppressWarnings("unchecked")
 		final Map<String, Long> fitnesses = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, Map.class);
 

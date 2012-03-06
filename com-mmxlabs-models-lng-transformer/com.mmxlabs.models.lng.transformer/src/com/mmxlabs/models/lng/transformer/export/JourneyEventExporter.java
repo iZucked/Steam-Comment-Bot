@@ -26,7 +26,7 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public Journey export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel v) {
+	public Journey export(final ISequenceElement element, final Map<String, Object> annotations) {
 
 		final IJourneyEvent event = (IJourneyEvent) annotations.get(SchedulerConstants.AI_journeyInfo);
 
@@ -44,38 +44,22 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 
 		final Journey journey = factory.createJourney();
 
-		journey.setStartTime(entities.getDateFromHours(event.getStartTime()));
-		journey.setEndTime(entities.getDateFromHours(event.getEndTime()));
+		journey.setStart(entities.getDateFromHours(event.getStartTime()));
+		journey.setEnd(entities.getDateFromHours(event.getEndTime()));
 
-		journey.setFromPort(eFromPort);
-		journey.setToPort(eToPort);
+		journey.setPort(eFromPort);
+		journey.setDestination(eToPort);
 
-		// journey.setDestination(entities.getModelObject(event.getToPort(),
-		// Port.class));
 
 		journey.setDistance(event.getDistance());
 		journey.setRoute(event.getRoute());
-		journey.setRouteCost(event.getRouteCost() / Calculator.ScaleFactor);
+		journey.setToll((int) (event.getRouteCost() / Calculator.ScaleFactor));
 
-		switch (event.getVesselState()) {
-		case Ballast:
-			journey.setVesselState(VesselState.BALLAST);
-			break;
-		case Laden:
-			journey.setVesselState(VesselState.LADEN);
-			break;
-		}
-
+		journey.setLaden(VesselState.Laden.equals(event.getVesselState()));
+		
 		journey.setSpeed(event.getSpeed() / (double) Calculator.ScaleFactor);
 
-		for (final FuelComponent fc : FuelComponent.getTravelFuelComponents()) {
-			final long consumption = event.getFuelConsumption(fc, fc.getDefaultFuelUnit());
-			final long cost = event.getFuelCost(fc);
-
-			addFuelQuantity(journey, fc, consumption, cost);
-		}
-
-		scaleFuelQuantities(journey);
+		journey.getFuels().addAll(super.createFuelQuantities(event));
 
 		return journey;
 	}

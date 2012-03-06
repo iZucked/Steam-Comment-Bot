@@ -5,9 +5,12 @@
 package com.mmxlabs.models.lng.transformer.export;
 
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -16,6 +19,7 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.events.IFuelUsingEvent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
@@ -32,42 +36,34 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	protected ModelEntityMap entities;
 	protected final ScheduleFactory scheduleFactory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
-	protected final ScheduleFactory factory = SchedulePackage.eINSTANCE.getEventsFactory();
+	protected final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
-	private static final Map<FuelUnit, scenario.schedule.events.FuelUnit> fuelUnits = new HashMap<FuelUnit, scenario.schedule.events.FuelUnit>();
-
-	private static final Map<FuelComponent, FuelType> fuelTypes = new HashMap<FuelComponent, FuelType>();
-
-	private static final Map<FuelComponent, FuelPurpose> fuelPurposes = new HashMap<FuelComponent, FuelPurpose>();
-
+	private static final String BASE_FUEL_NAME = "Base Fuel";
+	private static final String NBO_FUEL_NAME = "NBO";
+	private static final String FBO_FUEL_NAME = "FBO";
+ 
+	private static final Map<Fuel, FuelComponent[]> fuelComponentNames = 
+			new HashMap<Fuel, FuelComponent[]>();
+	
+	private static final Map<Fuel, FuelUnit[]> displayFuelUnits = 
+			new HashMap<Fuel, FuelUnit[]>();
+	
+	private static final Map<FuelUnit, com.mmxlabs.models.lng.schedule.FuelUnit> modelUnits =
+			new HashMap<FuelUnit, com.mmxlabs.models.lng.schedule.FuelUnit>();
+	
 	static {
-		fuelTypes.put(FuelComponent.Base, FuelType.BASE_FUEL);
-		fuelTypes.put(FuelComponent.Base_Supplemental, FuelType.BASE_FUEL);
-		fuelTypes.put(FuelComponent.IdleBase, FuelType.BASE_FUEL);
+		fuelComponentNames.put(Fuel.BASE_FUEL, FuelComponent.getBaseFuelComponents());
 
-		fuelTypes.put(FuelComponent.PilotLight, FuelType.BASE_FUEL);
-		fuelTypes.put(FuelComponent.IdlePilotLight, FuelType.BASE_FUEL);
+		fuelComponentNames.put(Fuel.NBO, new FuelComponent[] { FuelComponent.NBO, FuelComponent.IdleNBO });
+		fuelComponentNames.put(Fuel.FBO, new FuelComponent[] { FuelComponent.FBO });
 
-		fuelTypes.put(FuelComponent.NBO, FuelType.NBO);
-		fuelTypes.put(FuelComponent.IdleNBO, FuelType.NBO);
-
-		fuelTypes.put(FuelComponent.FBO, FuelType.FBO);
-
-		fuelTypes.put(FuelComponent.Cooldown, FuelType.COOLDOWN);
-
-		fuelUnits.put(FuelUnit.M3, scenario.schedule.events.FuelUnit.M3);
-		fuelUnits.put(FuelUnit.MT, scenario.schedule.events.FuelUnit.MT);
-		fuelUnits.put(FuelUnit.MMBTu, scenario.schedule.events.FuelUnit.MMB_TU);
-
-		fuelPurposes.put(FuelComponent.Base, FuelPurpose.TRAVEL);
-		fuelPurposes.put(FuelComponent.Base_Supplemental, FuelPurpose.TRAVEL);
-		fuelPurposes.put(FuelComponent.NBO, FuelPurpose.TRAVEL);
-		fuelPurposes.put(FuelComponent.FBO, FuelPurpose.TRAVEL);
-		fuelPurposes.put(FuelComponent.IdleBase, FuelPurpose.IDLE);
-		fuelPurposes.put(FuelComponent.IdleNBO, FuelPurpose.IDLE);
-		fuelPurposes.put(FuelComponent.PilotLight, FuelPurpose.PILOT_LIGHT);
-		fuelPurposes.put(FuelComponent.IdlePilotLight, FuelPurpose.PILOT_LIGHT);
-		fuelPurposes.put(FuelComponent.Cooldown, FuelPurpose.COOLDOWN);
+		displayFuelUnits.put(Fuel.BASE_FUEL, new FuelUnit[] {FuelUnit.MT});
+		displayFuelUnits.put(Fuel.NBO, new FuelUnit[] {FuelUnit.M3,FuelUnit.MMBTu});
+		displayFuelUnits.put(Fuel.FBO, new FuelUnit[] {FuelUnit.M3,FuelUnit.MMBTu});
+		
+		modelUnits.put(FuelUnit.M3, com.mmxlabs.models.lng.schedule.FuelUnit.M3);
+		modelUnits.put(FuelUnit.MT, com.mmxlabs.models.lng.schedule.FuelUnit.MT);
+		modelUnits.put(FuelUnit.MMBTu, com.mmxlabs.models.lng.schedule.FuelUnit.MMBTU);
 	}
 
 	@Override
@@ -90,61 +86,39 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 		this.entities = entities;
 	}
 
-	/**
-	 * Create a fuel quantity
-	 * 
-	 * TODO some units need scaling.
-	 * 
-	 * @param fc
-	 * @param consumption
-	 * @param cost
-	 * @return
-	 */
-	private FuelQuantity createFuelQuantity(final FuelComponent fc, final long consumption, final long cost) {
-		final FuelQuantity fq = factory.createFuelQuantity();
-
-		fq.setQuantity(consumption);
-		fq.setTotalPrice(cost);
-		// TODO float?
-		fq.setUnitPrice(consumption == 0 ? 0 : cost / consumption);
-
-		fq.setFuelType(fuelTypes.get(fc));
-		fq.setFuelUnit(fuelUnits.get(fc.getDefaultFuelUnit()));
-		fq.setPurpose(fuelPurposes.get(fc));
+	protected List<FuelQuantity> createFuelQuantities(final IFuelUsingEvent event) {
+		final List<FuelQuantity> result = new LinkedList<FuelQuantity>();
 		
-		return fq;
-	}
-
-	protected void addFuelQuantity(final FuelMixture mixture, final FuelComponent component, final long consumption, final long cost) {
-		final FuelType fuelType = fuelTypes.get(component);
-		final FuelPurpose purpose = fuelPurposes.get(component);
-		for (final FuelQuantity fq : mixture.getFuelUsage()) {
-			if (fq.getFuelType().equals(fuelType) && fq.getPurpose().equals(purpose)) {
-				// add to existing
-				// TODO this will accumulate rounding error worse than batch
-				// adding with a final division.
-				final long newQuantity = fq.getQuantity() + consumption;
-				final long newTotalPrice = fq.getTotalPrice() + cost;
-				fq.setQuantity(newQuantity);
-				fq.setTotalPrice(newTotalPrice);
-				fq.setUnitPrice(newQuantity == 0 ? 0 : newTotalPrice / newQuantity);
-				return;
+		for (final Map.Entry<Fuel, FuelComponent[]> entry : fuelComponentNames.entrySet()) {
+			long totalCost = 0;
+			boolean matters = false;
+			
+			for (final FuelComponent component : entry.getValue()) {
+				totalCost += event.getFuelCost(component);
 			}
-		}
-
-		mixture.getFuelUsage().add(createFuelQuantity(component, consumption, cost));
-	}
-
-	protected void scaleFuelQuantities(final FuelMixture mixture) {
-		final Iterator<FuelQuantity> iterator = mixture.getFuelUsage().iterator();
-		while (iterator.hasNext()) {
-			final FuelQuantity fq = iterator.next();
-			if (fq.getQuantity() == 0) {
-				iterator.remove();
-			} else {
-			fq.setQuantity(fq.getQuantity() / Calculator.ScaleFactor);
-			fq.setTotalPrice(fq.getTotalPrice() / Calculator.ScaleFactor);
+			
+			final FuelQuantity quantity = ScheduleFactory.eINSTANCE.createFuelQuantity();
+			quantity.setFuel(entry.getKey());
+			quantity.setCost((int) (totalCost / Calculator.ScaleFactor));
+			if (totalCost > 0) matters = true;
+			
+			for (final FuelUnit unit : displayFuelUnits.get(entry.getKey())) {
+				long totalUsage = 0;
+				for (final FuelComponent component : entry.getValue()) {
+					totalUsage += event.getFuelConsumption(component, unit);
+				}
+				if (totalUsage > 0) {
+					final FuelAmount amount = ScheduleFactory.eINSTANCE.createFuelAmount();
+					amount.setQuantity((int) (totalUsage / Calculator.ScaleFactor));
+					amount.setUnit(modelUnits.get(unit));
+					quantity.getAmounts().add(amount);
+					matters = true;
+				}
 			}
+			
+			if (matters) result.add(quantity);
 		}
+		
+		return result;
 	}
 }

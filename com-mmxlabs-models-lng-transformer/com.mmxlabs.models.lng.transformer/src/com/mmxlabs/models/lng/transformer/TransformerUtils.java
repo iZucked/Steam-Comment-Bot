@@ -282,8 +282,8 @@ public class TransformerUtils {
 		calendar.clear(Calendar.SECOND);
 		calendar.clear(Calendar.MILLISECOND);
 		final Date date = calendar.getTime();
-		final DateAndOptionalTime daot = new DateAndOptionalTime(date, true);
-		return unsetOrSetNullValues(unsetOrSetNullValues(input, ScenarioPackage.eINSTANCE.getDateAndOptionalTime(), daot), EcorePackage.eINSTANCE.getEDate(), date);
+//		final DateAndOptionalTime daot = new DateAndOptionalTime(date, true);
+		return unsetOrSetNullValues(input, EcorePackage.eINSTANCE.getEDate(), date);
 	}
 
 	/**

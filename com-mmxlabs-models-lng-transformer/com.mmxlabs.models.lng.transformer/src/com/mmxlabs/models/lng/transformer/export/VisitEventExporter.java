@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -47,7 +48,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public Event export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel vessel) {
+	public Event export(final ISequenceElement element, final Map<String, Object> annotations) {
 
 		final IPortSlot slot = portSlotProvider.getPortSlot(element);
 
@@ -58,13 +59,17 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		if (ePort == null)
 			return null;
 
-		PortVisit portVisit = null;
+		Event portVisit = null;
 
 		lastPortVisited = ePort;
 
 		if (slot instanceof IDischargeSlot || slot instanceof ILoadSlot) {
+			
 			final SlotVisit sv = factory.createSlotVisit();
-			sv.setSlot(entities.getModelObject(slot, Slot.class));
+			final SlotAllocation slotAllocation = factory.createSlotAllocation();
+			sv.setSlotAllocation(slotAllocation);
+			//TODO this will have to look at market-generated slots.
+			slotAllocation.setSlot(entities.getModelObject(slot, Slot.class));
 			portVisit = sv;
 
 			// Output allocation info.
@@ -77,30 +82,18 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				allocations.put(allocation.getLoadSlot(), eAllocation);
 				allocations.put(allocation.getDischargeSlot(), eAllocation);
 
-				eAllocation.setCargoType(CargoType.FLEET);
+//				eAllocation.setLoadPriceM3(allocation.getLoadM3Price());
+//				eAllocation.setDischargePriceM3(allocation.getDischargeM3Price());
+//				eAllocation.setFuelVolume(allocation.getFuelVolume() / Calculator.ScaleFactor); // yes? no?
+				eAllocation.setDischargeVolume((int) (allocation.getDischargeVolume() / Calculator.ScaleFactor));
 
-				eAllocation.setLoadVisit(entities.getModelObject(allocation.getLoadSlot(), LoadSlot.class));
-				eAllocation.setDischargeSlot(entities.getModelObject(allocation.getDischargeSlot(), Slot.class));
-
-				eAllocation.setLoadDate(entities.getDateFromHours(allocation.getLoadTime()));
-				eAllocation.setDischargeDate(entities.getDateFromHours(allocation.getDischargeTime()));
-
-				eAllocation.setLoadPriceM3(allocation.getLoadM3Price());
-				eAllocation.setDischargePriceM3(allocation.getDischargeM3Price());
-				eAllocation.setFuelVolume(allocation.getFuelVolume() / Calculator.ScaleFactor); // yes? no?
-				eAllocation.setDischargeVolume(allocation.getDischargeVolume() / Calculator.ScaleFactor);
-
-				eAllocation.setVessel(vessel);
+//				eAllocation.setSequence();
 
 				output.getCargoAllocations().add(eAllocation);
 			}
 
-			sv.setCargoAllocation(eAllocation);
-			if (sv.getSlot() instanceof LoadSlot) {
-				eAllocation.setLoadSlotVisit(sv);
-			} else {
-				eAllocation.setDischargeSlotVisit(sv);
-			}
+			sv.setSlotAllocation(slotAllocation);
+			slotAllocation.setCargoAllocation(eAllocation);
 		} else if (slot instanceof IVesselEventPortSlot) {
 			// final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
 			final VesselEvent event = entities.getModelObject(slot, VesselEvent.class);
@@ -110,18 +103,19 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				final CharterOutEvent charterOut = (CharterOutEvent) event;
 				// filter out the charter out slots at the start port (these
 				// will have duration zero anyway)
-				if (ePort != charterOut.getEffectiveEndPort())
+				if (ePort != charterOut.getEndPort())
 					return null;
-				final CharterOutVisit cov = factory.createCharterOutVisit();
-				vev = cov;
-				cov.setCharterOut(charterOut);
+//				final CharterOutVisit cov = factory.createCharterOutVisit();
+//				vev = cov;
+//				cov.setCharterOut(charterOut);
+				vev = factory.createVesselEventVisit();	
 			} else {
 				vev = factory.createVesselEventVisit();
 			}
 			vev.setVesselEvent(event);
 			portVisit = vev;
 		} else {
-			portVisit = factory.createPortVisit();
+			portVisit = factory.createEvent();
 		}
 
 		portVisit.setPort(ePort);
@@ -131,14 +125,14 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		assert visitEvent != null : "Every sequence element should have a visit event associated with it";
 
 		if (slot.getPortType() == PortType.Start) {
-			portVisit.setStartTime(entities.getDateFromHours(visitEvent.getStartTime() - 1));
+			portVisit.setStart(entities.getDateFromHours(visitEvent.getStartTime() - 1));
 		} else {
-			portVisit.setStartTime(entities.getDateFromHours(visitEvent.getStartTime()));
+			portVisit.setStart(entities.getDateFromHours(visitEvent.getStartTime()));
 		}
 		if (slot.getPortType() == PortType.End) {
-			portVisit.setEndTime(entities.getDateFromHours(visitEvent.getEndTime() + 1));
+			portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime() + 1));
 		} else {
-			portVisit.setEndTime(entities.getDateFromHours(visitEvent.getEndTime()));
+			portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime()));
 		}
 		return portVisit;
 	}

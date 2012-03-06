@@ -6,14 +6,12 @@ package com.mmxlabs.models.lng.transformer.export;
 
 import java.util.Map;
 
-import scenario.fleet.VesselState;
-import scenario.port.Port;
-import scenario.schedule.events.Idle;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.fleetallocation.AllocatedVessel;
-
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
@@ -40,7 +38,7 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public ScheduledEvent export(final ISequenceElement element, final Map<String, Object> annotations, final AllocatedVessel v) {
+	public Event export(final ISequenceElement element, final Map<String, Object> annotations) {
 		final IIdleEvent event = (IIdleEvent) annotations.get(SchedulerConstants.AI_idleInfo);
 
 		if (event == null) {
@@ -61,27 +59,11 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		final Idle idle = factory.createIdle();
 
 		idle.setPort(ePort);
-		idle.setStartTime(entities.getDateFromHours(event.getStartTime()));
-		idle.setEndTime(entities.getDateFromHours(event.getEndTime()));
+		idle.setStart(entities.getDateFromHours(event.getStartTime()));
+		idle.setEnd(entities.getDateFromHours(event.getEndTime()));
+		idle.setLaden(VesselState.Laden.equals(event.getVesselState()));
 
-		switch (event.getVesselState()) {
-		case Ballast:
-			idle.setVesselState(VesselState.BALLAST);
-			break;
-		case Laden:
-			idle.setVesselState(VesselState.LADEN);
-			break;
-		}
-
-		for (final FuelComponent fc : FuelComponent.getIdleFuelComponents()) {
-			addFuelQuantity(idle, fc, event.getFuelConsumption(fc, fc.getDefaultFuelUnit()), event.getFuelCost(fc));
-		}
-
-		scaleFuelQuantities(idle);
-
-		// if (idle.getPort() == null) {
-		// System.err.println("This shouldn't have happened");
-		// }
+		idle.getFuels().addAll(super.createFuelQuantities(event));
 
 		return idle;
 	}
