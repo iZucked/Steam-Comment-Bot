@@ -107,6 +107,12 @@
 			<url>http://download.eclipse.org/technology/nebula/snapshot</url>
 			<layout>p2</layout>
 		</repository>
+		
+        <repository>
+            <id>nebula-incubation-snapshots</id>
+            <url>http://download.eclipse.org/technology/nebula/incubation/snapshot</url>
+            <layout>p2</layout>
+        </repository>
 
 		<repository>
 			<id>mmxlabs-p2-external</id>
