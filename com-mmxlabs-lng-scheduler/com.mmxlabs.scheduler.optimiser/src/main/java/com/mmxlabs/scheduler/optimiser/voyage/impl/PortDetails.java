@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.EnumMap;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -107,6 +108,12 @@ public final class PortDetails implements Cloneable {
 		return false;
 	}
 
+	@Override
+	public final int hashCode() {
+		
+		return Objects.hashCode(visitDuration, capacityViolations, fuelConsumption, portSlot);
+	}
+	
 	@Override
 	public String toString() {
 		return "PortDetails [fuelConsumption=" + fuelConsumption + ", visitDuration=" + visitDuration + ", portSlot=" + portSlot + ", capacityViolations=" + capacityViolations + "]";
