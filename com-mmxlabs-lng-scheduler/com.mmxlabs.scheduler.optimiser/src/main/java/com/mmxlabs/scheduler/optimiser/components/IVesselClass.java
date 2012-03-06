@@ -167,5 +167,5 @@ public interface IVesselClass {
 	 * 
 	 * @return scaled M3 of LNG
 	 */
-	int getCooldownVolume();
+	long getCooldownVolume();
 }

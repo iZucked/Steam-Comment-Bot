@@ -83,7 +83,7 @@ public final class Calculator {
 	 * @param value
 	 * @return scaled version of value
 	 */
-	public static int scale(final int value) {
+	public static long scale(final int value) {
 		return ScaleFactor * value;
 	}
 
