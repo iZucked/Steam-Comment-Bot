@@ -6,7 +6,7 @@
 	<version>1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Scheduler - Parentr</name>
+	<name>Scheduler - Parent</name>
 	<description>LNG Scheduler</description>
 
 	<parent>
