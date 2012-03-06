@@ -68,5 +68,15 @@ public class IdleComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_ladenEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the laden feature on Idle
+	 *
+	 * @generated
+	 */
+	protected void add_ladenEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.IDLE__LADEN));
 	}
 }

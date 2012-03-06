@@ -62,18 +62,19 @@ public class FuelQuantityComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_fuelNameEditor(detailComposite, topClass);
+		add_fuelEditor(detailComposite, topClass);
 		add_costEditor(detailComposite, topClass);
 		add_amountsEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the fuelName feature on FuelQuantity
+	 * Create the editor for the fuel feature on FuelQuantity
 	 *
 	 * @generated
 	 */
-	protected void add_fuelNameEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.FUEL_QUANTITY__FUEL_NAME));
+	protected void add_fuelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.FUEL_QUANTITY__FUEL));
 	}
+
 	/**
 	 * Create the editor for the cost feature on FuelQuantity
 	 *

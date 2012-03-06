@@ -72,6 +72,8 @@ public class JourneyComponentHelper implements IComponentHelper {
 		add_ladenEditor(detailComposite, topClass);
 		add_routeEditor(detailComposite, topClass);
 		add_tollEditor(detailComposite, topClass);
+		add_distanceEditor(detailComposite, topClass);
+		add_speedEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the destination feature on Journey
@@ -104,5 +106,23 @@ public class JourneyComponentHelper implements IComponentHelper {
 	 */
 	protected void add_tollEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__TOLL));
+	}
+
+	/**
+	 * Create the editor for the distance feature on Journey
+	 *
+	 * @generated
+	 */
+	protected void add_distanceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__DISTANCE));
+	}
+
+	/**
+	 * Create the editor for the speed feature on Journey
+	 *
+	 * @generated
+	 */
+	protected void add_speedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__SPEED));
 	}
 }

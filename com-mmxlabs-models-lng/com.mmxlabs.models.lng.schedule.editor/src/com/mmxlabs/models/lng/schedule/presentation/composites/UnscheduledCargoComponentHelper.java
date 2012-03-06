@@ -67,23 +67,24 @@ public class UnscheduledCargoComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_loadEditor(detailComposite, topClass);
-		add_dischargeEditor(detailComposite, topClass);
+		add_loadAllocationEditor(detailComposite, topClass);
+		add_dischargeAllocationEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the load feature on UnscheduledCargo
+	 * Create the editor for the loadAllocation feature on UnscheduledCargo
 	 *
 	 * @generated
 	 */
-	protected void add_loadEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.UNSCHEDULED_CARGO__LOAD));
+	protected void add_loadAllocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.UNSCHEDULED_CARGO__LOAD_ALLOCATION));
 	}
+
 	/**
-	 * Create the editor for the discharge feature on UnscheduledCargo
+	 * Create the editor for the dischargeAllocation feature on UnscheduledCargo
 	 *
 	 * @generated
 	 */
-	protected void add_dischargeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.UNSCHEDULED_CARGO__DISCHARGE));
+	protected void add_dischargeAllocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION));
 	}
 }

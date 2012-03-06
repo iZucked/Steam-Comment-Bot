@@ -70,6 +70,9 @@ public class SequenceComponentHelper implements IComponentHelper {
 		add_eventsEditor(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
 		add_vesselClassEditor(detailComposite, topClass);
+		add_fitnessesEditor(detailComposite, topClass);
+		add_dailyHireRateEditor(detailComposite, topClass);
+		add_spotIndexEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the events feature on Sequence
@@ -94,5 +97,32 @@ public class SequenceComponentHelper implements IComponentHelper {
 	 */
 	protected void add_vesselClassEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__VESSEL_CLASS));
+	}
+
+	/**
+	 * Create the editor for the fitnesses feature on Sequence
+	 *
+	 * @generated
+	 */
+	protected void add_fitnessesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__FITNESSES));
+	}
+
+	/**
+	 * Create the editor for the dailyHireRate feature on Sequence
+	 *
+	 * @generated
+	 */
+	protected void add_dailyHireRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__DAILY_HIRE_RATE));
+	}
+
+	/**
+	 * Create the editor for the spotIndex feature on Sequence
+	 *
+	 * @generated
+	 */
+	protected void add_spotIndexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__SPOT_INDEX));
 	}
 }

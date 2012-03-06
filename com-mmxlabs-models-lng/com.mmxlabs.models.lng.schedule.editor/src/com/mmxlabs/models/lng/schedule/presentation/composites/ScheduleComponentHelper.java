@@ -70,8 +70,9 @@ public class ScheduleComponentHelper implements IComponentHelper {
 		add_completeEditor(detailComposite, topClass);
 		add_sequencesEditor(detailComposite, topClass);
 		add_unscheduledCargosEditor(detailComposite, topClass);
-		add_allocationsEditor(detailComposite, topClass);
+		add_cargoAllocationsEditor(detailComposite, topClass);
 		add_slotAllocationsEditor(detailComposite, topClass);
+		add_fitnessesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the complete feature on Schedule
@@ -98,13 +99,14 @@ public class ScheduleComponentHelper implements IComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__UNSCHEDULED_CARGOS));
 	}
 	/**
-	 * Create the editor for the allocations feature on Schedule
+	 * Create the editor for the cargoAllocations feature on Schedule
 	 *
 	 * @generated
 	 */
-	protected void add_allocationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__ALLOCATIONS));
+	protected void add_cargoAllocationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS));
 	}
+
 	/**
 	 * Create the editor for the slotAllocations feature on Schedule
 	 *
@@ -112,5 +114,14 @@ public class ScheduleComponentHelper implements IComponentHelper {
 	 */
 	protected void add_slotAllocationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__SLOT_ALLOCATIONS));
+	}
+
+	/**
+	 * Create the editor for the fitnesses feature on Schedule
+	 *
+	 * @generated
+	 */
+	protected void add_fitnessesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__FITNESSES));
 	}
 }

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule.presentation.composites;
 
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import java.util.ArrayList;
@@ -45,6 +46,9 @@ public class EventComponentHelper implements IComponentHelper {
 	public EventComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
 			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.MMX_OBJECT);
+			if (helper != null) superClassesHelpers.add(helper);
+		} {
+			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ITIMEZONE_PROVIDER);
 			if (helper != null) superClassesHelpers.add(helper);
 		}
 	}

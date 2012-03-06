@@ -67,8 +67,8 @@ public class CargoAllocationComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_loadVisitEditor(detailComposite, topClass);
-		add_dischargeVisitEditor(detailComposite, topClass);
+		add_loadAllocationEditor(detailComposite, topClass);
+		add_dischargeAllocationEditor(detailComposite, topClass);
 		add_loadVolumeEditor(detailComposite, topClass);
 		add_dischargeVolumeEditor(detailComposite, topClass);
 		add_inputCargoEditor(detailComposite, topClass);
@@ -76,23 +76,26 @@ public class CargoAllocationComponentHelper implements IComponentHelper {
 		add_ballastLegEditor(detailComposite, topClass);
 		add_ladenIdleEditor(detailComposite, topClass);
 		add_ballastIdleEditor(detailComposite, topClass);
+		add_sequenceEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the loadVisit feature on CargoAllocation
+	 * Create the editor for the loadAllocation feature on CargoAllocation
 	 *
 	 * @generated
 	 */
-	protected void add_loadVisitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_VISIT));
+	protected void add_loadAllocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_ALLOCATION));
 	}
+
 	/**
-	 * Create the editor for the dischargeVisit feature on CargoAllocation
+	 * Create the editor for the dischargeAllocation feature on CargoAllocation
 	 *
 	 * @generated
 	 */
-	protected void add_dischargeVisitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_VISIT));
+	protected void add_dischargeAllocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_ALLOCATION));
 	}
+
 	/**
 	 * Create the editor for the loadVolume feature on CargoAllocation
 	 *
@@ -152,5 +155,14 @@ public class CargoAllocationComponentHelper implements IComponentHelper {
 	 */
 	protected void add_ballastIdleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_IDLE));
+	}
+
+	/**
+	 * Create the editor for the sequence feature on CargoAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_sequenceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__SEQUENCE));
 	}
 }
