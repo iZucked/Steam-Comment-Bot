@@ -263,10 +263,10 @@
                adaptableType="org.eclipse.core.resources.IResource"
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.scenario.ScenarioTreeNodeClassAdapterFactory">
             <adapter
-                  type="scenario.Scenario">
+                  type="com.mmxlabs.models.mmxcore.MMXRootObject">
             </adapter>
             <adapter
-                  type="scenario.schedule.Schedule">
+                  type="com.mmxlabs.models.lng.schedule.Schedule">
             </adapter>
             <!--
             <adapter
