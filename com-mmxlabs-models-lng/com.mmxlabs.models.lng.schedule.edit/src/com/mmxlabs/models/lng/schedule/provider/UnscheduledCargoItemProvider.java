@@ -60,26 +60,26 @@ public class UnscheduledCargoItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLoadPropertyDescriptor(object);
-			addDischargePropertyDescriptor(object);
+			addLoadAllocationPropertyDescriptor(object);
+			addDischargeAllocationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Load feature.
+	 * This adds a property descriptor for the Load Allocation feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLoadPropertyDescriptor(Object object) {
+	protected void addLoadAllocationPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_UnscheduledCargo_load_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UnscheduledCargo_load_feature", "_UI_UnscheduledCargo_type"),
-				 SchedulePackage.Literals.UNSCHEDULED_CARGO__LOAD,
+				 getString("_UI_UnscheduledCargo_loadAllocation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnscheduledCargo_loadAllocation_feature", "_UI_UnscheduledCargo_type"),
+				 SchedulePackage.Literals.UNSCHEDULED_CARGO__LOAD_ALLOCATION,
 				 true,
 				 false,
 				 true,
@@ -89,19 +89,19 @@ public class UnscheduledCargoItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Discharge feature.
+	 * This adds a property descriptor for the Discharge Allocation feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addDischargePropertyDescriptor(Object object) {
+	protected void addDischargeAllocationPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_UnscheduledCargo_discharge_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UnscheduledCargo_discharge_feature", "_UI_UnscheduledCargo_type"),
-				 SchedulePackage.Literals.UNSCHEDULED_CARGO__DISCHARGE,
+				 getString("_UI_UnscheduledCargo_dischargeAllocation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnscheduledCargo_dischargeAllocation_feature", "_UI_UnscheduledCargo_type"),
+				 SchedulePackage.Literals.UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION,
 				 true,
 				 false,
 				 true,

@@ -143,6 +143,52 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.Event} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EventItemProvider eventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.Event}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEventAdapter() {
+		if (eventItemProvider == null) {
+			eventItemProvider = new EventItemProvider(this);
+		}
+
+		return eventItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.SlotVisit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SlotVisitItemProvider slotVisitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.SlotVisit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSlotVisitAdapter() {
+		if (slotVisitItemProvider == null) {
+			slotVisitItemProvider = new SlotVisitItemProvider(this);
+		}
+
+		return slotVisitItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.VesselEventVisit} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -497,6 +543,8 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (scheduleModelItemProvider != null) scheduleModelItemProvider.dispose();
 		if (scheduleItemProvider != null) scheduleItemProvider.dispose();
 		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
+		if (eventItemProvider != null) eventItemProvider.dispose();
+		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
 		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
 		if (journeyItemProvider != null) journeyItemProvider.dispose();
 		if (idleItemProvider != null) idleItemProvider.dispose();

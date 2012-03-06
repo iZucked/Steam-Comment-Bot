@@ -63,8 +63,8 @@ public class CargoAllocationItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLoadVisitPropertyDescriptor(object);
-			addDischargeVisitPropertyDescriptor(object);
+			addLoadAllocationPropertyDescriptor(object);
+			addDischargeAllocationPropertyDescriptor(object);
 			addLoadVolumePropertyDescriptor(object);
 			addDischargeVolumePropertyDescriptor(object);
 			addInputCargoPropertyDescriptor(object);
@@ -72,24 +72,25 @@ public class CargoAllocationItemProvider
 			addBallastLegPropertyDescriptor(object);
 			addLadenIdlePropertyDescriptor(object);
 			addBallastIdlePropertyDescriptor(object);
+			addSequencePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Load Visit feature.
+	 * This adds a property descriptor for the Load Allocation feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLoadVisitPropertyDescriptor(Object object) {
+	protected void addLoadAllocationPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_loadVisit_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_loadVisit_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_VISIT,
+				 getString("_UI_CargoAllocation_loadAllocation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_loadAllocation_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_ALLOCATION,
 				 true,
 				 false,
 				 true,
@@ -99,19 +100,19 @@ public class CargoAllocationItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Discharge Visit feature.
+	 * This adds a property descriptor for the Discharge Allocation feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addDischargeVisitPropertyDescriptor(Object object) {
+	protected void addDischargeAllocationPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_dischargeVisit_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_dischargeVisit_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_VISIT,
+				 getString("_UI_CargoAllocation_dischargeAllocation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_dischargeAllocation_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_ALLOCATION,
 				 true,
 				 false,
 				 true,
@@ -266,6 +267,28 @@ public class CargoAllocationItemProvider
 				 getString("_UI_CargoAllocation_ballastIdle_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_ballastIdle_feature", "_UI_CargoAllocation_type"),
 				 SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_IDLE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Sequence feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSequencePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_sequence_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_sequence_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__SEQUENCE,
 				 true,
 				 false,
 				 true,

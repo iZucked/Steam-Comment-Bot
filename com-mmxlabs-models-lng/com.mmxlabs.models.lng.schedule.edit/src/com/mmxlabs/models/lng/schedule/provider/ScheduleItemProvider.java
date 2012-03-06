@@ -67,7 +67,7 @@ public class ScheduleItemProvider
 			super.getPropertyDescriptors(object);
 
 			addCompletePropertyDescriptor(object);
-			addAllocationsPropertyDescriptor(object);
+			addCargoAllocationsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -95,19 +95,19 @@ public class ScheduleItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Allocations feature.
+	 * This adds a property descriptor for the Cargo Allocations feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addAllocationsPropertyDescriptor(Object object) {
+	protected void addCargoAllocationsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Schedule_allocations_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Schedule_allocations_feature", "_UI_Schedule_type"),
-				 SchedulePackage.Literals.SCHEDULE__ALLOCATIONS,
+				 getString("_UI_Schedule_cargoAllocations_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Schedule_cargoAllocations_feature", "_UI_Schedule_type"),
+				 SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS,
 				 true,
 				 false,
 				 true,
@@ -131,6 +131,7 @@ public class ScheduleItemProvider
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SEQUENCES);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__UNSCHEDULED_CARGOS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SLOT_ALLOCATIONS);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FITNESSES);
 		}
 		return childrenFeatures;
 	}
@@ -189,6 +190,7 @@ public class ScheduleItemProvider
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOS:
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
+			case SchedulePackage.SCHEDULE__FITNESSES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -220,6 +222,11 @@ public class ScheduleItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__SLOT_ALLOCATIONS,
 				 ScheduleFactory.eINSTANCE.createSlotAllocation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__FITNESSES,
+				 ScheduleFactory.eINSTANCE.createFitness()));
 	}
 
 	/**

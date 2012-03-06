@@ -28,6 +28,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
@@ -67,6 +68,8 @@ public class SequenceItemProvider
 
 			addVesselPropertyDescriptor(object);
 			addVesselClassPropertyDescriptor(object);
+			addDailyHireRatePropertyDescriptor(object);
+			addSpotIndexPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -116,6 +119,50 @@ public class SequenceItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Daily Hire Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDailyHireRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Sequence_dailyHireRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_dailyHireRate_feature", "_UI_Sequence_type"),
+				 SchedulePackage.Literals.SEQUENCE__DAILY_HIRE_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Spot Index feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSpotIndexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Sequence_spotIndex_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_spotIndex_feature", "_UI_Sequence_type"),
+				 SchedulePackage.Literals.SEQUENCE__SPOT_INDEX,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -128,6 +175,7 @@ public class SequenceItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.SEQUENCE__EVENTS);
+			childrenFeatures.add(SchedulePackage.Literals.SEQUENCE__FITNESSES);
 		}
 		return childrenFeatures;
 	}
@@ -164,7 +212,8 @@ public class SequenceItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Sequence_type");
+		Sequence sequence = (Sequence)object;
+		return getString("_UI_Sequence_type") + " " + sequence.getDailyHireRate();
 	}
 
 	/**
@@ -179,7 +228,12 @@ public class SequenceItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Sequence.class)) {
+			case SchedulePackage.SEQUENCE__DAILY_HIRE_RATE:
+			case SchedulePackage.SEQUENCE__SPOT_INDEX:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case SchedulePackage.SEQUENCE__EVENTS:
+			case SchedulePackage.SEQUENCE__FITNESSES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -200,6 +254,16 @@ public class SequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createSlotVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
 				 ScheduleFactory.eINSTANCE.createVesselEventVisit()));
 
 		newChildDescriptors.add
@@ -216,6 +280,11 @@ public class SequenceItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
 				 ScheduleFactory.eINSTANCE.createCooldown()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__FITNESSES,
+				 ScheduleFactory.eINSTANCE.createFitness()));
 	}
 
 	/**

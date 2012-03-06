@@ -67,6 +67,8 @@ public class JourneyItemProvider
 			addLadenPropertyDescriptor(object);
 			addRoutePropertyDescriptor(object);
 			addTollPropertyDescriptor(object);
+			addDistancePropertyDescriptor(object);
+			addSpeedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -154,7 +156,51 @@ public class JourneyItemProvider
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Distance feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDistancePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Journey_distance_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_distance_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__DISTANCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Speed feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSpeedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Journey_speed_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_speed_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__SPEED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -230,6 +276,8 @@ public class JourneyItemProvider
 			case SchedulePackage.JOURNEY__LADEN:
 			case SchedulePackage.JOURNEY__ROUTE:
 			case SchedulePackage.JOURNEY__TOLL:
+			case SchedulePackage.JOURNEY__DISTANCE:
+			case SchedulePackage.JOURNEY__SPEED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.JOURNEY__FUELS:

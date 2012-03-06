@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
+import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -65,26 +66,26 @@ public class FuelQuantityItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addFuelNamePropertyDescriptor(object);
+			addFuelPropertyDescriptor(object);
 			addCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Fuel Name feature.
+	 * This adds a property descriptor for the Fuel feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addFuelNamePropertyDescriptor(Object object) {
+	protected void addFuelPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_FuelQuantity_fuelName_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_FuelQuantity_fuelName_feature", "_UI_FuelQuantity_type"),
-				 SchedulePackage.Literals.FUEL_QUANTITY__FUEL_NAME,
+				 getString("_UI_FuelQuantity_fuel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FuelQuantity_fuel_feature", "_UI_FuelQuantity_type"),
+				 SchedulePackage.Literals.FUEL_QUANTITY__FUEL,
 				 true,
 				 false,
 				 false,
@@ -164,7 +165,8 @@ public class FuelQuantityItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((FuelQuantity)object).getFuelName();
+		Fuel labelValue = ((FuelQuantity)object).getFuel();
+		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_FuelQuantity_type") :
 			getString("_UI_FuelQuantity_type") + " " + label;
@@ -182,7 +184,7 @@ public class FuelQuantityItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(FuelQuantity.class)) {
-			case SchedulePackage.FUEL_QUANTITY__FUEL_NAME:
+			case SchedulePackage.FUEL_QUANTITY__FUEL:
 			case SchedulePackage.FUEL_QUANTITY__COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
