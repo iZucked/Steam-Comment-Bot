@@ -15,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * @author Simon Goodall
  * 
  */
-public interface IJourneyEvent extends IScheduledEvent {
+public interface IJourneyEvent extends IScheduledEvent, IFuelUsingEvent {
 
 	/**
 	 * Returns the originating {@link IPort} for this journey.
@@ -51,22 +51,6 @@ public interface IJourneyEvent extends IScheduledEvent {
 	 * @return
 	 */
 	VesselState getVesselState();
-
-	/**
-	 * Returns the fuel consumption per {@link FuelComponent} during this event.
-	 * 
-	 * @param fuel
-	 * @return
-	 */
-	long getFuelConsumption(FuelComponent fuel, FuelUnit unit);
-
-	/**
-	 * Returns the total cost of the fuel consumed per {@link FuelComponent} during this event. TODO: What about making this the unit cost?
-	 * 
-	 * @param fuel
-	 * @return
-	 */
-	long getFuelCost(FuelComponent fuel);
 
 	/**
 	 * Returns the route undertaken in this journey.

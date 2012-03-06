@@ -49,7 +49,7 @@ public final class VesselClass implements IVesselClass {
 	/**
 	 * The volume of LNG required to cool the tanks on vessels of this class.
 	 */
-	private int cooldownVolume;
+	private long cooldownVolume;
 
 	/**
 	 * The time in hours required to cool the tanks on vessels of this class.
@@ -208,11 +208,11 @@ public final class VesselClass implements IVesselClass {
 	}
 
 	@Override
-	public int getCooldownVolume() {
+	public long getCooldownVolume() {
 		return cooldownVolume;
 	}
 
-	public void setCooldownVolume(final int cooldownVolume) {
+	public void setCooldownVolume(final long cooldownVolume) {
 		this.cooldownVolume = cooldownVolume;
 	}
 
