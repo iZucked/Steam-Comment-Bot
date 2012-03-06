@@ -148,10 +148,7 @@ public class ScheduleAdapter {
 		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		if (scheduleModel != null) {
 
-			final EList<Schedule> schedules = scheduleModel.getSchedules();
-			if (schedules.isEmpty() == false) {
-				return schedules.get(schedules.size() - 1);
-			}
+			return scheduleModel.getOptimisedSchedule();
 
 		}
 		return null;

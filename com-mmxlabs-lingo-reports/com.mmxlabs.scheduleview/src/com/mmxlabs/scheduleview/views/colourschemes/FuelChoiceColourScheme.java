@@ -7,8 +7,8 @@ package com.mmxlabs.scheduleview.views.colourschemes;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
+import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
-import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 
@@ -35,13 +35,13 @@ public class FuelChoiceColourScheme implements IScheduleViewColourScheme {
 
 			for (final FuelQuantity fq : journey.getFuels()) {
 				if (fq.getAmounts().isEmpty() == false) {
-					if (fq.getFuelName().equals("Base Fuel")) {
+					if (fq.getFuel().equals(Fuel.BASE_FUEL)) {
 						r = 255;
 						break;
-					} else if (fq.getFuelName().equals("FBO")) {
+					} else if (fq.getFuel().equals(Fuel.FBO)) {
 						b = 255;
 						break;
-					} else if (fq.getFuelName().equals("NBO")) {
+					} else if (fq.getFuel().equals(Fuel.NBO)) {
 						g = 255;
 						break;
 					}

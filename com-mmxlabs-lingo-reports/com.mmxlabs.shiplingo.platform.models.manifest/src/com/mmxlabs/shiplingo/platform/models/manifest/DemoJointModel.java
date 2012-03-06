@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.fleet.VesselAvailablility;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -74,6 +75,7 @@ public class DemoJointModel extends JointModel {
 	private static final String SCHEDULE_MODEL_KEY = "schedule-model";
 	private static final String COMMERCIAL_MODEL_KEY = "commercial-model";
 	private static final String ROOT_MODEL_KEY = "root-model";
+	private static final String OPTIMISER_MODEL_KEY = "optimiser-model";
 	
 	/**
 	 * This map lets us know what kind of model class has what key.
@@ -88,7 +90,8 @@ public class DemoJointModel extends JointModel {
 				PRICING_MODEL_KEY, 0,
 				INPUT_MODEL_KEY, 0,
 				SCHEDULE_MODEL_KEY, 0,
-				COMMERCIAL_MODEL_KEY, 0));
+				COMMERCIAL_MODEL_KEY, 0,
+				OPTIMISER_MODEL_KEY, 0));
 		
 		modelClassKeys.put(PortPackage.eINSTANCE.getPortModel(), PORT_MODEL_KEY);
 		modelClassKeys.put(FleetPackage.eINSTANCE.getFleetModel(), FLEET_MODEL_KEY);
@@ -97,6 +100,7 @@ public class DemoJointModel extends JointModel {
 		modelClassKeys.put(PricingPackage.eINSTANCE.getPricingModel(), PRICING_MODEL_KEY);
 		modelClassKeys.put(InputPackage.eINSTANCE.getInputModel(), INPUT_MODEL_KEY);
 		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
+		modelClassKeys.put(OptimiserPackage.eINSTANCE.getOptimiserModel(), OPTIMISER_MODEL_KEY);
 		
 		/*
 		 * There is no migration history for MMXCore, but this is not a problem; the joint model

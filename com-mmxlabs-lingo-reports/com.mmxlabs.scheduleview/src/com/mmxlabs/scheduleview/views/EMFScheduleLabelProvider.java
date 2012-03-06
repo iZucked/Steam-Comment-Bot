@@ -124,7 +124,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				final FuelUsage fuel = (FuelUsage) element;
 				for (final FuelQuantity fq : fuel.getFuels()) {
 					sb.append(String.format("%s, %,d %s, $%,d\n",
-							fq.getFuelName(), fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit().toString(),
+							fq.getFuel().toString(), fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit().toString(),
 							fq.getCost()));
 				}
 			}
