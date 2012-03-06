@@ -694,13 +694,40 @@ public interface PricingPackage extends EPackage {
 	int SPOT_MARKET__MAX_QUANTITY = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__NOTIONAL_PORT = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__TYPE = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__CONTRACT = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Spot Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET_FEATURE_COUNT = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 4;
+	int SPOT_MARKET_FEATURE_COUNT = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl <em>Port Cost</em>}' class.
@@ -1344,6 +1371,39 @@ public interface PricingPackage extends EPackage {
 	EAttribute getSpotMarket_MaxQuantity();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.SpotMarket#getNotionalPort <em>Notional Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Notional Port</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SpotMarket#getNotionalPort()
+	 * @see #getSpotMarket()
+	 * @generated
+	 */
+	EReference getSpotMarket_NotionalPort();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SpotMarket#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SpotMarket#getType()
+	 * @see #getSpotMarket()
+	 * @generated
+	 */
+	EAttribute getSpotMarket_Type();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.SpotMarket#getContract <em>Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Contract</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SpotMarket#getContract()
+	 * @see #getSpotMarket()
+	 * @generated
+	 */
+	EReference getSpotMarket_Contract();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortCost <em>Port Cost</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1837,6 +1897,30 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SPOT_MARKET__MAX_QUANTITY = eINSTANCE.getSpotMarket_MaxQuantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Notional Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKET__NOTIONAL_PORT = eINSTANCE.getSpotMarket_NotionalPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SPOT_MARKET__TYPE = eINSTANCE.getSpotMarket_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKET__CONTRACT = eINSTANCE.getSpotMarket_Contract();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl <em>Port Cost</em>}' class.

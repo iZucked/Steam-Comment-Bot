@@ -7,8 +7,11 @@ import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 
+import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.types.APortSet;
 
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.impl.ASpotMarketImpl;
 
 import java.util.Collection;
@@ -35,6 +38,9 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getNotionalPort <em>Notional Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getType <em>Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -100,6 +106,46 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 	 * @ordered
 	 */
 	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getNotionalPort() <em>Notional Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotionalPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port notionalPort;
+
+	/**
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final SpotType TYPE_EDEFAULT = SpotType.FOB_SALE;
+
+	/**
+	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected SpotType type = TYPE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContract()
+	 * @generated
+	 * @ordered
+	 */
+	protected Contract contract;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -218,6 +264,103 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Port getNotionalPort() {
+		if (notionalPort != null && notionalPort.eIsProxy()) {
+			InternalEObject oldNotionalPort = (InternalEObject)notionalPort;
+			notionalPort = (Port)eResolveProxy(oldNotionalPort);
+			if (notionalPort != oldNotionalPort) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.SPOT_MARKET__NOTIONAL_PORT, oldNotionalPort, notionalPort));
+			}
+		}
+		return notionalPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetNotionalPort() {
+		return notionalPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNotionalPort(Port newNotionalPort) {
+		Port oldNotionalPort = notionalPort;
+		notionalPort = newNotionalPort;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SPOT_MARKET__NOTIONAL_PORT, oldNotionalPort, notionalPort));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SpotType getType() {
+		return type;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setType(SpotType newType) {
+		SpotType oldType = type;
+		type = newType == null ? TYPE_EDEFAULT : newType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SPOT_MARKET__TYPE, oldType, type));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Contract getContract() {
+		if (contract != null && contract.eIsProxy()) {
+			InternalEObject oldContract = (InternalEObject)contract;
+			contract = (Contract)eResolveProxy(oldContract);
+			if (contract != oldContract) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.SPOT_MARKET__CONTRACT, oldContract, contract));
+			}
+		}
+		return contract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Contract basicGetContract() {
+		return contract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setContract(Contract newContract) {
+		Contract oldContract = contract;
+		contract = newContract;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SPOT_MARKET__CONTRACT, oldContract, contract));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -230,6 +373,14 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 				return getMinQuantity();
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				return getMaxQuantity();
+			case PricingPackage.SPOT_MARKET__NOTIONAL_PORT:
+				if (resolve) return getNotionalPort();
+				return basicGetNotionalPort();
+			case PricingPackage.SPOT_MARKET__TYPE:
+				return getType();
+			case PricingPackage.SPOT_MARKET__CONTRACT:
+				if (resolve) return getContract();
+				return basicGetContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -256,6 +407,15 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				setMaxQuantity((Integer)newValue);
 				return;
+			case PricingPackage.SPOT_MARKET__NOTIONAL_PORT:
+				setNotionalPort((Port)newValue);
+				return;
+			case PricingPackage.SPOT_MARKET__TYPE:
+				setType((SpotType)newValue);
+				return;
+			case PricingPackage.SPOT_MARKET__CONTRACT:
+				setContract((Contract)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -280,6 +440,15 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				setMaxQuantity(MAX_QUANTITY_EDEFAULT);
 				return;
+			case PricingPackage.SPOT_MARKET__NOTIONAL_PORT:
+				setNotionalPort((Port)null);
+				return;
+			case PricingPackage.SPOT_MARKET__TYPE:
+				setType(TYPE_EDEFAULT);
+				return;
+			case PricingPackage.SPOT_MARKET__CONTRACT:
+				setContract((Contract)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -300,6 +469,12 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 				return minQuantity != MIN_QUANTITY_EDEFAULT;
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				return maxQuantity != MAX_QUANTITY_EDEFAULT;
+			case PricingPackage.SPOT_MARKET__NOTIONAL_PORT:
+				return notionalPort != null;
+			case PricingPackage.SPOT_MARKET__TYPE:
+				return type != TYPE_EDEFAULT;
+			case PricingPackage.SPOT_MARKET__CONTRACT:
+				return contract != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -318,6 +493,8 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");
 		result.append(maxQuantity);
+		result.append(", type: ");
+		result.append(type);
 		result.append(')');
 		return result.toString();
 	}

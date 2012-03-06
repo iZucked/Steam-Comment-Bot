@@ -532,6 +532,33 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSpotMarket_NotionalPort() {
+		return (EReference)spotMarketEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSpotMarket_Type() {
+		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSpotMarket_Contract() {
+		return (EReference)spotMarketEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPortCost() {
 		return portCostEClass;
 	}
@@ -751,6 +778,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(spotMarketEClass, SPOT_MARKET__PORTS);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__MIN_QUANTITY);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__MAX_QUANTITY);
+		createEReference(spotMarketEClass, SPOT_MARKET__NOTIONAL_PORT);
+		createEAttribute(spotMarketEClass, SPOT_MARKET__TYPE);
+		createEReference(spotMarketEClass, SPOT_MARKET__CONTRACT);
 
 		portCostEClass = createEClass(PORT_COST);
 		createEReference(portCostEClass, PORT_COST__PORT);
@@ -909,6 +939,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getSpotMarket_Ports(), theTypesPackage.getAPortSet(), null, "ports", null, 0, -1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSpotMarket_NotionalPort(), theTypesPackage.getAPort(), null, "notionalPort", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSpotMarket_Type(), this.getSpotType(), "type", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSpotMarket_Contract(), theTypesPackage.getAContract(), null, "contract", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portCostEClass, PortCost.class, "PortCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortCost_Port(), theTypesPackage.getAPortSet(), null, "port", null, 1, 1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
