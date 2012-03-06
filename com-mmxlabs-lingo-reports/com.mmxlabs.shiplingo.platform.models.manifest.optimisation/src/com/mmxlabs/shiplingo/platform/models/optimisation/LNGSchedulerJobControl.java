@@ -16,6 +16,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -63,7 +64,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
 
-		final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
+		final OptimisationTransformer ot = new OptimisationTransformer(scenario);
 
 		IOptimisationData data;
 		try {
@@ -86,21 +87,31 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		optimiser.init();
 		final IAnnotatedSolution startSolution = optimiser.start(context);
 
-		saveSolution("start state", startSolution);
+		saveInitialSolution(startSolution);
 	}
 
-	private Schedule saveSolution(final String name, final IAnnotatedSolution solution) {
+	private Schedule saveInitialSolution(final IAnnotatedSolution solution) {
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		exporter.addPlatformExporterExtensions();
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
 
-		schedule.setName(scenario.getName() + " " + name);
-
-		scenario.getOrCreateScheduleModel().getSchedules().add(schedule);
-
+		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
+		scheduleModel.setInitialSchedule(schedule);
+		
 		return schedule;
 	}
 
+	private Schedule saveOptimisedSolution(final IAnnotatedSolution solution) {
+		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		exporter.addPlatformExporterExtensions();
+		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
+
+		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
+		scheduleModel.setOptimisedSchedule(schedule);
+		
+		return schedule;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -117,7 +128,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				// intermediateSchedule.eContainingFeature()))
 				// .remove(intermediateSchedule);
 			}
-			intermediateSchedule = saveSolution(currentProgress + "%", optimiser.getBestSolution(false));
+			intermediateSchedule = saveOptimisedSolution(optimiser.getBestSolution(false));
 		}
 
 		// System.err.println("current fitness " +
@@ -133,7 +144,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				schedules.remove(intermediateSchedule);
 			}
 			intermediateSchedule = null;
-			saveSolution("optimised", optimiser.getBestSolution(true));
+			intermediateSchedule = saveOptimisedSolution(optimiser.getBestSolution(true));
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 			return false;
@@ -169,8 +180,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	}
 
 	@Override
-	public final SerializableScenario getJobOutput() {
-		return new SerializableScenario(scenario);
+	public final MMXRootObject getJobOutput() {
+		return scenario;
 	}
 
 	@Override
