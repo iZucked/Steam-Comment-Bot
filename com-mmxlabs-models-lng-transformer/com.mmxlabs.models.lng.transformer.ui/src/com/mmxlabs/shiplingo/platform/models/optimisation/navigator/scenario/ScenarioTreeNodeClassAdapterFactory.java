@@ -4,11 +4,10 @@
  */
 package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.scenario;
 
-import java.util.Collections;
-
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -25,7 +24,7 @@ import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 
 	// FIXME: Get this string from somewhere else
-	private final EcoreContentProvider scp = new EcoreContentProvider(Collections.singleton("scenario"));
+	private final EcoreContentProvider scp = new EcoreContentProvider(CollectionsUtil.makeHashSet("scn", "scenario"));
 
 	@Override
 	public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
