@@ -26,7 +26,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.emf.edapt.history.Release;
 import org.eclipse.emf.edapt.migration.Metamodel;
 import org.eclipse.emf.edapt.migration.MigrationException;
@@ -61,11 +64,18 @@ public abstract class JointModel {
 	protected final Map<String, URI> subModels = new HashMap<String, URI>();
 	private final MMXCoreResourceFactoryImpl resourceFactory = new MMXCoreResourceFactoryImpl();
 	final ResourceSet resourceSet = new ResourceSetImpl();
+	
+	
+	
 	private MMXRootObject rootObject;
 
 	protected JointModel() {
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
 				.put("*", resourceFactory);
+		
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
 	}
 
 	/**
@@ -188,6 +198,10 @@ public abstract class JointModel {
 			out.write(c);
 		}
 	}
+	
+	protected boolean needsUpgrade() {
+		return true;
+	}
 
 	/**
 	 * Upgrade to the latest release, if necessary.
@@ -199,6 +213,8 @@ public abstract class JointModel {
 	 * @throws IOException
 	 */
 	public void upgrade() throws MigrationException, IOException {
+		if (!needsUpgrade()) return;
+		
 		final Map<String, Integer> initialVersions = new HashMap<String, Integer>();
 		final Map<URI, Migrator> migrators = new HashMap<URI, Migrator>();
 
@@ -349,7 +365,7 @@ public abstract class JointModel {
 		this.rootObject = newRootObject;
 	}
 
-	protected MMXRootObject getRootObject() {
+	public MMXRootObject getRootObject() {
 		return rootObject;
 	}
 
