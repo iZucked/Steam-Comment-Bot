@@ -27,3 +27,5 @@ syntax: regexp
 
 syntax: regexp
 ^com\.mmxlabs\.rcp\.common\.tests/screenshots$
+syntax: regexp
+^com\.mmxlabs\.rcp\.common\.p2/\.project$
