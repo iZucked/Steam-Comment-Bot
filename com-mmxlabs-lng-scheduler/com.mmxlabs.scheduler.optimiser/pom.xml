@@ -74,16 +74,7 @@
 			<artifactId>com.springsource.slf4j.log4j</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-			<version>1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice</artifactId>
-		</dependency>
+		
 		<dependency>
 			<groupId>com.googlecode.guava-osgi</groupId>
 			<artifactId>guava-osgi</artifactId>
