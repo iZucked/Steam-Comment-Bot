@@ -13,6 +13,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.XMLResource.ResourceHandler;
 
@@ -59,13 +60,17 @@ public class MMXCoreResourceHandler implements ResourceHandler {
 	@Override
 	public void preLoad(XMLResource resource, InputStream inputStream,
 			Map<?, ?> options) {
-
+		if (resource instanceof ResourceImpl) {
+			((ResourceImpl) resource).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
+		}
 	}
 
 	@Override
 	public void postLoad(XMLResource resource, InputStream inputStream,
 			Map<?, ?> options) {
-		
+		if (resource instanceof ResourceImpl) {
+			((ResourceImpl) resource).setIntrinsicIDToEObjectMap(null);
+		}
 	}
 
 	@Override
