@@ -43,7 +43,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -58,7 +58,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -98,7 +98,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -113,7 +113,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -132,7 +132,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -147,7 +147,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -166,7 +166,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -181,7 +181,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -200,7 +200,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -215,7 +215,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -329,7 +329,7 @@
                <test
                      forcePluginActivation="true"
                      property="org.eclipse.core.resources.extension"
-                     value="scenario">
+                     value="scn">
                </test>
             </or></triggerPoints>
          <possibleChildren>

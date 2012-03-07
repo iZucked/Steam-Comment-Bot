@@ -24,6 +24,7 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 	 */
 	@Override
 	public boolean performFinish() {
+		
 		IFile file = mainPage.createNewFile();
         if (file == null)
             return false;

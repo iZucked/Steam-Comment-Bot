@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.fleet.VesselAvailablility;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -139,6 +140,7 @@ public class DemoJointModel extends JointModel {
 		rootObject.addSubModel(InputFactory.eINSTANCE.createInputModel());
 		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
+		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
 		
 		{
 		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
