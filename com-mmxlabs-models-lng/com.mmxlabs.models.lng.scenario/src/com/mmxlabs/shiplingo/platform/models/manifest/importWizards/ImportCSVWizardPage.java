@@ -29,6 +29,7 @@ public class ImportCSVWizardPage extends WizardNewFileCreationPage {
 	public ImportCSVWizardPage(String pageName, IStructuredSelection selection, ImportCSVFilesPage previousPage) {
 		super(pageName, selection);
 		setTitle(pageName); //NON-NLS-1
+		setFileExtension("scn");
 		setDescription("Import a file from the local file system into the workspace"); //NON-NLS-1
 		this.previousPage = previousPage;
 	}
@@ -64,7 +65,7 @@ public class ImportCSVWizardPage extends WizardNewFileCreationPage {
 	 */
 	@Override
 	protected String getNewFileLabel() {
-		return "New File Name:"; //NON-NLS-1
+		return "Scenario Name:"; //NON-NLS-1
 	}
 
 	/* (non-Javadoc)
