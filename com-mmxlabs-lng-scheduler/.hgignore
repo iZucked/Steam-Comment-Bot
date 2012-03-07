@@ -18,3 +18,9 @@ syntax: regexp
 ^com\.mmxlabs\.scheduler\.spring/\.classpath$
 syntax: regexp
 ^com\.mmxlabs\.scheduler\.spring/\.project$
+syntax: regexp
+^\.settings$
+syntax: regexp
+^com\.mmxlabs\.scheduler\.p2/\.settings$
+syntax: regexp
+^com\.mmxlabs\.scheduler\.p2/\.project$
