@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.mmxlabs.models.util.import.attributes">
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.ui.dateAttributeImporter"
+            attributeImporterClass="com.mmxlabs.models.ui.dates.DateAttributeImporter">
+         <dataType
+               attributeTypeName="EDate"
+               attributeTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+         </dataType>
+      </attributeImporter>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.ui.editorfactories">
+      <editorFactory
+            factoryClass="com.mmxlabs.models.ui.dates.DateAndLocalTimeInlineEditorFactory"
+            id="com.mmxlabs.models.lng.ui.dateEditorFactory">
+         <FeatureAnyOf>
+            <EDataTypeIs
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore"></EDataTypeIs>
+         </FeatureAnyOf>
+      </editorFactory>
+   </extension>
+
+</plugin>
