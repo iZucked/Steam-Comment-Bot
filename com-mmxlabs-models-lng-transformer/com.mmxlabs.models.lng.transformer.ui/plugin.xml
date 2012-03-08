@@ -10,10 +10,6 @@
  <extension
          point="org.eclipse.ui.handlers">
        <handler
-            class="com.mmxlabs.shiplingo.platform.models.optimisation.jobmanager.handlers.ScheduleFitnessExportHandler"
-            commandId="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.exportTrace">
-      </handler>
-       <handler
              class="com.mmxlabs.shiplingo.platform.models.optimisation.jobmanager.handlers.SaveOptimisationJobHandler"
              commandId="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.SaveOptimisationJob">
           <enabledWhen>
@@ -43,7 +39,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -58,7 +54,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -98,7 +94,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -113,7 +109,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -132,7 +128,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -147,7 +143,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -166,7 +162,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -181,7 +177,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -200,7 +196,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -215,7 +211,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>

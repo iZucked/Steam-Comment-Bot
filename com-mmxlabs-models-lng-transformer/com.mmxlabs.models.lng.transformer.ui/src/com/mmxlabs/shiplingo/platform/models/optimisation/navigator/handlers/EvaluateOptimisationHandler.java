@@ -116,15 +116,15 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 //								output.getOptimisation().getCurrentSettings().setInitialSchedule(lastSchedule);
 
 								// Create new resource using original scenario URI
-								final XMIResourceImpl r = new XMIResourceImpl(scenario.eResource().getURI());
-								// Copy scenario to ensure we don't change resources.
-								r.getContents().add(EcoreUtil.copy(output));
-								try {
-									r.save(Collections.emptyMap());
-									monitor.worked(4);
-								} catch (final IOException e) {
-									e.printStackTrace();
-								}
+//								final XMIResourceImpl r = new XMIResourceImpl(scenario.eResource().getURI());
+//								// Copy scenario to ensure we don't change resources.
+//								r.getContents().add(EcoreUtil.copy(output));
+//								try {
+//									r.save(Collections.emptyMap());
+//									monitor.worked(4);
+//								} catch (final IOException e) {
+//									e.printStackTrace();
+//								}
 
 								resource.refreshLocal(IResource.DEPTH_ONE, new SubProgressMonitor(monitor, 1));
 							} finally {
