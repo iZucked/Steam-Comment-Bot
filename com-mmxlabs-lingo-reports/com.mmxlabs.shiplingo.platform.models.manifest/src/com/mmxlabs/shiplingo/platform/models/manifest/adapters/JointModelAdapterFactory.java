@@ -7,12 +7,14 @@ package com.mmxlabs.shiplingo.platform.models.manifest.adapters;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IURIEditorInput;
 
+import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
 
 /**
@@ -43,13 +45,24 @@ public class JointModelAdapterFactory implements IAdapterFactory {
 					return null;
 				}
 			}
+		} else if (adaptableObject instanceof IResource) {
+			try {
+				return new DemoJointModel(URI.createPlatformResourceURI(((IResource) adaptableObject).getFullPath().toString(), true));
+			} catch (FileNotFoundException e) {
+				return null;
+			} catch (IOException e) {
+				return null;
+			} catch (MigrationException e) {
+				return null;
+			}
+
 		}
 		return null;
 	}
 
 	@Override
 	public Class[] getAdapterList() {
-		return new Class[] {DemoJointModel.class};
+		return new Class[] {JointModel.class};
 	}
 
 }

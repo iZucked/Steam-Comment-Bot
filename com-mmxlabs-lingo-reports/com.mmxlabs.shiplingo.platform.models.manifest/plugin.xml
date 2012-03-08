@@ -67,6 +67,13 @@
                type="com.mmxlabs.models.mmxcore.jointmodel.JointModel">
          </adapter>
       </factory>
+      <factory
+            adaptableType="org.eclipse.core.resources.IResource"
+            class="com.mmxlabs.shiplingo.platform.models.manifest.adapters.JointModelAdapterFactory">
+         <adapter
+               type="com.mmxlabs.models.mmxcore.jointmodel.JointModel">
+         </adapter>
+      </factory>
    </extension>
    <extension
          point="org.eclipse.ui.importWizards">
