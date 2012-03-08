@@ -23,15 +23,15 @@ import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
 
 
 public class ImportCSVWizardPage extends WizardNewFileCreationPage {
-	protected ImportCSVFilesPage previousPage;
+	protected ImportWarningsPage previousPage;
 	protected FileFieldEditor editor;
 
-	public ImportCSVWizardPage(String pageName, IStructuredSelection selection, ImportCSVFilesPage previousPage) {
+	public ImportCSVWizardPage(String pageName, IStructuredSelection selection, ImportWarningsPage warnings) {
 		super(pageName, selection);
 		setTitle(pageName); //NON-NLS-1
 		setFileExtension("scn");
 		setDescription("Import a file from the local file system into the workspace"); //NON-NLS-1
-		this.previousPage = previousPage;
+		this.previousPage = warnings;
 	}
 	
 	 /* (non-Javadoc)
@@ -47,7 +47,7 @@ public class ImportCSVWizardPage extends WizardNewFileCreationPage {
 	@Override
 	protected InputStream getInitialContents() {
 		try {
-			final MMXRootObject root = previousPage.doImport();
+			final MMXRootObject root = previousPage.getRootObject();
 			final File tempFile = File.createTempFile(UUID.randomUUID().toString(), "scn");
 			tempFile.deleteOnExit();
 			final DemoJointModel djm = new DemoJointModel(root, URI.createFileURI(tempFile.getCanonicalPath()));

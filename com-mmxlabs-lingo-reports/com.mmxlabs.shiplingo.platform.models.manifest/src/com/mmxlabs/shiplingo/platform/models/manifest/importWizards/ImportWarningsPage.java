@@ -4,11 +4,19 @@
  */
 package com.mmxlabs.shiplingo.platform.models.manifest.importWizards;
 
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
+import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 
 /**
  * Page for displaying the warnings from an import job
@@ -19,31 +27,98 @@ import org.eclipse.swt.widgets.Composite;
 public class ImportWarningsPage extends WizardPage {
 	TableViewer viewer;
 	private ImportCSVFilesPage filesPage;
+	private MMXRootObject rootObject;
 	
 	protected ImportWarningsPage(String pageName, ImportCSVFilesPage filesPage) {
 		super(pageName);
 		this.filesPage = filesPage;
+		setTitle("Import warnings");
 	}
 	
 	@Override
 	public void setVisible(boolean visible) {
+		if (visible = true) {
+			final DefaultImportContext context = new DefaultImportContext();
+			this.rootObject = filesPage.doImport(context);
+			viewer.setInput(context);
+			viewer.refresh();
+			int errors = viewer.getTable().getItemCount();
+			setMessage(errors == 0 ? null : errors + " problems during import");
+		}
 		super.setVisible(visible);
 	}
 
+	private TableViewerColumn addViewerColumn(final String name, final ColumnLabelProvider lp) {
+		final TableViewerColumn c = new TableViewerColumn(viewer, SWT.NONE);
+		
+		c.getColumn().setResizable(true);
+		c.getColumn().setText(name);
+		c.getColumn().setMoveable(true);
+		c.getColumn().pack();
+		c.setLabelProvider(lp);
+		
+		return c;
+	}
+	
 	@Override
 	public void createControl(final Composite parent) {
-		viewer = new TableViewer(parent);
+		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
+				| SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		// set up table, and load inputs
-		final TableViewerColumn fileColumn = new TableViewerColumn(viewer, SWT.NONE);
-		final TableViewerColumn lineColumn = new TableViewerColumn(viewer, SWT.NONE);
-		final TableViewerColumn fieldColumn = new TableViewerColumn(viewer, SWT.NONE);
-		final TableViewerColumn messageColumn = new TableViewerColumn(viewer, SWT.NONE);
+		viewer.getTable().setHeaderVisible(true);
+		viewer.getTable().setLinesVisible(true);
 		
-		fileColumn.getColumn().setText("File");
-		lineColumn.getColumn().setText("Line");
-		fieldColumn.getColumn().setText("Column");
-		messageColumn.getColumn().setText("Problem");
+		addViewerColumn("File", 
+				new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				return ((IImportProblem) element).getFilename();
+			}
+		});
 		
+		addViewerColumn("Line", 
+				new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				return ((IImportProblem) element).getLineNumber() == null ? "" : "" + ((IImportProblem)element).getLineNumber();
+			}
+		});
 		
+		addViewerColumn("Field", 
+				new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				return ((IImportProblem) element).getField();
+			}
+		});
+		
+		addViewerColumn("Problem", 
+				new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				return ((IImportProblem) element).getProblemDescription();
+			}
+		});
+		
+		viewer.setContentProvider(new IStructuredContentProvider() {
+			@Override
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			}
+			
+			@Override
+			public void dispose() {
+			}
+			
+			@Override
+			public Object[] getElements(Object inputElement) {
+				return ((IImportContext) inputElement).getProblems().toArray();
+			}
+		});
+		
+		setControl(viewer.getControl());
+	}
+
+	public MMXRootObject getRootObject() {
+		return rootObject;
 	}
 }

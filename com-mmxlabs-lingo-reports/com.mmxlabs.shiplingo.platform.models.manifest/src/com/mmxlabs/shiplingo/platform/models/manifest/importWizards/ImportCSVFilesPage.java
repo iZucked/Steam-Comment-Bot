@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.shiplingo.platform.models.manifest.importWizards;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,10 +17,14 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Group;
 
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
@@ -35,11 +40,29 @@ public class ImportCSVFilesPage extends WizardPage {
 		public final EClass eClass;
 		public final ISubmodelImporter importer;
 		public final Map<String, String> keys;
+		public final Map<String, String> friendlyNames = new HashMap<String, String>();
+		
+		public final Map<String, FileFieldEditor> editors = new HashMap<String, FileFieldEditor>();
+		
 		public Chunk(EClass eClass, ISubmodelImporter importer) {
 			super();
 			this.eClass = eClass;
 			this.importer = importer;
 			this.keys = new HashMap<String, String>();
+		}
+		
+		public void setFromDirectory(final File directory) {
+			for (final String k : friendlyNames.keySet()) {
+				final File sub = new File(directory, friendlyNames.get(k) + ".csv");
+				if (sub.exists()) {
+					try {
+						final String str = sub.getCanonicalPath();
+						editors.get(k).setStringValue(str);
+						keys.put(k, str); // CME?
+					} catch (IOException e) {
+					}
+				}
+			}
 		}
 	}
 	
@@ -47,6 +70,7 @@ public class ImportCSVFilesPage extends WizardPage {
 	
 	protected ImportCSVFilesPage(String pageName) {
 		super(pageName);
+		setTitle("Choose CSV Files");
 	}
 
 	@Override
@@ -59,7 +83,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			final Chunk chunk = new Chunk(subModelClass, importer);
 			final Map<String, String> parts = importer.getRequiredInputs();
 			chunks.add(chunk);
-
+			chunk.friendlyNames.putAll(parts);
 			if (parts.keySet().isEmpty()) continue;
 			final Group g = new Group(top, SWT.NONE);
 			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -73,14 +97,37 @@ public class ImportCSVFilesPage extends WizardPage {
 						chunk.keys.put(entry.getKey(), ffe.getStringValue());
 					}
 				});
+				chunk.editors.put(entry.getKey(), ffe);
 			}
 		}
+		
+		final Button auto = new Button(top, SWT.NONE);
+		auto.setText("Choose Directory...");
+		
+		auto.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// display file open dialog and then fill out files if the exist.
+				final DirectoryDialog dd = new DirectoryDialog(getShell());
+				final String d = dd.open();
+				
+				if (d != null) {
+					final File dir = new File(d);
+					if (dir.exists() && dir.isDirectory()) {
+						for (final Chunk c : chunks) {
+							c.setFromDirectory(dir);
+						}
+					}
+				}
+			}
+		});
+		
 		setControl(top);
 	}
 
-	public MMXRootObject doImport() {
+	public MMXRootObject doImport(final DefaultImportContext context) {
 		final MMXRootObject root = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-		final DefaultImportContext context = new DefaultImportContext();
+//		final DefaultImportContext context = new DefaultImportContext();
 		
 		for (final Chunk c : chunks) {
 			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
