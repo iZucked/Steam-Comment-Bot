@@ -110,7 +110,6 @@ public class DemoJointModel extends JointModel {
 		modelClassKeys.put(MMXCorePackage.eINSTANCE.getMMXRootObject(), ROOT_MODEL_KEY);
 	}
 
-	private URIConverter uriConverter = new ExtensibleURIConverterImpl();
 	private URI rootURI;
 	
 	private Manifest manifest;
@@ -129,6 +128,14 @@ public class DemoJointModel extends JointModel {
 		return URI.createURI("archive:" + rootURI.toString() + "!/" + relativePath);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.mmxcore.jointmodel.JointModel#needsUpgrade()
+	 */
+	@Override
+	protected boolean needsUpgrade() {
+		return false;
+	}
+
 	public static DemoJointModel createEmptyModel(final URI target) throws IOException {
 		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 		rootObject.setVersion(releases.size());
