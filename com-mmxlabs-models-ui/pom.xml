@@ -23,7 +23,7 @@
 
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.models.mmxcore/</url>
+		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.models.ui/</url>
 	</ciManagement>
 
 	<modules>
