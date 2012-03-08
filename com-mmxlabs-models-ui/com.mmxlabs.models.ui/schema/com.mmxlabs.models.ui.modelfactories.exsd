@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="com.mmxlabs.models.ui" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="com.mmxlabs.models.ui" id="com.mmxlabs.models.ui.modelfactories" name="Model Element Factories"/>
+      </appinfo>
+      <documentation>
+         Submodel extensions can register model factory extensions to through this extension point. These allow customisation of the creation of new model elements.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="factory" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="factory">
+      <annotation>
+         <documentation>
+            Defines a model factory, which will be used to create models of a particular type
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="targetEClass" type="string" use="required">
+            <annotation>
+               <documentation>
+                  This is the EClass of the object which is being instantiated, or more precisely the java type corresponding to that EClass.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.emf.ecore.EObject"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="inheritable" type="boolean" use="required">
+            <annotation>
+               <documentation>
+                  If this is true, the factory will be used for subclasses of the target EClass, unless there is a more specific subclass available.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="ID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A unique ID
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="factory" type="string">
+            <annotation>
+               <documentation>
+                  The implementation of this factory
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>

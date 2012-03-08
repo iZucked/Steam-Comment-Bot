@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Model Utils
+Bundle-SymbolicName: com.mmxlabs.models.util;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.mmxlabs.models.util.Activator
+Bundle-Vendor: MMXLABS
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.mmxlabs.common.common-util;bundle-version="1.0.0",
+ org.eclipse.emf.ecore;bundle-version="2.7.0",
+ org.eclipse.emf.ecore.xmi;bundle-version="2.7.0",
+ org.ops4j.peaberry.eclipse;bundle-version="1.1.1",
+ com.mmxlabs.models.mmxcore;bundle-version="1.0.0",
+ org.slf4j.api;bundle-version="1.6.1",
+ com.springsource.javax.inject;bundle-version="1.0.0",
+ com.google.inject;bundle-version="3.0.0",
+ org.ops4j.peaberry;bundle-version="1.2.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: com.mmxlabs.models.util,
+ com.mmxlabs.models.util.emfpath,
+ com.mmxlabs.models.util.importer,
+ com.mmxlabs.models.util.importer.impl,
+ com.mmxlabs.models.util.importer.registry,
+ com.mmxlabs.models.util.importer.registry.impl

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2011
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="com.mmxlabs.models.ui.editorfactories" name="Inline Editor Factories" schema="schema/com.mmxlabs.models.ui.editorfactories.exsd"/>
+   <extension-point id="com.mmxlabs.models.ui.componenthelpers" name="Component Helpers" schema="schema/com.mmxlabs.models.ui.componenthelpers.exsd"/>
+   <extension-point id="com.mmxlabs.models.ui.valueproviders" name="Reference Value Providers" schema="schema/com.mmxlabs.models.ui.valueproviders.exsd"/>
+   <extension-point id="com.mmxlabs.models.ui.displaycompositefactories" name="Display Composite Factories" schema="schema/com.mmxlabs.models.ui.displaycompositefactories.exsd"/>
+   <extension-point id="com.mmxlabs.models.ui.jointmodeleditors" name="Joint Model Editor Extensions" schema="schema/com.mmxlabs.models.ui.jointmodeleditors.exsd"/>
+   <extension-point id="com.mmxlabs.models.ui.modelfactories" name="Model Element Factories" schema="schema/com.mmxlabs.models.ui.modelfactories.exsd"/>
+   <extension
+         id="com.mmxlabs.models.ui.defs"
+         name="Def. ed. factories"
+         point="com.mmxlabs.models.ui.editorfactories">
+      <editorFactory
+      		id="com.mmxlabs.models.ui.defaultEditorFactory"
+            factoryClass="com.mmxlabs.models.ui.impl.DefaultInlineEditorFactory">
+         <FeatureAnyOf>
+            <EDataTypeIs
+                  EDataTypeName="EInt"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore"></EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EDouble"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EFloat"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EBoolean"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EByte"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EChar"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EShort"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="ELong"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+            <EClassExtends
+                  EClass="org.eclipse.emf.ecore.EObject">
+            </EClassExtends>
+            <EDataTypeIs
+                  EDataTypeName="EString"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
+         </FeatureAnyOf>
+      </editorFactory>
+   </extension>
+   <extension
+         id="com.mmxlabs.models.ui.dcfs"
+         name="Def. composite. factories"
+         point="com.mmxlabs.models.ui.displaycompositefactories">
+      <displayCompositeFactory
+            eClass="org.eclipse.emf.ecore.EObject"
+            factory="com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory"
+            id="com.mmxlabs.models.ui.defaultDisplayCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
+   </extension>
+   <extension
+         id="com.mmxlabs.models.ui.adapterfactories"
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="com.mmxlabs.models.mmxcore.MMXRootObject"
+            class="com.mmxlabs.models.ui.valueproviders.MMXRootObjectValueProviderCacheAdapterFactory">
+         <adapter
+               type="com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache">
+         </adapter>
+      </factory>
+   </extension>
+</plugin>
