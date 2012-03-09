@@ -41,14 +41,5 @@
             contributorClass="com.mmxlabs.models.mmxcore.presentation.MMXCoreActionBarContributor">
       </editor>
    </extension>
-   <extension
-         point="com.mmxlabs.models.ui.componenthelpers">
-      <componentHelper
-            helperClass="com.mmxlabs.models.mmxcore.presentation.composites.NamedObjectComponentHelper"
-            id="com.mmxlabs.models.mmxcore.editor.namedObjectHelper"
-            inheritable="true"
-            modelClass="com.mmxlabs.models.mmxcore.NamedObject">
-      </componentHelper>
-   </extension>
 
 </plugin>
