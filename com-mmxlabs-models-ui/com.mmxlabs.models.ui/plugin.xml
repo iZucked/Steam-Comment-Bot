@@ -84,4 +84,13 @@
          </adapter>
       </factory>
    </extension>
+   <extension
+         point="com.mmxlabs.models.ui.componenthelpers">
+      <componentHelper
+            helperClass="com.mmxlabs.models.ui.mmxcore.NamedObjectComponentHelper"
+            id="com.mmxlabs.models.ui.namedObjectHelper"
+            inheritable="true"
+            modelClass="com.mmxlabs.models.mmxcore.NamedObject">
+      </componentHelper>
+   </extension>
 </plugin>
