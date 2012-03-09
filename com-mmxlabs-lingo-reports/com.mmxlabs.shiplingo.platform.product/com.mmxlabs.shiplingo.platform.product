@@ -3,7 +3,6 @@
 
 <product name="ShipLiNGO" uid="com.mmxlabs.shiplingo.platform.app.product.id" id="com.mmxlabs.shiplingo.platform.app.product" application="com.mmxlabs.shiplingo.platform.app.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -30,7 +29,6 @@
    <vm>
    </vm>
 
-
    <plugins>
    </plugins>
 
@@ -40,7 +38,8 @@
       <feature id="com.mmxlabs.models.lng.feature" version="1.0.0.qualifier"/>
       <feature id="com.mmxlabs.models.lng.transformer.feature" version="1.0.0.qualifier"/>
       <feature id="com.mmxlabs.models.lng.types.feature" version="1.0.0.201203051532"/>
-      <feature id="com.mmxlabs.models.mmxcore.runtime.feature" version="1.0.0.201203071108"/>
+      <feature id="com.mmxlabs.models.mmxcore.runtime.feature" version="1.0.0.201203081026"/>
+      <feature id="com.mmxlabs.models.ui.runtime.feature" version="1.0.0.qualifier"/>
    </features>
 
    <configurations>
