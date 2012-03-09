@@ -31,7 +31,6 @@
 		<module>com.mmxlabs.models.mmxcore.edit</module>
 		<module>com.mmxlabs.models.mmxcore.editor</module>
 		<module>com.mmxlabs.models.mmxcore.template</module>
-		<module>com.mmxlabs.models.mmxcore.validation</module>
 
 		<module>com.mmxlabs.models.mmxcore.runtime.feature</module>
 		<module>com.mmxlabs.models.mmxcore.sdk.feature</module>
