@@ -24,6 +24,7 @@ import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 
 public class ScenarioTableViewerPane extends ViewerPane {
 	private ScenarioTableViewer scenarioViewer;
@@ -103,37 +104,10 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
-		
-	/*	{
-			final ToolBarManager x = getToolBarManager();
-			final EMFPath ePath = new EMFPath(true, path);
-			{
-				final Action addAction = createAddAction(eObjectTableViewer, part.getEditingDomain(), ePath);
-				if (addAction != null) {
-					x.appendToGroup("edit", LockableAction.wrap(addAction));
-				}
-			}
-			{
-				final Action deleteAction = createDeleteAction(eObjectTableViewer, part.getEditingDomain());
-				if (deleteAction != null) {
-					x.appendToGroup("edit", LockableAction.wrap(deleteAction));
-
-				}
-			}
-			{
-				final Action importAction = createImportAction(eObjectTableViewer, part.getEditingDomain(), ePath);
-				if (importAction != null) {
-					x.appendToGroup("importers", LockableAction.wrap(importAction));
-				}
-			}
-			{
-				final Action a = createExportAction(eObjectTableViewer, ePath);
-				if (a != null) {
-					x.appendToGroup("exporters", a);
-				}
-			}
-
-			x.update(true);
-		} */
+		// set up toolbars
+		final ToolBarManager toolbar = getToolBarManager();
+		toolbar.appendToGroup("view", new PackGridTableColumnsAction(scenarioViewer));
+		//toolbar.appendToGroup("edit", )//
+		toolbar.update(true);
 	}
 }
