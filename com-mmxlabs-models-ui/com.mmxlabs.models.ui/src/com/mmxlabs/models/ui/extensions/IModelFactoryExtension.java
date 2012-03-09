@@ -5,13 +5,20 @@
 package com.mmxlabs.models.ui.extensions;
 
 import org.ops4j.peaberry.eclipse.ExtensionBean;
+import org.ops4j.peaberry.eclipse.MapName;
 
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 
 @ExtensionBean("com.mmxlabs.models.ui.modelfactories")
 public interface IModelFactoryExtension {
+	@MapName("ID")
 	public String getID();
+	@MapName("targetEClass")
 	public String getTargetEClass();
-	public String isInheritable();
-	public IModelFactory createFactory();
+	@MapName("outputEClass")
+	public String getOutputEClass();
+	@MapName("label")
+	public String getLabel();
+	@MapName("factory")
+	public IModelFactory createInstance();
 }

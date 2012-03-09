@@ -57,18 +57,11 @@
          <attribute name="targetEClass" type="string" use="required">
             <annotation>
                <documentation>
-                  This is the EClass of the object which is being instantiated, or more precisely the java type corresponding to that EClass.
+                  The extension factory must be able to create things which can be assigned to this type.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":org.eclipse.emf.ecore.EObject"/>
                </appinfo>
-            </annotation>
-         </attribute>
-         <attribute name="inheritable" type="boolean" use="required">
-            <annotation>
-               <documentation>
-                  If this is true, the factory will be used for subclasses of the target EClass, unless there is a more specific subclass available.
-               </documentation>
             </annotation>
          </attribute>
          <attribute name="ID" type="string" use="required">
@@ -85,6 +78,23 @@
                </documentation>
                <appinfo>
                   <meta.attribute kind="java"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="label" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The label which will be displayed for this factory in the UI
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="outputEClass" type="string">
+            <annotation>
+               <documentation>
+                  If set, this will be passed to the factory to let it know what type to actually construct.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.emf.ecore.EObject"/>
                </appinfo>
             </annotation>
          </attribute>

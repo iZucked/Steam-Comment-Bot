@@ -29,7 +29,7 @@ public class SetReference implements IDeferment {
 		this.reference = reference;
 		this.name = nameOrNames;
 		this.linkType = eReferenceLinkType;
-		this.problem = context.createProblem("Could not resolve " + linkType.eClass() + " with name(s) " + nameOrNames, true, true, true);
+		this.problem = context.createProblem("Could not resolve " + linkType.getName() + " with name(s) " + nameOrNames, true, true, true);
 	}
 	@Override
 	public void run(final IImportContext context) {

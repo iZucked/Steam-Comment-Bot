@@ -87,19 +87,24 @@ public class DefaultClassImporter implements IClassImporter {
 	public Collection<EObject> importObject(final EClass eClass,
 			final Map<String, String> row, IImportContext context) {
 		final EClass rowClass = getTrueOutputClass(eClass, row.get(KIND_KEY));
-		final EObject instance = rowClass.getEPackage().getEFactoryInstance()
-				.create(rowClass);
-		final LinkedList<EObject> results = new LinkedList<EObject>();
-		results.add(instance);
-		importAttributes(row, context, rowClass, instance);
-		if (row instanceof IFieldMap) {
-			importReferences((IFieldMap) row, context, rowClass, instance,
-					results);
-		} else {
-			importReferences(new FieldMap(row), context, rowClass, instance,
-					results);
+		try {
+			final EObject instance = rowClass.getEPackage().getEFactoryInstance()
+					.create(rowClass);
+			final LinkedList<EObject> results = new LinkedList<EObject>();
+			results.add(instance);
+			importAttributes(row, context, rowClass, instance);
+			if (row instanceof IFieldMap) {
+				importReferences((IFieldMap) row, context, rowClass, instance,
+						results);
+			} else {
+				importReferences(new FieldMap(row), context, rowClass, instance,
+						results);
+			}
+			return results;
+		} catch (final IllegalArgumentException illegal) {
+			context.addProblem(context.createProblem(row.get(KIND_KEY) + " is not a valid king of " + rowClass.getName(), true, true, true));
+			return Collections.emptySet();
 		}
-		return results;
 	}
 
 	/**

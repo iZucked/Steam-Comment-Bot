@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.models.util.importer.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -106,49 +108,115 @@ public class DefaultImportContext implements IImportContext {
 		problems.add(problem);
 	}
 	
+	private class DefaultImportProblem implements IImportProblem {
+		private final String filename;
+		private final Integer lineNumber;
+		private final String field;
+		private final String message;
+		
+		
+		public DefaultImportProblem(String filename, Integer lineNumber, String field, String message) {
+			super();
+			this.filename = filename;
+			this.lineNumber = lineNumber;
+			this.field = field;
+			this.message = message;
+		}
+
+		@Override
+		public String getFilename() {
+			return filename;
+		}
+
+
+		@Override
+		public Integer getLineNumber() {
+			return lineNumber;
+		}
+
+		@Override
+		public String getField() {
+			return field;
+		}
+
+		@Override
+		public String getProblemDescription() {
+			return message;
+		}
+
+		/* (non-Javadoc)
+		 * @see java.lang.Object#hashCode()
+		 */
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getOuterType().hashCode();
+			result = prime * result + ((field == null) ? 0 : field.hashCode());
+			result = prime * result + ((filename == null) ? 0 : filename.hashCode());
+			result = prime * result + ((lineNumber == null) ? 0 : lineNumber.hashCode());
+			result = prime * result + ((message == null) ? 0 : message.hashCode());
+			return result;
+		}
+
+		/* (non-Javadoc)
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			DefaultImportProblem other = (DefaultImportProblem) obj;
+			if (!getOuterType().equals(other.getOuterType()))
+				return false;
+			if (field == null) {
+				if (other.field != null)
+					return false;
+			} else if (!field.equals(other.field))
+				return false;
+			if (filename == null) {
+				if (other.filename != null)
+					return false;
+			} else if (!filename.equals(other.filename))
+				return false;
+			if (lineNumber == null) {
+				if (other.lineNumber != null)
+					return false;
+			} else if (!lineNumber.equals(other.lineNumber))
+				return false;
+			if (message == null) {
+				if (other.message != null)
+					return false;
+			} else if (!message.equals(other.message))
+				return false;
+			return true;
+		}
+
+		private DefaultImportContext getOuterType() {
+			return DefaultImportContext.this;
+		}
+	}
+	
 	@Override
 	public IImportProblem createProblem(final String string, boolean trackFile, boolean trackLine, boolean trackField) {
-		String tracking = "";
-		if (trackFile || trackField) {
-			final CSVReader reader = readerStack.peek();
-			tracking = 
-					(trackFile ? reader.getFileName() + ":" + reader.getLineNumber() : "" ) + 
-					(trackField ? ", field " + reader.getLastField() : "");
-		}
-		log.warn(string + " " + tracking);
-		
-		final Integer line = trackLine ? readerStack.peek().getLineNumber() : null;
-		final String field = trackField ? readerStack.peek().getCasedColumnName(readerStack.peek().getLastField().toLowerCase()) : null;
+		final CSVReader reader = readerStack.peek();
+		final Integer line = trackLine ? reader.getLineNumber() : null;
+		final String lowerField = reader.getLastField().toLowerCase();
+		final String upperField = reader.getCasedColumnName(lowerField);
+		final String field = trackField ? (upperField == null ? lowerField : upperField) : null;
 		final String file = trackFile ? readerStack.peek().getFileName() : null;
 		
-		return (
-				new IImportProblem() {
-					@Override
-					public String getProblemDescription() {
-						return string;
-					}
-					
-					@Override
-					public Integer getLineNumber() {
-						return line;
-					}
-					
-					@Override
-					public String getFilename() {
-						return file;
-					}
-					
-					@Override
-					public String getField() {
-						return field;
-					}
-				});
+		return new DefaultImportProblem(file, line, field, string);
 	}
 
-	private List<IImportProblem> problems = new LinkedList<IImportContext.IImportProblem>();
+	private LinkedHashSet<IImportProblem> problems = new LinkedHashSet<IImportContext.IImportProblem>();
 	
 	@Override
 	public List<IImportProblem> getProblems() {
-		return problems;
+		return new ArrayList<IImportProblem>(problems);
 	}
 }

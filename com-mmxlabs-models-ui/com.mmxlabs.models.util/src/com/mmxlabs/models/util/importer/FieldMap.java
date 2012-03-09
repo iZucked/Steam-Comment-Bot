@@ -131,7 +131,7 @@ public class FieldMap implements IFieldMap {
 				subDelegate.put(key.substring(keyPrefix.length()), delegate.get(key));
 			}
 		}
-		return new FieldMap(subDelegate);
+		return new FieldMap(subDelegate, keyPrefix, this);
 	}
 
 	@Override
