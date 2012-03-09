@@ -33,6 +33,7 @@
 		<module>com.mmxlabs.models.util</module>
 		<module>com.mmxlabs.models.ui.p2</module>
 		<module>com.mmxlabs.models.ui.runtime.feature</module>
+		<module>com.mmxlabs.models.mmxcore.validation</module>
 	</modules>
 
 	<build>
