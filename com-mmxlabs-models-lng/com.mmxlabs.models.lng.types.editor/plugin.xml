@@ -35,27 +35,4 @@
             contributorClass="com.mmxlabs.models.lng.types.presentation.TypesActionBarContributor">
       </editor>
    </extension>
-   <extension
-         point="com.mmxlabs.models.ui.editorfactories">
-      <editorFactory
-            factoryClass="com.mmxlabs.models.lng.types.ui.DateAndLocalTimeInlineEditorFactory"
-            id="com.mmxlabs.models.lng.types.editor.datetimeeditorfactory">
-         <FeatureAnyOf>
-            <EDataTypeIs
-                  EDataTypeName="EDate"
-                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore"></EDataTypeIs>
-         </FeatureAnyOf>
-      </editorFactory>
-   </extension>
-	<extension
-         point="com.mmxlabs.models.util.import.attributes">
-      <attributeImporter
-            ID="com.mmxlabs.models.lng.types.dateAttributeImporter"
-            attributeImporterClass="com.mmxlabs.models.lng.types.importer.DateAttributeImporter">
-         <dataType
-               attributeTypeName="EDate"
-               attributeTypeURI="http://www.eclipse.org/emf/2002/Ecore">
-         </dataType>
-     </attributeImporter>
-     </extension>
 </plugin>

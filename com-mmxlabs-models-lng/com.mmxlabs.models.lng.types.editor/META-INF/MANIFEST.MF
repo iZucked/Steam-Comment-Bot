@@ -21,6 +21,4 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.common.common-util;bundle-version="1.0.0",
  com.mmxlabs.models.util;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
-Export-Package: com.mmxlabs.models.lng.types.presentation,
- com.mmxlabs.models.lng.types.ui,
- com.mmxlabs.models.lng.types.ui.tabular
+Export-Package: com.mmxlabs.models.lng.types.presentation
