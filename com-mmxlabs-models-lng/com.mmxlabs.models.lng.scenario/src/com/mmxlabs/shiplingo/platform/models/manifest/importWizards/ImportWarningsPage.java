@@ -37,6 +37,7 @@ public class ImportWarningsPage extends WizardPage {
 	
 	@Override
 	public void setVisible(boolean visible) {
+		super.setVisible(visible);
 		if (visible = true) {
 			final DefaultImportContext context = new DefaultImportContext();
 			this.rootObject = filesPage.doImport(context);
@@ -45,7 +46,6 @@ public class ImportWarningsPage extends WizardPage {
 			int errors = viewer.getTable().getItemCount();
 			setMessage(errors == 0 ? null : errors + " problems during import");
 		}
-		super.setVisible(visible);
 	}
 
 	private TableViewerColumn addViewerColumn(final String name, final ColumnLabelProvider lp) {
