@@ -19,6 +19,7 @@
             id="com.mmxlabs.models.lng.ui.dateEditorFactory">
          <FeatureAnyOf>
             <EDataTypeIs
+                  EDataTypeName="EDate"
                   EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore"></EDataTypeIs>
          </FeatureAnyOf>
       </editorFactory>

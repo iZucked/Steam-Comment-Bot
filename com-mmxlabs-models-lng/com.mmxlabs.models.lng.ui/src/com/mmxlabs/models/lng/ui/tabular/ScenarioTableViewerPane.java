@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.ui.ViewerPane;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -17,8 +20,12 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.models.lng.ui.actions.AddModelAction;
+import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -106,8 +113,36 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 		// set up toolbars
 		final ToolBarManager toolbar = getToolBarManager();
+		toolbar.add(new GroupMarker("addremove"));
+		toolbar.add(new GroupMarker("view"));
 		toolbar.appendToGroup("view", new PackGridTableColumnsAction(scenarioViewer));
-		//toolbar.appendToGroup("edit", )//
+		
+		final EReference containment = path.get(path.size()-1);
+		final Action addAction = AddModelAction.create(containment.getEReferenceType(), 
+				new IAddContext() {
+					@Override
+					public MMXRootObject getRootObject() {
+						return jointModelEditorPart.getRootObject();
+					}
+					
+					@Override
+					public EReference getContainment() {
+						return containment;
+					}
+					
+					@Override
+					public EObject getContainer() {
+						return scenarioViewer.getCurrentContainer();
+					}
+					
+					@Override
+					public ICommandHandler getCommandHandler() {
+						return jointModelEditorPart.getDefaultCommandHandler();
+					}
+				});
+		if (addAction != null)
+			toolbar.appendToGroup("addremove", addAction);
+		
 		toolbar.update(true);
 	}
 }
