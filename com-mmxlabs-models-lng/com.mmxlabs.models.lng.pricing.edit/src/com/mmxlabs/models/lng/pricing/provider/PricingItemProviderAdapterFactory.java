@@ -4,15 +4,12 @@
  */
 package com.mmxlabs.models.lng.pricing.provider;
 
-import com.mmxlabs.models.lng.pricing.util.PricingAdapterFactory;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.edit.provider.ChangeNotifier;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -24,6 +21,8 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+
+import com.mmxlabs.models.lng.pricing.util.PricingAdapterFactory;
 
 /**
  * This is the factory that is used to provide the interfaces needed to support Viewers.
@@ -327,29 +326,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.RouteCostByVesselClass} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RouteCostByVesselClassItemProvider routeCostByVesselClassItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.RouteCostByVesselClass}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRouteCostByVesselClassAdapter() {
-		if (routeCostByVesselClassItemProvider == null) {
-			routeCostByVesselClassItemProvider = new RouteCostByVesselClassItemProvider(this);
-		}
-
-		return routeCostByVesselClassItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortCostVessels} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -528,7 +504,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (baseFuelCostItemProvider != null) baseFuelCostItemProvider.dispose();
 		if (spotMarketItemProvider != null) spotMarketItemProvider.dispose();
 		if (portCostItemProvider != null) portCostItemProvider.dispose();
-		if (routeCostByVesselClassItemProvider != null) routeCostByVesselClassItemProvider.dispose();
 		if (portCostVesselsItemProvider != null) portCostVesselsItemProvider.dispose();
 		if (portCostEntryItemProvider != null) portCostEntryItemProvider.dispose();
 		if (cooldownPriceItemProvider != null) cooldownPriceItemProvider.dispose();

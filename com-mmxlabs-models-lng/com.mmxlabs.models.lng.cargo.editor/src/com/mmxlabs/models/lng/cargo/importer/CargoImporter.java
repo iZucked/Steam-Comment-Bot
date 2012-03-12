@@ -13,5 +13,5 @@ public class CargoImporter extends DefaultClassImporter {
 	@Override
 	protected boolean shouldFlattenReference(EReference reference) {
 		return super.shouldFlattenReference(reference) || reference == CargoPackage.eINSTANCE.getCargo_LoadSlot() || reference == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
-	}
+	}	
 }

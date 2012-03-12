@@ -152,4 +152,19 @@
           inheritable="true">
     </displayCompositeFactory>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.vesselClassFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Vessel Class"
+          targetEClass="com.mmxlabs.models.lng.fleet.VesselClass">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.vesselFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Vessel"
+          targetEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </factory>
+ </extension>
 </plugin>

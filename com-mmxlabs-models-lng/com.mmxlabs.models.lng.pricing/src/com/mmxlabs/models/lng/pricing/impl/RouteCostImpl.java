@@ -3,27 +3,16 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.RouteCost;
-
-import com.mmxlabs.models.lng.pricing.RouteCostByVesselClass;
-import com.mmxlabs.models.lng.port.Route;
-
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,7 +22,9 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.RouteCostImpl#getRoute <em>Route</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.RouteCostImpl#getCostsByClass <em>Costs By Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.RouteCostImpl#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.RouteCostImpl#getLadenCost <em>Laden Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.RouteCostImpl#getBallastCost <em>Ballast Cost</em>}</li>
  * </ul>
  * </p>
  *
@@ -50,14 +41,50 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 	 */
 	protected Route route;
 	/**
-	 * The cached value of the '{@link #getCostsByClass() <em>Costs By Class</em>}' containment reference list.
+	 * The cached value of the '{@link #getVesselClass() <em>Vessel Class</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCostsByClass()
+	 * @see #getVesselClass()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<RouteCostByVesselClass> costsByClass;
+	protected VesselClass vesselClass;
+	/**
+	 * The default value of the '{@link #getLadenCost() <em>Laden Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLadenCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int LADEN_COST_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getLadenCost() <em>Laden Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLadenCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int ladenCost = LADEN_COST_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getBallastCost() <em>Ballast Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int BALLAST_COST_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getBallastCost() <em>Ballast Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int ballastCost = BALLAST_COST_EDEFAULT;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -120,11 +147,16 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<RouteCostByVesselClass> getCostsByClass() {
-		if (costsByClass == null) {
-			costsByClass = new EObjectContainmentEList<RouteCostByVesselClass>(RouteCostByVesselClass.class, this, PricingPackage.ROUTE_COST__COSTS_BY_CLASS);
+	public VesselClass getVesselClass() {
+		if (vesselClass != null && vesselClass.eIsProxy()) {
+			InternalEObject oldVesselClass = (InternalEObject)vesselClass;
+			vesselClass = (VesselClass)eResolveProxy(oldVesselClass);
+			if (vesselClass != oldVesselClass) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.ROUTE_COST__VESSEL_CLASS, oldVesselClass, vesselClass));
+			}
 		}
-		return costsByClass;
+		return vesselClass;
 	}
 
 	/**
@@ -132,13 +164,62 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case PricingPackage.ROUTE_COST__COSTS_BY_CLASS:
-				return ((InternalEList<?>)getCostsByClass()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+	public VesselClass basicGetVesselClass() {
+		return vesselClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselClass(VesselClass newVesselClass) {
+		VesselClass oldVesselClass = vesselClass;
+		vesselClass = newVesselClass;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.ROUTE_COST__VESSEL_CLASS, oldVesselClass, vesselClass));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getLadenCost() {
+		return ladenCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLadenCost(int newLadenCost) {
+		int oldLadenCost = ladenCost;
+		ladenCost = newLadenCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.ROUTE_COST__LADEN_COST, oldLadenCost, ladenCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getBallastCost() {
+		return ballastCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBallastCost(int newBallastCost) {
+		int oldBallastCost = ballastCost;
+		ballastCost = newBallastCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.ROUTE_COST__BALLAST_COST, oldBallastCost, ballastCost));
 	}
 
 	/**
@@ -152,8 +233,13 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 			case PricingPackage.ROUTE_COST__ROUTE:
 				if (resolve) return getRoute();
 				return basicGetRoute();
-			case PricingPackage.ROUTE_COST__COSTS_BY_CLASS:
-				return getCostsByClass();
+			case PricingPackage.ROUTE_COST__VESSEL_CLASS:
+				if (resolve) return getVesselClass();
+				return basicGetVesselClass();
+			case PricingPackage.ROUTE_COST__LADEN_COST:
+				return getLadenCost();
+			case PricingPackage.ROUTE_COST__BALLAST_COST:
+				return getBallastCost();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -170,9 +256,14 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 			case PricingPackage.ROUTE_COST__ROUTE:
 				setRoute((Route)newValue);
 				return;
-			case PricingPackage.ROUTE_COST__COSTS_BY_CLASS:
-				getCostsByClass().clear();
-				getCostsByClass().addAll((Collection<? extends RouteCostByVesselClass>)newValue);
+			case PricingPackage.ROUTE_COST__VESSEL_CLASS:
+				setVesselClass((VesselClass)newValue);
+				return;
+			case PricingPackage.ROUTE_COST__LADEN_COST:
+				setLadenCost((Integer)newValue);
+				return;
+			case PricingPackage.ROUTE_COST__BALLAST_COST:
+				setBallastCost((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -189,8 +280,14 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 			case PricingPackage.ROUTE_COST__ROUTE:
 				setRoute((Route)null);
 				return;
-			case PricingPackage.ROUTE_COST__COSTS_BY_CLASS:
-				getCostsByClass().clear();
+			case PricingPackage.ROUTE_COST__VESSEL_CLASS:
+				setVesselClass((VesselClass)null);
+				return;
+			case PricingPackage.ROUTE_COST__LADEN_COST:
+				setLadenCost(LADEN_COST_EDEFAULT);
+				return;
+			case PricingPackage.ROUTE_COST__BALLAST_COST:
+				setBallastCost(BALLAST_COST_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -206,10 +303,32 @@ public class RouteCostImpl extends MMXObjectImpl implements RouteCost {
 		switch (featureID) {
 			case PricingPackage.ROUTE_COST__ROUTE:
 				return route != null;
-			case PricingPackage.ROUTE_COST__COSTS_BY_CLASS:
-				return costsByClass != null && !costsByClass.isEmpty();
+			case PricingPackage.ROUTE_COST__VESSEL_CLASS:
+				return vesselClass != null;
+			case PricingPackage.ROUTE_COST__LADEN_COST:
+				return ladenCost != LADEN_COST_EDEFAULT;
+			case PricingPackage.ROUTE_COST__BALLAST_COST:
+				return ballastCost != BALLAST_COST_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (ladenCost: ");
+		result.append(ladenCost);
+		result.append(", ballastCost: ");
+		result.append(ballastCost);
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of RouteCostImpl

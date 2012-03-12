@@ -3,25 +3,20 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
-import com.mmxlabs.models.lng.pricing.CharterCostModel;
-import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-
-import com.mmxlabs.models.lng.types.AVesselSet;
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.pricing.CharterCostModel;
+import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,7 +25,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CharterCostModelImpl#getVessels <em>Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CharterCostModelImpl#getVesselClasses <em>Vessel Classes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CharterCostModelImpl#getCharterInPrice <em>Charter In Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CharterCostModelImpl#getCharterOutPrice <em>Charter Out Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CharterCostModelImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
@@ -39,16 +34,16 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *
  * @generated
  */
-public class CharterCostModelImpl extends EObjectImpl implements CharterCostModel {
+public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostModel {
 	/**
-	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
+	 * The cached value of the '{@link #getVesselClasses() <em>Vessel Classes</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVessels()
+	 * @see #getVesselClasses()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<AVesselSet> vessels;
+	protected EList<VesselClass> vesselClasses;
 
 	/**
 	 * The cached value of the '{@link #getCharterInPrice() <em>Charter In Price</em>}' reference.
@@ -104,11 +99,11 @@ public class CharterCostModelImpl extends EObjectImpl implements CharterCostMode
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<AVesselSet> getVessels() {
-		if (vessels == null) {
-			vessels = new EObjectResolvingEList<AVesselSet>(AVesselSet.class, this, PricingPackage.CHARTER_COST_MODEL__VESSELS);
+	public EList<VesselClass> getVesselClasses() {
+		if (vesselClasses == null) {
+			vesselClasses = new EObjectResolvingEList<VesselClass>(VesselClass.class, this, PricingPackage.CHARTER_COST_MODEL__VESSEL_CLASSES);
 		}
-		return vessels;
+		return vesselClasses;
 	}
 
 	/**
@@ -236,8 +231,8 @@ public class CharterCostModelImpl extends EObjectImpl implements CharterCostMode
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PricingPackage.CHARTER_COST_MODEL__VESSELS:
-				return getVessels();
+			case PricingPackage.CHARTER_COST_MODEL__VESSEL_CLASSES:
+				return getVesselClasses();
 			case PricingPackage.CHARTER_COST_MODEL__CHARTER_IN_PRICE:
 				if (resolve) return getCharterInPrice();
 				return basicGetCharterInPrice();
@@ -260,9 +255,9 @@ public class CharterCostModelImpl extends EObjectImpl implements CharterCostMode
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PricingPackage.CHARTER_COST_MODEL__VESSELS:
-				getVessels().clear();
-				getVessels().addAll((Collection<? extends AVesselSet>)newValue);
+			case PricingPackage.CHARTER_COST_MODEL__VESSEL_CLASSES:
+				getVesselClasses().clear();
+				getVesselClasses().addAll((Collection<? extends VesselClass>)newValue);
 				return;
 			case PricingPackage.CHARTER_COST_MODEL__CHARTER_IN_PRICE:
 				setCharterInPrice((Index<Integer>)newValue);
@@ -285,8 +280,8 @@ public class CharterCostModelImpl extends EObjectImpl implements CharterCostMode
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PricingPackage.CHARTER_COST_MODEL__VESSELS:
-				getVessels().clear();
+			case PricingPackage.CHARTER_COST_MODEL__VESSEL_CLASSES:
+				getVesselClasses().clear();
 				return;
 			case PricingPackage.CHARTER_COST_MODEL__CHARTER_IN_PRICE:
 				setCharterInPrice((Index<Integer>)null);
@@ -309,8 +304,8 @@ public class CharterCostModelImpl extends EObjectImpl implements CharterCostMode
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PricingPackage.CHARTER_COST_MODEL__VESSELS:
-				return vessels != null && !vessels.isEmpty();
+			case PricingPackage.CHARTER_COST_MODEL__VESSEL_CLASSES:
+				return vesselClasses != null && !vesselClasses.isEmpty();
 			case PricingPackage.CHARTER_COST_MODEL__CHARTER_IN_PRICE:
 				return charterInPrice != null;
 			case PricingPackage.CHARTER_COST_MODEL__CHARTER_OUT_PRICE:

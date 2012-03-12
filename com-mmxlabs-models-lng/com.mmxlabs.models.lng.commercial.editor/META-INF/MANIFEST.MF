@@ -19,5 +19,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.ui,
  com.mmxlabs.models.mmxcore.edit,
  com.mmxlabs.models.util;bundle-version="1.0.0",
- com.mmxlabs.models.lng.types.editor;bundle-version="1.0.0"
+ com.mmxlabs.models.lng.types.editor;bundle-version="1.0.0",
+ com.mmxlabs.models.lng.ui;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy

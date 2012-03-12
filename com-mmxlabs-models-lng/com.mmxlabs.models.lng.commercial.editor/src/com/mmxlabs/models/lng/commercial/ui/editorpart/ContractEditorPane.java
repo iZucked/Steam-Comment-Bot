@@ -11,7 +11,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.ui.IWorkbenchPage;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.types.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.tabular.MultipleReferenceManipulator;
@@ -20,6 +20,7 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 public class ContractEditorPane extends ScenarioTableViewerPane {
 	public ContractEditorPane(IWorkbenchPage page, JointModelEditorPart part) {
 		super(page, part);
+		
 	}
 
 	@Override
@@ -33,4 +34,14 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 		
 		defaultSetTitle("Contracts");
 	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.lng.types.ui.tabular.ScenarioTableViewerPane#defaultSetTitle(java.lang.String)
+	 */
+	@Override
+	public void defaultSetTitle(String string) {
+		super.defaultSetTitle(string);
+	}
+	
+	
 }

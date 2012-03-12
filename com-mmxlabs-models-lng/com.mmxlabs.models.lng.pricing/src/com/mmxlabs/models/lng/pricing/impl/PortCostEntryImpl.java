@@ -7,17 +7,14 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.pricing.impl;
-import com.mmxlabs.models.lng.pricing.PortCostEntry;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-
-import com.mmxlabs.models.lng.types.PortCapability;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.lng.pricing.PortCostEntry;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.types.PortCapability;
 
 /**
  * <!-- begin-user-doc -->

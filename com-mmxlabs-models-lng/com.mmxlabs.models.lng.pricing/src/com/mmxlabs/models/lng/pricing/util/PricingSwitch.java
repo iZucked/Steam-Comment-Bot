@@ -4,19 +4,30 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
-import com.mmxlabs.models.lng.pricing.*;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.util.Switch;
 
+import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CharterCostModel;
+import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.DerivedIndex;
+import com.mmxlabs.models.lng.pricing.FleetCostModel;
+import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PortCost;
+import com.mmxlabs.models.lng.pricing.PortCostEntry;
+import com.mmxlabs.models.lng.pricing.PortCostVessels;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.types.AIndex;
 import com.mmxlabs.models.lng.types.ASpotMarket;
-
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-
-import org.eclipse.emf.ecore.util.Switch;
 
 /**
  * <!-- begin-user-doc -->
@@ -139,6 +150,7 @@ public class PricingSwitch<T> extends Switch<T> {
 			case PricingPackage.CHARTER_COST_MODEL: {
 				CharterCostModel charterCostModel = (CharterCostModel)theEObject;
 				T result = caseCharterCostModel(charterCostModel);
+				if (result == null) result = caseMMXObject(charterCostModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -163,13 +175,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				PortCost portCost = (PortCost)theEObject;
 				T result = casePortCost(portCost);
 				if (result == null) result = caseMMXObject(portCost);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.ROUTE_COST_BY_VESSEL_CLASS: {
-				RouteCostByVesselClass routeCostByVesselClass = (RouteCostByVesselClass)theEObject;
-				T result = caseRouteCostByVesselClass(routeCostByVesselClass);
-				if (result == null) result = caseMMXObject(routeCostByVesselClass);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -359,21 +364,6 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePortCost(PortCost object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Route Cost By Vessel Class</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Route Cost By Vessel Class</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseRouteCostByVesselClass(RouteCostByVesselClass object) {
 		return null;
 	}
 

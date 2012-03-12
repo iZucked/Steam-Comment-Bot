@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.pricing.RouteCostByVesselClass;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.ValidationSupport;
@@ -48,13 +47,13 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 						boolean seenCanalCost = false;
 						routeCosts:
 						for (final RouteCost routeCost : pricingModel.getRouteCosts()) {
-							for (final RouteCostByVesselClass classCost : routeCost.getCostsByClass()) {
-								if (classCost.getVesselClass() == vesselClass &&
+							
+								if (routeCost.getVesselClass() == vesselClass &&
 										routeCost.getRoute() == route) {
 									seenCanalCost = true;
 									break routeCosts;
 								}
-							}
+							
 						}
 						
 						boolean seenCanalParameters = false;
@@ -80,8 +79,8 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 					return result;
 				}
 			}
-		} else if (target instanceof RouteCostByVesselClass) {
-			final RouteCostByVesselClass vesselClassCost = (RouteCostByVesselClass) target;
+		} else if (target instanceof RouteCost) {
+			final RouteCost vesselClassCost = (RouteCost) target;
 			
 			if (vesselClassCost.getLadenCost() == 0 || vesselClassCost.getBallastCost() == 0) {
 
@@ -90,13 +89,12 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 						.getRoute()
 						.getName()));
 
-				dcsd.addEObjectAndFeature(target.eContainer(), PricingPackage.eINSTANCE.getRouteCost_CostsByClass());
-
+				
 				if (vesselClassCost.getLadenCost() == 0)
-					dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCostByVesselClass_LadenCost());
+					dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCost_LadenCost());
 
 				if (vesselClassCost.getBallastCost() == 0)
-					dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCostByVesselClass_BallastCost());
+					dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCost_BallastCost());
 
 				return dcsd;
 			}

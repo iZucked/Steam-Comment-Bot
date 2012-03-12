@@ -18,7 +18,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.types.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.DialogFeatureManipulator;
@@ -64,7 +64,7 @@ public class IndexEditorPane extends ScenarioTableViewerPane {
 					@Override
 					protected String renderValue(Object value) {
 						if (value == null) return "";
-						return ((DataIndex) value).getPoints().size() + " points";
+						return ((List) value).size() + " points";
 					}
 					
 					@Override

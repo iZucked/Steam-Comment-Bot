@@ -4,16 +4,30 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 
-import com.mmxlabs.models.lng.pricing.*;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CharterCostModel;
+import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.DerivedIndex;
+import com.mmxlabs.models.lng.pricing.FleetCostModel;
+import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PortCost;
+import com.mmxlabs.models.lng.pricing.PortCostEntry;
+import com.mmxlabs.models.lng.pricing.PortCostVessels;
+import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SpotMarket;
+import com.mmxlabs.models.lng.pricing.SpotType;
 
 /**
  * <!-- begin-user-doc -->
@@ -70,7 +84,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.BASE_FUEL_COST: return createBaseFuelCost();
 			case PricingPackage.SPOT_MARKET: return createSpotMarket();
 			case PricingPackage.PORT_COST: return createPortCost();
-			case PricingPackage.ROUTE_COST_BY_VESSEL_CLASS: return createRouteCostByVesselClass();
 			case PricingPackage.PORT_COST_VESSELS: return createPortCostVessels();
 			case PricingPackage.PORT_COST_ENTRY: return createPortCostEntry();
 			case PricingPackage.COOLDOWN_PRICE: return createCooldownPrice();
@@ -217,16 +230,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public PortCost createPortCost() {
 		PortCostImpl portCost = new PortCostImpl();
 		return portCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public RouteCostByVesselClass createRouteCostByVesselClass() {
-		RouteCostByVesselClassImpl routeCostByVesselClass = new RouteCostByVesselClassImpl();
-		return routeCostByVesselClass;
 	}
 
 	/**

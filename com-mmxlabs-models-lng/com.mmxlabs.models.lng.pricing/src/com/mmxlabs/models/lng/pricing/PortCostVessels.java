@@ -7,11 +7,10 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.pricing;
-import com.mmxlabs.models.lng.types.AVesselSet;
-
-import com.mmxlabs.models.mmxcore.MMXObject;
-
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

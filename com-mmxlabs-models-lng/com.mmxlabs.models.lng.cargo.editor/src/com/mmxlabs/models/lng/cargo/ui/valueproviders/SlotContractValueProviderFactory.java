@@ -53,6 +53,8 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 		if (delegate == null) return null;
 		final IReferenceValueProvider delegateFactory = delegate
 				.createReferenceValueProvider(owner, reference, rootObject);
+		
+//		if (delegateFactory == null) return null;
 		if (reference == CargoPackage.eINSTANCE.getSlot_Contract()) {
 			return new IReferenceValueProvider() {
 				@Override

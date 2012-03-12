@@ -3,11 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
-import com.mmxlabs.models.lng.types.AVesselSet;
-
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,7 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getVessels <em>Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getVesselClasses <em>Vessel Classes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getCharterInPrice <em>Charter In Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getCharterOutPrice <em>Charter Out Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getSpotCharterCount <em>Spot Charter Count</em>}</li>
@@ -28,22 +27,22 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface CharterCostModel extends EObject {
+public interface CharterCostModel extends MMXObject {
 	/**
-	 * Returns the value of the '<em><b>Vessels</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}.
+	 * Returns the value of the '<em><b>Vessel Classes</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.VesselClass}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Vessels</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Vessel Classes</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Vessels</em>' reference list.
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCharterCostModel_Vessels()
+	 * @return the value of the '<em>Vessel Classes</em>' reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCharterCostModel_VesselClasses()
 	 * @model
 	 * @generated
 	 */
-	EList<AVesselSet> getVessels();
+	EList<VesselClass> getVesselClasses();
 
 	/**
 	 * Returns the value of the '<em><b>Charter In Price</b></em>' reference.

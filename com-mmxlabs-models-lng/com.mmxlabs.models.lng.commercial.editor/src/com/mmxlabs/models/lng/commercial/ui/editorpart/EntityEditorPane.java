@@ -10,7 +10,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.ui.IWorkbenchPage;
 
-import com.mmxlabs.models.lng.types.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 public class EntityEditorPane extends ScenarioTableViewerPane {

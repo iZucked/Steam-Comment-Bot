@@ -3,13 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.mmxcore.MMXObject;
-import com.mmxlabs.models.lng.types.AVesselSet;
-
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

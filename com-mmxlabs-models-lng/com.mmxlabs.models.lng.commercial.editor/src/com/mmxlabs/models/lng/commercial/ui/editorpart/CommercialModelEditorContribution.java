@@ -35,17 +35,23 @@ public class CommercialModelEditorContribution implements IJointModelEditorContr
 		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
 		
 		EntityEditorPane entEp = new EntityEditorPane(part.getSite().getPage(), part);
-		ContractEditorPane conEp = new ContractEditorPane(part.getSite().getPage(), part);
+		ContractEditorPane pconEp = new ContractEditorPane(part.getSite().getPage(), part);
+		ContractEditorPane sconEp = new ContractEditorPane(part.getSite().getPage(), part);
 
 		entEp.createControl(sash);
-		conEp.createControl(sash);
+		sconEp.createControl(sash);
+		pconEp.createControl(sash);
 		
 		entEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), part.getAdapterFactory());
-		conEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), part.getAdapterFactory());
-		conEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), part.getAdapterFactory());
+		sconEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), part.getAdapterFactory());
+		pconEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), part.getAdapterFactory());
 		
 		entEp.getViewer().setInput(subModel);
-		conEp.getViewer().setInput(subModel);
+		sconEp.getViewer().setInput(subModel);
+		pconEp.getViewer().setInput(subModel);
+		
+		pconEp.defaultSetTitle("Purchase Contracts");
+		sconEp.defaultSetTitle("Sales Contracts");
 		
 		pageNumber = part.addPage(sash);
 		part.setPageText(pageNumber, "Commercial");
