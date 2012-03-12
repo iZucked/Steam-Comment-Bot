@@ -120,4 +120,14 @@ public class IndexEditorPane extends ScenarioTableViewerPane {
 		}
 		
 	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane#defaultSetTitle(java.lang.String)
+	 */
+	@Override
+	public void defaultSetTitle(String string) {
+		super.defaultSetTitle(string);
+	}
+	
+	
 }

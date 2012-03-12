@@ -111,6 +111,12 @@
 			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortCostComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.pricing.PortCost" />
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CooldownPriceComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.helpers.CooldownPrice"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -166,6 +172,26 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Base Fuel Price"
           targetEClass="com.mmxlabs.models.lng.pricing.BaseFuelCost">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.dataIndexFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Data Index"
+          outputEClass="com.mmxlabs.models.lng.pricing.DataIndex"
+          targetEClass="com.mmxlabs.models.lng.pricing.Index">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.expressionFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Expression"
+          outputEClass="com.mmxlabs.models.lng.pricing.DerivedIndex"
+          targetEClass="com.mmxlabs.models.lng.pricing.Index">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.cooldownPricing"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Cooldown Price"
+          targetEClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
     </factory>
  </extension>
 </plugin>

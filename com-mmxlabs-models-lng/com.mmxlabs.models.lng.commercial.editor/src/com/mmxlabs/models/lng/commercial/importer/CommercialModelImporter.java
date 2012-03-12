@@ -50,8 +50,7 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(ENTITIES_KEY)) {
 			commercial.getEntities().addAll(
 					(Collection<? extends LegalEntity>) 
-					entityImporter.importObjects(CommercialPackage.eINSTANCE.getLegalEntity(), inputs.get(ENTITIES_KEY), context)
-					);
+					entityImporter.importObjects(CommercialPackage.eINSTANCE.getLegalEntity(), inputs.get(ENTITIES_KEY), context));
 			if (commercial.getEntities().isEmpty() == false) {
 				commercial.setShippingEntity(commercial.getEntities().get(0));
 			}
@@ -59,14 +58,12 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(SALES_CON_KEY)) {
 			commercial.getSalesContracts().addAll(
 					(Collection<? extends SalesContract>) 
-					salesImporter.importObjects(CommercialPackage.eINSTANCE.getSalesContract(), inputs.get(SALES_CON_KEY), context)
-					);
+					salesImporter.importObjects(CommercialPackage.eINSTANCE.getSalesContract(), inputs.get(SALES_CON_KEY), context));
 		}
 		if (inputs.containsKey(PURCHASE_CON_KEY)) {
 			commercial.getPurchaseContracts().addAll(
 					(Collection<? extends PurchaseContract>) 
-					purchaseImporter.importObjects(CommercialPackage.eINSTANCE.getPurchaseContract(), inputs.get(PURCHASE_CON_KEY), context)
-					);
+					purchaseImporter.importObjects(CommercialPackage.eINSTANCE.getPurchaseContract(), inputs.get(PURCHASE_CON_KEY), context));
 		}
 		return commercial;
 	}

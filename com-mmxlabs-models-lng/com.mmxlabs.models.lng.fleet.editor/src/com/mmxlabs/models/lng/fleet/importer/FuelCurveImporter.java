@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 
 /**
  * Special case for fuel curve data
@@ -39,16 +40,18 @@ public class FuelCurveImporter {
 				final List<FuelConsumption> consumptions = new LinkedList<FuelConsumption>();
 				for (final Map.Entry<String, String> column : row.entrySet()) {
 					try {
-						final float speed = Float.parseFloat(column.getKey());
-						final int consumption = Integer.parseInt(column.getValue());
+						final double speed = Double.parseDouble(column.getKey());
+						final double consumption = Double.parseDouble(column.getValue());
 						final FuelConsumption fcl = FleetFactory.eINSTANCE.createFuelConsumption();
 						fcl.setSpeed(speed);
-						fcl.setConsumption(consumption);
+						fcl.setConsumption((int) consumption);
 						consumptions.add(fcl);
 					} catch (final NumberFormatException nfe) {
 
 					}
 				}
+				
+				final IImportProblem vesselClassMissing = context.createProblem("Vessel class " + className + " is missing", true, true, true);
 				
 				context.doLater(new IDeferment() {
 					@Override
@@ -67,6 +70,8 @@ public class FuelCurveImporter {
 								}
 								vesselClass.getBallastAttributes().getFuelConsumption().addAll(consumptions);
 							}
+						} else {
+							context.addProblem(vesselClassMissing);
 						}
 					}
 					

@@ -18,6 +18,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -87,7 +88,9 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 					if (target instanceof LoadSlot) {
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> value : delegateValue) {
-							if (value.getSecond() instanceof PurchaseContract) {
+							if (((EReference) (value.getSecond().eContainingFeature())).getEReferenceType().isSuperTypeOf(
+											CommercialPackage.eINSTANCE.getPurchaseContract()))
+											{
 								filteredList.add(value);
 							}
 						}
@@ -95,7 +98,8 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 					} else if (target instanceof DischargeSlot) {
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> value : delegateValue) {
-							if (value.getSecond() instanceof SalesContract) {
+							if (((EReference) (value.getSecond().eContainingFeature())).getEReferenceType().isSuperTypeOf(
+									CommercialPackage.eINSTANCE.getSalesContract())) {
 								filteredList.add(value);
 							}
 						}

@@ -16,6 +16,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import javax.management.timer.Timer;
+
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -624,12 +626,11 @@ public class SlotImpl extends ASlotImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public Date getWindowEndWithSlotOrPortTime() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		return new Date(getWindowStartWithSlotOrPortTime().getTime()
+				+ Timer.ONE_HOUR * getSlotOrPortWindowSize());
 	}
 
 	/**

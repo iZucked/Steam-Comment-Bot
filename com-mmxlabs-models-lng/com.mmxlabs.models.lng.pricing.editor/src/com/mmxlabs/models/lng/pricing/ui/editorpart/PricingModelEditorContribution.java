@@ -64,6 +64,11 @@ public class PricingModelEditorContribution implements IJointModelEditorContribu
 		route.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_RouteCosts() }), editorPart.getAdapterFactory());
 		route.getViewer().setInput(modelObject);
 
+		final CooldownPricingEditorPane cool = new CooldownPricingEditorPane(editorPart.getSite().getPage(), editorPart);
+		cool.createControl(sash);
+		cool.init(Arrays.asList(new EReference[] {PricingPackage.eINSTANCE.getPricingModel_CooldownPrices()}), editorPart.getAdapterFactory());
+		cool.getViewer().setInput(modelObject);
+		
 		int page = editorPart.addPage(sash);
 		editorPart.setPageText(page, "Pricing");
 	}
@@ -73,12 +78,20 @@ public class PricingModelEditorContribution implements IJointModelEditorContribu
 	}
 
 	private void addIndexPage(final Composite parent) {
+		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
 		final IndexEditorPane pane = new IndexEditorPane(editorPart.getSite().getPage(), editorPart);
-		pane.createControl(parent);
+		pane.createControl(sash);
 		pane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()), editorPart.getAdapterFactory());
 		pane.getViewer().setInput(modelObject);
 
-		int page = editorPart.addPage(pane.getControl());
+		final IndexEditorPane pane2 = new IndexEditorPane(editorPart.getSite().getPage(), editorPart);
+		pane2.createControl(sash);
+		pane2.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CharterIndices()), editorPart.getAdapterFactory());
+		pane2.getViewer().setInput(modelObject);
+		pane.defaultSetTitle("Commodity Indices");
+		pane2.defaultSetTitle("Chartering Indices");
+		
+		int page = editorPart.addPage(sash);
 		editorPart.setPageText(page, "Indices");
 	}
 

@@ -39,16 +39,17 @@ public class FixedPriceContractComponentHelper implements IComponentHelper {
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated
+	 * @generated NO
 	 */
 	public FixedPriceContractComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
 			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.SALES_CONTRACT);
 			if (helper != null) superClassesHelpers.add(helper);
-		} {
-			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.PURCHASE_CONTRACT);
-			if (helper != null) superClassesHelpers.add(helper);
 		}
+//		} {
+//			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.PURCHASE_CONTRACT);
+//			if (helper != null) superClassesHelpers.add(helper);
+//		}
 	}
 	
 	/**

@@ -39,16 +39,17 @@ public class IndexPriceContractComponentHelper implements IComponentHelper {
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated
+	 * @generated NO - there is an issue with having Contract as the supertype two ways at the moment
 	 */
 	public IndexPriceContractComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
 			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.SALES_CONTRACT);
 			if (helper != null) superClassesHelpers.add(helper);
-		} {
-			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.PURCHASE_CONTRACT);
-			if (helper != null) superClassesHelpers.add(helper);
-		}
+		} 
+//		{
+//			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.PURCHASE_CONTRACT);
+//			if (helper != null) superClassesHelpers.add(helper);
+//		}
 	}
 	
 	/**
