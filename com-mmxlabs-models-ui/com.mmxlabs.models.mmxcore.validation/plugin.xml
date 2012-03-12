@@ -8,7 +8,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="com.mmxlabs.models.mmxcore.validation"
+         id="com.mmxlabs.models.mmxcore.validation.constraintProviders"
          point="org.eclipse.emf.validation.constraintProviders">
       <category
             id="com.mmxlabs.models.mmxcore.validation.base"
@@ -42,7 +42,7 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.mmxcore.validation.NameSetConstraint"
+                  class="com.mmxlabs.models.mmxcore.validation.NameValidityConstraint"
                   id="com.mmxlabs.models.mmxcore.validation.NameSetConstraint"
                   isEnabledByDefault="true"
                   lang="Java"
@@ -64,6 +64,7 @@
       </constraintProvider>
    </extension>
    <extension
+         id="com.mmxlabs.models.mmxcore.validation.bindings"
          point="org.eclipse.emf.validation.constraintBindings">
       <clientContext
             default="true"

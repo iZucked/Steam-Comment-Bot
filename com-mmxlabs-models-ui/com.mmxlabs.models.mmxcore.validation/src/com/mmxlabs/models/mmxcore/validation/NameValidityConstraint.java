@@ -22,7 +22,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  * @author hinton
  * 
  */
-public class NameSetConstraint extends AbstractModelConstraint {
+public class NameValidityConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
