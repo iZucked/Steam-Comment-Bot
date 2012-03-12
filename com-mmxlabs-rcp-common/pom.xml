@@ -11,8 +11,8 @@
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
-		<version>5</version>
 		<relativePath />
+		<version>11</version>
 	</parent>
 
 	<scm>
@@ -29,9 +29,11 @@
 	<modules>
 		<module>com.mmxlabs.rcp.common</module>
 		<module>com.mmxlabs.ganttviewer</module>
-		
+
+		<module>com.mmxlabs.rcp.common.feature</module>
+
 		<module>com.mmxlabs.rcp.common.p2</module>
-		
+
 		<!-- Test Plugins -->
 		<module>com.mmxlabs.rcp.common.tests</module>
 	</modules>
@@ -88,6 +90,20 @@
 						</environment>
 					</environments>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>plugin-source</id>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 		</plugins>
