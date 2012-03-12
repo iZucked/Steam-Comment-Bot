@@ -174,8 +174,6 @@ public class AnnotatedSolutionExporter {
 				break;
 			}
 
-			
-
 			{
 				// set sequence fitness values
 				final EList<Fitness> eSequenceFitness = eSequence.getFitnesses();

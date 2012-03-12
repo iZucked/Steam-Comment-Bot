@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.export;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
@@ -81,7 +80,6 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				eAllocation = scheduleFactory.createCargoAllocation();
 				allocations.put(allocation.getLoadSlot(), eAllocation);
 				allocations.put(allocation.getDischargeSlot(), eAllocation);
-
 //				eAllocation.setLoadPriceM3(allocation.getLoadM3Price());
 //				eAllocation.setDischargePriceM3(allocation.getDischargeM3Price());
 //				eAllocation.setFuelVolume(allocation.getFuelVolume() / Calculator.ScaleFactor); // yes? no?
@@ -89,9 +87,13 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 //				eAllocation.setSequence();
 
+				
 				output.getCargoAllocations().add(eAllocation);
 			}
 
+			if (slot instanceof ILoadSlot) eAllocation.setLoadAllocation(slotAllocation);
+			else eAllocation.setDischargeAllocation(slotAllocation);
+			
 			sv.setSlotAllocation(slotAllocation);
 			slotAllocation.setCargoAllocation(eAllocation);
 		} else if (slot instanceof IVesselEventPortSlot) {

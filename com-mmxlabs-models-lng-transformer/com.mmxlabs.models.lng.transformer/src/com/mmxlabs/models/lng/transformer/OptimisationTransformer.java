@@ -77,9 +77,12 @@ public class OptimisationTransformer {
 	private OptimiserSettings settings;
 
 	public OptimisationTransformer(final MMXRootObject rootObject) {
-		this.rootObject = rootObject;
-		final OptimiserModel optimiserModel = rootObject.getSubModel(OptimiserModel.class);
-		this.settings = optimiserModel.getActiveSetting();
+		this(rootObject, rootObject.getSubModel(OptimiserModel.class).getActiveSetting());
+	}
+	
+	public OptimisationTransformer(final MMXRootObject root, final OptimiserSettings settings) {
+		this.settings = settings;
+		this.rootObject = root;
 	}
 
 	public IOptimisationContext createOptimisationContext(final IOptimisationData data, final ModelEntityMap mem) {

@@ -471,7 +471,7 @@ public class LNGScenarioTransformer {
 			}
 
 			final ILoadSlot load = builder.createLoadSlot(loadSlot.getName(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
-					Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, (int) Calculator.scale(loadSlot.getSlotOrPortCV()), loadSlot.getSlotOrPortDuration(),
+					Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), loadSlot.getSlotOrPortDuration(),
 					loadSlot.isSetArriveCold(), loadSlot.isArriveCold(), false);
 
 			final Slot dischargeSlot = eCargo.getDischargeSlot();
@@ -636,9 +636,17 @@ public class LNGScenarioTransformer {
 			int charterCount = 0;
 			for (CharterCostModel charterCost : pricingModel.getFleetCost().getCharterCosts()) {
 				if (charterCost.getVesselClasses().contains(eVc)) {
-					charterInPrice = charterCost.getCharterInPrice().getValueAfter(latestTime);
+					if (charterCost.getCharterInPrice() != null) {
+						charterInPrice = charterCost.getCharterInPrice().getValueAfter(latestTime);
+					} else {
+						charterInPrice = 0;
+					}
 //					charterOutPrice = charterCost.getCharterOutPrice().getValueAfter(latestTime);
-					charterCount = charterCost.getSpotCharterCount().getValueAfter(latestTime);
+					if (charterCost.getSpotCharterCount() != null) {
+						charterCount = charterCost.getSpotCharterCount().getValueAfter(latestTime);
+					} else {
+						charterCount = 0;
+					}
 				}
 			}
 			
@@ -679,7 +687,7 @@ public class LNGScenarioTransformer {
 
 			if (charterCount > 0) {
 				for (int i = 0; i<charterCount; i++) {
-					builder.createSpotVessels("SPOT-", vesselClassAssociation.lookup(eVc), charterCount);
+					builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount);
 				}
 			}
 			
@@ -894,6 +902,7 @@ public class LNGScenarioTransformer {
 //		}
 //	}
 
+	OptimiserSettings defaultSettings = null;
 	/**
 	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
 	 * 
@@ -903,8 +912,12 @@ public class LNGScenarioTransformer {
 		final OptimiserModel om = rootObject.getSubModel(OptimiserModel.class);
 		if (om != null) {
 			// select settings
-			return om.getActiveSetting();
+			OptimiserSettings x = om.getActiveSetting();
+			if (x != null) return x;
 		}
-		return null;
+		if (defaultSettings == null) {
+			defaultSettings = ScenarioUtils.createDefaultSettings();
+		}
+		return defaultSettings;
 	}
 }

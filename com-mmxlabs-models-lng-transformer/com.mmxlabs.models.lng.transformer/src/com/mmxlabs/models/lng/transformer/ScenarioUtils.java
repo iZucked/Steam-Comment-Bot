@@ -39,8 +39,33 @@ public class ScenarioUtils {
 	 * @param scenario
 	 */
 	public static void addDefaultSettings(MMXRootObject scenario) {
-		final OptimiserFactory of = OptimiserPackage.eINSTANCE.getOptimiserFactory();
 		OptimiserModel om = scenario.getSubModel(OptimiserModel.class);
+		OptimiserSettings settings = createDefaultSettings();
+		om.getSettings().add(settings);
+		om.setActiveSetting(settings);
+	}
+
+	private static Constraint createConstraint(OptimiserFactory of, String name, boolean enabled) {
+		Constraint c = of.createConstraint();
+		c.setName(name);
+		c.setEnabled(enabled);
+		return c;
+	}
+
+	private static Objective createObjective(OptimiserFactory of, String name, double weight) {
+		Objective o = of.createObjective();
+		o.setName(name);
+		o.setWeight(weight);
+		o.setEnabled(weight > 0);
+		return o;
+	}
+
+	/**
+	 * @return
+	 */
+	public static OptimiserSettings createDefaultSettings() {
+		final OptimiserFactory of = OptimiserPackage.eINSTANCE.getOptimiserFactory();
+		
 		
 		OptimiserSettings settings = of.createOptimiserSettings();
 
@@ -82,22 +107,6 @@ public class ScenarioUtils {
 		
 		final OptimisationRange range = of.createOptimisationRange();
 		settings.setRange(range);
-
-		om.getSettings().add(settings);
-		om.setActiveSetting(settings);
-	}
-
-	private static Constraint createConstraint(OptimiserFactory of, String name, boolean enabled) {
-		Constraint c = of.createConstraint();
-		c.setName(name);
-		c.setEnabled(enabled);
-		return c;
-	}
-
-	private static Objective createObjective(OptimiserFactory of, String name, double weight) {
-		Objective o = of.createObjective();
-		o.setName(name);
-		o.setWeight(weight);
-		return o;
+		return settings;
 	}
 }
