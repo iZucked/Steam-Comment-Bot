@@ -834,9 +834,11 @@ public class SlotImpl extends ASlotImpl implements Slot {
 	public Object getUnsetValue(EStructuralFeature feature) {
 
 		if (CargoPackage.eINSTANCE.getSlot_WindowStartTime() == feature) {
-			return port.getDefaultStartTime();
+			if (getPort() == null) return (Integer) 7;
+			else return getPort().getDefaultStartTime();
 		} else if (CargoPackage.eINSTANCE.getSlot_WindowSize() == feature) {
-			return port.getDefaultWindowSize();
+			if (getPort() == null) return (Integer) 6;
+			else return getPort().getDefaultWindowSize();
 		}
 		
 		return super.getUnsetValue(feature);

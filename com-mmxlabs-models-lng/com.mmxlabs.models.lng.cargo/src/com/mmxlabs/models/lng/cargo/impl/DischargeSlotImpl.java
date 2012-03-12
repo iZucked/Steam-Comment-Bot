@@ -41,6 +41,7 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	@Override
 	public Object getUnsetValue(EStructuralFeature feature) {
 		if (feature == CargoPackage.Literals.SLOT__DURATION) {
+			if (getPort() == null) return 12;
 			return getPort().getDischargeDuration();
 		}
 		return super.getUnsetValue(feature);
