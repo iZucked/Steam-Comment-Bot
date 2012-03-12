@@ -123,8 +123,8 @@ public class ScheduleAdapter {
 			final IJobControl control = jobManager.getControlForJob(job);
 			final Object jobContext = control.getJobOutput();
 
-			if (jobContext instanceof SerializableScenario) {
-				final Scenario s = ((SerializableScenario) jobContext).scenario;
+			if (jobContext instanceof MMXRootObject) {
+				final MMXRootObject s = (MMXRootObject) jobContext;
 				final Schedule schedule = getLastScheduleFromScenario(s);
 				if (schedule != null) {
 					schedules.add(schedule);
@@ -147,9 +147,11 @@ public class ScheduleAdapter {
 		
 		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		if (scheduleModel != null) {
-
-			return scheduleModel.getOptimisedSchedule();
-
+			if (scheduleModel.getOptimisedSchedule() == null) {
+				return scheduleModel.getInitialSchedule();
+			} else {
+				return scheduleModel.getOptimisedSchedule();
+			}
 		}
 		return null;
 	}
