@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,7 +21,6 @@ import java.util.TreeMap;
 
 import javax.management.timer.Timer;
 
-import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
-import com.mmxlabs.common.curves.InterpolatingDiscountCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -66,12 +62,6 @@ import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.pricing.RouteCostByVesselClass;
-import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer.ModelClass;
@@ -98,7 +88,6 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
-import com.mmxlabs.scheduler.optimiser.components.impl.TotalVolumeLimit;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
@@ -597,16 +586,10 @@ public class LNGScenarioTransformer {
 			// set tolls
 			PricingModel pm = rootObject.getSubModel(PricingModel.class);
 			for (final RouteCost routeCost : pm.getRouteCosts()) {
-				for (RouteCostByVesselClass classCost : routeCost.getCostsByClass()) {
-					builder.setVesselClassRouteCost(routeCost.getRoute().getName(), 
-							vesselAssociation.lookup(classCost.getVesselClass())
-							, VesselState.Laden
-							, classCost.getLadenCost());
-					builder.setVesselClassRouteCost(routeCost.getRoute().getName(), 
-							vesselAssociation.lookup(classCost.getVesselClass())
-							, VesselState.Ballast
-							, classCost.getBallastCost());
-				}
+				final IVesselClass vesselClass = vesselAssociation.lookup(routeCost.getVesselClass());
+
+				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Laden, routeCost.getLadenCost());
+				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Ballast, routeCost.getBallastCost());
 			}
 		}
 
@@ -641,7 +624,7 @@ public class LNGScenarioTransformer {
 		for (final VesselClass eVc : fleetModel.getVesselClasses()) {
 			int baseFuelPrice = 0;
 			for (BaseFuelCost baseFuelCost : pricingModel.getFleetCost().getBaseFuelPrices()) {
-				if (baseFuelCost.getFuels().contains(eVc.getBaseFuel())) {
+				if (baseFuelCost.getFuel() == eVc.getBaseFuel()) {
 					baseFuelPrice = Calculator.scaleToInt(
 							baseFuelCost.getPrice().getValueAfter(latestTime));
 					break;
@@ -652,7 +635,7 @@ public class LNGScenarioTransformer {
 			
 			int charterCount = 0;
 			for (CharterCostModel charterCost : pricingModel.getFleetCost().getCharterCosts()) {
-				if (SetUtils.getVessels(charterCost.getVessels()).contains(eVc)) {
+				if (charterCost.getVesselClasses().contains(eVc)) {
 					charterInPrice = charterCost.getCharterInPrice().getValueAfter(latestTime);
 //					charterOutPrice = charterCost.getCharterOutPrice().getValueAfter(latestTime);
 					charterCount = charterCost.getSpotCharterCount().getValueAfter(latestTime);

@@ -15,19 +15,10 @@
       <Transformer
             transformer="com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformer">
          <modelclass
-               class="scenario.contract.SalesContract">
+               class="com.mmxlabs.models.lng.commercial.FixedPriceContract">
          </modelclass>
          <modelclass
-               class="scenario.contract.NetbackPurchaseContract">
-         </modelclass>
-         <modelclass
-               class="scenario.contract.FixedPricePurchaseContract">
-         </modelclass>
-         <modelclass
-               class="scenario.contract.IndexPricePurchaseContract">
-         </modelclass>
-         <modelclass
-               class="scenario.contract.ProfitSharingPurchaseContract">
+               class="com.mmxlabs.models.lng.commercial.IndexPriceContract">
          </modelclass>
       </Transformer>
    </extension> 
