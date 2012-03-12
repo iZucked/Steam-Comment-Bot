@@ -25,9 +25,13 @@ public class ModelFactoryRegistry implements IModelFactoryRegistry {
 		
 		final String targetClassName = targetClass.getInstanceClass().getCanonicalName();
 		for (final IModelFactoryExtension extension : extensions) {
-			if (extension.getTargetEClass().equals(targetClassName)) {
+			final String extensionTarget = extension.getTargetEClass();
+			final String extensionID = extension.getID();
+			final String extensionLabel = extension.getLabel();
+			final String outputEClass = extension.getOutputEClass();
+			if (extensionTarget.equals(targetClassName)) {
 				final IModelFactory factory = extension.createInstance();
-				factory.initFromExtension(extension.getID(), extension.getOutputEClass(), extension.getLabel());
+				factory.initFromExtension(extensionID, outputEClass, extensionLabel);
 				result.add(factory);
 			}
 		}

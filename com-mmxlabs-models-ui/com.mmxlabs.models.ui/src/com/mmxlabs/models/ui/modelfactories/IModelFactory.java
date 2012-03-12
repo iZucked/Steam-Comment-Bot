@@ -4,11 +4,12 @@
  */
 package com.mmxlabs.models.ui.modelfactories;
 
+import java.util.Collection;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editors.ICommandHandler;
 
 public interface IModelFactory {
 	/**
@@ -35,5 +36,11 @@ public interface IModelFactory {
 	 * 
 	 * @return null if the operation did not happen, or the main part of whatever has been created (for example the cargo if a cargo has been created with some slots).
 	 */
-	public EObject addInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, final ICommandHandler handler);
+	public Collection<? extends ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment);
+
+	public interface ISetting {
+		public EObject getInstance();
+		public EObject getContainer();
+		public EReference getContainment();
+	}
 }

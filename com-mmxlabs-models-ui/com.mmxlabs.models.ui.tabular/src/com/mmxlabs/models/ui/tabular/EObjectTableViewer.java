@@ -136,6 +136,13 @@ public class EObjectTableViewer extends GridTableViewer {
 	 * should be refreshed (e.g. after an import)
 	 */
 	EObject currentContainer;
+	
+	/**
+	 * @return the currentContainer
+	 */
+	public EObject getCurrentContainer() {
+		return currentContainer;
+	}
 
 	/**
 	 * A set containing the elements currently being displayed, which is used by #adapter to determine which row to refresh when a notification comes in

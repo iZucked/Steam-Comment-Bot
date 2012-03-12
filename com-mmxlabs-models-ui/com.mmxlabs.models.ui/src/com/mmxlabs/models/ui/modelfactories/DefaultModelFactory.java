@@ -5,6 +5,8 @@
 package com.mmxlabs.models.ui.modelfactories;
 
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -12,10 +14,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.edit.command.AddCommand;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editors.ICommandHandler;
 
 /**
  * The default model factory, which just instantiates stuff of the given class.
@@ -29,7 +29,7 @@ public class DefaultModelFactory implements IModelFactory {
 	private String label;
 
 	@Override
-	public EObject addInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, final ICommandHandler handler) {
+	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment) {
 		final EObject output;
 		
 		if (outputEClassName == null || outputEClassName.isEmpty()) {
@@ -53,12 +53,27 @@ public class DefaultModelFactory implements IModelFactory {
 		nowCal.clear(Calendar.MILLISECOND);
 		nowCal.clear(Calendar.SECOND);
 		nowCal.clear(Calendar.MINUTE);
-		//TODO date part only annotation goes here.
+		
+		
 		now = nowCal.getTime();
 		postprocess(output);
-		addInstanceToContainer(container, containment, output, handler);
-		
-		return output;
+		final ISetting setting = new ISetting() {
+			@Override
+			public EObject getInstance() {
+				return output;
+			}
+
+			@Override
+			public EObject getContainer() {
+				return container;
+			}
+
+			@Override
+			public EReference getContainment() {
+				return containment;
+			}
+		};
+		return Collections.singleton(setting);
 	}
 
 	protected EObject constructInstance(final EClass eClass) {
@@ -81,17 +96,15 @@ public class DefaultModelFactory implements IModelFactory {
 	
 	protected void postprocess(final EObject top) {
 		for (final EAttribute attribute : top.eClass().getEAllAttributes()) {
-			if (attribute.getEAttributeType() == EcorePackage.eINSTANCE.getEDate() && top.eGet(attribute) == null) {
+			if (attribute.getEAttributeType() == EcorePackage.eINSTANCE.getEDate() && 
+					attribute.isUnsettable() &&
+					top.eGet(attribute) == null) {
 				top.eSet(attribute, now);
 			}
 		}
 		for (final EObject o : top.eContents()) {
 			postprocess(o);
 		}
-	}
-	
-	protected void addInstanceToContainer(final EObject container, final EReference containment, final EObject instance, final ICommandHandler handler) {
-		handler.handleCommand(AddCommand.create(handler.getEditingDomain(), container, containment, instance), container, containment);
 	}
 
 	@Override

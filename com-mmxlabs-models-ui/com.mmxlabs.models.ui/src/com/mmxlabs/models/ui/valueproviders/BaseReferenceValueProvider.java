@@ -80,7 +80,7 @@ public abstract class BaseReferenceValueProvider extends EContentAdapter impleme
 
 		for (final EObject object : objects) {
 			result.add(new Pair<String, EObject>(object.eGet(nameAttribute)
-					.toString(), object));
+					 + "", object));
 		}
 
 		Collections.sort(result, comparator);

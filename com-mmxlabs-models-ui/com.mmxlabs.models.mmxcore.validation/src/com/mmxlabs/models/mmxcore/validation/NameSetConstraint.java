@@ -22,9 +22,6 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  * @author hinton
  * 
  */
-
-//DUPLICATE FOPR FLEET AND CARGO
-
 public class NameSetConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {

@@ -181,7 +181,7 @@ public class DetailCompositeDialog extends Dialog {
 	}
 
 	private void validate() {
-		IStatus status = validator.validate(currentEditorTargets);
+		final IStatus status = validator.validate(currentEditorTargets);
 		final boolean problem = status.matches(IStatus.ERROR);
 		for (final EObject object : currentEditorTargets)
 			objectValidity.put(object, !problem);
@@ -231,13 +231,29 @@ public class DetailCompositeDialog extends Dialog {
 		for (final EObject o : range) {
 			currentEditorTargets.add(originalToDuplicate.get(o));
 		}
+		final ICommandHandler proxyHandler = new ICommandHandler() {
+			@Override
+			public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
+				command.execute(); // do not run in stack, so as not to make dirty if the user cancels.
+			}
+			
+			@Override
+			public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
+				return commandHandler.getReferenceValueProviderProvider();
+			}
+			
+			@Override
+			public EditingDomain getEditingDomain() {
+				return commandHandler.getEditingDomain();
+			}
+		};
 		
-		displayComposite.setCommandHandler(commandHandler);
+		displayComposite.setCommandHandler(proxyHandler);
 		displayComposite.display(rootObject, duplicate);
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		// handle enablement
-		
+		validate();
 	}
 
 	private void resizeAndCenter() {

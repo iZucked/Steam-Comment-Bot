@@ -8,6 +8,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
+         id="com.mmxlabs.models.mmxcore.validation"
          point="org.eclipse.emf.validation.constraintProviders">
       <category
             id="com.mmxlabs.models.mmxcore.validation.base"
@@ -15,7 +16,8 @@
             name="MMXCore Validation">
       </category>
       <constraintProvider
-            cache="true">
+            cache="true"
+            mode="Batch">
          <package
                namespaceUri="http://www.mmxlabs.com/models/mmxcore/1/">
          </package>
@@ -60,6 +62,14 @@
             </constraint>
          </constraints>
       </constraintProvider>
+   </extension>
+   <extension
+         point="org.eclipse.emf.validation.constraintBindings">
+      <clientContext
+            default="true"
+            id="com.mmxlabs.models.mmxcore.validation.clientContext2">
+         <enablement></enablement>
+      </clientContext>
    </extension>
 
 </plugin>
