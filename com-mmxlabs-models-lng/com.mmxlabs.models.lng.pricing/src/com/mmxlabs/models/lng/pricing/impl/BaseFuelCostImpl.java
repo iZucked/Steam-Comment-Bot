@@ -3,26 +3,16 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-
-import com.mmxlabs.models.lng.fleet.BaseFuel;
-
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +21,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelCostImpl#getFuels <em>Fuels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelCostImpl#getFuel <em>Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelCostImpl#getPrice <em>Price</em>}</li>
  * </ul>
  * </p>
@@ -40,14 +30,14 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  */
 public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	/**
-	 * The cached value of the '{@link #getFuels() <em>Fuels</em>}' reference list.
+	 * The cached value of the '{@link #getFuel() <em>Fuel</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFuels()
+	 * @see #getFuel()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<BaseFuel> fuels;
+	protected BaseFuel fuel;
 
 	/**
 	 * The cached value of the '{@link #getPrice() <em>Price</em>}' reference.
@@ -83,11 +73,37 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<BaseFuel> getFuels() {
-		if (fuels == null) {
-			fuels = new EObjectResolvingEList<BaseFuel>(BaseFuel.class, this, PricingPackage.BASE_FUEL_COST__FUELS);
+	public BaseFuel getFuel() {
+		if (fuel != null && fuel.eIsProxy()) {
+			InternalEObject oldFuel = (InternalEObject)fuel;
+			fuel = (BaseFuel)eResolveProxy(oldFuel);
+			if (fuel != oldFuel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.BASE_FUEL_COST__FUEL, oldFuel, fuel));
+			}
 		}
-		return fuels;
+		return fuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuel basicGetFuel() {
+		return fuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFuel(BaseFuel newFuel) {
+		BaseFuel oldFuel = fuel;
+		fuel = newFuel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.BASE_FUEL_COST__FUEL, oldFuel, fuel));
 	}
 
 	/**
@@ -137,8 +153,9 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PricingPackage.BASE_FUEL_COST__FUELS:
-				return getFuels();
+			case PricingPackage.BASE_FUEL_COST__FUEL:
+				if (resolve) return getFuel();
+				return basicGetFuel();
 			case PricingPackage.BASE_FUEL_COST__PRICE:
 				if (resolve) return getPrice();
 				return basicGetPrice();
@@ -155,9 +172,8 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PricingPackage.BASE_FUEL_COST__FUELS:
-				getFuels().clear();
-				getFuels().addAll((Collection<? extends BaseFuel>)newValue);
+			case PricingPackage.BASE_FUEL_COST__FUEL:
+				setFuel((BaseFuel)newValue);
 				return;
 			case PricingPackage.BASE_FUEL_COST__PRICE:
 				setPrice((Index<Double>)newValue);
@@ -174,8 +190,8 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PricingPackage.BASE_FUEL_COST__FUELS:
-				getFuels().clear();
+			case PricingPackage.BASE_FUEL_COST__FUEL:
+				setFuel((BaseFuel)null);
 				return;
 			case PricingPackage.BASE_FUEL_COST__PRICE:
 				setPrice((Index<Double>)null);
@@ -192,8 +208,8 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PricingPackage.BASE_FUEL_COST__FUELS:
-				return fuels != null && !fuels.isEmpty();
+			case PricingPackage.BASE_FUEL_COST__FUEL:
+				return fuel != null;
 			case PricingPackage.BASE_FUEL_COST__PRICE:
 				return price != null;
 		}

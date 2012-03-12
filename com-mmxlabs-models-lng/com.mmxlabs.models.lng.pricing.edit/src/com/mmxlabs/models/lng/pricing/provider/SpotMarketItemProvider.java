@@ -5,19 +5,12 @@
 package com.mmxlabs.models.lng.pricing.provider;
 
 
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.SpotMarket;
-
-import com.mmxlabs.models.lng.types.provider.ASpotMarketItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -27,6 +20,10 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.SpotMarket;
+import com.mmxlabs.models.lng.types.provider.ASpotMarketItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.SpotMarket} object.
@@ -69,6 +66,7 @@ public class SpotMarketItemProvider
 			addMaxQuantityPropertyDescriptor(object);
 			addNotionalPortPropertyDescriptor(object);
 			addTypePropertyDescriptor(object);
+			addContractPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -201,6 +199,28 @@ public class SpotMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Contract feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContractPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotMarket_contract_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_contract_feature", "_UI_SpotMarket_type"),
+				 PricingPackage.Literals.SPOT_MARKET__CONTRACT,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

@@ -134,7 +134,7 @@ public interface LoadSlot extends Slot {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	int getSlotOrPortCV();
+	double getSlotOrPortCV();
 
 } // end of  LoadSlot
 

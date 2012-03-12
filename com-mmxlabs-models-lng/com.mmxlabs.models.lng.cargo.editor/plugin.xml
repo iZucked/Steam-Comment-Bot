@@ -146,4 +146,13 @@
           inheritable="true">
     </classImporter>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.cargoFactory"
+          factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.CargoFactory"
+          label="Cargo"
+          targetEClass="com.mmxlabs.models.lng.cargo.Cargo">
+    </factory>
+ </extension>
 </plugin>

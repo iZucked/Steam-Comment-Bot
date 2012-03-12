@@ -110,4 +110,19 @@
           subModelImporterClass="com.mmxlabs.models.lng.port.importer.PortModelImporter">
     </submodelImporter>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.port.editor.portFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Port"
+          targetEClass="com.mmxlabs.models.lng.port.Port">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.port.editor.portGroupFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Port Group"
+          targetEClass="com.mmxlabs.models.lng.port.PortGroup">
+    </factory>
+ </extension>
 </plugin>

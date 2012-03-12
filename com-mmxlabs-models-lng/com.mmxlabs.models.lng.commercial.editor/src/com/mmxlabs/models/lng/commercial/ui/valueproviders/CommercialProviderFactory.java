@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
+import com.mmxlabs.models.ui.valueproviders.MergedReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 
 public class CommercialProviderFactory implements IReferenceValueProviderFactory {
@@ -30,6 +31,8 @@ public class CommercialProviderFactory implements IReferenceValueProviderFactory
 				return new SimpleReferenceValueProvider(model, commercial.getCommercialModel_SalesContracts());
 		} else if (types.getALegalEntity().isSuperTypeOf(referenceClass)) {
 			return new SimpleReferenceValueProvider(model, commercial.getCommercialModel_Entities());
+		} else if (types.getAContract().isSuperTypeOf(referenceClass)) {
+			return new MergedReferenceValueProvider(model, commercial.getCommercialModel_PurchaseContracts(), commercial.getCommercialModel_SalesContracts());
 		}
 		
 		return null;

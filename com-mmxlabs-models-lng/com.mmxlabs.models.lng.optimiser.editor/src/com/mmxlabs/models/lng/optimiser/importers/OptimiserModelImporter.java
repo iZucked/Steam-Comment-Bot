@@ -32,7 +32,9 @@ public class OptimiserModelImporter implements ISubmodelImporter {
 	@Override
 	public UUIDObject importModel(Map<String, CSVReader> inputs, IImportContext context) {
 		final OptimiserModel model = OptimiserFactory.eINSTANCE.createOptimiserModel();
-		 // we ought to add default settings somewhere.
+		
+		
+		
 		return model;
 	}
 

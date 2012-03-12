@@ -3,11 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Route;
-
 import com.mmxlabs.models.mmxcore.MMXObject;
-
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,7 +16,9 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getRoute <em>Route</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getCostsByClass <em>Costs By Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getLadenCost <em>Laden Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getBallastCost <em>Ballast Cost</em>}</li>
  * </ul>
  * </p>
  *
@@ -54,20 +54,82 @@ public interface RouteCost extends MMXObject {
 	void setRoute(Route value);
 
 	/**
-	 * Returns the value of the '<em><b>Costs By Class</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.RouteCostByVesselClass}.
+	 * Returns the value of the '<em><b>Vessel Class</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Costs By Class</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Vessel Class</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Costs By Class</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getRouteCost_CostsByClass()
-	 * @model containment="true"
+	 * @return the value of the '<em>Vessel Class</em>' reference.
+	 * @see #setVesselClass(VesselClass)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getRouteCost_VesselClass()
+	 * @model required="true"
 	 * @generated
 	 */
-	EList<RouteCostByVesselClass> getCostsByClass();
+	VesselClass getVesselClass();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.RouteCost#getVesselClass <em>Vessel Class</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Class</em>' reference.
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	void setVesselClass(VesselClass value);
+
+	/**
+	 * Returns the value of the '<em><b>Laden Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Laden Cost</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Laden Cost</em>' attribute.
+	 * @see #setLadenCost(int)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getRouteCost_LadenCost()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getLadenCost();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.RouteCost#getLadenCost <em>Laden Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Laden Cost</em>' attribute.
+	 * @see #getLadenCost()
+	 * @generated
+	 */
+	void setLadenCost(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ballast Cost</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Cost</em>' attribute.
+	 * @see #setBallastCost(int)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getRouteCost_BallastCost()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getBallastCost();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.RouteCost#getBallastCost <em>Ballast Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Cost</em>' attribute.
+	 * @see #getBallastCost()
+	 * @generated
+	 */
+	void setBallastCost(int value);
 
 } // end of  RouteCost
 

@@ -3,12 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.ASpotMarket;
+import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
-import org.eclipse.emf.common.util.EList;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.ASpotMarket;
 
 /**
  * <!-- begin-user-doc -->

@@ -5,16 +5,12 @@
 package com.mmxlabs.models.lng.pricing.provider;
 
 
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -22,7 +18,9 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
+
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.CharterCostModel} object.
@@ -31,7 +29,7 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
  * @generated
  */
 public class CharterCostModelItemProvider
-	extends ItemProviderAdapter
+	extends MMXObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -59,7 +57,7 @@ public class CharterCostModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addVesselsPropertyDescriptor(object);
+			addVesselClassesPropertyDescriptor(object);
 			addCharterInPricePropertyDescriptor(object);
 			addCharterOutPricePropertyDescriptor(object);
 			addSpotCharterCountPropertyDescriptor(object);
@@ -68,19 +66,19 @@ public class CharterCostModelItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessels feature.
+	 * This adds a property descriptor for the Vessel Classes feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addVesselsPropertyDescriptor(Object object) {
+	protected void addVesselClassesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CharterCostModel_vessels_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterCostModel_vessels_feature", "_UI_CharterCostModel_type"),
-				 PricingPackage.Literals.CHARTER_COST_MODEL__VESSELS,
+				 getString("_UI_CharterCostModel_vesselClasses_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterCostModel_vesselClasses_feature", "_UI_CharterCostModel_type"),
+				 PricingPackage.Literals.CHARTER_COST_MODEL__VESSEL_CLASSES,
 				 true,
 				 false,
 				 true,

@@ -4,21 +4,19 @@
  */
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EClass;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for BaseFuelCost instances
@@ -67,17 +65,18 @@ public class BaseFuelCostComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_fuelsEditor(detailComposite, topClass);
+		add_fuelEditor(detailComposite, topClass);
 		add_priceEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the fuels feature on BaseFuelCost
+	 * Create the editor for the fuel feature on BaseFuelCost
 	 *
 	 * @generated
 	 */
-	protected void add_fuelsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.BASE_FUEL_COST__FUELS));
+	protected void add_fuelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.BASE_FUEL_COST__FUEL));
 	}
+
 	/**
 	 * Create the editor for the price feature on BaseFuelCost
 	 *

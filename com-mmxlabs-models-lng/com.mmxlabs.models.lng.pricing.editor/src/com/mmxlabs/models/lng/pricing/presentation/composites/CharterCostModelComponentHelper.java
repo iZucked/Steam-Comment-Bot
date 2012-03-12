@@ -4,19 +4,19 @@
  */
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EClass;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for CharterCostModel instances
@@ -41,7 +41,10 @@ public class CharterCostModelComponentHelper implements IComponentHelper {
 	 * @generated
 	 */
 	public CharterCostModelComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
+			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.MMX_OBJECT);
+			if (helper != null) superClassesHelpers.add(helper);
+		}
 	}
 	
 	/**
@@ -62,19 +65,20 @@ public class CharterCostModelComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_vesselsEditor(detailComposite, topClass);
+		add_vesselClassesEditor(detailComposite, topClass);
 		add_charterInPriceEditor(detailComposite, topClass);
 		add_charterOutPriceEditor(detailComposite, topClass);
 		add_spotCharterCountEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the vessels feature on CharterCostModel
+	 * Create the editor for the vesselClasses feature on CharterCostModel
 	 *
 	 * @generated
 	 */
-	protected void add_vesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.CHARTER_COST_MODEL__VESSELS));
+	protected void add_vesselClassesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.CHARTER_COST_MODEL__VESSEL_CLASSES));
 	}
+
 	/**
 	 * Create the editor for the charterInPrice feature on CharterCostModel
 	 *

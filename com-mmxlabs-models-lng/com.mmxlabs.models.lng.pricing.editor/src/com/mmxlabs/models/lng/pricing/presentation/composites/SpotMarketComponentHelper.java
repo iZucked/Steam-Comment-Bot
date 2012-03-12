@@ -4,21 +4,19 @@
  */
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-
-import com.mmxlabs.models.lng.types.TypesPackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EClass;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for SpotMarket instances
@@ -73,6 +71,7 @@ public class SpotMarketComponentHelper implements IComponentHelper {
 		add_maxQuantityEditor(detailComposite, topClass);
 		add_notionalPortEditor(detailComposite, topClass);
 		add_typeEditor(detailComposite, topClass);
+		add_contractEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the availability feature on SpotMarket
@@ -123,5 +122,14 @@ public class SpotMarketComponentHelper implements IComponentHelper {
 	 */
 	protected void add_typeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SPOT_MARKET__TYPE));
+	}
+
+	/**
+	 * Create the editor for the contract feature on SpotMarket
+	 *
+	 * @generated
+	 */
+	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SPOT_MARKET__CONTRACT));
 	}
 }

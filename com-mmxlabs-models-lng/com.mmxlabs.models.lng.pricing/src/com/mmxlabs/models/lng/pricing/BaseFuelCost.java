@@ -4,10 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-
 import com.mmxlabs.models.mmxcore.MMXObject;
-
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,7 +14,7 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getFuels <em>Fuels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getFuel <em>Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getPrice <em>Price</em>}</li>
  * </ul>
  * </p>
@@ -28,20 +25,30 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface BaseFuelCost extends MMXObject {
 	/**
-	 * Returns the value of the '<em><b>Fuels</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.BaseFuel}.
+	 * Returns the value of the '<em><b>Fuel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Fuels</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Fuel</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Fuels</em>' reference list.
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getBaseFuelCost_Fuels()
-	 * @model
+	 * @return the value of the '<em>Fuel</em>' reference.
+	 * @see #setFuel(BaseFuel)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getBaseFuelCost_Fuel()
+	 * @model required="true"
 	 * @generated
 	 */
-	EList<BaseFuel> getFuels();
+	BaseFuel getFuel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getFuel <em>Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fuel</em>' reference.
+	 * @see #getFuel()
+	 * @generated
+	 */
+	void setFuel(BaseFuel value);
 
 	/**
 	 * Returns the value of the '<em><b>Price</b></em>' reference.

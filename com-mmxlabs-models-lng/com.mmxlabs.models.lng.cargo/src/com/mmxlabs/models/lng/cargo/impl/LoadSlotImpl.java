@@ -200,12 +200,14 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	public int getSlotOrPortCV() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+	public double getSlotOrPortCV() {
+		if (isSetCargoCV()) {
+			return getCargoCV();
+		} else {
+			return getPort().getCvValue();
+		}
 	}
 
 	/**
@@ -297,7 +299,11 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	@Override
 	public Object getUnsetValue(EStructuralFeature feature) {
 		if (feature == CargoPackage.Literals.SLOT__DURATION) {
+			if (getPort() == null) return 12;
 			return getPort().getLoadDuration();
+		} else if (feature == CargoPackage.Literals.LOAD_SLOT__CARGO_CV) {
+			if (getPort() == null) return 24.0;
+			return getPort().getCvValue();
 		}
 		return super.getUnsetValue(feature);
 	}

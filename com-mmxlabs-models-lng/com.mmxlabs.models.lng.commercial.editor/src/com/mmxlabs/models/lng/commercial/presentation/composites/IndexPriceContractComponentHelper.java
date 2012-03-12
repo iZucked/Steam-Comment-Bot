@@ -6,19 +6,18 @@
  */
 package com.mmxlabs.models.lng.commercial.presentation.composites;
 
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EClass;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for IndexPriceContract instances
@@ -40,16 +39,17 @@ public class IndexPriceContractComponentHelper implements IComponentHelper {
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated
+	 * @generated NO - there is an issue with having Contract as the supertype two ways at the moment
 	 */
 	public IndexPriceContractComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
 			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.SALES_CONTRACT);
 			if (helper != null) superClassesHelpers.add(helper);
-		} {
-			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.PURCHASE_CONTRACT);
-			if (helper != null) superClassesHelpers.add(helper);
-		}
+		} 
+//		{
+//			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.PURCHASE_CONTRACT);
+//			if (helper != null) superClassesHelpers.add(helper);
+//		}
 	}
 	
 	/**

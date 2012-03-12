@@ -75,6 +75,18 @@
 			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.PurchaseContractComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.commercial.PurchaseContract" />
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.IndexPriceContractComponentHelper"
+        id="com.mmxlabs.models.lng.commercial.editor.indexPriceHelper"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.commercial.IndexPriceContract">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.FixedPriceContractComponentHelper"
+        id="com.mmxlabs.models.lng.commercial.editor.fixedPriceHelper"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.commercial.FixedPriceContract">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -106,5 +118,36 @@
           priority="5"
           subModelClass="com.mmxlabs.models.lng.commercial.CommercialModel">
     </jointModelEditor>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.fixedPurchaseFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Fixed Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.FixedPriceContract"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.fixedSalesFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Fixed Sales Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.FixedPriceContract"
+          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.indexPurchaseFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Indexed Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceContract"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.indexSalesFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Indexed Sales Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceContract"
+          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
+    </factory>
  </extension>
 </plugin>

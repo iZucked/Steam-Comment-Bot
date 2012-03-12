@@ -44,6 +44,7 @@ public class RouteImporter {
 						final int distance = Integer.parseInt(entry.getValue());
 						final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
 						line.setDistance(distance);
+						row.get(entry.getKey());
 						context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
 						lines.add(line);
 					} catch (final NumberFormatException nfe) {
