@@ -14,6 +14,7 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 	
 	ImportCSVWizardPage mainPage;
 	private ImportCSVFilesPage filesPage;
+	private ImportWarningsPage warnings;
 
 	public ImportCSVWizard() {
 		super();
@@ -24,6 +25,7 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 	 */
 	@Override
 	public boolean performFinish() {
+		
 		IFile file = mainPage.createNewFile();
         if (file == null)
             return false;
@@ -38,7 +40,8 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 		setWindowTitle("File Import Wizard"); //NON-NLS-1
 		setNeedsProgressMonitor(true);
 		filesPage = new ImportCSVFilesPage("CSV Files");
-		mainPage = new ImportCSVWizardPage("Import CSV",selection, filesPage); //NON-NLS-1
+		warnings = new ImportWarningsPage("Warnings", filesPage);
+		mainPage = new ImportCSVWizardPage("Import CSV",selection, warnings); //NON-NLS-1
 	}
 	
 	/* (non-Javadoc)
@@ -48,6 +51,7 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 	public void addPages() {
         super.addPages(); 
         addPage(filesPage);
+        addPage(warnings);
         addPage(mainPage);
     }
 }

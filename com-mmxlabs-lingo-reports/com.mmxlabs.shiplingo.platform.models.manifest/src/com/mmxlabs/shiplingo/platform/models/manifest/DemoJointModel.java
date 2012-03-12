@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.fleet.VesselAvailablility;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -109,7 +110,6 @@ public class DemoJointModel extends JointModel {
 		modelClassKeys.put(MMXCorePackage.eINSTANCE.getMMXRootObject(), ROOT_MODEL_KEY);
 	}
 
-	private URIConverter uriConverter = new ExtensibleURIConverterImpl();
 	private URI rootURI;
 	
 	private Manifest manifest;
@@ -128,6 +128,14 @@ public class DemoJointModel extends JointModel {
 		return URI.createURI("archive:" + rootURI.toString() + "!/" + relativePath);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.mmxcore.jointmodel.JointModel#needsUpgrade()
+	 */
+	@Override
+	protected boolean needsUpgrade() {
+		return false;
+	}
+
 	public static DemoJointModel createEmptyModel(final URI target) throws IOException {
 		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 		rootObject.setVersion(releases.size());
@@ -139,6 +147,7 @@ public class DemoJointModel extends JointModel {
 		rootObject.addSubModel(InputFactory.eINSTANCE.createInputModel());
 		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
+		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
 		
 		{
 		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);

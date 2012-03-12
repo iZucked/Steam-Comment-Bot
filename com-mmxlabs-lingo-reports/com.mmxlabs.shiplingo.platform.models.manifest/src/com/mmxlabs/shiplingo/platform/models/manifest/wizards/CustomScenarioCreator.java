@@ -14,44 +14,38 @@ import javax.management.timer.Timer;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 
-import scenario.Scenario;
-import scenario.ScenarioFactory;
-import scenario.UUIDObject;
-import scenario.cargo.Cargo;
-import scenario.cargo.CargoFactory;
-import scenario.cargo.LoadSlot;
-import scenario.cargo.Slot;
-import scenario.contract.ContractFactory;
-import scenario.contract.Entity;
-import scenario.contract.GroupEntity;
-import scenario.contract.PurchaseContract;
-import scenario.contract.SalesContract;
-import scenario.fleet.CharterOut;
-import scenario.fleet.Drydock;
-import scenario.fleet.FleetFactory;
-import scenario.fleet.FuelConsumptionLine;
-import scenario.fleet.PortAndTime;
-import scenario.fleet.PortTimeAndHeel;
-import scenario.fleet.Vessel;
-import scenario.fleet.VesselClass;
-import scenario.fleet.VesselClassCost;
-import scenario.fleet.VesselFuel;
-import scenario.fleet.VesselState;
-import scenario.fleet.VesselStateAttributes;
-import scenario.market.Index;
-import scenario.market.MarketFactory;
-import scenario.market.StepwisePriceCurve;
-import scenario.port.Canal;
-import scenario.port.DistanceLine;
-import scenario.port.DistanceModel;
-import scenario.port.Port;
-import scenario.port.PortFactory;
-
-import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
-import com.mmxlabs.lngscheduler.emf.extras.ScenarioUtils;
-import com.mmxlabs.shiplingo.platform.app.Activator;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.FixedPriceContract;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.DryDockEvent;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.optimiser.OptimiserModel;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.shiplingo.platform.models.manifest.Activator;
+import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
 
 /**
  * Class to create a scenario. Call methods to customise the scenario. When finished get the final scenario using {@link #buildScenario()}. <br>
@@ -61,12 +55,17 @@ import com.mmxlabs.shiplingo.platform.app.Activator;
  * 
  */
 public class CustomScenarioCreator {
+	private final DemoJointModel jointModel;
 
-	/** The scenario being built */
-	private final Scenario scenario;
+	private final CommercialModel commercialModel;
+	private final CargoModel cargoModel;
+	private final PortModel portModel;
+	private final FleetModel fleetModel;
+	private final PricingModel pricingModel;
+	private final OptimiserModel optimiserModel;
 
-	final SalesContract sc;
-	final PurchaseContract pc;
+	final FixedPriceContract sc;
+	final FixedPriceContract pc;
 
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
@@ -74,40 +73,36 @@ public class CustomScenarioCreator {
 	private static final String timeZone = TimeZone.getDefault().getID();
 
 	public CustomScenarioCreator(final float dischargePrice) {
-
-		scenario = ScenarioFactory.eINSTANCE.createScenario();
-		scenario.createMissingModels();
-
-		final Entity e = ContractFactory.eINSTANCE.createEntity();
-		scenario.getContractModel().getEntities().add(e);
-		final GroupEntity s = ContractFactory.eINSTANCE.createGroupEntity();
-		scenario.getContractModel().setShippingEntity(s);
-		s.setOwnership(1.0);
-		s.setTaxRate(0.0);
-		s.setTransferOffset(0);
-
+		jointModel = DemoJointModel.createEmptyModel(URI.createURI("rubbish://rubbish"));
+		final MMXRootObject root = jointModel.getRootObject();
+		
+		commercialModel = root.getSubModel(CommercialModel.class);
+		cargoModel = root.getSubModel(CargoModel.class);
+		portModel = root.getSubModel(PortModel.class);
+		fleetModel = root.getSubModel(FleetModel.class);
+		pricingModel = root.getSubModel(PricingModel.class);
+		optimiserModel = root.getSubModel(OptimiserModel.class);
+		
+		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
+		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
+		commercialModel.getEntities().add(e);
+		commercialModel.getEntities().add(s);
+		commercialModel.setShippingEntity(s);
+		
 		e.setName("Other");
 		s.setName("Shipping");
 
-		sc = ContractFactory.eINSTANCE.createSalesContract();
-		pc = ContractFactory.eINSTANCE.createFixedPricePurchaseContract();
-
-		final Index sales = MarketFactory.eINSTANCE.createIndex();
-		sales.setName("Sales");
-		final StepwisePriceCurve curve = MarketFactory.eINSTANCE.createStepwisePriceCurve();
-		sales.setPriceCurve(curve);
-		curve.setDefaultValue(dischargePrice);
-
-		scenario.getMarketModel().getIndices().add(sales);
+		sc = CommercialFactory.eINSTANCE.createFixedPriceContract();
+		pc = CommercialFactory.eINSTANCE.createFixedPriceContract();
 
 		sc.setEntity(e);
 		pc.setEntity(e);
-		sc.setIndex(sales);
+		sc.setPricePerMMBTU(dischargePrice);
 
-		scenario.getContractModel().getSalesContracts().add(sc);
-		scenario.getContractModel().getPurchaseContracts().add(pc);
+		commercialModel.getSalesContracts().add(sc);
+		commercialModel.getPurchaseContracts().add(pc);
 
-		ScenarioUtils.addDefaultSettings(scenario);
+//		ScenarioUtils.addDefaultSettings(scenario);
 	}
 
 	/**
@@ -159,11 +154,11 @@ public class CustomScenarioCreator {
 
 		final double fillCapacity = 1.0;
 
-		final VesselFuel baseFuel = FleetFactory.eINSTANCE.createVesselFuel();
+		final BaseFuel baseFuel = FleetFactory.eINSTANCE.createBaseFuel();
 		baseFuel.setName("BASE FUEL");
-		baseFuel.setUnitPrice(baseFuelUnitPrice);
+//		baseFuel.setUnitPrice(baseFuelUnitPrice);
 		baseFuel.setEquivalenceFactor(equivalenceFactor);
-		scenario.getFleetModel().getFuels().add(baseFuel);
+		fleetModel.getBaseFuels().add(baseFuel);
 
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
 		final VesselStateAttributes laden = FleetFactory.eINSTANCE.createVesselStateAttributes();
@@ -171,10 +166,8 @@ public class CustomScenarioCreator {
 
 		vc.setLadenAttributes(laden);
 		vc.setBallastAttributes(ballast);
-		laden.setVesselState(VesselState.LADEN);
-		ballast.setVesselState(VesselState.BALLAST);
 
-		scenario.getFleetModel().getVesselClasses().add(vc);
+		fleetModel.getVesselClasses().add(vc);
 
 		vc.setName(vesselClassName);
 		vc.setBaseFuel(baseFuel);
@@ -182,18 +175,18 @@ public class CustomScenarioCreator {
 		vc.setMaxSpeed(maxSpeed);
 		vc.setCapacity(capacity);
 		vc.setPilotLightRate(pilotLightRate);
-		vc.setCooldownTime(cooldownTime);
-		vc.setWarmupTime(warmupTime);
-		vc.setCooldownVolume(cooldownVolume);
-		vc.setMinHeelVolume(minHeelVolume);
-		vc.setSpotCharterCount(spotCharterCount);
+		vc.setCoolingTime(cooldownTime);
+		vc.setWarmingTime(warmupTime);
+		vc.setCoolingVolume(cooldownVolume);
+		vc.setMinHeel(minHeelVolume);
+//		vc.setSpotCharterCount(spotCharterCount);
 		vc.setFillCapacity(fillCapacity);
 
-		final FuelConsumptionLine ladenMin = FleetFactory.eINSTANCE.createFuelConsumptionLine();
-		final FuelConsumptionLine ladenMax = FleetFactory.eINSTANCE.createFuelConsumptionLine();
+		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
+		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
 
-		final FuelConsumptionLine ballastMin = FleetFactory.eINSTANCE.createFuelConsumptionLine();
-		final FuelConsumptionLine ballastMax = FleetFactory.eINSTANCE.createFuelConsumptionLine();
+		final FuelConsumption ballastMin = FleetFactory.eINSTANCE.createFuelConsumption();
+		final FuelConsumption ballastMax = FleetFactory.eINSTANCE.createFuelConsumption();
 
 		ballastMin.setSpeed(ballastMinSpeed);
 		ballastMin.setConsumption(ballastMinConsumption);
@@ -205,17 +198,17 @@ public class CustomScenarioCreator {
 		ladenMax.setSpeed(ladenMaxSpeed);
 		ladenMax.setConsumption(ladenMaxConsumption);
 
-		laden.getFuelConsumptionCurve().add(ladenMin);
-		laden.getFuelConsumptionCurve().add(ladenMax);
+		laden.getFuelConsumption().add(ladenMin);
+		laden.getFuelConsumption().add(ladenMax);
 
-		ballast.getFuelConsumptionCurve().add(ballastMin);
-		ballast.getFuelConsumptionCurve().add(ballastMax);
+		ballast.getFuelConsumption().add(ballastMin);
+		ballast.getFuelConsumption().add(ballastMax);
 
-		laden.setIdleConsumptionRate(ladenIdleConsumptionRate);
+		laden.setIdleBaseRate(ladenIdleConsumptionRate);
 		laden.setIdleNBORate(ladenIdleNBORate);
 		laden.setNboRate(ladenNBORate);
 
-		ballast.setIdleConsumptionRate(ballastIdleConsumptionRate);
+		ballast.setIdleBaseRate(ballastIdleConsumptionRate);
 		ballast.setIdleNBORate(ballastIdleNBORate);
 		ballast.setNboRate(ballastNBORate);
 
@@ -225,18 +218,17 @@ public class CustomScenarioCreator {
 		// now create vessels of this class
 		for (int i = 0; i < numOfVesselsToCreate; i++) {
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
-			vessel.setClass(vc);
+			vessel.setVesselClass(vc);
 			vessel.setName(i + " (class " + vesselClassName + ")");
 
-			vessel.setTimeChartered(isTimeChartered);
+			if (isTimeChartered) vessel.setTimeCharterRate(10);
+			
+			final VesselAvailablility availability = FleetFactory.eINSTANCE.createVesselAvailablility();
+			
+			vessel.setAvailability(availability);
+			
 
-			final PortTimeAndHeel start = FleetFactory.eINSTANCE.createPortTimeAndHeel();
-			final PortAndTime end = FleetFactory.eINSTANCE.createPortAndTime();
-
-			vessel.setStartRequirement(start);
-			vessel.setEndRequirement(end);
-
-			scenario.getFleetModel().getFleet().add(vessel);
+			fleetModel.getVessels().add(vessel);
 			created[i] = vessel;
 		}
 
@@ -389,55 +381,59 @@ public class CustomScenarioCreator {
 		return cargo;
 	}
 
-	public Drydock addDryDock(final Port startPort, final Date start, final int durationDays) {
+	public DryDockEvent addDryDock(final Port startPort, final Date start, final int durationDays) {
 
-		if (!scenario.getPortModel().getPorts().contains(startPort)) {
+		if (!portModel.getPorts().contains(startPort)) {
 			Activator
 					.getDefault()
 					.getLog()
 					.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
 							"Scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
-			scenario.getPortModel().getPorts().add(startPort);
+			portModel.getPorts().add(startPort);
 		}
 
 		// Set up dry dock.
-		final Drydock dryDock = FleetFactory.eINSTANCE.createDrydock();
-		dryDock.setDuration(durationDays);
-		dryDock.setStartPort(startPort);
+		final DryDockEvent dryDock = FleetFactory.eINSTANCE.createDryDockEvent();
+		dryDock.setDurationInDays(durationDays);
+		dryDock.setPort(startPort);
 		// add to scenario's fleet model
-		scenario.getFleetModel().getVesselEvents().add(dryDock);
+		fleetModel.getVesselEvents().add(dryDock);
 
 		// define the start and end time
-		dryDock.setStartDate(start);
-		dryDock.setEndDate(start);
+		dryDock.setStartAfter(start);
+		dryDock.setStartBy(start);
 
 		return dryDock;
 	}
 
-	public CharterOut addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays, final float cvValue,
+	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays, final float cvValue,
 			final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 
-		final CharterOut charterOut = FleetFactory.eINSTANCE.createCharterOut();
+		final CharterOutEvent charterOut = FleetFactory.eINSTANCE.createCharterOutEvent();
 
 		// the start and end of the charter out starting-window is 0, for simplicity.
-		charterOut.setStartDate(startCharterOut);
-		charterOut.setEndDate(startCharterOut);
+		charterOut.setStartAfter(startCharterOut);
+		charterOut.setStartBy(startCharterOut);
 
-		charterOut.setStartPort(startPort);
+		charterOut.setPort(startPort);
 		// don't set the end port if both ports are the same - this is equivalent to setting the end port to unset and is a good place to test it works
 		if (!startPort.equals(endPort)) {
-			charterOut.setEndPort(endPort);
+			charterOut.setRelocateTo(endPort);
 		}
 
-		charterOut.setId(id);
-		charterOut.setHeelLimit(heelLimit);
-		charterOut.setDuration(charterOutDurationDays);
-		charterOut.setHeelCVValue(cvValue);
-		charterOut.setHeelUnitPrice(dischargePrice);
-		charterOut.setDailyCharterOutPrice(dailyCharterOutPrice);
+		charterOut.setName(id);
+		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
+		heelOptions.setVolumeAvailable(heelLimit);
+		heelOptions.setCvValue(cvValue);
+		heelOptions.setPricePerMMBTU(dischargePrice);
+		charterOut.setHeelOptions(heelOptions);
+		
+		charterOut.setDurationInDays(charterOutDurationDays);
+		
+		charterOut.setHireRate(dailyCharterOutPrice);
 		charterOut.setRepositioningFee(repositioningFee);
 		// add to the scenario's fleet model
-		scenario.getFleetModel().getVesselEvents().add(charterOut);
+		fleetModel.getVesselEvents().add(charterOut);
 
 		return charterOut;
 	}

@@ -64,7 +64,6 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
 
-		final OptimisationTransformer ot = new OptimisationTransformer(scenario);
 
 		IOptimisationData data;
 		try {
@@ -75,6 +74,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			throw new RuntimeException(e);
 		}
 
+		final OptimisationTransformer ot = new OptimisationTransformer(scenario, lst.getOptimisationSettings());
 		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
 		final IOptimisationContext context = optAndContext.getFirst();

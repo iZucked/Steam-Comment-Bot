@@ -65,19 +65,19 @@ public final class SaveJobUtil {
 		final MMXRootObject scenario = control.getJobOutput();
 
 		// Process scenario - prune out intermediate schedules ....
-		ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
-		int numSchedules = scheduleModel.getSchedules().size();
-		while (numSchedules > 1) {
-			scheduleModel.getSchedules().remove(0);
-			--numSchedules;
-		}
-		// .. and set remaining schedule to the new initial state
-		if (numSchedules == 1) {
-			scenario.getOptimisation().getCurrentSettings().setInitialSchedule(scheduleModel.getSchedules().get(0));
-		} else {
-			// TODO: Necessary?
-			// scenario.getOptimisation().getCurrentSettings().setInitialSchedule(null);
-		}
+//		ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
+//		int numSchedules = scheduleModel.getSchedules().size();
+//		while (numSchedules > 1) {
+//			scheduleModel.getSchedules().remove(0);
+//			--numSchedules;
+//		}
+//		// .. and set remaining schedule to the new initial state
+//		if (numSchedules == 1) {
+//			scenario.getOptimisation().getCurrentSettings().setInitialSchedule(scheduleModel.getSchedules().get(0));
+//		} else {
+//			// TODO: Necessary?
+//			// scenario.getOptimisation().getCurrentSettings().setInitialSchedule(null);
+//		}
 
 		// Create resource set to save into
 		final ResourceSetImpl resourceSet = new ResourceSetImpl();

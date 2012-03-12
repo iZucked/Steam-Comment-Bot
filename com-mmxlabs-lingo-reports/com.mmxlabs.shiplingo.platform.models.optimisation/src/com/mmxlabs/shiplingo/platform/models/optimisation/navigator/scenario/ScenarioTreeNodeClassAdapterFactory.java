@@ -12,7 +12,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.rcp.common.ecore.EcoreContentProvider;
+import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 /**
@@ -24,7 +24,7 @@ import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 
 	// FIXME: Get this string from somewhere else
-	private final EcoreContentProvider scp = new EcoreContentProvider(CollectionsUtil.makeHashSet("scn", "scenario"));
+	// private final EcoreContentProvider scp = new EcoreContentProvider(CollectionsUtil.makeHashSet("scn", "scenario"));
 
 	@Override
 	public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
@@ -77,14 +77,19 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory {
 	}
 
 	private MMXRootObject getScenario(final IResource resource) {
-		final Object[] scenarioObjects = scp.getChildren(resource);
-		if (scenarioObjects != null) {
-			for (final Object o : scenarioObjects) {
-				if (o instanceof MMXRootObject) {
-					final MMXRootObject scenario = (MMXRootObject) o;
-					return scenario;
-				}
-			}
+//		final Object[] scenarioObjects = scp.getChildren(resource);
+//		if (scenarioObjects != null) {
+//			for (final Object o : scenarioObjects) {
+//				if (o instanceof MMXRootObject) {
+//					final MMXRootObject scenario = (MMXRootObject) o;
+//					return scenario;
+//				}
+//			}
+//		}
+		
+		final JointModel jointModel = (JointModel) resource.getAdapter(JointModel.class);
+		if (jointModel != null) {
+			return jointModel.getRootObject();
 		}
 		return null;
 	}

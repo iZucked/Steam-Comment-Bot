@@ -10,11 +10,11 @@
  <extension
          point="org.eclipse.ui.handlers">
        <handler
-            class="com.mmxlabs.lngscheduler.ui.jobmanager.handlers.ScheduleFitnessExportHandler"
+            class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.ScheduleFitnessExportHandler"
             commandId="com.mmxlabs.lngscheduler.ui.commands.exportTrace">
       </handler>
        <handler
-             class="com.mmxlabs.lngscheduler.ui.jobmanager.handlers.SaveOptimisationJobHandler"
+             class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.SaveOptimisationJobHandler"
              commandId="com.mmxlabs.lngscheduler.ui.commands.SaveOptimisationJob">
           <enabledWhen>
              <or>
@@ -22,7 +22,7 @@
                       ifEmpty="false"
                       operator="or">
                    <instanceof
-                         value="com.mmxlabs.lngscheduler.ui.LNGSchedulerJobDescriptor">
+                         value="com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor">
                    </instanceof>
                 </iterate>
              </or>
@@ -32,7 +32,7 @@
 <extension
             point="org.eclipse.ui.handlers">
          <handler
-               class="com.mmxlabs.lngscheduler.ui.navigator.handlers.StartOptimisationHandler"
+               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StartOptimisationHandler"
                commandId="com.mmxlabs.rcp.navigator.commands.optimisation.play">
             <enabledWhen>
                <or>
@@ -43,7 +43,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -58,7 +58,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -98,7 +98,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -113,7 +113,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -132,7 +132,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -147,7 +147,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -166,7 +166,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -181,7 +181,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -200,7 +200,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -215,7 +215,7 @@
                         <test
                               forcePluginActivation="true"
                               property="org.eclipse.core.resources.extension"
-                              value="scenario">
+                              value="scn">
                         </test>
                      </and>
                   </iterate>
@@ -329,7 +329,7 @@
                <test
                      forcePluginActivation="true"
                      property="org.eclipse.core.resources.extension"
-                     value="scenario">
+                     value="scn">
                </test>
             </or></triggerPoints>
          <possibleChildren>
