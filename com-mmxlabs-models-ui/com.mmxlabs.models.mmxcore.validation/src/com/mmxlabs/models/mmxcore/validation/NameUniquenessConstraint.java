@@ -41,23 +41,22 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 
 		final EObject container = containerAndFeature.getFirst(); // target.eContainer();
 		if (container == null)
-			return ctx.createSuccessStatus(); // TODO sort out this issue
+			return ctx.createSuccessStatus();
 		final EStructuralFeature feature = containerAndFeature.getSecond();
 		if (feature != null && feature.isMany() && feature instanceof EReference && ((EReference) feature).getEReferenceType().getEAllAttributes().contains(nameAttribute)) {
 
-			Map<EObject, Set<String>> badNames = (Map<EObject, Set<String>>) ctx.getCurrentConstraintData();
+			Map<Pair<EObject, EReference>, Set<String>> badNames = (Map<Pair<EObject, EReference>, Set<String>>) ctx.getCurrentConstraintData();
 			if (badNames == null) {
-				badNames = new HashMap<EObject, Set<String>>();
+				badNames = new HashMap<Pair<EObject, EReference>, Set<String>>();
 				ctx.putCurrentConstraintData(badNames);
 			}
-
-			Set<String> bad = badNames.get(container);
+			
+			Set<String> bad = badNames.get(containerAndFeature);
 			if (bad == null) {
 				bad = new HashSet<String>();
-				badNames.put(container, bad);
+				badNames.put(containerAndFeature, bad);
 				final List<EObject> objects = ValidationSupport.getInstance().getContents(container, (EReference) feature);
-				// container
-				// .eGet(feature);
+
 				final Set<String> temp = new HashSet<String>();
 				for (final EObject no : objects) {
 					final String n = (String) no.eGet(nameAttribute);
