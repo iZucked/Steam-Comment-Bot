@@ -137,6 +137,9 @@ public class DefaultClassImporter implements IClassImporter {
 				final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
 
 				if (subKeys.isEmpty()) {
+					if (reference.isContainment()) {
+						populateWithBlank(instance, reference);
+					}
 					context.addProblem(
 							context.createProblem(reference.getName() + " is missing from "
 									+ instance.eClass().getName()
@@ -158,7 +161,19 @@ public class DefaultClassImporter implements IClassImporter {
 			}
 		}
 	}
-
+	
+	protected void populateWithBlank(final EObject target, final EReference reference) {
+		final EClass objectClass = reference.getEReferenceType();
+		if (objectClass.isAbstract()) return;
+		final EObject content = objectClass.getEPackage().getEFactoryInstance().create(objectClass);
+		for (final EReference ref : content.eClass().getEAllReferences()) {
+			if (ref.isContainment() && ref.isMany() == false) {
+				populateWithBlank(content, ref);
+			}
+		}
+		target.eSet(reference, content);
+	}
+	
 	protected void importAttributes(final Map<String, String> row,
 			IImportContext context, final EClass rowClass,
 			final EObject instance) {

@@ -19,7 +19,7 @@ public interface IModelFactory {
 	 * @param outputEClassName the name of the output EClass
 	 * @param label a nice label for this in the UI
 	 */
-	public void initFromExtension(final String ID, final String outputEClassName, final String label);
+	public void initFromExtension(final String ID, final String label, final String prototype);
 	
 	/**
 	 * Get the display label for this factory.

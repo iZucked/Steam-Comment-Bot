@@ -17,6 +17,7 @@ public interface IModelFactoryExtension {
 	public String getTargetEClass();
 	@MapName("outputEClass")
 	public String getOutputEClass();
+
 	@MapName("label")
 	public String getLabel();
 	@MapName("factory")

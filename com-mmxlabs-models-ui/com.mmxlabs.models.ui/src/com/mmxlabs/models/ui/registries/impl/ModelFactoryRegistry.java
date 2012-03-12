@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.ui.extensions.IModelFactoryExtension;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
@@ -31,7 +32,7 @@ public class ModelFactoryRegistry implements IModelFactoryRegistry {
 			final String outputEClass = extension.getOutputEClass();
 			if (extensionTarget.equals(targetClassName)) {
 				final IModelFactory factory = extension.createInstance();
-				factory.initFromExtension(extensionID, outputEClass, extensionLabel);
+				factory.initFromExtension(extensionID, extensionLabel, outputEClass);
 				result.add(factory);
 			}
 		}

@@ -11,6 +11,7 @@ import java.util.Date;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -24,31 +25,29 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public class DefaultModelFactory implements IModelFactory {
 	protected Date now;
-	private String outputEClassName;
 	private String extensionID;
 	private String label;
+	private String prototypeClass;
 
 	@Override
 	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment) {
-		final EObject output;
+		EObject output = null;
 		
-		if (outputEClassName == null || outputEClassName.isEmpty()) {
+		if (prototypeClass == null) {
 			output = constructInstance(containment.getEReferenceType());
 		} else {
-			// find the right EClass; this might be a bad way to do it
-			try {
-				@SuppressWarnings("unchecked")
-				final Class<EObject> clazz = (Class<EObject>) Class.forName(outputEClassName);
-				final EObject temp = clazz.newInstance();
-				output = constructInstance(temp.eClass());
-			} catch (InstantiationException e) {
-				return null;
-			} catch (IllegalAccessException e) {
-				return null;
-			} catch (ClassNotFoundException e) {
-				return null;
+			for (final EClassifier e : containment.getEReferenceType().getEPackage().getEClassifiers()) {
+				if (e instanceof EClass) {
+					if (e.getInstanceClass().getCanonicalName().equals(prototypeClass)) {
+						output = constructInstance((EClass) e);
+						break;
+					}
+				}
 			}
+			if (output == null)
+				output = constructInstance(containment.getEReferenceType());
 		}
+		
 		final Calendar nowCal = Calendar.getInstance();
 		nowCal.clear(Calendar.MILLISECOND);
 		nowCal.clear(Calendar.SECOND);
@@ -57,10 +56,11 @@ public class DefaultModelFactory implements IModelFactory {
 		
 		now = nowCal.getTime();
 		postprocess(output);
+		final EObject finalOutput = output;
 		final ISetting setting = new ISetting() {
 			@Override
 			public EObject getInstance() {
-				return output;
+				return finalOutput;
 			}
 
 			@Override
@@ -108,10 +108,10 @@ public class DefaultModelFactory implements IModelFactory {
 	}
 
 	@Override
-	public void initFromExtension(String ID, String outputEClassName, String label) {
+	public void initFromExtension(String ID, String label, String prototype) {
 		this.label = label;
 		this.extensionID = ID;
-		this.outputEClassName = outputEClassName;
+		this.prototypeClass = prototype;
 	}
 
 	@Override

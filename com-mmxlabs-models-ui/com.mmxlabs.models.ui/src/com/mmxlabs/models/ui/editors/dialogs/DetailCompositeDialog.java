@@ -58,7 +58,6 @@ public class DetailCompositeDialog extends Dialog {
 			.getLogger(DetailCompositeDialog.class);
 
 	private IDisplayComposite displayComposite;
-
 	/**
 	 * The top composite in which we store our detail views
 	 */
@@ -149,11 +148,12 @@ public class DetailCompositeDialog extends Dialog {
 		super(parentShell);
 		this.commandHandler = 
 				new ICommandHandler() {
-
 					@Override
 					public void handleCommand(final Command command, final EObject target,
 							final EStructuralFeature feature) {
-						commandHandler.handleCommand(command, target, feature);
+						// we want to directly execute these commands, because they are on copies anyway
+						// so (a) no undo needed and (b) don't want to make the command stack dirty.
+						command.execute();
 						validate();
 					}
 					
@@ -182,6 +182,7 @@ public class DetailCompositeDialog extends Dialog {
 
 	private void validate() {
 		final IStatus status = validator.validate(currentEditorTargets);
+		
 		final boolean problem = status.matches(IStatus.ERROR);
 		for (final EObject object : currentEditorTargets)
 			objectValidity.put(object, !problem);
@@ -231,24 +232,8 @@ public class DetailCompositeDialog extends Dialog {
 		for (final EObject o : range) {
 			currentEditorTargets.add(originalToDuplicate.get(o));
 		}
-		final ICommandHandler proxyHandler = new ICommandHandler() {
-			@Override
-			public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
-				command.execute(); // do not run in stack, so as not to make dirty if the user cancels.
-			}
-			
-			@Override
-			public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
-				return commandHandler.getReferenceValueProviderProvider();
-			}
-			
-			@Override
-			public EditingDomain getEditingDomain() {
-				return commandHandler.getEditingDomain();
-			}
-		};
 		
-		displayComposite.setCommandHandler(proxyHandler);
+		displayComposite.setCommandHandler(commandHandler);
 		displayComposite.display(rootObject, duplicate);
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 		
