@@ -3,6 +3,7 @@
 
 <product name="ShipLiNGO" uid="com.mmxlabs.shiplingo.platform.app.product.id" id="com.mmxlabs.shiplingo.platform.app.product" application="com.mmxlabs.shiplingo.platform.app.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
+
    <configIni use="default">
    </configIni>
 
@@ -10,7 +11,7 @@
       <vmArgs>-ea -server -Xmx768m</vmArgs>
    </launcherArgs>
 
-   <windowImages i16="/com.mmxlabs.shiplingo.platform.app/icons/alt_window_16.gif" i32="/com.mmxlabs.demo.app/icons/alt_window_16.gif"/>
+   <windowImages i16="/com.mmxlabs.shiplingo.platform.app/icons/alt_window_16.gif"/>
 
    <splash
       location="com.mmxlabs.shiplingo.platform.app"
@@ -28,6 +29,7 @@
 
    <vm>
    </vm>
+
 
    <plugins>
    </plugins>
