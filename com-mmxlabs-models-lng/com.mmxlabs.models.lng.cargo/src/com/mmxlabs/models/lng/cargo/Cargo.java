@@ -148,6 +148,14 @@ public interface Cargo extends ACargo {
 	 */
 	EList<AVesselSet> getAllowedVessels();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	CargoType getCargoType();
+
 } // end of  Cargo
 
 // finish type fixing

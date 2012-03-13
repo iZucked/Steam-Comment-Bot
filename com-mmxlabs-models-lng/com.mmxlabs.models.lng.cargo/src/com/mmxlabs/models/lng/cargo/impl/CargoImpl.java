@@ -254,6 +254,15 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public CargoType getCargoType() {
+		return CargoType.FLEET;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
