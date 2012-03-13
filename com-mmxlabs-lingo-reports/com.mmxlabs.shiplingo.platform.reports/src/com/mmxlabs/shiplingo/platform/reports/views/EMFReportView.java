@@ -112,7 +112,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		public ColumnHandler(final IFormatter formatter, final Object[] features, final String title) {
 			super();
 			this.formatter = formatter;
-			this.path = new CompiledEMFPath(true, features);
+			this.path = new CompiledEMFPath(getClass().getClassLoader(), true, features);
 			this.title = title;
 		}
 
