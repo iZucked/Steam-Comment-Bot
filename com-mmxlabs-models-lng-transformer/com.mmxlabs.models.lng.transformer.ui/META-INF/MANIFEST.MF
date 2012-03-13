@@ -7,7 +7,7 @@ Bundle-Activator: com.mmxlabs.shiplingo.platform.models.optimisation.Activator
 Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- com.mmxlabs.rcp.navigator;bundle-version="1.0.0",
+ com.mmxlabs.shiplingo.platform.navigator;bundle-version="1.0.0",
  com.mmxlabs.jobmanager;bundle-version="1.0.0",
  com.mmxlabs.jobmanager.eclipse;bundle-version="1.0.0",
  org.eclipse.core.resources;bundle-version="3.7.101",
