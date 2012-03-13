@@ -89,7 +89,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "com.mmxlabs.demo.reports.views.FitnessReportView";
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView";
 
 	private TableViewer viewer;
 
