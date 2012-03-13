@@ -14,12 +14,14 @@ import javax.management.timer.Timer;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -41,7 +43,9 @@ import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.shiplingo.platform.models.manifest.Activator;
@@ -55,8 +59,9 @@ import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
  * 
  */
 public class CustomScenarioCreator {
-	private final ManifestJointModel jointModel;
 
+	private static final Logger log = LoggerFactory.getLogger(CustomScenarioCreator.class);
+	
 	private final CommercialModel commercialModel;
 	private final CargoModel cargoModel;
 	private final PortModel portModel;
@@ -66,22 +71,23 @@ public class CustomScenarioCreator {
 
 	final FixedPriceContract sc;
 	final FixedPriceContract pc;
+	
+	MMXRootObject scenario ;
 
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
-	private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
+//	private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
 
 	private static final String timeZone = TimeZone.getDefault().getID();
 
 	public CustomScenarioCreator(final float dischargePrice) {
-		jointModel = ManifestJointModel.createEmptyModel(URI.createURI("rubbish://rubbish"));
-		final MMXRootObject root = jointModel.getRootObject();
+		 scenario = ManifestJointModel.createEmptyInstance();
 		
-		commercialModel = root.getSubModel(CommercialModel.class);
-		cargoModel = root.getSubModel(CargoModel.class);
-		portModel = root.getSubModel(PortModel.class);
-		fleetModel = root.getSubModel(FleetModel.class);
-		pricingModel = root.getSubModel(PricingModel.class);
-		optimiserModel = root.getSubModel(OptimiserModel.class);
+		commercialModel = scenario.getSubModel(CommercialModel.class);
+		cargoModel = scenario.getSubModel(CargoModel.class);
+		portModel = scenario.getSubModel(PortModel.class);
+		fleetModel = scenario.getSubModel(FleetModel.class);
+		pricingModel = scenario.getSubModel(PricingModel.class);
+		optimiserModel = scenario.getSubModel(OptimiserModel.class);
 		
 		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
 		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
@@ -292,27 +298,28 @@ public class CustomScenarioCreator {
 	 *            A list of distances from port B to port A
 	 */
 	public void addPorts(final Port portA, final Port portB, final int[] AtoBDistances, final int[] BtoADistances) {
-		if (!scenario.getPortModel().getPorts().contains(portA)) {
-			scenario.getPortModel().getPorts().add(portA);
+		
+		if (!portModel.getPorts().contains(portA)) {
+			portModel.getPorts().add(portA);
 			portA.setTimeZone(timeZone);
 		}
-		if (!scenario.getPortModel().getPorts().contains(portB)) {
-			scenario.getPortModel().getPorts().add(portB);
+		if (!portModel.getPorts().contains(portB)) {
+			portModel.getPorts().add(portB);
 			portB.setTimeZone(timeZone);
 		}
 
 		for (final int distance : AtoBDistances) {
-			final DistanceLine distanceLine = PortFactory.eINSTANCE.createDistanceLine();
-			distanceLine.setFromPort(portA);
-			distanceLine.setToPort(portB);
+			final RouteLine distanceLine = PortFactory.eINSTANCE.createRouteLine();
+			distanceLine.setFrom(portA);
+			distanceLine.setTo(portB);
 			distanceLine.setDistance(distance);
 			scenario.getDistanceModel().getDistances().add(distanceLine);
 		}
 
 		for (final int distance : BtoADistances) {
-			final DistanceLine distanceLine = PortFactory.eINSTANCE.createDistanceLine();
-			distanceLine.setFromPort(portB);
-			distanceLine.setToPort(portA);
+			final RouteLine distanceLine = PortFactory.eINSTANCE.createRouteLine();
+			distanceLine.setFrom(portB);
+			distanceLine.setTo(portA);
 			distanceLine.setDistance(distance);
 			scenario.getDistanceModel().getDistances().add(distanceLine);
 		}
@@ -325,21 +332,13 @@ public class CustomScenarioCreator {
 	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
 			final int travelTime) {
 
-		if (!scenario.getPortModel().getPorts().contains(loadPort)) {
-			Activator
-					.getDefault()
-					.getLog()
-					.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
-							"Scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
-			scenario.getPortModel().getPorts().add(loadPort);
+		if (!portModel.getPorts().contains(loadPort)) {
+			log.warn("Scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
+			portModel.getPorts().add(loadPort);
 		}
-		if (!scenario.getPortModel().getPorts().contains(dischargePort)) {
-			Activator
-					.getDefault()
-					.getLog()
-					.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
-							"Scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
-			scenario.getPortModel().getPorts().add(dischargePort);
+		if (!portModel.getPorts().contains(dischargePort)) {
+			log.warn("Scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
+			portModel.getPorts().add(dischargePort);
 		}
 
 		// final int loadPrice = 1000;
@@ -348,7 +347,7 @@ public class CustomScenarioCreator {
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		final LoadSlot load = CargoFactory.eINSTANCE.createLoadSlot();
-		final Slot dis = CargoFactory.eINSTANCE.createSlot();
+		final DischargeSlot dis = CargoFactory.eINSTANCE.createDischargeSlot();
 
 		cargo.setLoadSlot(load);
 		cargo.setDischargeSlot(dis);
@@ -357,8 +356,8 @@ public class CustomScenarioCreator {
 		dis.setPort(dischargePort);
 		load.setContract(pc);
 		dis.setContract(sc);
-		load.setId("load");
-		dis.setId("discharge");
+		load.setName("load");
+		dis.setName("discharge");
 
 		dis.setFixedPrice(dischargePrice);
 		load.setFixedPrice(loadPrice);
@@ -366,17 +365,17 @@ public class CustomScenarioCreator {
 		load.setMaxQuantity(loadMaxQuantity);
 		dis.setMaxQuantity(dischargeMaxQuantity);
 
-		load.setCargoCVvalue(cvValue);
+		load.setCargoCV(cvValue);
 
-		load.setWindowStart(new DateAndOptionalTime(loadWindowStart, false));
-		load.setWindowDuration(0);
+		load.setWindowStart(loadWindowStart);
+		load.setWindowSize(0);
 		final Date dischargeDate = new Date(loadWindowStart.getTime() + (Timer.ONE_HOUR * travelTime));
-		dis.setWindowStart(new DateAndOptionalTime(dischargeDate, false));
-		dis.setWindowDuration(0);
+		dis.setWindowStart(dischargeDate);
+		dis.setWindowSize(0);
 
-		cargo.setId(cargoID);
+		cargo.setName(cargoID);
 
-		scenario.getCargoModel().getCargoes().add(cargo);
+		cargoModel.getCargos().add(cargo);
 
 		return cargo;
 	}
@@ -384,11 +383,7 @@ public class CustomScenarioCreator {
 	public DryDockEvent addDryDock(final Port startPort, final Date start, final int durationDays) {
 
 		if (!portModel.getPorts().contains(startPort)) {
-			Activator
-					.getDefault()
-					.getLog()
-					.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID,
-							"Scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway."));
+			log.warn("Scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
 			portModel.getPorts().add(startPort);
 		}
 
@@ -443,11 +438,11 @@ public class CustomScenarioCreator {
 	 * 
 	 * @return The finished scenario.
 	 */
-	public Scenario buildScenario() {
+	public MMXRootObject buildScenario() {
 
 		// Add every canal to every vessel class.
 		for (final VesselClassCost canalCost : this.canalCostsForAllVesselClasses) {
-			for (final VesselClass vc : scenario.getFleetModel().getVesselClasses()) {
+			for (final VesselClass vc : fleetModel.getVesselClasses()) {
 				addCanal(vc, canalCost);
 			}
 		}
@@ -463,14 +458,14 @@ public class CustomScenarioCreator {
 	 * @param scenario
 	 *            The scenario to fix.
 	 */
-	private static void fixUUIDMisMatches(final Scenario scenario) {
+	private static void fixUUIDMisMatches(final MMXRootObject scenario) {
 
 		final TreeIterator<EObject> iterator = scenario.eAllContents();
 		while (iterator.hasNext()) {
 			final EObject obj = iterator.next();
 
 			if (obj instanceof UUIDObject) {
-				((UUIDObject) obj).getUUID();
+				((UUIDObject) obj).getUuid();
 			}
 		}
 	}
@@ -478,11 +473,11 @@ public class CustomScenarioCreator {
 	public VesselClassCost createCanalCost(final String canalName, final Port portA, final Port portB, final int distanceAToB, final int distanceBToA, final int canalLadenCost,
 			final int canalUnladenCost, final int canalTransitFuelDays, final int canalTransitTime) {
 
-		if (!scenario.getPortModel().getPorts().contains(portA)) {
-			scenario.getPortModel().getPorts().add(portA);
+		if (!portModel.getPorts().contains(portA)) {
+			portModel.getPorts().add(portA);
 		}
-		if (!scenario.getPortModel().getPorts().contains(portB)) {
-			scenario.getPortModel().getPorts().add(portB);
+		if (!portModel.getPorts().contains(portB)) {
+			portModel.getPorts().add(portB);
 		}
 
 		final Canal canal = PortFactory.eINSTANCE.createCanal();
@@ -531,7 +526,7 @@ public class CustomScenarioCreator {
 
 		if (scenarioFleetModelContainsVesselClass(vc)) {
 
-			for (final VesselClass v : scenario.getFleetModel().getVesselClasses()) {
+			for (final VesselClass v : fleetModel.getVesselClasses()) {
 				if (v.equals(vc)) {
 					v.getInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
 				}
@@ -544,8 +539,8 @@ public class CustomScenarioCreator {
 
 	private boolean scenarioFleetModelContainsVesselClass(final VesselClass vc) {
 
-		for (final Vessel v : scenario.getFleetModel().getFleet()) {
-			if (v.getClass_().equals(vc)) {
+		for (final Vessel v : fleetModel.getVessels()) {
+			if (v.getVesselClass().equals(vc)) {
 				return true;
 			}
 		}
@@ -565,9 +560,9 @@ public class CustomScenarioCreator {
 	 */
 	public boolean addAllowedVesselsOnCargo(final Cargo cargo, final ArrayList<Vessel> allowedVessels) {
 
-		if (scenario.getCargoModel().getCargoes().contains(cargo)) {
+		if (cargoModel.getCargos().contains(cargo)) {
 
-			for (final Cargo c : scenario.getCargoModel().getCargoes()) {
+			for (final Cargo c : cargoModel.getCargos()) {
 				if (c.equals(cargo)) {
 					c.getAllowedVessels().addAll(allowedVessels);
 
