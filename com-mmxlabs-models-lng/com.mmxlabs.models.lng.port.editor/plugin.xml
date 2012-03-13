@@ -125,4 +125,17 @@
           targetEClass="com.mmxlabs.models.lng.port.PortGroup">
     </factory>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.ui.dates.TimeInlineEditorFactory"
+          featureNameEquals="defaultStartTime"
+          id="com.mmxlabs.models.lng.port.editor.portTimeEditor">
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.port.Port">
+          </EClassExtends>
+       </OwnerAnyOf>
+    </editorFactory>
+ </extension>
 </plugin>
