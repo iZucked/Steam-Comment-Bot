@@ -46,7 +46,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class SlotImpl extends ASlotImpl implements Slot {
+public abstract class SlotImpl extends ASlotImpl implements Slot {
 	/**
 	 * The default value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->

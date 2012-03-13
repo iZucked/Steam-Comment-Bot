@@ -97,29 +97,6 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.Slot} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected SlotItemProvider slotItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.Slot}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createSlotAdapter() {
-		if (slotItemProvider == null) {
-			slotItemProvider = new SlotItemProvider(this);
-		}
-
-		return slotItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.LoadSlot} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -357,7 +334,6 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	 */
 	public void dispose() {
 		if (cargoItemProvider != null) cargoItemProvider.dispose();
-		if (slotItemProvider != null) slotItemProvider.dispose();
 		if (loadSlotItemProvider != null) loadSlotItemProvider.dispose();
 		if (dischargeSlotItemProvider != null) dischargeSlotItemProvider.dispose();
 		if (cargoModelItemProvider != null) cargoModelItemProvider.dispose();

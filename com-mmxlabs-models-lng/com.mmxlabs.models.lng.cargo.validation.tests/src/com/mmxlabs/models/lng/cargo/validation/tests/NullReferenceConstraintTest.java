@@ -46,7 +46,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
 public class NullReferenceConstraintTest {
 
 	private Slot initSlot() {
-		final Slot slot = CargoFactory.eINSTANCE.createSlot();
+		final Slot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		// port is initially null, so set it.
 		slot.setPort(PortFactory.eINSTANCE.createPort());
 		return slot;

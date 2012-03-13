@@ -60,7 +60,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case CargoPackage.CARGO: return createCargo();
-			case CargoPackage.SLOT: return createSlot();
 			case CargoPackage.LOAD_SLOT: return createLoadSlot();
 			case CargoPackage.DISCHARGE_SLOT: return createDischargeSlot();
 			case CargoPackage.CARGO_MODEL: return createCargoModel();
@@ -110,16 +109,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public Cargo createCargo() {
 		CargoImpl cargo = new CargoImpl();
 		return cargo;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Slot createSlot() {
-		SlotImpl slot = new SlotImpl();
-		return slot;
 	}
 
 	/**
