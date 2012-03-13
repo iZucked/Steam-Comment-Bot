@@ -38,6 +38,12 @@ public interface IDisplayComposite {
 	public void setCommandHandler(ICommandHandler commandHandler);
 	
 	/**
+	 * Wrap controls from the next display() with this wrapper
+	 * @param wrapper
+	 */
+	public void setEditorWrapper(final IInlineEditorWrapper wrapper);
+	
+	/**
 	 * Should return a collection of the branches that this object might edit in its display.
 	 * 
 	 * This is useful for the editor dialogs, which need to take copies of any objects that might be edited

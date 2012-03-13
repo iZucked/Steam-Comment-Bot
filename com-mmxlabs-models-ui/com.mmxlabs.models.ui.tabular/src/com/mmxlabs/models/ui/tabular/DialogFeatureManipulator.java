@@ -104,7 +104,7 @@ public abstract class DialogFeatureManipulator extends BasicAttributeManipulator
 	
 	
 	@Override
-	protected String renderSetValue(Object setValue) {
+	protected String renderSetValue(Object o, Object setValue) {
 		return renderValue(setValue);
 	}
 

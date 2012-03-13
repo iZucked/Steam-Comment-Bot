@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
@@ -70,6 +72,8 @@ public interface IImportContext {
 		 */
 		public String getProblemDescription();
 	}
+	
+	public MMXRootObject getRootObject();
 	
 	/**
 	 * Get a named object which has been passed to {@link #registerNamedObject(NamedObject)} whose type

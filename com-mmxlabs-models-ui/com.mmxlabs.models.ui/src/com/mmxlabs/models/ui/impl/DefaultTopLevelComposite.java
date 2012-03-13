@@ -24,6 +24,7 @@ import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
+import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 
 /**
  * The default composite used to display an EObject
@@ -37,6 +38,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	private List<IDisplayComposite> childComposites = new LinkedList<IDisplayComposite>();
 	private ICommandHandler commandHandler;
 	private IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
+	private IInlineEditorWrapper editorWrapper = IInlineEditorWrapper.IDENTITY;
 
 	public DefaultTopLevelComposite(final Composite parent, final int style) {
 		super(parent, style);
@@ -52,6 +54,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().
 				getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass);
 		topLevel.setCommandHandler(commandHandler);
+		topLevel.setEditorWrapper(editorWrapper);
 		for (final EReference ref : eClass.getEAllReferences()) {
 			if (shouldDisplay(ref)) {
 				final EObject value = (EObject) object.eGet(ref);
@@ -65,6 +68,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 							getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass());
 					
 					sub.setCommandHandler(commandHandler);
+					sub.setEditorWrapper(editorWrapper);
 					childReferences.add(ref);
 					childComposites.add(sub);
 				}
@@ -107,6 +111,15 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		topLevel.displayValidationStatus(status);
 		for (final IDisplayComposite child : childComposites) {
 			child.displayValidationStatus(status);
+		}
+	}
+
+	@Override
+	public void setEditorWrapper(IInlineEditorWrapper wrapper) {
+		this.editorWrapper = wrapper;
+		topLevel.setEditorWrapper(editorWrapper);
+		for (final IDisplayComposite child : childComposites) {
+			child.setEditorWrapper(editorWrapper);
 		}
 	}
 }

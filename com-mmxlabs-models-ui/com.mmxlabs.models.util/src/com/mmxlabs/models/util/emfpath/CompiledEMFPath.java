@@ -11,6 +11,8 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.common.compilation.ITransformer;
 
 /**
+ * TODO - allow passing in of a classloader.
+ * 
  * @author Tom Hinton
  * 
  */

@@ -41,21 +41,21 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 	@Override
 	public String render(final Object object) {
 		if ((object instanceof EObject) && !((EObject) object).eIsSet(field)) {
-			return renderUnsetValue(
+			return renderUnsetValue(object, 
 					(object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) :
 						null);
 		} else {
-			return renderSetValue(
+			return renderSetValue(object, 
 					getValue(object)
 					);
 		}
 	}
 	
-	protected String renderUnsetValue(final Object unsetDefault) {
-		return renderSetValue(unsetDefault);
+	protected String renderUnsetValue(final Object container, final Object unsetDefault) {
+		return renderSetValue(container, unsetDefault);
 	}
 	
-	protected String renderSetValue(final Object setValue) {
+	protected String renderSetValue(final Object container, final Object setValue) {
 		return setValue == null ? "":setValue.toString();
 	}
 

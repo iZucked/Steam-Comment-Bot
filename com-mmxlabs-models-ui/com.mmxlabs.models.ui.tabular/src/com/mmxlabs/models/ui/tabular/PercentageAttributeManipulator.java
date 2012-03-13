@@ -23,7 +23,7 @@ public class PercentageAttributeManipulator extends NumericAttributeManipulator 
 	}
 
 	@Override
-	public String renderSetValue(final Object val) {
+	public String renderSetValue(final Object o, final Object val) {
 		if (val == null) {
 			return "";
 		}

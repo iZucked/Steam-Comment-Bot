@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -214,9 +215,19 @@ public class DefaultImportContext implements IImportContext {
 	}
 
 	private LinkedHashSet<IImportProblem> problems = new LinkedHashSet<IImportContext.IImportProblem>();
+	private MMXRootObject rootObject;
 	
 	@Override
 	public List<IImportProblem> getProblems() {
 		return new ArrayList<IImportProblem>(problems);
+	}
+
+	@Override
+	public MMXRootObject getRootObject() {
+		return rootObject;
+	}
+
+	public void setRootObject(MMXRootObject root) {
+		this.rootObject = root;
 	}
 }

@@ -38,12 +38,7 @@ public class DefaultDetailComposite extends Composite implements
 	private ICommandHandler commandHandler;
 	private EClass displayedClass;
 	private IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
-	private IInlineEditorWrapper wrapper = new IInlineEditorWrapper() {
-		@Override
-		public IInlineEditor wrap(IInlineEditor editor) {
-			return editor;
-		}
-	};
+	private IInlineEditorWrapper wrapper = IInlineEditorWrapper.IDENTITY;
 
 	public DefaultDetailComposite(final Composite parent, final int style) {
 		super(parent, style);
@@ -126,5 +121,10 @@ public class DefaultDetailComposite extends Composite implements
 	@Override
 	public void displayValidationStatus(IStatus status) {
 		for (final IInlineEditor editor : editors) editor.processValidation(status);
+	}
+
+	@Override
+	public void setEditorWrapper(final IInlineEditorWrapper wrapper) {
+		this.wrapper = wrapper;
 	}
 }

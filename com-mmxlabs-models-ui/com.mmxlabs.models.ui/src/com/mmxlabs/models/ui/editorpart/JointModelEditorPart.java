@@ -5,6 +5,8 @@
 package com.mmxlabs.models.ui.editorpart;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,30 +19,40 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edapt.migration.MigrationException;
+import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -54,15 +66,33 @@ import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
  * @author hinton
  *
  */
-public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider {
+public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider {
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
+	/**
+	 * This joint model instance should contain and provide the root object
+	 */
 	private JointModel jointModel;
+	/**
+	 * The root object from {@link #jointModel}
+	 */
 	private MMXRootObject rootObject;
 	
+	/**
+	 * The editing domain for controls to use. This is pretty standard, but hooks command creation to allow extra things there
+	 */
 	private AdapterFactoryEditingDomain editingDomain;
 	private ComposedAdapterFactory adapterFactory;
 	private BasicCommandStack commandStack;
-	private  IReferenceValueProviderProvider referenceValueProviderCache = null;
+	
+	/**
+	 * This caches reference value provider providers.
+	 */
+	private IReferenceValueProviderProvider referenceValueProviderCache = null;
+	private Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
+	/**
+	 * This holds the selection of the active viewer.
+	 */
+	private ISelection editorSelection = StructuredSelection.EMPTY;
 	
 	private List<IJointModelEditorContribution> contributions = new LinkedList<IJointModelEditorContribution>();
 	private ICommandHandler defaultCommandHandler = new ICommandHandler() {
@@ -83,6 +113,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		}
 	};
 	private boolean saving = false;
+	private Viewer currentViewer;
+	private ISelectionChangedListener selectionChangedListener;
 	
 	public JointModelEditorPart() {
 		
@@ -160,8 +192,28 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 							}
 						}
 						);
+				
+				final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker = 
+						Activator.getDefault().getCommandProviderTracker();
 				// create editing domain
-				editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
+				editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack) {
+					@Override
+					public Command createCommand(Class<? extends Command> commandClass, CommandParameter commandParameter) {
+						final Command normal = super.createCommand(commandClass, commandParameter);
+						
+						final CompoundCommand wrapper = new CompoundCommand();
+						wrapper.append(normal);
+						for (final IModelCommandProvider provider : commandProviderTracker.getServices(new IModelCommandProvider[0])) {
+							final Command addition = provider.provideAdditionalCommand(
+									getEditingDomain(),
+									getRootObject(), commandClass, commandParameter, normal);
+							if (addition != null) wrapper.append(addition);
+						}
+						
+						return wrapper.unwrap();
+					}
+				};
+				
 				// initialize extensions
 				
 				contributions = Activator.getDefault().getJointModelEditorContributionRegistry().initEditorContributions(this, root);
@@ -173,6 +225,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				throw new PartInitException("IO Exception loading joint model", e);
 			}
 		}
+		
+		site.setSelectionProvider(this);
 	}
 
 	@Override
@@ -240,5 +294,75 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	public MMXRootObject getRootObject() {
 		return rootObject;
+	}
+
+	@Override
+	public ISelection getSelection() {
+		return editorSelection;
+	}
+	
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		selectionChangedListeners.add(listener);
+	}
+	
+	@Override
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+		selectionChangedListeners.remove(listener);
+	}
+
+	@Override
+	public void setSelection(ISelection selection) {
+		this.editorSelection = selection;
+		final SelectionChangedEvent event = new SelectionChangedEvent(this, getSelection());
+		for (final ISelectionChangedListener l : selectionChangedListeners) {
+			l.selectionChanged(event);
+		}
+	}
+	
+	/**
+	 * This makes sure that one content viewer, either for the current page or the outline view, if it has focus, is the current one. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public void setCurrentViewer(final Viewer viewer) {
+		// If it is changing...
+		//
+		if (currentViewer != viewer) {
+			if (selectionChangedListener == null) {
+				// Create the listener on demand.
+				//
+				selectionChangedListener = new ISelectionChangedListener() {
+					// This just notifies those things that are affected by the
+					// section.
+					//
+					@Override
+					public void selectionChanged(final SelectionChangedEvent selectionChangedEvent) {
+						setSelection(selectionChangedEvent.getSelection());
+					}
+				};
+			}
+
+			// Stop listening to the old one.
+			//
+			if (currentViewer != null) {
+				currentViewer.removeSelectionChangedListener(selectionChangedListener);
+			}
+
+			// Start listening to the new one.
+			//
+			if (viewer != null) {
+				viewer.addSelectionChangedListener(selectionChangedListener);
+			}
+
+			// Remember it.
+			//
+			currentViewer = viewer;
+
+			// Set the editors selection based on the current viewer's
+			// selection.
+			//
+			setSelection(currentViewer == null ? StructuredSelection.EMPTY : currentViewer.getSelection());
+		}
 	}
 }

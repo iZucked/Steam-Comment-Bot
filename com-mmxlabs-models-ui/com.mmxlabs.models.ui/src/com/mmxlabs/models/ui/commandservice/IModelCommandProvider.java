@@ -1,0 +1,31 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
+package com.mmxlabs.models.ui.commandservice;
+
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.domain.EditingDomain;
+
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+
+/**
+ * An interface for things which override / extend commands
+ * 
+ * @author hinton
+ *
+ */
+public interface IModelCommandProvider {
+	/**
+	 * Given the input command, return an extra command which should happen after the input has executed.
+	 * @param input
+	 * @return
+	 */
+	public Command provideAdditionalCommand(
+			final EditingDomain editingDomain, 
+			final MMXRootObject rootObject,
+			final Class<? extends Command> commandClass, 
+			final CommandParameter parameter, 
+			final Command input);
+}
