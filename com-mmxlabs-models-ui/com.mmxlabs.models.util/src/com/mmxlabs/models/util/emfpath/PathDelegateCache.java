@@ -12,6 +12,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.compilation.ITransformer;
 import com.mmxlabs.common.compilation.InjectableClassLoader;
 import com.mmxlabs.common.compilation.MethodChainGenerator;
@@ -22,35 +23,37 @@ import com.mmxlabs.common.compilation.MethodChainGenerator;
  */
 public class PathDelegateCache {
 	private static final PathDelegateCache INSTANCE = new PathDelegateCache();
-	private final InjectableClassLoader loader = new InjectableClassLoader(getClass().getClassLoader());
+	
 	private final MethodChainGenerator generator = new MethodChainGenerator();
 	public static PathDelegateCache getInstance() {
 		return INSTANCE;
 	}
 
-	private final HashMap<List<Object>, ITransformer> cache = new HashMap<List<Object>, ITransformer>();
+	private final HashMap<Pair<ClassLoader, List<Object>>, ITransformer> cache = new HashMap<Pair<ClassLoader, List<Object>>, ITransformer>();
 	
 	protected PathDelegateCache() {
 
 	}
 
-	public synchronized ITransformer getPathDelegate(final List<Object> path) {
-		if (cache.containsKey(path)) {
-			return cache.get(path);
+	public synchronized ITransformer getPathDelegate(final ClassLoader loader, final List<Object> path) {
+		final Pair<ClassLoader, List<Object>> key = new Pair<ClassLoader, List<Object>>(loader, path);
+		if (cache.containsKey(key)) {
+			return cache.get(key);
 		} else {
-			final ITransformer answer = compileDelegate(path);
-			cache.put(path, answer);
+			final ITransformer answer = compileDelegate(new InjectableClassLoader(loader), path);
+			cache.put(key, answer);
 			return answer;
 		}
 	}
 
 	/**
 	 * Create a new delegate
+	 * @param injectableClassLoader 
 	 * @param path
 	 * @return
 	 */
 	private synchronized ITransformer compileDelegate(
-			final List<Object> path) {
+			InjectableClassLoader injectableClassLoader, final List<Object> path) {
 		final List<Method> methods = new LinkedList<Method>();
 		
 		// find Methods for ESF/EOps.
@@ -77,7 +80,7 @@ public class PathDelegateCache {
 		}
 		
 		final Class<ITransformer> tc = (Class<ITransformer>) generator
-				.createTransformer(methods, loader);
+				.createTransformer(methods, injectableClassLoader);
 		try {
 			return tc.newInstance();
 		} catch (final Exception ex) {

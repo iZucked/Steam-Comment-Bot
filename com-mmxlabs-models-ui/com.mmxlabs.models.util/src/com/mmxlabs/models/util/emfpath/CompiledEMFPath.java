@@ -23,10 +23,10 @@ public class CompiledEMFPath extends EMFPath {
 	 * @param failSilently
 	 * @param path
 	 */
-	public CompiledEMFPath(boolean failSilently, Object... path) {
+	public CompiledEMFPath(final ClassLoader loader, boolean failSilently, Object... path) {
 		super(failSilently, path);
 		if (failSilently) {
-			delegate = PathDelegateCache.getInstance().getPathDelegate(
+			delegate = PathDelegateCache.getInstance().getPathDelegate(loader, 
 					Arrays.asList(path));
 		} else {
 			delegate = null;
@@ -39,9 +39,9 @@ public class CompiledEMFPath extends EMFPath {
 	 * @param path
 	 * @param append
 	 */
-	public CompiledEMFPath(final EMFPath path,
+	public CompiledEMFPath(final ClassLoader loader, final EMFPath path,
 			final Object append) {
-		this(path.failSilently, appendPath(path, append));
+		this(loader, path.failSilently, appendPath(path, append));
 	}
 
 	/**
