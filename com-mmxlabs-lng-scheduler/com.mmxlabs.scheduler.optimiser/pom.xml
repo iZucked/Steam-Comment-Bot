@@ -1,9 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.mmxlabs.scheduler</groupId>
 	<artifactId>com.mmxlabs.scheduler.optimiser</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Scheduler - Optimiser</name>
 	<description>LNG Scheduler</description>
@@ -19,35 +18,35 @@
 		<dependency>
 			<groupId>com.mmxlabs.optimiser</groupId>
 			<artifactId>optimiser-common</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.0.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mmxlabs.optimiser</groupId>
 			<artifactId>optimiser-core</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.0.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mmxlabs.optimiser</groupId>
 			<artifactId>optimiser-lso</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.0.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mmxlabs.optimiser</groupId>
 			<artifactId>optimiser-ga</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.0.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mmxlabs.optimiser</groupId>
 			<artifactId>optimiser-lso</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.0.0-SNAPSHOT</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
