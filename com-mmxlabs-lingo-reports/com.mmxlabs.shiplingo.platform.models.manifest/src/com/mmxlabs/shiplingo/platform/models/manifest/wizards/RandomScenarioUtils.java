@@ -65,7 +65,7 @@ import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
+import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
  * A class for constructing the EMF representations of random test scenarios
@@ -93,7 +93,7 @@ public class RandomScenarioUtils {
 	}
 
 	public MMXRootObject createScenario() {
-		final MMXRootObject rootObject = DemoJointModel.createEmptyInstance();
+		final MMXRootObject rootObject = ManifestJointModel.createEmptyInstance();
 
 		return rootObject;
 	}
@@ -170,7 +170,7 @@ public class RandomScenarioUtils {
 
 			BaseFuelCost bfp400 = pricingFactory.createBaseFuelCost();
 			bfp400.setFuel(costs400);
-			bfp400.setPrice(idx);
+			bfp400.setPrice(400);
 			fleetCostModel.getBaseFuelPrices().add(bfp400);
 			pricingModel.getCommodityIndices().add(idx);
 
@@ -189,7 +189,7 @@ public class RandomScenarioUtils {
 
 			BaseFuelCost bfp = pricingFactory.createBaseFuelCost();
 			bfp.setFuel(costs600);
-			bfp.setPrice(idx);
+			bfp.setPrice(600);
 			fleetCostModel.getBaseFuelPrices().add(bfp);
 			pricingModel.getCommodityIndices().add(idx);
 
@@ -237,7 +237,7 @@ public class RandomScenarioUtils {
 			IndexPoint<Integer> p = pricingFactory.createIndexPoint();
 			p.setValue(4);
 			idx.getPoints().add(p);
-			charterCostModel.setSpotCharterCount(idx);
+			charterCostModel.setSpotCharterCount(4);
 			pricingModel.getCharterIndices().add(idx);
 			
 		}
