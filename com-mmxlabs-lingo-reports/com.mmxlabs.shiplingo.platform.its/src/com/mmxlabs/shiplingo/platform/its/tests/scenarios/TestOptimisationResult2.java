@@ -7,9 +7,10 @@ package com.mmxlabs.shiplingo.platform.its.tests.scenarios;
 import java.io.IOException;
 import java.net.URL;
 
+import org.eclipse.emf.edapt.migration.MigrationException;
 import org.junit.Test;
 
-import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
+import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 
 public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 
@@ -20,9 +21,10 @@ public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 	 * @throws IOException
 	 * @throws IncompleteScenarioException
 	 * @throws InterruptedException
+	 * @throws MigrationException 
 	 */
 	@Test
-	public void testFitnessRepeatability() throws IOException, IncompleteScenarioException, InterruptedException {
+	public void testFitnessRepeatability() throws IOException, InterruptedException, IncompleteScenarioException, MigrationException {
 
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/TestOptimisationResult2.scenario");
