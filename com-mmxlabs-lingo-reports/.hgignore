@@ -27,3 +27,7 @@ syntax: regexp
 
 syntax: regexp
 ^com\.mmxlabs\.rcp\.common\.tests/screenshots$
+syntax: regexp
+^com\.mmxlabs\.shiplingo\.platform\.doc/\.classpath$
+syntax: regexp
+^\.settings$

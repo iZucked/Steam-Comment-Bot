@@ -8,7 +8,6 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
-import com.mmxlabs.scheduleview.views.SchedulerView;
 import com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.CargoReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView;
@@ -17,6 +16,7 @@ import com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView;
 import com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerView;
 
 public class OptimisationPerspective implements IPerspectiveFactory {
 

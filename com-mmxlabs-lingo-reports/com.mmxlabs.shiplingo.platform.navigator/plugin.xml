@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.mmxlabs.shiplingo.platform.navigator.TheNavigator"
+            icon="icons/configure_build_path.gif"
+            id="com.mmxlabs.rcp.navigator"
+            name="Scenario Navigator">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerActionBinding
+            viewerId="com.mmxlabs.rcp.navigator">
+         <includes>
+            <actionExtension
+                  pattern="org.eclipse.ui.navigator.resources.*">
+            </actionExtension>
+            <actionExtension
+                  pattern="com.mmxlabs.rcp.navigator.*">
+            </actionExtension>
+         </includes>
+      </viewerActionBinding>
+      <viewerContentBinding
+            viewerId="com.mmxlabs.rcp.navigator">
+         <includes>
+            <contentExtension
+                  pattern="org.eclipse.ui.navigator.resourceContent">
+            </contentExtension>
+            <contentExtension
+                  pattern="org.eclipse.ui.navigator.resources.filters.*">
+            </contentExtension>
+            <contentExtension
+                  pattern="org.eclipse.ui.navigator.resources.linkHelper">
+            </contentExtension>
+            <contentExtension
+                  pattern="org.eclipse.ui.navigator.resources.workingSets">
+            </contentExtension>
+         </includes>
+      </viewerContentBinding>
+      <dragAssistant
+            class="org.eclipse.ui.navigator.resources.ResourceDragAdapterAssistant"
+            viewerId="com.mmxlabs.rcp.navigator">
+      </dragAssistant>
+   </extension>
+   
+      <extension
+            point="org.eclipse.ui.commands">
+         <category
+               id="com.mmxlabs.rcp.navigator.commands.category.optimisation"
+               name="Optimisation Commands">
+         </category>
+         <command
+               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
+               id="com.mmxlabs.rcp.navigator.commands.optimisation.play"
+               name="Start/Resume Optimisation">
+         </command>
+         <command
+               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
+               id="com.mmxlabs.rcp.navigator.commands.optimisation.pause"
+               name="Pause Optimisation">
+         </command>
+         <command
+               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
+               id="com.mmxlabs.rcp.navigator.commands.optimisation.terminate"
+               name="Terminate Optimisation">
+         </command>
+         <command
+               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
+               id="com.mmxlabs.rcp.navigator.commands.optimisation.save"
+               name="Save Optimisation">
+         </command>
+         <category
+               id="com.mmxlabs.rcp.navigator.commands.category.scenario"
+               name="Scenario Commands">
+         </category>
+         <command
+               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
+               id="com.mmxlabs.rcp.navigator.commands.optimisation.evaluate"
+               name="Evaluate Schedule">
+         </command>
+      </extension>
+      <extension
+            point="org.eclipse.ui.menus">
+         <menuContribution
+               locationURI="toolbar:com.mmxlabs.rcp.navigator">
+            <command
+                  commandId="com.mmxlabs.rcp.navigator.commands.optimisation.evaluate"
+                  icon="icons/evaluate_schedule.gif"
+                  id="com.mmxlabs.rcp.navigator.commands.optimisation.evaluate"
+                  label="Evaluate schedule"
+                  style="push"
+                  tooltip="Evaluate scenario">
+            </command>
+               <command
+                     commandId="com.mmxlabs.rcp.navigator.commands.optimisation.play"
+                     disabledIcon="icons/dlcl16/resume_co.gif"
+                     icon="icons/elcl16/resume_co.gif"
+                     id="com.mmxlabs.rcp.navigator.toolbars.optimisation.play"
+                     label="Start/Resume Optimisation"
+                     style="push"
+                     tooltip="Start or resume optimisations">
+               </command>
+               <command
+                     commandId="com.mmxlabs.rcp.navigator.commands.optimisation.pause"
+                     disabledIcon="icons/dlcl16/suspend_co.gif"
+                     icon="icons/elcl16/suspend_co.gif"
+                     id="com.mmxlabs.rcp.navigator.toolbars.optimisation.pause"
+                     label="Pause Optimisation"
+                     style="push"
+                     tooltip="Pause optimisations">
+               </command>
+               <command
+                     commandId="com.mmxlabs.rcp.navigator.commands.optimisation.terminate"
+                     disabledIcon="icons/dlcl16/terminate_co.gif"
+                     icon="icons/elcl16/terminate_co.gif"
+                     id="com.mmxlabs.rcp.navigator.toolbars.optimisation.terminate"
+                     label="Terminate Optimisation"
+                     style="push"
+                     tooltip="Terminate optimisations">
+               </command>
+               <command
+                     commandId="com.mmxlabs.rcp.navigator.commands.optimisation.save"
+                     disabledIcon="icons/dtool16/saveas_edit.gif"
+                     icon="icons/etool16/saveas_edit.gif"
+                     id="com.mmxlabs.rcp.navigator.toolbars.optimisation.save"
+                     label="Save Optimisation"
+                     mnemonic="S"
+                     style="push"
+                     tooltip="Save optimisations">
+               </command>
+         </menuContribution>
+      </extension>
+</plugin>

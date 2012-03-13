@@ -27,8 +27,8 @@ All rights reserved.
    <requires>
       <import feature="com.mmxlabs.models.lng.types.feature" version="1.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="1.0.0" match="compatible"/>
-	  <import feature="com.mmxlabs.models.ui.runtime.feature" version="1.0.0" match="compatible" />
-	  <import feature="com.mmxlabs.models.lng.ui.runtime.feature" version="1.0.0" match="compatible" />
+      <import feature="com.mmxlabs.models.ui.runtime.feature" version="1.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.models.lng.ui.runtime.feature" version="1.0.0" match="compatible"/>
    </requires>
 
    <plugin
@@ -67,7 +67,7 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.rcp.navigator"
+         id="com.mmxlabs.shiplingo.platform.navigator"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -81,7 +81,7 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.scheduleview"
+         id="com.mmxlabs.shiplingo.platform.scheduleview"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -188,6 +188,20 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.common.common-util"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.shiplingo.platform.models.manifest"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.shiplingo.platform.models.optimisation"
          download-size="0"
          install-size="0"
          version="0.0.0"

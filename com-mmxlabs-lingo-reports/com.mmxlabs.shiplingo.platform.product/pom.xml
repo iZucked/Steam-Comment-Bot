@@ -43,8 +43,8 @@
 				<configuration>
 					<products>
 						<product>
-							<id>com.mmxlabs.demo.app.product.id</id>
-							<attachId>com.mmxlabs.demo.app.product</attachId>
+							<id>com.mmxlabs.shiplingo.platform.app.product.id</id>
+							<attachId>com.mmxlabs.shiplingo.platform.app.product</attachId>
 							<rootFolder>ShipLingo</rootFolder>
 						</product>
 					</products>
