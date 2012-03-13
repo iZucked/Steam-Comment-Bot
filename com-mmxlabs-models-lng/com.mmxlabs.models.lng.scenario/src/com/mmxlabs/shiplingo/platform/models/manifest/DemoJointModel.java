@@ -137,17 +137,7 @@ public class DemoJointModel extends JointModel {
 	}
 
 	public static DemoJointModel createEmptyModel(final URI target) throws IOException {
-		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-		rootObject.setVersion(releases.size());
-		//TODO sort out how to create blank models; should there be an extension for this?
-		rootObject.addSubModel(PortFactory.eINSTANCE.createPortModel());
-		rootObject.addSubModel(FleetFactory.eINSTANCE.createFleetModel());
-		rootObject.addSubModel(CargoFactory.eINSTANCE.createCargoModel());
-		rootObject.addSubModel(PricingFactory.eINSTANCE.createPricingModel());
-		rootObject.addSubModel(InputFactory.eINSTANCE.createInputModel());
-		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
-		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
-		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
+		final MMXRootObject rootObject = createEmptyInstance();
 		
 		{
 		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
@@ -184,6 +174,21 @@ public class DemoJointModel extends JointModel {
 		
 		final DemoJointModel result = new DemoJointModel(rootObject, target);
 		return result;
+	}
+
+	public static MMXRootObject createEmptyInstance() {
+		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
+		rootObject.setVersion(releases.size());
+		//TODO sort out how to create blank models; should there be an extension for this?
+		rootObject.addSubModel(PortFactory.eINSTANCE.createPortModel());
+		rootObject.addSubModel(FleetFactory.eINSTANCE.createFleetModel());
+		rootObject.addSubModel(CargoFactory.eINSTANCE.createCargoModel());
+		rootObject.addSubModel(PricingFactory.eINSTANCE.createPricingModel());
+		rootObject.addSubModel(InputFactory.eINSTANCE.createInputModel());
+		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
+		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
+		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
+		return rootObject;
 	}
 	
 	public DemoJointModel(final MMXRootObject rootObject, final URI file_) throws IOException {
