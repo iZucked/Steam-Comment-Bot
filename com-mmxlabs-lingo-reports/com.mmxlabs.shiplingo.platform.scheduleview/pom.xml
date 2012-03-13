@@ -8,8 +8,7 @@
 		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
 		<version>1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.mmxlabs.scheduleview</groupId>
-	<artifactId>com.mmxlabs.scheduleview</artifactId>
+	<artifactId>com.mmxlabs.shiplingo.platform.scheduleview</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
