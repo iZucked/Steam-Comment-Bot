@@ -31,6 +31,7 @@ import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.models.lng.transformer.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
 
 public class RandomScenarioWizard extends Wizard implements INewWizard {
 	private IWorkbench workbench;
@@ -99,15 +100,13 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 
 		final URI fileURI = URI.createFileURI(outputFileName);
 
-		// save scenario to file
-		final ResourceSet resourceSet = new ResourceSetImpl();
-		final Resource resource = resourceSet.createResource(fileURI);
-
-		resource.getContents().add(scenario);
-
 		try {
-			resource.save(new HashMap<Object, Object>());
+			// save scenario to file
+			DemoJointModel model = new DemoJointModel(scenario, fileURI);
+			model.save();
+
 		} catch (final IOException e) {
+			e.printStackTrace();
 			return false;
 		}
 

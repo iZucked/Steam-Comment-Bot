@@ -20,8 +20,6 @@ import java.util.Random;
 
 import javax.management.timer.Timer;
 
-import org.eclipse.emf.common.util.EList;
-
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.common.csv.DistanceImporter;
@@ -61,7 +59,6 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
@@ -162,41 +159,44 @@ public class RandomScenarioUtils {
 		PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
 		FleetCostModel fleetCostModel = pricingFactory.createFleetCostModel();
 		pricingModel.setFleetCost(fleetCostModel);
-		
+
 		{
 			DataIndex<Double> idx = pricingFactory.createDataIndex();
 			idx.setName("MDO");
-			
+
 			IndexPoint<Double> p = pricingFactory.createIndexPoint();
 			p.setValue(400.0);
 			idx.getPoints().add(p);
-			
+
 			BaseFuelCost bfp400 = pricingFactory.createBaseFuelCost();
 			bfp400.setFuel(costs400);
 			bfp400.setPrice(idx);
 			fleetCostModel.getBaseFuelPrices().add(bfp400);
-			
+			pricingModel.getCommodityIndices().add(idx);
+
 		}
 
-		
 		final BaseFuel costs600 = FleetFactory.eINSTANCE.createBaseFuel();
 		costs600.setName("HFO");
 		costs600.setEquivalenceFactor(0.5f);
 		{
 			DataIndex<Double> idx = pricingFactory.createDataIndex();
 			idx.setName("HFO");
-			
+
 			IndexPoint<Double> p = pricingFactory.createIndexPoint();
 			p.setValue(400.0);
 			idx.getPoints().add(p);
-			
+
 			BaseFuelCost bfp = pricingFactory.createBaseFuelCost();
 			bfp.setFuel(costs600);
 			bfp.setPrice(idx);
 			fleetCostModel.getBaseFuelPrices().add(bfp);
-			
+			pricingModel.getCommodityIndices().add(idx);
+
 		}
-		
+		FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
+		fleetModel.getBaseFuels().add(costs400);
+		fleetModel.getBaseFuels().add(costs600);
 		// create class parameters; currently model uses containment for curves,
 		// so we need to do duplicates
 		steam_138.setLadenAttributes(createVesselStateAttributes(200, 180, 50, steamLaden));
@@ -215,7 +215,6 @@ public class RandomScenarioUtils {
 		steam_126.setBallastAttributes(createVesselStateAttributes(180, 100, 50, steamBallast));
 		steam_126.setBaseFuel(costs400);
 
-		
 		CharterCostModel charterCostModel = pricingFactory.createCharterCostModel();
 		{
 			DataIndex<Integer> idx = pricingFactory.createDataIndex();
@@ -223,6 +222,7 @@ public class RandomScenarioUtils {
 			p.setValue(100000);
 			idx.getPoints().add(p);
 			charterCostModel.setCharterInPrice(idx);
+			pricingModel.getCharterIndices().add(idx);
 		}
 		{
 			DataIndex<Integer> idx = pricingFactory.createDataIndex();
@@ -230,6 +230,7 @@ public class RandomScenarioUtils {
 			p.setValue(80000);
 			idx.getPoints().add(p);
 			charterCostModel.setCharterOutPrice(idx);
+			pricingModel.getCharterIndices().add(idx);
 		}
 		{
 			DataIndex<Integer> idx = pricingFactory.createDataIndex();
@@ -237,10 +238,12 @@ public class RandomScenarioUtils {
 			p.setValue(4);
 			idx.getPoints().add(p);
 			charterCostModel.setSpotCharterCount(idx);
+			pricingModel.getCharterIndices().add(idx);
+			
 		}
-		
+
 		fleetCostModel.getCharterCosts().add(charterCostModel);
-		
+
 		// create vessels in each class
 
 		randomiseAvailability(scenario, addVessel(scenario, "Methane Kari Elin", steam_138));
@@ -315,14 +318,13 @@ public class RandomScenarioUtils {
 		loadEntity.setName("load entity");
 		dischargeEntity.setName("discharge entity");
 		shipEntity.setName("shipping entity");
-		
+
 		commercialModel.getEntities().add(loadEntity);
 		commercialModel.getEntities().add(dischargeEntity);
 		// Contained here
 		commercialModel.getEntities().add(shipEntity);
 		// But referenced here
 		commercialModel.setShippingEntity(shipEntity);
-
 
 		final IndexPriceContract dischargeContract = commercialFactory.createIndexPriceContract();
 		final IndexPriceContract loadContract = commercialFactory.createIndexPriceContract();
@@ -519,9 +521,9 @@ public class RandomScenarioUtils {
 		dischargeSlot.setPort(dischargePort);
 
 		// How quickly can the fastest vessel arrive (days)
-		final int minTravelTime = (int) Math.ceil(Calculator.getTimeFromSpeedDistance((int)Calculator.scale(20), line.getDistance()) / 24.0);
+		final int minTravelTime = (int) Math.ceil(Calculator.getTimeFromSpeedDistance((int) Calculator.scale(20), line.getDistance()) / 24.0);
 		// How slowly can the slowest vessel arrive (days)
-		final int maxTravelTime = (int) Math.ceil(Calculator.getTimeFromSpeedDistance((int)Calculator.scale(12), line.getDistance()) / 24.0);
+		final int maxTravelTime = (int) Math.ceil(Calculator.getTimeFromSpeedDistance((int) Calculator.scale(12), line.getDistance()) / 24.0);
 
 		// Pick load start time window day
 		final int startDay = random.nextInt(scenarioDuration);
@@ -562,6 +564,8 @@ public class RandomScenarioUtils {
 		cargo.setDischargeSlot(dischargeSlot);
 
 		cargoModel.getCargos().add(cargo);
+		cargoModel.getLoadSlots().add(loadSlot);
+		cargoModel.getDischargeSlots().add(dischargeSlot);
 	}
 
 	/**
@@ -603,7 +607,7 @@ public class RandomScenarioUtils {
 		for (final double[] point : curve) {
 			final FuelConsumption line = fleetFactory.createFuelConsumption();
 			line.setSpeed(point[0]);
-			line.setConsumption((int)point[1]);
+			line.setConsumption((int) point[1]);
 			vsa.getFuelConsumption().add(line);
 		}
 
@@ -636,7 +640,7 @@ public class RandomScenarioUtils {
 
 		FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
 		CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
-		
+
 		// narrow initial TW for now
 		final long now = (new Date()).getTime();
 		final int size = random.nextInt(maxSize - minSize) + minSize;
@@ -660,11 +664,11 @@ public class RandomScenarioUtils {
 	 * @param addVessel
 	 */
 	private void randomiseAvailability(final MMXRootObject scenario, final Vessel addVessel) {
-		// TODO: This method did not do a lot... 
-//		// Add a random start constraint.
-//		final PortAndTime start = fleetFactory.createPortAndTime();
-//		final EList<Port> ports = scenario.getPortModel().getPorts();
-//		start.setPort(ports.get(random.nextInt(ports.size())));
+		// TODO: This method did not do a lot...
+		// // Add a random start constraint.
+		// final PortAndTime start = fleetFactory.createPortAndTime();
+		// final EList<Port> ports = scenario.getPortModel().getPorts();
+		// start.setPort(ports.get(random.nextInt(ports.size())));
 	}
 
 	/**
