@@ -24,7 +24,7 @@ import java.io.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
 
-import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
+import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
  * This is a sample new wizard. Its role is to create a new file 
@@ -145,7 +145,7 @@ public class EmptyScenarioWizard extends Wizard implements INewWizard {
 	private InputStream openContentStream() {
 		try {
 			final File tempFile = File.createTempFile(UUID.randomUUID() + "", "scn");
-			final DemoJointModel model = DemoJointModel.createEmptyModel(URI.createFileURI(tempFile.getCanonicalPath()));
+			final ManifestJointModel model = ManifestJointModel.createEmptyModel(URI.createFileURI(tempFile.getCanonicalPath()));
 			model.save();
 			tempFile.deleteOnExit();
 			return new FileInputStream(tempFile);

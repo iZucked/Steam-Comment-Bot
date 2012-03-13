@@ -19,7 +19,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
+import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 
 public class ImportCSVWizardPage extends WizardNewFileCreationPage {
@@ -50,7 +50,7 @@ public class ImportCSVWizardPage extends WizardNewFileCreationPage {
 			final MMXRootObject root = previousPage.getRootObject();
 			final File tempFile = File.createTempFile(UUID.randomUUID().toString(), "scn");
 			tempFile.deleteOnExit();
-			final DemoJointModel djm = new DemoJointModel(root, URI.createFileURI(tempFile.getCanonicalPath()));
+			final ManifestJointModel djm = new ManifestJointModel(root, URI.createFileURI(tempFile.getCanonicalPath()));
 			djm.save();
 			return new FileInputStream(tempFile);
 		} catch (FileNotFoundException e) {

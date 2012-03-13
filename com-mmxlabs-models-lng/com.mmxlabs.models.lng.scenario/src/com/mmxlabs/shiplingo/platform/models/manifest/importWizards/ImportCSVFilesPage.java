@@ -33,7 +33,7 @@ import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
-import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
+import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 public class ImportCSVFilesPage extends WizardPage {
 	private class Chunk {
@@ -77,7 +77,7 @@ public class ImportCSVFilesPage extends WizardPage {
 	public void createControl(Composite arg0) {
 		final Composite top = new Composite(arg0, SWT.NONE);
 		top.setLayout(new GridLayout(1, false));
-		for (final EClass subModelClass : DemoJointModel.getSubmodelClasses()) {
+		for (final EClass subModelClass : ManifestJointModel.getSubmodelClasses()) {
 			final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(subModelClass);
 			if (importer == null) continue;
 			final Chunk chunk = new Chunk(subModelClass, importer);
