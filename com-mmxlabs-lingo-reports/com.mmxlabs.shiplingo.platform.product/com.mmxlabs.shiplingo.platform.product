@@ -39,6 +39,9 @@
       <feature id="com.mmxlabs.models.lng.transformer.feature"/>
       <feature id="com.mmxlabs.models.lng.types.feature"/>
       <feature id="com.mmxlabs.models.ui.runtime.feature"/>
+      <feature id="com.mmxlabs.models.mmxcore.runtime.feature"/>
+      <feature id="com.mmxlabs.models.lng.ui.runtime.feature"/>
+      <feature id="com.mmxlabs.rcp.common.feature"/>
    </features>
 
    <configurations>
