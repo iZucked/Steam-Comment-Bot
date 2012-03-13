@@ -11,13 +11,12 @@ syntax: regexp
 ^com\.mmxlabs\.jobmanager\.eclipse/target$
 syntax: regexp
 ^com\.mmxlabs\.jobmanager\.tests/target$
+syntax: regexp
+^com\.mmxlabs\.jobmanager\.p2/target$
+syntax: regexp
+^com\.mmxlabs\.jobmanager\.p2/.settings$
 
 syntax: regexp
 ^com\.mmxlabs\.jobmanager\.ipc/target$
 syntax: regexp
 ^com\.mmxlabs\.jobmanager\.ipc\.runner/target$
-
-syntax: regexp
-^com\.mmxlabs\.jobmanager\.p2/\.settings$
-syntax: regexp
-^com\.mmxlabs\.jobmanager\.p2/target$
