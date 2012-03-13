@@ -17,7 +17,6 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getCargoType <em>Cargo Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
  * </ul>
@@ -79,35 +78,6 @@ public interface Cargo extends ACargo {
 	 * @generated
 	 */
 	void setDischargeSlot(DischargeSlot value);
-
-	/**
-	 * Returns the value of the '<em><b>Cargo Type</b></em>' attribute.
-	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.cargo.CargoType}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Cargo Type</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cargo Type</em>' attribute.
-	 * @see com.mmxlabs.models.lng.cargo.CargoType
-	 * @see #setCargoType(CargoType)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_CargoType()
-	 * @model required="true"
-	 * @generated
-	 */
-	CargoType getCargoType();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Cargo#getCargoType <em>Cargo Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cargo Type</em>' attribute.
-	 * @see com.mmxlabs.models.lng.cargo.CargoType
-	 * @see #getCargoType()
-	 * @generated
-	 */
-	void setCargoType(CargoType value);
 
 	/**
 	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.

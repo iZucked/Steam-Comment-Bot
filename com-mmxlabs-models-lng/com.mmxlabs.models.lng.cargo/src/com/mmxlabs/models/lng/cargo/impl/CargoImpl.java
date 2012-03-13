@@ -31,7 +31,6 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getCargoType <em>Cargo Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  * </ul>
@@ -59,26 +58,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * @ordered
 	 */
 	protected DischargeSlot dischargeSlot;
-
-	/**
-	 * The default value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCargoType()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final CargoType CARGO_TYPE_EDEFAULT = CargoType.FLEET;
-
-	/**
-	 * The cached value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCargoType()
-	 * @generated
-	 * @ordered
-	 */
-	protected CargoType cargoType = CARGO_TYPE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isAllowRewiring() <em>Allow Rewiring</em>}' attribute.
@@ -219,27 +198,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CargoType getCargoType() {
-		return cargoType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCargoType(CargoType newCargoType) {
-		CargoType oldCargoType = cargoType;
-		cargoType = newCargoType == null ? CARGO_TYPE_EDEFAULT : newCargoType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__CARGO_TYPE, oldCargoType, cargoType));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public boolean isAllowRewiring() {
 		return allowRewiring;
 	}
@@ -307,8 +265,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				if (resolve) return getDischargeSlot();
 				return basicGetDischargeSlot();
-			case CargoPackage.CARGO__CARGO_TYPE:
-				return getCargoType();
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				return isAllowRewiring();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
@@ -331,9 +287,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				return;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				setDischargeSlot((DischargeSlot)newValue);
-				return;
-			case CargoPackage.CARGO__CARGO_TYPE:
-				setCargoType((CargoType)newValue);
 				return;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				setAllowRewiring((Boolean)newValue);
@@ -360,9 +313,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				setDischargeSlot((DischargeSlot)null);
 				return;
-			case CargoPackage.CARGO__CARGO_TYPE:
-				setCargoType(CARGO_TYPE_EDEFAULT);
-				return;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				unsetAllowRewiring();
 				return;
@@ -385,8 +335,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				return loadSlot != null;
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				return dischargeSlot != null;
-			case CargoPackage.CARGO__CARGO_TYPE:
-				return cargoType != CARGO_TYPE_EDEFAULT;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				return isSetAllowRewiring();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
@@ -405,9 +353,7 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (cargoType: ");
-		result.append(cargoType);
-		result.append(", allowRewiring: ");
+		result.append(" (allowRewiring: ");
 		if (allowRewiringESet) result.append(allowRewiring); else result.append("<unset>");
 		result.append(')');
 		return result.toString();

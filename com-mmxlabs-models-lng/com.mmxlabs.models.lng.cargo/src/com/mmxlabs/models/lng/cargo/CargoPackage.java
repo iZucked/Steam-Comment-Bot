@@ -127,22 +127,13 @@ public interface CargoPackage extends EPackage {
 	int CARGO__DISCHARGE_SLOT = TypesPackage.ACARGO_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Cargo Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO__CARGO_TYPE = TypesPackage.ACARGO_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Allow Rewiring</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOW_REWIRING = TypesPackage.ACARGO_FEATURE_COUNT + 3;
+	int CARGO__ALLOW_REWIRING = TypesPackage.ACARGO_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -151,7 +142,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOWED_VESSELS = TypesPackage.ACARGO_FEATURE_COUNT + 4;
+	int CARGO__ALLOWED_VESSELS = TypesPackage.ACARGO_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
@@ -160,7 +151,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 5;
+	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl <em>Slot</em>}' class.
@@ -1069,17 +1060,6 @@ public interface CargoPackage extends EPackage {
 	EReference getCargo_DischargeSlot();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Cargo#getCargoType <em>Cargo Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cargo Type</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Cargo#getCargoType()
-	 * @see #getCargo()
-	 * @generated
-	 */
-	EAttribute getCargo_CargoType();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1393,14 +1373,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO__DISCHARGE_SLOT = eINSTANCE.getCargo_DischargeSlot();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargo Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CARGO__CARGO_TYPE = eINSTANCE.getCargo_CargoType();
 
 		/**
 		 * The meta object literal for the '<em><b>Allow Rewiring</b></em>' attribute feature.

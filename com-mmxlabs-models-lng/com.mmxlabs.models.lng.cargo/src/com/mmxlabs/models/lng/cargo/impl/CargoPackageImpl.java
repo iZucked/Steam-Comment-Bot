@@ -194,7 +194,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCargo_CargoType() {
+	public EAttribute getCargo_AllowRewiring() {
 		return (EAttribute)cargoEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -203,17 +203,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCargo_AllowRewiring() {
-		return (EAttribute)cargoEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getCargo_AllowedVessels() {
-		return (EReference)cargoEClass.getEStructuralFeatures().get(4);
+		return (EReference)cargoEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -454,7 +445,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		cargoEClass = createEClass(CARGO);
 		createEReference(cargoEClass, CARGO__LOAD_SLOT);
 		createEReference(cargoEClass, CARGO__DISCHARGE_SLOT);
-		createEAttribute(cargoEClass, CARGO__CARGO_TYPE);
 		createEAttribute(cargoEClass, CARGO__ALLOW_REWIRING);
 		createEReference(cargoEClass, CARGO__ALLOWED_VESSELS);
 
@@ -540,7 +530,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(cargoEClass, Cargo.class, "Cargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCargo_LoadSlot(), this.getLoadSlot(), null, "loadSlot", null, 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargo_DischargeSlot(), this.getDischargeSlot(), null, "dischargeSlot", null, 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCargo_CargoType(), this.getCargoType(), "cargoType", null, 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargo_AllowRewiring(), ecorePackage.getEBoolean(), "allowRewiring", null, 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargo_AllowedVessels(), theTypesPackage.getAVesselSet(), null, "allowedVessels", null, 0, -1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -571,7 +560,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLoadSlot_ArriveCold(), ecorePackage.getEBoolean(), "arriveCold", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(loadSlotEClass, ecorePackage.getEInt(), "getSlotOrPortCV", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(loadSlotEClass, ecorePackage.getEDouble(), "getSlotOrPortCV", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(dischargeSlotEClass, DischargeSlot.class, "DischargeSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -595,6 +584,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.mmxlabs.com/models/lng/ui/datetime
+		createDatetimeAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/lng/ui/datetime</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createDatetimeAnnotations() {
+		String source = "http://www.mmxlabs.com/models/lng/ui/datetime";		
+		addAnnotation
+		  (getSlot_WindowStart(), 
+		   source, 
+		   new String[] {
+			 "showTime", "false"
+		   });
 	}
 
 } //CargoPackageImpl

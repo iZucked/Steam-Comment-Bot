@@ -65,7 +65,6 @@ public class CargoItemProvider
 
 			addLoadSlotPropertyDescriptor(object);
 			addDischargeSlotPropertyDescriptor(object);
-			addCargoTypePropertyDescriptor(object);
 			addAllowRewiringPropertyDescriptor(object);
 			addAllowedVesselsPropertyDescriptor(object);
 		}
@@ -112,28 +111,6 @@ public class CargoItemProvider
 				 false,
 				 true,
 				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Cargo Type feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCargoTypePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Cargo_cargoType_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Cargo_cargoType_feature", "_UI_Cargo_type"),
-				 CargoPackage.Literals.CARGO__CARGO_TYPE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -219,7 +196,6 @@ public class CargoItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Cargo.class)) {
-			case CargoPackage.CARGO__CARGO_TYPE:
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

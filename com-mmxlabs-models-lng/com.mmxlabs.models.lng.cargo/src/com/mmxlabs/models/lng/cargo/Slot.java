@@ -47,6 +47,7 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	 * @see #setWindowStart(Date)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowStart()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/lng/ui/datetime showTime='false'"
 	 * @generated
 	 */
 	Date getWindowStart();
