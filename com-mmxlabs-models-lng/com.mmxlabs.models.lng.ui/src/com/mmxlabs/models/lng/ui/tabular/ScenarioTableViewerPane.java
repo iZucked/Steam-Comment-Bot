@@ -6,12 +6,14 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
@@ -21,6 +23,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
+import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -140,9 +143,42 @@ public class ScenarioTableViewerPane extends ViewerPane {
 						return jointModelEditorPart.getDefaultCommandHandler();
 					}
 				});
-		if (addAction != null)
+		if (addAction != null) {
 			toolbar.appendToGroup("addremove", addAction);
+		}
+		final Action deleteAction = createDeleteAction();
+		if (deleteAction != null) {
+			toolbar.appendToGroup("addremove", deleteAction);
+		}
 		
 		toolbar.update(true);
+	}
+	
+	protected Action createDeleteAction() {
+		return new ScenarioModifyingAction("Delete") {
+			{
+				jointModelEditorPart.addSelectionChangedListener(this);
+			}
+			@Override
+			public void run() {
+				final ISelection sel = getLastSelection();
+				if (sel instanceof IStructuredSelection) {
+					final EditingDomain ed = jointModelEditorPart.getEditingDomain();
+					final List objects = ((IStructuredSelection) sel).toList();
+					ed.getCommandStack().execute(DeleteCommand.create(ed, objects));
+				}
+			}
+
+			@Override
+			protected boolean isApplicableToSelection(ISelection selection) {
+				return selection.isEmpty() == false && selection instanceof IStructuredSelection;
+			}
+		};
+	}
+
+	@Override
+	protected void requestActivation() {
+		super.requestActivation();
+		jointModelEditorPart.setCurrentViewer(scenarioViewer);
 	}
 }

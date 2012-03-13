@@ -36,14 +36,14 @@ public class DateAttributeManipulator extends BasicAttributeManipulator {
 	}
 	
 	@Override
-	public String renderSetValue(Object object) {
+	public String renderSetValue(final Object owner, Object object) {
 		if (!(object instanceof Date)) {
 			return "";
 		}
 		
 		final Date date = (Date) object;
 		
-		final Calendar calendar = Calendar.getInstance(LocalDateUtil.getTimeZone(object, (EAttribute) field));
+		final Calendar calendar = Calendar.getInstance(LocalDateUtil.getTimeZone(owner, (EAttribute) field));
 		calendar.setTime(date);
 		
 		final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
