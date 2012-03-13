@@ -91,4 +91,22 @@
           subModelImporterClass="com.mmxlabs.models.lng.optimiser.importers.OptimiserModelImporter">
     </submodelImporter>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.optimiser.editor.settingsFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Settings"
+          targetEClass="com.mmxlabs.models.lng.optimiser.OptimiserSettings">
+    </factory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.optimiser.editor.optimiserEditor"
+          implementation="com.mmxlabs.models.lng.optimiser.ui.editorpart.OptimiserModelEditorContribution"
+          priority="9"
+          subModelClass="com.mmxlabs.models.lng.optimiser.OptimiserModel">
+    </jointModelEditor>
+ </extension>
 </plugin>
