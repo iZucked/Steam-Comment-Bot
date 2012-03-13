@@ -7,7 +7,6 @@ package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.scenario;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
