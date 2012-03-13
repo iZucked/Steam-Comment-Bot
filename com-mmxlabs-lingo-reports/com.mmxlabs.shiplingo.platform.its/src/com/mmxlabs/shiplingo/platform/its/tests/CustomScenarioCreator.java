@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.wizards;
+package com.mmxlabs.shiplingo.platform.its.tests;
 
 import java.util.ArrayList;
 import java.util.Arrays;
