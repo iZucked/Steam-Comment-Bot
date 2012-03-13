@@ -8,11 +8,13 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IWorkbenchPage;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
 /**
@@ -37,10 +39,14 @@ public class BaseFuelPricingPane extends ScenarioTableViewerPane {
 				new SingleReferenceManipulator(PricingPackage.eINSTANCE.getBaseFuelCost_Fuel(), 
 						getReferenceValueProviderCache(), getEditingDomain()));
 		
-		addTypicalColumn("Commodity Index", 
-				new SingleReferenceManipulator(PricingPackage.eINSTANCE.getBaseFuelCost_Price(), 
-						getReferenceValueProviderCache(), getEditingDomain()));
-		
+		addTypicalColumn("Unit Price", 
+				new NumericAttributeManipulator(PricingPackage.eINSTANCE.getBaseFuelCost_Price(), getEditingDomain()));
+
 		defaultSetTitle("Base Fuel Pricing");
+	}
+
+	@Override
+	protected Action createDeleteAction() {
+		return null;
 	}
 }

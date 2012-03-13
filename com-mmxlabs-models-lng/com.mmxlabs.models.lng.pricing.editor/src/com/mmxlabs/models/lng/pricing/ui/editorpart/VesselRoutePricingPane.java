@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IWorkbenchPage;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -37,5 +38,10 @@ public class VesselRoutePricingPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Ballast Toll", new NumericAttributeManipulator(PricingPackage.eINSTANCE.getRouteCost_BallastCost(), getEditingDomain()));
 		
 		defaultSetTitle("Route Pricing");
+	}
+
+	@Override
+	protected Action createDeleteAction() {
+		return null;
 	}
 }
