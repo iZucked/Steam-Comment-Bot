@@ -101,7 +101,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements 
 		public void widgetDisposed(final DisposeEvent e) {
 			if (e.widget == tooltipControl) {
 				if (input != null) {
-					input.eAdapters().remove(this);
+					input.eAdapters().remove(BasicAttributeInlineEditor.this);
 				}
 				e.widget.removeDisposeListener(this);
 			}
