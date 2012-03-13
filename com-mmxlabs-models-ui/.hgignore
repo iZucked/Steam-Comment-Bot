@@ -2,3 +2,8 @@ syntax: regexp
 ^.*/bin$
 syntax: regexp
 ^.*/target$
+
+syntax: regexp
+^\.settings$
+syntax: regexp
+^\.project$
