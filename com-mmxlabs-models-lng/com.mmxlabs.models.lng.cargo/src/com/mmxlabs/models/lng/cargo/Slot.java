@@ -31,7 +31,7 @@ import java.util.Date;
  * </p>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface Slot extends ASlot, ITimezoneProvider {

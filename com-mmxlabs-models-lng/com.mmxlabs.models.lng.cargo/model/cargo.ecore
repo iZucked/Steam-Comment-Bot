@@ -14,7 +14,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Slot" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASlot platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
+  <eClassifiers xsi:type="ecore:EClass" name="Slot" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASlot platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
     <eOperations name="getSlotOrPortDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrContractMinQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrContractMaxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
