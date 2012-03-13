@@ -136,6 +136,7 @@ public class ManifestJointModel extends JointModel {
 		return false;
 	}
 
+
 	public static ManifestJointModel createEmptyModel(final URI target) throws IOException {
 		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 		rootObject.setVersion(releases.size());
@@ -149,41 +150,23 @@ public class ManifestJointModel extends JointModel {
 		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
 		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
 		
-		{
-		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-		final LoadSlot ls = CargoFactory.eINSTANCE.createLoadSlot();
-		final DischargeSlot ds = CargoFactory.eINSTANCE.createDischargeSlot();
-		final Cargo c = CargoFactory.eINSTANCE.createCargo();
-		c.setLoadSlot(ls);
-		c.setDischargeSlot(ds);
-		
-		cargoModel.getCargos().add(c);
-		cargoModel.getLoadSlots().add(ls);
-		cargoModel.getDischargeSlots().add(ds);
-		}
-		
-		{
-		final PortModel portModel = rootObject.getSubModel(PortModel.class);
-		final Port p = PortFactory.eINSTANCE.createPort();
-		p.setName("my fav. port");
-		portModel.getPorts().add(p);
-		}
-		
-		{
-			final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
-			final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
-			vc.setName("VC 1");
-			final Vessel v = FleetFactory.eINSTANCE.createVessel();
-			v.setVesselClass(vc);
-			v.setName("V1");
-			fleetModel.getVessels().add(v);
-			fleetModel.getVesselClasses().add(vc);
-			final VesselAvailablility a = FleetFactory.eINSTANCE.createVesselAvailablility();
-			v.setAvailability(a);
-		}
-		
 		final ManifestJointModel result = new ManifestJointModel(rootObject, target);
 		return result;
+	}
+
+	public static MMXRootObject createEmptyInstance() {
+		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
+		rootObject.setVersion(releases.size());
+		//TODO sort out how to create blank models; should there be an extension for this?
+		rootObject.addSubModel(PortFactory.eINSTANCE.createPortModel());
+		rootObject.addSubModel(FleetFactory.eINSTANCE.createFleetModel());
+		rootObject.addSubModel(CargoFactory.eINSTANCE.createCargoModel());
+		rootObject.addSubModel(PricingFactory.eINSTANCE.createPricingModel());
+		rootObject.addSubModel(InputFactory.eINSTANCE.createInputModel());
+		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
+		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
+		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
+		return rootObject;
 	}
 	
 	public ManifestJointModel(final MMXRootObject rootObject, final URI file_) throws IOException {

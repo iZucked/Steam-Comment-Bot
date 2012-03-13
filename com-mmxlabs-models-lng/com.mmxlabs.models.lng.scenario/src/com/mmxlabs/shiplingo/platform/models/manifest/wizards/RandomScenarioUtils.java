@@ -20,52 +20,52 @@ import java.util.Random;
 
 import javax.management.timer.Timer;
 
-import org.eclipse.emf.common.util.EList;
-
-import scenario.Scenario;
-import scenario.ScenarioFactory;
-import scenario.ScenarioPackage;
-import scenario.cargo.Cargo;
-import scenario.cargo.CargoFactory;
-import scenario.cargo.CargoPackage;
-import scenario.cargo.LoadSlot;
-import scenario.cargo.Slot;
-import scenario.contract.ContractFactory;
-import scenario.contract.ContractPackage;
-import scenario.contract.Entity;
-import scenario.contract.GroupEntity;
-import scenario.contract.IndexPricePurchaseContract;
-import scenario.contract.PurchaseContract;
-import scenario.contract.SalesContract;
-import scenario.fleet.CharterOut;
-import scenario.fleet.FleetFactory;
-import scenario.fleet.FleetPackage;
-import scenario.fleet.FuelConsumptionLine;
-import scenario.fleet.PortAndTime;
-import scenario.fleet.Vessel;
-import scenario.fleet.VesselClass;
-import scenario.fleet.VesselFuel;
-import scenario.fleet.VesselState;
-import scenario.fleet.VesselStateAttributes;
-import scenario.market.Index;
-import scenario.market.MarketFactory;
-import scenario.market.MarketPackage;
-import scenario.market.StepwisePrice;
-import scenario.market.StepwisePriceCurve;
-import scenario.port.DistanceLine;
-import scenario.port.DistanceModel;
-import scenario.port.Port;
-import scenario.port.PortFactory;
-import scenario.port.PortModel;
-import scenario.port.PortPackage;
-import scenario.schedule.ScheduleFactory;
-import scenario.schedule.SchedulePackage;
-
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.common.csv.DistanceImporter;
-import com.mmxlabs.lngscheduler.emf.datatypes.DateAndOptionalTime;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.IndexPriceContract;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CharterCostModel;
+import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.FleetCostModel;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
 
 /**
  * A class for constructing the EMF representations of random test scenarios
@@ -74,11 +74,12 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
  * 
  */
 public class RandomScenarioUtils {
-	private final ScenarioFactory scenarioFactory = ScenarioPackage.eINSTANCE.getScenarioFactory();
+	private final MMXCoreFactory mmxCoreFactory = MMXCorePackage.eINSTANCE.getMMXCoreFactory();
 	private final FleetFactory fleetFactory = FleetPackage.eINSTANCE.getFleetFactory();
 	private final PortFactory portFactory = PortPackage.eINSTANCE.getPortFactory();
 	private final CargoFactory cargoFactory = CargoPackage.eINSTANCE.getCargoFactory();
-	private final MarketFactory marketFactory = MarketPackage.eINSTANCE.getMarketFactory();
+	private final PricingFactory pricingFactory = PricingPackage.eINSTANCE.getPricingFactory();
+	private final CommercialFactory commercialFactory = CommercialPackage.eINSTANCE.getCommercialFactory();
 	private final ScheduleFactory scheduleFactory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
 	private final Random random;
@@ -91,17 +92,15 @@ public class RandomScenarioUtils {
 		this(new Random(1));
 	}
 
-	public Scenario createScenario() {
-		final Scenario scenario = scenarioFactory.createScenario();
+	public MMXRootObject createScenario() {
+		final MMXRootObject rootObject = DemoJointModel.createEmptyInstance();
 
-		scenario.createMissingModels();
-
-		return scenario;
+		return rootObject;
 	}
 
-	public Scenario addDistanceModel(final Scenario scenario, final String distanceFile) throws FileNotFoundException, IOException {
+	public MMXRootObject addDistanceModel(final MMXRootObject scenario, final String distanceFile) throws FileNotFoundException, IOException {
 		final DistanceImporter di = new DistanceImporter(distanceFile);
-		final PortModel portModel = scenario.getPortModel();
+		final PortModel portModel = scenario.getSubModel(PortModel.class);
 
 		for (final String s : di.getKeys()) {
 			final Port port = portFactory.createPort();
@@ -109,17 +108,18 @@ public class RandomScenarioUtils {
 			portModel.getPorts().add(port);
 		}
 
-		final DistanceModel dm = scenario.getDistanceModel();
-
-		for (final Port a : scenario.getPortModel().getPorts()) {
-			for (final Port b : scenario.getPortModel().getPorts()) {
+		final Route route = portFactory.createRoute();
+		route.setName("default");
+		portModel.getRoutes().add(route);
+		for (final Port a : portModel.getPorts()) {
+			for (final Port b : portModel.getPorts()) {
 				final int distance = di.getDistance(a.getName(), b.getName());
 				if (!(a.equals(b)) && (distance != Integer.MAX_VALUE)) {
-					final DistanceLine dl = portFactory.createDistanceLine();
-					dl.setFromPort(a);
-					dl.setToPort(b);
+					final RouteLine dl = portFactory.createRouteLine();
+					dl.setFrom(a);
+					dl.setTo(b);
 					dl.setDistance(distance);
-					dm.getDistances().add(dl);
+					route.getLines().add(dl);
 				}
 			}
 		}
@@ -127,7 +127,7 @@ public class RandomScenarioUtils {
 		return scenario;
 	}
 
-	public Scenario addDefaultFleet(final Scenario scenario, final int spotCount) {
+	public MMXRootObject addDefaultFleet(final MMXRootObject scenario, final int spotCount) {
 		// generate the standard fleet
 		final VesselClass steam_138 = addVesselClass(scenario, "STEAM-138", 12, 19.5f, 138000);
 		final VesselClass steam_145 = addVesselClass(scenario, "STEAM-145", 12, 19.5f, 145000);
@@ -136,52 +136,113 @@ public class RandomScenarioUtils {
 		final VesselClass steam_126 = addVesselClass(scenario, "STEAM-126", 12, 19.5f, 138000); // TODO units in the model; should it be a
 		// float?
 
-		final float[][] steamLaden = new float[][] { { 12, 91 }, { 13, 100 }, { 14, 115 }, { 15, 125 }, { 16, 140 }, { 17, 150 }, { 18, 160 }, { 19, 176 }, { 19.5f, 190 } };
-		final float[][] dfdeLaden = new float[][] { { 12, 50 }, { 13, 65 }, { 14, 74 }, { 15, 85 }, { 16, 100 }, { 17, 110 }, { 18, 120 }, { 19, 133 }, { 19.5f, 145 } };
+		final double[][] steamLaden = new double[][] { { 12, 91 }, { 13, 100 }, { 14, 115 }, { 15, 125 }, { 16, 140 }, { 17, 150 }, { 18, 160 }, { 19, 176 }, { 19.5f, 190 } };
+		final double[][] dfdeLaden = new double[][] { { 12, 50 }, { 13, 65 }, { 14, 74 }, { 15, 85 }, { 16, 100 }, { 17, 110 }, { 18, 120 }, { 19, 133 }, { 19.5f, 145 } };
 
-		final float[][] steamBallast = new float[steamLaden.length][2];
+		final double[][] steamBallast = new double[steamLaden.length][2];
 		for (int i = 0; i < steamLaden.length; i++) {
 			steamBallast[i][0] = steamLaden[i][0];
-			steamBallast[i][1] = 0.94f * steamLaden[i][1];
+			steamBallast[i][1] = (int) (0.94f * steamLaden[i][1]);
 		}
-		final float[][] dfdeBallast = new float[dfdeLaden.length][2];
+		final double[][] dfdeBallast = new double[dfdeLaden.length][2];
 		for (int i = 0; i < dfdeBallast.length; i++) {
 			dfdeBallast[i][0] = dfdeLaden[i][0];
-			dfdeBallast[i][1] = 0.94f * dfdeLaden[i][1];
+			dfdeBallast[i][1] = (int) (0.94f * dfdeLaden[i][1]);
 		}
 
-		final VesselFuel costs400 = FleetFactory.eINSTANCE.createVesselFuel();
+		final BaseFuel costs400 = FleetFactory.eINSTANCE.createBaseFuel();
 		costs400.setName("MDO");
 		costs400.setEquivalenceFactor(0.5f);
-		costs400.setUnitPrice(400);
 
-		final VesselFuel costs600 = FleetFactory.eINSTANCE.createVesselFuel();
-		costs400.setName("HFO");
-		costs400.setEquivalenceFactor(0.5f);
-		costs400.setUnitPrice(600);
+		// PPricing
 
+		PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
+		FleetCostModel fleetCostModel = pricingFactory.createFleetCostModel();
+		pricingModel.setFleetCost(fleetCostModel);
+
+		{
+			DataIndex<Double> idx = pricingFactory.createDataIndex();
+			idx.setName("MDO");
+
+			IndexPoint<Double> p = pricingFactory.createIndexPoint();
+			p.setValue(400.0);
+			idx.getPoints().add(p);
+
+			BaseFuelCost bfp400 = pricingFactory.createBaseFuelCost();
+			bfp400.setFuel(costs400);
+			bfp400.setPrice(idx);
+			fleetCostModel.getBaseFuelPrices().add(bfp400);
+			pricingModel.getCommodityIndices().add(idx);
+
+		}
+
+		final BaseFuel costs600 = FleetFactory.eINSTANCE.createBaseFuel();
+		costs600.setName("HFO");
+		costs600.setEquivalenceFactor(0.5f);
+		{
+			DataIndex<Double> idx = pricingFactory.createDataIndex();
+			idx.setName("HFO");
+
+			IndexPoint<Double> p = pricingFactory.createIndexPoint();
+			p.setValue(400.0);
+			idx.getPoints().add(p);
+
+			BaseFuelCost bfp = pricingFactory.createBaseFuelCost();
+			bfp.setFuel(costs600);
+			bfp.setPrice(idx);
+			fleetCostModel.getBaseFuelPrices().add(bfp);
+			pricingModel.getCommodityIndices().add(idx);
+
+		}
+		FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
+		fleetModel.getBaseFuels().add(costs400);
+		fleetModel.getBaseFuels().add(costs600);
 		// create class parameters; currently model uses containment for curves,
 		// so we need to do duplicates
-		steam_138.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 200, 180, 50, steamLaden));
-		steam_138.setBallastAttributes(createVesselStateAttributes(VesselState.BALLAST, 180, 100, 50, steamBallast));
+		steam_138.setLadenAttributes(createVesselStateAttributes(200, 180, 50, steamLaden));
+		steam_138.setBallastAttributes(createVesselStateAttributes(180, 100, 50, steamBallast));
 		steam_138.setBaseFuel(costs400);
 
-		steam_145.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 200, 180, 50, steamLaden));
-		steam_145.setBallastAttributes(createVesselStateAttributes(VesselState.BALLAST, 180, 100, 50, steamBallast));
+		steam_145.setLadenAttributes(createVesselStateAttributes(200, 180, 50, steamLaden));
+		steam_145.setBallastAttributes(createVesselStateAttributes(180, 100, 50, steamBallast));
 		steam_145.setBaseFuel(costs400);
 
-		dfde_177.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 230, 210, 50, dfdeLaden));
-		dfde_177.setBallastAttributes(createVesselStateAttributes(VesselState.BALLAST, 180, 100, 50, dfdeBallast));
+		dfde_177.setLadenAttributes(createVesselStateAttributes(230, 210, 50, dfdeLaden));
+		dfde_177.setBallastAttributes(createVesselStateAttributes(180, 100, 50, dfdeBallast));
 		dfde_177.setBaseFuel(costs600);
 
-		steam_126.setLadenAttributes(createVesselStateAttributes(VesselState.LADEN, 200, 180, 50, steamLaden));
-		steam_126.setBallastAttributes(createVesselStateAttributes(VesselState.BALLAST, 180, 100, 50, steamBallast));
+		steam_126.setLadenAttributes(createVesselStateAttributes(200, 180, 50, steamLaden));
+		steam_126.setBallastAttributes(createVesselStateAttributes(180, 100, 50, steamBallast));
 		steam_126.setBaseFuel(costs400);
 
-		steam_138.setSpotCharterCount(spotCount);
-		steam_145.setSpotCharterCount(spotCount);
-		dfde_177.setSpotCharterCount(spotCount);
-		steam_126.setSpotCharterCount(spotCount);
+		CharterCostModel charterCostModel = pricingFactory.createCharterCostModel();
+		{
+			DataIndex<Integer> idx = pricingFactory.createDataIndex();
+			IndexPoint<Integer> p = pricingFactory.createIndexPoint();
+			p.setValue(100000);
+			idx.getPoints().add(p);
+			charterCostModel.setCharterInPrice(idx);
+			pricingModel.getCharterIndices().add(idx);
+		}
+		{
+			DataIndex<Integer> idx = pricingFactory.createDataIndex();
+			IndexPoint<Integer> p = pricingFactory.createIndexPoint();
+			p.setValue(80000);
+			idx.getPoints().add(p);
+			charterCostModel.setCharterOutPrice(idx);
+			pricingModel.getCharterIndices().add(idx);
+		}
+		{
+			DataIndex<Integer> idx = pricingFactory.createDataIndex();
+			IndexPoint<Integer> p = pricingFactory.createIndexPoint();
+			p.setValue(4);
+			idx.getPoints().add(p);
+			charterCostModel.setSpotCharterCount(idx);
+			pricingModel.getCharterIndices().add(idx);
+			
+		}
+
+		fleetCostModel.getCharterCosts().add(charterCostModel);
 
 		// create vessels in each class
 
@@ -208,20 +269,20 @@ public class RandomScenarioUtils {
 		return scenario;
 	}
 
-	public Scenario addRandomCargoes(final Scenario scenario, final String distanceMatrix, final String slotsFile, final int count, final int minWindow, final int maxWindow, final int minVisit,
-			final int maxVisit, final int minSlack, final int maxSlack, final double locality, final int scenarioDuration) throws NumberFormatException, IOException {
+	public MMXRootObject addRandomCargoes(final MMXRootObject scenario, final String distanceMatrix, final String slotsFile, final int count, final int minWindow, final int maxWindow,
+			final int minVisit, final int maxVisit, final int minSlack, final int maxSlack, final double locality, final int scenarioDuration) throws NumberFormatException, IOException {
+
+		PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
+		CommercialModel commercialModel = scenario.getSubModel(CommercialModel.class);
+
 		// set up markets
-		final Index loadMarket = marketFactory.createIndex();
-		final Index dischargeMarket = marketFactory.createIndex();
+		final DataIndex<Double> loadCurve = pricingFactory.createDataIndex();
+		final DataIndex<Double> dischargeCurve = pricingFactory.createDataIndex();
+		pricingModel.getCommodityIndices().add(loadCurve);
+		pricingModel.getCommodityIndices().add(dischargeCurve);
 
-		final StepwisePriceCurve loadCurve = marketFactory.createStepwisePriceCurve();
-		final StepwisePriceCurve dischargeCurve = marketFactory.createStepwisePriceCurve();
-
-		loadMarket.setPriceCurve(loadCurve);
-		dischargeMarket.setPriceCurve(dischargeCurve);
-
-		loadMarket.setName("LNG Sales Index");
-		dischargeMarket.setName("LNG Purchase Index");
+		loadCurve.setName("LNG Sales Index");
+		dischargeCurve.setName("LNG Purchase Index");
 
 		// random walk time
 		// every 30d, price changes a bit. load price tracks discharge price
@@ -229,12 +290,9 @@ public class RandomScenarioUtils {
 		int dischargePrice = 5000;
 		final long now = new Date().getTime();
 
-		dischargeCurve.setDefaultValue(dischargePrice / (float) Calculator.ScaleFactor);
-		loadCurve.setDefaultValue((dischargePrice - 200) / (float) Calculator.ScaleFactor);
-
 		for (int i = 0; i < scenarioDuration; i += 30) {
 			final Date forwardDate = createHourlyDate(now + (i * Timer.ONE_DAY));
-			final StepwisePrice price = marketFactory.createStepwisePrice();
+			final IndexPoint<Double> price = pricingFactory.createIndexPoint();
 
 			dischargePrice += (random.nextInt(80) - 40);
 
@@ -243,75 +301,76 @@ public class RandomScenarioUtils {
 															// getting cheap.
 
 			price.setDate(forwardDate);
-			price.setPriceFromDate(dischargePrice / (float) Calculator.ScaleFactor);
+			price.setValue(dischargePrice / (double) Calculator.ScaleFactor);
 
-			dischargeCurve.getPrices().add(price);
+			dischargeCurve.getPoints().add(price);
 
-			final StepwisePrice loadPrice = marketFactory.createStepwisePrice();
+			final IndexPoint<Double> loadPrice = pricingFactory.createIndexPoint();
 			loadPrice.setDate(forwardDate);
-			loadPrice.setPriceFromDate((dischargePrice - 200) / (float) Calculator.ScaleFactor);
-			loadCurve.getPrices().add(loadPrice);
+			loadPrice.setValue((dischargePrice - 200) / (double) Calculator.ScaleFactor);
+			loadCurve.getPoints().add(loadPrice);
 		}
 
-		scenario.setMarketModel(marketFactory.createMarketModel());
-		scenario.getMarketModel().getIndices().add(loadMarket);
-		scenario.getMarketModel().getIndices().add(dischargeMarket);
-
-		final ContractFactory contractFactory = ContractPackage.eINSTANCE.getContractFactory();
-
-		final Entity loadEntity = contractFactory.createEntity();
-		final GroupEntity shipEntity = contractFactory.createGroupEntity();
-		final Entity dischargeEntity = contractFactory.createEntity();
+		final LegalEntity loadEntity = commercialFactory.createLegalEntity();
+		final LegalEntity shipEntity = commercialFactory.createLegalEntity();
+		final LegalEntity dischargeEntity = commercialFactory.createLegalEntity();
 
 		loadEntity.setName("load entity");
 		dischargeEntity.setName("discharge entity");
 		shipEntity.setName("shipping entity");
 
-		scenario.setContractModel(contractFactory.createContractModel());
-		scenario.getContractModel().getEntities().add(loadEntity);
-		scenario.getContractModel().getEntities().add(shipEntity);
-		scenario.getContractModel().getEntities().add(dischargeEntity);
+		commercialModel.getEntities().add(loadEntity);
+		commercialModel.getEntities().add(dischargeEntity);
+		// Contained here
+		commercialModel.getEntities().add(shipEntity);
+		// But referenced here
+		commercialModel.setShippingEntity(shipEntity);
 
-		scenario.getContractModel().setShippingEntity(shipEntity);
-
-		final SalesContract dischargeContract = contractFactory.createSalesContract();
-		final IndexPricePurchaseContract loadContract = contractFactory.createIndexPricePurchaseContract();
+		final IndexPriceContract dischargeContract = commercialFactory.createIndexPriceContract();
+		final IndexPriceContract loadContract = commercialFactory.createIndexPriceContract();
 
 		// dischargeContract.setRegasEfficiency(1);
 		dischargeContract.setEntity(dischargeEntity);
 		dischargeContract.setName("discharge contract");
-		dischargeContract.setIndex(dischargeMarket);
+		dischargeContract.setIndex(dischargeCurve);
 
 		loadContract.setEntity(loadEntity);
-		loadContract.setIndex(loadMarket);
+		loadContract.setIndex(loadCurve);
 		loadContract.setName("load contract");
 
-		scenario.getContractModel().getSalesContracts().add(dischargeContract);
-		scenario.getContractModel().getPurchaseContracts().add(loadContract);
+		commercialModel.getSalesContracts().add(dischargeContract);
+		commercialModel.getPurchaseContracts().add(loadContract);
 
 		// dischargeSlot.setUnitPrice(3.70f + random.nextInt(10));
 		// loadSlot.setUnitPrice(dischargeSlot.getUnitPrice() - 0.2f);
 
 		// load slots file
 
-		final BufferedReader br = new BufferedReader(new FileReader(new File(slotsFile)));
+		BufferedReader br = null;
 
 		final Map<String, Integer> loadSlots = new HashMap<String, Integer>();
 		final Map<String, Integer> dischargeSlots = new HashMap<String, Integer>();
+		try {
+			br = new BufferedReader(new FileReader(new File(slotsFile)));
 
-		String line;
-		int totalLoads = 0;
-		int totalDischarges = 0;
-		while ((line = br.readLine()) != null) {
-			final String[] parts = line.split(",");
-			final String pn = parts[0].replace("\"", "");
-			final int loadDischargeCount = Integer.parseInt(parts[2]);
-			if (parts[1].contains("L")) {
-				loadSlots.put(pn, loadDischargeCount);
-				totalLoads += loadDischargeCount;
-			} else {
-				dischargeSlots.put(pn, loadDischargeCount);
-				totalDischarges += loadDischargeCount;
+			String line;
+			int totalLoads = 0;
+			int totalDischarges = 0;
+			while ((line = br.readLine()) != null) {
+				final String[] parts = line.split(",");
+				final String pn = parts[0].replace("\"", "");
+				final int loadDischargeCount = Integer.parseInt(parts[2]);
+				if (parts[1].contains("L")) {
+					loadSlots.put(pn, loadDischargeCount);
+					totalLoads += loadDischargeCount;
+				} else {
+					dischargeSlots.put(pn, loadDischargeCount);
+					totalDischarges += loadDischargeCount;
+				}
+			}
+		} finally {
+			if (br != null) {
+				br.close();
 			}
 		}
 
@@ -423,13 +482,15 @@ public class RandomScenarioUtils {
 	 * @param dischargeMarket
 	 * @param loadMarket
 	 */
-	private void addCargo(final Scenario scenario, final long now, final String loadPortName, final String dischargePortName, final int minWindow, final int maxWindow, final int minVisit,
+	private void addCargo(final MMXRootObject scenario, final long now, final String loadPortName, final String dischargePortName, final int minWindow, final int maxWindow, final int minVisit,
 			final int maxVisit, final int minSlack, final int maxSlack, final int scenarioDuration, final PurchaseContract loadContract, final SalesContract dischargeContract) {
 
-		final int index = scenario.getCargoModel().getCargoes().size();
+		CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
+		PortModel portModel = scenario.getSubModel(PortModel.class);
+		final int index = cargoModel.getCargos().size();
 
 		Port loadPort = null, dischargePort = null;
-		for (final Port p : scenario.getPortModel().getPorts()) {
+		for (final Port p : portModel.getPorts()) {
 			if (p.getName().equals(loadPortName)) {
 				loadPort = p;
 			}
@@ -441,9 +502,9 @@ public class RandomScenarioUtils {
 			}
 		}
 
-		DistanceLine line = null;
-		for (final DistanceLine dl : scenario.getDistanceModel().getDistances()) {
-			if (dl.getFromPort().equals(loadPort) && dl.getToPort().equals(dischargePort)) {
+		RouteLine line = null;
+		for (final RouteLine dl : portModel.getRoutes().get(0).getLines()) {
+			if (dl.getFrom().equals(loadPort) && dl.getTo().equals(dischargePort)) {
 				line = dl;
 			}
 		}
@@ -451,18 +512,18 @@ public class RandomScenarioUtils {
 		assert line != null;
 
 		final LoadSlot loadSlot = cargoFactory.createLoadSlot();
-		final Slot dischargeSlot = cargoFactory.createSlot();
+		final DischargeSlot dischargeSlot = cargoFactory.createDischargeSlot();
 
-		loadSlot.setId("load-" + index);
-		dischargeSlot.setId("discharge-" + index);
+		loadSlot.setName("load-" + index);
+		dischargeSlot.setName("discharge-" + index);
 
 		loadSlot.setPort(loadPort);
 		dischargeSlot.setPort(dischargePort);
 
 		// How quickly can the fastest vessel arrive (days)
-		final int minTravelTime = (int) Math.ceil(Calculator.getTimeFromSpeedDistance(Calculator.scale(20), line.getDistance()) / 24.0);
+		final int minTravelTime = (int) Math.ceil(Calculator.getTimeFromSpeedDistance((int) Calculator.scale(20), line.getDistance()) / 24.0);
 		// How slowly can the slowest vessel arrive (days)
-		final int maxTravelTime = (int) Math.ceil(Calculator.getTimeFromSpeedDistance(Calculator.scale(12), line.getDistance()) / 24.0);
+		final int maxTravelTime = (int) Math.ceil(Calculator.getTimeFromSpeedDistance((int) Calculator.scale(12), line.getDistance()) / 24.0);
 
 		// Pick load start time window day
 		final int startDay = random.nextInt(scenarioDuration);
@@ -475,14 +536,14 @@ public class RandomScenarioUtils {
 		final int loadWindow = minWindow + random.nextInt((maxWindow - minWindow) + 1);
 		final int dischargeWindow = minWindow + random.nextInt((maxWindow - minWindow) + 1);
 
-		loadSlot.setSlotDuration(loadVisitDuration);
-		dischargeSlot.setSlotDuration(dischargeVisitDuration);
+		loadSlot.setDuration(loadVisitDuration);
+		dischargeSlot.setDuration(dischargeVisitDuration);
 
-		loadSlot.setWindowDuration(loadWindow);
-		dischargeSlot.setWindowDuration(dischargeWindow);
+		loadSlot.setWindowSize(loadWindow);
+		dischargeSlot.setWindowSize(dischargeWindow);
 
-		loadSlot.setWindowStart(new DateAndOptionalTime(createHourlyDate(now + (Timer.ONE_DAY * startDay)), false));
-		dischargeSlot.setWindowStart(new DateAndOptionalTime(createHourlyDate(now + (Timer.ONE_DAY * endDay)), false));
+		loadSlot.setWindowStart(createHourlyDate(now + (Timer.ONE_DAY * startDay)));
+		dischargeSlot.setWindowStart(createHourlyDate(now + (Timer.ONE_DAY * endDay)));
 
 		// dischargeSlot.setMarket(dischargeMarket);
 		// loadSlot.setMarket(loadMarket);
@@ -491,18 +552,20 @@ public class RandomScenarioUtils {
 
 		loadSlot.setMinQuantity(0);
 		loadSlot.setMaxQuantity(200000);
-		loadSlot.setCargoCVvalue(22.8f);
+		loadSlot.setCargoCV(22.8f);
 
 		dischargeSlot.setMinQuantity(0);
 		dischargeSlot.setMaxQuantity(200000);
 
 		final Cargo cargo = cargoFactory.createCargo();
 
-		cargo.setId("cargo-" + index);
+		cargo.setName("cargo-" + index);
 		cargo.setLoadSlot(loadSlot);
 		cargo.setDischargeSlot(dischargeSlot);
 
-		scenario.getCargoModel().getCargoes().add(cargo);
+		cargoModel.getCargos().add(cargo);
+		cargoModel.getLoadSlots().add(loadSlot);
+		cargoModel.getDischargeSlots().add(dischargeSlot);
 	}
 
 	/**
@@ -516,52 +579,50 @@ public class RandomScenarioUtils {
 	 * @param scenarioLength
 	 * @return
 	 */
-	public Scenario addCharterOuts(final Scenario scenario, int charterOuts, final int minCharterLength, final int maxCharterLength, final int scenarioLength) {
+	public MMXRootObject addCharterOuts(final MMXRootObject scenario, int charterOuts, final int minCharterLength, final int maxCharterLength, final int scenarioLength) {
 		while (charterOuts-- > 0) {
 			createRandomCharterout(scenario, minCharterLength, maxCharterLength, scenarioLength);
 		}
 		return scenario;
 	}
 
-	private Vessel addVessel(final Scenario scenario, final String string, final VesselClass class1) {
+	private Vessel addVessel(final MMXRootObject scenario, final String string, final VesselClass class1) {
 		final Vessel v = fleetFactory.createVessel();
 
 		v.setName(string);
-		v.setClass(class1);
+		v.setVesselClass(class1);
 
-		scenario.getFleetModel().getFleet().add(v);
+		scenario.getSubModel(FleetModel.class).getVessels().add(v);
 
 		return v;
 	}
 
-	private VesselStateAttributes createVesselStateAttributes(final VesselState state, final float nbo, final float idlenbo, final float idleconsumption, final float[][] curve) {
+	private VesselStateAttributes createVesselStateAttributes(final int nbo, final int idlenbo, final int idleconsumption, final double[][] curve) {
 		final VesselStateAttributes vsa = fleetFactory.createVesselStateAttributes();
 
-		vsa.setVesselState(state);
-		vsa.setIdleConsumptionRate(idleconsumption);
+		vsa.setIdleBaseRate(idleconsumption);
 		vsa.setNboRate(nbo);
 		vsa.setIdleNBORate(idlenbo);
 
-		for (final float[] point : curve) {
-			final FuelConsumptionLine line = fleetFactory.createFuelConsumptionLine();
+		for (final double[] point : curve) {
+			final FuelConsumption line = fleetFactory.createFuelConsumption();
 			line.setSpeed(point[0]);
-			line.setConsumption(point[1]);
-			vsa.getFuelConsumptionCurve().add(line);
+			line.setConsumption((int) point[1]);
+			vsa.getFuelConsumption().add(line);
 		}
 
 		return vsa;
 	}
 
-	private VesselClass addVesselClass(final Scenario scenario, final String name, final int minSpeed, final float maxSpeed, final long capacity) {
+	private VesselClass addVesselClass(final MMXRootObject scenario, final String name, final double minSpeed, final double maxSpeed, final int capacity) {
 		final VesselClass vc = fleetFactory.createVesselClass();
 
 		vc.setName(name);
 		vc.setMinSpeed(minSpeed);
 		vc.setMaxSpeed(maxSpeed);
 		vc.setCapacity(capacity);
-		vc.setDailyCharterInPrice(40000);
 
-		scenario.getFleetModel().getVesselClasses().add(vc);
+		scenario.getSubModel(FleetModel.class).getVesselClasses().add(vc);
 
 		return vc;
 	}
@@ -574,23 +635,26 @@ public class RandomScenarioUtils {
 	 * @param minSize
 	 * @param maxSize
 	 */
-	private void createRandomCharterout(final Scenario scenario, final int minSize, final int maxSize, final int scenarioLength) {
-		final CharterOut co = fleetFactory.createCharterOut();
+	private void createRandomCharterout(final MMXRootObject scenario, final int minSize, final int maxSize, final int scenarioLength) {
+		final CharterOutEvent co = fleetFactory.createCharterOutEvent();
+
+		FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
+		CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
 
 		// narrow initial TW for now
 		final long now = (new Date()).getTime();
 		final int size = random.nextInt(maxSize - minSize) + minSize;
 		final int startDay = random.nextInt(scenarioLength - size);
-		co.setStartDate(createHourlyDate(now + (startDay * Timer.ONE_DAY)));
-		co.setEndDate(createHourlyDate(now + (startDay * Timer.ONE_DAY) + (6 * Timer.ONE_HOUR)));
-		co.setDuration(size);
-		co.getVesselClasses().add(RandomHelper.chooseElementFrom(random, scenario.getFleetModel().getVesselClasses()));
+		co.setStartAfter(createHourlyDate(now + (startDay * Timer.ONE_DAY)));
+		co.setStartBy(createHourlyDate(now + (startDay * Timer.ONE_DAY) + (6 * Timer.ONE_HOUR)));
+		co.setDurationInDays(size);
+		co.getAllowedVessels().add(RandomHelper.chooseElementFrom(random, fleetModel.getVesselClasses()));
 
-		co.setStartPort(RandomHelper.chooseElementFrom(random, scenario.getCargoModel().getCargoes()).getLoadSlot().getPort());
+		co.setPort(RandomHelper.chooseElementFrom(random, cargoModel.getCargos()).getLoadSlot().getPort());
 
-		co.setEndPort(co.getStartPort());
+		co.setRelocateTo(co.getPort());
 
-		scenario.getFleetModel().getVesselEvents().add(co);
+		fleetModel.getVesselEvents().add(co);
 	}
 
 	/**
@@ -599,11 +663,12 @@ public class RandomScenarioUtils {
 	 * @param scenario
 	 * @param addVessel
 	 */
-	private void randomiseAvailability(final Scenario scenario, final Vessel addVessel) {
-		// Add a random start constraint.
-		final PortAndTime start = fleetFactory.createPortAndTime();
-		final EList<Port> ports = scenario.getPortModel().getPorts();
-		start.setPort(ports.get(random.nextInt(ports.size())));
+	private void randomiseAvailability(final MMXRootObject scenario, final Vessel addVessel) {
+		// TODO: This method did not do a lot...
+		// // Add a random start constraint.
+		// final PortAndTime start = fleetFactory.createPortAndTime();
+		// final EList<Port> ports = scenario.getPortModel().getPorts();
+		// start.setPort(ports.get(random.nextInt(ports.size())));
 	}
 
 	/**
