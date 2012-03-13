@@ -37,6 +37,18 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 
 public class ScenarioTableViewerPane extends ViewerPane {
+	/**
+	 * 
+	 */
+	protected static final String VIEW_GROUP = "view";
+	/**
+	 * 
+	 */
+	protected static final String ADD_REMOVE_GROUP = "addremove";
+	/**
+	 * 
+	 */
+	protected static final String EDIT_GROUP = "edit";
 	private ScenarioTableViewer scenarioViewer;
 	private JointModelEditorPart jointModelEditorPart;
 
@@ -48,7 +60,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	@Override
 	public ScenarioTableViewer createViewer(Composite parent) {
 		if (scenarioViewer == null) {
-			scenarioViewer = new ScenarioTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
+			scenarioViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
 			scenarioViewer.addDoubleClickListener(new IDoubleClickListener() {
 				
 				@Override
@@ -68,6 +80,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 				}
 			});
+			scenarioViewer.getGrid().setCellSelectionEnabled(true);
 			return scenarioViewer;
 		} else {
 			throw new RuntimeException("Did not expect two calls to createViewer()");
@@ -116,9 +129,10 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 		// set up toolbars
 		final ToolBarManager toolbar = getToolBarManager();
-		toolbar.add(new GroupMarker("addremove"));
-		toolbar.add(new GroupMarker("view"));
-		toolbar.appendToGroup("view", new PackGridTableColumnsAction(scenarioViewer));
+		toolbar.add(new GroupMarker(EDIT_GROUP));
+		toolbar.add(new GroupMarker(ADD_REMOVE_GROUP));
+		toolbar.add(new GroupMarker(VIEW_GROUP));
+		toolbar.appendToGroup(VIEW_GROUP, new PackGridTableColumnsAction(scenarioViewer));
 		
 		final EReference containment = path.get(path.size()-1);
 		final Action addAction = AddModelAction.create(containment.getEReferenceType(), 
@@ -144,11 +158,11 @@ public class ScenarioTableViewerPane extends ViewerPane {
 					}
 				});
 		if (addAction != null) {
-			toolbar.appendToGroup("addremove", addAction);
+			toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 		}
 		final Action deleteAction = createDeleteAction();
 		if (deleteAction != null) {
-			toolbar.appendToGroup("addremove", deleteAction);
+			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
 		}
 		
 		toolbar.update(true);

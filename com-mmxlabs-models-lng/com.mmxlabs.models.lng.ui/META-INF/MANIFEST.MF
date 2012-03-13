@@ -21,5 +21,6 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.models.ui.validation;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.lng.ui,
+ com.mmxlabs.models.lng.ui.actions,
  com.mmxlabs.models.lng.ui.tabular,
  com.mmxlabs.models.ui.dates
