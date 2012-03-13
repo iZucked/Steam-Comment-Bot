@@ -6,12 +6,8 @@ package com.mmxlabs.shiplingo.platform.models.manifest.wizards;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -31,7 +27,7 @@ import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.models.lng.transformer.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
+import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 public class RandomScenarioWizard extends Wizard implements INewWizard {
 	private IWorkbench workbench;
@@ -102,7 +98,7 @@ public class RandomScenarioWizard extends Wizard implements INewWizard {
 
 		try {
 			// save scenario to file
-			DemoJointModel model = new DemoJointModel(scenario, fileURI);
+			ManifestJointModel model = new ManifestJointModel(scenario, fileURI);
 			model.save();
 
 		} catch (final IOException e) {
