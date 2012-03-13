@@ -373,12 +373,62 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Find the earliest date entry in the model, for relative hours calculations. Uses a slightly naff bit of reflection to find all getters which return a date.
+	 * Find the earliest and latest times set by events in the model. This takes into account:
+	 * 
+	 * <ul>
+	 * <li>Slot window dates</li>
+	 * <li>Vessel event dates</li>
+	 * <li>Vessel availability dates</li>
+	 * </ul>
 	 */
 	private void findEarliestAndLatestTimes() {
-		final Pair<Date, Date> a = EMFUtils.findMinMaxDateAttributes(rootObject);
-		earliestTime = a.getFirst();
-		latestTime = a.getSecond();
+		earliestTime = null;
+		latestTime = null;
+		final FleetModel fleet = rootObject.getSubModel(FleetModel.class);
+		final CargoModel cargo = rootObject.getSubModel(CargoModel.class);
+		for (final VesselEvent event : fleet.getVesselEvents()) {
+			earliestTime = minDate(event.getStartBy(), earliestTime);
+			earliestTime = minDate(event.getStartAfter(), earliestTime);
+			latestTime = maxDate(event.getStartBy(), latestTime);
+			latestTime = maxDate(event.getStartAfter(), latestTime);
+		}
+		for (final Vessel vessel : fleet.getVessels()) {
+			earliestTime = minDate(vessel.getAvailability().getStartBy(), earliestTime);
+			earliestTime = minDate(vessel.getAvailability().getStartAfter(), earliestTime);
+			earliestTime = minDate(vessel.getAvailability().getEndBy(), earliestTime);
+			earliestTime = minDate(vessel.getAvailability().getEndAfter(), earliestTime);
+			
+			latestTime = maxDate(vessel.getAvailability().getStartBy(), latestTime);
+			latestTime = maxDate(vessel.getAvailability().getStartAfter(), latestTime);
+			latestTime = maxDate(vessel.getAvailability().getEndBy(), latestTime);
+			latestTime = maxDate(vessel.getAvailability().getEndAfter(), latestTime);
+		}
+		for (final Slot s : cargo.getLoadSlots()) {
+			earliestTime = minDate(s.getWindowStartWithSlotOrPortTime(), earliestTime);
+			earliestTime = minDate(s.getWindowEndWithSlotOrPortTime(), earliestTime);
+			latestTime = maxDate(s.getWindowStartWithSlotOrPortTime(), latestTime);
+			latestTime = maxDate(s.getWindowEndWithSlotOrPortTime(), latestTime);
+		}
+		for (final Slot s : cargo.getDischargeSlots()) {
+			earliestTime = minDate(s.getWindowStartWithSlotOrPortTime(), earliestTime);
+			earliestTime = minDate(s.getWindowEndWithSlotOrPortTime(), earliestTime);
+			latestTime = maxDate(s.getWindowStartWithSlotOrPortTime(), latestTime);
+			latestTime = maxDate(s.getWindowEndWithSlotOrPortTime(), latestTime);
+		}
+	}
+	
+	private Date minDate(final Date a, final Date b) {
+		if (a == null) return b;
+		if (b == null) return a;
+		if (a.before(b)) return a;
+		return b;
+	}
+	
+	private Date maxDate(final Date a, final Date b) {
+		if (a == null) return b;
+		if (b == null) return a;
+		if (b.before(a)) return a;
+		return b;
 	}
 
 	private void buildVesselEvents(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<VesselClass, IVesselClass> classes,
@@ -625,9 +675,7 @@ public class LNGScenarioTransformer {
 			int baseFuelPrice = 0;
 			for (BaseFuelCost baseFuelCost : pricingModel.getFleetCost().getBaseFuelPrices()) {
 				if (baseFuelCost.getFuel() == eVc.getBaseFuel()) {
-					baseFuelPrice = Calculator.scaleToInt(
-							baseFuelCost.getPrice().getValueAfter(latestTime));
-					break;
+					baseFuelPrice = Calculator.scaleToInt(baseFuelCost.getPrice());
 				}
 			}
 			
@@ -642,11 +690,7 @@ public class LNGScenarioTransformer {
 						charterInPrice = 0;
 					}
 //					charterOutPrice = charterCost.getCharterOutPrice().getValueAfter(latestTime);
-					if (charterCost.getSpotCharterCount() != null) {
-						charterCount = charterCost.getSpotCharterCount().getValueAfter(latestTime);
-					} else {
-						charterCount = 0;
-					}
+					charterCount = charterCost.getSpotCharterCount();
 				}
 			}
 			
