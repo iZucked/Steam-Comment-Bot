@@ -45,7 +45,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.shiplingo.platform.models.manifest.Activator;
-import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
+import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
  * Class to create a scenario. Call methods to customise the scenario. When finished get the final scenario using {@link #buildScenario()}. <br>
@@ -55,7 +55,7 @@ import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
  * 
  */
 public class CustomScenarioCreator {
-	private final DemoJointModel jointModel;
+	private final ManifestJointModel jointModel;
 
 	private final CommercialModel commercialModel;
 	private final CargoModel cargoModel;
@@ -73,7 +73,7 @@ public class CustomScenarioCreator {
 	private static final String timeZone = TimeZone.getDefault().getID();
 
 	public CustomScenarioCreator(final float dischargePrice) {
-		jointModel = DemoJointModel.createEmptyModel(URI.createURI("rubbish://rubbish"));
+		jointModel = ManifestJointModel.createEmptyModel(URI.createURI("rubbish://rubbish"));
 		final MMXRootObject root = jointModel.getRootObject();
 		
 		commercialModel = root.getSubModel(CommercialModel.class);
