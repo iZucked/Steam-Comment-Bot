@@ -7,3 +7,15 @@ syntax: regexp
 ^\.settings$
 syntax: regexp
 ^\.project$
+syntax: regexp
+^com\.mmxlabs\.models\.ui\.p2/\.settings$
+syntax: regexp
+^com\.mmxlabs\.models\.ui\.tabular/\.settings$
+syntax: regexp
+^com\.mmxlabs\.models\.ui\.validation/\.settings$
+syntax: regexp
+^com\.mmxlabs\.models\.util/\.settings$
+syntax: regexp
+^com\.mmxlabs\.models\.mmxcore\.validation/\.settings$
+syntax: regexp
+^com\.mmxlabs\.models\.ui/\.settings$
