@@ -19,17 +19,15 @@ import junit.framework.Assert;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.emf.edapt.migration.MigrationException;
 
-import scenario.Scenario;
-import scenario.ScenarioPackage;
-import scenario.schedule.ScheduleFitness;
-
-import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
+import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.ScenarioRunner;
+import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
  * 
@@ -48,7 +46,8 @@ public class AbstractOptimisationResultTester {
 	static {
 		// Trigger EMF initialisation outside of eclipse environment.
 		@SuppressWarnings("unused")
-		final ScenarioPackage einstance = ScenarioPackage.eINSTANCE;
+		final MMXCorePackage einstance = MMXCorePackage.eINSTANCE;
+		// Add other packages?
 	}
 
 	/**
@@ -71,23 +70,16 @@ public class AbstractOptimisationResultTester {
 	 * 
 	 * @throws IOException
 	 * @throws IncompleteScenarioException
+	 * @throws MigrationException 
 	 * @throws InterruptedException
 	 */
-	public void runScenario(final URL url) throws IOException, IncompleteScenarioException {
-		final Resource resource = new XMIResourceImpl(URI.createURI(url.toString()));
-		resource.load(Collections.emptyMap());
+	public void runScenario(final URL url) throws IOException, IncompleteScenarioException, MigrationException {
+		
+		ManifestJointModel originalJointModel = new ManifestJointModel(URI.createURI(url.toString()));
+		final MMXRootObject originalScenario = originalJointModel.getRootObject();
 
-		final ResourceSetImpl resourceSet = new ResourceSetImpl();
-		resourceSet.getResources().add(resource);
-
-		final Scenario originalScenario = (Scenario) (resource.getAllContents().next());
-
-		final Scenario copy = EcoreUtil.copy(originalScenario);
-
-		final Resource cpyResource = new XMIResourceImpl(resource.getURI());
-		cpyResource.getContents().add(copy);
-		final ResourceSetImpl cpyResourceSet = new ResourceSetImpl();
-		cpyResourceSet.getResources().add(cpyResource);
+		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
+		final MMXRootObject copy = EcoreUtil.copy(originalScenario);
 
 		// Create two scenario runners.
 		// TODO are two necessary?
@@ -99,8 +91,8 @@ public class AbstractOptimisationResultTester {
 		endScenarioRunner.run();
 
 		// get the fitnesses.
-		final EList<ScheduleFitness> currentOriginalFitnesses = originalScenarioRunner.getIntialSchedule().getFitness();
-		final EList<ScheduleFitness> currentEndFitnesses = endScenarioRunner.getFinalSchedule().getFitness();
+		final EList<Fitness> currentOriginalFitnesses = originalScenarioRunner.getIntialSchedule().getFitnesses();
+		final EList<Fitness> currentEndFitnesses = endScenarioRunner.getFinalSchedule().getFitnesses();
 
 		if (storeFitnessMap) {
 
@@ -152,26 +144,26 @@ public class AbstractOptimisationResultTester {
 	 *            A list of fitnesses to store.
 	 */
 
-	private void storeFitnesses(Properties props, final String mapName, final EList<ScheduleFitness> fitnesses) {
+	private void storeFitnesses(Properties props, final String mapName, final EList<Fitness> fitnesses) {
 
-		for (final ScheduleFitness f : fitnesses) {
-			props.setProperty(mapName + "." + f.getName(), Long.toString(f.getValue()));
+		for (final Fitness f : fitnesses) {
+			props.setProperty(mapName + "." + f.getName(), Long.toString(f.getFitnessValue()));
 		}
 	}
 
 	/**
 	 * Test the original (previously generated) fitnesses against the current. Also test that the total of the original and current are equal.
 	 */
-	private void testOriginalAndCurrentFitnesses(Properties props, String mapName, final EList<ScheduleFitness> currentFitnesses) {
+	private void testOriginalAndCurrentFitnesses(Properties props, String mapName, final EList<Fitness> currentFitnesses) {
 
 		long totalOriginalFitness = 0;
 		long totalCurrentFitness = 0;
 
-		for (final ScheduleFitness f : currentFitnesses) {
+		for (final Fitness f : currentFitnesses) {
 
 			// get the values
 			final long originalFitnessValue = Long.parseLong(props.getProperty(mapName + "." + f.getName(), "0"));
-			final long currentFitness = f.getValue();
+			final long currentFitness = f.getFitnessValue();
 
 			// test they are equal
 			Assert.assertEquals(f.getName() + " - Previous fitness matches current fitness", originalFitnessValue, currentFitness);
