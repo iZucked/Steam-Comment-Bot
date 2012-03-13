@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.scheduleview.views;
+package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.Viewer;

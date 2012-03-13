@@ -10,7 +10,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            class="com.mmxlabs.rcp.navigator.TheNavigator"
+            class="com.mmxlabs.shiplingo.platform.navigator.TheNavigator"
             icon="icons/configure_build_path.gif"
             id="com.mmxlabs.rcp.navigator"
             name="Scenario Navigator">

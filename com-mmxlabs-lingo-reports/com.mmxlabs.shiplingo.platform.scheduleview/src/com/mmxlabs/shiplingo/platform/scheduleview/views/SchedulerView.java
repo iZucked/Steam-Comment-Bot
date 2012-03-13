@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.scheduleview.views;
+package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,14 +49,14 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.scheduleview.Activator;
-import com.mmxlabs.scheduleview.views.colourschemes.CooldownColourScheme;
-import com.mmxlabs.scheduleview.views.colourschemes.FuelChoiceColourScheme;
-import com.mmxlabs.scheduleview.views.colourschemes.HighSpeedColourScheme;
-import com.mmxlabs.scheduleview.views.colourschemes.IScheduleViewColourScheme;
-import com.mmxlabs.scheduleview.views.colourschemes.RouteChoiceColourScheme;
-import com.mmxlabs.scheduleview.views.colourschemes.VesselStateColourScheme;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
+import com.mmxlabs.shiplingo.platform.scheduleview.Activator;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownColourScheme;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.FuelChoiceColourScheme;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.HighSpeedColourScheme;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.IScheduleViewColourScheme;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.RouteChoiceColourScheme;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.VesselStateColourScheme;
 
 public class SchedulerView extends ViewPart implements ISelectionListener {
 

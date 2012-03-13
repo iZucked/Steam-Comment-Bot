@@ -18,7 +18,7 @@
             name="Scheduler View"
             icon="icons/schedule_view.gif"
             category="com.mmxlabs.scheduleview"
-            class="com.mmxlabs.scheduleview.views.SchedulerView"
+            class="com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerView"
             id="com.mmxlabs.scheduleview.views.SchedulerView">
       </view>
    </extension>

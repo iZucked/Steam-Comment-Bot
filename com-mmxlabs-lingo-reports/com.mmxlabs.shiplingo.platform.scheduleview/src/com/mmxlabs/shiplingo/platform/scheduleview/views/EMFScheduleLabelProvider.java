@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.scheduleview.views;
+package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.ValidationSupport;
-import com.mmxlabs.scheduleview.views.colourschemes.IScheduleViewColourScheme;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 
 /**
  * @author hinton

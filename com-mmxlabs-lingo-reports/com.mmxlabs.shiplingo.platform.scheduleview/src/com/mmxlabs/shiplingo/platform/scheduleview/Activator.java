@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.scheduleview;
+package com.mmxlabs.shiplingo.platform.scheduleview;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
