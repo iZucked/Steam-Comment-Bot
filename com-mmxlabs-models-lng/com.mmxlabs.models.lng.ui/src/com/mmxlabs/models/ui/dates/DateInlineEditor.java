@@ -17,8 +17,13 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	private FormattedText formattedText;
 	private DateTimeFormatter dateFormatter;
 
-	public DateInlineEditor(EStructuralFeature feature) {
+	public DateInlineEditor(EStructuralFeature feature, final DateTimeFormatter formatter) {
 		super(feature);
+		this.dateFormatter = formatter;
+	}
+	
+	public DateInlineEditor(final EStructuralFeature feature) {
+		this(feature, new DateTimeFormatter());
 	}
 	
 	@Override
@@ -29,14 +34,12 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected Object getInitialUnsetValue() {
-		return new Date(); //TODO zero minutes
+		return new Date();
 	}
 
 	@Override
 	protected Control createValueControl(Composite parent) {
 		formattedText = new FormattedText(parent);
-		//TODO update the date time formatter to fix to zero.
-		dateFormatter = new DateTimeFormatter();
 		
 		formattedText.setFormatter(dateFormatter);
 		

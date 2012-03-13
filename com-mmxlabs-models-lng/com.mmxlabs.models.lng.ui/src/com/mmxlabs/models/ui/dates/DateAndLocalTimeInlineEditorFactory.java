@@ -3,6 +3,7 @@ package com.mmxlabs.models.ui.dates;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.nebula.widgets.formattedtext.DateFormatter;
 
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
@@ -23,7 +24,7 @@ public class DateAndLocalTimeInlineEditorFactory implements
 		if (showTime) {
 			return new DateInlineEditor(feature); 
 		} else {
-			return new DateInlineEditor(feature);
+			return new DateInlineEditor(feature, new DateFormatter());
 		}
 	}
 }
