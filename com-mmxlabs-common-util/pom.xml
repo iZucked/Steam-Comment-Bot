@@ -29,9 +29,9 @@
 
 	<modules>
 		<module>com.mmxlabs.common.util</module>
-		<module>com.mmxlabs.common.util.p2</module>
 		<module>common-recorder</module>
 		<module>common-nauticaldistances</module>
+		<module>com.mmxlabs.common.util.p2</module>
 	</modules>
 
 </project>
