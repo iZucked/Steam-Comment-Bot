@@ -27,6 +27,9 @@ import scenario.Scenario;
 import scenario.ScenarioPackage;
 
 import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
  * Run a test scenario several times to try and see if it varies.
@@ -41,31 +44,27 @@ public class OptimisationRepeatabilityTest {
 
 		// Load up the Scenario Package
 		@SuppressWarnings("unused")
-		final ScenarioPackage einstance = ScenarioPackage.eINSTANCE;
+		final MMXCorePackage einstance = MMXCorePackage.eINSTANCE;
 	}
 
 	@Test
-	public void testScenario() throws IOException, InterruptedException, IncompleteScenarioException {
+	public void testScenario() throws IOException, InterruptedException {
 
 		final URL url = getClass().getResource("/test.scenario");
 
 		testScenario(url, 5);
 	}
 
-	private void testScenario(final URL url, final int numTries) throws IOException, InterruptedException, IncompleteScenarioException {
+	private void testScenario(final URL url, final int numTries) throws IOException, InterruptedException {
 
-		final Resource resource = new XMIResourceImpl(URI.createURI(url.toString()));
-		resource.load(Collections.emptyMap());
-
-		final ResourceSetImpl resourceSet = new ResourceSetImpl();
-		resourceSet.getResources().add(resource);
-
-		final Scenario originalScenario = (Scenario) (resource.getAllContents().next());
+		ManifestJointModel jointModel = new ManifestJointModel(URI.createURI(url.toString()));
+		final MMXRootObject originalScenario = jointModel.getRootObject();
 
 		final ScenarioRunner[] scenarioRunners = new ScenarioRunner[numTries];
 		for (int i = 0; i < numTries; ++i) {
 
-			final Scenario copy = EcoreUtil.copy(originalScenario);
+			// TODO: Does EcoreUtil.copy work -- do we need to do it here?
+			final MMXRootObject copy = EcoreUtil.copy(originalScenario);
 
 			final Resource cpyResource = new XMIResourceImpl(resource.getURI());
 			cpyResource.getContents().add(copy);

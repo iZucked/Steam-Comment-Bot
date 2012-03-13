@@ -4,19 +4,17 @@
  */
 package com.mmxlabs.shiplingo.platform.its.tests;
 
-import scenario.Scenario;
-import scenario.schedule.Schedule;
-
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lngscheduler.emf.extras.IncompleteScenarioException;
-import com.mmxlabs.lngscheduler.emf.extras.LNGScenarioTransformer;
-import com.mmxlabs.lngscheduler.emf.extras.ModelEntityMap;
-import com.mmxlabs.lngscheduler.emf.extras.OptimisationTransformer;
-import com.mmxlabs.lngscheduler.emf.extras.ResourcelessModelEntityMap;
-import com.mmxlabs.lngscheduler.emf.extras.contracts.SimpleContractTransformer;
-import com.mmxlabs.lngscheduler.emf.extras.export.AnnotatedSolutionExporter;
-import com.mmxlabs.lngscheduler.emf.extras.inject.LNGTransformerModule;
-import com.mmxlabs.lngscheduler.ui.LNGSchedulerJobDescriptor;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformer;
+import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerModule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -31,7 +29,7 @@ import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
  */
 public class ScenarioRunner {
 
-	private final Scenario scenario;
+	private final MMXRootObject scenario;
 
 	private IOptimisationData data;
 	private IOptimisationContext context;
@@ -44,7 +42,7 @@ public class ScenarioRunner {
 
 	private Schedule finalSchedule;
 
-	public ScenarioRunner(final Scenario scenario) {
+	public ScenarioRunner(final MMXRootObject scenario) {
 		this.scenario = scenario;
 	}
 
@@ -56,7 +54,7 @@ public class ScenarioRunner {
 		return intialSchedule;
 	}
 
-	protected final Scenario getScenario() {
+	protected final MMXRootObject getScenario() {
 		return scenario;
 	}
 

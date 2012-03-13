@@ -8,18 +8,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import scenario.cargo.Cargo;
-import scenario.fleet.CharterOut;
-import scenario.fleet.Drydock;
-import scenario.fleet.Vessel;
-import scenario.fleet.VesselClass;
-import scenario.port.Port;
-import scenario.schedule.Schedule;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.PortVisit;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.fleetallocation.FleetVessel;
-
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.DryDockEvent;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 
 /**
@@ -111,7 +108,7 @@ public class SanityCheckTools {
 
 		for (final Sequence sq : schedule.getSequences()) {
 			if (sq.getVessel().equals(fleetVessel)) {
-				for (final ScheduledEvent se : sq.getEvents()) {
+				for (final Event se : sq.getEvents()) {
 					if (se instanceof PortVisit) {
 						final PortVisit pv = (PortVisit) se;
 
@@ -143,7 +140,7 @@ public class SanityCheckTools {
 			for (final Port portB : ports) {
 				if (!portA.equals(portB)) {
 
-					final Drydock dry = csc.addDryDock(portB, start, 1);
+					final DryDockEvent dry = csc.addDryDock(portB, start, 1);
 
 					if (allowedDrydockVessel != null) {
 						dry.getVessels().add(allowedDrydockVessel);
@@ -178,7 +175,7 @@ public class SanityCheckTools {
 
 				final String id = "CharterOut " + portA.getName() + " to " + portB.getName();
 
-				final CharterOut charterOut = csc.addCharterOut(id, portA, portB, start, 1000, charterOutDurationDays, cvValue, dischargePrice, 100, 0);
+				final CharterOutEvent charterOut = csc.addCharterOut(id, portA, portB, start, 1000, charterOutDurationDays, cvValue, dischargePrice, 100, 0);
 
 				if (allowedCharterOutVessel != null) {
 					charterOut.getVessels().add(allowedCharterOutVessel);
