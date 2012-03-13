@@ -4,15 +4,35 @@
  */
 package com.mmxlabs.models.lng.port.ui.editorpart;
 
+import java.util.HashSet;
 import java.util.List;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IWorkbenchPage;
 
+import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorDialog;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 
 public class PortEditorPane extends ScenarioTableViewerPane {
 
@@ -34,6 +54,149 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			addTypicalColumn(capability.getName(), new CapabilityManipulator(capability, jointModelEditorPart.getEditingDomain()));
 		}
 		
+		final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
+		getToolBarManager().appendToGroup("view", dmaAction);
+		getToolBarManager().update(true);
 		defaultSetTitle("Ports");
 	}
+	
+	class DistanceMatrixEditorAction extends AbstractMenuAction {
+		public DistanceMatrixEditorAction() {
+			super("Edit distances");
+//			setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(LngEditorPlugin.getPlugin().getSymbolicName(), "/icons/table.gif"));
+			setToolTipText("Edit distance matrices and canals");
+		}
+
+		@Override
+		protected void populate(final Menu menu) {
+			final PortModel portModel = jointModelEditorPart.getRootObject().getSubModel(PortModel.class);
+			for (final Route canal : portModel.getRoutes()) {
+				final Action canalEditor = new AbstractMenuAction(canal.getName()) {
+					@Override
+					protected void populate(final Menu menu2) {
+						final Action editCanal = createMatrixEditor(canal.getName(), canal);
+						addActionToMenu(editCanal, menu2);
+						final Action renameCanal = new Action("Rename " + canal.getName() + "...") {
+							@Override
+							public void run() {
+								final HashSet<String> existingNames = new HashSet<String>();
+								for (final Route c : portModel.getRoutes()) {
+									if (c != canal) {
+										existingNames.add(c.getName());
+									}
+								}
+								final InputDialog input = new InputDialog(part.getSite().getShell(), "Rename canal " + canal.getName(), "Enter a new name for the canal " + canal.getName(),
+										canal.getName(), new IInputValidator() {
+											@Override
+											public String isValid(final String newText) {
+												if (newText.trim().isEmpty()) {
+													return "The canal must have a name";
+												}
+												if (existingNames.contains(newText)) {
+													return "Another canal already has the name " + newText;
+												}
+												return null;
+											}
+										});
+								if (input.open() == Window.OK) {
+									final String newName = input.getValue();
+									jointModelEditorPart.getEditingDomain().getCommandStack().execute(SetCommand.create(jointModelEditorPart.getEditingDomain(), canal, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newName));
+								}
+							}
+						};
+						addActionToMenu(renameCanal, menu2);
+						//TODO fix delete action. 
+//						final Action deleteCanal = new Action("Delete " + canal.getName() + "...") {
+//							@Override
+//							public void run() {
+//								if (MessageDialog.openQuestion(part.getSite().getShell(), "Delete canal " + canal.getName(), "Are you sure you want to delete the canal \"" + canal.getName()
+//										+ "\"?")) {
+//									jointModelEditorPart.getEditingDomain().getCommandStack().execute(DeleteHelper.createDeleteCommand(part.getEditingDomain(), Collections.singleton(canal)));
+//								}
+//							}
+//						};
+//						addActionToMenu(deleteCanal, menu2);
+					}
+				};
+				addActionToMenu(canalEditor, menu);
+			}
+
+			new MenuItem(menu, SWT.SEPARATOR);
+
+			addActionToMenu(new Action("Add new canal...") {
+				@Override
+				public void run() {
+					final HashSet<String> existingNames = new HashSet<String>();
+					for (final Route c : portModel.getRoutes()) {
+						existingNames.add(c.getName());
+					}
+					final InputDialog input = new InputDialog(part.getSite().getShell(), "Create canal", "Enter a name for the new canal", "", new IInputValidator() {
+						@Override
+						public String isValid(final String newText) {
+							if (newText.trim().isEmpty()) {
+								return "The canal must have a name";
+							}
+							if (existingNames.contains(newText)) {
+								return "Another canal already has the name " + newText;
+							}
+							return null;
+						}
+					});
+					if (input.open() == Window.OK) {
+						final CompoundCommand cc = new CompoundCommand();
+						final String newName = input.getValue();
+						Route dm = PortFactory.eINSTANCE.createRoute();
+						dm.setName(newName);
+						
+						final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
+						if (ded.open(jointModelEditorPart, dm) == Window.OK) {
+							dm = ded.getResult();
+						}
+//						
+//						final VesselClassCost prototype = FleetFactory.eINSTANCE.createVesselClassCost();
+//						prototype.setCanal(c);
+//
+//						final DetailCompositeDialog editor = new DetailCompositeDialog(part.getSite().getShell(), part, part.getEditingDomain());
+//
+//						editor.open(Collections.singletonList((EObject) prototype));
+//						for (final VesselClass vc : part.getScenario().getFleetModel().getVesselClasses()) {
+//							cc.append(AddCommand.create(part.getEditingDomain(), vc, FleetPackage.eINSTANCE.getVesselClass_CanalCosts(), EcoreUtil.copy(prototype)));
+//						}
+						cc.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), portModel, PortPackage.eINSTANCE.getPortModel_Routes(), dm));
+						jointModelEditorPart.getEditingDomain().getCommandStack().execute(cc);
+
+					}
+				}
+			}, menu);
+		}
+
+		protected Action createMatrixEditor(final String name, final Route distanceModel) {
+			return new Action("Edit " + name + " distances...") {
+				@Override
+				public void run() {
+					
+					final Route newModel = edit(distanceModel);
+					if (newModel == null) {
+						return;
+					}
+					final EditingDomain ed = jointModelEditorPart.getEditingDomain();
+					final CompoundCommand cc = new CompoundCommand();
+					cc.append(DeleteCommand.create(ed, distanceModel.getLines()));
+					cc.append(AddCommand.create(ed, distanceModel, PortPackage.eINSTANCE.getRoute_Lines(), newModel.getLines()));
+					ed.getCommandStack().execute(cc);
+					// display error
+				}
+
+				private Route edit(final Route distanceModel) {
+					final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
+					if (ded.open(jointModelEditorPart, distanceModel) == Window.OK) {
+						return ded.getResult();
+					}
+					return null;
+				}
+			};
+		}
+	}
 }
+
+
