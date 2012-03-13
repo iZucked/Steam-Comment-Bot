@@ -14,6 +14,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.ui.actions.RotateSlotsAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
@@ -34,6 +35,10 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 	public void init(List<EReference> path, AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		
+		final RotateSlotsAction rotate = new RotateSlotsAction(getJointModelEditorPart());
+		part.addSelectionChangedListener(rotate);
+		getToolBarManager().appendToGroup("edit", rotate);
+		getToolBarManager().update(true);
 		final MMXCorePackage mmx = MMXCorePackage.eINSTANCE;
 		final CargoPackage pkg = CargoPackage.eINSTANCE;
 		final IReferenceValueProviderProvider provider = part.getReferenceValueProviderCache();

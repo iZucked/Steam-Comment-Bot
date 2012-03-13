@@ -66,14 +66,24 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	protected Index<Integer> charterOutPrice;
 
 	/**
-	 * The cached value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' reference.
+	 * The default value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getSpotCharterCount()
 	 * @generated
 	 * @ordered
 	 */
-	protected Index<Integer> spotCharterCount;
+	protected static final int SPOT_CHARTER_COUNT_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSpotCharterCount()
+	 * @generated
+	 * @ordered
+	 */
+	protected int spotCharterCount = SPOT_CHARTER_COUNT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -190,15 +200,7 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public Index<Integer> getSpotCharterCount() {
-		if (spotCharterCount != null && spotCharterCount.eIsProxy()) {
-			InternalEObject oldSpotCharterCount = (InternalEObject)spotCharterCount;
-			spotCharterCount = (Index<Integer>)eResolveProxy(oldSpotCharterCount);
-			if (spotCharterCount != oldSpotCharterCount) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT, oldSpotCharterCount, spotCharterCount));
-			}
-		}
+	public int getSpotCharterCount() {
 		return spotCharterCount;
 	}
 
@@ -207,17 +209,8 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index<Integer> basicGetSpotCharterCount() {
-		return spotCharterCount;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setSpotCharterCount(Index<Integer> newSpotCharterCount) {
-		Index<Integer> oldSpotCharterCount = spotCharterCount;
+	public void setSpotCharterCount(int newSpotCharterCount) {
+		int oldSpotCharterCount = spotCharterCount;
 		spotCharterCount = newSpotCharterCount;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT, oldSpotCharterCount, spotCharterCount));
@@ -240,8 +233,7 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 				if (resolve) return getCharterOutPrice();
 				return basicGetCharterOutPrice();
 			case PricingPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT:
-				if (resolve) return getSpotCharterCount();
-				return basicGetSpotCharterCount();
+				return getSpotCharterCount();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -266,7 +258,7 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 				setCharterOutPrice((Index<Integer>)newValue);
 				return;
 			case PricingPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT:
-				setSpotCharterCount((Index<Integer>)newValue);
+				setSpotCharterCount((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -290,7 +282,7 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 				setCharterOutPrice((Index<Integer>)null);
 				return;
 			case PricingPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT:
-				setSpotCharterCount((Index<Integer>)null);
+				setSpotCharterCount(SPOT_CHARTER_COUNT_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -311,9 +303,25 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 			case PricingPackage.CHARTER_COST_MODEL__CHARTER_OUT_PRICE:
 				return charterOutPrice != null;
 			case PricingPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT:
-				return spotCharterCount != null;
+				return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (spotCharterCount: ");
+		result.append(spotCharterCount);
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of CharterCostModelImpl

@@ -458,8 +458,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCharterCostModel_SpotCharterCount() {
-		return (EReference)charterCostModelEClass.getEStructuralFeatures().get(3);
+	public EAttribute getCharterCostModel_SpotCharterCount() {
+		return (EAttribute)charterCostModelEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -485,8 +485,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBaseFuelCost_Price() {
-		return (EReference)baseFuelCostEClass.getEStructuralFeatures().get(1);
+	public EAttribute getBaseFuelCost_Price() {
+		return (EAttribute)baseFuelCostEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -740,11 +740,11 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(charterCostModelEClass, CHARTER_COST_MODEL__VESSEL_CLASSES);
 		createEReference(charterCostModelEClass, CHARTER_COST_MODEL__CHARTER_IN_PRICE);
 		createEReference(charterCostModelEClass, CHARTER_COST_MODEL__CHARTER_OUT_PRICE);
-		createEReference(charterCostModelEClass, CHARTER_COST_MODEL__SPOT_CHARTER_COUNT);
+		createEAttribute(charterCostModelEClass, CHARTER_COST_MODEL__SPOT_CHARTER_COUNT);
 
 		baseFuelCostEClass = createEClass(BASE_FUEL_COST);
 		createEReference(baseFuelCostEClass, BASE_FUEL_COST__FUEL);
-		createEReference(baseFuelCostEClass, BASE_FUEL_COST__PRICE);
+		createEAttribute(baseFuelCostEClass, BASE_FUEL_COST__PRICE);
 
 		spotMarketEClass = createEClass(SPOT_MARKET);
 		createEReference(spotMarketEClass, SPOT_MARKET__AVAILABILITY);
@@ -889,17 +889,11 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g2 = createEGenericType(ecorePackage.getEIntegerObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getCharterCostModel_CharterOutPrice(), g1, null, "charterOutPrice", null, 1, 1, CharterCostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		g1 = createEGenericType(this.getIndex());
-		g2 = createEGenericType(ecorePackage.getEIntegerObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getCharterCostModel_SpotCharterCount(), g1, null, "spotCharterCount", null, 1, 1, CharterCostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterCostModel_SpotCharterCount(), ecorePackage.getEInt(), "spotCharterCount", null, 1, 1, CharterCostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(baseFuelCostEClass, BaseFuelCost.class, "BaseFuelCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBaseFuelCost_Fuel(), theTypesPackage.getABaseFuel(), null, "fuel", null, 1, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		g1 = createEGenericType(this.getIndex());
-		g2 = createEGenericType(ecorePackage.getEDoubleObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getBaseFuelCost_Price(), g1, null, "price", null, 1, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBaseFuelCost_Price(), ecorePackage.getEDouble(), "price", null, 1, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(spotMarketEClass, SpotMarket.class, "SpotMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(this.getIndex());

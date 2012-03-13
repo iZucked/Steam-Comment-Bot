@@ -8,16 +8,25 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
 public class PricingModelImporter implements ISubmodelImporter {
@@ -47,7 +56,57 @@ public class PricingModelImporter implements ISubmodelImporter {
 		final FleetCostModel fcm = PricingFactory.eINSTANCE.createFleetCostModel();
 		pricing.setFleetCost(fcm);
 		
-		// blah blah.
+		context.doLater(new IDeferment() {
+			@Override
+			public void run(final IImportContext context) {
+				final MMXRootObject root = context.getRootObject();
+				if (root != null) {
+					final PricingModel pricing = root.getSubModel(PricingModel.class);
+					final FleetModel fleet = root.getSubModel(FleetModel.class);
+					final PortModel port = root.getSubModel(PortModel.class);
+					if (pricing != null && fleet != null && port != null) {
+						for (final Route route : port.getRoutes()) {
+							if (route.isCanal()) {
+								for (final VesselClass vesselClass : fleet.getVesselClasses()) {
+									boolean found = false;
+									for (final RouteCost cost : pricing.getRouteCosts()) {
+										if (cost.getVesselClass() == vesselClass && cost.getRoute() == route) {
+											found = true;
+											break;
+										}
+									}
+									if (!found) {
+										final RouteCost cost = PricingFactory.eINSTANCE.createRouteCost();
+										cost.setRoute(route);
+										cost.setVesselClass(vesselClass);
+										pricing.getRouteCosts().add(cost);
+									}
+								}
+							}
+						}
+					}
+					if (pricing != null && fleet != null) {
+						for (final BaseFuel baseFuel : fleet.getBaseFuels()) {
+							boolean found = false;
+							for (final BaseFuelCost cost : pricing.getFleetCost().getBaseFuelPrices()) {
+								found = cost.getFuel() == baseFuel;
+								if (found) break;
+							}
+							if (!found) {
+								final BaseFuelCost cost = PricingFactory.eINSTANCE.createBaseFuelCost();
+								cost.setFuel(baseFuel);
+								pricing.getFleetCost().getBaseFuelPrices().add(cost);
+							}
+						}
+					}
+				}
+			}
+			
+			@Override
+			public int getStage() {
+				return 10;
+			}
+		});
 		
 		return pricing;
 	}

@@ -40,14 +40,24 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	protected BaseFuel fuel;
 
 	/**
-	 * The cached value of the '{@link #getPrice() <em>Price</em>}' reference.
+	 * The default value of the '{@link #getPrice() <em>Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getPrice()
 	 * @generated
 	 * @ordered
 	 */
-	protected Index<Double> price;
+	protected static final double PRICE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getPrice() <em>Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected double price = PRICE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -112,15 +122,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public Index<Double> getPrice() {
-		if (price != null && price.eIsProxy()) {
-			InternalEObject oldPrice = (InternalEObject)price;
-			price = (Index<Double>)eResolveProxy(oldPrice);
-			if (price != oldPrice) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.BASE_FUEL_COST__PRICE, oldPrice, price));
-			}
-		}
+	public double getPrice() {
 		return price;
 	}
 
@@ -129,17 +131,8 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index<Double> basicGetPrice() {
-		return price;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPrice(Index<Double> newPrice) {
-		Index<Double> oldPrice = price;
+	public void setPrice(double newPrice) {
+		double oldPrice = price;
 		price = newPrice;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.BASE_FUEL_COST__PRICE, oldPrice, price));
@@ -157,8 +150,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 				if (resolve) return getFuel();
 				return basicGetFuel();
 			case PricingPackage.BASE_FUEL_COST__PRICE:
-				if (resolve) return getPrice();
-				return basicGetPrice();
+				return getPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -176,7 +168,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 				setFuel((BaseFuel)newValue);
 				return;
 			case PricingPackage.BASE_FUEL_COST__PRICE:
-				setPrice((Index<Double>)newValue);
+				setPrice((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -194,7 +186,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 				setFuel((BaseFuel)null);
 				return;
 			case PricingPackage.BASE_FUEL_COST__PRICE:
-				setPrice((Index<Double>)null);
+				setPrice(PRICE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -211,9 +203,25 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 			case PricingPackage.BASE_FUEL_COST__FUEL:
 				return fuel != null;
 			case PricingPackage.BASE_FUEL_COST__PRICE:
-				return price != null;
+				return price != PRICE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (price: ");
+		result.append(price);
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of BaseFuelCostImpl

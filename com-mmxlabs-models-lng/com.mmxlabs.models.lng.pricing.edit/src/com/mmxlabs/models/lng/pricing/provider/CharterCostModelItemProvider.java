@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.pricing.provider;
 
 
+import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
@@ -148,7 +150,7 @@ public class CharterCostModelItemProvider
 				 true,
 				 false,
 				 true,
-				 null,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -172,7 +174,8 @@ public class CharterCostModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_CharterCostModel_type");
+		CharterCostModel charterCostModel = (CharterCostModel)object;
+		return getString("_UI_CharterCostModel_type") + " " + charterCostModel.getSpotCharterCount();
 	}
 
 	/**

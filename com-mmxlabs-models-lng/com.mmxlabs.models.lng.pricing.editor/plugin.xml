@@ -156,22 +156,10 @@
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
     <factory
-          ID="com.mmxlabs.models.lng.pricing.editor.routeCostFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Route Price"
-          targetEClass="com.mmxlabs.models.lng.pricing.RouteCost">
-    </factory>
-    <factory
           ID="com.mmxlabs.models.lng.pricing.editor.charterCostFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Charter Price"
           targetEClass="com.mmxlabs.models.lng.pricing.CharterCostModel">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.pricing.editor.baseFuelCostFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Base Fuel Price"
-          targetEClass="com.mmxlabs.models.lng.pricing.BaseFuelCost">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.dataIndexFactory"

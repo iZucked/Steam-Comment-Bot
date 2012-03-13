@@ -55,7 +55,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		}
 		
 		final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
-		getToolBarManager().appendToGroup("view", dmaAction);
+		getToolBarManager().appendToGroup(EDIT_GROUP, dmaAction);
 		getToolBarManager().update(true);
 		defaultSetTitle("Ports");
 	}

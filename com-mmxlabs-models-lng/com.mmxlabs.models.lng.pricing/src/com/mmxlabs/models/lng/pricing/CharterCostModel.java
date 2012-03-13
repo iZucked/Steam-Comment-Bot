@@ -97,30 +97,30 @@ public interface CharterCostModel extends MMXObject {
 	void setCharterOutPrice(Index<Integer> value);
 
 	/**
-	 * Returns the value of the '<em><b>Spot Charter Count</b></em>' reference.
+	 * Returns the value of the '<em><b>Spot Charter Count</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Spot Charter Count</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Spot Charter Count</em>' reference.
-	 * @see #setSpotCharterCount(Index)
+	 * @return the value of the '<em>Spot Charter Count</em>' attribute.
+	 * @see #setSpotCharterCount(int)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCharterCostModel_SpotCharterCount()
-	 * @model type="com.mmxlabs.models.lng.pricing.Index<org.eclipse.emf.ecore.EIntegerObject>" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
-	Index<Integer> getSpotCharterCount();
+	int getSpotCharterCount();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getSpotCharterCount <em>Spot Charter Count</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getSpotCharterCount <em>Spot Charter Count</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Spot Charter Count</em>' reference.
+	 * @param value the new value of the '<em>Spot Charter Count</em>' attribute.
 	 * @see #getSpotCharterCount()
 	 * @generated
 	 */
-	void setSpotCharterCount(Index<Integer> value);
+	void setSpotCharterCount(int value);
 
 } // end of  CharterCostModel
 

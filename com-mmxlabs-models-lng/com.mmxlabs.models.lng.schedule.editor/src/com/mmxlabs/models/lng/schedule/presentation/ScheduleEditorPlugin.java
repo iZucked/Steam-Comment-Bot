@@ -4,15 +4,19 @@
  */
 package com.mmxlabs.models.lng.schedule.presentation;
 
+import com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
+import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
 import org.eclipse.emf.common.EMFPlugin;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
 /**
  * This is the central singleton for the Schedule editor plugin.
@@ -78,9 +82,11 @@ public final class ScheduleEditorPlugin extends EMFPlugin {
 	 * The actual implementation of the Eclipse <b>Plugin</b>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public static class Implementation extends EclipseUIPlugin {
+		private ServiceRegistration<IModelCommandProvider> scheduleClearingRegistration;
+
 		/**
 		 * Creates an instance.
 		 * <!-- begin-user-doc -->
@@ -93,6 +99,24 @@ public final class ScheduleEditorPlugin extends EMFPlugin {
 			// Remember the static instance.
 			//
 			plugin = this;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+		 */
+		@Override
+		public void start(BundleContext context) throws Exception {
+			super.start(context);
+			scheduleClearingRegistration = context.registerService(IModelCommandProvider.class, new ScheduleModelCommandProvider(), null);
+		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+		 */
+		@Override
+		public void stop(BundleContext context) throws Exception {
+			scheduleClearingRegistration.unregister();
+			super.stop(context);
 		}
 	}
 

@@ -7,9 +7,14 @@ package com.mmxlabs.models.lng.cargo.presentation;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
+import com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider;
+import com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
+import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
 /**
  * This is the central singleton for the Cargo editor plugin.
@@ -75,14 +80,17 @@ public final class CargoEditorPlugin extends EMFPlugin {
 	 * The actual implementation of the Eclipse <b>Plugin</b>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT services
 	 */
 	public static class Implementation extends EclipseUIPlugin {
+		private ServiceRegistration<IModelCommandProvider> dateCorrectorRegistration;
+		private ServiceRegistration<IModelCommandProvider> portCorrectorRegistration;
+
 		/**
 		 * Creates an instance.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
+		 * @generated NOT
 		 */
 		public Implementation() {
 			super();
@@ -90,6 +98,24 @@ public final class CargoEditorPlugin extends EMFPlugin {
 			// Remember the static instance.
 			//
 			plugin = this;
+		}
+
+		
+		@Override
+		public void start(BundleContext context) throws Exception {
+			super.start(context);
+			dateCorrectorRegistration = context.registerService(IModelCommandProvider.class, new DateUpdatingCommandProvider(), null);
+			portCorrectorRegistration = context.registerService(IModelCommandProvider.class, new PortUpdatingCommandProvider(), null);
+		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+		 */
+		@Override
+		public void stop(BundleContext context) throws Exception {
+			dateCorrectorRegistration.unregister();
+			portCorrectorRegistration.unregister();
+			super.stop(context);
 		}
 	}
 

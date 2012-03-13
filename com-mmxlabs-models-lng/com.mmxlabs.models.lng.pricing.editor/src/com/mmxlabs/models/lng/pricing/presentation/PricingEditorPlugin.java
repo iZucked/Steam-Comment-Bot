@@ -5,11 +5,30 @@
 package com.mmxlabs.models.lng.pricing.presentation;
 
 import org.eclipse.emf.common.EMFPlugin;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.ui.commands.BaseFuelCostModelCommandProvider;
+import com.mmxlabs.models.lng.pricing.ui.commands.RouteCostModelCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
+import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
 /**
  * This is the central singleton for the Pricing editor plugin.
@@ -75,7 +94,7 @@ public final class PricingEditorPlugin extends EMFPlugin {
 	 * The actual implementation of the Eclipse <b>Plugin</b>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT add services
 	 */
 	public static class Implementation extends EclipseUIPlugin {
 		/**
@@ -90,6 +109,26 @@ public final class PricingEditorPlugin extends EMFPlugin {
 			// Remember the static instance.
 			//
 			plugin = this;
+		}
+
+		private ServiceRegistration<IModelCommandProvider> routeCostProviderRegistration;
+		private ServiceRegistration<IModelCommandProvider> fuelCostProviderRegistration;
+		
+		@Override
+		public void start(BundleContext context) throws Exception {
+			super.start(context);
+			routeCostProviderRegistration = context.registerService(IModelCommandProvider.class, 
+					new RouteCostModelCommandProvider()
+					, null);
+			fuelCostProviderRegistration = context.registerService(IModelCommandProvider.class, new BaseFuelCostModelCommandProvider(), null);
+			
+		}
+
+		@Override
+		public void stop(BundleContext context) throws Exception {
+			routeCostProviderRegistration.unregister();
+			fuelCostProviderRegistration.unregister();
+			super.stop(context);
 		}
 	}
 

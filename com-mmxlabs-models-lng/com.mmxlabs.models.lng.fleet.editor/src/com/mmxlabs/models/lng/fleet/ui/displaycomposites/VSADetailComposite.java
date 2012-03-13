@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 
 /**
@@ -323,5 +324,13 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	@Override
 	public void displayValidationStatus(final IStatus status) {
 		delegate.displayValidationStatus(status);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editors.IDisplayComposite#setEditorWrapper(com.mmxlabs.models.ui.editors.IInlineEditorWrapper)
+	 */
+	@Override
+	public void setEditorWrapper(IInlineEditorWrapper wrapper) {
+		delegate.setEditorWrapper(wrapper);
 	}
 }

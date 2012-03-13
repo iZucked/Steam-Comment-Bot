@@ -574,7 +574,7 @@ public interface PricingPackage extends EPackage {
 	int CHARTER_COST_MODEL__CHARTER_OUT_PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Spot Charter Count</b></em>' reference.
+	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -629,7 +629,7 @@ public interface PricingPackage extends EPackage {
 	int BASE_FUEL_COST__FUEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Price</b></em>' reference.
+	 * The feature id for the '<em><b>Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1267,15 +1267,15 @@ public interface PricingPackage extends EPackage {
 	EReference getCharterCostModel_CharterOutPrice();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getSpotCharterCount <em>Spot Charter Count</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getSpotCharterCount <em>Spot Charter Count</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Spot Charter Count</em>'.
+	 * @return the meta object for the attribute '<em>Spot Charter Count</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.CharterCostModel#getSpotCharterCount()
 	 * @see #getCharterCostModel()
 	 * @generated
 	 */
-	EReference getCharterCostModel_SpotCharterCount();
+	EAttribute getCharterCostModel_SpotCharterCount();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost <em>Base Fuel Cost</em>}'.
@@ -1299,15 +1299,15 @@ public interface PricingPackage extends EPackage {
 	EReference getBaseFuelCost_Fuel();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getPrice <em>Price</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getPrice <em>Price</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Price</em>'.
+	 * @return the meta object for the attribute '<em>Price</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.BaseFuelCost#getPrice()
 	 * @see #getBaseFuelCost()
 	 * @generated
 	 */
-	EReference getBaseFuelCost_Price();
+	EAttribute getBaseFuelCost_Price();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.SpotMarket <em>Spot Market</em>}'.
@@ -1789,12 +1789,12 @@ public interface PricingPackage extends EPackage {
 		EReference CHARTER_COST_MODEL__CHARTER_OUT_PRICE = eINSTANCE.getCharterCostModel_CharterOutPrice();
 
 		/**
-		 * The meta object literal for the '<em><b>Spot Charter Count</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Spot Charter Count</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CHARTER_COST_MODEL__SPOT_CHARTER_COUNT = eINSTANCE.getCharterCostModel_SpotCharterCount();
+		EAttribute CHARTER_COST_MODEL__SPOT_CHARTER_COUNT = eINSTANCE.getCharterCostModel_SpotCharterCount();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelCostImpl <em>Base Fuel Cost</em>}' class.
@@ -1815,12 +1815,12 @@ public interface PricingPackage extends EPackage {
 		EReference BASE_FUEL_COST__FUEL = eINSTANCE.getBaseFuelCost_Fuel();
 
 		/**
-		 * The meta object literal for the '<em><b>Price</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BASE_FUEL_COST__PRICE = eINSTANCE.getBaseFuelCost_Price();
+		EAttribute BASE_FUEL_COST__PRICE = eINSTANCE.getBaseFuelCost_Price();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl <em>Spot Market</em>}' class.

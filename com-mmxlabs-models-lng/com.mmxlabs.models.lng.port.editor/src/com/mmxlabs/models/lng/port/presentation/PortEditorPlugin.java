@@ -7,9 +7,13 @@ package com.mmxlabs.models.lng.port.presentation;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
+import com.mmxlabs.models.lng.port.ui.commands.RoutePortCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
+import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
 /**
  * This is the central singleton for the Port editor plugin.
@@ -75,9 +79,11 @@ public final class PortEditorPlugin extends EMFPlugin {
 	 * The actual implementation of the Eclipse <b>Plugin</b>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NO
 	 */
 	public static class Implementation extends EclipseUIPlugin {
+		private ServiceRegistration<IModelCommandProvider> routeCommandProviderRegistration;
+
 		/**
 		 * Creates an instance.
 		 * <!-- begin-user-doc -->
@@ -91,6 +97,27 @@ public final class PortEditorPlugin extends EMFPlugin {
 			//
 			plugin = this;
 		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+		 */
+		@Override
+		public void start(BundleContext context) throws Exception {
+			super.start(context);
+			routeCommandProviderRegistration = context.registerService(IModelCommandProvider.class, new RoutePortCommandProvider(), null);
+			
+		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+		 */
+		@Override
+		public void stop(BundleContext context) throws Exception {
+			routeCommandProviderRegistration.unregister();
+			super.stop(context);
+		}
+		
+		
 	}
 
 }
