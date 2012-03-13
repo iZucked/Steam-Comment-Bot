@@ -8,7 +8,6 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.validation.internal.modeled.model.validation.util.ValidationSwitch;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.swt.graphics.Color;
@@ -25,7 +24,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.ValidationSupport;
-import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 
 /**
