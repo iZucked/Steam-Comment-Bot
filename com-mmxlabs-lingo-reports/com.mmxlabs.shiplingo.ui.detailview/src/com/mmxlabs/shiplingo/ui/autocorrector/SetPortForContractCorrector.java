@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortCapability;
+import com.mmxlabs.models.lng.types.PortCapability;
 
 /**
  * An auto-corrector which sets the port to a value from the contract's default port list if necessary

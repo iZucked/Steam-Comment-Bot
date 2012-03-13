@@ -142,6 +142,8 @@ public class ImportCSVFilesPage extends WizardPage {
 			root.addSubModel(c.importer.importModel(readers, context));
 		}
 		
+		context.setRootObject(root);
+		
 		context.run();
 		return root;
 	}	
