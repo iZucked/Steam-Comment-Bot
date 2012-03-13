@@ -65,7 +65,7 @@ import com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage;
  * @author hinton
  *
  */
-public class DemoJointModel extends JointModel {
+public class ManifestJointModel extends JointModel {
 	private static final List<IJointModelRelease> releases = 
 			new LinkedList<IJointModelRelease>();
 	private static final String PORT_MODEL_KEY = "port-model";
@@ -136,7 +136,7 @@ public class DemoJointModel extends JointModel {
 		return false;
 	}
 
-	public static DemoJointModel createEmptyModel(final URI target) throws IOException {
+	public static ManifestJointModel createEmptyModel(final URI target) throws IOException {
 		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 		rootObject.setVersion(releases.size());
 		//TODO sort out how to create blank models; should there be an extension for this?
@@ -182,11 +182,11 @@ public class DemoJointModel extends JointModel {
 			v.setAvailability(a);
 		}
 		
-		final DemoJointModel result = new DemoJointModel(rootObject, target);
+		final ManifestJointModel result = new ManifestJointModel(rootObject, target);
 		return result;
 	}
 	
-	public DemoJointModel(final MMXRootObject rootObject, final URI file_) throws IOException {
+	public ManifestJointModel(final MMXRootObject rootObject, final URI file_) throws IOException {
 		setFile(file_);
 		final Resource resource = createManifestResource();
 		manifest = ManifestFactory.eINSTANCE.createManifest();
@@ -194,7 +194,7 @@ public class DemoJointModel extends JointModel {
 		setRootObject(rootObject);
 	}
 	
-	public DemoJointModel(final URI file_) throws FileNotFoundException, IOException, MigrationException {
+	public ManifestJointModel(final URI file_) throws FileNotFoundException, IOException, MigrationException {
 		setFile(file_);
 		final Resource resource = createManifestResource();
 		resource.load(null);

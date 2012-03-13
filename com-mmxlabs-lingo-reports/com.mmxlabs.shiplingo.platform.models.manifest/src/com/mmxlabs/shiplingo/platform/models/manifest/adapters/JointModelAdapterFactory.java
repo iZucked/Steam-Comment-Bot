@@ -15,7 +15,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IURIEditorInput;
 
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
-import com.mmxlabs.shiplingo.platform.models.manifest.DemoJointModel;
+import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
  * Adapts IEditorInputs to DemoJointModels where possible.
@@ -28,12 +28,12 @@ public class JointModelAdapterFactory implements IAdapterFactory {
 	@Override
 	public Object getAdapter(Object adaptableObject, Class adapterType) {
 		if (adaptableObject instanceof IEditorInput) {
-			if (adapterType.isAssignableFrom(DemoJointModel.class)) {
+			if (adapterType.isAssignableFrom(ManifestJointModel.class)) {
 				final IEditorInput input = (IEditorInput) adaptableObject;
 				final IURIEditorInput uriInput = (IURIEditorInput) input.getAdapter(IURIEditorInput.class);
 				if (uriInput != null) {
 					try {
-						return new DemoJointModel(URI.createURI(uriInput.getURI().toString()));
+						return new ManifestJointModel(URI.createURI(uriInput.getURI().toString()));
 					} catch (FileNotFoundException e) {
 						return null;
 					} catch (IOException e) {
@@ -47,7 +47,7 @@ public class JointModelAdapterFactory implements IAdapterFactory {
 			}
 		} else if (adaptableObject instanceof IResource) {
 			try {
-				return new DemoJointModel(URI.createPlatformResourceURI(((IResource) adaptableObject).getFullPath().toString(), true));
+				return new ManifestJointModel(URI.createPlatformResourceURI(((IResource) adaptableObject).getFullPath().toString(), true));
 			} catch (FileNotFoundException e) {
 				return null;
 			} catch (IOException e) {
