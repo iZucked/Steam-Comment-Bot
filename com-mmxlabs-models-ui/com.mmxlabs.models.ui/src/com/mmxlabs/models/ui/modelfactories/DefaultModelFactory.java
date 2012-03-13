@@ -97,7 +97,7 @@ public class DefaultModelFactory implements IModelFactory {
 	protected void postprocess(final EObject top) {
 		for (final EAttribute attribute : top.eClass().getEAllAttributes()) {
 			if (attribute.getEAttributeType() == EcorePackage.eINSTANCE.getEDate() && 
-					attribute.isUnsettable() &&
+					!attribute.isUnsettable() &&
 					top.eGet(attribute) == null) {
 				top.eSet(attribute, now);
 			}
