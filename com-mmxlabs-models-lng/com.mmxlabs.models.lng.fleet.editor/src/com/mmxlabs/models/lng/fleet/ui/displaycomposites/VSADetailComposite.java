@@ -5,8 +5,8 @@
 package com.mmxlabs.models.lng.fleet.ui.displaycomposites;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Adapter;
@@ -317,7 +317,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	}
 
 	@Override
-	public Collection<EObject> getEditingRange(final MMXRootObject root, final EObject value) {
+	public List<EObject> getEditingRange(final MMXRootObject root, final EObject value) {
 		return delegate.getEditingRange(root, value);
 	}
 

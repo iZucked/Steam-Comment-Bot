@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.actions;
 
-import java.security.acl.LastOwnerException;
-
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -17,6 +15,8 @@ import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 /**
+ * Action to display wiring editor. 
+ *
  * @author hinton
  *
  */
