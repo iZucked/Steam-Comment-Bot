@@ -55,6 +55,23 @@ public class ArrayIndexMapTest {
 		context.assertIsSatisfied();
 	}
 
+	@Test(expected = NoSuchElementException.class)
+	public void testGet3() {
+		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
+		final IIndexedObject key = context.mock(IIndexedObject.class);
+
+		context.checking(new Expectations() {
+			{
+				one(key).getIndex();
+				will(returnValue(Integer.MAX_VALUE));
+			}
+		});
+
+		map.get(key);
+
+		context.assertIsSatisfied();
+	}
+	
 	@Test
 	public void testGetSet() {
 		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
@@ -132,6 +149,19 @@ public class ArrayIndexMapTest {
 		// Trigger no such element exception
 		iterator.next();
 
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void testGetValues3() {
+		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
+
+		final Iterable<Object> values = map.getValues();
+		Assert.assertNotNull(values);
+
+		final Iterator<Object> iterator = values.iterator();
+		Assert.assertNotNull(iterator);
+
+		iterator.remove();
 	}
 
 	@Test
