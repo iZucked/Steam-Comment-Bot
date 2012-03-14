@@ -218,6 +218,40 @@
                </or>
             </activeWhen>
          </handler>
+         <handler
+               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.DeriveOptimisationHandler"
+               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.derive">
+            <enabledWhen>
+               <or>
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <and>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scn">
+                        </test>
+                     </and>
+                  </iterate>
+               </or>
+            </enabledWhen>
+            <activeWhen>
+               <or>
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <and>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.eclipse.core.resources.extension"
+                              value="scn">
+                        </test>
+                     </and>
+                  </iterate>
+               </or>
+            </activeWhen>
+         </handler>
       </extension>
 
 <extension
@@ -263,6 +297,9 @@
             </adapter>
             <adapter
                   type="com.mmxlabs.models.lng.schedule.Schedule">
+            </adapter>
+            <adapter
+                  type="com.mmxlabs.models.mmxcore.jointmodel.JointModel">
             </adapter>
             <!--
             <adapter
@@ -325,7 +362,7 @@
                <test
                      forcePluginActivation="true"
                      property="org.eclipse.core.resources.extension"
-                     value="scenario">
+                     value="scn">
                </test>
             </or></triggerPoints>
          <possibleChildren>
