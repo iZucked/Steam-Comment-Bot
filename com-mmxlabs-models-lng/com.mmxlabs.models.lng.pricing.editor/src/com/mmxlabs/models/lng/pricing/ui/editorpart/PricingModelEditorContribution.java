@@ -12,22 +12,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
-public class PricingModelEditorContribution implements IJointModelEditorContribution {
-	private UUIDObject modelObject;
-	private JointModelEditorPart editorPart;
-
-	@Override
-	public void init(JointModelEditorPart editorPart, MMXRootObject rootObject, UUIDObject modelObject) {
-		this.editorPart = editorPart;
-		this.modelObject = modelObject;
-	}
-
+public class PricingModelEditorContribution extends BaseJointModelEditorContribution<PricingModel> {
 	@Override
 	public void addPages(final Composite parent) {
 		addIndexPage(parent);
@@ -93,6 +86,24 @@ public class PricingModelEditorContribution implements IJointModelEditorContribu
 		
 		int page = editorPart.addPage(sash);
 		editorPart.setPageText(page, "Indices");
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#lock()
+	 */
+	@Override
+	protected void lock() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#unlock()
+	 */
+	@Override
+	protected void unlock() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

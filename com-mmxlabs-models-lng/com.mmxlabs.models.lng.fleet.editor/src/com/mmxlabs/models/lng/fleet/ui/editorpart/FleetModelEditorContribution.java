@@ -10,27 +10,19 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
-public class FleetModelEditorContribution implements IJointModelEditorContribution {
-
-	private JointModelEditorPart editorPart;
-	private UUIDObject modelObject;
+public class FleetModelEditorContribution extends BaseJointModelEditorContribution<FleetModel> {	
 	private VesselViewerPane vesselViewerPane;
 	private VesselClassViewerPane vesselClassViewerPane;
-	private int pageNumber;
 	private VesselEventViewerPane eventViewerPane;
-
-	@Override
-	public void init(JointModelEditorPart editorPart, MMXRootObject rootObject,
-			UUIDObject modelObject) {
-		this.editorPart = editorPart;
-		this.modelObject = modelObject;
-	}
+	private int pageNumber;
 
 	@Override
 	public void addPages(final Composite parent) {
@@ -59,6 +51,24 @@ public class FleetModelEditorContribution implements IJointModelEditorContributi
 		
 		pageNumber = editorPart.addPage(sash);
 		editorPart.setPageText(pageNumber, "Fleet");
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#lock()
+	 */
+	@Override
+	protected void lock() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#unlock()
+	 */
+	@Override
+	protected void unlock() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

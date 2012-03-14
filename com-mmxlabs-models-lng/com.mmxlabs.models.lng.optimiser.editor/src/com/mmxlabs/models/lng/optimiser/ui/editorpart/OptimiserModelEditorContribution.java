@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
@@ -20,25 +21,15 @@ import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
  * @author hinton
  *
  */
-public class OptimiserModelEditorContribution implements IJointModelEditorContribution {
-
-	private OptimiserModel modelObject;
-	private MMXRootObject rootObject;
-	private JointModelEditorPart editorPart;
-
-	@Override
-	public void init(JointModelEditorPart editorPart, MMXRootObject rootObject, UUIDObject modelObject) {
-		this.editorPart = editorPart;
-		this.rootObject = rootObject;
-		this.modelObject = (OptimiserModel) modelObject;
-	}
+public class OptimiserModelEditorContribution extends BaseJointModelEditorContribution<OptimiserModel> {
+	private OptimiserSettingsEditorPane pane;
 
 	/* (non-Javadoc)
 	 * @see com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution#addPages(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
 	public void addPages(Composite parent) {
-		final OptimiserSettingsEditorPane pane = new OptimiserSettingsEditorPane(editorPart.getSite().getPage(), editorPart);
+		pane = new OptimiserSettingsEditorPane(editorPart.getSite().getPage(), editorPart);
 		
 		pane.createControl(parent);
 		pane.init(
@@ -48,6 +39,24 @@ public class OptimiserModelEditorContribution implements IJointModelEditorContri
 		
 		int pageNumber = editorPart.addPage(pane.getControl());
 		editorPart.setPageText(pageNumber, "Optimiser Settings");
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#lock()
+	 */
+	@Override
+	protected void lock() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#unlock()
+	 */
+	@Override
+	protected void unlock() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

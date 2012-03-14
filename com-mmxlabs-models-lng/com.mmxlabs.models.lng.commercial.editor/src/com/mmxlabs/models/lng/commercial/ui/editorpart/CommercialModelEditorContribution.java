@@ -14,46 +14,55 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
-public class CommercialModelEditorContribution implements IJointModelEditorContribution {
-	CommercialModel subModel;
-	MMXRootObject rootModel;
-	JointModelEditorPart part;
+public class CommercialModelEditorContribution extends BaseJointModelEditorContribution<CommercialModel> {
 	private int pageNumber;
-	
-	@Override
-	public void init(final JointModelEditorPart editorPart, final MMXRootObject rootObject, final UUIDObject modelObject) {
-		this.part = editorPart;
-		this.rootModel = rootObject;
-		this.subModel = (CommercialModel) modelObject;
-	}
 
 	@Override
 	public void addPages(final Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
 		
-		EntityEditorPane entEp = new EntityEditorPane(part.getSite().getPage(), part);
-		ContractEditorPane pconEp = new ContractEditorPane(part.getSite().getPage(), part);
-		ContractEditorPane sconEp = new ContractEditorPane(part.getSite().getPage(), part);
+		EntityEditorPane entEp = new EntityEditorPane(editorPart.getSite().getPage(), editorPart);
+		ContractEditorPane pconEp = new ContractEditorPane(editorPart.getSite().getPage(), editorPart);
+		ContractEditorPane sconEp = new ContractEditorPane(editorPart.getSite().getPage(), editorPart);
 
 		entEp.createControl(sash);
 		sconEp.createControl(sash);
 		pconEp.createControl(sash);
 		
-		entEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), part.getAdapterFactory());
-		sconEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), part.getAdapterFactory());
-		pconEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), part.getAdapterFactory());
+		entEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory());
+		sconEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory());
+		pconEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory());
 		
-		entEp.getViewer().setInput(subModel);
-		sconEp.getViewer().setInput(subModel);
-		pconEp.getViewer().setInput(subModel);
+		entEp.getViewer().setInput(modelObject);
+		sconEp.getViewer().setInput(modelObject);
+		pconEp.getViewer().setInput(modelObject);
 		
 		pconEp.defaultSetTitle("Purchase Contracts");
 		sconEp.defaultSetTitle("Sales Contracts");
 		
-		pageNumber = part.addPage(sash);
-		part.setPageText(pageNumber, "Commercial");
+		pageNumber = editorPart.addPage(sash);
+		editorPart.setPageText(pageNumber, "Commercial");
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#lock()
+	 */
+	@Override
+	protected void lock() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#unlock()
+	 */
+	@Override
+	protected void unlock() {
+		// TODO Auto-generated method stub
+		
 	}
 }

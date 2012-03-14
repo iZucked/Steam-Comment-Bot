@@ -10,26 +10,18 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
-public class PortModelEditorContribution implements IJointModelEditorContribution {
-
-	private UUIDObject modelObject;
-	private JointModelEditorPart editorPart;
+public class PortModelEditorContribution extends BaseJointModelEditorContribution<PortModel> {
 	private PortEditorPane portViewerPane;
-	private int pageNumber = 1;
 	private PortGroupEditorPane groupViewerPane;
-
-	@Override
-	public void init(final JointModelEditorPart editorPart, final MMXRootObject rootObject,
-			final UUIDObject modelObject) {
-		this.editorPart = editorPart;
-		this.modelObject = modelObject;
-	}
+	private int pageNumber = 1;
 
 	@Override
 	public void addPages(Composite parent) {
@@ -49,5 +41,23 @@ public class PortModelEditorContribution implements IJointModelEditorContributio
 		
 		pageNumber = editorPart.addPage(sash);
 		editorPart.setPageText(pageNumber, "Ports");
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#lock()
+	 */
+	@Override
+	protected void lock() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#unlock()
+	 */
+	@Override
+	protected void unlock() {
+		// TODO Auto-generated method stub
+		
 	}
 }
