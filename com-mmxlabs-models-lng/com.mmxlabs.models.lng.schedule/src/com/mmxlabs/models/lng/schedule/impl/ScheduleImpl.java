@@ -89,7 +89,7 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	protected EList<UnscheduledCargo> unscheduledCargos;
 
 	/**
-	 * The cached value of the '{@link #getCargoAllocations() <em>Cargo Allocations</em>}' reference list.
+	 * The cached value of the '{@link #getCargoAllocations() <em>Cargo Allocations</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getCargoAllocations()
@@ -189,7 +189,7 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 */
 	public EList<CargoAllocation> getCargoAllocations() {
 		if (cargoAllocations == null) {
-			cargoAllocations = new EObjectResolvingEList<CargoAllocation>(CargoAllocation.class, this, SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS);
+			cargoAllocations = new EObjectContainmentEList<CargoAllocation>(CargoAllocation.class, this, SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS);
 		}
 		return cargoAllocations;
 	}
@@ -230,6 +230,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return ((InternalEList<?>)getSequences()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOS:
 				return ((InternalEList<?>)getUnscheduledCargos()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
+				return ((InternalEList<?>)getCargoAllocations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 				return ((InternalEList<?>)getSlotAllocations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__FITNESSES:

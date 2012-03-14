@@ -88,7 +88,7 @@ public interface Schedule extends MMXObject {
 	EList<UnscheduledCargo> getUnscheduledCargos();
 
 	/**
-	 * Returns the value of the '<em><b>Cargo Allocations</b></em>' reference list.
+	 * Returns the value of the '<em><b>Cargo Allocations</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.CargoAllocation}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -96,9 +96,9 @@ public interface Schedule extends MMXObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cargo Allocations</em>' reference list.
+	 * @return the value of the '<em>Cargo Allocations</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_CargoAllocations()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<CargoAllocation> getCargoAllocations();

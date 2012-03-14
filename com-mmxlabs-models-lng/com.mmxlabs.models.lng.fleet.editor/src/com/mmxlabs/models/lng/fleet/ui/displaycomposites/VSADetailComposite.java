@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
@@ -274,11 +275,10 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	}
 
 	VesselStateAttributes oldValue = null;
-	final Adapter adapter = new EContentAdapter() {
+	final Adapter adapter = new MMXContentAdapter() {
 
 		@Override
-		public void notifyChanged(Notification notification) {
-			super.notifyChanged(notification);
+		public void reallyNotifyChanged(Notification notification) {
 			if (!isDisposed() && isVisible()) {
 				if (tableViewer != null && tableViewer.getTable().isDisposed() == false) tableViewer.refresh();
 			} else {

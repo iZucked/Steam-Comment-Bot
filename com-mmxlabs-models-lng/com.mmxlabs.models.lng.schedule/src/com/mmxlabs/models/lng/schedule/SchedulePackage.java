@@ -272,7 +272,7 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__UNSCHEDULED_CARGOS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Cargo Allocations</b></em>' reference list.
+	 * The feature id for the '<em><b>Cargo Allocations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2967,10 +2967,10 @@ public interface SchedulePackage extends EPackage {
 	EReference getSchedule_UnscheduledCargos();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Cargo Allocations</em>'.
+	 * @return the meta object for the containment reference list '<em>Cargo Allocations</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations()
 	 * @see #getSchedule()
 	 * @generated
@@ -3906,7 +3906,7 @@ public interface SchedulePackage extends EPackage {
 		EReference SCHEDULE__UNSCHEDULED_CARGOS = eINSTANCE.getSchedule_UnscheduledCargos();
 
 		/**
-		 * The meta object literal for the '<em><b>Cargo Allocations</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Cargo Allocations</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
