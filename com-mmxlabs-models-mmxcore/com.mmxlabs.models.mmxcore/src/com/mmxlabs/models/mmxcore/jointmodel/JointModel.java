@@ -202,7 +202,7 @@ public abstract class JointModel {
 				((IMMXAdapter) a).disable();
 			}
 		}
-		for (final EObject o : top.eContents()) disableAdapters(top);
+		for (final EObject o : top.eContents()) disableAdapters(o);
 	}
 	
 	private void enableAdapters(final EObject top) {
@@ -211,7 +211,7 @@ public abstract class JointModel {
 				((IMMXAdapter) a).enable();
 			}
 		}
-		for (final EObject o : top.eContents()) enableAdapters(top);
+		for (final EObject o : top.eContents()) enableAdapters(o);
 	}
 
 	private void copy(final InputStream in, final OutputStream out)
