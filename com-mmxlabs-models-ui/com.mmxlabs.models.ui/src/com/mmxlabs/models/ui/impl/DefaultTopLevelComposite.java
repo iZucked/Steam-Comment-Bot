@@ -25,6 +25,7 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
+import com.mmxlabs.models.ui.editors.util.EditorUtils;
 
 /**
  * The default composite used to display an EObject
@@ -48,7 +49,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	public void display(final MMXRootObject root, final EObject object) {
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
-		g.setText(eClass.getName());
+		g.setText(EditorUtils.unmangle(eClass.getName()));
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
 		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().
