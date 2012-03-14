@@ -6,7 +6,6 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
 
 public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter {
-	boolean enabled = true;
 	@Override
 	public void notifyChanged(final Notification notification) {
 		if (enabled) reallyNotifyChanged(notification);
@@ -14,6 +13,7 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 	
 	public abstract void reallyNotifyChanged(final Notification notification);
 
+	boolean enabled = true;
 	@Override
 	public void disable() {
 		enabled = false;
