@@ -27,7 +27,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
@@ -103,7 +102,7 @@ public abstract class JointModel {
 	 */
 	public void createResources(final MMXRootObject root,
 			final boolean skipExistingResources) {
-		if (skipExistingResources && root.eResource() == null) {
+		if (!skipExistingResources || root.eResource() == null) {
 			final URI rootURI = createURI(root);
 
 			final Resource rootResource = resourceSet.createResource(rootURI);
@@ -114,7 +113,7 @@ public abstract class JointModel {
 
 		while (iterator.hasNext()) {
 			final MMXSubModel subModel = iterator.next();
-			if (skipExistingResources && subModel.getOriginalResource() == null) {
+			if (!skipExistingResources || subModel.getOriginalResource() == null) {
 				iterator.remove();
 				final URI uri = createURI(subModel.getSubModelInstance());
 				subObjects.add(subModel.getSubModelInstance());
