@@ -257,6 +257,7 @@ public class AnnotatedSolutionExporter {
 				if (event instanceof SlotVisit) {
 					final SlotVisit visit = (SlotVisit) event;
 					allocation = visit.getSlotAllocation().getCargoAllocation();
+					allocation.setSequence(eSequence);
 				} else if (event instanceof Journey && allocation != null) {
 					if (allocation.getLadenLeg() == null) {
 						allocation.setLadenLeg((Journey) event);

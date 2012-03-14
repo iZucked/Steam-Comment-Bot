@@ -98,7 +98,8 @@ public class ScenarioUtils {
 		}
 
 		final AnnealingSettings annealingSettings = of.createAnnealingSettings();
-		annealingSettings.setIterations(200000);
+//		annealingSettings.setIterations(200000);
+		annealingSettings.setIterations(1000);
 		annealingSettings.setCooling(0.85);
 		annealingSettings.setEpochLength(20000);
 		annealingSettings.setInitialTemperature(45000);

@@ -67,6 +67,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			final SlotVisit sv = factory.createSlotVisit();
 			final SlotAllocation slotAllocation = factory.createSlotAllocation();
 			sv.setSlotAllocation(slotAllocation);
+			
+			output.getSlotAllocations().add(slotAllocation);
 			//TODO this will have to look at market-generated slots.
 			slotAllocation.setSlot(entities.getModelObject(slot, Slot.class));
 			portVisit = sv;
@@ -87,7 +89,6 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 //				eAllocation.setSequence();
 
-				
 				output.getCargoAllocations().add(eAllocation);
 			}
 

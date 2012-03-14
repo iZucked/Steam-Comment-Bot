@@ -961,6 +961,10 @@ public class LNGScenarioTransformer {
 		}
 		if (defaultSettings == null) {
 			defaultSettings = ScenarioUtils.createDefaultSettings();
+			if (om != null) {
+				om.getSettings().add(defaultSettings);
+				om.setActiveSetting(defaultSettings);
+			}
 		}
 		return defaultSettings;
 	}
