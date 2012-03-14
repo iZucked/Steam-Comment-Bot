@@ -9,9 +9,9 @@ public class NothingParserTest {
 	public void test() throws InvalidArgumentException {
 		final NothingParser parser = new NothingParser();
 
-		Assert.assertFalse(parser.hasDefaultValue());
-		Assert.assertNull(parser.getDefaultValue());
+		Assert.assertTrue(parser.hasDefaultValue());
+		Assert.assertEquals(false, parser.getDefaultValue());
 
-		parser.parse(null, null);
+		Assert.assertEquals(true, parser.parse(null, null));
 	}
 }
