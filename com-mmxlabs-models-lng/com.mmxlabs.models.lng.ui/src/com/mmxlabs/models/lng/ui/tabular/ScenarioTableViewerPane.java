@@ -179,6 +179,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected Action createDeleteAction() {
 		return new ScenarioModifyingAction("Delete") {
 			{
+				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
 				jointModelEditorPart.addSelectionChangedListener(this);
 			}
 			@Override
