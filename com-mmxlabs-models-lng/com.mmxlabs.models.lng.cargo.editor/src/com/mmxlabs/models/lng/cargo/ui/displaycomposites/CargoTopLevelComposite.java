@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -37,7 +38,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	}
 
 	@Override
-	public Collection<EObject> getEditingRange(MMXRootObject root, EObject value) {
+	public List<EObject> getEditingRange(MMXRootObject root, EObject value) {
 		if (value instanceof Cargo) {
 			return Arrays.asList(new EObject[] {value, ((Cargo) value).getLoadSlot(), ((Cargo) value).getDischargeSlot()});
 		} else {

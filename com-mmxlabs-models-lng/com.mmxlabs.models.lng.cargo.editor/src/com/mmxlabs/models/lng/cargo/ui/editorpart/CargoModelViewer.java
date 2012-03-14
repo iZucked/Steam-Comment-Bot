@@ -14,6 +14,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.ui.actions.RewireAction;
 import com.mmxlabs.models.lng.cargo.ui.actions.RotateSlotsAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -34,9 +35,11 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 	@Override
 	public void init(List<EReference> path, AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-		
+		final RewireAction rewire = new RewireAction(getJointModelEditorPart());
 		final RotateSlotsAction rotate = new RotateSlotsAction(getJointModelEditorPart());
 		part.addSelectionChangedListener(rotate);
+		part.addSelectionChangedListener(rewire);
+		getToolBarManager().appendToGroup("edit", rewire);
 		getToolBarManager().appendToGroup("edit", rotate);
 		getToolBarManager().update(true);
 		final MMXCorePackage mmx = MMXCorePackage.eINSTANCE;
@@ -67,7 +70,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		addTypicalColumn(
 				"Discharge Contract",
 				new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_DischargeSlot());
-
+		
 		setTitle("Cargos", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 }
