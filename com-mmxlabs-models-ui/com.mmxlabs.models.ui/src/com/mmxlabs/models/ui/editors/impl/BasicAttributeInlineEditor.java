@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
@@ -48,7 +49,7 @@ import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
  * @author Tom Hinton
  * 
  */
-public abstract class BasicAttributeInlineEditor extends AdapterImpl implements IInlineEditor {
+public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implements IInlineEditor {
 
 	/**
 	 * Adapter factory instance. This contains all factories registered in the
@@ -201,8 +202,7 @@ public abstract class BasicAttributeInlineEditor extends AdapterImpl implements 
 	}
 
 	@Override
-	public void notifyChanged(final Notification msg) {
-		super.notifyChanged(msg);
+	public void reallyNotifyChanged(final Notification msg) {
 		// check if msg is relevant
 		if (msg.getFeature() != null
 				&& updateOnChangeToFeature(msg.getFeature())) {

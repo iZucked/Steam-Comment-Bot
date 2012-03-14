@@ -26,14 +26,12 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -65,6 +63,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.mmxcore.IMMXAdapter;
+import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.tabular.filter.FilterUtils;
 import com.mmxlabs.models.ui.tabular.filter.IFilter;
 import com.mmxlabs.models.util.emfpath.EMFPath;
@@ -84,10 +85,9 @@ public class EObjectTableViewer extends GridTableViewer {
 	protected static final String COLUMN_MNEMONICS = "COLUMN_MNEMONICS";
 	protected static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";
 
-	final EContentAdapter adapter = new EContentAdapter() {
+	final MMXContentAdapter adapter = new MMXContentAdapter() {
 		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
+		public void reallyNotifyChanged(final Notification notification) {
 
 			if (refreshOrGiveUp()) {
 				return;
@@ -125,6 +125,8 @@ public class EObjectTableViewer extends GridTableViewer {
 					return;
 				}
 			}
+			// TODO Auto-generated method stub
+
 		}
 	};
 	private final LinkedList<Pair<EMFPath, ICellRenderer>> cellRenderers = new LinkedList<Pair<EMFPath, ICellRenderer>>();
@@ -149,9 +151,9 @@ public class EObjectTableViewer extends GridTableViewer {
 	 */
 	final HashSet<EObject> currentElements = new HashSet<EObject>();
 
-	private final Adapter externalAdapter = new AdapterImpl() {
+	private final IMMXAdapter externalAdapter = new MMXAdapterImpl() {
 		@Override
-		public void notifyChanged(final Notification msg) {
+		public void reallyNotifyChanged(final Notification msg) {
 			if (!msg.isTouch()) {
 				final Object notifier = msg.getNotifier();
 				// redraw all objects listening to this notifier
@@ -557,18 +559,19 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	protected void removeAdapters() {
+		adapter.disable();
+		externalAdapter.disable();
 		if (currentContainer != null) {
-			if (currentContainer.eAdapters().contains(adapter)) {
-				currentContainer.eAdapters().remove(adapter);
-			}
+			currentContainer.eAdapters().remove(adapter);
 		}
-
 		for (final Notifier n : externalReferences.keySet()) {
 			n.eAdapters().remove(externalAdapter);
 		}
 
 		externalReferences.clear();
 		externalNotifiersByObject.clear();
+		adapter.enable();
+		externalAdapter.enable();
 	}
 
 	private void updateObjectExternalNotifiers(final EObject object) {
