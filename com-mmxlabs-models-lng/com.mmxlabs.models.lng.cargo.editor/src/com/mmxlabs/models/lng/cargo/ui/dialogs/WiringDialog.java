@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.dialogs;
 
 import java.util.List;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -98,7 +99,7 @@ public class WiringDialog extends Dialog {
 		final Button btnOk = new Button(buttonsComposite, SWT.NONE);
 		GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
 				1, 1);
-		gd_btnOk.widthHint = 50;
+//		gd_btnOk.widthHint = 50;
 		gd_btnOk.grabExcessHorizontalSpace = true;
 		btnOk.setLayoutData(gd_btnOk);
 		btnOk.setText("OK");
@@ -106,8 +107,8 @@ public class WiringDialog extends Dialog {
 		btnOk.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				domain.getCommandStack().execute(
-						wiringComposite.createApplyCommand(domain));
+				final Command c = wiringComposite.createApplyCommand(domain);
+				domain.getCommandStack().execute(c);
 
 				shell.close();
 			}
@@ -121,7 +122,7 @@ public class WiringDialog extends Dialog {
 		Button btnCancel = new Button(buttonsComposite, SWT.NONE);
 		GridData gd_btnCancel = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
-		gd_btnCancel.widthHint = 50;
+//		gd_btnCancel.widthHint = 50;
 		btnCancel.setLayoutData(gd_btnCancel);
 		btnCancel.setText("Cancel");
 

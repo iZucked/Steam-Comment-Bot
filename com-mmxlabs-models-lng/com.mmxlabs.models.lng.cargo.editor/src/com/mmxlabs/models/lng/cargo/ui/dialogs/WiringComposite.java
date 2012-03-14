@@ -476,11 +476,7 @@ public class WiringComposite extends Composite {
 		// update modified properties
 		int index = 0;
 		for (final Cargo cargo : cargos) {
-			command.append(SetCommand.create(domain, cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newNames.get(index)));
-//			command.append(SetCommand.create(domain, cargo, CargoPackage.eINSTANCE.getCargo_CargoType(), 
-//					CargoType.getByName(newTypes.get(index))
-//			));
-			
+			command.append(SetCommand.create(domain, cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newNames.get(index)));			
 			command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort()));
 			command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate()));
 			command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), rhsComposites.get(index).getPort()));
@@ -488,6 +484,8 @@ public class WiringComposite extends Composite {
 			
 			index++;
 		}
+		
+		// todo sort out new cargo slots.
 		
 		for (int i = 0; i < wiring.size() - 1; i++) {
 			int newTail = wiring.get(i);
@@ -502,8 +500,8 @@ public class WiringComposite extends Composite {
 		// add new cargos back into container
 		final EObject container = cargos.get(0).eContainer();
 		final EStructuralFeature feature = cargos.get(0).eContainingFeature();
-		
-		command.append(AddCommand.create(domain, container, feature, newCargos));
+		if (!newCargos.isEmpty())
+			command.append(AddCommand.create(domain, container, feature, newCargos));
 		
 		// scenario's cargo model.
 
