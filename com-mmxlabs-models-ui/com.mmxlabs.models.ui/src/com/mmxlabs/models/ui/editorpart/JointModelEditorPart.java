@@ -116,10 +116,23 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	private Viewer currentViewer;
 	private ISelectionChangedListener selectionChangedListener;
 	
+	private boolean locked;
+	
 	public JointModelEditorPart() {
 		
 	}
 	
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+		for (final IJointModelEditorContribution contribution : contributions) {
+			contribution.setLocked(locked);
+		}
+	}
+
 	public boolean isSaving() {
 		return saving ;
 	}

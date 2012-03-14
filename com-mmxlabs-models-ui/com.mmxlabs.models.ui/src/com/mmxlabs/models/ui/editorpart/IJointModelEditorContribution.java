@@ -12,4 +12,5 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 public interface IJointModelEditorContribution {
 	public void init(final JointModelEditorPart editorPart, final MMXRootObject rootObject, final UUIDObject modelObject);
 	public void addPages(Composite parent);
+	public void setLocked(final boolean locked);
 }
