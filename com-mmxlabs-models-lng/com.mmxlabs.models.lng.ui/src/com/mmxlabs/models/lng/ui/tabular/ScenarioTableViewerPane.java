@@ -30,6 +30,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -66,15 +67,22 @@ public class ScenarioTableViewerPane extends ViewerPane {
 				@Override
 				public void doubleClick(DoubleClickEvent event) {
 
-					if (event.getSelection() instanceof IStructuredSelection) {
-						final IStructuredSelection structuredSelection = (IStructuredSelection) event
+					if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
+						final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer
 								.getSelection();
 						if (structuredSelection.isEmpty() == false) {
+							if (structuredSelection.size() == 1) {
 							final DetailCompositeDialog dcd = new DetailCompositeDialog(
 									event.getViewer().getControl().getShell(),
 									jointModelEditorPart
 											.getDefaultCommandHandler());
 							dcd.open(jointModelEditorPart.getRootObject(), structuredSelection.toList());
+							} else {
+								final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(),
+										jointModelEditorPart.getRootObject(), jointModelEditorPart.getDefaultCommandHandler()
+										); 
+								mdd.open(structuredSelection.toList());
+							}
 						}
 					}
 
