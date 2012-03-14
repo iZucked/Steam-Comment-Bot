@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -38,6 +39,7 @@ import org.eclipse.emf.edapt.migration.execution.MigratorRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.mmxcore.IMMXAdapter;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
@@ -172,23 +174,44 @@ public abstract class JointModel {
 	 * @throws IOException
 	 */
 	public void save() throws IOException {
-			createResources(rootObject, true);
-			rootObject.restoreSubModels(); // put sub models back in their
-											// resources
-			// save each resource
-			for (final Resource resource : resourceSet.getResources()) {
-				resource.save(null);
+		disableAdapters(rootObject);
+		createResources(rootObject, true);
+		rootObject.restoreSubModels(); // put sub models back in their
+										// resources
+		// save each resource
+		for (final Resource resource : resourceSet.getResources()) {
+			resource.save(null);
+		}
+		// put sub models back how they were, making the change transparent
+		for (final Resource resource : resourceSet.getResources()) {
+			if (resource.getContents().size() != 1) {
+				log.warn("Resource " + resource.getURI()
+						+ " does not contain exactly one element");
+			} else {
+				EObject top = resource.getContents().get(0);
+				if (top != rootObject && top instanceof UUIDObject)
+					rootObject.addSubModel((UUIDObject) top);
 			}
-			// put sub models back how they were, making the change transparent
-			for (final Resource resource : resourceSet.getResources()) {
-				if (resource.getContents().size() != 1) {
-					log.warn("Resource " + resource.getURI() + " does not contain exactly one element");
-				} else {
-					EObject top = resource.getContents().get(0);
-					if (top != rootObject && top instanceof UUIDObject)
-						rootObject.addSubModel((UUIDObject) top);
-				}
+		}
+		enableAdapters(rootObject);
+	}
+	
+	private void disableAdapters(final EObject top) {
+		for (final Adapter a : top.eAdapters()) {
+			if (a instanceof IMMXAdapter) {
+				((IMMXAdapter) a).disable();
 			}
+		}
+		for (final EObject o : top.eContents()) disableAdapters(top);
+	}
+	
+	private void enableAdapters(final EObject top) {
+		for (final Adapter a : top.eAdapters()) {
+			if (a instanceof IMMXAdapter) {
+				((IMMXAdapter) a).enable();
+			}
+		}
+		for (final EObject o : top.eContents()) enableAdapters(top);
 	}
 
 	private void copy(final InputStream in, final OutputStream out)
