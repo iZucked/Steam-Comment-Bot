@@ -149,5 +149,11 @@
           outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceContract"
           targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.entityFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Entity"
+          targetEClass="com.mmxlabs.models.lng.commercial.LegalEntity">
+    </factory>
  </extension>
 </plugin>
