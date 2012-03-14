@@ -10,6 +10,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
@@ -17,6 +18,7 @@ import org.eclipse.ui.IWorkbenchPage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
@@ -45,7 +47,8 @@ public class EntityEditorPane extends ScenarioTableViewerPane {
 				final LegalEntity settings = (LegalEntity) object;
 				if (settings.eContainer() instanceof CommercialModel) {
 					final CommercialModel cm = (CommercialModel) settings.eContainer();
-					cm.setShippingEntity(settings);
+					getEditingDomain().getCommandStack().execute(
+							SetCommand.create(getEditingDomain(), cm, CommercialPackage.eINSTANCE.getCommercialModel_ShippingEntity(), settings));
 				}
 			}
 		}

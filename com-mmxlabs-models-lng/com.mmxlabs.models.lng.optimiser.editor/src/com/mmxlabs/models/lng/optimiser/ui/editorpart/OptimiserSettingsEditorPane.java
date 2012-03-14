@@ -10,6 +10,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
@@ -24,7 +25,6 @@ import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.ValueListAttributeManipulator;
 
 /**
  * Simplistic editor for optimiser settings.
@@ -85,7 +85,8 @@ public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
 				final OptimiserSettings settings = (OptimiserSettings) object;
 				if (settings.eContainer() instanceof OptimiserModel) {
 					final OptimiserModel om = (OptimiserModel) settings.eContainer();
-					om.setActiveSetting(settings);
+					getEditingDomain().getCommandStack().execute(
+							SetCommand.create(getEditingDomain(), om, OptimiserPackage.eINSTANCE.getOptimiserModel_ActiveSetting(), settings));
 				}
 			}
 		}
