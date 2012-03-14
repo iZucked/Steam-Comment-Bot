@@ -87,6 +87,11 @@
                id="com.mmxlabs.rcp.navigator.commands.optimisation.evaluate"
                name="Evaluate Schedule">
          </command>
+         <command
+               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
+               id="com.mmxlabs.rcp.navigator.commands.optimisation.derive"
+               name="Derive Optimisation">
+         </command>
       </extension>
       <extension
             point="org.eclipse.ui.menus">
@@ -136,6 +141,14 @@
                      mnemonic="S"
                      style="push"
                      tooltip="Save optimisations">
+               </command>
+               <command
+                     commandId="com.mmxlabs.rcp.navigator.commands.optimisation.derive"
+                     icon="icons/evaluate_schedule.gif"
+                     id="com.mmxlabs.rcp.navigator.commands.optimisation.derive"
+                     label="Derive schedule"
+                     style="push"
+                     tooltip="Derive scenario">
                </command>
          </menuContribution>
       </extension>

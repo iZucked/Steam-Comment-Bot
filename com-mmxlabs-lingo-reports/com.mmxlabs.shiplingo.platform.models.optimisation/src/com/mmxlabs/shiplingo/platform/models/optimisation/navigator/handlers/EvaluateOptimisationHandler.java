@@ -5,7 +5,6 @@
 package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Iterator;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -17,8 +16,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -28,9 +25,9 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobControl;
 import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor;
@@ -67,13 +64,7 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 				final Object obj = itr.next();
 
 				if (obj instanceof IResource) {
-					final IResource resource = (IResource) obj;
-					final MMXRootObject scenario = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
-
-					// Need a scenario to start an optimisation
-					if (scenario == null) {
-						return false;
-					}
+					final IResource resource = (IResource) obj;					
 
 					final IJobDescriptor existingJob = jm.findJobForResource(resource);
 					final IJobControl control = jm.getControlForJob(existingJob);
@@ -83,6 +74,14 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 						jm.removeJob(existingJob);
 						// } else {
 						// return false;
+					}
+					
+					final JointModel jointModel = (JointModel) resource.getAdapter(JointModel.class);
+					final MMXRootObject scenario = (jointModel == null) ? null : jointModel.getRootObject();
+					
+					// Need a scenario to start an optimisation
+					if (scenario == null) {
+						return false;
 					}
 
 					final WorkspaceJob job = new WorkspaceJob("Evaluate Scenario") {
@@ -105,28 +104,13 @@ public class EvaluateOptimisationHandler extends AbstractOptimisationHandler {
 								
 								// Clear any existing optimised solution
 								scheduleModel.setOptimisedSchedule(null);
-//								final Iterator<Schedule> iterator = output.getScheduleModel().getSchedules().iterator();
-//								Schedule lastSchedule = null;
-//								while (iterator.hasNext()) {
-//									lastSchedule = iterator.next();
-//									if (iterator.hasNext()) {
-//										iterator.remove();
-//									}
-//								}
-//								output.getOptimisation().getCurrentSettings().setInitialSchedule(lastSchedule);
-
-								// Create new resource using original scenario URI
-//								final XMIResourceImpl r = new XMIResourceImpl(scenario.eResource().getURI());
-//								// Copy scenario to ensure we don't change resources.
-//								r.getContents().add(EcoreUtil.copy(output));
-//								try {
-//									r.save(Collections.emptyMap());
-//									monitor.worked(4);
-//								} catch (final IOException e) {
-//									e.printStackTrace();
-//								}
-
+								
+								jointModel.save();
+								
 								resource.refreshLocal(IResource.DEPTH_ONE, new SubProgressMonitor(monitor, 1));
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							} finally {
 								monitor.done();
 								if (newJob != null) {

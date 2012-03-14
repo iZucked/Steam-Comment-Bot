@@ -59,23 +59,6 @@
       </editor>
    </extension>
    <extension
-         point="org.eclipse.core.runtime.adapters">
-      <factory
-            adaptableType="org.eclipse.ui.IEditorInput"
-            class="com.mmxlabs.shiplingo.platform.models.manifest.adapters.JointModelAdapterFactory">
-         <adapter
-               type="com.mmxlabs.models.mmxcore.jointmodel.JointModel">
-         </adapter>
-      </factory>
-      <factory
-            adaptableType="org.eclipse.core.resources.IResource"
-            class="com.mmxlabs.shiplingo.platform.models.manifest.adapters.JointModelAdapterFactory">
-         <adapter
-               type="com.mmxlabs.models.mmxcore.jointmodel.JointModel">
-         </adapter>
-      </factory>
-   </extension>
-   <extension
          point="org.eclipse.ui.importWizards">
       <category
             id="com.mmxlabs.models.lng.demo.importWizards.sampleCategory"
@@ -100,5 +83,15 @@
             name="New Random Scenario">
       </wizard>
    </extension>
+     <extension
+           point="org.eclipse.core.runtime.adapters">
+        <factory
+              adaptableType="org.eclipse.ui.IEditorInput"
+              class="com.mmxlabs.shiplingo.platform.models.manifest.adapters.JointModelAdapterFactory">
+           <adapter
+                 type="com.mmxlabs.models.mmxcore.jointmodel.JointModel">
+           </adapter>
+        </factory>
+     </extension>
 
 </plugin>

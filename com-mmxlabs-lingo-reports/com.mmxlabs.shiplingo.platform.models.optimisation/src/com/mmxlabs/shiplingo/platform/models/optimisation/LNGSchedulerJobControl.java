@@ -58,12 +58,10 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	@Override
 	protected void reallyPrepare() {
 		startTimeMillis = System.currentTimeMillis();
-		scenario = EcoreUtil.copy(scenario);
 
 		entities.setScenario(scenario);
 
 		final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
-
 
 		IOptimisationData data;
 		try {
@@ -138,12 +136,6 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
 			// export final state
-			if (intermediateSchedule != null) {
-				@SuppressWarnings("unchecked")
-				final EList<EObject> schedules = ((EList<EObject>) intermediateSchedule.eContainer().eGet(intermediateSchedule.eContainingFeature()));
-				schedules.remove(intermediateSchedule);
-			}
-			intermediateSchedule = null;
 			intermediateSchedule = saveOptimisedSolution(optimiser.getBestSolution(true));
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));

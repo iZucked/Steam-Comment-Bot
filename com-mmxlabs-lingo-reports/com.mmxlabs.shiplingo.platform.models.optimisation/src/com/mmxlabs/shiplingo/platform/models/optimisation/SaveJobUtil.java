@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
@@ -22,8 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
  * Utility class to help save Scenarios.
@@ -53,54 +54,27 @@ public final class SaveJobUtil {
 	 * @return New resource {@link IPath}.
 	 */
 	public static IPath saveLNGSchedulerJob(final LNGSchedulerJobDescriptor job, final LNGSchedulerJobControl control, final String fileExt, final IResource resource) {
+		final MMXRootObject scenario = control.getJobOutput();
+		return saveRootObject(scenario, fileExt, resource);
+	}
 
-		final IPath newFile = openSaveAsDialog(null, fileExt, resource);
+	public static IPath saveRootObject(final MMXRootObject root, final String ext, final IResource resource) {
+		final IPath newFile = openSaveAsDialog(null, ext, resource);
 		if (newFile == null) {
 			return null;
 		}
-
-		// Take copy of scenario
-		// this was wrong
-		// final Scenario scenario = EcoreUtil.copy((job).getJobContext());
-		final MMXRootObject scenario = control.getJobOutput();
-
-		// Process scenario - prune out intermediate schedules ....
-//		ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
-//		int numSchedules = scheduleModel.getSchedules().size();
-//		while (numSchedules > 1) {
-//			scheduleModel.getSchedules().remove(0);
-//			--numSchedules;
-//		}
-//		// .. and set remaining schedule to the new initial state
-//		if (numSchedules == 1) {
-//			scenario.getOptimisation().getCurrentSettings().setInitialSchedule(scheduleModel.getSchedules().get(0));
-//		} else {
-//			// TODO: Necessary?
-//			// scenario.getOptimisation().getCurrentSettings().setInitialSchedule(null);
-//		}
-
-		// Create resource set to save into
-		final ResourceSetImpl resourceSet = new ResourceSetImpl();
-
-		final URI uri = URI.createPlatformResourceURI(newFile.toString(), true);
-
-		final Resource nResource = resourceSet.createResource(uri);
-
-		// Add copied scenario to this resource
-		nResource.getContents().add(scenario);
-
-		final Map<String, String> options = new HashMap<String, String>();
-		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
+		final MMXRootObject duplicate = EcoreUtil.copy(root);
 		try {
-			nResource.save(options);
+			final ManifestJointModel jm = new ManifestJointModel(duplicate, URI.createPlatformResourceURI(newFile.toString(), true));
+			jm.consolidate();
+			jm.save();
 			return newFile;
-		} catch (final IOException e) {
+		} catch (IOException e) {
 			log.error(e.getMessage(), e);
+			return null;
 		}
-		return null;
-
 	}
-
+	
 	/**
 	 * Opens a "Save As" dialog prompting the user for a new file location. A desired file extension can be provided which will be appended to the filename if missing. An {@link IResource} instance
 	 * can also be provided as the original file to point the UI at. Returns a new {@link IPath} to the specified file.

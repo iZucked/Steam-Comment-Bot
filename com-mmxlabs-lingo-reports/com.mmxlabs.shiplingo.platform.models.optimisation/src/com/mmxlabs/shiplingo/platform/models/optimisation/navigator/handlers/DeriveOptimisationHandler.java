@@ -4,18 +4,13 @@
  */
 package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -26,10 +21,18 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.InputFactory;
+import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
-import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobControl;
-import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor;
 import com.mmxlabs.shiplingo.platform.models.optimisation.SaveJobUtil;
 
 /**
@@ -38,14 +41,14 @@ import com.mmxlabs.shiplingo.platform.models.optimisation.SaveJobUtil;
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
  */
-public class SaveOptimisationHandler extends AbstractOptimisationHandler {
+public class DeriveOptimisationHandler extends AbstractOptimisationHandler {
 
-	private final static Logger log = LoggerFactory.getLogger(SaveOptimisationHandler.class);
+	private final static Logger log = LoggerFactory.getLogger(DeriveOptimisationHandler.class);
 	
 	/**
 	 * The constructor.
 	 */
-	public SaveOptimisationHandler() {
+	public DeriveOptimisationHandler() {
 
 	}
 
@@ -66,48 +69,39 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 				if (obj instanceof IResource) {
 					final IResource resource = (IResource) obj;
 					final JointModel jm = (JointModel) resource.getAdapter(JointModel.class);
-					if (jm != null) {
-						try {
-							jm.save();
-						} catch (final IOException e) {
-							log.error(e.getMessage(), e);
+					final MMXRootObject root = jm.getRootObject();
+					final IPath newPath = SaveJobUtil.saveRootObject(root, "scn", resource);
+					final IResource newResource = ResourcesPlugin.getWorkspace().getRoot().getFile(newPath);
+					final JointModel njm = (JointModel) newResource.getAdapter(JointModel.class);
+					// process njm
+					final InputModel input = njm.getRootObject().getSubModel(InputModel.class);
+					final ScheduleModel schedule = njm.getRootObject().getSubModel(ScheduleModel.class);
+					if (input != null && schedule != null) {
+						final Schedule opt = schedule.getOptimisedSchedule();
+						if (opt != null) {
+							input.getAssignments().clear();
+							for (final Sequence sequence : opt.getSequences()) {
+								final Assignment a = InputFactory.eINSTANCE.createAssignment();
+								input.getAssignments().add(a);
+								
+								if (sequence.isSetVessel()) {
+									a.getVessels().add(sequence.getVessel());
+								} else if (sequence.isSetVesselClass()) {
+									a.getVessels().add(sequence.getVesselClass());
+									a.setAssignToSpot(true);
+								}
+								
+								for (final Event e : sequence.getEvents()) {
+									if (e instanceof SlotVisit) {
+										a.getAssignedObjects().add(((SlotVisit) e).getSlotAllocation().getSlot());
+									} else if (e instanceof VesselEventVisit) {
+										a.getAssignedObjects().add(((VesselEventVisit) e).getVesselEvent());
+									}
+								}
+							}
 						}
 					}
-//					final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-//					final IJobDescriptor job = jobManager.findJobForResource(resource);
-//					final IJobControl control = jobManager.getControlForJob(job);
-//
-//					if (job instanceof LNGSchedulerJobDescriptor) {
-//
-//						final IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
-//
-//							@Override
-//							public void run(final IProgressMonitor monitor) throws CoreException {
-//
-//								monitor.beginTask("Save Scenario", 2);
-//								try {
-//									// Attempt to save job
-//									// FIXME: Do not hardcode extension
-//									final IPath path = SaveJobUtil.saveLNGSchedulerJob((LNGSchedulerJobDescriptor) job, (LNGSchedulerJobControl) control, resource.getFileExtension(), resource);
-//									if (path != null) {
-//										// An IPath has been returned, try and find the IResource that it corresponds to
-//										final IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
-//										if (resource != null) {
-//											// A resource exists!, refresh the parent so that the navigator will find it.
-//											resource.getParent().refreshLocal(IResource.DEPTH_ONE, new SubProgressMonitor(monitor, 1));
-//										}
-//									}
-//								} finally {
-//									monitor.done();
-//								}
-//							}
-//						};
-//						try {
-//							ResourcesPlugin.getWorkspace().run(runnable, null);
-//						} catch (final CoreException e) {
-//							log.error(e.getMessage(), e);
-//						}
-//					}
+					njm.consolidate();
 				}
 			}
 		}
