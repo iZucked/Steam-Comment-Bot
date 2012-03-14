@@ -166,5 +166,26 @@
           label="Vessel"
           targetEClass="com.mmxlabs.models.lng.fleet.Vessel">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.charterOutFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Charter Out"
+          outputEClass="com.mmxlabs.models.lng.fleet.CharterOutEvent"
+          targetEClass="com.mmxlabs.models.lng.fleet.VesselEvent">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.dryDockFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Dry Dock"
+          outputEClass="com.mmxlabs.models.lng.fleet.DryDockEvent"
+          targetEClass="com.mmxlabs.models.lng.fleet.VesselEvent">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.maintenanceFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Maintenance"
+          outputEClass="com.mmxlabs.models.lng.fleet.MaintenanceEvent"
+          targetEClass="com.mmxlabs.models.lng.fleet.VesselEvent">
+    </factory>
  </extension>
 </plugin>
