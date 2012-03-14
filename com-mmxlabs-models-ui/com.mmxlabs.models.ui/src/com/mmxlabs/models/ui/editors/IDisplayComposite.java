@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.ui.editors;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -55,7 +55,7 @@ public interface IDisplayComposite {
 	 * @param value
 	 * @return a list of objects which might be modified when this display composite is displaying value
 	 */
-	public Collection<EObject> getEditingRange(final MMXRootObject root, final EObject value);
+	public List<EObject> getEditingRange(final MMXRootObject root, final EObject value);
 	
 	/**
 	 * Update contents with validation data.

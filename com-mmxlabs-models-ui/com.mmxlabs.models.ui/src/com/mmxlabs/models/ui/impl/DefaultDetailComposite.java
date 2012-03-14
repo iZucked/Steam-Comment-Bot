@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui.impl;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EClass;
@@ -114,8 +115,8 @@ public class DefaultDetailComposite extends Composite implements
 	}
 
 	@Override
-	public Collection<EObject> getEditingRange(MMXRootObject root, EObject value) {
-		return Collections.singleton(value);
+	public List<EObject> getEditingRange(MMXRootObject root, EObject value) {
+		return Collections.singletonList(value);
 	}
 
 	@Override

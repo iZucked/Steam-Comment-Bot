@@ -102,8 +102,8 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	@Override
-	public Collection<EObject> getEditingRange(MMXRootObject root, EObject value) {
-		return Collections.singleton(value);
+	public List<EObject> getEditingRange(MMXRootObject root, EObject value) {
+		return Collections.singletonList(value);
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	@Override
 	public void setEditorWrapper(IInlineEditorWrapper wrapper) {
 		this.editorWrapper = wrapper;
-		topLevel.setEditorWrapper(editorWrapper);
+		if (topLevel != null) topLevel.setEditorWrapper(editorWrapper);
 		for (final IDisplayComposite child : childComposites) {
 			child.setEditorWrapper(editorWrapper);
 		}
