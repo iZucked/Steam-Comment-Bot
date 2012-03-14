@@ -122,7 +122,7 @@ public class ManifestJointModel extends JointModel {
 	 */
 	@Override
 	protected boolean needsUpgrade() {
-		return manifest.getCurrentVersion() == getReleases().size() - 1;
+		return manifest.getCurrentVersion() != getReleases().size() - 1;
 	}
 
 
