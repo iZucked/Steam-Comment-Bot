@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest#getEntries <em>Entries</em>}</li>
+ *   <li>{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest#getCurrentVersion <em>Current Version</em>}</li>
  * </ul>
  * </p>
  *
@@ -40,5 +41,31 @@ public interface Manifest extends EObject {
 	 * @generated
 	 */
 	EList<Entry> getEntries();
+
+	/**
+	 * Returns the value of the '<em><b>Current Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Current Version</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Current Version</em>' attribute.
+	 * @see #setCurrentVersion(int)
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage#getManifest_CurrentVersion()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getCurrentVersion();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest#getCurrentVersion <em>Current Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Current Version</em>' attribute.
+	 * @see #getCurrentVersion()
+	 * @generated
+	 */
+	void setCurrentVersion(int value);
 
 } // Manifest
