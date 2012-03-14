@@ -39,26 +39,28 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 
 		// these are all special cases - for now could use standard parts.
 		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
-
+		final SashForm sash2 = new SashForm(sash, SWT.HORIZONTAL);
+		final SashForm sash3 = new SashForm(sash, SWT.HORIZONTAL);
+		
 		final BaseFuelPricingPane base = new BaseFuelPricingPane(editorPart.getSite().getPage(), editorPart);
-		base.createControl(sash);
+		base.createControl(sash2);
 		base.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FleetCost(), PricingPackage.eINSTANCE.getFleetCostModel_BaseFuelPrices() }), editorPart.getAdapterFactory());
 
 		base.getViewer().setInput(modelObject);
 
 		final CharterPricingPane charter = new CharterPricingPane(editorPart.getSite().getPage(), editorPart);
-		charter.createControl(sash);
+		charter.createControl(sash3);
 		charter.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FleetCost(), PricingPackage.eINSTANCE.getFleetCostModel_CharterCosts() }),
 				editorPart.getAdapterFactory());
 		charter.getViewer().setInput(modelObject);
 
 		final VesselRoutePricingPane route = new VesselRoutePricingPane(editorPart.getSite().getPage(), editorPart);
-		route.createControl(sash);
+		route.createControl(sash3);
 		route.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_RouteCosts() }), editorPart.getAdapterFactory());
 		route.getViewer().setInput(modelObject);
 
 		final CooldownPricingEditorPane cool = new CooldownPricingEditorPane(editorPart.getSite().getPage(), editorPart);
-		cool.createControl(sash);
+		cool.createControl(sash2);
 		cool.init(Arrays.asList(new EReference[] {PricingPackage.eINSTANCE.getPricingModel_CooldownPrices()}), editorPart.getAdapterFactory());
 		cool.getViewer().setInput(modelObject);
 		
