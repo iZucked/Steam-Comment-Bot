@@ -114,13 +114,22 @@ public interface ManifestPackage extends EPackage {
 	int MANIFEST__ENTRIES = 0;
 
 	/**
+	 * The feature id for the '<em><b>Current Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANIFEST__CURRENT_VERSION = 1;
+
+	/**
 	 * The number of structural features of the '<em>Manifest</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MANIFEST_FEATURE_COUNT = 1;
+	int MANIFEST_FEATURE_COUNT = 2;
 
 
 	/**
@@ -175,6 +184,17 @@ public interface ManifestPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getManifest_Entries();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest#getCurrentVersion <em>Current Version</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Current Version</em>'.
+	 * @see com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest#getCurrentVersion()
+	 * @see #getManifest()
+	 * @generated
+	 */
+	EAttribute getManifest_CurrentVersion();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -241,6 +261,14 @@ public interface ManifestPackage extends EPackage {
 		 * @generated
 		 */
 		EReference MANIFEST__ENTRIES = eINSTANCE.getManifest_Entries();
+
+		/**
+		 * The meta object literal for the '<em><b>Current Version</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MANIFEST__CURRENT_VERSION = eINSTANCE.getManifest_CurrentVersion();
 
 	}
 

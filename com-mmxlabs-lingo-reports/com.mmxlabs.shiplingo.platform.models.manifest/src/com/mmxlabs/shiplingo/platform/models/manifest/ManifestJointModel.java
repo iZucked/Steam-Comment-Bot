@@ -10,34 +10,23 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.URIConverter;
-import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.edapt.migration.MigrationException;
 
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -133,7 +122,7 @@ public class ManifestJointModel extends JointModel {
 	 */
 	@Override
 	protected boolean needsUpgrade() {
-		return false;
+		return manifest.getCurrentVersion() == getReleases().size() - 1;
 	}
 
 
@@ -200,6 +189,7 @@ public class ManifestJointModel extends JointModel {
 //			zos.flush();
 //			zos.close();
 //		}
+		manifest.setCurrentVersion(getReleases().size()-1);
 		super.save();
 		manifest.getEntries().clear();
 		for (final Map.Entry<String, URI> keyAndURI : subModels.entrySet()) {

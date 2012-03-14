@@ -153,6 +153,15 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getManifest_CurrentVersion() {
+		return (EAttribute)manifestEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public ManifestFactory getManifestFactory() {
 		return (ManifestFactory)getEFactoryInstance();
@@ -183,6 +192,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 
 		manifestEClass = createEClass(MANIFEST);
 		createEReference(manifestEClass, MANIFEST__ENTRIES);
+		createEAttribute(manifestEClass, MANIFEST__CURRENT_VERSION);
 	}
 
 	/**
@@ -221,6 +231,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 
 		initEClass(manifestEClass, Manifest.class, "Manifest", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getManifest_Entries(), this.getEntry(), null, "entries", null, 0, -1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getManifest_CurrentVersion(), ecorePackage.getEInt(), "currentVersion", null, 1, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
