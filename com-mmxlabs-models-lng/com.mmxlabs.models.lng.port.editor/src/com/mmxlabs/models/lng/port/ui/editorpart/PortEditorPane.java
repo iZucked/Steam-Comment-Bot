@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.port.ui.editorpart;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +21,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
@@ -65,7 +68,9 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 	class DistanceMatrixEditorAction extends AbstractMenuAction {
 		public DistanceMatrixEditorAction() {
 			super("Edit distances");
-//			setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(LngEditorPlugin.getPlugin().getSymbolicName(), "/icons/table.gif"));
+			try {
+				setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.port.editor/icons/table.gif")));
+			} catch (final MalformedURLException e) {}
 			setToolTipText("Edit distance matrices and canals");
 		}
 
