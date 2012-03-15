@@ -37,6 +37,9 @@ public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider {
 		if (added instanceof BaseFuel) {
 			final PricingModel pricing = rootObject.getSubModel(PricingModel.class);
 			if (pricing == null) return null;
+			for (final BaseFuelCost existing : pricing.getFleetCost().getBaseFuelPrices()) {
+				if (existing.getFuel() == added) return null;
+			}
 			final BaseFuelCost cost = PricingFactory.eINSTANCE.createBaseFuelCost();
 			cost.setFuel((BaseFuel) added);
 			return AddCommand.create(domain, pricing.getFleetCost(), PricingPackage.eINSTANCE.getFleetCostModel_BaseFuelPrices(), cost);
