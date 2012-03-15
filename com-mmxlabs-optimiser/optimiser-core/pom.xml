@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>optimiser-core</artifactId>
-	<packaging>jar</packaging>
+	<packaging>bundle</packaging>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>Optimiser - Core</name>
 
@@ -63,7 +63,7 @@
 					<instructions>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
-						<Export-Package>com.mmxlabs.optimiser.core.*;version="${Bundle-UnqualifiedVersion}"</Export-Package>
+						<Export-Package>com.mmxlabs.optimiser.core.*;version="${_Bundle-UnqualifiedVersion}"</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>

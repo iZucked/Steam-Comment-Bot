@@ -9,7 +9,7 @@
 
 	<artifactId>optimiser-common</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>bundle</packaging>
 	<name>Optimiser - Common</name>
 
 	<dependencies>
@@ -82,7 +82,7 @@
 					<instructions>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
-						<Export-Package>com.mmxlabs.optimiser.common.*;version="${Bundle-UnqualifiedVersion}"</Export-Package>
+						<Export-Package>com.mmxlabs.optimiser.common.*;version="${_Bundle-UnqualifiedVersion}"</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>

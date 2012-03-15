@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>optimiser-ga</artifactId>
-	<packaging>jar</packaging>
+	<packaging>bundle</packaging>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>Optimiser - GA</name>
 
@@ -65,7 +65,7 @@
 
 				<configuration>
 					<instructions>
-						<Export-Package>com.mmxlabs.optimiser.ga.*;version="${Bundle-UnqualifiedVersion}"</Export-Package>
+						<Export-Package>com.mmxlabs.optimiser.ga.*;version="${_Bundle-UnqualifiedVersion}"</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
