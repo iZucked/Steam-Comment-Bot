@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>com.mmxlabs.scheduler.optimiser</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>bundle</packaging>
 	<name>Scheduler - Optimiser</name>
 	<description>LNG Scheduler</description>
 
@@ -87,7 +87,7 @@
 					<instructions>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
-						<Export-Package>com.mmxlabs.scheduler.optimiser.*;version="${Bundle-UnqualifiedVersion}",com.mmxlabs.trading.optimiser.*;version="${Bundle-UnqualifiedVersion}"</Export-Package>
+						<Export-Package>com.mmxlabs.scheduler.optimiser.*;version="${_Bundle-UnqualifiedVersion}",com.mmxlabs.trading.optimiser.*;version="${_Bundle-UnqualifiedVersion}"</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
