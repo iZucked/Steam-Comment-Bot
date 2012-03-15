@@ -51,8 +51,11 @@ class CellEditorWrapper<T extends Control> extends CellEditor {
 		public void setDelegate(final CellEditor delegate) {
 			this.delegate = delegate;
 			inner.setValueControl((T) delegate.getControl());
-			if (isActivated()) delegate.activate();
-			else if (delegate.isActivated()) delegate.deactivate();
+			if (isActivated()) {
+				delegate.activate();
+			} else if (delegate.isActivated()) {
+				delegate.deactivate();
+			}
 			
 			delegate.addListener(new ICellEditorListener() {
 				@Override
@@ -91,7 +94,9 @@ class CellEditorWrapper<T extends Control> extends CellEditor {
 		@Override
 		protected Object doGetValue() {
 			if (inner.isChecked()) {
-				if (delegate != null) return delegate.getValue();
+				if (delegate != null) {
+					return delegate.getValue();
+				}
 				return null;
 			} else {
 				return SetCommand.UNSET_VALUE;
@@ -109,37 +114,51 @@ class CellEditorWrapper<T extends Control> extends CellEditor {
 				inner.setChecked(false);
 			} else {
 				inner.setChecked(true);
-				if (delegate != null) delegate.setValue(value);
+				if (delegate != null) {
+					delegate.setValue(value);
+				}
 			}
 		}
 		@Override
 		public void activate() {
 			super.activate();
-			if (delegate != null) delegate.activate();
-			delegate.getControl().setVisible(true);
+			if (delegate != null) {
+				delegate.activate();
+				delegate.getControl().setVisible(true);
+			}
 		}
 		@Override
 		public void addPropertyChangeListener(IPropertyChangeListener listener) {
-			if (delegate != null) delegate.addPropertyChangeListener(listener);
+			if (delegate != null) {
+				delegate.addPropertyChangeListener(listener);
+			}
 		}
 		@Override
 		public void deactivate() {
 			super.deactivate();
-			if (delegate != null) delegate.deactivate();
+			if (delegate != null) {
+				delegate.deactivate();
+			}
 		}
 		@Override
 		public void dispose() {
-			if (delegate != null) delegate.dispose();
+			if (delegate != null) {
+				delegate.dispose();
+			}
 			super.dispose();
 		}
 		@Override
 		public String getErrorMessage() {
-			if (delegate != null) return delegate.getErrorMessage();
+			if (delegate != null) {
+				return delegate.getErrorMessage();
+			}
 			return super.getErrorMessage();
 		}
 		@Override
 		public ICellEditorValidator getValidator() {
-			if (delegate != null) return delegate.getValidator();
+			if (delegate != null) {
+				return delegate.getValidator();
+			}
 			return super.getValidator();
 		}
 		@Override
@@ -148,102 +167,146 @@ class CellEditorWrapper<T extends Control> extends CellEditor {
 		}
 		@Override
 		public boolean isCopyEnabled() {
-			if (delegate != null) return delegate.isCopyEnabled();
+			if (delegate != null) {
+				return delegate.isCopyEnabled();
+			}
 			return super.isCopyEnabled();
 		}
 		@Override
 		public boolean isCutEnabled() {
-			if (delegate != null) return delegate.isCutEnabled();
+			if (delegate != null) {
+				return delegate.isCutEnabled();
+			}
 			return super.isCutEnabled();
 		}
 		@Override
 		public boolean isDeleteEnabled() {
-			if (delegate != null) return delegate.isDeleteEnabled();
+			if (delegate != null) {
+				return delegate.isDeleteEnabled();
+			}
 			return super.isDeleteEnabled();
 		}
 		@Override
 		public boolean isDirty() {
-			if (delegate != null) return delegate.isDirty();
+			if (delegate != null) {
+				return delegate.isDirty();
+			}
 			return super.isDirty();
 		}
 		@Override
 		public boolean isFindEnabled() {
-			if (delegate != null) return delegate.isFindEnabled();
+			if (delegate != null) {
+				return delegate.isFindEnabled();
+			}
 			return super.isFindEnabled();
 		}
 		@Override
 		public boolean isPasteEnabled() {
-			if (delegate != null) return delegate.isPasteEnabled();
+			if (delegate != null) {
+				return delegate.isPasteEnabled();
+			}
 			return super.isPasteEnabled();
 		}
 		@Override
 		public boolean isRedoEnabled() {
-			if (delegate != null) return delegate.isRedoEnabled();
+			if (delegate != null) {
+				return delegate.isRedoEnabled();
+			}
 			return super.isRedoEnabled();
 		}
 		@Override
 		public boolean isSelectAllEnabled() {
-			if (delegate != null) return delegate.isSelectAllEnabled();
+			if (delegate != null) {
+				return delegate.isSelectAllEnabled();
+			}
 			return super.isSelectAllEnabled();
 		}
 		@Override
 		public boolean isUndoEnabled() {
-			if (delegate != null) return delegate.isUndoEnabled();
+			if (delegate != null) {
+				return delegate.isUndoEnabled();
+			}
 			return super.isUndoEnabled();
 		}
 		@Override
 		public boolean isValueValid() {
-			if (delegate != null) return delegate.isValueValid();
+			if (delegate != null) {
+				return delegate.isValueValid();
+			}
 			return super.isValueValid();
 		}
 		@Override
 		public void performCopy() {
-			if (delegate != null) delegate.performCopy();
+			if (delegate != null) {
+				delegate.performCopy();
+			}
 		}
 		@Override
 		public void performCut() {
-			if (delegate != null) delegate.performCut();
+			if (delegate != null) {
+				delegate.performCut();
+			}
 		}
 		@Override
 		public void performDelete() {
-			if (delegate != null) delegate.performDelete();
+			if (delegate != null) {
+				delegate.performDelete();
+			}
 		}
 		@Override
 		public void performFind() {
-			if (delegate != null) delegate.performFind();
+			if (delegate != null) {
+				delegate.performFind();
+			}
 		}
 		@Override
 		public void performPaste() {
-			if (delegate != null) delegate.performPaste();
+			if (delegate != null) {
+				delegate.performPaste();
+			}
 		}
 		@Override
 		public void performRedo() {
-			if (delegate != null) delegate.performRedo();
+			if (delegate != null) {
+				delegate.performRedo();
+			}
 		}
 		@Override
 		public void performSelectAll() {
-			if (delegate != null) delegate.performSelectAll();
+			if (delegate != null) {
+				delegate.performSelectAll();
+			}
 		}
 		@Override
 		public void performUndo() {
-			if (delegate != null) delegate.performUndo();
+			if (delegate != null) {
+				delegate.performUndo();
+			}
 		}
 		@Override
 		public void removeListener(ICellEditorListener listener) {
-			if (delegate != null) delegate.removeListener(listener);
+			if (delegate != null) {
+				delegate.removeListener(listener);
+			}
 		}
 		@Override
 		public void removePropertyChangeListener(
 				IPropertyChangeListener listener) {
-			if (delegate != null) delegate.removePropertyChangeListener(listener);
+			if (delegate != null) {
+				delegate.removePropertyChangeListener(listener);
+			}
 		}
 		@Override
 		public void setValidator(ICellEditorValidator validator) {
-			if (delegate != null) delegate.setValidator(validator);
+			if (delegate != null) {
+				delegate.setValidator(validator);
+			}
 		}
 		@Override
 		protected void focusLost() {
-			if (inner.isFocusControl() == false) super.focusLost();
+			if (inner.isFocusControl() == false) {
+				super.focusLost();
+			}
 		}
 		@Override
 		protected boolean dependsOnExternalFocusListener() {
