@@ -9,6 +9,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 
+import com.mmxlabs.rcp.common.actions.LockableAction;
+
 /**
  * Superclass for actions which will do something to a scenario based on a selection
  * 
