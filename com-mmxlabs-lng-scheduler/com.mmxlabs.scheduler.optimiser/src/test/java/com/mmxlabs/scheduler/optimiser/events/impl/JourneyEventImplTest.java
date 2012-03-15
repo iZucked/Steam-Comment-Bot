@@ -93,4 +93,13 @@ public class JourneyEventImplTest {
 		Assert.assertSame(route, event.getRoute());
 	}
 
+	@Test
+	public void testGetSetRouteCost() {
+
+		final JourneyEventImpl event = new JourneyEventImpl();
+		Assert.assertEquals(0, event.getRouteCost());
+		final long cost = 1234567890l;
+		event.setRouteCost(cost);
+		Assert.assertEquals(cost, event.getRouteCost());
+	}
 }
