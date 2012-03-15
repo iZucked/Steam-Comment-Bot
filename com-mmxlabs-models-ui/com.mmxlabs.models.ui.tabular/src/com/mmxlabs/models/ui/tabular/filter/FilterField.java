@@ -71,9 +71,6 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 					setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.gif")));
 				} catch (final MalformedURLException ex) {
 				}
-				// setImageDescriptor(LngEditorPlugin.Implementation
-				// .imageDescriptorFromPlugin(LngEditorPlugin.getPlugin()
-				// .getSymbolicName(), "/icons/filter.gif"));
 			}
 
 			@Override
