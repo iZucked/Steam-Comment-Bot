@@ -263,7 +263,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			if (item instanceof ActionContributionItem) {
 				final IAction action = ((ActionContributionItem) item).getAction();
 				if (action instanceof LockableAction) {
-					((LockableAction) action).setLockedForEditing(locked);
+					((LockableAction) action).setLocked(locked);
 				}
 			}
 		}

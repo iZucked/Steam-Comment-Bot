@@ -46,7 +46,7 @@ public abstract class LockableAction extends Action {
 		return lockedForEditing;
 	}
 
-	public void setLockedForEditing(final boolean lockedForEditing) {
+	public void setLocked(final boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
 		if (lockedForEditing) {
 			super.setEnabled(false);
@@ -69,7 +69,7 @@ public abstract class LockableAction extends Action {
 			}
 
 			@Override
-			public void setLockedForEditing(final boolean lockedForEditing) {
+			public void setLocked(final boolean lockedForEditing) {
 				this.lockedForEditing = lockedForEditing;
 				if (lockedForEditing) {
 					action.setEnabled(false);
