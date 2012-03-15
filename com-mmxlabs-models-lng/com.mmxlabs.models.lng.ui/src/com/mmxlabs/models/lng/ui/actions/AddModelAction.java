@@ -58,8 +58,7 @@ public final class AddModelAction {
 	}
 }
 
-class SingleAddAction extends Action {
-
+class SingleAddAction extends LockableAction {
 	private IAddContext context;
 	private IModelFactory factory;
 
