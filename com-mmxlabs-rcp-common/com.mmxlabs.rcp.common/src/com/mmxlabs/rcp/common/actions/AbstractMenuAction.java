@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Menu;
  * @author hinton
  * 
  */
-public abstract class AbstractMenuAction extends Action implements IMenuCreator {
+public abstract class AbstractMenuAction extends LockableAction implements IMenuCreator {
 	private Menu lastMenu;
 
 	protected AbstractMenuAction(final String label) {
