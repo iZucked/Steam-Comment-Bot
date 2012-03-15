@@ -230,11 +230,14 @@ public class LNGVoyageCalculatorTest {
 
 		options.setAvailableTime(96);
 		options.setDistance(15 * 48);
+		final String route = "route";
+		options.setRoute(route);
 
 		final VoyageDetails details = new VoyageDetails();
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
+		
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
 
@@ -251,9 +254,9 @@ public class LNGVoyageCalculatorTest {
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
-				one(mockRouteCostProvider).getRouteCost(null, vesselClass, VesselState.Laden);
-				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
-				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
+				one(mockRouteCostProvider).getRouteCost(route, vesselClass, VesselState.Laden);
+				one(mockRouteCostProvider).getRouteFuelUsage(route, vesselClass);
+				one(mockRouteCostProvider).getRouteTransitTime(route, vesselClass);
 
 			}
 		});
