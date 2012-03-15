@@ -41,7 +41,7 @@ public class DefaultImportContext implements IImportContext {
 		for (final NamedObject o : matches) {
 			if (preferredType.isSuperTypeOf(o.eClass())) {
 				int thisMatch = EMFUtils.getMinimumGenerations(o.eClass(), preferredType);
-				if (thisMatch < match) {
+				if (thisMatch <= match) {
 					match = thisMatch;
 					best = o;
 				}

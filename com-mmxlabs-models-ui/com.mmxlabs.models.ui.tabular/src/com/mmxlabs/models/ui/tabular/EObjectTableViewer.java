@@ -145,6 +145,10 @@ public class EObjectTableViewer extends GridTableViewer {
 	public EObject getCurrentContainer() {
 		return currentContainer;
 	}
+	
+	public EReference getCurrentContainment() {
+		return currentReference;
+	}
 
 	/**
 	 * A set containing the elements currently being displayed, which is used by #adapter to determine which row to refresh when a notification comes in
@@ -527,8 +531,10 @@ public class EObjectTableViewer extends GridTableViewer {
 		});
 	}
 
+	private EReference currentReference;
 	public void init(final AdapterFactory adapterFactory, final EReference... path) {
 		init(new AdapterFactoryContentProvider(adapterFactory) {
+
 
 			@SuppressWarnings("rawtypes")
 			@Override
@@ -540,6 +546,7 @@ public class EObjectTableViewer extends GridTableViewer {
 						if (object instanceof EList) {
 							o.eAdapters().add(adapter);
 							currentContainer = o;
+							currentReference = ref;
 							return ((EList) object).toArray();
 						}
 						if (object instanceof EObject) {

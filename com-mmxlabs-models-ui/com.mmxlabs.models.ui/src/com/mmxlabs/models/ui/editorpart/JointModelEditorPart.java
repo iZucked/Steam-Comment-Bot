@@ -20,6 +20,7 @@ import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -58,6 +59,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.jobs.impl.JobControlAdapter;
 import com.mmxlabs.jobmanager.manager.IJobManager;
+import com.mmxlabs.models.mmxcore.IMMXAdapter;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.models.ui.Activator;
@@ -161,6 +163,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	};
 	
 	private boolean locked;
+	private boolean commandProvidersDisabled;
 
 	public JointModelEditorPart() {
 
@@ -254,15 +257,19 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 					public Command createCommand(Class<? extends Command> commandClass, CommandParameter commandParameter) {
 						final Command normal = super.createCommand(commandClass, commandParameter);
 
-						final CompoundCommand wrapper = new CompoundCommand();
-						wrapper.append(normal);
-						for (final IModelCommandProvider provider : commandProviderTracker.getServices(new IModelCommandProvider[0])) {
-							final Command addition = provider.provideAdditionalCommand(getEditingDomain(), getRootObject(), commandClass, commandParameter, normal);
-							if (addition != null)
-								wrapper.append(addition);
-						}
+						if (!commandProvidersDisabled) {
+							final CompoundCommand wrapper = new CompoundCommand();
+							wrapper.append(normal);
+							for (final IModelCommandProvider provider : commandProviderTracker.getServices(new IModelCommandProvider[0])) {
+								final Command addition = provider.provideAdditionalCommand(getEditingDomain(), getRootObject(), commandClass, commandParameter, normal);
+								if (addition != null)
+									wrapper.append(addition);
+							}
 
-						return wrapper.unwrap();
+							return wrapper.unwrap();
+						} else {
+							return normal;
+						}
 					}
 				};
 
@@ -375,6 +382,36 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		for (final ISelectionChangedListener l : selectionChangedListeners) {
 			l.selectionChanged(event);
 		}
+	}
+	
+	public void setDisableCommandProviders(final boolean disable) {
+		this.commandProvidersDisabled = disable;
+	}
+	
+	public void setDisableUpdates(final boolean disable) {
+		if (disable) {
+			disableAdapters(getRootObject());
+		} else {
+			enableAdapters(getRootObject());
+		}
+	}
+	
+	private void disableAdapters(final EObject top) {
+		for (final Adapter a : top.eAdapters()) {
+			if (a instanceof IMMXAdapter) {
+				((IMMXAdapter) a).disable();
+			}
+		}
+		for (final EObject o : top.eContents()) disableAdapters(o);
+	}
+	
+	private void enableAdapters(final EObject top) {
+		for (final Adapter a : top.eAdapters()) {
+			if (a instanceof IMMXAdapter) {
+				((IMMXAdapter) a).enable();
+			}
+		}
+		for (final EObject o : top.eContents()) enableAdapters(o);
 	}
 
 	/**
