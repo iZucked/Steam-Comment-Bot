@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.port.ui.editorpart;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
@@ -105,17 +107,20 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 							}
 						};
 						addActionToMenu(renameCanal, menu2);
-						//TODO fix delete action. 
-//						final Action deleteCanal = new Action("Delete " + canal.getName() + "...") {
-//							@Override
-//							public void run() {
-//								if (MessageDialog.openQuestion(part.getSite().getShell(), "Delete canal " + canal.getName(), "Are you sure you want to delete the canal \"" + canal.getName()
-//										+ "\"?")) {
-//									jointModelEditorPart.getEditingDomain().getCommandStack().execute(DeleteHelper.createDeleteCommand(part.getEditingDomain(), Collections.singleton(canal)));
-//								}
-//							}
-//						};
-//						addActionToMenu(deleteCanal, menu2);
+						if (canal.isCanal()) {
+							final Action deleteCanal = new Action("Delete " + canal.getName() + "...") {
+							@Override
+							public void run() {
+								if (MessageDialog.openQuestion(part.getSite().getShell(), "Delete canal " + canal.getName(), "Are you sure you want to delete the canal \"" + canal.getName()
+										+ "\"?")) {
+									jointModelEditorPart.getEditingDomain().getCommandStack().execute(
+											DeleteCommand.create(jointModelEditorPart.getEditingDomain(), Collections.singleton(canal)));
+								}
+							}
+						};
+						addActionToMenu(deleteCanal, menu2);
+						}
+
 					}
 				};
 				addActionToMenu(canalEditor, menu);
