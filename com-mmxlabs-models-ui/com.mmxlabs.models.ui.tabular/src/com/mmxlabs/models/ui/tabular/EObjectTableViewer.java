@@ -189,7 +189,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	/**
 	 * @return True if editing is currently disabled on this table.
 	 */
-	public boolean isLockedForEditing() {
+	public boolean isLocked() {
 		return lockedForEditing;
 	}
 
@@ -197,7 +197,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	 * @param Set
 	 *            to true if editing should be disabled on this table.
 	 */
-	public void setLockedForEditing(final boolean lockedForEditing) {
+	public void setLocked(final boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
 	}
 

@@ -14,6 +14,7 @@ import org.eclipse.nebula.widgets.formattedtext.FloatFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.nebula.widgets.formattedtext.LongFormatter;
+import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -50,17 +51,22 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 		
 		
 		final FormattedTextCellEditor result = new FormattedTextCellEditor(c);
-		
+		final NumberFormatter formatter;
 		if (field.getEType().equals(EcorePackage.eINSTANCE.getEInt())) {
-			result.setFormatter(new IntegerFormatter());
+			formatter = new IntegerFormatter();
 		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
-			result.setFormatter(new LongFormatter());
+			formatter = new LongFormatter();
 		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEFloat())) {
-			result.setFormatter(new FloatFormatter());
+			formatter = new FloatFormatter();
 		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEDouble())) {
-			result.setFormatter(new DoubleFormatter());
+			formatter = new DoubleFormatter();
+		} else {
+			formatter = null;
 		}
 		
+		formatter.setFixedLengths(false, false);
+		
+		result.setFormatter(formatter);
 		
 		return result;
 	}

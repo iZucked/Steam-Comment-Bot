@@ -68,7 +68,7 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 				setChecked(false);
 				setText("Filter table");
 				try {
-					setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.shiplingo.ui.detailview/icons/filter.gif")));
+					setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.gif")));
 				} catch (final MalformedURLException ex) {
 				}
 				// setImageDescriptor(LngEditorPlugin.Implementation
