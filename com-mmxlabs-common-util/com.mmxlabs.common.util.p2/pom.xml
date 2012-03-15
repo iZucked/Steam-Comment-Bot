@@ -13,11 +13,6 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-
-	<properties>
-		<tycho-extras-version>0.13.0</tycho-extras-version>
-	</properties>
-
 	<build>
 		<plugins>
 
