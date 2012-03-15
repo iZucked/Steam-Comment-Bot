@@ -63,6 +63,10 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		this.jointModelEditorPart = part;
 	}
 
+	protected ScenarioTableViewer getScenarioViewer() {
+		return scenarioViewer;
+	}
+
 	@Override
 	public void createControl(Composite parent) {
 		// interpose and create filter field
