@@ -41,17 +41,16 @@ import org.eclipse.swt.widgets.Text;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
 /**
- * A composite for displaying a wiring editor. Contains a {@link WiringDiagram},
- * which lets the user view and edit a matching in a bipartite graph, and
- * provides the interfacing logic to apply a new matching to the cargos passed
- * in through {@link #setCargos(List)}.
+ * A composite for displaying a wiring editor. Contains a {@link WiringDiagram}, which lets the user view and edit a matching in a bipartite graph, and provides the interfacing logic to apply a new
+ * matching to the cargos passed in through {@link #setCargos(List)}.
  * 
  * The {@link #createApplyCommand(EditingDomain)} applies the changes.
  * 
@@ -62,16 +61,14 @@ public class WiringComposite extends Composite {
 	private final ArrayList<Cargo> cargos = new ArrayList<Cargo>();
 	private final ArrayList<Integer> wiring = new ArrayList<Integer>();
 
-	final List<PortAndDateComposite> lhsComposites = new ArrayList<PortAndDateComposite>(
-			cargos.size());
-	final List<PortAndDateComposite> rhsComposites = new ArrayList<PortAndDateComposite>(
-			cargos.size());
+	final List<PortAndDateComposite> lhsComposites = new ArrayList<PortAndDateComposite>(cargos.size());
+	final List<PortAndDateComposite> rhsComposites = new ArrayList<PortAndDateComposite>(cargos.size());
 
 	final List<String> newNames = new ArrayList<String>();
-//	final List<String> newTypes = new ArrayList<String>();
+	// final List<String> newTypes = new ArrayList<String>();
 
 	final List<Cargo> newCargos = new LinkedList<Cargo>();
-	
+
 	private IReferenceValueProvider portProvider;
 
 	/**
@@ -104,10 +101,10 @@ public class WiringComposite extends Composite {
 		wiring.add(-1); // bogus element for the add terminals.
 
 		newNames.clear();
-//		newTypes.clear();
+		// newTypes.clear();
 		for (final Cargo c : cargos) {
 			newNames.add(c.getName());
-//			newTypes.add(c.getCargoType().getName());
+			// newTypes.add(c.getCargoType().getName());
 		}
 
 		createChildren();
@@ -134,19 +131,24 @@ public class WiringComposite extends Composite {
 			wiring.clear();
 			wiring.addAll(newWiring);
 		}
-		
+
 		wiring.add(-1); // preserve bogus element
 		// duplicate last cargo?
-		final Cargo newCargo = EcoreUtil.copy(cargos.get(cargos.size()-1));
-		
+		final Cargo prototype = cargos.get(cargos.size() - 1);
+		final Cargo newCargo = EcoreUtil.copy(prototype);
+		final LoadSlot newLoad = EcoreUtil.copy(prototype.getLoadSlot());
+		final DischargeSlot newDischarge = EcoreUtil.copy(prototype.getDischargeSlot());
+		newCargo.setLoadSlot(newLoad);
+		newCargo.setDischargeSlot(newDischarge);
+
 		final String name = "New cargo " + (newCargos.size() + 1);
-		
+
 		newCargo.setName(name);
 
 		newNames.add(name);
-		
+
 		cargos.add(newCargo);
-//		newTypes.add(newCargo.getCargoType().getName());
+		// newTypes.add(newCargo.getCargoType().getName());
 		newCargos.add(newCargo);
 
 		for (final Control c : getChildren()) {
@@ -175,8 +177,7 @@ public class WiringComposite extends Composite {
 		setLayout(layout);
 	}
 
-	private class PortAndDateComposite extends Composite implements
-			SelectionListener {
+	private class PortAndDateComposite extends Composite implements SelectionListener {
 		private static final int LONG_LENGTH = 20;
 		public final DateTime dateTime;
 		public final Combo combo;
@@ -190,17 +191,15 @@ public class WiringComposite extends Composite {
 		 * @param parent
 		 * @param style
 		 */
-		public PortAndDateComposite(Composite parent, int style,
-				final IReferenceValueProvider rvp, final Slot slot) {
+		public PortAndDateComposite(Composite parent, int style, final IReferenceValueProvider rvp, final Slot slot) {
 			super(parent, style);
 			setLayout(new GridLayout(2, false));
 			combo = new Combo(this, SWT.READ_ONLY);
 			dateTime = new DateTime(this, SWT.MEDIUM | SWT.DATE);
-			ports = rvp.getAllowedValues(slot,
-					CargoPackage.eINSTANCE.getSlot_Port());
-			
+			ports = rvp.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Port());
+
 			// trim port names
-			
+
 			for (final Pair<String, EObject> p : ports) {
 				combo.add(shorten(p.getFirst()));
 			}
@@ -211,25 +210,22 @@ public class WiringComposite extends Composite {
 			dateTime.addSelectionListener(this);
 		}
 
-		
 		private String shorten(final String longString) {
 			if (longString.length() > LONG_LENGTH + 3) {
 				return longString.substring(0, LONG_LENGTH) + "...";
 			}
 			return longString;
 		}
-		
+
 		/**
 		 * @param date
 		 */
 		public void setDate(Date date) {
-			final Calendar cal = Calendar.getInstance(TimeZone
-					.getTimeZone(getPort().getTimeZone()));
+			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(getPort().getTimeZone()));
 			cal.clear();
 			cal.setTime(date);
 
-			dateTime.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
-					cal.get(Calendar.DAY_OF_MONTH));
+			dateTime.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
 
 			hours = cal.get(Calendar.HOUR_OF_DAY);
 		}
@@ -242,8 +238,7 @@ public class WiringComposite extends Composite {
 		}
 
 		public Date getDate() {
-			final Calendar cal = Calendar.getInstance(TimeZone
-					.getTimeZone(getPort().getTimeZone()));
+			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(getPort().getTimeZone()));
 			cal.clear();
 			cal.set(Calendar.YEAR, dateTime.getYear());
 			cal.set(Calendar.MONTH, dateTime.getMonth());
@@ -267,14 +262,10 @@ public class WiringComposite extends Composite {
 		}
 	}
 
-	private void updateWiringColours(final WiringDiagram diagram,
-			final List<Integer> wiring, final List<PortAndDateComposite> loads,
-			final List<PortAndDateComposite> discharge) {
+	private void updateWiringColours(final WiringDiagram diagram, final List<Integer> wiring, final List<PortAndDateComposite> loads, final List<PortAndDateComposite> discharge) {
 		final Color red = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-		final Color green = Display.getCurrent()
-				.getSystemColor(SWT.COLOR_GREEN);
-		final Color black = Display.getCurrent()
-				.getSystemColor(SWT.COLOR_BLACK);
+		final Color green = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
+		final Color black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 
 		for (int i = 0; i < wiring.size() - 1; i++) {
 			diagram.setLeftTerminalColor(i, red);
@@ -319,40 +310,37 @@ public class WiringComposite extends Composite {
 				}
 			});
 
-//			final Combo typeCombo = new Combo(this, SWT.READ_ONLY);
-//			for (final CargoType type : CargoType.values()) {
-//				typeCombo.add(type.getName());
-//			}
-//
-//			typeCombo.setText(newTypes.get(index));
-//
-//			typeCombo.addSelectionListener(new SelectionListener() {
-//				void apply() {
-//					newTypes.set(finalIndex, typeCombo.getText());
-//				}
-//
-//				@Override
-//				public void widgetSelected(SelectionEvent e) {
-//					apply();
-//				}
-//
-//				@Override
-//				public void widgetDefaultSelected(SelectionEvent e) {
-//					apply();
-//				}
-//			});
+			// final Combo typeCombo = new Combo(this, SWT.READ_ONLY);
+			// for (final CargoType type : CargoType.values()) {
+			// typeCombo.add(type.getName());
+			// }
+			//
+			// typeCombo.setText(newTypes.get(index));
+			//
+			// typeCombo.addSelectionListener(new SelectionListener() {
+			// void apply() {
+			// newTypes.set(finalIndex, typeCombo.getText());
+			// }
+			//
+			// @Override
+			// public void widgetSelected(SelectionEvent e) {
+			// apply();
+			// }
+			//
+			// @Override
+			// public void widgetDefaultSelected(SelectionEvent e) {
+			// apply();
+			// }
+			// });
 
-			final PortAndDateComposite loadSide = new PortAndDateComposite(
-					this, SWT.NONE, portProvider, cargo.getLoadSlot());
+			final PortAndDateComposite loadSide = new PortAndDateComposite(this, SWT.NONE, portProvider, cargo.getLoadSlot());
 
 			if (wiringDiagram == null) {
-				wiringDiagram = new WiringDiagram(this, getStyle()
-						& ~SWT.BORDER) {
+				wiringDiagram = new WiringDiagram(this, getStyle() & ~SWT.BORDER) {
 					@Override
 					protected List<Float> getTerminalPositions() {
 						final float littleOffset = getBounds().y;
-						final ArrayList<Float> vMidPoints = new ArrayList<Float>(
-								cargos.size());
+						final ArrayList<Float> vMidPoints = new ArrayList<Float>(cargos.size());
 						// get vertical coordinates of labels
 
 						float lastMidpointButOne = 0;
@@ -361,13 +349,11 @@ public class WiringComposite extends Composite {
 						for (final Composite l : lhsComposites) {
 							final Rectangle lbounds = l.getBounds();
 							lastMidpointButOne = lastMidpoint;
-							lastMidpoint = -littleOffset + lbounds.y
-									+ lbounds.height / 2.0f;
+							lastMidpoint = -littleOffset + lbounds.y + lbounds.height / 2.0f;
 							vMidPoints.add(lastMidpoint);
 						}
 
-						vMidPoints.add(lastMidpoint
-								+ (lastMidpoint - lastMidpointButOne));
+						vMidPoints.add(lastMidpoint + (lastMidpoint - lastMidpointButOne));
 
 						return vMidPoints;
 					}
@@ -376,37 +362,30 @@ public class WiringComposite extends Composite {
 					protected void wiringChanged(final List<Integer> newWiring) {
 						// check for wiring to add terminal
 						int addIndex = newWiring.size() - 1;
-						if (newWiring.get(addIndex) != -1
-								|| newWiring.indexOf(addIndex) != -1) {
+						if (newWiring.get(addIndex) != -1 || newWiring.indexOf(addIndex) != -1) {
 							addNewCargo(new ArrayList<Integer>(newWiring));
 						} else {
 							WiringComposite.this.wiring.clear();
 							WiringComposite.this.wiring.addAll(newWiring);
-							updateWiringColours(this, newWiring, lhsComposites,
-									rhsComposites);
+							updateWiringColours(this, newWiring, lhsComposites, rhsComposites);
 						}
-						WiringComposite.this.notifyListeners(SWT.Modify,
-								new Event());
+						WiringComposite.this.notifyListeners(SWT.Modify, new Event());
 					}
 				};
 				// wiring diagram is tall
-				wiringDiagram.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
-						true, true, 1, cargos.size() + 1));
+				wiringDiagram.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, cargos.size() + 1));
 
 				final WiringDiagram wiringDiagram2 = wiringDiagram;
 
 				selectionListener = new Listener() {
 					@Override
 					public void handleEvent(Event event) {
-						updateWiringColours(wiringDiagram2,
-								wiringDiagram2.getWiring(), lhsComposites,
-								rhsComposites);
+						updateWiringColours(wiringDiagram2, wiringDiagram2.getWiring(), lhsComposites, rhsComposites);
 					}
 				};
 			}
 
-			final PortAndDateComposite dischargeSide = new PortAndDateComposite(
-					this, SWT.NONE, portProvider, cargo.getDischargeSlot());
+			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, SWT.NONE, portProvider, cargo.getDischargeSlot());
 
 			final String id = newNames.get(index);
 
@@ -420,36 +399,28 @@ public class WiringComposite extends Composite {
 			loadSide.addListener(SWT.DefaultSelection, selectionListener);
 			dischargeSide.addListener(SWT.DefaultSelection, selectionListener);
 
-			idLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-					false));
-			loadSide.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-					false));
-			dischargeSide.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
-					false, false));
+			idLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+			loadSide.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
+			dischargeSide.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 
 			index++;
 		}
 
 		// add bogus packing label
-		new Label(this, SWT.NONE).setLayoutData(new GridData(
-				GridData.FILL_VERTICAL));
-		new Label(this, SWT.NONE).setLayoutData(new GridData(
-				GridData.FILL_VERTICAL));
+		new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 		wiringDiagram.setWiring(wiring);
 		final ArrayList<Pair<Color, Color>> terminalColors = new ArrayList<Pair<Color, Color>>();
 		final ArrayList<Color> wireColors = new ArrayList<Color>();
-		final Color green = Display.getCurrent()
-				.getSystemColor(SWT.COLOR_GREEN);
-		final Color black = Display.getCurrent()
-				.getSystemColor(SWT.COLOR_BLACK);
+		final Color green = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
+		final Color black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 		for (final Cargo cargo : cargos) {
 			terminalColors.add(new Pair<Color, Color>(green, green));
 			wireColors.add(black);
 		}
 
-		final Color addColor = Display.getCurrent().getSystemColor(
-				SWT.COLOR_YELLOW);
+		final Color addColor = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
 
 		terminalColors.add(new Pair<Color, Color>(addColor, addColor));
 
@@ -459,8 +430,7 @@ public class WiringComposite extends Composite {
 	}
 
 	/*
-	 * TODO highlight lines when mouseover labels TODO feedback validation state
-	 * to containing dialog TODO generate command to apply changes.
+	 * TODO highlight lines when mouseover labels TODO feedback validation state to containing dialog TODO generate command to apply changes.
 	 */
 
 	/**
@@ -472,37 +442,41 @@ public class WiringComposite extends Composite {
 
 	public Command createApplyCommand(final EditingDomain domain) {
 		final CompoundCommand command = new CompoundCommand();
-		
+
 		// update modified properties
 		int index = 0;
 		for (final Cargo cargo : cargos) {
-			command.append(SetCommand.create(domain, cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newNames.get(index)));			
+			command.append(SetCommand.create(domain, cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newNames.get(index)));
 			command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort()));
 			command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate()));
 			command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), rhsComposites.get(index).getPort()));
 			command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), rhsComposites.get(index).getDate()));
-			
+
 			index++;
 		}
-		
+
 		// todo sort out new cargo slots.
-		
+
 		for (int i = 0; i < wiring.size() - 1; i++) {
 			int newTail = wiring.get(i);
 			if (newTail != i) {
 				final Slot slot = cargos.get(newTail).getDischargeSlot();
 				final Cargo cargo = cargos.get(i);
-				command.append(SetCommand.create(domain, cargo,
-						CargoPackage.eINSTANCE.getCargo_DischargeSlot(), slot));
+				command.append(SetCommand.create(domain, cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), slot));
 			}
 		}
 
 		// add new cargos back into container
 		final EObject container = cargos.get(0).eContainer();
 		final EStructuralFeature feature = cargos.get(0).eContainingFeature();
-		if (!newCargos.isEmpty())
+		if (!newCargos.isEmpty()) {
 			command.append(AddCommand.create(domain, container, feature, newCargos));
-		
+			for (final Cargo cargo : newCargos) {
+				command.append(AddCommand.create(domain, container, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargo.getLoadSlot()));
+				command.append(AddCommand.create(domain, container, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargo.getDischargeSlot()));
+			}
+		}
+
 		// scenario's cargo model.
 
 		return command;
