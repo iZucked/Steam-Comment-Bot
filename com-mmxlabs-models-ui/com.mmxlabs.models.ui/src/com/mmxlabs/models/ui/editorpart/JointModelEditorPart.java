@@ -49,6 +49,15 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.jobmanager.eclipse.manager.impl.EclipseJobManagerAdapter;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlListener;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.jobs.impl.JobControlAdapter;
+import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.models.ui.Activator;
@@ -61,10 +70,10 @@ import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 /**
  * An editor part for editing MMX Root Objects.
  * 
- * TODO top level object may want to contribute functionality 
+ * TODO top level object may want to contribute functionality
  * 
  * @author hinton
- *
+ * 
  */
 public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider {
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
@@ -76,14 +85,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	 * The root object from {@link #jointModel}
 	 */
 	private MMXRootObject rootObject;
-	
+
 	/**
 	 * The editing domain for controls to use. This is pretty standard, but hooks command creation to allow extra things there
 	 */
 	private AdapterFactoryEditingDomain editingDomain;
 	private ComposedAdapterFactory adapterFactory;
 	private BasicCommandStack commandStack;
-	
+
 	/**
 	 * This caches reference value provider providers.
 	 */
@@ -93,20 +102,19 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	 * This holds the selection of the active viewer.
 	 */
 	private ISelection editorSelection = StructuredSelection.EMPTY;
-	
+
 	private List<IJointModelEditorContribution> contributions = new LinkedList<IJointModelEditorContribution>();
 	private ICommandHandler defaultCommandHandler = new ICommandHandler() {
 		@Override
-		public void handleCommand(Command command, EObject target,
-				EStructuralFeature feature) {
+		public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
 			getEditingDomain().getCommandStack().execute(command);
 		}
-		
+
 		@Override
 		public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
 			return JointModelEditorPart.this.getReferenceValueProviderCache();
 		}
-		
+
 		@Override
 		public EditingDomain getEditingDomain() {
 			return JointModelEditorPart.this.getEditingDomain();
@@ -115,13 +123,49 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	private boolean saving = false;
 	private Viewer currentViewer;
 	private ISelectionChangedListener selectionChangedListener;
+
+	/**
+	 * Used to track jobs for the displayed joint model, and lock the UI when jobs are running.
+	 */
+	private IEclipseJobManagerListener jobManagerListener = new EclipseJobManagerAdapter() {
+		@Override
+		public void jobAdded(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
+			if (job.getJobContext() == getRootObject() || job.getJobContext() == jointModel) {
+				control.addListener(jobListener);
+			}
+		}
+
+		@Override
+		public void jobRemoved(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
+			control.removeListener(jobListener); // no harm in removing even if it's not there
+		}
+	};
+	
+	private IJobControlListener jobListener = new JobControlAdapter() {
+		@Override
+		public boolean jobStateChanged(IJobControl control, EJobState oldState, EJobState newState) {
+			switch (newState) {
+			case INITIALISING:
+			case INITIALISED:
+			case PAUSED:
+			case PAUSING:
+			case RESUMING:
+			case RUNNING:
+				setLocked(true);
+				break;
+			default:
+				setLocked(false);
+			}
+			return true;
+		}
+	};
 	
 	private boolean locked;
-	
+
 	public JointModelEditorPart() {
-		
+
 	}
-	
+
 	public boolean isLocked() {
 		return locked;
 	}
@@ -134,32 +178,31 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	}
 
 	public boolean isSaving() {
-		return saving ;
+		return saving;
 	}
-	
+
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		//TODO use other invocation with scheduling rule
+		// TODO use other invocation with scheduling rule
 		try {
-			ResourcesPlugin.getWorkspace().run(
-					new IWorkspaceRunnable() {
-						@Override
-						public void run(IProgressMonitor monitor) throws CoreException {
-							try {
-								saving = true;
-								monitor.beginTask("Saving", 1);
-								jointModel.save();
-								monitor.worked(1);
-							} catch (IOException e) {
-								log.error("IO Error during save", e);
-							} finally {
-								monitor.done();
-								saving = false;
-								commandStack.saveIsDone();
-								firePropertyChange(PROP_DIRTY);
-							}
-						}
-					}, monitor);
+			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
+				@Override
+				public void run(IProgressMonitor monitor) throws CoreException {
+					try {
+						saving = true;
+						monitor.beginTask("Saving", 1);
+						jointModel.save();
+						monitor.worked(1);
+					} catch (IOException e) {
+						log.error("IO Error during save", e);
+					} finally {
+						monitor.done();
+						saving = false;
+						commandStack.saveIsDone();
+						firePropertyChange(PROP_DIRTY);
+					}
+				}
+			}, monitor);
 		} catch (CoreException e) {
 			log.error("Error during save", e);
 		}
@@ -167,15 +210,15 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	@Override
 	public void doSaveAs() {
-		
+
 	}
 
 	@Override
-	public void init(final IEditorSite site, final IEditorInput input)
-			throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		setPartName(input.getName());
 		JointModel jointModel = (JointModel) input.getAdapter(JointModel.class);
+
 		if (jointModel == null)
 			jointModel = (JointModel) Platform.getAdapterManager().loadAdapter(input, JointModel.class.getCanonicalName());
 		if (jointModel == null) {
@@ -192,54 +235,58 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 				adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 				adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-				//TODO do we need more stuff here? I (tom) am not currently sure what this stuff really does.
-				
+				// TODO do we need more stuff here? I (tom) am not currently sure what this stuff really does.
+
 				commandStack = new BasicCommandStack();
-				commandStack.addCommandStackListener(
-						new CommandStackListener() {
-							@Override
-							public void commandStackChanged(EventObject event) {
-								if (commandStack.isSaveNeeded()) {
-									firePropertyChange(IEditorPart.PROP_DIRTY);
-								}
-							}
+				commandStack.addCommandStackListener(new CommandStackListener() {
+					@Override
+					public void commandStackChanged(EventObject event) {
+						if (commandStack.isSaveNeeded()) {
+							firePropertyChange(IEditorPart.PROP_DIRTY);
 						}
-						);
-				
-				final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker = 
-						Activator.getDefault().getCommandProviderTracker();
+					}
+				});
+
+				final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker = Activator.getDefault().getCommandProviderTracker();
 				// create editing domain
 				editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack) {
 					@Override
 					public Command createCommand(Class<? extends Command> commandClass, CommandParameter commandParameter) {
 						final Command normal = super.createCommand(commandClass, commandParameter);
-						
+
 						final CompoundCommand wrapper = new CompoundCommand();
 						wrapper.append(normal);
 						for (final IModelCommandProvider provider : commandProviderTracker.getServices(new IModelCommandProvider[0])) {
-							final Command addition = provider.provideAdditionalCommand(
-									getEditingDomain(),
-									getRootObject(), commandClass, commandParameter, normal);
-							if (addition != null) wrapper.append(addition);
+							final Command addition = provider.provideAdditionalCommand(getEditingDomain(), getRootObject(), commandClass, commandParameter, normal);
+							if (addition != null)
+								wrapper.append(addition);
 						}
-						
+
 						return wrapper.unwrap();
 					}
 				};
-				
+
 				// initialize extensions
-				
+
 				contributions = Activator.getDefault().getJointModelEditorContributionRegistry().initEditorContributions(this, root);
-				
+
 				referenceValueProviderCache = new ReferenceValueProviderCache(rootObject);
+				
+				Activator.getDefault().getJobManager().addEclipseJobManagerListener(jobManagerListener);
 			} catch (MigrationException e) {
 				throw new PartInitException("Error migrating joint model", e);
 			} catch (IOException e) {
 				throw new PartInitException("IO Exception loading joint model", e);
 			}
 		}
-		
+
 		site.setSelectionProvider(this);
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		Activator.getDefault().getJobManager().removeEclipseJobManagerListener(jobManagerListener);
 	}
 
 	@Override
@@ -251,10 +298,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	public boolean isSaveAsAllowed() {
 		return false;
 	}
-	
+
 	@Override
 	public void setFocus() {
-		
+
 	}
 
 	@Override
@@ -268,7 +315,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			contribution.addPages(getContainer());
 		}
 	}
-	
+
 	@Override
 	public void setPageImage(int pageIndex, Image image) {
 		super.setPageImage(pageIndex, image);
@@ -288,17 +335,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	}
 
 	/**
-	 * Get a reference value provider for the given reference on the given EClass. Delegates to the result of
-	 * {@link #getReferenceValueProviderCache()}
+	 * Get a reference value provider for the given reference on the given EClass. Delegates to the result of {@link #getReferenceValueProviderCache()}
 	 * 
 	 * @param owner
 	 * @param reference
 	 * @return
 	 */
-	public IReferenceValueProvider getReferenceValueProvider(EClass owner,
-			EReference reference) {
-		return referenceValueProviderCache.getReferenceValueProvider(owner,
-				reference);
+	public IReferenceValueProvider getReferenceValueProvider(EClass owner, EReference reference) {
+		return referenceValueProviderCache.getReferenceValueProvider(owner, reference);
 	}
 
 	public ICommandHandler getDefaultCommandHandler() {
@@ -313,12 +357,12 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	public ISelection getSelection() {
 		return editorSelection;
 	}
-	
+
 	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 		selectionChangedListeners.add(listener);
 	}
-	
+
 	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
 		selectionChangedListeners.remove(listener);
@@ -332,7 +376,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			l.selectionChanged(event);
 		}
 	}
-	
+
 	/**
 	 * This makes sure that one content viewer, either for the current page or the outline view, if it has focus, is the current one. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 

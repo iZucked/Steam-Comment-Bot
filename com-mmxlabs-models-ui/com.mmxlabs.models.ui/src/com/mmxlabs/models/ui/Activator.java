@@ -12,6 +12,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.ui.extensions.ExtensionConfigurationModule;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -38,6 +39,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 	private ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker;
+	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerTracker;
 	
 	/**
 	 * The constructor
@@ -58,6 +60,9 @@ public class Activator extends AbstractUIPlugin {
 		commandProviderTracker = new ServiceTracker<IModelCommandProvider, IModelCommandProvider>(context, IModelCommandProvider.class, null);
 		commandProviderTracker.open();
 		
+		jobManagerTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context, IEclipseJobManager.class.getName(), null);
+		jobManagerTracker.open();
+		
 		final Injector injector = Guice.createInjector(new ExtensionConfigurationModule(this));
 		injector.injectMembers(this);
 	}
@@ -70,9 +75,17 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(final BundleContext context) throws Exception {
 		plugin = null;
 		commandProviderTracker.close();
+		jobManagerTracker.close();
+		
+		commandProviderTracker = null;
+		jobManagerTracker = null;
 		super.stop(context);
 	}
-
+	
+	public IEclipseJobManager getJobManager() {
+		return jobManagerTracker.getService();
+	}
+	
 	/**
 	 * Returns the shared instance
 	 *
