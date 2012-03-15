@@ -985,7 +985,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getVesselClass_InaccessiblePorts(), theTypesPackage.getAPortSet(), null, "inaccessiblePorts", null, 0, -1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselClass_BaseFuel(), this.getBaseFuel(), null, "baseFuel", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_Capacity(), ecorePackage.getEInt(), "capacity", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselClass_FillCapacity(), ecorePackage.getEDouble(), "fillCapacity", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClass_FillCapacity(), ecorePackage.getEDouble(), "fillCapacity", "1", 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselClass_LadenAttributes(), this.getVesselStateAttributes(), null, "ladenAttributes", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselClass_BallastAttributes(), this.getVesselStateAttributes(), null, "ballastAttributes", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_MinSpeed(), ecorePackage.getEDouble(), "minSpeed", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1063,6 +1063,112 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.mmxlabs.com/models/ui/numberFormat
+		createNumberFormatAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/ui/numberFormat</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNumberFormatAnnotations() {
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";			
+		addAnnotation
+		  (getVesselClass_Capacity(), 
+		   source, 
+		   new String[] {
+			 "unit", "M3"
+		   });		
+		addAnnotation
+		  (getVesselClass_FillCapacity(), 
+		   source, 
+		   new String[] {
+			 "scale", "100",
+			 "formatString", "###.#",
+			 "unit", "%"
+		   });		
+		addAnnotation
+		  (getVesselClass_MinSpeed(), 
+		   source, 
+		   new String[] {
+			 "unit", "kts"
+		   });		
+		addAnnotation
+		  (getVesselClass_MaxSpeed(), 
+		   source, 
+		   new String[] {
+			 "unit", "kts"
+		   });		
+		addAnnotation
+		  (getVesselClass_MinHeel(), 
+		   source, 
+		   new String[] {
+			 "unit", "M3"
+		   });		
+		addAnnotation
+		  (getVesselClass_WarmingTime(), 
+		   source, 
+		   new String[] {
+			 "unit", "hrs"
+		   });		
+		addAnnotation
+		  (getVesselClass_CoolingTime(), 
+		   source, 
+		   new String[] {
+			 "unit", "hrs"
+		   });		
+		addAnnotation
+		  (getVesselClass_CoolingVolume(), 
+		   source, 
+		   new String[] {
+			 "unit", "M3"
+		   });		
+		addAnnotation
+		  (getVesselClass_PilotLightRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "MT/d"
+		   });		
+		addAnnotation
+		  (getHeelOptions_VolumeAvailable(), 
+		   source, 
+		   new String[] {
+			 "unit", "M3"
+		   });		
+		addAnnotation
+		  (getVesselStateAttributes_NboRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "M3/d"
+		   });		
+		addAnnotation
+		  (getVesselStateAttributes_IdleNBORate(), 
+		   source, 
+		   new String[] {
+			 "unit", "M3/d"
+		   });		
+		addAnnotation
+		  (getVesselStateAttributes_IdleBaseRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "MT/d"
+		   });		
+		addAnnotation
+		  (getVesselStateAttributes_CanalNBORate(), 
+		   source, 
+		   new String[] {
+			 "unit", "M3/d"
+		   });		
+		addAnnotation
+		  (getVesselStateAttributes_InPortBaseRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "MT/d"
+		   });
 	}
 
 } //FleetPackageImpl

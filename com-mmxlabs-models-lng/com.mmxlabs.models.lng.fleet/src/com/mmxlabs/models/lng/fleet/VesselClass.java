@@ -94,6 +94,7 @@ public interface VesselClass extends AVesselClass {
 	 * @see #setCapacity(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_Capacity()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3'"
 	 * @generated
 	 */
 	int getCapacity();
@@ -110,6 +111,7 @@ public interface VesselClass extends AVesselClass {
 
 	/**
 	 * Returns the value of the '<em><b>Fill Capacity</b></em>' attribute.
+	 * The default value is <code>"1"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Fill Capacity</em>' attribute isn't clear,
@@ -119,7 +121,8 @@ public interface VesselClass extends AVesselClass {
 	 * @return the value of the '<em>Fill Capacity</em>' attribute.
 	 * @see #setFillCapacity(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_FillCapacity()
-	 * @model required="true"
+	 * @model default="1" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%'"
 	 * @generated
 	 */
 	double getFillCapacity();
@@ -198,6 +201,7 @@ public interface VesselClass extends AVesselClass {
 	 * @see #setMinSpeed(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_MinSpeed()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts'"
 	 * @generated
 	 */
 	double getMinSpeed();
@@ -224,6 +228,7 @@ public interface VesselClass extends AVesselClass {
 	 * @see #setMaxSpeed(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_MaxSpeed()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts'"
 	 * @generated
 	 */
 	double getMaxSpeed();
@@ -250,6 +255,7 @@ public interface VesselClass extends AVesselClass {
 	 * @see #setMinHeel(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_MinHeel()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3'"
 	 * @generated
 	 */
 	int getMinHeel();
@@ -276,6 +282,7 @@ public interface VesselClass extends AVesselClass {
 	 * @see #setWarmingTime(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_WarmingTime()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hrs'"
 	 * @generated
 	 */
 	int getWarmingTime();
@@ -302,6 +309,7 @@ public interface VesselClass extends AVesselClass {
 	 * @see #setCoolingTime(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_CoolingTime()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hrs'"
 	 * @generated
 	 */
 	int getCoolingTime();
@@ -328,6 +336,7 @@ public interface VesselClass extends AVesselClass {
 	 * @see #setCoolingVolume(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_CoolingVolume()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3'"
 	 * @generated
 	 */
 	int getCoolingVolume();
@@ -370,6 +379,7 @@ public interface VesselClass extends AVesselClass {
 	 * @see #setPilotLightRate(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_PilotLightRate()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d'"
 	 * @generated
 	 */
 	int getPilotLightRate();

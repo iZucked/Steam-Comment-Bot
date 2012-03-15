@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.fleet.ui.editorpart;
 
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
@@ -41,6 +44,7 @@ import com.mmxlabs.models.ui.tabular.DialogFeatureManipulator;
 import com.mmxlabs.models.ui.tabular.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class VesselClassViewerPane extends ScenarioTableViewerPane {
 	private JointModelEditorPart jointModelEditor;
@@ -89,6 +93,9 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 	class BaseFuelEditorAction extends AbstractMenuAction {
 		public BaseFuelEditorAction() {
 			super("Base Fuels");
+			try {
+				setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.fleet.editor/icons/oildrop.png")));
+			} catch (final MalformedURLException e) {}
 		}
 		
 		@Override
@@ -100,7 +107,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 				final Action editBase = new AbstractMenuAction(baseFuel.getName()) {					
 					@Override
 					protected void populate(Menu submenu) {
-						final Action edit = new Action("Edit...") {
+						final LockableAction edit = new LockableAction("Edit...") {
 							public void run() {
 								final DetailCompositeDialog dcd = new DetailCompositeDialog(
 										jointModelEditor.getSite().getShell(), 
@@ -110,7 +117,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 						};
 						addActionToMenu(edit, submenu);
 						
-						final Action delete = new Action("Delete...") {
+						final Action delete = new LockableAction("Delete...") {
 							public void run() {
 								final ICommandHandler handler = jointModelEditor.getDefaultCommandHandler();
 								handler.handleCommand(DeleteCommand.create(handler.getEditingDomain(), Collections.singleton(baseFuel)), fleetModel, FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
@@ -125,7 +132,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 			if (b) {
 				new MenuItem(menu, SWT.SEPARATOR);
 			}
-			final Action newBase = new Action("Add base fuel...") {
+			final Action newBase = new LockableAction("Add base fuel...") {
 				@Override
 				public void run() {
 					final BaseFuel newFuel = FleetFactory.eINSTANCE.createBaseFuel();

@@ -57,18 +57,9 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#lock()
 	 */
 	@Override
-	protected void lock() {
-		// TODO Auto-generated method stub
-		
+	public void setLocked(boolean locked) {
+		vesselClassViewerPane.setLocked(locked);
+		vesselViewerPane.setLocked(locked);
+		eventViewerPane.setLocked(locked);
 	}
-
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#unlock()
-	 */
-	@Override
-	protected void unlock() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

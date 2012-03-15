@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class PortEditorPane extends ScenarioTableViewerPane {
 
@@ -133,7 +134,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 			new MenuItem(menu, SWT.SEPARATOR);
 
-			addActionToMenu(new Action("Add new canal...") {
+			addActionToMenu(new LockableAction("Add new canal...") {
 				@Override
 				public void run() {
 					final HashSet<String> existingNames = new HashSet<String>();
@@ -172,7 +173,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		}
 
 		protected Action createMatrixEditor(final String name, final Route distanceModel) {
-			return new Action("Edit " + name + " distances...") {
+			return new LockableAction("Edit " + name + " distances...") {
 				@Override
 				public void run() {
 					

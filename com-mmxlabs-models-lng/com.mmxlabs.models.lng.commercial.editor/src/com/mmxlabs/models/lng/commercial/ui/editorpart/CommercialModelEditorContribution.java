@@ -12,57 +12,46 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
-import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 public class CommercialModelEditorContribution extends BaseJointModelEditorContribution<CommercialModel> {
 	private int pageNumber;
+	private ContractEditorPane salesContractEditorPane;
+	private ContractEditorPane purchaseContractEditorPane;
+	private EntityEditorPane entityEditorPane;
 
 	@Override
 	public void addPages(final Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
 		
-		EntityEditorPane entEp = new EntityEditorPane(editorPart.getSite().getPage(), editorPart);
-		ContractEditorPane pconEp = new ContractEditorPane(editorPart.getSite().getPage(), editorPart);
-		ContractEditorPane sconEp = new ContractEditorPane(editorPart.getSite().getPage(), editorPart);
+		entityEditorPane = new EntityEditorPane(editorPart.getSite().getPage(), editorPart);
+		purchaseContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart);
+		salesContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart);
 
-		entEp.createControl(sash);
-		sconEp.createControl(sash);
-		pconEp.createControl(sash);
+		entityEditorPane.createControl(sash);
+		salesContractEditorPane.createControl(sash);
+		purchaseContractEditorPane.createControl(sash);
 		
-		entEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory());
-		sconEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory());
-		pconEp.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory());
+		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory());
+		salesContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory());
+		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory());
 		
-		entEp.getViewer().setInput(modelObject);
-		sconEp.getViewer().setInput(modelObject);
-		pconEp.getViewer().setInput(modelObject);
+		entityEditorPane.getViewer().setInput(modelObject);
+		salesContractEditorPane.getViewer().setInput(modelObject);
+		purchaseContractEditorPane.getViewer().setInput(modelObject);
 		
-		pconEp.defaultSetTitle("Purchase Contracts");
-		sconEp.defaultSetTitle("Sales Contracts");
+		purchaseContractEditorPane.defaultSetTitle("Purchase Contracts");
+		salesContractEditorPane.defaultSetTitle("Sales Contracts");
 		
 		pageNumber = editorPart.addPage(sash);
 		editorPart.setPageText(pageNumber, "Commercial");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#lock()
-	 */
-	@Override
-	protected void lock() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#unlock()
-	 */
 	@Override
-	protected void unlock() {
-		// TODO Auto-generated method stub
-		
+	public void setLocked(boolean locked) {
+		entityEditorPane.setLocked(locked);
+		salesContractEditorPane.setLocked(locked);
+		purchaseContractEditorPane.setLocked(locked);
 	}
 }

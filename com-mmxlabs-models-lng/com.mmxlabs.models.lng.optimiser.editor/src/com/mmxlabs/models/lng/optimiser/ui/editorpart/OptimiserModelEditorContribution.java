@@ -11,11 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
-import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 /**
  * @author hinton
@@ -41,22 +37,9 @@ public class OptimiserModelEditorContribution extends BaseJointModelEditorContri
 		editorPart.setPageText(pageNumber, "Optimiser Settings");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#lock()
-	 */
 	@Override
-	protected void lock() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#unlock()
-	 */
-	@Override
-	protected void unlock() {
-		// TODO Auto-generated method stub
-		
+	public void setLocked(boolean locked) {
+		pane.setLocked(locked);
 	}
 
 }

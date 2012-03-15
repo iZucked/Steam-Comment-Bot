@@ -14,13 +14,14 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
-import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 public class PricingModelEditorContribution extends BaseJointModelEditorContribution<PricingModel> {
+	private BaseFuelPricingPane base;
+	private CharterPricingPane charter;
+	private VesselRoutePricingPane route;
+	private CooldownPricingEditorPane cool;
+
 	@Override
 	public void addPages(final Composite parent) {
 		addIndexPage(parent);
@@ -29,37 +30,28 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 	}
 
 	private void addPricingPage(final Composite parent) {
-		// pricing items are:
-		// 1. base fuel prices
-		// this is a table with 1 row per base fuel, letting you pick a commodity index
-		// 2. canal prices
-		// not sure; hierarchy perhaps?
-		// 3. charter prices
-		// table per vessel class? or just a normal table?
-
-		// these are all special cases - for now could use standard parts.
 		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
 		final SashForm sash2 = new SashForm(sash, SWT.HORIZONTAL);
 		final SashForm sash3 = new SashForm(sash, SWT.HORIZONTAL);
 		
-		final BaseFuelPricingPane base = new BaseFuelPricingPane(editorPart.getSite().getPage(), editorPart);
+		base = new BaseFuelPricingPane(editorPart.getSite().getPage(), editorPart);
 		base.createControl(sash2);
 		base.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FleetCost(), PricingPackage.eINSTANCE.getFleetCostModel_BaseFuelPrices() }), editorPart.getAdapterFactory());
 
 		base.getViewer().setInput(modelObject);
 
-		final CharterPricingPane charter = new CharterPricingPane(editorPart.getSite().getPage(), editorPart);
+		charter = new CharterPricingPane(editorPart.getSite().getPage(), editorPart);
 		charter.createControl(sash3);
 		charter.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FleetCost(), PricingPackage.eINSTANCE.getFleetCostModel_CharterCosts() }),
 				editorPart.getAdapterFactory());
 		charter.getViewer().setInput(modelObject);
 
-		final VesselRoutePricingPane route = new VesselRoutePricingPane(editorPart.getSite().getPage(), editorPart);
+		route = new VesselRoutePricingPane(editorPart.getSite().getPage(), editorPart);
 		route.createControl(sash3);
 		route.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_RouteCosts() }), editorPart.getAdapterFactory());
 		route.getViewer().setInput(modelObject);
 
-		final CooldownPricingEditorPane cool = new CooldownPricingEditorPane(editorPart.getSite().getPage(), editorPart);
+		cool = new CooldownPricingEditorPane(editorPart.getSite().getPage(), editorPart);
 		cool.createControl(sash2);
 		cool.init(Arrays.asList(new EReference[] {PricingPackage.eINSTANCE.getPricingModel_CooldownPrices()}), editorPart.getAdapterFactory());
 		cool.getViewer().setInput(modelObject);
@@ -90,22 +82,11 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		editorPart.setPageText(page, "Indices");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#lock()
-	 */
 	@Override
-	protected void lock() {
-		// TODO Auto-generated method stub
-		
+	public void setLocked(boolean locked) {
+		base.setLocked(locked);
+		route.setLocked(locked);
+		charter.setLocked(locked);
+		cool.setLocked(locked);
 	}
-
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#unlock()
-	 */
-	@Override
-	protected void unlock() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

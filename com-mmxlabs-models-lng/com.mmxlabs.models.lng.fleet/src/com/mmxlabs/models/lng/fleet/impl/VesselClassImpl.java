@@ -108,7 +108,7 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double FILL_CAPACITY_EDEFAULT = 0.0;
+	protected static final double FILL_CAPACITY_EDEFAULT = 1.0;
 
 	/**
 	 * The cached value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.

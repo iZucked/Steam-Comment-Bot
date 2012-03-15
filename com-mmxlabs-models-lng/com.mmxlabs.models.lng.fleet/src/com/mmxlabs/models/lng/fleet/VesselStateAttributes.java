@@ -40,6 +40,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setNboRate(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_NboRate()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3/d'"
 	 * @generated
 	 */
 	int getNboRate();
@@ -66,6 +67,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setIdleNBORate(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_IdleNBORate()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3/d'"
 	 * @generated
 	 */
 	int getIdleNBORate();
@@ -92,6 +94,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setIdleBaseRate(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_IdleBaseRate()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d'"
 	 * @generated
 	 */
 	int getIdleBaseRate();
@@ -118,6 +121,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setCanalNBORate(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_CanalNBORate()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3/d'"
 	 * @generated
 	 */
 	int getCanalNBORate();
@@ -144,6 +148,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setInPortBaseRate(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_InPortBaseRate()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d'"
 	 * @generated
 	 */
 	int getInPortBaseRate();
