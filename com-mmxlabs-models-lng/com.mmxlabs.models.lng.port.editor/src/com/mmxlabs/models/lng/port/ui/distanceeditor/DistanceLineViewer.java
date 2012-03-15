@@ -189,7 +189,7 @@ public class DistanceLineViewer extends GridTableViewer {
 							command = SetCommand.create(editingDomain, dl, PortPackage.eINSTANCE.getRouteLine_Distance(), Integer.parseInt(stringValue));
 						}
 					}
-					editingDomain.getCommandStack().execute(command);
+					command.execute();
 					refresh(element);
 				}
 

@@ -152,21 +152,12 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 						final String newName = input.getValue();
 						Route dm = PortFactory.eINSTANCE.createRoute();
 						dm.setName(newName);
-						
+						dm.setCanal(true);
 						final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
 						if (ded.open(jointModelEditorPart, dm) == Window.OK) {
 							dm = ded.getResult();
 						}
-//						
-//						final VesselClassCost prototype = FleetFactory.eINSTANCE.createVesselClassCost();
-//						prototype.setCanal(c);
-//
-//						final DetailCompositeDialog editor = new DetailCompositeDialog(part.getSite().getShell(), part, part.getEditingDomain());
-//
-//						editor.open(Collections.singletonList((EObject) prototype));
-//						for (final VesselClass vc : part.getScenario().getFleetModel().getVesselClasses()) {
-//							cc.append(AddCommand.create(part.getEditingDomain(), vc, FleetPackage.eINSTANCE.getVesselClass_CanalCosts(), EcoreUtil.copy(prototype)));
-//						}
+
 						cc.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), portModel, PortPackage.eINSTANCE.getPortModel_Routes(), dm));
 						jointModelEditorPart.getEditingDomain().getCommandStack().execute(cc);
 
