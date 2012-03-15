@@ -10,4 +10,5 @@
    <service>
       <provide interface="com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry"/>
    </service>
+   <reference bind="registerFitnessCoreFactory" cardinality="0..n" interface="com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory" name="IFitnessCoreFactory" policy="dynamic" unbind="deregisterFitnessCoreFactory"/>
 </scr:component>

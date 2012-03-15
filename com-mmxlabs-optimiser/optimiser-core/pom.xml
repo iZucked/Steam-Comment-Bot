@@ -64,6 +64,7 @@
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
 						<Export-Package>com.mmxlabs.optimiser.core.*;version="${_Bundle-UnqualifiedVersion}"</Export-Package>
+						<Service-Component>OSGI-INF/*.xml</Service-Component>
 					</instructions>
 				</configuration>
 			</plugin>
