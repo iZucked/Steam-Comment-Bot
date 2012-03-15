@@ -24,6 +24,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * TODO look at nebula formattedtext
@@ -122,8 +123,11 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 
 	@Override
 	public void widgetDisposed(final DisposeEvent e) {
-		text.getControl().removeModifyListener(this);
-		text.getControl().removeDisposeListener(this);
+		if (e.getSource() instanceof Text) {
+			final Text t = (Text) e.getSource();
+			t.removeModifyListener(this);
+			t.removeDisposeListener(this);
+		}
 		text = null;
 	}
 
