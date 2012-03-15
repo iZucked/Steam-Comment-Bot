@@ -92,8 +92,7 @@ class SingleAddAction extends LockableAction {
 					// apply the set commands
 					final CompoundCommand add = new CompoundCommand();
 					for (final ISetting setting : settings) {
-						add.append(
-								AddCommand.create(context.getCommandHandler().getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
+						add.append(AddCommand.create(context.getCommandHandler().getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
 					}
 					context.getCommandHandler().handleCommand(add, context.getContainer(), context.getContainment());
 				}
