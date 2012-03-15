@@ -34,6 +34,7 @@ import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
+import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
@@ -224,9 +225,18 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
 		}
 		
+		final Action importAction = createImportAction();
+		if (importAction != null) {
+			toolbar.appendToGroup(ADD_REMOVE_GROUP, importAction);
+		}
+		
 		toolbar.update(true);
 	}
 	
+	protected Action createImportAction() {
+		return new SimpleImportAction(jointModelEditorPart, scenarioViewer);
+	}
+
 	protected Action createDeleteAction() {
 		return new ScenarioModifyingAction("Delete") {
 			{
