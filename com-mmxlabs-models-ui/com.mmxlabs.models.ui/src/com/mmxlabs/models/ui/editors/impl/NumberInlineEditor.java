@@ -4,107 +4,160 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
+import org.eclipse.nebula.widgets.formattedtext.FloatFormatter;
+import org.eclipse.nebula.widgets.formattedtext.FormattedText;
+import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
+import org.eclipse.nebula.widgets.formattedtext.LongFormatter;
+import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Label;
 
 /**
  * TODO look at nebula formattedtext
  * @author hinton
  *
  */
-public class NumberInlineEditor extends UnsettableInlineEditor implements ModifyListener, VerifyListener, DisposeListener {
+public class NumberInlineEditor extends UnsettableInlineEditor implements ModifyListener, DisposeListener {
 	private EDataType type;
 
-	public NumberInlineEditor(EStructuralFeature feature) {
+	private FormattedText text;
+	private Object defaultValue;
+	private NumberFormatter formatter;
+	private int scale = 1;
+	private String unit = null;
+	
+	public NumberInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 		type = (EDataType) feature.getEType();
+		
+		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/ui/numberFormat");
+		String format = null;
+		String defaultValueString = "0";
+		
+		if (annotation != null) {
+			if (annotation.getDetails().containsKey("defaultValue")) {
+				defaultValueString = annotation.getDetails().get("defaultValue");
+			}
+			
+			if (annotation.getDetails().containsKey("formatString")) {
+				format = annotation.getDetails().get("formatString");
+			}
+			
+			if (annotation.getDetails().containsKey("scale")) {
+				scale = Integer.parseInt(annotation.getDetails().get("scale"));
+			}
+			
+			if (annotation.getDetails().containsKey("unit")) {
+				unit = annotation.getDetails().get("unit");
+			}
+		}
+		
+		if (type == EcorePackage.eINSTANCE.getELong()) {
+			defaultValue = Long.parseLong(defaultValueString);
+			formatter = format == null ? new LongFormatter() : new LongFormatter(format);
+		} else if (type == EcorePackage.eINSTANCE.getEInt()) {
+			defaultValue = Integer.parseInt(defaultValueString);
+			formatter = format == null ? new IntegerFormatter() : new IntegerFormatter(format);
+		} else if (type == EcorePackage.eINSTANCE.getEFloat()) {
+			defaultValue = Float.parseFloat(defaultValueString);
+			formatter = format == null ? new FloatFormatter() : new FloatFormatter(format);
+		} else if (type == EcorePackage.eINSTANCE.getEDouble()) {
+			defaultValue = Double.parseDouble(defaultValueString);
+			formatter = format == null ? new DoubleFormatter() : new DoubleFormatter(format);
+		}
+		if (format == null)
+			formatter.setFixedLengths(false, false);
 	}
 
-	private Text text;
 
 	@Override
 	public Control createValueControl(Composite parent) {
-		text = new Text(parent, SWT.BORDER);
+		if (unit != null) {
+			final Composite sub = new Composite(parent, SWT.NONE);
+			GridLayout layout = new GridLayout(2, false);
+			layout.marginHeight = layout.marginWidth = 0;
+			sub.setLayout(layout);
+			parent = sub;
+		}
 		
-		text.addVerifyListener(this);
-		text.addModifyListener(this);
-		text.addDisposeListener(this);
+		text = new FormattedText(parent, SWT.BORDER);
+		text.setFormatter(formatter);
+		text.setValue(defaultValue);
 		
-		return text;
+		text.getControl().addModifyListener(this);
+		text.getControl().addDisposeListener(this);
+		
+		if (unit != null) {
+			final Label unitLabel = new Label(parent, SWT.NONE);
+			unitLabel.setText(unit);
+			text.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+			return parent;
+		} else {
+			return text.getControl();
+		}
 	}
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		text.setText("" + value);
+		text.setValue(scale(value));
 	}
 
 	@Override
 	protected Object getInitialUnsetValue() {
-		if (type == EcorePackage.eINSTANCE.getELong()) {
-			return 0l;
-		} else if (type == EcorePackage.eINSTANCE.getEInt()) {
-			return (int)0;
-		} else if (type == EcorePackage.eINSTANCE.getEShort()) {
-			return (short) 0;
-		} else if (type == EcorePackage.eINSTANCE.getEFloat()) {
-			return 0.0f;
-		} else if (type == EcorePackage.eINSTANCE.getEDouble()) {
-			return 0.0d;
-		} else {
-			return null;
-		}
+		return defaultValue;
 	}
 
 	@Override
 	public void widgetDisposed(final DisposeEvent e) {
-		text.removeVerifyListener(this);
-		text.removeModifyListener(this);
-		text.removeDisposeListener(this);
+		text.getControl().removeModifyListener(this);
+		text.getControl().removeDisposeListener(this);
 		text = null;
 	}
 
-	@Override
-	public void verifyText(final VerifyEvent e) {
-		final String value = text.getText();
-		final String newText = value.substring(0, e.start) + e.text + value.substring(e.start, e.end);
-		// try and parse string as appropriate number type
-		final Number nValue = parse(newText);
-		e.doit = (nValue != null && nValue.doubleValue() >= 0);
-	}
-
-	private Number parse(final String newText) {
-		try {
-			if (type == EcorePackage.eINSTANCE.getELong()) {
-				return Long.parseLong(newText);
-			} else if (type == EcorePackage.eINSTANCE.getEInt()) {
-				return Integer.parseInt(newText);
-			} else if (type == EcorePackage.eINSTANCE.getEShort()) {
-				return Short.parseShort(newText);
-			} else if (type == EcorePackage.eINSTANCE.getEFloat()) {
-				return Float.parseFloat(newText);
-			} else if (type == EcorePackage.eINSTANCE.getEDouble()) {
-				return Double.parseDouble(newText);
-			} else {
-				return null;
-			}
-		} catch (final NumberFormatException nfe) {
-			return null;
-		}
-	}
 
 	@Override
 	public void modifyText(final ModifyEvent e) {
-		doSetValue(parse(text.getText()));
+		if (text.isValid()) {
+			doSetValue(descale(text.getValue()));
+		}
+	}
+	
+	private Object scale(final Object internalValue) {
+		if (internalValue instanceof Integer) {
+			return (Integer) (((Integer) internalValue).intValue() * scale);
+		} else if (internalValue instanceof Long) {
+			return (Long) (((Long) internalValue).longValue() * scale);
+		} else if (internalValue instanceof Float) {
+			return (Float) (((Float) internalValue).floatValue() * scale);
+		} else if (internalValue instanceof Double) {
+			return (Double) (((Double) internalValue).doubleValue() * scale);
+		}
+		return internalValue;
+	}
+	
+	private Object descale(final Object displayValue) {
+		if (displayValue instanceof Integer) {
+			return (Integer) (((Integer) displayValue).intValue() / scale);
+		} else if (displayValue instanceof Long) {
+			return (Long) (((Long) displayValue).longValue() / scale);
+		} else if (displayValue instanceof Float) {
+			return (Float) (((Float) displayValue).floatValue() / scale);
+		} else if (displayValue instanceof Double) {
+			return (Double) (((Double) displayValue).doubleValue() / scale);
+		}
+		return displayValue;
 	}
 }

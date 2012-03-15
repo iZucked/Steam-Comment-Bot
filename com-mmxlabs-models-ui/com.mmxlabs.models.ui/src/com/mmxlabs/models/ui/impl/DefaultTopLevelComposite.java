@@ -61,7 +61,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 				final EObject value = (EObject) object.eGet(ref);
 				if (value != null) {
 					final Group g2 = new Group(this, SWT.NONE);
-					g2.setText(EditorUtils.unmangle(value.eClass().getName()));
+					g2.setText(EditorUtils.unmangle(ref.getName()));
 					g2.setLayout(new FillLayout());
 					g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
 					

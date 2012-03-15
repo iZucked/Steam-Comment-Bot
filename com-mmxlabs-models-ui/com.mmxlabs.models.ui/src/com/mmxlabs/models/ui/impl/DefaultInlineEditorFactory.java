@@ -56,7 +56,6 @@ public class DefaultInlineEditorFactory implements IInlineEditorFactory {
 			final EAttribute attribute = (EAttribute) feature;
 			final EDataType attributeType = attribute.getEAttributeType();
 			if (attributeType == ecore.getEInt() ||
-//					attributeType == ecore.getEShort()||
 				attributeType == ecore.getELong()||
 				attributeType == ecore.getEDouble()||
 				attributeType == ecore.getEFloat()) {

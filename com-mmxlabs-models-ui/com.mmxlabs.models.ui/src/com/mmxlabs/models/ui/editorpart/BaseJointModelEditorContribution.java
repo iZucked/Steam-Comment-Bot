@@ -23,15 +23,4 @@ public abstract class BaseJointModelEditorContribution<T extends UUIDObject> imp
 		this.rootObject = rootObject;
 		this.modelObject = (T) modelObject;
 	}
-	
-	@Override
-	public void setLocked(boolean locked) {
-		this.locked = locked;
-		if (locked) lock();
-		else unlock();
-	}
-	
-	protected abstract void lock();
-	
-	protected abstract void unlock();
 }
