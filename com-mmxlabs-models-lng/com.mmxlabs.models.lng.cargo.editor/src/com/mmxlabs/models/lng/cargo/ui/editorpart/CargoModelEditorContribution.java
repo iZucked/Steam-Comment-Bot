@@ -10,11 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
-import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 public class CargoModelEditorContribution extends BaseJointModelEditorContribution<CargoModel> {
 	private int pageNumber = 0;
@@ -32,14 +28,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	}
 
 	@Override
-	protected void lock() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void unlock() {
-		// TODO Auto-generated method stub
-		
+	public void setLocked(boolean locked) {
+		viewerPane.setLocked(locked);
 	}
 }

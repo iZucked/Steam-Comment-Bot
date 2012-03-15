@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.actions;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -25,6 +29,9 @@ public class RewireAction extends ScenarioModifyingAction {
 
 	public RewireAction(final JointModelEditorPart part) {
 		super("Rewire");
+		try {
+			setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.cargo.editor/icons/rewire_icon.png")));
+		} catch (final MalformedURLException e) {}
 		this.part = part;
 	}
 	/* (non-Javadoc)

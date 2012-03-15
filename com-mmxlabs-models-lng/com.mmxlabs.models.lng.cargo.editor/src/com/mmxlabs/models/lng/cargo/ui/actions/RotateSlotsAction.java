@@ -4,12 +4,15 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.actions;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
@@ -27,6 +30,9 @@ public class RotateSlotsAction extends ScenarioModifyingAction {
 
 	public RotateSlotsAction(final IEditingDomainProvider edProvider) {
 		super("Swap Discharge Slots");
+		try {
+			setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.cargo.editor/icons/swap.gif")));
+		} catch (final MalformedURLException e) {}
 		this.editingDomainProvider = edProvider;
 	}
 

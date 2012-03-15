@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
