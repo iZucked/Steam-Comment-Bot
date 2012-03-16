@@ -1,0 +1,76 @@
+package com.mmxlabs.models.lng.transformer.inject;
+
+import javax.inject.Inject;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+
+/**
+ * Helper class to create {@link LNGScenarioTransformer}, {@link OptimisationTransformer}, {@link IOptimisationData} and {@link ModelEntityMap} instances using Guice to inject components as necessary.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public class LNGTransformer {
+
+	private final MMXRootObject scenario;
+
+	private final Injector injector;
+
+	@Inject
+	private ModelEntityMap entities;
+
+	@Inject
+	private LNGScenarioTransformer lngScenarioTransformer;
+
+	private IOptimisationData optimisationData;
+
+	private final OptimisationTransformer optimisationTransformer;
+
+	public LNGTransformer(final MMXRootObject scenario) {
+		this.scenario = scenario;
+		injector = Guice.createInjector(new LNGTransformerModule(scenario), new DataComponentProviderModule());
+
+		injector.injectMembers(this);
+
+		entities.setScenario(scenario);
+
+		try {
+			optimisationData = lngScenarioTransformer.createOptimisationData(entities);
+		} catch (final IncompleteScenarioException e) {
+			throw new RuntimeException(e);
+		}
+		optimisationTransformer = new OptimisationTransformer(scenario, lngScenarioTransformer.getOptimisationSettings());
+	}
+
+	public synchronized LNGScenarioTransformer getLNGScenarioTransformer() {
+		return lngScenarioTransformer;
+	}
+
+	public OptimisationTransformer getOptimisationTransformer() {
+		return optimisationTransformer;
+	}
+
+	public MMXRootObject getScenario() {
+		return scenario;
+	}
+
+	public ModelEntityMap getEntities() {
+		return entities;
+	}
+
+	public LNGScenarioTransformer getLngScenarioTransformer() {
+		return lngScenarioTransformer;
+	}
+
+	public IOptimisationData getOptimisationData() {
+		return optimisationData;
+	}
+}
