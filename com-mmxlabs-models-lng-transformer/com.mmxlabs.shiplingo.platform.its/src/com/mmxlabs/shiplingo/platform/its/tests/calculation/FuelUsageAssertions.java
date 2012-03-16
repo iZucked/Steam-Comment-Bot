@@ -6,6 +6,11 @@ package com.mmxlabs.shiplingo.platform.its.tests.calculation;
 
 import org.junit.Assert;
 
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.Journey;
+
 /**
  * Methods for asserting which fuel types are used on a journey.
  * 
@@ -21,13 +26,19 @@ public class FuelUsageAssertions {
 	 */
 	public static void assertLNGNotUsed(final Journey j) {
 
-		for (final FuelQuantity fq : j.getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO) {
-				Assert.assertTrue("NBO not used", fq.getQuantity() == 0);
-			} else if (fq.getFuelType() == FuelType.FBO) {
-				Assert.assertTrue("FBO not used", fq.getQuantity() == 0);
-			} else if (fq.getFuelType() == FuelType.BASE_FUEL) {
-				Assert.assertTrue("Base fuel used", fq.getQuantity() > 0);
+		for (final FuelQuantity fq : j.getFuels()) {
+			if (fq.getFuel() == Fuel.NBO) {
+				for (final FuelAmount amount : fq.getAmounts()) {
+					Assert.assertTrue("NBO not used", amount.getQuantity() == 0);
+				}
+			} else if (fq.getFuel() == Fuel.FBO) {
+				for (final FuelAmount amount : fq.getAmounts()) {
+					Assert.assertTrue("FBO not used", amount.getQuantity() == 0);
+				}
+			} else if (fq.getFuel() == Fuel.BASE_FUEL) {
+				for (final FuelAmount amount : fq.getAmounts()) {
+					Assert.assertTrue("Base fuel used", amount.getQuantity() > 0);
+				}
 			}
 		}
 	}
@@ -39,13 +50,19 @@ public class FuelUsageAssertions {
 	 */
 	public static void assertBaseFuelNotUsed(final Journey j) {
 
-		for (final FuelQuantity fq : j.getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL) {
-				Assert.assertTrue("Base fuel not used", fq.getQuantity() == 0);
-			} else if (fq.getFuelType() == FuelType.NBO) {
-				Assert.assertTrue("NBO used", fq.getQuantity() > 0);
-			} else if (fq.getFuelType() == FuelType.FBO) {
-				Assert.assertTrue("FBO used", fq.getQuantity() > 0);
+		for (final FuelQuantity fq : j.getFuels()) {
+			if (fq.getFuel() == Fuel.BASE_FUEL) {
+				for (final FuelAmount amount : fq.getAmounts()) {
+					Assert.assertTrue("Base fuel not used", amount.getQuantity() == 0);
+				}
+			} else if (fq.getFuel() == Fuel.NBO) {
+				for (final FuelAmount amount : fq.getAmounts()) {
+					Assert.assertTrue("NBO used", amount.getQuantity() > 0);
+				}
+			} else if (fq.getFuel() == Fuel.FBO) {
+				for (final FuelAmount amount : fq.getAmounts()) {
+					Assert.assertTrue("FBO used", amount.getQuantity() > 0);
+				}
 			}
 		}
 	}
@@ -57,13 +74,19 @@ public class FuelUsageAssertions {
 	 */
 	public static void assertFBONotUsed(final Journey j) {
 
-		for (final FuelQuantity fq : j.getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.FBO) {
-				Assert.assertTrue("FBO not used", fq.getQuantity() == 0);
-			} else if (fq.getFuelType() == FuelType.BASE_FUEL) {
-				Assert.assertTrue("BF used", fq.getQuantity() > 0);
-			} else if (fq.getFuelType() == FuelType.NBO) {
-				Assert.assertTrue("NBO used", fq.getQuantity() > 0);
+		for (final FuelQuantity fq : j.getFuels()) {
+			if (fq.getFuel() == Fuel.FBO) {
+				for (final FuelAmount amount : fq.getAmounts()) {
+					Assert.assertTrue("FBO not used", amount.getQuantity() == 0);
+				}
+			} else if (fq.getFuel() == Fuel.BASE_FUEL) {
+				for (final FuelAmount amount : fq.getAmounts()) {
+					Assert.assertTrue("BF used", amount.getQuantity() > 0);
+				}
+			} else if (fq.getFuel() == Fuel.NBO) {
+				for (final FuelAmount amount : fq.getAmounts()) {
+					Assert.assertTrue("NBO used", amount.getQuantity() > 0);
+				}
 			}
 		}
 	}
