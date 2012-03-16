@@ -119,7 +119,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 		// this vessels that will be allowed to carry the cargo
 		final ArrayList<Vessel> allowedVessels = new ArrayList<Vessel>();
 
-		// createVessels creates and adds the vessesl to the scenario.
+		// createVessels creates and adds the vessels to the scenario.
 		allowedVessels.addAll(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
 		allowedVessels.addAll(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
 		allowedVessels.addAll(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 1, 35, 10000000, 5, 5, 5, 0, false)));
