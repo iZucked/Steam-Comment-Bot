@@ -8,6 +8,17 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
@@ -159,9 +170,13 @@ public class HeelOutOfCharterOutTest {
 
 			// get the amount of heel used
 			long LNGUsed = 0;
-			for (final FuelQuantity fq : j.getFuelUsage()) {
-				if ((fq.getFuelType() == FuelType.FBO) || (fq.getFuelType() == FuelType.NBO)) {
-					LNGUsed += fq.getQuantity();
+			for (final FuelQuantity fq : j.getFuels()) {
+				if ((fq.getFuel() == Fuel.FBO) || (fq.getFuel() == Fuel.NBO)) {
+					for (FuelAmount fa : fq.getAmounts()) {
+						if (fa.getUnit() == FuelUnit.M3) {
+							LNGUsed += fa.getQuantity();
+						}
+					}
 				}
 			}
 
@@ -218,7 +233,7 @@ public class HeelOutOfCharterOutTest {
 		final int ladenNBORate = NBORatePerDay;
 		final int pilotLightRate = 0;
 
-		final Scenario scenario = ScenarioTools.createCharterOutScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
+		final MMXRootObject scenario = ScenarioTools.createCharterOutScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
 				ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption,
 				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, pilotLightRate, charterOutTimeDays, heelLimit);
 
@@ -245,14 +260,14 @@ public class HeelOutOfCharterOutTest {
 		final Sequence seq = charterOutSchedule.getSequences().get(0);
 
 		// get the event after the charter out.
-		for (final ScheduledEvent e : seq.getEvents()) {
+		for (final Event e : seq.getEvents()) {
 
-			if (e instanceof CharterOutVisit) {
+			if (e instanceof VesselEventVisit && ((VesselEventVisit) e).getVesselEvent() instanceof CharterOutEvent) {
 				// got the charter out, now get the event after it and make sure it is a journey. If it is, return it.
 				final int charterOutIndex = seq.getEvents().indexOf(e);
 				final int nextEventIndex = charterOutIndex + 1;
 				Assert.assertTrue("There is an event after the charter out", seq.getEvents().size() >= nextEventIndex);
-				final ScheduledEvent eventAfterCharterOut = seq.getEvents().get(charterOutIndex + 1);
+				final Event eventAfterCharterOut = seq.getEvents().get(charterOutIndex + 1);
 				Assert.assertTrue("Event after charter out is a journey", eventAfterCharterOut instanceof Journey);
 
 				return (Journey) eventAfterCharterOut;

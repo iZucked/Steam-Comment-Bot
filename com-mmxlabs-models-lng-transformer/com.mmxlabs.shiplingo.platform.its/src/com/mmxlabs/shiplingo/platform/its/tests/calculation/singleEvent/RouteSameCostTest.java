@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
 /**

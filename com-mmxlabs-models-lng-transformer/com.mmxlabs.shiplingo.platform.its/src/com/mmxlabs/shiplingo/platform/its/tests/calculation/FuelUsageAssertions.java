@@ -9,6 +9,7 @@ import org.junit.Assert;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Journey;
 
 /**
@@ -90,4 +91,29 @@ public class FuelUsageAssertions {
 			}
 		}
 	}
+
+	public static void assertFuelNotUsed(final Iterable<FuelQuantity> fuels, Fuel fuelType) {
+
+		for (final FuelQuantity fq : fuels) {
+			if (fq.getFuel() == fuelType) {
+				for (final FuelAmount amount : fq.getAmounts()) {
+					Assert.assertTrue(fuelType + " not used", amount.getQuantity() == 0);
+				}
+			}
+		}
+	}
+
+	public static void assertFuelUsed(final Iterable<FuelQuantity> fuels, Fuel fuelType, FuelUnit fuelUnit) {
+
+		for (final FuelQuantity fq : fuels) {
+			if (fq.getFuel() == fuelType) {
+				for (final FuelAmount amount : fq.getAmounts()) {
+					if (amount.getUnit() == fuelUnit) {
+						Assert.assertTrue(fuelType + " used", amount.getQuantity() > 0);
+					}
+				}
+			}
+		}
+	}
+
 }

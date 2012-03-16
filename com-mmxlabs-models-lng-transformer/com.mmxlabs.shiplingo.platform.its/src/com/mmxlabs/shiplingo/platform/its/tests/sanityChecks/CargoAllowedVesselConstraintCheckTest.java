@@ -11,6 +11,12 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
@@ -65,18 +71,18 @@ public class CargoAllowedVesselConstraintCheckTest {
 		Assert.assertTrue("Allowed vessels added to cargo successfully", csc.addAllowedVesselsOnCargo(constrainedCargo, vesselsClassFour));
 
 		// build and run the scenario.
-		final Scenario scenario = csc.buildScenario();
+		final MMXRootObject scenario = csc.buildScenario();
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
 		// get the cargo that was constrained out of the results.
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
-			final Cargo c = (Cargo) (ca.getLoadSlot().eContainer());
+			final Cargo c = ca.getInputCargo();
 
 			if (c.equals(constrainedCargo)) {
 				// found the constrained cargo
 				// now get the name of the vessel and see it it matches the one class four vessel.
-				final AllocatedVessel av = ca.getVessel();
+				final Vessel av = ca.getSequence().getVessel();
 
 				final boolean namesMatch = av.getName().equals(vesselsClassFour.get(0).getName());
 				Assert.assertTrue("Only vessel class four used", namesMatch);
@@ -129,13 +135,13 @@ public class CargoAllowedVesselConstraintCheckTest {
 		}
 
 		// build and run the scenario
-		final Scenario scenario = csc.buildScenario();
+		final MMXRootObject scenario = csc.buildScenario();
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
 		// check that the vessel that carries every cargo matches the name of one in the allowed vessels list.
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
-			final AllocatedVessel av = ca.getVessel();
+			final Vessel av = ca.getSequence().getVessel();
 
 			boolean inAllowedVessels = false;
 			for (final Vessel v : allowedVessels) {

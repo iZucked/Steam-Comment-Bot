@@ -4,10 +4,18 @@
  */
 package com.mmxlabs.shiplingo.platform.its.tests.calculation.singleEvent;
 
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.shiplingo.platform.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
 /**
@@ -38,23 +46,11 @@ public class FuelChoiceBoundaryTest {
 		final CargoAllocation a = testPriceConsumption("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour);
 
 		// need to check that FBO is never used on any leg or idle.
-		for (final FuelQuantity fq : a.getLadenLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.FBO) {
-				Assert.assertTrue("Laden leg never uses FBO", fq.getQuantity() == 0);
-			}
-		}
+		FuelUsageAssertions.assertFuelNotUsed(a.getLadenLeg().getFuels(), Fuel.FBO);
 
 		// Check there is no heel by checking there is no NBO used after discharge
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO) {
-				Assert.assertTrue("Ballast leg never uses NBO", fq.getQuantity() == 0);
-			}
-		}
-		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO) {
-				Assert.assertTrue("Ballast idle never uses NBO", fq.getQuantity() == 0);
-			}
-		}
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.NBO);
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastIdle().getFuels(), Fuel.NBO);
 	}
 
 	/**
@@ -72,26 +68,11 @@ public class FuelChoiceBoundaryTest {
 		final CargoAllocation a = testPriceConsumption("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour);
 
 		// need to check that base fuel is never used on any leg or idle.
-		for (final FuelQuantity fq : a.getLadenLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL) {
-				Assert.assertTrue("Laden leg never uses base fuel", fq.getQuantity() == 0);
-			}
-		}
-		for (final FuelQuantity fq : a.getLadenIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL) {
-				Assert.assertTrue("Laden idle never uses base fuel", fq.getQuantity() == 0);
-			}
-		}
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL) {
-				Assert.assertTrue("Ballast leg never uses base fuel", fq.getQuantity() == 0);
-			}
-		}
-		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL) {
-				Assert.assertTrue("Ballast idle never uses base fuel", fq.getQuantity() == 0);
-			}
-		}
+		FuelUsageAssertions.assertFuelNotUsed(a.getLadenLeg().getFuels(), Fuel.BASE_FUEL);
+		FuelUsageAssertions.assertFuelNotUsed(a.getLadenIdle().getFuels(), Fuel.BASE_FUEL);
+		
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL);
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastIdle().getFuels(), Fuel.BASE_FUEL);
 	}
 
 	/**
@@ -120,7 +101,7 @@ public class FuelChoiceBoundaryTest {
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
 
-		final Scenario scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
+		final MMXRootObject scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
 				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, speed, fuelTravelConsumptionPerDay, speed,
 				fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		// evaluate and get a schedule
@@ -143,16 +124,11 @@ public class FuelChoiceBoundaryTest {
 
 		final CargoAllocation a = testPilotLight("Test ballast cheaper on NBO, ballast idle cheaper on base", pilotLightRate);
 
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() != FuelType.NBO) {
-				Assert.assertTrue("Ballast leg only uses NBO", fq.getQuantity() == 0);
-			}
-		}
-		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.BASE_FUEL) {
-				Assert.assertTrue("Ballast idle uses base fuel", fq.getQuantity() > 0);
-			}
-		}
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL);
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.FBO);
+		FuelUsageAssertions.assertFuelUsed(a.getBallastLeg().getFuels(), Fuel.NBO, FuelUnit.M3);
+		
+		FuelUsageAssertions.assertFuelUsed(a.getBallastIdle().getFuels(), Fuel.BASE_FUEL, FuelUnit.MT);
 	}
 
 	/**
@@ -165,11 +141,9 @@ public class FuelChoiceBoundaryTest {
 
 		final CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
 
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() != FuelType.BASE_FUEL) {
-				Assert.assertTrue("Ballast leg only uses base fuel", fq.getQuantity() == 0);
-			}
-		}
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.NBO);
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.FBO);
+		FuelUsageAssertions.assertFuelUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL, FuelUnit.MT);
 	}
 
 	/**
@@ -182,11 +156,9 @@ public class FuelChoiceBoundaryTest {
 
 		final CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
 
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() != FuelType.FBO) {
-				Assert.assertTrue("Ballast leg uses NBO and base fuel", fq.getQuantity() > 0);
-			}
-		}
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.FBO);
+		FuelUsageAssertions.assertFuelUsed(a.getBallastLeg().getFuels(), Fuel.NBO, FuelUnit.M3);
+		FuelUsageAssertions.assertFuelUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL, FuelUnit.MT);
 	}
 
 	/**
@@ -235,7 +207,7 @@ public class FuelChoiceBoundaryTest {
 		final int minHeelVolume = 0;
 		final boolean useDryDock = true;
 
-		final Scenario scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
+		final MMXRootObject scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
 				travelFuelConsumptionPerDay, speed, travelFuelConsumptionPerDay, idleFuelConsumptionPerDay, idleNBORatePerDay, travelNBORatePerDay, speed, travelFuelConsumptionPerDay, speed,
 				travelFuelConsumptionPerDay, idleFuelConsumptionPerDay, idleNBORatePerDay, travelNBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		// evaluate and get a schedule

@@ -10,6 +10,11 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
@@ -78,7 +83,7 @@ public class VesselExistenceCheckTest {
 		// create some cargos.
 		SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
 
-		final Scenario scenario = csc.buildScenario();
+		final MMXRootObject scenario = csc.buildScenario();
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);

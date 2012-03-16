@@ -13,6 +13,16 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
@@ -70,7 +80,7 @@ public class MultipleCargoFuelConsumptionTest {
 		final Date dryDockStart = new Date(cargoBStart.getTime() + (2 * legDuration));
 		csc.addDryDock(portA, dryDockStart, dryDockDurationDays);
 
-		final Scenario scenario = csc.buildScenario();
+		final MMXRootObject scenario = csc.buildScenario();
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
@@ -90,50 +100,99 @@ public class MultipleCargoFuelConsumptionTest {
 			// expect only NBO to be used always
 
 			// check the laden journey
-			for (final FuelQuantity fq : ca.getLadenLeg().getFuelUsage()) {
-				if (fq.getFuelType() == FuelType.FBO) {
-					Assert.assertEquals("Laden leg never uses FBO", 0, fq.getQuantity());
+			for (final FuelQuantity fq : ca.getLadenLeg().getFuels()) {
+				if (fq.getFuel() == Fuel.FBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Laden leg never uses FBO", 0, amount.getQuantity());
+
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.BASE_FUEL) {
-					Assert.assertEquals("Laden leg never uses base fuel", 0, fq.getQuantity());
+				if (fq.getFuel() == Fuel.BASE_FUEL) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.MT) {
+							Assert.assertEquals("Laden leg never uses base fuel", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.NBO) {
-					Assert.assertEquals("Laden leg uses 90M3 NBO", expectedLegNBO, fq.getQuantity());
+				if (fq.getFuel() == Fuel.NBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Laden leg uses 90M3 NBO", expectedLegNBO, amount.getQuantity());
+						}
+					}
 				}
 			}
-			for (final FuelQuantity fq : ca.getLadenIdle().getFuelUsage()) {
-				if (fq.getFuelType() == FuelType.FBO) {
-					Assert.assertEquals("Laden idle never uses FBO", 0, fq.getQuantity());
+			for (final FuelQuantity fq : ca.getLadenIdle().getFuels()) {
+				if (fq.getFuel() == Fuel.FBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Laden idle never uses FBO", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.BASE_FUEL) {
-					Assert.assertEquals("Laden idle never uses base fuel", 0, fq.getQuantity());
+				if (fq.getFuel() == Fuel.BASE_FUEL) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.MT) {
+							Assert.assertEquals("Laden idle never uses base fuel", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.NBO) {
-					Assert.assertEquals("Laden idle uses 10M3 NBO", expectedIdleNBO, fq.getQuantity());
+				if (fq.getFuel() == Fuel.NBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Laden idle uses 10M3 NBO", expectedIdleNBO, amount.getQuantity());
+						}
+					}
 				}
 			}
 
 			// check the ballast journey
-			for (final FuelQuantity fq : ca.getBallastLeg().getFuelUsage()) {
-				if (fq.getFuelType() == FuelType.FBO) {
-					Assert.assertEquals("Ballast leg never uses FBO", 0, fq.getQuantity());
+			for (final FuelQuantity fq : ca.getBallastLeg().getFuels()) {
+				if (fq.getFuel() == Fuel.FBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Ballast leg never uses FBO", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.BASE_FUEL) {
-					Assert.assertEquals("Ballast leg never uses base fuel", 0, fq.getQuantity());
+				if (fq.getFuel() == Fuel.BASE_FUEL) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.MT) {
+							Assert.assertEquals("Ballast leg never uses base fuel", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.NBO) {
-					Assert.assertEquals("Ballast leg uses 90M3 NBO", expectedLegNBO, fq.getQuantity());
+				if (fq.getFuel() == Fuel.NBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Ballast leg uses 90M3 NBO", expectedLegNBO, amount.getQuantity());
+						}
+					}
 				}
 			}
-			for (final FuelQuantity fq : ca.getBallastIdle().getFuelUsage()) {
-				if (fq.getFuelType() == FuelType.FBO) {
-					Assert.assertEquals("Ballast idle never uses FBO", 0, fq.getQuantity());
+			for (final FuelQuantity fq : ca.getBallastIdle().getFuels()) {
+				if (fq.getFuel() == Fuel.FBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Ballast idle never uses FBO", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.BASE_FUEL) {
-					Assert.assertEquals("Ballast idle never uses base fuel", 0, fq.getQuantity());
+				if (fq.getFuel() == Fuel.BASE_FUEL) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.MT) {
+							Assert.assertEquals("Ballast idle never uses base fuel", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.NBO) {
-					Assert.assertEquals("Ballast idle uses 10M3 NBO", expectedIdleNBO, fq.getQuantity());
+				if (fq.getFuel() == Fuel.NBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Ballast idle uses 10M3 NBO", expectedIdleNBO, amount.getQuantity());
+						}
+					}
 				}
 			}
 		}
@@ -156,10 +215,7 @@ public class MultipleCargoFuelConsumptionTest {
 		// and add a canal
 		final String canalName = "canal";
 		final int canalDistanceBetweenPorts = 90;
-		final VesselClassCost canalCost = csc
-				.createCanalCost(canalName, portA, portB, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, 0, 0);
-		csc.addCanal(canalCost);
-
+		
 		final String vesselClassName = "vc";
 		final int numOfVesselsToCreate = 1;
 		final float baseFuelUnitPrice = 10.01f;
@@ -171,6 +227,7 @@ public class MultipleCargoFuelConsumptionTest {
 		final int minHeelVolume = 0;
 		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume, false);
 
+		
 		// Set up start dates and durations.
 		final Date cargoAStart = new Date(System.currentTimeMillis());
 		final int cargoADuration = 10;
@@ -187,7 +244,8 @@ public class MultipleCargoFuelConsumptionTest {
 		final Date dryDockStart = new Date(cargoBStart.getTime() + (2 * legDuration));
 		csc.addDryDock(portA, dryDockStart, dryDockDurationDays);
 
-		final Scenario scenario = csc.buildScenario();
+		final MMXRootObject scenario = csc.buildScenario();
+		CustomScenarioCreator.createCanalAndCost(scenario, canalName, portA, portB, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, 0,0, 0);
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
@@ -211,50 +269,99 @@ public class MultipleCargoFuelConsumptionTest {
 			// expect only NBO to be used always
 
 			// check the laden journey
-			for (final FuelQuantity fq : ca.getLadenLeg().getFuelUsage()) {
-				if (fq.getFuelType() == FuelType.FBO) {
-					Assert.assertEquals("Laden leg never uses FBO", 0, fq.getQuantity());
+			for (final FuelQuantity fq : ca.getLadenLeg().getFuels()) {
+				if (fq.getFuel() == Fuel.FBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Laden leg never uses FBO", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.BASE_FUEL) {
-					Assert.assertEquals("Laden leg never uses base fuel", 0, fq.getQuantity());
+				if (fq.getFuel() == Fuel.BASE_FUEL) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.MT) {
+							Assert.assertEquals("Laden leg never uses base fuel", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.NBO) {
-					Assert.assertEquals("Laden leg uses 90M3 NBO", expectedLegNBO, fq.getQuantity());
+				if (fq.getFuel() == Fuel.NBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Laden leg uses 90M3 NBO", expectedLegNBO, amount.getQuantity());
+						}
+					}
 				}
 			}
-			for (final FuelQuantity fq : ca.getLadenIdle().getFuelUsage()) {
-				if (fq.getFuelType() == FuelType.FBO) {
-					Assert.assertEquals("Laden idle never uses FBO", 0, fq.getQuantity());
+			for (final FuelQuantity fq : ca.getLadenIdle().getFuels()) {
+				if (fq.getFuel() == Fuel.FBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Laden idle never uses FBO", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.BASE_FUEL) {
-					Assert.assertEquals("Laden idle never uses base fuel", 0, fq.getQuantity());
+				if (fq.getFuel() == Fuel.BASE_FUEL) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.MT) {
+							Assert.assertEquals("Laden idle never uses base fuel", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.NBO) {
-					Assert.assertEquals("Laden idle uses 10M3 NBO", expectedIdleNBO, fq.getQuantity());
+				if (fq.getFuel() == Fuel.NBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Laden idle uses 10M3 NBO", expectedIdleNBO, amount.getQuantity());
+						}
+					}
 				}
 			}
 
 			// check the ballast journey
-			for (final FuelQuantity fq : ca.getBallastLeg().getFuelUsage()) {
-				if (fq.getFuelType() == FuelType.FBO) {
-					Assert.assertEquals("Ballast leg never uses FBO", 0, fq.getQuantity());
+			for (final FuelQuantity fq : ca.getBallastLeg().getFuels()) {
+				if (fq.getFuel() == Fuel.FBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Ballast leg never uses FBO", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.BASE_FUEL) {
-					Assert.assertEquals("Ballast leg never uses base fuel", 0, fq.getQuantity());
+				if (fq.getFuel() == Fuel.BASE_FUEL) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.MT) {
+
+							Assert.assertEquals("Ballast leg never uses base fuel", 0, amount.getQuantity());
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.NBO) {
-					Assert.assertEquals("Ballast leg uses 90M3 NBO", expectedLegNBO, fq.getQuantity());
+				if (fq.getFuel() == Fuel.NBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertEquals("Ballast leg uses 90M3 NBO", expectedLegNBO, amount.getQuantity());
+						}
+					}
 				}
 			}
-			for (final FuelQuantity fq : ca.getBallastIdle().getFuelUsage()) {
-				if (fq.getFuelType() == FuelType.FBO) {
-					Assert.assertTrue("Ballast idle never uses FBO", fq.getQuantity() == 0);
+			for (final FuelQuantity fq : ca.getBallastIdle().getFuels()) {
+				if (fq.getFuel() == Fuel.FBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertTrue("Ballast idle never uses FBO", amount.getQuantity() == 0);
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.BASE_FUEL) {
-					Assert.assertTrue("Ballast idle never uses base fuel", fq.getQuantity() == 0);
+				if (fq.getFuel() == Fuel.BASE_FUEL) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.MT) {
+							Assert.assertTrue("Ballast idle never uses base fuel", amount.getQuantity() == 0);
+						}
+					}
 				}
-				if (fq.getFuelType() == FuelType.NBO) {
-					Assert.assertTrue("Ballast idle uses 10M3 NBO", fq.getQuantity() == expectedIdleNBO);
+				if (fq.getFuel() == Fuel.NBO) {
+					for (final FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit() == FuelUnit.M3) {
+							Assert.assertTrue("Ballast idle uses 10M3 NBO", amount.getQuantity() == expectedIdleNBO);
+						}
+					}
 				}
 			}
 		}

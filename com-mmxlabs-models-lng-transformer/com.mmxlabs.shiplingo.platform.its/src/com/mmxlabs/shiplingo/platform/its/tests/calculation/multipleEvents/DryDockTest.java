@@ -11,6 +11,18 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
@@ -71,7 +83,7 @@ public class DryDockTest {
 		csc.addDryDock(portB, startSecondDryDock, dryDockDurationDays);
 		csc.addDryDock(portC, startThirdDryDock, dryDockDurationDays);
 
-		final Scenario scenario = csc.buildScenario();
+		final MMXRootObject scenario = csc.buildScenario();
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
@@ -79,21 +91,25 @@ public class DryDockTest {
 		ScenarioTools.printSequences(result);
 
 		for (final Sequence seq : result.getSequences()) {
-			for (final ScheduledEvent e : seq.getEvents()) {
+			for (final Event e : seq.getEvents()) {
 				if (e instanceof Journey) {
 					final Journey j = (Journey) e;
 
 					FuelUsageAssertions.assertLNGNotUsed(j);
 
-					for (final FuelQuantity fq : j.getFuelUsage()) {
-						if (fq.getFuelType() == FuelType.BASE_FUEL) {
-							Assert.assertEquals("100MT of basefuel used", 100, fq.getQuantity());
+					for (final FuelQuantity fq : j.getFuels()) {
+						if (fq.getFuel() == Fuel.BASE_FUEL) {
+							for (final FuelAmount amount : fq.getAmounts()) {
+								if (amount.getUnit() == FuelUnit.MT) {
+									Assert.assertEquals("100MT of basefuel used", 100, amount.getQuantity());
+								}
+							}
 						}
 					}
 				} else if (e instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) e;
 
-					Assert.assertEquals("Duration of dry dock matches expected", TimeUnit.DAYS.toHours(dryDockDurationDays), vev.getEventDuration());
+					Assert.assertEquals("Duration of dry dock matches expected", TimeUnit.DAYS.toHours(dryDockDurationDays), vev.getDuration());
 				}
 			}
 		}

@@ -11,6 +11,11 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
@@ -58,10 +63,10 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 		final ArrayList<Vessel> vesselsOfClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
 
 		// get the vessel classes
-		final VesselClass vesselClassOne = vesselsOfClassOne.get(0).getClass_();
-		final VesselClass vesselClassTwo = vesselsOfClassTwo.get(0).getClass_();
-		final VesselClass vesselClassThree = vesselsOfClassThree.get(0).getClass_();
-		final VesselClass vesselClassFour = vesselsOfClassFour.get(0).getClass_();
+		final VesselClass vesselClassOne = vesselsOfClassOne.get(0).getVesselClass();
+		final VesselClass vesselClassTwo = vesselsOfClassTwo.get(0).getVesselClass();
+		final VesselClass vesselClassThree = vesselsOfClassThree.get(0).getVesselClass();
+		final VesselClass vesselClassFour = vesselsOfClassFour.get(0).getVesselClass();
 
 		// create some cargos.
 		SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
@@ -77,10 +82,10 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 		vesselClassFour.getInaccessiblePorts().add(portD);
 
 		// build and run the scenario.
-		final Scenario scenario = csc.buildScenario();
+		final MMXRootObject scenario = csc.buildScenario();
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
-		// check contraints.
+		// check constraints.
 
 		for (final AllocatedVessel av : result.getFleet()) {
 			if (av instanceof FleetVessel) {
