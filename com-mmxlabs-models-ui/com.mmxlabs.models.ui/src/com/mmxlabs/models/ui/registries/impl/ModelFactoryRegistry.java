@@ -12,8 +12,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-
 import com.mmxlabs.models.ui.extensions.IModelFactoryExtension;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.registries.IModelFactoryRegistry;
