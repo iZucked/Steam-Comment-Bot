@@ -98,7 +98,6 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 		theLabel.setText(sb.toString());
 	}
 
-	@SuppressWarnings("unchecked")
 	protected List<Object> openDialogBox(Control cellEditorWindow) {
 		ListSelectionDialog dlg = new ListSelectionDialog(
 				cellEditorWindow.getShell(), enumerators,
