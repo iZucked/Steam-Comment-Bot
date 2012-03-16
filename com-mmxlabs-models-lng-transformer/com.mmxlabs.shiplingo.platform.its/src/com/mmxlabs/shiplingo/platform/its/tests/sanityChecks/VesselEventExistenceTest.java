@@ -11,15 +11,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
-import scenario.Scenario;
-import scenario.fleet.VesselEvent;
-import scenario.port.Port;
-import scenario.schedule.CargoAllocation;
-import scenario.schedule.Schedule;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.events.VesselEventVisit;
-
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 

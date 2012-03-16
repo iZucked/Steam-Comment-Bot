@@ -7,15 +7,6 @@ package com.mmxlabs.shiplingo.platform.its.tests.calculation.singleEvent;
 import org.junit.Assert;
 import org.junit.Test;
 
-import scenario.Scenario;
-import scenario.schedule.Schedule;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.CharterOutVisit;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.FuelType;
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.ScheduledEvent;
-
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;

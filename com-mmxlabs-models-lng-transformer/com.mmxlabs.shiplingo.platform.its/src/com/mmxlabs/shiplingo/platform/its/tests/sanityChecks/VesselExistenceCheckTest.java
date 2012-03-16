@@ -10,15 +10,6 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
-import scenario.Scenario;
-import scenario.fleet.Vessel;
-import scenario.port.Port;
-import scenario.schedule.CargoAllocation;
-import scenario.schedule.Schedule;
-import scenario.schedule.fleetallocation.AllocatedVessel;
-import scenario.schedule.fleetallocation.FleetVessel;
-import scenario.schedule.fleetallocation.SpotVessel;
-
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 

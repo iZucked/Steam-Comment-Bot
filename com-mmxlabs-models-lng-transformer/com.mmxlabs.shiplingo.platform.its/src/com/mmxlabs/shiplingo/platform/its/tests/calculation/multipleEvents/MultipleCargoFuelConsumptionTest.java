@@ -12,15 +12,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import scenario.Scenario;
-import scenario.fleet.VesselClassCost;
-import scenario.port.Port;
-import scenario.port.PortFactory;
-import scenario.schedule.CargoAllocation;
-import scenario.schedule.Schedule;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.FuelType;
-
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;

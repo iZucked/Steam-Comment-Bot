@@ -11,14 +11,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import scenario.Scenario;
-import scenario.cargo.Cargo;
-import scenario.fleet.Vessel;
-import scenario.port.Port;
-import scenario.schedule.CargoAllocation;
-import scenario.schedule.Schedule;
-import scenario.schedule.fleetallocation.AllocatedVessel;
-
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 

@@ -6,10 +6,6 @@ package com.mmxlabs.shiplingo.platform.its.tests.calculation;
 
 import org.junit.Assert;
 
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.FuelType;
-import scenario.schedule.events.Journey;
-
 /**
  * Methods for asserting which fuel types are used on a journey.
  * 

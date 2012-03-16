@@ -10,16 +10,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
-import scenario.Scenario;
-import scenario.port.Port;
-import scenario.port.PortFactory;
-import scenario.schedule.Schedule;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.FuelQuantity;
-import scenario.schedule.events.FuelType;
-import scenario.schedule.events.Journey;
-import scenario.schedule.events.ScheduledEvent;
-
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.FuelUsageAssertions;
