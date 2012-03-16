@@ -400,6 +400,8 @@ public class CustomScenarioCreator {
 
 		cargo.setName(cargoID);
 
+		cargoModel.getLoadSlots().add(load);
+		cargoModel.getDischargeSlots().add(dis);
 		cargoModel.getCargos().add(cargo);
 
 		return cargo;
