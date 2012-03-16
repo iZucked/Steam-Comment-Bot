@@ -6,9 +6,6 @@ package com.mmxlabs.shiplingo.platform.models.optimisation;
 
 import javax.management.timer.Timer;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,13 +14,10 @@ import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
-import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
-import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerModule;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -43,7 +37,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 	private Schedule intermediateSchedule = null;
 
-	private final ModelEntityMap entities = new ResourcelessModelEntityMap();
+	private ModelEntityMap entities ;
 
 	private LocalSearchOptimiser optimiser;
 
@@ -59,20 +53,12 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	protected void reallyPrepare() {
 		startTimeMillis = System.currentTimeMillis();
 
-		entities.setScenario(scenario);
+		LNGTransformer transformer = new LNGTransformer(scenario);
 
-		final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
+		IOptimisationData data = transformer.getOptimisationData();
+		entities = transformer.getEntities();
 
-		IOptimisationData data;
-		try {
-			lst.addPlatformTransformerExtensions();
-			data = lst.createOptimisationData(entities);
-		} catch (final IncompleteScenarioException e) {
-			// Wrap up exception
-			throw new RuntimeException(e);
-		}
-
-		final OptimisationTransformer ot = new OptimisationTransformer(scenario, lst.getOptimisationSettings());
+		final OptimisationTransformer ot = transformer.getOptimisationTransformer();
 		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
 		final IOptimisationContext context = optAndContext.getFirst();
