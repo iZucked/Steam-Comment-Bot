@@ -5,6 +5,8 @@ import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
+import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
@@ -22,6 +24,12 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(ResourceAllocationConstraintCheckerFactory.class.getCanonicalName())).toProvider(
+				Peaberry.service(new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider)).export());
+
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(OrderedSequenceElementsConstraintCheckerFactory.class.getCanonicalName())).toProvider(
+				Peaberry.service(new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider)).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PortExclusionConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new PortExclusionConstraintCheckerFactory(SchedulerConstants.DCP_portExclusionProvider, SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portProvider))
