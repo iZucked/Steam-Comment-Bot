@@ -498,11 +498,8 @@ public class ScenarioTools {
 
 		final VesselAvailablility availability = FleetFactory.eINSTANCE.createVesselAvailablility();
 
-		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
-		heelOptions.setVolumeAvailable(heelLimit);
-		heelOptions.setCvValue(cvValue);
-		heelOptions.setPricePerMMBTU(dischargePrice);
-		vessel.setStartHeel(heelOptions);
+		
+		vessel.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 		
 		vessel.setAvailability(availability);
 
@@ -565,6 +562,12 @@ public class ScenarioTools {
 		charterOut.setPort(A);
 		charterOut.setRelocateTo(A);
 		charterOut.setName("Charter Out");
+		
+		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
+		heelOptions.setVolumeAvailable(heelLimit);
+		heelOptions.setCvValue(cvValue);
+		heelOptions.setPricePerMMBTU(dischargePrice);
+		charterOut.setHeelOptions(heelOptions);
 		
 
 		charterOut.setDurationInDays(charterOutTimeDays);
