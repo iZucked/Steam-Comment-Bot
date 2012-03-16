@@ -10,12 +10,6 @@ import java.util.Iterator;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
@@ -28,9 +22,6 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
-import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobControl;
-import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor;
-import com.mmxlabs.shiplingo.platform.models.optimisation.SaveJobUtil;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.

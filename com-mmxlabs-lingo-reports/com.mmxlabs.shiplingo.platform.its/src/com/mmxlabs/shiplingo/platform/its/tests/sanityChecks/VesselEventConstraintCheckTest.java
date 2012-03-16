@@ -14,20 +14,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import scenario.Scenario;
-import scenario.fleet.CharterOut;
-import scenario.fleet.Drydock;
-import scenario.fleet.Vessel;
-import scenario.fleet.VesselClass;
-import scenario.fleet.VesselEvent;
-import scenario.port.Port;
-import scenario.schedule.CargoAllocation;
-import scenario.schedule.Schedule;
-import scenario.schedule.Sequence;
-import scenario.schedule.events.ScheduledEvent;
-import scenario.schedule.events.VesselEventVisit;
-import scenario.schedule.fleetallocation.FleetVessel;
-
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 

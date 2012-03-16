@@ -15,9 +15,6 @@ import org.eclipse.emf.compare.match.service.MatchService;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Test;
 
-import scenario.Scenario;
-import scenario.port.Port;
-
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
