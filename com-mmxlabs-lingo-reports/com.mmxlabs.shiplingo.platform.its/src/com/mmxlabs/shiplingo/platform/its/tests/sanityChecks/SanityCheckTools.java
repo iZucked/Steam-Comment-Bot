@@ -17,6 +17,8 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 
 /**
@@ -102,18 +104,25 @@ public class SanityCheckTools {
 	 * @param fleetVessel
 	 * @return A list of visited ports (with no duplicates)
 	 */
-	public static ArrayList<Port> getVesselsVisitedPorts(final Schedule schedule, final FleetVessel fleetVessel) {
+	public static ArrayList<Port> getVesselsVisitedPorts(final Schedule schedule, final Vessel fleetVessel) {
 
 		final ArrayList<Port> visitedPorts = new ArrayList<Port>();
 
 		for (final Sequence sq : schedule.getSequences()) {
 			if (sq.getVessel().equals(fleetVessel)) {
 				for (final Event se : sq.getEvents()) {
-					if (se instanceof PortVisit) {
-						final PortVisit pv = (PortVisit) se;
+					if (se instanceof SlotVisit) {
+						final SlotVisit visit = (SlotVisit) se;
 
-						if (!visitedPorts.contains(pv.getPort())) {
-							visitedPorts.add(pv.getPort());
+						if (!visitedPorts.contains(visit.getPort())) {
+							visitedPorts.add(visit.getPort());
+						}
+					}
+					else if (se instanceof VesselEventVisit) {
+						final VesselEventVisit visit = (VesselEventVisit) se;
+
+						if (!visitedPorts.contains(visit.getPort())) {
+							visitedPorts.add(visit.getPort());
 						}
 					}
 				}
@@ -143,10 +152,10 @@ public class SanityCheckTools {
 					final DryDockEvent dry = csc.addDryDock(portB, start, 1);
 
 					if (allowedDrydockVessel != null) {
-						dry.getVessels().add(allowedDrydockVessel);
+						dry.getAllowedVessels().add(allowedDrydockVessel);
 					}
 					if (allowedDrydockVesselClass != null) {
-						dry.getVesselClasses().add(allowedDrydockVesselClass);
+						dry.getAllowedVessels().add(allowedDrydockVesselClass);
 					}
 
 					start.setTime(start.getTime() + TimeUnit.HOURS.toMillis(2));
@@ -178,10 +187,10 @@ public class SanityCheckTools {
 				final CharterOutEvent charterOut = csc.addCharterOut(id, portA, portB, start, 1000, charterOutDurationDays, cvValue, dischargePrice, 100, 0);
 
 				if (allowedCharterOutVessel != null) {
-					charterOut.getVessels().add(allowedCharterOutVessel);
+					charterOut.getAllowedVessels().add(allowedCharterOutVessel);
 				}
 				if (allowedCharterOutVesselClass != null) {
-					charterOut.getVesselClasses().add(allowedCharterOutVesselClass);
+					charterOut.getAllowedVessels().add(allowedCharterOutVesselClass);
 				}
 
 				if (portA.equals(portB)) {

@@ -15,6 +15,8 @@ import org.eclipse.emf.compare.match.service.MatchService;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Test;
 
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
@@ -67,8 +69,8 @@ public class InputAttributesCheckTest {
 		// create some cargos.
 		SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
 
-		final Scenario scenario = csc.buildScenario();
-		final Scenario copiedScenario = EcoreUtil.copy(scenario);
+		final MMXRootObject scenario = csc.buildScenario();
+		final MMXRootObject copiedScenario = EcoreUtil.copy(scenario);
 
 		assertScenariosEqual("Copy has been made correctly", copiedScenario, scenario);
 		ScenarioTools.evaluate(scenario);
@@ -86,7 +88,7 @@ public class InputAttributesCheckTest {
 	 *            Another scenario
 	 * @throws InterruptedException
 	 */
-	private void assertScenariosEqual(final String assertionMessage, final Scenario originalScenario, final Scenario otherScenario) throws InterruptedException {
+	private void assertScenariosEqual(final String assertionMessage, final MMXRootObject originalScenario, final MMXRootObject otherScenario) throws InterruptedException {
 
 		final MatchModel match = MatchService.doMatch(originalScenario, otherScenario, null);
 		final DiffModel diff = DiffService.doDiff(match);

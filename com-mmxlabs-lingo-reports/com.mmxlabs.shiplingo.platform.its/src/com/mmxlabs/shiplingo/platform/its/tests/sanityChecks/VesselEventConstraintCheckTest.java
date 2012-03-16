@@ -14,6 +14,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.DryDockEvent;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
@@ -92,9 +104,9 @@ public class VesselEventConstraintCheckTest {
 
 		// get some vessels and vessel classes to restrict the dry docks and charter outs
 		final Vessel allowedDrydockVessel = vesselsOfClassOne.get(0);
-		final VesselClass allowedDrydockVesselClass = vesselsOfClassThree.get(0).getClass_();
+		final VesselClass allowedDrydockVesselClass = vesselsOfClassThree.get(0).getVesselClass();
 		final Vessel allowedCharterOutVessel = vesselsOfClassTwo.get(0);
-		final VesselClass allowedCharterOutVesselClass = vesselsOfClassFour.get(0).getClass_();
+		final VesselClass allowedCharterOutVesselClass = vesselsOfClassFour.get(0).getVesselClass();
 
 		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
 	}
@@ -134,7 +146,7 @@ public class VesselEventConstraintCheckTest {
 	public void testDryDockVesselClass() {
 
 		final Vessel allowedDrydockVessel = null;
-		final VesselClass allowedDrydockVesselClass = vesselsOfClassOne.get(0).getClass_();
+		final VesselClass allowedDrydockVesselClass = vesselsOfClassOne.get(0).getVesselClass();
 		final Vessel allowedCharterOutVessel = null;
 		final VesselClass allowedCharterOutVesselClass = null;
 
@@ -150,7 +162,7 @@ public class VesselEventConstraintCheckTest {
 		final Vessel allowedDrydockVessel = null;
 		final VesselClass allowedDrydockVesselClass = null;
 		final Vessel allowedCharterOutVessel = null;
-		final VesselClass allowedCharterOutVesselClass = vesselsOfClassOne.get(0).getClass_();
+		final VesselClass allowedCharterOutVesselClass = vesselsOfClassOne.get(0).getVesselClass();
 
 		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
 	}
@@ -174,7 +186,7 @@ public class VesselEventConstraintCheckTest {
 		SanityCheckTools.addDrydocks(csc, ports, allowedDrydockVessel, allowedDrydockVesselClass);
 		SanityCheckTools.addCharterOuts(csc, ports, allowedCharterOutVessel, allowedCharterOutVesselClass, cvValue, dischargePrice);
 
-		final Scenario scenario = csc.buildScenario();
+		final MMXRootObject scenario = csc.buildScenario();
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
@@ -208,17 +220,17 @@ public class VesselEventConstraintCheckTest {
 			final VesselClass allowedCharterOutVesselClass) {
 
 		for (final Sequence seq : result.getSequences()) {
-			for (final ScheduledEvent e : seq.getEvents()) {
+			for (final Event e : seq.getEvents()) {
 				if (e instanceof VesselEventVisit) {
 
 					final VesselEventVisit vev = (VesselEventVisit) e;
 					final VesselEvent ve = vev.getVesselEvent();
 
-					final Vessel usedVessel = ((FleetVessel) seq.getVessel()).getVessel();
+					final Vessel usedVessel = seq.getVessel();
 
-					if (ve instanceof CharterOut) {
+					if (ve instanceof CharterOutEvent) {
 						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedCharterOutVessel, allowedCharterOutVesselClass));
-					} else if (ve instanceof Drydock) {
+					} else if (ve instanceof DryDockEvent) {
 						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedDryDockVessel, allowedDryDockVesselClass));
 					} else {
 						fail("Test should cover all VesselEvents.");
@@ -239,7 +251,7 @@ public class VesselEventConstraintCheckTest {
 				isValid = isValid || usedVessel.equals(allowedVessel);
 			}
 			if (allowedVesselClass != null) {
-				isValid = isValid || allowedVesselClass.equals(usedVessel.getClass_());
+				isValid = isValid || allowedVesselClass.equals(usedVessel.getVesselClass());
 			}
 
 			return isValid;

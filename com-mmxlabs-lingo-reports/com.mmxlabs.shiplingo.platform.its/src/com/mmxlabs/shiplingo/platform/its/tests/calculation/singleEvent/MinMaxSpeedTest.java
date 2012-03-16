@@ -8,6 +8,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
 /**
@@ -68,11 +75,17 @@ public class MinMaxSpeedTest {
 		final CargoAllocation a = test(testName, travelTime, baseFuelCheap);
 
 		// assert that base fuel is used on the ballast leg as it is cheaper than LNG
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if ((fq.getFuelType() == FuelType.NBO) || (fq.getFuelType() == FuelType.FBO)) {
-				Assert.assertTrue("LNG not used as BF cheaper", fq.getQuantity() == 0);
-			} else if (fq.getFuelType() == FuelType.BASE_FUEL) {
-				Assert.assertTrue("Base fuel used, LNG more expensive", fq.getQuantity() > 0);
+		for (final FuelQuantity fq : a.getBallastLeg().getFuels()) {
+			if ((fq.getFuel() == Fuel.NBO) || (fq.getFuel() == Fuel.FBO)) {
+				for (FuelAmount fa : fq.getAmounts()) {
+					Assert.assertTrue("LNG not used as BF cheaper", fa.getQuantity() == 0);
+				}
+			} else if (fq.getFuel() == Fuel.BASE_FUEL) {
+				for (FuelAmount fa : fq.getAmounts()) {
+					if (fa.getUnit() == FuelUnit.MT) {
+						Assert.assertTrue("Base fuel used, LNG more expensive", fa.getQuantity() > 0);
+					}
+				}
 			}
 		}
 
@@ -95,11 +108,16 @@ public class MinMaxSpeedTest {
 		final CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
 
 		// assert that NBO is used on the ballast leg as it is cheaper than base fuel
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO) {
-				Assert.assertTrue("Cheap NBO used", fq.getQuantity() > 0);
-			} else if (fq.getFuelType() == FuelType.BASE_FUEL) {
-				Assert.assertTrue("Base fuel not used", fq.getQuantity() == 0);
+		for (final FuelQuantity fq : a.getBallastLeg().getFuels()) {
+			if (fq.getFuel() == Fuel.NBO) {
+				for (FuelAmount fa : fq.getAmounts()) {
+					if (fa.getUnit() == FuelUnit.M3)
+						Assert.assertTrue("Cheap NBO used", fa.getQuantity() > 0);
+				}
+			} else if (fq.getFuel() == Fuel.BASE_FUEL) {
+				for (FuelAmount fa : fq.getAmounts()) {
+					Assert.assertTrue("Base fuel not used", fa.getQuantity() == 0);
+				}
 			}
 		}
 
@@ -127,11 +145,17 @@ public class MinMaxSpeedTest {
 		final CargoAllocation a = test(testName, travelTime, baseFuelCheap);
 
 		// Base fuel used on ballast as it is cheaper than LNG
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			if (fq.getFuelType() == FuelType.NBO) {
-				Assert.assertTrue("NBO not used", fq.getQuantity() == 0);
-			} else if (fq.getFuelType() == FuelType.BASE_FUEL) {
-				Assert.assertTrue("Base fuel used", fq.getQuantity() > 0);
+		for (final FuelQuantity fq : a.getBallastLeg().getFuels()) {
+			if (fq.getFuel() == Fuel.NBO) {
+				for (FuelAmount fa : fq.getAmounts()) {
+					Assert.assertTrue("NBO not used", fa.getQuantity() == 0);
+				}
+			} else if (fq.getFuel() == Fuel.BASE_FUEL) {
+				for (FuelAmount fa : fq.getAmounts()) {
+					if (fa.getUnit() == FuelUnit.MT) {
+						Assert.assertTrue("Base fuel used", fa.getQuantity() > 0);
+					}
+				}
 			}
 		}
 
@@ -167,7 +191,7 @@ public class MinMaxSpeedTest {
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
 
-		final Scenario scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
+		final MMXRootObject scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
 				ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption,
 				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, true, pilotLightRate, minHeelVolume);
 

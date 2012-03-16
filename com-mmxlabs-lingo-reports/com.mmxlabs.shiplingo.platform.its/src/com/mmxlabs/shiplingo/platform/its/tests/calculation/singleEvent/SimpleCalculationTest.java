@@ -9,6 +9,13 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.shiplingo.platform.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
 /**
@@ -42,7 +49,7 @@ public class SimpleCalculationTest {
 		final float cvValue = 22.8f;
 		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
 
-		final Scenario scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
+		final MMXRootObject scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
@@ -51,13 +58,11 @@ public class SimpleCalculationTest {
 		ScenarioTools.printCargoAllocation("testLNGSelection", a);
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			Assert.assertTrue("Ballast leg never uses base", (fq.getQuantity() == 0) || (fq.getFuelType() != FuelType.BASE_FUEL));
-		}
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL);
+		FuelUsageAssertions.assertFuelUsed(a.getBallastLeg().getFuels(), Fuel.NBO, FuelUnit.M3);
 
-		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			Assert.assertTrue("Ballast idle never uses base", (fq.getQuantity() == 0) || (fq.getFuelType() != FuelType.BASE_FUEL));
-		}
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastIdle().getFuels(), Fuel.BASE_FUEL);
+		FuelUsageAssertions.assertFuelUsed(a.getBallastIdle().getFuels(), Fuel.NBO, FuelUnit.M3);
 	}
 
 	/**
@@ -71,7 +76,7 @@ public class SimpleCalculationTest {
 		final float cvValue = 22.8f;
 		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
 
-		final Scenario scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
+		final MMXRootObject scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
@@ -80,13 +85,12 @@ public class SimpleCalculationTest {
 		ScenarioTools.printCargoAllocation("testBaseSelection", a);
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
-		for (final FuelQuantity fq : a.getBallastLeg().getFuelUsage()) {
-			Assert.assertTrue("Ballast leg only uses base", (fq.getQuantity() == 0) || (fq.getFuelType() == FuelType.BASE_FUEL));
-		}
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.NBO);
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.FBO);
+		FuelUsageAssertions.assertFuelUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL, FuelUnit.MT);
 
-		for (final FuelQuantity fq : a.getBallastIdle().getFuelUsage()) {
-			Assert.assertTrue("Ballast idle only uses base", (fq.getQuantity() == 0) || (fq.getFuelType() == FuelType.BASE_FUEL));
-		}
+		FuelUsageAssertions.assertFuelNotUsed(a.getBallastIdle().getFuels(), Fuel.BASE_FUEL);
+		FuelUsageAssertions.assertFuelUsed(a.getBallastIdle().getFuels(), Fuel.NBO, FuelUnit.M3);
 	}
 
 	/**
@@ -98,7 +102,7 @@ public class SimpleCalculationTest {
 	 * 
 	 * @return
 	 */
-	private Scenario createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
+	private MMXRootObject createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class

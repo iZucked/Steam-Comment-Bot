@@ -11,6 +11,17 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
@@ -29,7 +40,7 @@ public class CharterOutTest {
 	 * port C to force a travel and check heel usage.
 	 */
 	@Test
-	public void twoCharterOutHeelUseageTest() {
+	public void twoCharterOutHeelUsageTest() {
 
 		// discharge price makes LNG slightly cheaper than BF.
 		final float dischargePrice = 0.99f;
@@ -80,7 +91,7 @@ public class CharterOutTest {
 		csc.addCharterOut(secondCharterOutID, portB, portB, startSecondCharterOut, secondCOHeelLimit, charterOutDurationDays, cvValue, dischargePrice, 0, 0);
 		csc.addDryDock(portC, startSecondDryDock, dryDockDurationDays);
 
-		final Scenario scenario = csc.buildScenario();
+		final MMXRootObject scenario = csc.buildScenario();
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
@@ -88,30 +99,38 @@ public class CharterOutTest {
 		ScenarioTools.printSequences(result);
 
 		for (final Sequence seq : result.getSequences()) {
-			for (final ScheduledEvent e : seq.getEvents()) {
+			for (final Event e : seq.getEvents()) {
 				if (e instanceof Journey) {
 					final Journey j = (Journey) e;
 
-					if (j.getToPort().equals(portB)) {
+					if (j.getDestination().equals(portB)) {
 						// first journey, so check that heel is used.
 						// get the amount of heel used
 						long LNGUsed = 0;
-						for (final FuelQuantity fq : j.getFuelUsage()) {
-							if ((fq.getFuelType() == FuelType.FBO) || (fq.getFuelType() == FuelType.NBO)) {
-								LNGUsed += fq.getQuantity();
+						for (final FuelQuantity fq : j.getFuels()) {
+							if ((fq.getFuel() == Fuel.FBO) || (fq.getFuel() == Fuel.NBO)) {
+								for (FuelAmount fa : fq.getAmounts()) {
+									if (fa.getUnit() == FuelUnit.M3) {
+										LNGUsed += fa.getQuantity();
+									}
+								}
 							}
 						}
 
 						Assert.assertTrue("Heel not exceeded", LNGUsed <= firstCOHeelLimit);
 
 						FuelUsageAssertions.assertBaseFuelNotUsed(j);
-					} else if (j.getToPort().equals(portC)) {
+					} else if (j.getDestination().equals(portC)) {
 						// second journey, check heel is NOT used.
 						// get the amount of heel used
 						long LNGUsed = 0;
-						for (final FuelQuantity fq : j.getFuelUsage()) {
-							if ((fq.getFuelType() == FuelType.FBO) || (fq.getFuelType() == FuelType.NBO)) {
-								LNGUsed += fq.getQuantity();
+						for (final FuelQuantity fq : j.getFuels()) {
+							if ((fq.getFuel() == Fuel.FBO) || (fq.getFuel() == Fuel.NBO)) {
+								for (FuelAmount fa : fq.getAmounts()) {
+									if (fa.getUnit() == FuelUnit.M3) {
+										LNGUsed += fa.getQuantity();
+									}
+								}
 							}
 						}
 

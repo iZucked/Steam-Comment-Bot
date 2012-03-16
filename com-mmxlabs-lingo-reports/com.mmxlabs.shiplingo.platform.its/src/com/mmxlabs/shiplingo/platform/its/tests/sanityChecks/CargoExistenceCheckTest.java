@@ -10,6 +10,11 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
@@ -61,7 +66,7 @@ public class CargoExistenceCheckTest {
 		// create some cargos.
 		inputCargos.addAll(Arrays.asList(SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue)));
 
-		final Scenario scenario = csc.buildScenario();
+		final MMXRootObject scenario = csc.buildScenario();
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
@@ -94,7 +99,7 @@ public class CargoExistenceCheckTest {
 
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
-			final Cargo c = (Cargo) (ca.getLoadSlot().eContainer());
+			final Cargo c = ca.getInputCargo();
 
 			Assert.assertTrue("Input cargo is in output", inputCargos.contains(c));
 

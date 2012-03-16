@@ -8,6 +8,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
 /**
@@ -39,8 +42,8 @@ public class DistanceRoundingTest {
 		Assert.assertSame("Laden leg same distance", distanceBetweenPorts, a.getLadenLeg().getDistance());
 		Assert.assertSame("Ballast leg same distance", distanceBetweenPorts, a.getBallastLeg().getDistance());
 
-		Assert.assertSame(expectedDuration, a.getLadenLeg().getEventDuration());
-		Assert.assertSame(expectedDuration, a.getBallastLeg().getEventDuration());
+		Assert.assertSame(expectedDuration, a.getLadenLeg().getDuration());
+		Assert.assertSame(expectedDuration, a.getBallastLeg().getDuration());
 
 		/*
 		 * At the moment the expected result is that the duration is rounded to zero. These tests are for if this isn't the case.
@@ -92,7 +95,7 @@ public class DistanceRoundingTest {
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
 
-		final Scenario scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity,
+		final MMXRootObject scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity,
 				ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption,
 				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, true, pilotLightRate, minHeelVolume);
 
