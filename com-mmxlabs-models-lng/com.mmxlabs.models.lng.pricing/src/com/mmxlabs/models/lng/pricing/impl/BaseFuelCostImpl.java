@@ -120,7 +120,6 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	public double getPrice() {
 		return price;
 	}
@@ -159,7 +158,6 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {

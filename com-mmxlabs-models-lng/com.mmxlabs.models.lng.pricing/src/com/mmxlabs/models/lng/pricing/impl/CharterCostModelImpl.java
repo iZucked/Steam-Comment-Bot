@@ -199,7 +199,6 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	public int getSpotCharterCount() {
 		return spotCharterCount;
 	}
