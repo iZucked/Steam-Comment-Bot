@@ -545,6 +545,7 @@ public class CustomScenarioCreator {
 
 		VesselClassRouteParameters params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
 
+		params.setRoute(canal);
 		params.setLadenConsumptionRate(canalTransitFuelDays);
 		params.setBallastConsumptionRate(canalTransitFuelDays);
 		params.setLadenNBORate(canalNBORateDays);
