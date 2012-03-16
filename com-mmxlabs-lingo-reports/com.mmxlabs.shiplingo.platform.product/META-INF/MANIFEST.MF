@@ -4,3 +4,4 @@ Bundle-Name: Product
 Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.product
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Minimax Labs
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
