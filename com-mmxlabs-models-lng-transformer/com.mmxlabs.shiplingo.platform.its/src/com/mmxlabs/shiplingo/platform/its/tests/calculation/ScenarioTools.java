@@ -502,6 +502,7 @@ public class ScenarioTools {
 		heelOptions.setVolumeAvailable(heelLimit);
 		heelOptions.setCvValue(cvValue);
 		heelOptions.setPricePerMMBTU(dischargePrice);
+		vessel.setStartHeel(heelOptions);
 		
 		vessel.setAvailability(availability);
 
