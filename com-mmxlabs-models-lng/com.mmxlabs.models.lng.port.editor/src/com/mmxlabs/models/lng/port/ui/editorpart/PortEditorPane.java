@@ -38,7 +38,6 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
-import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class PortEditorPane extends ScenarioTableViewerPane {
 

@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.port.impl;
 import com.mmxlabs.models.lng.port.*;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 

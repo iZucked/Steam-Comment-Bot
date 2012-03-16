@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.schedule;
 import com.mmxlabs.models.lng.port.Port;
 
-import java.math.BigDecimal;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Journey</b></em>'.

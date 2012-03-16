@@ -9,8 +9,6 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-
 import com.mmxlabs.models.lng.cargo.Cargo;
 
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;

@@ -12,11 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
-import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 public class FleetModelEditorContribution extends BaseJointModelEditorContribution<FleetModel> {	
 	private VesselViewerPane vesselViewerPane;

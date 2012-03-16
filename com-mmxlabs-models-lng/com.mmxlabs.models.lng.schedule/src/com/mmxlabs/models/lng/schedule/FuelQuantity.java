@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import java.math.BigDecimal;
-
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
