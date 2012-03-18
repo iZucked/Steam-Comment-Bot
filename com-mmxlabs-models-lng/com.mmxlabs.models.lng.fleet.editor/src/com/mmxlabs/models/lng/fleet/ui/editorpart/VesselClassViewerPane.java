@@ -44,6 +44,7 @@ import com.mmxlabs.models.ui.tabular.DialogFeatureManipulator;
 import com.mmxlabs.models.ui.tabular.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class VesselClassViewerPane extends ScenarioTableViewerPane {
 	private JointModelEditorPart jointModelEditor;
