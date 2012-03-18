@@ -252,7 +252,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 				final ISelection sel = getLastSelection();
 				if (sel instanceof IStructuredSelection) {
 					final EditingDomain ed = jointModelEditorPart.getEditingDomain();
-					final List objects = ((IStructuredSelection) sel).toList();
+					final List<?> objects = ((IStructuredSelection) sel).toList();
 					ed.getCommandStack().execute(DeleteCommand.create(ed, objects));
 				}
 			}
