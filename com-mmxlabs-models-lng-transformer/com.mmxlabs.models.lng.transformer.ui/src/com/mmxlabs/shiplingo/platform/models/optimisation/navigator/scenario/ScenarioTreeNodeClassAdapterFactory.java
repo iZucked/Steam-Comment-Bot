@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.scenario;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.WeakHashMap;
 
@@ -17,11 +16,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.edapt.migration.MigrationException;
-import org.eclipse.emf.validation.internal.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -41,6 +40,8 @@ import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
  */
 public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory, IResourceChangeListener, IResourceDeltaVisitor {
 
+	private static final Logger log = LoggerFactory.getLogger(ScenarioTreeNodeClassAdapterFactory.class);
+	
 	// global cache of load model map resources
 	private final static WeakHashMap<IResource, JointModel> modelMap = new WeakHashMap<IResource, JointModel>();
 
@@ -104,8 +105,10 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory, IRe
 						modelMap.put(resource, jointModel);
 						return jointModel;
 					}
-				} catch (IOException | MigrationException e) {
-					Log.error(0, "Error loading joint model", e);
+				} catch (IOException e) {
+					log.error("Error loading joint model", e);
+				} catch (MigrationException e) {
+					log.error("Error loading joint model", e);
 				}
 			}
 		}
