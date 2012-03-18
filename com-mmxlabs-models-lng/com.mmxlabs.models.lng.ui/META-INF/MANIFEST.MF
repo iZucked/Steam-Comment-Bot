@@ -24,3 +24,4 @@ Export-Package: com.mmxlabs.models.lng.ui,
  com.mmxlabs.models.lng.ui.actions,
  com.mmxlabs.models.lng.ui.tabular,
  com.mmxlabs.models.ui.dates
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
