@@ -10,10 +10,9 @@ import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
-import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformer;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerModule;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -33,9 +32,7 @@ public class ScenarioRunner {
 
 	private IOptimisationData data;
 	private IOptimisationContext context;
-
-	private final ModelEntityMap entities = new ResourcelessModelEntityMap();
-
+	private ModelEntityMap entities;
 	private LocalSearchOptimiser optimiser;
 
 	private Schedule intialSchedule;
@@ -64,20 +61,22 @@ public class ScenarioRunner {
 
 	public void init() throws IncompleteScenarioException {
 
-		entities.setScenario(scenario);
 
-		final LNGScenarioTransformer lst = LNGTransformerModule.createLNGScenarioTransformer(scenario);
+		final LNGTransformer transformer = new LNGTransformer(scenario);
 
-		if (!lst.addPlatformTransformerExtensions()) {
+		entities = transformer.getEntities();
+		LNGScenarioTransformer lst =  transformer.getLngScenarioTransformer();
+
+		{
 			// add extensions manually; TODO improve this later.
 			final SimpleContractTransformer sct = new SimpleContractTransformer();
 			lst.addTransformerExtension(sct);
 			lst.addContractTransformer(sct, sct.getContractEClasses());
 		}
 
-		final OptimisationTransformer ot = new OptimisationTransformer(lst.getOptimisationSettings());
+		final OptimisationTransformer ot = transformer.getOptimisationTransformer();
 
-		data = lst.createOptimisationData(entities);
+		data = transformer.getOptimisationData();
 
 		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
