@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
@@ -118,13 +119,13 @@ public class VesselExistenceCheckTest {
 
 		// Check all vessels in the input exist in the output.
 		int numOfVesselsInOutput = 0;
-		for (final AllocatedVessel av : result.getFleet()) {
-			if (av instanceof FleetVessel) {
-				final FleetVessel fv = (FleetVessel) av;
+		for (final Sequence sequence : result.getSequences()) {
+			if (sequence.isFleetVessel()) {
+				final Vessel fv = sequence.getVessel();
 
-				Assert.assertTrue("Input vessel exists in output", inputVessels.contains(fv.getVessel()));
+				Assert.assertTrue("Input vessel exists in output", inputVessels.contains(fv));
 				// remove the vessel - it should only exist once.
-				inputVessels.remove(fv.getVessel());
+				inputVessels.remove(fv);
 
 				// count the number of vessels in the output
 				numOfVesselsInOutput++;
@@ -144,9 +145,8 @@ public class VesselExistenceCheckTest {
 	private void checkNumOfSpotVesselsNotExceeded(final Schedule result, final int maxNumOfSpotVessels) {
 
 		int numOfSpotVessels = 0;
-		for (final AllocatedVessel av : result.getFleet()) {
-
-			if (av instanceof SpotVessel) {
+		for (final Sequence sequence : result.getSequences()) {
+			if (sequence.isSpotVessel()) {
 				numOfSpotVessels++;
 			}
 		}
