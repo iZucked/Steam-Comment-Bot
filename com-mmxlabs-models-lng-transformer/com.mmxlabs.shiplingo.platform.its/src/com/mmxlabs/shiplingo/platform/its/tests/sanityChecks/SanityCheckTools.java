@@ -6,6 +6,7 @@ package com.mmxlabs.shiplingo.platform.its.tests.sanityChecks;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -15,7 +16,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -97,34 +97,28 @@ public class SanityCheckTools {
 	}
 
 	/**
-	 * Get a list of ports that a fleet vessel has visited in a schedule.
+	 * Get a list of ports that has visited in a schedule.
 	 * 
-	 * @param schedule
-	 *            The schedule that must contain the given FleetVessel
-	 * @param fleetVessel
+	 * @param sequence
+	 *            The sequence
 	 * @return A list of visited ports (with no duplicates)
 	 */
-	public static ArrayList<Port> getVesselsVisitedPorts(final Schedule schedule, final Vessel fleetVessel) {
+	public static List<Port> getVesselsVisitedPorts(final Sequence sequence) {
 
-		final ArrayList<Port> visitedPorts = new ArrayList<Port>();
+		final List<Port> visitedPorts = new ArrayList<Port>();
 
-		for (final Sequence sq : schedule.getSequences()) {
-			if (sq.getVessel().equals(fleetVessel)) {
-				for (final Event se : sq.getEvents()) {
-					if (se instanceof SlotVisit) {
-						final SlotVisit visit = (SlotVisit) se;
+		for (final Event se : sequence.getEvents()) {
+			if (se instanceof SlotVisit) {
+				final SlotVisit visit = (SlotVisit) se;
 
-						if (!visitedPorts.contains(visit.getPort())) {
-							visitedPorts.add(visit.getPort());
-						}
-					}
-					else if (se instanceof VesselEventVisit) {
-						final VesselEventVisit visit = (VesselEventVisit) se;
+				if (!visitedPorts.contains(visit.getPort())) {
+					visitedPorts.add(visit.getPort());
+				}
+			} else if (se instanceof VesselEventVisit) {
+				final VesselEventVisit visit = (VesselEventVisit) se;
 
-						if (!visitedPorts.contains(visit.getPort())) {
-							visitedPorts.add(visit.getPort());
-						}
-					}
+				if (!visitedPorts.contains(visit.getPort())) {
+					visitedPorts.add(visit.getPort());
 				}
 			}
 		}
