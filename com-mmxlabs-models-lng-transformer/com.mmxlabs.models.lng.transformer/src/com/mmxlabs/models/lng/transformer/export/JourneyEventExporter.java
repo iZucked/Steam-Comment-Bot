@@ -13,7 +13,6 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
  * @author hinton

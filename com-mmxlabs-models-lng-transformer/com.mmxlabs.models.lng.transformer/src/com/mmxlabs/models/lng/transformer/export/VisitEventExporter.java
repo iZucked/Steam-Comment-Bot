@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.export;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.VesselEvent;

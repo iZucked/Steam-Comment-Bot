@@ -69,7 +69,6 @@ import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
