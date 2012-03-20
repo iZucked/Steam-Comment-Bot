@@ -1,66 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="ShipLingo Platform (Indigo)" sequenceNumber="48">
+<target name="ShipLingo Platform (Indigo)" sequenceNumber="74">
 <locations>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.common.util" version="1.0.0.SNAPSHOT"/>
-<unit id="org.eclipse.nebula.widgets.ganttchart" version="1.0.0"/>
-<unit id="com.mmxlabs.optimiser.common" version="1.0.0.SNAPSHOT"/>
-<unit id="com.mmxlabs.optimiser.core" version="1.0.0.SNAPSHOT"/>
-<unit id="com.mmxlabs.optimiser.ga" version="1.0.0.SNAPSHOT"/>
-<unit id="com.mmxlabs.optimiser.lso" version="1.0.0.SNAPSHOT"/>
-<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="1.0.0.SNAPSHOT"/>
-<repository location="https://server1.mmxlabs.com/static/p2/mmxlabs-p2-snapshots"/>
+<location includeAllPlatforms="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.edapt.recorder.sdk.feature.feature.group" version="0.3.0.201111051053"/>
+<unit id="org.eclipse.emf.edapt.runtime.feature.feature.group" version="0.3.0.201111051053"/>
+<unit id="org.eclipse.emf.edapt.runtime.sdk.feature.feature.group" version="0.3.0.201111051053"/>
+<unit id="org.eclipse.emf.edapt.recorder.feature.feature.group" version="0.3.0.201111051053"/>
+<repository location="http://download.eclipse.org/edapt/update-site/"/>
 </location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.apache.commons.math" version="2.1.0.v201105210652"/>
-<unit id="org.apache.commons.math.source" version="2.1.0.v201105210652"/>
-<unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
-<unit id="org.apache.commons.logging.source" version="1.1.1.v201101211721"/>
-<unit id="ch.qos.logback.classic" version="0.9.27.v20110224-1110"/>
-<unit id="ch.qos.logback.classic.source" version="0.9.27.v20110224-1110"/>
-<unit id="ch.qos.logback.core" version="0.9.27.v20110224-1110"/>
-<unit id="ch.qos.logback.core.source" version="0.9.27.v20110224-1110"/>
-<unit id="ch.qos.logback.slf4j" version="0.9.27.v20110224-1110"/>
-<unit id="ch.qos.logback.slf4j.source" version="0.9.27.v20110224-1110"/>
-<unit id="org.slf4j.api" version="1.6.1.v20100831-0715"/>
-<unit id="org.slf4j.ext" version="1.6.1.v20100831-0715"/>
-<unit id="org.slf4j.ext.source" version="1.6.1.v20100831-0715"/>
-<unit id="org.slf4j.api.source" version="1.6.1.v20100831-0715"/>
-<unit id="org.slf4j.jul" version="1.6.1.v20100831-0715"/>
-<unit id="org.slf4j.jul.source" version="1.6.1.v20100831-0715"/>
-<unit id="org.slf4j.log4j" version="1.6.1.v20100831-0715"/>
-<unit id="org.slf4j.log4j.source" version="1.6.1.v20100831-0715"/>
-<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository/"/>
+<location includeAllPlatforms="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="1.0.0.201203191405"/>
+<repository location="http://download.eclipse.org/technology/nebula/incubation/snapshot"/>
 </location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.ide" version="3.7.0.I20110613-1736"/>
-<unit id="org.eclipse.platform.sdk" version="3.7.0.I20110613-1736"/>
-<unit id="org.eclipse.rcp.feature.group" version="3.7.0.v20110216-9DB5Fm1FpBGy_AaVz-mFamgY"/>
-<unit id="org.eclipse.rcp.source.feature.group" version="3.7.0.v20110216-9DB5Fm1FpBGy_AaVz-mFamgY"/>
-<unit id="org.eclipse.sdk.ide" version="3.7.0.I20110613-1736"/>
-<repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
-</location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.0.4.20110304_0338-e5aff47-dev-e36"/>
-<unit id="org.eclipse.swtbot.ide.feature.group" version="2.0.4.20110304_0338-e5aff47-dev-e36"/>
-<unit id="org.eclipse.swtbot.forms.feature.group" version="2.0.4.20110304_0338-e5aff47-dev-e36"/>
-<unit id="org.eclipse.swtbot.feature.group" version="2.0.4.20110304_0338-e5aff47-dev-e36"/>
+<location includeAllPlatforms="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
+<unit id="org.eclipse.swtbot.ide.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
+<unit id="org.eclipse.swtbot.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
+<unit id="org.eclipse.swtbot.forms.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
 <repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
 </location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.swtchart" version="0.7.0"/>
-<repository location="https://server1.mmxlabs.com/static/p2/mmxlabs-p2-external"/>
+<location includeAllPlatforms="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.common.common-util" version="1.0.0.201203200906"/>
+<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="1.0.0.201203141721"/>
+<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="1.0.0.201203141721"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="1.0.0.201203141717"/>
+<unit id="com.mmxlabs.models.mmxcore.sdk.feature.source.feature.group" version="1.0.0.201203141717"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="1.0.0.201203141717"/>
+<unit id="com.mmxlabs.models.mmxcore.sdk.feature.feature.group" version="1.0.0.201203141717"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
 </location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.rcp.source.feature.group" version="3.7.0.v20110216-9DB5Fm1FpBGy_AaVz-mFamgY"/>
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.7.0.v20110606-0949"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="3.7.0.v20110502-7M7W8Z8eNV4UqfbhicjDN-ROgjNc"/>
-<unit id="org.eclipse.emf.compare.sdk.feature.group" version="1.2.0.v20110607-2028"/>
+<location includeAllPlatforms="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.rcp.source.feature.group" version="3.7.2.v20120120-1424-9DB5FmnFq5JCf1UA38R-kz0S0272"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.7.2.v20120130-0943"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.7.1.R37x_v20110907-7M7W8i8eNV4WsRkue-4Vq4J6pCyW"/>
+<unit id="org.eclipse.pde.api.tools.ee.fragments.feature.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.emf.compare.sdk.feature.group" version="1.2.2.v20120214-0915"/>
 <unit id="org.eclipse.emf.query.sdk.feature.group" version="1.5.0.v20110502-1600-67O-95GFz03DQEiNLXRMK_NPj507"/>
 <unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.5.0.v20110502-1600-67O-96SGR55YJeZPedcQnghI6uFA"/>
 <repository location="http://download.eclipse.org/releases/indigo"/>
+</location>
+<location includeAllPlatforms="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.platform.ide" version="3.7.2.M20120208-0800"/>
+<unit id="org.eclipse.platform.sdk" version="3.7.2.M20120208-0800"/>
+<unit id="org.eclipse.rcp.feature.group" version="3.7.2.v20120120-1424-9DB5FmnFq5JCf1UA38R-kz0S0272"/>
+<unit id="org.eclipse.rcp.source.feature.group" version="3.7.2.v20120120-1424-9DB5FmnFq5JCf1UA38R-kz0S0272"/>
+<unit id="org.eclipse.sdk.ide" version="3.7.2.M20120208-0800"/>
+<unit id="org.eclipse.pde.api.tools.ee.fragments.feature.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.cdcfoundation10.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.cdcfoundation11.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.j2se13.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.j2se14.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.j2se15.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.javase16.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.javase17.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.jre11.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.osgiminimum10.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.osgiminimum11.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<unit id="org.eclipse.pde.api.tools.ee.osgiminimum12.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
+<repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
+</location>
+<location includeAllPlatforms="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="com.springsource.org.aopalliance" version="1.0.0"/>
+<unit id="com.springsource.org.apache.commons.logging" version="1.1.1"/>
+<unit id="com.springsource.org.apache.log4j" version="1.2.16"/>
+<unit id="org.apache.commons.math" version="2.2.0"/>
+<unit id="com.springsource.javax.inject" version="1.0.0"/>
+<unit id="com.google.guava" version="11.0.1"/>
+<unit id="com.google.guava.source" version="11.0.1"/>
+<unit id="com.google.inject" version="3.0.0"/>
+<unit id="com.google.inject.assistedinject" version="3.0.0"/>
+<unit id="com.springsource.org.hamcrest.core" version="1.1.0"/>
+<unit id="org.mockito.mockito-core" version="1.9.0"/>
+<unit id="com.springsource.org.objenesis" version="1.2.0"/>
+<unit id="org.ops4j.peaberry.activation" version="1.2.0"/>
+<unit id="org.ops4j.peaberry" version="1.2.0"/>
+<unit id="org.ops4j.peaberry.eclipse" version="1.2.0"/>
+<unit id="com.springsource.slf4j.api" version="1.5.10"/>
+<unit id="com.springsource.slf4j.log4j" version="1.5.10"/>
+<unit id="com.springsource.slf4j.simple" version="1.5.10"/>
+<unit id="org.swtchart" version="0.7.0"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/"/>
 </location>
 </locations>
 <includeBundles>
@@ -646,6 +667,9 @@
 <plugin id="org.eclipse.ui.workbench.texteditor.source"/>
 </includeBundles>
 <environment>
+<os>*</os>
+<ws>*</ws>
+<arch>*</arch>
 <nl>en_GB</nl>
 </environment>
 <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
