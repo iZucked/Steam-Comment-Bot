@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.shiplingo.platform.its.tests.calculation;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import javax.management.timer.Timer;
@@ -367,11 +369,44 @@ public class ScenarioTools {
 		load.setCargoCV(cvValue);
 
 		final Date now = new Date();
-		load.setWindowStart(now);
+		
 		load.setWindowSize(0);
+		load.setDuration(0);
+		final TimeZone loadZone = TimeZone.getTimeZone(
+				A.getTimeZone() == null || A.getTimeZone().isEmpty() ? "UTC" : A.getTimeZone());
+		
+		final TimeZone dischargeZone = TimeZone.getTimeZone(
+				B.getTimeZone() == null || B.getTimeZone().isEmpty() ? "UTC" : B.getTimeZone());
+		
+		final Calendar loadCalendar = Calendar.getInstance(loadZone);
+		loadCalendar.setTime(now);
+		load.setWindowStartTime(loadCalendar.get(Calendar.HOUR_OF_DAY));
+		loadCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		loadCalendar.set(Calendar.MINUTE, 0);
+		loadCalendar.set(Calendar.SECOND, 0);
+		loadCalendar.set(Calendar.MILLISECOND, 0);
+		
+		load.setWindowStart(loadCalendar.getTime());
+
+//		System.err.println(load.getWindowStartWithSlotOrPortTime());
+//		System.err.println(now);
+		
 		final Date dischargeDate = new Date(now.getTime() + (Timer.ONE_HOUR * travelTime));
-		dis.setWindowStart(dischargeDate);
+		
+		final Calendar dischargeCalendar = Calendar.getInstance(dischargeZone);
+		dischargeCalendar.setTime(dischargeDate);
+		dis.setWindowStartTime(dischargeCalendar.get(Calendar.HOUR_OF_DAY));
+		dischargeCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		dischargeCalendar.set(Calendar.MINUTE, 0);
+		dischargeCalendar.set(Calendar.SECOND, 0);
+		dischargeCalendar.set(Calendar.MILLISECOND, 0);
+		dis.setWindowStart(dischargeCalendar.getTime());
+		
 		dis.setWindowSize(0);
+		dis.setDuration(0);
+		
+//		System.err.println(dis.getWindowStartWithSlotOrPortTime());
+//		System.err.println(dischargeDate);
 
 		if (useDryDock) {
 			// Set up dry dock.
@@ -390,6 +425,8 @@ public class ScenarioTools {
 
 		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
 		cargoModel.getCargos().add(cargo);
+		cargoModel.getLoadSlots().add(load);
+		cargoModel.getDischargeSlots().add(dis);
 
 		ScenarioUtils.addDefaultSettings(scenario);
 
@@ -662,7 +699,7 @@ public class ScenarioTools {
 		System.err.println("\tRoute: " + journey.getRoute() + ", Distance: " + journey.getDistance() + ", Duration: " + journey.getDuration() + ", Speed: " + journey.getSpeed());
 		printFuel(journey.getFuels());
 		// FIXME: Update for API changes
-		// System.err.println("\tRoute cost: $" + journey.getRouteCost() + ", Total cost: $" + journey.getFuelCost() + journey.getHireCost());
+		 System.err.println("\tRoute cost: $" + journey.getToll() + ", Total cost: $" + (journey.getToll() + journey.getFuelCost() + journey.getHireCost()));
 	}
 
 	/**

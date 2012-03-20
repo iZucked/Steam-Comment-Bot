@@ -117,7 +117,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final Calendar c = Calendar.getInstance();
 			final Slot slot = visit.getSlotAllocation().getSlot();
 
-			final Date windowStart = slot.getWindowStart();
+			final Date windowStart = slot.getWindowStartWithSlotOrPortTime();
 			if (windowStart != null) {
 				c.setTime(windowStart);
 				return c;
@@ -133,7 +133,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final SlotVisit visit = (SlotVisit) element;
 			final Calendar c = Calendar.getInstance();
 			final Slot slot = visit.getSlotAllocation().getSlot();
-			final Date windowStart = slot.getWindowStart();
+			final Date windowStart = slot.getWindowStartWithSlotOrPortTime();
 			if (windowStart != null) {
 				c.setTime(windowStart);
 				c.add(Calendar.HOUR, slot.getSlotOrPortDuration());

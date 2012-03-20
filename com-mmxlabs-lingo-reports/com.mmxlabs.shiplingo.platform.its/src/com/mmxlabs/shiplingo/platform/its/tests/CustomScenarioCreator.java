@@ -6,6 +6,7 @@ package com.mmxlabs.shiplingo.platform.its.tests;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -392,10 +393,34 @@ public class CustomScenarioCreator {
 
 		load.setCargoCV(cvValue);
 
-		load.setWindowStart(loadWindowStart);
 		load.setWindowSize(0);
+		
+		final TimeZone loadZone = TimeZone.getTimeZone(
+				loadPort.getTimeZone() == null || loadPort.getTimeZone().isEmpty() ? "UTC" : loadPort.getTimeZone());
+		
+		final TimeZone dischargeZone = TimeZone.getTimeZone(
+				dischargePort.getTimeZone() == null || dischargePort.getTimeZone().isEmpty() ? "UTC" : dischargePort.getTimeZone());
+		
+		final Calendar loadCalendar = Calendar.getInstance(loadZone);
+		loadCalendar.setTime(loadWindowStart);
+		load.setWindowStartTime(loadCalendar.get(Calendar.HOUR_OF_DAY));
+		loadCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		loadCalendar.set(Calendar.MINUTE, 0);
+		loadCalendar.set(Calendar.SECOND, 0);
+		loadCalendar.set(Calendar.MILLISECOND, 0);
+		load.setWindowStart(loadCalendar.getTime());
+		
 		final Date dischargeDate = new Date(loadWindowStart.getTime() + (Timer.ONE_HOUR * travelTime));
-		dis.setWindowStart(dischargeDate);
+		final Calendar dischargeCalendar = Calendar.getInstance(dischargeZone);
+		dischargeCalendar.setTime(dischargeDate);
+		dis.setWindowStartTime(dischargeCalendar.get(Calendar.HOUR_OF_DAY));
+		
+		dischargeCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		dischargeCalendar.set(Calendar.MINUTE, 0);
+		dischargeCalendar.set(Calendar.SECOND, 0);
+		dischargeCalendar.set(Calendar.MILLISECOND, 0);
+		
+		dis.setWindowStart(dischargeCalendar.getTime());
 		dis.setWindowSize(0);
 
 		cargo.setName(cargoID);
@@ -520,6 +545,8 @@ public class CustomScenarioCreator {
 			final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
 
 		final Route canal = PortFactory.eINSTANCE.createRoute();
+		canal.setCanal(true);
+		scenario.getSubModel(PortModel.class).getRoutes().add(canal);
 		canal.setName(canalName);
 		// add distance lines, as for the main distance model:
 		final RouteLine atob = PortFactory.eINSTANCE.createRouteLine();
@@ -534,13 +561,14 @@ public class CustomScenarioCreator {
 
 		canal.getLines().add(atob);
 		canal.getLines().add(btoa);
+		
 
 		// next do canal costs
 		final RouteCost canalCost = PricingFactory.eINSTANCE.createRouteCost();
 		canalCost.setRoute(canal);
 		canalCost.setLadenCost(canalLadenCost); // cost in dollars for a laden vessel
 		canalCost.setBallastCost(canalUnladenCost); // cost in dollars for a ballast vessel
-
+		
 		FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
 
 		VesselClassRouteParameters params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
@@ -550,11 +578,13 @@ public class CustomScenarioCreator {
 		params.setBallastConsumptionRate(canalTransitFuelDays);
 		params.setLadenNBORate(canalNBORateDays);
 		params.setBallastNBORate(canalNBORateDays);
-
 		params.setExtraTransitTime(canalTransitTime);
 
 		for (VesselClass vc : fleetModel.getVesselClasses()) {
 			vc.getRouteParameters().add(EcoreUtil.copy(params));
+			final RouteCost rc2 = EcoreUtil.copy(canalCost);
+			rc2.setVesselClass(vc);
+			scenario.getSubModel(PricingModel.class).getRouteCosts().add(rc2);
 		}
 	}
 
