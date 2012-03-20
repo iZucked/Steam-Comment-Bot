@@ -53,11 +53,9 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformer;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -601,19 +599,9 @@ public class ScenarioTools {
 	public static Schedule evaluate(final MMXRootObject scenario) {
 
 		final LNGTransformer transformer = new LNGTransformer(scenario, new ContractExtensionTestModule());
-		// final LNGScenarioTransformer transformer = new LNGScenarioTransformer(scenario);
-		final LNGScenarioTransformer lst = transformer.getLngScenarioTransformer();
 
 		final ModelEntityMap entities = transformer.getEntities();
 		final OptimisationTransformer ot = transformer.getOptimisationTransformer();
-
-		// TODO: This needs fixing up
-		if (!lst.addPlatformTransformerExtensions()) {
-			// add extensions manually; TODO improve this later.
-			final SimpleContractTransformer sct = new SimpleContractTransformer();
-			lst.addTransformerExtension(sct);
-			lst.addContractTransformer(sct, sct.getContractEClasses());
-		}
 
 		final IOptimisationData data = transformer.getOptimisationData();
 
@@ -628,7 +616,7 @@ public class ScenarioTools {
 		final IAnnotatedSolution startSolution = optimiser.start(context);
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-		// TODO addd trading extension?
+		// TODO add trading extension?
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);
 
 		return schedule;
