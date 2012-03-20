@@ -19,10 +19,12 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.emf.edapt.migration.MigrationException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
@@ -44,14 +46,14 @@ public class OptimisationRepeatabilityTest {
 	}
 
 	@Test
-	public void testScenario() throws IOException, InterruptedException {
+	public void testScenario() throws IOException, InterruptedException, MigrationException, IncompleteScenarioException {
 
 		final URL url = getClass().getResource("/test.scenario");
 
 		testScenario(url, 5);
 	}
 
-	private void testScenario(final URL url, final int numTries) throws IOException, InterruptedException {
+	private void testScenario(final URL url, final int numTries) throws IOException, InterruptedException, MigrationException, IncompleteScenarioException {
 
 		ManifestJointModel jointModel = new ManifestJointModel(URI.createURI(url.toString()));
 		final MMXRootObject originalScenario = jointModel.getRootObject();
@@ -61,11 +63,6 @@ public class OptimisationRepeatabilityTest {
 
 			// TODO: Does EcoreUtil.copy work -- do we need to do it here?
 			final MMXRootObject copy = EcoreUtil.copy(originalScenario);
-
-			final Resource cpyResource = new XMIResourceImpl(resource.getURI());
-			cpyResource.getContents().add(copy);
-			final ResourceSetImpl cpyResourceSet = new ResourceSetImpl();
-			cpyResourceSet.getResources().add(cpyResource);
 
 			scenarioRunners[i] = new ScenarioRunner(copy);
 			scenarioRunners[i].init();
