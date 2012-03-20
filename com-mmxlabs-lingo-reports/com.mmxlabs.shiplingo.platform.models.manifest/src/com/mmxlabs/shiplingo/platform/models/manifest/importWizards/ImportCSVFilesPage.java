@@ -15,10 +15,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -75,7 +77,10 @@ public class ImportCSVFilesPage extends WizardPage {
 
 	@Override
 	public void createControl(Composite arg0) {
-		final Composite top = new Composite(arg0, SWT.NONE);
+		final ScrolledComposite c1 = new ScrolledComposite(arg0, SWT.BORDER | SWT.V_SCROLL);
+				
+		final Composite top = new Composite(c1, SWT.NONE);
+		
 		top.setLayout(new GridLayout(1, false));
 		for (final EClass subModelClass : ManifestJointModel.getSubmodelClasses()) {
 			final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(subModelClass);
@@ -122,7 +127,12 @@ public class ImportCSVFilesPage extends WizardPage {
 			}
 		});
 		
-		setControl(top);
+		c1.setContent(top);
+//		c1.setExpandVertical(true);
+//		c1.setExpandHorizontal(true);
+//		c1.set
+		top.setSize(top.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		setControl(c1);
 	}
 
 	public MMXRootObject doImport(final DefaultImportContext context) {
