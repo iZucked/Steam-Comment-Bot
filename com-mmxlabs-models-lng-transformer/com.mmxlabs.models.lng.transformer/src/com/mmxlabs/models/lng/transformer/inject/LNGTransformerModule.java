@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.inject;
 
+import javax.inject.Singleton;
+
 import com.google.inject.AbstractModule;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -25,12 +27,10 @@ public class LNGTransformerModule extends AbstractModule {
 	protected void configure() {
 		install(new ScheduleBuilderModule());
 
-		final LNGScenarioTransformer lngScenarioTransformer = new LNGScenarioTransformer(scenario);
-		lngScenarioTransformer.addPlatformTransformerExtensions();
+		bind(MMXRootObject.class).toInstance(scenario);
 
-		bind(LNGScenarioTransformer.class).toInstance(lngScenarioTransformer);
+		bind(LNGScenarioTransformer.class).in(Singleton.class);
 
-		bind(ModelEntityMap.class).to(ResourcelessModelEntityMap.class);
+		bind(ModelEntityMap.class).to(ResourcelessModelEntityMap.class).in(Singleton.class);
 	}
-
 }
