@@ -109,6 +109,7 @@ public class MinMaxSpeedTest {
 
 		// assert that NBO is used on the ballast leg as it is cheaper than base fuel
 		for (final FuelQuantity fq : a.getBallastLeg().getFuels()) {
+			System.err.println(fq.getFuel() + ", " + fq.getCost());
 			if (fq.getFuel() == Fuel.NBO) {
 				for (FuelAmount fa : fq.getAmounts()) {
 					if (fa.getUnit() == FuelUnit.M3)
