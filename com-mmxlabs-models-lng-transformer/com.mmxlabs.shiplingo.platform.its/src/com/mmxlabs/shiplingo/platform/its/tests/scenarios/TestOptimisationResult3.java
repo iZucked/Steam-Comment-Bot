@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 public class TestOptimisationResult3 extends AbstractOptimisationResultTester {
 
 	@Test
-	public void testFitnessRepeatability() throws IOException, IncompleteScenarioException, InterruptedException, MigrationException {
+	public void testOptimisationResult() throws IOException, IncompleteScenarioException, InterruptedException, MigrationException {
 
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/TestOptimisationResult3.scenario");
