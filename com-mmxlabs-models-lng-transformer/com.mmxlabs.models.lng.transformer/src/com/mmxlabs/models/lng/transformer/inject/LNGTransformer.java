@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -35,8 +36,17 @@ public class LNGTransformer {
 	private final OptimisationTransformer optimisationTransformer;
 
 	public LNGTransformer(final MMXRootObject scenario) {
+		this(scenario, null);
+	}
+
+	public LNGTransformer(final MMXRootObject scenario, final Module module) {
 		this.scenario = scenario;
-		injector = Guice.createInjector(new LNGTransformerModule(scenario), new DataComponentProviderModule());
+
+		if (module != null) {
+			injector = Guice.createInjector(module, new LNGTransformerModule(scenario), new DataComponentProviderModule());
+		} else {
+			injector = Guice.createInjector(new LNGTransformerModule(scenario), new DataComponentProviderModule());
+		}
 
 		injector.injectMembers(this);
 
