@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
@@ -144,8 +144,8 @@ public class TransformerUtils {
 			final TreeIterator<EObject> iterator = subModel.eAllContents();
 			while (iterator.hasNext()) {
 				final EObject o = iterator.next();
-				if (o instanceof VesselAvailablility) {
-					final VesselAvailablility pat = (VesselAvailablility) o;
+				if (o instanceof VesselAvailability) {
+					final VesselAvailability pat = (VesselAvailability) o;
 					updateMinMax(result, pat.getStartAfter());
 					updateMinMax(result, pat.getStartBy());
 					updateMinMax(result, pat.getEndAfter());
