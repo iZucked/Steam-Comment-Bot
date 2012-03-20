@@ -109,4 +109,13 @@
           subModelClass="com.mmxlabs.models.lng.optimiser.OptimiserModel">
     </jointModelEditor>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.optimiser.OptimiserSettings"
+          factory="com.mmxlabs.models.lng.optimiser.ui.displaycomposites.OptimiserSettingsCompositeFactory"
+          id="com.mmxlabs.models.lng.optimiser.editor.settingsCompositeFactory"
+          inheritable="false">
+    </displayCompositeFactory>
+ </extension>
 </plugin>

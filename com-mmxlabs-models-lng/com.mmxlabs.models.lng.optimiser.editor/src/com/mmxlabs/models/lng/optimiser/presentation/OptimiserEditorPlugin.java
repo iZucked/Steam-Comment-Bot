@@ -6,12 +6,17 @@
  */
 package com.mmxlabs.models.lng.optimiser.presentation;
 
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
+import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 
 /**
  * This is the central singleton for the Optimiser editor plugin.
@@ -77,9 +82,16 @@ public final class OptimiserEditorPlugin extends EMFPlugin {
 	 * The actual implementation of the Eclipse <b>Plugin</b>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public static class Implementation extends EclipseUIPlugin {
+		private ServiceTracker<IConstraintCheckerRegistry, IConstraintCheckerRegistry>
+			constraintCheckerRegistryTracker;
+		
+		private ServiceTracker<IFitnessFunctionRegistry, IFitnessFunctionRegistry>
+			fitnessFunctionRegistryTracker;
+	
+		
 		/**
 		 * Creates an instance.
 		 * <!-- begin-user-doc -->
@@ -93,6 +105,34 @@ public final class OptimiserEditorPlugin extends EMFPlugin {
 			//
 			plugin = this;
 		}
+
+		public IConstraintCheckerRegistry getConstraintCheckerRegistry() {
+			return constraintCheckerRegistryTracker.getService();
+		}
+		
+		public IFitnessFunctionRegistry getFitnessFunctionRegistry() {
+			return fitnessFunctionRegistryTracker.getService();
+		}
+
+		@Override
+		public void start(BundleContext context) throws Exception {
+			super.start(context);
+			
+			constraintCheckerRegistryTracker = new ServiceTracker<IConstraintCheckerRegistry, IConstraintCheckerRegistry>(context, IConstraintCheckerRegistry.class, null);
+			fitnessFunctionRegistryTracker = new ServiceTracker<IFitnessFunctionRegistry, IFitnessFunctionRegistry>(context, IFitnessFunctionRegistry.class, null);
+		
+			constraintCheckerRegistryTracker.open();
+			fitnessFunctionRegistryTracker.open();
+		}
+
+		@Override
+		public void stop(BundleContext context) throws Exception {
+			constraintCheckerRegistryTracker.close();
+			fitnessFunctionRegistryTracker.close();
+			super.stop(context);
+		}
+		
+		
 	}
 
 }
