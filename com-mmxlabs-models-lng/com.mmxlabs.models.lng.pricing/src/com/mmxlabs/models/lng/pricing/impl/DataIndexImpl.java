@@ -155,7 +155,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	
 	private List<IndexPoint<Value>> getSortedPoints() {
 		if (sortedPoints == null) {
-			sortedPoints = new ArrayList<IndexPoint<Value>>(points);
+			sortedPoints = new ArrayList<IndexPoint<Value>>(getPoints());
 			Collections.sort(sortedPoints, new Comparator<IndexPoint<Value>>() {
 				@Override
 				public int compare(IndexPoint<Value> arg0,
