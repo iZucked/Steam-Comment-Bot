@@ -62,7 +62,7 @@ public class ScenarioRunner {
 	public void init() throws IncompleteScenarioException {
 
 
-		final LNGTransformer transformer = new LNGTransformer(scenario);
+		final LNGTransformer transformer = new LNGTransformer(scenario, new ContractExtensionTestModule());
 
 		entities = transformer.getEntities();
 		LNGScenarioTransformer lst =  transformer.getLngScenarioTransformer();
