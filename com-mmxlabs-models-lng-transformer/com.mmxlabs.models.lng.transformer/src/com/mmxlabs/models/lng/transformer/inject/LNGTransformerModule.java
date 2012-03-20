@@ -5,9 +5,13 @@
 package com.mmxlabs.models.lng.transformer.inject;
 
 import com.google.inject.AbstractModule;
+import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
+import com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -26,7 +30,12 @@ public class LNGTransformerModule extends AbstractModule {
 		install(new ScheduleBuilderModule());
 
 		final LNGScenarioTransformer lngScenarioTransformer = new LNGScenarioTransformer(scenario);
-		lngScenarioTransformer.addPlatformTransformerExtensions();
+		if (!lngScenarioTransformer.addPlatformTransformerExtensions()) {
+			IContractTransformer sct = new SimpleContractTransformer();
+			lngScenarioTransformer.addTransformerExtension(sct);
+			lngScenarioTransformer.addContractTransformer(sct, CollectionsUtil.makeArrayList(CommercialPackage.eINSTANCE.getFixedPriceContract(),
+					CommercialPackage.eINSTANCE.getIndexPriceContract()));
+		}
 
 		bind(LNGScenarioTransformer.class).toInstance(lngScenarioTransformer);
 

@@ -152,7 +152,7 @@ public class TransformerUtils {
 					updateMinMax(result, pat.getEndBy());
 				} else if (o instanceof Slot) {
 					final Slot slot = (Slot) o;
-					updateMinMax(result, slot.getWindowStart());
+					updateMinMax(result, slot.getWindowStartWithSlotOrPortTime());
 					updateMinMax(result, slot.getWindowEndWithSlotOrPortTime());
 				} else if (o instanceof VesselEvent) {
 					updateMinMax(result, ((VesselEvent) o).getStartAfter());

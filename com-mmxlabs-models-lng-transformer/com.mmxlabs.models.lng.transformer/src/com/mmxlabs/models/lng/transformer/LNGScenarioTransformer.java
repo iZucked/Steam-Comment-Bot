@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -385,49 +386,35 @@ public class LNGScenarioTransformer {
 		latestTime = null;
 		final FleetModel fleet = rootObject.getSubModel(FleetModel.class);
 		final CargoModel cargo = rootObject.getSubModel(CargoModel.class);
+		
+		final HashSet<Date> allDates = new HashSet<Date>();
+		
 		for (final VesselEvent event : fleet.getVesselEvents()) {
-			earliestTime = minDate(event.getStartBy(), earliestTime);
-			earliestTime = minDate(event.getStartAfter(), earliestTime);
-			latestTime = maxDate(event.getStartBy(), latestTime);
-			latestTime = maxDate(event.getStartAfter(), latestTime);
+			allDates.add(event.getStartBy());
+			allDates.add(event.getStartAfter());
 		}
 		for (final Vessel vessel : fleet.getVessels()) {
-			earliestTime = minDate(vessel.getAvailability().getStartBy(), earliestTime);
-			earliestTime = minDate(vessel.getAvailability().getStartAfter(), earliestTime);
-			earliestTime = minDate(vessel.getAvailability().getEndBy(), earliestTime);
-			earliestTime = minDate(vessel.getAvailability().getEndAfter(), earliestTime);
-			
-			latestTime = maxDate(vessel.getAvailability().getStartBy(), latestTime);
-			latestTime = maxDate(vessel.getAvailability().getStartAfter(), latestTime);
-			latestTime = maxDate(vessel.getAvailability().getEndBy(), latestTime);
-			latestTime = maxDate(vessel.getAvailability().getEndAfter(), latestTime);
+			if (vessel.getAvailability().isSetStartBy())
+				allDates.add(vessel.getAvailability().getStartBy());
+			if (vessel.getAvailability().isSetStartAfter())
+				allDates.add(vessel.getAvailability().getStartAfter());
+
+			if (vessel.getAvailability().isSetEndBy())
+				allDates.add(vessel.getAvailability().getEndBy());
+			if (vessel.getAvailability().isSetEndAfter())
+				allDates.add(vessel.getAvailability().getEndAfter());
 		}
 		for (final Slot s : cargo.getLoadSlots()) {
-			earliestTime = minDate(s.getWindowStartWithSlotOrPortTime(), earliestTime);
-			earliestTime = minDate(s.getWindowEndWithSlotOrPortTime(), earliestTime);
-			latestTime = maxDate(s.getWindowStartWithSlotOrPortTime(), latestTime);
-			latestTime = maxDate(s.getWindowEndWithSlotOrPortTime(), latestTime);
+			allDates.add(s.getWindowStartWithSlotOrPortTime());
+			allDates.add(s.getWindowEndWithSlotOrPortTime());
 		}
 		for (final Slot s : cargo.getDischargeSlots()) {
-			earliestTime = minDate(s.getWindowStartWithSlotOrPortTime(), earliestTime);
-			earliestTime = minDate(s.getWindowEndWithSlotOrPortTime(), earliestTime);
-			latestTime = maxDate(s.getWindowStartWithSlotOrPortTime(), latestTime);
-			latestTime = maxDate(s.getWindowEndWithSlotOrPortTime(), latestTime);
+			allDates.add(s.getWindowStartWithSlotOrPortTime());
+			allDates.add(s.getWindowEndWithSlotOrPortTime());
 		}
-	}
-	
-	private Date minDate(final Date a, final Date b) {
-		if (a == null) return b;
-		if (b == null) return a;
-		if (a.before(b)) return a;
-		return b;
-	}
-	
-	private Date maxDate(final Date a, final Date b) {
-		if (a == null) return b;
-		if (b == null) return a;
-		if (b.before(a)) return a;
-		return b;
+		
+		earliestTime = Collections.min(allDates);
+		latestTime = Collections.max(allDates);
 	}
 
 	private void buildVesselEvents(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<VesselClass, IVesselClass> classes,
@@ -455,7 +442,6 @@ public class LNGScenarioTransformer {
 				final long maxHeel = heelOptions.isSetVolumeAvailable() ? (heelOptions.getVolumeAvailable() * Calculator.ScaleFactor) : Long.MAX_VALUE;
 				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, maxHeel, Calculator.scaleToInt(heelOptions.getCvValue()),
 						Calculator.scaleToInt(heelOptions.getPricePerMMBTU()));
-
 			} else if (event instanceof DryDockEvent) {
 				builderSlot = builder.createDrydockEvent(event.getName(), window, port, durationHours);
 			} else if (event instanceof MaintenanceEvent) {
@@ -494,14 +480,15 @@ public class LNGScenarioTransformer {
 				continue;
 			}
 
-			if (eCargo.getLoadSlot().getWindowStart().after(latestDate)) {
+			if (eCargo.getLoadSlot().getWindowStartWithSlotOrPortTime().after(latestDate)) {
 				continue;
 			}
 
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
-			final int loadStart = convertTime(earliestTime, loadSlot.getWindowStart());//, loadSlot.getPort());
-
-			final ITimeWindow loadWindow = builder.createTimeWindow(loadStart, loadStart + loadSlot.getSlotOrPortWindowSize());
+			
+			final ITimeWindow loadWindow = builder.createTimeWindow(
+					convertTime(earliestTime, loadSlot.getWindowStartWithSlotOrPortTime()), 
+					convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTime()));
 
 			final ILoadPriceCalculator2 loadPriceCalculator;
 			if (loadSlot.isSetFixedPrice()) {
@@ -524,8 +511,10 @@ public class LNGScenarioTransformer {
 					loadSlot.isSetArriveCold(), loadSlot.isArriveCold(), false);
 
 			final Slot dischargeSlot = eCargo.getDischargeSlot();
-			final int dischargeStart = convertTime(earliestTime, dischargeSlot.getWindowStart());//, dischargeSlot.getPort());
-			final ITimeWindow dischargeWindow = builder.createTimeWindow(dischargeStart, dischargeStart + dischargeSlot.getWindowSize());
+			final ITimeWindow dischargeWindow = builder.createTimeWindow(
+					convertTime(earliestTime, dischargeSlot.getWindowStartWithSlotOrPortTime()), 
+					convertTime(earliestTime, dischargeSlot.getWindowEndWithSlotOrPortTime()));
+			
 			final IShippingPriceCalculator dischargePriceCalculator;
 
 			if (dischargeSlot.isSetFixedPrice()) {
@@ -559,10 +548,10 @@ public class LNGScenarioTransformer {
 			final ICargo cargo = builder.createCargo(eCargo.getName(), load, discharge, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
 
 			final Set<AVessel> allowedVessels = SetUtils.getVessels(eCargo.getAllowedVessels());
-			if (allowedVessels.isEmpty()) {
+			if (!allowedVessels.isEmpty()) {
 				Set<IVessel> vesselsForCargo = new HashSet<IVessel>();
 				for (final AVessel v : allowedVessels) {
-					vesselsForCargo .add(vesselAssociation.lookup((Vessel) v));
+					vesselsForCargo.add(vesselAssociation.lookup((Vessel) v));
 				}
 				builder.setCargoVesselRestriction(cargo, vesselsForCargo);
 			}
@@ -627,7 +616,7 @@ public class LNGScenarioTransformer {
 					builder.setVesselClassRouteTimeAndFuel(routeParameters.getRoute().getName(), 
 							vesselAssociation.lookup(evc),
 							routeParameters.getExtraTransitTime(),
-							Calculator.scale(routeParameters.getLadenConsumptionRate()));
+							Calculator.scale(routeParameters.getLadenConsumptionRate()) / 24);
 					//TODO handle rates properly in optimiser
 				}
 			}
@@ -637,11 +626,10 @@ public class LNGScenarioTransformer {
 			for (final RouteCost routeCost : pm.getRouteCosts()) {
 				final IVesselClass vesselClass = vesselAssociation.lookup(routeCost.getVesselClass());
 
-				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Laden, routeCost.getLadenCost());
-				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Ballast, routeCost.getBallastCost());
+				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Laden, (int) Calculator.scale(routeCost.getLadenCost()));
+				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Ballast, (int) Calculator.scale(routeCost.getBallastCost()));
 			}
 		}
-
 	}
 
 	/**
