@@ -37,12 +37,6 @@
                   Some references should not be null.
                </description>
                <target
-                     class="Port">
-               </target>
-               <target
-                     class="DistanceLine">
-               </target>
-               <target
                      class="Vessel">
                </target>
                <target
