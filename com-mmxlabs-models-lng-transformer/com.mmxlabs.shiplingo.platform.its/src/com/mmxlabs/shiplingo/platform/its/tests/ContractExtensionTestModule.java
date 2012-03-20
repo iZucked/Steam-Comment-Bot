@@ -16,7 +16,7 @@ public class ContractExtensionTestModule extends AbstractModule {
 		final SimpleContractTransformer sct = new SimpleContractTransformer();
 
 		final ContractTransformer transformer = new ContractTransformerWrapper(sct, sct.getContractEClasses());
-		bind(ContractTransformer.class).toInstance(transformer);
+//		bind(ContractTransformer.class).toInstance(transformer);
 		bind(TypeLiterals.iterable(ContractTransformer.class)).toInstance(Collections.singleton(transformer));
 //		bind(TypeLiterals.iterable(ContractTransformer.class)).to(service(transformer)());
 	}
