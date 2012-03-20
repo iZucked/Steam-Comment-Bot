@@ -271,6 +271,13 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	public void setWindowStart(Date newWindowStart) {
 		Date oldWindowStart = windowStart;
 		windowStart = newWindowStart;
+		
+//		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
+		
+//		calendar.setTime(windowStart);
+		
+//		if (calendar.get(Calendar.HOUR_OF_DAY) != 0) throw new RuntimeException("Hour of day is " + calendar.get(Calendar.HOUR_OF_DAY));
+		
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_START, oldWindowStart, windowStart));
 	}
@@ -639,9 +646,10 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * @generated NOT
 	 */
 	public Date getWindowStartWithSlotOrPortTime() {
-		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(port.getTimeZone()));
+		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
 		final int startTime = (Integer) eGetWithDefault(CargoPackage.eINSTANCE.getSlot_WindowStartTime());
 		calendar.setTime(getWindowStart());
+//		if (calendar.get(Calendar.HOUR_OF_DAY) != 0) System.err.println("This should never happen : " + calendar.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.HOUR_OF_DAY, startTime);
 		return calendar.getTime();
 	}
@@ -662,7 +670,7 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 */
 	public String getTimeZone(EAttribute attribute) {
 		final Port p = getPort();
-		if (p == null)
+		if (p == null || p.getTimeZone() == null)
 			return "UTC";
 		return p.getTimeZone();
 	}
