@@ -24,7 +24,7 @@ public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 	 * @throws MigrationException 
 	 */
 	@Test
-	public void testFitnessRepeatability() throws IOException, InterruptedException, IncompleteScenarioException, MigrationException {
+	public void testOptimisationResult() throws IOException, InterruptedException, IncompleteScenarioException, MigrationException {
 
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/TestOptimisationResult2.scenario");
