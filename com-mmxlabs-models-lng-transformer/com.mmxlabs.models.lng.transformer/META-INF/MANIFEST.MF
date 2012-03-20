@@ -33,7 +33,8 @@ Require-Bundle: com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-ver
 Export-Package: com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.contracts,
  com.mmxlabs.models.lng.transformer.export,
- com.mmxlabs.models.lng.transformer.inject
+ com.mmxlabs.models.lng.transformer.inject,
+ com.mmxlabs.models.lng.transformer.inject.extensions
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.models.lng.transformer.Activator
 Import-Package: javax.inject;version="1.0.0"
