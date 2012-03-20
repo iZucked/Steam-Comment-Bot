@@ -1,29 +1,33 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.fleet.presentation.composites;
+
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
-
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+
 /**
- * A component helper for VesselAvailablility instances
+ * A component helper for VesselAvailability instances
  *
  * @generated
  */
-public class VesselAvailablilityComponentHelper implements IComponentHelper {
+public class VesselAvailabilityComponentHelper implements IComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -31,7 +35,7 @@ public class VesselAvailablilityComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public VesselAvailablilityComponentHelper() {
+	public VesselAvailabilityComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -40,7 +44,7 @@ public class VesselAvailablilityComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public VesselAvailablilityComponentHelper(IAdapterManager adapterManager) {
+	public VesselAvailabilityComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
 			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.MMX_OBJECT);
 			if (helper != null) superClassesHelpers.add(helper);
@@ -48,13 +52,13 @@ public class VesselAvailablilityComponentHelper implements IComponentHelper {
 	}
 	
 	/**
-	 * add editors to a composite, using VesselAvailablility as the supertype
+	 * add editors to a composite, using VesselAvailability as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, FleetPackage.Literals.VESSEL_AVAILABLILITY);	
+		addEditorsToComposite(detailComposite, FleetPackage.Literals.VESSEL_AVAILABILITY);	
 	}
 	
 	/**
@@ -73,52 +77,51 @@ public class VesselAvailablilityComponentHelper implements IComponentHelper {
 		add_endByEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the startAt feature on VesselAvailablility
+	 * Create the editor for the startAt feature on VesselAvailability
 	 *
 	 * @generated
 	 */
 	protected void add_startAtEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__START_AT));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__START_AT));
 	}
 	/**
-	 * Create the editor for the startAfter feature on VesselAvailablility
+	 * Create the editor for the startAfter feature on VesselAvailability
 	 *
 	 * @generated
 	 */
 	protected void add_startAfterEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__START_AFTER));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__START_AFTER));
 	}
 	/**
-	 * Create the editor for the startBy feature on VesselAvailablility
+	 * Create the editor for the startBy feature on VesselAvailability
 	 *
 	 * @generated
 	 */
 	protected void add_startByEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__START_BY));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__START_BY));
 	}
-
 	/**
-	 * Create the editor for the endAt feature on VesselAvailablility
+	 * Create the editor for the endAt feature on VesselAvailability
 	 *
 	 * @generated
 	 */
 	protected void add_endAtEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__END_AT));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__END_AT));
 	}
 	/**
-	 * Create the editor for the endAfter feature on VesselAvailablility
+	 * Create the editor for the endAfter feature on VesselAvailability
 	 *
 	 * @generated
 	 */
 	protected void add_endAfterEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__END_AFTER));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__END_AFTER));
 	}
 	/**
-	 * Create the editor for the endBy feature on VesselAvailablility
+	 * Create the editor for the endBy feature on VesselAvailability
 	 *
 	 * @generated
 	 */
 	protected void add_endByEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABLILITY__END_BY));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__END_BY));
 	}
 }

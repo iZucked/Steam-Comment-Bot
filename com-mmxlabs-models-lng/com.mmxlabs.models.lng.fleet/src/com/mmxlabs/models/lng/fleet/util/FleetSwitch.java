@@ -169,10 +169,10 @@ public class FleetSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case FleetPackage.VESSEL_AVAILABLILITY: {
-				VesselAvailablility vesselAvailablility = (VesselAvailablility)theEObject;
-				T result = caseVesselAvailablility(vesselAvailablility);
-				if (result == null) result = caseMMXObject(vesselAvailablility);
+			case FleetPackage.VESSEL_AVAILABILITY: {
+				VesselAvailability vesselAvailability = (VesselAvailability)theEObject;
+				T result = caseVesselAvailability(vesselAvailability);
+				if (result == null) result = caseMMXObject(vesselAvailability);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -341,17 +341,17 @@ public class FleetSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Vessel Availablility</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Availability</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Vessel Availablility</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Availability</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseVesselAvailablility(VesselAvailablility object) {
+	public T caseVesselAvailability(VesselAvailability object) {
 		return null;
 	}
 

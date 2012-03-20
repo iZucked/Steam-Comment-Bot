@@ -14,7 +14,7 @@ import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
@@ -107,7 +107,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass vesselAvailablilityEClass = null;
+	private EClass vesselAvailabilityEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -658,8 +658,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getVesselAvailablility() {
-		return vesselAvailablilityEClass;
+	public EClass getVesselAvailability() {
+		return vesselAvailabilityEClass;
 	}
 
 	/**
@@ -667,8 +667,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getVesselAvailablility_StartAt() {
-		return (EReference)vesselAvailablilityEClass.getEStructuralFeatures().get(0);
+	public EReference getVesselAvailability_StartAt() {
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -676,8 +676,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselAvailablility_StartAfter() {
-		return (EAttribute)vesselAvailablilityEClass.getEStructuralFeatures().get(1);
+	public EAttribute getVesselAvailability_StartAfter() {
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -685,8 +685,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselAvailablility_StartBy() {
-		return (EAttribute)vesselAvailablilityEClass.getEStructuralFeatures().get(2);
+	public EAttribute getVesselAvailability_StartBy() {
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -694,8 +694,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getVesselAvailablility_EndAt() {
-		return (EReference)vesselAvailablilityEClass.getEStructuralFeatures().get(3);
+	public EReference getVesselAvailability_EndAt() {
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -703,8 +703,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselAvailablility_EndAfter() {
-		return (EAttribute)vesselAvailablilityEClass.getEStructuralFeatures().get(4);
+	public EAttribute getVesselAvailability_EndAfter() {
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -712,8 +712,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselAvailablility_EndBy() {
-		return (EAttribute)vesselAvailablilityEClass.getEStructuralFeatures().get(5);
+	public EAttribute getVesselAvailability_EndBy() {
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -903,13 +903,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE);
 		createEReference(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION);
 
-		vesselAvailablilityEClass = createEClass(VESSEL_AVAILABLILITY);
-		createEReference(vesselAvailablilityEClass, VESSEL_AVAILABLILITY__START_AT);
-		createEAttribute(vesselAvailablilityEClass, VESSEL_AVAILABLILITY__START_AFTER);
-		createEAttribute(vesselAvailablilityEClass, VESSEL_AVAILABLILITY__START_BY);
-		createEReference(vesselAvailablilityEClass, VESSEL_AVAILABLILITY__END_AT);
-		createEAttribute(vesselAvailablilityEClass, VESSEL_AVAILABLILITY__END_AFTER);
-		createEAttribute(vesselAvailablilityEClass, VESSEL_AVAILABLILITY__END_BY);
+		vesselAvailabilityEClass = createEClass(VESSEL_AVAILABILITY);
+		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__START_AT);
+		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__START_AFTER);
+		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__START_BY);
+		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__END_AT);
+		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__END_AFTER);
+		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__END_BY);
 
 		fuelConsumptionEClass = createEClass(FUEL_CONSUMPTION);
 		createEAttribute(fuelConsumptionEClass, FUEL_CONSUMPTION__SPEED);
@@ -969,7 +969,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		charterOutEventEClass.getESuperTypes().add(this.getVesselEvent());
 		heelOptionsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		vesselStateAttributesEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		vesselAvailablilityEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		vesselAvailabilityEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		maintenanceEventEClass.getESuperTypes().add(this.getVesselEvent());
 		vesselClassRouteParametersEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
@@ -978,7 +978,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getVessel_VesselClass(), this.getVesselClass(), null, "vesselClass", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_InaccessiblePorts(), theTypesPackage.getAPortSet(), null, "inaccessiblePorts", null, 0, -1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_StartHeel(), this.getHeelOptions(), null, "startHeel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVessel_Availability(), this.getVesselAvailablility(), null, "availability", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVessel_Availability(), this.getVesselAvailability(), null, "availability", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_TimeCharterRate(), ecorePackage.getEInt(), "timeCharterRate", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselClassEClass, VesselClass.class, "VesselClass", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1039,13 +1039,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVesselStateAttributes_InPortBaseRate(), ecorePackage.getEInt(), "inPortBaseRate", null, 1, 1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselStateAttributes_FuelConsumption(), this.getFuelConsumption(), null, "fuelConsumption", null, 0, -1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(vesselAvailablilityEClass, VesselAvailablility.class, "VesselAvailablility", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getVesselAvailablility_StartAt(), theTypesPackage.getAPortSet(), null, "startAt", null, 0, -1, VesselAvailablility.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselAvailablility_StartAfter(), ecorePackage.getEDate(), "startAfter", null, 1, 1, VesselAvailablility.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselAvailablility_StartBy(), ecorePackage.getEDate(), "startBy", null, 1, 1, VesselAvailablility.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselAvailablility_EndAt(), theTypesPackage.getAPortSet(), null, "endAt", null, 0, -1, VesselAvailablility.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselAvailablility_EndAfter(), ecorePackage.getEDate(), "endAfter", null, 1, 1, VesselAvailablility.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselAvailablility_EndBy(), ecorePackage.getEDate(), "endBy", null, 1, 1, VesselAvailablility.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(vesselAvailabilityEClass, VesselAvailability.class, "VesselAvailability", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVesselAvailability_StartAt(), theTypesPackage.getAPortSet(), null, "startAt", null, 0, -1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselAvailability_StartAfter(), ecorePackage.getEDate(), "startAfter", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselAvailability_StartBy(), ecorePackage.getEDate(), "startBy", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselAvailability_EndAt(), theTypesPackage.getAPortSet(), null, "endAt", null, 0, -1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselAvailability_EndAfter(), ecorePackage.getEDate(), "endAfter", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselAvailability_EndBy(), ecorePackage.getEDate(), "endBy", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fuelConsumptionEClass, FuelConsumption.class, "FuelConsumption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFuelConsumption_Speed(), ecorePackage.getEDouble(), "speed", null, 1, 1, FuelConsumption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -117,8 +117,8 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createVesselStateAttributesAdapter();
 			}
 			@Override
-			public Adapter caseVesselAvailablility(VesselAvailablility object) {
-				return createVesselAvailablilityAdapter();
+			public Adapter caseVesselAvailability(VesselAvailability object) {
+				return createVesselAvailabilityAdapter();
 			}
 			@Override
 			public Adapter caseFuelConsumption(FuelConsumption object) {
@@ -315,16 +315,16 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility <em>Vessel Availablility</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.VesselAvailability <em>Vessel Availability</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability
 	 * @generated
 	 */
-	public Adapter createVesselAvailablilityAdapter() {
+	public Adapter createVesselAvailabilityAdapter() {
 		return null;
 	}
 

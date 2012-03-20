@@ -48,19 +48,19 @@ public class VesselViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Time Charter", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_TimeCharterRate(), jointModelEditor.getEditingDomain()));
 		
 		addTypicalColumn("Start Port", 
-				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()),
+				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselAvailability_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()),
 				FleetPackage.eINSTANCE.getVessel_Availability());
 		
 		addTypicalColumn("Start Before", 
-				new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_StartBy(), jointModelEditor.getEditingDomain()),
+				new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailability_StartBy(), jointModelEditor.getEditingDomain()),
 				FleetPackage.eINSTANCE.getVessel_Availability());
 		
 		addTypicalColumn("End Port", 
-				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_EndAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()),
+				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselAvailability_EndAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()),
 				FleetPackage.eINSTANCE.getVessel_Availability());
 		
 		addTypicalColumn("End After", 
-				new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailablility_EndAfter(), jointModelEditor.getEditingDomain()),
+				new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailability_EndAfter(), jointModelEditor.getEditingDomain()),
 				FleetPackage.eINSTANCE.getVessel_Availability());
 		
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));

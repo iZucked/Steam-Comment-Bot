@@ -253,7 +253,7 @@ public class VesselItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(FleetPackage.Literals.VESSEL__AVAILABILITY,
-				 FleetFactory.eINSTANCE.createVesselAvailablility()));
+				 FleetFactory.eINSTANCE.createVesselAvailability()));
 	}
 
 	/**

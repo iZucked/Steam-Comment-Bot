@@ -11,7 +11,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
         eType="#//HeelOptions" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="availability" lowerBound="1"
-        eType="#//VesselAvailablility" containment="true"/>
+        eType="#//VesselAvailability" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeCharterRate" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
   </eClassifiers>
@@ -173,7 +173,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="fuelConsumption" upperBound="-1"
         eType="#//FuelConsumption" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselAvailablility" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+  <eClassifiers xsi:type="ecore:EClass" name="VesselAvailability" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="startAt" upperBound="-1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startAfter" lowerBound="1"

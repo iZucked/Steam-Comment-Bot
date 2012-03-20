@@ -96,13 +96,13 @@ public interface FleetFactory extends EFactory {
 	VesselStateAttributes createVesselStateAttributes();
 
 	/**
-	 * Returns a new object of class '<em>Vessel Availablility</em>'.
+	 * Returns a new object of class '<em>Vessel Availability</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Vessel Availablility</em>'.
+	 * @return a new object of class '<em>Vessel Availability</em>'.
 	 * @generated
 	 */
-	VesselAvailablility createVesselAvailablility();
+	VesselAvailability createVesselAvailability();
 
 	/**
 	 * Returns a new object of class '<em>Fuel Consumption</em>'.

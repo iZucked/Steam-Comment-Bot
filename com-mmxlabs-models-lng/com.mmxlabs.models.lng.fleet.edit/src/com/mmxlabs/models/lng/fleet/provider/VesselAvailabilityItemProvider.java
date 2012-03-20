@@ -1,12 +1,14 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.fleet.provider;
 
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
@@ -30,12 +32,12 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.fleet.VesselAvailablility} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.fleet.VesselAvailability} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class VesselAvailablilityItemProvider
+public class VesselAvailabilityItemProvider
 	extends MMXObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -49,7 +51,7 @@ public class VesselAvailablilityItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselAvailablilityItemProvider(AdapterFactory adapterFactory) {
+	public VesselAvailabilityItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -85,9 +87,9 @@ public class VesselAvailablilityItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselAvailablility_startAt_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailablility_startAt_feature", "_UI_VesselAvailablility_type"),
-				 FleetPackage.Literals.VESSEL_AVAILABLILITY__START_AT,
+				 getString("_UI_VesselAvailability_startAt_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_startAt_feature", "_UI_VesselAvailability_type"),
+				 FleetPackage.Literals.VESSEL_AVAILABILITY__START_AT,
 				 true,
 				 false,
 				 true,
@@ -107,9 +109,9 @@ public class VesselAvailablilityItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselAvailablility_startAfter_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailablility_startAfter_feature", "_UI_VesselAvailablility_type"),
-				 FleetPackage.Literals.VESSEL_AVAILABLILITY__START_AFTER,
+				 getString("_UI_VesselAvailability_startAfter_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_startAfter_feature", "_UI_VesselAvailability_type"),
+				 FleetPackage.Literals.VESSEL_AVAILABILITY__START_AFTER,
 				 true,
 				 false,
 				 false,
@@ -129,9 +131,9 @@ public class VesselAvailablilityItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselAvailablility_startBy_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailablility_startBy_feature", "_UI_VesselAvailablility_type"),
-				 FleetPackage.Literals.VESSEL_AVAILABLILITY__START_BY,
+				 getString("_UI_VesselAvailability_startBy_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_startBy_feature", "_UI_VesselAvailability_type"),
+				 FleetPackage.Literals.VESSEL_AVAILABILITY__START_BY,
 				 true,
 				 false,
 				 false,
@@ -151,9 +153,9 @@ public class VesselAvailablilityItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselAvailablility_endAt_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailablility_endAt_feature", "_UI_VesselAvailablility_type"),
-				 FleetPackage.Literals.VESSEL_AVAILABLILITY__END_AT,
+				 getString("_UI_VesselAvailability_endAt_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_endAt_feature", "_UI_VesselAvailability_type"),
+				 FleetPackage.Literals.VESSEL_AVAILABILITY__END_AT,
 				 true,
 				 false,
 				 true,
@@ -173,9 +175,9 @@ public class VesselAvailablilityItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselAvailablility_endAfter_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailablility_endAfter_feature", "_UI_VesselAvailablility_type"),
-				 FleetPackage.Literals.VESSEL_AVAILABLILITY__END_AFTER,
+				 getString("_UI_VesselAvailability_endAfter_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_endAfter_feature", "_UI_VesselAvailability_type"),
+				 FleetPackage.Literals.VESSEL_AVAILABILITY__END_AFTER,
 				 true,
 				 false,
 				 false,
@@ -195,9 +197,9 @@ public class VesselAvailablilityItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselAvailablility_endBy_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailablility_endBy_feature", "_UI_VesselAvailablility_type"),
-				 FleetPackage.Literals.VESSEL_AVAILABLILITY__END_BY,
+				 getString("_UI_VesselAvailability_endBy_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_endBy_feature", "_UI_VesselAvailability_type"),
+				 FleetPackage.Literals.VESSEL_AVAILABILITY__END_BY,
 				 true,
 				 false,
 				 false,
@@ -207,14 +209,14 @@ public class VesselAvailablilityItemProvider
 	}
 
 	/**
-	 * This returns VesselAvailablility.gif.
+	 * This returns VesselAvailability.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/VesselAvailablility"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VesselAvailability"));
 	}
 
 	/**
@@ -225,11 +227,11 @@ public class VesselAvailablilityItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((VesselAvailablility)object).getStartAfter();
+		Date labelValue = ((VesselAvailability)object).getStartAfter();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_VesselAvailablility_type") :
-			getString("_UI_VesselAvailablility_type") + " " + label;
+			getString("_UI_VesselAvailability_type") :
+			getString("_UI_VesselAvailability_type") + " " + label;
 	}
 
 	/**
@@ -243,11 +245,11 @@ public class VesselAvailablilityItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(VesselAvailablility.class)) {
-			case FleetPackage.VESSEL_AVAILABLILITY__START_AFTER:
-			case FleetPackage.VESSEL_AVAILABLILITY__START_BY:
-			case FleetPackage.VESSEL_AVAILABLILITY__END_AFTER:
-			case FleetPackage.VESSEL_AVAILABLILITY__END_BY:
+		switch (notification.getFeatureID(VesselAvailability.class)) {
+			case FleetPackage.VESSEL_AVAILABILITY__START_AFTER:
+			case FleetPackage.VESSEL_AVAILABILITY__START_BY:
+			case FleetPackage.VESSEL_AVAILABILITY__END_AFTER:
+			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

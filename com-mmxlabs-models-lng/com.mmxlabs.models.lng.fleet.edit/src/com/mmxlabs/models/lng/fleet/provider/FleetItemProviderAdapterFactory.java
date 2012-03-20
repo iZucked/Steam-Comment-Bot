@@ -258,26 +258,26 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.VesselAvailablility} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.VesselAvailability} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected VesselAvailablilityItemProvider vesselAvailablilityItemProvider;
+	protected VesselAvailabilityItemProvider vesselAvailabilityItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.VesselAvailablility}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.VesselAvailability}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createVesselAvailablilityAdapter() {
-		if (vesselAvailablilityItemProvider == null) {
-			vesselAvailablilityItemProvider = new VesselAvailablilityItemProvider(this);
+	public Adapter createVesselAvailabilityAdapter() {
+		if (vesselAvailabilityItemProvider == null) {
+			vesselAvailabilityItemProvider = new VesselAvailabilityItemProvider(this);
 		}
 
-		return vesselAvailablilityItemProvider;
+		return vesselAvailabilityItemProvider;
 	}
 
 	/**
@@ -456,7 +456,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (charterOutEventItemProvider != null) charterOutEventItemProvider.dispose();
 		if (heelOptionsItemProvider != null) heelOptionsItemProvider.dispose();
 		if (vesselStateAttributesItemProvider != null) vesselStateAttributesItemProvider.dispose();
-		if (vesselAvailablilityItemProvider != null) vesselAvailablilityItemProvider.dispose();
+		if (vesselAvailabilityItemProvider != null) vesselAvailabilityItemProvider.dispose();
 		if (fuelConsumptionItemProvider != null) fuelConsumptionItemProvider.dispose();
 		if (maintenanceEventItemProvider != null) maintenanceEventItemProvider.dispose();
 		if (vesselClassRouteParametersItemProvider != null) vesselClassRouteParametersItemProvider.dispose();

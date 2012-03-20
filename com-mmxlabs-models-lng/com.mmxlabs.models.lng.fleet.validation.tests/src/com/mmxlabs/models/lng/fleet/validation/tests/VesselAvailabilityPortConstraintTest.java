@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityPortConstraint;
 import com.mmxlabs.models.lng.port.Port;
@@ -45,7 +45,7 @@ public class VesselAvailabilityPortConstraintTest {
 		// This is the constraint we will be testing
 		final VesselAvailabilityPortConstraint constraint = new VesselAvailabilityPortConstraint();
 		// Mock a port and time to test
-		final VesselAvailablility availability = mock(VesselAvailablility.class);
+		final VesselAvailability availability = mock(VesselAvailability.class);
 		// Mock a vessel for it to belong to.
 		final Vessel vessel = mock(Vessel.class);
 		// Mock a port to think about
@@ -100,7 +100,7 @@ public class VesselAvailabilityPortConstraintTest {
 		final IStatus result = constraint.validate(validationContext);
 
 		Assert.assertTrue("Result should be a detail constraint status decorator", result instanceof DetailConstraintStatusDecorator);
-		Assert.assertTrue("Port feature should be flagged up", ((DetailConstraintStatusDecorator) result).getFeaturesForEObject(availability).contains(FleetPackage.eINSTANCE.getVesselAvailablility_StartAt()));
+		Assert.assertTrue("Port feature should be flagged up", ((DetailConstraintStatusDecorator) result).getFeaturesForEObject(availability).contains(FleetPackage.eINSTANCE.getVesselAvailability_StartAt()));
 
 		verify(availability, atLeastOnce()).eContainer();
 		verify(availability, atLeastOnce()).eContainingFeature();

@@ -14,7 +14,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.ValidationSupport;
 
@@ -33,14 +33,14 @@ public class VesselAvailabilityDateConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof VesselAvailablility) {
-			final VesselAvailablility va = (VesselAvailablility) target;
+		if (target instanceof VesselAvailability) {
+			final VesselAvailability va = (VesselAvailability) target;
 			if (va.isSetStartAfter() && va.isSetStartBy()) {
 				if (va.getStartAfter().after(va.getStartBy())) {
 					final Pair<EObject, EReference> container = ValidationSupport.getInstance().getContainer(va);
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(((Vessel) container.getFirst()).getName(), "start"));
-					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailablility_StartAfter());
-					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailablility_StartBy());
+					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailability_StartAfter());
+					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailability_StartBy());
 					return dcsd;
 				}
 			}
@@ -49,8 +49,8 @@ public class VesselAvailabilityDateConstraint extends AbstractModelConstraint {
 				if (va.getEndAfter().after(va.getEndBy())) {
 					final Pair<EObject, EReference> container = ValidationSupport.getInstance().getContainer(va);
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(((Vessel) container.getFirst()).getName(), "end"));
-					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailablility_EndAfter());
-					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailablility_EndBy());
+					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailability_EndAfter());
+					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailability_EndBy());
 					return dcsd;
 				}
 			}

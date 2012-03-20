@@ -989,14 +989,14 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl <em>Vessel Availablility</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl <em>Vessel Availability</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselAvailablility()
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselAvailability()
 	 * @generated
 	 */
-	int VESSEL_AVAILABLILITY = 9;
+	int VESSEL_AVAILABILITY = 9;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1005,7 +1005,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABLILITY__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+	int VESSEL_AVAILABILITY__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
@@ -1014,7 +1014,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABLILITY__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+	int VESSEL_AVAILABILITY__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Start At</b></em>' reference list.
@@ -1023,7 +1023,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABLILITY__START_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+	int VESSEL_AVAILABILITY__START_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Start After</b></em>' attribute.
@@ -1032,7 +1032,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABLILITY__START_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int VESSEL_AVAILABILITY__START_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Start By</b></em>' attribute.
@@ -1041,7 +1041,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABLILITY__START_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int VESSEL_AVAILABILITY__START_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>End At</b></em>' reference list.
@@ -1050,7 +1050,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABLILITY__END_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int VESSEL_AVAILABILITY__END_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>End After</b></em>' attribute.
@@ -1059,7 +1059,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABLILITY__END_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int VESSEL_AVAILABILITY__END_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>End By</b></em>' attribute.
@@ -1068,16 +1068,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABLILITY__END_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int VESSEL_AVAILABILITY__END_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The number of structural features of the '<em>Vessel Availablility</em>' class.
+	 * The number of structural features of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABLILITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.
@@ -1863,80 +1863,80 @@ public interface FleetPackage extends EPackage {
 	EReference getVesselStateAttributes_FuelConsumption();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility <em>Vessel Availablility</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselAvailability <em>Vessel Availability</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Vessel Availablility</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility
+	 * @return the meta object for class '<em>Vessel Availability</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability
 	 * @generated
 	 */
-	EClass getVesselAvailablility();
+	EClass getVesselAvailability();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAt <em>Start At</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAt <em>Start At</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Start At</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAt()
-	 * @see #getVesselAvailablility()
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAt()
+	 * @see #getVesselAvailability()
 	 * @generated
 	 */
-	EReference getVesselAvailablility_StartAt();
+	EReference getVesselAvailability_StartAt();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAfter <em>Start After</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAfter <em>Start After</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Start After</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAfter()
-	 * @see #getVesselAvailablility()
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAfter()
+	 * @see #getVesselAvailability()
 	 * @generated
 	 */
-	EAttribute getVesselAvailablility_StartAfter();
+	EAttribute getVesselAvailability_StartAfter();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy <em>Start By</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartBy <em>Start By</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Start By</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy()
-	 * @see #getVesselAvailablility()
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getStartBy()
+	 * @see #getVesselAvailability()
 	 * @generated
 	 */
-	EAttribute getVesselAvailablility_StartBy();
+	EAttribute getVesselAvailability_StartBy();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAt <em>End At</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAt <em>End At</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>End At</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAt()
-	 * @see #getVesselAvailablility()
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAt()
+	 * @see #getVesselAvailability()
 	 * @generated
 	 */
-	EReference getVesselAvailablility_EndAt();
+	EReference getVesselAvailability_EndAt();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAfter <em>End After</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAfter <em>End After</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>End After</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAfter()
-	 * @see #getVesselAvailablility()
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAfter()
+	 * @see #getVesselAvailability()
 	 * @generated
 	 */
-	EAttribute getVesselAvailablility_EndAfter();
+	EAttribute getVesselAvailability_EndAfter();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy <em>End By</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndBy <em>End By</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>End By</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy()
-	 * @see #getVesselAvailablility()
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getEndBy()
+	 * @see #getVesselAvailability()
 	 * @generated
 	 */
-	EAttribute getVesselAvailablility_EndBy();
+	EAttribute getVesselAvailability_EndBy();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FuelConsumption <em>Fuel Consumption</em>}'.
@@ -2505,14 +2505,14 @@ public interface FleetPackage extends EPackage {
 		EReference VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION = eINSTANCE.getVesselStateAttributes_FuelConsumption();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl <em>Vessel Availablility</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl <em>Vessel Availability</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl
-		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselAvailablility()
+		 * @see com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselAvailability()
 		 * @generated
 		 */
-		EClass VESSEL_AVAILABLILITY = eINSTANCE.getVesselAvailablility();
+		EClass VESSEL_AVAILABILITY = eINSTANCE.getVesselAvailability();
 
 		/**
 		 * The meta object literal for the '<em><b>Start At</b></em>' reference list feature.
@@ -2520,7 +2520,7 @@ public interface FleetPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL_AVAILABLILITY__START_AT = eINSTANCE.getVesselAvailablility_StartAt();
+		EReference VESSEL_AVAILABILITY__START_AT = eINSTANCE.getVesselAvailability_StartAt();
 
 		/**
 		 * The meta object literal for the '<em><b>Start After</b></em>' attribute feature.
@@ -2528,7 +2528,7 @@ public interface FleetPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL_AVAILABLILITY__START_AFTER = eINSTANCE.getVesselAvailablility_StartAfter();
+		EAttribute VESSEL_AVAILABILITY__START_AFTER = eINSTANCE.getVesselAvailability_StartAfter();
 
 		/**
 		 * The meta object literal for the '<em><b>Start By</b></em>' attribute feature.
@@ -2536,7 +2536,7 @@ public interface FleetPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL_AVAILABLILITY__START_BY = eINSTANCE.getVesselAvailablility_StartBy();
+		EAttribute VESSEL_AVAILABILITY__START_BY = eINSTANCE.getVesselAvailability_StartBy();
 
 		/**
 		 * The meta object literal for the '<em><b>End At</b></em>' reference list feature.
@@ -2544,7 +2544,7 @@ public interface FleetPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL_AVAILABLILITY__END_AT = eINSTANCE.getVesselAvailablility_EndAt();
+		EReference VESSEL_AVAILABILITY__END_AT = eINSTANCE.getVesselAvailability_EndAt();
 
 		/**
 		 * The meta object literal for the '<em><b>End After</b></em>' attribute feature.
@@ -2552,7 +2552,7 @@ public interface FleetPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL_AVAILABLILITY__END_AFTER = eINSTANCE.getVesselAvailablility_EndAfter();
+		EAttribute VESSEL_AVAILABILITY__END_AFTER = eINSTANCE.getVesselAvailability_EndAfter();
 
 		/**
 		 * The meta object literal for the '<em><b>End By</b></em>' attribute feature.
@@ -2560,7 +2560,7 @@ public interface FleetPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL_AVAILABLILITY__END_BY = eINSTANCE.getVesselAvailablility_EndBy();
+		EAttribute VESSEL_AVAILABILITY__END_BY = eINSTANCE.getVesselAvailability_EndBy();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.
