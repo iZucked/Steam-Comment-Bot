@@ -69,6 +69,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
+import com.mmxlabs.shiplingo.platform.its.tests.ContractExtensionTestModule;
 import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
@@ -636,7 +637,7 @@ public class ScenarioTools {
 	 */
 	public static Schedule evaluate(final MMXRootObject scenario) {
 
-		final LNGTransformer transformer = new LNGTransformer(scenario);
+		final LNGTransformer transformer = new LNGTransformer(scenario, new ContractExtensionTestModule());
 		// final LNGScenarioTransformer transformer = new LNGScenarioTransformer(scenario);
 		final LNGScenarioTransformer lst = transformer.getLngScenarioTransformer();
 
