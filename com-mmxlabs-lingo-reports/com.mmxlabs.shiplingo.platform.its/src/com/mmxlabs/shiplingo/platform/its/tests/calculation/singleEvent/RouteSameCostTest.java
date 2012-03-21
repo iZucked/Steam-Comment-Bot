@@ -11,6 +11,7 @@ import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
 /**
@@ -25,6 +26,16 @@ import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
  */
 public class RouteSameCostTest {
 
+	static class CanalParameters {
+		
+		public String canalName ;
+		public int canalDistance ;
+		public int canalCost ;
+		public int canalTransitFuelPerDay ;
+		public int canalTransitTime ;
+		public int NBOTravelRatePerDay  ;
+	}
+	
 	/**
 	 * If a canal and ocean route have the same price then test to see that one is chosen (over more expensive routes), and they are definitely the same price.
 	 */
@@ -38,30 +49,31 @@ public class RouteSameCostTest {
 		final int expensiveDistance2 = 1200;
 
 		final int[] portDistances = { cheapestDistance, expensiveDistance1, expensiveDistance2 };
+		
+		CanalParameters params = new CanalParameters();
+		params.canalName = "Canal 1";
+		params.canalDistance = 900;
+		params.canalCost = 50;
+		params.canalTransitFuelPerDay = TimeUnitConvert.convertPerHourToPerDay(0);
+		params.canalTransitTime = 0;
+		params.NBOTravelRatePerDay  = 0;
 
-		final String canalName = "Canal 1";
-		final int canalDistance = 900;
-		final int canalCost = 50;
-		final int canalTransitFuelPerDay = TimeUnitConvert.convertPerHourToPerDay(0);
-		final int canalTransitTime = 0;
-
-		final VesselClassCost[] canalCosts = { ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalCost, canalCost, canalTransitFuelPerDay, canalTransitTime) };
 
 		// the NBO rate is set as the idle consumption rate, so it costs lets to idle than travel. The canal route will allow idle time, but the fee will make the canal the same price as the longer
 		// ocean route.
 		final int fuelTravelConsumptionPerHour = 10;
 		final int NBORatePerHour = 5;
 
-		final CargoAllocation a = testEquallyPricedRoutes(testName, portDistances, canalCosts, fuelTravelConsumptionPerHour, NBORatePerHour);
+		final CargoAllocation a = testEquallyPricedRoutes(testName, portDistances, params, fuelTravelConsumptionPerHour, NBORatePerHour);
 
 		// check same price
-		final long canalPrice = getPriceOfCanal(testName, canalCosts[0], fuelTravelConsumptionPerHour, NBORatePerHour);
+		final long canalPrice = getPriceOfCanal(testName, params, fuelTravelConsumptionPerHour, NBORatePerHour);
 		final long oceanPrice = getPriceOfOcean(testName, cheapestDistance, fuelTravelConsumptionPerHour, NBORatePerHour);
 		Assert.assertTrue("Cheapest routes are same price", canalPrice == oceanPrice);
 
 		// check the vessel took either of the cheapest routes.
-		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRoute().equals(canalName);
-		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRoute().equals(canalName);
+		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRoute().equals(params.canalName);
+		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRoute().equals(params.canalName);
 
 		Assert.assertTrue("Vessel took one of cheapest routes", ballastCheapestOceanRouteOrCanal && ladenCheapestOceanRouteOrCanal);
 	}
@@ -82,28 +94,28 @@ public class RouteSameCostTest {
 
 		final int[] portDistances = { cheapestDistance, expensiveDistance1, expensiveDistance2 };
 
-		final String canalName = "Canal 1";
-		final int canalDistance = 2000;
-		final int canalCost = 0;
-		final int canalTransitFuelPerDay = TimeUnitConvert.convertPerHourToPerDay(0);
-		final int canalTransitTime = 0;
-
-		final VesselClassCost[] canalCosts = { ScenarioTools.createCanalAndCost(canalName, canalDistance, canalDistance, canalCost, canalCost, canalTransitFuelPerDay, canalTransitTime) };
+		CanalParameters params = new CanalParameters();
+		params.canalName = "Canal 1";
+		params.canalDistance = 2000;
+		params.canalCost = 0;
+		params.canalTransitFuelPerDay = TimeUnitConvert.convertPerHourToPerDay(0);
+		params.canalTransitTime = 0;
+		params.NBOTravelRatePerDay = 0;
 
 		// use the same fuel consumption for every travel
 		final int fuelConsumptionHours = 10;
 		final int NBORateHours = 10;
 
-		final CargoAllocation a = testEquallyPricedRoutes(testName, portDistances, canalCosts, fuelConsumptionHours, NBORateHours);
+		final CargoAllocation a = testEquallyPricedRoutes(testName, portDistances, params, fuelConsumptionHours, NBORateHours);
 
 		// check same price
-		final long canalPrice = getPriceOfCanal(testName, canalCosts[0], fuelConsumptionHours, NBORateHours);
+		final long canalPrice = getPriceOfCanal(testName, params, fuelConsumptionHours, NBORateHours);
 		final long oceanPrice = getPriceOfOcean(testName, cheapestDistance, fuelConsumptionHours, NBORateHours);
 		Assert.assertTrue("Cheapest routes are same price", canalPrice == oceanPrice);
 
 		// check the vessel took either of the cheapest routes.
-		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRoute().equals(canalName);
-		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRoute().equals(canalName);
+		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRoute().equals(params.canalName);
+		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRoute().equals(params.canalName);
 
 		Assert.assertTrue("Vessel took one of cheapest routes", ballastCheapestOceanRouteOrCanal && ladenCheapestOceanRouteOrCanal);
 	}
@@ -119,7 +131,7 @@ public class RouteSameCostTest {
 	 *            An array of costs for each canal.
 	 * @return The result of running the scenario.
 	 */
-	private CargoAllocation testEquallyPricedRoutes(final String testName, final int[] distancesBetweenPorts, final VesselClassCost[] canalCosts, final int fuelTravelConsumptionPerHour,
+	private CargoAllocation testEquallyPricedRoutes(final String testName, final int[] distancesBetweenPorts, final CanalParameters canalCosts, final int fuelTravelConsumptionPerHour,
 			final int NBORatePerHour) {
 
 		final int travelTime = 200;
@@ -161,7 +173,10 @@ public class RouteSameCostTest {
 
 		final MMXRootObject canalScenario = ScenarioTools.createScenarioWithCanals(distancesBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed,
 				capacity, ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed,
-				ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate, minHeelVolume, canalCosts);
+				ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate, minHeelVolume);
+		
+		
+		addCanalParameters(canalCosts, canalScenario);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(canalScenario);
 		// check result is how we expect it to be
@@ -181,10 +196,10 @@ public class RouteSameCostTest {
 	 *            The canal to get the price.
 	 * @return The total cost for the route, including idles.
 	 */
-	private long getPriceOfCanal(final String testName, final VesselClassCost canalCost, final int fuelTravelConsumptionPerHour, final int NBORatePerHour) {
-		final CargoAllocation a = testEquallyPricedRoutes(testName + ": get canal price", new int[] { 10000 }, new VesselClassCost[] { canalCost }, fuelTravelConsumptionPerHour, NBORatePerHour);
+	private long getPriceOfCanal(final String testName, final CanalParameters canalCost, final int fuelTravelConsumptionPerHour, final int NBORatePerHour) {
+		final CargoAllocation a = testEquallyPricedRoutes(testName + ": get canal price", new int[] { 10000 }, canalCost , fuelTravelConsumptionPerHour, NBORatePerHour);
 
-		return a.getTotalCost();
+		return getCargoAllocationCost(a);
 	}
 
 	/**
@@ -199,8 +214,35 @@ public class RouteSameCostTest {
 	private long getPriceOfOcean(final String testName, final int distance, final int fuelTravelConsumptionPerHour, final int NBORatePerHour) {
 		final CargoAllocation a = testEquallyPricedRoutes(testName + ": get ocean price", new int[] { distance }, null, fuelTravelConsumptionPerHour, NBORatePerHour);
 
-		return a.getTotalCost();
+		return getCargoAllocationCost(a);
 
 	}
 
+	private void addCanalParameters(CanalParameters canalParameters, MMXRootObject canalScenario) {
+		
+		CustomScenarioCreator.createCanalAndCost(canalScenario, canalParameters.canalName, ScenarioTools.A, ScenarioTools.B, canalParameters.canalDistance, canalParameters.canalDistance, canalParameters.canalCost, canalParameters.canalCost, canalParameters.canalTransitFuelPerDay, canalParameters.NBOTravelRatePerDay  , canalParameters.canalTransitTime);
+	}
+	
+	long getCargoAllocationCost(CargoAllocation a) {
+		
+		long total = 0;
+		
+		total += a.getLadenLeg().getFuelCost();
+		total += a.getLadenLeg().getHireCost();
+		total += a.getLadenLeg().getToll();
+		total += a.getLadenIdle().getFuelCost();
+		total += a.getLadenIdle().getHireCost();
+		
+		total += a.getBallastLeg().getFuelCost();
+		total += a.getBallastLeg().getHireCost();
+		total += a.getBallastLeg().getToll();
+		total += a.getBallastIdle().getFuelCost();
+		total += a.getBallastIdle().getHireCost();
+		
+		
+		
+		return total;
+		
+		
+	}
 }
