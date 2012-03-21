@@ -49,7 +49,8 @@ public class ScenarioValidationStatusAdapterFactory implements IAdapterFactory {
 		final IValidator<EObject> validator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
-
+		validator.setOption(IBatchValidator.OPTION_TRACK_RESOURCES, true);
+		
 		final IStatus status = validator.validate(scenario);
 		return status;
 	}
