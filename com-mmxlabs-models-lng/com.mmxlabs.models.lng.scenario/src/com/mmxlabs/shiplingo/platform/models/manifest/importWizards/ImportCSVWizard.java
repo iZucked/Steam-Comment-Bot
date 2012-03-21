@@ -37,7 +37,7 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		setWindowTitle("File Import Wizard"); //NON-NLS-1
+		setWindowTitle("CSV Import Wizard"); //NON-NLS-1
 		setNeedsProgressMonitor(true);
 		filesPage = new ImportCSVFilesPage("CSV Files");
 		warnings = new ImportWarningsPage("Warnings", filesPage);
