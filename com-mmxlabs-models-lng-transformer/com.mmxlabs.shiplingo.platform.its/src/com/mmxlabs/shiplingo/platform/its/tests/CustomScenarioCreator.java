@@ -35,7 +35,6 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
@@ -247,10 +246,11 @@ public class CustomScenarioCreator {
 			vessel.setVesselClass(vc);
 			vessel.setName(i + " (class " + vesselClassName + ")");
 
-			if (isTimeChartered)
+			if (isTimeChartered) {
 				vessel.setTimeCharterRate(10);
+			}
 
-			final VesselAvailablility availability = FleetFactory.eINSTANCE.createVesselAvailablility();
+			final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
 
 			vessel.setAvailability(availability);
 
@@ -394,13 +394,11 @@ public class CustomScenarioCreator {
 		load.setCargoCV(cvValue);
 
 		load.setWindowSize(0);
-		
-		final TimeZone loadZone = TimeZone.getTimeZone(
-				loadPort.getTimeZone() == null || loadPort.getTimeZone().isEmpty() ? "UTC" : loadPort.getTimeZone());
-		
-		final TimeZone dischargeZone = TimeZone.getTimeZone(
-				dischargePort.getTimeZone() == null || dischargePort.getTimeZone().isEmpty() ? "UTC" : dischargePort.getTimeZone());
-		
+
+		final TimeZone loadZone = TimeZone.getTimeZone(loadPort.getTimeZone() == null || loadPort.getTimeZone().isEmpty() ? "UTC" : loadPort.getTimeZone());
+
+		final TimeZone dischargeZone = TimeZone.getTimeZone(dischargePort.getTimeZone() == null || dischargePort.getTimeZone().isEmpty() ? "UTC" : dischargePort.getTimeZone());
+
 		final Calendar loadCalendar = Calendar.getInstance(loadZone);
 		loadCalendar.setTime(loadWindowStart);
 		load.setWindowStartTime(loadCalendar.get(Calendar.HOUR_OF_DAY));
@@ -409,17 +407,17 @@ public class CustomScenarioCreator {
 		loadCalendar.set(Calendar.SECOND, 0);
 		loadCalendar.set(Calendar.MILLISECOND, 0);
 		load.setWindowStart(loadCalendar.getTime());
-		
+
 		final Date dischargeDate = new Date(loadWindowStart.getTime() + (Timer.ONE_HOUR * travelTime));
 		final Calendar dischargeCalendar = Calendar.getInstance(dischargeZone);
 		dischargeCalendar.setTime(dischargeDate);
 		dis.setWindowStartTime(dischargeCalendar.get(Calendar.HOUR_OF_DAY));
-		
+
 		dischargeCalendar.set(Calendar.HOUR_OF_DAY, 0);
 		dischargeCalendar.set(Calendar.MINUTE, 0);
 		dischargeCalendar.set(Calendar.SECOND, 0);
 		dischargeCalendar.set(Calendar.MILLISECOND, 0);
-		
+
 		dis.setWindowStart(dischargeCalendar.getTime());
 		dis.setWindowSize(0);
 
@@ -541,8 +539,8 @@ public class CustomScenarioCreator {
 	 *            Transit time in hours
 	 * @return
 	 */
-	public static void createCanalAndCost(MMXRootObject scenario, final String canalName, Port A, Port B, final int distanceAToB, final int distanceBToA, final int canalLadenCost, final int canalUnladenCost,
-			final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
+	public static void createCanalAndCost(MMXRootObject scenario, final String canalName, Port A, Port B, final int distanceAToB, final int distanceBToA, final int canalLadenCost,
+			final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
 
 		final Route canal = PortFactory.eINSTANCE.createRoute();
 		canal.setCanal(true);
@@ -561,14 +559,13 @@ public class CustomScenarioCreator {
 
 		canal.getLines().add(atob);
 		canal.getLines().add(btoa);
-		
 
 		// next do canal costs
 		final RouteCost canalCost = PricingFactory.eINSTANCE.createRouteCost();
 		canalCost.setRoute(canal);
 		canalCost.setLadenCost(canalLadenCost); // cost in dollars for a laden vessel
 		canalCost.setBallastCost(canalUnladenCost); // cost in dollars for a ballast vessel
-		
+
 		FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
 
 		VesselClassRouteParameters params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
@@ -587,7 +584,6 @@ public class CustomScenarioCreator {
 			scenario.getSubModel(PricingModel.class).getRouteCosts().add(rc2);
 		}
 	}
-
 
 	/**
 	 * A vessel class has a list of inaccessible ports. This method can add to that list if the given vessel class has already been added to the scenario. Note that that this method does not check to
