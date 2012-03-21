@@ -13,6 +13,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.validation.marker.MarkerUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -26,6 +30,7 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 /**
@@ -67,7 +72,22 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					if (status.matches(IStatus.ERROR)) {
 						Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Validation errors were found in the resource " + resource.getName()));
 						try {
+							final MMXRootObject root = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
+							final ResourceSet rs = root.eResource().getResourceSet();
+							// temporarily mess with joint model resource set's uri converter
+							// so that all of the URIs appear to be the same, for marker util.
+							
+							// this may need improving later.
+							final URIConverter temp = rs.getURIConverter();
+							rs.setURIConverter(new ExtensibleURIConverterImpl() {
+								@Override
+								public URI normalize(URI uri) {
+									return URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
+								}
+							});
 							MarkerUtil.updateMarkers(status);
+							
+							rs.setURIConverter(temp);
 							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
 									, null, IWorkbenchPage.VIEW_VISIBLE);
 						} catch (final CoreException e) {
