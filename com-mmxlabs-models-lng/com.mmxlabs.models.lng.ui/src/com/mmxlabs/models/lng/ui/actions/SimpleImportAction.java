@@ -54,7 +54,7 @@ public class SimpleImportAction extends ImportAction {
 			part.getEditingDomain().getCommandStack().execute(mergeImports(container, containment, importedObjects));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
 
 	protected Command mergeImports(final EObject container, final EReference containment, final Collection<EObject> imports) {
