@@ -73,25 +73,12 @@ public class SeriesUtil {
 	}
 
 	public static int floor(final int[] points, final int point) {
-		int lower = 0;
-		int upper = points.length - 1;
-		while (true) {
-			int position = (upper - lower) / 2;
-			if (upper == lower + 1) {
-				if (points[upper] <= point) return upper;
-				else if (points[lower] <= point) return lower;
-				else return -1;
-			}
-			if (points[position] == point)
-				return position;
-			if (upper == lower)
-				return points[position] <= point ? position : -1;
-			if (points[position] > point) {
-				upper = position;
-			} else if (points[position] < point) {
-				lower = position;
-			}
-		}
+		final int pos = Arrays.binarySearch(points, point);
+		if (pos >= 0) return pos;
+		final int pos2 = (-pos) - 1;
+		if (pos2 < 0) return 0;
+		if (pos2 >= points.length) return points.length-1;
+		return pos2;
 	}
 
 	public static String toString(final ISeries s) {

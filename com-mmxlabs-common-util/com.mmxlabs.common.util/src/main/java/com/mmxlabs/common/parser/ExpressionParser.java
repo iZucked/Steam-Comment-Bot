@@ -96,6 +96,8 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 			case ',':
 				break loop;
 			case StreamTokenizer.TT_WORD:
+			case '"':
+			case '\'':
 				word = tok.sval;
 				break;
 			default:
@@ -129,7 +131,7 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 			
 			}
 			
-			justSeenWord = tok.ttype == StreamTokenizer.TT_WORD;
+			justSeenWord = tok.ttype == StreamTokenizer.TT_WORD || tok.ttype == '"' || tok.ttype == '\'';
 		}
 		
 		// handle leftover operators

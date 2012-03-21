@@ -150,7 +150,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		});
 	}
 	
-	private ISeries getSeries(final String name) {
+	public ISeries getSeries(final String name) {
 		if (evaluatedSeries.containsKey(name)) {
 			return evaluatedSeries.get(name);
 		} else if (unevaluatedSeries.containsKey(name)) {
