@@ -82,7 +82,11 @@
         eType="#//SlotAllocation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FuelUsage">
-    <eOperations name="getFuelCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getFuelCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="int sum = 0;&#xA;for (final FuelQuantity fq : getFuels()) {&#xA;&#x9;sum += fq.getCost();&#xA;}&#xA;return sum;"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fuels" upperBound="-1"
         eType="#//FuelQuantity" containment="true"/>
   </eClassifiers>
