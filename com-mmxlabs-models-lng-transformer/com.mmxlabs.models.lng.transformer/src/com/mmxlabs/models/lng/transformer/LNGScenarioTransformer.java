@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,8 +18,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.management.timer.Timer;
 
@@ -31,6 +34,8 @@ import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.parser.series.ISeries;
+import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -60,7 +65,10 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
@@ -107,6 +115,8 @@ public class LNGScenarioTransformer {
 	private TimeZone timezone;
 	private Date earliestTime;
 	private Date latestTime;
+	
+	private SeriesParser indices = new SeriesParser();
 
 	@Inject(optional = true)
 	private Iterable<ContractTransformer> transformerExtensions;
@@ -217,6 +227,7 @@ public class LNGScenarioTransformer {
 		 */
 		findEarliestAndLatestTimes();
 
+		
 		/**
 		 * First, create all the market curves (should these come through the builder?)
 		 */
@@ -224,12 +235,44 @@ public class LNGScenarioTransformer {
 		final Association<Index, ICurve> indexAssociation = new Association<Index, ICurve>();
 
 		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
-		for (final Index index : pricingModel.getCommodityIndices()) {
-			final StepwiseIntegerCurve curve = createCurveForIndex(index, 1.0f);
-
-			entities.addModelObject(index, curve);
-
-			indexAssociation.add(index, curve);
+		for (final Index<Double> index : pricingModel.getCommodityIndices()) {
+			if (index instanceof DataIndex) {
+				final DataIndex<Double> di = (DataIndex) index;
+				final SortedSet<Pair<Date, Number>> vals = new TreeSet<Pair<Date, Number>>(new Comparator<Pair<Date, ?>>() {
+					@Override
+					public int compare(Pair<Date, ?> o1, Pair<Date, ?> o2) {
+						return o1.getFirst().compareTo(o2.getFirst());
+					}
+				});
+				for (final IndexPoint<Double> pt : di.getPoints()) {
+					vals.add(new Pair<Date, Number>(pt.getDate(), pt.getValue()));
+				}
+				final int[] times = new int[vals.size()];
+				final Number[] nums = new Number[vals.size()];
+				int k = 0;
+				for (final Pair<Date, Number> e : vals) {
+					times[k] = convertTime(e.getFirst());
+					nums[k++] = e.getSecond();
+				}
+				indices.addSeriesData(index.getName(), times, nums);
+			} else if (index instanceof DerivedIndex) {
+				indices.addSeriesExpression(index.getName(), ((DerivedIndex) index).getExpression());
+			}
+		}
+		
+		for (final Index<Double> index : pricingModel.getCommodityIndices()) {
+			try {
+				final ISeries parsed = indices.getSeries(index.getName());
+				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+				curve.setDefaultValue(0);
+				for (final int i : parsed.getChangePoints()) {
+					curve.setValueAfter(i - 1, Calculator.scaleToInt(parsed.evaluate(i).doubleValue()));
+				}
+				entities.addModelObject(index, curve);
+				indexAssociation.add(index, curve);
+			} catch (final Exception exception) {
+				log.warn("Error evaluating series " + index.getName(), exception);
+			}
 		}
 
 		// set up the contract transformers
