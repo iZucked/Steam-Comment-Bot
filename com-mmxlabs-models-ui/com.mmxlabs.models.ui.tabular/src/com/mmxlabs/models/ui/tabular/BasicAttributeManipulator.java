@@ -40,7 +40,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 	
 	@Override
 	public String render(final Object object) {
-		if ((object instanceof EObject) && !((EObject) object).eIsSet(field)) {
+		if ((object instanceof EObject) && (field.isUnsettable()) && !((EObject) object).eIsSet(field)) {
 			return renderUnsetValue(object, 
 					(object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) :
 						null);
