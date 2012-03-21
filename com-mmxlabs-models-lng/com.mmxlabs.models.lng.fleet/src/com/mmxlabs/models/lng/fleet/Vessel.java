@@ -105,12 +105,12 @@ public interface Vessel extends AVessel {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Availability</em>' containment reference.
-	 * @see #setAvailability(VesselAvailablility)
+	 * @see #setAvailability(VesselAvailability)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Availability()
 	 * @model containment="true" required="true"
 	 * @generated
 	 */
-	VesselAvailablility getAvailability();
+	VesselAvailability getAvailability();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getAvailability <em>Availability</em>}' containment reference.
@@ -120,7 +120,7 @@ public interface Vessel extends AVessel {
 	 * @see #getAvailability()
 	 * @generated
 	 */
-	void setAvailability(VesselAvailablility value);
+	void setAvailability(VesselAvailability value);
 
 	/**
 	 * Returns the value of the '<em><b>Time Charter Rate</b></em>' attribute.

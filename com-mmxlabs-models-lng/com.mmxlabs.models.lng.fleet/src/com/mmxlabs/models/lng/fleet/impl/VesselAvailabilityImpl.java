@@ -1,10 +1,14 @@
+
+
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.fleet.impl;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 
 import com.mmxlabs.models.lng.types.APortSet;
 
@@ -25,23 +29,23 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Vessel Availablility</b></em>'.
+ * An implementation of the model object '<em><b>Vessel Availability</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getStartAt <em>Start At</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getStartAfter <em>Start After</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getStartBy <em>Start By</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getEndAt <em>End At</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getEndAfter <em>End After</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailablilityImpl#getEndBy <em>End By</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getStartAt <em>Start At</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getStartAfter <em>Start After</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getStartBy <em>Start By</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndAt <em>End At</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndAfter <em>End After</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndBy <em>End By</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvailablility {
+public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvailability {
 	/**
 	 * The cached value of the '{@link #getStartAt() <em>Start At</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -183,7 +187,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected VesselAvailablilityImpl() {
+	protected VesselAvailabilityImpl() {
 		super();
 	}
 
@@ -194,7 +198,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return FleetPackage.Literals.VESSEL_AVAILABLILITY;
+		return FleetPackage.Literals.VESSEL_AVAILABILITY;
 	}
 
 	/**
@@ -204,7 +208,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 */
 	public EList<APortSet> getStartAt() {
 		if (startAt == null) {
-			startAt = new EObjectResolvingEList<APortSet>(APortSet.class, this, FleetPackage.VESSEL_AVAILABLILITY__START_AT);
+			startAt = new EObjectResolvingEList<APortSet>(APortSet.class, this, FleetPackage.VESSEL_AVAILABILITY__START_AT);
 		}
 		return startAt;
 	}
@@ -229,7 +233,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 		boolean oldStartAfterESet = startAfterESet;
 		startAfterESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABLILITY__START_AFTER, oldStartAfter, startAfter, !oldStartAfterESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABILITY__START_AFTER, oldStartAfter, startAfter, !oldStartAfterESet));
 	}
 
 	/**
@@ -243,7 +247,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 		startAfter = START_AFTER_EDEFAULT;
 		startAfterESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABLILITY__START_AFTER, oldStartAfter, START_AFTER_EDEFAULT, oldStartAfterESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABILITY__START_AFTER, oldStartAfter, START_AFTER_EDEFAULT, oldStartAfterESet));
 	}
 
 	/**
@@ -275,7 +279,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 		boolean oldStartByESet = startByESet;
 		startByESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABLILITY__START_BY, oldStartBy, startBy, !oldStartByESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABILITY__START_BY, oldStartBy, startBy, !oldStartByESet));
 	}
 
 	/**
@@ -289,7 +293,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 		startBy = START_BY_EDEFAULT;
 		startByESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABLILITY__START_BY, oldStartBy, START_BY_EDEFAULT, oldStartByESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABILITY__START_BY, oldStartBy, START_BY_EDEFAULT, oldStartByESet));
 	}
 
 	/**
@@ -308,7 +312,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	 */
 	public EList<APortSet> getEndAt() {
 		if (endAt == null) {
-			endAt = new EObjectResolvingEList<APortSet>(APortSet.class, this, FleetPackage.VESSEL_AVAILABLILITY__END_AT);
+			endAt = new EObjectResolvingEList<APortSet>(APortSet.class, this, FleetPackage.VESSEL_AVAILABILITY__END_AT);
 		}
 		return endAt;
 	}
@@ -333,7 +337,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 		boolean oldEndAfterESet = endAfterESet;
 		endAfterESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABLILITY__END_AFTER, oldEndAfter, endAfter, !oldEndAfterESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABILITY__END_AFTER, oldEndAfter, endAfter, !oldEndAfterESet));
 	}
 
 	/**
@@ -347,7 +351,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 		endAfter = END_AFTER_EDEFAULT;
 		endAfterESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABLILITY__END_AFTER, oldEndAfter, END_AFTER_EDEFAULT, oldEndAfterESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABILITY__END_AFTER, oldEndAfter, END_AFTER_EDEFAULT, oldEndAfterESet));
 	}
 
 	/**
@@ -379,7 +383,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 		boolean oldEndByESet = endByESet;
 		endByESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABLILITY__END_BY, oldEndBy, endBy, !oldEndByESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABILITY__END_BY, oldEndBy, endBy, !oldEndByESet));
 	}
 
 	/**
@@ -393,7 +397,7 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 		endBy = END_BY_EDEFAULT;
 		endByESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABLILITY__END_BY, oldEndBy, END_BY_EDEFAULT, oldEndByESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABILITY__END_BY, oldEndBy, END_BY_EDEFAULT, oldEndByESet));
 	}
 
 	/**
@@ -413,17 +417,17 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_AVAILABLILITY__START_AT:
+			case FleetPackage.VESSEL_AVAILABILITY__START_AT:
 				return getStartAt();
-			case FleetPackage.VESSEL_AVAILABLILITY__START_AFTER:
+			case FleetPackage.VESSEL_AVAILABILITY__START_AFTER:
 				return getStartAfter();
-			case FleetPackage.VESSEL_AVAILABLILITY__START_BY:
+			case FleetPackage.VESSEL_AVAILABILITY__START_BY:
 				return getStartBy();
-			case FleetPackage.VESSEL_AVAILABLILITY__END_AT:
+			case FleetPackage.VESSEL_AVAILABILITY__END_AT:
 				return getEndAt();
-			case FleetPackage.VESSEL_AVAILABLILITY__END_AFTER:
+			case FleetPackage.VESSEL_AVAILABILITY__END_AFTER:
 				return getEndAfter();
-			case FleetPackage.VESSEL_AVAILABLILITY__END_BY:
+			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				return getEndBy();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -438,24 +442,24 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_AVAILABLILITY__START_AT:
+			case FleetPackage.VESSEL_AVAILABILITY__START_AT:
 				getStartAt().clear();
 				getStartAt().addAll((Collection<? extends APortSet>)newValue);
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__START_AFTER:
+			case FleetPackage.VESSEL_AVAILABILITY__START_AFTER:
 				setStartAfter((Date)newValue);
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__START_BY:
+			case FleetPackage.VESSEL_AVAILABILITY__START_BY:
 				setStartBy((Date)newValue);
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__END_AT:
+			case FleetPackage.VESSEL_AVAILABILITY__END_AT:
 				getEndAt().clear();
 				getEndAt().addAll((Collection<? extends APortSet>)newValue);
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__END_AFTER:
+			case FleetPackage.VESSEL_AVAILABILITY__END_AFTER:
 				setEndAfter((Date)newValue);
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__END_BY:
+			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				setEndBy((Date)newValue);
 				return;
 		}
@@ -470,22 +474,22 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_AVAILABLILITY__START_AT:
+			case FleetPackage.VESSEL_AVAILABILITY__START_AT:
 				getStartAt().clear();
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__START_AFTER:
+			case FleetPackage.VESSEL_AVAILABILITY__START_AFTER:
 				unsetStartAfter();
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__START_BY:
+			case FleetPackage.VESSEL_AVAILABILITY__START_BY:
 				unsetStartBy();
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__END_AT:
+			case FleetPackage.VESSEL_AVAILABILITY__END_AT:
 				getEndAt().clear();
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__END_AFTER:
+			case FleetPackage.VESSEL_AVAILABILITY__END_AFTER:
 				unsetEndAfter();
 				return;
-			case FleetPackage.VESSEL_AVAILABLILITY__END_BY:
+			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				unsetEndBy();
 				return;
 		}
@@ -500,17 +504,17 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_AVAILABLILITY__START_AT:
+			case FleetPackage.VESSEL_AVAILABILITY__START_AT:
 				return startAt != null && !startAt.isEmpty();
-			case FleetPackage.VESSEL_AVAILABLILITY__START_AFTER:
+			case FleetPackage.VESSEL_AVAILABILITY__START_AFTER:
 				return isSetStartAfter();
-			case FleetPackage.VESSEL_AVAILABLILITY__START_BY:
+			case FleetPackage.VESSEL_AVAILABILITY__START_BY:
 				return isSetStartBy();
-			case FleetPackage.VESSEL_AVAILABLILITY__END_AT:
+			case FleetPackage.VESSEL_AVAILABILITY__END_AT:
 				return endAt != null && !endAt.isEmpty();
-			case FleetPackage.VESSEL_AVAILABLILITY__END_AFTER:
+			case FleetPackage.VESSEL_AVAILABILITY__END_AFTER:
 				return isSetEndAfter();
-			case FleetPackage.VESSEL_AVAILABLILITY__END_BY:
+			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				return isSetEndBy();
 		}
 		return super.eIsSet(featureID);
@@ -538,6 +542,6 @@ public class VesselAvailablilityImpl extends MMXObjectImpl implements VesselAvai
 		return result.toString();
 	}
 
-} // end of VesselAvailablilityImpl
+} // end of VesselAvailabilityImpl
 
 // finish type fixing

@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.fleet.impl;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 
 import com.mmxlabs.models.lng.types.APortSet;
@@ -82,7 +82,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * @generated
 	 * @ordered
 	 */
-	protected VesselAvailablility availability;
+	protected VesselAvailability availability;
 
 	/**
 	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
@@ -230,7 +230,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselAvailablility getAvailability() {
+	public VesselAvailability getAvailability() {
 		return availability;
 	}
 
@@ -239,8 +239,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetAvailability(VesselAvailablility newAvailability, NotificationChain msgs) {
-		VesselAvailablility oldAvailability = availability;
+	public NotificationChain basicSetAvailability(VesselAvailability newAvailability, NotificationChain msgs) {
+		VesselAvailability oldAvailability = availability;
 		availability = newAvailability;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__AVAILABILITY, oldAvailability, newAvailability);
@@ -254,7 +254,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setAvailability(VesselAvailablility newAvailability) {
+	public void setAvailability(VesselAvailability newAvailability) {
 		if (newAvailability != availability) {
 			NotificationChain msgs = null;
 			if (availability != null)
@@ -373,7 +373,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				setStartHeel((HeelOptions)newValue);
 				return;
 			case FleetPackage.VESSEL__AVAILABILITY:
-				setAvailability((VesselAvailablility)newValue);
+				setAvailability((VesselAvailability)newValue);
 				return;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				setTimeCharterRate((Integer)newValue);
@@ -400,7 +400,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				setStartHeel((HeelOptions)null);
 				return;
 			case FleetPackage.VESSEL__AVAILABILITY:
-				setAvailability((VesselAvailablility)null);
+				setAvailability((VesselAvailability)null);
 				return;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				unsetTimeCharterRate();

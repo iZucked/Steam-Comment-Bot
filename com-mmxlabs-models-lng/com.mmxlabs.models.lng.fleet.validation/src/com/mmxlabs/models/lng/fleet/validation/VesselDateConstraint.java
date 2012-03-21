@@ -14,7 +14,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -37,7 +37,7 @@ public class VesselDateConstraint extends AbstractModelConstraint {
 			final Vessel vessel = (Vessel) object;
 			// Gather start/end requirements
 			
-			VesselAvailablility availability = vessel.getAvailability();
+			VesselAvailability availability = vessel.getAvailability();
 			
 			if (availability != null) {
 				// Gather dates
@@ -54,16 +54,16 @@ public class VesselDateConstraint extends AbstractModelConstraint {
 					if (e.before(s)) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vessel.getName()));
 						if (startStart != null) {
-							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailablility_StartAfter());
+							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailability_StartAfter());
 						}
 						if (startEnd != null) {
-							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailablility_StartBy());
+							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailability_StartBy());
 						}
 						if (endStart != null) {
-							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailablility_EndAfter());
+							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailability_EndAfter());
 						}
 						if (endEnd != null) {
-							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailablility_EndBy());
+							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailability_EndBy());
 						}
 						return status;
 					}

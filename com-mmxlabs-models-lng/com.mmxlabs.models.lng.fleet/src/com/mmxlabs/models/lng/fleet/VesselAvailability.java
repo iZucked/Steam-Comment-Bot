@@ -1,6 +1,10 @@
+
+
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.fleet;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -13,26 +17,26 @@ import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Vessel Availablility</b></em>'.
+ * A representation of the model object '<em><b>Vessel Availability</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAt <em>Start At</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAfter <em>Start After</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy <em>Start By</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAt <em>End At</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAfter <em>End After</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy <em>End By</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAt <em>Start At</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAfter <em>Start After</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartBy <em>Start By</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAt <em>End At</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAfter <em>End After</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndBy <em>End By</em>}</li>
  * </ul>
  * </p>
  *
- * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailablility()
+ * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability()
  * @model
  * @generated
  */
-public interface VesselAvailablility extends MMXObject {
+public interface VesselAvailability extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Start At</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
@@ -43,7 +47,7 @@ public interface VesselAvailablility extends MMXObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start At</em>' reference list.
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailablility_StartAt()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_StartAt()
 	 * @model
 	 * @generated
 	 */
@@ -61,14 +65,14 @@ public interface VesselAvailablility extends MMXObject {
 	 * @see #isSetStartAfter()
 	 * @see #unsetStartAfter()
 	 * @see #setStartAfter(Date)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailablility_StartAfter()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_StartAfter()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
 	Date getStartAfter();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAfter <em>Start After</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAfter <em>Start After</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Start After</em>' attribute.
@@ -80,7 +84,7 @@ public interface VesselAvailablility extends MMXObject {
 	void setStartAfter(Date value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAfter <em>Start After</em>}' attribute.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAfter <em>Start After</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #isSetStartAfter()
@@ -91,7 +95,7 @@ public interface VesselAvailablility extends MMXObject {
 	void unsetStartAfter();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartAfter <em>Start After</em>}' attribute is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAfter <em>Start After</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Start After</em>' attribute is set.
@@ -114,14 +118,14 @@ public interface VesselAvailablility extends MMXObject {
 	 * @see #isSetStartBy()
 	 * @see #unsetStartBy()
 	 * @see #setStartBy(Date)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailablility_StartBy()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_StartBy()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
 	Date getStartBy();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy <em>Start By</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartBy <em>Start By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Start By</em>' attribute.
@@ -133,7 +137,7 @@ public interface VesselAvailablility extends MMXObject {
 	void setStartBy(Date value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy <em>Start By</em>}' attribute.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartBy <em>Start By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #isSetStartBy()
@@ -144,7 +148,7 @@ public interface VesselAvailablility extends MMXObject {
 	void unsetStartBy();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getStartBy <em>Start By</em>}' attribute is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartBy <em>Start By</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Start By</em>' attribute is set.
@@ -165,7 +169,7 @@ public interface VesselAvailablility extends MMXObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>End At</em>' reference list.
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailablility_EndAt()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_EndAt()
 	 * @model
 	 * @generated
 	 */
@@ -183,14 +187,14 @@ public interface VesselAvailablility extends MMXObject {
 	 * @see #isSetEndAfter()
 	 * @see #unsetEndAfter()
 	 * @see #setEndAfter(Date)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailablility_EndAfter()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_EndAfter()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
 	Date getEndAfter();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAfter <em>End After</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAfter <em>End After</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>End After</em>' attribute.
@@ -202,7 +206,7 @@ public interface VesselAvailablility extends MMXObject {
 	void setEndAfter(Date value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAfter <em>End After</em>}' attribute.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAfter <em>End After</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #isSetEndAfter()
@@ -213,7 +217,7 @@ public interface VesselAvailablility extends MMXObject {
 	void unsetEndAfter();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndAfter <em>End After</em>}' attribute is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAfter <em>End After</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>End After</em>' attribute is set.
@@ -236,14 +240,14 @@ public interface VesselAvailablility extends MMXObject {
 	 * @see #isSetEndBy()
 	 * @see #unsetEndBy()
 	 * @see #setEndBy(Date)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailablility_EndBy()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_EndBy()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
 	Date getEndBy();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy <em>End By</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndBy <em>End By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>End By</em>' attribute.
@@ -255,7 +259,7 @@ public interface VesselAvailablility extends MMXObject {
 	void setEndBy(Date value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy <em>End By</em>}' attribute.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndBy <em>End By</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #isSetEndBy()
@@ -266,7 +270,7 @@ public interface VesselAvailablility extends MMXObject {
 	void unsetEndBy();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailablility#getEndBy <em>End By</em>}' attribute is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndBy <em>End By</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>End By</em>' attribute is set.
@@ -277,6 +281,6 @@ public interface VesselAvailablility extends MMXObject {
 	 */
 	boolean isSetEndBy();
 
-} // end of  VesselAvailablility
+} // end of  VesselAvailability
 
 // finish type fixing

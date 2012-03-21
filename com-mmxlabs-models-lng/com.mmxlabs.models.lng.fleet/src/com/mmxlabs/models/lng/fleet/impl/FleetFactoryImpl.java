@@ -66,7 +66,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
 			case FleetPackage.HEEL_OPTIONS: return createHeelOptions();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES: return createVesselStateAttributes();
-			case FleetPackage.VESSEL_AVAILABLILITY: return createVesselAvailablility();
+			case FleetPackage.VESSEL_AVAILABILITY: return createVesselAvailability();
 			case FleetPackage.FUEL_CONSUMPTION: return createFuelConsumption();
 			case FleetPackage.MAINTENANCE_EVENT: return createMaintenanceEvent();
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS: return createVesselClassRouteParameters();
@@ -160,9 +160,9 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselAvailablility createVesselAvailablility() {
-		VesselAvailablilityImpl vesselAvailablility = new VesselAvailablilityImpl();
-		return vesselAvailablility;
+	public VesselAvailability createVesselAvailability() {
+		VesselAvailabilityImpl vesselAvailability = new VesselAvailabilityImpl();
+		return vesselAvailability;
 	}
 
 	/**

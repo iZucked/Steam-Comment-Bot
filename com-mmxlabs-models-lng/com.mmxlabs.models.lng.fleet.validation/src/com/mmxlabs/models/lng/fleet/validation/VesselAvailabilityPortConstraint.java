@@ -20,7 +20,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -43,8 +43,8 @@ public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof VesselAvailablility) {
-			final VesselAvailablility availablility = (VesselAvailablility) target;
+		if (target instanceof VesselAvailability) {
+			final VesselAvailability availablility = (VesselAvailability) target;
 
 			final Pair<EObject, EReference> container = ValidationSupport.getInstance().getContainer(availablility);
 			if (container.getFirst() instanceof Vessel) {
@@ -61,7 +61,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vessel.getName(), "start", vessel
 									.getVesselClass().getName(), p.getName()));
 
-							dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailablility_StartAt());
+							dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailability_StartAt());
 							return dcsd;
 
 						}
@@ -76,7 +76,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vessel.getName(), "end", vessel
 									.getVesselClass().getName(), p.getName()));
 
-							dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailablility_EndAt());
+							dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailability_EndAt());
 							return dcsd;
 
 						}
@@ -97,7 +97,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 			for (final Vessel v : fleetModel.getVessels()) {
 				if (ValidationSupport.getInstance().isSame(v.getVesselClass(), vesselClass)) {
 
-					final VesselAvailablility availablility = (VesselAvailablility) target;
+					final VesselAvailability availablility = v.getAvailability();
 
 					final Set<APort> inaccessiblePortSet = SetUtils.getPorts(vesselClass.getInaccessiblePorts());
 

@@ -37,31 +37,13 @@
                   Some references should not be null.
                </description>
                <target
-                     class="Port">
-               </target>
-               <target
-                     class="Cargo">
-               </target>
-               <target
-                     class="Contract">
-               </target>
-               <target
-                     class="DistanceLine">
-               </target>
-               <target
                      class="Vessel">
                </target>
                <target
                      class="VesselClass">
                </target>
                <target
-                     class="CharterOut">
-               </target>
-               <target
-                     class="VesselEvent">
-               </target>
-               <target
-                     class="PortAndTime">
+                     class="CharterOutEvent">
                </target>
                <target
                      class="VesselEvent">
