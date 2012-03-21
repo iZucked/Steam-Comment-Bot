@@ -71,7 +71,7 @@
             id="com.mmxlabs.models.lng.demo.importWizards.ImportCSVWizard"
             name="Import CSV">
          <description>
-            Import a file from the local file system into the workspace.
+            Import an LNG optimiser scenario from several CSV files.
          </description>
       </wizard>
    </extension>
@@ -92,6 +92,19 @@
                  type="com.mmxlabs.models.mmxcore.jointmodel.JointModel">
            </adapter>
         </factory>
+     </extension>
+     <extension
+           point="org.eclipse.ui.exportWizards">
+        <wizard
+              category="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
+              class="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards.ExportCSVWizard"
+              id="com.mmxlabs.shiplingo.platform.models.manifest.csvExportWizard"
+              name="Export CSV">
+        </wizard>
+        <category
+              id="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
+              name="LNG Scenario Export">
+        </category>
      </extension>
 
 </plugin>
