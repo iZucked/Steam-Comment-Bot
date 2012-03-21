@@ -7,10 +7,6 @@ syntax: regexp
 syntax: regexp
 ^com\.mmxlabs.*/\.settings$
 syntax: regexp
-^com\.mmxlabs-.*/\.classpath$
-syntax: regexp
-^com\.mmxlabs.*/\.project$
-syntax: regexp
 ^com\.mmxlabs.*/META-INF$
 syntax: regexp
 ^common-recorder/META-INF$
