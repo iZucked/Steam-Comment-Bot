@@ -32,7 +32,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailablility;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
@@ -289,7 +289,7 @@ public class ScenarioTools {
 		vessel.setVesselClass(vc);
 		vessel.setName("Vessel");
 
-		final VesselAvailablility availablility = FleetFactory.eINSTANCE.createVesselAvailablility();
+		final VesselAvailability availablility = FleetFactory.eINSTANCE.createVesselAvailability();
 
 		vessel.setAvailability(availablility);
 
@@ -532,8 +532,7 @@ public class ScenarioTools {
 		vessel.setVesselClass(vc);
 		vessel.setName("Vessel");
 
-		final VesselAvailablility availability = FleetFactory.eINSTANCE.createVesselAvailablility();
-
+		final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
 		
 		vessel.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 		
