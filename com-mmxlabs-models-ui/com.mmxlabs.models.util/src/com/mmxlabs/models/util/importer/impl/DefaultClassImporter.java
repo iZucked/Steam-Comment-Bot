@@ -102,7 +102,7 @@ public class DefaultClassImporter implements IClassImporter {
 			}
 			return results;
 		} catch (final IllegalArgumentException illegal) {
-			context.addProblem(context.createProblem(row.get(KIND_KEY) + " is not a valid king of " + rowClass.getName(), true, true, true));
+			context.addProblem(context.createProblem(row.get(KIND_KEY) + " is not a valid kind of " + rowClass.getName(), true, true, true));
 			return Collections.emptySet();
 		}
 	}
