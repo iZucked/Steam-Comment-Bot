@@ -5,8 +5,11 @@
 package com.mmxlabs.models.lng.fleet.ui.editorpart;
 
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,17 +26,21 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.fleet.importer.FuelCurveImporter;
+import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
@@ -43,6 +50,10 @@ import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.DialogFeatureManipulator;
 import com.mmxlabs.models.ui.tabular.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
+import com.mmxlabs.models.util.Activator;
+import com.mmxlabs.models.util.importer.CSVReader;
+import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
@@ -90,6 +101,56 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 				.getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 	
+	@Override
+	protected Action createImportAction() {
+		final Action def = super.createImportAction();
+		def.setText("Import Vessel Classes");
+		return new AbstractMenuAction("Import CSV") {
+			{
+				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
+			}
+			@Override
+			protected void populate(Menu menu) {
+				addActionToMenu(def, menu);
+				final Action importFuels = new ImportAction(getJointModelEditorPart()) {
+					{
+						setText("Import Base Fuels");
+					}
+					@Override
+					protected void doImportStages(final DefaultImportContext context) {
+						final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getBaseFuel());
+						
+						final FileDialog fileDialog = new FileDialog(part.getSite().getShell());
+						fileDialog.setFilterExtensions(new String[] {"*.csv"});
+						final String path = fileDialog.open();
+						
+						if (path == null) return;
+						
+						CSVReader reader;
+						try {
+							reader = new CSVReader(path);
+							final Collection<EObject> importedObjects = importer.importObjects(FleetPackage.eINSTANCE.getBaseFuel(), reader, context);
+							context.run();
+							part.getEditingDomain().getCommandStack().execute(mergeLists(getScenarioViewer().getCurrentContainer(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels(), new ArrayList<EObject>(importedObjects)));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				addActionToMenu(importFuels, menu);
+				
+				final Action importFuelCurves = new LockableAction("Import Consumption Curves") {
+					@Override
+					public void run() {
+						// this is a special case.
+					}
+				};
+				
+				addActionToMenu(importFuelCurves, menu);
+			}
+		};
+	}
+
 	class BaseFuelEditorAction extends AbstractMenuAction {
 		public BaseFuelEditorAction() {
 			super("Base Fuels");
