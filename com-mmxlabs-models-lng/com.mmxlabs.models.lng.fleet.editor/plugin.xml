@@ -101,10 +101,10 @@
 			modelClass="com.mmxlabs.models.lng.fleet.VesselStateAttributes" />
 		
 		<componentHelper
-			id="com.mmxlabs.models.lng.fleet.helpers.VesselAvailablility"
-			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselAvailablilityComponentHelper"
+			id="com.mmxlabs.models.lng.fleet.helpers.VesselAvailiability"
+			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselAvailabilityComponentHelper"
 			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.fleet.VesselAvailablility" />
+			modelClass="com.mmxlabs.models.lng.fleet.VesselAvailability" />
 		
 		<componentHelper
 			id="com.mmxlabs.models.lng.fleet.helpers.FuelConsumption"
