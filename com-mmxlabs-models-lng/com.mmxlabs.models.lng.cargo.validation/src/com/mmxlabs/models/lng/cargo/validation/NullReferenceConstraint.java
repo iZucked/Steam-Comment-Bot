@@ -31,7 +31,10 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 public class NullReferenceConstraint extends AbstractModelConstraint {
 	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(
 	// TODO add any more refs to check here
-			CargoPackage.eINSTANCE.getCargo_LoadSlot(), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), CargoPackage.eINSTANCE.getSlot_Contract());
+			CargoPackage.eINSTANCE.getCargo_LoadSlot(), 
+			CargoPackage.eINSTANCE.getCargo_DischargeSlot(), 
+			CargoPackage.eINSTANCE.getSlot_Port(), 
+			CargoPackage.eINSTANCE.getSlot_Contract());
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 
