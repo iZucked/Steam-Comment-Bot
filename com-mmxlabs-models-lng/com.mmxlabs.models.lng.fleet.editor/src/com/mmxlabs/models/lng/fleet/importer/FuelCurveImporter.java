@@ -5,10 +5,12 @@
 package com.mmxlabs.models.lng.fleet.importer;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
@@ -29,7 +31,8 @@ public class FuelCurveImporter {
 		
 	}
 	
-	public void importFuelConsumptions(final CSVReader reader, final IImportContext context) {
+	public Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> readConsumptions(final CSVReader reader, final IImportContext context) throws IOException {
+		final Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> result = new HashMap<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>>();
 		Map<String, String> row = null;
 		try {
 			context.pushReader(reader);
@@ -51,27 +54,46 @@ public class FuelCurveImporter {
 					}
 				}
 				
-				final IImportProblem vesselClassMissing = context.createProblem("Vessel class " + className + " is missing", true, true, true);
-				
+				Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>> p = result.get(className);
+				if (p == null) {
+					
+					p = new Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>(
+							context.createProblem("Unknown vessel class: " + className, true, true, false),
+							new Pair<List<FuelConsumption>, List<FuelConsumption>>()
+							);
+					result.put(className, p);
+				}
+				if (stateName.equalsIgnoreCase("laden")) {
+					p.getSecond().setFirst(consumptions);
+				} else if (stateName.equalsIgnoreCase("ballast")) {
+					p.getSecond().setSecond(consumptions);
+				} else {
+					context.addProblem(context.createProblem("Unknown vessel state " + stateName, true, true, false));
+				}
+			}
+		} finally {
+			context.popReader();
+			reader.close();
+		}
+		return result;
+	}
+	
+	public void importFuelConsumptions(final CSVReader reader, final IImportContext context) {
+		try {
+			final Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> consumptions = readConsumptions(reader, context);
+		
+			for (final String s : consumptions.keySet()) {
+				final Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>> c = consumptions.get(s);
 				context.doLater(new IDeferment() {
 					@Override
-					public void run(final IImportContext context) {
+					public void run(IImportContext context) {
 						final VesselClass vesselClass = (VesselClass)
-								context.getNamedObject(className, FleetPackage.eINSTANCE.getVesselClass());
+								context.getNamedObject(s, FleetPackage.eINSTANCE.getVesselClass());
 						if (vesselClass != null) {
-							if (stateName.equalsIgnoreCase("laden")) {
-								if (vesselClass.getLadenAttributes() == null) {
-									vesselClass.setLadenAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
-								}
-								vesselClass.getLadenAttributes().getFuelConsumption().addAll(consumptions);
-							} else {
-								if (vesselClass.getLadenAttributes() == null) {
-									vesselClass.setBallastAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
-								}
-								vesselClass.getBallastAttributes().getFuelConsumption().addAll(consumptions);
-							}
+							vesselClass.getLadenAttributes().getFuelConsumption().addAll(c.getSecond().getFirst());
+							vesselClass.getBallastAttributes().getFuelConsumption().addAll(c.getSecond().getSecond());
 						} else {
-							context.addProblem(vesselClassMissing);
+							context.addProblem(c.getFirst());
 						}
 					}
 					
@@ -81,15 +103,8 @@ public class FuelCurveImporter {
 					}
 				});
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				context.popReader();
-				reader.close();
-			} catch (IOException e) {
-			}
+		} catch (final IOException ex) {
+			context.createProblem("IO Exception: " + ex.getMessage(), false, false, false);
 		}
 	}
 }
