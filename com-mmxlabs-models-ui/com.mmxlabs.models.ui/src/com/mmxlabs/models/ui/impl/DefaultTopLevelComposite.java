@@ -122,4 +122,8 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 			child.setEditorWrapper(editorWrapper);
 		}
 	}
+	
+	public ICommandHandler getCommandHandler() {
+		return commandHandler;
+	}
 }
