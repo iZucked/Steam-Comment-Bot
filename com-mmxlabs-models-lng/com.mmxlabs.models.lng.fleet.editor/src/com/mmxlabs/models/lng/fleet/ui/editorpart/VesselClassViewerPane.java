@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -34,10 +36,13 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.fleet.importer.FuelCurveImporter;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
@@ -53,6 +58,7 @@ import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
@@ -142,7 +148,48 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 				final Action importFuelCurves = new LockableAction("Import Consumption Curves") {
 					@Override
 					public void run() {
-						// this is a special case.
+						final DefaultImportContext context = new DefaultImportContext();
+						final FuelCurveImporter importer = new FuelCurveImporter();
+						final FileDialog fileDialog = new FileDialog(part.getSite().getShell());
+						fileDialog.setFilterExtensions(new String[] {"*.csv"});
+						final String path = fileDialog.open();
+						
+						if (path == null) return;
+						
+						CSVReader reader;
+						try {
+							jointModelEditor.setDisableUpdates(true);
+							jointModelEditor.setDisableCommandProviders(true);
+							reader = new CSVReader(path);
+							final Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> consumptions = importer.readConsumptions(reader, context);
+							final EditingDomain ed = jointModelEditor.getEditingDomain();
+							final CompoundCommand command = new CompoundCommand();
+							final FleetModel fleet = jointModelEditor.getRootObject().getSubModel(FleetModel.class);
+							each_vessel:
+							for (final String vesselName : consumptions.keySet()) {
+								// find vessel class
+								for (final VesselClass vc : fleet.getVesselClasses()) {
+									if (vc.getName().equals(vesselName)) {
+										final Pair<List<FuelConsumption>, List<FuelConsumption>> ladenAndBallastConsumptions = consumptions.get(vesselName).getSecond();
+										// apply change
+										command.append(DeleteCommand.create(ed, vc.getLadenAttributes().getFuelConsumption()));
+										command.append(DeleteCommand.create(ed, vc.getBallastAttributes().getFuelConsumption()));
+										command.append(AddCommand.create(ed, vc.getLadenAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), ladenAndBallastConsumptions.getFirst()));
+										command.append(AddCommand.create(ed, vc.getBallastAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), ladenAndBallastConsumptions.getSecond()));
+										continue each_vessel;
+									}
+								}
+								// collect problem
+								context.addProblem(consumptions.get(vesselName).getFirst());
+							}
+							
+							ed.getCommandStack().execute(command);
+						} catch (IOException e) {
+							context.addProblem(context.createProblem("IO Error: " + e.getMessage(), false, false, false));
+						} finally {
+							jointModelEditor.setDisableUpdates(false);
+							jointModelEditor.setDisableCommandProviders(false);
+						}
 					}
 				};
 				
