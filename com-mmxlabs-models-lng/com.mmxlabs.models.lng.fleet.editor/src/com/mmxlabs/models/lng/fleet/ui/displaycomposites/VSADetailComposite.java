@@ -15,14 +15,17 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -212,29 +215,26 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		remove.setText("-");
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		remove.setEnabled(false);
-		table.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				remove.setEnabled(table.getSelectionIndex() > -1);
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				remove.setEnabled(table.getSelectionIndex() > -1);
-			}
+		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				remove.setEnabled(event.getSelection().isEmpty() == false);
+			}
 		});
+		
 		
 		remove.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				final ISelection sel = tableViewer.getSelection();
 				if (sel.isEmpty()) return;
-				if (sel instanceof IStructuredSelection) {					
-					commandHandler.handleCommand(DeleteCommand.create(commandHandler.getEditingDomain(), 
-							((IStructuredSelection) sel).getFirstElement()),
+				if (sel instanceof IStructuredSelection) {
+					final FuelConsumption fc = (FuelConsumption) ((IStructuredSelection) sel).getFirstElement();
+					commandHandler.handleCommand(
+							RemoveCommand.create(commandHandler.getEditingDomain(), fc.eContainer(), fc.eContainingFeature(), fc),
 							oldValue,FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption());
+					tableViewer.refresh();
 				}
 			}
 		});
