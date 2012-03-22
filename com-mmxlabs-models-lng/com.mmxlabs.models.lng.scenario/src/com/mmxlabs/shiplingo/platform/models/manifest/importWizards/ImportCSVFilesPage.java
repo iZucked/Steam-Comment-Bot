@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Group;
 
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
@@ -78,7 +79,7 @@ public class ImportCSVFilesPage extends WizardPage {
 	@Override
 	public void createControl(Composite arg0) {
 		final ScrolledComposite c1 = new ScrolledComposite(arg0, SWT.BORDER | SWT.V_SCROLL);
-				
+		
 		final Composite top = new Composite(c1, SWT.NONE);
 		
 		top.setLayout(new GridLayout(1, false));
@@ -93,7 +94,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			final Group g = new Group(top, SWT.NONE);
 			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			g.setLayout(new RowLayout(SWT.VERTICAL));
-			g.setText(subModelClass.getName());	
+			g.setText(EditorUtils.unmangle(subModelClass.getName()));
 			for (final Map.Entry<String, String> entry : parts.entrySet()) {
 				final FileFieldEditor ffe = new FileFieldEditor(entry.getKey(), entry.getValue(), g);
 				ffe.getTextControl(g).addModifyListener(new ModifyListener() {	
@@ -129,7 +130,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		
 		c1.setContent(top);
 //		c1.setExpandVertical(true);
-//		c1.setExpandHorizontal(true);
+		c1.setExpandHorizontal(true);
 //		c1.set
 		top.setSize(top.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		setControl(c1);
