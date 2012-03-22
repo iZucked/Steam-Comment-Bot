@@ -23,6 +23,14 @@ import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
 public class PortModelImporter implements ISubmodelImporter {
+	/**
+	 * 
+	 */
+	private static final String SUEZ_CANAL_NAME = "Suez canal";
+	/**
+	 * 
+	 */
+	private static final String DIRECT_NAME = "Direct";
 	public static final String PORT_KEY = "PORT";
 	public static final String PORT_GROUP_KEY = "PORTGROUP";
 	public static final String DISTANCES_KEY = "DISTANCES";
@@ -59,16 +67,18 @@ public class PortModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(DISTANCES_KEY)) {
 			final Route direct = routeImporter.importRoute(inputs.get(DISTANCES_KEY), context);
 			if (direct != null) {
-				direct.setName("Direct");
+				direct.setName(DIRECT_NAME);
 				result.getRoutes().add(direct);
+				context.registerNamedObject(direct);
 			}
 		}
 		if (inputs.containsKey(SUEZ_KEY)) {
 			final Route suez = routeImporter.importRoute(inputs.get(SUEZ_KEY), context);
 			if (suez != null) {
-				suez.setName("Suez canal");
+				suez.setName(SUEZ_CANAL_NAME);
 				suez.setCanal(true);
 				result.getRoutes().add(suez);
+				context.registerNamedObject(suez);
 			}
 		}
 		return result;
@@ -77,6 +87,17 @@ public class PortModelImporter implements ISubmodelImporter {
 	@Override
 	public void exportModel(UUIDObject model,
 			Map<String, Collection<Map<String, String>>> output) {
+		for (final Route r : ((PortModel)model).getRoutes()) {
+			Collection<Map<String, String>> result = routeImporter.exportRoute(r);
+			if (r.getName().equals(DIRECT_NAME)) {
+				output.put(DISTANCES_KEY, result );
+			} else if (r.getName().equals(SUEZ_CANAL_NAME)) {
+				output.put(SUEZ_KEY, result);
+			} else {
+				inputs.put(r.getName(), r.getName());
+				output.put(r.getName(), result);
+			}
+		}
 		output.put(PORT_KEY, portImporter.exportObjects(((PortModel)model).getPorts()));
 		output.put(PORT_GROUP_KEY, portGroupImporter.exportObjects(((PortModel)model).getPortGroups()));
 	}

@@ -121,6 +121,7 @@ public class DataIndexImporter implements IClassImporter {
 					final Date dt = pt.getDate();
 					row.put(shortDate.format(dt), n.toString());
 				}
+				result.add(row);
 			}
 		}
 		return result;

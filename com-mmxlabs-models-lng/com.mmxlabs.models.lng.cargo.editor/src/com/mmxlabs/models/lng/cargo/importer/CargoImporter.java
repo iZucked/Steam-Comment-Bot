@@ -53,7 +53,7 @@ public class CargoImporter extends DefaultClassImporter {
 					
 					@Override
 					public int getStage() {
-						return -1;
+						return IImportContext.STAGE_MODIFY_ATTRIBUTES;
 					}
 				});
 			}
@@ -69,7 +69,7 @@ public class CargoImporter extends DefaultClassImporter {
 					
 					@Override
 					public int getStage() {
-						return -1;
+						return IImportContext.STAGE_MODIFY_ATTRIBUTES;
 					}
 				});
 			}

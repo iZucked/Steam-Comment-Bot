@@ -150,8 +150,8 @@ public class PricingModelImporter implements ISubmodelImporter {
 	public void exportModel(final UUIDObject model,
 			final Map<String, Collection<Map<String, String>>> output) {
 		final PricingModel pricing = (PricingModel) model;
-		output.put(PRICE_CURVE_KEY, dataIndexImporter.exportObjects(pricing.getCharterIndices()));
-		output.put(CHARTER_CURVE_KEY, dataIndexImporter.exportObjects(pricing.getCommodityIndices()));
+		output.put(PRICE_CURVE_KEY, dataIndexImporter.exportObjects(pricing.getCommodityIndices()));
+		output.put(CHARTER_CURVE_KEY, dataIndexImporter.exportObjects(pricing.getCharterIndices()));
 		output.put(COOLDOWN_PRICING_KEY, cooldownPriceImporter.exportObjects(pricing.getCooldownPrices()));
 		output.put(CHARTER_PRICING_KEY, charterPriceImporter.exportObjects(pricing.getFleetCost().getCharterCosts()));
 	}

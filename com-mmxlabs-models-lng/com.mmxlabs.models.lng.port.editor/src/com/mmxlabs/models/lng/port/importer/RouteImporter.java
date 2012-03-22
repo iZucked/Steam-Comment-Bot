@@ -5,6 +5,9 @@
 package com.mmxlabs.models.lng.port.importer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -76,5 +79,24 @@ public class RouteImporter {
 		}
 
 		return result;
+	}
+
+	/**
+	 * @param r
+	 * @return
+	 */
+	public Collection<Map<String, String>> exportRoute(final Route r) {
+		final Map<String, Map<String, String>> rows = new HashMap<String, Map<String, String>>();
+		
+		for (final RouteLine line : r.getLines()) {
+			Map<String, String> row = rows.get(line.getFrom().getName());
+			if (row == null) {
+				row = new HashMap<String, String>();
+				row.put("from", line.getFrom().getName());
+			}
+			row.put(line.getTo().getName(), line.getDistance() + "");
+		}
+		
+		return rows.values();
 	}
 }
