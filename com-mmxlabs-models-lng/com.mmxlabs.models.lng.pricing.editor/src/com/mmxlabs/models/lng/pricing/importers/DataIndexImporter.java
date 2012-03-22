@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -25,25 +27,26 @@ import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 
-
 /**
  * Custom import logic for loading a data index.
  * 
  * @author hinton
- *
+ * 
  */
 public class DataIndexImporter implements IClassImporter {
 	boolean parseAsInt = false;
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
+
 	/**
 	 * @return the parseAsInt
 	 */
 	public boolean isParseAsInt() {
 		return parseAsInt;
 	}
-	
+
 	/**
-	 * @param parseAsInt the parseAsInt to set
+	 * @param parseAsInt
+	 *            the parseAsInt to set
 	 */
 	public void setParseAsInt(boolean parseAsInt) {
 		this.parseAsInt = parseAsInt;
@@ -52,7 +55,7 @@ public class DataIndexImporter implements IClassImporter {
 	@Override
 	public Collection<EObject> importObjects(EClass targetClass, CSVReader reader, IImportContext context) {
 		final List<EObject> result = new LinkedList<EObject>();
-		
+
 		Map<String, String> row;
 		try {
 			context.pushReader(reader);
@@ -64,20 +67,20 @@ public class DataIndexImporter implements IClassImporter {
 		} finally {
 			context.popReader();
 		}
- 		
+
 		return result;
 	}
 
 	@Override
 	public Collection<EObject> importObject(EClass targetClass, Map<String, String> row, IImportContext context) {
 		final DataIndex<Number> result = PricingFactory.eINSTANCE.createDataIndex();
-		
+
 		if (row.containsKey("name")) {
 			result.setName(row.get("name"));
 		} else {
 			context.addProblem(context.createProblem("Index name is missing", true, true, true));
 		}
-		
+
 		for (final String s : row.keySet()) {
 			try {
 				final Date date = shortDate.parse(s);
@@ -99,16 +102,27 @@ public class DataIndexImporter implements IClassImporter {
 				}
 			}
 		}
-		
+
 		context.registerNamedObject(result);
-		
+
 		return Collections.singleton((EObject) result);
 	}
 
 	@Override
 	public Collection<Map<String, String>> exportObjects(Collection<? extends EObject> objects) {
-		// TODO Auto-generated method stub
-		
-		return null;
+		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		for (final EObject o : objects) {
+			if (o instanceof DataIndex) {
+				final DataIndex<Number> i = (DataIndex) o;
+				final Map<String, String> row = new HashMap<String, String>();
+				row.put("name", i.getName());
+				for (final IndexPoint<Number> pt : i.getPoints()) {
+					final Number n = pt.getValue();
+					final Date dt = pt.getDate();
+					row.put(shortDate.format(dt), n.toString());
+				}
+			}
+		}
+		return result;
 	}
 }
