@@ -123,7 +123,8 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 
 	private String escape(final String key) {
 		if (key == null) return "";
-		return key.trim().replace("\"", "\\\"");
+		final String sub = key.trim().replace("\"", "\\\"");
+		return sub.contains(",") ? "\""+sub+"\"" : sub;
 	}
 
 	@Override
