@@ -13,13 +13,18 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserModel/activeSetting"/>
     </genClasses>
     <genClasses ecoreClass="optimiser.ecore#//OptimiserSettings">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/objectives"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/constraints"/>
+      <genFeatures property="None" children="true" createChild="true" propertyDescription="The list of objectives being optimised (or fitness functions)"
+          ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/objectives"/>
+      <genFeatures property="None" children="true" createChild="true" propertyDescription="The list of hard constraints being applied"
+          ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/constraints"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/range"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/annealingSettings"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimiserSettings/seed"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/arguments"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimiserSettings/rewire"/>
+      <genFeatures createChild="false" propertyDescription="A seed for the random number generator"
+          ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimiserSettings/seed"/>
+      <genFeatures property="None" children="true" createChild="true" propertyDescription="A list of extra arguments to the optimiser"
+          ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/arguments"/>
+      <genFeatures createChild="false" propertyDescription="If true, rewiring will be allowed by default, otherwise not (cargos can override this)"
+          ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimiserSettings/rewire"/>
     </genClasses>
     <genClasses ecoreClass="optimiser.ecore#//Objective">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//Objective/weight"/>
@@ -29,14 +34,20 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//Constraint/enabled"/>
     </genClasses>
     <genClasses ecoreClass="optimiser.ecore#//OptimisationRange">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimisationRange/optimiseAfter"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimisationRange/optimiseBefore"/>
+      <genFeatures createChild="false" propertyDescription="Only scenario events after this date will be included in the optimisation, if set"
+          ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimisationRange/optimiseAfter"/>
+      <genFeatures createChild="false" propertyDescription="Only scenario events before this date will be optimised, if set"
+          ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimisationRange/optimiseBefore"/>
     </genClasses>
     <genClasses ecoreClass="optimiser.ecore#//AnnealingSettings">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//AnnealingSettings/iterations"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//AnnealingSettings/epochLength"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//AnnealingSettings/cooling"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//AnnealingSettings/initialTemperature"/>
+      <genFeatures createChild="false" propertyDescription="The number of adjustments to the schedule to perform before finishing; more iterations may give a better result, but will take longer"
+          ecoreFeature="ecore:EAttribute optimiser.ecore#//AnnealingSettings/iterations"/>
+      <genFeatures createChild="false" propertyDescription="The number of iterations performed before each annealing temperature change; a longer epoch length typically goes with more iterations"
+          ecoreFeature="ecore:EAttribute optimiser.ecore#//AnnealingSettings/epochLength"/>
+      <genFeatures createChild="false" propertyDescription="The fraction by which to multiply the temperature each epoch"
+          ecoreFeature="ecore:EAttribute optimiser.ecore#//AnnealingSettings/cooling"/>
+      <genFeatures createChild="false" propertyDescription="The starting temperature for the annealer"
+          ecoreFeature="ecore:EAttribute optimiser.ecore#//AnnealingSettings/initialTemperature"/>
     </genClasses>
     <genClasses ecoreClass="optimiser.ecore#//Argument">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute optimiser.ecore#//Argument/name"/>
