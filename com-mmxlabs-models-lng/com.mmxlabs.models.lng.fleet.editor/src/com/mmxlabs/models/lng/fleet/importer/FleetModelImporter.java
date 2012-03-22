@@ -77,6 +77,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 		output.put(VESSEL_CLASSES_KEY, vesselClassImporter.exportObjects(fleetModel.getVesselClasses()));
 		output.put(EVENTS_KEY, vesselEventImporter.exportObjects(fleetModel.getVesselEvents()));
 		output.put(FUELS_KEY, baseFuelImporter.exportObjects(fleetModel.getBaseFuels()));
+		output.put(CURVES_KEY, fuelCurveImporter.exportCurves(fleetModel.getVesselClasses()));
 	}
 
 }

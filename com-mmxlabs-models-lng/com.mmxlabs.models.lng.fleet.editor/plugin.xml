@@ -188,4 +188,19 @@
           targetEClass="com.mmxlabs.models.lng.fleet.VesselEvent">
     </factory>
  </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.classes">
+    <classImporter
+          ID="com.mmxlabs.models.lng.fleet.editor.vesselClassImporter"
+          classImporterClass="com.mmxlabs.models.lng.fleet.importer.VesselClassImporter"
+          eClassName="com.mmxlabs.models.lng.fleet.VesselClass"
+          inheritable="true">
+    </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.fleet.editor.baseFuelImporter"
+          classImporterClass="com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter"
+          eClassName="com.mmxlabs.models.lng.fleet.BaseFuel"
+          inheritable="true">
+    </classImporter>
+ </extension>
 </plugin>

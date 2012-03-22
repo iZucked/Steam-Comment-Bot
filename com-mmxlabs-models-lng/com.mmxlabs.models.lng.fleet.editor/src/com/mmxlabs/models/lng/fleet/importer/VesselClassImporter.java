@@ -1,0 +1,156 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
+package com.mmxlabs.models.lng.fleet.importer;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.util.Activator;
+import com.mmxlabs.models.util.importer.FieldMap;
+import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IFieldMap;
+import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
+
+/**
+ * Vessel class importer; adds support for canal time fields.
+ * 
+ * @author hinton
+ *
+ */
+public class VesselClassImporter extends DefaultClassImporter {
+	final IClassImporter routeCostImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getRouteCost());
+	final IClassImporter parameterImporter = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getVesselClassRouteParameters());
+	
+	@Override
+	public Collection<EObject> importObject(EClass eClass, Map<String, String> row, IImportContext context) {
+		final Collection<EObject> result = super.importObject(eClass, row, context);
+		final VesselClass vc = (VesselClass) result.iterator().next();
+		for (final String key : row.keySet()) {
+			final String[] parts = key.split("\\.");
+			if (parts.length > 1) {
+				if (parts[1].equals("pricing")) {
+					final String original = context.peekReader().getCasedColumnName(key);
+					final String canalName = original.split("\\.")[0];
+					
+					if (routeCostImporter != null) {
+						final IFieldMap rowMap;
+						if (row instanceof IFieldMap) {
+							rowMap = (IFieldMap) row;
+						} else {
+							rowMap = new FieldMap(row);
+						}
+						final IFieldMap subMap = rowMap.getSubMap(parts[0]+"."+parts[1]+".");
+						
+						subMap.put("route", canalName);
+						subMap.put("vesselclass", row.get("name"));
+						final RouteCost cost = (RouteCost) routeCostImporter.importObject(PricingPackage.eINSTANCE.getRouteCost(), subMap, context).iterator().next();
+						
+						context.doLater(new IDeferment() {
+							@Override
+							public void run(final IImportContext context) {
+								if (cost.getRoute() != null && cost.getVesselClass() != null) {
+									context.getRootObject().getSubModel(PricingModel.class).getRouteCosts().add(cost);
+								}
+							}
+							
+							@Override
+							public int getStage() {
+								return IImportContext.STAGE_MODIFY_SUBMODELS;
+							}
+						});
+					}
+				} else if (parts[1].equals("parameters")) {
+					final String original = context.peekReader().getCasedColumnName(key);
+					final String canalName = original.split("\\.")[0];
+					
+					if (parameterImporter != null) {
+						final IFieldMap rowMap;
+						if (row instanceof IFieldMap) {
+							rowMap = (IFieldMap) row;
+						} else {
+							rowMap = new FieldMap(row);
+						}
+						final IFieldMap subMap = rowMap.getSubMap(parts[0]+"."+parts[1]+".");
+						
+						subMap.put("route", canalName);
+						
+						final VesselClassRouteParameters parameters = (VesselClassRouteParameters) parameterImporter.importObject(FleetPackage.eINSTANCE.getVesselClassRouteParameters(), subMap, context).iterator().next();
+					
+						context.doLater(new IDeferment() {							
+							@Override
+							public void run(IImportContext context) {
+								if (parameters.getRoute() != null) {
+									vc.getRouteParameters().add(parameters);
+								}
+							}
+							
+							@Override
+							public int getStage() {
+								return IImportContext.STAGE_MODIFY_SUBMODELS;
+							}
+						});
+					}
+				}
+			}
+		}
+		
+		
+		
+		return result;
+	}
+
+	@Override
+	protected Map<String, String> exportObject(EObject object) {
+		final VesselClass vc = (VesselClass) object;
+		final Map<String, String> result = super.exportObject(object);
+		
+		for (final VesselClassRouteParameters routeParameters : vc.getRouteParameters()) {
+			final Map<String, String> exportedParameters = parameterImporter.exportObjects(Collections.singleton(routeParameters)).iterator().next();
+			final String route = exportedParameters.get("route");
+			exportedParameters.remove("route");
+			final String prefix = route + ".parameters.";
+			for (final Map.Entry<String, String> e : exportedParameters.entrySet()) {
+				result.put(prefix + e.getKey(), e.getValue());
+			}
+		}
+		
+		while (!(object instanceof MMXRootObject) && !(object == null)) {
+			object = object.eContainer();
+		}
+		
+		if (object instanceof MMXRootObject) {
+			final PricingModel pm = ((MMXRootObject) object).getSubModel(PricingModel.class);
+			if (pm != null) {
+				for (final RouteCost rc : pm.getRouteCosts()) {
+					if (rc.getVesselClass() == vc) {
+						final Map<String, String> exportedCost = routeCostImporter.exportObjects(Collections.singleton(rc)).iterator().next();
+						exportedCost.remove("vesselclass");
+						final String route = exportedCost.get("route");
+						exportedCost.remove("route");
+						final String prefix = route + ".pricing.";
+						for (final Map.Entry<String, String> e : exportedCost.entrySet()) {
+							result.put(prefix + e.getKey(), e.getValue());
+						}
+					}
+				}
+			}
+		}
+		
+		return result;
+	}
+}

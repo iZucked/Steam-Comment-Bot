@@ -103,7 +103,7 @@ public class FuelCurveImporter {
 					
 					@Override
 					public int getStage() {
-						return 4;
+						return IImportContext.STAGE_REFERENCES_RESOLVED;
 					}
 				});
 			}
