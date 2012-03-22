@@ -5,10 +5,14 @@
 package com.mmxlabs.models.lng.fleet.importer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
@@ -105,6 +109,32 @@ public class FuelCurveImporter {
 			}
 		} catch (final IOException ex) {
 			context.createProblem("IO Exception: " + ex.getMessage(), false, false, false);
+		}
+	}
+
+	public Collection<Map<String, String>> exportCurves(final EList<VesselClass> vesselClasses) {
+		final List<Map<String, String>> rows = new ArrayList<Map<String, String>>(vesselClasses.size() * 2);
+		
+		for (final VesselClass vc : vesselClasses) {
+			final Map<String, String> ladenRow = new HashMap<String, String>();
+			ladenRow.put("class", vc.getName());
+			ladenRow.put("state", "laden");
+			exportConsumptions(vc.getLadenAttributes().getFuelConsumption(), ladenRow);
+			rows.add(ladenRow);
+			
+			final Map<String, String> ballastRow = new HashMap<String, String>();
+			ballastRow.put("class", vc.getName());
+			ballastRow.put("state", "ballast");
+			exportConsumptions(vc.getBallastAttributes().getFuelConsumption(), ballastRow);
+			rows.add(ballastRow);
+		}
+		
+		return rows;
+	}
+
+	private void exportConsumptions(EList<FuelConsumption> fuelConsumption, Map<String, String> ladenRow) {
+		for (final FuelConsumption fc : fuelConsumption) {
+			ladenRow.put(String.format("%.2f", fc.getSpeed()), Integer.toString(fc.getConsumption()));
 		}
 	}
 }
