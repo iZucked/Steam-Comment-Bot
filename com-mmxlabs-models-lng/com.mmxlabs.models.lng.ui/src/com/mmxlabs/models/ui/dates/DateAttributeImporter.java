@@ -110,7 +110,7 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 
 			@Override
 			public int getStage() {
-				return 5;
+				return IImportContext.STAGE_REFERENCES_RESOLVED;
 			}
 		});
 		}
