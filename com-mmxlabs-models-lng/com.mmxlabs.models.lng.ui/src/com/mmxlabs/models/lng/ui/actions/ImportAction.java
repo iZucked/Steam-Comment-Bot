@@ -65,6 +65,10 @@ public abstract class ImportAction extends LockableAction {
 			}
 
 			doImportStages(context);
+			if (context.getProblems().isEmpty() == false) {
+				final ImportProblemDialog ipd = new ImportProblemDialog(part.getSite().getShell());
+				ipd.open(context);
+			}
 		} finally {
 			part.setDisableUpdates(false);
 			part.setDisableCommandProviders(false);
