@@ -53,6 +53,6 @@ public class SetReference implements IDeferment {
 	}
 	@Override
 	public int getStage() {
-		return 0;
+		return IImportContext.STAGE_RESOLVE_REFERENCES;
 	}
 }

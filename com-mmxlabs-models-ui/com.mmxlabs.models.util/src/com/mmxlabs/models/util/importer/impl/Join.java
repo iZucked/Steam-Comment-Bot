@@ -55,7 +55,7 @@ public class Join implements IDeferment {
 
 	@Override
 	public int getStage() {
-		return secondAttempt ? 2 : 1;
+		return secondAttempt ? IImportContext.STAGE_RESOLVE_CROSSREFERENCES : IImportContext.STAGE_RESOLVE_REFERENCES;
 	}
 
 }

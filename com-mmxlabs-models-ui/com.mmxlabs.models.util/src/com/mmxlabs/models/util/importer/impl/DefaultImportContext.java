@@ -35,7 +35,10 @@ public class DefaultImportContext implements IImportContext {
 	@Override
 	public NamedObject getNamedObject(String name, EClass preferredType) {
 		final List<NamedObject> matches = namedObjects.get(name);
-		if (matches == null) return null;
+		if (matches == null) {
+			log.warn("No objects with name " + name + " have been imported");
+			return null;
+		}
 		int match = Integer.MAX_VALUE;
 		NamedObject best = null;
 		for (final NamedObject o : matches) {
@@ -46,7 +49,17 @@ public class DefaultImportContext implements IImportContext {
 					best = o;
 				}
 			}
+		} 
+		
+		if (best == null) {
+			final ArrayList<String> typeNames = new ArrayList<String>();
+			for (final NamedObject o : matches) {
+				typeNames.add(o.eClass().getName());
+			}
+			log.warn("Could not locate instance of " +preferredType.getName() + " with name " + name +". "
+					+ "Objects with that name are of types " + typeNames);
 		}
+		
 		return best;
 	}
 
@@ -229,5 +242,13 @@ public class DefaultImportContext implements IImportContext {
 
 	public void setRootObject(MMXRootObject root) {
 		this.rootObject = root;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.util.importer.IImportContext#peekReader()
+	 */
+	@Override
+	public CSVReader peekReader() {
+		return readerStack.peek();
 	}
 }

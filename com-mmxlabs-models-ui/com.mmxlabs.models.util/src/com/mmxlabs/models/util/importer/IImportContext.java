@@ -21,6 +21,28 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  */
 public interface IImportContext {
 	/**
+	 * This stage is intended for any simple modifications to attributes, which just require
+	 * that the object be largely OK
+	 */
+	public static final int STAGE_MODIFY_ATTRIBUTES = 5;
+	/**
+	 * This is the stage during which references are resolved
+	 */
+	public static final int STAGE_RESOLVE_REFERENCES = 10;
+	/**
+	 * This is the stage during which references that depend on other references are resolved
+	 */
+	public static final int STAGE_RESOLVE_CROSSREFERENCES = 20;
+	/**
+	 * This is for anything which requires all references to be resolved
+	 */
+	public static final int STAGE_REFERENCES_RESOLVED = 25;
+	/**
+	 * This is for things which do arbitrary changes and require most stuff to be in place.
+	 */
+	public static final int STAGE_MODIFY_SUBMODELS = 30;
+	
+	/**
 	 * Instances of this can be used to do things like looking up named references after the bulk of the import has been completed.
 	 * 
 	 * 
@@ -121,4 +143,9 @@ public interface IImportContext {
 	 * @return
 	 */
 	public List<IImportProblem> getProblems();
+
+	/**
+	 * @return the current reader
+	 */
+	public CSVReader peekReader();
 }
