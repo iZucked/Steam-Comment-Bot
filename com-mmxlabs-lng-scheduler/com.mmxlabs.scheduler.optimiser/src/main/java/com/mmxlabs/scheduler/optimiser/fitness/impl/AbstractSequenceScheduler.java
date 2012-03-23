@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,22 +59,31 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	private static final Logger log = LoggerFactory.getLogger(AbstractSequenceScheduler.class);
 
+	@Inject
 	private IElementDurationProvider durationsProvider;
 
+	@Inject
 	private ITimeWindowDataComponentProvider timeWindowProvider;
 
+	@Inject
 	private IPortProvider portProvider;
 
+	@Inject
 	private IPortSlotProvider portSlotProvider;
 
+	@Inject
 	private IPortTypeProvider portTypeProvider;
 
+	@Inject
 	private IVesselProvider vesselProvider;
 
+	@Inject
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
+	@Inject
 	private IVoyagePlanOptimiser voyagePlanOptimiser;
 
+	@Inject
 	protected IRouteCostProvider routeCostProvider;
 
 	public IRouteCostProvider getRouteCostProvider() {
