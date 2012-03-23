@@ -6,8 +6,6 @@ package com.mmxlabs.scheduler.optimiser.events;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
  * {@link IScheduledEvent} defining a journey or travel between ports.
