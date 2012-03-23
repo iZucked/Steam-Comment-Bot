@@ -250,7 +250,34 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 	@Override
 	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		// TODO Auto-generated method stub
+		final PortType firstType = portTypeProvider.getPortType(first);
+		final PortType secondType = portTypeProvider.getPortType(second);
+
+		// check the legality of this sequencing decision
+		// End can't come before anything and Start can't come after anything
+		if (firstType.equals(PortType.End) || secondType.equals(PortType.Start)) {
+			return "End can't come before anything and Start can't come after anything";
+		}
+
+		if (firstType.equals(PortType.Start) && secondType.equals(PortType.Discharge)) {
+			// first port should be a load slot (TODO is this true?)
+			return "Need a discharge after a Start";
+		}
+
+		// load must precede discharge or waypoint, but nothing else
+		if (firstType.equals(PortType.Load)) {
+			
+			if (!(secondType.equals(PortType.Discharge) || secondType.equals(PortType.Waypoint))) {
+				return "Discharge or Waypoint must follow a Load";
+			}
+		}
+
+		// discharge may precede anything but Discharge (and start, but we
+		// already did that)
+		if (firstType.equals(PortType.Discharge) && secondType.equals(PortType.Discharge)) {
+			return "Discharge cannot follow a discharge";
+		}
+
 		return null;
 	}
 }
