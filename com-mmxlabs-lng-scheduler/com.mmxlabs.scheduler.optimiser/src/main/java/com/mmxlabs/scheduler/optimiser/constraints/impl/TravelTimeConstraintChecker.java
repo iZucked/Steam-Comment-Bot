@@ -150,12 +150,9 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		if (distance == Integer.MAX_VALUE) {
 			return "No edge connecting ports";
 		}
-		final int travelTime = Calculator.getTimeFromSpeedDistance(vesselProvider.getVessel(resource).getVesselClass().getMaxSpeed(), distance);
 		final ITimeWindow tw1 = slot1.getTimeWindow();
 		final ITimeWindow tw2 = slot2.getTimeWindow();
-		final int earliestArrivalTime = tw1.getStart() + elementDurationProvider.getElementDuration(first, resource) + travelTime;
 
-		final int latestAllowableTime = tw2.getEnd() + maxLateness;
 		return "Excessive lateness : " + slot1.getPort().getName() + " to " + slot2.getPort().getName() + " = " + distance + ", but " + " start of first tw = " + tw1.getStart()
 				+ " and end of second = " + tw2.getEnd();
 	}
