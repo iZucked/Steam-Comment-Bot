@@ -773,10 +773,19 @@ public class LNGScenarioTransformer {
 		 * Now create each vessel
 		 */
 		for (final Vessel eV : fleetModel.getVessels()) {
-			final IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, eV.getAvailability().getStartAfter(), eV.getAvailability().getStartBy(),
+			final IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, 
+					eV.getAvailability().isSetStartAfter() ?
+					eV.getAvailability().getStartAfter() : null, 
+					eV.getAvailability().isSetStartBy() ?
+					eV.getAvailability().getStartBy() : null, 
 					SetUtils.getPorts(eV.getAvailability().getStartAt()));
 
-			final IStartEndRequirement endRequirement = createRequirement(builder, portAssociation, eV.getAvailability().getEndAfter(), eV.getAvailability().getEndBy(),
+			final IStartEndRequirement endRequirement = 
+					createRequirement(builder, portAssociation, 
+					eV.getAvailability().isSetEndAfter() ?
+					eV.getAvailability().getEndAfter() : null, 
+					eV.getAvailability().isSetEndBy() ?
+					eV.getAvailability().getEndBy() : null, 
 					SetUtils.getPorts(eV.getAvailability().getEndAt()));
 
 			final int dailyCharterPrice = eV.isSetTimeCharterRate() ? eV.getTimeCharterRate() : vesselClassAssociation.lookup(eV.getVesselClass()).getHourlyCharterInPrice() * 24;
