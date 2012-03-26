@@ -40,13 +40,13 @@ public class CooldownPricingConstraint extends AbstractModelConstraint {
 			if (rootObject != null) {
 				final PortModel ports = rootObject.getSubModel(PortModel.class);
 				if (ports != null) {
-					final HashSet<APort> pricedPorts = new HashSet<APort>();
+					final HashSet<APort> unpricedPorts = new HashSet<APort>();
+					unpricedPorts.addAll(ports.getPorts());
 					for (final CooldownPrice c : pm.getCooldownPrices()) {
-						pricedPorts.addAll(SetUtils.getPorts(c.getPorts()));
+						unpricedPorts.removeAll(SetUtils.getPorts(c.getPorts()));
 					}
-					pricedPorts.removeAll(ports.getPorts());
-					if (!pricedPorts.isEmpty()) {
-						return ctx.createFailureStatus(pricedPorts.toString());
+					if (!unpricedPorts.isEmpty()) {
+						return ctx.createFailureStatus(unpricedPorts.toString());
 					}
 				}
 			}
