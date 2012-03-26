@@ -17,7 +17,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getNboRate <em>Nbo Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getIdleNBORate <em>Idle NBO Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getIdleBaseRate <em>Idle Base Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getCanalNBORate <em>Canal NBO Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortBaseRate <em>In Port Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getFuelConsumption <em>Fuel Consumption</em>}</li>
  * </ul>
@@ -108,33 +107,6 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @generated
 	 */
 	void setIdleBaseRate(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Canal NBO Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Canal NBO Rate</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Canal NBO Rate</em>' attribute.
-	 * @see #setCanalNBORate(int)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_CanalNBORate()
-	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3/d'"
-	 * @generated
-	 */
-	int getCanalNBORate();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getCanalNBORate <em>Canal NBO Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Canal NBO Rate</em>' attribute.
-	 * @see #getCanalNBORate()
-	 * @generated
-	 */
-	void setCanalNBORate(int value);
 
 	/**
 	 * Returns the value of the '<em><b>In Port Base Rate</b></em>' attribute.

@@ -68,7 +68,6 @@ public class VesselStateAttributesItemProvider
 			addNboRatePropertyDescriptor(object);
 			addIdleNBORatePropertyDescriptor(object);
 			addIdleBaseRatePropertyDescriptor(object);
-			addCanalNBORatePropertyDescriptor(object);
 			addInPortBaseRatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -132,28 +131,6 @@ public class VesselStateAttributesItemProvider
 				 getString("_UI_VesselStateAttributes_idleBaseRate_feature"),
 				 getString("_UI_VesselStateAttributes_idleBaseRate_description"),
 				 FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Canal NBO Rate feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCanalNBORatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselStateAttributes_canalNBORate_feature"),
-				 getString("_UI_VesselStateAttributes_canalNBORate_description"),
-				 FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE,
 				 true,
 				 false,
 				 false,
@@ -252,7 +229,6 @@ public class VesselStateAttributesItemProvider
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__NBO_RATE:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE:
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

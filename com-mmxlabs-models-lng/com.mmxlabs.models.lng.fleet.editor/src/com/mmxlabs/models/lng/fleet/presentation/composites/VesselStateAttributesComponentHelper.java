@@ -68,7 +68,6 @@ public class VesselStateAttributesComponentHelper implements IComponentHelper {
 		add_nboRateEditor(detailComposite, topClass);
 		add_idleNBORateEditor(detailComposite, topClass);
 		add_idleBaseRateEditor(detailComposite, topClass);
-		add_canalNBORateEditor(detailComposite, topClass);
 		add_inPortBaseRateEditor(detailComposite, topClass);
 		add_fuelConsumptionEditor(detailComposite, topClass);
 	}
@@ -95,14 +94,6 @@ public class VesselStateAttributesComponentHelper implements IComponentHelper {
 	 */
 	protected void add_idleBaseRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE));
-	}
-	/**
-	 * Create the editor for the canalNBORate feature on VesselStateAttributes
-	 *
-	 * @generated
-	 */
-	protected void add_canalNBORateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE));
 	}
 	/**
 	 * Create the editor for the inPortBaseRate feature on VesselStateAttributes

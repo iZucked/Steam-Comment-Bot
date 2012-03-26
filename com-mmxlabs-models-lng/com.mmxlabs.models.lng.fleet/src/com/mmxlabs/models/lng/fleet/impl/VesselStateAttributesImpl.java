@@ -31,7 +31,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getNboRate <em>Nbo Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getIdleNBORate <em>Idle NBO Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getIdleBaseRate <em>Idle Base Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getCanalNBORate <em>Canal NBO Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getInPortBaseRate <em>In Port Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getFuelConsumption <em>Fuel Consumption</em>}</li>
  * </ul>
@@ -99,26 +98,6 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @ordered
 	 */
 	protected int idleBaseRate = IDLE_BASE_RATE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getCanalNBORate() <em>Canal NBO Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCanalNBORate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int CANAL_NBO_RATE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getCanalNBORate() <em>Canal NBO Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCanalNBORate()
-	 * @generated
-	 * @ordered
-	 */
-	protected int canalNBORate = CANAL_NBO_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getInPortBaseRate() <em>In Port Base Rate</em>}' attribute.
@@ -237,27 +216,6 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getCanalNBORate() {
-		return canalNBORate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCanalNBORate(int newCanalNBORate) {
-		int oldCanalNBORate = canalNBORate;
-		canalNBORate = newCanalNBORate;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE, oldCanalNBORate, canalNBORate));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getInPortBaseRate() {
 		return inPortBaseRate;
 	}
@@ -314,8 +272,6 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return getIdleNBORate();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE:
 				return getIdleBaseRate();
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE:
-				return getCanalNBORate();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
 				return getInPortBaseRate();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
@@ -341,9 +297,6 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE:
 				setIdleBaseRate((Integer)newValue);
-				return;
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE:
-				setCanalNBORate((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
 				setInPortBaseRate((Integer)newValue);
@@ -373,9 +326,6 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE:
 				setIdleBaseRate(IDLE_BASE_RATE_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE:
-				setCanalNBORate(CANAL_NBO_RATE_EDEFAULT);
-				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
 				setInPortBaseRate(IN_PORT_BASE_RATE_EDEFAULT);
 				return;
@@ -400,8 +350,6 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return idleNBORate != IDLE_NBO_RATE_EDEFAULT;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE:
 				return idleBaseRate != IDLE_BASE_RATE_EDEFAULT;
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE:
-				return canalNBORate != CANAL_NBO_RATE_EDEFAULT;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
 				return inPortBaseRate != IN_PORT_BASE_RATE_EDEFAULT;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
@@ -426,8 +374,6 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 		result.append(idleNBORate);
 		result.append(", idleBaseRate: ");
 		result.append(idleBaseRate);
-		result.append(", canalNBORate: ");
-		result.append(canalNBORate);
 		result.append(", inPortBaseRate: ");
 		result.append(inPortBaseRate);
 		result.append(')');

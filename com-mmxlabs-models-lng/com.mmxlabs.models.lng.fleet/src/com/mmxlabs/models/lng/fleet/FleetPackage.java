@@ -953,22 +953,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Canal NBO Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The feature id for the '<em><b>In Port Base Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Fuel Consumption</b></em>' containment reference list.
@@ -977,7 +968,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Vessel State Attributes</em>' class.
@@ -986,7 +977,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl <em>Vessel Availability</em>}' class.
@@ -1830,17 +1821,6 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselStateAttributes_IdleBaseRate();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getCanalNBORate <em>Canal NBO Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Canal NBO Rate</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#getCanalNBORate()
-	 * @see #getVesselStateAttributes()
-	 * @generated
-	 */
-	EAttribute getVesselStateAttributes_CanalNBORate();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortBaseRate <em>In Port Base Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2479,14 +2459,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE = eINSTANCE.getVesselStateAttributes_IdleBaseRate();
-
-		/**
-		 * The meta object literal for the '<em><b>Canal NBO Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE = eINSTANCE.getVesselStateAttributes_CanalNBORate();
 
 		/**
 		 * The meta object literal for the '<em><b>In Port Base Rate</b></em>' attribute feature.

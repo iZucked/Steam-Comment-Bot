@@ -631,7 +631,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselStateAttributes_CanalNBORate() {
+	public EAttribute getVesselStateAttributes_InPortBaseRate() {
 		return (EAttribute)vesselStateAttributesEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -640,17 +640,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselStateAttributes_InPortBaseRate() {
-		return (EAttribute)vesselStateAttributesEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getVesselStateAttributes_FuelConsumption() {
-		return (EReference)vesselStateAttributesEClass.getEStructuralFeatures().get(5);
+		return (EReference)vesselStateAttributesEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -899,7 +890,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__NBO_RATE);
 		createEAttribute(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE);
 		createEAttribute(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE);
-		createEAttribute(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__CANAL_NBO_RATE);
 		createEAttribute(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE);
 		createEReference(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION);
 
@@ -1035,7 +1025,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVesselStateAttributes_NboRate(), ecorePackage.getEInt(), "nboRate", null, 1, 1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselStateAttributes_IdleNBORate(), ecorePackage.getEInt(), "idleNBORate", null, 1, 1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselStateAttributes_IdleBaseRate(), ecorePackage.getEInt(), "idleBaseRate", null, 1, 1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselStateAttributes_CanalNBORate(), ecorePackage.getEInt(), "canalNBORate", null, 1, 1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselStateAttributes_InPortBaseRate(), ecorePackage.getEInt(), "inPortBaseRate", null, 1, 1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselStateAttributes_FuelConsumption(), this.getFuelConsumption(), null, "fuelConsumption", null, 0, -1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1156,12 +1145,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   source, 
 		   new String[] {
 			 "unit", "MT/d"
-		   });		
-		addAnnotation
-		  (getVesselStateAttributes_CanalNBORate(), 
-		   source, 
-		   new String[] {
-			 "unit", "M3/d"
 		   });		
 		addAnnotation
 		  (getVesselStateAttributes_InPortBaseRate(), 
