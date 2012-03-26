@@ -37,6 +37,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
+import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -123,30 +124,6 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		if (scenarioViewer == null) {
 			scenarioViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
 
-//			scenarioViewer.addDoubleClickListener(new IDoubleClickListener() {
-//
-//				@Override
-//				public void doubleClick(DoubleClickEvent event) {
-//
-//					if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
-//						final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
-//						if (structuredSelection.isEmpty() == false) {
-//							if (structuredSelection.size() == 1) {
-//								final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getDefaultCommandHandler());
-//								dcd.open(jointModelEditorPart.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
-//							} else {
-//								if (scenarioViewer.isLocked() == false) {
-//									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart
-//											.getDefaultCommandHandler());
-//									mdd.open(structuredSelection.toList());
-//								}
-//							}
-//						}
-//					}
-//
-//				}
-//			});
-//			
 			scenarioViewer.addOpenListener(new IOpenListener() {
 				
 				@Override
@@ -231,8 +208,6 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		scenarioViewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
 		
-		
-		
 		final Grid table = scenarioViewer.getGrid();
 
 		table.setHeaderVisible(true);
@@ -250,6 +225,9 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		toolbar.appendToGroup(VIEW_GROUP, filter);
 
 		final EReference containment = path.get(path.size() - 1);
+		
+		
+		
 		final Action addAction = AddModelAction.create(containment.getEReferenceType(), new IAddContext() {
 			@Override
 			public MMXRootObject getRootObject() {
@@ -271,7 +249,15 @@ public class ScenarioTableViewerPane extends ViewerPane {
 				return jointModelEditorPart.getDefaultCommandHandler();
 			}
 		});
+		
 		if (addAction != null) {
+			// if we can't add one, we can't duplicate one either.
+			final Action dupAction = createDuplicateAction();
+			
+			if (dupAction != null) {
+				toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
+			}
+			
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 		}
 		final Action deleteAction = createDeleteAction();
@@ -285,6 +271,16 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		}
 
 		toolbar.update(true);
+	}
+
+	/**
+	 * Return an action which duplicates the selection
+	 * @return
+	 */
+	protected Action createDuplicateAction() {
+		final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
+		scenarioViewer.addSelectionChangedListener(result);
+		return result;
 	}
 
 	protected Action createImportAction() {
