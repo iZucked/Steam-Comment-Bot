@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.pricing.validation;
 
 import java.util.HashSet;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -46,7 +48,9 @@ public class CooldownPricingConstraint extends AbstractModelConstraint {
 						unpricedPorts.removeAll(SetUtils.getPorts(c.getPorts()));
 					}
 					if (!unpricedPorts.isEmpty()) {
-						return ctx.createFailureStatus(unpricedPorts.toString());
+						final SortedSet<String> names = new TreeSet<String>();
+						for (final APort p : unpricedPorts) names.add(p.getName());
+						return ctx.createFailureStatus(names.toString());
 					}
 				}
 			}

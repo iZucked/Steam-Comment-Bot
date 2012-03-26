@@ -33,6 +33,9 @@
                <message>
                   The vessel class {0} has invalid canal costs set for canal {1}
                </message>
+               <target
+                     class="RouteCost">
+               </target>
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.pricing.validation.CooldownPricingConstraint"
@@ -46,6 +49,9 @@
                <message>
                   The port(s) {0} do not have any cooldown prices specified.
                </message>
+               <target
+                     class="PricingModel">
+               </target>
             </constraint>
          </constraints>
       </constraintProvider>

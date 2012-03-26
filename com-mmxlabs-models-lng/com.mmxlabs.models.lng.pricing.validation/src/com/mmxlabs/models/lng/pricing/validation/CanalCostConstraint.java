@@ -45,22 +45,18 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 				for (final Route route : portModel.getRoutes()) {
 					if (route.isCanal()) {
 						boolean seenCanalCost = false;
-						routeCosts:
-						for (final RouteCost routeCost : pricingModel.getRouteCosts()) {
-							
-								if (routeCost.getVesselClass() == vesselClass &&
-										routeCost.getRoute() == route) {
-									seenCanalCost = true;
-									break routeCosts;
-								}
-							
+						routeCosts: for (final RouteCost routeCost : pricingModel.getRouteCosts()) {
+							if (routeCost.getVesselClass() == vesselClass && routeCost.getRoute() == route) {
+								seenCanalCost = true;
+								break routeCosts;
+							}
+
 						}
-						
+
 						boolean seenCanalParameters = false;
-						canalParameters:
-							for (final VesselClassRouteParameters routeParameters : vesselClass.getRouteParameters()) {
-								if (route == routeParameters.getRoute()) {
-									seenCanalParameters = true;
+						canalParameters: for (final VesselClassRouteParameters routeParameters : vesselClass.getRouteParameters()) {
+							if (route == routeParameters.getRoute()) {
+								seenCanalParameters = true;
 									break canalParameters;
 								}
 							}
@@ -84,11 +80,8 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 			
 			if (vesselClassCost.getLadenCost() == 0 || vesselClassCost.getBallastCost() == 0) {
 
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselClassCost.getVesselClass().getName(), 
-						((RouteCost) vesselClassCost.eContainer())
-						.getRoute()
-						.getName()));
-
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselClassCost.getVesselClass().getName(),
+						vesselClassCost.getRoute().getName()));
 				
 				if (vesselClassCost.getLadenCost() == 0)
 					dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCost_LadenCost());
