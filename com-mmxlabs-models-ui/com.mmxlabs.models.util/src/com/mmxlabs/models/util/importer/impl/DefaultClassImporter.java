@@ -196,10 +196,12 @@ public class DefaultClassImporter implements IClassImporter {
 	public Collection<Map<String, String>> exportObjects(
 			Collection<? extends EObject> objects) {
 		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
-		final boolean addKind = !EMFUtils.allSameEClass(objects);
+		
+		if (objects.isEmpty()) return result;
+		
 		for (final EObject object : objects) {
 			final Map<String, String> flattened = exportObject(object);
-			if (addKind)
+//			if (addKind)
 				flattened.put(KIND_KEY, object.eClass().getName());
 			result.add(flattened);
 		}
