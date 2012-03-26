@@ -203,4 +203,21 @@
           inheritable="true">
     </classImporter>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.fleet.ui.inlineeditors.RouteCostInlineEditorFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.editorfactories.routeCostInlineEditorFactory">
+       <FeatureAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.fleet.VesselClassRouteParameters">
+          </EClassExtends>
+       </FeatureAnyOf>
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.fleet.VesselClass">
+          </EClassExtends>
+       </OwnerAnyOf>
+    </editorFactory>
+ </extension>
 </plugin>
