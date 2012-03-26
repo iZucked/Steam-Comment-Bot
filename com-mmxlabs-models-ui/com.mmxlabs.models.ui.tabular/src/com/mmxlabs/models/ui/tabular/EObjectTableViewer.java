@@ -228,9 +228,9 @@ public class EObjectTableViewer extends GridTableViewer {
 		refresh(false);
 	}
 
-	public void addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
+	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
 		final EMFPath path = new EMFPath(true, pathObjects);//new CompiledEMFPath(true, pathObjects);
-		addColumn(columnName, renderer, manipulator, path);
+		return addColumn(columnName, renderer, manipulator, path);
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
@@ -275,25 +275,25 @@ public class EObjectTableViewer extends GridTableViewer {
 			mnems.add(initials.toLowerCase());
 		}
 
-		GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer) {
-			long timer = 0;
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
-			 */
-			@Override
-			protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
-				final long fireTime = System.currentTimeMillis();
-				final boolean activate = (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
-						|| ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.F2) && ((fireTime - timer) > 500)); // this is a hack; for some reason without
-																																							// this we get loads of keydown events.
-				timer = fireTime;
-				return activate;
-			}
-
-		}, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
+//		GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer) {
+//			long timer = 0;
+//
+//			/*
+//			 * (non-Javadoc)
+//			 * 
+//			 * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
+//			 */
+//			@Override
+//			protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
+//				final long fireTime = System.currentTimeMillis();
+//				final boolean activate = (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
+//						|| ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.F2) && ((fireTime - timer) > 500)); // this is a hack; for some reason without
+//																																							// this we get loads of keydown events.
+//				timer = fireTime;
+//				return activate;
+//			}
+//
+//		}, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
 
 		columnSortOrder.add(tColumn);
 
