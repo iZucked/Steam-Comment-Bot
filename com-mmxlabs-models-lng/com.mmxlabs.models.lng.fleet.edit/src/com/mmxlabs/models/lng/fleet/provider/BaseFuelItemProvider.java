@@ -78,7 +78,7 @@ public class BaseFuelItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_BaseFuel_equivalenceFactor_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BaseFuel_equivalenceFactor_feature", "_UI_BaseFuel_type"),
+				 getString("_UI_BaseFuel_equivalenceFactor_description"),
 				 FleetPackage.Literals.BASE_FUEL__EQUIVALENCE_FACTOR,
 				 true,
 				 false,

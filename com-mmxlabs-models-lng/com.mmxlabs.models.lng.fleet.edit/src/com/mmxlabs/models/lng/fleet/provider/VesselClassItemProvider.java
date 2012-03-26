@@ -76,6 +76,7 @@ public class VesselClassItemProvider
 			addWarmingTimePropertyDescriptor(object);
 			addCoolingTimePropertyDescriptor(object);
 			addCoolingVolumePropertyDescriptor(object);
+			addRouteParametersPropertyDescriptor(object);
 			addPilotLightRatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -93,7 +94,7 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_inaccessiblePorts_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_inaccessiblePorts_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_inaccessiblePorts_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__INACCESSIBLE_PORTS,
 				 true,
 				 false,
@@ -115,7 +116,7 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_baseFuel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_baseFuel_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_baseFuel_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__BASE_FUEL,
 				 true,
 				 false,
@@ -137,7 +138,7 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_capacity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_capacity_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_capacity_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__CAPACITY,
 				 true,
 				 false,
@@ -159,7 +160,7 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_fillCapacity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_fillCapacity_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_fillCapacity_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__FILL_CAPACITY,
 				 true,
 				 false,
@@ -181,7 +182,7 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_minSpeed_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_minSpeed_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_minSpeed_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__MIN_SPEED,
 				 true,
 				 false,
@@ -203,7 +204,7 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_maxSpeed_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_maxSpeed_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_maxSpeed_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__MAX_SPEED,
 				 true,
 				 false,
@@ -225,7 +226,7 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_minHeel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_minHeel_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_minHeel_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__MIN_HEEL,
 				 true,
 				 false,
@@ -247,7 +248,7 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_warmingTime_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_warmingTime_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_warmingTime_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__WARMING_TIME,
 				 true,
 				 false,
@@ -269,7 +270,7 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_coolingTime_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_coolingTime_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_coolingTime_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__COOLING_TIME,
 				 true,
 				 false,
@@ -291,12 +292,34 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_coolingVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_coolingVolume_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_coolingVolume_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__COOLING_VOLUME,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Route Parameters feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRouteParametersPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_routeParameters_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_routeParameters_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__ROUTE_PARAMETERS,
+				 true,
+				 false,
+				 false,
+				 null,
 				 null,
 				 null));
 	}
@@ -313,7 +336,7 @@ public class VesselClassItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselClass_pilotLightRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_pilotLightRate_feature", "_UI_VesselClass_type"),
+				 getString("_UI_VesselClass_pilotLightRate_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__PILOT_LIGHT_RATE,
 				 true,
 				 false,

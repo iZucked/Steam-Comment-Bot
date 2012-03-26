@@ -43,7 +43,7 @@
           ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/coolingTime"/>
       <genFeatures createChild="false" propertyDescription="The volume of LNG required to cool the tanks to operating temperature"
           ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/coolingVolume"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselClass/routeParameters"/>
+      <genFeatures children="true" createChild="true" propertyDescription="" ecoreFeature="ecore:EReference fleet.ecore#//VesselClass/routeParameters"/>
       <genFeatures createChild="false" propertyDescription="The rate at which base fuel must be used to run the pilot light, when running on LNG"
           ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/pilotLightRate"/>
       <genOperations ecoreOperation="fleet.ecore#//VesselClass/collect">
