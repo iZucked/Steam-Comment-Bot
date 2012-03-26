@@ -21,6 +21,32 @@
          </package>
          <constraints
                categories=" com.mmxlabs.models.lng.pricing.validation.base">
+            <constraint
+                  class="com.mmxlabs.models.lng.pricing.validation.CanalCostConstraint"
+                  id="com.mmxlabs.models.lng.pricing.validation.canalCosts"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Canal Costs"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  The vessel class {0} has invalid canal costs set for canal {1}
+               </message>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.pricing.validation.CooldownPricingConstraint"
+                  id="com.mmxlabs.models.lng.pricing.validation.cooldownPricing"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Cooldown Pricing"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  The port(s) {0} do not have any cooldown prices specified.
+               </message>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
