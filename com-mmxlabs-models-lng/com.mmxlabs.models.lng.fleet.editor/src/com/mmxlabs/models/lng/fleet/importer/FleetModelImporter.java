@@ -14,12 +14,16 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
 public class FleetModelImporter implements ISubmodelImporter {
@@ -66,6 +70,35 @@ public class FleetModelImporter implements ISubmodelImporter {
 		
 		if (inputs.containsKey(CURVES_KEY)) fuelCurveImporter.importFuelConsumptions(inputs.get(CURVES_KEY), context);
 		
+		context.doLater(new IDeferment() {			
+			@Override
+			public void run(final IImportContext context) {
+				final FleetModel fleetModel = context.getRootObject().getSubModel(FleetModel.class);
+				final PortModel   portModel = context.getRootObject().getSubModel(PortModel.class);
+				
+				for (final Route route : portModel.getRoutes()) {
+					if (route.isCanal() == false) {
+						vessel_classes:
+						for (final VesselClass vc : fleetModel.getVesselClasses()) {
+							for (final VesselClassRouteParameters parameters : vc.getRouteParameters()) {
+								if (parameters.getRoute() == route) continue vessel_classes;
+							}
+							
+							// construct blank parameters
+							final VesselClassRouteParameters parameters = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+							parameters.setRoute(route);
+							vc.getRouteParameters().add(parameters);
+						}
+					}
+				}
+			}
+			
+			@Override
+			public int getStage() {
+				return IImportContext.STAGE_MODIFY_SUBMODELS;
+			}
+		});
+		
 		return fleetModel;
 	}
 
@@ -79,5 +112,4 @@ public class FleetModelImporter implements ISubmodelImporter {
 		output.put(FUELS_KEY, baseFuelImporter.exportObjects(fleetModel.getBaseFuels()));
 		output.put(CURVES_KEY, fuelCurveImporter.exportCurves(fleetModel.getVesselClasses()));
 	}
-
 }
