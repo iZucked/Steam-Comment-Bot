@@ -92,10 +92,14 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		
 		table.addListener(SWT.Resize, 
 				new Listener() {
+					boolean resizing = false;
 					@Override
 					public void handleEvent(Event event) {
+						if (resizing) return;
+						resizing = true;
 						speedColumn.getColumn().pack();
 						fuelColumn.getColumn().pack();
+						resizing = false;
 					}
 				});
 		
