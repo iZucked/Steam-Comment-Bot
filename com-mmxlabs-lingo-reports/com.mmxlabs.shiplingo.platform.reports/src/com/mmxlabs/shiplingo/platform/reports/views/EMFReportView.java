@@ -48,6 +48,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -164,9 +165,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				}
 			}
 			if (object instanceof Schedule) {
-//				final Scenario s = (Scenario) ((Schedule) object).eContainer().eContainer();
-//				return s.getName();
-				return "TODO";
+				final MMXRootObject s = (MMXRootObject) ((Schedule) object).eContainer().eContainer();
+				return s.getName();
+//				return "TODO";
 			} else {
 				return "";
 			}
