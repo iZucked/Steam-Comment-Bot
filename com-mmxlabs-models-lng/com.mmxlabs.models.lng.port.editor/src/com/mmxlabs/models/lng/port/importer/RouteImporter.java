@@ -93,10 +93,12 @@ public class RouteImporter {
 			if (row == null) {
 				row = new HashMap<String, String>();
 				row.put("from", line.getFrom().getName());
+				rows.put(line.getFrom().getName(), row);
 			}
 			row.put(line.getTo().getName(), line.getDistance() + "");
 		}
 		
-		return rows.values();
+		final ArrayList<Map<String, String>> result = new ArrayList<Map<String, String>>(rows.values());
+		return result;
 	}
 }
