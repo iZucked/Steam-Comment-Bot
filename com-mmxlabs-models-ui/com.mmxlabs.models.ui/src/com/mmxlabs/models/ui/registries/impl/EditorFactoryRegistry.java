@@ -98,6 +98,8 @@ public class EditorFactoryRegistry extends AbstractRegistry<Pair<EClass, EStruct
 			final EClass featureEClass = featureType instanceof EClass ? (EClass) featureType
 					: null;
 
+			final String extensionID = extension.getID();
+			
 			for (final IInlineEditorFactoryExtension.IFeatureMatcher featureMatcher : extension.getFeatureMatchers()) {
 				if (dataType) {
 					matchesDataType = false;
@@ -139,7 +141,8 @@ public class EditorFactoryRegistry extends AbstractRegistry<Pair<EClass, EStruct
 	public EditorFactoryMatcher getBetterMatch(
 				final EditorFactoryMatcher other) {
 			if (other == null)
-				return this;
+				return this.badMatch ? null : this;
+			
 			if (badMatch) {
 				if (other.badMatch)
 					return null;
@@ -157,7 +160,7 @@ public class EditorFactoryRegistry extends AbstractRegistry<Pair<EClass, EStruct
 			if (matchesDataType && !other.matchesDataType)
 				return this;
 			if (other.matchesDataType && !matchesDataType)
-				return this;
+				return other;
 
 			if (referenceTypeMinGenerations < other.referenceTypeMinGenerations)
 				return this;

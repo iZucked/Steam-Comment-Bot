@@ -22,7 +22,7 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 		super(feature);
 	}
 	private Button button;
-	private Label label;
+	private Label description;
 	
 	protected Shell getShell() {
 		return button.getShell();
@@ -33,10 +33,10 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 		final Composite contents = new Composite(parent, SWT.NONE);
 		contents.setLayout(new RowLayout(SWT.HORIZONTAL));
 		
-		final Label label = new Label(contents, SWT.NONE);
+		final Label description = new Label(contents, SWT.NONE);
 		final Button button = new Button(contents, SWT.NONE);
 		button.setText("Edit");
-		this.label = label;
+		this.description = description;
 		this.button = button;
 		button.addSelectionListener(
 				new SelectionListener() {
@@ -68,8 +68,8 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void updateDisplay(final Object value) {
-		if (!label.isDisposed())
-			label.setText(render(value));
+		if (!description.isDisposed())
+			description.setText(render(value));
 	}
 
 	protected abstract Object displayDialog(final Object currentValue);
