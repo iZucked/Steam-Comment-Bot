@@ -20,18 +20,22 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 public abstract class ScenarioModifyingAction extends LockableAction implements ISelectionChangedListener {
 	public ScenarioModifyingAction() {
 		super();
+		setEnabled(false);
 	}
 
 	public ScenarioModifyingAction(String text, ImageDescriptor image) {
 		super(text, image);
+		setEnabled(false);
 	}
 
 	public ScenarioModifyingAction(String text, int style) {
 		super(text, style);
+		setEnabled(false);
 	}
 
 	public ScenarioModifyingAction(String text) {
 		super(text);
+		setEnabled(false);
 	}
 	
 	@Override
