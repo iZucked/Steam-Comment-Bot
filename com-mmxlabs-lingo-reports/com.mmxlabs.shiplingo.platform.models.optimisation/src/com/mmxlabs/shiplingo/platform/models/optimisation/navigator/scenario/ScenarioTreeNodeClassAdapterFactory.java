@@ -103,6 +103,7 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory, IRe
 					jointModel = new ManifestJointModel(URI.createPlatformResourceURI(resource.getFullPath().toString(), true));
 					if (jointModel != null) {
 						modelMap.put(resource, jointModel);
+						jointModel.getRootObject().setName(resource.getName());//hack
 						return jointModel;
 					}
 				} catch (IOException e) {
