@@ -77,7 +77,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 				final PortModel   portModel = context.getRootObject().getSubModel(PortModel.class);
 				
 				for (final Route route : portModel.getRoutes()) {
-					if (route.isCanal() == false) {
+					if (route.isCanal() == true) {
 						vessel_classes:
 						for (final VesselClass vc : fleetModel.getVesselClasses()) {
 							for (final VesselClassRouteParameters parameters : vc.getRouteParameters()) {
