@@ -7,11 +7,13 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.validation.internal.modeled.model.validation.util.ValidationAdapterFactory;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -50,8 +52,8 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 			for (final Object o : ((Iterable<?>) newInput)) {
 				if (o instanceof Schedule) {
 					final Schedule schedule = (Schedule) o;
-//					final Scenario s = (Scenario) schedule.eContainer().eContainer();
-					final String scheduleName = "FIXME";//s.getName();
+					final MMXRootObject s = (MMXRootObject) schedule.eContainer().eContainer();
+					final String scheduleName = s.getName();
 					long total = 0l;
 					for (final Fitness f : schedule.getFitnesses()) {
 						rowDataList.add(new RowData(scheduleName, f.getName(), f.getFitnessValue()));

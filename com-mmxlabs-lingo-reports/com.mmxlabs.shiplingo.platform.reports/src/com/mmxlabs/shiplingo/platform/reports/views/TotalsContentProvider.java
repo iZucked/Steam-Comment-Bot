@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -86,8 +87,8 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-//		final Scenario s = (Scenario) schedule.eContainer().eContainer();
-		final String scheduleName = "FIXME"; //s.getName();
+		final MMXRootObject s = (MMXRootObject) schedule.eContainer().eContainer();
+		final String scheduleName = s.getName();
 
 		for (final Entry<Fuel, Long> entry : totalFuelCosts.entrySet()) {
 			output.add(new RowData(scheduleName, entry.getKey().toString(), true, entry.getValue()));

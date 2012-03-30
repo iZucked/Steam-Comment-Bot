@@ -148,8 +148,10 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	public void dispose() {
 
 		kill();
-
-		this.entities.dispose();
+		if (this.entities != null) {
+			this.entities.dispose();
+			this.entities = null;
+		}
 
 		// TODO: this.scenario = null;
 		this.optimiser = null;

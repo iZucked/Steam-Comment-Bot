@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
@@ -181,8 +182,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 //			dummy.addChild(createProfitTreeData(schedule));
 		} else {
 			for (final Schedule schedule : schedules) {
-//				final Scenario s = (Scenario) schedule.eContainer().eContainer();
-				final String scheduleName = "FIXME";//s.getName();
+				final MMXRootObject s = (MMXRootObject) schedule.eContainer().eContainer();
+				final String scheduleName = s.getName();
 				// final String scheduleName = schedule.getName();
 				// don't sum costs and profits, because it's meaningless
 				// (profits already include costs)
