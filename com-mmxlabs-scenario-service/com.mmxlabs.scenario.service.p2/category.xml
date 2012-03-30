@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
    <category-def name="all" label="Scenario Service p2 Snapshots"/>
-   <iu>
+   <feature url="features/com.mmxlabs.scenario.service.feature_1.0.0.qualifier.jar" id="com.mmxlabs.scenario.service.feature" version="1.0.0.qualifier">
       <category name="all"/>
-      <query><expression type="match">providedCapabilities.exists(p | p.namespace == 'osgi.bundle')</expression></query>
-   </iu>
+   </feature>
+   <feature url="features/com.mmxlabs.scenario.service.feature.source_1.0.0.qualifier.jar" id="com.mmxlabs.scenario.service.feature.source" version="1.0.0.qualifier">
+      <category name="all"/>
+   </feature>
 </site>

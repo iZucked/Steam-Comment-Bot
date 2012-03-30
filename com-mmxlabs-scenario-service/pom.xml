@@ -36,6 +36,8 @@
 		<module>com.mmxlabs.scenario.service.file</module>
 		<module>com.mmxlabs.scenario.service.dirscan</module>
 
+		<module>com.mmxlabs.scenario.service.feature</module>
+
 		<module>com.mmxlabs.scenario.service.p2</module>
 	</modules>
 
@@ -92,6 +94,21 @@
 					</environments>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>plugin-source</id>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 
 		</plugins>
 	</build>
