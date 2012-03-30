@@ -219,8 +219,9 @@ public class RouteSameCostTest {
 	}
 
 	private void addCanalParameters(CanalParameters canalParameters, MMXRootObject canalScenario) {
-		
-		CustomScenarioCreator.createCanalAndCost(canalScenario, canalParameters.canalName, ScenarioTools.A, ScenarioTools.B, canalParameters.canalDistance, canalParameters.canalDistance, canalParameters.canalCost, canalParameters.canalCost, canalParameters.canalTransitFuelPerDay, canalParameters.NBOTravelRatePerDay  , canalParameters.canalTransitTime);
+		if (canalParameters != null) {
+			CustomScenarioCreator.createCanalAndCost(canalScenario, canalParameters.canalName, ScenarioTools.A, ScenarioTools.B, canalParameters.canalDistance, canalParameters.canalDistance, canalParameters.canalCost, canalParameters.canalCost, canalParameters.canalTransitFuelPerDay, canalParameters.NBOTravelRatePerDay  , canalParameters.canalTransitTime);
+		}
 	}
 	
 	long getCargoAllocationCost(CargoAllocation a) {
