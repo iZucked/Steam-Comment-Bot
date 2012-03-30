@@ -40,6 +40,7 @@ public class InputAttributesCheckTest {
 	 * 
 	 * @throws InterruptedException
 	 *             Thrown by the method that checks that the original and evaluated scenarios are the same
+	 * @throws IOException
 	 */
 	@Test
 	public void test() throws InterruptedException {
@@ -60,7 +61,7 @@ public class InputAttributesCheckTest {
 		final int numOfClassThree = 4;
 		final int numOfClassFour = 6;
 
-		// createVessels creates and adds the vessesl to the scenario.
+		// createVessels creates and adds the vessels to the scenario.
 		csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500, false);
 		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false);
 		csc.addVesselSimple("classThree", numOfClassThree, 20, 25, 10000, 17, 14, 10, 1000, false);
