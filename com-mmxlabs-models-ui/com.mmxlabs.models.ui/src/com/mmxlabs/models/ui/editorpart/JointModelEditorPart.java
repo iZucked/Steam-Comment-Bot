@@ -141,7 +141,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			control.removeListener(jobListener); // no harm in removing even if it's not there
 		}
 	};
-	
+
 	private IJobControlListener jobListener = new JobControlAdapter() {
 		@Override
 		public boolean jobStateChanged(IJobControl control, EJobState oldState, EJobState newState) {
@@ -160,7 +160,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			return true;
 		}
 	};
-	
+
 	private boolean locked;
 	private boolean commandProvidersDisabled;
 
@@ -277,7 +277,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				contributions = Activator.getDefault().getJointModelEditorContributionRegistry().initEditorContributions(this, root);
 
 				referenceValueProviderCache = new ReferenceValueProviderCache(rootObject);
-				
+
 				Activator.getDefault().getJobManager().addEclipseJobManagerListener(jobManagerListener);
 			} catch (MigrationException e) {
 				throw new PartInitException("Error migrating joint model", e);
@@ -288,7 +288,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 		site.setSelectionProvider(this);
 	}
-	
+
 	@Override
 	public void dispose() {
 		super.dispose();
@@ -382,11 +382,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			l.selectionChanged(event);
 		}
 	}
-	
+
 	public void setDisableCommandProviders(final boolean disable) {
 		this.commandProvidersDisabled = disable;
 	}
-	
+
 	public void setDisableUpdates(final boolean disable) {
 		if (disable) {
 			disableAdapters(getRootObject());
@@ -394,23 +394,25 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			enableAdapters(getRootObject());
 		}
 	}
-	
+
 	private void disableAdapters(final EObject top) {
 		for (final Adapter a : top.eAdapters()) {
 			if (a instanceof IMMXAdapter) {
 				((IMMXAdapter) a).disable();
 			}
 		}
-		for (final EObject o : top.eContents()) disableAdapters(o);
+		for (final EObject o : top.eContents())
+			disableAdapters(o);
 	}
-	
+
 	private void enableAdapters(final EObject top) {
 		for (final Adapter a : top.eAdapters()) {
 			if (a instanceof IMMXAdapter) {
 				((IMMXAdapter) a).enable();
 			}
 		}
-		for (final EObject o : top.eContents()) enableAdapters(o);
+		for (final EObject o : top.eContents())
+			enableAdapters(o);
 	}
 
 	/**
