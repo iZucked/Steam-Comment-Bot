@@ -6,7 +6,6 @@ package com.mmxlabs.shiplingo.platform.its.tests;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -15,10 +14,7 @@ import org.eclipse.emf.compare.diff.metamodel.DiffModel;
 import org.eclipse.emf.compare.diff.service.DiffService;
 import org.eclipse.emf.compare.match.metamodel.MatchModel;
 import org.eclipse.emf.compare.match.service.MatchService;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
