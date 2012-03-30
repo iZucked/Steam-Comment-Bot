@@ -92,8 +92,6 @@ public class MultiDetailDialog extends Dialog {
 	private EClass editingClass;
 	private List<EObject> editedObjects;
 	private Map<EObject, List<EObject>> proxyCounterparts = new HashMap<EObject, List<EObject>>();
-	
-
 
 	public MultiDetailDialog(final Shell parentShell, final MMXRootObject root, final ICommandHandler commandHandler) {
 		super(parentShell);
