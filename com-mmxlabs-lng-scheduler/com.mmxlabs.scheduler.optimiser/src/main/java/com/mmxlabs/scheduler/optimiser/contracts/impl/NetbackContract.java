@@ -11,6 +11,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
@@ -73,7 +74,10 @@ public class NetbackContract implements ILoadPriceCalculator2 {
 
 	@Override
 	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int salesPrice, final int loadVolume,
-			final IVesselClass vesselClass, final VoyagePlan plan) {
+			final IVessel vessel, final VoyagePlan plan) {
+		
+		IVesselClass vesselClass = vessel.getVesselClass();
+
 		final VoyageDetails ladenLeg = (VoyageDetails) plan.getSequence()[1];
 		// final VoyageDetails ballastLeg = (VoyageDetails) plan.getSequence()[3];
 
@@ -86,7 +90,20 @@ public class NetbackContract implements ILoadPriceCalculator2 {
 		}
 		// vessel cost (don't use calculator.multiply here; hours are not
 		// scaled, but price is)
-		totalRealTransportCosts += (dischargeTime - loadTime) * vesselClass.getHourlyCharterInPrice();
+		final int hireRate;
+		switch (vessel.getVesselInstanceType()) {
+		case SPOT_CHARTER:
+			hireRate = vesselClass.getHourlyCharterInPrice();
+			break;
+		case TIME_CHARTER:
+			hireRate = vessel.getHourlyCharterOutPrice();
+			break;
+		default:
+			hireRate = 0;
+			break;
+		}
+		
+		totalRealTransportCosts += (dischargeTime - loadTime) * hireRate;
 
 		final int notionalReturnSpeed = vesselClass.getMaxSpeed(); // fair?
 
@@ -107,7 +124,7 @@ public class NetbackContract implements ILoadPriceCalculator2 {
 		 */
 		final long totalNotionalFuelCost = Calculator.costFromConsumption(vesselClass.getConsumptionRate(VesselState.Ballast).getRate(notionalReturnSpeed) * notionalTransportTime, notionalFuelCost);
 
-		final long notionalTransportCosts = (vesselClass.getHourlyCharterInPrice() * notionalTransportTime) + totalNotionalFuelCost;
+		final long notionalTransportCosts = (hireRate * notionalTransportTime) + totalNotionalFuelCost;
 
 		final long transportCostPerMMBTU = Calculator.divide(notionalTransportCosts + totalRealTransportCosts, Calculator.multiply(loadSlot.getCargoCVValue(), loadVolume));
 

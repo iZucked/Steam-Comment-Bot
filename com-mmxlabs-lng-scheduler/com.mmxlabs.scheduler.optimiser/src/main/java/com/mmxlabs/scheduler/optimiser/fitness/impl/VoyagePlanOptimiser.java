@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -39,7 +38,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	private IVessel vessel;
 
 	private int bestProblemCount = Integer.MAX_VALUE;
-	
+
 	private long bestCost = Long.MAX_VALUE;
 
 	private VoyagePlan bestPlan = null;
@@ -188,7 +187,18 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			int bestLastProblemCount = Short.MAX_VALUE;
 			int bestAvailableTime = options.getAvailableTime();
 
-			final int hireRate = vessel.getVesselInstanceType() == VesselInstanceType.FLEET ? 0 : vessel.getVesselClass().getHourlyCharterInPrice();
+			final int hireRate;
+			switch (vessel.getVesselInstanceType()) {
+			case SPOT_CHARTER:
+				hireRate = vessel.getVesselClass().getHourlyCharterInPrice();
+				break;
+			case TIME_CHARTER:
+				hireRate = vessel.getHourlyCharterOutPrice();
+				break;
+			default:
+				hireRate = 0;
+				break;
+			}
 
 			// TODO: Turn into a parameter -- probably want this to be longer than slightly over one day - could also scale it to 6/12 hours etc.
 			final int step = 6; // 6 hours
@@ -203,29 +213,29 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 					// Only add in hire cost for last leg evaluation. It is constant otherwise and does not need to be part of the cost comparison.
 					// Hire cost will be properly calculated in a different step.
-					
-					//This is not calculator.multiply, because hireRate is not scaled.
+
+					// This is not calculator.multiply, because hireRate is not scaled.
 					final long hireCost = hireRate * (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
 					currentCost += hireCost;
 
 					// Check for capacity violations, prefer solutions with fewer violations
 					currentProblemCount = currentPlan.getCapacityViolations();
-					
+
 					if (currentProblemCount < bestLastProblemCount || (currentProblemCount == bestLastProblemCount && currentCost < bestLastLegCost)) {
 						bestLastLegCost = currentCost;
 						bestLastLegPlan = currentPlan;
 						bestLastProblemCount = currentProblemCount;
 						bestAvailableTime = options.getAvailableTime();
 					}
-//
-//					if (currentCost > lastCost) {
-////						// back out one step. this is ugly.
-////						options.setAvailableTime(options.getAvailableTime() - 1);
-//						// TODO: This is not really all that good.
-////						break; // presume minimum.
-//					} else {
-//						lastCost = currentCost;
-//					}
+					//
+					// if (currentCost > lastCost) {
+					// // // back out one step. this is ugly.
+					// // options.setAvailableTime(options.getAvailableTime() - 1);
+					// // TODO: This is not really all that good.
+					// // break; // presume minimum.
+					// } else {
+					// lastCost = currentCost;
+					// }
 				}
 				options.setAvailableTime(options.getAvailableTime() + step);
 			}
@@ -272,17 +282,16 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			}
 		}
 
-		
 		boolean storePlan = false;
 		// Store cheapest cost, but take into account time or capacity problems
 		if (currentPlan != null) {
-			
+
 			// this plan is valid, but the other is not, who cares about cost
 			if (currentPlanFitsInAvailableTime && !bestPlanFitsInAvailableTime) {
 				storePlan = true;
 				// this plan is valid, or the other is not, and it's cheaper
 			} else if (currentPlanFitsInAvailableTime || !bestPlanFitsInAvailableTime) {
-				
+
 				if (currentProblemCount < bestProblemCount) {
 					storePlan = true;
 				} else if ((currentProblemCount == bestProblemCount) && (cost < bestCost)) {
@@ -290,7 +299,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				}
 			}
 		}
-		
+
 		if (storePlan) {
 			bestPlanFitsInAvailableTime = currentPlanFitsInAvailableTime;
 			bestCost = cost;

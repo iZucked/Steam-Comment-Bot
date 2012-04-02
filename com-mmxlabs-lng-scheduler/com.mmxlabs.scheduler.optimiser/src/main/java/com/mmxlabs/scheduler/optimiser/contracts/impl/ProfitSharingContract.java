@@ -10,7 +10,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -47,7 +47,7 @@ public class ProfitSharingContract implements ILoadPriceCalculator2 {
 
 	@Override
 	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int actualSalesPrice, final int loadVolume,
-			final IVesselClass vesselClass, final VoyagePlan plan) {
+			final IVessel vessel, final VoyagePlan plan) {
 		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, actualSalesPrice);
 	}
 

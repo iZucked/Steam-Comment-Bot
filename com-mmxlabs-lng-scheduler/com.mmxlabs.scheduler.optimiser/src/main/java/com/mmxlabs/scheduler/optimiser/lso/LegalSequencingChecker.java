@@ -7,6 +7,9 @@ package com.mmxlabs.scheduler.optimiser.lso;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -24,6 +27,9 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChec
  * 
  */
 public class LegalSequencingChecker {
+	
+	private static final Logger log = LoggerFactory.getLogger(LegalSequencingChecker.class);
+	
 	private final List<IPairwiseConstraintChecker> pairwiseCheckers;
 	private final List<IResource> resources;
 
@@ -71,6 +77,9 @@ public class LegalSequencingChecker {
 		// Check with hard constraints like resource allocation and ordered elements
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource)) {
+//				if (log.isInfoEnabled()) {
+//					log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
+//				}
 				return false;
 			}
 		}

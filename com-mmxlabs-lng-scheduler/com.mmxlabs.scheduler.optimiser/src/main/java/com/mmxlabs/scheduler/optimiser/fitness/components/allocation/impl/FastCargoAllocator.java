@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -50,8 +50,8 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 
 	@Override
 	public void addCargo(final VoyagePlan plan, final PortDetails loadDetails, final VoyageDetails ladenLeg, final PortDetails dischargeDetails, final VoyageDetails ballastLeg, final int loadTime,
-			final int dischargeTime, final long requiredLoadVolume, final IVesselClass vesselClass) {
-		super.addCargo(plan, loadDetails, ladenLeg, dischargeDetails, ballastLeg, loadTime, dischargeTime, requiredLoadVolume, vesselClass);
+			final int dischargeTime, final long requiredLoadVolume, final IVessel vessel) {
+		super.addCargo(plan, loadDetails, ladenLeg, dischargeDetails, ballastLeg, loadTime, dischargeTime, requiredLoadVolume, vessel);
 
 		cargoConstraints.add(new Pair<Integer, Integer>(volumeConstraintMap.get(loadDetails.getPortSlot()), volumeConstraintMap.get(dischargeDetails.getPortSlot())));
 	}

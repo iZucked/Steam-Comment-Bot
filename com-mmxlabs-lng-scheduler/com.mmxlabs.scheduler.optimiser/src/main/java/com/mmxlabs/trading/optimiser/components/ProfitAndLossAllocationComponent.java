@@ -260,12 +260,25 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 				+ plan.getTotalFuelCost(FuelComponent.PilotLight)
 				+ (includeLNG ? plan.getTotalFuelCost(FuelComponent.NBO) + plan.getTotalFuelCost(FuelComponent.IdleNBO) + plan.getTotalFuelCost(FuelComponent.FBO) : 0);
 
+		
+		final int hireRate;
+		switch (vessel.getVesselInstanceType()) {
+		case SPOT_CHARTER:
+			hireRate = vessel.getVesselClass().getHourlyCharterInPrice();
+			break;
+		case TIME_CHARTER:
+			hireRate = vessel.getHourlyCharterOutPrice();
+			break;
+		default:
+			hireRate = 0;
+			break;
+		}
 		final long hireCosts;
-		if (vessel.getVesselInstanceType() == VesselInstanceType.FLEET) {
+		if (hireRate == 0) {
 			hireCosts = 0;
 		} else {
 			final long planDuration = getPartialPlanDuration(plan, 1); // skip off the last port details, as we don't pay for that here.
-			hireCosts = vessel.getVesselClass().getHourlyCharterInPrice() * planDuration;
+			hireCosts = hireRate * planDuration;
 		}
 
 		return shippingCosts + hireCosts;

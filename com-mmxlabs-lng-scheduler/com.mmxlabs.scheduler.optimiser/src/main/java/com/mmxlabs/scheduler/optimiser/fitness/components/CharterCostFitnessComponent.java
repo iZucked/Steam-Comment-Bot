@@ -45,22 +45,32 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	protected boolean reallyStartSequence(final IResource resource) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
-		if (vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER) || vessel.getVesselInstanceType().equals(VesselInstanceType.TIME_CHARTER)) {
-			charterPrice = vessel.getVesselClass().getHourlyCharterInPrice();
-			firstLoadTime = -1;
-			lastTime = -1;
-
-			if (vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
-				loadPortType = PortType.Load;
-			} else {
-				loadPortType = PortType.Start;
-			}
-
-			return true; // we are interested
-		} else {
-			return false; // we are not interested in this sequence - we won't
-							// be bothered for the rest of it.
+		final int hireRate;
+		switch (vessel.getVesselInstanceType()) {
+		case SPOT_CHARTER:
+			hireRate = vessel.getVesselClass().getHourlyCharterInPrice();
+			break;
+		case TIME_CHARTER:
+			hireRate = vessel.getHourlyCharterOutPrice();
+			break;
+		default:
+			// we are not interested in this sequence - we won't
+			// be bothered for the rest of it.
+			return false;
 		}
+
+		charterPrice = hireRate;
+		firstLoadTime = -1;
+		lastTime = -1;
+
+		if (vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
+			loadPortType = PortType.Load;
+		} else {
+			loadPortType = PortType.Start;
+		}
+
+		// we are interested
+		return true; 
 	}
 
 	/*

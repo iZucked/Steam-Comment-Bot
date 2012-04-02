@@ -15,7 +15,9 @@ import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -52,6 +54,7 @@ public class TestNetbackContract {
 		ladenLeg.setOptions(ladenOptions);
 		ballastLeg.setOptions(ballastOptions);
 
+		final IVessel vessel = context.mock(IVessel.class);
 		final IVesselClass vesselClass = context.mock(IVesselClass.class);
 
 		final IConsumptionRateCalculator curve = context.mock(IConsumptionRateCalculator.class);
@@ -66,6 +69,10 @@ public class TestNetbackContract {
 				will(returnValue(1000)); // 1000 nautical miles
 				atLeast(1).of(vesselClass).getMaxSpeed();
 				will(returnValue(MAX_SPEED)); // 10 knots => 100 hours
+				atLeast(1).of(vessel).getVesselClass();
+				will(returnValue(vesselClass));
+				atLeast(1).of(vessel).getVesselInstanceType();
+				will(returnValue(VesselInstanceType.SPOT_CHARTER));
 				atLeast(1).of(vesselClass).getHourlyCharterInPrice();
 				will(returnValue(1000));
 
@@ -92,7 +99,7 @@ public class TestNetbackContract {
 
 		final VoyagePlan plan = new VoyagePlan();
 		plan.setSequence(new Object[] { null, ladenLeg, null, ballastLeg, null });
-		final int loadPrice = nbc.calculateLoadUnitPrice(slotA, slotB, 0, 0, 7500, 2000000, vesselClass, plan);
+		final int loadPrice = nbc.calculateLoadUnitPrice(slotA, slotB, 0, 0, 7500, 2000000, vessel, plan);
 
 		context.assertIsSatisfied();
 		Assert.assertEquals(6263, loadPrice);

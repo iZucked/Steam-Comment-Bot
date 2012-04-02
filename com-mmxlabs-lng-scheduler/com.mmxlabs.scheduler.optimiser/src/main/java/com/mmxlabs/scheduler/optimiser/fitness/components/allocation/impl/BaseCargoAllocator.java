@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -127,7 +128,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		final VoyagePlanIterator planIterator = new VoyagePlanIterator();
 		for (final ScheduledSequence sequence : sequences) {
 			planIterator.setVoyagePlans(sequence.getVoyagePlans(), sequence.getStartTime());
-			final IVesselClass vesselClass = vesselProvider.getVessel(sequence.getResource()).getVesselClass();
+			final IVessel vessel = vesselProvider.getVessel(sequence.getResource());
 
 			PortDetails loadDetails = null;
 			PortDetails dischargeDetails = null;
@@ -159,7 +160,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 						ladenVoyage = (VoyageDetails) object;
 					} else if ((dischargeDetails != null) && (loadDetails != null)) {
 						ballastVoyage = (VoyageDetails) object;
-						addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vesselClass);
+						addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vessel);
 						loadDetails = null;
 						dischargeDetails = null;
 					}
@@ -185,11 +186,12 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 	}
 
 	public void addCargo(final VoyagePlan plan, final PortDetails loadDetails, final VoyageDetails ladenLeg, final PortDetails dischargeDetails, final VoyageDetails ballastLeg, final int loadTime,
-			final int dischargeTime, final long requiredLoadVolume, final IVesselClass vesselClass) {
+			final int dischargeTime, final long requiredLoadVolume, final IVessel vessel) {
 		// if (requiredLoadVolume > vesselClass.getCargoCapacity() / 10) {
 		// System.err.println("Using a whole lot of gas for fuel here");
 		// }
 
+		IVesselClass vesselClass = vessel.getVesselClass();
 		final long vesselCapacity = vesselClass.getCargoCapacity();
 		final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getPortSlot();
 		final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getPortSlot();
@@ -221,7 +223,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		// the load CV price is the notional maximum price
 		// if we load less, it might actually be worth less
 
-		final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargeCVPrice, (int) maximumDischargeVolume, vesselClass,
+		final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargeCVPrice, (int) maximumDischargeVolume, vessel,
 				plan);
 
 		final int dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
