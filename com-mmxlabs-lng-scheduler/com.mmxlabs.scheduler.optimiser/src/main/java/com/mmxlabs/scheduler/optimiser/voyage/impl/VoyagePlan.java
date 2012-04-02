@@ -20,19 +20,23 @@ public final class VoyagePlan implements Cloneable {
 
 	private Object[] sequence;
 	private final LongFastEnumMap<FuelComponent> fuelConsumptions;
+	private final LongFastEnumMap<FuelComponent> routeAdditionalConsumption;
 	private final LongFastEnumMap<FuelComponent> fuelCosts;
 	private long lngFuelVolume;
 	private int capacityViolations;
 
 	public VoyagePlan() {
 		fuelConsumptions = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
+		routeAdditionalConsumption = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 		fuelCosts = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 	}
 
-	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> fuelCosts, final int capacityViolations) {
+	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> routeAdditionalConsumption,
+			final LongFastEnumMap<FuelComponent> fuelCosts, final int capacityViolations) {
 		super();
 		this.sequence = sequence;
 		this.fuelConsumptions = fuelConsumptions;
+		this.routeAdditionalConsumption = routeAdditionalConsumption;
 		this.fuelCosts = fuelCosts;
 		this.lngFuelVolume = fuelVolume;
 		this.capacityViolations = capacityViolations;
@@ -46,6 +50,14 @@ public final class VoyagePlan implements Cloneable {
 		fuelConsumptions.put(fuel, consumption);
 	}
 
+	public final long getRouteAdditionalConsumption(final FuelComponent fuel) {
+		return routeAdditionalConsumption.get(fuel);
+	}
+
+	public final void setRouteAdditionalConsumption(final FuelComponent fuel, final long consumption) {
+		routeAdditionalConsumption.put(fuel, consumption);
+	}
+
 	public final long getTotalFuelCost(final FuelComponent fuel) {
 		return fuelCosts.get(fuel);
 	}
@@ -53,7 +65,7 @@ public final class VoyagePlan implements Cloneable {
 	public final void setTotalFuelCost(final FuelComponent fuel, final long cost) {
 		fuelCosts.put(fuel, cost);
 	}
-	
+
 	public final int getCapacityViolations() {
 		return capacityViolations;
 	}
@@ -89,6 +101,9 @@ public final class VoyagePlan implements Cloneable {
 			if (!Equality.isEqual(fuelConsumptions, p.fuelConsumptions)) {
 				return false;
 			}
+			if (!Equality.isEqual(routeAdditionalConsumption, p.routeAdditionalConsumption)) {
+				return false;
+			}
 			if (!Equality.isEqual(fuelCosts, p.fuelCosts)) {
 				return false;
 			}
@@ -100,7 +115,8 @@ public final class VoyagePlan implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", fuelConsumptions=" + fuelConsumptions + ", fuelCosts=" + fuelCosts + "]";
+		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", fuelConsumptions=" + fuelConsumptions + ", routeAdditionalConsumption=" + routeAdditionalConsumption + ", fuelCosts="
+				+ fuelCosts + "]";
 	}
 
 	@Override
@@ -116,7 +132,7 @@ public final class VoyagePlan implements Cloneable {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, fuelCosts, capacityViolations);
+		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, capacityViolations);
 	}
 
 	/**
