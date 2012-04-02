@@ -74,7 +74,7 @@ public final class CostComponent extends AbstractPerRouteSchedulerFitnessCompone
 			for (int i = 0; i < fuelComponentCount; i++) {
 				final FuelComponent fuel = fuelComponents[i];
 				final FuelUnit defaultFuelUnit = defaultUnits[i];
-				final long consumption = detail.getFuelConsumption(fuel, defaultFuelUnit);
+				final long consumption = detail.getFuelConsumption(fuel, defaultFuelUnit) + detail.getRouteAdditionalConsumption(fuel, defaultFuelUnit);
 				final long fuelCost = Calculator.costFromConsumption(consumption, detail.getFuelUnitPrice(fuel));
 
 				// addDiscountedValue(time, fuelCost);

@@ -86,7 +86,8 @@ public class NetbackContract implements ILoadPriceCalculator2 {
 		long totalRealTransportCosts = ladenLeg.getRouteCost();
 		// fuel cost
 		for (final FuelComponent c : FuelComponent.values()) {
-			totalRealTransportCosts += Calculator.multiply(ladenLeg.getFuelConsumption(c, c.getDefaultFuelUnit()), ladenLeg.getFuelUnitPrice(c));
+			long fuelConsumption = ladenLeg.getFuelConsumption(c, c.getDefaultFuelUnit()) + ladenLeg.getRouteAdditionalConsumption(c,  c.getDefaultFuelUnit());
+			totalRealTransportCosts += Calculator.multiply(fuelConsumption, ladenLeg.getFuelUnitPrice(c));
 		}
 		// vessel cost (don't use calculator.multiply here; hours are not
 		// scaled, but price is)

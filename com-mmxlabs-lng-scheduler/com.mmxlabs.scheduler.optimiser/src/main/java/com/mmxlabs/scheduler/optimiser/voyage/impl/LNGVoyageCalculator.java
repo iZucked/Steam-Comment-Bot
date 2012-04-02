@@ -403,6 +403,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				routeCostAccumulator += details.getRouteCost();
 				for (final FuelComponent fc : FuelComponent.values()) {
 					fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc, fc.getDefaultFuelUnit());
+					fuelConsumptions[fc.ordinal()] += details.getRouteAdditionalConsumption(fc, fc.getDefaultFuelUnit());
 				}
 
 				// TODO: Assert that if discharge.heelOut set, then future

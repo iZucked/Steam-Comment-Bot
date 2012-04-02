@@ -194,7 +194,7 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 				for (final FuelComponent fuel : travelFuelComponents) {
 					for (final FuelUnit unit : FuelUnit.values()) {
-						final long consumption = details.getFuelConsumption(fuel, unit);
+						final long consumption = details.getFuelConsumption(fuel, unit) + details.getRouteAdditionalConsumption(fuel, unit);
 						journey.setFuelConsumption(fuel, unit, consumption);
 						if (unit == fuel.getDefaultFuelUnit()) {
 							final long cost = Calculator.costFromConsumption(consumption, details.getFuelUnitPrice(fuel));
