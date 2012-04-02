@@ -714,8 +714,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setVesselClassRouteTimeAndFuel(final String name, final IVesselClass vc, final int transitTimeInHours, final long baseFuelInScaledMT) {
-		routeCostProvider.setRouteTimeAndFuel(name, vc, transitTimeInHours, baseFuelInScaledMT);
+	public void setVesselClassRouteFuel(final String name, final IVesselClass vc, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
+		routeCostProvider.setRouteFuel(name, vc, vesselState, baseFuelInScaledMT, nboRateInScaledM3);
+	}
+
+	@Override
+	public void setVesselClassRouteTransitTime(final String name, final IVesselClass vc, final int transitTimeInHours) {
+		routeCostProvider.setRouteTransitTime(name, vc, transitTimeInHours);
 	}
 
 	@Override

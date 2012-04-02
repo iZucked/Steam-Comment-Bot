@@ -322,12 +322,26 @@ public interface ISchedulerBuilder {
 	 *            the name of the route
 	 * @param vc
 	 *            the vessel class
+	 * @param vesselState
+	 *            the vessel state
+	 * @param baseFuelInScaledMT
+	 *            the extra base fuel or equivalent required, in up-scaled MT (see {@link Calculator#ScaleFactor})
+	 * @param nboRateInScaledM3
+	 *            the NBO rate in up-scaled M3 (see {@link Calculator#ScaleFactor})
+	 */
+	void setVesselClassRouteFuel(String name, IVesselClass vc, VesselState vesselState, long baseFuelInScaledMT, long nboRateInScaledM3);
+
+	/**
+	 * Set the extra time required for the given vessel class to travel by the given route
+	 * 
+	 * @param name
+	 *            the name of the route
+	 * @param vc
+	 *            the vessel class
 	 * @param time
 	 *            the extra transit time required, in hours
-	 * @param fuel
-	 *            the extra base fuel or equivalent required, in up-scaled MT (see {@link Calculator#ScaleFactor})
 	 */
-	void setVesselClassRouteTimeAndFuel(String name, IVesselClass vc, int time, long fuel);
+	void setVesselClassRouteTransitTime(String name, IVesselClass vc, int time);
 
 	/**
 	 * Specify an amount of time a given {@link IResource} must incur if assigned to the given {@link ISequenceElement}.
