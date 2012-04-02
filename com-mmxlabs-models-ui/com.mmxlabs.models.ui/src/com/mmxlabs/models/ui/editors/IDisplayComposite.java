@@ -20,6 +20,12 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *
  */
 public interface IDisplayComposite {
+	
+	/**
+	 * Key used to associate a label with it's control for tool tips
+	 */
+	public static final String LABEL_CONTROL_KEY = "label-control";
+	
 	/**
 	 * Get the SWT {@link Composite} which will be used to display values
 	 * @return

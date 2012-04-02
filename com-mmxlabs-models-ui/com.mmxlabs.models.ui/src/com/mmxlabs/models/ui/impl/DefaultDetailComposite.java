@@ -27,14 +27,13 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 
 /**
- * The default detail composite implementation; does not do anything about
- * having child composites.
+ * The default detail composite implementation; does not do anything about having child composites.
  * 
  * @author hinton
  * 
  */
-public class DefaultDetailComposite extends Composite implements
-		IInlineEditorContainer, IDisplayComposite {
+public class DefaultDetailComposite extends Composite implements IInlineEditorContainer, IDisplayComposite {
+
 	private ICommandHandler commandHandler;
 	private EClass displayedClass;
 	private IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
@@ -57,21 +56,21 @@ public class DefaultDetailComposite extends Composite implements
 
 	public void createControls(MMXRootObject root, EObject object) {
 		for (final IInlineEditor editor : editors) {
-			final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(this, SWT.NONE):null;
+			final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(this, SWT.NONE) : null;
 			editor.setLabel(label);
 			final Control control = editor.createControl(this);
 			control.setLayoutData(layoutProvider.createEditorLayoutData(root, object, editor, control));
+			control.setData(LABEL_CONTROL_KEY, label);
 			if (label != null) {
 				label.setLayoutData(layoutProvider.createLabelLayoutData(root, object, editor, control, label));
-			}			
+			}
 		}
 	}
 
 	/**
 	 * Display the given EObject in this container.
 	 * 
-	 * Recreates the controls if the object's eClass is different to what we had
-	 * before.
+	 * Recreates the controls if the object's eClass is different to what we had before.
 	 * 
 	 * @param object
 	 */
@@ -97,9 +96,7 @@ public class DefaultDetailComposite extends Composite implements
 
 	private void initialize(final EClass eClass) {
 		this.displayedClass = eClass;
-		final IComponentHelper helper = Activator.getDefault()
-				.getComponentHelperRegistry()
-				.getComponentHelper(displayedClass);
+		final IComponentHelper helper = Activator.getDefault().getComponentHelperRegistry().getComponentHelper(displayedClass);
 		helper.addEditorsToComposite(this);
 	}
 
@@ -120,7 +117,8 @@ public class DefaultDetailComposite extends Composite implements
 
 	@Override
 	public void displayValidationStatus(IStatus status) {
-		for (final IInlineEditor editor : editors) editor.processValidation(status);
+		for (final IInlineEditor editor : editors)
+			editor.processValidation(status);
 	}
 
 	@Override
