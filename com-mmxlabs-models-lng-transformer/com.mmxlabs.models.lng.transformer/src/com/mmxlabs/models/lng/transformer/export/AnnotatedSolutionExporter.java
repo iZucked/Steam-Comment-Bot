@@ -59,7 +59,7 @@ public class AnnotatedSolutionExporter {
 	private final List<IAnnotationExporter> exporters = new LinkedList<IAnnotationExporter>();
 	final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
 	final List<IExporterExtension> extensions = new LinkedList<IExporterExtension>();
-	
+
 	private boolean exportRuntimeAndFitness = false;
 
 	public boolean isExportRuntimeAndFitness() {
@@ -97,11 +97,11 @@ public class AnnotatedSolutionExporter {
 		}
 		return true;
 	}
-	
+
 	public void addExporterExtension(final IExporterExtension extension) {
 		extensions.add(extension);
 	}
-	
+
 	public Schedule exportAnnotatedSolution(final MMXRootObject inputScenario, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
 		final IOptimisationData data = annotatedSolution.getContext().getOptimisationData();
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
@@ -135,14 +135,26 @@ public class AnnotatedSolutionExporter {
 		final Map<IResource, Map<String, Long>> sequenceFitnesses = annotatedSolution.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, Map.class);
 		for (final IResource resource : resources) {
 			final IVessel vessel = vesselProvider.getVessel(resource);
-			
+
 			final Sequence eSequence = factory.createSequence();
 			sequences.add(eSequence);
-			
+
 			// TODO use spot rates correctly.
-			eSequence.setDailyHireRate(
-					(vessel.getVesselClass().getHourlyCharterInPrice() * 24) / 1000);
-			
+			final int hireRate;
+			switch (vessel.getVesselInstanceType()) {
+			case SPOT_CHARTER:
+				hireRate = vessel.getVesselClass().getHourlyCharterInPrice();
+				break;
+			case TIME_CHARTER:
+				hireRate = vessel.getHourlyCharterOutPrice();
+				break;
+			default:
+				hireRate = 0;
+				break;
+			}
+
+			eSequence.setDailyHireRate((hireRate * 24) / 1000);
+
 			switch (vessel.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
@@ -181,7 +193,7 @@ public class AnnotatedSolutionExporter {
 					eSequenceFitness.add(sf);
 				}
 			}
-			
+
 			final EList<Event> events = eSequence.getEvents();
 
 			final Comparator<Event> eventComparator = new Comparator<Event>() {
@@ -207,7 +219,6 @@ public class AnnotatedSolutionExporter {
 					return 0;
 				}
 			};
-
 
 			final List<Event> eventsForElement = new ArrayList<Event>();
 			for (final ISequenceElement element : annotatedSolution.getSequences().getSequence(resource)) {
@@ -271,20 +282,18 @@ public class AnnotatedSolutionExporter {
 					allocation = null;
 			}
 		}
-		
+
 		// connect back-references to input cargos.
 		final CargoModel cargoModel = inputScenario.getSubModel(CargoModel.class);
 		for (final Cargo cargo : cargoModel.getCargos()) {
 			for (final CargoAllocation allocation : output.getCargoAllocations()) {
-				if (allocation.getLoadAllocation().isSetSlot() &&
-						allocation.getDischargeAllocation().isSetSlot() &&
-						allocation.getLoadAllocation().getSlot() == cargo.getLoadSlot() &&
-						allocation.getDischargeAllocation().getSlot() == cargo.getDischargeSlot()) {
+				if (allocation.getLoadAllocation().isSetSlot() && allocation.getDischargeAllocation().isSetSlot() && allocation.getLoadAllocation().getSlot() == cargo.getLoadSlot()
+						&& allocation.getDischargeAllocation().getSlot() == cargo.getDischargeSlot()) {
 					allocation.setInputCargo(cargo);
 				}
 			}
 		}
-		
+
 		@SuppressWarnings("unchecked")
 		final Map<String, Long> fitnesses = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, Map.class);
 
