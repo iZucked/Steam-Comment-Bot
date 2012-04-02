@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="com.mmxlabs.models.lng.analytics.presentation.AnalyticsModelWizardID"
+            name="%_UI_AnalyticsModelWizard_label"
+            class="com.mmxlabs.models.lng.analytics.presentation.AnalyticsModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/AnalyticsModelFile.gif">
+         <description>%_UI_AnalyticsModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditorID"
+            name="%_UI_AnalyticsEditor_label"
+            icon="icons/full/obj16/AnalyticsModelFile.gif"
+            extensions="analytics"
+            class="com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditor"
+            contributorClass="com.mmxlabs.models.lng.analytics.presentation.AnalyticsActionBarContributor">
+      </editor>
+   </extension>
+
+	
+	<extension
+		point="com.mmxlabs.models.ui.componenthelpers">
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.analytics.helpers.AnalyticsModel"
+			helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.AnalyticsModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.analytics.AnalyticsModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.analytics.helpers.UnitCostMatrix"
+			helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.UnitCostMatrixComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.analytics.UnitCostMatrix" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.analytics.helpers.UnitCostLine"
+			helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.UnitCostLineComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.analytics.UnitCostLine" />
+		
+	</extension>
+</plugin>
