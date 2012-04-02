@@ -91,7 +91,7 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 
 	@Override
 	public long getRouteNBORate(final String route, final IVesselClass vesselClass, final VesselState vesselState) {
-		return get(baseFuelByRouteAndClass, route, vesselClass, vesselState, 0l);
+		return get(nboRateByRouteAndClass, route, vesselClass, vesselState, 0l);
 	}
 
 	@Override

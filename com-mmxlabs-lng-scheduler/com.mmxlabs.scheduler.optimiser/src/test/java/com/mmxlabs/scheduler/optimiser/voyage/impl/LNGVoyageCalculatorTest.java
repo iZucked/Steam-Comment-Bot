@@ -74,7 +74,7 @@ public class LNGVoyageCalculatorTest {
 			{
 				allowing(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass, VesselState.Laden);
-				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass, VesselState.Laden);
 				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
 			}
 		});
@@ -132,7 +132,7 @@ public class LNGVoyageCalculatorTest {
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
-				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass, VesselState.Laden);
 				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass, VesselState.Laden);
 			}
@@ -192,7 +192,7 @@ public class LNGVoyageCalculatorTest {
 			{
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass, VesselState.Laden);
-				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass, VesselState.Laden);
 				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
 
 			}
@@ -237,7 +237,6 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
-		
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
 
@@ -255,7 +254,7 @@ public class LNGVoyageCalculatorTest {
 			{
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(route, vesselClass, VesselState.Laden);
-				one(mockRouteCostProvider).getRouteFuelUsage(route, vesselClass);
+				one(mockRouteCostProvider).getRouteFuelUsage(route, vesselClass, VesselState.Laden);
 				one(mockRouteCostProvider).getRouteTransitTime(route, vesselClass);
 
 			}
@@ -316,7 +315,7 @@ public class LNGVoyageCalculatorTest {
 			{
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass, VesselState.Laden);
-				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass, VesselState.Laden);
 				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
 
 			}
@@ -378,7 +377,7 @@ public class LNGVoyageCalculatorTest {
 			{
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass, VesselState.Laden);
-				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass, VesselState.Laden);
 				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
 
 			}
@@ -437,7 +436,7 @@ public class LNGVoyageCalculatorTest {
 			{
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass, VesselState.Laden);
-				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass, VesselState.Laden);
 				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
 
 			}
@@ -497,7 +496,7 @@ public class LNGVoyageCalculatorTest {
 			{
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass, VesselState.Laden);
-				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass, VesselState.Laden);
 				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
 
 			}
@@ -612,7 +611,7 @@ public class LNGVoyageCalculatorTest {
 			{
 				one(options.getVessel()).getVesselClass();
 				one(mockRouteCostProvider).getRouteCost(null, vesselClass, VesselState.Laden);
-				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass);
+				one(mockRouteCostProvider).getRouteFuelUsage(null, vesselClass, VesselState.Laden);
 				one(mockRouteCostProvider).getRouteTransitTime(null, vesselClass);
 
 			}
@@ -672,7 +671,8 @@ public class LNGVoyageCalculatorTest {
 		final IVesselClass vesselClass = options.getVessel().getVesselClass();
 
 		routeCostProvider.setDefaultRouteCost(routeName, 200000);
-		routeCostProvider.setRouteTimeAndFuel(routeName, vesselClass, 24, 1000);
+		routeCostProvider.setRouteTransitTime(routeName, vesselClass, 24);
+		routeCostProvider.setRouteFuel(routeName, vesselClass, VesselState.Laden, 1000, 50000);
 
 		context.checking(new Expectations() {
 			{
@@ -688,14 +688,16 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(0, details.getIdleTime());
 		Assert.assertEquals(48, details.getTravelTime());
 
+		/* standard consumption */
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-		Assert.assertEquals(
-		/* route cost consumption */(1000 * 24 * 2) + // * 2 because of base fuel conversion factor
-				(/* standard consumption */150 * 24 * Calculator.ScaleFactor), details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
+		Assert.assertEquals((150 * 24 * Calculator.ScaleFactor), details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+
+		/* route cost consumption */
+		Assert.assertEquals((50000 * 24), details.getRouteAdditionalConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 
 		context.assertIsSatisfied();
 	}
@@ -736,7 +738,8 @@ public class LNGVoyageCalculatorTest {
 		final IVesselClass vesselClass = options.getVessel().getVesselClass();
 
 		routeCostProvider.setDefaultRouteCost(routeName, 200000);
-		routeCostProvider.setRouteTimeAndFuel(routeName, vesselClass, 24, 1000);
+		routeCostProvider.setRouteTransitTime(routeName, vesselClass, 24);
+		routeCostProvider.setRouteFuel(routeName, vesselClass, VesselState.Laden, 1000, 50000);
 
 		context.checking(new Expectations() {
 			{
@@ -752,13 +755,16 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(0, details.getIdleTime());
 		Assert.assertEquals(48, details.getTravelTime());
 
-		Assert.assertEquals(/* route cost consumption */(1000 * 24) + (/* standard consumption */75 * 24 * Calculator.ScaleFactor),
-				details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
+		/* standard consumption */
+		Assert.assertEquals((75 * 24 * Calculator.ScaleFactor), details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+
+		/* route cost consumption */
+		Assert.assertEquals((1000 * 24), details.getRouteAdditionalConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 
 		context.assertIsSatisfied();
 	}
