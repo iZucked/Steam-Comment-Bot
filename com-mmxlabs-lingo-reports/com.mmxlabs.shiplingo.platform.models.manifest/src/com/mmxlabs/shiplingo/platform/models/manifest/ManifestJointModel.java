@@ -128,7 +128,7 @@ public class ManifestJointModel extends JointModel {
 
 	public static ManifestJointModel createEmptyModel(final URI target) throws IOException {
 		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-		rootObject.setVersion(releases.size());
+		rootObject.setVersion(releases.size() - 1);
 		// TODO sort out how to create blank models; should there be an extension for this?
 		rootObject.addSubModel(PortFactory.eINSTANCE.createPortModel());
 		rootObject.addSubModel(FleetFactory.eINSTANCE.createFleetModel());
@@ -145,7 +145,7 @@ public class ManifestJointModel extends JointModel {
 
 	public static MMXRootObject createEmptyInstance() {
 		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-		rootObject.setVersion(releases.size());
+		rootObject.setVersion(releases.size() - 1);
 		// TODO sort out how to create blank models; should there be an extension for this?
 		rootObject.addSubModel(PortFactory.eINSTANCE.createPortModel());
 		rootObject.addSubModel(FleetFactory.eINSTANCE.createFleetModel());
