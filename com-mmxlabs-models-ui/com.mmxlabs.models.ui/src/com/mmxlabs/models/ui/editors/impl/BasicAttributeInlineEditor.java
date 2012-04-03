@@ -36,14 +36,14 @@ import org.eclipse.swt.widgets.Label;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 
 /**
  * 
- * TODO sometimes field B should be refreshed when field A changes; currently
- * only field A knows about changes because they happen in here.
+ * TODO sometimes field B should be refreshed when field A changes; currently only field A knows about changes because they happen in here.
  * 
  * @author Tom Hinton
  * 
@@ -51,8 +51,7 @@ import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implements IInlineEditor {
 
 	/**
-	 * Adapter factory instance. This contains all factories registered in the
-	 * global registry.
+	 * Adapter factory instance. This contains all factories registered in the global registry.
 	 */
 	private static final ComposedAdapterFactory FACTORY = createAdapterFactory();
 
@@ -79,22 +78,17 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	/**
 	 * Cached reference to the Information icon
 	 */
-	protected final FieldDecoration decorationInfo = FieldDecorationRegistry
-			.getDefault().getFieldDecoration(
-					FieldDecorationRegistry.DEC_INFORMATION);
+	protected final FieldDecoration decorationInfo = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION);
 
 	/**
 	 * Cached reference to the Warning icon
 	 */
-	protected final FieldDecoration decorationWarning = FieldDecorationRegistry
-			.getDefault().getFieldDecoration(
-					FieldDecorationRegistry.DEC_WARNING);
+	protected final FieldDecoration decorationWarning = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_WARNING);
 
 	/**
 	 * Cached reference to the Error icon
 	 */
-	protected final FieldDecoration decorationError = FieldDecorationRegistry
-			.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
+	protected final FieldDecoration decorationError = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 
 	private final DisposeListener disposeListener = new DisposeListener() {
 		@Override
@@ -107,10 +101,9 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			}
 		}
 	};
-	
 
+	protected Label label;
 
-	protected Label label;	
 	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
 		this.feature = feature;
 	}
@@ -134,35 +127,32 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			String toolTip = "";
 			String labelText = "";
 			// This will fetch the property source of the input object
-			final IItemPropertySource inputPropertySource = (IItemPropertySource) FACTORY
-					.adapt(input, IItemPropertySource.class);
+			final IItemPropertySource inputPropertySource = (IItemPropertySource) FACTORY.adapt(input, IItemPropertySource.class);
 
 			// Iterate through the property descriptors to find a matching
 			// descriptor for the feature
-			for (final IItemPropertyDescriptor descriptor : inputPropertySource
-					.getPropertyDescriptors(input)) {
+			for (final IItemPropertyDescriptor descriptor : inputPropertySource.getPropertyDescriptors(input)) {
 
 				if (feature.equals(descriptor.getFeature(input))) {
 					// Found match
-					
-					toolTip = descriptor.getDescription(input).replace(
-							"{0}",
-							EditorUtils.unmangle(input.eClass().getName())
-									.toLowerCase());
-					
+
+					toolTip = descriptor.getDescription(input).replace("{0}", EditorUtils.unmangle(input.eClass().getName()).toLowerCase());
+
 					labelText = descriptor.getDisplayName(input);
 					break;
 				}
 			}
 			// Update tooltip text
-//			tooltipControl.setToolTipText(toolTip);
+			// tooltipControl.setToolTipText(toolTip);
 			setToolTipText(tooltipControl, toolTip);
-			if (label != null) label.setText(labelText);
+			if (label != null)
+				label.setText(labelText);
 		}
 	}
-	
+
 	/**
 	 * Set the tooltip on control, and any child controls if it's a composite
+	 * 
 	 * @param control
 	 * @param toolTipText
 	 */
@@ -172,26 +162,29 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			for (final Control sub : ((Composite) control).getChildren()) {
 				setToolTipText(sub, toolTipText);
 			}
+			final Object data = control.getData(IDisplayComposite.LABEL_CONTROL_KEY);
+			if (data instanceof Control) {
+				((Control) data).setToolTipText(toolTipText);
+			}
 		}
 	}
 
 	private synchronized void doUpdateDisplayWithValue() {
 		doUpdateDisplayWithValue(false);
 	}
-	
+
 	private synchronized void doUpdateDisplayWithValue(final boolean allowRecursion) {
 		if (currentlySettingValue && !allowRecursion) {
 			return;
 		}
 		currentlySettingValue = true;
-		
+
 		updateDisplay(getValue());
 		currentlySettingValue = false;
 	}
 
 	/**
-	 * Subclasses can override this to trigger a redisplay when other fields
-	 * change
+	 * Subclasses can override this to trigger a redisplay when other fields change
 	 * 
 	 * @param changedFeature
 	 * @return
@@ -203,8 +196,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	@Override
 	public void reallyNotifyChanged(final Notification msg) {
 		// check if msg is relevant
-		if (msg.getFeature() != null
-				&& updateOnChangeToFeature(msg.getFeature())) {
+		if (msg.getFeature() != null && updateOnChangeToFeature(msg.getFeature())) {
 			doUpdateDisplayWithValue(feature.equals(msg.getFeature()) == false);
 		}
 		if (msg.getFeature() != null && msg.getFeature().equals(feature)) {
@@ -231,8 +223,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 		currentlySettingValue = true;
 		final Object currentValue = getValue();
-		if (!(/* (currentValue == null && value == null) || */((currentValue != null && value != null) && currentValue
-				.equals(value)))) {
+		if (!(/* (currentValue == null && value == null) || */((currentValue != null && value != null) && currentValue.equals(value)))) {
 			final Command command = createSetCommand(value);
 			commandHandler.handleCommand(command, input, feature);
 			// editingDomain.getCommandStack().execute(command);
@@ -333,14 +324,16 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	protected Command createSetCommand(final Object value) {
 		// System.err.println("Creating set command (" + input + "." +
 		// feature.getName() + " <- " + value + ")");
+
 		final Command command = commandHandler.getEditingDomain().createCommand(SetCommand.class,
 				new CommandParameter(input, feature, value));
-//		if (value == null) {
-//			((SetCommand) command).setLabel("Clear " + feature.getName());
-//		} else {
-//			((SetCommand) command).setLabel("Set " + feature.getName() + " to "
-//					+ value.toString());
-//		}
+		if (value == null) {
+			((SetCommand) command).setLabel("Clear " + feature.getName());
+		} else {
+			((SetCommand) command).setLabel("Set " + feature.getName() + " to "
+					+ value.toString());
+		}
+
 
 		return command;
 	}
@@ -372,15 +365,13 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	}
 
 	/**
-	 * Utility method to create a {@link ComposedAdapterFactory}. Taken from
-	 * org.eclipse.emf.compare.util.AdapterUtils.
+	 * Utility method to create a {@link ComposedAdapterFactory}. Taken from org.eclipse.emf.compare.util.AdapterUtils.
 	 * 
 	 * @return
 	 */
 	private static ComposedAdapterFactory createAdapterFactory() {
 		final List<AdapterFactory> factories = new ArrayList<AdapterFactory>();
-		factories.add(new ComposedAdapterFactory(
-				ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
+		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
 		factories.add(new ReflectiveItemProviderAdapterFactory());
 		return new ComposedAdapterFactory(factories);
 	}
@@ -394,7 +385,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	public void setCommandHandler(final ICommandHandler handler) {
 		this.commandHandler = handler;
 	}
-	
+
 	@Override
 	public void setLabel(final Label label) {
 		this.label = label;
