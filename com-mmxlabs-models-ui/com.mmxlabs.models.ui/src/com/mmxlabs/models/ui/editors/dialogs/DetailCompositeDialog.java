@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.validation.model.EvaluationMode;
@@ -411,23 +412,21 @@ public class DetailCompositeDialog extends Dialog {
 			// For containment references, we need to compare the contained
 			// object, rather than generate a SetCommand.
 			if (original.eClass().getEAllContainments().contains(feature)) {
-
-				// TODO: Handle non-EObject references such as Lists (e.g. for
-				// VesselClass edits
-				// TODO: fix this temporary fix, which presumes that multiply
-				// contained objects
-				// are not referenced elsewhere and so will not create dangling
-				// hrefs
-				// one possible solution is to use the code in the
-				// ImportCSVAction which relinks objects that have been
-				// replaced.
 				if (feature.isMany()) {
-					final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection) duplicate.eGet(feature));
-					if (mas.canExecute() == false) {
-						log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
-								"Attempt to set feature which could not be set."));
-					}
-					compound.append(mas);
+					if (!((Collection)original.eGet(feature)).isEmpty())
+					compound.append(
+							RemoveCommand.create(editingDomain, original, feature, (Collection) original.eGet(feature))
+							);
+					if (!((Collection)duplicate.eGet(feature)).isEmpty())
+					compound.append(
+							AddCommand.create(editingDomain, original, feature, (Collection) duplicate.eGet(feature))
+							);
+//					final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection) duplicate.eGet(feature));
+//					if (mas.canExecute() == false) {
+//						log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
+//								"Attempt to set feature which could not be set."));
+//					}
+//					compound.append(mas);
 				} else {
 					final Command c = makeEqualizer((EObject) original.eGet(feature), (EObject) duplicate.eGet(feature));
 					// if (!c.getAffectedObjects().isEmpty()) {
