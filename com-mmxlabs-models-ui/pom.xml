@@ -108,7 +108,8 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -166,6 +167,12 @@
 		<repository>
 			<id>nebula-incubation-snapshots</id>
 			<url>http://download.eclipse.org/technology/nebula/incubation/snapshot</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
+			<id>orbit</id>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/I20120321212921/</url>
 			<layout>p2</layout>
 		</repository>
 
