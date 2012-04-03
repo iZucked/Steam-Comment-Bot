@@ -101,9 +101,9 @@ public class OptimisationTransformer {
 	public IOptimisationContext createOptimisationContext(final IOptimisationData data, final ModelEntityMap mem) {
 		final ISequences sequences = createInitialSequences(data, mem);
 
-		createConstraintCheckerRegistry();
-		createFitnessFunctionRegistry();
-		createEvaluationProcessRegistry();
+//		createConstraintCheckerRegistry();
+//		createFitnessFunctionRegistry();
+//		createEvaluationProcessRegistry();
 
 		final List<String> components = getEnabledFitnessFunctionNames();
 		log.debug("Desired components: " + components);

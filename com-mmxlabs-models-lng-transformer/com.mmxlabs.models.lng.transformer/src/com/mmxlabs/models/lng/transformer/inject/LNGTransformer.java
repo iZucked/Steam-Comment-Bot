@@ -58,6 +58,7 @@ public class LNGTransformer {
 			throw new RuntimeException(e);
 		}
 		optimisationTransformer = new OptimisationTransformer(scenario, lngScenarioTransformer.getOptimisationSettings());
+		injector.injectMembers(optimisationTransformer);
 	}
 
 	public synchronized LNGScenarioTransformer getLNGScenarioTransformer() {
