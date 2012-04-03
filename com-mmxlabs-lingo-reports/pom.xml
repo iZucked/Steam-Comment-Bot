@@ -155,6 +155,12 @@
 		</repository>
 
 		<repository>
+			<id>orbit</id>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/I20120321212921/</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
 			<id>mmxlabs-p2-snapshots</id>
 			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/</url>
 			<layout>p2</layout>
