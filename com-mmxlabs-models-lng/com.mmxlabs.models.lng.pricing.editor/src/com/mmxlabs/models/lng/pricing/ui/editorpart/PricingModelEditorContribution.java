@@ -21,6 +21,7 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 	private CharterPricingPane charter;
 	private VesselRoutePricingPane route;
 	private CooldownPricingEditorPane cool;
+	private PortCostPricingPane port;
 
 	@Override
 	public void addPages(final Composite parent) {
@@ -30,9 +31,9 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 	}
 
 	private void addPricingPage(final Composite parent) {
-		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
-		final SashForm sash2 = new SashForm(sash, SWT.HORIZONTAL);
-		final SashForm sash3 = new SashForm(sash, SWT.HORIZONTAL);
+//		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
+		final SashForm sash2 = new SashForm(parent, SWT.HORIZONTAL);
+		final SashForm sash3 = new SashForm(parent, SWT.VERTICAL);
 		
 		base = new BaseFuelPricingPane(editorPart.getSite().getPage(), editorPart);
 		base.createControl(sash2);
@@ -41,7 +42,7 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		base.getViewer().setInput(modelObject);
 
 		charter = new CharterPricingPane(editorPart.getSite().getPage(), editorPart);
-		charter.createControl(sash3);
+		charter.createControl(sash2);
 		charter.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FleetCost(), PricingPackage.eINSTANCE.getFleetCostModel_CharterCosts() }),
 				editorPart.getAdapterFactory());
 		charter.getViewer().setInput(modelObject);
@@ -52,12 +53,19 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		route.getViewer().setInput(modelObject);
 
 		cool = new CooldownPricingEditorPane(editorPart.getSite().getPage(), editorPart);
-		cool.createControl(sash2);
+		cool.createControl(sash3);
 		cool.init(Arrays.asList(new EReference[] {PricingPackage.eINSTANCE.getPricingModel_CooldownPrices()}), editorPart.getAdapterFactory());
 		cool.getViewer().setInput(modelObject);
 		
-		int page = editorPart.addPage(sash);
-		editorPart.setPageText(page, "Pricing");
+		port = new PortCostPricingPane(editorPart.getSite().getPage(), editorPart);
+		port.createControl(sash3);
+		port.init(Arrays.asList(new EReference[] {PricingPackage.eINSTANCE.getPricingModel_PortCosts()}), editorPart.getAdapterFactory());
+		port.getViewer().setInput(modelObject);
+		
+//		int page = editorPart.addPage(sash);
+//		editorPart.setPageText(page, "Pricing");
+		editorPart.setPageText(editorPart.addPage(sash2), "Vessel Costs");
+		editorPart.setPageText(editorPart.addPage(sash3), "Port + Route Costs");
 	}
 
 	private void addMarketPage(final Composite parent) {
@@ -88,5 +96,6 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		route.setLocked(locked);
 		charter.setLocked(locked);
 		cool.setLocked(locked);
+		port.setLocked(locked);
 	}
 }

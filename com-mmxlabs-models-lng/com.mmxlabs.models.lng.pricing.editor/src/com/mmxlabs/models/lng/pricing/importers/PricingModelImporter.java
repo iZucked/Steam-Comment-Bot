@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -37,13 +38,14 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private static final String CHARTER_CURVE_KEY = "CHARTER_CURVES";
 	private static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
 	private static final String CHARTER_PRICING_KEY = "CHARTER_PRICING";
+	private static final String PORT_COSTS_KEY = "PORT_COSTS";
 	
 	static {
 		inputs.put(PRICE_CURVE_KEY, "Commodity Curves");
 		inputs.put(CHARTER_CURVE_KEY, "Charter Curves");
 		inputs.put(COOLDOWN_PRICING_KEY, "Cooldown Prices");
 		inputs.put(CHARTER_PRICING_KEY, "Charter Rates");
-		
+		inputs.put(PORT_COSTS_KEY, "Port Costs");
 	}
 	
 	final IClassImporter dataIndexImporter = 
@@ -54,6 +56,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 	
 	final IClassImporter charterPriceImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getCharterCostModel());
 	
+	final IClassImporter portCostImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getPortCost());
 	@Override
 	public Map<String, String> getRequiredInputs() {
 		return inputs;
@@ -64,6 +67,10 @@ public class PricingModelImporter implements ISubmodelImporter {
 		final PricingModel pricing = PricingFactory.eINSTANCE.createPricingModel();
 		if (inputs.containsKey(PRICE_CURVE_KEY)) importCommodityCurves(pricing, inputs.get(PRICE_CURVE_KEY), context);
 		if (inputs.containsKey(CHARTER_CURVE_KEY)) importCharterCurves(pricing, inputs.get(CHARTER_CURVE_KEY), context);
+		
+		if (inputs.containsKey(PORT_COSTS_KEY)) {
+			pricing.getPortCosts().addAll((Collection<? extends PortCost>) portCostImporter.importObjects(PricingPackage.eINSTANCE.getPortCost(),inputs.get(PORT_COSTS_KEY), context));
+		}
 		
 		final FleetCostModel fcm = PricingFactory.eINSTANCE.createFleetCostModel();
 		pricing.setFleetCost(fcm);
@@ -155,6 +162,6 @@ public class PricingModelImporter implements ISubmodelImporter {
 		output.put(CHARTER_CURVE_KEY, dataIndexImporter.exportObjects(pricing.getCharterIndices()));
 		output.put(COOLDOWN_PRICING_KEY, cooldownPriceImporter.exportObjects(pricing.getCooldownPrices()));
 		output.put(CHARTER_PRICING_KEY, charterPriceImporter.exportObjects(pricing.getFleetCost().getCharterCosts()));
+		output.put(PORT_COSTS_KEY, portCostImporter.exportObjects(pricing.getPortCosts()));
 	}
-
 }
