@@ -30,7 +30,7 @@
 		<module>com.mmxlabs.models.lng.transformer</module>
 
 		<module>com.mmxlabs.models.lng.transformer.feature</module>
-		
+
 		<module>com.mmxlabs.models.lng.transformer.p2</module>
 	</modules>
 
@@ -107,12 +107,18 @@
 			<url>http://download.eclipse.org/technology/nebula/snapshot</url>
 			<layout>p2</layout>
 		</repository>
-		
-        <repository>
-            <id>nebula-incubation-snapshots</id>
-            <url>http://download.eclipse.org/technology/nebula/incubation/snapshot</url>
-            <layout>p2</layout>
-        </repository>
+
+		<repository>
+			<id>nebula-incubation-snapshots</id>
+			<url>http://download.eclipse.org/technology/nebula/incubation/snapshot</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
+			<id>orbit</id>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/I20120321212921/</url>
+			<layout>p2</layout>
+		</repository>
 
 		<repository>
 			<id>mmxlabs-p2-external</id>
