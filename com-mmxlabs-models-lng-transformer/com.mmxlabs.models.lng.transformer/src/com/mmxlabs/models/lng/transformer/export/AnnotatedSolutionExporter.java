@@ -78,6 +78,9 @@ public class AnnotatedSolutionExporter {
 	}
 
 	public boolean addPlatformExporterExtensions() {
+		
+		// TOOD: Peaberry
+		
 		if (Platform.getExtensionRegistry() == null) {
 			log.warn("addPlatformExporterExtensions() called without a platform - skipping");
 			return false;
