@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
+import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -18,11 +19,12 @@ import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PortCost;
+import com.mmxlabs.models.lng.pricing.PortCostDefinition;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
-import com.mmxlabs.models.lng.pricing.PortCostVessels;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SimplePortCost;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.types.AIndex;
 import com.mmxlabs.models.lng.types.ASpotMarket;
@@ -131,16 +133,20 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createPortCostAdapter();
 			}
 			@Override
-			public Adapter casePortCostVessels(PortCostVessels object) {
-				return createPortCostVesselsAdapter();
-			}
-			@Override
 			public Adapter casePortCostEntry(PortCostEntry object) {
 				return createPortCostEntryAdapter();
 			}
 			@Override
 			public Adapter caseCooldownPrice(CooldownPrice object) {
 				return createCooldownPriceAdapter();
+			}
+			@Override
+			public Adapter caseSimplePortCost(SimplePortCost object) {
+				return createSimplePortCostAdapter();
+			}
+			@Override
+			public Adapter casePortCostDefinition(PortCostDefinition object) {
+				return createPortCostDefinitionAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -337,20 +343,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.PortCostVessels <em>Port Cost Vessels</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.PortCostVessels
-	 * @generated
-	 */
-	public Adapter createPortCostVesselsAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.PortCostEntry <em>Port Cost Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -375,6 +367,34 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCooldownPriceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.SimplePortCost <em>Simple Port Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.SimplePortCost
+	 * @generated
+	 */
+	public Adapter createSimplePortCostAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.PortCostDefinition <em>Port Cost Definition</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.PortCostDefinition
+	 * @generated
+	 */
+	public Adapter createPortCostDefinitionAdapter() {
 		return null;
 	}
 

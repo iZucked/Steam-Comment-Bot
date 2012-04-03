@@ -145,6 +145,98 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.Voyage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VoyageItemProvider voyageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.Voyage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVoyageAdapter() {
+		if (voyageItemProvider == null) {
+			voyageItemProvider = new VoyageItemProvider(this);
+		}
+
+		return voyageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.Visit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VisitItemProvider visitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.Visit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVisitAdapter() {
+		if (visitItemProvider == null) {
+			visitItemProvider = new VisitItemProvider(this);
+		}
+
+		return visitItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.CostComponent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CostComponentItemProvider costComponentItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.CostComponent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCostComponentAdapter() {
+		if (costComponentItemProvider == null) {
+			costComponentItemProvider = new CostComponentItemProvider(this);
+		}
+
+		return costComponentItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.FuelCost} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FuelCostItemProvider fuelCostItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.FuelCost}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFuelCostAdapter() {
+		if (fuelCostItemProvider == null) {
+			fuelCostItemProvider = new FuelCostItemProvider(this);
+		}
+
+		return fuelCostItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -246,6 +338,10 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (analyticsModelItemProvider != null) analyticsModelItemProvider.dispose();
 		if (unitCostMatrixItemProvider != null) unitCostMatrixItemProvider.dispose();
 		if (unitCostLineItemProvider != null) unitCostLineItemProvider.dispose();
+		if (voyageItemProvider != null) voyageItemProvider.dispose();
+		if (visitItemProvider != null) visitItemProvider.dispose();
+		if (costComponentItemProvider != null) costComponentItemProvider.dispose();
+		if (fuelCostItemProvider != null) fuelCostItemProvider.dispose();
 	}
 
 }

@@ -63,6 +63,10 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.ANALYTICS_MODEL: return createAnalyticsModel();
 			case AnalyticsPackage.UNIT_COST_MATRIX: return createUnitCostMatrix();
 			case AnalyticsPackage.UNIT_COST_LINE: return createUnitCostLine();
+			case AnalyticsPackage.VOYAGE: return createVoyage();
+			case AnalyticsPackage.VISIT: return createVisit();
+			case AnalyticsPackage.COST_COMPONENT: return createCostComponent();
+			case AnalyticsPackage.FUEL_COST: return createFuelCost();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -96,6 +100,46 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public UnitCostLine createUnitCostLine() {
 		UnitCostLineImpl unitCostLine = new UnitCostLineImpl();
 		return unitCostLine;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Voyage createVoyage() {
+		VoyageImpl voyage = new VoyageImpl();
+		return voyage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Visit createVisit() {
+		VisitImpl visit = new VisitImpl();
+		return visit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CostComponent createCostComponent() {
+		CostComponentImpl costComponent = new CostComponentImpl();
+		return costComponent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FuelCost createFuelCost() {
+		FuelCostImpl fuelCost = new FuelCostImpl();
+		return fuelCost;
 	}
 
 	/**

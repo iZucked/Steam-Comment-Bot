@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 
+import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -21,11 +22,11 @@ import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
-import com.mmxlabs.models.lng.pricing.PortCostVessels;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SimplePortCost;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.pricing.SpotType;
 
@@ -84,9 +85,9 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.BASE_FUEL_COST: return createBaseFuelCost();
 			case PricingPackage.SPOT_MARKET: return createSpotMarket();
 			case PricingPackage.PORT_COST: return createPortCost();
-			case PricingPackage.PORT_COST_VESSELS: return createPortCostVessels();
 			case PricingPackage.PORT_COST_ENTRY: return createPortCostEntry();
 			case PricingPackage.COOLDOWN_PRICE: return createCooldownPrice();
+			case PricingPackage.SIMPLE_PORT_COST: return createSimplePortCost();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -237,16 +238,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortCostVessels createPortCostVessels() {
-		PortCostVesselsImpl portCostVessels = new PortCostVesselsImpl();
-		return portCostVessels;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public PortCostEntry createPortCostEntry() {
 		PortCostEntryImpl portCostEntry = new PortCostEntryImpl();
 		return portCostEntry;
@@ -260,6 +251,16 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public CooldownPrice createCooldownPrice() {
 		CooldownPriceImpl cooldownPrice = new CooldownPriceImpl();
 		return cooldownPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SimplePortCost createSimplePortCost() {
+		SimplePortCostImpl simplePortCost = new SimplePortCostImpl();
+		return simplePortCost;
 	}
 
 	/**

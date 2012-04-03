@@ -61,25 +61,25 @@ public class PortCostItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPortPropertyDescriptor(object);
+			addPortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Port feature.
+	 * This adds a property descriptor for the Ports feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPortPropertyDescriptor(Object object) {
+	protected void addPortsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PortCost_port_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortCost_port_feature", "_UI_PortCost_type"),
-				 PricingPackage.Literals.PORT_COST__PORT,
+				 getString("_UI_PortCost_ports_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortCost_ports_feature", "_UI_PortCost_type"),
+				 PricingPackage.Literals.PORT_COST__PORTS,
 				 true,
 				 false,
 				 true,
@@ -100,7 +100,7 @@ public class PortCostItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.PORT_COST__VESSEL_PORT_COSTS);
+			childrenFeatures.add(PricingPackage.Literals.PORT_COST__DEFINITION);
 		}
 		return childrenFeatures;
 	}
@@ -152,7 +152,7 @@ public class PortCostItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PortCost.class)) {
-			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
+			case PricingPackage.PORT_COST__DEFINITION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -172,8 +172,8 @@ public class PortCostItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.PORT_COST__VESSEL_PORT_COSTS,
-				 PricingFactory.eINSTANCE.createPortCostVessels()));
+				(PricingPackage.Literals.PORT_COST__DEFINITION,
+				 PricingFactory.eINSTANCE.createSimplePortCost()));
 	}
 
 	/**

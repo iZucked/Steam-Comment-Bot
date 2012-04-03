@@ -14,7 +14,6 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -23,18 +22,18 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.pricing.PortCostVessels;
+import com.mmxlabs.models.lng.pricing.PortCostDefinition;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.PortCostVessels} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.PortCostDefinition} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class PortCostVesselsItemProvider
+public class PortCostDefinitionItemProvider
 	extends MMXObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -48,7 +47,7 @@ public class PortCostVesselsItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortCostVesselsItemProvider(AdapterFactory adapterFactory) {
+	public PortCostDefinitionItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -63,31 +62,8 @@ public class PortCostVesselsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addVesselsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Vessels feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVesselsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PortCostVessels_vessels_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortCostVessels_vessels_feature", "_UI_PortCostVessels_type"),
-				 PricingPackage.Literals.PORT_COST_VESSELS__VESSELS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
@@ -102,7 +78,7 @@ public class PortCostVesselsItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.PORT_COST_VESSELS__PORT_COST_ENTRIES);
+			childrenFeatures.add(PricingPackage.Literals.PORT_COST_DEFINITION__ENTRIES);
 		}
 		return childrenFeatures;
 	}
@@ -121,17 +97,6 @@ public class PortCostVesselsItemProvider
 	}
 
 	/**
-	 * This returns PortCostVessels.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/PortCostVessels"));
-	}
-
-	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -139,7 +104,7 @@ public class PortCostVesselsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_PortCostVessels_type");
+		return getString("_UI_PortCostDefinition_type");
 	}
 
 	/**
@@ -153,8 +118,8 @@ public class PortCostVesselsItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(PortCostVessels.class)) {
-			case PricingPackage.PORT_COST_VESSELS__PORT_COST_ENTRIES:
+		switch (notification.getFeatureID(PortCostDefinition.class)) {
+			case PricingPackage.PORT_COST_DEFINITION__ENTRIES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -174,7 +139,7 @@ public class PortCostVesselsItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.PORT_COST_VESSELS__PORT_COST_ENTRIES,
+				(PricingPackage.Literals.PORT_COST_DEFINITION__ENTRIES,
 				 PricingFactory.eINSTANCE.createPortCostEntry()));
 	}
 

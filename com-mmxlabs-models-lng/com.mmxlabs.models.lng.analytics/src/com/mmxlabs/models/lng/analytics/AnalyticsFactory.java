@@ -53,6 +53,42 @@ public interface AnalyticsFactory extends EFactory {
 	UnitCostLine createUnitCostLine();
 
 	/**
+	 * Returns a new object of class '<em>Voyage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Voyage</em>'.
+	 * @generated
+	 */
+	Voyage createVoyage();
+
+	/**
+	 * Returns a new object of class '<em>Visit</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Visit</em>'.
+	 * @generated
+	 */
+	Visit createVisit();
+
+	/**
+	 * Returns a new object of class '<em>Cost Component</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cost Component</em>'.
+	 * @generated
+	 */
+	CostComponent createCostComponent();
+
+	/**
+	 * Returns a new object of class '<em>Fuel Cost</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fuel Cost</em>'.
+	 * @generated
+	 */
+	FuelCost createFuelCost();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

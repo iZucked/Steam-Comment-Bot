@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.analytics.provider;
 
 
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 
@@ -20,6 +21,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -66,13 +68,16 @@ public class UnitCostLineItemProvider
 			super.getPropertyDescriptors(object);
 
 			addUnitCostPropertyDescriptor(object);
-			addTotalCostPropertyDescriptor(object);
 			addMmbtuDeliveredPropertyDescriptor(object);
 			addFromPropertyDescriptor(object);
 			addToPropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
 			addVolumeLoadedPropertyDescriptor(object);
 			addVolumeDischargedPropertyDescriptor(object);
+			addHireCostPropertyDescriptor(object);
+			addFuelCostPropertyDescriptor(object);
+			addCanalCostPropertyDescriptor(object);
+			addPortCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -95,28 +100,6 @@ public class UnitCostLineItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Total Cost feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addTotalCostPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_UnitCostLine_totalCost_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostLine_totalCost_feature", "_UI_UnitCostLine_type"),
-				 AnalyticsPackage.Literals.UNIT_COST_LINE__TOTAL_COST,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -254,6 +237,124 @@ public class UnitCostLineItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Hire Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHireCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostLine_hireCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostLine_hireCost_feature", "_UI_UnitCostLine_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_LINE__HIRE_COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Fuel Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFuelCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostLine_fuelCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostLine_fuelCost_feature", "_UI_UnitCostLine_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_LINE__FUEL_COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Canal Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCanalCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostLine_canalCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostLine_canalCost_feature", "_UI_UnitCostLine_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_LINE__CANAL_COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostLine_portCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostLine_portCost_feature", "_UI_UnitCostLine_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_LINE__PORT_COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(AnalyticsPackage.Literals.UNIT_COST_LINE__COST_COMPONENTS);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
+	}
+
+	/**
 	 * This returns UnitCostLine.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -289,12 +390,18 @@ public class UnitCostLineItemProvider
 
 		switch (notification.getFeatureID(UnitCostLine.class)) {
 			case AnalyticsPackage.UNIT_COST_LINE__UNIT_COST:
-			case AnalyticsPackage.UNIT_COST_LINE__TOTAL_COST:
 			case AnalyticsPackage.UNIT_COST_LINE__MMBTU_DELIVERED:
 			case AnalyticsPackage.UNIT_COST_LINE__DURATION:
 			case AnalyticsPackage.UNIT_COST_LINE__VOLUME_LOADED:
 			case AnalyticsPackage.UNIT_COST_LINE__VOLUME_DISCHARGED:
+			case AnalyticsPackage.UNIT_COST_LINE__HIRE_COST:
+			case AnalyticsPackage.UNIT_COST_LINE__FUEL_COST:
+			case AnalyticsPackage.UNIT_COST_LINE__CANAL_COST:
+			case AnalyticsPackage.UNIT_COST_LINE__PORT_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case AnalyticsPackage.UNIT_COST_LINE__COST_COMPONENTS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -310,6 +417,21 @@ public class UnitCostLineItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.UNIT_COST_LINE__COST_COMPONENTS,
+				 AnalyticsFactory.eINSTANCE.createCostComponent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.UNIT_COST_LINE__COST_COMPONENTS,
+				 AnalyticsFactory.eINSTANCE.createVoyage()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.UNIT_COST_LINE__COST_COMPONENTS,
+				 AnalyticsFactory.eINSTANCE.createVisit()));
 	}
 
 	/**

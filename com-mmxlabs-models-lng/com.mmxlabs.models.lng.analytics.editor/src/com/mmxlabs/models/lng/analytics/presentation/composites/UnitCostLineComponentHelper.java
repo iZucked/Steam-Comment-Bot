@@ -70,13 +70,17 @@ public class UnitCostLineComponentHelper implements IComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_unitCostEditor(detailComposite, topClass);
-		add_totalCostEditor(detailComposite, topClass);
 		add_mmbtuDeliveredEditor(detailComposite, topClass);
 		add_fromEditor(detailComposite, topClass);
 		add_toEditor(detailComposite, topClass);
 		add_durationEditor(detailComposite, topClass);
 		add_volumeLoadedEditor(detailComposite, topClass);
 		add_volumeDischargedEditor(detailComposite, topClass);
+		add_hireCostEditor(detailComposite, topClass);
+		add_fuelCostEditor(detailComposite, topClass);
+		add_canalCostEditor(detailComposite, topClass);
+		add_costComponentsEditor(detailComposite, topClass);
+		add_portCostEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the unitCost feature on UnitCostLine
@@ -85,14 +89,6 @@ public class UnitCostLineComponentHelper implements IComponentHelper {
 	 */
 	protected void add_unitCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_LINE__UNIT_COST));
-	}
-	/**
-	 * Create the editor for the totalCost feature on UnitCostLine
-	 *
-	 * @generated
-	 */
-	protected void add_totalCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_LINE__TOTAL_COST));
 	}
 	/**
 	 * Create the editor for the mmbtuDelivered feature on UnitCostLine
@@ -141,5 +137,50 @@ public class UnitCostLineComponentHelper implements IComponentHelper {
 	 */
 	protected void add_volumeDischargedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_LINE__VOLUME_DISCHARGED));
+	}
+
+	/**
+	 * Create the editor for the hireCost feature on UnitCostLine
+	 *
+	 * @generated
+	 */
+	protected void add_hireCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_LINE__HIRE_COST));
+	}
+
+	/**
+	 * Create the editor for the fuelCost feature on UnitCostLine
+	 *
+	 * @generated
+	 */
+	protected void add_fuelCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_LINE__FUEL_COST));
+	}
+
+	/**
+	 * Create the editor for the canalCost feature on UnitCostLine
+	 *
+	 * @generated
+	 */
+	protected void add_canalCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_LINE__CANAL_COST));
+	}
+
+	/**
+	 * Create the editor for the costComponents feature on UnitCostLine
+	 *
+	 * @generated
+	 */
+	protected void add_costComponentsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_LINE__COST_COMPONENTS));
+	}
+
+	/**
+	 * Create the editor for the portCost feature on UnitCostLine
+	 *
+	 * @generated
+	 */
+	protected void add_portCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_LINE__PORT_COST));
 	}
 }

@@ -88,6 +88,22 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createUnitCostLineAdapter();
 			}
 			@Override
+			public Adapter caseVoyage(Voyage object) {
+				return createVoyageAdapter();
+			}
+			@Override
+			public Adapter caseVisit(Visit object) {
+				return createVisitAdapter();
+			}
+			@Override
+			public Adapter caseCostComponent(CostComponent object) {
+				return createCostComponentAdapter();
+			}
+			@Override
+			public Adapter caseFuelCost(FuelCost object) {
+				return createFuelCostAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -158,6 +174,62 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createUnitCostLineAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.Voyage <em>Voyage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.Voyage
+	 * @generated
+	 */
+	public Adapter createVoyageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.Visit <em>Visit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.Visit
+	 * @generated
+	 */
+	public Adapter createVisitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.CostComponent <em>Cost Component</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.CostComponent
+	 * @generated
+	 */
+	public Adapter createCostComponentAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.FuelCost <em>Fuel Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.FuelCost
+	 * @generated
+	 */
+	public Adapter createFuelCostAdapter() {
 		return null;
 	}
 

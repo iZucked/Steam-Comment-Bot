@@ -6,15 +6,19 @@
  */
 package com.mmxlabs.models.lng.analytics.presentation;
 
+import com.mmxlabs.models.lng.analytics.ui.commands.UnitCostMatrixCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
+import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
 import org.eclipse.emf.common.EMFPlugin;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
 /**
  * This is the central singleton for the Analytics editor plugin.
@@ -80,9 +84,11 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 	 * The actual implementation of the Eclipse <b>Plugin</b>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NO
 	 */
 	public static class Implementation extends EclipseUIPlugin {
+		private ServiceRegistration<IModelCommandProvider> commandService;
+
 		/**
 		 * Creates an instance.
 		 * <!-- begin-user-doc -->
@@ -95,6 +101,25 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 			// Remember the static instance.
 			//
 			plugin = this;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+		 */
+		@Override
+		public void start(BundleContext context) throws Exception {
+			super.start(context);
+			IModelCommandProvider commandProvider = new UnitCostMatrixCommandProvider();
+			commandService = context.registerService(IModelCommandProvider.class, commandProvider , null);
+		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+		 */
+		@Override
+		public void stop(BundleContext context) throws Exception {
+			commandService.unregister();
+			super.stop(context);
 		}
 	}
 

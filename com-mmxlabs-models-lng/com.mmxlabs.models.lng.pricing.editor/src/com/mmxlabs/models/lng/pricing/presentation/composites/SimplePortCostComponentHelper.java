@@ -14,18 +14,17 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
- * A component helper for PortCostVessels instances
+ * A component helper for SimplePortCost instances
  *
  * @generated
  */
-public class PortCostVesselsComponentHelper implements IComponentHelper {
+public class SimplePortCostComponentHelper implements IComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -33,7 +32,7 @@ public class PortCostVesselsComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public PortCostVesselsComponentHelper() {
+	public SimplePortCostComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -42,21 +41,21 @@ public class PortCostVesselsComponentHelper implements IComponentHelper {
 	 *
 	 * @generated
 	 */
-	public PortCostVesselsComponentHelper(IAdapterManager adapterManager) {
+	public SimplePortCostComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.MMX_OBJECT);
+			final IComponentHelper helper = registry.getComponentHelper(PricingPackage.Literals.PORT_COST_DEFINITION);
 			if (helper != null) superClassesHelpers.add(helper);
 		}
 	}
 	
 	/**
-	 * add editors to a composite, using PortCostVessels as the supertype
+	 * add editors to a composite, using SimplePortCost as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PricingPackage.Literals.PORT_COST_VESSELS);	
+		addEditorsToComposite(detailComposite, PricingPackage.Literals.SIMPLE_PORT_COST);	
 	}
 	
 	/**
@@ -67,23 +66,24 @@ public class PortCostVesselsComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_vesselsEditor(detailComposite, topClass);
-		add_portCostEntriesEditor(detailComposite, topClass);
+		add_referenceCapacityEditor(detailComposite, topClass);
+		add_appliesToEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the vessels feature on PortCostVessels
+	 * Create the editor for the referenceCapacity feature on SimplePortCost
 	 *
 	 * @generated
 	 */
-	protected void add_vesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST_VESSELS__VESSELS));
+	protected void add_referenceCapacityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SIMPLE_PORT_COST__REFERENCE_CAPACITY));
 	}
+
 	/**
-	 * Create the editor for the portCostEntries feature on PortCostVessels
+	 * Create the editor for the appliesTo feature on SimplePortCost
 	 *
 	 * @generated
 	 */
-	protected void add_portCostEntriesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST_VESSELS__PORT_COST_ENTRIES));
+	protected void add_appliesToEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SIMPLE_PORT_COST__APPLIES_TO));
 	}
 }

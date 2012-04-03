@@ -97,6 +97,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 										}
 									}
 									if (!found) {
+										context.addProblem(context.createProblem("There was no route cost for " + route.getName() + " with " + vesselClass.getName(), false, false, false));
 										final RouteCost cost = PricingFactory.eINSTANCE.createRouteCost();
 										cost.setRoute(route);
 										cost.setVesselClass(vesselClass);

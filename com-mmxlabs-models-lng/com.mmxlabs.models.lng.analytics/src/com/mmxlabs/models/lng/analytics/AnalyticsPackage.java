@@ -353,22 +353,13 @@ public interface AnalyticsPackage extends EPackage {
 	int UNIT_COST_LINE__UNIT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Total Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__TOTAL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Mmbtu Delivered</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__MMBTU_DELIVERED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int UNIT_COST_LINE__MMBTU_DELIVERED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' reference.
@@ -377,7 +368,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__FROM = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int UNIT_COST_LINE__FROM = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>To</b></em>' reference.
@@ -386,7 +377,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__TO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int UNIT_COST_LINE__TO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -395,7 +386,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__DURATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int UNIT_COST_LINE__DURATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Volume Loaded</b></em>' attribute.
@@ -404,7 +395,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__VOLUME_LOADED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int UNIT_COST_LINE__VOLUME_LOADED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Volume Discharged</b></em>' attribute.
@@ -413,7 +404,52 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__VOLUME_DISCHARGED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int UNIT_COST_LINE__VOLUME_DISCHARGED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_COST_LINE__HIRE_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_COST_LINE__FUEL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Canal Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_COST_LINE__CANAL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Cost Components</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_COST_LINE__COST_COMPONENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_COST_LINE__PORT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The number of structural features of the '<em>Unit Cost Line</em>' class.
@@ -422,7 +458,264 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int UNIT_COST_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CostComponentImpl <em>Cost Component</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.CostComponentImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCostComponent()
+	 * @generated
+	 */
+	int COST_COMPONENT = 5;
+
+	/**
+	 * The feature id for the '<em><b>Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COST_COMPONENT__DURATION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COST_COMPONENT__HIRE_COST = 1;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Costs</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COST_COMPONENT__FUEL_COSTS = 2;
+
+	/**
+	 * The number of structural features of the '<em>Cost Component</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COST_COMPONENT_FEATURE_COUNT = 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VoyageImpl <em>Voyage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.VoyageImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVoyage()
+	 * @generated
+	 */
+	int VOYAGE = 3;
+
+	/**
+	 * The feature id for the '<em><b>Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE__DURATION = COST_COMPONENT__DURATION;
+
+	/**
+	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE__HIRE_COST = COST_COMPONENT__HIRE_COST;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Costs</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE__FUEL_COSTS = COST_COMPONENT__FUEL_COSTS;
+
+	/**
+	 * The feature id for the '<em><b>Route</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE__ROUTE = COST_COMPONENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Route Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE__ROUTE_COST = COST_COMPONENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE__SPEED = COST_COMPONENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE__DISTANCE = COST_COMPONENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Idle Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE__IDLE_TIME = COST_COMPONENT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Travel Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE__TRAVEL_TIME = COST_COMPONENT_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of structural features of the '<em>Voyage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE_FEATURE_COUNT = COST_COMPONENT_FEATURE_COUNT + 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VisitImpl <em>Visit</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.VisitImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVisit()
+	 * @generated
+	 */
+	int VISIT = 4;
+
+	/**
+	 * The feature id for the '<em><b>Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VISIT__DURATION = COST_COMPONENT__DURATION;
+
+	/**
+	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VISIT__HIRE_COST = COST_COMPONENT__HIRE_COST;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Costs</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VISIT__FUEL_COSTS = COST_COMPONENT__FUEL_COSTS;
+
+	/**
+	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VISIT__PORT_COST = COST_COMPONENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Visit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VISIT_FEATURE_COUNT = COST_COMPONENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.FuelCostImpl <em>Fuel Cost</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.FuelCostImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFuelCost()
+	 * @generated
+	 */
+	int FUEL_COST = 6;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_COST__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_COST__UNIT = 1;
+
+	/**
+	 * The feature id for the '<em><b>Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_COST__QUANTITY = 2;
+
+	/**
+	 * The feature id for the '<em><b>Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_COST__COST = 3;
+
+	/**
+	 * The number of structural features of the '<em>Fuel Cost</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_COST_FEATURE_COUNT = 4;
 
 
 	/**
@@ -643,17 +936,6 @@ public interface AnalyticsPackage extends EPackage {
 	EAttribute getUnitCostLine_UnitCost();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getTotalCost <em>Total Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Total Cost</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getTotalCost()
-	 * @see #getUnitCostLine()
-	 * @generated
-	 */
-	EAttribute getUnitCostLine_TotalCost();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getMmbtuDelivered <em>Mmbtu Delivered</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -718,6 +1000,255 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getUnitCostLine_VolumeDischarged();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getHireCost <em>Hire Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getHireCost()
+	 * @see #getUnitCostLine()
+	 * @generated
+	 */
+	EAttribute getUnitCostLine_HireCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getFuelCost <em>Fuel Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fuel Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getFuelCost()
+	 * @see #getUnitCostLine()
+	 * @generated
+	 */
+	EAttribute getUnitCostLine_FuelCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getCanalCost <em>Canal Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Canal Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getCanalCost()
+	 * @see #getUnitCostLine()
+	 * @generated
+	 */
+	EAttribute getUnitCostLine_CanalCost();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getCostComponents <em>Cost Components</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Cost Components</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getCostComponents()
+	 * @see #getUnitCostLine()
+	 * @generated
+	 */
+	EReference getUnitCostLine_CostComponents();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getPortCost <em>Port Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getPortCost()
+	 * @see #getUnitCostLine()
+	 * @generated
+	 */
+	EAttribute getUnitCostLine_PortCost();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.Voyage <em>Voyage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Voyage</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Voyage
+	 * @generated
+	 */
+	EClass getVoyage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getRoute <em>Route</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Route</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Voyage#getRoute()
+	 * @see #getVoyage()
+	 * @generated
+	 */
+	EAttribute getVoyage_Route();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getRouteCost <em>Route Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Route Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Voyage#getRouteCost()
+	 * @see #getVoyage()
+	 * @generated
+	 */
+	EAttribute getVoyage_RouteCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getSpeed <em>Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Speed</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Voyage#getSpeed()
+	 * @see #getVoyage()
+	 * @generated
+	 */
+	EAttribute getVoyage_Speed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getDistance <em>Distance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Distance</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Voyage#getDistance()
+	 * @see #getVoyage()
+	 * @generated
+	 */
+	EAttribute getVoyage_Distance();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getIdleTime <em>Idle Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Idle Time</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Voyage#getIdleTime()
+	 * @see #getVoyage()
+	 * @generated
+	 */
+	EAttribute getVoyage_IdleTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getTravelTime <em>Travel Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Travel Time</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Voyage#getTravelTime()
+	 * @see #getVoyage()
+	 * @generated
+	 */
+	EAttribute getVoyage_TravelTime();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.Visit <em>Visit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Visit</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Visit
+	 * @generated
+	 */
+	EClass getVisit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Visit#getPortCost <em>Port Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Visit#getPortCost()
+	 * @see #getVisit()
+	 * @generated
+	 */
+	EAttribute getVisit_PortCost();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.CostComponent <em>Cost Component</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Cost Component</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CostComponent
+	 * @generated
+	 */
+	EClass getCostComponent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.CostComponent#getDuration <em>Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Duration</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CostComponent#getDuration()
+	 * @see #getCostComponent()
+	 * @generated
+	 */
+	EAttribute getCostComponent_Duration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.CostComponent#getHireCost <em>Hire Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CostComponent#getHireCost()
+	 * @see #getCostComponent()
+	 * @generated
+	 */
+	EAttribute getCostComponent_HireCost();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.CostComponent#getFuelCosts <em>Fuel Costs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fuel Costs</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CostComponent#getFuelCosts()
+	 * @see #getCostComponent()
+	 * @generated
+	 */
+	EReference getCostComponent_FuelCosts();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.FuelCost <em>Fuel Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Fuel Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.FuelCost
+	 * @generated
+	 */
+	EClass getFuelCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.FuelCost#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.FuelCost#getName()
+	 * @see #getFuelCost()
+	 * @generated
+	 */
+	EAttribute getFuelCost_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.FuelCost#getUnit <em>Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Unit</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.FuelCost#getUnit()
+	 * @see #getFuelCost()
+	 * @generated
+	 */
+	EAttribute getFuelCost_Unit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.FuelCost#getQuantity <em>Quantity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Quantity</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.FuelCost#getQuantity()
+	 * @see #getFuelCost()
+	 * @generated
+	 */
+	EAttribute getFuelCost_Quantity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.FuelCost#getCost <em>Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.FuelCost#getCost()
+	 * @see #getFuelCost()
+	 * @generated
+	 */
+	EAttribute getFuelCost_Cost();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -908,14 +1439,6 @@ public interface AnalyticsPackage extends EPackage {
 		EAttribute UNIT_COST_LINE__UNIT_COST = eINSTANCE.getUnitCostLine_UnitCost();
 
 		/**
-		 * The meta object literal for the '<em><b>Total Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_LINE__TOTAL_COST = eINSTANCE.getUnitCostLine_TotalCost();
-
-		/**
 		 * The meta object literal for the '<em><b>Mmbtu Delivered</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -962,6 +1485,198 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute UNIT_COST_LINE__VOLUME_DISCHARGED = eINSTANCE.getUnitCostLine_VolumeDischarged();
+
+		/**
+		 * The meta object literal for the '<em><b>Hire Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNIT_COST_LINE__HIRE_COST = eINSTANCE.getUnitCostLine_HireCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Fuel Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNIT_COST_LINE__FUEL_COST = eINSTANCE.getUnitCostLine_FuelCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNIT_COST_LINE__CANAL_COST = eINSTANCE.getUnitCostLine_CanalCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Cost Components</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference UNIT_COST_LINE__COST_COMPONENTS = eINSTANCE.getUnitCostLine_CostComponents();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNIT_COST_LINE__PORT_COST = eINSTANCE.getUnitCostLine_PortCost();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.VoyageImpl <em>Voyage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.VoyageImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVoyage()
+		 * @generated
+		 */
+		EClass VOYAGE = eINSTANCE.getVoyage();
+
+		/**
+		 * The meta object literal for the '<em><b>Route</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOYAGE__ROUTE = eINSTANCE.getVoyage_Route();
+
+		/**
+		 * The meta object literal for the '<em><b>Route Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOYAGE__ROUTE_COST = eINSTANCE.getVoyage_RouteCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOYAGE__SPEED = eINSTANCE.getVoyage_Speed();
+
+		/**
+		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOYAGE__DISTANCE = eINSTANCE.getVoyage_Distance();
+
+		/**
+		 * The meta object literal for the '<em><b>Idle Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOYAGE__IDLE_TIME = eINSTANCE.getVoyage_IdleTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Travel Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOYAGE__TRAVEL_TIME = eINSTANCE.getVoyage_TravelTime();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.VisitImpl <em>Visit</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.VisitImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVisit()
+		 * @generated
+		 */
+		EClass VISIT = eINSTANCE.getVisit();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VISIT__PORT_COST = eINSTANCE.getVisit_PortCost();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.CostComponentImpl <em>Cost Component</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.CostComponentImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCostComponent()
+		 * @generated
+		 */
+		EClass COST_COMPONENT = eINSTANCE.getCostComponent();
+
+		/**
+		 * The meta object literal for the '<em><b>Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COST_COMPONENT__DURATION = eINSTANCE.getCostComponent_Duration();
+
+		/**
+		 * The meta object literal for the '<em><b>Hire Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COST_COMPONENT__HIRE_COST = eINSTANCE.getCostComponent_HireCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Fuel Costs</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COST_COMPONENT__FUEL_COSTS = eINSTANCE.getCostComponent_FuelCosts();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.FuelCostImpl <em>Fuel Cost</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.FuelCostImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFuelCost()
+		 * @generated
+		 */
+		EClass FUEL_COST = eINSTANCE.getFuelCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUEL_COST__NAME = eINSTANCE.getFuelCost_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUEL_COST__UNIT = eINSTANCE.getFuelCost_Unit();
+
+		/**
+		 * The meta object literal for the '<em><b>Quantity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUEL_COST__QUANTITY = eINSTANCE.getFuelCost_Quantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUEL_COST__COST = eINSTANCE.getFuelCost_Cost();
 
 	}
 

@@ -326,29 +326,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortCostVessels} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PortCostVesselsItemProvider portCostVesselsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PortCostVessels}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createPortCostVesselsAdapter() {
-		if (portCostVesselsItemProvider == null) {
-			portCostVesselsItemProvider = new PortCostVesselsItemProvider(this);
-		}
-
-		return portCostVesselsItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortCostEntry} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -392,6 +369,29 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		}
 
 		return cooldownPriceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.SimplePortCost} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SimplePortCostItemProvider simplePortCostItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.SimplePortCost}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSimplePortCostAdapter() {
+		if (simplePortCostItemProvider == null) {
+			simplePortCostItemProvider = new SimplePortCostItemProvider(this);
+		}
+
+		return simplePortCostItemProvider;
 	}
 
 	/**
@@ -504,9 +504,9 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (baseFuelCostItemProvider != null) baseFuelCostItemProvider.dispose();
 		if (spotMarketItemProvider != null) spotMarketItemProvider.dispose();
 		if (portCostItemProvider != null) portCostItemProvider.dispose();
-		if (portCostVesselsItemProvider != null) portCostVesselsItemProvider.dispose();
 		if (portCostEntryItemProvider != null) portCostEntryItemProvider.dispose();
 		if (cooldownPriceItemProvider != null) cooldownPriceItemProvider.dispose();
+		if (simplePortCostItemProvider != null) simplePortCostItemProvider.dispose();
 	}
 
 }

@@ -123,10 +123,10 @@ public class UnitCostMatrixComponentHelper implements IComponentHelper {
 	/**
 	 * Create the editor for the roundTrip feature on UnitCostMatrix
 	 *
-	 * @generated
+	 * @generated NO disabled
 	 */
 	protected void add_roundTripEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__ROUND_TRIP));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__ROUND_TRIP));
 	}
 	/**
 	 * Create the editor for the minimumLoad feature on UnitCostMatrix

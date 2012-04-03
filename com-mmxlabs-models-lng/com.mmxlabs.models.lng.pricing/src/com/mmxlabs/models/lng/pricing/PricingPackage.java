@@ -793,22 +793,22 @@ public interface PricingPackage extends EPackage {
 	int PORT_COST__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * The feature id for the '<em><b>Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_COST__PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+	int PORT_COST__PORTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Port Costs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Definition</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_COST__VESSEL_PORT_COSTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int PORT_COST__DEFINITION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Port Cost</em>' class.
@@ -820,61 +820,6 @@ public interface PricingPackage extends EPackage {
 	int PORT_COST_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostVesselsImpl <em>Port Cost Vessels</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.PortCostVesselsImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostVessels()
-	 * @generated
-	 */
-	int PORT_COST_VESSELS = 11;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_COST_VESSELS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_COST_VESSELS__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_COST_VESSELS__VESSELS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Port Cost Entries</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_COST_VESSELS__PORT_COST_ENTRIES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Port Cost Vessels</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_COST_VESSELS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl <em>Port Cost Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -882,7 +827,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostEntry()
 	 * @generated
 	 */
-	int PORT_COST_ENTRY = 12;
+	int PORT_COST_ENTRY = 11;
 
 	/**
 	 * The feature id for the '<em><b>Activity</b></em>' attribute.
@@ -919,7 +864,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCooldownPrice()
 	 * @generated
 	 */
-	int COOLDOWN_PRICE = 13;
+	int COOLDOWN_PRICE = 12;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -967,6 +912,116 @@ public interface PricingPackage extends EPackage {
 	int COOLDOWN_PRICE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostDefinitionImpl <em>Port Cost Definition</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.PortCostDefinitionImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostDefinition()
+	 * @generated
+	 */
+	int PORT_COST_DEFINITION = 14;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_DEFINITION__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_DEFINITION__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_DEFINITION__ENTRIES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Port Cost Definition</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COST_DEFINITION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.SimplePortCostImpl <em>Simple Port Cost</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.SimplePortCostImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSimplePortCost()
+	 * @generated
+	 */
+	int SIMPLE_PORT_COST = 13;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PORT_COST__EXTENSIONS = PORT_COST_DEFINITION__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PORT_COST__PROXIES = PORT_COST_DEFINITION__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PORT_COST__ENTRIES = PORT_COST_DEFINITION__ENTRIES;
+
+	/**
+	 * The feature id for the '<em><b>Reference Capacity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PORT_COST__REFERENCE_CAPACITY = PORT_COST_DEFINITION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Applies To</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PORT_COST__APPLIES_TO = PORT_COST_DEFINITION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Simple Port Cost</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_PORT_COST_FEATURE_COUNT = PORT_COST_DEFINITION_FEATURE_COUNT + 2;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.SpotType <em>Spot Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -974,7 +1029,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSpotType()
 	 * @generated
 	 */
-	int SPOT_TYPE = 14;
+	int SPOT_TYPE = 15;
 
 
 	/**
@@ -1407,58 +1462,26 @@ public interface PricingPackage extends EPackage {
 	EClass getPortCost();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.PortCost#getPort <em>Port</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.PortCost#getPorts <em>Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Port</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortCost#getPort()
+	 * @return the meta object for the reference list '<em>Ports</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortCost#getPorts()
 	 * @see #getPortCost()
 	 * @generated
 	 */
-	EReference getPortCost_Port();
+	EReference getPortCost_Ports();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PortCost#getVesselPortCosts <em>Vessel Port Costs</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.PortCost#getDefinition <em>Definition</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Vessel Port Costs</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortCost#getVesselPortCosts()
+	 * @return the meta object for the containment reference '<em>Definition</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortCost#getDefinition()
 	 * @see #getPortCost()
 	 * @generated
 	 */
-	EReference getPortCost_VesselPortCosts();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortCostVessels <em>Port Cost Vessels</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Port Cost Vessels</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortCostVessels
-	 * @generated
-	 */
-	EClass getPortCostVessels();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.PortCostVessels#getVessels <em>Vessels</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Vessels</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortCostVessels#getVessels()
-	 * @see #getPortCostVessels()
-	 * @generated
-	 */
-	EReference getPortCostVessels_Vessels();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PortCostVessels#getPortCostEntries <em>Port Cost Entries</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Port Cost Entries</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortCostVessels#getPortCostEntries()
-	 * @see #getPortCostVessels()
-	 * @generated
-	 */
-	EReference getPortCostVessels_PortCostEntries();
+	EReference getPortCost_Definition();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortCostEntry <em>Port Cost Entry</em>}'.
@@ -1523,6 +1546,59 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCooldownPrice_Index();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.SimplePortCost <em>Simple Port Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Simple Port Cost</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SimplePortCost
+	 * @generated
+	 */
+	EClass getSimplePortCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SimplePortCost#getReferenceCapacity <em>Reference Capacity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Reference Capacity</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SimplePortCost#getReferenceCapacity()
+	 * @see #getSimplePortCost()
+	 * @generated
+	 */
+	EAttribute getSimplePortCost_ReferenceCapacity();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.SimplePortCost#getAppliesTo <em>Applies To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Applies To</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SimplePortCost#getAppliesTo()
+	 * @see #getSimplePortCost()
+	 * @generated
+	 */
+	EReference getSimplePortCost_AppliesTo();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortCostDefinition <em>Port Cost Definition</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Port Cost Definition</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortCostDefinition
+	 * @generated
+	 */
+	EClass getPortCostDefinition();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PortCostDefinition#getEntries <em>Entries</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Entries</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortCostDefinition#getEntries()
+	 * @see #getPortCostDefinition()
+	 * @generated
+	 */
+	EReference getPortCostDefinition_Entries();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.pricing.SpotType <em>Spot Type</em>}'.
@@ -1899,46 +1975,20 @@ public interface PricingPackage extends EPackage {
 		EClass PORT_COST = eINSTANCE.getPortCost();
 
 		/**
-		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PORT_COST__PORT = eINSTANCE.getPortCost_Port();
+		EReference PORT_COST__PORTS = eINSTANCE.getPortCost_Ports();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel Port Costs</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Definition</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PORT_COST__VESSEL_PORT_COSTS = eINSTANCE.getPortCost_VesselPortCosts();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostVesselsImpl <em>Port Cost Vessels</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.PortCostVesselsImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostVessels()
-		 * @generated
-		 */
-		EClass PORT_COST_VESSELS = eINSTANCE.getPortCostVessels();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORT_COST_VESSELS__VESSELS = eINSTANCE.getPortCostVessels_Vessels();
-
-		/**
-		 * The meta object literal for the '<em><b>Port Cost Entries</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORT_COST_VESSELS__PORT_COST_ENTRIES = eINSTANCE.getPortCostVessels_PortCostEntries();
+		EReference PORT_COST__DEFINITION = eINSTANCE.getPortCost_Definition();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl <em>Port Cost Entry</em>}' class.
@@ -1991,6 +2041,50 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COOLDOWN_PRICE__INDEX = eINSTANCE.getCooldownPrice_Index();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.SimplePortCostImpl <em>Simple Port Cost</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.SimplePortCostImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSimplePortCost()
+		 * @generated
+		 */
+		EClass SIMPLE_PORT_COST = eINSTANCE.getSimplePortCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Reference Capacity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SIMPLE_PORT_COST__REFERENCE_CAPACITY = eINSTANCE.getSimplePortCost_ReferenceCapacity();
+
+		/**
+		 * The meta object literal for the '<em><b>Applies To</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SIMPLE_PORT_COST__APPLIES_TO = eINSTANCE.getSimplePortCost_AppliesTo();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostDefinitionImpl <em>Port Cost Definition</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.PortCostDefinitionImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostDefinition()
+		 * @generated
+		 */
+		EClass PORT_COST_DEFINITION = eINSTANCE.getPortCostDefinition();
+
+		/**
+		 * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_COST_DEFINITION__ENTRIES = eINSTANCE.getPortCostDefinition_Entries();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.SpotType <em>Spot Type</em>}' enum.

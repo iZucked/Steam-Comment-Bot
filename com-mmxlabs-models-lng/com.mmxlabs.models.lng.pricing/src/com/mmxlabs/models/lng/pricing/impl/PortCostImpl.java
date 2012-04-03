@@ -11,11 +11,10 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import com.mmxlabs.models.lng.pricing.PortCost;
-import com.mmxlabs.models.lng.pricing.PortCostVessels;
+import com.mmxlabs.models.lng.pricing.PortCostDefinition;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
@@ -27,8 +26,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getPort <em>Port</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getVesselPortCosts <em>Vessel Port Costs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getPorts <em>Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getDefinition <em>Definition</em>}</li>
  * </ul>
  * </p>
  *
@@ -36,24 +35,24 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  */
 public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPort()
+	 * @see #getPorts()
 	 * @generated
 	 * @ordered
 	 */
-	protected APortSet port;
+	protected EList<APortSet> ports;
 
 	/**
-	 * The cached value of the '{@link #getVesselPortCosts() <em>Vessel Port Costs</em>}' containment reference list.
+	 * The cached value of the '{@link #getDefinition() <em>Definition</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVesselPortCosts()
+	 * @see #getDefinition()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<PortCostVessels> vesselPortCosts;
+	protected PortCostDefinition definition;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -79,16 +78,11 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public APortSet getPort() {
-		if (port != null && port.eIsProxy()) {
-			InternalEObject oldPort = (InternalEObject)port;
-			port = (APortSet)eResolveProxy(oldPort);
-			if (port != oldPort) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.PORT_COST__PORT, oldPort, port));
-			}
+	public EList<APortSet> getPorts() {
+		if (ports == null) {
+			ports = new EObjectResolvingEList<APortSet>(APortSet.class, this, PricingPackage.PORT_COST__PORTS);
 		}
-		return port;
+		return ports;
 	}
 
 	/**
@@ -96,8 +90,8 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public APortSet basicGetPort() {
-		return port;
+	public PortCostDefinition getDefinition() {
+		return definition;
 	}
 
 	/**
@@ -105,23 +99,33 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPort(APortSet newPort) {
-		APortSet oldPort = port;
-		port = newPort;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PORT_COST__PORT, oldPort, port));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<PortCostVessels> getVesselPortCosts() {
-		if (vesselPortCosts == null) {
-			vesselPortCosts = new EObjectContainmentEList<PortCostVessels>(PortCostVessels.class, this, PricingPackage.PORT_COST__VESSEL_PORT_COSTS);
+	public NotificationChain basicSetDefinition(PortCostDefinition newDefinition, NotificationChain msgs) {
+		PortCostDefinition oldDefinition = definition;
+		definition = newDefinition;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.PORT_COST__DEFINITION, oldDefinition, newDefinition);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
-		return vesselPortCosts;
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDefinition(PortCostDefinition newDefinition) {
+		if (newDefinition != definition) {
+			NotificationChain msgs = null;
+			if (definition != null)
+				msgs = ((InternalEObject)definition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PORT_COST__DEFINITION, null, msgs);
+			if (newDefinition != null)
+				msgs = ((InternalEObject)newDefinition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PORT_COST__DEFINITION, null, msgs);
+			msgs = basicSetDefinition(newDefinition, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PORT_COST__DEFINITION, newDefinition, newDefinition));
 	}
 
 	/**
@@ -132,8 +136,8 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
-				return ((InternalEList<?>)getVesselPortCosts()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PORT_COST__DEFINITION:
+				return basicSetDefinition(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -146,11 +150,10 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PricingPackage.PORT_COST__PORT:
-				if (resolve) return getPort();
-				return basicGetPort();
-			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
-				return getVesselPortCosts();
+			case PricingPackage.PORT_COST__PORTS:
+				return getPorts();
+			case PricingPackage.PORT_COST__DEFINITION:
+				return getDefinition();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -164,12 +167,12 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PricingPackage.PORT_COST__PORT:
-				setPort((APortSet)newValue);
+			case PricingPackage.PORT_COST__PORTS:
+				getPorts().clear();
+				getPorts().addAll((Collection<? extends APortSet>)newValue);
 				return;
-			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
-				getVesselPortCosts().clear();
-				getVesselPortCosts().addAll((Collection<? extends PortCostVessels>)newValue);
+			case PricingPackage.PORT_COST__DEFINITION:
+				setDefinition((PortCostDefinition)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -183,11 +186,11 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PricingPackage.PORT_COST__PORT:
-				setPort((APortSet)null);
+			case PricingPackage.PORT_COST__PORTS:
+				getPorts().clear();
 				return;
-			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
-				getVesselPortCosts().clear();
+			case PricingPackage.PORT_COST__DEFINITION:
+				setDefinition((PortCostDefinition)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -201,10 +204,10 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PricingPackage.PORT_COST__PORT:
-				return port != null;
-			case PricingPackage.PORT_COST__VESSEL_PORT_COSTS:
-				return vesselPortCosts != null && !vesselPortCosts.isEmpty();
+			case PricingPackage.PORT_COST__PORTS:
+				return ports != null && !ports.isEmpty();
+			case PricingPackage.PORT_COST__DEFINITION:
+				return definition != null;
 		}
 		return super.eIsSet(featureID);
 	}

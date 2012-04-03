@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.analytics;
 import com.mmxlabs.models.lng.port.Port;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,13 +21,17 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getUnitCost <em>Unit Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getTotalCost <em>Total Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getMmbtuDelivered <em>Mmbtu Delivered</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getFrom <em>From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getTo <em>To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getVolumeLoaded <em>Volume Loaded</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getVolumeDischarged <em>Volume Discharged</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getHireCost <em>Hire Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getFuelCost <em>Fuel Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getCanalCost <em>Canal Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getCostComponents <em>Cost Components</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getPortCost <em>Port Cost</em>}</li>
  * </ul>
  * </p>
  *
@@ -62,30 +67,17 @@ public interface UnitCostLine extends MMXObject {
 	void setUnitCost(double value);
 
 	/**
-	 * Returns the value of the '<em><b>Total Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Total Cost</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Total Cost</em>' attribute.
-	 * @see #setTotalCost(int)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostLine_TotalCost()
-	 * @model required="true"
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getHireCost() + getFuelCost() + getCanalCost() + getPortCost();'"
 	 * @generated
 	 */
 	int getTotalCost();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getTotalCost <em>Total Cost</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Total Cost</em>' attribute.
-	 * @see #getTotalCost()
-	 * @generated
-	 */
-	void setTotalCost(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Mmbtu Delivered</b></em>' attribute.
@@ -242,6 +234,126 @@ public interface UnitCostLine extends MMXObject {
 	 * @generated
 	 */
 	void setVolumeDischarged(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Hire Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Hire Cost</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hire Cost</em>' attribute.
+	 * @see #setHireCost(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostLine_HireCost()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getHireCost();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getHireCost <em>Hire Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hire Cost</em>' attribute.
+	 * @see #getHireCost()
+	 * @generated
+	 */
+	void setHireCost(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Fuel Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fuel Cost</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fuel Cost</em>' attribute.
+	 * @see #setFuelCost(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostLine_FuelCost()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getFuelCost();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getFuelCost <em>Fuel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fuel Cost</em>' attribute.
+	 * @see #getFuelCost()
+	 * @generated
+	 */
+	void setFuelCost(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Canal Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Canal Cost</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Canal Cost</em>' attribute.
+	 * @see #setCanalCost(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostLine_CanalCost()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getCanalCost();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getCanalCost <em>Canal Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Canal Cost</em>' attribute.
+	 * @see #getCanalCost()
+	 * @generated
+	 */
+	void setCanalCost(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Cost Components</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.CostComponent}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cost Components</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cost Components</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostLine_CostComponents()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<CostComponent> getCostComponents();
+
+	/**
+	 * Returns the value of the '<em><b>Port Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Cost</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Cost</em>' attribute.
+	 * @see #setPortCost(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostLine_PortCost()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getPortCost();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getPortCost <em>Port Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Cost</em>' attribute.
+	 * @see #getPortCost()
+	 * @generated
+	 */
+	void setPortCost(int value);
 
 } // end of  UnitCostLine
 

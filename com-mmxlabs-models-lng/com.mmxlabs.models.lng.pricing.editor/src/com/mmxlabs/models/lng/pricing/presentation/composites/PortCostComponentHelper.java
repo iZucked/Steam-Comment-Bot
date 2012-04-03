@@ -65,24 +65,24 @@ public class PortCostComponentHelper implements IComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_portEditor(detailComposite, topClass);
-		add_vesselPortCostsEditor(detailComposite, topClass);
+		add_portsEditor(detailComposite, topClass);
+		add_definitionEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the port feature on PortCost
+	 * Create the editor for the ports feature on PortCost
 	 *
 	 * @generated
 	 */
-	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST__PORT));
+	protected void add_portsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST__PORTS));
 	}
 
 	/**
-	 * Create the editor for the vesselPortCosts feature on PortCost
+	 * Create the editor for the definition feature on PortCost
 	 *
 	 * @generated
 	 */
-	protected void add_vesselPortCostsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST__VESSEL_PORT_COSTS));
+	protected void add_definitionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST__DEFINITION));
 	}
 }

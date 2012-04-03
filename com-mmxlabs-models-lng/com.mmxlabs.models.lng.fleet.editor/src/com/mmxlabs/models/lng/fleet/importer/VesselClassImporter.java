@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.fleet.importer;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
@@ -40,13 +41,18 @@ public class VesselClassImporter extends DefaultClassImporter {
 	public Collection<EObject> importObject(EClass eClass, Map<String, String> row, IImportContext context) {
 		final Collection<EObject> result = super.importObject(eClass, row, context);
 		final VesselClass vc = (VesselClass) result.iterator().next();
+		final HashSet<String> pricedCanals = new HashSet<String>();
+		final HashSet<String> parameterisedCanals = new HashSet<String>();
 		for (final String key : row.keySet()) {
 			final String[] parts = key.split("\\.");
 			if (parts.length > 1) {
 				if (parts[1].equals("pricing")) {
 					final String original = context.peekReader().getCasedColumnName(key);
 					final String canalName = original.split("\\.")[0];
-					
+					if (pricedCanals.contains(canalName)) {
+						continue;
+					}
+					pricedCanals.add(canalName);
 					if (routeCostImporter != null) {
 						final IFieldMap rowMap;
 						if (row instanceof IFieldMap) {
@@ -70,13 +76,18 @@ public class VesselClassImporter extends DefaultClassImporter {
 							
 							@Override
 							public int getStage() {
-								return IImportContext.STAGE_MODIFY_SUBMODELS;
+								return IImportContext.STAGE_REFERENCES_RESOLVED;
 							}
 						});
 					}
 				} else if (parts[1].equals("parameters")) {
 					final String original = context.peekReader().getCasedColumnName(key);
 					final String canalName = original.split("\\.")[0];
+					
+					if (parameterisedCanals.contains(canalName)) {
+						continue;
+					}
+					parameterisedCanals.add(canalName);
 					
 					if (parameterImporter != null) {
 						final IFieldMap rowMap;
@@ -101,7 +112,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 							
 							@Override
 							public int getStage() {
-								return IImportContext.STAGE_MODIFY_SUBMODELS;
+								return IImportContext.STAGE_REFERENCES_RESOLVED;
 							}
 						});
 					}

@@ -8,18 +8,24 @@
  */
 package com.mmxlabs.models.lng.analytics.impl;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.CostComponent;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 
 import com.mmxlabs.models.lng.port.Port;
 
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,13 +35,17 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getUnitCost <em>Unit Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getTotalCost <em>Total Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getMmbtuDelivered <em>Mmbtu Delivered</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getFrom <em>From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getTo <em>To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getVolumeLoaded <em>Volume Loaded</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getVolumeDischarged <em>Volume Discharged</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getHireCost <em>Hire Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getFuelCost <em>Fuel Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getCanalCost <em>Canal Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getCostComponents <em>Cost Components</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getPortCost <em>Port Cost</em>}</li>
  * </ul>
  * </p>
  *
@@ -61,26 +71,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * @ordered
 	 */
 	protected double unitCost = UNIT_COST_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getTotalCost() <em>Total Cost</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTotalCost()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int TOTAL_COST_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getTotalCost() <em>Total Cost</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTotalCost()
-	 * @generated
-	 * @ordered
-	 */
-	protected int totalCost = TOTAL_COST_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getMmbtuDelivered() <em>Mmbtu Delivered</em>}' attribute.
@@ -183,6 +173,96 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	protected int volumeDischarged = VOLUME_DISCHARGED_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getHireCost() <em>Hire Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHireCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HIRE_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHireCost() <em>Hire Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHireCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int hireCost = HIRE_COST_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getFuelCost() <em>Fuel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFuelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int FUEL_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getFuelCost() <em>Fuel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFuelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int fuelCost = FUEL_COST_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCanalCost() <em>Canal Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CANAL_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCanalCost() <em>Canal Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int canalCost = CANAL_COST_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getCostComponents() <em>Cost Components</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCostComponents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CostComponent> costComponents;
+
+	/**
+	 * The default value of the '{@link #getPortCost() <em>Port Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PORT_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPortCost() <em>Port Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int portCost = PORT_COST_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -228,19 +308,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * @generated
 	 */
 	public int getTotalCost() {
-		return totalCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setTotalCost(int newTotalCost) {
-		int oldTotalCost = totalCost;
-		totalCost = newTotalCost;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_LINE__TOTAL_COST, oldTotalCost, totalCost));
+		return getHireCost() + getFuelCost() + getCanalCost() + getPortCost();
 	}
 
 	/**
@@ -408,13 +476,121 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getHireCost() {
+		return hireCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHireCost(int newHireCost) {
+		int oldHireCost = hireCost;
+		hireCost = newHireCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_LINE__HIRE_COST, oldHireCost, hireCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getFuelCost() {
+		return fuelCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFuelCost(int newFuelCost) {
+		int oldFuelCost = fuelCost;
+		fuelCost = newFuelCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_LINE__FUEL_COST, oldFuelCost, fuelCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCanalCost() {
+		return canalCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCanalCost(int newCanalCost) {
+		int oldCanalCost = canalCost;
+		canalCost = newCanalCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_LINE__CANAL_COST, oldCanalCost, canalCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<CostComponent> getCostComponents() {
+		if (costComponents == null) {
+			costComponents = new EObjectContainmentEList<CostComponent>(CostComponent.class, this, AnalyticsPackage.UNIT_COST_LINE__COST_COMPONENTS);
+		}
+		return costComponents;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getPortCost() {
+		return portCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortCost(int newPortCost) {
+		int oldPortCost = portCost;
+		portCost = newPortCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_LINE__PORT_COST, oldPortCost, portCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AnalyticsPackage.UNIT_COST_LINE__COST_COMPONENTS:
+				return ((InternalEList<?>)getCostComponents()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case AnalyticsPackage.UNIT_COST_LINE__UNIT_COST:
 				return getUnitCost();
-			case AnalyticsPackage.UNIT_COST_LINE__TOTAL_COST:
-				return getTotalCost();
 			case AnalyticsPackage.UNIT_COST_LINE__MMBTU_DELIVERED:
 				return getMmbtuDelivered();
 			case AnalyticsPackage.UNIT_COST_LINE__FROM:
@@ -429,6 +605,16 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 				return getVolumeLoaded();
 			case AnalyticsPackage.UNIT_COST_LINE__VOLUME_DISCHARGED:
 				return getVolumeDischarged();
+			case AnalyticsPackage.UNIT_COST_LINE__HIRE_COST:
+				return getHireCost();
+			case AnalyticsPackage.UNIT_COST_LINE__FUEL_COST:
+				return getFuelCost();
+			case AnalyticsPackage.UNIT_COST_LINE__CANAL_COST:
+				return getCanalCost();
+			case AnalyticsPackage.UNIT_COST_LINE__COST_COMPONENTS:
+				return getCostComponents();
+			case AnalyticsPackage.UNIT_COST_LINE__PORT_COST:
+				return getPortCost();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -438,14 +624,12 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case AnalyticsPackage.UNIT_COST_LINE__UNIT_COST:
 				setUnitCost((Double)newValue);
-				return;
-			case AnalyticsPackage.UNIT_COST_LINE__TOTAL_COST:
-				setTotalCost((Integer)newValue);
 				return;
 			case AnalyticsPackage.UNIT_COST_LINE__MMBTU_DELIVERED:
 				setMmbtuDelivered((Integer)newValue);
@@ -465,6 +649,22 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 			case AnalyticsPackage.UNIT_COST_LINE__VOLUME_DISCHARGED:
 				setVolumeDischarged((Integer)newValue);
 				return;
+			case AnalyticsPackage.UNIT_COST_LINE__HIRE_COST:
+				setHireCost((Integer)newValue);
+				return;
+			case AnalyticsPackage.UNIT_COST_LINE__FUEL_COST:
+				setFuelCost((Integer)newValue);
+				return;
+			case AnalyticsPackage.UNIT_COST_LINE__CANAL_COST:
+				setCanalCost((Integer)newValue);
+				return;
+			case AnalyticsPackage.UNIT_COST_LINE__COST_COMPONENTS:
+				getCostComponents().clear();
+				getCostComponents().addAll((Collection<? extends CostComponent>)newValue);
+				return;
+			case AnalyticsPackage.UNIT_COST_LINE__PORT_COST:
+				setPortCost((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -479,9 +679,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 		switch (featureID) {
 			case AnalyticsPackage.UNIT_COST_LINE__UNIT_COST:
 				setUnitCost(UNIT_COST_EDEFAULT);
-				return;
-			case AnalyticsPackage.UNIT_COST_LINE__TOTAL_COST:
-				setTotalCost(TOTAL_COST_EDEFAULT);
 				return;
 			case AnalyticsPackage.UNIT_COST_LINE__MMBTU_DELIVERED:
 				setMmbtuDelivered(MMBTU_DELIVERED_EDEFAULT);
@@ -501,6 +698,21 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 			case AnalyticsPackage.UNIT_COST_LINE__VOLUME_DISCHARGED:
 				setVolumeDischarged(VOLUME_DISCHARGED_EDEFAULT);
 				return;
+			case AnalyticsPackage.UNIT_COST_LINE__HIRE_COST:
+				setHireCost(HIRE_COST_EDEFAULT);
+				return;
+			case AnalyticsPackage.UNIT_COST_LINE__FUEL_COST:
+				setFuelCost(FUEL_COST_EDEFAULT);
+				return;
+			case AnalyticsPackage.UNIT_COST_LINE__CANAL_COST:
+				setCanalCost(CANAL_COST_EDEFAULT);
+				return;
+			case AnalyticsPackage.UNIT_COST_LINE__COST_COMPONENTS:
+				getCostComponents().clear();
+				return;
+			case AnalyticsPackage.UNIT_COST_LINE__PORT_COST:
+				setPortCost(PORT_COST_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -515,8 +727,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 		switch (featureID) {
 			case AnalyticsPackage.UNIT_COST_LINE__UNIT_COST:
 				return unitCost != UNIT_COST_EDEFAULT;
-			case AnalyticsPackage.UNIT_COST_LINE__TOTAL_COST:
-				return totalCost != TOTAL_COST_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_LINE__MMBTU_DELIVERED:
 				return mmbtuDelivered != MMBTU_DELIVERED_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_LINE__FROM:
@@ -529,6 +739,16 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 				return volumeLoaded != VOLUME_LOADED_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_LINE__VOLUME_DISCHARGED:
 				return volumeDischarged != VOLUME_DISCHARGED_EDEFAULT;
+			case AnalyticsPackage.UNIT_COST_LINE__HIRE_COST:
+				return hireCost != HIRE_COST_EDEFAULT;
+			case AnalyticsPackage.UNIT_COST_LINE__FUEL_COST:
+				return fuelCost != FUEL_COST_EDEFAULT;
+			case AnalyticsPackage.UNIT_COST_LINE__CANAL_COST:
+				return canalCost != CANAL_COST_EDEFAULT;
+			case AnalyticsPackage.UNIT_COST_LINE__COST_COMPONENTS:
+				return costComponents != null && !costComponents.isEmpty();
+			case AnalyticsPackage.UNIT_COST_LINE__PORT_COST:
+				return portCost != PORT_COST_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -545,8 +765,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (unitCost: ");
 		result.append(unitCost);
-		result.append(", totalCost: ");
-		result.append(totalCost);
 		result.append(", mmbtuDelivered: ");
 		result.append(mmbtuDelivered);
 		result.append(", duration: ");
@@ -555,6 +773,14 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 		result.append(volumeLoaded);
 		result.append(", volumeDischarged: ");
 		result.append(volumeDischarged);
+		result.append(", hireCost: ");
+		result.append(hireCost);
+		result.append(", fuelCost: ");
+		result.append(fuelCost);
+		result.append(", canalCost: ");
+		result.append(canalCost);
+		result.append(", portCost: ");
+		result.append(portCost);
 		result.append(')');
 		return result.toString();
 	}

@@ -59,4 +59,39 @@
 			modelClass="com.mmxlabs.models.lng.analytics.UnitCostLine" />
 		
 	</extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.analytics.editor.analyticsModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.analytics.AnalyticsModel"
+          subModelImporterClass="com.mmxlabs.models.lng.analytics.importer.AnalyticsModelImporter">
+    </submodelImporter>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.analytics.editor.analyticsEditor"
+          implementation="com.mmxlabs.models.lng.analytics.ui.editorpart.AnalyticsModelEditorContribution"
+          priority="0"
+          subModelClass="com.mmxlabs.models.lng.analytics.AnalyticsModel">
+    </jointModelEditor>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.editor.ucmFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Unit Cost Matrix"
+          targetEClass="com.mmxlabs.models.lng.analytics.UnitCostMatrix">
+    </factory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.analytics.UnitCostMatrix"
+          factory="com.mmxlabs.models.lng.analytics.ui.editors.UnitCostMatrixDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.analytics.editor.ucmdcf"
+          inheritable="false">
+    </displayCompositeFactory>
+ </extension>
 </plugin>
