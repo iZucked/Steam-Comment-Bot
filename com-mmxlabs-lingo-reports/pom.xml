@@ -156,7 +156,7 @@
 
 		<repository>
 			<id>orbit</id>
-			<url>http://download.eclipse.org/tools/orbit/downloads/drops/I20120321212921/</url>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/I20120321212921/repository</url>
 			<layout>p2</layout>
 		</repository>
 
