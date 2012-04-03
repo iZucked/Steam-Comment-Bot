@@ -42,7 +42,7 @@ public class EvaluateUnitCostMatrixAction extends ScenarioModifyingAction {
 		this.part = part;
 		setText("Evaluate Cost Matrix");
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", 
-				"$nl$/icons/recompute.gif");
+				"$nl$/icons/recompute.gif"));
 	}
 	
 	@Override
