@@ -8,6 +8,8 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -62,4 +64,18 @@ public interface IOptimisationContext {
 	 */
 	List<String> getConstraintCheckers();
 
+	
+	/**
+	 * Returns the {@link IEvaluationProcessRegistry} instance to be used to obtain {@link IEvaluationProcess} instances. @see {@link #getEvaluationProcesses()}.
+	 * 
+	 * @return
+	 */
+	IEvaluationProcessRegistry getEvaluationProcessRegistry();
+
+	/**
+	 * Returns a list of {@link IEvaluationProcess} names to be used in this optimisation.
+	 * 
+	 * @return
+	 */
+	List<String> getEvaluationProcesses();
 }

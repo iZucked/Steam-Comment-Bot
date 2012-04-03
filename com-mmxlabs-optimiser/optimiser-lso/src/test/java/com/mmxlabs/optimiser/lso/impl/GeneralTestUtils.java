@@ -15,6 +15,8 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessComponentInstantiator;
@@ -65,6 +67,13 @@ public final class GeneralTestUtils {
 	public static IConstraintCheckerRegistry createConstraintCheckerRegistry() {
 
 		final ConstraintCheckerRegistry registry = new ConstraintCheckerRegistry();
+
+		return registry;
+	}
+	
+	public static IEvaluationProcessRegistry createEvaluationProcessRegistry() {
+
+		final EvaluationProcessRegistry registry = new EvaluationProcessRegistry();
 
 		return registry;
 	}

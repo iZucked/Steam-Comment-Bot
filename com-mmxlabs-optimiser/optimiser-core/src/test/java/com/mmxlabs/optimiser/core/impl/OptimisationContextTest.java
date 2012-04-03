@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
@@ -34,8 +35,10 @@ public class OptimisationContextTest {
 		final IFitnessFunctionRegistry fitnessFunctionRegistry = context.mock(IFitnessFunctionRegistry.class);
 		final List<String> constraintCheckers = Collections.emptyList();
 		final IConstraintCheckerRegistry constraintCheckerRegistry = context.mock(IConstraintCheckerRegistry.class);
+		final List<String> evaluationProcesses = Collections.emptyList();
+		final IEvaluationProcessRegistry evaluationProcessRegistry = context.mock(IEvaluationProcessRegistry.class);
 
-		final OptimisationContext optContext = new OptimisationContext(optimisationData, initialSequences, fitnessComponents, fitnessFunctionRegistry, constraintCheckers, constraintCheckerRegistry);
+		final OptimisationContext optContext = new OptimisationContext(optimisationData, initialSequences, fitnessComponents, fitnessFunctionRegistry, constraintCheckers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry);
 
 		Assert.assertSame(optimisationData, optContext.getOptimisationData());
 		Assert.assertSame(initialSequences, optContext.getInitialSequences());
@@ -43,5 +46,7 @@ public class OptimisationContextTest {
 		Assert.assertSame(fitnessFunctionRegistry, optContext.getFitnessFunctionRegistry());
 		Assert.assertSame(constraintCheckers, optContext.getConstraintCheckers());
 		Assert.assertSame(constraintCheckerRegistry, optContext.getConstraintCheckerRegistry());
+		Assert.assertSame(evaluationProcesses, optContext.getEvaluationProcesses());
+		Assert.assertSame(evaluationProcessRegistry, optContext.getEvaluationProcessRegistry());
 	}
 }

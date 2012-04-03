@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
@@ -35,6 +36,7 @@ public class DefaultLocalSearchOptimiserTest {
 
 		final IConstraintCheckerRegistry checkerRegistry = GeneralTestUtils.createConstraintCheckerRegistry();
 		final IFitnessFunctionRegistry fitnessRegistry = GeneralTestUtils.createFitnessRegistry();
+		final IEvaluationProcessRegistry evaluationProcessRegistry = GeneralTestUtils.createEvaluationProcessRegistry();
 
 		final List<String> constraintCheckerNames = new ArrayList<String>(checkerRegistry.getConstraintCheckerNames());
 		// final ConstraintCheckerInstantiator constraintCheckerInstantiator =
@@ -50,6 +52,9 @@ public class DefaultLocalSearchOptimiserTest {
 		// final List<IFitnessComponent> fitnessComponents =
 		// fitnessComponentInstantiator
 		// .instantiateFitnesses(fitnessRegistry, fitnessComponentNames);
+
+		final List<String> evaluationProcessNames = new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames());
+
 		//
 		// final LinearSimulatedAnnealingFitnessEvaluator
 		// fitnessEvaluator = TestUtils
@@ -78,7 +83,8 @@ public class DefaultLocalSearchOptimiserTest {
 
 		final OptimisationData data = new OptimisationData();
 
-		final OptimisationContext context = new OptimisationContext(data, sequences, fitnessComponentNames, fitnessRegistry, constraintCheckerNames, checkerRegistry);
+		final OptimisationContext context = new OptimisationContext(data, sequences, fitnessComponentNames, fitnessRegistry, constraintCheckerNames, checkerRegistry, evaluationProcessNames,
+				evaluationProcessRegistry);
 
 		final IOptimiserProgressMonitor monitor = new SystemOutProgressMonitor();
 

@@ -9,6 +9,7 @@ import java.util.List;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
@@ -30,14 +31,21 @@ public final class OptimisationContext implements IOptimisationContext {
 
 	private final IConstraintCheckerRegistry constraintCheckerRegistry;
 
+	private final List<String> evaluationProcesses;
+
+	private final IEvaluationProcessRegistry evaluationProcessRegistry;
+
 	public OptimisationContext(final IOptimisationData optimisationData, final ISequences initialSequences, final List<String> fitnessComponents,
-			final IFitnessFunctionRegistry fitnessFunctionRegistry, final List<String> constraintCheckers, final IConstraintCheckerRegistry constraintCheckerRegistry) {
+			final IFitnessFunctionRegistry fitnessFunctionRegistry, final List<String> constraintCheckers, final IConstraintCheckerRegistry constraintCheckerRegistry,
+			final List<String> evaluationProcesses, final IEvaluationProcessRegistry evaluationProcessRegistry) {
 		this.optimisationData = optimisationData;
 		this.initialSequences = initialSequences;
 		this.fitnessComponents = fitnessComponents;
 		this.fitnessFunctionRegistry = fitnessFunctionRegistry;
 		this.constraintCheckers = constraintCheckers;
 		this.constraintCheckerRegistry = constraintCheckerRegistry;
+		this.evaluationProcesses = evaluationProcesses;
+		this.evaluationProcessRegistry = evaluationProcessRegistry;
 	}
 
 	@Override
@@ -68,5 +76,15 @@ public final class OptimisationContext implements IOptimisationContext {
 	@Override
 	public List<String> getConstraintCheckers() {
 		return constraintCheckers;
+	}
+
+	@Override
+	public IEvaluationProcessRegistry getEvaluationProcessRegistry() {
+		return evaluationProcessRegistry;
+	}
+
+	@Override
+	public List<String> getEvaluationProcesses() {
+		return evaluationProcesses;
 	}
 }
