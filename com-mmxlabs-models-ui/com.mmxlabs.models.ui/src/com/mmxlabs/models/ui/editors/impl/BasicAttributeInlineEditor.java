@@ -324,12 +324,16 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	protected Command createSetCommand(final Object value) {
 		// System.err.println("Creating set command (" + input + "." +
 		// feature.getName() + " <- " + value + ")");
-		final Command command = commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input, feature, value));
+
+		final Command command = commandHandler.getEditingDomain().createCommand(SetCommand.class,
+				new CommandParameter(input, feature, value));
 		if (value == null) {
 			((SetCommand) command).setLabel("Clear " + feature.getName());
 		} else {
-			((SetCommand) command).setLabel("Set " + feature.getName() + " to " + value.toString());
+			((SetCommand) command).setLabel("Set " + feature.getName() + " to "
+					+ value.toString());
 		}
+
 
 		return command;
 	}

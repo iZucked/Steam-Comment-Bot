@@ -14,6 +14,7 @@ import java.util.List;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -34,6 +35,7 @@ import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -46,6 +48,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertySourceProvider;
+import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,7 +147,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			control.removeListener(jobListener); // no harm in removing even if it's not there
 		}
 	};
-
+	
 	private IJobControlListener jobListener = new JobControlAdapter() {
 		@Override
 		public boolean jobStateChanged(IJobControl control, EJobState oldState, EJobState newState) {
@@ -163,6 +169,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	private boolean locked;
 	private boolean commandProvidersDisabled;
+	private PropertySheetPage propertySheetPage;
 
 	public JointModelEditorPart() {
 
@@ -213,6 +220,31 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	@Override
 	public void doSaveAs() {
 
+	}
+	
+	@Override
+	public Object getAdapter(final Class adapter) {
+		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
+			if (propertySheetPage == null) {
+				propertySheetPage = new PropertySheetPage();
+				propertySheetPage.setPropertySourceProvider(
+						new IPropertySourceProvider() {
+							@Override
+							public IPropertySource getPropertySource(Object object) {
+								for (final IJointModelEditorContribution contribution : contributions) {
+									if (contribution instanceof IPropertySourceProvider) {
+										IPropertySource delegate = ((IPropertySourceProvider) contribution).getPropertySource(object);
+										if (delegate != null) return delegate;
+									}
+								}
+								return null;
+							}
+						}
+						);
+			}
+			return propertySheetPage;
+		}
+		return super.getAdapter(adapter);
 	}
 
 	@Override

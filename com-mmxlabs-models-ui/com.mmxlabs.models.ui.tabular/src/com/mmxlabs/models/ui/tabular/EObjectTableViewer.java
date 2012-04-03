@@ -31,6 +31,7 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EValidator;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -85,21 +86,30 @@ public class EObjectTableViewer extends GridTableViewer {
 	protected static final String COLUMN_MNEMONICS = "COLUMN_MNEMONICS";
 	protected static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";
 
+	final HashSet<EObject> objectsToUpdate = new HashSet<EObject>();
+	boolean waitingForUpdate = false;
+	final Runnable updateRunner = new Runnable() {
+		@Override
+		public void run() {
+			synchronized (objectsToUpdate) {
+				for (final EObject o : objectsToUpdate) {
+					EObjectTableViewer.this.update(o, null);
+					EObjectTableViewer.this.updateObjectExternalNotifiers(o);
+					
+					// consider refresh?
+				}
+				objectsToUpdate.clear();
+				waitingForUpdate = false;
+			}
+		}		
+	};
+	
 	final MMXContentAdapter adapter = new MMXContentAdapter() {
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
-
-			if (refreshOrGiveUp()) {
-				return;
-			}
-
-			// if (ImportUI.isImporting()) {
-			// ImportUI.refreshLater(EObjectTableViewer.this);
-			// return;
-			// }
-
 			// System.err.println(notification);
 			if (notification.isTouch() == false) {
+				if (notification.getEventType() == Notification.REMOVING_ADAPTER) return;
 				// this is a change, so we have to refresh.
 				// ideally we just want to update the changed object, but we
 				// get the notification from
@@ -112,21 +122,19 @@ public class EObjectTableViewer extends GridTableViewer {
 					return;
 				}
 				while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null)) {
-					;
+					
 				}
 				if (source != null) {
-					EObjectTableViewer.this.update(source, null);
-					EObjectTableViewer.this.updateObjectExternalNotifiers(source); // may have
-																					// changed
-					// what we need to
-					// hook
-					// notifications for
-					// this seems to clear the selection
+					synchronized (objectsToUpdate) {
+						objectsToUpdate.add(source);
+						if (!waitingForUpdate) {
+							waitingForUpdate = true;
+							Display.getDefault().asyncExec(updateRunner);
+						}
+					}
 					return;
 				}
 			}
-			// TODO Auto-generated method stub
-
 		}
 	};
 	private final LinkedList<Pair<EMFPath, ICellRenderer>> cellRenderers = new LinkedList<Pair<EMFPath, ICellRenderer>>();
