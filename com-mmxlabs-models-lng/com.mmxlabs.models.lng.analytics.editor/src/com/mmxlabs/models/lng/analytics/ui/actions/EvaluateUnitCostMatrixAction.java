@@ -18,6 +18,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
@@ -40,6 +41,8 @@ public class EvaluateUnitCostMatrixAction extends ScenarioModifyingAction {
 	public EvaluateUnitCostMatrixAction(final JointModelEditorPart part) {
 		this.part = part;
 		setText("Evaluate Cost Matrix");
+		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", 
+				"$nl$/icons/recompute.gif");
 	}
 	
 	@Override

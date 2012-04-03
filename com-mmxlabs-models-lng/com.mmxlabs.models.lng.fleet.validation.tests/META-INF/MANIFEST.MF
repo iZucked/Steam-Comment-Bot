@@ -5,7 +5,7 @@ Bundle-SymbolicName: com.mmxlabs.models.lng.fleet.validation.tests
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.core.runtime,
- org.mockito.mockito-core;bundle-version="1.8.5",
+ org.mockito;bundle-version="1.8.4",
  org.junit;bundle-version="4.8.2",
  org.hamcrest.core;bundle-version="1.1.0",
  com.mmxlabs.models.lng.fleet;bundle-version="1.0.0",

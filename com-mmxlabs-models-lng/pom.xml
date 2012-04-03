@@ -138,6 +138,12 @@
 			<url>http://download.eclipse.org/eclipse/updates/3.7</url>
 			<layout>p2</layout>
 		</repository>
+        
+        <repository>
+            <id>orbit</id>
+            <url>http://download.eclipse.org/tools/orbit/downloads/drops/I20120321212921/repository</url>
+            <layout>p2</layout>
+        </repository>
 
 		<repository>
 			<id>nebula-main-snapshots</id>
