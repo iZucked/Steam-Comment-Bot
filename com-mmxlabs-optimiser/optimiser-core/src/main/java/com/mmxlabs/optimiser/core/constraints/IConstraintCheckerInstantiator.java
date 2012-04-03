@@ -6,7 +6,6 @@ package com.mmxlabs.optimiser.core.constraints;
 
 import java.util.List;
 
-import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public interface IConstraintCheckerInstantiator {
@@ -21,7 +20,7 @@ public interface IConstraintCheckerInstantiator {
 	List<IConstraintChecker> instantiateConstraintCheckers(IConstraintCheckerRegistry registry, IOptimisationData optimisationData);
 
 	/**
-	 * Return new instances of all {@link IConstraintChecker}s the {@link IFitnessFunctionRegistry} knows about. The returned list will contain {@link IConstraintChecker}s in the same order as the
+	 * Return new instances of all {@link IConstraintChecker}s the {@link IConstraintCheckerRegistry} knows about. The returned list will contain {@link IConstraintChecker}s in the same order as the
 	 * input list. Missing {@link IConstraintChecker}s will be replaced with a null entry in the list.
 	 * 
 	 * @param registry
