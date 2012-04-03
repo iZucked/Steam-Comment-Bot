@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
@@ -26,6 +25,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
@@ -156,13 +157,14 @@ public class SimpleSchedulerTest {
 
 		final IFitnessFunctionRegistry fitnessRegistry = createFitnessRegistry();
 		final IConstraintCheckerRegistry constraintRegistry = createConstraintRegistry();
+		final IEvaluationProcessRegistry evaluationProcessRegistry = createEvaluationProcessRegistry();
 
 		// Generate initial state
 		final IInitialSequenceBuilder sequenceBuilder = new ConstrainedInitialSequenceBuilder(constraintRegistry.getConstraintCheckerFactories());
 		final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null);
 
 		final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()), fitnessRegistry, new ArrayList<String>(
-				constraintRegistry.getConstraintCheckerNames()), constraintRegistry);
+				constraintRegistry.getConstraintCheckerNames()), constraintRegistry,  new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames()), evaluationProcessRegistry);
 
 		final IOptimiserProgressMonitor monitor = new IOptimiserProgressMonitor() {
 
@@ -232,6 +234,14 @@ public class SimpleSchedulerTest {
 
 		fitnessRegistry.registerFitnessCoreFactory(factory);
 		return fitnessRegistry;
+	}
+
+	private IEvaluationProcessRegistry createEvaluationProcessRegistry() {
+		final IEvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
+
+		// TODO: Fill in
+
+		return evaluationProcessRegistry;
 	}
 
 	void printSequences(final Collection<ISequences> sequences) {
