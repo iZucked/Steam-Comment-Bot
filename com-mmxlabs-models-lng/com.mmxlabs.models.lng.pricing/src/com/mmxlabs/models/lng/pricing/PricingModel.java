@@ -105,7 +105,7 @@ public interface PricingModel extends UUIDObject, NamedObject {
 	EList<RouteCost> getRouteCosts();
 
 	/**
-	 * Returns the value of the '<em><b>Port Costs</b></em>' reference list.
+	 * Returns the value of the '<em><b>Port Costs</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.PortCost}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -113,9 +113,9 @@ public interface PricingModel extends UUIDObject, NamedObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Port Costs</em>' reference list.
+	 * @return the value of the '<em>Port Costs</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_PortCosts()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<PortCost> getPortCosts();

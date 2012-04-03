@@ -19,6 +19,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.pricing.PortCost;
@@ -62,6 +63,8 @@ public class PortCostItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPortsPropertyDescriptor(object);
+			addReferenceCapacityPropertyDescriptor(object);
+			addAppliesToPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -89,6 +92,50 @@ public class PortCostItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Reference Capacity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addReferenceCapacityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortCost_referenceCapacity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortCost_referenceCapacity_feature", "_UI_PortCost_type"),
+				 PricingPackage.Literals.PORT_COST__REFERENCE_CAPACITY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Applies To feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAppliesToPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortCost_appliesTo_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortCost_appliesTo_feature", "_UI_PortCost_type"),
+				 PricingPackage.Literals.PORT_COST__APPLIES_TO,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -100,7 +147,7 @@ public class PortCostItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.PORT_COST__DEFINITION);
+			childrenFeatures.add(PricingPackage.Literals.PORT_COST__ENTRIES);
 		}
 		return childrenFeatures;
 	}
@@ -137,7 +184,8 @@ public class PortCostItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_PortCost_type");
+		PortCost portCost = (PortCost)object;
+		return getString("_UI_PortCost_type") + " " + portCost.getReferenceCapacity();
 	}
 
 	/**
@@ -152,7 +200,10 @@ public class PortCostItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PortCost.class)) {
-			case PricingPackage.PORT_COST__DEFINITION:
+			case PricingPackage.PORT_COST__REFERENCE_CAPACITY:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case PricingPackage.PORT_COST__ENTRIES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -172,8 +223,8 @@ public class PortCostItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.PORT_COST__DEFINITION,
-				 PricingFactory.eINSTANCE.createSimplePortCost()));
+				(PricingPackage.Literals.PORT_COST__ENTRIES,
+				 PricingFactory.eINSTANCE.createPortCostEntry()));
 	}
 
 	/**

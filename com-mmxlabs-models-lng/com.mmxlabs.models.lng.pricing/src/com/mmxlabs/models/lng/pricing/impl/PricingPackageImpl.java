@@ -23,13 +23,11 @@ import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PortCost;
-import com.mmxlabs.models.lng.pricing.PortCostDefinition;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.pricing.SimplePortCost;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -132,20 +130,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass cooldownPriceEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass simplePortCostEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass portCostDefinitionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -592,8 +576,26 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPortCost_Definition() {
+	public EReference getPortCost_Entries() {
 		return (EReference)portCostEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPortCost_ReferenceCapacity() {
+		return (EAttribute)portCostEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPortCost_AppliesTo() {
+		return (EReference)portCostEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -648,51 +650,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	public EReference getCooldownPrice_Index() {
 		return (EReference)cooldownPriceEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getSimplePortCost() {
-		return simplePortCostEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSimplePortCost_ReferenceCapacity() {
-		return (EAttribute)simplePortCostEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getSimplePortCost_AppliesTo() {
-		return (EReference)simplePortCostEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getPortCostDefinition() {
-		return portCostDefinitionEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getPortCostDefinition_Entries() {
-		return (EReference)portCostDefinitionEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -783,7 +740,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		portCostEClass = createEClass(PORT_COST);
 		createEReference(portCostEClass, PORT_COST__PORTS);
-		createEReference(portCostEClass, PORT_COST__DEFINITION);
+		createEReference(portCostEClass, PORT_COST__ENTRIES);
+		createEAttribute(portCostEClass, PORT_COST__REFERENCE_CAPACITY);
+		createEReference(portCostEClass, PORT_COST__APPLIES_TO);
 
 		portCostEntryEClass = createEClass(PORT_COST_ENTRY);
 		createEAttribute(portCostEntryEClass, PORT_COST_ENTRY__ACTIVITY);
@@ -792,13 +751,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		cooldownPriceEClass = createEClass(COOLDOWN_PRICE);
 		createEReference(cooldownPriceEClass, COOLDOWN_PRICE__PORTS);
 		createEReference(cooldownPriceEClass, COOLDOWN_PRICE__INDEX);
-
-		simplePortCostEClass = createEClass(SIMPLE_PORT_COST);
-		createEAttribute(simplePortCostEClass, SIMPLE_PORT_COST__REFERENCE_CAPACITY);
-		createEReference(simplePortCostEClass, SIMPLE_PORT_COST__APPLIES_TO);
-
-		portCostDefinitionEClass = createEClass(PORT_COST_DEFINITION);
-		createEReference(portCostDefinitionEClass, PORT_COST_DEFINITION__ENTRIES);
 
 		// Create enums
 		spotTypeEEnum = createEEnum(SPOT_TYPE);
@@ -858,8 +810,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		spotMarketEClass.getESuperTypes().add(theTypesPackage.getASpotMarket());
 		portCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cooldownPriceEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		simplePortCostEClass.getESuperTypes().add(this.getPortCostDefinition());
-		portCostDefinitionEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -873,7 +823,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getPricingModel_CharterIndices(), g1, null, "charterIndices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_FleetCost(), this.getFleetCostModel(), null, "fleetCost", null, 1, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_RouteCosts(), this.getRouteCost(), null, "routeCosts", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPricingModel_PortCosts(), this.getPortCost(), null, "portCosts", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_PortCosts(), this.getPortCost(), null, "portCosts", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_CooldownPrices(), this.getCooldownPrice(), null, "cooldownPrices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dataIndexEClass, DataIndex.class, "DataIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -939,7 +889,14 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		initEClass(portCostEClass, PortCost.class, "PortCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortCost_Ports(), theTypesPackage.getAPortSet(), null, "ports", null, 0, -1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPortCost_Definition(), this.getPortCostDefinition(), null, "definition", null, 1, 1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortCost_Entries(), this.getPortCostEntry(), null, "entries", null, 0, -1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortCost_ReferenceCapacity(), ecorePackage.getEInt(), "referenceCapacity", null, 1, 1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortCost_AppliesTo(), theTypesPackage.getAVesselSet(), null, "appliesTo", null, 0, -1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		op = addEOperation(portCostEClass, ecorePackage.getEInt(), "getPortCost", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theTypesPackage.getAVessel(), "vessel", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theTypesPackage.getAVesselClass(), "vesselClass", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theTypesPackage.getPortCapability(), "activity", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(portCostEntryEClass, PortCostEntry.class, "PortCostEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPortCostEntry_Activity(), theTypesPackage.getPortCapability(), "activity", null, 1, 1, PortCostEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -951,22 +908,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g2 = createEGenericType(ecorePackage.getEDoubleObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getCooldownPrice_Index(), g1, null, "index", null, 1, 1, CooldownPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(simplePortCostEClass, SimplePortCost.class, "SimplePortCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSimplePortCost_ReferenceCapacity(), ecorePackage.getEInt(), "referenceCapacity", null, 1, 1, SimplePortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSimplePortCost_AppliesTo(), theTypesPackage.getAVesselSet(), null, "appliesTo", null, 0, -1, SimplePortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		op = addEOperation(simplePortCostEClass, ecorePackage.getEInt(), "getPortCost", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theTypesPackage.getAVessel(), "vessel", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theTypesPackage.getAVesselClass(), "vesselClass", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theTypesPackage.getPortCapability(), "activity", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEClass(portCostDefinitionEClass, PortCostDefinition.class, "PortCostDefinition", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPortCostDefinition_Entries(), this.getPortCostEntry(), null, "entries", null, 0, -1, PortCostDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		op = addEOperation(portCostDefinitionEClass, ecorePackage.getEInt(), "getPortCost", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theTypesPackage.getAVesselClass(), "vesselClass", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theTypesPackage.getPortCapability(), "activity", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(spotTypeEEnum, SpotType.class, "SpotType");

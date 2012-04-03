@@ -18,12 +18,10 @@ import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PortCost;
-import com.mmxlabs.models.lng.pricing.PortCostDefinition;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.pricing.SimplePortCost;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.types.AIndex;
 import com.mmxlabs.models.lng.types.ASpotMarket;
@@ -190,21 +188,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				CooldownPrice cooldownPrice = (CooldownPrice)theEObject;
 				T result = caseCooldownPrice(cooldownPrice);
 				if (result == null) result = caseMMXObject(cooldownPrice);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.SIMPLE_PORT_COST: {
-				SimplePortCost simplePortCost = (SimplePortCost)theEObject;
-				T result = caseSimplePortCost(simplePortCost);
-				if (result == null) result = casePortCostDefinition(simplePortCost);
-				if (result == null) result = caseMMXObject(simplePortCost);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.PORT_COST_DEFINITION: {
-				PortCostDefinition portCostDefinition = (PortCostDefinition)theEObject;
-				T result = casePortCostDefinition(portCostDefinition);
-				if (result == null) result = caseMMXObject(portCostDefinition);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -404,36 +387,6 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCooldownPrice(CooldownPrice object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Simple Port Cost</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Simple Port Cost</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseSimplePortCost(SimplePortCost object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Port Cost Definition</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Port Cost Definition</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T casePortCostDefinition(PortCostDefinition object) {
 		return null;
 	}
 

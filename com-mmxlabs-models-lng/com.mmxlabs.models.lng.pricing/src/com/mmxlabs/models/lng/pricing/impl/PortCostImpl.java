@@ -11,12 +11,19 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.pricing.PortCost;
-import com.mmxlabs.models.lng.pricing.PortCostDefinition;
+import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVessel;
+import com.mmxlabs.models.lng.types.AVesselClass;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
@@ -27,7 +34,9 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getPorts <em>Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getDefinition <em>Definition</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getEntries <em>Entries</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getReferenceCapacity <em>Reference Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getAppliesTo <em>Applies To</em>}</li>
  * </ul>
  * </p>
  *
@@ -45,14 +54,53 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	protected EList<APortSet> ports;
 
 	/**
-	 * The cached value of the '{@link #getDefinition() <em>Definition</em>}' containment reference.
+	 * The cached value of the '{@link #getEntries() <em>Entries</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDefinition()
+	 * @see #getEntries()
 	 * @generated
 	 * @ordered
 	 */
-	protected PortCostDefinition definition;
+	protected EList<PortCostEntry> entries;
+
+	/**
+	 * The default value of the '{@link #getReferenceCapacity() <em>Reference Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferenceCapacity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int REFERENCE_CAPACITY_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getReferenceCapacity() <em>Reference Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferenceCapacity()
+	 * @generated
+	 * @ordered
+	 */
+	protected int referenceCapacity = REFERENCE_CAPACITY_EDEFAULT;
+
+	/**
+	 * This is true if the Reference Capacity attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean referenceCapacityESet;
+
+	/**
+	 * The cached value of the '{@link #getAppliesTo() <em>Applies To</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAppliesTo()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AVesselSet> appliesTo;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -90,8 +138,11 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortCostDefinition getDefinition() {
-		return definition;
+	public EList<PortCostEntry> getEntries() {
+		if (entries == null) {
+			entries = new EObjectContainmentEList<PortCostEntry>(PortCostEntry.class, this, PricingPackage.PORT_COST__ENTRIES);
+		}
+		return entries;
 	}
 
 	/**
@@ -99,14 +150,8 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetDefinition(PortCostDefinition newDefinition, NotificationChain msgs) {
-		PortCostDefinition oldDefinition = definition;
-		definition = newDefinition;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.PORT_COST__DEFINITION, oldDefinition, newDefinition);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public int getReferenceCapacity() {
+		return referenceCapacity;
 	}
 
 	/**
@@ -114,18 +159,63 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDefinition(PortCostDefinition newDefinition) {
-		if (newDefinition != definition) {
-			NotificationChain msgs = null;
-			if (definition != null)
-				msgs = ((InternalEObject)definition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PORT_COST__DEFINITION, null, msgs);
-			if (newDefinition != null)
-				msgs = ((InternalEObject)newDefinition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PORT_COST__DEFINITION, null, msgs);
-			msgs = basicSetDefinition(newDefinition, msgs);
-			if (msgs != null) msgs.dispatch();
+	public void setReferenceCapacity(int newReferenceCapacity) {
+		int oldReferenceCapacity = referenceCapacity;
+		referenceCapacity = newReferenceCapacity;
+		boolean oldReferenceCapacityESet = referenceCapacityESet;
+		referenceCapacityESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PORT_COST__REFERENCE_CAPACITY, oldReferenceCapacity, referenceCapacity, !oldReferenceCapacityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetReferenceCapacity() {
+		int oldReferenceCapacity = referenceCapacity;
+		boolean oldReferenceCapacityESet = referenceCapacityESet;
+		referenceCapacity = REFERENCE_CAPACITY_EDEFAULT;
+		referenceCapacityESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PricingPackage.PORT_COST__REFERENCE_CAPACITY, oldReferenceCapacity, REFERENCE_CAPACITY_EDEFAULT, oldReferenceCapacityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetReferenceCapacity() {
+		return referenceCapacityESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<AVesselSet> getAppliesTo() {
+		if (appliesTo == null) {
+			appliesTo = new EObjectResolvingEList<AVesselSet>(AVesselSet.class, this, PricingPackage.PORT_COST__APPLIES_TO);
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PORT_COST__DEFINITION, newDefinition, newDefinition));
+		return appliesTo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getPortCost(AVessel vessel, AVesselClass vesselClass, PortCapability activity) {
+		for (final PortCostEntry entry : getEntries()) {
+			if (entry.getActivity() == activity) {
+				return (int)
+					(entry.getCost() * ((VesselClass)vesselClass).getCapacity() / (double) getReferenceCapacity());
+			}
+		}
+		return 0;
 	}
 
 	/**
@@ -136,8 +226,8 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case PricingPackage.PORT_COST__DEFINITION:
-				return basicSetDefinition(null, msgs);
+			case PricingPackage.PORT_COST__ENTRIES:
+				return ((InternalEList<?>)getEntries()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -152,8 +242,12 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 		switch (featureID) {
 			case PricingPackage.PORT_COST__PORTS:
 				return getPorts();
-			case PricingPackage.PORT_COST__DEFINITION:
-				return getDefinition();
+			case PricingPackage.PORT_COST__ENTRIES:
+				return getEntries();
+			case PricingPackage.PORT_COST__REFERENCE_CAPACITY:
+				return getReferenceCapacity();
+			case PricingPackage.PORT_COST__APPLIES_TO:
+				return getAppliesTo();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -171,8 +265,16 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 				getPorts().clear();
 				getPorts().addAll((Collection<? extends APortSet>)newValue);
 				return;
-			case PricingPackage.PORT_COST__DEFINITION:
-				setDefinition((PortCostDefinition)newValue);
+			case PricingPackage.PORT_COST__ENTRIES:
+				getEntries().clear();
+				getEntries().addAll((Collection<? extends PortCostEntry>)newValue);
+				return;
+			case PricingPackage.PORT_COST__REFERENCE_CAPACITY:
+				setReferenceCapacity((Integer)newValue);
+				return;
+			case PricingPackage.PORT_COST__APPLIES_TO:
+				getAppliesTo().clear();
+				getAppliesTo().addAll((Collection<? extends AVesselSet>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -189,8 +291,14 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 			case PricingPackage.PORT_COST__PORTS:
 				getPorts().clear();
 				return;
-			case PricingPackage.PORT_COST__DEFINITION:
-				setDefinition((PortCostDefinition)null);
+			case PricingPackage.PORT_COST__ENTRIES:
+				getEntries().clear();
+				return;
+			case PricingPackage.PORT_COST__REFERENCE_CAPACITY:
+				unsetReferenceCapacity();
+				return;
+			case PricingPackage.PORT_COST__APPLIES_TO:
+				getAppliesTo().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -206,10 +314,30 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 		switch (featureID) {
 			case PricingPackage.PORT_COST__PORTS:
 				return ports != null && !ports.isEmpty();
-			case PricingPackage.PORT_COST__DEFINITION:
-				return definition != null;
+			case PricingPackage.PORT_COST__ENTRIES:
+				return entries != null && !entries.isEmpty();
+			case PricingPackage.PORT_COST__REFERENCE_CAPACITY:
+				return isSetReferenceCapacity();
+			case PricingPackage.PORT_COST__APPLIES_TO:
+				return appliesTo != null && !appliesTo.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (referenceCapacity: ");
+		if (referenceCapacityESet) result.append(referenceCapacity); else result.append("<unset>");
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of PortCostImpl

@@ -107,7 +107,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	protected EList<RouteCost> routeCosts;
 
 	/**
-	 * The cached value of the '{@link #getPortCosts() <em>Port Costs</em>}' reference list.
+	 * The cached value of the '{@link #getPortCosts() <em>Port Costs</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getPortCosts()
@@ -252,7 +252,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 */
 	public EList<PortCost> getPortCosts() {
 		if (portCosts == null) {
-			portCosts = new EObjectResolvingEList<PortCost>(PortCost.class, this, PricingPackage.PRICING_MODEL__PORT_COSTS);
+			portCosts = new EObjectContainmentEList<PortCost>(PortCost.class, this, PricingPackage.PRICING_MODEL__PORT_COSTS);
 		}
 		return portCosts;
 	}
@@ -285,6 +285,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return basicSetFleetCost(null, msgs);
 			case PricingPackage.PRICING_MODEL__ROUTE_COSTS:
 				return ((InternalEList<?>)getRouteCosts()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__PORT_COSTS:
+				return ((InternalEList<?>)getPortCosts()).basicRemove(otherEnd, msgs);
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 				return ((InternalEList<?>)getCooldownPrices()).basicRemove(otherEnd, msgs);
 		}
