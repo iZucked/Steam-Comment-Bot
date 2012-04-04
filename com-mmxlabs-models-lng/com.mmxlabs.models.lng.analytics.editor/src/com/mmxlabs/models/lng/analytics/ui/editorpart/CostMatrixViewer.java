@@ -241,6 +241,7 @@ public class CostMatrixViewer extends ViewerPane implements ISelectionChangedLis
 			if (y.length == 1) {
 				final Pair<Port, Map<Port, UnitCostLine>> element = (Pair<Port, Map<Port, UnitCostLine>>) grid.getElementAt(y[0].y);
 				final UnitCostLine line = element.getSecond().get(columnPorts.get(y[0].x));
+				if (line == null) return StructuredSelection.EMPTY;
 				return new StructuredSelection(line);
 			} else {
 				return StructuredSelection.EMPTY;
