@@ -35,7 +35,7 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 		final CostMatrixViewer matrixViewer = new CostMatrixViewer(editorPart.getSite().getPage(), editorPart, viewer);
 		matrixViewer.createControl(sash);
 
-		editorPart.setPageText(editorPart.addPage(sash), "Analytics");
+		editorPart.setPageText(editorPart.addPage(sash), "Cost Matrices");
 	}
 
 	@Override
