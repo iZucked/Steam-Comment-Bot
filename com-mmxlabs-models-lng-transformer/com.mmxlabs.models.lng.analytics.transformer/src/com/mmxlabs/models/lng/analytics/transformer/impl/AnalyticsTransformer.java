@@ -111,7 +111,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			final Association<Port, IPort> ports = new Association<Port, IPort>();
 			final IShippingPriceCalculator nullCalculator = new FixedPriceContract(0);
 
-			final Map<Pair<Port, Port>, Integer> minTravelTimeAtSpeed = new HashMap<Pair<Port, Port>, Integer>();
+			final Map<Pair<Port, Port>, List<Integer>> minTravelTimeAtSpeed = new HashMap<Pair<Port, Port>, List<Integer>>();
 
 			for (final Port port : portModel.getPorts()) {
 				ports.add(port, builder.createPort(port.getName(), !port.isAllowCooldown(), nullCalculator));
@@ -167,9 +167,12 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					}
 					int travelTime = (int) Math.ceil(line.getDistance() / spec.getSpeed()) + (parametersForRoute == null ? 0 : parametersForRoute.getExtraTransitTime());
 					final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
-					final Integer existingValue = minTravelTimeAtSpeed.get(key);
-					if (existingValue == null || existingValue > travelTime)
-						minTravelTimeAtSpeed.put(key, travelTime);
+					List<Integer> existingValue = minTravelTimeAtSpeed.get(key);
+					if (existingValue == null) {
+						existingValue = new ArrayList<Integer>();
+						minTravelTimeAtSpeed.put(key, existingValue);
+					}
+					existingValue.add(travelTime);
 				}
 			}
 			monitor.worked(5);
@@ -205,30 +208,36 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			for (final Port loadPort : loadPorts) {
 				for (final Port dischargePort : dischargePorts) {
 					// compute time windows
-					final Integer minTimeLD = minTravelTimeAtSpeed.get(new Pair<Port, Port>(loadPort, dischargePort));
-					final Integer minTimeDL = minTravelTimeAtSpeed.get(new Pair<Port, Port>(dischargePort, loadPort));
-					if (minTimeLD == null || minTimeDL == null) {
+					final List<Integer> minTimesLD = minTravelTimeAtSpeed.get(new Pair<Port, Port>(loadPort, dischargePort));
+					final List<Integer> minTimesDL = minTravelTimeAtSpeed.get(new Pair<Port, Port>(dischargePort, loadPort));
+					if (minTimesLD == null || minTimesDL == null) {
 						System.err.println("No connection from " + loadPort.getName() + "-" + dischargePort.getName());
 						continue;
 					} else {
 					}
-					// create round trip cargo
-					final String id = loadPort.getName() + "-to-" + dischargePort.getName();
-					final ILoadSlot loadSlot = builder.createLoadSlot("load-" + id, ports.lookup(loadPort), builder.createTimeWindow(0, 0), Calculator.scale(spec.getMinimumLoad()),
-							Calculator.scale(spec.getMaximumLoad()), loadCalculator, Calculator.scaleToInt(spec.isSetCvValue() ? spec.getCvValue() : loadPort.getCvValue()),
-							loadPort.getLoadDuration(), false, false, false);
+					int counter = 0;
+					for (final int minTimeLD : minTimesLD) {
+						for (final int minTimeDL : minTimesDL) {
+							// create round trip cargo
+							final String id = (counter++) + "-" + loadPort.getName() + "-to-" + dischargePort.getName();
+							final ILoadSlot loadSlot = builder.createLoadSlot("load-" + id, ports.lookup(loadPort), builder.createTimeWindow(0, 0), Calculator.scale(spec.getMinimumLoad()),
+									Calculator.scale(spec.getMaximumLoad()), loadCalculator, Calculator.scaleToInt(spec.isSetCvValue() ? spec.getCvValue() : loadPort.getCvValue()),
+									loadPort.getLoadDuration(), false, false, false);
 
-					final int timeAtDischarge = loadPort.getLoadDuration() + minTimeLD + spec.getDischargeIdleTime();
-					final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-" + id, ports.lookup(dischargePort), builder.createTimeWindow(timeAtDischarge, timeAtDischarge),
-							Calculator.scale(spec.getMinimumDischarge()), Calculator.scale(spec.getMaximumDischarge()), dischargeCalculator, dischargePort.getDischargeDuration(), false);
+							final int timeAtDischarge = loadPort.getLoadDuration() + minTimeLD + spec.getDischargeIdleTime();
+							final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-" + id, ports.lookup(dischargePort), builder.createTimeWindow(timeAtDischarge, timeAtDischarge),
+									Calculator.scale(spec.getMinimumDischarge()), Calculator.scale(spec.getMaximumDischarge()), dischargeCalculator, dischargePort.getDischargeDuration(), false);
 
-					final ICargo cargo = builder.createCargo(id, loadSlot, dischargeSlot, false);
-					cargos.add(cargo);
-					// create vessel
+							final ICargo cargo = builder.createCargo(id, loadSlot, dischargeSlot, false);
+							cargos.add(cargo);
+							// create vessel
 
-					final int timeAtReturn = timeAtDischarge + dischargePort.getDischargeDuration() + minTimeDL + spec.getReturnIdleTime();
-					vessels.add(builder.createVessel("vessel-" + i++, vesselClass, 0, VesselInstanceType.SPOT_CHARTER, builder.createStartEndRequirement(),
-							builder.createStartEndRequirement(builder.createTimeWindow(timeAtReturn, timeAtReturn)), 0, 0, 0));
+							final int timeAtReturn = timeAtDischarge + dischargePort.getDischargeDuration() + minTimeDL + spec.getReturnIdleTime();
+							vessels.add(builder.createVessel("vessel-" + i++, vesselClass, 0, VesselInstanceType.SPOT_CHARTER, builder.createStartEndRequirement(),
+									builder.createStartEndRequirement(builder.createTimeWindow(timeAtReturn, timeAtReturn)), 0, 0, 0));
+						}
+					}
+					
 				}
 			}
 
@@ -305,6 +314,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
 			monitor.worked(5);
 			monitor.subTask("Exporting matrix for display");
+			final HashMap<Pair<Port, Port>, UnitCostLine> bestCostSoFar = new HashMap<Pair<Port, Port>, UnitCostLine>();
 			/*
 			 * Unpack the annotated solution and create output lines
 			 */
@@ -314,10 +324,12 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				// create line for plan
 
 				final UnitCostLine line = AnalyticsFactory.eINSTANCE.createUnitCostLine();
-				lines.add(line);
+				
 				line.setFrom(ports.reverseLookup(((PortDetails) plan.getSequence()[0]).getPortSlot().getPort()));
 				line.setTo(ports.reverseLookup(((PortDetails) plan.getSequence()[2]).getPortSlot().getPort()));
 
+				final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
+				
 				// unpack costs from plan
 				line.getCostComponents().add(createPortCostComponent(ports, pricing, spec, (PortDetails) plan.getSequence()[0]));
 				line.getCostComponents().add(createVoyageCostComponent(spec, (VoyageDetails) plan.getSequence()[1]));
@@ -348,7 +360,12 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 				line.setMmbtuDelivered((int) (line.getVolumeDischarged() * cv));
 				line.setUnitCost(line.getTotalCost() / (double) line.getMmbtuDelivered());
+				UnitCostLine d = bestCostSoFar.get(key);
+				if (d == null || d.getUnitCost() > line.getUnitCost()) {
+					bestCostSoFar.put(key, line);
+				}
 			}
+			lines.addAll(bestCostSoFar.values());
 			monitor.worked(10);
 			return lines;
 		} finally {
