@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.analytics.ui.actions.EvaluateUnitCostMatrixAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
 /**
  * A viewer pane for editing unit cost matrix definitions
@@ -35,9 +36,22 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 	public void init(List<EReference> path, AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		addNameManipulator("Name");
-		// etc
+
+		
 		addTypicalColumn("Hire Rate", 
 				new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_NotionalDayRate(), getEditingDomain()));
+
+		addTypicalColumn("Vessel", 
+				new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_Vessel(), getReferenceValueProviderCache(), getEditingDomain()));
+
+		addTypicalColumn("Speed", 
+				new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_Speed(), getEditingDomain()));
+		
+		addTypicalColumn("Base Price", 
+				new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_BaseFuelPrice(), getEditingDomain()));
+		
+		addTypicalColumn("LNG Price", 
+				new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CargoPrice(), getEditingDomain()));
 		
 		final EvaluateUnitCostMatrixAction evaluateAction = new EvaluateUnitCostMatrixAction(getJointModelEditorPart());
 		getToolBarManager().appendToGroup(EDIT_GROUP, evaluateAction);
