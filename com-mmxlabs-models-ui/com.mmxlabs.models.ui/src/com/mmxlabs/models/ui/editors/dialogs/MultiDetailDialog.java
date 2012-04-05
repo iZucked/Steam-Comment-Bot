@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.editors.dialogs;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -48,6 +49,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.util.ControlUtils;
@@ -92,6 +94,7 @@ public class MultiDetailDialog extends Dialog {
 	private EClass editingClass;
 	private List<EObject> editedObjects;
 	private Map<EObject, List<EObject>> proxyCounterparts = new HashMap<EObject, List<EObject>>();
+	private IDisplayCompositeFactory displayCompositeFactory;
 
 	public MultiDetailDialog(final Shell parentShell, final MMXRootObject root, final ICommandHandler commandHandler) {
 		super(parentShell);
@@ -129,7 +132,7 @@ public class MultiDetailDialog extends Dialog {
 			}
 		};
 		displayComposite.setCommandHandler(immediate);
-		displayComposite.display(rootObject, proxies.get(0));
+		displayComposite.display(rootObject, proxies.get(0), proxies);
 		disableControls();
 		resizeAndCenter();
 	}
@@ -137,7 +140,8 @@ public class MultiDetailDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		final Composite c = (Composite) super.createDialogArea(parent);
-		displayComposite = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass).
+		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
+		displayComposite = displayCompositeFactory.
 				createToplevelComposite(c, editingClass);
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 		return c;
@@ -147,7 +151,9 @@ public class MultiDetailDialog extends Dialog {
 		final List<List<EObject>> ranges = new ArrayList<List<EObject>>(editedObjects.size());
 		
 		for (final EObject object : editedObjects) {
-			ranges.add(displayComposite.getEditingRange(rootObject, object));
+			final List<EObject> range = displayCompositeFactory.getExternalEditingRange(rootObject, object);
+			range.add(object);
+			ranges.add(range);
 		}
 		
 		final List<EObject> range0 = ranges.get(0);
@@ -387,9 +393,9 @@ public class MultiDetailDialog extends Dialog {
 				}
 				
 				@Override
-				public void display(MMXRootObject scenario, EObject object) {
+				public void display(MMXRootObject scenario, EObject object, final Collection<EObject> range) {
 					key.setFirst(object);
-					proxy.display(scenario, object);
+					proxy.display(scenario, object, range);
 				}
 
 				@Override

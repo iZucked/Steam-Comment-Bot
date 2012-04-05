@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.validation.model.EvaluationMode;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.ValidationSupport;
@@ -106,6 +108,10 @@ public class DetailCompositeDialog extends Dialog {
 	 */
 	private List<EObject> currentEditorTargets = new ArrayList<EObject>();
 
+	private IDisplayCompositeFactory displayCompositeFactory;
+
+	private Map<EObject, Collection<EObject>> ranges = new HashMap<EObject, Collection<EObject>>();
+
 	/**
 	 * Get the duplicate object (for editing) corresponding to the given input object.
 	 * 
@@ -116,10 +122,12 @@ public class DetailCompositeDialog extends Dialog {
 	private EObject getDuplicate(final EObject input, final IDisplayComposite displayComposite) {
 		final EObject original = input;
 		if (!originalToDuplicate.containsKey(original)) {
-			final Collection<EObject> range = displayComposite.getEditingRange(rootObject, original);
+			final Collection<EObject> range = displayCompositeFactory.getExternalEditingRange(rootObject, original);
+			range.add(original);
 			// range is the full set of objects which the display composite
 			// might touch; we need to duplicate all of these
 			final Collection<EObject> duplicateRange = EcoreUtil.copyAll(range);
+			ranges .put(original, duplicateRange);
 			final Iterator<EObject> rangeIterator = range.iterator();
 			final Iterator<EObject> duplicateRangeIterator = duplicateRange.iterator();
 			while (rangeIterator.hasNext() && duplicateRangeIterator.hasNext()) {
@@ -214,19 +222,20 @@ public class DetailCompositeDialog extends Dialog {
 			displayComposite = null;
 		}
 
-		displayComposite = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass()).createToplevelComposite(dialogArea, selection.eClass());
+		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
+		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass());
 
 		final EObject duplicate = getDuplicate(selection, displayComposite);
 
 		currentEditorTargets.clear();
-		final Collection<EObject> range = displayComposite.getEditingRange(rootObject, selection);
-
+		final Collection<EObject> range = displayCompositeFactory.getExternalEditingRange(rootObject, selection);
+		range.add(selection);
 		for (final EObject o : range) {
 			currentEditorTargets.add(originalToDuplicate.get(o));
 		}
 
 		displayComposite.setCommandHandler(commandHandler);
-		displayComposite.display(rootObject, duplicate);
+		displayComposite.display(rootObject, duplicate, ranges.get(selection));
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		// handle enablement
@@ -411,23 +420,21 @@ public class DetailCompositeDialog extends Dialog {
 			// For containment references, we need to compare the contained
 			// object, rather than generate a SetCommand.
 			if (original.eClass().getEAllContainments().contains(feature)) {
-
-				// TODO: Handle non-EObject references such as Lists (e.g. for
-				// VesselClass edits
-				// TODO: fix this temporary fix, which presumes that multiply
-				// contained objects
-				// are not referenced elsewhere and so will not create dangling
-				// hrefs
-				// one possible solution is to use the code in the
-				// ImportCSVAction which relinks objects that have been
-				// replaced.
 				if (feature.isMany()) {
-					final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection) duplicate.eGet(feature));
-					if (mas.canExecute() == false) {
-						log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
-								"Attempt to set feature which could not be set."));
-					}
-					compound.append(mas);
+					if (!((Collection)original.eGet(feature)).isEmpty())
+					compound.append(
+							RemoveCommand.create(editingDomain, original, feature, (Collection) original.eGet(feature))
+							);
+					if (!((Collection)duplicate.eGet(feature)).isEmpty())
+					compound.append(
+							AddCommand.create(editingDomain, original, feature, (Collection) duplicate.eGet(feature))
+							);
+//					final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection) duplicate.eGet(feature));
+//					if (mas.canExecute() == false) {
+//						log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
+//								"Attempt to set feature which could not be set."));
+//					}
+//					compound.append(mas);
 				} else {
 					final Command c = makeEqualizer((EObject) original.eGet(feature), (EObject) duplicate.eGet(feature));
 					// if (!c.getAffectedObjects().isEmpty()) {

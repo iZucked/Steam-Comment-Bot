@@ -10,6 +10,8 @@ package com.mmxlabs.models.ui.editors;
  */
 
 
+import java.util.Collection;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -29,7 +31,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public interface IInlineEditor {
 	public void setCommandHandler(final ICommandHandler handler);
-	public void display(final MMXRootObject scenario, final EObject object);
+	public void display(final MMXRootObject scenario, final EObject object, final Collection<EObject> range);
 	public Control createControl(final Composite parent);
 	void processValidation(IStatus status);	
 	public EStructuralFeature getFeature();

@@ -75,7 +75,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		}
 
 		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, field, value));
-		((SetCommand) command).setLabel("Set " + field.getName() + " to " + (value == null ? "null" : value.toString()));
+//		command.setLabel("Set " + field.getName() + " to " + (value == null ? "null" : value.toString()));
 		editingDomain.getCommandStack().execute(command);
 	}
 	

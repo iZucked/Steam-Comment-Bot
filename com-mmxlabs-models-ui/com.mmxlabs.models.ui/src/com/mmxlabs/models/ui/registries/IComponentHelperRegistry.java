@@ -4,12 +4,14 @@
  */
 package com.mmxlabs.models.ui.registries;
 
+import java.util.List;
+
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.ui.IComponentHelper;
 
 public interface IComponentHelperRegistry {
 
-	public abstract IComponentHelper getComponentHelper(final EClass modelClass);
+	public abstract List<IComponentHelper> getComponentHelpers(final EClass modelClass);
 
 }

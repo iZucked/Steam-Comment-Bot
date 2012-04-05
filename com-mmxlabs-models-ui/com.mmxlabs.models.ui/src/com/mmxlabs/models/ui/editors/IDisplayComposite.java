@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.ui.editors;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -36,7 +36,7 @@ public interface IDisplayComposite {
 	 * @param root
 	 * @param value
 	 */
-	public void display(final MMXRootObject root, final EObject value);
+	public void display(final MMXRootObject root, final EObject value, final Collection<EObject> range);
 	/**
 	 * Sets the command handler for any stuff that goes on in this composite.
 	 * @param commandHandler
@@ -48,21 +48,7 @@ public interface IDisplayComposite {
 	 * @param wrapper
 	 */
 	public void setEditorWrapper(final IInlineEditorWrapper wrapper);
-	
-	/**
-	 * Should return a collection of the branches that this object might edit in its display.
-	 * 
-	 * This is useful for the editor dialogs, which need to take copies of any objects that might be edited
-	 * before they get edited, without taking a copy of all the scenario just in case.
-	 * 
-	 * Please don't return a list whose members contain one another, as this won't work properly.
-	 * 
-	 * @param root
-	 * @param value
-	 * @return a list of objects which might be modified when this display composite is displaying value
-	 */
-	public List<EObject> getEditingRange(final MMXRootObject root, final EObject value);
-	
+
 	/**
 	 * Update contents with validation data.
 	 * 

@@ -8,6 +8,7 @@
 package com.mmxlabs.models.ui.editors.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
@@ -45,12 +46,12 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	public void display(MMXRootObject context, EObject input) {
+	public void display(MMXRootObject context, EObject input, final Collection<EObject> range) {
 		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
 		if (valueProvider == null) {
 			log.error("Could not get a value provider for " + input.eClass().getName() + "." + feature.getName());
 		}
-		super.display(context, input);
+		super.display(context, input, range);
 	}
 
 	@Override

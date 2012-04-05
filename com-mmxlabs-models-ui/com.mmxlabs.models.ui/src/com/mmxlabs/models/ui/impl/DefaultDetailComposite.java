@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.ui.impl;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -75,7 +77,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	 * @param object
 	 */
 	@Override
-	public void display(final MMXRootObject root, final EObject object) {
+	public void display(final MMXRootObject root, final EObject object, final Collection<EObject> range) {
 		final EClass eClass = object.eClass();
 		setLayout(layoutProvider.createDetailLayout(root, object));
 		if (eClass != displayedClass) {
@@ -84,7 +86,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 			createControls(root, object);
 		}
 		for (final IInlineEditor editor : editors) {
-			editor.display(root, object);
+			editor.display(root, object, range);
 		}
 	}
 
@@ -96,8 +98,10 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 
 	private void initialize(final EClass eClass) {
 		this.displayedClass = eClass;
-		final IComponentHelper helper = Activator.getDefault().getComponentHelperRegistry().getComponentHelper(displayedClass);
-		helper.addEditorsToComposite(this);
+		final List<IComponentHelper> helpers = Activator.getDefault().getComponentHelperRegistry().getComponentHelpers(displayedClass);
+		for (final IComponentHelper helper : helpers) {
+			helper.addEditorsToComposite(this);
+		}
 	}
 
 	@Override
@@ -108,11 +112,6 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	@Override
 	public void setCommandHandler(ICommandHandler commandHandler) {
 		this.commandHandler = commandHandler;
-	}
-
-	@Override
-	public List<EObject> getEditingRange(MMXRootObject root, EObject value) {
-		return Collections.singletonList(value);
 	}
 
 	@Override

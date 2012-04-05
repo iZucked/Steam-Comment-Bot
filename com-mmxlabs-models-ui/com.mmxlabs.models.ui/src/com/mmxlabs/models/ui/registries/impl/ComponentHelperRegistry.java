@@ -5,11 +5,15 @@
 package com.mmxlabs.models.ui.registries.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.extensions.IComponentHelperExtension;
@@ -33,8 +37,14 @@ import com.mmxlabs.models.util.importer.registry.impl.AbstractRegistry;
  * @author hinton
  * 
  */
-public class ComponentHelperRegistry extends AbstractRegistry<EClass, IComponentHelper> implements IComponentHelperRegistry {
+public class ComponentHelperRegistry extends AbstractRegistry<EClass, List<IComponentHelper>> implements IComponentHelperRegistry {
 	@Inject Iterable<IComponentHelperExtension> extensions;
+	private Comparator<IComponentHelper> comparator = new Comparator<IComponentHelper>() {
+		@Override
+		public int compare(IComponentHelper arg0, IComponentHelper arg1) {
+			return ((Integer) arg0.getDisplayPriority()).compareTo(arg1.getDisplayPriority());
+		}
+	};
 	
 	/**
 	 * If an EClass has no component helper registered that will match it, but its supertypes do have registered component helpers,
@@ -47,14 +57,14 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, IComponent
 		final ArrayList<IComponentHelper> superHelpers = new ArrayList<IComponentHelper>();
 		
 		for (final EClass eSuper : eClass.getESuperTypes()) {
-			final IComponentHelper h = getComponentHelper(eSuper);
-			if (h != null) superHelpers.add(h);
+			final List<IComponentHelper> h = getComponentHelpers(eSuper);
+			superHelpers.addAll(h);
 		}
 		
 		// This check should ensure that pointless reflectors are not created.
 		if (superHelpers.isEmpty()) return null;
 		
-		return new IComponentHelper() {
+		return new BaseComponentHelper() {
 			@Override
 			public void addEditorsToComposite(IInlineEditorContainer detailComposite,
 					EClass displayedClass) {
@@ -72,37 +82,52 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, IComponent
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.ui.registries.impl.IComponentHelperRegistry#getComponentHelper(org.eclipse.emf.ecore.EClass)
-	 */
 	@Override
-	public synchronized IComponentHelper getComponentHelper(final EClass modelClass) {
+	public synchronized List<IComponentHelper> getComponentHelpers(final EClass modelClass) {
 		return get(modelClass);
 	}
 
 	@Override
-	protected IComponentHelper match(final EClass key) {
+	protected List<IComponentHelper> match(final EClass key) {
+		final List<IComponentHelper> helpers = new ArrayList<IComponentHelper>();
 		IComponentHelperExtension bestExtension = null;
 		int bestExtensionMatch = Integer.MAX_VALUE;
 		for (final IComponentHelperExtension extension : extensions) {
 			final int closeness = getMinimumGenerations(key, extension.getEClassName());
-			if ( Boolean.valueOf(extension.isInheritable()) || closeness == 0) {
+			if (Boolean.valueOf(extension.isInheritable()) || closeness == 0) {
 				if (closeness < bestExtensionMatch) {
 					bestExtensionMatch = closeness;
 					bestExtension = extension;
+				} else if (Boolean.valueOf(extension.isInheritable()) == false) {
+					if (factoryExistsForID(extension.getID())) {
+						helpers.addAll(getFactoryForID(extension.getID()));
+					} else {
+						helpers.addAll(cacheFactoryForID(extension.getID(), Collections.singletonList(extension.instantiate())));
+					}
 				}
 			}
+			
 		}
 		
 		if (bestExtension == null) {
-			if (key.getESuperTypes().isEmpty()) return null;
-			else return reflector(key);
+			if (key.getESuperTypes().isEmpty()) return helpers;
+			final IComponentHelper reflector = reflector(key);
+			if (reflector != null) helpers.add(reflector);
+			return helpers;
 		}
 		
 		if (factoryExistsForID(bestExtension.getID())) {
-			return getFactoryForID(bestExtension.getID());
+			helpers.addAll(getFactoryForID(bestExtension.getID()));
 		} else {
-			return cacheFactoryForID(bestExtension.getID(), bestExtension.instantiate());
+			helpers.addAll(cacheFactoryForID(bestExtension.getID(), Collections.singletonList(bestExtension.instantiate())));
 		}
+		
+		if (helpers.size() > 1) {
+			Collections.sort(helpers, comparator );
+		}
+		
+		while (helpers.remove(null));
+		
+		return helpers;
 	}
 }

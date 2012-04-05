@@ -217,14 +217,17 @@ public class DefaultImportContext implements IImportContext {
 	
 	@Override
 	public IImportProblem createProblem(final String string, boolean trackFile, boolean trackLine, boolean trackField) {
-		final CSVReader reader = readerStack.peek();
-		final Integer line = trackLine ? reader.getLineNumber() : null;
-		final String lowerField = reader.getLastField().toLowerCase();
-		final String upperField = reader.getCasedColumnName(lowerField);
-		final String field = trackField ? (upperField == null ? lowerField : upperField) : null;
-		final String file = trackFile ? readerStack.peek().getFileName() : null;
-		
-		return new DefaultImportProblem(file, line, field, string);
+		if (readerStack.isEmpty()) {
+			return new DefaultImportProblem(null, null, null, string);
+		} else {
+			final CSVReader reader = readerStack.peek();
+			final Integer line = trackLine ? reader.getLineNumber() : null;
+			final String lowerField = reader.getLastField().toLowerCase();
+			final String upperField = reader.getCasedColumnName(lowerField);
+			final String field = trackField ? (upperField == null ? lowerField : upperField) : null;
+			final String file = trackFile ? readerStack.peek().getFileName() : null;
+			return new DefaultImportProblem(file, line, field, string);
+		}
 	}
 
 	private LinkedHashSet<IImportProblem> problems = new LinkedHashSet<IImportContext.IImportProblem>();

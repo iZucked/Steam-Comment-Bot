@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.ui.impl;
 
+import java.util.Collection;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Composite;
 
@@ -22,9 +24,9 @@ public class MMXObjectDetailComposite extends DefaultDetailComposite {
 	}
 
 	@Override
-	public void display(MMXRootObject root, EObject object) {
+	public void display(MMXRootObject root, EObject object, final Collection<EObject> range) {
 		// handle extension fields.
-		super.display(root, object);
+		super.display(root, object, range);
 	}
 
 	
