@@ -185,32 +185,32 @@ public class FileScenarioService implements IScenarioService {
 
 	@Override
 	public EObject getScenario(final String uuid) {
-		final ScenarioInstance findInstance = ioHelper.findInstance(uuid);
+		final ScenarioInstance instance = ioHelper.findInstance(uuid);
 
-		if (findInstance.getInstance() == null) {
+		if (instance.getInstance() == null) {
 			try {
 				final EObject scenario = ioHelper.loadScenario(uuid, Collections.EMPTY_MAP);
 
-				Map<Class<?>, Object> adapters = findInstance.getAdapters();
+				Map<Class<?>, Object> adapters = instance.getAdapters();
 				if (adapters == null) {
 					adapters = new HashMap<Class<?>, Object>();
-					findInstance.setAdapters(adapters);
+					instance.setAdapters(adapters);
 				}
 				final EditingDomain ed = initEditingDomain();
 				adapters.put(EditingDomain.class, ed);
 				ed.getResourceSet().getResources().add(scenario.eResource());
 
-				findInstance.setInstance(scenario);
+				instance.setInstance(scenario);
 
 				final IServiceModelTracker tracker = (IServiceModelTracker) Platform.getAdapterManager().loadAdapter(scenario, IServiceModelTracker.class.getCanonicalName());
 				if (tracker != null) {
-					tracker.setScenarioInstance(findInstance);
+					tracker.setScenarioInstance(instance);
 				}
 			} catch (final IOException e) {
 				log.error(e.getMessage(), e);
 			}
 		}
-		return findInstance.getInstance();
+		return instance.getInstance();
 	}
 
 	@Override
