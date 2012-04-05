@@ -11,6 +11,8 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -22,7 +24,7 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
  *
  * @generated
  */
-public class LegalEntityComponentHelper implements IComponentHelper {
+public class LegalEntityComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -40,10 +42,8 @@ public class LegalEntityComponentHelper implements IComponentHelper {
 	 * @generated
 	 */
 	public LegalEntityComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ALEGAL_ENTITY);
-			if (helper != null) superClassesHelpers.add(helper);
-		}
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.ALEGAL_ENTITY));
 	}
 	
 	/**

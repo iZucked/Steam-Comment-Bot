@@ -12,10 +12,14 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/roundTripMatrices"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//UnitCostMatrix">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//UnitCostMatrix/ports"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//UnitCostMatrix/vessel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostMatrix/notionalDayRate"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostMatrix/speed"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="If any ports are selected, the matrix will only be computed for those ports. If no ports are selected, the matrix will be computed for all ports."
+          propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//UnitCostMatrix/ports"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The vessel for which a cost matrix is being generated"
+          propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//UnitCostMatrix/vessel"/>
+      <genFeatures createChild="false" propertyDescription="The charter rate at which unit prices are to be found"
+          ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostMatrix/notionalDayRate"/>
+      <genFeatures createChild="false" propertyDescription="The speed to set on the laden and ballast legs. If this is not set, the optimiser will choose a speed."
+          ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostMatrix/speed"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostMatrix/roundTrip"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostMatrix/minimumLoad"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostMatrix/maximumLoad"/>
@@ -27,16 +31,46 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostMatrix/dischargeIdleTime"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostMatrix/returnIdleTime"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//UnitCostMatrix/costLines"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="If any routes are selected, only those routes will be considered. Otherwise, all routes will be considered."
+          propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//UnitCostMatrix/allowedRoutes"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//UnitCostLine">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostLine/unitCost"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostLine/totalCost"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostLine/mmbtuDelivered"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//UnitCostLine/from"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//UnitCostLine/to"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostLine/duration"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostLine/volumeLoaded"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostLine/volumeDischarged"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostLine/hireCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostLine/fuelCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostLine/canalCost"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//UnitCostLine/costComponents"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//UnitCostLine/portCost"/>
+      <genOperations ecoreOperation="analytics.ecore#//UnitCostLine/getTotalCost"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//Voyage">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//Voyage/route"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//Voyage/routeCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//Voyage/speed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//Voyage/distance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//Voyage/idleTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//Voyage/travelTime"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//Visit">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//Visit/portCost"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//CostComponent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//CostComponent/duration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//CostComponent/hireCost"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//CostComponent/fuelCosts"/>
+      <genOperations ecoreOperation="analytics.ecore#//CostComponent/getFuelCost"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//FuelCost">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//FuelCost/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//FuelCost/unit"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//FuelCost/quantity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//FuelCost/cost"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

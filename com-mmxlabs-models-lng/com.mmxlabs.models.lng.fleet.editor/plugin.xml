@@ -187,6 +187,12 @@
           outputEClass="com.mmxlabs.models.lng.fleet.MaintenanceEvent"
           targetEClass="com.mmxlabs.models.lng.fleet.VesselEvent">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.baseFuelModelFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Base Fuel"
+          targetEClass="com.mmxlabs.models.lng.fleet.BaseFuel">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.classes">

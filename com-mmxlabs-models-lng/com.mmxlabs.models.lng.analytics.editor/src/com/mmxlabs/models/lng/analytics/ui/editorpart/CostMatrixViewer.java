@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
@@ -118,12 +119,10 @@ public class CostMatrixViewer extends ViewerPane implements ISelectionChangedLis
 		grid.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(final DoubleClickEvent event) {
-				Point[] y = grid.getGrid().getCellSelection();
-
-				if (y.length == 1) {
-					final Pair<Port, Map<Port, UnitCostLine>> element = (Pair<Port, Map<Port, UnitCostLine>>) grid.getElementAt(y[0].y);
-					final UnitCostLine line = element.getSecond().get(columnPorts.get(y[0].x));
-					// display detail view for line
+				// display properties view
+				try {
+					jointModelEditorPart.getSite().getPage().showView("org.eclipse.ui.views.PropertySheet");
+				} catch (PartInitException e) {
 				}
 			}
 		});

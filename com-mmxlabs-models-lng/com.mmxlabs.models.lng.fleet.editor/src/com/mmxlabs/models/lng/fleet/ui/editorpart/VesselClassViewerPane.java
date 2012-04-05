@@ -45,9 +45,12 @@ import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.fleet.importer.FuelCurveImporter;
+import com.mmxlabs.models.lng.ui.actions.AddModelAction;
+import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -240,23 +243,32 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 			if (b) {
 				new MenuItem(menu, SWT.SEPARATOR);
 			}
-			final Action newBase = new LockableAction("Add base fuel...") {
-				@Override
-				public void run() {
-					final BaseFuel newFuel = FleetFactory.eINSTANCE.createBaseFuel();
-					final DetailCompositeDialog dcd = new DetailCompositeDialog(
-							jointModelEditor.getSite().getShell(), 
-							jointModelEditor.getDefaultCommandHandler());
-					if (dcd.open(jointModelEditor.getRootObject(), Collections.singletonList((EObject) newFuel)) == Window.OK) {
-						final ICommandHandler handler = jointModelEditor.getDefaultCommandHandler();
-						handler.handleCommand(
-								AddCommand.create(handler.getEditingDomain(), fleetModel,  FleetPackage.eINSTANCE.getFleetModel_BaseFuels(),
-										newFuel),
-										fleetModel, FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
-					}
-				}
-			};
-			addActionToMenu(newBase, menu);
+			final Action newBase = 
+					AddModelAction.create(FleetPackage.eINSTANCE.getBaseFuel(), new IAddContext() {
+						@Override
+						public MMXRootObject getRootObject() {
+							return jointModelEditor.getRootObject();
+						}
+						
+						@Override
+						public EReference getContainment() {
+							return FleetPackage.eINSTANCE.getFleetModel_BaseFuels();
+						}
+						
+						@Override
+						public EObject getContainer() {
+							return fleetModel;
+						}
+						
+						@Override
+						public ICommandHandler getCommandHandler() {
+							return jointModelEditor.getDefaultCommandHandler();
+						}
+					});
+			if (newBase != null) {
+				newBase.setText("Add new base fuel...");
+				addActionToMenu(newBase, menu);
+			}
 		}
 	}
 	

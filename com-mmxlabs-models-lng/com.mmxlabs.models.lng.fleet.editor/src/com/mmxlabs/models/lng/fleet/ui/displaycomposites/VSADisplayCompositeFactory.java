@@ -4,11 +4,15 @@
  */
 package com.mmxlabs.models.lng.fleet.ui.displaycomposites;
 
+import java.util.List;
+
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
@@ -23,5 +27,11 @@ public class VSADisplayCompositeFactory implements IDisplayCompositeFactory {
 	@Override
 	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass) {
 		return new VSADetailComposite(composite, SWT.NONE);
+	}
+
+	@Override
+	public List<EObject> getExternalEditingRange(MMXRootObject root,
+			EObject value) {
+		return defaultFactory.getExternalEditingRange(root, value);
 	}
 }

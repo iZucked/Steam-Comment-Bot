@@ -8,6 +8,7 @@
  */
 package com.mmxlabs.models.lng.analytics;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -38,6 +39,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getDischargeIdleTime <em>Discharge Idle Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getReturnIdleTime <em>Return Idle Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCostLines <em>Cost Lines</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getAllowedRoutes <em>Allowed Routes</em>}</li>
  * </ul>
  * </p>
  *
@@ -124,9 +126,11 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Speed</em>' attribute.
+	 * @see #isSetSpeed()
+	 * @see #unsetSpeed()
 	 * @see #setSpeed(double)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_Speed()
-	 * @model required="true"
+	 * @model unsettable="true" required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts'"
 	 * @generated
 	 */
@@ -137,10 +141,35 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Speed</em>' attribute.
+	 * @see #isSetSpeed()
+	 * @see #unsetSpeed()
 	 * @see #getSpeed()
 	 * @generated
 	 */
 	void setSpeed(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getSpeed <em>Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetSpeed()
+	 * @see #getSpeed()
+	 * @see #setSpeed(double)
+	 * @generated
+	 */
+	void unsetSpeed();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getSpeed <em>Speed</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Speed</em>' attribute is set.
+	 * @see #unsetSpeed()
+	 * @see #getSpeed()
+	 * @see #setSpeed(double)
+	 * @generated
+	 */
+	boolean isSetSpeed();
 
 	/**
 	 * Returns the value of the '<em><b>Round Trip</b></em>' attribute.
@@ -453,6 +482,22 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	EList<UnitCostLine> getCostLines();
+
+	/**
+	 * Returns the value of the '<em><b>Allowed Routes</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.Route}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Allowed Routes</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allowed Routes</em>' reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_AllowedRoutes()
+	 * @model
+	 * @generated
+	 */
+	EList<Route> getAllowedRoutes();
 
 } // end of  UnitCostMatrix
 

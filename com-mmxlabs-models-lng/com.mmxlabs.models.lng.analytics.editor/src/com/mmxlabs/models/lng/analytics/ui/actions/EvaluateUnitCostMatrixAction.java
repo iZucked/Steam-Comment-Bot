@@ -18,6 +18,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -79,6 +80,12 @@ public class EvaluateUnitCostMatrixAction extends ScenarioModifyingAction {
 			}
 			
 		};
+		
+		try {
+			part.getSite().getPage().showView("org.eclipse.ui.views.ProgressView");
+		} catch (PartInitException e) {
+		}
+		
 		job.schedule();
 	}
 

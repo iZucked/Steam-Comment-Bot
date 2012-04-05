@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -23,7 +24,7 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
  *
  * @generated
  */
-public class SpotMarketComponentHelper implements IComponentHelper {
+public class SpotMarketComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -41,10 +42,8 @@ public class SpotMarketComponentHelper implements IComponentHelper {
 	 * @generated
 	 */
 	public SpotMarketComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ASPOT_MARKET);
-			if (helper != null) superClassesHelpers.add(helper);
-		}
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.ASPOT_MARKET));
 	}
 	
 	/**

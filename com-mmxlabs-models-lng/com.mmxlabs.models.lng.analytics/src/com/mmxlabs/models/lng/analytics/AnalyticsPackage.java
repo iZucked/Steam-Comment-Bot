@@ -307,13 +307,22 @@ public interface AnalyticsPackage extends EPackage {
 	int UNIT_COST_MATRIX__COST_LINES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
+	 * The feature id for the '<em><b>Allowed Routes</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_COST_MATRIX__ALLOWED_ROUTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+
+	/**
 	 * The number of structural features of the '<em>Unit Cost Matrix</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int UNIT_COST_MATRIX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl <em>Unit Cost Line</em>}' class.
@@ -915,6 +924,17 @@ public interface AnalyticsPackage extends EPackage {
 	EReference getUnitCostMatrix_CostLines();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getAllowedRoutes <em>Allowed Routes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Allowed Routes</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getAllowedRoutes()
+	 * @see #getUnitCostMatrix()
+	 * @generated
+	 */
+	EReference getUnitCostMatrix_AllowedRoutes();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.UnitCostLine <em>Unit Cost Line</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1419,6 +1439,14 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference UNIT_COST_MATRIX__COST_LINES = eINSTANCE.getUnitCostMatrix_CostLines();
+
+		/**
+		 * The meta object literal for the '<em><b>Allowed Routes</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference UNIT_COST_MATRIX__ALLOWED_ROUTES = eINSTANCE.getUnitCostMatrix_AllowedRoutes();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl <em>Unit Cost Line</em>}' class.

@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -24,7 +25,7 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
  *
  * @generated
  */
-public class OptimisationRangeComponentHelper implements IComponentHelper {
+public class OptimisationRangeComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**

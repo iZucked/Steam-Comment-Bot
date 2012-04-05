@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.fleet.ui.displaycomposites;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -299,8 +300,8 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	}
 	
 	@Override
-	public void display(final MMXRootObject root, final EObject value) {
-		delegate.display(root, value);
+	public void display(final MMXRootObject root, final EObject value, final Collection<EObject> range) {
+		delegate.display(root, value, range);
 		tableViewer.setInput(value);
 		removeAdapter();
 		oldValue = (VesselStateAttributes) value;
@@ -317,11 +318,6 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	public void setCommandHandler(final ICommandHandler commandHandler) {
 		delegate.setCommandHandler(commandHandler);
 		this.commandHandler = commandHandler;
-	}
-
-	@Override
-	public List<EObject> getEditingRange(final MMXRootObject root, final EObject value) {
-		return delegate.getEditingRange(root, value);
 	}
 
 	@Override

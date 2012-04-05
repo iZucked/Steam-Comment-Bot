@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -58,6 +59,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getDischargeIdleTime <em>Discharge Idle Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getReturnIdleTime <em>Return Idle Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getCostLines <em>Cost Lines</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getAllowedRoutes <em>Allowed Routes</em>}</li>
  * </ul>
  * </p>
  *
@@ -143,6 +145,15 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * @ordered
 	 */
 	protected double speed = SPEED_EDEFAULT;
+
+	/**
+	 * This is true if the Speed attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean speedESet;
 
 	/**
 	 * The default value of the '{@link #isRoundTrip() <em>Round Trip</em>}' attribute.
@@ -364,6 +375,16 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	protected EList<UnitCostLine> costLines;
 
 	/**
+	 * The cached value of the '{@link #getAllowedRoutes() <em>Allowed Routes</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAllowedRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Route> allowedRoutes;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -491,8 +512,33 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	public void setSpeed(double newSpeed) {
 		double oldSpeed = speed;
 		speed = newSpeed;
+		boolean oldSpeedESet = speedESet;
+		speedESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_MATRIX__SPEED, oldSpeed, speed));
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_MATRIX__SPEED, oldSpeed, speed, !oldSpeedESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetSpeed() {
+		double oldSpeed = speed;
+		boolean oldSpeedESet = speedESet;
+		speed = SPEED_EDEFAULT;
+		speedESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, AnalyticsPackage.UNIT_COST_MATRIX__SPEED, oldSpeed, SPEED_EDEFAULT, oldSpeedESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetSpeed() {
+		return speedESet;
 	}
 
 	/**
@@ -747,6 +793,18 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<Route> getAllowedRoutes() {
+		if (allowedRoutes == null) {
+			allowedRoutes = new EObjectResolvingEList<Route>(Route.class, this, AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES);
+		}
+		return allowedRoutes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -797,6 +855,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return getReturnIdleTime();
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:
 				return getCostLines();
+			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
+				return getAllowedRoutes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -860,6 +920,10 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				getCostLines().clear();
 				getCostLines().addAll((Collection<? extends UnitCostLine>)newValue);
 				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
+				getAllowedRoutes().clear();
+				getAllowedRoutes().addAll((Collection<? extends Route>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -885,7 +949,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				setNotionalDayRate(NOTIONAL_DAY_RATE_EDEFAULT);
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__SPEED:
-				setSpeed(SPEED_EDEFAULT);
+				unsetSpeed();
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__ROUND_TRIP:
 				setRoundTrip(ROUND_TRIP_EDEFAULT);
@@ -920,6 +984,9 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:
 				getCostLines().clear();
 				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
+				getAllowedRoutes().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -941,7 +1008,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__NOTIONAL_DAY_RATE:
 				return notionalDayRate != NOTIONAL_DAY_RATE_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_MATRIX__SPEED:
-				return speed != SPEED_EDEFAULT;
+				return isSetSpeed();
 			case AnalyticsPackage.UNIT_COST_MATRIX__ROUND_TRIP:
 				return roundTrip != ROUND_TRIP_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_MATRIX__MINIMUM_LOAD:
@@ -964,6 +1031,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return returnIdleTime != RETURN_IDLE_TIME_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:
 				return costLines != null && !costLines.isEmpty();
+			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
+				return allowedRoutes != null && !allowedRoutes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1015,7 +1084,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		result.append(", notionalDayRate: ");
 		result.append(notionalDayRate);
 		result.append(", speed: ");
-		result.append(speed);
+		if (speedESet) result.append(speed); else result.append("<unset>");
 		result.append(", roundTrip: ");
 		result.append(roundTrip);
 		result.append(", minimumLoad: ");

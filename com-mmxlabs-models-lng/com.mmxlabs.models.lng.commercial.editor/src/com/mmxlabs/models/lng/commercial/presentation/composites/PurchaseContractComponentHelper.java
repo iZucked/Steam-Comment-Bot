@@ -11,6 +11,8 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
@@ -21,7 +23,7 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
  *
  * @generated
  */
-public class PurchaseContractComponentHelper implements IComponentHelper {
+public class PurchaseContractComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -39,10 +41,8 @@ public class PurchaseContractComponentHelper implements IComponentHelper {
 	 * @generated
 	 */
 	public PurchaseContractComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.CONTRACT);
-			if (helper != null) superClassesHelpers.add(helper);
-		}
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.CONTRACT));
 	}
 	
 	/**

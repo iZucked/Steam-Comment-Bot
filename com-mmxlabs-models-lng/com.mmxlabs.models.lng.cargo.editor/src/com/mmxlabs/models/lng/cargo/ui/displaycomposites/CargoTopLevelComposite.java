@@ -4,16 +4,10 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 
 /**
@@ -35,14 +29,4 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	protected boolean shouldDisplay(EReference ref) {
 		return super.shouldDisplay(ref) || ref == CargoPackage.eINSTANCE.getCargo_LoadSlot() ||ref == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
 	}
-
-	@Override
-	public List<EObject> getEditingRange(MMXRootObject root, EObject value) {
-		if (value instanceof Cargo) {
-			return Arrays.asList(new EObject[] {value, ((Cargo) value).getLoadSlot(), ((Cargo) value).getDischargeSlot()});
-		} else {
-			return super.getEditingRange(root, value);
-		}
-	}
-
 }

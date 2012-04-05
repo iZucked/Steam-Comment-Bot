@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -22,7 +23,7 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
  *
  * @generated
  */
-public class MaintenanceEventComponentHelper implements IComponentHelper {
+public class MaintenanceEventComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -40,10 +41,8 @@ public class MaintenanceEventComponentHelper implements IComponentHelper {
 	 * @generated
 	 */
 	public MaintenanceEventComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(FleetPackage.Literals.VESSEL_EVENT);
-			if (helper != null) superClassesHelpers.add(helper);
-		}
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(FleetPackage.Literals.VESSEL_EVENT));
 	}
 	
 	/**

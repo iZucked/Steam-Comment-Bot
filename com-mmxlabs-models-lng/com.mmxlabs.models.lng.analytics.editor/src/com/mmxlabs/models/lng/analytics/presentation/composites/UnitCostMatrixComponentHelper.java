@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
@@ -27,7 +28,7 @@ import org.eclipse.core.runtime.Platform;
  *
  * @generated
  */
-public class UnitCostMatrixComponentHelper implements IComponentHelper {
+public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -45,13 +46,9 @@ public class UnitCostMatrixComponentHelper implements IComponentHelper {
 	 * @generated
 	 */
 	public UnitCostMatrixComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.UUID_OBJECT);
-			if (helper != null) superClassesHelpers.add(helper);
-		} {
-			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.NAMED_OBJECT);
-			if (helper != null) superClassesHelpers.add(helper);
-		}
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 	}
 	
 	/**
@@ -87,6 +84,7 @@ public class UnitCostMatrixComponentHelper implements IComponentHelper {
 		add_dischargeIdleTimeEditor(detailComposite, topClass);
 		add_returnIdleTimeEditor(detailComposite, topClass);
 		add_costLinesEditor(detailComposite, topClass);
+		add_allowedRoutesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the ports feature on UnitCostMatrix
@@ -207,5 +205,14 @@ public class UnitCostMatrixComponentHelper implements IComponentHelper {
 	 */
 	protected void add_costLinesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__COST_LINES));
+	}
+
+	/**
+	 * Create the editor for the allowedRoutes feature on UnitCostMatrix
+	 *
+	 * @generated
+	 */
+	protected void add_allowedRoutesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__ALLOWED_ROUTES));
 	}
 }

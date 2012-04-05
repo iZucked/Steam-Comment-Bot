@@ -1,6 +1,7 @@
 package com.mmxlabs.models.lng.optimiser.ui.displaycomposites;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
@@ -36,8 +37,8 @@ public class OptimiserSettingsToplevelComposite extends DefaultTopLevelComposite
 	}
 
 	@Override
-	public void display(final MMXRootObject root, final EObject object) {
-		super.display(root, object);
+	public void display(final MMXRootObject root, final EObject object, final Collection<EObject> range) {
+		super.display(root, object, range);
 		// display sub-things
 		final Composite lower = new Composite(this, SWT.NONE);
 		final GridData gd = new GridData();

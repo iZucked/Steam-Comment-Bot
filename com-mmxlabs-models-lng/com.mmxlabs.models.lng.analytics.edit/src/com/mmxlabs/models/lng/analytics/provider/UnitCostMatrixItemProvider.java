@@ -85,6 +85,7 @@ public class UnitCostMatrixItemProvider
 			addCvValuePropertyDescriptor(object);
 			addDischargeIdleTimePropertyDescriptor(object);
 			addReturnIdleTimePropertyDescriptor(object);
+			addAllowedRoutesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -123,7 +124,7 @@ public class UnitCostMatrixItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_UnitCostMatrix_ports_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostMatrix_ports_feature", "_UI_UnitCostMatrix_type"),
+				 getString("_UI_UnitCostMatrix_ports_description"),
 				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__PORTS,
 				 true,
 				 false,
@@ -145,7 +146,7 @@ public class UnitCostMatrixItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_UnitCostMatrix_vessel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostMatrix_vessel_feature", "_UI_UnitCostMatrix_type"),
+				 getString("_UI_UnitCostMatrix_vessel_description"),
 				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__VESSEL,
 				 true,
 				 false,
@@ -167,7 +168,7 @@ public class UnitCostMatrixItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_UnitCostMatrix_notionalDayRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostMatrix_notionalDayRate_feature", "_UI_UnitCostMatrix_type"),
+				 getString("_UI_UnitCostMatrix_notionalDayRate_description"),
 				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__NOTIONAL_DAY_RATE,
 				 true,
 				 false,
@@ -189,7 +190,7 @@ public class UnitCostMatrixItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_UnitCostMatrix_speed_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostMatrix_speed_feature", "_UI_UnitCostMatrix_type"),
+				 getString("_UI_UnitCostMatrix_speed_description"),
 				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__SPEED,
 				 true,
 				 false,
@@ -415,6 +416,28 @@ public class UnitCostMatrixItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Allowed Routes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowedRoutesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostMatrix_allowedRoutes_feature"),
+				 getString("_UI_UnitCostMatrix_allowedRoutes_description"),
+				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__ALLOWED_ROUTES,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

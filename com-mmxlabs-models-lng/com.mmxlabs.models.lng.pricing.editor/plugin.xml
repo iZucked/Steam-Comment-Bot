@@ -188,4 +188,13 @@
           targetEClass="com.mmxlabs.models.lng.pricing.PortCost">
     </factory>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.componenthelpers">
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.pricing.composite_inject.BaseFuelPriceInjector"
+          id="com.mmxlabs.models.lng.pricing.editor.basePriceInjector"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.fleet.BaseFuel">
+    </componentHelper>
+ </extension>
 </plugin>

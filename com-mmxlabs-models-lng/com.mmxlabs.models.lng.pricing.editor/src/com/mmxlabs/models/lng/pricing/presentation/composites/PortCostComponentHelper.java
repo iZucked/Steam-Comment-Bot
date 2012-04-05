@@ -5,12 +5,14 @@
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.ui.BaseComponentHelper;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.widgets.Composite;
@@ -37,7 +39,7 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
  *
  * @generated
  */
-public class PortCostComponentHelper implements IComponentHelper {
+public class PortCostComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -55,10 +57,8 @@ public class PortCostComponentHelper implements IComponentHelper {
 	 * @generated
 	 */
 	public PortCostComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-			final IComponentHelper helper = registry.getComponentHelper(MMXCorePackage.Literals.MMX_OBJECT);
-			if (helper != null) superClassesHelpers.add(helper);
-		}
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
 	}
 	
 	/**
@@ -127,20 +127,20 @@ public class PortCostComponentHelper implements IComponentHelper {
 				}
 				
 				@Override
-				public void display(MMXRootObject scenario, EObject object) {
+				public void display(MMXRootObject scenario, EObject object, final Collection<EObject> range) {
 					// mangle
 					if (object instanceof PortCost) {
 						final PortCost pc = (PortCost) object;
 						for (final PortCostEntry entry : pc.getEntries()) {
 							if (entry.getActivity() == capability) {
-								numberEditor.display(scenario, entry);
+								numberEditor.display(scenario, entry, range);
 								break;
 							}
 						}
 						final PortCostEntry entry = PricingFactory.eINSTANCE.createPortCostEntry();
 						entry.setActivity(capability);
 						pc.getEntries().add(entry);
-						numberEditor.display(scenario, entry);
+						numberEditor.display(scenario, entry, range);
 					}
 				}
 				
