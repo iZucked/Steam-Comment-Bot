@@ -224,9 +224,13 @@ public class FileScenarioService implements IScenarioService {
 		if (EditingDomain.class.isAssignableFrom(adapter)) {
 			final ScenarioInstance instance = ioHelper.findInstance(uuid);
 
+			Object a = null;
 			final Map<Class<?>, Object> adapters = instance.getAdapters();
 			if (adapters != null && adapters.containsKey(adapter)) {
-				return (T) adapters.get(adapter);
+				a = adapters.get(adapter);
+			}
+			if (a != null) {
+				return adapter.cast(a);
 			}
 		}
 		return null;
