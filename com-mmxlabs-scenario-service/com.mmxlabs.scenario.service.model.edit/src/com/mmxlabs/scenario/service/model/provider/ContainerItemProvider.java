@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.scenario.service.model.provider;
 
+import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-import com.mmxlabs.scenario.service.model.Solution;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,19 +30,19 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.scenario.service.model.Solution} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.scenario.service.model.Container} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SolutionItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class ContainerItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SolutionItemProvider(AdapterFactory adapterFactory) {
+	public ContainerItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -57,48 +57,9 @@ public class SolutionItemProvider extends ItemProviderAdapter implements IEditin
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
-			addUuidPropertyDescriptor(object);
-			addUriPropertyDescriptor(object);
 			addArchivedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Uri feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addUriPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Solution_uri_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Solution_uri_feature", "_UI_Solution_type"), ScenarioServicePackage.Literals.SOLUTION__URI, true, false, false,
-				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Solution_name_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Solution_name_feature", "_UI_Solution_type"), ScenarioServicePackage.Literals.SOLUTION__NAME, true, false, false,
-				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Uuid feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addUuidPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Solution_uuid_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Solution_uuid_feature", "_UI_Solution_type"), ScenarioServicePackage.Literals.SOLUTION__UUID, true, false, false,
-				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -109,8 +70,8 @@ public class SolutionItemProvider extends ItemProviderAdapter implements IEditin
 	 */
 	protected void addArchivedPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_Solution_archived_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Solution_archived_feature", "_UI_Solution_type"),
-				ScenarioServicePackage.Literals.SOLUTION__ARCHIVED, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+				getString("_UI_Container_archived_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Container_archived_feature", "_UI_Container_type"),
+				ScenarioServicePackage.Literals.CONTAINER__ARCHIVED, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -125,7 +86,7 @@ public class SolutionItemProvider extends ItemProviderAdapter implements IEditin
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ScenarioServicePackage.Literals.SOLUTION__METADATA);
+			childrenFeatures.add(ScenarioServicePackage.Literals.CONTAINER__ELEMENTS);
 		}
 		return childrenFeatures;
 	}
@@ -144,17 +105,6 @@ public class SolutionItemProvider extends ItemProviderAdapter implements IEditin
 	}
 
 	/**
-	 * This returns Solution.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Solution"));
-	}
-
-	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -162,8 +112,8 @@ public class SolutionItemProvider extends ItemProviderAdapter implements IEditin
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Solution) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_Solution_type") : getString("_UI_Solution_type") + " " + label;
+		Container container = (Container) object;
+		return getString("_UI_Container_type") + " " + container.isArchived();
 	}
 
 	/**
@@ -177,14 +127,11 @@ public class SolutionItemProvider extends ItemProviderAdapter implements IEditin
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Solution.class)) {
-		case ScenarioServicePackage.SOLUTION__NAME:
-		case ScenarioServicePackage.SOLUTION__UUID:
-		case ScenarioServicePackage.SOLUTION__URI:
-		case ScenarioServicePackage.SOLUTION__ARCHIVED:
+		switch (notification.getFeatureID(Container.class)) {
+		case ScenarioServicePackage.CONTAINER__ARCHIVED:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
-		case ScenarioServicePackage.SOLUTION__METADATA:
+		case ScenarioServicePackage.CONTAINER__ELEMENTS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -202,7 +149,11 @@ public class SolutionItemProvider extends ItemProviderAdapter implements IEditin
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.SOLUTION__METADATA, ScenarioServiceFactory.eINSTANCE.createMetadata()));
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.CONTAINER__ELEMENTS, ScenarioServiceFactory.eINSTANCE.createFolder()));
+
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.CONTAINER__ELEMENTS, ScenarioServiceFactory.eINSTANCE.createScenarioService()));
+
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.CONTAINER__ELEMENTS, ScenarioServiceFactory.eINSTANCE.createScenarioInstance()));
 	}
 
 	/**

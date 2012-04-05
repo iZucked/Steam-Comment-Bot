@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.scenario.service.model.provider;
 
-import com.mmxlabs.scenario.service.model.ScenarioModel;
+import com.mmxlabs.scenario.service.model.Folder;
+import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 import java.util.Collection;
@@ -12,8 +13,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
@@ -24,24 +23,23 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.scenario.service.model.Folder} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioModelItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
-		IItemPropertySource {
+public class FolderItemProvider extends ContainerItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioModelItemProvider(AdapterFactory adapterFactory) {
+	public FolderItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -56,21 +54,21 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addScenarioServicesPropertyDescriptor(object);
+			addNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Scenario Services feature.
+	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addScenarioServicesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioModel_scenarioServices_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioModel_scenarioServices_feature", "_UI_ScenarioModel_type"),
-				ScenarioServicePackage.Literals.SCENARIO_MODEL__SCENARIO_SERVICES, true, false, true, null, null, null));
+	protected void addNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Folder_name_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_Folder_name_feature", "_UI_Folder_type"), ScenarioServicePackage.Literals.FOLDER__NAME, true, false, false,
+				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -85,7 +83,7 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_MODEL__SCENARIO_SERVICES);
+			childrenFeatures.add(ScenarioServicePackage.Literals.FOLDER__METADATA);
 		}
 		return childrenFeatures;
 	}
@@ -104,14 +102,14 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 	}
 
 	/**
-	 * This returns ScenarioModel.gif.
+	 * This returns Folder.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Folder"));
 	}
 
 	/**
@@ -122,7 +120,8 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ScenarioModel_type");
+		String label = ((Folder) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_Folder_type") : getString("_UI_Folder_type") + " " + label;
 	}
 
 	/**
@@ -136,8 +135,11 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ScenarioModel.class)) {
-		case ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES:
+		switch (notification.getFeatureID(Folder.class)) {
+		case ScenarioServicePackage.FOLDER__NAME:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			return;
+		case ScenarioServicePackage.FOLDER__METADATA:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -154,17 +156,8 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
 
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ScenarioEditPlugin.INSTANCE;
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.FOLDER__METADATA, ScenarioServiceFactory.eINSTANCE.createMetadata()));
 	}
 
 }

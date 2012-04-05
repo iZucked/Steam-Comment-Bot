@@ -60,14 +60,12 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 		switch (eClass.getClassifierID()) {
 		case ScenarioServicePackage.SCENARIO_MODEL:
 			return createScenarioModel();
+		case ScenarioServicePackage.FOLDER:
+			return createFolder();
 		case ScenarioServicePackage.SCENARIO_SERVICE:
 			return createScenarioService();
 		case ScenarioServicePackage.SCENARIO_INSTANCE:
 			return createScenarioInstance();
-		case ScenarioServicePackage.PARAM_SET:
-			return createParamSet();
-		case ScenarioServicePackage.SOLUTION:
-			return createSolution();
 		case ScenarioServicePackage.METADATA:
 			return createMetadata();
 		default:
@@ -114,16 +112,6 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioInstance createScenarioInstance() {
-		ScenarioInstanceImpl scenarioInstance = new ScenarioInstanceImpl();
-		return scenarioInstance;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public ScenarioModel createScenarioModel() {
 		ScenarioModelImpl scenarioModel = new ScenarioModelImpl();
 		return scenarioModel;
@@ -134,19 +122,9 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ParamSet createParamSet() {
-		ParamSetImpl paramSet = new ParamSetImpl();
-		return paramSet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Solution createSolution() {
-		SolutionImpl solution = new SolutionImpl();
-		return solution;
+	public Folder createFolder() {
+		FolderImpl folder = new FolderImpl();
+		return folder;
 	}
 
 	/**
@@ -157,6 +135,16 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	public ScenarioService createScenarioService() {
 		ScenarioServiceImpl scenarioService = new ScenarioServiceImpl();
 		return scenarioService;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScenarioInstance createScenarioInstance() {
+		ScenarioInstanceImpl scenarioInstance = new ScenarioInstanceImpl();
+		return scenarioInstance;
 	}
 
 	/**

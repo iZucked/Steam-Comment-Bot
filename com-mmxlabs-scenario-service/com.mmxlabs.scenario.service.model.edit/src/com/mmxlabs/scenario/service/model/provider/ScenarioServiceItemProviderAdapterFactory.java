@@ -74,29 +74,6 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.ScenarioInstance} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ScenarioInstanceItemProvider scenarioInstanceItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioInstance}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createScenarioInstanceAdapter() {
-		if (scenarioInstanceItemProvider == null) {
-			scenarioInstanceItemProvider = new ScenarioInstanceItemProvider(this);
-		}
-
-		return scenarioInstanceItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.ScenarioModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -120,49 +97,26 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.ParamSet} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.Folder} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ParamSetItemProvider paramSetItemProvider;
+	protected FolderItemProvider folderItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.scenario.service.model.ParamSet}.
+	 * This creates an adapter for a {@link com.mmxlabs.scenario.service.model.Folder}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createParamSetAdapter() {
-		if (paramSetItemProvider == null) {
-			paramSetItemProvider = new ParamSetItemProvider(this);
+	public Adapter createFolderAdapter() {
+		if (folderItemProvider == null) {
+			folderItemProvider = new FolderItemProvider(this);
 		}
 
-		return paramSetItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.Solution} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected SolutionItemProvider solutionItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.scenario.service.model.Solution}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createSolutionAdapter() {
-		if (solutionItemProvider == null) {
-			solutionItemProvider = new SolutionItemProvider(this);
-		}
-
-		return solutionItemProvider;
+		return folderItemProvider;
 	}
 
 	/**
@@ -186,6 +140,29 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 		}
 
 		return scenarioServiceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.ScenarioInstance} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ScenarioInstanceItemProvider scenarioInstanceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioInstance}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createScenarioInstanceAdapter() {
+		if (scenarioInstanceItemProvider == null) {
+			scenarioInstanceItemProvider = new ScenarioInstanceItemProvider(this);
+		}
+
+		return scenarioInstanceItemProvider;
 	}
 
 	/**
@@ -312,14 +289,12 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 	public void dispose() {
 		if (scenarioModelItemProvider != null)
 			scenarioModelItemProvider.dispose();
+		if (folderItemProvider != null)
+			folderItemProvider.dispose();
 		if (scenarioServiceItemProvider != null)
 			scenarioServiceItemProvider.dispose();
 		if (scenarioInstanceItemProvider != null)
 			scenarioInstanceItemProvider.dispose();
-		if (paramSetItemProvider != null)
-			paramSetItemProvider.dispose();
-		if (solutionItemProvider != null)
-			solutionItemProvider.dispose();
 		if (metadataItemProvider != null)
 			metadataItemProvider.dispose();
 	}

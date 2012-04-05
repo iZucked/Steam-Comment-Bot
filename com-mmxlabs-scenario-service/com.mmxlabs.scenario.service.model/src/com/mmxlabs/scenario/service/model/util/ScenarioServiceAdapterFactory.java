@@ -74,6 +74,16 @@ public class ScenarioServiceAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
+		public Adapter caseContainer(Container object) {
+			return createContainerAdapter();
+		}
+
+		@Override
+		public Adapter caseFolder(Folder object) {
+			return createFolderAdapter();
+		}
+
+		@Override
 		public Adapter caseScenarioService(ScenarioService object) {
 			return createScenarioServiceAdapter();
 		}
@@ -81,16 +91,6 @@ public class ScenarioServiceAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseScenarioInstance(ScenarioInstance object) {
 			return createScenarioInstanceAdapter();
-		}
-
-		@Override
-		public Adapter caseParamSet(ParamSet object) {
-			return createParamSetAdapter();
-		}
-
-		@Override
-		public Adapter caseSolution(Solution object) {
-			return createSolutionAdapter();
 		}
 
 		@Override
@@ -118,20 +118,6 @@ public class ScenarioServiceAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.model.ScenarioInstance <em>Scenario Instance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance
-	 * @generated
-	 */
-	public Adapter createScenarioInstanceAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.model.ScenarioModel <em>Scenario Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -146,30 +132,30 @@ public class ScenarioServiceAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.model.ParamSet <em>Param Set</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.model.Container <em>Container</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.scenario.service.model.ParamSet
+	 * @see com.mmxlabs.scenario.service.model.Container
 	 * @generated
 	 */
-	public Adapter createParamSetAdapter() {
+	public Adapter createContainerAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.model.Solution <em>Solution</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.model.Folder <em>Folder</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.scenario.service.model.Solution
+	 * @see com.mmxlabs.scenario.service.model.Folder
 	 * @generated
 	 */
-	public Adapter createSolutionAdapter() {
+	public Adapter createFolderAdapter() {
 		return null;
 	}
 
@@ -184,6 +170,20 @@ public class ScenarioServiceAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createScenarioServiceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.model.ScenarioInstance <em>Scenario Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance
+	 * @generated
+	 */
+	public Adapter createScenarioInstanceAdapter() {
 		return null;
 	}
 

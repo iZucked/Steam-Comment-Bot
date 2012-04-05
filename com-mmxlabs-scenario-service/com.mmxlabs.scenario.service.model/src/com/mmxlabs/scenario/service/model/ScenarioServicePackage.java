@@ -59,16 +59,6 @@ public interface ScenarioServicePackage extends EPackage {
 	ScenarioServicePackage eINSTANCE = com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl
-	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioInstance()
-	 * @generated
-	 */
-	int SCENARIO_INSTANCE = 2;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioModelImpl <em>Scenario Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -97,24 +87,96 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_MODEL_FEATURE_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ParamSetImpl <em>Param Set</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl <em>Container</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.scenario.service.model.impl.ParamSetImpl
-	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getParamSet()
+	 * @see com.mmxlabs.scenario.service.model.impl.ContainerImpl
+	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getContainer()
 	 * @generated
 	 */
-	int PARAM_SET = 3;
+	int CONTAINER = 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.SolutionImpl <em>Solution</em>}' class.
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.scenario.service.model.impl.SolutionImpl
-	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getSolution()
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__ELEMENTS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Archived</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__ARCHIVED = 1;
+
+	/**
+	 * The number of structural features of the '<em>Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.FolderImpl <em>Folder</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.scenario.service.model.impl.FolderImpl
+	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getFolder()
 	 * @generated
 	 */
-	int SOLUTION = 4;
+	int FOLDER = 2;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__ELEMENTS = CONTAINER__ELEMENTS;
+
+	/**
+	 * The feature id for the '<em><b>Archived</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__ARCHIVED = CONTAINER__ARCHIVED;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__NAME = CONTAINER_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Metadata</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__METADATA = CONTAINER_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Folder</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl <em>Scenario Service</em>}' class.
@@ -124,7 +186,25 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioService()
 	 * @generated
 	 */
-	int SCENARIO_SERVICE = 1;
+	int SCENARIO_SERVICE = 3;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_SERVICE__ELEMENTS = CONTAINER__ELEMENTS;
+
+	/**
+	 * The feature id for the '<em><b>Archived</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_SERVICE__ARCHIVED = CONTAINER__ARCHIVED;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -133,7 +213,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_SERVICE__NAME = 0;
+	int SCENARIO_SERVICE__NAME = CONTAINER_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -142,16 +222,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_SERVICE__DESCRIPTION = 1;
-
-	/**
-	 * The feature id for the '<em><b>Scenarios</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_SERVICE__SCENARIOS = 2;
+	int SCENARIO_SERVICE__DESCRIPTION = CONTAINER_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Scenario Service</em>' class.
@@ -160,7 +231,35 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_SERVICE_FEATURE_COUNT = 3;
+	int SCENARIO_SERVICE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl
+	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioInstance()
+	 * @generated
+	 */
+	int SCENARIO_INSTANCE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__ELEMENTS = CONTAINER__ELEMENTS;
+
+	/**
+	 * The feature id for the '<em><b>Archived</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__ARCHIVED = CONTAINER__ARCHIVED;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -169,7 +268,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__NAME = 0;
+	int SCENARIO_INSTANCE__NAME = CONTAINER_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -178,7 +277,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__UUID = 1;
+	int SCENARIO_INSTANCE__UUID = CONTAINER_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -187,7 +286,16 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__URI = 2;
+	int SCENARIO_INSTANCE__URI = CONTAINER_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Metadata</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__METADATA = CONTAINER_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
@@ -196,52 +304,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__LOCKED = 3;
-
-	/**
-	 * The feature id for the '<em><b>Metadata</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__METADATA = 4;
-
-	/**
-	 * The feature id for the '<em><b>Archived</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__ARCHIVED = 5;
-
-	/**
-	 * The feature id for the '<em><b>Initial Solution</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__INITIAL_SOLUTION = 6;
-
-	/**
-	 * The feature id for the '<em><b>Variations</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__VARIATIONS = 7;
-
-	/**
-	 * The feature id for the '<em><b>Parameter Sets</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__PARAMETER_SETS = 8;
+	int SCENARIO_INSTANCE__LOCKED = CONTAINER_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Instance</b></em>' reference.
@@ -250,16 +313,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__INSTANCE = 9;
-
-	/**
-	 * The feature id for the '<em><b>Controller</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__CONTROLLER = 10;
+	int SCENARIO_INSTANCE__INSTANCE = CONTAINER_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Adapters</b></em>' attribute.
@@ -268,7 +322,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__ADAPTERS = 11;
+	int SCENARIO_INSTANCE__ADAPTERS = CONTAINER_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Scenario Instance</em>' class.
@@ -277,133 +331,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = 12;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAM_SET__NAME = 0;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAM_SET__UUID = 1;
-
-	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAM_SET__URI = 2;
-
-	/**
-	 * The feature id for the '<em><b>Metadata</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAM_SET__METADATA = 3;
-
-	/**
-	 * The feature id for the '<em><b>Archived</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAM_SET__ARCHIVED = 4;
-
-	/**
-	 * The feature id for the '<em><b>Solutions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAM_SET__SOLUTIONS = 5;
-
-	/**
-	 * The number of structural features of the '<em>Param Set</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAM_SET_FEATURE_COUNT = 6;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SOLUTION__NAME = 0;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SOLUTION__UUID = 1;
-
-	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SOLUTION__URI = 2;
-
-	/**
-	 * The feature id for the '<em><b>Metadata</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SOLUTION__METADATA = 3;
-
-	/**
-	 * The feature id for the '<em><b>Archived</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SOLUTION__ARCHIVED = 4;
-
-	/**
-	 * The feature id for the '<em><b>Param Set</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SOLUTION__PARAM_SET = 5;
-
-	/**
-	 * The number of structural features of the '<em>Solution</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SOLUTION_FEATURE_COUNT = 6;
+	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -499,148 +427,6 @@ public interface ScenarioServicePackage extends EPackage {
 	int OBJECT = 7;
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioInstance <em>Scenario Instance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Scenario Instance</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance
-	 * @generated
-	 */
-	EClass getScenarioInstance();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getVariations <em>Variations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Variations</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getVariations()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EReference getScenarioInstance_Variations();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getParameterSets <em>Parameter Sets</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Parameter Sets</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getParameterSets()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EReference getScenarioInstance_ParameterSets();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance <em>Instance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Instance</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EReference getScenarioInstance_Instance();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getController <em>Controller</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Controller</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getController()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EReference getScenarioInstance_Controller();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters <em>Adapters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Adapters</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_Adapters();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getUri <em>Uri</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Uri</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getUri()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_Uri();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getName()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_Name();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInitialSolution <em>Initial Solution</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Initial Solution</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getInitialSolution()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EReference getScenarioInstance_InitialSolution();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getUuid <em>Uuid</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Uuid</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getUuid()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_Uuid();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLocked <em>Locked</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Locked</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#isLocked()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_Locked();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isArchived <em>Archived</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Archived</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#isArchived()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_Archived();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getMetadata <em>Metadata</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Metadata</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getMetadata()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EReference getScenarioInstance_Metadata();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioModel <em>Scenario Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -662,156 +448,68 @@ public interface ScenarioServicePackage extends EPackage {
 	EReference getScenarioModel_ScenarioServices();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ParamSet <em>Param Set</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.Container <em>Container</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Param Set</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ParamSet
+	 * @return the meta object for class '<em>Container</em>'.
+	 * @see com.mmxlabs.scenario.service.model.Container
 	 * @generated
 	 */
-	EClass getParamSet();
+	EClass getContainer();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.scenario.service.model.ParamSet#getSolutions <em>Solutions</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.scenario.service.model.Container#getElements <em>Elements</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Solutions</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ParamSet#getSolutions()
-	 * @see #getParamSet()
+	 * @return the meta object for the containment reference list '<em>Elements</em>'.
+	 * @see com.mmxlabs.scenario.service.model.Container#getElements()
+	 * @see #getContainer()
 	 * @generated
 	 */
-	EReference getParamSet_Solutions();
+	EReference getContainer_Elements();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ParamSet#getUri <em>Uri</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Uri</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ParamSet#getUri()
-	 * @see #getParamSet()
-	 * @generated
-	 */
-	EAttribute getParamSet_Uri();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ParamSet#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ParamSet#getName()
-	 * @see #getParamSet()
-	 * @generated
-	 */
-	EAttribute getParamSet_Name();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ParamSet#getUuid <em>Uuid</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Uuid</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ParamSet#getUuid()
-	 * @see #getParamSet()
-	 * @generated
-	 */
-	EAttribute getParamSet_Uuid();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ParamSet#isArchived <em>Archived</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.Container#isArchived <em>Archived</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Archived</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ParamSet#isArchived()
-	 * @see #getParamSet()
+	 * @see com.mmxlabs.scenario.service.model.Container#isArchived()
+	 * @see #getContainer()
 	 * @generated
 	 */
-	EAttribute getParamSet_Archived();
+	EAttribute getContainer_Archived();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.scenario.service.model.ParamSet#getMetadata <em>Metadata</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.Folder <em>Folder</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Metadata</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ParamSet#getMetadata()
-	 * @see #getParamSet()
+	 * @return the meta object for class '<em>Folder</em>'.
+	 * @see com.mmxlabs.scenario.service.model.Folder
 	 * @generated
 	 */
-	EReference getParamSet_Metadata();
+	EClass getFolder();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.Solution <em>Solution</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Solution</em>'.
-	 * @see com.mmxlabs.scenario.service.model.Solution
-	 * @generated
-	 */
-	EClass getSolution();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.Solution#getUri <em>Uri</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Uri</em>'.
-	 * @see com.mmxlabs.scenario.service.model.Solution#getUri()
-	 * @see #getSolution()
-	 * @generated
-	 */
-	EAttribute getSolution_Uri();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.Solution#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.Folder#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see com.mmxlabs.scenario.service.model.Solution#getName()
-	 * @see #getSolution()
+	 * @see com.mmxlabs.scenario.service.model.Folder#getName()
+	 * @see #getFolder()
 	 * @generated
 	 */
-	EAttribute getSolution_Name();
+	EAttribute getFolder_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.Solution#getUuid <em>Uuid</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Uuid</em>'.
-	 * @see com.mmxlabs.scenario.service.model.Solution#getUuid()
-	 * @see #getSolution()
-	 * @generated
-	 */
-	EAttribute getSolution_Uuid();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.Solution#isArchived <em>Archived</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Archived</em>'.
-	 * @see com.mmxlabs.scenario.service.model.Solution#isArchived()
-	 * @see #getSolution()
-	 * @generated
-	 */
-	EAttribute getSolution_Archived();
-
-	/**
-	 * Returns the meta object for the container reference '{@link com.mmxlabs.scenario.service.model.Solution#getParamSet <em>Param Set</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Param Set</em>'.
-	 * @see com.mmxlabs.scenario.service.model.Solution#getParamSet()
-	 * @see #getSolution()
-	 * @generated
-	 */
-	EReference getSolution_ParamSet();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.scenario.service.model.Solution#getMetadata <em>Metadata</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.scenario.service.model.Folder#getMetadata <em>Metadata</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Metadata</em>'.
-	 * @see com.mmxlabs.scenario.service.model.Solution#getMetadata()
-	 * @see #getSolution()
+	 * @see com.mmxlabs.scenario.service.model.Folder#getMetadata()
+	 * @see #getFolder()
 	 * @generated
 	 */
-	EReference getSolution_Metadata();
+	EReference getFolder_Metadata();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioService <em>Scenario Service</em>}'.
@@ -835,17 +533,6 @@ public interface ScenarioServicePackage extends EPackage {
 	EAttribute getScenarioService_Name();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.scenario.service.model.ScenarioService#getScenarios <em>Scenarios</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Scenarios</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioService#getScenarios()
-	 * @see #getScenarioService()
-	 * @generated
-	 */
-	EReference getScenarioService_Scenarios();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioService#getDescription <em>Description</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -855,6 +542,93 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getScenarioService_Description();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioInstance <em>Scenario Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Scenario Instance</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance
+	 * @generated
+	 */
+	EClass getScenarioInstance();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getName()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getUuid <em>Uuid</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Uuid</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getUuid()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_Uuid();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getUri <em>Uri</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Uri</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getUri()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_Uri();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getMetadata <em>Metadata</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Metadata</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getMetadata()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EReference getScenarioInstance_Metadata();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLocked <em>Locked</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Locked</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#isLocked()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_Locked();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance <em>Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Instance</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EReference getScenarioInstance_Instance();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters <em>Adapters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Adapters</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_Adapters();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.Metadata <em>Metadata</em>}'.
@@ -977,112 +751,6 @@ public interface ScenarioServicePackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioInstance()
-		 * @generated
-		 */
-		EClass SCENARIO_INSTANCE = eINSTANCE.getScenarioInstance();
-
-		/**
-		 * The meta object literal for the '<em><b>Variations</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_INSTANCE__VARIATIONS = eINSTANCE.getScenarioInstance_Variations();
-
-		/**
-		 * The meta object literal for the '<em><b>Parameter Sets</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_INSTANCE__PARAMETER_SETS = eINSTANCE.getScenarioInstance_ParameterSets();
-
-		/**
-		 * The meta object literal for the '<em><b>Instance</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_INSTANCE__INSTANCE = eINSTANCE.getScenarioInstance_Instance();
-
-		/**
-		 * The meta object literal for the '<em><b>Controller</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_INSTANCE__CONTROLLER = eINSTANCE.getScenarioInstance_Controller();
-
-		/**
-		 * The meta object literal for the '<em><b>Adapters</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__ADAPTERS = eINSTANCE.getScenarioInstance_Adapters();
-
-		/**
-		 * The meta object literal for the '<em><b>Uri</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__URI = eINSTANCE.getScenarioInstance_Uri();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__NAME = eINSTANCE.getScenarioInstance_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Initial Solution</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_INSTANCE__INITIAL_SOLUTION = eINSTANCE.getScenarioInstance_InitialSolution();
-
-		/**
-		 * The meta object literal for the '<em><b>Uuid</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__UUID = eINSTANCE.getScenarioInstance_Uuid();
-
-		/**
-		 * The meta object literal for the '<em><b>Locked</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__LOCKED = eINSTANCE.getScenarioInstance_Locked();
-
-		/**
-		 * The meta object literal for the '<em><b>Archived</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__ARCHIVED = eINSTANCE.getScenarioInstance_Archived();
-
-		/**
-		 * The meta object literal for the '<em><b>Metadata</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_INSTANCE__METADATA = eINSTANCE.getScenarioInstance_Metadata();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioModelImpl <em>Scenario Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1101,46 +769,22 @@ public interface ScenarioServicePackage extends EPackage {
 		EReference SCENARIO_MODEL__SCENARIO_SERVICES = eINSTANCE.getScenarioModel_ScenarioServices();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ParamSetImpl <em>Param Set</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl <em>Container</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.model.impl.ParamSetImpl
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getParamSet()
+		 * @see com.mmxlabs.scenario.service.model.impl.ContainerImpl
+		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getContainer()
 		 * @generated
 		 */
-		EClass PARAM_SET = eINSTANCE.getParamSet();
+		EClass CONTAINER = eINSTANCE.getContainer();
 
 		/**
-		 * The meta object literal for the '<em><b>Solutions</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PARAM_SET__SOLUTIONS = eINSTANCE.getParamSet_Solutions();
-
-		/**
-		 * The meta object literal for the '<em><b>Uri</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PARAM_SET__URI = eINSTANCE.getParamSet_Uri();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PARAM_SET__NAME = eINSTANCE.getParamSet_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Uuid</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PARAM_SET__UUID = eINSTANCE.getParamSet_Uuid();
+		EReference CONTAINER__ELEMENTS = eINSTANCE.getContainer_Elements();
 
 		/**
 		 * The meta object literal for the '<em><b>Archived</b></em>' attribute feature.
@@ -1148,33 +792,17 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute PARAM_SET__ARCHIVED = eINSTANCE.getParamSet_Archived();
+		EAttribute CONTAINER__ARCHIVED = eINSTANCE.getContainer_Archived();
 
 		/**
-		 * The meta object literal for the '<em><b>Metadata</b></em>' containment reference feature.
+		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.FolderImpl <em>Folder</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.scenario.service.model.impl.FolderImpl
+		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getFolder()
 		 * @generated
 		 */
-		EReference PARAM_SET__METADATA = eINSTANCE.getParamSet_Metadata();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.SolutionImpl <em>Solution</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.model.impl.SolutionImpl
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getSolution()
-		 * @generated
-		 */
-		EClass SOLUTION = eINSTANCE.getSolution();
-
-		/**
-		 * The meta object literal for the '<em><b>Uri</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SOLUTION__URI = eINSTANCE.getSolution_Uri();
+		EClass FOLDER = eINSTANCE.getFolder();
 
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
@@ -1182,31 +810,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SOLUTION__NAME = eINSTANCE.getSolution_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Uuid</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SOLUTION__UUID = eINSTANCE.getSolution_Uuid();
-
-		/**
-		 * The meta object literal for the '<em><b>Archived</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SOLUTION__ARCHIVED = eINSTANCE.getSolution_Archived();
-
-		/**
-		 * The meta object literal for the '<em><b>Param Set</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SOLUTION__PARAM_SET = eINSTANCE.getSolution_ParamSet();
+		EAttribute FOLDER__NAME = eINSTANCE.getFolder_Name();
 
 		/**
 		 * The meta object literal for the '<em><b>Metadata</b></em>' containment reference feature.
@@ -1214,7 +818,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SOLUTION__METADATA = eINSTANCE.getSolution_Metadata();
+		EReference FOLDER__METADATA = eINSTANCE.getFolder_Metadata();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl <em>Scenario Service</em>}' class.
@@ -1235,20 +839,78 @@ public interface ScenarioServicePackage extends EPackage {
 		EAttribute SCENARIO_SERVICE__NAME = eINSTANCE.getScenarioService_Name();
 
 		/**
-		 * The meta object literal for the '<em><b>Scenarios</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_SERVICE__SCENARIOS = eINSTANCE.getScenarioService_Scenarios();
-
-		/**
 		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute SCENARIO_SERVICE__DESCRIPTION = eINSTANCE.getScenarioService_Description();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl
+		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioInstance()
+		 * @generated
+		 */
+		EClass SCENARIO_INSTANCE = eINSTANCE.getScenarioInstance();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_INSTANCE__NAME = eINSTANCE.getScenarioInstance_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Uuid</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_INSTANCE__UUID = eINSTANCE.getScenarioInstance_Uuid();
+
+		/**
+		 * The meta object literal for the '<em><b>Uri</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_INSTANCE__URI = eINSTANCE.getScenarioInstance_Uri();
+
+		/**
+		 * The meta object literal for the '<em><b>Metadata</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO_INSTANCE__METADATA = eINSTANCE.getScenarioInstance_Metadata();
+
+		/**
+		 * The meta object literal for the '<em><b>Locked</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_INSTANCE__LOCKED = eINSTANCE.getScenarioInstance_Locked();
+
+		/**
+		 * The meta object literal for the '<em><b>Instance</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO_INSTANCE__INSTANCE = eINSTANCE.getScenarioInstance_Instance();
+
+		/**
+		 * The meta object literal for the '<em><b>Adapters</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_INSTANCE__ADAPTERS = eINSTANCE.getScenarioInstance_Adapters();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.

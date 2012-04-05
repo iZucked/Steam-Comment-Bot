@@ -24,15 +24,6 @@ public interface ScenarioServiceFactory extends EFactory {
 	ScenarioServiceFactory eINSTANCE = com.mmxlabs.scenario.service.model.impl.ScenarioServiceFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Scenario Instance</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Scenario Instance</em>'.
-	 * @generated
-	 */
-	ScenarioInstance createScenarioInstance();
-
-	/**
 	 * Returns a new object of class '<em>Scenario Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -42,22 +33,13 @@ public interface ScenarioServiceFactory extends EFactory {
 	ScenarioModel createScenarioModel();
 
 	/**
-	 * Returns a new object of class '<em>Param Set</em>'.
+	 * Returns a new object of class '<em>Folder</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Param Set</em>'.
+	 * @return a new object of class '<em>Folder</em>'.
 	 * @generated
 	 */
-	ParamSet createParamSet();
-
-	/**
-	 * Returns a new object of class '<em>Solution</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Solution</em>'.
-	 * @generated
-	 */
-	Solution createSolution();
+	Folder createFolder();
 
 	/**
 	 * Returns a new object of class '<em>Scenario Service</em>'.
@@ -67,6 +49,15 @@ public interface ScenarioServiceFactory extends EFactory {
 	 * @generated
 	 */
 	ScenarioService createScenarioService();
+
+	/**
+	 * Returns a new object of class '<em>Scenario Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Scenario Instance</em>'.
+	 * @generated
+	 */
+	ScenarioInstance createScenarioInstance();
 
 	/**
 	 * Returns a new object of class '<em>Metadata</em>'.

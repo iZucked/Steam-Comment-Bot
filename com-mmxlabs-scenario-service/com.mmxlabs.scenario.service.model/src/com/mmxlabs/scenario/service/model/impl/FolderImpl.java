@@ -4,30 +4,33 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
-import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.model.Folder;
+import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Scenario Service</b></em>'.
+ * An implementation of the model object '<em><b>Folder</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.FolderImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.FolderImpl#getMetadata <em>Metadata</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class ScenarioServiceImpl extends ContainerImpl implements ScenarioService {
+public class FolderImpl extends ContainerImpl implements Folder {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -49,31 +52,21 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * The cached value of the '{@link #getMetadata() <em>Metadata</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDescription()
+	 * @see #getMetadata()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String DESCRIPTION_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDescription()
-	 * @generated
-	 * @ordered
-	 */
-	protected String description = DESCRIPTION_EDEFAULT;
+	protected Metadata metadata;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ScenarioServiceImpl() {
+	protected FolderImpl() {
 		super();
 	}
 
@@ -84,7 +77,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ScenarioServicePackage.Literals.SCENARIO_SERVICE;
+		return ScenarioServicePackage.Literals.FOLDER;
 	}
 
 	/**
@@ -105,7 +98,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_SERVICE__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.FOLDER__NAME, oldName, name));
 	}
 
 	/**
@@ -113,8 +106,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getDescription() {
-		return description;
+	public Metadata getMetadata() {
+		return metadata;
 	}
 
 	/**
@@ -122,11 +115,50 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDescription(String newDescription) {
-		String oldDescription = description;
-		description = newDescription;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION, oldDescription, description));
+	public NotificationChain basicSetMetadata(Metadata newMetadata, NotificationChain msgs) {
+		Metadata oldMetadata = metadata;
+		metadata = newMetadata;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.FOLDER__METADATA, oldMetadata, newMetadata);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMetadata(Metadata newMetadata) {
+		if (newMetadata != metadata) {
+			NotificationChain msgs = null;
+			if (metadata != null)
+				msgs = ((InternalEObject) metadata).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioServicePackage.FOLDER__METADATA, null, msgs);
+			if (newMetadata != null)
+				msgs = ((InternalEObject) newMetadata).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioServicePackage.FOLDER__METADATA, null, msgs);
+			msgs = basicSetMetadata(newMetadata, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.FOLDER__METADATA, newMetadata, newMetadata));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+		case ScenarioServicePackage.FOLDER__METADATA:
+			return basicSetMetadata(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -137,10 +169,10 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case ScenarioServicePackage.SCENARIO_SERVICE__NAME:
+		case ScenarioServicePackage.FOLDER__NAME:
 			return getName();
-		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
-			return getDescription();
+		case ScenarioServicePackage.FOLDER__METADATA:
+			return getMetadata();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -153,11 +185,11 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case ScenarioServicePackage.SCENARIO_SERVICE__NAME:
+		case ScenarioServicePackage.FOLDER__NAME:
 			setName((String) newValue);
 			return;
-		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
-			setDescription((String) newValue);
+		case ScenarioServicePackage.FOLDER__METADATA:
+			setMetadata((Metadata) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -171,11 +203,11 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case ScenarioServicePackage.SCENARIO_SERVICE__NAME:
+		case ScenarioServicePackage.FOLDER__NAME:
 			setName(NAME_EDEFAULT);
 			return;
-		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
-			setDescription(DESCRIPTION_EDEFAULT);
+		case ScenarioServicePackage.FOLDER__METADATA:
+			setMetadata((Metadata) null);
 			return;
 		}
 		super.eUnset(featureID);
@@ -189,10 +221,10 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case ScenarioServicePackage.SCENARIO_SERVICE__NAME:
+		case ScenarioServicePackage.FOLDER__NAME:
 			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
-			return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+		case ScenarioServicePackage.FOLDER__METADATA:
+			return metadata != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -210,10 +242,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", description: ");
-		result.append(description);
 		result.append(')');
 		return result.toString();
 	}
 
-} //ScenarioServiceImpl
+} //FolderImpl

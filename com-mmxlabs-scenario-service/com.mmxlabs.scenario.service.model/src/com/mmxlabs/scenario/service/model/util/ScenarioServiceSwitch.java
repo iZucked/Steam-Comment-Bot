@@ -75,9 +75,27 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case ScenarioServicePackage.CONTAINER: {
+			Container container = (Container) theEObject;
+			T result = caseContainer(container);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case ScenarioServicePackage.FOLDER: {
+			Folder folder = (Folder) theEObject;
+			T result = caseFolder(folder);
+			if (result == null)
+				result = caseContainer(folder);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		case ScenarioServicePackage.SCENARIO_SERVICE: {
 			ScenarioService scenarioService = (ScenarioService) theEObject;
 			T result = caseScenarioService(scenarioService);
+			if (result == null)
+				result = caseContainer(scenarioService);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -86,19 +104,7 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 			ScenarioInstance scenarioInstance = (ScenarioInstance) theEObject;
 			T result = caseScenarioInstance(scenarioInstance);
 			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case ScenarioServicePackage.PARAM_SET: {
-			ParamSet paramSet = (ParamSet) theEObject;
-			T result = caseParamSet(paramSet);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case ScenarioServicePackage.SOLUTION: {
-			Solution solution = (Solution) theEObject;
-			T result = caseSolution(solution);
+				result = caseContainer(scenarioInstance);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -113,21 +119,6 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 		default:
 			return defaultCase(theEObject);
 		}
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Scenario Instance</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Scenario Instance</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseScenarioInstance(ScenarioInstance object) {
-		return null;
 	}
 
 	/**
@@ -146,32 +137,32 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Param Set</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Container</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Param Set</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Container</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseParamSet(ParamSet object) {
+	public T caseContainer(Container object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Solution</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Folder</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Solution</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Folder</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseSolution(Solution object) {
+	public T caseFolder(Folder object) {
 		return null;
 	}
 
@@ -187,6 +178,21 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseScenarioService(ScenarioService object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Scenario Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Scenario Instance</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScenarioInstance(ScenarioInstance object) {
 		return null;
 	}
 

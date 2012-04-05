@@ -4,10 +4,6 @@
  */
 package com.mmxlabs.scenario.service.model;
 
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Scenario Service</b></em>'.
@@ -18,7 +14,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getDescription <em>Description</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getScenarios <em>Scenarios</em>}</li>
  * </ul>
  * </p>
  *
@@ -26,7 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface ScenarioService extends EObject {
+public interface ScenarioService extends Container {
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -52,22 +47,6 @@ public interface ScenarioService extends EObject {
 	 * @generated
 	 */
 	void setName(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Scenarios</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.scenario.service.model.ScenarioInstance}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Scenarios</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Scenarios</em>' containment reference list.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService_Scenarios()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<ScenarioInstance> getScenarios();
 
 	/**
 	 * Returns the value of the '<em><b>Description</b></em>' attribute.

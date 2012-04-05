@@ -4,14 +4,13 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
+import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
-import com.mmxlabs.scenario.service.model.ParamSet;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-import com.mmxlabs.scenario.service.model.Solution;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -34,13 +33,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass scenarioInstanceEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass scenarioModelEClass = null;
 
 	/**
@@ -48,14 +40,14 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass paramSetEClass = null;
+	private EClass containerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass solutionEClass = null;
+	private EClass folderEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -63,6 +55,13 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	private EClass scenarioServiceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass scenarioInstanceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -152,123 +151,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getScenarioInstance() {
-		return scenarioInstanceEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getScenarioInstance_Variations() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getScenarioInstance_ParameterSets() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(8);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getScenarioInstance_Instance() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(9);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getScenarioInstance_Controller() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(10);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getScenarioInstance_Adapters() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(11);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getScenarioInstance_Uri() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getScenarioInstance_Name() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getScenarioInstance_InitialSolution() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getScenarioInstance_Uuid() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getScenarioInstance_Locked() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getScenarioInstance_Archived() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getScenarioInstance_Metadata() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getScenarioModel() {
 		return scenarioModelEClass;
 	}
@@ -287,8 +169,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getParamSet() {
-		return paramSetEClass;
+	public EClass getContainer() {
+		return containerEClass;
 	}
 
 	/**
@@ -296,8 +178,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getParamSet_Solutions() {
-		return (EReference) paramSetEClass.getEStructuralFeatures().get(5);
+	public EReference getContainer_Elements() {
+		return (EReference) containerEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -305,8 +187,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getParamSet_Uri() {
-		return (EAttribute) paramSetEClass.getEStructuralFeatures().get(2);
+	public EAttribute getContainer_Archived() {
+		return (EAttribute) containerEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -314,8 +196,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getParamSet_Name() {
-		return (EAttribute) paramSetEClass.getEStructuralFeatures().get(0);
+	public EClass getFolder() {
+		return folderEClass;
 	}
 
 	/**
@@ -323,8 +205,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getParamSet_Uuid() {
-		return (EAttribute) paramSetEClass.getEStructuralFeatures().get(1);
+	public EAttribute getFolder_Name() {
+		return (EAttribute) folderEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -332,80 +214,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getParamSet_Archived() {
-		return (EAttribute) paramSetEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getParamSet_Metadata() {
-		return (EReference) paramSetEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getSolution() {
-		return solutionEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSolution_Uri() {
-		return (EAttribute) solutionEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSolution_Name() {
-		return (EAttribute) solutionEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSolution_Uuid() {
-		return (EAttribute) solutionEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSolution_Archived() {
-		return (EAttribute) solutionEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getSolution_ParamSet() {
-		return (EReference) solutionEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getSolution_Metadata() {
-		return (EReference) solutionEClass.getEStructuralFeatures().get(3);
+	public EReference getFolder_Metadata() {
+		return (EReference) folderEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -431,8 +241,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getScenarioService_Scenarios() {
-		return (EReference) scenarioServiceEClass.getEStructuralFeatures().get(2);
+	public EAttribute getScenarioService_Description() {
+		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -440,8 +250,71 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getScenarioService_Description() {
-		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(1);
+	public EClass getScenarioInstance() {
+		return scenarioInstanceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioInstance_Name() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioInstance_Uuid() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioInstance_Uri() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenarioInstance_Metadata() {
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioInstance_Locked() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenarioInstance_Instance() {
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioInstance_Adapters() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -557,40 +430,26 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		scenarioModelEClass = createEClass(SCENARIO_MODEL);
 		createEReference(scenarioModelEClass, SCENARIO_MODEL__SCENARIO_SERVICES);
 
+		containerEClass = createEClass(CONTAINER);
+		createEReference(containerEClass, CONTAINER__ELEMENTS);
+		createEAttribute(containerEClass, CONTAINER__ARCHIVED);
+
+		folderEClass = createEClass(FOLDER);
+		createEAttribute(folderEClass, FOLDER__NAME);
+		createEReference(folderEClass, FOLDER__METADATA);
+
 		scenarioServiceEClass = createEClass(SCENARIO_SERVICE);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__NAME);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__DESCRIPTION);
-		createEReference(scenarioServiceEClass, SCENARIO_SERVICE__SCENARIOS);
 
 		scenarioInstanceEClass = createEClass(SCENARIO_INSTANCE);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__NAME);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__UUID);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__URI);
-		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__LOCKED);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__METADATA);
-		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__ARCHIVED);
-		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__INITIAL_SOLUTION);
-		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__VARIATIONS);
-		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__PARAMETER_SETS);
+		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__LOCKED);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__INSTANCE);
-		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__CONTROLLER);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__ADAPTERS);
-
-		paramSetEClass = createEClass(PARAM_SET);
-		createEAttribute(paramSetEClass, PARAM_SET__NAME);
-		createEAttribute(paramSetEClass, PARAM_SET__UUID);
-		createEAttribute(paramSetEClass, PARAM_SET__URI);
-		createEReference(paramSetEClass, PARAM_SET__METADATA);
-		createEAttribute(paramSetEClass, PARAM_SET__ARCHIVED);
-		createEReference(paramSetEClass, PARAM_SET__SOLUTIONS);
-
-		solutionEClass = createEClass(SOLUTION);
-		createEAttribute(solutionEClass, SOLUTION__NAME);
-		createEAttribute(solutionEClass, SOLUTION__UUID);
-		createEAttribute(solutionEClass, SOLUTION__URI);
-		createEReference(solutionEClass, SOLUTION__METADATA);
-		createEAttribute(solutionEClass, SOLUTION__ARCHIVED);
-		createEReference(solutionEClass, SOLUTION__PARAM_SET);
 
 		metadataEClass = createEClass(METADATA);
 		createEAttribute(metadataEClass, METADATA__CREATOR);
@@ -635,19 +494,32 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		folderEClass.getESuperTypes().add(this.getContainer());
+		scenarioServiceEClass.getESuperTypes().add(this.getContainer());
+		scenarioInstanceEClass.getESuperTypes().add(this.getContainer());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(scenarioModelEClass, ScenarioModel.class, "ScenarioModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getScenarioModel_ScenarioServices(), this.getScenarioService(), null, "scenarioServices", null, 0, -1, ScenarioModel.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(containerEClass, com.mmxlabs.scenario.service.model.Container.class, "Container", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getContainer_Elements(), this.getContainer(), null, "elements", null, 0, -1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContainer_Archived(), ecorePackage.getEBoolean(), "archived", null, 0, 1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(folderEClass, Folder.class, "Folder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getFolder_Name(), ecorePackage.getEString(), "name", null, 0, 1, Folder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEReference(getFolder_Metadata(), this.getMetadata(), null, "metadata", null, 0, 1, Folder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(scenarioServiceEClass, ScenarioService.class, "ScenarioService", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getScenarioService_Name(), ecorePackage.getEString(), "name", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioService_Description(), ecorePackage.getEString(), "description", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
 				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenarioService_Scenarios(), this.getScenarioInstance(), null, "scenarios", null, 0, -1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
-				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scenarioInstanceEClass, ScenarioInstance.class, "ScenarioInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getScenarioInstance_Name(), ecorePackage.getEString(), "name", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
@@ -656,21 +528,11 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioInstance_Uri(), ecorePackage.getEString(), "uri", null, 1, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
-		initEAttribute(getScenarioInstance_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenarioInstance_Metadata(), this.getMetadata(), null, "metadata", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
 				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getScenarioInstance_Archived(), ecorePackage.getEBoolean(), "archived", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+		initEAttribute(getScenarioInstance_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenarioInstance_InitialSolution(), this.getSolution(), null, "initialSolution", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenarioInstance_Variations(), this.getScenarioInstance(), null, "variations", null, 0, -1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
-				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenarioInstance_ParameterSets(), this.getParamSet(), null, "parameterSets", null, 0, -1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
-				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenarioInstance_Instance(), ecorePackage.getEObject(), null, "instance", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScenarioInstance_Controller(), ecorePackage.getEObject(), null, "controller", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		EGenericType g1 = createEGenericType(ecorePackage.getEMap());
 		EGenericType g2 = createEGenericType(this.getClass_());
@@ -681,34 +543,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		g1.getETypeArguments().add(g2);
 		initEAttribute(getScenarioInstance_Adapters(), g1, "adapters", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);
-
-		initEClass(paramSetEClass, ParamSet.class, "ParamSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getParamSet_Name(), ecorePackage.getEString(), "name", null, 0, 1, ParamSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEAttribute(getParamSet_Uuid(), ecorePackage.getEString(), "uuid", null, 1, 1, ParamSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEAttribute(getParamSet_Uri(), ecorePackage.getEString(), "uri", null, 1, 1, ParamSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEReference(getParamSet_Metadata(), this.getMetadata(), null, "metadata", null, 0, 1, ParamSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getParamSet_Archived(), ecorePackage.getEBoolean(), "archived", null, 0, 1, ParamSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
-		initEReference(getParamSet_Solutions(), this.getSolution(), this.getSolution_ParamSet(), "solutions", null, 0, -1, ParamSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
-				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(solutionEClass, Solution.class, "Solution", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSolution_Name(), ecorePackage.getEString(), "name", null, 0, 1, Solution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEAttribute(getSolution_Uuid(), ecorePackage.getEString(), "uuid", null, 1, 1, Solution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEAttribute(getSolution_Uri(), ecorePackage.getEString(), "uri", null, 1, 1, Solution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEReference(getSolution_Metadata(), this.getMetadata(), null, "metadata", null, 0, 1, Solution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSolution_Archived(), ecorePackage.getEBoolean(), "archived", null, 0, 1, Solution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
-		initEReference(getSolution_ParamSet(), this.getParamSet(), this.getParamSet_Solutions(), "paramSet", null, 0, 1, Solution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(metadataEClass, Metadata.class, "Metadata", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMetadata_Creator(), ecorePackage.getEString(), "creator", null, 1, 1, Metadata.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
