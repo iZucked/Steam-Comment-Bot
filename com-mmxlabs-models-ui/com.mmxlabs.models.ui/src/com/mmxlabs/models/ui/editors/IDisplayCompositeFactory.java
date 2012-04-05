@@ -4,8 +4,13 @@
  */
 package com.mmxlabs.models.ui.editors;
 
+import java.util.List;
+
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Composite;
+
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * Interface for factories which will create composites for displaying model objects.
@@ -28,4 +33,12 @@ public interface IDisplayCompositeFactory {
 	 * @return
 	 */
 	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass);
+	
+	/**
+	 * This is for asking what non-contained objects a composite can edit on this value.
+	 * @param root
+	 * @param value
+	 * @return
+	 */
+	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value);
 }

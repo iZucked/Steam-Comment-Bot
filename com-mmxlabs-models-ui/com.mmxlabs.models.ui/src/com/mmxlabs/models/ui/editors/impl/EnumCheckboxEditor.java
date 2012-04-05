@@ -42,8 +42,8 @@ public class EnumCheckboxEditor extends BooleanInlineEditor {
 	}
 
 	@Override
-	public void display(MMXRootObject context, EObject input) {
-		super.display(context, input);
+	public void display(MMXRootObject context, EObject input, final Collection<EObject> range) {
+		super.display(context, input, range);
 		if (label != null) label.setText(labelPrefix + enumValue.getName());
 	}
 }

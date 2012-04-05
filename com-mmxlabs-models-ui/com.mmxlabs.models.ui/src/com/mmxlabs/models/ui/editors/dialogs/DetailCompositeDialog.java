@@ -48,6 +48,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.ValidationSupport;
@@ -107,6 +108,10 @@ public class DetailCompositeDialog extends Dialog {
 	 */
 	private List<EObject> currentEditorTargets = new ArrayList<EObject>();
 
+	private IDisplayCompositeFactory displayCompositeFactory;
+
+	private Map<EObject, Collection<EObject>> ranges = new HashMap<EObject, Collection<EObject>>();
+
 	/**
 	 * Get the duplicate object (for editing) corresponding to the given input object.
 	 * 
@@ -117,10 +122,12 @@ public class DetailCompositeDialog extends Dialog {
 	private EObject getDuplicate(final EObject input, final IDisplayComposite displayComposite) {
 		final EObject original = input;
 		if (!originalToDuplicate.containsKey(original)) {
-			final Collection<EObject> range = displayComposite.getEditingRange(rootObject, original);
+			final Collection<EObject> range = displayCompositeFactory.getExternalEditingRange(rootObject, original);
+			range.add(original);
 			// range is the full set of objects which the display composite
 			// might touch; we need to duplicate all of these
 			final Collection<EObject> duplicateRange = EcoreUtil.copyAll(range);
+			ranges .put(original, duplicateRange);
 			final Iterator<EObject> rangeIterator = range.iterator();
 			final Iterator<EObject> duplicateRangeIterator = duplicateRange.iterator();
 			while (rangeIterator.hasNext() && duplicateRangeIterator.hasNext()) {
@@ -215,19 +222,20 @@ public class DetailCompositeDialog extends Dialog {
 			displayComposite = null;
 		}
 
-		displayComposite = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass()).createToplevelComposite(dialogArea, selection.eClass());
+		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
+		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass());
 
 		final EObject duplicate = getDuplicate(selection, displayComposite);
 
 		currentEditorTargets.clear();
-		final Collection<EObject> range = displayComposite.getEditingRange(rootObject, selection);
-
+		final Collection<EObject> range = displayCompositeFactory.getExternalEditingRange(rootObject, selection);
+		range.add(selection);
 		for (final EObject o : range) {
 			currentEditorTargets.add(originalToDuplicate.get(o));
 		}
 
 		displayComposite.setCommandHandler(commandHandler);
-		displayComposite.display(rootObject, duplicate);
+		displayComposite.display(rootObject, duplicate, ranges.get(selection));
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		// handle enablement

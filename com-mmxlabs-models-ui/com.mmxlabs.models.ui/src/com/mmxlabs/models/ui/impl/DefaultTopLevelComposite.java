@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.impl;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -45,7 +46,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	@Override
-	public void display(final MMXRootObject root, final EObject object) {
+	public void display(final MMXRootObject root, final EObject object, final Collection<EObject> range) {
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
 		g.setText(EditorUtils.unmangle(eClass.getName()));
@@ -75,13 +76,13 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 			}
 		}
 
-		topLevel.display(root, object);
+		topLevel.display(root, object, range);
 		final Iterator<EReference> refs = childReferences.iterator();
 		final Iterator<IDisplayComposite> children = childComposites
 				.iterator();
 
 		while (refs.hasNext()) {
-			children.next().display(root, (EObject) object.eGet(refs.next()));
+			children.next().display(root, (EObject) object.eGet(refs.next()), range);
 		}
 		
 		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));
@@ -99,11 +100,6 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	@Override
 	public void setCommandHandler(ICommandHandler commandHandler) {
 		this.commandHandler = commandHandler;
-	}
-
-	@Override
-	public List<EObject> getEditingRange(MMXRootObject root, EObject value) {
-		return Collections.singletonList(value);
 	}
 
 	@Override

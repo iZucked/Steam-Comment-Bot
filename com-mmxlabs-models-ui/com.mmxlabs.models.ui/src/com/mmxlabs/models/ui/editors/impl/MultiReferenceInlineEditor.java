@@ -54,11 +54,11 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public void display(MMXRootObject context, EObject input) {
+	public void display(MMXRootObject context, EObject input, final Collection<EObject> range) {
 		valueProvider = commandHandler
 				.getReferenceValueProviderProvider()
 				.getReferenceValueProvider(input.eClass(), (EReference) feature);
-		super.display(context, input);
+		super.display(context, input, range);
 	}
 
 	@Override

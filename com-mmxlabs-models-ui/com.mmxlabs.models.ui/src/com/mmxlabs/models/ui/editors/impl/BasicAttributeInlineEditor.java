@@ -9,6 +9,7 @@ package com.mmxlabs.models.ui.editors.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -109,7 +110,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	}
 
 	@Override
-	public void display(final MMXRootObject context, final EObject input) {
+	public void display(final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		if (this.input != null) {
 			this.input.eAdapters().remove(this);
 		}
