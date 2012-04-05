@@ -25,9 +25,11 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	public void preWindowOpen() {
 		final IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 		configurer.setInitialSize(new Point(1280, 1024));
-		configurer.setShowCoolBar(true);
+		
+		configurer.setShowCoolBar(false);
 		configurer.setShowStatusLine(true);
-		configurer.setShowPerspectiveBar(true);
+		configurer.setShowPerspectiveBar(false);
+		
 		configurer.setTitle("ShipLiNGO");
 	}
 }

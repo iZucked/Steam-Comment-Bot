@@ -18,12 +18,10 @@ import com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView;
 import com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerView;
 
-public class OptimisationPerspective implements IPerspectiveFactory {
+public class AnalyticsPerspective implements IPerspectiveFactory {
 
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
-
-		layout.setEditorAreaVisible(false);
 
 		final IFolderLayout navFolder = layout.createFolder("navFolder", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
 		navFolder.addView("com.mmxlabs.rcp.navigator");
@@ -53,7 +51,7 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut("com.mmxlabs.rcp.navigator");
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
+		layout.addPerspectiveShortcut("com.mmxlabs.demo.app.perspective.optimisation");
 		layout.addPerspectiveShortcut("com.mmxlabs.demo.app.perspective.editing");
-		layout.addPerspectiveShortcut("com.mmxlabs.demo.app.perspective.analytics");
 	}
 }
