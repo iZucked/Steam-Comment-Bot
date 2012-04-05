@@ -36,6 +36,8 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IServiceModelTracker;
 import com.mmxlabs.scenario.service.ScenarioServiceIOHelper;
+import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
@@ -182,28 +184,41 @@ public class DirScanScenarioService implements IScenarioService {
 	public void scanForScenarios(final String scenarioServiceID) {
 
 		final File dataDir = dataPath.toFile();
+		scanForScenarios(scenarioServiceID, scenarioService, dataDir);
+	}
+
+	public void scanForScenarios(final String scenarioServiceID, final Container container, final File dataDir) {
 		if (dataDir.isDirectory() || dataDir.exists()) {
 			for (final File f : dataDir.listFiles()) {
-				final String uuid = f.getName();
+				if (f.isFile()) {
+					final String uuid = f.getName();
 
-				// See if file exists in scenario
-				final SELECT query = new SELECT(1, new FROM(scenarioService), new WHERE(new EObjectAttributeValueCondition(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid(),
-						new org.eclipse.emf.query.conditions.strings.StringValue(uuid))));
-				final IQueryResult queryResult = query.execute();
+					// See if file exists in scenario
+					final SELECT query = new SELECT(1, new FROM(scenarioService), new WHERE(new EObjectAttributeValueCondition(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid(),
+							new org.eclipse.emf.query.conditions.strings.StringValue(uuid))));
+					final IQueryResult queryResult = query.execute();
 
-				if (queryResult.isEmpty()) {
-					final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-					scenarioInstance.setUuid(uuid);
-					scenarioInstance.setName(uuid);
+					if (queryResult.isEmpty()) {
+						final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+						scenarioInstance.setUuid(uuid);
+						scenarioInstance.setName(f.getName());
 
-					scenarioInstance.setUri("service://" + scenarioServiceID + "/" + uuid);
+						scenarioInstance.setUri("service://" + scenarioServiceID + "/" + uuid);
 
-					final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-					// TODO: Set correct content type
-					metadata.setContentType("text/xmi");
-					scenarioInstance.setMetadata(metadata);
+						final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+						// TODO: Set correct content type
+						metadata.setContentType("text/xmi");
+						scenarioInstance.setMetadata(metadata);
 
-					scenarioService.getScenarios().add(scenarioInstance);
+						container.getElements().add(scenarioInstance);
+					}
+				} else if (f.isDirectory()) {
+					// Create container,
+					final Folder folder = ScenarioServiceFactory.eINSTANCE.createFolder();
+					container.getElements().add(folder);
+					folder.setName(f.getName());
+					// Recurse
+					scanForScenarios(scenarioServiceID, folder, f);
 				}
 			}
 		}
