@@ -18,6 +18,7 @@ import com.mmxlabs.scenario.service.ui.Activator;
 
 public class ScenarioServiceURIHandler extends URIHandlerImpl {
 
+	private static final String SERVICE_SCHEME = "service";
 	/**
 	 * Reference to {@link Activator} maintained map of services.
 	 */
@@ -30,9 +31,9 @@ public class ScenarioServiceURIHandler extends URIHandlerImpl {
 
 	@Override
 	public boolean canHandle(final URI uri) {
-		// This handler should only accept URIs with the scheme "service"
 
-		return "service".equalsIgnoreCase(uri.scheme());
+		// This handler should only accept URIs with the scheme "service"
+		return SERVICE_SCHEME.equalsIgnoreCase(uri.scheme());
 	}
 
 	@Override
