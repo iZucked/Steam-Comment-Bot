@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics.transformer.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -43,6 +44,7 @@ import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -58,6 +60,7 @@ import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -134,8 +137,15 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
 			buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
 
-
-			for (final Route route : portModel.getRoutes()) {
+			final double speed;
+			if (spec.isSetSpeed()) {
+				speed = spec.getSpeed();
+			} else {
+				speed = spec.getVessel().getVesselClass().getMaxSpeed();
+			}
+			
+			
+			for (final Route route : spec.getAllowedRoutes().isEmpty() ? portModel.getRoutes() : spec.getAllowedRoutes()) {
 				VesselClassRouteParameters parametersForRoute = null;
 				RouteCost costForRoute = null;
 				for (final VesselClassRouteParameters parameters : spec.getVessel().getVesselClass().getRouteParameters()) {
@@ -165,7 +175,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 						builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Laden, (int) Calculator.scale(costForRoute.getLadenCost()));
 						builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Ballast, (int) Calculator.scale(costForRoute.getBallastCost()));
 					}
-					int travelTime = (int) Math.ceil(line.getDistance() / spec.getSpeed()) + (parametersForRoute == null ? 0 : parametersForRoute.getExtraTransitTime());
+					int travelTime = (int) Math.ceil(line.getDistance() / speed) + (parametersForRoute == null ? 0 : parametersForRoute.getExtraTransitTime());
 					final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
 					List<Integer> existingValue = minTravelTimeAtSpeed.get(key);
 					if (existingValue == null) {
@@ -215,6 +225,18 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 						continue;
 					} else {
 					}
+					
+					if (!spec.isSetSpeed()) {
+						Integer minTimeLD = Collections.min(minTimesLD);
+						Integer minTimeDL = Collections.min(minTimesDL);
+						minTimesLD.clear();
+						minTimesDL.clear();
+						if (minTimeLD != null)
+							minTimesLD.add(minTimeLD);
+						if (minTimeDL != null)
+							minTimesDL.add(minTimeDL);
+					}
+					
 					int counter = 0;
 					for (final int minTimeLD : minTimesLD) {
 						for (final int minTimeDL : minTimesDL) {
@@ -225,16 +247,19 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 									loadPort.getLoadDuration(), false, false, false);
 
 							final int timeAtDischarge = loadPort.getLoadDuration() + minTimeLD + spec.getDischargeIdleTime();
-							final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-" + id, ports.lookup(dischargePort), builder.createTimeWindow(timeAtDischarge, timeAtDischarge),
+							final ITimeWindow dischargeWindow = builder.createTimeWindow(timeAtDischarge, timeAtDischarge);;
+							final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-" + id, ports.lookup(dischargePort), dischargeWindow,
 									Calculator.scale(spec.getMinimumDischarge()), Calculator.scale(spec.getMaximumDischarge()), dischargeCalculator, dischargePort.getDischargeDuration(), false);
 
 							final ICargo cargo = builder.createCargo(id, loadSlot, dischargeSlot, false);
 							cargos.add(cargo);
 							// create vessel
-
+							
 							final int timeAtReturn = timeAtDischarge + dischargePort.getDischargeDuration() + minTimeDL + spec.getReturnIdleTime();
+							final ITimeWindow returnWindow = builder.createTimeWindow(timeAtReturn, timeAtReturn);
+
 							vessels.add(builder.createVessel("vessel-" + i++, vesselClass, 0, VesselInstanceType.SPOT_CHARTER, builder.createStartEndRequirement(),
-									builder.createStartEndRequirement(builder.createTimeWindow(timeAtReturn, timeAtReturn)), 0, 0, 0));
+									builder.createStartEndRequirement(returnWindow), 0, 0, 0));
 						}
 					}
 					
@@ -265,8 +290,13 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				sequence.add(startEndProvider.getEndElement(resource));
 				final int[] times = arrivalTimes[index++];
 				times[0] = 0;
-				times[1] = cargo.getDischargeOption().getTimeWindow().getStart() - spec.getDischargeIdleTime();
-				times[2] = startEndProvider.getEndRequirement(resource).getTimeWindow().getStart() - spec.getReturnIdleTime();
+				times[1] = cargo.getDischargeOption().getTimeWindow().getStart();
+				times[2] = startEndProvider.getEndRequirement(resource).getTimeWindow().getStart();
+				
+				if (spec.isSetSpeed()) {
+					times[1] -= spec.getDischargeIdleTime();
+					times[2] -= spec.getReturnIdleTime();
+				}
 			}
 			/*
 			 * Create a fitness core and evaluate+annotate the sequences
