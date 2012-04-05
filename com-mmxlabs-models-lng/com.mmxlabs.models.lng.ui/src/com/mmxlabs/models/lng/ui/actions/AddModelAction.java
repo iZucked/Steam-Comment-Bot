@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.ui.actions;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Menu;
@@ -80,27 +82,28 @@ class SingleAddAction extends LockableAction {
 	public void run() {
 		final Collection<? extends ISetting> settings = factory.createInstance(context.getRootObject(), context.getContainer(), context.getContainment());
 		if (settings.isEmpty() == false) {
-			try {
-				for (final ISetting setting : settings) {
-					ValidationSupport.getInstance().setContainers(Collections.singleton(setting.getInstance()), setting.getContainer(), setting.getContainment());
+			
+			final CompoundCommand add = new CompoundCommand();
+			for (final ISetting setting : settings) {
+				add.append(AddCommand.create(context.getCommandHandler().getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
+			}
+			context.getCommandHandler().getEditingDomain().getCommandStack().execute(add);
+			
+			final DetailCompositeDialog editor = new DetailCompositeDialog(
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					context.getCommandHandler());
+			
+			if (editor.open(context.getRootObject(), Collections.singletonList(settings.iterator().next().getInstance()))
+					!= Window.OK) {
+				final List<EObject> del = new ArrayList<EObject>(settings.size());
+				for (final ISetting s : settings) {
+					del.add(s.getInstance());
 				}
-				
-				final DetailCompositeDialog editor = new DetailCompositeDialog(
-						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-						context.getCommandHandler());
-				if (editor.open(context.getRootObject(), Collections.singletonList(settings.iterator().next().getInstance()))
-						== Window.OK) {
-					// apply the set commands
-					final CompoundCommand add = new CompoundCommand();
-					for (final ISetting setting : settings) {
-						add.append(AddCommand.create(context.getCommandHandler().getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
-					}
-					context.getCommandHandler().handleCommand(add, context.getContainer(), context.getContainment());
-				}
-			} finally {
-				for (final ISetting setting : settings) {
-					ValidationSupport.getInstance().clearContainers(Collections.singleton(setting.getInstance()));
-				}
+				// delete what we created.
+				context.getCommandHandler().getEditingDomain().getCommandStack().execute(
+						DeleteCommand.create(
+						context.getCommandHandler().getEditingDomain(),
+						del));
 			}
 		}
 	}
