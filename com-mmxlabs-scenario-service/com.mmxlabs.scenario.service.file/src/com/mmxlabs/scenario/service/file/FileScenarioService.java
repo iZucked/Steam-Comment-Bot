@@ -30,6 +30,8 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IServiceModelTracker;
@@ -40,6 +42,8 @@ import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 
 public class FileScenarioService implements IScenarioService {
 
+	private static final Logger log = LoggerFactory.getLogger(FileScenarioService.class);
+	
 	private static final String PROPERTY_MODEL = "com.mmxlabs.scenario.service.file.model";
 
 	private ResourceSet resourceSet;
@@ -203,8 +207,7 @@ public class FileScenarioService implements IScenarioService {
 					tracker.setScenarioInstance(findInstance);
 				}
 			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(e.getMessage(), e);
 			}
 		}
 		return findInstance.getInstance();

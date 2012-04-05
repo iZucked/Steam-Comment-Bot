@@ -30,6 +30,8 @@ import org.eclipse.emf.query.statements.IQueryResult;
 import org.eclipse.emf.query.statements.SELECT;
 import org.eclipse.emf.query.statements.WHERE;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IServiceModelTracker;
@@ -41,6 +43,8 @@ import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class DirScanScenarioService implements IScenarioService {
+
+	private static final Logger log = LoggerFactory.getLogger(DirScanScenarioService.class);
 
 	private ScenarioService scenarioService;
 
@@ -137,8 +141,7 @@ public class DirScanScenarioService implements IScenarioService {
 					tracker.setScenarioInstance(findInstance);
 				}
 			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(e.getMessage(), e);
 			}
 		}
 		return findInstance.getInstance();
