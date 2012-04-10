@@ -11,6 +11,14 @@
                attributeTypeURI="http://www.eclipse.org/emf/2002/Ecore">
          </dataType>
       </attributeImporter>
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.ui.capabilityImporter"
+            attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
+         <dataType
+               attributeTypeName="PortCapability"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
+         </dataType>
+      </attributeImporter>
    </extension>
    <extension
          point="com.mmxlabs.models.ui.editorfactories">
