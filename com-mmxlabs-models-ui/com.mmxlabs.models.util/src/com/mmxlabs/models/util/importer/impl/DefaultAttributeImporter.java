@@ -8,7 +8,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -59,26 +58,10 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 	protected Object attributeFromString(final EObject container,
 			final EAttribute attribute, final String value,
 			final IImportContext context) {
-		EDataType dt = attribute.getEAttributeType();
-		final EcorePackage ecp = EcorePackage.eINSTANCE;
+		final EDataType dt = attribute.getEAttributeType();
 		try {
-			if (dt == ecp.getEString()) {
-				return value;
-//			} else if (dt == ecp.getEInt() || dt == ecp.getEIntegerObject()) {
-//				return Integer.parseInt(value);
-//			} else if (dt == ecp.getEBoolean() || dt == ecp.getEBooleanObject()) {
-//				return Boolean.parseBoolean(value);
-//			} else if (dt == ecp.getEDouble() || dt == ecp.getEDoubleObject()) {
-//				return Double.parseDouble(value);
-//			} else if (dt == ecp.getEFloat() || dt == ecp.getEFloatObject()) {
-//				return Float.parseFloat(value);
-//			} else if (dt == ecp.getELong() || dt == ecp.getELongObject()) {
-//				return Long.parseLong(value);
-			} else {
-				return dt.getEPackage().getEFactoryInstance().createFromString(dt, value);
-			}
+			return dt.getEPackage().getEFactoryInstance().createFromString(dt, value);
 		} catch (Exception ex) {
-			// TODO WARN
 			context.addProblem(context.createProblem("Error parsing value " + value + " for " + attribute.getName() + ":" + ex.toString(), true, true, true));
 		}
 		return null;
