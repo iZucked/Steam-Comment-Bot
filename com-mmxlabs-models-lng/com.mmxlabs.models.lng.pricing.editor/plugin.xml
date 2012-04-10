@@ -197,4 +197,13 @@
           modelClass="com.mmxlabs.models.lng.fleet.BaseFuel">
     </componentHelper>
  </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.classes">
+    <classImporter
+          ID="com.mmxlabs.models.lng.pricing.editor.portCostImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.PortCostImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.PortCost"
+          inheritable="true">
+    </classImporter>
+ </extension>
 </plugin>
