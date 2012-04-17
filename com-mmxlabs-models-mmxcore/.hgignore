@@ -5,3 +5,5 @@ syntax: regexp
 
 syntax: regexp
 ^\.project$
+
+.*~$
