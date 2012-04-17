@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.analytics.presentation;
 
+import com.mmxlabs.models.lng.analytics.evaluation.IEvaluationService;
 import com.mmxlabs.models.lng.analytics.ui.commands.UnitCostMatrixCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 
@@ -19,6 +20,7 @@ import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * This is the central singleton for the Analytics editor plugin.
@@ -88,6 +90,7 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 	 */
 	public static class Implementation extends EclipseUIPlugin {
 		private ServiceRegistration<IModelCommandProvider> commandService;
+		private ServiceTracker<IEvaluationService, IEvaluationService> evaluationServiceTracker;
 
 		/**
 		 * Creates an instance.
@@ -111,6 +114,8 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 			super.start(context);
 			IModelCommandProvider commandProvider = new UnitCostMatrixCommandProvider();
 			commandService = context.registerService(IModelCommandProvider.class, commandProvider , null);
+			evaluationServiceTracker = new ServiceTracker<IEvaluationService, IEvaluationService>(context, IEvaluationService.class, null);
+			evaluationServiceTracker.open();
 		}
 
 		/* (non-Javadoc)
@@ -119,7 +124,12 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 		@Override
 		public void stop(BundleContext context) throws Exception {
 			commandService.unregister();
+			evaluationServiceTracker.close();
 			super.stop(context);
+		}
+
+		public IEvaluationService getEvaluationService() {
+			return evaluationServiceTracker.getService();
 		}
 	}
 
