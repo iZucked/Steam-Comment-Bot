@@ -20,5 +20,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.util;bundle-version="1.0.0",
  com.mmxlabs.models.lng.types.editor;bundle-version="1.0.0";visibility:=reexport,
  com.mmxlabs.models.lng.ui;bundle-version="1.0.0",
- com.mmxlabs.optimiser.optimiser-core;bundle-version="1.0.0"
+ com.mmxlabs.optimiser.optimiser-core;bundle-version="1.0.0",
+ com.mmxlabs.models.ui.tabular;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
