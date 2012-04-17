@@ -1,6 +1,7 @@
 target/
 .classpath
 .settings/
+.*~$
 
 syntax: regexp
 ^com\.mmxlabs.*/target$
