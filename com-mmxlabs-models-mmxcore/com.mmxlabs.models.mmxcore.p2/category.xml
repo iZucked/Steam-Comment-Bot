@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
 <site>
    <feature url="features/com.mmxlabs.models.mmxcore.runtime.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.mmxcore.runtime.feature" version="1.0.0.qualifier">
       <category name="all"/>
