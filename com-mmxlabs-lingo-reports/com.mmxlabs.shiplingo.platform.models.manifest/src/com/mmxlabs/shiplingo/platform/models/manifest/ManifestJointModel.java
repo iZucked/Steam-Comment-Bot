@@ -16,6 +16,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edapt.migration.MigrationException;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -74,6 +76,7 @@ public class ManifestJointModel extends JointModel {
 	private static final String COMMERCIAL_MODEL_KEY = "commercial-model";
 	private static final String ROOT_MODEL_KEY = "root-model";
 	private static final String OPTIMISER_MODEL_KEY = "optimiser-model";
+	private static final String ANALYTICS_MODEL_KEY = "analytics-model";
 
 	/**
 	 * This map lets us know what kind of model class has what key.
@@ -92,7 +95,8 @@ public class ManifestJointModel extends JointModel {
 		modelClassKeys.put(InputPackage.eINSTANCE.getInputModel(), INPUT_MODEL_KEY);
 		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
 		modelClassKeys.put(OptimiserPackage.eINSTANCE.getOptimiserModel(), OPTIMISER_MODEL_KEY);
-
+		modelClassKeys.put(AnalyticsPackage.eINSTANCE.getAnalyticsModel(), ANALYTICS_MODEL_KEY);
+		
 		/*
 		 * There is no migration history for MMXCore, but this is not a problem; the joint model will ignore submodels which have no release history and leave them out of the upgrade process.
 		 */
@@ -138,7 +142,8 @@ public class ManifestJointModel extends JointModel {
 		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
 		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
-
+		rootObject.addSubModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
+		
 		final ManifestJointModel result = new ManifestJointModel(rootObject, target);
 		return result;
 	}
@@ -155,6 +160,7 @@ public class ManifestJointModel extends JointModel {
 		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
 		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
+		rootObject.addSubModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
 		
 		initialiseTopLevelObjects(rootObject);
 		

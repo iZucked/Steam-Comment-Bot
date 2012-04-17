@@ -47,7 +47,6 @@ import org.eclipse.ui.part.ViewPart;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
-import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -159,15 +158,14 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	protected final IFormatter containingScheduleFormatter = new BaseFormatter() {
 		@Override
 		public String format(Object object) {
-			while ((object != null) && !(object instanceof Schedule)) {
+			while ((object != null) && !(object instanceof MMXRootObject)) {
 				if (object instanceof EObject) {
 					object = ((EObject) object).eContainer();
 				}
 			}
-			if (object instanceof Schedule) {
-				final MMXRootObject s = (MMXRootObject) ((Schedule) object).eContainer().eContainer();
+			if (object instanceof MMXRootObject) {
+				final MMXRootObject s = (MMXRootObject) object;
 				return s.getName();
-//				return "TODO";
 			} else {
 				return "";
 			}

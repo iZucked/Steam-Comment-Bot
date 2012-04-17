@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -87,7 +88,13 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-		final MMXRootObject s = (MMXRootObject) schedule.eContainer().eContainer();
+		EObject object = schedule.eContainer();
+		while ((object != null) && !(object instanceof MMXRootObject)) {
+			if (object instanceof EObject) {
+				object = ((EObject) object).eContainer();
+			}
+		}
+		final MMXRootObject s = (MMXRootObject) object;
 		final String scheduleName = s.getName();
 
 		for (final Entry<Fuel, Long> entry : totalFuelCosts.entrySet()) {
