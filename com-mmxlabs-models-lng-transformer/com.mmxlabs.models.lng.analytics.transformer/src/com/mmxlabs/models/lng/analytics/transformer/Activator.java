@@ -24,12 +24,9 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
+		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
@@ -37,10 +34,6 @@ public class Activator extends AbstractUIPlugin {
 		evaluationServiceRegistration = context.registerService(IEvaluationService.class, new EvaluationService(), null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		evaluationServiceRegistration.unregister();
 		plugin = null;
@@ -55,5 +48,4 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
-
 }
