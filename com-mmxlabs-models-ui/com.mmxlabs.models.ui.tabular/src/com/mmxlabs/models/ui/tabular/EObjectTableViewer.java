@@ -118,7 +118,12 @@ public class EObjectTableViewer extends GridTableViewer {
 				// if (currentElements.contains(source))
 				// return;
 				if (source == currentContainer) {
-					refresh();
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							refresh();
+						}
+					});
 					return;
 				}
 				while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null)) {
