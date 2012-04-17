@@ -133,7 +133,12 @@ public class ScenarioTableViewerPane extends ViewerPane {
 						if (structuredSelection.isEmpty() == false) {
 							if (structuredSelection.size() == 1) {
 								final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getDefaultCommandHandler());
-								dcd.open(jointModelEditorPart.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
+								try {
+									jointModelEditorPart.setDisableUpdates(true);
+									dcd.open(jointModelEditorPart.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
+								} finally {
+									jointModelEditorPart.setDisableUpdates(false);
+								}
 							} else {
 								if (scenarioViewer.isLocked() == false) {
 									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart
