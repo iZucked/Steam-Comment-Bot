@@ -31,7 +31,7 @@ public class DoubleParserTest {
 
 	@Test
 	public void testDoubleParser() {
-		
+
 		final DoubleParser parser = new DoubleParser();
 		Assert.assertFalse(parser.hasDefaultValue());
 		Assert.assertNull(parser.getDefaultValue());
@@ -39,9 +39,9 @@ public class DoubleParserTest {
 
 	@Test
 	public void testParse() throws InvalidArgumentException {
-		
+
 		final DoubleParser parser = new DoubleParser();
-		
+
 		final List<String> strings = new ArrayList<String>(2);
 		final String str1 = "0.0";
 		final String str2 = "string";

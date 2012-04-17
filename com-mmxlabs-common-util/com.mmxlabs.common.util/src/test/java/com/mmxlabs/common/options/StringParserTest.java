@@ -22,7 +22,7 @@ public class StringParserTest {
 	@Test
 	public void testStringParserString() {
 		final String str = new String();
-		
+
 		final StringParser parser = new StringParser(str);
 		Assert.assertTrue(parser.hasDefaultValue());
 		Assert.assertSame(str, parser.getDefaultValue());
@@ -31,13 +31,13 @@ public class StringParserTest {
 	@Test
 	public void testParse() throws InvalidArgumentException {
 		final StringParser parser = new StringParser();
-		
+
 		final List<String> strings = new ArrayList<String>(2);
 		final String str1 = new String();
 		final String str2 = new String();
 		strings.add(str1);
 		strings.add(str2);
-		
-		Assert.assertSame(str1, parser.parse(null,  strings.iterator()));
+
+		Assert.assertSame(str1, parser.parse(null, strings.iterator()));
 	}
 }

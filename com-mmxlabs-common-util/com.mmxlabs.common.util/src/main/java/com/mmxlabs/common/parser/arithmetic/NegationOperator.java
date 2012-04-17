@@ -8,7 +8,7 @@ import com.mmxlabs.common.parser.IExpression;
 
 public class NegationOperator extends ArithmeticExpression {
 	final IExpression<Double> argument;
-	
+
 	public NegationOperator(IExpression<Double> argument) {
 		super();
 		this.argument = argument;
@@ -18,5 +18,8 @@ public class NegationOperator extends ArithmeticExpression {
 	public Double evaluate() {
 		return -argument.evaluate();
 	}
-	public String toString() {return "-" + argument;}
+
+	public String toString() {
+		return "-" + argument;
+	}
 }

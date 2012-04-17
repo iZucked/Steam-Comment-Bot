@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.mmxlabs.common.parser.series.ISeries;
 
-public class Mean extends SimpleSeriesFunction {	
+public class Mean extends SimpleSeriesFunction {
 	public Mean(List<ISeries> arguments) {
 		super(arguments);
 	}

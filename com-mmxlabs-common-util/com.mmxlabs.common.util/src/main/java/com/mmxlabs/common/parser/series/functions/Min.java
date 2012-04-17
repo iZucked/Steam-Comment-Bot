@@ -18,7 +18,7 @@ public class Min extends SimpleSeriesFunction {
 			return ((Double) o1.doubleValue()).compareTo(o2.doubleValue());
 		}
 	};
-	
+
 	public Min(List<ISeries> arguments) {
 		super(arguments);
 	}
@@ -26,11 +26,11 @@ public class Min extends SimpleSeriesFunction {
 	@Override
 	public Number evaluate(int point) {
 		final List<Number> values = new ArrayList<Number>(arguments.size());
-		
+
 		for (final ISeries s : arguments) {
 			values.add(s.evaluate(point));
 		}
-		
+
 		return Collections.min(values, comparator);
 	}
 }

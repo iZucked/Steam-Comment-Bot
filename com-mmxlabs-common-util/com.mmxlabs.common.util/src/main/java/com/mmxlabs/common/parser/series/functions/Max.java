@@ -11,7 +11,7 @@ import java.util.List;
 
 import com.mmxlabs.common.parser.series.ISeries;
 
-public class Max extends SimpleSeriesFunction {	
+public class Max extends SimpleSeriesFunction {
 	private Comparator<? super Number> comparator = new Comparator<Number>() {
 		@Override
 		public int compare(Number o1, Number o2) {
@@ -26,11 +26,11 @@ public class Max extends SimpleSeriesFunction {
 	@Override
 	public Number evaluate(int point) {
 		final List<Number> values = new ArrayList<Number>(arguments.size());
-		
+
 		for (final ISeries s : arguments) {
 			values.add(s.evaluate(point));
 		}
-		
+
 		return Collections.max(values, comparator);
 	}
 

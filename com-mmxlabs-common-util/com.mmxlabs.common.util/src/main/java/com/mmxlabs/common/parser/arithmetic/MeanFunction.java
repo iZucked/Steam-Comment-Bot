@@ -14,13 +14,16 @@ public class MeanFunction extends ArithmeticExpression {
 	public MeanFunction(final List<IExpression<Double>> arguments) {
 		this.arguments = arguments;
 	}
-	
+
 	@Override
 	public Double evaluate() {
 		double sum = 0;
-		for (final IExpression<Double> arg : arguments) sum += arg.evaluate();
+		for (final IExpression<Double> arg : arguments)
+			sum += arg.evaluate();
 		return sum / arguments.size();
 	}
-	
-	public String toString() {return "avg(" + arguments + ")"; }
+
+	public String toString() {
+		return "avg(" + arguments + ")";
+	}
 }

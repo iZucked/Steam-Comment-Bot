@@ -79,7 +79,8 @@ public class TableImporterTest {
 		ti.getCell("unknown", "col1");
 	}
 
-	@Test//(expected = NullPointerException.class)
+	@Test
+	// (expected = NullPointerException.class)
 	public void testUnknownColumnKey() throws IOException {
 		final StringBuilder sb = new StringBuilder();
 

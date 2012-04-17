@@ -13,7 +13,7 @@ public class ConstantSeriesExpression implements IExpression<ISeries> {
 	public ConstantSeriesExpression(final Number constant) {
 		this.constant = constant;
 	}
-	
+
 	@Override
 	public ISeries evaluate() {
 		return new ISeries() {
@@ -21,7 +21,7 @@ public class ConstantSeriesExpression implements IExpression<ISeries> {
 			public int[] getChangePoints() {
 				return NONE;
 			}
-			
+
 			@Override
 			public Number evaluate(int point) {
 				return constant;

@@ -9,10 +9,12 @@ import java.util.Map;
 public class ArithmeticTerm extends ArithmeticExpression {
 	private final String term;
 	private final Map<String, Double> variables;
+
 	public ArithmeticTerm(final String term, final Map<String, Double> variables) {
 		this.term = term;
 		this.variables = variables;
 	}
+
 	@Override
 	public Double evaluate() {
 		try {
@@ -21,6 +23,8 @@ public class ArithmeticTerm extends ArithmeticExpression {
 			return variables.get(term);
 		}
 	}
-	
-	public String toString() { return term; }
+
+	public String toString() {
+		return term;
+	}
 }

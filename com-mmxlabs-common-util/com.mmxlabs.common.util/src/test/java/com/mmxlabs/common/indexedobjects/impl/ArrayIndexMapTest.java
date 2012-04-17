@@ -71,7 +71,7 @@ public class ArrayIndexMapTest {
 
 		context.assertIsSatisfied();
 	}
-	
+
 	@Test
 	public void testGetSet() {
 		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();

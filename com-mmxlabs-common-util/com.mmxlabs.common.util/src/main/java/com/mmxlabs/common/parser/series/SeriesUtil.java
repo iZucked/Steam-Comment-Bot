@@ -31,26 +31,26 @@ public class SeriesUtil {
 				ic++;
 			}
 		}
-		
+
 		while (ia < a.length) {
 			c[ic++] = a[ia++];
 		}
-		
+
 		while (ib < b.length) {
 			c[ic++] = b[ib++];
 		}
-		
+
 		return Arrays.copyOf(c, ic);
 	}
-	
+
 	public static void main(String[] args) {
 		final SortedSet<Integer> s1 = new TreeSet<Integer>();
 		final SortedSet<Integer> s2 = new TreeSet<Integer>();
 		final SortedSet<Integer> s3 = new TreeSet<Integer>();
-		
+
 		final Random r = new Random();
-		
-		for (int i = 0; i<20; i++) {
+
+		for (int i = 0; i < 20; i++) {
 			final int r1 = r.nextInt(100);
 			final int r2 = r.nextInt(100);
 			s1.add(r1);
@@ -58,7 +58,7 @@ public class SeriesUtil {
 			s3.add(r1);
 			s3.add(r2);
 		}
-		
+
 		final int[] ia1 = new int[s1.size()];
 		final int[] ia2 = new int[s2.size()];
 		int i = 0;
@@ -69,7 +69,7 @@ public class SeriesUtil {
 		for (int k : s2) {
 			ia2[i++] = k;
 		}
-		
+
 		int[] cia = mergeChangePoints(ia1, ia2);
 		System.err.println(Arrays.toString(ia1));
 		System.err.println(Arrays.toString(ia2));
@@ -78,10 +78,13 @@ public class SeriesUtil {
 
 	public static int floor(final int[] points, final int point) {
 		final int pos = Arrays.binarySearch(points, point);
-		if (pos >= 0) return pos;
+		if (pos >= 0)
+			return pos;
 		final int pos2 = (-pos) - 1;
-		if (pos2 < 0) return 0;
-		if (pos2 >= points.length) return points.length-1;
+		if (pos2 < 0)
+			return 0;
+		if (pos2 >= points.length)
+			return points.length - 1;
 		return pos2;
 	}
 

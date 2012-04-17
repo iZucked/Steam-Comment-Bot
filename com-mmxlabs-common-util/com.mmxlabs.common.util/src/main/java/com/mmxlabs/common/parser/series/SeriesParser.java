@@ -28,7 +28,7 @@ import com.mmxlabs.common.parser.series.functions.ShiftedSeries;
 public class SeriesParser extends ExpressionParser<ISeries> {
 	private final Map<String, ISeries> evaluatedSeries = new HashMap<String, ISeries>();
 	private final Map<String, String> unevaluatedSeries = new HashMap<String, String>();
-	
+
 	private class FunctionConstructor implements IExpression<ISeries> {
 		private Class<? extends ISeries> clazz;
 		private List<IExpression<ISeries>> arguments;
@@ -37,7 +37,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			this.clazz = clazz;
 			this.arguments = arguments;
 		}
-		
+
 		public ISeries construct() {
 			try {
 				return clazz.getConstructor(List.class).newInstance(evaluate(arguments));
@@ -45,7 +45,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 				throw new RuntimeException(th);
 			}
 		}
-		
+
 		private List<ISeries> evaluate(final List<IExpression<ISeries>> exprs) {
 			final List<ISeries> result = new ArrayList<ISeries>(exprs.size());
 			for (final IExpression<ISeries> exp : exprs) {
@@ -60,36 +60,36 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		}
 	}
 
-	
 	public SeriesParser() {
 		setInfixOperatorFactory(new IInfixOperatorFactory<ISeries>() {
 			@Override
 			public boolean isOperatorHigherPriority(char a, char b) {
-				if (a == b) return false;
+				if (a == b)
+					return false;
 				switch (a) {
-				case '*': return true;
-				case '/': return b == '+' || b == '-';
-				case '+': return b == '-';
-				case '-': return false;
+				case '*':
+					return true;
+				case '/':
+					return b == '+' || b == '-';
+				case '+':
+					return b == '-';
+				case '-':
+					return false;
 				}
 				return false;
 			}
-			
+
 			@Override
 			public boolean isInfixOperator(char operator) {
-				return operator == '*' ||
-						operator == '/' ||
-						operator == '+' ||
-						operator == '-';
+				return operator == '*' || operator == '/' || operator == '+' || operator == '-';
 			}
-			
+
 			@Override
-			public IExpression<ISeries> createInfixOperator(char operator,
-					IExpression<ISeries> lhs, IExpression<ISeries> rhs) {
+			public IExpression<ISeries> createInfixOperator(char operator, IExpression<ISeries> lhs, IExpression<ISeries> rhs) {
 				return new SeriesOperatorExpression(operator, lhs, rhs);
 			}
 		});
-		
+
 		setTermFactory(new ITermFactory<ISeries>() {
 			@Override
 			public IExpression<ISeries> createTerm(final String term) {
@@ -106,11 +106,10 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 				}
 			}
 		});
-		
+
 		setFunctionFactory(new IFunctionFactory<ISeries>() {
 			@Override
-			public IExpression<ISeries> createFunction(String name,
-					final List<IExpression<ISeries>> arguments) {
+			public IExpression<ISeries> createFunction(String name, final List<IExpression<ISeries>> arguments) {
 				if (name.equals("MAX")) {
 					return new FunctionConstructor(Max.class, arguments);
 				} else if (name.equals("MIN")) {
@@ -139,21 +138,20 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 				}
 			}
 		});
-		
+
 		setPrefixOperatorFactory(new IPrefixOperatorFactory<ISeries>() {
 			@Override
 			public boolean isPrefixOperator(char operator) {
 				return false;
 			}
-			
+
 			@Override
-			public IExpression<ISeries> createPrefixOperator(char operator,
-					IExpression<ISeries> argument) {
+			public IExpression<ISeries> createPrefixOperator(char operator, IExpression<ISeries> argument) {
 				throw new RuntimeException("Unknown prefix op " + operator);
 			}
 		});
 	}
-	
+
 	public ISeries getSeries(final String name) {
 		if (evaluatedSeries.containsKey(name)) {
 			return evaluatedSeries.get(name);
@@ -165,35 +163,34 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			throw new RuntimeException("No series with name " + name + " defined");
 		}
 	}
-	
+
 	public void addConstant(final String name, final Number value) {
 		evaluatedSeries.put(name, new ConstantSeriesExpression(value).evaluate());
 	}
-	
+
 	public void addSeriesData(final String name, final int[] points, final Number[] values) {
-		evaluatedSeries.put(name, 
-				new ISeries() {
-					@Override
-					public int[] getChangePoints() {
-						return points;
-					}
-					
-					@Override
-					public Number evaluate(int point) {
-						return values[SeriesUtil.floor(points, point)];
-					}
-				});
+		evaluatedSeries.put(name, new ISeries() {
+			@Override
+			public int[] getChangePoints() {
+				return points;
+			}
+
+			@Override
+			public Number evaluate(int point) {
+				return values[SeriesUtil.floor(points, point)];
+			}
+		});
 	}
-	
+
 	public void addSeriesExpression(final String name, final String expression) {
 		unevaluatedSeries.put(name, expression);
 	}
-	
+
 	public static void main(String args[]) {
 		final SeriesParser parser = new SeriesParser();
 		parser.addConstant("X", 1);
 		parser.addConstant("Y", 10);
-		parser.addSeriesData("Z", new int[] {0, 10, 20}, new Double[] {-5d, 4d, 9.4});
+		parser.addSeriesData("Z", new int[] { 0, 10, 20 }, new Double[] { -5d, 4d, 9.4 });
 		System.err.println(SeriesUtil.toString(parser.parse(args[0]).evaluate()));
 	}
 }

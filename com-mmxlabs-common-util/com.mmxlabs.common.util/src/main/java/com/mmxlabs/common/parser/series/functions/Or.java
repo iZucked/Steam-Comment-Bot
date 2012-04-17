@@ -22,7 +22,9 @@ public class Or extends SimpleSeriesFunction {
 				value = true;
 			}
 		}
-		if (value) return 1.0;
-		else return 0;
+		if (value)
+			return 1.0;
+		else
+			return 0;
 	}
 }

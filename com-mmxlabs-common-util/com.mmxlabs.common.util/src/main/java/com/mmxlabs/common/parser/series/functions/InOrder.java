@@ -23,7 +23,7 @@ public class InOrder extends SimpleSeriesFunction {
 			}
 			d = n.doubleValue();
 		}
-		
+
 		return 1;
 	}
 }

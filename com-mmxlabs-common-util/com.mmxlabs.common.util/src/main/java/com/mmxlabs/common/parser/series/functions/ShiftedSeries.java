@@ -17,24 +17,25 @@ public class ShiftedSeries implements ISeries {
 		this.shiftee = shiftee;
 		this.shifter = shifter;
 	}
+
 	@Override
 	public int[] getChangePoints() {
 		final int[] shifteePoints = shiftee.getChangePoints();
-		
+
 		final int[] shifterChangePoints = shifter.getChangePoints();
-		
+
 		if (shifterChangePoints.length == 0) {
 			final int shift = shifter.evaluate(0).intValue();
-			for (int i = 0; i<shifteePoints.length; i++) {
+			for (int i = 0; i < shifteePoints.length; i++) {
 				shifteePoints[i] -= shift;
 			}
 			return shifteePoints;
 		}
-		
+
 		final SortedSet<Integer> points = new TreeSet<Integer>();
-		for (int i = 0; i<shifterChangePoints.length-1; i++) {
+		for (int i = 0; i < shifterChangePoints.length - 1; i++) {
 			final int ws = shifterChangePoints[i];
-			final int we = shifterChangePoints[i+1];
+			final int we = shifterChangePoints[i + 1];
 			final int shift = shifter.evaluate(ws).intValue();
 			points.add(ws);
 			points.add(we);
