@@ -21,16 +21,17 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IFieldMap;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 
 public class DefaultClassImporter implements IClassImporter {
 	private static final String KIND_KEY = "kind";
@@ -140,6 +141,11 @@ public class DefaultClassImporter implements IClassImporter {
 					if (reference.isContainment()) {
 						populateWithBlank(instance, reference);
 					}
+					
+					notifyMissingFields((EObject) instance.eGet(reference), 
+							context.createProblem("Field not present", true, false, true),
+							context);
+					
 					context.addProblem(
 							context.createProblem(reference.getName() + " is missing from "
 									+ instance.eClass().getName()
@@ -162,6 +168,84 @@ public class DefaultClassImporter implements IClassImporter {
 		}
 	}
 	
+	private void notifyMissingFields(EObject blank, final IImportProblem delegate, IImportContext context) {
+		if (blank == null) return;
+		for (final EAttribute attribute : blank.eClass().getEAllAttributes()) {
+			context.addProblem(
+					new IImportProblem() {
+						@Override
+						public String getProblemDescription() {
+							return delegate.getProblemDescription();
+						}
+						
+						@Override
+						public Integer getLineNumber() {
+							return delegate.getLineNumber();
+						}
+						
+						@Override
+						public String getFilename() {
+							return delegate.getFilename();
+						}
+						
+						@Override
+						public String getField() {
+							return delegate.getField() + "." + attribute.getName();
+						}
+
+						@Override
+						public boolean equals(Object obj) {
+							if (obj instanceof IImportProblem) {
+								final IImportProblem other = (IImportProblem) obj;
+								return
+									Equality.isEqual(getProblemDescription(), other.getProblemDescription()) &&
+									Equality.isEqual(getLineNumber(), other.getLineNumber()) &&
+									Equality.isEqual(getFilename(), other.getFilename()) &&
+									Equality.isEqual(getField(), other.getField());
+							} else {
+								return false;
+							}
+						}
+
+						@Override
+						public int hashCode() {
+							return 
+									(getProblemDescription() == null ? 0 : getProblemDescription().hashCode()) +
+									(getLineNumber() == null ? 0 : getLineNumber().hashCode()) +
+									(getFilename() == null ? 0 : getFilename().hashCode()) +
+									(getField() == null ? 0 : getField().hashCode());
+						}
+						
+						
+					});
+		}
+		
+		for (final EObject content : blank.eContents()) {
+			notifyMissingFields(content, 
+					new IImportProblem() {
+						@Override
+						public String getProblemDescription() {
+							return delegate.getProblemDescription();
+						}
+						
+						@Override
+						public Integer getLineNumber() {
+							return delegate.getLineNumber();
+						}
+						
+						@Override
+						public String getFilename() {
+							return delegate.getFilename();
+						}
+						
+						@Override
+						public String getField() {
+							return delegate.getField() + "." + content.eContainingFeature().getName();
+						}
+					}, context);
+		}
+	}
+
 	protected void populateWithBlank(final EObject target, final EReference reference) {
 		final EClass objectClass = reference.getEReferenceType();
 		if (objectClass.isAbstract()) return;
@@ -252,8 +336,7 @@ public class DefaultClassImporter implements IClassImporter {
 			if (MMXCorePackage.eINSTANCE.getNamedObject().isSuperTypeOf(
 					reference.getEReferenceType())) {
 				if (reference.isMany()) {
-					final EList<? extends NamedObject> values = (EList<? extends NamedObject>) object
-							.eGet(reference);
+					final EList<? extends NamedObject> values = (EList<? extends NamedObject>) object.eGet(reference);
 					final StringBuffer sb = new StringBuffer();
 					boolean comma = false;
 					for (final NamedObject no : values) {
