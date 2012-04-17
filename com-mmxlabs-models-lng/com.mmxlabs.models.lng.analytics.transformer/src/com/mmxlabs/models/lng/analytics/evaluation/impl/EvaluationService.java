@@ -69,24 +69,25 @@ public class EvaluationService implements IEvaluationService {
 		
 		protected void evaluate() {
 			LNGTransformer transformer = new LNGTransformer(rootObject);
-
-			IOptimisationData data = transformer.getOptimisationData();
+			final Schedule schedule;
+			synchronized (rootObject) {
+				IOptimisationData data = transformer.getOptimisationData();
 			
-			final OptimisationTransformer ot = transformer.getOptimisationTransformer();
-			final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, transformer.getEntities());
+				final OptimisationTransformer ot = transformer.getOptimisationTransformer();
+				final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, transformer.getEntities());
 
-			final IOptimisationContext context = optAndContext.getFirst();
-			final LocalSearchOptimiser optimiser = optAndContext.getSecond();
+				final IOptimisationContext context = optAndContext.getFirst();
+				final LocalSearchOptimiser optimiser = optAndContext.getSecond();
 
-			optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
+				optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 
-			optimiser.init();
-			optimiser.start(context);
+				optimiser.init();
+				optimiser.start(context);
 
-			final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-			exporter.addPlatformExporterExtensions();
-			final Schedule schedule = exporter.exportAnnotatedSolution(rootObject, transformer.getEntities(), optimiser.getBestSolution(true));
-
+				final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+				exporter.addPlatformExporterExtensions();
+				schedule = exporter.exportAnnotatedSolution(rootObject, transformer.getEntities(), optimiser.getBestSolution(true));
+			}
 			final ScheduleModel scheduleModel = rootObject.getSubModel(ScheduleModel.class);
 			scheduleModel.setInitialSchedule(schedule);
 		}
