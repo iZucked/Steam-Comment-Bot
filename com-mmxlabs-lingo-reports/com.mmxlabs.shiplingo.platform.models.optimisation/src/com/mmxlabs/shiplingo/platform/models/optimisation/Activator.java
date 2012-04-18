@@ -1,10 +1,15 @@
 package com.mmxlabs.shiplingo.platform.models.optimisation;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.analytics.ui.liveeval.IResourceEvaluator;
+import com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StartOptimisationHandler;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -18,6 +23,8 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerServiceTracker;
+
+	private ServiceRegistration<IResourceEvaluator> evaluator;
 
 	/**
 	 * The constructor
@@ -36,6 +43,13 @@ public class Activator extends AbstractUIPlugin {
 
 		jobManagerServiceTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context, IEclipseJobManager.class.getName(), null);
 		jobManagerServiceTracker.open();
+		final StartOptimisationHandler handler = new StartOptimisationHandler(false);
+		evaluator = context.registerService(IResourceEvaluator.class, new IResourceEvaluator() {
+			@Override
+			public void evaluate(final IResource resource) {
+				handler.evaluateResource(getJobManager(), resource);
+			}
+		}, null);
 	}
 
 	/*
@@ -48,8 +62,9 @@ public class Activator extends AbstractUIPlugin {
 		// close the service tracker
 		jobManagerServiceTracker.close();
 		jobManagerServiceTracker = null;
+		evaluator.unregister();
 
-		plugin = null;
+		plugin = null;		
 		super.stop(context);
 	}
 

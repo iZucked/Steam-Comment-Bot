@@ -22,7 +22,6 @@ import org.eclipse.emf.edapt.migration.MigrationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -48,17 +47,13 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory, IRe
 	// FIXME: Get this string from somewhere else
 	public ScenarioTreeNodeClassAdapterFactory() {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
+		log.debug("Constructed");
 	}
 
 	@Override
 	public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
 
 		if (adaptableObject instanceof IResource) {
-			/**
-			 * Try obtaining in memory data from a running job before falling back to loading the scenario from the resource. This allows the current optimisation state to be shown.
-			 */
-			final IJobDescriptor job = Activator.getDefault().getJobManager().findJobForResource(adaptableObject);
-
 			// Fall back to directly loading from resource
 			final JointModel model = getJointModel((IResource) adaptableObject);
 			
@@ -92,17 +87,22 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory, IRe
 		if (modelMap.containsKey(resource)) {
 			return modelMap.get(resource);
 		} else {
-			synchronized (resource) {
+			synchronized (modelMap) {
 				// Re-check in case we've just reloaded
 				if (modelMap.containsKey(resource)) {
 					return modelMap.get(resource);
 				}
-				
+				log.debug("Loading model from " + resource);
+				log.debug("Already loaded " + modelMap.size() + " resources:");
+				for (final IResource key : modelMap.keySet()) {
+					log.debug("\t" + key);
+				}
 				JointModel jointModel;
 				try {
 					jointModel = new ManifestJointModel(URI.createPlatformResourceURI(resource.getFullPath().toString(), true));
 					if (jointModel != null) {
 						modelMap.put(resource, jointModel);
+						log.debug("Storing loaded model");
 						jointModel.getRootObject().setName(resource.getName());//hack
 						return jointModel;
 					}
@@ -142,7 +142,7 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory, IRe
 		final IResource changedResource = delta.getResource();
 
 		if (modelMap.containsKey(changedResource)) {
-			modelMap.remove(changedResource);
+//			modelMap.remove(changedResource);
 			return false;
 		}
 		return true;

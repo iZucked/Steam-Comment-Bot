@@ -22,9 +22,12 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 
 	private MMXRootObject scenario;
 
-	public LNGSchedulerJobDescriptor(final String name, final MMXRootObject scenario) {
+	private boolean optimise;
+
+	public LNGSchedulerJobDescriptor(final String name, final MMXRootObject scenario, final boolean optimise) {
 		this.name = name;
 		this.scenario = scenario;
+		this.optimise = true;
 	}
 
 	@Override
@@ -52,4 +55,14 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 		return null;
 	}
 
+	/**
+	 * @return
+	 */
+	public boolean isOptimising() {
+		return optimise;
+	}
+
+	public void setOptimising(final boolean optimise) {
+		this.optimise = optimise;
+	}
 }
