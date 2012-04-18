@@ -23,4 +23,9 @@ public abstract class BaseJointModelEditorContribution<T extends UUIDObject> imp
 		this.rootObject = rootObject;
 		this.modelObject = (T) modelObject;
 	}
+
+	@Override
+	public void dispose() {
+		
+	}
 }

@@ -14,7 +14,6 @@ import java.util.List;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -35,7 +34,6 @@ import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -246,7 +244,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		}
 		return super.getAdapter(adapter);
 	}
-
+	
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
@@ -269,9 +267,20 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 				adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 				adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-				// TODO do we need more stuff here? I (tom) am not currently sure what this stuff really does.
-
-				commandStack = new BasicCommandStack();
+			
+				// synchronize command execution on the root object; this is a temporary
+				// solution to allow other threads (evaluation thread for example) to ensure a consistent scenario 
+				// state when they want to do something.
+				// This probably belongs in the scenario service in some future version.
+				commandStack = new BasicCommandStack() {
+					@Override
+					public void execute(Command command) {
+						synchronized (rootObject) {
+							super.execute(command);
+						}
+					}
+				};
+				
 				commandStack.addCommandStackListener(new CommandStackListener() {
 					@Override
 					public void commandStackChanged(EventObject event) {
@@ -323,8 +332,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	@Override
 	public void dispose() {
-		super.dispose();
 		Activator.getDefault().getJobManager().removeEclipseJobManagerListener(jobManagerListener);
+		for (final IJointModelEditorContribution contribution : contributions) {
+			contribution.dispose();
+		}
+		super.dispose();
 	}
 
 	@Override
