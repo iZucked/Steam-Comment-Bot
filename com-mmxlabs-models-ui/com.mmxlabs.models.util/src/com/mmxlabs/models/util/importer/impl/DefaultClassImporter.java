@@ -285,8 +285,7 @@ public class DefaultClassImporter implements IClassImporter {
 		
 		for (final EObject object : objects) {
 			final Map<String, String> flattened = exportObject(object);
-//			if (addKind)
-				flattened.put(KIND_KEY, object.eClass().getName());
+			flattened.put(KIND_KEY, object.eClass().getName());
 			result.add(flattened);
 		}
 		return result;
