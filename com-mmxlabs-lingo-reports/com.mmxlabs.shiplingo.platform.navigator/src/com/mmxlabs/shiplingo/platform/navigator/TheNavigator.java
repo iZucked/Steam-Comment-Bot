@@ -64,19 +64,28 @@ public class TheNavigator extends CommonNavigator {
 
 		@Override
 		public void jobSelected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-
-			final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
-			for (final TreeItem i : items) {
-				checkItems(i, resource, true);
-			}
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
+					for (final TreeItem i : items) {
+						checkItems(i, resource, true);
+					}					
+				}
+			});
 		}
 
 		@Override
 		public void jobDeselected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-			final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
-			for (final TreeItem i : items) {
-				checkItems(i, resource, false);
-			}
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					final TreeItem[] items = TheNavigator.this.getCommonViewer().getTree().getItems();
+					for (final TreeItem i : items) {
+						checkItems(i, resource, false);
+					}
+				}				
+			});
 		}
 	};
 
