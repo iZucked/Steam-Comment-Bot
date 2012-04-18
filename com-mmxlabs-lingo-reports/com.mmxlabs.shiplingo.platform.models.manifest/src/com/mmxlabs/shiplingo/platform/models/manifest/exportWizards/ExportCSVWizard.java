@@ -87,6 +87,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 	 * @param outputFile
 	 */
 	private void writeCSV(Collection<Map<String, String>> rows, File outputFile) {
+		if (rows.isEmpty()) return;
 		final LinkedHashSet<String> keys = new LinkedHashSet<String>();
 		for (final Map<String, String> row : rows) {
 			keys.addAll(row.keySet());
