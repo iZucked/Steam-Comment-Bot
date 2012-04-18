@@ -108,7 +108,8 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -170,10 +171,10 @@
 		</repository>
 
 		<repository>
-            <id>orbit</id>
-            <url>http://download.eclipse.org/tools/orbit/downloads/drops/I20120321212921/repository</url>
-            <layout>p2</layout>
-        </repository>
+			<id>orbit</id>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/I20120321212921/repository</url>
+			<layout>p2</layout>
+		</repository>
 
 		<repository>
 			<id>mmxlabs-p2-external</id>
