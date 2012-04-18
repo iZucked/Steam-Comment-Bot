@@ -69,7 +69,7 @@ public class LNGJobDescriptorAdapterFactory implements IAdapterFactory {
 		// Set model name so reports can show the right thing in the optimisation column.
 		scenario.setName(name);
 		// Create the job
-		final LNGSchedulerJobDescriptor newJob = new LNGSchedulerJobDescriptor(name, scenario);
+		final LNGSchedulerJobDescriptor newJob = new LNGSchedulerJobDescriptor(name, scenario, true);
 
 		return newJob;
 	}

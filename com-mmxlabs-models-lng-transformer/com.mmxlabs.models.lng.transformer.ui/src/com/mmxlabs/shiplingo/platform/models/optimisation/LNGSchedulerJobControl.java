@@ -44,7 +44,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	private long startTimeMillis;
 
 	public LNGSchedulerJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
-		super("Optimising " + jobDescriptor.getJobName());
+		super(jobDescriptor.isOptimising() ? "Optimising " : "Evaluating " + jobDescriptor.getJobName());
 		this.jobDescriptor = jobDescriptor;
 		this.scenario = jobDescriptor.getJobContext();
 	}
@@ -81,7 +81,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		scheduleModel.setInitialSchedule(schedule);
-		
+		scheduleModel.setOptimisedSchedule(null); //clear optimised state.
 		return schedule;
 	}
 
@@ -103,6 +103,12 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	 */
 	@Override
 	protected boolean step() {
+		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
+		if (jobDescriptor.isOptimising() == false) {
+			scheduleModel.setDirty(false);
+			log.debug("Cleared dirty bit on " + scheduleModel);
+			return false; // if we are not optimising, finish.
+		}
 		optimiser.step(REPORT_PERCENTAGE);
 		currentProgress += REPORT_PERCENTAGE;
 
@@ -125,6 +131,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			intermediateSchedule = saveOptimisedSolution(optimiser.getBestSolution(true));
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
+			scheduleModel.setDirty(false);
+			log.debug("Cleared dirty bit on " + scheduleModel);
 			return false;
 		} else {
 			return true;
