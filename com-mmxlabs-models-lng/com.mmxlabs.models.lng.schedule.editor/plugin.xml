@@ -145,4 +145,13 @@
           subModelImporterClass="com.mmxlabs.models.lng.schedule.importers.ScheduleModelImporter">
     </submodelImporter>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.schedule.editor.scheduleEditorContribution"
+          implementation="com.mmxlabs.models.lng.schedule.ui.editorpart.ScheduleModelEditorContribution"
+          priority="0"
+          subModelClass="com.mmxlabs.models.lng.schedule.ScheduleModel">
+    </jointModelEditor>
+ </extension>
 </plugin>
