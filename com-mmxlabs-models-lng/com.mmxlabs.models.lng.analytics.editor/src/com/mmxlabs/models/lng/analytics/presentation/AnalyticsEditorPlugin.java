@@ -6,21 +6,18 @@
  */
 package com.mmxlabs.models.lng.analytics.presentation;
 
-import com.mmxlabs.models.lng.analytics.evaluation.IEvaluationService;
-import com.mmxlabs.models.lng.analytics.ui.commands.UnitCostMatrixCommandProvider;
-import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
-
-import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
-import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
-
 import org.eclipse.emf.common.EMFPlugin;
-
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
-
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
+
+import com.mmxlabs.models.lng.analytics.ui.commands.UnitCostMatrixCommandProvider;
+import com.mmxlabs.models.lng.analytics.ui.liveeval.IResourceEvaluator;
+import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
+import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
+import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
 /**
  * This is the central singleton for the Analytics editor plugin.
@@ -90,8 +87,8 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 	 */
 	public static class Implementation extends EclipseUIPlugin {
 		private ServiceRegistration<IModelCommandProvider> commandService;
-		private ServiceTracker<IEvaluationService, IEvaluationService> evaluationServiceTracker;
-
+		private ServiceTracker<IResourceEvaluator, IResourceEvaluator> evaluatorTracker;
+	
 		/**
 		 * Creates an instance.
 		 * <!-- begin-user-doc -->
@@ -114,8 +111,8 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 			super.start(context);
 			IModelCommandProvider commandProvider = new UnitCostMatrixCommandProvider();
 			commandService = context.registerService(IModelCommandProvider.class, commandProvider , null);
-			evaluationServiceTracker = new ServiceTracker<IEvaluationService, IEvaluationService>(context, IEvaluationService.class, null);
-			evaluationServiceTracker.open();
+			evaluatorTracker = new ServiceTracker<IResourceEvaluator, IResourceEvaluator>(context, IResourceEvaluator.class, null);
+			evaluatorTracker.open();
 		}
 
 		/* (non-Javadoc)
@@ -124,12 +121,12 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 		@Override
 		public void stop(BundleContext context) throws Exception {
 			commandService.unregister();
-			evaluationServiceTracker.close();
+			evaluatorTracker.close();
 			super.stop(context);
 		}
-
-		public IEvaluationService getEvaluationService() {
-			return evaluationServiceTracker.getService();
+		
+		public IResourceEvaluator getResourceEvaluator() {
+			return evaluatorTracker.getService();
 		}
 	}
 
