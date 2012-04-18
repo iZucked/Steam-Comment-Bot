@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="MMXLabs Target" sequenceNumber="26">
+<target name="MMXLabs Target" sequenceNumber="28">
 <locations>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.edapt.recorder.feature.feature.group" version="0.3.0.201111051053"/>
@@ -30,6 +30,7 @@
 <unit id="org.eclipse.emf.query.sdk.feature.group" version="1.5.0.v20110502-1600-67O-95GFz03DQEiNLXRMK_NPj507"/>
 <unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.5.0.v20110502-1600-67O-96SGR55YJeZPedcQnghI6uFA"/>
 <unit id="org.eclipse.jet.sdk.feature.group" version="1.1.1.v201101271243-42186A5NsKEQPHRQeFaJS4A35"/>
+<unit id="org.eclipse.ocl.all.sdk.feature.group" version="3.1.2.v20120206-0606"/>
 <repository location="http://download.eclipse.org/releases/indigo"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
