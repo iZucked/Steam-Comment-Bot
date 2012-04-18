@@ -16,6 +16,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getInitialSchedule <em>Initial Schedule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getOptimisedSchedule <em>Optimised Schedule</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.ScheduleModel#isDirty <em>Dirty</em>}</li>
  * </ul>
  * </p>
  *
@@ -75,6 +76,32 @@ public interface ScheduleModel extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setOptimisedSchedule(Schedule value);
+
+	/**
+	 * Returns the value of the '<em><b>Dirty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Dirty</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Dirty</em>' attribute.
+	 * @see #setDirty(boolean)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getScheduleModel_Dirty()
+	 * @model required="true"
+	 * @generated
+	 */
+	boolean isDirty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.ScheduleModel#isDirty <em>Dirty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Dirty</em>' attribute.
+	 * @see #isDirty()
+	 * @generated
+	 */
+	void setDirty(boolean value);
 
 } // end of  ScheduleModel
 

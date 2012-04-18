@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#getInitialSchedule <em>Initial Schedule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#getOptimisedSchedule <em>Optimised Schedule</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#isDirty <em>Dirty</em>}</li>
  * </ul>
  * </p>
  *
@@ -75,6 +76,26 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	 * @ordered
 	 */
 	protected Schedule optimisedSchedule;
+
+	/**
+	 * The default value of the '{@link #isDirty() <em>Dirty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDirty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DIRTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDirty() <em>Dirty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDirty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean dirty = DIRTY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -207,6 +228,27 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDirty(boolean newDirty) {
+		boolean oldDirty = dirty;
+		dirty = newDirty;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE_MODEL__DIRTY, oldDirty, dirty));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -232,6 +274,8 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 				return getInitialSchedule();
 			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
 				return getOptimisedSchedule();
+			case SchedulePackage.SCHEDULE_MODEL__DIRTY:
+				return isDirty();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -252,6 +296,9 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 				return;
 			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
 				setOptimisedSchedule((Schedule)newValue);
+				return;
+			case SchedulePackage.SCHEDULE_MODEL__DIRTY:
+				setDirty((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -274,6 +321,9 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
 				setOptimisedSchedule((Schedule)null);
 				return;
+			case SchedulePackage.SCHEDULE_MODEL__DIRTY:
+				setDirty(DIRTY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -292,6 +342,8 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 				return initialSchedule != null;
 			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
 				return optimisedSchedule != null;
+			case SchedulePackage.SCHEDULE_MODEL__DIRTY:
+				return dirty != DIRTY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -340,6 +392,8 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", dirty: ");
+		result.append(dirty);
 		result.append(')');
 		return result.toString();
 	}

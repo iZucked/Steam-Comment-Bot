@@ -83,9 +83,11 @@ public class FuelUsageImpl extends EObjectImpl implements FuelUsage {
 	 * @generated
 	 */
 	public int getFuelCost() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		int sum = 0;
+		for (final FuelQuantity fq : getFuels()) {
+			sum += fq.getCost();
+		}
+		return sum;
 	}
 
 	/**
