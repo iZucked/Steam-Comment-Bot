@@ -37,68 +37,7 @@ public class ScheduleAdapter {
 	 * @return
 	 */
 	public static List<Schedule> getSchedules(final ISelection selection) {
-
 		return getSelectedSchedules();
-		//
-		// if (selection == null || selection.isEmpty()) {
-		// return Collections.emptyList();
-		// }
-		//
-		// // TODO: just pull latest scenario
-		//
-		// if (selection instanceof IStructuredSelection) {
-		// final IStructuredSelection sel = (IStructuredSelection) selection;
-		// final Iterator<?> iter = sel.iterator();
-		// while (iter.hasNext()) {
-		// final Object o = iter.next();
-		// // Try direct instanceof checks
-		// if (o instanceof Schedule) {
-		// schedules.add((Schedule) o);
-		// } else if (o instanceof Scenario) {
-		// Schedule schedule = getLastScheduleFromScenario((Scenario) o);
-		// if (schedule != null) {
-		// schedules.add(schedule);
-		// }
-		// } else {
-		// // Try IAdaptable
-		// if (o instanceof IAdaptable) {
-		// Object adapted = ((IAdaptable) o)
-		// .getAdapter(Schedule.class);
-		// if (adapted != null) {
-		// schedules.add((Schedule) adapted);
-		// } else {
-		// adapted = ((IAdaptable) o)
-		// .getAdapter(Scenario.class);
-		// if (adapted != null) {
-		// Schedule schedule = getLastScheduleFromScenario((Scenario) adapted);
-		// if (schedule != null) {
-		// schedules.add(schedule);
-		// }
-		// }
-		// }
-		// } else {
-		// // Finally try the platform adapter manager
-		// Object adapted = Platform.getAdapterManager()
-		// .loadAdapter(o,
-		// Schedule.class.getCanonicalName());
-		// if (adapted != null) {
-		// schedules.add((Schedule) adapted);
-		// } else {
-		// adapted = Platform.getAdapterManager().loadAdapter(
-		// o, Scenario.class.getCanonicalName());
-		// if (adapted != null) {
-		// Schedule schedule = getLastScheduleFromScenario((Scenario) adapted);
-		// if (schedule != null) {
-		// schedules.add(schedule);
-		// }
-		// }
-		// }
-		// }
-		// }
-		// }
-		// }
-		//
-		// return schedules;
 	}
 
 	public static List<Schedule> getSelectedSchedules() {
@@ -108,17 +47,6 @@ public class ScheduleAdapter {
 		final List<IJobDescriptor> selectedJobs = jobManager.getSelectedJobs();
 
 		for (final IJobDescriptor job : selectedJobs) {
-
-			// if (job instanceof LNGSchedulerJob) {
-			// // false
-			// // Need to do something here with separate descriptor/control
-			// final Scenario s = ((LNGSchedulerJob) job).getScenario();
-
-			// this does not work; the job copies the scenario when it starts, rather than modifying the original.
-			// What is the intended behavior here? Should the job modify the original?
-			// Shouldn't this thing be able to ask the descriptor for some current state to display rather than
-			// messing around with the context?
-
 			final IJobControl control = jobManager.getControlForJob(job);
 			final Object jobContext = control.getJobOutput();
 
@@ -222,7 +150,6 @@ public class ScheduleAdapter {
 			return false;
 		}
 		Display.getDefault().asyncExec(new Runnable() {
-
 			@Override
 			public void run() {
 				viewer.setInput(getSelectedSchedules());

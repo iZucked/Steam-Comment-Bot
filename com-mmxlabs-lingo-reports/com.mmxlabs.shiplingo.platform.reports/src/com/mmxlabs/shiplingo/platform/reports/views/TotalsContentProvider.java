@@ -94,9 +94,13 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 				object = ((EObject) object).eContainer();
 			}
 		}
-		final MMXRootObject s = (MMXRootObject) object;
-		final String scheduleName = s.getName();
-
+		final String scheduleName;
+		if (object instanceof MMXRootObject) {
+			final MMXRootObject s = (MMXRootObject) object;
+			scheduleName = s.getName();
+		} else {
+			scheduleName = "";
+		}
 		for (final Entry<Fuel, Long> entry : totalFuelCosts.entrySet()) {
 			output.add(new RowData(scheduleName, entry.getKey().toString(), true, entry.getValue()));
 		}
