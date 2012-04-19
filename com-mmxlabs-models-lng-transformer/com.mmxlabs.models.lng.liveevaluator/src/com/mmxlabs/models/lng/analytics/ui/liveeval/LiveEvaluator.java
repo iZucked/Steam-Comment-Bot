@@ -31,18 +31,19 @@ public class LiveEvaluator extends MMXAdapterImpl {
 	@Override
 	public void reallyNotifyChanged(final Notification notification) {
 		if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_Dirty()) {
-			if (notification.getEventType() == Notification.SET && !notification.isTouch()) {
-				if (notification.getOldBooleanValue() == false && notification.getNewBooleanValue() == true) {
-					queueEvaluate();
-				}
+			if (notification.getEventType() == Notification.SET && notification.getNewBooleanValue()) {
+				queueEvaluate();
 			}
 		}
 	}
 
-	private void queueEvaluate() {
-		if (evaluatorThread != null) evaluatorThread.interrupt();
-		evaluatorThread = new Thread(new Evaluator());
-		evaluatorThread.start();
+	private void queueEvaluate() { 
+		if (evaluatorThread == null || !evaluatorThread.isAlive()) {
+			evaluatorThread = new Thread(new Evaluator());
+			evaluatorThread.start();
+		} else {
+			evaluatorThread.interrupt();			
+		}
 	}
 	
 	private class Evaluator implements Runnable {
@@ -52,13 +53,17 @@ public class LiveEvaluator extends MMXAdapterImpl {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
+				run();
 				return;
 			}
 			
 			final IResourceEvaluator evaluator = AnalyticsEditorPlugin.getPlugin().getResourceEvaluator();
 			if (evaluator != null) {
 				final MMXRootObject rootObject = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
-				if (Thread.interrupted()) return;
+				if (Thread.interrupted()) {
+					run();
+					return;
+				}
 				synchronized (rootObject) {
 					log.debug("About to evaluate " + resource.getName());
 					evaluator.evaluate(resource);
