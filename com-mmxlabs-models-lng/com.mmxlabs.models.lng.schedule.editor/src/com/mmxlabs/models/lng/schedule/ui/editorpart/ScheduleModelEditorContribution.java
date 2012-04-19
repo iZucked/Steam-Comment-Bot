@@ -30,9 +30,6 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 	private MMXContentAdapter dirtyStateAdapter = new MMXContentAdapter() {
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
-			if (ScheduleModelEditorContribution.this.modelObject.isDirty()) {
-				return;
-			}
 			final int type = notification.getEventType();
 			switch (type) {
 			case Notification.RESOLVE:
@@ -48,20 +45,6 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 				log.debug("Setting dirty bit on schedule model");
 				ScheduleModelEditorContribution.this.modelObject.setDirty(true);
 			}
-		}
-
-
-		@Override
-		public void disable() {
-			log.debug("Adapter disabled");
-			super.disable();
-		}
-
-
-		@Override
-		public void enable() {
-			log.debug("Adapter enabled");
-			super.enable();
 		}
 	};
 	
