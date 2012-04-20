@@ -85,8 +85,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			final StringBuilder sb = new StringBuilder();
 			final Event event = (Event) element;
 
-			sb.append("Start Time: " + df.format(event.getStart()) + "\n");
-			sb.append("End Time: " + df.format(event.getEnd()) + "\n");
+			sb.append("Start Date: " + df.format(event.getStart()) + "\n");
+			sb.append("End Date: " + df.format(event.getEnd()) + "\n");
 			final int days = event.getDuration() / 24;
 			final int hours = event.getDuration() % 24;
 			sb.append("Duration: " + days + " days, " + hours + " hours\n");
