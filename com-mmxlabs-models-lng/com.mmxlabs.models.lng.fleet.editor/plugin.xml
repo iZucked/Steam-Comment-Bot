@@ -111,6 +111,12 @@
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.FuelConsumptionComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.fleet.FuelConsumption" />
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.MaintenanceEventComponentHelper"
+        id="com.mmxlabs.models.lng.fleet.helpers.MaintenanceEvent"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.fleet.MaintenanceEvent">
+  </componentHelper>
 		
 	</extension>
  <extension
