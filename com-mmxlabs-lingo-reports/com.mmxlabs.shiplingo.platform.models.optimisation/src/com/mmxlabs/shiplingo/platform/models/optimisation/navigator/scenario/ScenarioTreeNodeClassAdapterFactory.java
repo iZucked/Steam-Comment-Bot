@@ -7,6 +7,7 @@ package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.scenario;
 import java.io.IOException;
 import java.util.WeakHashMap;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -53,9 +54,9 @@ public class ScenarioTreeNodeClassAdapterFactory implements IAdapterFactory, IRe
 	@Override
 	public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
 
-		if (adaptableObject instanceof IResource) {
+		if (adaptableObject instanceof IFile) {
 			// Fall back to directly loading from resource
-			final JointModel model = getJointModel((IResource) adaptableObject);
+			final JointModel model = getJointModel((IFile) adaptableObject);
 			
 			if (MMXRootObject.class.isAssignableFrom(adapterType)) {
 				return model.getRootObject();
