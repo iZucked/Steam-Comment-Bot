@@ -36,7 +36,7 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
 		final ISelection selection = activePage.getSelection();
-		if (selection != null & selection instanceof IStructuredSelection) {
+		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
 				final Object element = iterator.next();

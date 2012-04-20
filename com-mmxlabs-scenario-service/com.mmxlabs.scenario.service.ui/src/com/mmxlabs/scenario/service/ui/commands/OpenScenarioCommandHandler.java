@@ -43,7 +43,7 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 		IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
 		ISelection selection = activePage.getSelection();
-		if (selection != null & selection instanceof IStructuredSelection) {
+		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection strucSelection = (IStructuredSelection) selection;
 			for (Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
 				Object element = iterator.next();
