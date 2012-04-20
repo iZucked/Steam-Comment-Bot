@@ -23,10 +23,14 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class OpenScenarioCommandHandler extends AbstractHandler {
+
+	private static final Logger log = LoggerFactory.getLogger(OpenScenarioCommandHandler.class);
 
 	private IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
 
@@ -46,16 +50,16 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 				if (element instanceof ScenarioInstance) {
 					ScenarioInstance model = (ScenarioInstance) element;
 
-//					ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(model);
+					// ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(model);
 					URIEditorInput editorInput = new URIEditorInput(URI.createURI(model.getUri()));
 
 					try {
 						openEditor(editorInput);
 					} catch (PartInitException e) {
-						
+
 						MessageDialog.openError(activePage.getWorkbenchWindow().getShell(), "Error opening editor", e.getMessage());
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+
+						log.error(e.getMessage(), e);
 					}
 				}
 			}
@@ -70,8 +74,8 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 		if (editorPart != null) {
 			// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(editorInput, null, true);
 		} else {
-//			String contentTypeString = editorInput.getContentType();
-			IContentType contentType = null;//contentTypeString == null ? null : Platform.getContentTypeManager().getContentType(contentTypeString);
+			// String contentTypeString = editorInput.getContentType();
+			IContentType contentType = null;// contentTypeString == null ? null : Platform.getContentTypeManager().getContentType(contentTypeString);
 
 			IEditorDescriptor descriptor = registry.getDefaultEditor(editorInput.getName(), contentType);
 
