@@ -316,6 +316,8 @@ public class MultiDetailDialog extends Dialog {
 	private class EditorWrapper implements IInlineEditorWrapper {
 		@Override
 		public IInlineEditor wrap(final IInlineEditor proxy) {
+			if (proxy == null) return null;
+			
 			if (proxy.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 				return null;
 			}
