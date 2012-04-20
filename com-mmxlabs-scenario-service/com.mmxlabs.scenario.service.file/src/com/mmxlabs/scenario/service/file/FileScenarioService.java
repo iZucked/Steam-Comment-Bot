@@ -223,7 +223,7 @@ public class FileScenarioService implements IScenarioService {
 
 			final Map<Class<?>, Object> adapters = instance.getAdapters();
 			if (adapters != null && adapters.containsKey(adapter)) {
-				return (T) adapters.get(adapter);
+				return adapter.cast(adapters.get(adapter));
 			}
 		}
 		return null;
