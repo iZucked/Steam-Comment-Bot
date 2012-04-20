@@ -54,7 +54,6 @@ import com.mmxlabs.shiplingo.platform.scheduleview.Activator;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownColourScheme;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.FuelChoiceColourScheme;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.HighSpeedColourScheme;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.RouteChoiceColourScheme;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.VesselStateColourScheme;
 

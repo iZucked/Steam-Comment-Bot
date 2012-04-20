@@ -9,6 +9,7 @@ import org.eclipse.swt.graphics.Color;
 
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.IScheduleViewColourScheme;
 
 /**
  * A colour scheme which highlights cooldown in red

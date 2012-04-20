@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.ValidationSupport;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 
 /**
  * @author hinton

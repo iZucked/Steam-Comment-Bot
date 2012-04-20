@@ -9,6 +9,7 @@ import org.eclipse.swt.graphics.Color;
 
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.IScheduleViewColourScheme;
 
 public class RouteChoiceColourScheme implements IScheduleViewColourScheme {
 

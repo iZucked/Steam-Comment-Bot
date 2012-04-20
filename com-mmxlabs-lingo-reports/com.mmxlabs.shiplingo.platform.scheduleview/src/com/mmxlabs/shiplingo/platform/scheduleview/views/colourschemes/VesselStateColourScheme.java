@@ -10,6 +10,7 @@ import org.eclipse.swt.graphics.Color;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.IScheduleViewColourScheme;
 
 public class VesselStateColourScheme implements IScheduleViewColourScheme {
 
