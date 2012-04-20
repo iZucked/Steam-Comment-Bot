@@ -56,7 +56,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			// final String name =
 			// URI.decode(sequence.eResource().getURI().lastSegment()).replaceAll(".scenario","");
 
-			return sequence.getName();
+			// TODO: Re-add scenario name
+			return sequence.getName(); // + "\n" + name;
 		}
 		return null;
 	}
