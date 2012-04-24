@@ -21,6 +21,5 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.scenario.service.ui,
  com.mmxlabs.scenario.service.ui.commands,
  com.mmxlabs.scenario.service.ui.editing,
- com.mmxlabs.scenario.service.ui.navigator,
- com.mmxlabs.scenario.service.ui.resource
+ com.mmxlabs.scenario.service.ui.navigator
 Bundle-ClassPath: .
