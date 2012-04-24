@@ -18,7 +18,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getUuid <em>Uuid</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getUri <em>Uri</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getMetadata <em>Metadata</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance <em>Instance</em>}</li>
@@ -82,32 +81,6 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	void setUuid(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Uri</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Uri</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Uri</em>' attribute.
-	 * @see #setUri(String)
-	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_Uri()
-	 * @model required="true"
-	 * @generated
-	 */
-	String getUri();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getUri <em>Uri</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Uri</em>' attribute.
-	 * @see #getUri()
-	 * @generated
-	 */
-	void setUri(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Metadata</b></em>' containment reference.

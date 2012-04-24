@@ -57,7 +57,6 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 
 			addNamePropertyDescriptor(object);
 			addUuidPropertyDescriptor(object);
-			addUriPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
 			addAdaptersPropertyDescriptor(object);
 		}
@@ -86,18 +85,6 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioInstance_uuid_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_uuid_feature", "_UI_ScenarioInstance_type"),
 				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__UUID, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Uri feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addUriPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_uri_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_uri_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__URI, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -204,7 +191,6 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		switch (notification.getFeatureID(ScenarioInstance.class)) {
 		case ScenarioServicePackage.SCENARIO_INSTANCE__NAME:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__URI:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
