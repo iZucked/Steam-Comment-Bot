@@ -3,10 +3,16 @@ syntax: regexp
 ^com\.mmxlabs\.scenario\.service/target$
 
 syntax: regexp
+^com\.mmxlabs\.scenario\.service\.workspace/target$
+
+syntax: regexp
 ^com\.mmxlabs\.scenario\.service\.model/target$
 
 syntax: regexp
 ^com\.mmxlabs\.scenario\.service\.model\.edit/target$
+
+syntax: regexp
+^com\.mmxlabs\.model\.service/target$
 
 syntax: regexp
 ^com\.mmxlabs\.scenario\.service\.ui/target$
@@ -19,6 +25,6 @@ syntax: regexp
 syntax: regexp
 ^com\.mmxlabs\.scenario\.service\.p2/target$
 syntax: regexp
-^\.settings$
+^.*\.settings$
 syntax: regexp
 ^\.project$
