@@ -81,22 +81,22 @@ public class ModelService implements IModelService {
 
 	@Override
 	public void saveAs(final IModelInstance instance, final URI uri) throws IOException {
-		
+
 		EObject model = instance.getModel();
 		if (model.eResource() != null) {
 			throw new IllegalStateException("Model already has a persisted resource");
 		}
 		final Resource resource = resourceSet.createResource(uri);
-		
+
 		resource.getContents().add(model);
-		
+
 		resource.save(Collections.emptyMap());
 	}
 
 	@Override
-	public void copyTo(final IModelInstance from, final URI to) throws IOException {
+	public IModelInstance copyTo(final IModelInstance from, final URI to) throws IOException {
 		// TODO Auto-generated method stub
-
+		return null;
 	}
 
 	@Override
