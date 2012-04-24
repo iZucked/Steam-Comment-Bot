@@ -7,6 +7,8 @@ package com.mmxlabs.scenario.service.workspace;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
@@ -16,6 +18,7 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -38,33 +41,86 @@ import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 
 public class WorkspaceScenarioService implements IScenarioService {
 
+	private static final Logger log = LoggerFactory.getLogger(WorkspaceScenarioService.class);
+
+	private final QualifiedName qnUUID = new QualifiedName("com.mmxlabs.scenario.service.workspace.WorkspaceScenarioService", "UUID");
+
 	/**
 	 * A workspace listener to maintain the EMF Model state.
-	 *
+	 * 
 	 */
 	private final class workspaceChangeListener implements IResourceChangeListener {
 		@Override
 		public void resourceChanged(final IResourceChangeEvent event) {
 
-			// TODO: Maintain a map for efficient lookup of resource to EMF nodes
-			
-			final IResourceDelta[] removedChildren = event.getDelta().getAffectedChildren(IResourceDelta.REMOVED);
-			// TODO Update model
-			
+			IResourceDelta parentDelta = event.getDelta();
+			processDelta(parentDelta);
+		}
 
-			final IResourceDelta[] addedChildren = event.getDelta().getAffectedChildren(IResourceDelta.ADDED);
-			// TODO Update model
+		private void processDelta(IResourceDelta delta) {
+
+			if (delta.getKind() == IResourceDelta.REMOVED) {
+
+				// Recurse first, then remove
+				for (final IResourceDelta d : delta.getAffectedChildren()) {
+					processDelta(d);
+				}
+
+				final IResource resource = delta.getResource();
+				final Container container = mapWorkspaceToModel.get(resource);
+				if (container != null) {
+
+					// Remove node from parent.
+					((Container) container.eContainer()).getElements().remove(container);
+
+					// Remove mapping
+					mapWorkspaceToModel.remove(resource);
+				}
+			} else if (delta.getKind() == IResourceDelta.ADDED) {
+
+				// Add then recurse
+
+				final IResource resource = delta.getResource();
+
+				if (resource.getType() == IResource.FILE) {
+
+					final Container container = mapWorkspaceToModel.get(resource.getParent());
+
+					createScenarioInstance(container, resource);
+
+				} else if (resource.getType() == IResource.FOLDER || resource.getType() == IResource.PROJECT) {
+
+					final Container container = mapWorkspaceToModel.get(resource.getParent());
+
+					createFolder(container, resource);
+				}
+
+				// Recurse
+				for (final IResourceDelta d : delta.getAffectedChildren()) {
+
+					processDelta(d);
+				}
+			} else {
+
+				// TODO - Update resource names
+
+				// Just recurse
+				for (final IResourceDelta d : delta.getAffectedChildren()) {
+
+					processDelta(d);
+				}
+			}
 
 		}
 	}
-
-	private static final Logger log = LoggerFactory.getLogger(WorkspaceScenarioService.class);
 
 	private IModelService modelService;
 
 	private ScenarioService scenarioService;
 
 	private final Map<String, ScenarioInstance> instanceMap = new HashMap<String, ScenarioInstance>();
+
+	private final Map<IResource, Container> mapWorkspaceToModel = new WeakHashMap<IResource, Container>();
 
 	private workspaceChangeListener workspaceChangeListener;
 
@@ -111,7 +167,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		serviceService.setDescription(getName());
 
 		// TODO: Hook up a listener to react to model changes and replicate in the workspace.
-		
+
 		return serviceService;
 	}
 
@@ -144,32 +200,63 @@ public class WorkspaceScenarioService implements IScenarioService {
 			try {
 				for (final IResource r : workspaceContainer.members()) {
 					if (r.getType() == IResource.FILE) {
-						final String uuid = r.getName();
-
-						final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-						scenarioInstance.setUuid(uuid);
-						scenarioInstance.setName(r.getName());
-
-						final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-						// TODO: Set correct content type
-						metadata.setContentType("text/xmi");
-						scenarioInstance.setMetadata(metadata);
-
-						modelContainer.getElements().add(scenarioInstance);
+						createScenarioInstance(modelContainer, r);
 					} else if (r.getType() == IResource.FOLDER || r.getType() == IResource.PROJECT) {
 
 						// Create container,
-						final Folder folder = ScenarioServiceFactory.eINSTANCE.createFolder();
-						modelContainer.getElements().add(folder);
-						folder.setName(r.getName());
+						final Folder folder = createFolder(modelContainer, r);
+
 						// Recurse
 						scanForScenarios(scenarioServiceID, (IContainer) r, folder);
+
 					}
 				}
 			} catch (final CoreException e) {
 				log.error(e.getMessage(), e);
 			}
 		}
+	}
+
+	private Folder createFolder(final Container modelContainer, final IResource r) {
+
+		System.out.println("Create folder: " + r.getName());
+
+		final Folder folder = ScenarioServiceFactory.eINSTANCE.createFolder();
+		modelContainer.getElements().add(folder);
+		folder.setName(r.getName());
+
+		mapWorkspaceToModel.put(r, folder);
+
+		return folder;
+	}
+
+	private void createScenarioInstance(final Container container, final IResource r) {
+
+		String uuid = null;
+		try {
+			// Try and restore previous UUID
+			uuid = r.getPersistentProperty(qnUUID);
+			if (uuid == null) {
+				// Otherwise generate a new one.
+				uuid = UUID.randomUUID().toString();
+				r.setPersistentProperty(qnUUID, uuid);
+			}
+		} catch (CoreException e) {
+			log.error(e.getMessage(), e);
+		}
+
+		final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+		scenarioInstance.setUuid(uuid);
+		scenarioInstance.setName(r.getName());
+
+		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+		// TODO: Set correct content type
+		metadata.setContentType("text/xmi");
+		scenarioInstance.setMetadata(metadata);
+
+		mapWorkspaceToModel.put(r, scenarioInstance);
+
+		container.getElements().add(scenarioInstance);
 	}
 
 	public IModelService getModelService() {

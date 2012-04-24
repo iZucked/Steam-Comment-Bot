@@ -28,7 +28,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getUuid <em>Uuid</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getUri <em>Uri</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getMetadata <em>Metadata</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getInstance <em>Instance</em>}</li>
@@ -78,26 +77,6 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * @ordered
 	 */
 	protected String uuid = UUID_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getUri() <em>Uri</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getUri()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String URI_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getUri() <em>Uri</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getUri()
-	 * @generated
-	 * @ordered
-	 */
-	protected String uri = URI_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getMetadata() <em>Metadata</em>}' containment reference.
@@ -208,27 +187,6 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		uuid = newUuid;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__UUID, oldUuid, uuid));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getUri() {
-		return uri;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setUri(String newUri) {
-		String oldUri = uri;
-		uri = newUri;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__URI, oldUri, uri));
 	}
 
 	/**
@@ -383,8 +341,6 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return getName();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
 			return getUuid();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__URI:
-			return getUri();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 			return getMetadata();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
@@ -413,9 +369,6 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
 			setUuid((String) newValue);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__URI:
-			setUri((String) newValue);
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 			setMetadata((Metadata) newValue);
@@ -447,9 +400,6 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
 			setUuid(UUID_EDEFAULT);
 			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__URI:
-			setUri(URI_EDEFAULT);
-			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 			setMetadata((Metadata) null);
 			return;
@@ -478,8 +428,6 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
 			return UUID_EDEFAULT == null ? uuid != null : !UUID_EDEFAULT.equals(uuid);
-		case ScenarioServicePackage.SCENARIO_INSTANCE__URI:
-			return URI_EDEFAULT == null ? uri != null : !URI_EDEFAULT.equals(uri);
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 			return metadata != null;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
@@ -507,8 +455,6 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		result.append(name);
 		result.append(", uuid: ");
 		result.append(uuid);
-		result.append(", uri: ");
-		result.append(uri);
 		result.append(", locked: ");
 		result.append(locked);
 		result.append(", adapters: ");

@@ -131,12 +131,5 @@
          </command>
       </menuContribution>
    </extension>
-   <extension
-         point="org.eclipse.emf.ecore.protocol_parser">
-      <parser
-            class="com.mmxlabs.scenario.service.ui.resource.ScenarioServiceResourceFactory"
-            protocolName="service">
-      </parser>
-   </extension>
 
 </plugin>
