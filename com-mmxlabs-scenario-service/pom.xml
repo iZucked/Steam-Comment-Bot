@@ -27,6 +27,7 @@
 	</ciManagement>
 
 	<modules>
+		<module>com.mmxlabs.model.service</module>
 		<module>com.mmxlabs.scenario.service</module>
 		<module>com.mmxlabs.scenario.service.ui</module>
 
