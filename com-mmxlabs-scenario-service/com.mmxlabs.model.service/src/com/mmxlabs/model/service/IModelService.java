@@ -27,7 +27,8 @@ public interface IModelService {
 	// todo: Add API for model groups
 	// ModelGroup createModelGroup(String name, URI ... uris)
 	// Collection<IModelInstance> getModelGroup(ModelGroup group);
-	
+	 // Resolve model references. 
+	//
 	
 	/**
 	 * Save the current {@link IModelInstance} into the given {@link URI}. This assumes the model is currently not tied to any existing {@link URI} - i.e. this is a newly created model.
