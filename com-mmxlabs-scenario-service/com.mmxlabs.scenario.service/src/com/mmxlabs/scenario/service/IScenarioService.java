@@ -4,13 +4,6 @@
  */
 package com.mmxlabs.scenario.service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Map;
-
-import org.eclipse.emf.ecore.EObject;
-
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 
@@ -31,24 +24,20 @@ public interface IScenarioService {
 	ScenarioService getServiceModel();
 
 	/**
-	 * Returns true if a resource exists with the specified UUID
+	 * Returns true if a scenario exists with the specified UUID
 	 * 
 	 * @param uuid
-	 * @param options
 	 * @return
 	 */
-	boolean exists(String uuid, Map<?, ?> options);
-
-	InputStream createInputStream(String uuid, Map<?, ?> options) throws IOException;
-
-	OutputStream createOutputStream(String uuid, Map<?, ?> options) throws IOException;
-
-	void delete(String uuid, Map<?, ?> options) throws IOException;
-	
-	
-	EObject getScenario(String uuid);
+	boolean exists(String uuid);
 
 	ScenarioInstance getScenarioInstance(String uuid);
 
-	<T> T getAdapter(String uuid, Class<T> adapters);
+	String saveAs(ScenarioInstance instance);
+
+	ScenarioInstance copyTo(ScenarioInstance from, int flags);
+
+	void delete(ScenarioInstance instance);
+
+	void delete(String uuid);
 }
