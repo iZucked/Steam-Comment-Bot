@@ -1,23 +1,7 @@
 
 syntax: regexp
-^com\.mmxlabs\.scenario\.service/target$
+^.*/target$
 
-syntax: regexp
-^com\.mmxlabs\.scenario\.service\.model/target$
-
-syntax: regexp
-^com\.mmxlabs\.scenario\.service\.model\.edit/target$
-
-syntax: regexp
-^com\.mmxlabs\.scenario\.service\.ui/target$
-
-syntax: regexp
-^com\.mmxlabs\.scenario\.service\.dirscan/target$
-
-syntax: regexp
-^com\.mmxlabs\.scenario\.service\.file/target$
-syntax: regexp
-^com\.mmxlabs\.scenario\.service\.p2/target$
 syntax: regexp
 ^\.settings$
 syntax: regexp
