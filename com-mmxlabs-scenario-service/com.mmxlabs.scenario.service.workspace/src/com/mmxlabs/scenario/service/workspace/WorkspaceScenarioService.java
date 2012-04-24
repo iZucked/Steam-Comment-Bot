@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scenario.service.workspace;
 
-import java.io.IOException;
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,10 +16,7 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IRegistryChangeEvent;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -43,10 +38,16 @@ import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 
 public class WorkspaceScenarioService implements IScenarioService {
 
+	/**
+	 * A workspace listener to maintain the EMF Model state.
+	 *
+	 */
 	private final class workspaceChangeListener implements IResourceChangeListener {
 		@Override
 		public void resourceChanged(final IResourceChangeEvent event) {
 
+			// TODO: Maintain a map for efficient lookup of resource to EMF nodes
+			
 			final IResourceDelta[] removedChildren = event.getDelta().getAffectedChildren(IResourceDelta.REMOVED);
 			// TODO Update model
 			
@@ -109,6 +110,8 @@ public class WorkspaceScenarioService implements IScenarioService {
 		serviceService.setName(getName());
 		serviceService.setDescription(getName());
 
+		// TODO: Hook up a listener to react to model changes and replicate in the workspace.
+		
 		return serviceService;
 	}
 
