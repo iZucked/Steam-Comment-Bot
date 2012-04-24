@@ -3,6 +3,7 @@ package com.mmxlabs.model.service.impl;
 import java.io.IOException;
 import java.util.Collections;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 
@@ -37,4 +38,8 @@ public class ModelInstance implements IModelInstance {
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
+	@Override
+	public URI getURI() {
+		return resource.getURI();
+	}
 }

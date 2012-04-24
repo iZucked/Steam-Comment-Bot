@@ -2,6 +2,7 @@ package com.mmxlabs.model.service;
 
 import java.io.IOException;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -40,4 +41,5 @@ public interface IModelInstance {
 	 */
 	void rollback();
 
+	URI getURI();
 }
