@@ -1,6 +1,13 @@
 
+.*~$
+.*\.orig$
+.*\.swp$
+
 syntax: regexp
 ^.*/target$
+
+syntax: regexp
+^.*/\.settings$
 
 syntax: regexp
 ^\.settings$
