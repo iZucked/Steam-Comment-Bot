@@ -5,20 +5,17 @@
 package com.mmxlabs.scenario.service.file;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -34,8 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.IServiceModelTracker;
-import com.mmxlabs.scenario.service.ScenarioServiceIOHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
@@ -43,7 +38,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 public class FileScenarioService implements IScenarioService {
 
 	private static final Logger log = LoggerFactory.getLogger(FileScenarioService.class);
-	
+
 	private static final String PROPERTY_MODEL = "com.mmxlabs.scenario.service.file.model";
 
 	private ResourceSet resourceSet;
@@ -52,8 +47,7 @@ public class FileScenarioService implements IScenarioService {
 	private ScenarioService serviceModel;
 
 	private final Map<Object, Object> options;
-
-	private ScenarioServiceIOHelper ioHelper;
+	private final Map<String, ScenarioInstance> instanceMap = new HashMap<String, ScenarioInstance>();
 
 	public FileScenarioService() {
 		options = new HashMap<Object, Object>();
@@ -84,8 +78,6 @@ public class FileScenarioService implements IScenarioService {
 
 		final URI uri = URI.createFileURI(workspaceLocation + "/" + modelURIString);
 		load(uri);
-
-		ioHelper = new ScenarioServiceIOHelper(serviceModel, workspaceLocation.append("/data/"));
 	}
 
 	public void stop(final ComponentContext context) {
@@ -137,6 +129,16 @@ public class FileScenarioService implements IScenarioService {
 			}
 		});
 
+		final TreeIterator<EObject> eAllContents = serviceModel.eAllContents();
+		while (eAllContents.hasNext()) {
+			final EObject obj = eAllContents.next();
+			if (obj instanceof ScenarioInstance) {
+				final ScenarioInstance instance = (ScenarioInstance) obj;
+				instanceMap.put(instance.getUuid(), instance);
+
+			}
+		}
+
 	}
 
 	public void save() {
@@ -145,8 +147,7 @@ public class FileScenarioService implements IScenarioService {
 		try {
 			resource.save(options);
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 	}
 
@@ -159,82 +160,34 @@ public class FileScenarioService implements IScenarioService {
 		return serviceService;
 	}
 
-	@Override
-	public InputStream createInputStream(final String uuid, final Map<?, ?> options) throws IOException {
-
-		return ioHelper.createInputStream(uuid, options);
-	}
-
-	@Override
-	public OutputStream createOutputStream(final String uuid, final Map<?, ?> options) throws IOException {
-
-		return ioHelper.createOutputStream(uuid, options);
-	}
-
-	@Override
-	public boolean exists(final String uuid, final Map<?, ?> options) {
-
-		return ioHelper.exists(uuid, options);
-	}
-
-	@Override
-	public void delete(final String uuid, final Map<?, ?> options) {
-
-		ioHelper.delete(uuid, options);
-	}
-
-	@Override
-	public EObject getScenario(final String uuid) {
-		final ScenarioInstance instance = ioHelper.findInstance(uuid);
-
-		if (instance.getInstance() == null) {
-			try {
-				final EObject scenario = ioHelper.loadScenario(uuid, Collections.EMPTY_MAP);
-
-				Map<Class<?>, Object> adapters = instance.getAdapters();
-				if (adapters == null) {
-					adapters = new HashMap<Class<?>, Object>();
-					instance.setAdapters(adapters);
-				}
-				final EditingDomain ed = initEditingDomain();
-				adapters.put(EditingDomain.class, ed);
-				ed.getResourceSet().getResources().add(scenario.eResource());
-
-				instance.setInstance(scenario);
-
-				final IServiceModelTracker tracker = (IServiceModelTracker) Platform.getAdapterManager().loadAdapter(scenario, IServiceModelTracker.class.getCanonicalName());
-				if (tracker != null) {
-					tracker.setScenarioInstance(instance);
-				}
-			} catch (final IOException e) {
-				log.error(e.getMessage(), e);
-			}
-		}
-		return instance.getInstance();
-	}
-
-	@Override
-	public ScenarioInstance getScenarioInstance(final String uuid) {
-		return ioHelper.findInstance(uuid);
-	}
-
-	@Override
-	public <T> T getAdapter(final String uuid, final Class<T> adapter) {
-
-		if (EditingDomain.class.isAssignableFrom(adapter)) {
-			final ScenarioInstance instance = ioHelper.findInstance(uuid);
-
-			Object a = null;
-			final Map<Class<?>, Object> adapters = instance.getAdapters();
-			if (adapters != null && adapters.containsKey(adapter)) {
-				a = adapters.get(adapter);
-			}
-			if (a != null) {
-				return adapter.cast(a);
-			}
-		}
-		return null;
-	}
+	// public EObject getScenario(final String uuid) {
+	// final ScenarioInstance instance = ioHelper.findInstance(uuid);
+	//
+	// if (instance.getInstance() == null) {
+	// try {
+	// final EObject scenario = ioHelper.loadScenario(uuid, Collections.EMPTY_MAP);
+	//
+	// Map<Class<?>, Object> adapters = instance.getAdapters();
+	// if (adapters == null) {
+	// adapters = new HashMap<Class<?>, Object>();
+	// instance.setAdapters(adapters);
+	// }
+	// final EditingDomain ed = initEditingDomain();
+	// adapters.put(EditingDomain.class, ed);
+	// ed.getResourceSet().getResources().add(scenario.eResource());
+	//
+	// instance.setInstance(scenario);
+	//
+	// final IServiceModelTracker tracker = (IServiceModelTracker) Platform.getAdapterManager().loadAdapter(scenario, IServiceModelTracker.class.getCanonicalName());
+	// if (tracker != null) {
+	// tracker.setScenarioInstance(instance);
+	// }
+	// } catch (final IOException e) {
+	// log.error(e.getMessage(), e);
+	// }
+	// }
+	// return instance.getInstance();
+	// }
 
 	public EditingDomain initEditingDomain() {
 		final BasicCommandStack commandStack = new BasicCommandStack();
@@ -247,5 +200,40 @@ public class FileScenarioService implements IScenarioService {
 		// Create the editing domain with a special command stack.
 		//
 		return new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
+	}
+
+	@Override
+	public boolean exists(final String uuid) {
+		return instanceMap.containsKey(uuid);
+	}
+
+	@Override
+	public String saveAs(final ScenarioInstance instance) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ScenarioInstance copyTo(final ScenarioInstance from, final int flags) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void delete(final ScenarioInstance instance) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete(final String uuid) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ScenarioInstance getScenarioInstance(final String uuid) {
+		return instanceMap.get(uuid);
+
 	}
 }
