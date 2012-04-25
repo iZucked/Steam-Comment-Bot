@@ -6,6 +6,7 @@ package com.mmxlabs.scenario.service.workspace;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
@@ -286,26 +287,8 @@ public class WorkspaceScenarioService implements IScenarioService {
 	}
 
 	@Override
-	public String saveAs(final ScenarioInstance instance) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ScenarioInstance copyTo(final ScenarioInstance from, final int flags) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void delete(final ScenarioInstance instance) {
 		
-	}
-
-	@Override
-	public void delete(final String uuid) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -346,5 +329,23 @@ public class WorkspaceScenarioService implements IScenarioService {
 		instance.setInstance(implementation);
 		
 		modelService.resolve(parts);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scenario.service.IScenarioService#insert(com.mmxlabs.scenario.service.model.Container, java.util.Collection, java.util.Collection)
+	 */
+	@Override
+	public ScenarioInstance insert(Container container, Collection<ScenarioInstance> dependencies, Collection<EObject> models) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scenario.service.IScenarioService#duplicate(com.mmxlabs.scenario.service.model.ScenarioInstance, com.mmxlabs.scenario.service.model.Container)
+	 */
+	@Override
+	public ScenarioInstance duplicate(ScenarioInstance original, Container destination) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
