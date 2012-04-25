@@ -4,11 +4,12 @@
  */
 package com.mmxlabs.scenario.service;
 
+import java.io.IOException;
+
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 
 public interface IScenarioService {
-
 	/**
 	 * Returns the name for this service
 	 * 
@@ -40,4 +41,6 @@ public interface IScenarioService {
 	void delete(ScenarioInstance instance);
 
 	void delete(String uuid);
+	
+	void load(final ScenarioInstance instance) throws IOException;
 }
