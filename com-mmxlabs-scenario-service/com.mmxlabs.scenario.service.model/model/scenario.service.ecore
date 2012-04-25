@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://com.mmxlabs.scenario.service/model/1" nsPrefix="com.mmxlabs.scenario.service">
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model"
+    nsURI="http://com.mmxlabs.scenario.service/model/1" nsPrefix="com.mmxlabs.scenario.service">
   <eClassifiers xsi:type="ecore:EClass" name="ScenarioModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioServices" upperBound="-1"
         eType="#//ScenarioService" transient="true"/>
@@ -37,6 +39,8 @@
         <eTypeArguments eClassifier="#//Object"/>
       </eGenericType>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manifest" lowerBound="1"
+        eType="#//Manifest" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Metadata">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="creator" lowerBound="1"
@@ -52,4 +56,10 @@
     <eTypeParameters name="T"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceClassName="java.lang.Object"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Manifest">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subModelURIs" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="#//ScenarioInstance"/>
+  </eClassifiers>
 </ecore:EPackage>
