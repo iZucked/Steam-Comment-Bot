@@ -16,7 +16,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
-import com.mmxlabs.scenario.service.internal.Activator;
+import com.mmxlabs.scenario.service.ui.Activator;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 
 public class ScenarioServiceNavigator extends CommonNavigator {

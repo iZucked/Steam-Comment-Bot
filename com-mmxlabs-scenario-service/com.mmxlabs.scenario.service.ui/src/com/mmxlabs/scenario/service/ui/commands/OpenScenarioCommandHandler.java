@@ -10,8 +10,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.content.IContentType;
-import org.eclipse.emf.common.ui.URIEditorInput;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -27,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 
 public class OpenScenarioCommandHandler extends AbstractHandler {
 
@@ -50,8 +49,7 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 				if (element instanceof ScenarioInstance) {
 					ScenarioInstance model = (ScenarioInstance) element;
 
-					// ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(model);
-					URIEditorInput editorInput = new URIEditorInput(URI.createURI(model.getUri()));
+					ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(model);
 
 					try {
 						openEditor(editorInput);
