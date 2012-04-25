@@ -25,6 +25,13 @@ All rights reserved.
    </license>
 
    <plugin
+         id="com.mmxlabs.model.service"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="com.mmxlabs.scenario.service"
          download-size="0"
          install-size="0"
@@ -32,7 +39,7 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.scenario.service.dirscan"
+         id="com.mmxlabs.scenario.service.workspace"
          download-size="0"
          install-size="0"
          version="0.0.0"
