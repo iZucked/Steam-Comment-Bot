@@ -18,6 +18,8 @@ import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.model.service.IModelService;
+import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 
 public class ModelService implements IModelService {
@@ -84,6 +86,35 @@ public class ModelService implements IModelService {
 			resource.getContents().add(instance);
 			final IModelInstance result = new ModelInstance(resource);
 			return result;
+		}
+	}
+
+	private void collect(final EObject object, final HashMap<String, UUIDObject> table) {
+		if (object instanceof MMXObject) ((MMXObject) object).collectUUIDObjects(table);
+		else {
+			for (final EObject o : object.eContents()) collect(o, table);
+		}
+	}
+	
+	@Override
+	public void resolve(List<EObject> parts) {
+		final HashMap<String, UUIDObject> table = new HashMap<String, UUIDObject>();
+		for (final EObject part : parts) {
+			collect(part, table);
+		}
+		// now restore proxies
+		for (final EObject part : parts) {
+			resolve(part, table);
+		}
+	}
+
+	private void resolve(EObject part, HashMap<String, UUIDObject> table) {
+		if (part instanceof MMXObject) {
+			((MMXObject) part).resolveProxies(table);
+			((MMXObject) part).restoreProxies();
+		} else {
+			for (final EObject child :part.eContents())
+				resolve(child, table);
 		}
 	}
 }

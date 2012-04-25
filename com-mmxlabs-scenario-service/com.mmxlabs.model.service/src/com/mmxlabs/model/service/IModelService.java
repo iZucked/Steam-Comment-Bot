@@ -2,6 +2,7 @@ package com.mmxlabs.model.service;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -64,4 +65,10 @@ public interface IModelService {
 	 * @throws IOException
 	 */
 	void delete(IModelInstance instance) throws IOException;
+
+	/**
+	 * Within this collection of EObjects, resolve any MMXProxies that may be dangling about inside.
+	 * @param parts
+	 */
+	void resolve(List<EObject> parts);
 }
