@@ -59,6 +59,8 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 			addUuidPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
 			addAdaptersPropertyDescriptor(object);
+			addSubModelURIsPropertyDescriptor(object);
+			addDependencyUUIDsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -109,6 +111,31 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioInstance_adapters_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_adapters_feature", "_UI_ScenarioInstance_type"),
 				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__ADAPTERS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Sub Model UR Is feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSubModelURIsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_subModelURIs_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_subModelURIs_feature", "_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__SUB_MODEL_UR_IS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Dependency UUI Ds feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDependencyUUIDsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_dependencyUUIDs_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_dependencyUUIDs_feature", "_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -193,6 +220,8 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__SUB_MODEL_UR_IS:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:

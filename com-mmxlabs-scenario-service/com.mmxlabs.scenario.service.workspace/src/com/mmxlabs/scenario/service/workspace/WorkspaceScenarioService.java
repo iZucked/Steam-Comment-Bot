@@ -167,7 +167,6 @@ public class WorkspaceScenarioService implements IScenarioService {
 		modelService = null;
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(workspaceChangeListener);
 		workspaceChangeListener = null;
-
 	}
 
 	private ScenarioService initialise() {
@@ -216,7 +215,6 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 						// Recurse
 						scanForScenarios(scenarioServiceID, (IContainer) r, folder);
-
 					}
 				}
 			} catch (final CoreException e) {
@@ -239,6 +237,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 	}
 	
 	private void createScenarioInstance(final Container container, final IResource r) {
+		// in future this could be abstracted out into an extension, but right now I don't see the point.
 		final URI resourceURI = URI.createPlatformResourceURI(r.getFullPath().toString(), true);
 		final URI manifestURI = URI.createURI("archive:" + resourceURI.toString() + "!/" + "MANIFEST.xmi");
 		

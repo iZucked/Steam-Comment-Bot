@@ -39,8 +39,10 @@
         <eTypeArguments eClassifier="#//Object"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="manifest" lowerBound="1"
-        eType="#//Manifest" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subModelURIs" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dependencyUUIDs" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Metadata">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="creator" lowerBound="1"
@@ -56,10 +58,4 @@
     <eTypeParameters name="T"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceClassName="java.lang.Object"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Manifest">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subModelURIs" upperBound="-1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
-        eType="#//ScenarioInstance"/>
-  </eClassifiers>
 </ecore:EPackage>
