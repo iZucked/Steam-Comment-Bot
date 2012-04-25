@@ -1,16 +1,17 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Service
-Bundle-SymbolicName: com.mmxlabs.scenario.service
+Bundle-Name: Scenario Service
+Bundle-SymbolicName: com.mmxlabs.scenario.service;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.mmxlabs.scenario.service.Activator
-Bundle-Vendor: MMXLABS
+Bundle-Activator: com.mmxlabs.scenario.service.internal.Activator
+Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.mmxlabs.scenario.service.model;bundle-version="1.0.0",
  org.eclipse.emf.query;bundle-version="1.2.100",
  org.eclipse.emf.ecore.xmi;bundle-version="2.7.0",
- org.eclipse.emf.edit;bundle-version="2.7.2"
+ org.eclipse.emf.edit;bundle-version="2.7.2",
+ com.mmxlabs.model.service;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.scenario.service

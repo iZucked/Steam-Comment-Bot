@@ -1,8 +1,13 @@
 
+.*~$
+.*\.orig$
+.*\.swp$
+
 syntax: regexp
 ^.*/target$
 
 syntax: regexp
-^.*\.settings$
+^.*/\.settings$
+
 syntax: regexp
 ^\.project$
