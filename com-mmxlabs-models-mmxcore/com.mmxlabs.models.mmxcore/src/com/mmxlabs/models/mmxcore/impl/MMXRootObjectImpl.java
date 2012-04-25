@@ -185,9 +185,9 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	 * @generated NO
 	 */
 	public void restoreSubModels() {
-		for (final MMXSubModel sub : getSubModels()) {
-			sub.getOriginalResource().getContents().add(sub.getSubModelInstance());
-		}
+//		for (final MMXSubModel sub : getSubModels()) {
+//			sub.getOriginalResource().getContents().add(sub.getSubModelInstance());
+//		}
 		getSubModels().clear();
 	}
 

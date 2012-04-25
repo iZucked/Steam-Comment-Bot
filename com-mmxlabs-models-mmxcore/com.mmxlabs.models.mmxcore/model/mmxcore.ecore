@@ -85,7 +85,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MMXSubModel" eSuperTypes="#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="subModelInstance" lowerBound="1"
-        eType="#//UUIDObject" containment="true"/>
+        eType="#//UUIDObject"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalResource" lowerBound="1"
         eType="#//MMXResource"/>
   </eClassifiers>

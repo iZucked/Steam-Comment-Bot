@@ -25,26 +25,26 @@ import org.eclipse.emf.ecore.resource.Resource;
  */
 public interface MMXSubModel extends MMXObject {
 	/**
-	 * Returns the value of the '<em><b>Sub Model Instance</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Sub Model Instance</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Sub Model Instance</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Sub Model Instance</em>' containment reference.
+	 * @return the value of the '<em>Sub Model Instance</em>' reference.
 	 * @see #setSubModelInstance(UUIDObject)
 	 * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getMMXSubModel_SubModelInstance()
-	 * @model containment="true" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
 	UUIDObject getSubModelInstance();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.mmxcore.MMXSubModel#getSubModelInstance <em>Sub Model Instance</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.mmxcore.MMXSubModel#getSubModelInstance <em>Sub Model Instance</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Sub Model Instance</em>' containment reference.
+	 * @param value the new value of the '<em>Sub Model Instance</em>' reference.
 	 * @see #getSubModelInstance()
 	 * @generated
 	 */

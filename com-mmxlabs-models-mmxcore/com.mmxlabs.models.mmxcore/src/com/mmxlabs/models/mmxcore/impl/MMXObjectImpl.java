@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EObject;
@@ -176,6 +177,7 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 			final MMXProxy p = iterator.next();
 			p.setResolvedReferent(objectsByUUID.get(p.getReferentID()));
 		}
+		
 		for (final EObject o : eContents()) {
 			if (o instanceof MMXObject) ((MMXObject) o).resolveProxies(objectsByUUID);
 		}
@@ -217,10 +219,27 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 		for (final EObject o : eContents()) {
 			if (o instanceof MMXObject) {
 				((MMXObject) o).collectUUIDObjects(objectsByUUID);
+			} else {
+				collectUUIDObjectsFor(objectsByUUID, o);
 			}
 		}
 	}
-
+	
+	/**
+	 * A helper method for collecting UUID objects even in children which are not themselves MMXObjects
+	 * @param objectsByUUID
+	 * @param object
+	 */
+	public void collectUUIDObjectsFor(final Map<String, UUIDObject> objectsByUUID, final EObject object) {
+		for (final EObject o : object.eContents()) {
+			if (o instanceof MMXObject) {
+				((MMXObject) o).collectUUIDObjects(objectsByUUID);
+			} else {
+				collectUUIDObjectsFor(objectsByUUID, o);
+			}
+		}
+	}
+	
 	/**
 	 * This is equivalent to
 	 * <code>

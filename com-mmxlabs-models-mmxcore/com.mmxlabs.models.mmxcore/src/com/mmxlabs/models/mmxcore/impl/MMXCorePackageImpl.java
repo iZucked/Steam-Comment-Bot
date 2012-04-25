@@ -607,7 +607,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		initEOperation(op, g1);
 
 		initEClass(mmxSubModelEClass, MMXSubModel.class, "MMXSubModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMMXSubModel_SubModelInstance(), this.getUUIDObject(), null, "subModelInstance", null, 1, 1, MMXSubModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMMXSubModel_SubModelInstance(), this.getUUIDObject(), null, "subModelInstance", null, 1, 1, MMXSubModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMMXSubModel_OriginalResource(), this.getMMXResource(), "originalResource", null, 1, 1, MMXSubModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
