@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.scenario.service.workspace;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.eclipse.core.resources.IContainer;
@@ -18,9 +20,13 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -30,8 +36,14 @@ import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.model.service.IModelService;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.MMXSubModel;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -42,8 +54,6 @@ import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 public class WorkspaceScenarioService implements IScenarioService {
 
 	private static final Logger log = LoggerFactory.getLogger(WorkspaceScenarioService.class);
-
-	private final QualifiedName qnUUID = new QualifiedName("com.mmxlabs.scenario.service.workspace.WorkspaceScenarioService", "UUID");
 
 	/**
 	 * A workspace listener to maintain the EMF Model state.
@@ -194,9 +204,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 	}
 
 	public void scanForScenarios(final String scenarioServiceID, final IContainer workspaceContainer, final Container modelContainer) {
-
 		if (workspaceContainer.isAccessible()) {
-
 			try {
 				for (final IResource r : workspaceContainer.members()) {
 					if (r.getType() == IResource.FILE) {
@@ -229,29 +237,35 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 		return folder;
 	}
-
+	
 	private void createScenarioInstance(final Container container, final IResource r) {
-
-		String uuid = null;
-		try {
-			// Try and restore previous UUID
-			uuid = r.getPersistentProperty(qnUUID);
-			if (uuid == null) {
-				// Otherwise generate a new one.
-				uuid = UUID.randomUUID().toString();
-				r.setPersistentProperty(qnUUID, uuid);
-			}
-		} catch (CoreException e) {
-			log.error(e.getMessage(), e);
-		}
-
+		final URI resourceURI = URI.createPlatformResourceURI(r.getFullPath().toString(), true);
+		final URI manifestURI = URI.createURI("archive:" + resourceURI.toString() + "!/" + "MANIFEST.xmi");
+		
+		final ResourceSet resourceSet = new ResourceSetImpl();
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		
+		final Resource manifestResource = resourceSet.createResource(manifestURI);
+		final Manifest manifest = (Manifest) manifestResource.getContents().get(0);
+		
 		final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-		scenarioInstance.setUuid(uuid);
+		scenarioInstance.setUuid(manifest.getUUID());
+		
+		for (final String uris : manifest.getModelURIs()) {
+			URI uri = URI.createURI(uris);
+			if (uri.isRelative()) {
+				uri = uri.resolve(manifestURI);
+			}
+			scenarioInstance.getSubModelURIs().add(uri.toString());
+		}
+		
+		scenarioInstance.getDependencyUUIDs().addAll(manifest.getDependencyUUIDs());
+		
 		scenarioInstance.setName(r.getName());
 
 		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-		// TODO: Set correct content type
-		metadata.setContentType("text/xmi");
+
+		metadata.setContentType(manifest.getScenarioType());
 		scenarioInstance.setMetadata(metadata);
 
 		mapWorkspaceToModel.put(r, scenarioInstance);
@@ -286,13 +300,52 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 	@Override
 	public void delete(final ScenarioInstance instance) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void delete(final String uuid) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void load(final ScenarioInstance instance) throws IOException {
+		if (instance.getInstance() != null) return;
+		final List<EObject> parts = new ArrayList<EObject>();
+		final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
+
+		for (final String uuid : instance.getDependencyUUIDs()) {
+			final ScenarioInstance dep = getScenarioInstance(uuid);
+			if (dep != null) {
+				load(dep);
+				if (dep.getInstance() != null) {
+					final EObject depInstance = dep.getInstance();
+					if (depInstance instanceof MMXRootObject) {
+						// this should probably always be true.
+						for (final MMXSubModel sub : ((MMXRootObject) depInstance).getSubModels()) {
+							implementation.addSubModel(sub.getSubModelInstance());
+						}
+					} else {
+						parts.add(depInstance); //hmm
+					}
+				}
+			}
+		}
+		
+		// create MMXRootObject and connect submodel instances into it.
+		for (final String subModelURI : instance.getSubModelURIs()) {
+			// acquire sub models
+			final IModelInstance modelInstance = modelService.getModel(URI.createURI(subModelURI));
+			if (modelInstance.getModel() instanceof UUIDObject) {
+				implementation.addSubModel((UUIDObject) modelInstance.getModel());
+			} else {
+				parts.add(modelInstance.getModel());
+			}
+		}
+		parts.add(implementation);
+		instance.setInstance(implementation);
+		
+		modelService.resolve(parts);
 	}
 }
