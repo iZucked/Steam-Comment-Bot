@@ -5,6 +5,8 @@
 package com.mmxlabs.models.mmxcore.impl;
 
 import java.util.Collection;
+import java.util.Map;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -216,6 +218,30 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 				return ((InternalEList<?>)getSubModels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	@Override
+	/**
+	 * Also collect UUID objects which are in submodels (not contained).
+	 * @param objectsByUUID
+	 */
+	public void collectUUIDObjects(Map<String, UUIDObject> objectsByUUID) {
+		super.collectUUIDObjects(objectsByUUID);
+		for (final MMXSubModel subModel : getSubModels()) {
+			subModel.collectUUIDObjects(objectsByUUID);
+		}
+	}
+	
+	@Override
+	public void resolveProxies(Map<String, UUIDObject> objectsByUUID) {
+		super.resolveProxies(objectsByUUID);
+		for (final MMXSubModel subModel : getSubModels()) subModel.resolveProxies(objectsByUUID);
+	}
+
+	@Override
+	public void restoreProxies() {
+		super.restoreProxies();
+		for (final MMXSubModel subModel : getSubModels()) subModel.restoreProxies();
 	}
 
 	/**
