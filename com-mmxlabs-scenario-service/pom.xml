@@ -34,6 +34,9 @@
 		<module>com.mmxlabs.scenario.service.model</module>
 		<module>com.mmxlabs.scenario.service.model.edit</module>
 
+		<module>com.mmxlabs.scenario.service.manifest</module>
+		<module>com.mmxlabs.scenario.service.manifest.edit</module>
+
 		<module>com.mmxlabs.scenario.service.file</module>
 		<module>com.mmxlabs.scenario.service.workspace</module>
 
