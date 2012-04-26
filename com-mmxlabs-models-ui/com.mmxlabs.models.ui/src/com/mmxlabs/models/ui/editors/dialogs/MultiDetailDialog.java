@@ -6,7 +6,6 @@ package com.mmxlabs.models.ui.editors.dialogs;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -53,7 +52,7 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.util.ControlUtils;
-import com.mmxlabs.models.ui.validation.ValidationSupport;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
@@ -76,6 +75,8 @@ public class MultiDetailDialog extends Dialog {
 	private final MMXRootObject rootObject;
 	private final IInlineEditorWrapper wrapper = new EditorWrapper();
 	private final ICommandHandler commandHandler;
+	
+	private DefaultExtraValidationContext validationContext;
 	
 	/**
 	 * Track all the controls that have been created, so we can disable them after setInput(), which will re-enable them otherwise.
@@ -168,8 +169,8 @@ public class MultiDetailDialog extends Dialog {
 			for (final List<EObject> range : ranges) {
 				originals.add(range.get(i));
 			}
-			final Pair<EObject, EReference> c = ValidationSupport.getInstance().getContainer(range0.get(i));
-			ValidationSupport.getInstance().setContainers(Collections.singleton(proxies.get(i)), c.getFirst(), c.getSecond());
+//			final Pair<EObject, EReference> c = ValidationSupport.getInstance().getContainer(range0.get(i));
+//			ValidationSupport.getInstance().setContainers(Collections.singleton(proxies.get(i)), c.getFirst(), c.getSecond());
 			setSameValues(proxy, originals);
 			setCounterparts(proxy, originals);
 		}
@@ -241,7 +242,7 @@ public class MultiDetailDialog extends Dialog {
 		}
 		
 		// undo change from createProxies above
-		ValidationSupport.getInstance().clearContainers(proxies);
+//		ValidationSupport.getInstance().clearContainers(proxies);
 		
 		return result;
 	}
