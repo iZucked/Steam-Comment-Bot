@@ -129,6 +129,59 @@
                style="push"
                tooltip="Delete Scenario">
          </command>
+         <command
+               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.evaluate"
+               icon="icons/evaluate_schedule.gif"
+               id="com.mmxlabs.rcp.navigator.commands.optimisation.evaluate"
+               label="Evaluate schedule"
+               style="push"
+               tooltip="Evaluate scenario">
+         </command>
+         <command
+               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.play"
+               disabledIcon="icons/dlcl16/resume_co.gif"
+               icon="icons/elcl16/resume_co.gif"
+               id="com.mmxlabs.rcp.navigator.toolbars.optimisation.play"
+               label="Start/Resume Optimisation"
+               style="push"
+               tooltip="Start or resume optimisations">
+         </command>
+         <command
+               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.pause"
+               disabledIcon="icons/dlcl16/suspend_co.gif"
+               icon="icons/elcl16/suspend_co.gif"
+               id="com.mmxlabs.rcp.navigator.toolbars.optimisation.pause"
+               label="Pause Optimisation"
+               style="push"
+               tooltip="Pause optimisations">
+         </command>
+         <command
+               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.terminate"
+               disabledIcon="icons/dlcl16/terminate_co.gif"
+               icon="icons/elcl16/terminate_co.gif"
+               id="com.mmxlabs.rcp.navigator.toolbars.optimisation.terminate"
+               label="Terminate Optimisation"
+               style="push"
+               tooltip="Terminate optimisations">
+         </command>
+         <command
+               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.save"
+               disabledIcon="icons/dtool16/saveas_edit.gif"
+               icon="icons/etool16/saveas_edit.gif"
+               id="com.mmxlabs.rcp.navigator.toolbars.optimisation.save"
+               label="Save Optimisation"
+               mnemonic="S"
+               style="push"
+               tooltip="Save optimisations">
+         </command>
+         <command
+               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.derive"
+               icon="icons/evaluate_schedule.gif"
+               id="com.mmxlabs.rcp.navigator.commands.optimisation.derive"
+               label="Derive schedule"
+               style="push"
+               tooltip="Derive scenario">
+         </command>
       </menuContribution>
    </extension>
 
