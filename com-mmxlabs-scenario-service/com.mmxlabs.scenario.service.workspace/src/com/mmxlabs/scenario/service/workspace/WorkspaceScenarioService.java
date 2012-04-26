@@ -282,6 +282,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 			final Manifest manifest = (Manifest) manifestResource.getContents().get(0);
 
 			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			scenarioInstance.setAdapters(new HashMap<Class<?>, Object>());
 			scenarioInstance.setUuid(manifest.getUUID());
 
 			for (final String uris : manifest.getModelURIs()) {
@@ -308,6 +309,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 			final com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest manifest = (com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest) manifestResource.getContents().get(0);
 
 			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			scenarioInstance.setAdapters(new HashMap<Class<?>, Object>());
 			scenarioInstance.setUuid(UUID.randomUUID().toString());
 			
 			for (final Entry entry: manifest.getEntries()) {
