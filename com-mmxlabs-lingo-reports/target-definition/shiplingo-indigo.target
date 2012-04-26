@@ -109,12 +109,12 @@
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="1.0.1.201204251508"/>
-<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="1.0.1.201204251508"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="1.0.1.201204251503"/>
-<unit id="com.mmxlabs.models.mmxcore.sdk.feature.source.feature.group" version="1.0.1.201204251503"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="1.0.1.201204251503"/>
-<unit id="com.mmxlabs.models.mmxcore.sdk.feature.feature.group" version="1.0.1.201204251503"/>
+<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="1.0.1.201204261352"/>
+<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="1.0.1.201204261352"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="1.0.1.201204261349"/>
+<unit id="com.mmxlabs.models.mmxcore.sdk.feature.source.feature.group" version="1.0.1.201204261349"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="1.0.1.201204261349"/>
+<unit id="com.mmxlabs.models.mmxcore.sdk.feature.feature.group" version="1.0.1.201204261349"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
 </location>
 </locations>
