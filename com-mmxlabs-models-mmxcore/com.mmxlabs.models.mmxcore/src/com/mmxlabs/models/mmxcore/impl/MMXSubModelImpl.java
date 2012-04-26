@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
+import java.util.Map;
+
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -225,4 +227,21 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 		return result.toString();
 	}
 
+	@Override
+	public void resolveProxies(Map<String, UUIDObject> objectsByUUID) {
+		super.resolveProxies(objectsByUUID);
+		getSubModelInstance().resolveProxies(objectsByUUID);
+	}
+
+	@Override
+	public void restoreProxies() {
+		super.restoreProxies();
+		getSubModelInstance().restoreProxies();
+	}
+
+	@Override
+	public void collectUUIDObjects(Map<String, UUIDObject> objectsByUUID) {
+		super.collectUUIDObjects(objectsByUUID);
+		getSubModelInstance().collectUUIDObjects(objectsByUUID);
+	}
 } //MMXSubModelImpl

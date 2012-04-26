@@ -220,30 +220,6 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-	@Override
-	/**
-	 * Also collect UUID objects which are in submodels (not contained).
-	 * @param objectsByUUID
-	 */
-	public void collectUUIDObjects(Map<String, UUIDObject> objectsByUUID) {
-		super.collectUUIDObjects(objectsByUUID);
-		for (final MMXSubModel subModel : getSubModels()) {
-			subModel.collectUUIDObjects(objectsByUUID);
-		}
-	}
-	
-	@Override
-	public void resolveProxies(Map<String, UUIDObject> objectsByUUID) {
-		super.resolveProxies(objectsByUUID);
-		for (final MMXSubModel subModel : getSubModels()) subModel.resolveProxies(objectsByUUID);
-	}
-
-	@Override
-	public void restoreProxies() {
-		super.restoreProxies();
-		for (final MMXSubModel subModel : getSubModels()) subModel.restoreProxies();
-	}
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
