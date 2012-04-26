@@ -5,6 +5,7 @@
 package com.mmxlabs.scenario.service.file;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
@@ -208,32 +210,31 @@ public class FileScenarioService implements IScenarioService {
 	}
 
 	@Override
-	public String saveAs(final ScenarioInstance instance) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ScenarioInstance copyTo(final ScenarioInstance from, final int flags) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void delete(final ScenarioInstance instance) {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void delete(final String uuid) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public ScenarioInstance getScenarioInstance(final String uuid) {
 		return instanceMap.get(uuid);
+
+	}
+
+	@Override
+	public ScenarioInstance insert(Container container, Collection<ScenarioInstance> dependencies, Collection<EObject> models) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ScenarioInstance duplicate(ScenarioInstance original, Container destination) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void load(ScenarioInstance instance) throws IOException {
+		// TODO Auto-generated method stub
 
 	}
 }
