@@ -271,6 +271,11 @@ public class WorkspaceScenarioService implements IScenarioService {
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 			
 			final Resource manifestResource = resourceSet.createResource(manifestURI);
+			try {
+				manifestResource.load(null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			final Manifest manifest = (Manifest) manifestResource.getContents().get(0);
 			
 			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
@@ -296,6 +301,12 @@ public class WorkspaceScenarioService implements IScenarioService {
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 			
 			final Resource manifestResource = resourceSet.createResource(manifestURI);
+			try {
+				manifestResource.load(null);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			final com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest manifest = 
 					(com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest) manifestResource.getContents().get(0);
 			
@@ -378,7 +389,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		final EditingDomain domain = initEditingDomain(implementation, instance);
 		instance.getAdapters().put(EditingDomain.class, domain);
 		instance.getAdapters().put(BasicCommandStack.class, (BasicCommandStack) domain.getCommandStack());
-
+		instance.getAdapters().put(ScenarioService.class, this);
 		modelService.resolve(parts);
 		
 		return implementation;
