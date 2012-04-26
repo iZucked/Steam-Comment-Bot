@@ -64,11 +64,11 @@ public class WorkspaceScenarioService implements IScenarioService {
 		@Override
 		public void resourceChanged(final IResourceChangeEvent event) {
 
-			IResourceDelta parentDelta = event.getDelta();
+			final IResourceDelta parentDelta = event.getDelta();
 			processDelta(parentDelta);
 		}
 
-		private void processDelta(IResourceDelta delta) {
+		private void processDelta(final IResourceDelta delta) {
 
 			if (delta.getKind() == IResourceDelta.REMOVED) {
 
@@ -236,21 +236,21 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 		return folder;
 	}
-	
+
 	private void createScenarioInstance(final Container container, final IResource r) {
 		// in future this could be abstracted out into an extension, but right now I don't see the point.
 		final URI resourceURI = URI.createPlatformResourceURI(r.getFullPath().toString(), true);
 		final URI manifestURI = URI.createURI("archive:" + resourceURI.toString() + "!/" + "MANIFEST.xmi");
-		
+
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		
+
 		final Resource manifestResource = resourceSet.createResource(manifestURI);
 		final Manifest manifest = (Manifest) manifestResource.getContents().get(0);
-		
+
 		final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 		scenarioInstance.setUuid(manifest.getUUID());
-		
+
 		for (final String uris : manifest.getModelURIs()) {
 			URI uri = URI.createURI(uris);
 			if (uri.isRelative()) {
@@ -258,9 +258,9 @@ public class WorkspaceScenarioService implements IScenarioService {
 			}
 			scenarioInstance.getSubModelURIs().add(uri.toString());
 		}
-		
+
 		scenarioInstance.getDependencyUUIDs().addAll(manifest.getDependencyUUIDs());
-		
+
 		scenarioInstance.setName(r.getName());
 
 		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
@@ -288,12 +288,13 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 	@Override
 	public void delete(final ScenarioInstance instance) {
-		
+
 	}
 
 	@Override
 	public void load(final ScenarioInstance instance) throws IOException {
-		if (instance.getInstance() != null) return;
+		if (instance.getInstance() != null)
+			return;
 		final List<EObject> parts = new ArrayList<EObject>();
 		final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 
@@ -309,12 +310,12 @@ public class WorkspaceScenarioService implements IScenarioService {
 							implementation.addSubModel(sub.getSubModelInstance());
 						}
 					} else {
-						parts.add(depInstance); //hmm
+						parts.add(depInstance); // hmm
 					}
 				}
 			}
 		}
-		
+
 		// create MMXRootObject and connect submodel instances into it.
 		for (final String subModelURI : instance.getSubModelURIs()) {
 			// acquire sub models
@@ -331,20 +332,24 @@ public class WorkspaceScenarioService implements IScenarioService {
 		modelService.resolve(parts);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scenario.service.IScenarioService#insert(com.mmxlabs.scenario.service.model.Container, java.util.Collection, java.util.Collection)
 	 */
 	@Override
-	public ScenarioInstance insert(Container container, Collection<ScenarioInstance> dependencies, Collection<EObject> models) {
+	public ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scenario.service.IScenarioService#duplicate(com.mmxlabs.scenario.service.model.ScenarioInstance, com.mmxlabs.scenario.service.model.Container)
 	 */
 	@Override
-	public ScenarioInstance duplicate(ScenarioInstance original, Container destination) {
+	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) {
 		// TODO Auto-generated method stub
 		return null;
 	}
