@@ -28,6 +28,15 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements ICo
 
 	private final Map<Object, Image> imageCache = new HashMap<Object, Image>();
 
+	/**
+	 * Blank image to return rather than trigger navigator fallback code to grab image from another image provider. Its a bit ugly as we see a white image box
+	 */
+	private final Image empty;
+
+	public ScenarioLabelProvider() {
+		empty = new Image(Display.getDefault(), 1, 1);
+	}
+
 	private Image getCachedImage(final Object key) {
 
 		if (imageCache.containsKey(key)) {
@@ -49,25 +58,25 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements ICo
 				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui", "/icons/elcl16/terminate_co.gif");
 				break;
 			case INITIALISED:
-				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui","/icons/elcl16/terminate_co.gif");
+				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui", "/icons/elcl16/terminate_co.gif");
 				break;
 			case PAUSED:
-				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui","/icons/elcl16/suspend_co.gif");
+				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui", "/icons/elcl16/suspend_co.gif");
 				break;
 			case PAUSING:
-				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui","/icons/dlcl16/suspend_co.gif");
+				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui", "/icons/dlcl16/suspend_co.gif");
 				break;
 			case RESUMING:
-				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui","/icons/dlcl16/resume_co.gif");
+				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui", "/icons/dlcl16/resume_co.gif");
 				break;
 			case RUNNING:
-				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui","/icons/elcl16/resume_co.gif");
+				desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui", "/icons/elcl16/resume_co.gif");
 				break;
 			case UNKNOWN:
 				return Display.getDefault().getSystemImage(SWT.ICON_WARNING);
 			}
 		} else {
-			desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui",key.toString());
+			desc = Activator.imageDescriptorFromPlugin("com.mmxlabs.jobmananger.ui", key.toString());
 		}
 
 		// Cache image
@@ -90,6 +99,8 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements ICo
 
 		imageCache.clear();
 
+		empty.dispose();
+
 		super.dispose();
 	}
 
@@ -105,11 +116,14 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements ICo
 					final IJobControl control = jobManager.getControlForJob(job);
 
 					if (control != null) {
-						return getCachedImage(control.getJobState());
+						Image cachedImage = getCachedImage(control.getJobState());
+						if (cachedImage != null) {
+							return cachedImage;
+						}
 					}
 				}
 			}
-
+			return empty;
 		}
 
 		return null;
@@ -135,6 +149,9 @@ public class ScenarioLabelProvider extends WorkbenchLabelProvider implements ICo
 						final EJobState jobState = control.getJobState();
 						if ((jobState == EJobState.RUNNING) || (jobState == EJobState.PAUSED) || (jobState == EJobState.PAUSING)) {
 							return jobState.toString() + " (" + control.getProgress() + "%)";
+						} else if (jobState == EJobState.CREATED) {
+							// Need something to avoid fallback code
+							return " ";
 						} else {
 							return jobState.toString();
 						}
