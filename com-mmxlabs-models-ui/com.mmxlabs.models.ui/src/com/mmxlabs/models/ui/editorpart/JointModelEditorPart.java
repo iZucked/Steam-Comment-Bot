@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EClass;
@@ -27,8 +26,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edapt.migration.MigrationException;
-import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -66,6 +63,7 @@ import com.mmxlabs.models.mmxcore.IMMXAdapter;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -94,7 +92,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	/**
 	 * The editing domain for controls to use. This is pretty standard, but hooks command creation to allow extra things there
 	 */
-	private AdapterFactoryEditingDomain editingDomain;
+	private CommandProviderAwareEditingDomain editingDomain;
 	private ComposedAdapterFactory adapterFactory;
 	private BasicCommandStack commandStack;
 
@@ -166,7 +164,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	};
 
 	private boolean locked;
-	private boolean commandProvidersDisabled;
 	private PropertySheetPage propertySheetPage;
 
 	public JointModelEditorPart() {
@@ -292,26 +289,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 				final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker = Activator.getDefault().getCommandProviderTracker();
 				// create editing domain
-				editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack) {
-					@Override
-					public Command createCommand(Class<? extends Command> commandClass, CommandParameter commandParameter) {
-						final Command normal = super.createCommand(commandClass, commandParameter);
-
-						if (!commandProvidersDisabled) {
-							final CompoundCommand wrapper = new CompoundCommand();
-							wrapper.append(normal);
-							for (final IModelCommandProvider provider : commandProviderTracker.getServices(new IModelCommandProvider[0])) {
-								final Command addition = provider.provideAdditionalCommand(getEditingDomain(), getRootObject(), commandClass, commandParameter, normal);
-								if (addition != null)
-									wrapper.append(addition);
-							}
-
-							return wrapper.unwrap();
-						} else {
-							return normal;
-						}
-					}
-				};
+				editingDomain = new CommandProviderAwareEditingDomain(adapterFactory, commandStack, (MMXRootObject)root, commandProviderTracker) ;
 
 				// initialize extensions
 
@@ -428,7 +406,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	}
 
 	public void setDisableCommandProviders(final boolean disable) {
-		this.commandProvidersDisabled = disable;
+		editingDomain.setCommandProvidersDisabled(disable);
 	}
 
 	public void setDisableUpdates(final boolean disable) {
