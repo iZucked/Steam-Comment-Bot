@@ -311,9 +311,9 @@ public class WorkspaceScenarioService implements IScenarioService {
 			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 			scenarioInstance.setAdapters(new HashMap<Class<?>, Object>());
 			scenarioInstance.setUuid(UUID.randomUUID().toString());
-			
-			for (final Entry entry: manifest.getEntries()) {
-				final URI uri = URI.createURI("../" + entry.getRelativePath()).resolve(manifestURI);
+
+			for (final Entry entry : manifest.getEntries()) {
+				final URI uri = URI.createURI("/" + entry.getRelativePath()).resolve(manifestURI);
 				scenarioInstance.getSubModelURIs().add(uri.toString());
 			}
 
