@@ -389,7 +389,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		final EditingDomain domain = initEditingDomain(implementation, instance);
 		instance.getAdapters().put(EditingDomain.class, domain);
 		instance.getAdapters().put(BasicCommandStack.class, (BasicCommandStack) domain.getCommandStack());
-		instance.getAdapters().put(ScenarioService.class, this);
+		instance.getAdapters().put(IScenarioService.class, this);
 		modelService.resolve(parts);
 		
 		return implementation;
