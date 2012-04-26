@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.workspace;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +35,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -58,6 +60,7 @@ import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry;
 
 public class WorkspaceScenarioService implements IScenarioService {
 
@@ -245,39 +248,61 @@ public class WorkspaceScenarioService implements IScenarioService {
 	}
 	
 	private void createScenarioInstance(final Container container, final IResource r) {
-		// in future this could be abstracted out into an extension, but right now I don't see the point.
+		ScenarioInstance scenarioInstance = null;
 		final URI resourceURI = URI.createPlatformResourceURI(r.getFullPath().toString(), true);
 		final URI manifestURI = URI.createURI("archive:" + resourceURI.toString() + "!/" + "MANIFEST.xmi");
-		
-		final ResourceSet resourceSet = new ResourceSetImpl();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		
-		final Resource manifestResource = resourceSet.createResource(manifestURI);
-		final Manifest manifest = (Manifest) manifestResource.getContents().get(0);
-		
-		final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-		scenarioInstance.setUuid(manifest.getUUID());
-		
-		for (final String uris : manifest.getModelURIs()) {
-			URI uri = URI.createURI(uris);
-			if (uri.isRelative()) {
-				uri = uri.resolve(manifestURI);
+		if (r.getName().endsWith("sc2")) {
+			final ResourceSet resourceSet = new ResourceSetImpl();
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+			
+			final Resource manifestResource = resourceSet.createResource(manifestURI);
+			final Manifest manifest = (Manifest) manifestResource.getContents().get(0);
+			
+			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			scenarioInstance.setUuid(manifest.getUUID());
+			
+			for (final String uris : manifest.getModelURIs()) {
+				URI uri = URI.createURI(uris);
+				if (uri.isRelative()) {
+					uri = uri.resolve(manifestURI);
+				}
+				scenarioInstance.getSubModelURIs().add(uri.toString());
 			}
-			scenarioInstance.getSubModelURIs().add(uri.toString());
+			
+			scenarioInstance.getDependencyUUIDs().addAll(manifest.getDependencyUUIDs());
+			
+			final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+	
+			metadata.setContentType(manifest.getScenarioType());
+			scenarioInstance.setMetadata(metadata);
+	
+		} else if (r.getName().endsWith("scn")) {
+			final ResourceSet resourceSet = new ResourceSetImpl();
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+			
+			final Resource manifestResource = resourceSet.createResource(manifestURI);
+			final com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest manifest = 
+					(com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest) manifestResource.getContents().get(0);
+			
+			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			scenarioInstance.setUuid(UUID.randomUUID().toString());
+			
+			for (final Entry entry: manifest.getEntries()) {
+				final URI uri = URI.createURI("../" + entry.getRelativePath()).resolve(manifestURI);
+				scenarioInstance.getSubModelURIs().add(uri.toString());
+			}
+			
+			final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+			
+			metadata.setContentType("old-scenario");
+			scenarioInstance.setMetadata(metadata);
 		}
-		
-		scenarioInstance.getDependencyUUIDs().addAll(manifest.getDependencyUUIDs());
-		
-		scenarioInstance.setName(r.getName());
-
-		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-
-		metadata.setContentType(manifest.getScenarioType());
-		scenarioInstance.setMetadata(metadata);
-
-		mapWorkspaceToModel.put(r, scenarioInstance);
-
-		container.getElements().add(scenarioInstance);
+		if (scenarioInstance != null) {
+			scenarioInstance.setName(r.getName());
+			mapWorkspaceToModel.put(r, scenarioInstance);
+			instanceMap.put(scenarioInstance.getUuid(), scenarioInstance);
+			container.getElements().add(scenarioInstance);
+		}
 	}
 
 	public IModelService getModelService() {
