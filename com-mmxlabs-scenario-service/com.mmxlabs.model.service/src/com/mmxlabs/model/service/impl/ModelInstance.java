@@ -7,12 +7,14 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
 
 public class ModelInstance implements IModelInstance {
-
+	private static final Logger log = LoggerFactory.getLogger(ModelInstance.class);
 	private final Resource resource;
 
 	public ModelInstance(final Resource resource) {
@@ -21,7 +23,12 @@ public class ModelInstance implements IModelInstance {
 
 	@Override
 	public EObject getModel() {
-		return resource.getContents().get(0);
+		if (resource.getContents().isEmpty()) {
+			log.error("Failed to get contents for " + resource.getURI() + ", as it is empty");
+			return null;
+		} else {
+			return resource.getContents().get(0);
+		}
 	}
 
 	@Override
