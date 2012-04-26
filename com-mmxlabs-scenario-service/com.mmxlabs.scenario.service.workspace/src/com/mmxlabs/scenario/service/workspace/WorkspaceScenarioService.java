@@ -324,6 +324,8 @@ public class WorkspaceScenarioService implements IScenarioService {
 			scenarioInstance.setMetadata(metadata);
 		}
 		if (scenarioInstance != null) {
+			scenarioInstance.setAdapters(new HashMap<Class<?>, Object>());
+			scenarioInstance.getAdapters().put(IScenarioService.class, this);
 			scenarioInstance.setName(r.getName());
 			mapWorkspaceToModel.put(r, scenarioInstance);
 			instanceMap.put(scenarioInstance.getUuid(), scenarioInstance);
@@ -389,7 +391,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		final EditingDomain domain = initEditingDomain(implementation, instance);
 		instance.getAdapters().put(EditingDomain.class, domain);
 		instance.getAdapters().put(BasicCommandStack.class, (BasicCommandStack) domain.getCommandStack());
-		instance.getAdapters().put(IScenarioService.class, this);
+		
 		modelService.resolve(parts);
 		
 		return implementation;
