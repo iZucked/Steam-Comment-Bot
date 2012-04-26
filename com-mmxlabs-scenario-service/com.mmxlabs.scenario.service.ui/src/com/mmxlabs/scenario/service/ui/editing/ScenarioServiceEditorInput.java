@@ -20,6 +20,11 @@ public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput {
 	}
 
 	@Override
+	public ScenarioInstance getScenarioInstance() {
+		return scenarioInstance;
+	}
+
+	@Override
 	public boolean exists() {
 		return scenarioInstance != null;
 	}
