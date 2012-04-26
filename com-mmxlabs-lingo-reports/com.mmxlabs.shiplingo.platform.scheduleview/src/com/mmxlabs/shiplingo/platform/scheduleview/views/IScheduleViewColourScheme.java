@@ -2,11 +2,10 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
+package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import org.eclipse.swt.graphics.Color;
 
-import com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerView;
 
 /**
  * Interface defining a colour scheme used to render the {@link SchedulerView} elements.

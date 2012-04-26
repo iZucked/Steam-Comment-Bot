@@ -22,8 +22,6 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 
 /**
  * @author hinton
@@ -51,7 +49,13 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
 
-			return sequence.getName();
+//			final MMXRootObject root = xxx;
+			//final String name = root.getName();
+			// final String name =
+			// URI.decode(sequence.eResource().getURI().lastSegment()).replaceAll(".scenario","");
+
+			// TODO: Re-add scenario name
+			return sequence.getName(); // + "\n" + name;
 		}
 		return null;
 	}
@@ -79,8 +83,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			final StringBuilder sb = new StringBuilder();
 			final Event event = (Event) element;
 
-			sb.append("Start Time: " + df.format(event.getStart()) + "\n");
-			sb.append("End Time: " + df.format(event.getEnd()) + "\n");
+			sb.append("Start Date: " + df.format(event.getStart()) + "\n");
+			sb.append("End Date: " + df.format(event.getEnd()) + "\n");
 			final int days = event.getDuration() / 24;
 			final int hours = event.getDuration() % 24;
 			sb.append("Duration: " + days + " days, " + hours + " hours\n");
