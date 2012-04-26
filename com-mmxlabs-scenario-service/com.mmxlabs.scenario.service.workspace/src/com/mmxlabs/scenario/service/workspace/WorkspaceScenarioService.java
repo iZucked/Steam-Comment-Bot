@@ -467,4 +467,20 @@ public class WorkspaceScenarioService implements IScenarioService {
 		
 		return insert(destination, dependencies , duppedSubModels);
 	}
+	
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scenario.service.IScenarioService#save(com.mmxlabs.scenario.service.model.ScenarioInstance)
+	 */
+	@Override
+	public void save(final ScenarioInstance scenarioInstance) throws IOException {
+		final EObject instance = scenarioInstance.getInstance();
+		if (instance == null) return;
+		for (final String uris : scenarioInstance.getSubModelURIs()) {
+			final IModelInstance modelInstance = modelService.getModel(URI.createURI(uris));
+			if (modelInstance != null) {
+				modelInstance.save();
+			}
+		}
+	}
 }
