@@ -20,7 +20,9 @@ import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.validation.marker.MarkerUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -109,8 +111,16 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 				MarkerUtil.updateMarkers(status);
 				
 				rs.setURIConverter(temp);
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
-						, null, IWorkbenchPage.VIEW_VISIBLE);
+				Display.getDefault().asyncExec(
+						new Runnable() {
+							@Override
+							public void run() {
+								try {
+									PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
+											, null, IWorkbenchPage.VIEW_VISIBLE);
+								} catch (final PartInitException e) {}
+							}							
+						});
 			} catch (final Throwable e) {
 				Platform.getLog(Activator.getDefault().getBundle()).log(
 						new Status(IStatus.ERROR, Activator.PLUGIN_ID, "An error occurred when creating validtion markers for an invalid scenario", e));
