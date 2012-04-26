@@ -2,12 +2,13 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2011
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.validation;
+package com.mmxlabs.models.ui.validation.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
+import com.mmxlabs.models.ui.validation.IValidationInputService;
 import com.mmxlabs.models.ui.validation.impl.ValidationInputService;
 
 /**
@@ -62,7 +63,7 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	protected ValidationInputService getInputService() {
+	public ValidationInputService getInputService() {
 		return inputService ;
 	}
 

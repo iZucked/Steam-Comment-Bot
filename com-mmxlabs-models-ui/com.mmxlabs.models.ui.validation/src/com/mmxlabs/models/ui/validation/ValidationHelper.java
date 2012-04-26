@@ -14,6 +14,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.service.IValidator;
 
+import com.mmxlabs.models.ui.validation.internal.Activator;
+
 /**
  * A helper class for running validations which lets you pass extra data into the validation.
  * Validation constraints can access the extra data using {@link IValidationInputService}, and so long

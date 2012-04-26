@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Validation
 Bundle-SymbolicName: com.mmxlabs.models.ui.validation
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.mmxlabs.models.ui.validation.Activator
+Bundle-Activator: com.mmxlabs.models.ui.validation.internal.Activator
 Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

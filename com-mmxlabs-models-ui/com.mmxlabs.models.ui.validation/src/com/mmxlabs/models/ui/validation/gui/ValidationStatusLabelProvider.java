@@ -6,7 +6,7 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.models.ui.validation.Activator;
+import com.mmxlabs.models.ui.validation.internal.Activator;
 
 /**
  * Simple label provider for {@link IStatus} objects showing the message and an icon based on severity.
