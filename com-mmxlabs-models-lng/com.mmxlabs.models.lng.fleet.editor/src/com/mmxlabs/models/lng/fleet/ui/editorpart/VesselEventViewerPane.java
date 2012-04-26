@@ -15,6 +15,7 @@ import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
@@ -46,8 +47,10 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 							return "Charter Out";
 						} else if (object instanceof DryDockEvent) {
 							return "Dry Dock";
+						} else if (object instanceof MaintenanceEvent) {
+							return "Maintenance Event";
 						} else {
-							return "Event";
+							return "Unknown Event";
 						}
 					}
 				});
