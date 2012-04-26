@@ -11,12 +11,10 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -26,7 +24,7 @@ import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.models.ui.validation.ValidationSupport;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * Check that start/end requirement matches port constraint
@@ -43,12 +41,13 @@ public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
+		final IExtraValidationContext extraContext = Activator.getDefault().getExtraValidationContext();
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability availablility = (VesselAvailability) target;
-
-			final Pair<EObject, EReference> container = ValidationSupport.getInstance().getContainer(availablility);
-			if (container.getFirst() instanceof Vessel) {
-				final Vessel vessel = (Vessel) container.getFirst();
+			
+			final EObject container = extraContext.getContainer(availablility);
+			if (container instanceof Vessel) {
+				final Vessel vessel = (Vessel) container;
 				final VesselClass vesselClass = (VesselClass) vessel.getVesselClass();
 				final Set<APort> inaccessiblePortSet = SetUtils.getPorts(vesselClass.getInaccessiblePorts());
 				if (!availablility.getStartAt().isEmpty()) {
@@ -85,7 +84,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 			}
 		} else if (target instanceof VesselClass) {
 			final VesselClass vesselClass = (VesselClass) target;
-			final MMXRootObject rootObject = ValidationSupport.getInstance().getParentObjectType(MMXRootObject.class, vesselClass);
+			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject == null) {
 				return ctx.createSuccessStatus();
 			}
@@ -95,8 +94,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 			final HashSet<String> badPorts = new HashSet<String>();
 			final List<String> badVessels = new LinkedList<String>();
 			for (final Vessel v : fleetModel.getVessels()) {
-				if (ValidationSupport.getInstance().isSame(v.getVesselClass(), vesselClass)) {
-
+				if (extraContext.getReplacement(vesselClass) == v.getVesselClass()) {
 					final VesselAvailability availablility = v.getAvailability();
 
 					final Set<APort> inaccessiblePortSet = SetUtils.getPorts(vesselClass.getInaccessiblePorts());

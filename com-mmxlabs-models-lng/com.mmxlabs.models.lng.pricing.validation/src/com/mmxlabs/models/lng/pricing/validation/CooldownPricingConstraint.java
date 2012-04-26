@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.validation.ValidationSupport;
 
 /**
  * A constraint for ensuring that all ports have a cooldown constraint in the given pricing model.
@@ -38,7 +37,7 @@ public class CooldownPricingConstraint extends AbstractModelConstraint {
 		
 		if (target instanceof PricingModel) {
 			final PricingModel pm = (PricingModel) target;
-			final MMXRootObject rootObject = ValidationSupport.getInstance().getParentObjectType(MMXRootObject.class, pm);
+			final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
 			if (rootObject != null) {
 				final PortModel ports = rootObject.getSubModel(PortModel.class);
 				if (ports != null) {

@@ -223,7 +223,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 								final DetailCompositeDialog dcd = new DetailCompositeDialog(
 										jointModelEditor.getSite().getShell(), 
 										jointModelEditor.getDefaultCommandHandler());
-								dcd.open(jointModelEditor.getRootObject(), Collections.singletonList((EObject) baseFuel));
+								dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) baseFuel));
 							}
 						};
 						addActionToMenu(edit, submenu);
@@ -264,6 +264,11 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 						public ICommandHandler getCommandHandler() {
 							return jointModelEditor.getDefaultCommandHandler();
 						}
+
+						@Override
+						public JointModelEditorPart getEditorPart() {
+							return jointModelEditor;
+						}
 					});
 			if (newBase != null) {
 				newBase.setText("Add new base fuel...");
@@ -283,7 +288,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(cellEditorWindow.getShell(), jointModelEditor.getDefaultCommandHandler());
 			
 			final VesselStateAttributes attributes = (VesselStateAttributes) EcoreUtil.copy((EObject)getValue(object));
-			if (dcd.open(jointModelEditor.getRootObject(), Collections.singletonList((EObject) attributes)) == Window.OK) {
+			if (dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) attributes)) == Window.OK) {
 				return attributes;
 			} else {
 				return null;

@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.models.ui.validation.ValidationSupport;
 
 /**
  * Generates a warning if some canal costs are not set
@@ -35,7 +34,7 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 
 		if (target instanceof VesselClass) {
 			final VesselClass vesselClass = (VesselClass) target;
-			final MMXRootObject scenario = ValidationSupport.getInstance().getParentObjectType(MMXRootObject.class, vesselClass);
+			final MMXRootObject scenario = Activator.getDefault().getExtraValidationContext().getRootObject();
 
 			if (scenario != null) {
 				final StringBuffer missingCanalNames = new StringBuffer();

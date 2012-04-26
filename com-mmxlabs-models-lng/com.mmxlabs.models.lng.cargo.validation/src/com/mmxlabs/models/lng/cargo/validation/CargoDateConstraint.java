@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.models.ui.validation.ValidationSupport;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
@@ -78,7 +77,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 	private IStatus validateSlotTravelTime(final IValidationContext ctx, final Cargo cargo, final int availableTime) {
 		if (availableTime >= 0) {
 
-			final MMXRootObject scenario = ValidationSupport.getInstance().getParentObjectType(MMXRootObject.class, cargo);
+			final MMXRootObject scenario = Activator.getDefault().getExtraValidationContext().getRootObject();
 			if (scenario != null) {
 
 				double maxSpeedKnots = 0.0;
