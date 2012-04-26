@@ -55,7 +55,7 @@ public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput {
 
 	@Override
 	public String getContentType() {
-		Metadata metadata = scenarioInstance.getMetadata();
+		final Metadata metadata = scenarioInstance.getMetadata();
 		if (metadata == null) {
 			return null;
 		}
