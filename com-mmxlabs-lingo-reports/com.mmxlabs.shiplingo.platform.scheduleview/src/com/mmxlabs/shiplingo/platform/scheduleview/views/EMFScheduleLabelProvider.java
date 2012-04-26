@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.validation.ValidationSupport;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.IScheduleViewColourScheme;
 
 /**
@@ -51,11 +50,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	public String getText(final Object element) {
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
-
-			final MMXRootObject root = ValidationSupport.getInstance().getParentObjectType(MMXRootObject.class, sequence);
-			//final String name = root.getName();
-			// final String name =
-			// URI.decode(sequence.eResource().getURI().lastSegment()).replaceAll(".scenario","");
 
 			return sequence.getName();
 		}
