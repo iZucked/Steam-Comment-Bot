@@ -7,6 +7,7 @@ package com.mmxlabs.scenario.service.workspace;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
@@ -108,9 +109,11 @@ public class WorkspaceScenarioService implements IScenarioService {
 				if (resource.getType() == IResource.FILE) {
 
 					final Container container = mapWorkspaceToModel.get(resource.getParent());
-
-					createScenarioInstance(container, resource);
-
+					try {
+						createScenarioInstance(container, resource);
+					} catch (Exception e) {
+						log.error(e.getMessage(), e);
+					}
 				} else if (resource.getType() == IResource.FOLDER || resource.getType() == IResource.PROJECT) {
 
 					final Container container = mapWorkspaceToModel.get(resource.getParent());
@@ -232,7 +235,11 @@ public class WorkspaceScenarioService implements IScenarioService {
 			try {
 				for (final IResource r : workspaceContainer.members()) {
 					if (r.getType() == IResource.FILE) {
-						createScenarioInstance(modelContainer, r);
+						try {
+							createScenarioInstance(modelContainer, r);
+						} catch (Exception e) {
+							log.error(e.getMessage(), e);
+						}
 					} else if (r.getType() == IResource.FOLDER || r.getType() == IResource.PROJECT) {
 
 						// Create container,
@@ -259,7 +266,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		return folder;
 	}
 
-	private void createScenarioInstance(final Container container, final IResource r) {
+	private void createScenarioInstance(final Container container, final IResource r) throws IOException {
 
 		ScenarioInstance scenarioInstance = null;
 
@@ -271,6 +278,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 			
 			final Resource manifestResource = resourceSet.createResource(manifestURI);
+			manifestResource.load(Collections.emptyMap());
 			final Manifest manifest = (Manifest) manifestResource.getContents().get(0);
 			
 			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
@@ -296,9 +304,9 @@ public class WorkspaceScenarioService implements IScenarioService {
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 			
 			final Resource manifestResource = resourceSet.createResource(manifestURI);
-			final com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest manifest = 
-					(com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest) manifestResource.getContents().get(0);
-			
+			manifestResource.load(Collections.emptyMap());
+			final com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest manifest = (com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest) manifestResource.getContents().get(0);
+
 			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 			scenarioInstance.setUuid(UUID.randomUUID().toString());
 			
