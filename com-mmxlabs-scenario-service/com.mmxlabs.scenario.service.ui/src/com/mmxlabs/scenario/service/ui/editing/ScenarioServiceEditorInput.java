@@ -46,7 +46,11 @@ public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput {
 
 	@Override
 	public String getToolTipText() {
-		return scenarioInstance.getMetadata().getComment();
+		final String comment = scenarioInstance.getMetadata().getComment();
+		if (comment == null) {
+			return getName();
+		}
+		return comment;
 	}
 
 	@Override
