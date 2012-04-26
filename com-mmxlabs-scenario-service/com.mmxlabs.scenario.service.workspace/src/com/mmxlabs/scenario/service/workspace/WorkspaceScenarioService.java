@@ -243,8 +243,6 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 	private Folder createFolder(final Container modelContainer, final IResource r) {
 
-		System.out.println("Create folder: " + r.getName());
-
 		final Folder folder = ScenarioServiceFactory.eINSTANCE.createFolder();
 		modelContainer.getElements().add(folder);
 		folder.setName(r.getName());
