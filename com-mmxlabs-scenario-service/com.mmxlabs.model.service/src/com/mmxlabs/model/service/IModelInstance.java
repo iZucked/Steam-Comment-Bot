@@ -17,8 +17,9 @@ public interface IModelInstance {
 	 * Return the model instance.
 	 * 
 	 * @return
+	 * @throws IOException 
 	 */
-	EObject getModel();
+	EObject getModel() throws IOException;
 
 	/**
 	 * Request the current model state should be saved.

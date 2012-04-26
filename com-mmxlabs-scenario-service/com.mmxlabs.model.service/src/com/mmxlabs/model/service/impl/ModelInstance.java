@@ -20,7 +20,11 @@ public class ModelInstance implements IModelInstance {
 	}
 
 	@Override
-	public EObject getModel() {
+	public EObject getModel() throws IOException {
+		
+		if (!resource.isLoaded()) {
+			resource.load(Collections.emptyMap());
+		}
 		return resource.getContents().get(0);
 	}
 
