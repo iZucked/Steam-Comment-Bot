@@ -52,4 +52,11 @@ public interface IExtraValidationContext {
 	 * @return
 	 */
 	public List<EObject> getSiblings(final EObject object);
+	
+	/**
+	 * Return the replacement for this EObject, if there is one.
+	 * @param object
+	 * @return
+	 */
+	public EObject getReplacement(final EObject object);
 }

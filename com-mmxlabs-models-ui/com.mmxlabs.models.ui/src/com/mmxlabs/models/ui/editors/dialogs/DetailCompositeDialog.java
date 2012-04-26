@@ -46,12 +46,14 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
-import com.mmxlabs.models.ui.validation.ValidationSupport;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.validation.ValidationHelper;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 /**
@@ -82,6 +84,8 @@ public class DetailCompositeDialog extends Dialog {
 	 */
 	final IValidator<EObject> validator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 
+	final ValidationHelper validationHelper = new ValidationHelper();
+	
 	private ICommandHandler commandHandler;
 
 	/**
@@ -112,6 +116,8 @@ public class DetailCompositeDialog extends Dialog {
 
 	private Map<EObject, Collection<EObject>> ranges = new HashMap<EObject, Collection<EObject>>();
 
+	private DefaultExtraValidationContext validationContext;
+	
 	/**
 	 * Get the duplicate object (for editing) corresponding to the given input object.
 	 * 
@@ -136,11 +142,17 @@ public class DetailCompositeDialog extends Dialog {
 				duplicateToOriginal.put(duplicateOne, originalOne);
 				originalToDuplicate.put(originalOne, duplicateOne);
 				if (returnDuplicates) {
-					ValidationSupport.getInstance().setContainers(Collections.singleton(duplicateOne), originalOne.eContainer(), (EReference) originalOne.eContainingFeature());
+					validationContext.setApparentContainment(duplicateOne, originalOne.eContainer(), (EReference) originalOne.eContainingFeature());
 				}
 			}
 			if (!returnDuplicates) {
-				ValidationSupport.getInstance().startEditingObjects(range, duplicateRange);
+				final Iterator	<EObject> rangeIterator2 = range.iterator();
+				final Iterator<EObject> duplicateIterator = duplicateRange.iterator();
+				while (rangeIterator.hasNext() && duplicateIterator.hasNext()) {
+					final EObject original2 = rangeIterator2.next();
+					final EObject duplicate = duplicateIterator.next();
+					validationContext.replace(original2, duplicate);
+				}
 			}
 		}
 		return originalToDuplicate.get(original);
@@ -187,7 +199,7 @@ public class DetailCompositeDialog extends Dialog {
 	}
 
 	private void validate() {
-		final IStatus status = validator.validate(currentEditorTargets);
+		final IStatus status = validationHelper.runValidation(validator, validationContext, currentEditorTargets);
 
 		final boolean problem = status.matches(IStatus.ERROR);
 		for (final EObject object : currentEditorTargets)
@@ -321,15 +333,17 @@ public class DetailCompositeDialog extends Dialog {
 		this.returnDuplicates = returnDuplicates;
 	}
 
-	public int open(final MMXRootObject rootObject, final List<EObject> objects) {
-		return open(rootObject, objects, false);
+	public int open(final JointModelEditorPart editorPart, final MMXRootObject rootObject, final List<EObject> objects) {
+		return open(editorPart, rootObject, objects, false);
 	}
 
 	private boolean lockedForEditing = false;
 
 	private MMXRootObject rootObject;
 
-	public int open(final MMXRootObject rootObject, final List<EObject> objects, final boolean locked) {
+	public int open(final JointModelEditorPart part, final MMXRootObject rootObject, final List<EObject> objects, final boolean locked) {
+		validationContext = new DefaultExtraValidationContext(part.getExtraValidationContext());
+		part.pushExtraValidationContext(validationContext);
 		this.rootObject = rootObject;
 		lockedForEditing = locked;
 		this.inputs.clear();
@@ -381,17 +395,7 @@ public class DetailCompositeDialog extends Dialog {
 			}
 			return value;
 		} finally {
-			if (returnDuplicates) {
-				ValidationSupport.getInstance().clearContainers(originalToDuplicate.values());
-			} else {
-				final List<EObject> duplicateObjects = new ArrayList<EObject>(duplicateToOriginal.keySet().size());
-				final List<EObject> originalObjects = new ArrayList<EObject>(duplicateToOriginal.keySet().size());
-				for (final Map.Entry<EObject, EObject> entry : duplicateToOriginal.entrySet()) {
-					duplicateObjects.add(entry.getKey());
-					originalObjects.add(entry.getValue());
-				}
-				ValidationSupport.getInstance().endEditingObjects(originalObjects, duplicateObjects);
-			}
+			part.popExtraValidationContext();
 		}
 	}
 

@@ -36,6 +36,7 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 	
 	private HashMap<Pair<EObject, EReference>, List<EObject>> ignoredContainedObjects = 
 			new HashMap<Pair<EObject, EReference>, List<EObject>>();
+	private HashMap<EObject, EObject> replacements = new HashMap<EObject, EObject>();
 
 	public DefaultExtraValidationContext(final MMXRootObject rootObject) {
 		this.rootObject = rootObject;
@@ -122,9 +123,33 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 		
 		return result;
 	}
+	
+	/**
+	 * replace one with two
+	 * 
+	 * @param one
+	 * @param two
+	 */
+	public void replace(final EObject one, final EObject two) {
+		setApparentContainment(two, getContainer(one), getContainment(one));
+		ignore(one);
+		replacements.put(one, two);
+	}
 
 	@Override
 	public List<EObject> getSiblings(final EObject object) {
 		return getContents(getContainer(object), getContainment(object));
+	}
+
+	
+	@Override
+	public EObject getReplacement(final EObject object) {
+		if (replacements .containsKey(object)) {
+			return replacements.get(object);
+		} else if (outerContext != null) {
+			return outerContext.getReplacement(object);
+		} else {
+			return object;
+		}
 	}
 }

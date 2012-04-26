@@ -10,6 +10,9 @@ import java.util.Collection;
 import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
+
+import javax.xml.bind.helpers.DefaultValidationEventHandler;
 
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -68,6 +71,8 @@ import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
@@ -82,6 +87,9 @@ import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
  */
 public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider {
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
+	
+	private Stack<IExtraValidationContext> validationContextStack = new Stack<IExtraValidationContext>();
+	
 	/**
 	 * This joint model instance should contain and provide the root object
 	 */
@@ -328,8 +336,23 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		}
 
 		site.setSelectionProvider(this);
+		
+		validationContextStack.clear();
+		validationContextStack.push(new DefaultExtraValidationContext(getRootObject()));
 	}
 
+	public IExtraValidationContext getExtraValidationContext() {
+		return validationContextStack.peek();
+	}
+	
+	public void pushExtraValidationContext(final IExtraValidationContext context) {
+		validationContextStack.push(context);
+	}
+	
+	public void popExtraValidationContext() {
+		validationContextStack.pop();
+	}
+	
 	@Override
 	public void dispose() {
 		Activator.getDefault().getJobManager().removeEclipseJobManagerListener(jobManagerListener);
