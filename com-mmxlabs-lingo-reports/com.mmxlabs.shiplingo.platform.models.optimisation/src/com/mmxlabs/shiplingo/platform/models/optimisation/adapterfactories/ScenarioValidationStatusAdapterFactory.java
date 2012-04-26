@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.shiplingo.platform.models.optimisation.adapterfactories;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.IStatus;
@@ -14,6 +17,9 @@ import org.eclipse.emf.validation.service.IValidator;
 import org.eclipse.emf.validation.service.ModelValidationService;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.MMXSubModel;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.validation.ValidationHelper;
 
 /**
  * {@link IAdapterFactory} to adapt a Resource to an IStatus indicating the validation status of the resource's scenario.
@@ -51,8 +57,17 @@ public class ScenarioValidationStatusAdapterFactory implements IAdapterFactory {
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 		validator.setOption(IBatchValidator.OPTION_TRACK_RESOURCES, true);
 		
-		final IStatus status = validator.validate(scenario);
-		return status;
+		final ValidationHelper helper = new ValidationHelper();
+		
+		final DefaultExtraValidationContext context = new DefaultExtraValidationContext(scenario);
+		
+		final List<EObject> subModels = new ArrayList<EObject>();
+		
+		for (final MMXSubModel subModel : scenario.getSubModels()) {
+			subModels.add(subModel.getSubModelInstance());
+		}
+		
+		return helper.runValidation(validator, new DefaultExtraValidationContext(scenario), subModels);
 	}
 
 	@Override

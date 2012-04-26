@@ -51,7 +51,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
 
-//			final MMXRootObject root = ValidationSupport.getInstance().getParentObjectType(MMXRootObject.class, sequence);
+//			final MMXRootObject root = xxx;
 			//final String name = root.getName();
 			// final String name =
 			// URI.decode(sequence.eResource().getURI().lastSegment()).replaceAll(".scenario","");
