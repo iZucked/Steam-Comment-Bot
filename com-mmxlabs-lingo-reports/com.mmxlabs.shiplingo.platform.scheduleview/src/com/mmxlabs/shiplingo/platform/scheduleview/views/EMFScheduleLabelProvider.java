@@ -22,8 +22,6 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.validation.ValidationSupport;
 
 /**
  * @author hinton
