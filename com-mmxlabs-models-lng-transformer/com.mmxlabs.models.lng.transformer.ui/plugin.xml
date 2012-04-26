@@ -31,35 +31,14 @@
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StartOptimisationHandler"
                commandId="com.mmxlabs.rcp.navigator.commands.optimisation.play">
             <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
             </enabledWhen>
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </activeWhen>
             <!--
             <activeWhen>
                <or>
@@ -373,6 +352,18 @@
             </or>
          </possibleChildren>
       </navigatorContent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:com.mmxlabs.scenario.service.ui.navigator">
+         <command
+               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.play"
+               label="Play/Pause Optimisation"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
    
 </plugin>

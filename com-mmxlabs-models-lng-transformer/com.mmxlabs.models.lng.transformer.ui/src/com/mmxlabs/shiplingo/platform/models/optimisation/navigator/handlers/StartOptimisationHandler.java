@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -14,6 +15,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
@@ -33,6 +35,8 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor;
 
@@ -71,133 +75,155 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 			final Iterator<?> itr = strucSelection.iterator();
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
-
-				if (obj instanceof IResource) {
-					final IResource resource = (IResource) obj;
-
-					return evaluateResource(jobManager, resource);
+				if (obj instanceof ScenarioInstance) {
+					return evaluateScenarioInstance(jobManager, (ScenarioInstance) obj);
+					
+					
 				}
+				
 			}
 		}
 
 		return null;
 	}
 
-	public Object evaluateResource(final IEclipseJobManager jobManager, final IResource resource) {
-		final IStatus status = (IStatus) resource.getAdapter(IStatus.class);
-		if (status.matches(IStatus.ERROR)) {
-			Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Validation errors were found in the resource " + resource.getName()));
-			final MMXRootObject root = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
-			final ScheduleModel scheduleModel = root.getSubModel(ScheduleModel.class);
-			if (scheduleModel != null) {
-				// no solution, so clear state.
-				scheduleModel.setInitialSchedule(null);
-				scheduleModel.setOptimisedSchedule(null);
-				scheduleModel.setDirty(false);
-			}
+	public Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance) {
+//		final IStatus status = (IStatus) resource.getAdapter(IStatus.class);
+//		if (status.matches(IStatus.ERROR)) {
+//			Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Validation errors were found in the resource " + resource.getName()));
+//			final MMXRootObject root = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
+//			final ScheduleModel scheduleModel = root.getSubModel(ScheduleModel.class);
+//			if (scheduleModel != null) {
+//				// no solution, so clear state.
+//				scheduleModel.setInitialSchedule(null);
+//				scheduleModel.setOptimisedSchedule(null);
+//				scheduleModel.setDirty(false);
+//			}
+//			try {
+//				final ResourceSet rs = root.eResource().getResourceSet();
+//				// temporarily mess with joint model resource set's uri converter
+//				// so that all of the URIs appear to be the same, for marker util.
+//				
+//				// this may need improving later.
+//				final URIConverter temp = rs.getURIConverter();
+//				rs.setURIConverter(new ExtensibleURIConverterImpl() {
+//					@Override
+//					public URI normalize(URI uri) {
+//						return URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
+//					}
+//				});
+//				MarkerUtil.updateMarkers(status);
+//				
+//				rs.setURIConverter(temp);
+//				Display.getDefault().asyncExec(
+//						new Runnable() {
+//							@Override
+//							public void run() {
+//								try {
+//									PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
+//											, null, IWorkbenchPage.VIEW_VISIBLE);
+//								} catch (final PartInitException e) {}
+//							}							
+//						});
+//			} catch (final Throwable e) {
+//				Platform.getLog(Activator.getDefault().getBundle()).log(
+//						new Status(IStatus.ERROR, Activator.PLUGIN_ID, "An error occurred when creating validtion markers for an invalid scenario", e));
+//				
+//			}
+//
+//			return null;
+//		} else {
+		
+		final IScenarioService service = (IScenarioService) instance.getAdapters().get(IScenarioService.class);
+		if (service != null) {
 			try {
-				final ResourceSet rs = root.eResource().getResourceSet();
-				// temporarily mess with joint model resource set's uri converter
-				// so that all of the URIs appear to be the same, for marker util.
-				
-				// this may need improving later.
-				final URIConverter temp = rs.getURIConverter();
-				rs.setURIConverter(new ExtensibleURIConverterImpl() {
-					@Override
-					public URI normalize(URI uri) {
-						return URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
-					}
-				});
-				MarkerUtil.updateMarkers(status);
-				
-				rs.setURIConverter(temp);
-				Display.getDefault().asyncExec(
-						new Runnable() {
-							@Override
-							public void run() {
-								try {
-									PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
-											, null, IWorkbenchPage.VIEW_VISIBLE);
-								} catch (final PartInitException e) {}
-							}							
-						});
-			} catch (final Throwable e) {
-				Platform.getLog(Activator.getDefault().getBundle()).log(
-						new Status(IStatus.ERROR, Activator.PLUGIN_ID, "An error occurred when creating validtion markers for an invalid scenario", e));
-				
-			}
+				final EObject object = service.load(instance);
+				if (object instanceof MMXRootObject) {
+					final MMXRootObject root = (MMXRootObject) object;
+					final String uuid = instance.getUuid();
+					final boolean resourceWasSelected = jobManager.getSelectedResources().contains(uuid);
+					IJobDescriptor job = getJobDescriptor(instance);
+					
+					if (job == null) return null;
+					
+					IJobControl control = jobManager.getControlForJob(job);
 
-			return null;
-		} else {
-			final MMXRootObject root = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
-			final ResourceSet rs = root.eResource().getResourceSet();
+					// If there is a job, but it is terminated, then we need to create a new one
+					if ((control != null) && ((control.getJobState() == EJobState.CANCELLED) || (control.getJobState() == EJobState.COMPLETED))) {
+						jobManager.removeJob(job);
+						instance.getAdapters().remove(IJobDescriptor.class);
+						job = getJobDescriptor(instance);
+					}
+					
+					if (!jobManager.getSelectedJobs().contains(job)) {
+						// Clean up when job is removed from manager
+						jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
+						control = jobManager.submitJob(job, uuid);
+					}
+					
+					final boolean jobWasSelected = jobManager.getSelectedJobs().contains(job);
+					
+					if (control.getJobState() == EJobState.CREATED) {
+						try {
+							control.prepare();
+							control.start();
+						} catch (final Exception ex) {
+							Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK, "An error ocurred starting the optimisation", ex));
+							control.cancel();
+						}
+						// Resume if paused
+					} else if (control.getJobState() == EJobState.PAUSED) {
+						control.resume();
+					} else {
+						control.start();
+					}
+					jobManager.setJobSelection(job, jobWasSelected);
+					jobManager.setResourceSelection(uuid, resourceWasSelected);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+			
+//			final ResourceSet rs = root.eResource().getResourceSet();
 			// temporarily mess with joint model resource set's uri converter
 			// so that all of the URIs appear to be the same, for marker util.
-			
-			// this may need improving later.
-			final URIConverter temp = rs.getURIConverter();
-			rs.setURIConverter(new ExtensibleURIConverterImpl() {
-				@Override
-				public URI normalize(URI uri) {
-					return URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
-				}
-			});
-			try {
-				MarkerUtil.updateMarkers(status);
-			} catch (CoreException e) {
-			}
-			
-			rs.setURIConverter(temp);
-		}
+//			
+//			// this may need improving later.
+//			final URIConverter temp = rs.getURIConverter();
+//			rs.setURIConverter(new ExtensibleURIConverterImpl() {
+//				@Override
+//				public URI normalize(URI uri) {
+//					return URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
+//				}
+//			});
+//			try {
+//				MarkerUtil.updateMarkers(status);
+//			} catch (CoreException e) {
+//			}
+//			
+//			rs.setURIConverter(temp);
+//		}
 
-		// Adapt to a new or existing job
-		final boolean resourceWasSelected = jobManager.getSelectedResources().contains(resource);
-		IJobDescriptor job = (IJobDescriptor) resource.getAdapter(IJobDescriptor.class);
-		final boolean wasSelected = jobManager.getSelectedJobs().contains(job);
-		// No job - then unable to adapt or wrong type of resource
-		if (job == null) {
-			// Not a lot we can do here....
-			return null;
-		}
 
-		IJobControl control = jobManager.getControlForJob(job);
-
-		// If there is a job, but it is terminated, then we need to create a new one
-		if ((control != null) && ((control.getJobState() == EJobState.CANCELLED) || (control.getJobState() == EJobState.COMPLETED))) {
-			
-			// Remove from job handler -- this should trigger the dispose listener registered on creation.
-			jobManager.removeJob(job);
-			// Create a new instance - this should use the default job manager
-			job = (IJobDescriptor) resource.getAdapter(IJobDescriptor.class);
-		}
-
-		// If the job does not already exist - it may do perhaps due to a race condition as did not exist when we started this code branch - then register it
-		if (!jobManager.getSelectedJobs().contains(job)) {
-			// Clean up when job is removed from manager
-			jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-			control = jobManager.submitJob(job, resource);
-		}
-		if (job instanceof LNGSchedulerJobDescriptor) {
-			((LNGSchedulerJobDescriptor) job).setOptimising(optimising);
-		}
-		// Now look to see whether or not we need to prepare, start or resume
-		if (control.getJobState() == EJobState.CREATED) {
-			try {
-				control.prepare();
-				control.start();
-			} catch (final Exception ex) {
-				Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK, "An error ocurred starting the optimisation", ex));
-				control.cancel();
-			}
-			// Resume if paused
-		} else if (control.getJobState() == EJobState.PAUSED) {
-			control.resume();
-		} else {
-			control.start();
-		}
-		jobManager.setJobSelection(job, wasSelected);
-		jobManager.setResourceSelection(resource, resourceWasSelected); // why are these separate?
 		return null;
+	}
+
+	/**
+	 * @param instance
+	 * @return
+	 */
+	private IJobDescriptor getJobDescriptor(ScenarioInstance instance) {
+		synchronized (instance) {
+			IJobDescriptor job = (IJobDescriptor) instance.getAdapters().get(IJobDescriptor.class);
+			if (job == null) {
+				job = new LNGSchedulerJobDescriptor(instance.getName(), (MMXRootObject) instance.getInstance(), optimising);
+				instance.getAdapters().put(IJobDescriptor.class, job);
+			}
+			return job;
+		}
 	}
 
 	@Override
@@ -221,17 +247,10 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 
-				if (obj instanceof IResource) {
-					final IResource resource = (IResource) obj;
-					// FIXME: Make this work efficiently without a scenario
-					final MMXRootObject s = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
+				if (obj instanceof ScenarioInstance) {
+					final ScenarioInstance instance = (ScenarioInstance) obj;
 
-					// Need a scenario to start an optimisation
-					if (s == null) {
-						return false;
-					}
-
-					final IJobDescriptor job = jobManager.findJobForResource(resource);
+					final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
 					final IJobControl control = jobManager.getControlForJob(job);
 
 					if (control == null) {

@@ -26,7 +26,9 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.models.lng.cargo;bundle-version="1.0.0",
  com.mmxlabs.models.lng.fleet;bundle-version="1.0.0",
  com.mmxlabs.models.lng.analytics.editor;bundle-version="1.0.0",
- com.mmxlabs.models.ui.validation;bundle-version="1.0.0"
+ com.mmxlabs.models.ui.validation;bundle-version="1.0.0",
+ com.mmxlabs.scenario.service.model;bundle-version="1.0.0",
+ com.mmxlabs.scenario.service;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.common;version="1.0.0",
