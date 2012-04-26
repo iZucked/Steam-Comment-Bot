@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scenario.service.workspace;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +34,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -324,8 +322,8 @@ public class WorkspaceScenarioService implements IScenarioService {
 	}
 
 	@Override
-	public void load(final ScenarioInstance instance) throws IOException {
-		if (instance.getInstance() != null) return;
+	public EObject load(final ScenarioInstance instance) throws IOException {
+		if (instance.getInstance() != null) return instance.getInstance();
 		final List<EObject> parts = new ArrayList<EObject>();
 		final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 
@@ -361,6 +359,8 @@ public class WorkspaceScenarioService implements IScenarioService {
 		instance.setInstance(implementation);
 		
 		modelService.resolve(parts);
+		
+		return implementation;
 	}
 
 	@Override
@@ -445,5 +445,20 @@ public class WorkspaceScenarioService implements IScenarioService {
 		}
 		
 		return insert(destination, dependencies , duppedSubModels);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scenario.service.IScenarioService#save(com.mmxlabs.scenario.service.model.ScenarioInstance)
+	 */
+	@Override
+	public void save(final ScenarioInstance scenarioInstance) throws IOException {
+		final EObject instance = scenarioInstance.getInstance();
+		if (instance == null) return;
+		for (final String uris : scenarioInstance.getSubModelURIs()) {
+			final IModelInstance modelInstance = modelService.getModel(URI.createURI(uris));
+			if (modelInstance != null) {
+				modelInstance.save();
+			}
+		}
 	}
 }
