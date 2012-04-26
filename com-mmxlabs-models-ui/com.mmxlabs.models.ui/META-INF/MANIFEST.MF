@@ -23,7 +23,10 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.jobmanager;bundle-version="1.0.0",
  com.mmxlabs.common.common-util;visibility:=reexport,
  org.eclipse.ui.views;bundle-version="3.6.0",
- org.eclipse.emf.edit.ui;bundle-version="2.7.0"
+ org.eclipse.emf.edit.ui;bundle-version="2.7.0",
+ com.mmxlabs.scenario.service;bundle-version="1.0.0",
+ com.mmxlabs.scenario.service.model;bundle-version="1.0.0",
+ com.mmxlabs.scenario.service.ui;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.ui,
