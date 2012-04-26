@@ -180,7 +180,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		serviceService.setName(getName());
 		serviceService.setDescription(getName());
 
-		// TODO: Hook up a listener to react to model changes and replicate in the workspace.
+		// TODO: Forbid direct editing of model expect via this class
 
 		return serviceService;
 	}
