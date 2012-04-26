@@ -47,7 +47,7 @@ public class Activator extends AbstractUIPlugin {
 		evaluator = context.registerService(IResourceEvaluator.class, new IResourceEvaluator() {
 			@Override
 			public void evaluate(final IResource resource) {
-				handler.evaluateResource(getJobManager(), resource);
+//				handler.evaluateResource(getJobManager(), resource);
 			}
 		}, null);
 	}
