@@ -15,7 +15,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.service.IValidator;
 
 /**
- * A helper class for running validations which lets you pass data into the validation by a horrible mechanism.
+ * A helper class for running validations which lets you pass extra data into the validation.
+ * Validation constraints can access the extra data using {@link IValidationInputService}, and so long
+ * as the validation has been run through a helper class like this they will be able to access the right copy.
  * 
  * @author hinton
  *

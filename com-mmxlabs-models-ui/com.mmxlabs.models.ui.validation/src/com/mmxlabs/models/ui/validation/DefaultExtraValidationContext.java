@@ -18,7 +18,8 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
- * A default extra validation context instance. Stacks on top of other extra validation contexts automatically.
+ * A default extra validation context instance; allows overriding of container and containment, and can be
+ * stacked on top of other validation contexts.
  * 
  * @author hinton
  *
@@ -38,7 +39,11 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 
 	public DefaultExtraValidationContext(final MMXRootObject rootObject) {
 		this.rootObject = rootObject;
-		this.outerContext = Activator.getDefault().getInputService().getExtraContext();
+	}
+	
+	public DefaultExtraValidationContext(final IExtraValidationContext outerContext) {
+		this.outerContext = outerContext;
+		this.rootObject = outerContext.getRootObject();
 	}
 	
 	@Override
