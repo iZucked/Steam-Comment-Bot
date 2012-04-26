@@ -23,7 +23,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.models.ui.validation.ValidationSupport;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * Ensures that the name attribute of all {@link NamedObject}s in a collection are unique.
@@ -36,8 +36,9 @@ import com.mmxlabs.models.ui.validation.ValidationSupport;
 public class NameUniquenessConstraint extends AbstractModelConstraint {
 	private IStatus validate(final IValidationContext ctx, final EAttribute nameAttribute) {
 		final EObject target = ctx.getTarget();
-
-		final Pair<EObject, EReference> containerAndFeature = ValidationSupport.getInstance().getContainer(target);
+		IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
+		final Pair<EObject, EReference> containerAndFeature = new Pair<EObject, EReference>(
+				extraValidationContext.getContainer(target), extraValidationContext.getContainment(target));
 
 		final EObject container = containerAndFeature.getFirst(); // target.eContainer();
 		if (container == null)
@@ -55,7 +56,7 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 			if (bad == null) {
 				bad = new HashSet<String>();
 				badNames.put(containerAndFeature, bad);
-				final List<EObject> objects = ValidationSupport.getInstance().getContents(container, (EReference) feature);
+				final List<EObject> objects = extraValidationContext.getSiblings(target);
 
 				final Set<String> temp = new HashSet<String>();
 				for (final EObject no : objects) {
