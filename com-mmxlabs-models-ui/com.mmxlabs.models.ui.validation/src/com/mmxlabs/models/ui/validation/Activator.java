@@ -6,6 +6,9 @@ package com.mmxlabs.models.ui.validation;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+
+import com.mmxlabs.models.ui.validation.impl.ValidationInputService;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -17,6 +20,10 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
+
+	private ValidationInputService inputService = new ValidationInputService();
+
+	private ServiceRegistration<IValidationInputService> serviceRegistration;
 	
 	/**
 	 * The constructor
@@ -32,6 +39,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		serviceRegistration = context.registerService(IValidationInputService.class, inputService, null);
 	}
 
 	/*
@@ -41,6 +49,7 @@ public class Activator extends AbstractUIPlugin {
 	@Override
 	public void stop(final BundleContext context) throws Exception {
 		plugin = null;
+		serviceRegistration.unregister();
 		super.stop(context);
 	}
 
@@ -51,6 +60,10 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static Activator getDefault() {
 		return plugin;
+	}
+
+	protected ValidationInputService getInputService() {
+		return inputService ;
 	}
 
 }
