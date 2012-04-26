@@ -76,5 +76,13 @@ public interface IScenarioService {
 	 * @param instance
 	 * @throws IOException
 	 */
-	void load(final ScenarioInstance instance) throws IOException;
+	EObject load(final ScenarioInstance instance) throws IOException;
+	
+	/**
+	 * Cause the saving of the given instance.
+	 * 
+	 * @param instance
+	 * @throws IOException
+	 */
+	void save(final ScenarioInstance instance) throws IOException;
 }

@@ -339,9 +339,8 @@ public class WorkspaceScenarioService implements IScenarioService {
 	}
 
 	@Override
-	public void load(final ScenarioInstance instance) throws IOException {
-		if (instance.getInstance() != null)
-			return;
+	public EObject load(final ScenarioInstance instance) throws IOException {
+		if (instance.getInstance() != null) return instance.getInstance();
 		final List<EObject> parts = new ArrayList<EObject>();
 		final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 
@@ -381,6 +380,8 @@ public class WorkspaceScenarioService implements IScenarioService {
 		instance.getAdapters().put(BasicCommandStack.class, (BasicCommandStack) domain.getCommandStack());
 
 		modelService.resolve(parts);
+		
+		return implementation;
 	}
 
 	@Override
