@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
-import com.mmxlabs.models.mmxcore.MMXObject;
 
 public class ModelInstance implements IModelInstance {
 
