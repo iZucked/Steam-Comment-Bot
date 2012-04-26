@@ -29,7 +29,7 @@ public class DuplicateAction extends ScenarioModifyingAction {
 		final IStructuredSelection selection = (IStructuredSelection) getLastSelection();
 		final DetailCompositeDialog dcd = new DetailCompositeDialog(part.getSite().getShell(), part.getDefaultCommandHandler());
 		dcd.setReturnDuplicates(true);
-		dcd.open(part.getRootObject(), selection.toList());
+		dcd.open(part, part.getRootObject(), selection.toList());
 	}
 
 	@Override

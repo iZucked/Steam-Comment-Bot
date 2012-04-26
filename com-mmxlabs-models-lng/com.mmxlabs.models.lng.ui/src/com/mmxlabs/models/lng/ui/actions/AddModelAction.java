@@ -24,11 +24,11 @@ import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
-import com.mmxlabs.models.ui.validation.ValidationSupport;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
@@ -47,6 +47,8 @@ public final class AddModelAction {
 		public EReference getContainment();
 
 		public MMXRootObject getRootObject();
+		
+		public JointModelEditorPart getEditorPart();
 	}
 
 	public final static Action create(final EClass eClass, final IAddContext context) {
@@ -93,7 +95,7 @@ class SingleAddAction extends LockableAction {
 					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 					context.getCommandHandler());
 			
-			if (editor.open(context.getRootObject(), Collections.singletonList(settings.iterator().next().getInstance()))
+			if (editor.open(context.getEditorPart(), context.getRootObject(), Collections.singletonList(settings.iterator().next().getInstance()))
 					!= Window.OK) {
 				final List<EObject> del = new ArrayList<EObject>(settings.size());
 				for (final ISetting s : settings) {

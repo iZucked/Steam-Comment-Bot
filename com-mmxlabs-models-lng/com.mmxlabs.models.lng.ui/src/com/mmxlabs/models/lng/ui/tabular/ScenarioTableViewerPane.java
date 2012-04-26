@@ -135,7 +135,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 								final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getDefaultCommandHandler());
 								try {
 									jointModelEditorPart.setDisableUpdates(true);
-									dcd.open(jointModelEditorPart.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
+									dcd.open(jointModelEditorPart, jointModelEditorPart.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
 								} finally {
 									jointModelEditorPart.setDisableUpdates(false);
 								}
@@ -252,6 +252,11 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			@Override
 			public ICommandHandler getCommandHandler() {
 				return jointModelEditorPart.getDefaultCommandHandler();
+			}
+
+			@Override
+			public JointModelEditorPart getEditorPart() {
+				return jointModelEditorPart;
 			}
 		});
 		
