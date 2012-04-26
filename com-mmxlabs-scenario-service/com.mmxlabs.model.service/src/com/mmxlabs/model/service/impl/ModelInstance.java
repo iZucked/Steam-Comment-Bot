@@ -36,6 +36,7 @@ public class ModelInstance implements IModelInstance {
 	}
 	
 	/**
+	 * TODO this could be in the MMXCoreResourceHandler
 	 * @param model
 	 */
 	private void switchAdapters(EObject model, boolean on) {
