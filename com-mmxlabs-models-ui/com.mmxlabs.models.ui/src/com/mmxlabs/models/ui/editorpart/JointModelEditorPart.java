@@ -12,23 +12,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-import javax.xml.bind.helpers.DefaultValidationEventHandler;
-
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edapt.migration.MigrationException;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -64,6 +62,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
@@ -167,6 +166,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	private ServiceTracker<IScenarioService, IScenarioService> scenarioServiceTracker;
 
 	private ScenarioInstance scenarioInstance;
+
+
+	private EContentAdapter lockedAdapter;
 
 	public JointModelEditorPart() {
 		scenarioServiceTracker = new ServiceTracker<IScenarioService, IScenarioService>(Activator.getDefault().getBundle().getBundleContext(), IScenarioService.class, null);
@@ -278,6 +280,20 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			
 			commandStack = (BasicCommandStack)instance.getAdapters().get(BasicCommandStack.class);
 			editingDomain = (CommandProviderAwareEditingDomain)instance.getAdapters().get(EditingDomain.class);
+			
+			lockedAdapter = new EContentAdapter() {
+				
+				@Override
+				public void notifyChanged(Notification notification) {
+					super.notifyChanged(notification);
+					
+					if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locked()) {
+						setLocked(notification.getNewBooleanValue());
+					}
+				}
+				
+			} ;
+			instance.eAdapters().add(lockedAdapter);
 			
 			if (ro instanceof MMXRootObject) {
 				root = (MMXRootObject) ro;
@@ -403,6 +419,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	
 	@Override
 	public void dispose() {
+		
+		scenarioInstance.eAdapters().remove(lockedAdapter);
+		
 		// Activator.getDefault().getJobManager().removeEclipseJobManagerListener(jobManagerListener);
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.dispose();
