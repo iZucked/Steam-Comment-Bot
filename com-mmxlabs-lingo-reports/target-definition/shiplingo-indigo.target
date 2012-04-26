@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="MMXLabs Target" sequenceNumber="28">
+<target name="MMXLabs Target" sequenceNumber="29">
 <locations>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.edapt.recorder.feature.feature.group" version="0.3.0.201111051053"/>
@@ -41,11 +41,11 @@
 <repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="1.0.0.201204151546"/>
+<unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="1.0.0.201204251640"/>
 <repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="1.0.0.201204151547"/>
+<unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="1.0.0.201204251643"/>
 <repository location="http://download.eclipse.org/technology/nebula/incubation/snapshot"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -97,7 +97,7 @@
 <unit id="org.slf4j.log4j.source" version="1.6.4.v20120130-2120"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/I20120321212921/repository"/>
 </location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.ops4j.peaberry.activation.source" version="1.2.0"/>
 <unit id="org.ops4j.peaberry.eclipse.source" version="1.2.0"/>
 <unit id="org.ops4j.peaberry.source" version="1.2.0"/>
@@ -107,6 +107,15 @@
 <unit id="org.ops4j.peaberry" version="1.2.0"/>
 <unit id="org.ops4j.peaberry.eclipse" version="1.2.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/"/>
+</location>
+<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="1.0.1.201204251508"/>
+<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="1.0.1.201204251508"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="1.0.1.201204251503"/>
+<unit id="com.mmxlabs.models.mmxcore.sdk.feature.source.feature.group" version="1.0.1.201204251503"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="1.0.1.201204251503"/>
+<unit id="com.mmxlabs.models.mmxcore.sdk.feature.feature.group" version="1.0.1.201204251503"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
 </location>
 </locations>
 </target>
