@@ -22,18 +22,19 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,9 @@ import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.Container;
@@ -186,17 +190,30 @@ public class WorkspaceScenarioService implements IScenarioService {
 		return instanceMap.get(uuid);
 	}
 
-	public EditingDomain initEditingDomain() {
-		final BasicCommandStack commandStack = new BasicCommandStack();
+	public EditingDomain initEditingDomain(final EObject rootObject, final ScenarioInstance instance) {
+		final BasicCommandStack commandStack = new BasicCommandStack() {
+			@Override
+			public void execute(final Command command) {
+				synchronized (rootObject) {
+					super.execute(command);
+				}
+			}
+		};
 
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
+		final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker = Activator.getDefault().getCommandProviderTracker();
+
 		// Create the editing domain with a special command stack.
 		//
-		return new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
+		// return new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
+
+		// create editing domain
+		return new CommandProviderAwareEditingDomain(adapterFactory, commandStack, instance, rootObject, commandProviderTracker);
+
 	}
 
 	public void scanForScenarios(final String scenarioServiceID) {
@@ -328,7 +345,11 @@ public class WorkspaceScenarioService implements IScenarioService {
 		}
 		parts.add(implementation);
 		instance.setInstance(implementation);
-		
+
+		final EditingDomain domain = initEditingDomain(implementation, instance);
+		instance.getAdapters().put(EditingDomain.class, domain);
+		instance.getAdapters().put(BasicCommandStack.class, (BasicCommandStack) domain.getCommandStack());
+
 		modelService.resolve(parts);
 	}
 
