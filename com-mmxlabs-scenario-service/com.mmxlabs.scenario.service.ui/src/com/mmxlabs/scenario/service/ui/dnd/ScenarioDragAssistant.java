@@ -3,9 +3,11 @@ package com.mmxlabs.scenario.service.ui.dnd;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -16,6 +18,9 @@ import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
 
 import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.Folder;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 
 /**
  * DND handler to allow element moving in the scenario navigator. This needs more support to handle copy actions and to allow scenarios to be dragged in from e.g. filesystem.
@@ -73,7 +78,25 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						}
 					}
 
-					container.getElements().addAll(containers);
+					
+					// TODO: This should really invoke a shared move/copy etc command/action handler
+					
+					if (aDropTargetEvent.detail == DND.DROP_MOVE) {
+						container.getElements().addAll(containers);
+					} else if (aDropTargetEvent.detail == DND.DROP_COPY) {
+						
+						
+						
+						for (Container c : containers) {
+							if (c instanceof Folder) {
+								copyFolder(container, (Folder) c);
+							} else {
+								copyScenario(container, (ScenarioInstance) c);
+							}
+						}
+					} else {
+						return Status.CANCEL_STATUS;
+					}
 					return Status.OK_STATUS;
 				}
 			}
@@ -82,4 +105,40 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		return Status.CANCEL_STATUS;
 	}
 
+	private void copyScenario(Container container, ScenarioInstance scenario) {
+
+		ScenarioInstance instance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+		instance.setName(scenario.getName());
+		instance.setMetadata(EcoreUtil.copy(scenario.getMetadata()));
+		instance.setUuid(UUID.randomUUID().toString());
+
+		// TODO: Invoke scenario service copy rather than above stub
+		// ScenarioInstance instance = scenario.getScenarioService().copy(scenario);
+		container.getElements().add(instance);
+
+		for (Container c : scenario.getElements()) {
+			if (c instanceof Folder) {
+				copyFolder(instance, (Folder) c);
+			} else {
+				copyScenario(instance, (ScenarioInstance) c);
+			}
+		}
+	}
+
+	private void copyFolder(Container container, Folder folder) {
+
+		final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
+		f.setName(folder.getName());
+		f.setMetadata(EcoreUtil.copy(folder.getMetadata()));
+		container.getElements().add(f);
+
+		for (Container c : folder.getElements()) {
+			if (c instanceof Folder) {
+				copyFolder(f, (Folder) c);
+			} else {
+				copyScenario(f, (ScenarioInstance) c);
+			}
+		}
+
+	}
 }
