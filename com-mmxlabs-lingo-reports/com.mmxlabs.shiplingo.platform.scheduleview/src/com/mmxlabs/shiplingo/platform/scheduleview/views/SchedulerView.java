@@ -6,6 +6,7 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
@@ -45,11 +46,12 @@ import com.mmxlabs.ganttviewer.PackAction;
 import com.mmxlabs.ganttviewer.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
+import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
+import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.shiplingo.platform.scheduleview.Activator;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownColourScheme;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.FuelChoiceColourScheme;
@@ -80,7 +82,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	private final ScenarioViewerComparator viewerComparator = new ScenarioViewerComparator();
 
-	private IEclipseJobManagerListener jobManagerListener;
+	private ScenarioViewerSynchronizer jobManagerListener;
 
 	/**
 	 * The constructor.
@@ -247,7 +249,12 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		getSite().setSelectionProvider(viewer);
 		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
-		jobManagerListener = ScheduleAdapter.registerView(viewer);
+		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
+			@Override
+			protected Collection<? extends Object> collectElements(final Schedule schedule) {
+				return Collections.singleton(schedule);
+			}
+		});
 
 		// getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
 		// selectionListener);
@@ -262,7 +269,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	@Override
 	public void dispose() {
 
-		ScheduleAdapter.deregisterView(jobManagerListener);
+		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
 		// getSite().getPage().removeSelectionListener(
 		// "com.mmxlabs.rcp.navigator", selectionListener);
 

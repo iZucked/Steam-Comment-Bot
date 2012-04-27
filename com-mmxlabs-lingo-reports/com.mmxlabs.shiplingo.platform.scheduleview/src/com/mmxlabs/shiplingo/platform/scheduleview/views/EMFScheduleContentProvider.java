@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 /**
  * A gantt chart content provider which provides content for a selected EMF Schedule object.
@@ -35,26 +36,19 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	@Override
 	public Object[] getChildren(final Object parent) {
-
-		if (parent instanceof Collection<?>) {
-			final List<Object> children = new ArrayList<Object>();
-
-			for (final Object o : (Collection) parent) {
+		if (parent instanceof IScenarioViewerSynchronizerOutput) {
+			final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) parent;
+			final List<Object> result = new ArrayList<Object>();
+			for (final Object o : synchronizerOutput.getCollectedElements()) {
 				if (o instanceof Schedule) {
-					children.addAll(((Schedule) o).getSequences());
+					result.addAll(((Schedule) o).getSequences());
 				}
 			}
-
-			return children.toArray();
+			return result.toArray();
 		} else if (parent instanceof Schedule) {
-			final Schedule schedule = (Schedule) parent;
-
-			final EList<Sequence> sequences = schedule.getSequences();
-
-			return sequences.toArray();
+			return ((Schedule) parent).getSequences().toArray();
 		} else if (parent instanceof Sequence) {
 			final Sequence sequence = (Sequence) parent;
-
 			return sequence.getEvents().toArray();
 		}
 		return null;
@@ -67,7 +61,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		return (element instanceof Schedule) || (element instanceof Sequence);
+		return (element instanceof Sequence) || (element instanceof Schedule);
 	}
 
 	@Override
