@@ -121,7 +121,7 @@ public class FolderItemProvider extends ContainerItemProvider implements IEditin
 	@Override
 	public String getText(Object object) {
 		String label = ((Folder) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_Folder_type") : getString("_UI_Folder_type") + " " + label;
+		return label == null  ? "(untitled)" : label;
 	}
 
 	/**
