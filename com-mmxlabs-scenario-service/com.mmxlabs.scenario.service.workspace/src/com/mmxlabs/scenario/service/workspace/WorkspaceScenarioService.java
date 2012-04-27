@@ -7,7 +7,6 @@ package com.mmxlabs.scenario.service.workspace;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
@@ -315,11 +314,13 @@ public class WorkspaceScenarioService implements IScenarioService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 			scenarioInstance.setAdapters(new HashMap<Class<?>, Object>());
 			scenarioInstance.setUuid(UUID.randomUUID().toString());
 
+			final com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest manifest = 
+					(com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest) manifestResource.getContents().get(0);
+			
 			for (final Entry entry : manifest.getEntries()) {
 				final URI uri = URI.createURI("/" + entry.getRelativePath()).resolve(manifestURI);
 				scenarioInstance.getSubModelURIs().add(uri.toString());
