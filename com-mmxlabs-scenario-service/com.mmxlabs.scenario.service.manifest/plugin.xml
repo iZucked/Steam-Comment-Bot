@@ -12,7 +12,7 @@
 
    <extension point="org.eclipse.emf.ecore.generated_package">
       <package
-            uri="http://www.mmxlabs.com/models/lng/demo-manifest/1/"
+            uri="http://www.mmxlabs.com/models/scenario/manifest/1/"
             class="com.mmxlabs.scenario.service.manifest.ManifestPackage"
             genModel="model/scenariomanifest.genmodel"/>
    </extension>

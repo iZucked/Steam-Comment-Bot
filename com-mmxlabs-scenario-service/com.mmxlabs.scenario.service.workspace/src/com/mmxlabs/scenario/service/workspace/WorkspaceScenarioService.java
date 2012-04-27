@@ -108,9 +108,11 @@ public class WorkspaceScenarioService implements IScenarioService {
 				if (resource.getType() == IResource.FILE) {
 
 					final Container container = mapWorkspaceToModel.get(resource.getParent());
-
-					createScenarioInstance(container, resource);
-
+					try {
+						createScenarioInstance(container, resource);
+					} catch (Exception e) {
+						log.error(e.getMessage(), e);
+					}
 				} else if (resource.getType() == IResource.FOLDER || resource.getType() == IResource.PROJECT) {
 
 					final Container container = mapWorkspaceToModel.get(resource.getParent());
@@ -232,7 +234,11 @@ public class WorkspaceScenarioService implements IScenarioService {
 			try {
 				for (final IResource r : workspaceContainer.members()) {
 					if (r.getType() == IResource.FILE) {
-						createScenarioInstance(modelContainer, r);
+						try {
+							createScenarioInstance(modelContainer, r);
+						} catch (Exception e) {
+							log.error(e.getMessage(), e);
+						}
 					} else if (r.getType() == IResource.FOLDER || r.getType() == IResource.PROJECT) {
 
 						// Create container,
@@ -259,7 +265,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		return folder;
 	}
 
-	private void createScenarioInstance(final Container container, final IResource r) {
+	private void createScenarioInstance(final Container container, final IResource r) throws IOException {
 
 		ScenarioInstance scenarioInstance = null;
 
@@ -269,7 +275,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		if (r.getName().endsWith("sc2")) {
 			final ResourceSet resourceSet = new ResourceSetImpl();
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-			
+
 			final Resource manifestResource = resourceSet.createResource(manifestURI);
 			try {
 				manifestResource.load(null);
@@ -277,10 +283,11 @@ public class WorkspaceScenarioService implements IScenarioService {
 				e.printStackTrace();
 			}
 			final Manifest manifest = (Manifest) manifestResource.getContents().get(0);
-			
+
 			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			scenarioInstance.setAdapters(new HashMap<Class<?>, Object>());
 			scenarioInstance.setUuid(manifest.getUUID());
-			
+
 			for (final String uris : manifest.getModelURIs()) {
 				URI uri = URI.createURI(uris);
 				if (uri.isRelative()) {
@@ -288,18 +295,18 @@ public class WorkspaceScenarioService implements IScenarioService {
 				}
 				scenarioInstance.getSubModelURIs().add(uri.toString());
 			}
-			
+
 			scenarioInstance.getDependencyUUIDs().addAll(manifest.getDependencyUUIDs());
-			
+
 			final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-	
+
 			metadata.setContentType(manifest.getScenarioType());
 			scenarioInstance.setMetadata(metadata);
-	
+
 		} else if (r.getName().endsWith("scn")) {
 			final ResourceSet resourceSet = new ResourceSetImpl();
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-			
+
 			final Resource manifestResource = resourceSet.createResource(manifestURI);
 			try {
 				manifestResource.load(null);
@@ -307,24 +314,24 @@ public class WorkspaceScenarioService implements IScenarioService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			scenarioInstance.setAdapters(new HashMap<Class<?>, Object>());
+			scenarioInstance.setUuid(UUID.randomUUID().toString());
+
 			final com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest manifest = 
 					(com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest) manifestResource.getContents().get(0);
 			
-			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-			scenarioInstance.setUuid(UUID.randomUUID().toString());
-			
-			for (final Entry entry: manifest.getEntries()) {
-				final URI uri = URI.createURI("../" + entry.getRelativePath()).resolve(manifestURI);
+			for (final Entry entry : manifest.getEntries()) {
+				final URI uri = URI.createURI("/" + entry.getRelativePath()).resolve(manifestURI);
 				scenarioInstance.getSubModelURIs().add(uri.toString());
 			}
-			
+
 			final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-			
+
 			metadata.setContentType("old-scenario");
 			scenarioInstance.setMetadata(metadata);
 		}
 		if (scenarioInstance != null) {
-			scenarioInstance.setAdapters(new HashMap<Class<?>, Object>());
 			scenarioInstance.getAdapters().put(IScenarioService.class, this);
 			scenarioInstance.setName(r.getName());
 			mapWorkspaceToModel.put(r, scenarioInstance);
@@ -353,7 +360,9 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 	@Override
 	public EObject load(final ScenarioInstance instance) throws IOException {
-		if (instance.getInstance() != null) return instance.getInstance();
+		if (instance.getInstance() != null) {
+			return instance.getInstance();
+		}
 		final List<EObject> parts = new ArrayList<EObject>();
 		final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 
@@ -393,7 +402,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		instance.getAdapters().put(BasicCommandStack.class, (BasicCommandStack) domain.getCommandStack());
 		
 		modelService.resolve(parts);
-		
+
 		return implementation;
 	}
 
@@ -406,23 +415,23 @@ public class WorkspaceScenarioService implements IScenarioService {
 				break;
 			}
 		}
-		
+
 		final String uuid = UUID.randomUUID().toString();
-		final URI resourceURI = URI.createPlatformResourceURI(containerResource.getFullPath().toString() + "/" +uuid + ".sc2", true);
+		final URI resourceURI = URI.createPlatformResourceURI(containerResource.getFullPath().toString() + "/" + uuid + ".sc2", true);
 		final URI manifestURI = URI.createURI("archive:" + resourceURI.toString() + "!/MANIFEST.xmi");
-		
+
 		final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
 		manifest.setUUID(uuid);
-		
+
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		
+
 		resourceSet.createResource(manifestURI).getContents().add(manifest);
-		
+
 		for (final ScenarioInstance dependency : dependencies) {
 			manifest.getDependencyUUIDs().add(dependency.getUuid());
 		}
-		
+
 		final WorkspaceJob wsJob = new WorkspaceJob("Create archive") {
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
@@ -436,7 +445,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 						log.error("Error storing submodel", e1);
 					}
 				}
-				
+
 				try {
 					manifest.eResource().save(null);
 				} catch (IOException e1) {
@@ -445,14 +454,14 @@ public class WorkspaceScenarioService implements IScenarioService {
 				return Status.OK_STATUS;
 			}
 		};
-		
+
 		wsJob.schedule();
 		try {
 			wsJob.join();
 		} catch (InterruptedException e1) {
 			log.error("Interrupted waiting for ws job to finish", e1);
 		}
-		
+
 		// by this point we should have detected the new scenario and loaded it as a consequence of the listener above
 		return getScenarioInstance(uuid);
 	}
@@ -461,34 +470,36 @@ public class WorkspaceScenarioService implements IScenarioService {
 	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) {
 		final List<EObject> originalSubModels = new ArrayList<EObject>();
 		for (final String subModelURI : original.getSubModelURIs()) {
-			
+
 			try {
 				final IModelInstance instance = modelService.getModel(URI.createURI(subModelURI));
 				originalSubModels.add(instance.getModel());
 			} catch (IOException e1) {
-				
+
 			}
 		}
-		
+
 		final Collection<EObject> duppedSubModels = EcoreUtil.copyAll(originalSubModels);
-		
+
 		Collection<ScenarioInstance> dependencies = new ArrayList<ScenarioInstance>();
-		
+
 		for (final String uuids : original.getDependencyUUIDs()) {
 			dependencies.add(getScenarioInstance(uuids));
 		}
-		
-		return insert(destination, dependencies , duppedSubModels);
-	}
-	
 
-	/* (non-Javadoc)
+		return insert(destination, dependencies, duppedSubModels);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.scenario.service.IScenarioService#save(com.mmxlabs.scenario.service.model.ScenarioInstance)
 	 */
 	@Override
 	public void save(final ScenarioInstance scenarioInstance) throws IOException {
 		final EObject instance = scenarioInstance.getInstance();
-		if (instance == null) return;
+		if (instance == null)
+			return;
 		for (final String uris : scenarioInstance.getSubModelURIs()) {
 			final IModelInstance modelInstance = modelService.getModel(URI.createURI(uris));
 			if (modelInstance != null) {

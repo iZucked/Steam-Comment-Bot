@@ -6,20 +6,28 @@ package com.mmxlabs.scenario.service.ui.navigator;
 
 import java.util.List;
 
+import org.eclipse.core.commands.Command;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
-import com.mmxlabs.scenario.service.ui.Activator;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
+import com.mmxlabs.scenario.service.ui.Activator;
 
 public class ScenarioServiceNavigator extends CommonNavigator {
+
+	private static final Logger log = LoggerFactory.getLogger(ScenarioServiceNavigator.class);
 
 	protected AdapterFactoryEditingDomain editingDomain;
 	protected ComposedAdapterFactory adapterFactory;
@@ -80,5 +88,24 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		} else {
 			return super.getAdapter(key);
 		}
+	}
+
+	@Override
+	protected void handleDoubleClick(DoubleClickEvent anEvent) {
+
+		ICommandService commandService = (ICommandService) getSite().getService(ICommandService.class);
+
+		Command command = commandService.getCommand("com.mmxlabs.scenario.service.ui.open");
+		if (command.isEnabled()) {
+			IHandlerService handlerService = (IHandlerService) getSite().getService(IHandlerService.class);
+			try {
+				handlerService.executeCommand("com.mmxlabs.scenario.service.ui.open", null);
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+			}
+		} else {
+			super.handleDoubleClick(anEvent);
+		}
+
 	}
 }
