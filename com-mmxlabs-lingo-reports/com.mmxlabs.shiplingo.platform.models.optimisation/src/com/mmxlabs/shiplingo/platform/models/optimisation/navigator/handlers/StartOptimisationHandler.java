@@ -142,17 +142,20 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					final MMXRootObject root = (MMXRootObject) object;
 					final String uuid = instance.getUuid();
 					final boolean resourceWasSelected = jobManager.getSelectedResources().contains(uuid);
-					IJobDescriptor job = getJobDescriptor(instance);
 					
-					if (job == null) return null;
+					IJobDescriptor job = jobManager.findJobForResource(uuid);
+					if (job == null) {
+						// create a new job
+						job = new LNGSchedulerJobDescriptor(instance.getName(), root, optimising);
+					}
 					
 					IJobControl control = jobManager.getControlForJob(job);
 
 					// If there is a job, but it is terminated, then we need to create a new one
 					if ((control != null) && ((control.getJobState() == EJobState.CANCELLED) || (control.getJobState() == EJobState.COMPLETED))) {
 						jobManager.removeJob(job);
-						instance.getAdapters().remove(IJobDescriptor.class);
-						job = getJobDescriptor(instance);
+						
+						job = new LNGSchedulerJobDescriptor(instance.getName(), root, optimising);
 					}
 					
 					if (!jobManager.getSelectedJobs().contains(job)) {
@@ -209,21 +212,6 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 
 		return null;
-	}
-
-	/**
-	 * @param instance
-	 * @return
-	 */
-	private IJobDescriptor getJobDescriptor(ScenarioInstance instance) {
-		synchronized (instance) {
-			IJobDescriptor job = (IJobDescriptor) instance.getAdapters().get(IJobDescriptor.class);
-			if (job == null) {
-				job = new LNGSchedulerJobDescriptor(instance.getName(), (MMXRootObject) instance.getInstance(), optimising);
-				instance.getAdapters().put(IJobDescriptor.class, job);
-			}
-			return job;
-		}
 	}
 
 	@Override
