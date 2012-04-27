@@ -23,8 +23,9 @@
          point="org.eclipse.ui.views">
       <view
             class="com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator"
+            icon="icons/filenav_nav.gif"
             id="com.mmxlabs.scenario.service.ui.navigator"
-            name="Scenario Navigator"
+            name="Scenarios"
             restorable="true">
       </view>
    </extension>
