@@ -126,15 +126,13 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	private boolean locked;
 	private PropertySheetPage propertySheetPage;
 
-	private ServiceTracker<IScenarioService, IScenarioService> scenarioServiceTracker;
+	private IScenarioService scenarioService;
 
 	private ScenarioInstance scenarioInstance;
 
 	private EContentAdapter lockedAdapter;
 
 	public JointModelEditorPart() {
-		scenarioServiceTracker = new ServiceTracker<IScenarioService, IScenarioService>(Activator.getDefault().getBundle().getBundleContext(), IScenarioService.class, null);
-		scenarioServiceTracker.open();
 	}
 
 	public boolean isLocked() {
@@ -162,7 +160,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 					try {
 						saving = true;
 						monitor.beginTask("Saving", 1);
-						scenarioServiceTracker.getService().save(scenarioInstance);
+						scenarioService.save(scenarioInstance);
 						monitor.worked(1);
 					} catch (IOException e) {
 						log.error("IO Error during save", e);
@@ -217,9 +215,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		if (input instanceof IScenarioServiceEditorInput) {
 			IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
 			final ScenarioInstance instance = ssInput.getScenarioInstance();
+			scenarioService = (IScenarioService) instance.getAdapters().get(IScenarioService.class);
 
 			EObject ro = instance.getInstance();
-			IScenarioService scenarioService = scenarioServiceTracker.getService();
 			if (scenarioService == null) {
 				throw new IllegalStateException("Scenario Service does not exist yet a scenario service editor input has been used");
 			}
@@ -320,8 +318,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.dispose();
 		}
-
-		scenarioServiceTracker.close();
 
 		super.dispose();
 	}
