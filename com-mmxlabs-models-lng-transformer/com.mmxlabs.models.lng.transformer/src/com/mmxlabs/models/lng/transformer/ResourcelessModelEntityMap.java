@@ -40,6 +40,10 @@ public class ResourcelessModelEntityMap extends ModelEntityMap {
 	}
 
 	@Override
+	public void setScenario(MMXRootObject rootObject) {
+	}
+
+	@Override
 	public void dispose() {
 		super.dispose();
 		modelToOptimiser.clear();
