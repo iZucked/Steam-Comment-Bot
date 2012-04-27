@@ -16,6 +16,8 @@ import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstrain
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -30,16 +32,21 @@ public class ContractExtensionTestModule extends AbstractModule {
 	protected void configure() {
 
 		bind(ServiceRegistry.class).to(EclipseRegistry.class);
-		
+
 		if (!Platform.isRunning()) {
 			bind(IFitnessFunctionRegistry.class).toInstance(createFitnessFunctionRegistry());
 			bind(IConstraintCheckerRegistry.class).toInstance(createConstraintCheckerRegistry());
+			bind(IEvaluationProcessRegistry.class).toInstance(createEvaluationProcessRegistry());
 		}
 
 		final SimpleContractTransformer sct = new SimpleContractTransformer();
 
 		final ContractTransformer transformer = new ContractTransformerWrapper(sct, sct.getContractEClasses());
 		bind(TypeLiterals.iterable(ContractTransformer.class)).toInstance(Collections.singleton(transformer));
+	}
+
+	private IEvaluationProcessRegistry createEvaluationProcessRegistry() {
+		return new EvaluationProcessRegistry();
 	}
 
 	/**
