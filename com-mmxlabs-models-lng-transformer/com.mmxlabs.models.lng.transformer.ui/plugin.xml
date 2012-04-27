@@ -65,171 +65,66 @@
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StopOptimisationHandler"
                commandId="com.mmxlabs.rcp.navigator.commands.optimisation.terminate">
             <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
             </enabledWhen>
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.PauseOptimisationHandler"
                commandId="com.mmxlabs.rcp.navigator.commands.optimisation.pause">
             <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
             </enabledWhen>
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.SaveOptimisationHandler"
                commandId="com.mmxlabs.rcp.navigator.commands.optimisation.save">
             <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
             </enabledWhen>
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.EvaluateOptimisationHandler"
                commandId="com.mmxlabs.rcp.navigator.commands.optimisation.evaluate">
             <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
             </enabledWhen>
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.DeriveOptimisationHandler"
                commandId="com.mmxlabs.rcp.navigator.commands.optimisation.derive">
             <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
             </enabledWhen>
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </activeWhen>
          </handler>
       </extension>
 
@@ -352,18 +247,6 @@
             </or>
          </possibleChildren>
       </navigatorContent>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="toolbar:com.mmxlabs.scenario.service.ui.navigator">
-         <command
-               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.play"
-               label="Play/Pause Optimisation"
-               style="push">
-         </command>
-      </menuContribution>
    </extension>
    
 </plugin>
