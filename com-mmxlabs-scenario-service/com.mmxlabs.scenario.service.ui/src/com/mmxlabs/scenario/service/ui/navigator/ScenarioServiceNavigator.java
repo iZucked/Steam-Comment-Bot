@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.ui.navigator;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.commands.Command;
@@ -12,17 +13,28 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.navigator.CommonNavigator;
+import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
+import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
+import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 public class ScenarioServiceNavigator extends CommonNavigator {
@@ -35,18 +47,81 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 	private final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker;
 
+	private CommonViewer viewer = null;
+	
+	private IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
+		@Override
+		public void selected(IScenarioServiceSelectionProvider provider, Collection<ScenarioInstance> deselected) {
+			if (viewer != null) {
+				for (final ScenarioInstance instance : deselected) viewer.refresh(instance, true);
+			}
+		}
+		
+		@Override
+		public void deselected(IScenarioServiceSelectionProvider provider, Collection<ScenarioInstance> deselected) {
+			if (viewer != null) {
+				for (final ScenarioInstance instance : deselected) viewer.refresh(instance, true);
+			}
+		}
+	};
+	
 	public ScenarioServiceNavigator() {
 		super();
 
 		tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
+		
+		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
 	}
 
 	@Override
 	public void dispose() {
-
 		tracker.close();
+		Activator.getDefault().getScenarioServiceSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
 		super.dispose();
+	}
+
+	@Override
+	protected CommonViewer createCommonViewer(final Composite aParent) {
+		final CommonViewer viewer = super.createCommonViewer(aParent);
+		
+		this.viewer = viewer;
+		
+		viewer.getTree().setHeaderVisible(true);
+		
+		TreeColumn labelColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
+		labelColumn.setText("Name");
+		TreeColumn checkColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
+		checkColumn.setText("Show");
+		labelColumn.pack();
+		checkColumn.pack();
+		
+		final Tree tree = viewer.getTree();
+		tree.addMouseListener(new MouseAdapter() {
+
+			/* (non-Javadoc)
+			 * @see org.eclipse.swt.events.MouseAdapter#mouseDown(org.eclipse.swt.events.MouseEvent)
+			 */
+			@Override
+			public void mouseDown(MouseEvent e) {
+				for(TreeItem item : tree.getSelection()) {
+					if(item.getImage() != null) {
+						if((e.x > item.getImageBounds(1).x) && (e.x < (item.getImageBounds(1).x + item.getImage().getBounds().width))) {
+							if((e.y > item.getImageBounds(1).y) && (e.y < (item.getImageBounds(1).y + item.getImage().getBounds().height))) {
+								final Object data = item.getData();
+								if (data instanceof ScenarioInstance) {
+									final ScenarioInstance instance = (ScenarioInstance) data;
+									Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
+								}
+							}
+						}
+					}
+				}
+			}
+			
+		});
+		
+		return viewer;
 	}
 
 	@Override
@@ -93,7 +168,6 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 	@Override
 	protected void handleDoubleClick(DoubleClickEvent anEvent) {
-
 		ICommandService commandService = (ICommandService) getSite().getService(ICommandService.class);
 
 		Command command = commandService.getCommand("com.mmxlabs.scenario.service.ui.open");

@@ -1,5 +1,7 @@
 package com.mmxlabs.scenario.service.ui;
 
+import java.util.Collection;
+
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -9,21 +11,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * 
  */
 public interface IScenarioServiceSelectionChangedListener {
-
-	/**
-	 * The given {@link ScenarioInstance} is now part of the current selection.
-	 * 
-	 * @param provider
-	 * @param instance
-	 */
-	void selected(IScenarioServiceSelectionProvider provider, ScenarioInstance instance);
-
-	/**
-	 * The given {@link ScenarioInstance} is no longer part of the current selection;
-	 * 
-	 * @param provider
-	 * @param instance
-	 */
-	void deselected(IScenarioServiceSelectionProvider provider, ScenarioInstance instance);
-
+	void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected);
+	void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected);
 }

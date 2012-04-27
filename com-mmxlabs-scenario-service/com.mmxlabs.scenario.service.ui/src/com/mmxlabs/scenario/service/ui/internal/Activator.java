@@ -14,8 +14,10 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -31,6 +33,10 @@ public class Activator extends AbstractUIPlugin {
 	private Map<String, WeakReference<IScenarioService>> services = new HashMap<String, WeakReference<IScenarioService>>();
 
 	private ServiceListener serviceListener;
+
+	private ScenarioServiceSelectionProvider scenarioServiceSelectionProvider = new ScenarioServiceSelectionProvider();
+
+	private ServiceRegistration<IScenarioServiceSelectionProvider> selectionProviderRegistration;;
 
 	/**
 	 * The constructor
@@ -75,6 +81,8 @@ public class Activator extends AbstractUIPlugin {
 			serviceListener.serviceChanged(event);
 		}
 
+		// register selection provder
+		selectionProviderRegistration = context.registerService(IScenarioServiceSelectionProvider.class, scenarioServiceSelectionProvider, null);
 	}
 
 	/*
@@ -86,7 +94,9 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(final BundleContext context) throws Exception {
 		context.removeServiceListener(serviceListener);
 		services.clear();
-
+		scenarioServiceSelectionProvider.deselectAll();
+		
+		selectionProviderRegistration.unregister();
 		plugin = null;
 		super.stop(context);
 	}
@@ -104,4 +114,7 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 
+	public ScenarioServiceSelectionProvider getScenarioServiceSelectionProvider() {
+		return scenarioServiceSelectionProvider ;
+	}
 }

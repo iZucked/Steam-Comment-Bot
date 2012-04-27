@@ -22,4 +22,6 @@ public interface IScenarioServiceSelectionProvider {
 	void addSelectionChangedListener(IScenarioServiceSelectionChangedListener listener);
 
 	void removeSelectionChangedListener(IScenarioServiceSelectionChangedListener listener);
+
+	boolean isSelected(ScenarioInstance instance);
 }
