@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.model.service.IModelService;
@@ -23,6 +25,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 
 public class ModelService implements IModelService {
+	private static final Logger log = LoggerFactory.getLogger(ModelService.class);
 	/**
 	 * The cache of loaded instances
 	 * TODO add weak references.
@@ -90,6 +93,10 @@ public class ModelService implements IModelService {
 	}
 
 	private void collect(final EObject object, final HashMap<String, UUIDObject> table) {
+		if (object == null) {
+			log.warn("Given a null object to collect UUIDObjects from");
+			return;
+		}
 		if (object instanceof MMXObject) ((MMXObject) object).collectUUIDObjects(table);
 		else {
 			for (final EObject o : object.eContents()) collect(o, table);
@@ -109,6 +116,10 @@ public class ModelService implements IModelService {
 	}
 
 	private void resolve(EObject part, HashMap<String, UUIDObject> table) {
+		if (part == null) {
+			log.warn("Asked to resolve references in a null object");
+			return;
+		}
 		if (part instanceof MMXObject) {
 			((MMXObject) part).resolveProxies(table);
 			((MMXObject) part).restoreProxies();

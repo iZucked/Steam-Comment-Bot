@@ -387,11 +387,14 @@ public class WorkspaceScenarioService implements IScenarioService {
 		// create MMXRootObject and connect submodel instances into it.
 		for (final String subModelURI : instance.getSubModelURIs()) {
 			// acquire sub models
+			log.debug("Loading submodel from " + subModelURI);
 			final IModelInstance modelInstance = modelService.getModel(URI.createURI(subModelURI));
 			if (modelInstance.getModel() instanceof UUIDObject) {
 				implementation.addSubModel((UUIDObject) modelInstance.getModel());
-			} else {
+			} else if (modelInstance.getModel() != null) {
 				parts.add(modelInstance.getModel());
+			} else {
+				log.warn("Null value for model instance " + subModelURI);
 			}
 		}
 		parts.add(implementation);
