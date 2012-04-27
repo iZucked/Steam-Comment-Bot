@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -20,12 +19,11 @@ import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.shiplingo.platform.reports.ScheduledEventCollector;
 
 /**
  * @author hinton
@@ -224,10 +222,12 @@ public class PortRotationReportView extends EMFReportView {
 
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
+		final IStructuredContentProvider superProvider = super.getContentProvider();
 		return new IStructuredContentProvider() {
 
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+				superProvider.inputChanged(viewer, oldInput, newInput);
 //				Display.getCurrent().asyncExec(new Runnable() {
 //					@Override
 //					public void run() {
@@ -268,32 +268,31 @@ public class PortRotationReportView extends EMFReportView {
 
 			@Override
 			public void dispose() {
-
+				superProvider.dispose();
 			}
 
 			@Override
 			public Object[] getElements(final Object object) {
-				final ArrayList<Event> allEvents = new ArrayList<Event>();
 				clearInputEquivalents();
-				if (object instanceof Iterable) {
-					for (final Object o : ((Iterable<?>) object)) {
-						if (o instanceof Schedule) {
-							for (final Sequence seq : ((Schedule) o).getSequences()) {
-								allEvents.addAll(seq.getEvents());
-							}
-						}
-					}
-				}
-				for (final Event event : allEvents) {
+				Object[] result = superProvider.getElements(object);
+				
+				for (final Object event : result) {
 					if (event instanceof SlotVisit) {
 						setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getSlotAllocation().getCargoAllocation() }));
 					} else {
 						setInputEquivalents(event, Collections.emptyList());
 					}
 				}
-				return allEvents.toArray();
+				
+				return result;
 			}
 		};
+	}
+
+
+	@Override
+	protected IScenarioInstanceElementCollector getElementCollector() {
+		return new ScheduledEventCollector();
 	}
 
 //	protected void addEntityColumns(final Scenario o) {

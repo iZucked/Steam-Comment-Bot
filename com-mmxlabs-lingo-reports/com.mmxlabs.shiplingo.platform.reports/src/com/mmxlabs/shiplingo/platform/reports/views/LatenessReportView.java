@@ -16,6 +16,8 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.shiplingo.platform.reports.ScheduledEventCollector;
 
 /**
  * @author hinton
@@ -43,47 +45,64 @@ public class LatenessReportView extends EMFReportView {
 
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
+		final IStructuredContentProvider superProvider = super.getContentProvider();
 		return new IStructuredContentProvider() {
 
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
+				superProvider.inputChanged(viewer, oldInput, newInput);
 			}
 
 			@Override
 			public void dispose() {
-
+				superProvider.dispose();
 			}
 
 			@Override
 			public Object[] getElements(final Object object) {
-				final ArrayList<Event> allEvents = new ArrayList<Event>();
+				
 				clearInputEquivalents();
-				if (object instanceof Iterable) {
-					for (final Object o : ((Iterable<?>) object)) {
-						if (o instanceof Schedule) {
-							for (final Sequence seq : ((Schedule) o).getSequences()) {
-								for (final Event e : seq.getEvents()) {
-									if (e instanceof SlotVisit) {
-										final SlotVisit visit = (SlotVisit) e;
+				final Object[] result = superProvider.getElements(object);
+				for (final Object e : result) {
+					if (e instanceof SlotVisit) {
+						final SlotVisit visit = (SlotVisit) e;
 
-										if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-											allEvents.add(e);
-										}
-										setInputEquivalents(visit, Collections.singleton((Object) visit.getSlotAllocation().getCargoAllocation()));
-									} else if (e instanceof VesselEventVisit) {
-										final VesselEventVisit vev = (VesselEventVisit) e;
-										if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
-											allEvents.add(e);
-										}
-									}
-								}
-							}
-						}
+						setInputEquivalents(visit, Collections.singleton((Object) visit.getSlotAllocation().getCargoAllocation()));
 					}
 				}
-				return allEvents.toArray();
+
+				return result;
 			}
+		};
+	}
+	
+	
+	@Override
+	protected IScenarioInstanceElementCollector getElementCollector() {
+		return new ScheduledEventCollector() {
+			@Override
+			protected boolean filter(Event e) {
+				if (e instanceof SlotVisit) {
+					final SlotVisit visit = (SlotVisit) e;
+
+					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
+						return true;
+					}
+					setInputEquivalents(visit, Collections.singleton((Object) visit.getSlotAllocation().getCargoAllocation()));
+				} else if (e instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) e;
+					if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			@Override
+			protected boolean filter() {
+				return true;
+			}
+			
 		};
 	}
 

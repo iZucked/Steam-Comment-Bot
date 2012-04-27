@@ -6,6 +6,7 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -16,6 +17,8 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 
 /**
  * 
@@ -101,9 +104,11 @@ public class CargoReportView extends EMFReportView {
 
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
+		final IStructuredContentProvider superProvider = super.getContentProvider();
 		return new IStructuredContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+				superProvider.inputChanged(viewer, oldInput, newInput);
 //				Display.getCurrent().asyncExec(new Runnable() {
 //					@Override
 //					public void run() {
@@ -142,24 +147,24 @@ public class CargoReportView extends EMFReportView {
 
 			@Override
 			public void dispose() {
-
+				superProvider.dispose();
 			}
 
 			@Override
 			public Object[] getElements(final Object object) {
+				
 				final ArrayList<CargoAllocation> allocations = new ArrayList<CargoAllocation>();
 				clearInputEquivalents();
-				if (object instanceof Iterable) {
-					for (final Object o : (Iterable<?>) object) {
-						if (o instanceof Schedule) {
-							// collect allocations from object
-							allocations.addAll(((Schedule) o).getCargoAllocations());
-						}
-					}
-				}
+				
+				final Object[] result = superProvider.getElements(object);
+				
 
-				for (final CargoAllocation allocation : allocations) {
+				for (final Object allocation_ : result) {
 					// map to events
+					if (allocation_ instanceof CargoAllocation) {
+						final CargoAllocation allocation = (CargoAllocation) allocation_;
+						
+					
 					setInputEquivalents(
 							allocation,
 							Arrays.asList(new Object[] {
@@ -171,12 +176,25 @@ public class CargoReportView extends EMFReportView {
 									allocation.getBallastLeg(), 
 									allocation.getLadenIdle(), 
 									allocation.getLadenLeg() }));
+					}
 				}
 
-				return allocations.toArray();
+				return result;
 			}
 		};
 	}
+
+	@Override
+	protected IScenarioInstanceElementCollector getElementCollector() {
+		return new ScheduleElementCollector() {
+			@Override
+			protected Collection<? extends Object> collectElements(Schedule schedule) {
+				return schedule.getCargoAllocations();
+			}
+		};
+	}
+	
+	
 
 //	private final List<String> entityColumnNames = new ArrayList<String>();
 

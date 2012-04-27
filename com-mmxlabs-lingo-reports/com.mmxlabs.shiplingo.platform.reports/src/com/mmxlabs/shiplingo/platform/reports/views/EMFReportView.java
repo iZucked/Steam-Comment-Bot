@@ -29,6 +29,7 @@ import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
@@ -46,7 +47,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -56,7 +56,9 @@ import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
-import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
+import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 
 /**
  * Base class for views which show things from the EMF output model.
@@ -158,17 +160,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	protected final IFormatter containingScheduleFormatter = new BaseFormatter() {
 		@Override
 		public String format(Object object) {
-			while ((object != null) && !(object instanceof MMXRootObject)) {
-				if (object instanceof EObject) {
-					object = ((EObject) object).eContainer();
-				}
-			}
-			if (object instanceof MMXRootObject) {
-				final MMXRootObject s = (MMXRootObject) object;
-				return s.getName();
-			} else {
-				return "";
-			}
+			return synchronizerOutput.getScenarioInstance(object).getName();
 		}
 
 	};
@@ -290,9 +282,35 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	private Action copyTableAction;
 	private final String helpContextId;
-	private IEclipseJobManagerListener jobManagerListener;
+	private ScenarioViewerSynchronizer jobManagerListener;
+	
+	private IScenarioViewerSynchronizerOutput synchronizerOutput = null;
 
-	protected abstract IStructuredContentProvider getContentProvider();
+	protected IStructuredContentProvider getContentProvider() {
+		return new IStructuredContentProvider() {
+			@Override
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+				synchronizerOutput = null;
+				if (newInput instanceof IScenarioViewerSynchronizerOutput) {
+					synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
+				}
+			}
+			
+			@Override
+			public void dispose() {
+				synchronizerOutput = null;
+			}
+			
+			@Override
+			public Object[] getElements(Object inputElement) {
+				if (inputElement instanceof IScenarioViewerSynchronizerOutput) {
+					final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) inputElement;
+					return output.getCollectedElements().toArray(new Object[output.getCollectedElements().size()]);
+				}
+				return new Object[0];
+			}
+		};
+	}
 
 	protected ColumnHandler addColumn(final String title, final IFormatter formatter, final Object... path) {
 		final ColumnHandler handler = new ColumnHandler(formatter, path, title);
@@ -395,8 +413,10 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
 		}
 
-		jobManagerListener = ScheduleAdapter.registerView(viewer);
+		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
 	}
+
+	protected abstract IScenarioInstanceElementCollector getElementCollector();
 
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
@@ -500,7 +520,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	@Override
 	public void dispose() {
-		ScheduleAdapter.deregisterView(jobManagerListener);
+		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
 
 		super.dispose();
 	}

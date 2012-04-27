@@ -7,13 +7,13 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.validation.internal.modeled.model.validation.util.ValidationAdapterFactory;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -47,21 +47,21 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 	@Override
 	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		rowData = new RowData[0];
-		if (newInput instanceof Iterable) {
+		if (newInput instanceof IScenarioViewerSynchronizerOutput) {
+			final IScenarioViewerSynchronizerOutput svso = (IScenarioViewerSynchronizerOutput) newInput;
 			final List<RowData> rowDataList = new LinkedList<RowData>();
-			for (final Object o : ((Iterable<?>) newInput)) {
+			for (final Object o : svso.getCollectedElements()) {
 				if (o instanceof Schedule) {
 					final Schedule schedule = (Schedule) o;
-					final MMXRootObject s = (MMXRootObject) schedule.eContainer().eContainer();
-					final String scheduleName = s.getName();
+					
 					long total = 0l;
 					for (final Fitness f : schedule.getFitnesses()) {
-						rowDataList.add(new RowData(scheduleName, f.getName(), f.getFitnessValue()));
+						rowDataList.add(new RowData(svso.getScenarioInstance(o).getName(), f.getName(), f.getFitnessValue()));
 						if (!(f.getName().equals("iterations") || f.getName().equals("runtime"))) {
 							total += f.getFitnessValue();
 						}
 					}
-					rowDataList.add(new RowData(scheduleName, "Total", total));
+					rowDataList.add(new RowData(svso.getScenarioInstance(o).getName(), "Total", total));
 
 				}
 			}

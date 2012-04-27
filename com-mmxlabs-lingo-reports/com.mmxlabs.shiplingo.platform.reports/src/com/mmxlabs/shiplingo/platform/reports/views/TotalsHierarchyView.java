@@ -7,6 +7,7 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,6 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
@@ -28,14 +28,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -46,7 +43,9 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
-import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
+import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
+import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 
 /**
  * A view which displays the cost breakdown as a hierarchy, thus
@@ -70,7 +69,7 @@ import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
  * @author hinton
  * 
  */
-public class TotalsHierarchyView extends ViewPart implements ISelectionListener {
+public class TotalsHierarchyView extends ViewPart {
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView";
 
 	protected static final String TREE_DATA_KEY = "THVTreeData";
@@ -81,16 +80,9 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 	private Action copyTreeAction;
 
-	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-
-		final List<Schedule> schedules = ScheduleAdapter.getSchedules(selection);
-		setSelectedSchedules(schedules);
-	}
-
 	static final DecimalFormat myFormat = new DecimalFormat("$###,###,###");
 
-	private IEclipseJobManagerListener jobManagerListener;
+	private ScenarioViewerSynchronizer jobManagerListener;
 
 	private static class TreeData {
 
@@ -164,26 +156,18 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		}
 	}
 
-	/**
-	 * Update the contents of the tree control for this schedule
-	 * 
-	 * @param schedule
-	 */
-	private void setSelectedSchedules(final List<Schedule> schedules) {
-		final TreeData dummy = createTreeData(schedules);
-		viewer.setInput(dummy);
-	}
-
-	private TreeData createTreeData(final List<Schedule> schedules) {
+	private TreeData createTreeData(final IScenarioViewerSynchronizerOutput object) {
 		final TreeData dummy = new TreeData("");
+		
+		final Collection<Schedule> schedules = (Collection) object.getCollectedElements();
+		
 		if (schedules.size() == 1) {
-			final Schedule schedule = schedules.get(0);
+			final Schedule schedule = schedules.iterator().next();
 			dummy.addChild(createCostsTreeData(schedule));
 //			dummy.addChild(createProfitTreeData(schedule));
 		} else {
 			for (final Schedule schedule : schedules) {
-				final MMXRootObject s = (MMXRootObject) schedule.eContainer().eContainer();
-				final String scheduleName = s.getName();
+				final String scheduleName = object.getScenarioInstance(schedule).getName();
 				// final String scheduleName = schedule.getName();
 				// don't sum costs and profits, because it's meaningless
 				// (profits already include costs)
@@ -439,8 +423,8 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 
 			@Override
 			public Object[] getElements(final Object object) {
-				if (object instanceof List) {
-					final TreeData top = createTreeData((List) object);
+				if (object instanceof IScenarioViewerSynchronizerOutput) {
+					final TreeData top = createTreeData((IScenarioViewerSynchronizerOutput)object);
 					return getChildren(top);
 				} else if (object instanceof TreeData) {
 					final TreeData data = (TreeData) object;
@@ -506,7 +490,12 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		//
 		// selectionChanged(null, selection);
 
-		jobManagerListener = ScheduleAdapter.registerView(viewer);
+		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
+			@Override
+			protected Collection<? extends Object> collectElements(Schedule schedule) {
+				return Collections.singleton(schedule);
+			}
+		});
 
 	}
 
@@ -568,7 +557,7 @@ public class TotalsHierarchyView extends ViewPart implements ISelectionListener 
 		// getSite().getPage().removeSelectionListener(
 		// "com.mmxlabs.rcp.navigator", this);
 
-		ScheduleAdapter.deregisterView(jobManagerListener);
+		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
 
 		super.dispose();
 	}

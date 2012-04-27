@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -54,7 +55,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		return rowData;
 	}
 
-	private void createRowData(final Schedule schedule, final List<RowData> output) {
+	private void createRowData(final Schedule schedule, String scheduleName, final List<RowData> output) {
 		/**
 		 * Stores the total fuel costs for each type of fuel - this may not be the detailed output we want, I don't know
 		 */
@@ -94,13 +95,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 				object = ((EObject) object).eContainer();
 			}
 		}
-		final String scheduleName;
-		if (object instanceof MMXRootObject) {
-			final MMXRootObject s = (MMXRootObject) object;
-			scheduleName = s.getName();
-		} else {
-			scheduleName = "";
-		}
+		
 		for (final Entry<Fuel, Long> entry : totalFuelCosts.entrySet()) {
 			output.add(new RowData(scheduleName, entry.getKey().toString(), true, entry.getValue()));
 		}
@@ -139,16 +134,17 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 	@Override
 	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		rowData = new RowData[0];
-		if (newInput instanceof Iterable) {
+		if (newInput instanceof IScenarioViewerSynchronizerOutput) {
+			final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
 			final ArrayList<RowData> rowDataList = new ArrayList<RowData>();
-			for (final Object o : ((Iterable<Object>) newInput)) {
+			for (final Object o : synchOutput.getCollectedElements()) {
 				if (o instanceof Schedule) {
-					// construct data for schedule
-					createRowData((Schedule) o, rowDataList);
+					createRowData((Schedule) o, synchOutput.getScenarioInstance(o).getName(), rowDataList);
 				}
 			}
 			rowData = rowDataList.toArray(rowData);
 		}
+		
 	}
 
 	@Override

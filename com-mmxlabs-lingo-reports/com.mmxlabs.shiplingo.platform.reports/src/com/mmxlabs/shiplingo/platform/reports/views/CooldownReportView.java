@@ -5,7 +5,6 @@
 package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -13,12 +12,13 @@ import org.eclipse.jface.viewers.Viewer;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
-import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.shiplingo.platform.reports.ScheduledEventCollector;
 
 /**
  * A report which displays the cooldowns in the selected schedules.
@@ -102,42 +102,38 @@ public class CooldownReportView extends EMFReportView {
 
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
+		final IStructuredContentProvider superProvider = super.getContentProvider();
 		return new IStructuredContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
+				superProvider.inputChanged(viewer, oldInput, newInput);
 			}
 
 			@Override
 			public void dispose() {
-
+				superProvider.dispose();
 			}
 
 			@Override
 			public Object[] getElements(final Object inputElement) {
 				final ArrayList<Event> events = new ArrayList<Event>();
 				clearInputEquivalents();
-				if (inputElement instanceof Iterable) {
-					for (final Object schedule_ : ((Iterable<?>) inputElement)) {
-						if (schedule_ instanceof Schedule) {
-							final Schedule schedule = (Schedule) schedule_;
-							for (final Sequence sequence : schedule.getSequences()) {
-								Cooldown lastCooldown = null;
-								for (final Event event : sequence.getEvents()) {
-									if (event instanceof Cooldown) {
-										events.add(event);
-										lastCooldown = (Cooldown) event;
-									} else if ((event instanceof SlotVisit) && (lastCooldown != null)) {
-										setInputEquivalents(event, Collections.singleton((Object) ((SlotVisit) event).getSlotAllocation().getCargoAllocation()));
-										lastCooldown = null;
-									}
-								}
-							}
-						}
-					}
-				}
+				return superProvider.getElements(inputElement);
+			}
+		};
+	}
 
-				return events.toArray();
+	@Override
+	protected IScenarioInstanceElementCollector getElementCollector() {
+		return new ScheduledEventCollector() {
+			@Override
+			protected boolean filter(Event event) {
+				return event instanceof Cooldown;
+			}
+
+			@Override
+			protected boolean filter() {
+				return true;
 			}
 		};
 	}

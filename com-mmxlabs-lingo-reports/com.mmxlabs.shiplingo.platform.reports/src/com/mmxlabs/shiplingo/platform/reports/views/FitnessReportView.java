@@ -6,8 +6,8 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -17,7 +17,6 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -34,20 +33,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
-import com.mmxlabs.shiplingo.platform.reports.ScheduleAdapter;
+import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
+import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.views.FitnessContentProvider.RowData;
 
-public class FitnessReportView extends ViewPart implements ISelectionListener {
+public class FitnessReportView extends ViewPart {
 	private final ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
 
 	private boolean inverseSort = false;
@@ -97,7 +94,7 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 
 	private Action copyTableAction;
 
-	private IEclipseJobManagerListener jobManagerListener;
+	private ScenarioViewerSynchronizer jobManagerListener;
 
 	static class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider {
 		@Override
@@ -225,7 +222,12 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 		//
 		// selectionChanged(null, selection);
 
-		jobManagerListener = ScheduleAdapter.registerView(viewer);
+		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
+			@Override
+			protected Collection<? extends Object> collectElements(Schedule schedule) {
+				return Collections.singleton(schedule);
+			}
+		});
 	}
 
 	private void hookContextMenu() {
@@ -315,22 +317,11 @@ public class FitnessReportView extends ViewPart implements ISelectionListener {
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart arg0, final ISelection selection) {
-
-		final List<Schedule> schedules = ScheduleAdapter.getSchedules(selection);
-		// if (!schedules.isEmpty()) {
-		setInput(schedules);
-		// } else {
-		// setInput(null);
-		// }
-	}
-
-	@Override
 	public void dispose() {
 		// getSite().getPage().removeSelectionListener(
 		// "com.mmxlabs.rcp.navigator", this);
 
-		ScheduleAdapter.deregisterView(jobManagerListener);
+		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
 
 		super.dispose();
 	}

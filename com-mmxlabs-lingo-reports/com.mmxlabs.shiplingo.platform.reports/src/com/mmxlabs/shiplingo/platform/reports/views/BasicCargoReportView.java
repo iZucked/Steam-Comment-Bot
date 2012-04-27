@@ -6,17 +6,20 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 
 /**
  * 
@@ -69,79 +72,81 @@ public class BasicCargoReportView extends EMFReportView {
 
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
+		final IStructuredContentProvider superProvider = super.getContentProvider();
 		return new IStructuredContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-				Display.getCurrent().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						if (viewer.getControl().isDisposed()) {
-							return;
-						}
-//						final Set<MMXRootObject> scenarios = new HashSet<MMXRootObject>();
-//						if (newInput instanceof Iterable) {
-//							for (final Object element : ((Iterable<?>) newInput)) {
-//								if (element instanceof Schedule) {
-//									// find all referenced entities
-////									for (final String s : entityColumnNames) {
-////										removeColumn(s);
-////									}
-////									entityColumnNames.clear();
+				superProvider.inputChanged(viewer, oldInput, newInput);
+//				Display.getCurrent().asyncExec(new Runnable() {
+//					@Override
+//					public void run() {
+//						if (viewer.getControl().isDisposed()) {
+//							return;
+//						}
+////						final Set<MMXRootObject> scenarios = new HashSet<MMXRootObject>();
+////						if (newInput instanceof Iterable) {
+////							for (final Object element : ((Iterable<?>) newInput)) {
+////								if (element instanceof Schedule) {
+////									// find all referenced entities
+//////									for (final String s : entityColumnNames) {
+//////										removeColumn(s);
+//////									}
+//////									entityColumnNames.clear();
+////////
+//////									EObject o = (EObject) element;
+//////									while ((o != null) && !(o instanceof Scenario)) {
+//////										o = o.eContainer();
+//////									}
 //////
-////									EObject o = (EObject) element;
-////									while ((o != null) && !(o instanceof Scenario)) {
-////										o = o.eContainer();
-////									}
+//////									if (o != null) {
+//////										scenarios.add((Scenario) o);
+//////									}
+////								}
+////							}
 ////
-////									if (o != null) {
-////										scenarios.add((Scenario) o);
-////									}
-//								}
-//							}
-//
-//						}
-//						for (final Scenario scenario : scenarios) {
-//							addEntityColumns(scenario);
-//						}
-						viewer.refresh();
-					}
-				});
+////						}
+////						for (final Scenario scenario : scenarios) {
+////							addEntityColumns(scenario);
+////						}
+//						viewer.refresh();
+//					}
+//				});
 			}
 
 			@Override
 			public void dispose() {
-
+				superProvider.dispose();
 			}
 
 			@Override
 			public Object[] getElements(final Object object) {
-				final ArrayList<CargoAllocation> allocations = new ArrayList<CargoAllocation>();
 				clearInputEquivalents();
-				if (object instanceof Iterable) {
-					for (final Object o : (Iterable<?>) object) {
-						if (o instanceof Schedule) {
-							// collect allocations from object
-							allocations.addAll(((Schedule) o).getCargoAllocations());
-						}
+				final Object[] result = superProvider.getElements(object);
+
+				for (final Object a : result) {
+					// map to events
+					if (a instanceof CargoAllocation) {
+						final CargoAllocation allocation = (CargoAllocation) a;
+
+						setInputEquivalents(
+								allocation,
+								Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(),
+										allocation.getDischargeAllocation().getSlotVisit(), allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(),
+										allocation.getLadenIdle(), allocation.getLadenLeg() }));
 					}
 				}
 
-				for (final CargoAllocation allocation : allocations) {
-					// map to events
-					setInputEquivalents(
-							allocation,
-							Arrays.asList(new Object[] { 
-									allocation.getLoadAllocation().getSlotVisit(), 
-									allocation.getLoadAllocation().getSlot(), 
-									allocation.getDischargeAllocation().getSlotVisit(), 
-									allocation.getDischargeAllocation().getSlot(),
-									allocation.getBallastIdle(),
-									allocation.getBallastLeg(), 
-									allocation.getLadenIdle(), 
-									allocation.getLadenLeg() }));
-				}
+				return result;
+			}
+		};
+	}
 
-				return allocations.toArray();
+	@Override
+	protected IScenarioInstanceElementCollector getElementCollector() {
+		return new ScheduleElementCollector() {
+			@Override
+			protected Collection<? extends Object> collectElements(Schedule schedule) {
+				return schedule.getCargoAllocations();
 			}
 		};
 	}
