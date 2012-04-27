@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
-import com.mmxlabs.scenario.service.ui.Activator;
+import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 public class ScenarioServiceNavigator extends CommonNavigator {
 
