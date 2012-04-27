@@ -50,55 +50,13 @@
             class="org.eclipse.ui.navigator.resources.ResourceDragAdapterAssistant"
             viewerId="com.mmxlabs.rcp.navigator">
       </dragAssistant>
-   </extension>
-   
-      <extension
-            point="org.eclipse.ui.commands">
-         <category
-               id="com.mmxlabs.rcp.navigator.commands.category.optimisation"
-               name="Optimisation Commands">
-         </category>
-         <command
-               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
-               id="com.mmxlabs.rcp.navigator.commands.optimisation.play"
-               name="Start/Resume Optimisation">
-         </command>
-         <command
-               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
-               id="com.mmxlabs.rcp.navigator.commands.optimisation.pause"
-               name="Pause Optimisation">
-         </command>
-         <command
-               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
-               id="com.mmxlabs.rcp.navigator.commands.optimisation.terminate"
-               name="Terminate Optimisation">
-         </command>
-         <command
-               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
-               id="com.mmxlabs.rcp.navigator.commands.optimisation.save"
-               name="Save Optimisation">
-         </command>
-         <category
-               id="com.mmxlabs.rcp.navigator.commands.category.scenario"
-               name="Scenario Commands">
-         </category>
-         <command
-               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
-               id="com.mmxlabs.rcp.navigator.commands.optimisation.evaluate"
-               name="Evaluate Schedule">
-         </command>
-         <command
-               categoryId="com.mmxlabs.rcp.navigator.commands.category.optimisation"
-               id="com.mmxlabs.rcp.navigator.commands.optimisation.derive"
-               name="Derive Optimisation">
-         </command>
       </extension>
       <extension
             point="org.eclipse.ui.menus">
          <menuContribution
                locationURI="toolbar:com.mmxlabs.rcp.navigator">
             <command
-                  commandId="com.mmxlabs.rcp.navigator.commands.optimisation.evaluate"
+                  commandId="com.mmxlabs.commands.optimisation.evaluate"
                   icon="icons/evaluate_schedule.gif"
                   id="com.mmxlabs.rcp.navigator.commands.optimisation.evaluate"
                   label="Evaluate schedule"
@@ -106,7 +64,7 @@
                   tooltip="Evaluate scenario">
             </command>
                <command
-                     commandId="com.mmxlabs.rcp.navigator.commands.optimisation.play"
+                     commandId="com.mmxlabs.commands.optimisation.play"
                      disabledIcon="icons/dlcl16/resume_co.gif"
                      icon="icons/elcl16/resume_co.gif"
                      id="com.mmxlabs.rcp.navigator.toolbars.optimisation.play"
@@ -115,7 +73,7 @@
                      tooltip="Start or resume optimisations">
                </command>
                <command
-                     commandId="com.mmxlabs.rcp.navigator.commands.optimisation.pause"
+                     commandId="com.mmxlabs.commands.optimisation.pause"
                      disabledIcon="icons/dlcl16/suspend_co.gif"
                      icon="icons/elcl16/suspend_co.gif"
                      id="com.mmxlabs.rcp.navigator.toolbars.optimisation.pause"
@@ -124,7 +82,7 @@
                      tooltip="Pause optimisations">
                </command>
                <command
-                     commandId="com.mmxlabs.rcp.navigator.commands.optimisation.terminate"
+                     commandId="com.mmxlabs.commands.optimisation.terminate"
                      disabledIcon="icons/dlcl16/terminate_co.gif"
                      icon="icons/elcl16/terminate_co.gif"
                      id="com.mmxlabs.rcp.navigator.toolbars.optimisation.terminate"
@@ -133,7 +91,7 @@
                      tooltip="Terminate optimisations">
                </command>
                <command
-                     commandId="com.mmxlabs.rcp.navigator.commands.optimisation.save"
+                     commandId="com.mmxlabs.commands.optimisation.save"
                      disabledIcon="icons/dtool16/saveas_edit.gif"
                      icon="icons/etool16/saveas_edit.gif"
                      id="com.mmxlabs.rcp.navigator.toolbars.optimisation.save"
@@ -143,7 +101,7 @@
                      tooltip="Save optimisations">
                </command>
                <command
-                     commandId="com.mmxlabs.rcp.navigator.commands.optimisation.derive"
+                     commandId="com.mmxlabs.commands.optimisation.derive"
                      icon="icons/evaluate_schedule.gif"
                      id="com.mmxlabs.rcp.navigator.commands.optimisation.derive"
                      label="Derive schedule"
