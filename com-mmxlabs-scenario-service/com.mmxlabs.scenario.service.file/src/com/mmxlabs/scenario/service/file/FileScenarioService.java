@@ -233,8 +233,14 @@ public class FileScenarioService implements IScenarioService {
 	}
 
 	@Override
-	public void load(ScenarioInstance instance) throws IOException {
+	public EObject load(ScenarioInstance instance) throws IOException {
 		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public void save(ScenarioInstance instance) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 }

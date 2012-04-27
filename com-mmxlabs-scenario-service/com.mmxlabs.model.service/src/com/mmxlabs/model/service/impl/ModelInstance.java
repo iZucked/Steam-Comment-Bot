@@ -22,7 +22,11 @@ public class ModelInstance implements IModelInstance {
 	}
 
 	@Override
-	public EObject getModel() {
+	public EObject getModel() throws IOException {
+		
+		if (!resource.isLoaded()) {
+			resource.load(Collections.emptyMap());
+		}
 		if (resource.getContents().isEmpty()) {
 			log.error("Failed to get contents for " + resource.getURI() + ", as it is empty");
 			return null;
