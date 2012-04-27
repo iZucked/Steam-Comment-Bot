@@ -19,6 +19,7 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 /**
@@ -49,10 +50,10 @@ public class StopOptimisationHandler extends AbstractOptimisationHandler {
 			final Iterator<?> itr = strucSelection.iterator();
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
-				if (obj instanceof IResource) {
-					final IResource resource = (IResource) obj;
+				if (obj instanceof ScenarioInstance) {
+					final ScenarioInstance instance = (ScenarioInstance) obj;
 					final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-					final IJobDescriptor job = jobManager.findJobForResource(resource);
+					final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
 					final IJobControl control = jobManager.getControlForJob(job);
 
 					if (control != null) {
@@ -95,15 +96,11 @@ public class StopOptimisationHandler extends AbstractOptimisationHandler {
 			final Iterator<?> itr = strucSelection.iterator();
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
-				if (obj instanceof IResource) {
-					final IResource resource = (IResource) obj;
-					final MMXRootObject s = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
-					if (s == null) {
-						return false;
-					}
+				if (obj instanceof ScenarioInstance) {
+					final ScenarioInstance instance = (ScenarioInstance) obj;
 
 					final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-					final IJobDescriptor job = jobManager.findJobForResource(resource);
+					final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
 					final IJobControl control = jobManager.getControlForJob(job);
 
 					if (control == null) {
