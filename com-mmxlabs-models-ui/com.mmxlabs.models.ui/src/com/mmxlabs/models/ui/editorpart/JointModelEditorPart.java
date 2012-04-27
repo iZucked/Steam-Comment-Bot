@@ -77,9 +77,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
 
-	
 	private Stack<IExtraValidationContext> validationContextStack = new Stack<IExtraValidationContext>();
-	
+
 	/**
 	 * The root object from {@link #jointModel}
 	 */
@@ -119,61 +118,23 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			return JointModelEditorPart.this.getEditingDomain();
 		}
 	};
+
 	private boolean saving = false;
 	private Viewer currentViewer;
 	private ISelectionChangedListener selectionChangedListener;
 
-	// /**
-	// * Used to track jobs for the displayed joint model, and lock the UI when jobs are running.
-	// */
-	// private IEclipseJobManagerListener jobManagerListener = new EclipseJobManagerAdapter() {
-	// @Override
-	// public void jobAdded(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
-	// if (job.getJobContext() == getRootObject() || job.getJobContext() == jointModel) {
-	// control.addListener(jobListener);
-	// }
-	// }
-	//
-	// @Override
-	// public void jobRemoved(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
-	// control.removeListener(jobListener); // no harm in removing even if it's not there
-	// }
-	// };
-	//
-	// private IJobControlListener jobListener = new JobControlAdapter() {
-	// @Override
-	// public boolean jobStateChanged(IJobControl control, EJobState oldState, EJobState newState) {
-	// switch (newState) {
-	// case INITIALISING:
-	// case INITIALISED:
-	// case PAUSED:
-	// case PAUSING:
-	// case RESUMING:
-	// case RUNNING:
-	// setLocked(true);
-	// break;
-	// default:
-	// setLocked(false);
-	// }
-	// return true;
-	// }
-	// };
-
 	private boolean locked;
-	// private boolean commandProvidersDisabled;
 	private PropertySheetPage propertySheetPage;
 
 	private ServiceTracker<IScenarioService, IScenarioService> scenarioServiceTracker;
 
 	private ScenarioInstance scenarioInstance;
 
-
 	private EContentAdapter lockedAdapter;
 
 	public JointModelEditorPart() {
 		scenarioServiceTracker = new ServiceTracker<IScenarioService, IScenarioService>(Activator.getDefault().getBundle().getBundleContext(), IScenarioService.class, null);
 		scenarioServiceTracker.open();
-
 	}
 
 	public boolean isLocked() {
@@ -256,7 +217,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		if (input instanceof IScenarioServiceEditorInput) {
 			IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
 			final ScenarioInstance instance = ssInput.getScenarioInstance();
-			
+
 			EObject ro = instance.getInstance();
 			IScenarioService scenarioService = scenarioServiceTracker.getService();
 			if (scenarioService == null) {
@@ -276,25 +237,24 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				// Error loading
 				throw new RuntimeException("No root object - error loading?");
 			}
-			
-			
-			commandStack = (BasicCommandStack)instance.getAdapters().get(BasicCommandStack.class);
-			editingDomain = (CommandProviderAwareEditingDomain)instance.getAdapters().get(EditingDomain.class);
-			
+
+			commandStack = (BasicCommandStack) instance.getAdapters().get(BasicCommandStack.class);
+			editingDomain = (CommandProviderAwareEditingDomain) instance.getAdapters().get(EditingDomain.class);
+
 			lockedAdapter = new EContentAdapter() {
-				
+
 				@Override
 				public void notifyChanged(Notification notification) {
 					super.notifyChanged(notification);
-					
+
 					if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locked()) {
 						setLocked(notification.getNewBooleanValue());
 					}
 				}
-				
-			} ;
+
+			};
 			instance.eAdapters().add(lockedAdapter);
-			
+
 			if (ro instanceof MMXRootObject) {
 				root = (MMXRootObject) ro;
 			} else {
@@ -303,54 +263,12 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			}
 			this.rootObject = root;
 
-			// } else {
-			//
-			// JointModel jointModel = (JointModel) input.getAdapter(JointModel.class);
-			//
-			// if (jointModel == null)
-			// jointModel = (JointModel) Platform.getAdapterManager().loadAdapter(input, JointModel.class.getCanonicalName());
-			// if (jointModel == null) {
-			// throw new PartInitException("Could not adapt input to JointModel");
-			// } else {
-			// try {
-			// root = jointModel.load();
-			// if (root == null) {
-			// throw new PartInitException("JointModel has no root object");
-			// }
-			// final JointModel jm = jointModel;
-			// this.saver = new Saver() {
-			// public void save() throws IOException {
-			//
-			// jm.save();
-			//
-			// };
-			// };
-			// } catch (MigrationException e) {
-			// throw new PartInitException("Error migrating joint model", e);
-			// } catch (IOException e) {
-			// throw new PartInitException("IO Exception loading joint model", e);
-			// }
-			//
-			// this.rootObject = root;
-			// commandStack = new BasicCommandStack() {
-			// @Override
-			// public void execute(Command command) {
-			// synchronized (rootObject) {
-			// super.execute(command);
-			// }
-			// }
-			// };
 		} else {
 			// Error!
+			throw new IllegalArgumentException("Editor input should be instance of IScenarioServiceEditorInput");
 		}
 
-		// TODO: The following bits should be hidden behind the scenario service...
 		{
-
-			// // set up adapter factory
-			// adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-			// adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-			// adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
 			// synchronize command execution on the root object; this is a temporary
 			// solution to allow other threads (evaluation thread for example) to ensure a consistent scenario
@@ -366,29 +284,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				}
 			});
 
-			// final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker = Activator.getDefault().getCommandProviderTracker();
-			// // create editing domain
-			// editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack) {
-			// @Override
-			// public Command createCommand(Class<? extends Command> commandClass, CommandParameter commandParameter) {
-			// final Command normal = super.createCommand(commandClass, commandParameter);
-			//
-			// if (!commandProvidersDisabled) {
-			// final CompoundCommand wrapper = new CompoundCommand();
-			// wrapper.append(normal);
-			// for (final IModelCommandProvider provider : commandProviderTracker.getServices(new IModelCommandProvider[0])) {
-			// final Command addition = provider.provideAdditionalCommand(getEditingDomain(), getRootObject(), commandClass, commandParameter, normal);
-			// if (addition != null)
-			// wrapper.append(addition);
-			// }
-			//
-			// return wrapper.unwrap();
-			// } else {
-			// return normal;
-			// }
-			// }
-			// };
-
 			// initialize extensions
 
 			contributions = Activator.getDefault().getJointModelEditorContributionRegistry().initEditorContributions(this, rootObject);
@@ -400,7 +295,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		}
 
 		site.setSelectionProvider(this);
-		
+
 		validationContextStack.clear();
 		validationContextStack.push(new DefaultExtraValidationContext(getRootObject()));
 	}
@@ -408,21 +303,20 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	public IExtraValidationContext getExtraValidationContext() {
 		return validationContextStack.peek();
 	}
-	
+
 	public void pushExtraValidationContext(final IExtraValidationContext context) {
 		validationContextStack.push(context);
 	}
-	
+
 	public void popExtraValidationContext() {
 		validationContextStack.pop();
 	}
-	
+
 	@Override
 	public void dispose() {
-		
+
 		scenarioInstance.eAdapters().remove(lockedAdapter);
-		
-		// Activator.getDefault().getJobManager().removeEclipseJobManagerListener(jobManagerListener);
+
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.dispose();
 		}
