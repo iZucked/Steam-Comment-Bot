@@ -196,12 +196,12 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((ScenarioInstance) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_ScenarioInstance_type") : getString("_UI_ScenarioInstance_type") + " " + label;
+		return label == null  ? "(untitled)" : label;
 	}
 
 	/**

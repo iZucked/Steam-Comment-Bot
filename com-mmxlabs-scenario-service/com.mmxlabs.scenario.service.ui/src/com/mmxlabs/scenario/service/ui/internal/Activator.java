@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.scenario.service.ui;
+package com.mmxlabs.scenario.service.ui.internal;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
