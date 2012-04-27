@@ -23,8 +23,9 @@
          point="org.eclipse.ui.views">
       <view
             class="com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator"
+            icon="icons/filenav_nav.gif"
             id="com.mmxlabs.scenario.service.ui.navigator"
-            name="Scenario Navigator"
+            name="Scenarios"
             restorable="true">
       </view>
    </extension>
@@ -40,7 +41,23 @@
             <instanceof
                   value="com.mmxlabs.scenario.service.model.ScenarioModel">
             </instanceof>
+            <instanceof
+                  value="com.mmxlabs.scenario.service.model.Container">
+            </instanceof>
          </triggerPoints>
+         <dropAssistant
+               class="com.mmxlabs.scenario.service.ui.dnd.ScenarioDragAssistant"
+               id="com.mmxlabs.scenario.service.ui.dnd.ScenarioDragAssistant">
+            <possibleDropTargets>
+               <instanceof
+                     value="com.mmxlabs.scenario.service.model.Container">
+               </instanceof></possibleDropTargets>
+         </dropAssistant>
+         <possibleChildren>
+            <instanceof
+                  value="com.mmxlabs.scenario.service.model.Container">
+            </instanceof>
+         </possibleChildren>
       </navigatorContent>
    </extension>
    <extension
