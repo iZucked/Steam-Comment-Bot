@@ -17,6 +17,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
@@ -30,6 +31,13 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlListener;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
@@ -64,6 +72,55 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			}
 		}
 	};
+
+	private IEclipseJobManagerListener jobManagerListener = new IEclipseJobManagerListener() {
+		
+		private IJobControlListener jobControlListener = new IJobControlListener() {
+			@Override
+			public boolean jobStateChanged(IJobControl job, EJobState oldState, EJobState newState) {
+				tryRefresh();
+				return true;
+			}
+			
+			@Override
+			public boolean jobProgressUpdated(IJobControl job, int progressDelta) {
+				tryRefresh();
+				return true;
+			}
+		};
+
+		@Override
+		public void jobSelected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource) {
+			
+		}
+		
+		@Override
+		public void jobRemoved(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
+			control.removeListener(jobControlListener);
+			tryRefresh();
+		}
+		
+		@Override
+		public void jobManagerRemoved(IEclipseJobManager eclipseJobManager, IJobManager jobManager) {
+			
+		}
+		
+		@Override
+		public void jobManagerAdded(IEclipseJobManager eclipseJobManager, IJobManager jobManager) {
+			
+		}
+		
+		@Override
+		public void jobDeselected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource) {
+			
+		}
+		
+		@Override
+		public void jobAdded(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
+			control.addListener(jobControlListener);
+			tryRefresh();
+		}
+	};
 	
 	public ScenarioServiceNavigator() {
 		super();
@@ -72,13 +129,27 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		tracker.open();
 		
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
+		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
 	}
 
 	@Override
 	public void dispose() {
 		tracker.close();
 		Activator.getDefault().getScenarioServiceSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
+		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
 		super.dispose();
+	}
+	
+	protected void tryRefresh() {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				final CommonViewer viewer1 = viewer;
+				if (viewer1 != null) viewer1.refresh();
+			}
+		
+		});
 	}
 
 	@Override
@@ -93,8 +164,13 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		labelColumn.setText("Name");
 		TreeColumn checkColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		checkColumn.setText("Show");
+		
+		TreeColumn progressColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
+		progressColumn.setText("Opt");
+		
 		labelColumn.pack();
 		checkColumn.pack();
+		progressColumn.pack();
 		
 		final Tree tree = viewer.getTree();
 		tree.addMouseListener(new MouseAdapter() {
