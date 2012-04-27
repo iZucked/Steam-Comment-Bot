@@ -201,7 +201,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	@Override
 	public String getText(Object object) {
 		String label = ((ScenarioInstance) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_ScenarioInstance_type") : getString("_UI_ScenarioInstance_type") + " " + label;
+		return label == null  ? "(untitled)" : label;
 	}
 
 	/**
