@@ -29,7 +29,7 @@
             point="org.eclipse.ui.handlers">
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StartOptimisationHandler"
-               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.play">
+               commandId="com.mmxlabs.commands.optimisation.play">
             <enabledWhen>
                <iterate>
                   <and>
@@ -63,7 +63,7 @@
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StopOptimisationHandler"
-               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.terminate">
+               commandId="com.mmxlabs.commands.optimisation.terminate">
             <enabledWhen>
                <iterate>
                   <and>
@@ -76,7 +76,7 @@
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.PauseOptimisationHandler"
-               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.pause">
+               commandId="com.mmxlabs.commands.optimisation.pause">
             <enabledWhen>
                <iterate>
                   <and>
@@ -89,7 +89,7 @@
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.SaveOptimisationHandler"
-               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.save">
+               commandId="com.mmxlabs.commands.optimisation.save">
             <enabledWhen>
                <iterate>
                   <and>
@@ -102,7 +102,7 @@
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.EvaluateOptimisationHandler"
-               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.evaluate">
+               commandId="com.mmxlabs.commands.optimisation.evaluate">
             <enabledWhen>
                <iterate>
                   <and>
@@ -115,7 +115,7 @@
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.DeriveOptimisationHandler"
-               commandId="com.mmxlabs.rcp.navigator.commands.optimisation.derive">
+               commandId="com.mmxlabs.commands.optimisation.derive">
             <enabledWhen>
                <iterate>
                   <and>
@@ -128,7 +128,7 @@
          </handler>
       </extension>
 
-<extension
+	<extension
          point="org.eclipse.ui.commands">
          <category
             id="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.category"
