@@ -43,8 +43,20 @@ public class ModelEntityMap {
 	 */
 	public void setScenario(final MMXRootObject rootObject) {
 		this.resourceSet = rootObject.eResource().getResourceSet();
-		earliestDate = EMFUtils.findMinMaxDateAttributes(rootObject)
-				.getFirst();
+	}
+	
+	/**
+	 * @return the earliestDate
+	 */
+	protected Date getEarliestDate() {
+		return earliestDate;
+	}
+
+	/**
+	 * @param earliestDate the earliestDate to set
+	 */
+	protected void setEarliestDate(Date earliestDate) {
+		this.earliestDate = earliestDate;
 	}
 
 	public Date getDateFromHours(final long hours) {

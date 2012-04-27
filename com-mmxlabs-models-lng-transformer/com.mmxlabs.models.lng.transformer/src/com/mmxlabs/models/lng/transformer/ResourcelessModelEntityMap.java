@@ -40,11 +40,6 @@ public class ResourcelessModelEntityMap extends ModelEntityMap {
 	}
 
 	@Override
-	public void setScenario(final MMXRootObject scenario) {
-		earliestDate = EMFUtils.findMinMaxDateAttributes(scenario).getFirst();
-	}
-
-	@Override
 	public void dispose() {
 		super.dispose();
 		modelToOptimiser.clear();
