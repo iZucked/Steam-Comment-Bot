@@ -17,10 +17,15 @@ import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
 
 import com.mmxlabs.scenario.service.model.Container;
 
+/**
+ * DND handler to allow element moving in the scenario navigator. This needs more support to handle copy actions and to allow scenarios to be dragged in from e.g. filesystem.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 	public ScenarioDragAssistant() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
