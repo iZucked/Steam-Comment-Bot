@@ -111,12 +111,6 @@
             allPopups="false"
             locationURI="toolbar:com.mmxlabs.scenario.service.ui.navigator">
          <command
-               commandId="com.mmxlabs.scenario.service.ui.open"
-               label="Open"
-               style="push"
-               tooltip="Open Scenario">
-         </command>
-         <command
                commandId="com.mmxlabs.scenario.service.ui.lock"
                icon="icons/commands/lock.gif"
                label="Lock"
