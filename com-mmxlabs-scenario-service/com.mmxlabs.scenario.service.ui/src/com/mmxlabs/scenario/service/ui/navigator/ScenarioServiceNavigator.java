@@ -30,7 +30,8 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	private static final Logger log = LoggerFactory.getLogger(ScenarioServiceNavigator.class);
 
 	protected AdapterFactoryEditingDomain editingDomain;
-	protected ComposedAdapterFactory adapterFactory;
+
+	protected ComposedAdapterFactory adapterFactory = ScenarioServiceComposedAdapterFactory.getAdapterFactory();
 
 	private final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker;
 
