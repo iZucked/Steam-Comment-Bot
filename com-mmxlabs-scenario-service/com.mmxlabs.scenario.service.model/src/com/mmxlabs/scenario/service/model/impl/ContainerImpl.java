@@ -20,6 +20,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -30,6 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl#getElements <em>Elements</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl#isArchived <em>Archived</em>}</li>
  * </ul>
@@ -92,9 +95,51 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Container getParent() {
+		if (eContainerFeatureID() != ScenarioServicePackage.CONTAINER__PARENT)
+			return null;
+		return (Container) eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetParent(Container newParent, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject) newParent, ScenarioServicePackage.CONTAINER__PARENT, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setParent(Container newParent) {
+		if (newParent != eInternalContainer() || (eContainerFeatureID() != ScenarioServicePackage.CONTAINER__PARENT && newParent != null)) {
+			if (EcoreUtil.isAncestor(this, newParent))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newParent != null)
+				msgs = ((InternalEObject) newParent).eInverseAdd(this, ScenarioServicePackage.CONTAINER__ELEMENTS, Container.class, msgs);
+			msgs = basicSetParent(newParent, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.CONTAINER__PARENT, newParent, newParent));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<Container> getElements() {
 		if (elements == null) {
-			elements = new EObjectContainmentEList<Container>(Container.class, this, ScenarioServicePackage.CONTAINER__ELEMENTS);
+			elements = new EObjectContainmentWithInverseEList<Container>(Container.class, this, ScenarioServicePackage.CONTAINER__ELEMENTS, ScenarioServicePackage.CONTAINER__PARENT);
 		}
 		return elements;
 	}
@@ -125,9 +170,30 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+		case ScenarioServicePackage.CONTAINER__PARENT:
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			return basicSetParent((Container) otherEnd, msgs);
+		case ScenarioServicePackage.CONTAINER__ELEMENTS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getElements()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+		case ScenarioServicePackage.CONTAINER__PARENT:
+			return basicSetParent(null, msgs);
 		case ScenarioServicePackage.CONTAINER__ELEMENTS:
 			return ((InternalEList<?>) getElements()).basicRemove(otherEnd, msgs);
 		}
@@ -140,8 +206,24 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+		case ScenarioServicePackage.CONTAINER__PARENT:
+			return eInternalContainer().eInverseRemove(this, ScenarioServicePackage.CONTAINER__ELEMENTS, Container.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+		case ScenarioServicePackage.CONTAINER__PARENT:
+			return getParent();
 		case ScenarioServicePackage.CONTAINER__ELEMENTS:
 			return getElements();
 		case ScenarioServicePackage.CONTAINER__ARCHIVED:
@@ -159,6 +241,9 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+		case ScenarioServicePackage.CONTAINER__PARENT:
+			setParent((Container) newValue);
+			return;
 		case ScenarioServicePackage.CONTAINER__ELEMENTS:
 			getElements().clear();
 			getElements().addAll((Collection<? extends Container>) newValue);
@@ -178,6 +263,9 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+		case ScenarioServicePackage.CONTAINER__PARENT:
+			setParent((Container) null);
+			return;
 		case ScenarioServicePackage.CONTAINER__ELEMENTS:
 			getElements().clear();
 			return;
@@ -196,6 +284,8 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+		case ScenarioServicePackage.CONTAINER__PARENT:
+			return getParent() != null;
 		case ScenarioServicePackage.CONTAINER__ELEMENTS:
 			return elements != null && !elements.isEmpty();
 		case ScenarioServicePackage.CONTAINER__ARCHIVED:

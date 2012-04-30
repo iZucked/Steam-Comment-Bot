@@ -178,7 +178,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getContainer_Elements() {
+	public EReference getContainer_Parent() {
 		return (EReference) containerEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -187,8 +187,17 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getContainer_Elements() {
+		return (EReference) containerEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getContainer_Archived() {
-		return (EAttribute) containerEClass.getEStructuralFeatures().get(1);
+		return (EAttribute) containerEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -440,6 +449,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEReference(scenarioModelEClass, SCENARIO_MODEL__SCENARIO_SERVICES);
 
 		containerEClass = createEClass(CONTAINER);
+		createEReference(containerEClass, CONTAINER__PARENT);
 		createEReference(containerEClass, CONTAINER__ELEMENTS);
 		createEAttribute(containerEClass, CONTAINER__ARCHIVED);
 
@@ -514,8 +524,10 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(containerEClass, com.mmxlabs.scenario.service.model.Container.class, "Container", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getContainer_Elements(), this.getContainer(), null, "elements", null, 0, -1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContainer_Parent(), this.getContainer(), this.getContainer_Elements(), "parent", null, 0, 1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContainer_Elements(), this.getContainer(), this.getContainer_Parent(), "elements", null, 0, -1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContainer_Archived(), ecorePackage.getEBoolean(), "archived", null, 0, 1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

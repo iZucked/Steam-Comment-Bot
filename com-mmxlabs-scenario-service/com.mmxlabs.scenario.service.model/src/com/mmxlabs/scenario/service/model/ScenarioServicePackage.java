@@ -97,13 +97,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int CONTAINER = 1;
 
 	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__PARENT = 0;
+
+	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTAINER__ELEMENTS = 0;
+	int CONTAINER__ELEMENTS = 1;
 
 	/**
 	 * The feature id for the '<em><b>Archived</b></em>' attribute.
@@ -112,7 +121,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTAINER__ARCHIVED = 1;
+	int CONTAINER__ARCHIVED = 2;
 
 	/**
 	 * The number of structural features of the '<em>Container</em>' class.
@@ -121,7 +130,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTAINER_FEATURE_COUNT = 2;
+	int CONTAINER_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.FolderImpl <em>Folder</em>}' class.
@@ -132,6 +141,15 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	int FOLDER = 2;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__PARENT = CONTAINER__PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -189,6 +207,15 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_SERVICE = 3;
 
 	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_SERVICE__PARENT = CONTAINER__PARENT;
+
+	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -242,6 +269,15 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	int SCENARIO_INSTANCE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__PARENT = CONTAINER__PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -465,6 +501,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getContainer();
+
+	/**
+	 * Returns the meta object for the container reference '{@link com.mmxlabs.scenario.service.model.Container#getParent <em>Parent</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Parent</em>'.
+	 * @see com.mmxlabs.scenario.service.model.Container#getParent()
+	 * @see #getContainer()
+	 * @generated
+	 */
+	EReference getContainer_Parent();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.scenario.service.model.Container#getElements <em>Elements</em>}'.
@@ -797,6 +844,14 @@ public interface ScenarioServicePackage extends EPackage {
 		 * @generated
 		 */
 		EClass CONTAINER = eINSTANCE.getContainer();
+
+		/**
+		 * The meta object literal for the '<em><b>Parent</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTAINER__PARENT = eINSTANCE.getContainer_Parent();
 
 		/**
 		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
