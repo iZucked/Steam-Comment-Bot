@@ -29,8 +29,7 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.models.ui.tabular;bundle-version="1.0.0",
  com.mmxlabs.models.mmxcore,
  com.mmxlabs.scenario.service.ui;bundle-version="1.0.0",
- com.mmxlabs.scenario.service.model;bundle-version="1.0.0",
- com.mmxlabs.scenario.service;bundle-version="1.0.0"
+ com.mmxlabs.scenario.service.model;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.shiplingo.platform.reports,
