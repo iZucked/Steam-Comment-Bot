@@ -228,6 +228,7 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 	 * A helper method for collecting UUID objects even in children which are not themselves MMXObjects
 	 * @param objectsByUUID
 	 * @param object
+	 * @since 2.0
 	 */
 	public void collectUUIDObjectsFor(final Map<String, UUIDObject> objectsByUUID, final EObject object) {
 		for (final EObject o : object.eContents()) {
