@@ -161,13 +161,13 @@ public class TheNavigator extends CommonNavigator {
 								return;
 							}
 							// If the job does not already exist - it may do perhaps due to a race condition as did not exist when we started this code branch - then register it
-							if (!jobManager.getSelectedJobs().contains(job)) {
-								// Clean up when job is removed from manager
-								jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-								control = jobManager.submitJob(job, resource);
-							} else {
-								control = jobManager.getControlForJob(job);
-							}
+//							if (!jobManager.getSelectedJobs().contains(job)) {
+//								// Clean up when job is removed from manager
+//								jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
+//								control = jobManager.submitJob(job, resource);
+//							} else {
+//								control = jobManager.getControlForJob(job);
+//							}
 
 							if (control == null) {
 								ti.setChecked(false);
@@ -176,7 +176,7 @@ public class TheNavigator extends CommonNavigator {
 						}
 
 						// Set selection status
-						jobManager.setResourceSelection(resource, ti.getChecked());
+//						jobManager.setResourceSelection(resource, ti.getChecked());
 					}
 				}
 			}
