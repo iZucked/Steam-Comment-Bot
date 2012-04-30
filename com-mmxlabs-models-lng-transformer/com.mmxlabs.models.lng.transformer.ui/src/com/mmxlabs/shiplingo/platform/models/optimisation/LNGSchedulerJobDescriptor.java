@@ -27,7 +27,7 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 	public LNGSchedulerJobDescriptor(final String name, final MMXRootObject scenario, final boolean optimise) {
 		this.name = name;
 		this.scenario = scenario;
-		this.optimise = true;
+		this.optimise = optimise;
 	}
 
 	@Override
