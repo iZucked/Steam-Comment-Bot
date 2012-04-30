@@ -140,7 +140,7 @@ public class AnnotatedSolutionExporter {
 			final IVessel vessel = vesselProvider.getVessel(resource);
 
 			final Sequence eSequence = factory.createSequence();
-			sequences.add(eSequence);
+			
 
 			// TODO use spot rates correctly.
 			final int hireRate;
@@ -164,6 +164,8 @@ public class AnnotatedSolutionExporter {
 				eSequence.setVessel(entities.getModelObject(vessel, Vessel.class));
 				eSequence.unsetVesselClass();
 				break;
+			case VIRTUAL:
+				break;
 			case SPOT_CHARTER:
 				if (annotatedSolution.getSequences().getSequence(resource).size() < 2)
 					continue;
@@ -184,6 +186,12 @@ public class AnnotatedSolutionExporter {
 			default:
 				break;
 			}
+			
+			if (eSequence.getName().equals("<no vessel>") || (eSequence.getVessel() == null && eSequence.getVesselClass() == null)) {
+				log.error("No vessel set on sequence!?");
+			}
+			
+			sequences.add(eSequence);
 
 			{
 				// set sequence fitness values

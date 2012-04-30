@@ -9,9 +9,7 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.util.emfpath.EMFUtils;
 
 /**
  * A model entity map which doesn't use the resourceset.
