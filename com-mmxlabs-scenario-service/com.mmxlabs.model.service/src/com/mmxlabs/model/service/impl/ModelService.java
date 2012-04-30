@@ -24,6 +24,10 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 
+/**
+ * Default implementation of {@link IModelService}.
+ * 
+ */
 public class ModelService implements IModelService {
 	private static final Logger log = LoggerFactory.getLogger(ModelService.class);
 	/**
