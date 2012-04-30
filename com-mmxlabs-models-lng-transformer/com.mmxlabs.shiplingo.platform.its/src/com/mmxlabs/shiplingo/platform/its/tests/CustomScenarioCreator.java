@@ -84,7 +84,7 @@ public class CustomScenarioCreator {
 	private static final String timeZone = TimeZone.getDefault().getID();
 
 	public CustomScenarioCreator(final float dischargePrice) {
-		scenario = ManifestJointModel.createEmptyInstance();
+		scenario = ManifestJointModel.createEmptyInstance(null);
 
 		commercialModel = scenario.getSubModel(CommercialModel.class);
 		cargoModel = scenario.getSubModel(CargoModel.class);

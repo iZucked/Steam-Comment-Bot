@@ -187,7 +187,7 @@ public class ScenarioTools {
 			final int ladenMaxSpeed, final int ladenMaxConsumption, int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
 			final int pilotLightRate, final int minHeelVolume) {
 
-		final MMXRootObject scenario = ManifestJointModel.createEmptyInstance();
+		final MMXRootObject scenario = ManifestJointModel.createEmptyInstance(null);
 
 		final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
 		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
@@ -442,7 +442,7 @@ public class ScenarioTools {
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate,
 			final int charterOutTimeDays, final int heelLimit) {
 
-		final MMXRootObject scenario = ManifestJointModel.createEmptyInstance();
+		final MMXRootObject scenario = ManifestJointModel.createEmptyInstance(null);
 		final PortModel portModel = scenario.getSubModel(PortModel.class);
 		final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
 		final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
