@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.WeakHashMap;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
@@ -105,19 +106,24 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		refreshViewer();
 	}
 
-	private boolean refreshIsQueued = false;
+	private boolean needsRefresh;
 	
-	private void refreshViewer() {
-		final IScenarioViewerSynchronizerOutput data = collectObjects();
-		if (refreshIsQueued) return;
-		refreshIsQueued = true;
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				refreshIsQueued = false;
-				viewer.setInput(data);
+	private final Runnable refresh = new Runnable() {
+		@Override
+		public void run() {
+			synchronized (this) {
+				while (needsRefresh) {
+					final IScenarioViewerSynchronizerOutput data = collectObjects();
+					viewer.setInput(data);
+					needsRefresh = false;
+				}
 			}
-		});
+		}		
+	};
+
+	private void refreshViewer() {
+		needsRefresh = true;
+		Display.getDefault().asyncExec(refresh);
 	}
 	
 	private IScenarioViewerSynchronizerOutput collectObjects() {
