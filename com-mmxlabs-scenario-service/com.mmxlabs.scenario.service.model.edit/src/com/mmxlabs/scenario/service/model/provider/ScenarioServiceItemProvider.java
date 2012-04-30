@@ -54,6 +54,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 
 			addNamePropertyDescriptor(object);
 			addDescriptionPropertyDescriptor(object);
+			addServiceRefPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -80,6 +81,18 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioService_description_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_description_feature", "_UI_ScenarioService_type"),
 				ScenarioServicePackage.Literals.SCENARIO_SERVICE__DESCRIPTION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Service Ref feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addServiceRefPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioService_serviceRef_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_serviceRef_feature", "_UI_ScenarioService_type"),
+				ScenarioServicePackage.Literals.SCENARIO_SERVICE__SERVICE_REF, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -119,6 +132,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 		switch (notification.getFeatureID(ScenarioService.class)) {
 		case ScenarioServicePackage.SCENARIO_SERVICE__NAME:
 		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
+		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}

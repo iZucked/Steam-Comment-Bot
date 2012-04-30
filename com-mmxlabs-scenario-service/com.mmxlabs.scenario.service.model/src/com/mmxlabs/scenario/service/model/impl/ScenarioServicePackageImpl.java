@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -76,6 +77,13 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	private EDataType classEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType iScenarioServiceEDataType = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -259,6 +267,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getScenarioService_ServiceRef() {
+		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getScenarioInstance() {
 		return scenarioInstanceEClass;
 	}
@@ -412,6 +429,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EDataType getIScenarioService() {
+		return iScenarioServiceEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getObject() {
 		return objectEDataType;
 	}
@@ -460,6 +486,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		scenarioServiceEClass = createEClass(SCENARIO_SERVICE);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__NAME);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__DESCRIPTION);
+		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__SERVICE_REF);
 
 		scenarioInstanceEClass = createEClass(SCENARIO_INSTANCE);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__NAME);
@@ -481,6 +508,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 		// Create data types
 		classEDataType = createEDataType(CLASS);
+		iScenarioServiceEDataType = createEDataType(ISCENARIO_SERVICE);
 		objectEDataType = createEDataType(OBJECT);
 	}
 
@@ -542,6 +570,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioService_Description(), ecorePackage.getEString(), "description", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
 				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioService_ServiceRef(), this.getIScenarioService(), "serviceRef", null, 0, 1, ScenarioService.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scenarioInstanceEClass, ScenarioInstance.class, "ScenarioInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getScenarioInstance_Name(), ecorePackage.getEString(), "name", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
@@ -584,6 +614,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 		// Initialize data types
 		initEDataType(classEDataType, Class.class, "Class", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(iScenarioServiceEDataType, IScenarioService.class, "IScenarioService", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(objectEDataType, Object.class, "Object", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource

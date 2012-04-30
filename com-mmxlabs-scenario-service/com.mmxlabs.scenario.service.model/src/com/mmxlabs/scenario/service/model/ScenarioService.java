@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scenario.service.model;
 
+import com.mmxlabs.scenario.service.IScenarioService;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Scenario Service</b></em>'.
@@ -14,6 +16,7 @@ package com.mmxlabs.scenario.service.model;
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getServiceRef <em>Service Ref</em>}</li>
  * </ul>
  * </p>
  *
@@ -73,5 +76,31 @@ public interface ScenarioService extends Container {
 	 * @generated
 	 */
 	void setDescription(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Service Ref</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Service Ref</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Service Ref</em>' attribute.
+	 * @see #setServiceRef(IScenarioService)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService_ServiceRef()
+	 * @model dataType="com.mmxlabs.scenario.service.model.IScenarioService" transient="true"
+	 * @generated
+	 */
+	IScenarioService getServiceRef();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioService#getServiceRef <em>Service Ref</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Service Ref</em>' attribute.
+	 * @see #getServiceRef()
+	 * @generated
+	 */
+	void setServiceRef(IScenarioService value);
 
 } // ScenarioService

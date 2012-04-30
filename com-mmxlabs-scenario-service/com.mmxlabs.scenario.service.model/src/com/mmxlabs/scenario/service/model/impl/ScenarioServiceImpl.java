@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
@@ -22,6 +23,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getServiceRef <em>Service Ref</em>}</li>
  * </ul>
  * </p>
  *
@@ -67,6 +69,26 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * @ordered
 	 */
 	protected String description = DESCRIPTION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getServiceRef() <em>Service Ref</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getServiceRef()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final IScenarioService SERVICE_REF_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getServiceRef() <em>Service Ref</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getServiceRef()
+	 * @generated
+	 * @ordered
+	 */
+	protected IScenarioService serviceRef = SERVICE_REF_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -134,6 +156,27 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public IScenarioService getServiceRef() {
+		return serviceRef;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setServiceRef(IScenarioService newServiceRef) {
+		IScenarioService oldServiceRef = serviceRef;
+		serviceRef = newServiceRef;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF, oldServiceRef, serviceRef));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -141,6 +184,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return getName();
 		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
 			return getDescription();
+		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
+			return getServiceRef();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -158,6 +203,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return;
 		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
 			setDescription((String) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
+			setServiceRef((IScenarioService) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -177,6 +225,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
 			setDescription(DESCRIPTION_EDEFAULT);
 			return;
+		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
+			setServiceRef(SERVICE_REF_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -193,6 +244,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
 			return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
+			return SERVICE_REF_EDEFAULT == null ? serviceRef != null : !SERVICE_REF_EDEFAULT.equals(serviceRef);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -212,6 +265,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		result.append(name);
 		result.append(", description: ");
 		result.append(description);
+		result.append(", serviceRef: ");
+		result.append(serviceRef);
 		result.append(')');
 		return result.toString();
 	}

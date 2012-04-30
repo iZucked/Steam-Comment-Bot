@@ -252,13 +252,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_SERVICE__DESCRIPTION = CONTAINER_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Service Ref</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_SERVICE__SERVICE_REF = CONTAINER_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Service</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_SERVICE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 2;
+	int SCENARIO_SERVICE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
@@ -462,6 +471,16 @@ public interface ScenarioServicePackage extends EPackage {
 	int CLASS = 6;
 
 	/**
+	 * The meta object id for the '<em>IScenario Service</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.scenario.service.IScenarioService
+	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getIScenarioService()
+	 * @generated
+	 */
+	int ISCENARIO_SERVICE = 7;
+
+	/**
 	 * The meta object id for the '<em>Object</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -469,7 +488,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 7;
+	int OBJECT = 8;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioModel <em>Scenario Model</em>}'.
@@ -598,6 +617,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getScenarioService_Description();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioService#getServiceRef <em>Service Ref</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Service Ref</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioService#getServiceRef()
+	 * @see #getScenarioService()
+	 * @generated
+	 */
+	EAttribute getScenarioService_ServiceRef();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioInstance <em>Scenario Instance</em>}'.
@@ -785,6 +815,17 @@ public interface ScenarioServicePackage extends EPackage {
 	EDataType getClass_();
 
 	/**
+	 * Returns the meta object for data type '{@link com.mmxlabs.scenario.service.IScenarioService <em>IScenario Service</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>IScenario Service</em>'.
+	 * @see com.mmxlabs.scenario.service.IScenarioService
+	 * @model instanceClass="com.mmxlabs.scenario.service.IScenarioService" serializeable="false"
+	 * @generated
+	 */
+	EDataType getIScenarioService();
+
+	/**
 	 * Returns the meta object for data type '{@link java.lang.Object <em>Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -920,6 +961,14 @@ public interface ScenarioServicePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SCENARIO_SERVICE__DESCRIPTION = eINSTANCE.getScenarioService_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Service Ref</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_SERVICE__SERVICE_REF = eINSTANCE.getScenarioService_ServiceRef();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
@@ -1062,6 +1111,16 @@ public interface ScenarioServicePackage extends EPackage {
 		 * @generated
 		 */
 		EDataType CLASS = eINSTANCE.getClass_();
+
+		/**
+		 * The meta object literal for the '<em>IScenario Service</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.scenario.service.IScenarioService
+		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getIScenarioService()
+		 * @generated
+		 */
+		EDataType ISCENARIO_SERVICE = eINSTANCE.getIScenarioService();
 
 		/**
 		 * The meta object literal for the '<em>Object</em>' data type.
