@@ -9,22 +9,12 @@ import java.util.Iterator;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.URIConverter;
-import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
-import org.eclipse.emf.validation.marker.MarkerUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -33,7 +23,6 @@ import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListene
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -77,8 +66,6 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 				final Object obj = itr.next();
 				if (obj instanceof ScenarioInstance) {
 					return evaluateScenarioInstance(jobManager, (ScenarioInstance) obj);
-					
-					
 				}
 				
 			}
@@ -141,7 +128,6 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 				if (object instanceof MMXRootObject) {
 					final MMXRootObject root = (MMXRootObject) object;
 					final String uuid = instance.getUuid();
-					final boolean resourceWasSelected = jobManager.getSelectedResources().contains(uuid);
 					
 					IJobDescriptor job = jobManager.findJobForResource(uuid);
 					if (job == null) {
@@ -150,21 +136,23 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					}
 					
 					IJobControl control = jobManager.getControlForJob(job);
-
 					// If there is a job, but it is terminated, then we need to create a new one
 					if ((control != null) && ((control.getJobState() == EJobState.CANCELLED) || (control.getJobState() == EJobState.COMPLETED))) {
 						jobManager.removeJob(job);
-						
+						control = null;
 						job = new LNGSchedulerJobDescriptor(instance.getName(), root, optimising);
 					}
 					
-					if (!jobManager.getSelectedJobs().contains(job)) {
-						// Clean up when job is removed from manager
+					if (control == null) {
 						jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
 						control = jobManager.submitJob(job, uuid);
 					}
 					
-					final boolean jobWasSelected = jobManager.getSelectedJobs().contains(job);
+//					if (!jobManager.getSelectedJobs().contains(job)) {
+//						// Clean up when job is removed from manager
+//						jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
+//						control = jobManager.submitJob(job, uuid);
+//					}
 					
 					if (control.getJobState() == EJobState.CREATED) {
 						try {
@@ -180,8 +168,6 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					} else {
 						control.start();
 					}
-					jobManager.setJobSelection(job, jobWasSelected);
-					jobManager.setResourceSelection(uuid, resourceWasSelected);
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

@@ -39,197 +39,71 @@
                   </and>
                </iterate>
             </enabledWhen>
-            <!--
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                        <or>
-                     
-                     
-                     <instanceof
-                           value="scenario.Scenario">
-                     </instanceof>
-                     <adapt
-                           type="com.mmxlabs.rcp.navigator.RandomTreeNodeClass">
-
-                     </adapt>
-                     </or>
-                  </iterate>
-               </or>
-            </activeWhen>
-            -->
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StopOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.terminate">
             <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
             </enabledWhen>
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.PauseOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.pause">
             <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
             </enabledWhen>
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.SaveOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.save">
-            <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
+           <enabledWhen>
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
             </enabledWhen>
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.EvaluateOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.evaluate">
             <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
             </enabledWhen>
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.DeriveOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.derive">
-            <enabledWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
+           <enabledWhen>
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
             </enabledWhen>
-            <activeWhen>
-               <or>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.core.resources.extension"
-                              value="scn">
-                        </test>
-                     </and>
-                  </iterate>
-               </or>
-            </activeWhen>
          </handler>
       </extension>
 

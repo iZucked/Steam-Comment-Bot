@@ -133,6 +133,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 			scheduleModel.setDirty(false);
 			log.debug("Cleared dirty bit on " + scheduleModel);
+			super.setProgress(100);
 			return false;
 		} else {
 			return true;
