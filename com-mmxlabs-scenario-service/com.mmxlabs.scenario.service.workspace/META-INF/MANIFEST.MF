@@ -7,7 +7,6 @@ Bundle-Activator: com.mmxlabs.scenario.service.workspace.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- com.mmxlabs.scenario.service;bundle-version="1.0.0",
  com.mmxlabs.scenario.service.model;bundle-version="1.0.0",
  com.mmxlabs.model.service;bundle-version="1.0.0",
  org.eclipse.core.resources;bundle-version="3.7.0",
