@@ -33,3 +33,4 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.lng.analytics;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.scheduler.optimiser;version="1.0.0"
+Bundle-Activator: com.mmxlabs.shiplingo.platform.models.manifest.Activator
