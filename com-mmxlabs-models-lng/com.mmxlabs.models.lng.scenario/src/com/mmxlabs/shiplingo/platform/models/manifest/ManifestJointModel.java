@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edapt.migration.MigrationException;
 
@@ -96,7 +97,7 @@ public class ManifestJointModel extends JointModel {
 		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
 		modelClassKeys.put(OptimiserPackage.eINSTANCE.getOptimiserModel(), OPTIMISER_MODEL_KEY);
 		modelClassKeys.put(AnalyticsPackage.eINSTANCE.getAnalyticsModel(), ANALYTICS_MODEL_KEY);
-		
+
 		/*
 		 * There is no migration history for MMXCore, but this is not a problem; the joint model will ignore submodels which have no release history and leave them out of the upgrade process.
 		 */
@@ -143,12 +144,12 @@ public class ManifestJointModel extends JointModel {
 		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
 		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
 		rootObject.addSubModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
-		
+
 		final ManifestJointModel result = new ManifestJointModel(rootObject, target);
 		return result;
 	}
 
-	public static MMXRootObject createEmptyInstance() {
+	public static MMXRootObject createEmptyInstance(List<EObject> models) {
 		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 		rootObject.setVersion(releases.size() - 1);
 		// TODO sort out how to create blank models; should there be an extension for this?
@@ -161,9 +162,16 @@ public class ManifestJointModel extends JointModel {
 		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
 		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
 		rootObject.addSubModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
-		
+
+		if (models != null) {
+			models.add(rootObject);
+			for (EObject o : rootObject.getSubModels()) {
+				models.add(o);
+			}
+		}
+
 		initialiseTopLevelObjects(rootObject);
-		
+
 		return rootObject;
 	}
 

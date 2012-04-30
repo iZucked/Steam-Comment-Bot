@@ -93,7 +93,7 @@ public class RandomScenarioUtils {
 	}
 
 	public MMXRootObject createScenario() {
-		final MMXRootObject rootObject = ManifestJointModel.createEmptyInstance();
+		final MMXRootObject rootObject = ManifestJointModel.createEmptyInstance(null);
 
 		return rootObject;
 	}
