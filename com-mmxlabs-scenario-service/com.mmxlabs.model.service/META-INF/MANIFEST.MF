@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Service
 Bundle-SymbolicName: com.mmxlabs.model.service
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.mmxlabs.model.service.Activator
+Bundle-Activator: com.mmxlabs.model.service.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

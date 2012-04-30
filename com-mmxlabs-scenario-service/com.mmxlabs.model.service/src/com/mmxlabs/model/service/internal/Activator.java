@@ -1,4 +1,4 @@
-package com.mmxlabs.model.service;
+package com.mmxlabs.model.service.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
