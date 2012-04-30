@@ -31,29 +31,27 @@ import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 public class ModelService implements IModelService {
 	private static final Logger log = LoggerFactory.getLogger(ModelService.class);
 	/**
-	 * The cache of loaded instances
-	 * TODO add weak references.
+	 * The cache of loaded instances TODO add weak references.
 	 */
 	final Map<URI, IModelInstance> cache = new HashMap<URI, IModelInstance>();
 
 	private final MMXCoreResourceFactoryImpl resourceFactory = new MMXCoreResourceFactoryImpl();
 	final ResourceSet resourceSet = new ResourceSetImpl();
-	
+
 	public ModelService() {
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-		.put("*", resourceFactory);
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", resourceFactory);
 
 		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
 		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
 		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
 	}
-	
+
 	@Override
 	public IModelInstance getModel(final URI uri) throws IOException {
 		synchronized (cache) {
 			if (cache.containsKey(uri))
 				return cache.get(uri);
-			
+
 			final ModelInstance instance = new ModelInstance(resourceSet.createResource(uri));
 			cache.put(uri, instance);
 			return instance;
@@ -69,10 +67,10 @@ public class ModelService implements IModelService {
 	public void copyTo(URI from, URI to) throws IOException {
 		copyTo(getModel(from), to);
 	}
-	
+
 	@Override
 	public void delete(IModelInstance instance) throws IOException {
-		//TODO handle this.
+		// TODO handle this.
 	}
 
 	@Override
@@ -88,7 +86,8 @@ public class ModelService implements IModelService {
 	public IModelInstance store(final EObject instance, final URI uri) throws IOException {
 		synchronized (cache) {
 			// TODO warn here, or return what's already there, or what?
-			if (cache.containsKey(uri)) return cache.get(uri);
+			if (cache.containsKey(uri))
+				return cache.get(uri);
 			final Resource resource = resourceSet.createResource(uri);
 			resource.getContents().add(instance);
 			final IModelInstance result = new ModelInstance(resource);
@@ -101,12 +100,14 @@ public class ModelService implements IModelService {
 			log.warn("Given a null object to collect UUIDObjects from");
 			return;
 		}
-		if (object instanceof MMXObject) ((MMXObject) object).collectUUIDObjects(table);
+		if (object instanceof MMXObject)
+			((MMXObject) object).collectUUIDObjects(table);
 		else {
-			for (final EObject o : object.eContents()) collect(o, table);
+			for (final EObject o : object.eContents())
+				collect(o, table);
 		}
 	}
-	
+
 	@Override
 	public void resolve(List<EObject> parts) {
 		final HashMap<String, UUIDObject> table = new HashMap<String, UUIDObject>();
@@ -128,7 +129,7 @@ public class ModelService implements IModelService {
 			((MMXObject) part).resolveProxies(table);
 			((MMXObject) part).restoreProxies();
 		} else {
-			for (final EObject child :part.eContents())
+			for (final EObject child : part.eContents())
 				resolve(child, table);
 		}
 	}
