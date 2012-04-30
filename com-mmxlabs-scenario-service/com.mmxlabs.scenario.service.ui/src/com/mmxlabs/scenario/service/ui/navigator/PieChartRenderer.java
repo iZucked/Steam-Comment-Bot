@@ -21,13 +21,12 @@ import com.mmxlabs.scenario.service.ui.internal.Activator;
  * Draws pie chart icons for the navigator progress indicator.
  * 
  * @author hinton
- *
+ * 
  */
 public class PieChartRenderer {
-	
-	public static Image renderPie(final Color pieColor, final double p) {
+	public static Image renderPie(final Color minorColor, final Color majorColor, final double p) {
 		final int angle = (int) - (p * 360);
-		final String imageName = "PIE-" + pieColor.getRGB() + "-" +angle;
+		final String imageName = "PIE-" + minorColor.getRGB() + "-" + majorColor.getRGB()+ "-" +angle;
 		final Image cache = Activator.getDefault().getImageRegistry().get(imageName);
 		if (cache != null) return cache;
 		final Image image = new Image(Display.getDefault(), 16, 16);
@@ -36,34 +35,44 @@ public class PieChartRenderer {
 		gc.setAdvanced(true);
 		gc.setAntialias(SWT.ON);
 		
-		final Color maskColor = new Color(Display.getDefault(), 
-				new RGB(Math.max(0, pieColor.getRed() - 10),Math.max(pieColor.getGreen() - 10, 0),
-						Math.max(pieColor.getBlue() - 10, 0)));
+		final Color maskColor = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
 		
 		gc.setBackground(maskColor);
 		gc.setForeground(maskColor);
 		
 		gc.fillRectangle(0, 0, 16, 16);
 		
-		gc.setBackground(pieColor);
 		gc.setAlpha(255);
 		
-		gc.fillArc(1, 1, 15, 15, -90, angle);
+		gc.setBackground(majorColor);
+		gc.fillArc(1, 1, 15, 15, 0, 360);
 		
+		gc.setBackground(minorColor);
+		gc.fillArc(1, 1, 15, 15, 90, angle);
+		
+		// clear middle of donut
 		gc.setBackground(maskColor);
-		
-		gc.fillArc(5, 5, 7, 7, -90, angle);
+		gc.fillArc(5, 5, 7, 7, 0, 360);
 		
 		final ImageData data = image.getImageData();
 		data.alphaData = new byte[16*16];
-		Arrays.fill(data.alphaData, (byte) 255);
+		Arrays.fill(data.alphaData, (byte) 0);
 
 		final PaletteData palette = data.palette;
-		final double dmax = colourDistance(maskColor.getRGB(), pieColor.getRGB());
+		final double dmax = Math.max(colourDistance(maskColor.getRGB(), minorColor.getRGB()),
+				colourDistance(maskColor.getRGB(), majorColor.getRGB()));
+		
 		for (int x = 0; x<data.width; x++) {
 			for (int y = 0; y<data.height; y++) {
-				data.setAlpha(x, y, 
-						(int) (255 * colourDistance(palette.getRGB(data.getPixel(x, y)), maskColor.getRGB()) / dmax));
+				final RGB rgb = palette.getRGB(data.getPixel(x, y));
+				if (rgb.equals(maskColor.getRGB())) {
+					data.setAlpha(x, y, 0);
+				} else {
+					double minorDistance = colourDistance(rgb, minorColor.getRGB());
+					double majorDistance = colourDistance(rgb, majorColor.getRGB());
+
+					data.setAlpha(x, y, (int) (255 * (1 - (Math.min(minorDistance, majorDistance) / dmax))));
+				}
 			}
 		}
 		
@@ -71,7 +80,7 @@ public class PieChartRenderer {
 		Activator.getDefault().getImageRegistry().put(imageName, result);
 		return result;
 	}
-	
+
 	private static final double colourDistance(final RGB one, final RGB two) {
 		final int dr = one.red - two.red;
 		final int dg = one.green - two.green;
