@@ -57,6 +57,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 							monitor.worked(p1 - p0);
 						}
 						if (more == false) {
+							setProgress(100);
 							setJobState(EJobState.COMPLETED);
 							return Status.OK_STATUS;
 						}

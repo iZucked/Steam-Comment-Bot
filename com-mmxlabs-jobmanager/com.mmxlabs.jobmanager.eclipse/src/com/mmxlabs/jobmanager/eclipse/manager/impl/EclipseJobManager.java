@@ -40,10 +40,6 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 	private final Map<IJobDescriptor, Object> jobResourceMap = new HashMap<IJobDescriptor, Object>();
 
-	private final List<IJobDescriptor> selectedJobs = new LinkedList<IJobDescriptor>();
-
-	private final List<Object> selectedResources = new LinkedList<Object>();
-
 	private final Set<IEclipseJobManagerListener> jobManagerListeners = new HashSet<IEclipseJobManagerListener>();
 
 	public EclipseJobManager() {
@@ -107,9 +103,6 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	public void removeJob(final IJobDescriptor job) {
 		if (job == null) {
 			return;
-		}
-		if (selectedJobs.contains(job)) {
-			deselectJob(job);
 		}
 
 		jobs.remove(job);
@@ -202,84 +195,6 @@ public final class EclipseJobManager implements IEclipseJobManager {
 			l.jobDeselected(this, job, jobControl, resource);
 		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.jobcontroller.core.IJobManager#getSelectedJobs()
-	 */
-	@Override
-	public List<IJobDescriptor> getSelectedJobs() {
-		return selectedJobs;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.jobcontroller.core.IJobManager#toggleJobSelection(com.mmxlabs .jobcontroller.core.IManagedJob)
-	 */
-	@Override
-	public void toggleJobSelection(final IJobDescriptor job) {
-
-		if (selectedJobs.contains(job)) {
-			deselectJob(job);
-		} else {
-			selectJob(job);
-		}
-	}
-
-	/**
-	 * Add job to the list of selected jobs and fire an event.
-	 * 
-	 * @param job
-	 */
-	private void selectJob(final IJobDescriptor job) {
-		selectedJobs.add(job);
-		final Object resource = jobResourceMap.get(job);
-		final IJobControl control = jobToControls.get(job);
-		selectedResources.add(resource);
-		fireJobSelected(job, control, resource);
-	}
-
-	/**
-	 * Remove job from the list of selected jobs and fire an event.
-	 * 
-	 * @param job
-	 */
-	private void deselectJob(final IJobDescriptor job) {
-		selectedJobs.remove(job);
-		final Object resource = jobResourceMap.get(job);
-		final IJobControl control = jobToControls.get(job);
-		selectedResources.remove(resource);
-		fireJobDeselected(job, control, resource);
-	}
-
-	/**
-	 * Remove job from the list of selected jobs and fire an event.
-	 * 
-	 * @param job
-	 */
-	private void deselectResource(final Object resource) {
-		selectedResources.remove(resource);
-		final IJobDescriptor job = findJobForResource(resource);
-		selectedJobs.remove(job);
-		final IJobControl control = jobToControls.get(job);
-		fireJobDeselected(job, control, resource);
-	}
-
-	/**
-	 * Add job from the list of selected jobs and fire an event.
-	 * 
-	 * @param resource
-	 */
-	private void selectResource(final Object resource) {
-		selectedResources.add(resource);
-		final IJobDescriptor job = findJobForResource(resource);
-		selectedJobs.add(job);
-		final IJobControl control = jobToControls.get(job);
-		fireJobSelected(job, control, resource);
-	}
-
 	@Override
 	public IJobDescriptor findJobForResource(final Object resource) {
 		for (final Map.Entry<IJobDescriptor, Object> entry : jobResourceMap.entrySet()) {
@@ -295,48 +210,6 @@ public final class EclipseJobManager implements IEclipseJobManager {
 		return jobResourceMap.get(job);
 	}
 
-	@Override
-	public void toggleResourceSelection(final Object resource) {
-		if (selectedResources.contains(resource)) {
-			deselectResource(resource);
-		} else {
-			selectResource(resource);
-		}
-	}
-
-	@Override
-	public void setJobSelection(final IJobDescriptor job, final boolean selected) {
-
-		if (selectedJobs.contains(job)) {
-			if (!selected) {
-				deselectJob(job);
-			}
-		} else {
-			if (selected) {
-				selectJob(job);
-			}
-		}
-	}
-
-	@Override
-	public void setResourceSelection(final Object resource, final boolean selected) {
-
-		if (selectedResources.contains(resource)) {
-			if (!selected) {
-				deselectResource(resource);
-			}
-		} else {
-			if (selected) {
-				selectResource(resource);
-			}
-		}
-
-	}
-
-	@Override
-	public List<Object> getSelectedResources() {
-		return selectedResources;
-	}
 
 	protected IJobManager findJobManager(final IJobDescriptor job) {
 
@@ -369,8 +242,6 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	public void dispose() {
 		jobManagers.clear();
 		jobManagerListeners.clear();
-		selectedJobs.clear();
-		selectedResources.clear();
 
 		jobResourceMap.clear();
 		jobs.clear();

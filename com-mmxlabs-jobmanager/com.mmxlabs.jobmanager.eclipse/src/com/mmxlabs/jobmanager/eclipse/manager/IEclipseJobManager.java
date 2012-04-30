@@ -28,18 +28,6 @@ public interface IEclipseJobManager {
 
 	void removeEclipseJobManagerListener(IEclipseJobManagerListener jobManagerListener);
 
-	void toggleJobSelection(IJobDescriptor job);
-
-	void toggleResourceSelection(Object resource);
-
-	void setJobSelection(IJobDescriptor job, boolean selected);
-
-	void setResourceSelection(Object resource, boolean selected);
-
-	List<IJobDescriptor> getSelectedJobs();
-
-	List<Object> getSelectedResources();
-
 	IJobDescriptor findJobForResource(Object resource);
 
 	Object findResourceForJob(IJobDescriptor job);
