@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Display;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -72,24 +73,13 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 					final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
 					final IJobControl control = jobManager.getControlForJob(job);
 					if (control != null) {
-						Color color = null;
-						switch (control.getJobState()) {
-						case RUNNING:
-						case INITIALISED:
-						case INITIALISING:
-							color = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-							break;
-						case COMPLETED:
-							color = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
-							break;
-						case PAUSED:
-						case PAUSING:
-							color = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
-							break;
-						}
-						if (color != null) {
-							return PieChartRenderer.renderPie(color, control.getProgress() / 100.0);
-						}
+						final Color minorColor = 
+								(control.getJobState() == EJobState.PAUSED || control.getJobState() == EJobState.PAUSING) ?
+										Display.getDefault().getSystemColor(SWT.COLOR_YELLOW) :
+								new Color(Display.getDefault(), 100, 230, 120);
+						final Color majorColor = new Color(Display.getDefault(), 240, 80, 85);
+						
+						return PieChartRenderer.renderPie(minorColor, majorColor, control.getProgress() / 100.0);
 					}
 				}
 			}
