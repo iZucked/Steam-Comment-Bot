@@ -394,8 +394,9 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @generated NOT
 	 */
 	public String getName() {
-		if (isSetVessel()) return vessel.getName();
-		else return vesselClass.getName();
+		if (isSetVessel()) return getVessel().getName();
+		else if (isSetVesselClass()) return getVesselClass().getName();
+		else return "<no vessel>";
 	}
 
 	/**
