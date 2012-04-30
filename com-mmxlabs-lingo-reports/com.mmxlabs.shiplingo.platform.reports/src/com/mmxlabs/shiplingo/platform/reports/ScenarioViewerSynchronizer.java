@@ -105,11 +105,16 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		refreshViewer();
 	}
 
+	private boolean refreshIsQueued = false;
+	
 	private void refreshViewer() {
 		final IScenarioViewerSynchronizerOutput data = collectObjects();
+		if (refreshIsQueued) return;
+		refreshIsQueued = true;
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
+				refreshIsQueued = false;
 				viewer.setInput(data);
 			}
 		});
@@ -154,10 +159,6 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			}
 		};
 	}
-
-	
-
-	
 	
 	/**
 	 * Creates a {@link IJobManagerListener} to call {@link Viewer#setInput(Object)} when the currently selected {@link IManagedJob}s state or progress changes for jobs registered with the
