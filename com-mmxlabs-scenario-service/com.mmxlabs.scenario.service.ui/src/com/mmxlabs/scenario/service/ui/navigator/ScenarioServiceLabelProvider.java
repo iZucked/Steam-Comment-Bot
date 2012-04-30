@@ -77,10 +77,10 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 						case RUNNING:
 						case INITIALISED:
 						case INITIALISING:
-							color = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+							color = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
 							break;
 						case COMPLETED:
-							color = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
+							color = Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN);
 							break;
 						case PAUSED:
 						case PAUSING:

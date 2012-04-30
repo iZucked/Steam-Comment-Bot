@@ -52,7 +52,7 @@ public class PieChartRenderer {
 		
 		gc.setBackground(maskColor);
 		
-		gc.fillArc(4, 4, 9, 9, -90, angle);
+		gc.fillArc(5, 5, 7, 7, -90, angle);
 		
 		final ImageData data = image.getImageData();
 		data.alphaData = new byte[16*16];
