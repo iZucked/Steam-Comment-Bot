@@ -559,6 +559,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		initEAttribute(getContainer_Archived(), ecorePackage.getEBoolean(), "archived", null, 0, 1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		addEOperation(containerEClass, this.getIScenarioService(), "getScenarioService", 1, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(folderEClass, Folder.class, "Folder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFolder_Name(), ecorePackage.getEString(), "name", null, 0, 1, Folder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);

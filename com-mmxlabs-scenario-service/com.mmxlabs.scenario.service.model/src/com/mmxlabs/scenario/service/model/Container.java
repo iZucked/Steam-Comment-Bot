@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model;
 
+import com.mmxlabs.scenario.service.IScenarioService;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -98,5 +99,14 @@ public interface Container extends EObject {
 	 * @generated
 	 */
 	void setArchived(boolean value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.scenario.service.model.IScenarioService" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='EObject up = this;\nwhile (up != null && !(up instanceof ScenarioService)) {\n\tup = up.eContainer();\n}\n\nif (up instanceof ScenarioService) {\n\treturn ((ScenarioService) up).getServiceRef();\n}\n\nreturn null;'"
+	 * @generated
+	 */
+	IScenarioService getScenarioService();
 
 } // Container
