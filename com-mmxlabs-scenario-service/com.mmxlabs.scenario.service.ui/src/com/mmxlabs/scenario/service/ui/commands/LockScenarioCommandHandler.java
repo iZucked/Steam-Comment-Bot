@@ -50,21 +50,4 @@ public class LockScenarioCommandHandler extends AbstractHandler {
 
 		return null;
 	}
-
-	public void openEditor(IEditorInput editorInput) throws PartInitException {
-
-		IEditorPart editorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findEditor(editorInput);
-		if (editorPart != null) {
-			// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(editorInput, null, true);
-		} else {
-			// String contentTypeString = editorInput.getContentType();
-			IContentType contentType = null;// contentTypeString == null ? null : Platform.getContentTypeManager().getContentType(contentTypeString);
-
-			IEditorDescriptor descriptor = registry.getDefaultEditor(editorInput.getName(), contentType);
-
-			if (descriptor != null) {
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(editorInput, descriptor.getId());
-			}
-		}
-	}
 }

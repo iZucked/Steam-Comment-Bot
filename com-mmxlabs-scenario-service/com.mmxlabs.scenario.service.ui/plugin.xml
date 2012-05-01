@@ -121,6 +121,50 @@
             </iterate>
          </enabledWhen>
       </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.CopyScenarioCommandHandler"
+            commandId="org.eclipse.ui.edit.copy">
+         <activeWhen>
+            <iterate>
+               <and>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </and>
+            </iterate>
+         </activeWhen>
+         <enabledWhen>
+            <iterate>
+               <and>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </and>
+            </iterate>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.PasteScenarioCommandHandler"
+            commandId="org.eclipse.ui.edit.paste">
+         <activeWhen>
+            <iterate>
+               <and>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.Container">
+                  </instanceof>
+               </and>
+            </iterate>
+         </activeWhen>
+         <enabledWhen>
+            <iterate>
+               <and>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.Container">
+                  </instanceof>
+               </and>
+            </iterate>
+         </enabledWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
