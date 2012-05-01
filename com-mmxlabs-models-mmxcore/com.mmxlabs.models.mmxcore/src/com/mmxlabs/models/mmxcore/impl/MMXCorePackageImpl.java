@@ -582,7 +582,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 		initEClass(mmxProxyEClass, MMXProxy.class, "MMXProxy", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMMXProxy_ReferentID(), ecorePackage.getEString(), "referentID", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMMXProxy_ResolvedReferent(), this.getUUIDObject(), null, "resolvedReferent", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMMXProxy_ResolvedReferent(), this.getUUIDObject(), null, "resolvedReferent", null, 1, 1, MMXProxy.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMMXProxy_Reference(), ecorePackage.getEReference(), null, "reference", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMMXProxy_ReferentOwner(), ecorePackage.getEString(), "referentOwner", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMMXProxy_Index(), ecorePackage.getEInt(), "index", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

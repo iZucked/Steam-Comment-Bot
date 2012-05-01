@@ -66,7 +66,7 @@ public interface MMXProxy extends EObject {
 	 * @return the value of the '<em>Resolved Referent</em>' reference.
 	 * @see #setResolvedReferent(UUIDObject)
 	 * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getMMXProxy_ResolvedReferent()
-	 * @model required="true"
+	 * @model required="true" transient="true"
 	 * @generated
 	 */
 	UUIDObject getResolvedReferent();
