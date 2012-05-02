@@ -70,6 +70,10 @@
             id="com.mmxlabs.scenario.service.ui.lock"
             name="Lock/Unlock">
       </command>
+      <command
+            id="com.mmxlabs.scenario.service.ui.newfolder"
+            name="New Folder">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -165,6 +169,43 @@
             </iterate>
          </enabledWhen>
       </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.NewFolderCommandHandler"
+            commandId="com.mmxlabs.scenario.service.ui.newfolder">
+         <activeWhen>
+            <or>
+               <count
+                     value="0">
+               </count>
+               <and>
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.Container">
+                     </instanceof>
+                  </iterate>
+               </and>
+            </or>
+         </activeWhen>
+         <enabledWhen>
+            <or>
+               <count
+                     value="0">
+               </count>
+               <and>
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.Container">
+                     </instanceof>
+                  </iterate>
+               </and>
+            </or></enabledWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -183,6 +224,12 @@
                label="Delete"
                style="push"
                tooltip="Delete Scenario">
+         </command>
+         <command
+               commandId="com.mmxlabs.scenario.service.ui.newfolder"
+               label="New Folder"
+               style="push"
+               tooltip="A">
          </command>
       </menuContribution>
    </extension>
