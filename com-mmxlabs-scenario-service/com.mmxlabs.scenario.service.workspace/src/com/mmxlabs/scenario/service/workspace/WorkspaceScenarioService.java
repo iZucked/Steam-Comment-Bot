@@ -119,7 +119,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 					}
 				} else if (resource.getType() == IResource.FOLDER || resource.getType() == IResource.PROJECT) {
 
-					final Container container = mapWorkspaceToModel.get(resource.getParent());
+					final Container container = resource.getType() == IResource.PROJECT ? getServiceModel() : mapWorkspaceToModel.get(resource.getParent());
 
 					createFolder(container, resource);
 				}
