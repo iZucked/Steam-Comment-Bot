@@ -11,24 +11,18 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class DeleteScenarioCommandHandler extends AbstractHandler {
-
-	private final IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
-
 	/**
 	 * the command has been executed, so extract extract the needed information from the application context.
 	 */
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
 		final ISelection selection = activePage.getSelection();

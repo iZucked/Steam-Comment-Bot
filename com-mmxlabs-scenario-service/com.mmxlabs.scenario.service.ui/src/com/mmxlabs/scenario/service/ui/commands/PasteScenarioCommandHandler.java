@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.ui.commands;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
@@ -66,7 +67,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 			for (final String filePath : files) {
 				final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath);
 				if (instance != null) {
-					service.duplicate(instance, container);
+					service.duplicate(instance, container).setName(new File(filePath).getName());
 				}
 			}
 		}
@@ -111,7 +112,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 						// duplicate insert into selected container
 
 						final IScenarioService targetService = container.getScenarioService();
-						targetService.duplicate(instance, container);
+						targetService.duplicate(instance, container).setName("Copy of " + instance.getName());
 						return true;
 					}
 				}
