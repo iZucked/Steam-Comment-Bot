@@ -7,6 +7,8 @@ package com.mmxlabs.scenario.service.ui.navigator;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 
+import com.mmxlabs.scenario.service.model.ScenarioService;
+
 public class ScenarioServiceContentProvider extends AdapterFactoryContentProvider {
 
 	public ScenarioServiceContentProvider() {
@@ -18,7 +20,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		final Object[] elements = super.getElements(object);
 
 		// Skip root node if there is only one item
-		if (elements.length == 1 && super.getParent(object) == null) {
+		if (elements.length == 1 && object instanceof ScenarioService) {
 			return getChildren(elements[0]);
 		}
 		return elements;
