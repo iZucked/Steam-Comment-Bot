@@ -50,7 +50,7 @@
       <editor
             class="com.mmxlabs.models.ui.editorpart.JointModelEditorPart"
             default="true"
-            extensions="scn"
+            extensions="scn,sc2"
             id="com.mmxlabs.models.lng.demo.scneditor"
             name="SCN Editor">
          <contentTypeBinding

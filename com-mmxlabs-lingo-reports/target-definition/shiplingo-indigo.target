@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="MMXLabs Target" sequenceNumber="29">
+<target name="MMXLabs Target" sequenceNumber="33">
 <locations>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.edapt.recorder.feature.feature.group" version="0.3.0.201111051053"/>
@@ -41,11 +41,11 @@
 <repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="1.0.0.201204251640"/>
+<unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="1.0.0.201205011846"/>
 <repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="1.0.0.201204251643"/>
+<unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="1.0.0.201204302233"/>
 <repository location="http://download.eclipse.org/technology/nebula/incubation/snapshot"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -109,12 +109,12 @@
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="1.0.1.201204261352"/>
-<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="1.0.1.201204261352"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="1.0.1.201204261349"/>
-<unit id="com.mmxlabs.models.mmxcore.sdk.feature.source.feature.group" version="1.0.1.201204261349"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="1.0.1.201204261349"/>
-<unit id="com.mmxlabs.models.mmxcore.sdk.feature.feature.group" version="1.0.1.201204261349"/>
+<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="1.0.1.201205011356"/>
+<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="1.0.1.201205011356"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="1.0.1.201205011353"/>
+<unit id="com.mmxlabs.models.mmxcore.sdk.feature.source.feature.group" version="1.0.1.201205011353"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="1.0.1.201205011353"/>
+<unit id="com.mmxlabs.models.mmxcore.sdk.feature.feature.group" version="1.0.1.201205011353"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
 </location>
 </locations>
