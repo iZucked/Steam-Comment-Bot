@@ -11,11 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -23,6 +26,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
@@ -68,7 +72,39 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 
-		storeURI = URI.createFileURI(workspaceLocation + "/" + modelURIString);
+		storeURI = URI.createFileURI(workspaceLocation + modelURIString);
+		
+		IResource resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(storeURI.toFileString()));
+		if (resource == null) {
+			// get first part of it and make project
+			final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(modelURIString.split("/")[1]);
+			try {
+				project.create(null);
+				resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(storeURI.toFileString()));
+			} catch (CoreException e) {
+				log.error("Exception project folder for store: ", e);
+			}
+		}
+		System.err.println(resource);
+		if (resource != null && resource.getParent().exists() == false) {
+			// create folder for resource somehow
+			try {
+				createFolder(resource.getParent());
+			} catch (CoreException e) {
+				log.error("Exception creating folder for store: ", e);
+			}
+		}
+	}
+
+	private void createFolder(IResource resource) throws CoreException {
+		if (resource.exists()) return;
+		createFolder(resource.getParent()); // ensure parent exists
+		//create this resource
+		if (resource instanceof IProject) {
+			((IProject) resource).create(null);
+		} else if (resource instanceof IFolder) {
+			((IFolder)resource).create(true, true, null);
+		}
 	}
 
 	public void stop(final ComponentContext context) {
@@ -77,8 +113,11 @@ public class FileScenarioService extends AbstractScenarioService {
 
 	public void save() {
 		try {
-			resource.save(options);
-		} catch (final IOException e) {
+			synchronized (resource) {				
+				resource.save(options);
+				log.debug("Saved " + resource.getURI());
+			}
+		} catch (final Throwable e) {
 			log.error(e.getMessage(), e);
 		}
 	}
@@ -109,6 +148,8 @@ public class FileScenarioService extends AbstractScenarioService {
 
 	@Override
 	public ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) {
+		log.debug("Inserting scenario into " + container);
+		
 		final String uuid = UUID.randomUUID().toString();
 		final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
@@ -122,8 +163,9 @@ public class FileScenarioService extends AbstractScenarioService {
 		
 		int index = 0;
 		for (final EObject model : models) {
-			URI rel = URI.createURI("/" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi");
+			URI rel = URI.createURI("../" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi");
 			rel = rel.resolve(storeURI);
+			log.debug("Storing submodel into " + storeURI);
 			try {
 				final IModelInstance instance = modelService.store(model, rel);
 				instance.save();
@@ -138,6 +180,20 @@ public class FileScenarioService extends AbstractScenarioService {
 		return newInstance;
 	}
 
+	final EContentAdapter saveAdapter = new EContentAdapter() {
+
+		@Override
+		public void notifyChanged(Notification notification) {
+			super.notifyChanged(notification);
+			if (notification.isTouch() == false) {
+				if (notification.getFeature() instanceof EStructuralFeature && ((EStructuralFeature)notification.getFeature()).isTransient())
+					return;
+				save();
+			}
+		}
+		
+	};
+	
 	@Override
 	protected ScenarioService initServiceModel() {
 		resource = resourceSet.createResource(storeURI);
@@ -149,14 +205,11 @@ public class FileScenarioService extends AbstractScenarioService {
 		}
 		
 		final ScenarioService result = (ScenarioService) resource.getContents().get(0);
-		resource.eAdapters().add(new AdapterImpl() {
-			@Override
-			public void notifyChanged(final Notification notification) {
-				save();
-			}
-		});
 		
 		result.setDescription("File scenario service with store " + storeURI);
+	
+		result.eAdapters().add(saveAdapter);
+		
 		return result;
 	}
 }
