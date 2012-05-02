@@ -35,7 +35,6 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 	@Override
 	public IStatus validateDrop(final Object target, final int operation, final TransferData transferType) {
-
 		// Only support moving around currently.
 		// TODO: Workspace service needs to handle this properly!
 		if (operation != DND.DROP_MOVE) {

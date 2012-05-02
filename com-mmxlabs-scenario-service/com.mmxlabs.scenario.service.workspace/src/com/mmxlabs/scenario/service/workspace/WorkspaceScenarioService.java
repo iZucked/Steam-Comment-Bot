@@ -366,7 +366,6 @@ public class WorkspaceScenarioService implements IScenarioService {
 				return;
 			}
 		}
-		log.warn("Could not find a resource to delete...");
 	}
 
 	@Override
@@ -520,13 +519,5 @@ public class WorkspaceScenarioService implements IScenarioService {
 				modelInstance.save();
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scenario.service.IScenarioService#getIdentifier()
-	 */
-	@Override
-	public String getIdentifier() {
-		return "platform-workspace";
 	}
 }

@@ -24,9 +24,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
-import com.mmxlabs.scenario.service.ui.internal.ScenarioStorageUtil;
 
 /**
  * @author hinton

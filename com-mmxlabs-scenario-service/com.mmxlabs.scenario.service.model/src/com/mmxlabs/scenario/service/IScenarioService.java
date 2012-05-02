@@ -90,11 +90,4 @@ public interface IScenarioService {
 	 * @throws IOException
 	 */
 	void save(ScenarioInstance instance) throws IOException;
-
-	/**
-	 * @return
-	 */
-	String getIdentifier();
-	
-	IModelService getModelService();
 }
