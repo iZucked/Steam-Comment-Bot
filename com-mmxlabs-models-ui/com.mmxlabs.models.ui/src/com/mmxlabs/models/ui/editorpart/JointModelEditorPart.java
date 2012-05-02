@@ -215,7 +215,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		if (input instanceof IScenarioServiceEditorInput) {
 			IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
 			final ScenarioInstance instance = ssInput.getScenarioInstance();
-			scenarioService = (IScenarioService) instance.getAdapters().get(IScenarioService.class);
+			scenarioService = instance.getScenarioService();
 
 			EObject ro = instance.getInstance();
 			if (scenarioService == null) {
