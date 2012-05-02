@@ -121,7 +121,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 //			return null;
 //		} else {
 		
-		final IScenarioService service = (IScenarioService) instance.getAdapters().get(IScenarioService.class);
+		final IScenarioService service = instance.getScenarioService();
 		if (service != null) {
 			try {
 				final EObject object = service.load(instance);
