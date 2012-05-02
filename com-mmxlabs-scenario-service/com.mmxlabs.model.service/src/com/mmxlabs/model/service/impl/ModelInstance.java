@@ -65,7 +65,7 @@ public class ModelInstance implements IModelInstance {
 
 	@Override
 	public void delete() throws IOException {
-		throw new UnsupportedOperationException("Not yet implemented");
+		resource.delete(null);
 	}
 
 	@Override
