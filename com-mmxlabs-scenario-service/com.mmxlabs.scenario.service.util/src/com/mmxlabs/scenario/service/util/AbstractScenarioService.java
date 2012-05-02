@@ -7,6 +7,7 @@ package com.mmxlabs.scenario.service.util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -111,12 +112,15 @@ public abstract class AbstractScenarioService implements IScenarioService {
 	@Override
 	public EObject load(final ScenarioInstance instance) throws IOException {
 		if (instance.getInstance() != null) {
+			log.debug("Instance " + instance.getUuid() + " already loaded");
 			return instance.getInstance();
 		}
+		log.debug("Instance " + instance.getUuid() + " needs loading");
 		final List<EObject> parts = new ArrayList<EObject>();
 		final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 
 		for (final String uuid : instance.getDependencyUUIDs()) {
+			log.debug("Loading dependency " + uuid);
 			final ScenarioInstance dep = getScenarioInstance(uuid);
 			if (dep != null) {
 				load(dep);
@@ -151,6 +155,9 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		instance.setInstance(implementation);
 
 		final EditingDomain domain = initEditingDomain(implementation, instance);
+		
+		instance.setAdapters(new HashMap<Class<?>, Object>());
+		
 		instance.getAdapters().put(EditingDomain.class, domain);
 		instance.getAdapters().put(BasicCommandStack.class, (BasicCommandStack) domain.getCommandStack());
 		
@@ -199,14 +206,15 @@ public abstract class AbstractScenarioService implements IScenarioService {
 	
 	@Override
 	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) {
+		log.debug("Duplicating " + original.getUuid() + " into " + destination);
 		final List<EObject> originalSubModels = new ArrayList<EObject>();
 		for (final String subModelURI : original.getSubModelURIs()) {
-
+			log.debug("Loading submodel "+subModelURI);
 			try {
 				final IModelInstance instance = modelService.getModel(URI.createURI(subModelURI));
 				originalSubModels.add(instance.getModel());
 			} catch (IOException e1) {
-
+				log.error("IO Exception loading model from " + subModelURI, e1);
 			}
 		}
 
