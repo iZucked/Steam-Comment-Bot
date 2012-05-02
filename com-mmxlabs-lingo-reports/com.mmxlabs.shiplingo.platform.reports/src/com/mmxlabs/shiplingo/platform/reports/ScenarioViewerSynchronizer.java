@@ -67,7 +67,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	}
 
 	private ScheduleModel getScheduleModel(ScenarioInstance instance) {
-		final IScenarioService scenarioService = (IScenarioService) instance.getAdapters().get(IScenarioService.class);
+		final IScenarioService scenarioService = instance.getScenarioService();
 
 		EObject object = null;
 		try {
