@@ -96,7 +96,9 @@ public class WorkspaceScenarioService implements IScenarioService {
 				if (container != null) {
 
 					// Remove node from parent.
-					((Container) container.eContainer()).getElements().remove(container);
+					if (container.getParent() != null) {
+						container.getParent().getElements().remove(container);
+					}
 
 					// Remove mapping
 					mapWorkspaceToModel.remove(resource);
