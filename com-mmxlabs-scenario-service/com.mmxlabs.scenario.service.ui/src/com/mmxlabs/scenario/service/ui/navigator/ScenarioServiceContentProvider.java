@@ -49,7 +49,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		// We need to record something so the notification can force a full refresh of the viewer.
 
 		// // Skip root node if there is only one item
-		if (elements.length == 1) {
+		if (elements.length == 1 && super.getParent(object) == null) {
 			return getChildren(elements[0]);
 		}
 

@@ -30,7 +30,7 @@
 		<module>com.mmxlabs.model.service</module>
 		
 		<module>com.mmxlabs.scenario.service.ui</module>
-
+		<module>com.mmxlabs.scenario.service.util</module>
 		<module>com.mmxlabs.scenario.service.model</module>
 		<module>com.mmxlabs.scenario.service.model.edit</module>
 

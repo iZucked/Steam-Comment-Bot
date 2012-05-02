@@ -4,25 +4,24 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
-import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -162,6 +161,24 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 		archived = newArchived;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.CONTAINER__ARCHIVED, oldArchived, archived));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public IScenarioService getScenarioService() {
+		EObject up = this;
+		while (up != null && !(up instanceof ScenarioService)) {
+			up = up.eContainer();
+		}
+
+		if (up instanceof ScenarioService) {
+			return ((ScenarioService) up).getServiceRef();
+		}
+
+		return null;
 	}
 
 	/**

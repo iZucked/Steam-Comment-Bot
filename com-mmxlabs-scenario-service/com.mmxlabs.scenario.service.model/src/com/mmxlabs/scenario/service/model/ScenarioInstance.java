@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model;
 
+import com.mmxlabs.scenario.service.IScenarioService;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;

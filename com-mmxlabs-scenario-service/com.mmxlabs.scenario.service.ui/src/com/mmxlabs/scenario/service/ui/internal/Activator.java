@@ -8,6 +8,7 @@ import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -33,6 +34,7 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	private Map<String, WeakReference<IScenarioService>> services = new HashMap<String, WeakReference<IScenarioService>>();
+	private Map<IScenarioService, String> serviceComponentIDs = new WeakHashMap<IScenarioService, String>();
 
 	private ServiceListener serviceListener;
 
@@ -70,8 +72,10 @@ public class Activator extends AbstractUIPlugin {
 
 				if (event.getType() == ServiceEvent.REGISTERED) {
 					services.put(key, new WeakReference<IScenarioService>(service));
+					serviceComponentIDs.put(service, key);
 				} else if (event.getType() == ServiceEvent.UNREGISTERING) {
 					services.remove(key);
+					serviceComponentIDs.remove(service);
 				}
 			}
 		};
@@ -126,5 +130,19 @@ public class Activator extends AbstractUIPlugin {
 	
 	public IEclipseJobManager getEclipseJobManager() {
 		return jobManagerTracker.getService();
+	}
+
+	/**
+	 * @param service
+	 * @return
+	 */
+	public String getServiceComponentID(IScenarioService service) {
+		return serviceComponentIDs.get(service);
+	}
+	
+	public IScenarioService getServiceForComponentID(final String componentID) {
+		WeakReference<IScenarioService> ref = services.get(componentID);
+		if (ref == null) return null;
+		return ref.get();
 	}
 }
