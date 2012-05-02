@@ -132,7 +132,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		final HashMap<Object, Pair<ScenarioInstance, MMXRootObject>> sourceByElement = new HashMap<Object, Pair<ScenarioInstance, MMXRootObject>>();
 		final ArrayList<Object> selectedObjects = new ArrayList<Object>();
 		for (final ScenarioInstance job : selectionProvider.getSelection()) {
-			final IScenarioService scenarioService = (IScenarioService) job.getAdapters().get(IScenarioService.class);
+			final IScenarioService scenarioService = job.getScenarioService();
 
 			EObject instance = null;
 			try {
