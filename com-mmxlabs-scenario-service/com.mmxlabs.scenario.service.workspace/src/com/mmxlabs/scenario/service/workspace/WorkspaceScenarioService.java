@@ -114,7 +114,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 					final Container container = mapWorkspaceToModel.get(resource.getParent());
 					try {
 						createScenarioInstance(container, resource);
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						log.error(e.getMessage(), e);
 					}
 				} else if (resource.getType() == IResource.FOLDER || resource.getType() == IResource.PROJECT) {
@@ -240,7 +240,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 					if (r.getType() == IResource.FILE) {
 						try {
 							createScenarioInstance(modelContainer, r);
-						} catch (Exception e) {
+						} catch (final Exception e) {
 							log.error(e.getMessage(), e);
 						}
 					} else if (r.getType() == IResource.FOLDER || r.getType() == IResource.PROJECT) {
@@ -283,7 +283,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 			final Resource manifestResource = resourceSet.createResource(manifestURI);
 			try {
 				manifestResource.load(null);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 			final Manifest manifest = (Manifest) manifestResource.getContents().get(0);
@@ -314,7 +314,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 			final Resource manifestResource = resourceSet.createResource(manifestURI);
 			try {
 				manifestResource.load(null);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -441,21 +441,21 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 		final WorkspaceJob wsJob = new WorkspaceJob("Create archive") {
 			@Override
-			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 				int index = 0;
 				for (final EObject subModel : models) {
 					final URI subModelURI = URI.createURI("archive:" + resourceURI.toString() + "!/" + subModel.eClass().getName() + "-" + Integer.toString(index++) + ".xmi");
 					manifest.getModelURIs().add(subModelURI.deresolve(manifestURI).toString());
 					try {
 						modelService.store(subModel, subModelURI);
-					} catch (IOException e1) {
+					} catch (final IOException e1) {
 						log.error("Error storing submodel", e1);
 					}
 				}
 
 				try {
 					manifest.eResource().save(null);
-				} catch (IOException e1) {
+				} catch (final IOException e1) {
 					log.error("Error saving manifest", e1);
 				}
 				return Status.OK_STATUS;
@@ -465,7 +465,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		wsJob.schedule();
 		try {
 			wsJob.join();
-		} catch (InterruptedException e1) {
+		} catch (final InterruptedException e1) {
 			log.error("Interrupted waiting for ws job to finish", e1);
 		}
 
@@ -481,14 +481,14 @@ public class WorkspaceScenarioService implements IScenarioService {
 			try {
 				final IModelInstance instance = modelService.getModel(URI.createURI(subModelURI));
 				originalSubModels.add(instance.getModel());
-			} catch (IOException e1) {
+			} catch (final IOException e1) {
 
 			}
 		}
 
 		final Collection<EObject> duppedSubModels = EcoreUtil.copyAll(originalSubModels);
 
-		Collection<ScenarioInstance> dependencies = new ArrayList<ScenarioInstance>();
+		final Collection<ScenarioInstance> dependencies = new ArrayList<ScenarioInstance>();
 
 		for (final String uuids : original.getDependencyUUIDs()) {
 			dependencies.add(getScenarioInstance(uuids));
