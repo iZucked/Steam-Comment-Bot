@@ -216,24 +216,21 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
 			final ScenarioInstance instance = ssInput.getScenarioInstance();
 			scenarioService = instance.getScenarioService();
-
-			EObject ro = instance.getInstance();
+			
 			if (scenarioService == null) {
 				throw new IllegalStateException("Scenario Service does not exist yet a scenario service editor input has been used");
 			}
-			if (ro == null) {
-
-				try {
-					scenarioService.load(instance);
-					ro = instance.getInstance();
-					this.scenarioInstance = instance;
-				} catch (IOException e) {
-					throw new RuntimeException("No root object - error loading", e);
-				}
+			
+			scenarioInstance = instance;
+			EObject ro;
+			try {
+				ro = scenarioService.load(instance);
+			} catch (IOException e) {
+				throw new RuntimeException("IO Exception loading instance", e);
 			}
+			
 			if (ro == null) {
-				// Error loading
-				throw new RuntimeException("No root object - error loading?");
+				throw new RuntimeException("Instance was not loaded");
 			}
 
 			commandStack = (BasicCommandStack) instance.getAdapters().get(BasicCommandStack.class);
@@ -257,7 +254,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				root = (MMXRootObject) ro;
 			} else {
 				// Wrong type.
-				throw new RuntimeException("No root object is wrong instance type");
+				throw new RuntimeException("Root object is of type " + ro.getClass().getName() + ", not MMXRootObject");
 			}
 			this.rootObject = root;
 
