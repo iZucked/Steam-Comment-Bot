@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
 package com.mmxlabs.scenario.service.workspace;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
