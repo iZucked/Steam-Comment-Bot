@@ -77,7 +77,9 @@ public class WorkspaceScenarioService implements IScenarioService {
 		public void resourceChanged(final IResourceChangeEvent event) {
 
 			final IResourceDelta parentDelta = event.getDelta();
-			processDelta(parentDelta);
+			if (parentDelta != null) {
+				processDelta(parentDelta);
+			}
 		}
 
 		private void processDelta(final IResourceDelta delta) {
