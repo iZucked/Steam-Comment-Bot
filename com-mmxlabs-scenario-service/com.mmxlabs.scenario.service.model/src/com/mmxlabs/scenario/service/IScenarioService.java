@@ -9,7 +9,6 @@ import java.util.Collection;
 
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.model.service.IModelService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;

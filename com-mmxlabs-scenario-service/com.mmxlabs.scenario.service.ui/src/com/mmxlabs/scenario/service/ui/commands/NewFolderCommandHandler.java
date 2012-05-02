@@ -1,8 +1,5 @@
 package com.mmxlabs.scenario.service.ui.commands;
 
-import java.awt.Desktop.Action;
-import java.rmi.activation.Activatable;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
