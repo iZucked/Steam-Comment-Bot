@@ -322,9 +322,8 @@ public class WorkspaceScenarioService implements IScenarioService {
 			scenarioInstance.setAdapters(new HashMap<Class<?>, Object>());
 			scenarioInstance.setUuid(UUID.randomUUID().toString());
 
-			final com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest manifest = 
-					(com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest) manifestResource.getContents().get(0);
-			
+			final com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest manifest = (com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest) manifestResource.getContents().get(0);
+
 			for (final Entry entry : manifest.getEntries()) {
 				final URI uri = URI.createURI("/" + entry.getRelativePath()).resolve(manifestURI);
 				scenarioInstance.getSubModelURIs().add(uri.toString());
@@ -407,7 +406,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		final EditingDomain domain = initEditingDomain(implementation, instance);
 		instance.getAdapters().put(EditingDomain.class, domain);
 		instance.getAdapters().put(BasicCommandStack.class, (BasicCommandStack) domain.getCommandStack());
-		
+
 		modelService.resolve(parts);
 
 		return implementation;
