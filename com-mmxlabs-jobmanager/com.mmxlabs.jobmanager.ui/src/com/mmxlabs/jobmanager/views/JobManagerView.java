@@ -174,11 +174,11 @@ public class JobManagerView extends ViewPart {
 			if (index == 0) {
 				if (obj instanceof IJobDescriptor) {
 					final IJobDescriptor job = (IJobDescriptor) obj;
-					if (jobManager.getSelectedJobs().contains(job)) {
-						return getCachedImage("/icons/console_view.gif");
-					} else {
+//					if (jobManager.getSelectedJobs().contains(job)) {
+//						return getCachedImage("/icons/console_view.gif");
+//					} else {
 						return null;
-					}
+//					}
 				}
 			}
 
@@ -616,7 +616,7 @@ public class JobManagerView extends ViewPart {
 				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
 				while (itr.hasNext()) {
 					final IJobDescriptor job = itr.next();
-					jobManager.toggleJobSelection(job);
+//					jobManager.toggleJobSelection(job);
 				}
 			}
 		};
