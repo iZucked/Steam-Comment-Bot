@@ -344,8 +344,8 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 		// by this point we should have detected the new scenario and loaded it as a consequence of the listener above
 		ScenarioInstance scenarioInstance = getScenarioInstance(uuid);
 		// Create instance element and attach.
-		save(scenarioInstance);
 		load(scenarioInstance);
+		save(scenarioInstance);
 		return scenarioInstance;
 	}
 
