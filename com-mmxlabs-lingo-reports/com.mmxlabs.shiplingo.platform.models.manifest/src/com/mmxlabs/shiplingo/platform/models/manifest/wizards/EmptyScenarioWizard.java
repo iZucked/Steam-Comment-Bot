@@ -41,7 +41,7 @@ import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 public class EmptyScenarioWizard extends Wizard implements INewWizard {
 
-	private EmptyScenarioWizardPage page;
+	private ScenarioServiceNewScenarioPage page;
 	private ISelection selection;
 
 	/**
@@ -62,7 +62,7 @@ public class EmptyScenarioWizard extends Wizard implements INewWizard {
 
 	@Override
 	public void addPages() {
-		page = new EmptyScenarioWizardPage(selection);
+		page = new ScenarioServiceNewScenarioPage(selection);
 		addPage(page);
 	}
 

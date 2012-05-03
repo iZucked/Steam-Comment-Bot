@@ -5,6 +5,7 @@
 package com.mmxlabs.shiplingo.platform.models.manifest.importWizards;
 
 import java.io.File;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -45,7 +46,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
-import com.mmxlabs.shiplingo.platform.models.manifest.wizards.EmptyScenarioWizardPage;
+import com.mmxlabs.shiplingo.platform.models.manifest.wizards.ScenarioServiceNewScenarioPage;
 
 public class ImportCSVFilesPage extends WizardPage {
 	private class Chunk {
@@ -82,13 +83,13 @@ public class ImportCSVFilesPage extends WizardPage {
 
 	private IImportContext importContext;
 
-	private EmptyScenarioWizardPage mainPage;
+	private ScenarioServiceNewScenarioPage mainPage;
 
 	public IImportContext getImportContext() {
 		return importContext;
 	}
 
-	protected ImportCSVFilesPage(String pageName, EmptyScenarioWizardPage mainPage) {
+	protected ImportCSVFilesPage(String pageName, ScenarioServiceNewScenarioPage mainPage) {
 		super(pageName);
 		setTitle("Choose CSV Files");
 		this.mainPage = mainPage;
@@ -199,6 +200,7 @@ public class ImportCSVFilesPage extends WizardPage {
 
 				return super.getNextPage();
 			} catch (IOException e) {
+			
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 

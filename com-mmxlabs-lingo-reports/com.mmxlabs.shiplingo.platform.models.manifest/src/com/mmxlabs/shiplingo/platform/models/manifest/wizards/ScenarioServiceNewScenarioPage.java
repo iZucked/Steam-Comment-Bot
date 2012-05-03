@@ -35,7 +35,7 @@ import com.mmxlabs.shiplingo.platform.models.manifest.Activator;
  * expected one (scn).
  */
 
-public class EmptyScenarioWizardPage extends WizardPage {
+public class ScenarioServiceNewScenarioPage extends WizardPage {
 
 	private ScenarioServiceSelectionGroup scenarioServiceSelectionGroup;
 
@@ -48,7 +48,7 @@ public class EmptyScenarioWizardPage extends WizardPage {
 	 * 
 	 * @param pageName
 	 */
-	public EmptyScenarioWizardPage(final ISelection selection) {
+	public ScenarioServiceNewScenarioPage(final ISelection selection) {
 		super("wizardPage");
 		setTitle("Choose file name");
 		setDescription("This wizard creates a new file with *.scn extension that can be opened by a multi-page editor.");
