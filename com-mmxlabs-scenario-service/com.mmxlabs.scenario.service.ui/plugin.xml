@@ -33,9 +33,9 @@
          point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent
             activeByDefault="true"
-            contentProvider="com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceContentProvider"
+            contentProvider="com.mmxlabs.scenario.service.ui.ScenarioServiceContentProvider"
             id="com.mmxlabs.scenario.service.ui.navigatorContent"
-            labelProvider="com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceLabelProvider"
+            labelProvider="com.mmxlabs.scenario.service.ui.ScenarioServiceLabelProvider"
             name="Scenario Service Content">
          <triggerPoints>
             <instanceof

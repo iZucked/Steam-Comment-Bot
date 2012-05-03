@@ -128,7 +128,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 
 	private final Map<String, ScenarioInstance> instanceMap = new HashMap<String, ScenarioInstance>();
 
-	private final Map<IResource, Container> mapWorkspaceToModel = new WeakHashMap<IResource, Container>();
+	private final Map<IResource, Container> mapWorkspaceToModel = new HashMap<IResource, Container>();
 
 	private workspaceChangeListener workspaceChangeListener;
 
@@ -143,6 +143,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 		final String scenarioServiceID = d.get("component.id").toString();
 
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		mapWorkspaceToModel.put(root, getServiceModel());
 		scanForScenarios(scenarioServiceID, root, getServiceModel());
 
 		workspaceChangeListener = new workspaceChangeListener();
@@ -343,8 +344,8 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 		// by this point we should have detected the new scenario and loaded it as a consequence of the listener above
 		ScenarioInstance scenarioInstance = getScenarioInstance(uuid);
 		// Create instance element and attach.
-		load(scenarioInstance);
 		save(scenarioInstance);
+		load(scenarioInstance);
 		return scenarioInstance;
 	}
 
