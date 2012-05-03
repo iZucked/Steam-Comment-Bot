@@ -546,9 +546,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	private EReference currentReference;
 	public void init(final AdapterFactory adapterFactory, final EReference... path) {
-		init(new AdapterFactoryContentProvider(adapterFactory) {
-
-
+		init(new IStructuredContentProvider() {
 			@SuppressWarnings("rawtypes")
 			@Override
 			public Object[] getElements(Object object) {
@@ -569,6 +567,17 @@ public class EObjectTableViewer extends GridTableViewer {
 					return new Object[] { o };
 				}
 				return new Object[] {};
+			}
+
+			@Override
+			public void dispose() {
+				
+			}
+
+			@Override
+			public void inputChanged(Viewer viewer, Object oldInput,
+					Object newInput) {
+				
 			}
 		});
 	}
