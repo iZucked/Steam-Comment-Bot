@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.scenario.service.ui.navigator;
+package com.mmxlabs.scenario.service.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,7 @@ import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterFactory;
 
 public class ScenarioServiceContentProvider extends AdapterFactoryContentProvider {
 
