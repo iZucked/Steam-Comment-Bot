@@ -194,6 +194,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 		serviceService.setName(getName());
 		serviceService.setDescription(getName());
 
+		serviceService.setServiceRef(this);
 		// TODO: Forbid direct editing of model expect via this class
 
 		return serviceService;
@@ -358,7 +359,16 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 	@Override
 	public void delete(final ScenarioInstance instance) {
-
+		for (final IResource resource : mapWorkspaceToModel.keySet()) {
+			if (mapWorkspaceToModel.get(resource) == instance) {
+				try {
+					resource.delete(true, null);
+				} catch (CoreException e) {
+					log.error("Could not delete " + resource, e);
+				}
+				return;
+			}
+		}
 	}
 
 	@Override
@@ -446,7 +456,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 					final URI subModelURI = URI.createURI("archive:" + resourceURI.toString() + "!/" + subModel.eClass().getName() + "-" + Integer.toString(index++) + ".xmi");
 					manifest.getModelURIs().add(subModelURI.deresolve(manifestURI).toString());
 					try {
-						modelService.store(subModel, subModelURI);
+						modelService.store(subModel, subModelURI).save();
 					} catch (final IOException e1) {
 						log.error("Error storing submodel", e1);
 					}
