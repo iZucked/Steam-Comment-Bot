@@ -4,47 +4,51 @@
  */
 package com.mmxlabs.shiplingo.platform.models.manifest.wizards;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.ContainerSelectionDialog;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+
+import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
+import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.Folder;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.shiplingo.platform.models.manifest.Activator;
 
 /**
- * The "New" wizard page allows setting the container for the new file as well
- * as the file name. The page will only accept file name without the extension
- * OR with the extension that matches the expected one (scn).
+ * The "New" wizard page allows setting the container for the new file as well as the file name. The page will only accept file name without the extension OR with the extension that matches the
+ * expected one (scn).
  */
 
 public class EmptyScenarioWizardPage extends WizardPage {
-	private Text containerText;
+
+	private ScenarioServiceSelectionGroup scenarioServiceSelectionGroup;
 
 	private Text fileText;
 
-	private ISelection selection;
+	private final ISelection selection;
 
 	/**
 	 * Constructor for SampleNewWizardPage.
 	 * 
 	 * @param pageName
 	 */
-	public EmptyScenarioWizardPage(ISelection selection) {
+	public EmptyScenarioWizardPage(final ISelection selection) {
 		super("wizardPage");
-		setTitle("Multi-page Editor File");
+		setTitle("Choose file name");
 		setDescription("This wizard creates a new file with *.scn extension that can be opened by a multi-page editor.");
 		this.selection = selection;
 	}
@@ -53,45 +57,40 @@ public class EmptyScenarioWizardPage extends WizardPage {
 	 * @see IDialogPage#createControl(Composite)
 	 */
 	@Override
-	public void createControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.NULL);
-		GridLayout layout = new GridLayout();
+	public void createControl(final Composite parent) {
+		final Composite container = new Composite(parent, SWT.NULL);
+
+		final GridLayout layout = new GridLayout();
 		container.setLayout(layout);
-		layout.numColumns = 3;
+		layout.numColumns = 2;
 		layout.verticalSpacing = 9;
-		Label label = new Label(container, SWT.NULL);
-		label.setText("&Container:");
+		final Listener listener = new Listener() {
+			public void handleEvent(final Event event) {
 
-		containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		containerText.setLayoutData(gd);
-		containerText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
 				dialogChanged();
-			}
-		});
 
-		Button button = new Button(container, SWT.PUSH);
-		button.setText("Browse...");
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleBrowse();
 			}
-		});
-		label = new Label(container, SWT.NULL);
+		};
+
+		scenarioServiceSelectionGroup = new ScenarioServiceSelectionGroup(container, listener, SWT.BORDER);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.widthHint = 300;
+		gd.heightHint = 320;
+		gd.horizontalSpan = 2;
+		scenarioServiceSelectionGroup.setLayoutData(gd);
+
+		Label label = new Label(container, SWT.NULL);
 		label.setText("&File name:");
-
 		fileText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		fileText.setLayoutData(gd);
 		fileText.addModifyListener(new ModifyListener() {
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void modifyText(final ModifyEvent e) {
 				dialogChanged();
 			}
 		});
+
 		initialize();
 		dialogChanged();
 		setControl(container);
@@ -102,39 +101,25 @@ public class EmptyScenarioWizardPage extends WizardPage {
 	 */
 
 	private void initialize() {
-		if (selection != null && selection.isEmpty() == false
-				&& selection instanceof IStructuredSelection) {
-			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() > 1)
+		final Bundle bundle = Activator.getDefault().getBundle();
+		final BundleContext bundleContext = bundle.getBundleContext();
+		final ServiceReference<ScenarioServiceRegistry> serviceReference = bundleContext.getServiceReference(ScenarioServiceRegistry.class);
+
+		scenarioServiceSelectionGroup.setInput(bundleContext.getService(serviceReference));
+
+		if (selection != null && selection.isEmpty() == false && selection instanceof IStructuredSelection) {
+
+			final IStructuredSelection ssel = (IStructuredSelection) selection;
+			if (ssel.size() > 1) {
 				return;
-			Object obj = ssel.getFirstElement();
-			if (obj instanceof IResource) {
-				IContainer container;
-				if (obj instanceof IContainer)
-					container = (IContainer) obj;
-				else
-					container = ((IResource) obj).getParent();
-				containerText.setText(container.getFullPath().toString());
+			}
+			final Object obj = ssel.getFirstElement();
+			if (obj instanceof Container) {
+				scenarioServiceSelectionGroup.setSelectedContainer((Container) obj);
 			}
 		}
+
 		fileText.setText("empty_scenario.scn");
-	}
-
-	/**
-	 * Uses the standard container selection dialog to choose the new value for
-	 * the container field.
-	 */
-
-	private void handleBrowse() {
-		ContainerSelectionDialog dialog = new ContainerSelectionDialog(
-				getShell(), ResourcesPlugin.getWorkspace().getRoot(), false,
-				"Select new file container");
-		if (dialog.open() == ContainerSelectionDialog.OK) {
-			Object[] result = dialog.getResult();
-			if (result.length == 1) {
-				containerText.setText(((Path) result[0]).toString());
-			}
-		}
 	}
 
 	/**
@@ -142,49 +127,54 @@ public class EmptyScenarioWizardPage extends WizardPage {
 	 */
 
 	private void dialogChanged() {
-		IResource container = ResourcesPlugin.getWorkspace().getRoot()
-				.findMember(new Path(getContainerName()));
-		String fileName = getFileName();
 
-		if (getContainerName().length() == 0) {
-			updateStatus("File container must be specified");
+		
+		Container c = scenarioServiceSelectionGroup.getSelectedContainer();
+		if (!(c instanceof Folder || c instanceof ScenarioInstance)) {
+			updateStatus("A Folder or Scenario must be selected");
 			return;
 		}
-		if (container == null
-				|| (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
-			updateStatus("File container must exist");
-			return;
-		}
-		if (!container.isAccessible()) {
-			updateStatus("Project must be writable");
-			return;
-		}
-		if (fileName.length() == 0) {
-			updateStatus("File name must be specified");
-			return;
-		}
-		if (fileName.replace('\\', '/').indexOf('/', 1) > 0) {
-			updateStatus("File name must be valid");
-			return;
-		}
-		int dotLoc = fileName.lastIndexOf('.');
-		if (dotLoc != -1) {
-			String ext = fileName.substring(dotLoc + 1);
-			if (ext.equalsIgnoreCase("scn") == false) {
-				updateStatus("File extension must be \"scn\"");
-				return;
-			}
-		}
+		// IResource container = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(getContainerName()));
+		// String fileName = getFileName();
+		//
+		// if (getContainerName().length() == 0) {
+		// updateStatus("File container must be specified");
+		// return;
+		// }
+		// if (container == null || (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
+		// updateStatus("File container must exist");
+		// return;
+		// }
+		// if (!container.isAccessible()) {
+		// updateStatus("Project must be writable");
+		// return;
+		// }
+		// if (fileName.length() == 0) {
+		// updateStatus("File name must be specified");
+		// return;
+		// }
+		// if (fileName.replace('\\', '/').indexOf('/', 1) > 0) {
+		// updateStatus("File name must be valid");
+		// return;
+		// }
+		// int dotLoc = fileName.lastIndexOf('.');
+		// if (dotLoc != -1) {
+		// String ext = fileName.substring(dotLoc + 1);
+		// if (ext.equalsIgnoreCase("scn") == false) {
+		// updateStatus("File extension must be \"scn\"");
+		// return;
+		// }
+		// }
 		updateStatus(null);
 	}
 
-	private void updateStatus(String message) {
+	private void updateStatus(final String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
 	}
 
-	public String getContainerName() {
-		return containerText.getText();
+	public Container getScenarioContainer() {
+		return scenarioServiceSelectionGroup.getSelectedContainer();
 	}
 
 	public String getFileName() {
