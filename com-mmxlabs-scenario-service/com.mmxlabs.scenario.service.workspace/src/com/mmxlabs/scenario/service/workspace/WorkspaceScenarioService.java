@@ -139,7 +139,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 
 	private final Map<String, ScenarioInstance> instanceMap = new HashMap<String, ScenarioInstance>();
 
-	private final Map<IResource, Container> mapWorkspaceToModel = new WeakHashMap<IResource, Container>();
+	private final Map<IResource, Container> mapWorkspaceToModel = new HashMap<IResource, Container>();
 
 	private workspaceChangeListener workspaceChangeListener;
 
