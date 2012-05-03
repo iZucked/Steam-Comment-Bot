@@ -26,6 +26,7 @@ import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceSelectionGroup;
 import com.mmxlabs.shiplingo.platform.models.manifest.Activator;
 
@@ -130,7 +131,7 @@ public class EmptyScenarioWizardPage extends WizardPage {
 	private void dialogChanged() {
 
 		Container c = scenarioServiceSelectionGroup.getSelectedContainer();
-		if (!(c instanceof Folder || c instanceof ScenarioInstance)) {
+		if (!(c instanceof Folder || c instanceof ScenarioInstance || c instanceof ScenarioService)) {
 			updateStatus("A Folder or Scenario must be selected");
 			return;
 		}
