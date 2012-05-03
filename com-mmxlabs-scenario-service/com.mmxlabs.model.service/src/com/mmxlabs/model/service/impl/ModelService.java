@@ -96,6 +96,9 @@ public class ModelService implements IModelService {
 			final Resource resource = resourceSet.createResource(uri);
 			resource.getContents().add(instance);
 			final IModelInstance result = new ModelInstance(resource);
+			
+			cache.put(uri,  result);
+			
 			return result;
 		}
 	}
