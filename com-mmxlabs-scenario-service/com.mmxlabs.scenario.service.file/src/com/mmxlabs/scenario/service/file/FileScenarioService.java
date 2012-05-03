@@ -146,7 +146,7 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) {
+	public ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) throws IOException {
 		log.debug("Inserting scenario into " + container);
 		
 		final String uuid = UUID.randomUUID().toString();
@@ -167,7 +167,6 @@ public class FileScenarioService extends AbstractScenarioService {
 			log.debug("Storing submodel into " + storeURI);
 			try {
 				final IModelInstance instance = modelService.store(model, rel);
-				instance.save();
 			} catch (IOException e) {
 				return null;
 			}
@@ -175,7 +174,8 @@ public class FileScenarioService extends AbstractScenarioService {
 		}
 		
 		container.getElements().add(newInstance);
-		
+		load(newInstance);
+		save(newInstance);
 		return newInstance;
 	}
 
