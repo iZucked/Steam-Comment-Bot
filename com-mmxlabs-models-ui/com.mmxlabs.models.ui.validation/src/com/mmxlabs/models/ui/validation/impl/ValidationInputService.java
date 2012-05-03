@@ -25,7 +25,7 @@ public class ValidationInputService implements IValidationInputService {
 	}
 
 	public void setExtraContext(final IExtraValidationContext extraContext) {
-		if (getExtraContext() != null) {
+		if (extraContext != null && getExtraContext() != null) {
 			log.warn("extra validation context was set without being cleared first; this suggests use of a validator without the ValidationHelper support class, which could cause problems");
 		}
 		this.extraContext.set(extraContext);

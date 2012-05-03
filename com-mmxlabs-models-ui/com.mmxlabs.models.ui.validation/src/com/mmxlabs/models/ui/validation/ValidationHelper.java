@@ -13,6 +13,8 @@ import java.util.concurrent.FutureTask;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.service.IValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.ui.validation.internal.Activator;
 
@@ -25,6 +27,7 @@ import com.mmxlabs.models.ui.validation.internal.Activator;
  *
  */
 public class ValidationHelper {
+	private static final Logger log = LoggerFactory.getLogger(ValidationHelper.class);
 	public IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext,
 			final Collection<? extends EObject> targets) {
 		final FutureTask<IStatus> validationTask = new FutureTask<IStatus>(new Callable<IStatus>() {
@@ -44,8 +47,10 @@ public class ValidationHelper {
 		try {
 			return validationTask.get();
 		} catch (InterruptedException e) {
+			log.error("Interrupted validating " + targets, e);
 			return null;
 		} catch (ExecutionException e) {
+			log.error("Error excuting validation on " + targets, e);
 			return null;
 		}
 	}
