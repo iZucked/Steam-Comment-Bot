@@ -317,7 +317,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	@Override
 	public void dispose() {
 
-		scenarioInstance.eAdapters().remove(lockedAdapter);
+		if (scenarioInstance != null) {
+			scenarioInstance.eAdapters().remove(lockedAdapter);
+		}
 
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.dispose();
