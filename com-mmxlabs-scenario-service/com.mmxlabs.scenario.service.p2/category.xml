@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
 <site>
    <category-def name="all" label="Scenario Service p2 Snapshots"/>
    <feature url="features/com.mmxlabs.scenario.service.feature_1.0.0.qualifier.jar" id="com.mmxlabs.scenario.service.feature" version="1.0.0.qualifier">

@@ -1,7 +1,8 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
 package com.mmxlabs.scenario.service.ui.commands;
-
-import java.awt.Desktop.Action;
-import java.rmi.activation.Activatable;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
