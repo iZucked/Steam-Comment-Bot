@@ -90,8 +90,9 @@ public class ModelService implements IModelService {
 	public IModelInstance store(final EObject instance, final URI uri) throws IOException {
 		synchronized (cache) {
 			// TODO warn here, or return what's already there, or what?
-			if (cache.containsKey(uri))
+			if (cache.containsKey(uri)) {
 				return cache.get(uri);
+			}
 			final Resource resource = resourceSet.createResource(uri);
 			resource.getContents().add(instance);
 			final IModelInstance result = new ModelInstance(resource);
