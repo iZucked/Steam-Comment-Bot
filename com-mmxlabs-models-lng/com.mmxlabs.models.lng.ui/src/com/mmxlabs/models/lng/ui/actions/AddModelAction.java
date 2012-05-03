@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -102,10 +103,9 @@ class SingleAddAction extends LockableAction {
 					del.add(s.getInstance());
 				}
 				// delete what we created.
-				context.getCommandHandler().getEditingDomain().getCommandStack().execute(
-						DeleteCommand.create(
-						context.getCommandHandler().getEditingDomain(),
-						del));
+				final Command command = DeleteCommand.create(context.getCommandHandler().getEditingDomain(), del);
+				context.getCommandHandler().getEditingDomain().getCommandStack().execute(command);
+				
 			}
 		}
 	}
