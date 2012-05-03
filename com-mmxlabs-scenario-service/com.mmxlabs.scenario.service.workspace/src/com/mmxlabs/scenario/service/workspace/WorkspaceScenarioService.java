@@ -354,7 +354,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 					final URI subModelURI = URI.createURI("archive:" + resourceURI.toString() + "!/" + subModel.eClass().getName() + "-" + Integer.toString(index++) + ".xmi");
 					manifest.getModelURIs().add(subModelURI.deresolve(manifestURI).toString());
 					try {
-						modelService.store(subModel, subModelURI).save();
+						modelService.store(subModel, subModelURI);
 					} catch (final IOException e1) {
 						log.error("Error storing submodel", e1);
 					}
@@ -379,6 +379,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 		// by this point we should have detected the new scenario and loaded it as a consequence of the listener above
 		ScenarioInstance scenarioInstance = getScenarioInstance(uuid);
 		// Create instance element and attach.
+		save(scenarioInstance);
 		load(scenarioInstance);
 		return scenarioInstance;
 	}
