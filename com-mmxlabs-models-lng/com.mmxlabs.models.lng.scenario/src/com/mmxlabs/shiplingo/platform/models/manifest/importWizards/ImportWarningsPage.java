@@ -17,7 +17,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
-import com.mmxlabs.shiplingo.platform.models.manifest.wizards.EmptyScenarioWizardPage;
+import com.mmxlabs.shiplingo.platform.models.manifest.wizards.ScenarioServiceNewScenarioPage;
 
 /**
  * Page for displaying the warnings from an import job

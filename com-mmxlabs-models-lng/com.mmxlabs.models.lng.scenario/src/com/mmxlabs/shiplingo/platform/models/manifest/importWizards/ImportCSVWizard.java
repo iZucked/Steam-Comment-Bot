@@ -30,11 +30,11 @@ import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler;
 import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
-import com.mmxlabs.shiplingo.platform.models.manifest.wizards.EmptyScenarioWizardPage;
+import com.mmxlabs.shiplingo.platform.models.manifest.wizards.ScenarioServiceNewScenarioPage;
 
 public class ImportCSVWizard extends Wizard implements IImportWizard {
 
-	EmptyScenarioWizardPage mainPage;
+	ScenarioServiceNewScenarioPage mainPage;
 	private ImportCSVFilesPage filesPage;
 	private ImportWarningsPage warnings;
 
@@ -110,7 +110,7 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle("CSV Import Wizard"); // NON-NLS-1
 		setNeedsProgressMonitor(true);
-		mainPage = new EmptyScenarioWizardPage(selection);
+		mainPage = new ScenarioServiceNewScenarioPage(selection);
 		filesPage = new ImportCSVFilesPage("CSV Files", mainPage);
 		warnings = new ImportWarningsPage("Warnings", filesPage);
 	}
