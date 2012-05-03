@@ -137,8 +137,6 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 		}
 	}
 
-	private IModelService modelService;
-
 	private final Map<String, ScenarioInstance> instanceMap = new HashMap<String, ScenarioInstance>();
 
 	private final Map<IResource, Container> mapWorkspaceToModel = new WeakHashMap<IResource, Container>();
@@ -305,14 +303,6 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 			instanceMap.put(scenarioInstance.getUuid(), scenarioInstance);
 			container.getElements().add(scenarioInstance);
 		}
-	}
-
-	public IModelService getModelService() {
-		return modelService;
-	}
-
-	public void setModelService(final IModelService modelService) {
-		this.modelService = modelService;
 	}
 
 	@Override
