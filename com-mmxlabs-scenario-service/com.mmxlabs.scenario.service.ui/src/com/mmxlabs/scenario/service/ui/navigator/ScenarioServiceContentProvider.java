@@ -10,9 +10,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.IViewerNotification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider.ViewerRefresh;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.scenario.service.IScenarioService;
