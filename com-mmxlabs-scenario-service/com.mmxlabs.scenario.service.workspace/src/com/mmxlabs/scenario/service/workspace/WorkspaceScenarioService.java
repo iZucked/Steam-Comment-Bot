@@ -154,6 +154,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 		final String scenarioServiceID = d.get("component.id").toString();
 
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		mapWorkspaceToModel.put(root, getServiceModel());
 		scanForScenarios(scenarioServiceID, root, getServiceModel());
 
 		workspaceChangeListener = new workspaceChangeListener();
