@@ -32,4 +32,14 @@ public class UnitCostMatrixCommandProvider implements IModelCommandProvider {
 		}
 		return null;
 	}
+
+	@Override
+	public void startCommandProvision() {
+		
+	}
+
+	@Override
+	public void endCommandProvision() {
+		
+	}
 }

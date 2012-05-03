@@ -4,8 +4,12 @@
  */
 package com.mmxlabs.models.lng.schedule.ui.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -20,29 +24,55 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.commandservice.BaseModelCommandProvider;
 
 /**
- * Command provider which detects the deletion of cargos and kills the corresponding entries in any schedule.
+ * Command provider which detects the deletion of cargos and kills the
+ * corresponding entries in any schedule.
  * 
  * @author hinton
- *
+ * 
  */
 public class ScheduleModelCommandProvider extends BaseModelCommandProvider {
 	@Override
 	protected boolean shouldHandleDeletion(Object deletedObject) {
-		return deletedObject instanceof VesselEvent || deletedObject instanceof Cargo || deletedObject instanceof Vessel || deletedObject instanceof Slot || deletedObject instanceof Port || deletedObject instanceof VesselClass;
+		if (getContext() != null)
+			return false;
+		if (deletedObject instanceof VesselEvent
+				|| deletedObject instanceof Cargo
+				|| deletedObject instanceof Vessel
+				|| deletedObject instanceof Slot
+				|| deletedObject instanceof Port
+				|| deletedObject instanceof VesselClass) {
+			setContext(Boolean.TRUE);
+			return true;
+		}
+		return false;
+
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.ui.commandservice.BaseModelCommandProvider#objectDeleted(org.eclipse.emf.edit.domain.EditingDomain, com.mmxlabs.models.mmxcore.MMXRootObject, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.mmxlabs.models.ui.commandservice.BaseModelCommandProvider#objectDeleted
+	 * (org.eclipse.emf.edit.domain.EditingDomain,
+	 * com.mmxlabs.models.mmxcore.MMXRootObject, java.lang.Object)
 	 */
 	@Override
-	protected Command objectDeleted(EditingDomain domain, MMXRootObject rootObject, Object deleted) {
-		final ScheduleModel scheduleModel = rootObject.getSubModel(ScheduleModel.class);
-		if (scheduleModel == null) return null;
-		final CompoundCommand deleteEverything = new CompoundCommand();
+	protected Command objectDeleted(EditingDomain domain,
+			MMXRootObject rootObject, Object deleted) {
+		final ScheduleModel scheduleModel = rootObject
+				.getSubModel(ScheduleModel.class);
+		if (scheduleModel == null)
+			return null;
 		
-		deleteEverything.append(DeleteCommand.create(domain, scheduleModel.getInitialSchedule()));
-		deleteEverything.append(DeleteCommand.create(domain, scheduleModel.getOptimisedSchedule()));
+		final List<EObject> delete = new ArrayList<EObject>(2);
 		
-		return deleteEverything;
+		if (scheduleModel.getInitialSchedule() != null)
+			delete.add(scheduleModel.getInitialSchedule());
+		
+		if (scheduleModel.getOptimisedSchedule() != null)
+			delete.add(scheduleModel.getOptimisedSchedule());
+		
+		if (delete.isEmpty())return null;
+		return DeleteCommand.create(domain, delete);
 	}
 }

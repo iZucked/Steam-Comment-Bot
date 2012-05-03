@@ -56,6 +56,8 @@ public class CargoModelCompositeFactory extends DefaultDisplayCompositeFactory {
 			for (final IComponentHelper helper : Activator.getDefault().getComponentHelperRegistry().getComponentHelpers(cargo.getDischargeSlot().eClass())) {
 				external.addAll(helper.getExternalEditingRange(root, cargo.getDischargeSlot()));
 			}
+			external.add(cargo.getLoadSlot());
+			external.add(cargo.getDischargeSlot());
 		}
 		
 		return external;

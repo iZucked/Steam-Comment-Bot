@@ -48,4 +48,14 @@ public class PortUpdatingCommandProvider implements IModelCommandProvider {
 		}
 		return null;
 	}
+
+	@Override
+	public void startCommandProvision() {
+		
+	}
+
+	@Override
+	public void endCommandProvision() {
+		
+	}
 }

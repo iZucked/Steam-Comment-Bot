@@ -72,4 +72,13 @@ public class DateUpdatingCommandProvider implements IModelCommandProvider {
 		else return TimeZone.getTimeZone(zone);
 	}
 
+	@Override
+	public void startCommandProvision() {
+		
+	}
+
+	@Override
+	public void endCommandProvision() {
+		
+	}
 }
