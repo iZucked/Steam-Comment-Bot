@@ -31,29 +31,24 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 
 	private static final Logger log = LoggerFactory.getLogger(OpenScenarioCommandHandler.class);
 
-	private IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
-
 	/**
 	 * the command has been executed, so extract extract the needed information from the application context.
 	 */
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
+		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
-		ISelection selection = activePage.getSelection();
+		final ISelection selection = activePage.getSelection();
 		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection strucSelection = (IStructuredSelection) selection;
-			for (Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
-				Object element = iterator.next();
+			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
+				final Object element = iterator.next();
 				if (element instanceof ScenarioInstance) {
-					ScenarioInstance model = (ScenarioInstance) element;
-
-					ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(model);
 
 					try {
-						openEditor(editorInput);
-					} catch (PartInitException e) {
+						openScenarioInstance(activePage, (ScenarioInstance) element);
+					} catch (final PartInitException e) {
 
 						MessageDialog.openError(activePage.getWorkbenchWindow().getShell(), "Error opening editor", e.getMessage());
 
@@ -66,19 +61,30 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 		return null;
 	}
 
-	public void openEditor(IEditorInput editorInput) throws PartInitException {
+	public static void openScenarioInstance(final IWorkbenchPage activePage, final ScenarioInstance model) throws PartInitException {
 
-		IEditorPart editorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findEditor(editorInput);
+		final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(model);
+
+		openEditor(editorInput);
+	}
+
+	public static void openEditor(final IEditorInput editorInput) throws PartInitException {
+
+		final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		final IEditorPart editorPart = activePage.findEditor(editorInput);
 		if (editorPart != null) {
-			// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(editorInput, null, true);
+			// FIXME: This doesn't quite work through navigator double click. Editor is activated, selection provider is linked to editor. However another double click in navigator does not transfer
+			// focus back - it still seems to think it has focus so does not request it. This results in the execute() obtaining the wrong selection.
+			activePage.activate(editorPart);
 		} else {
+			final IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
 			// String contentTypeString = editorInput.getContentType();
-			IContentType contentType = null;// contentTypeString == null ? null : Platform.getContentTypeManager().getContentType(contentTypeString);
+			final IContentType contentType = null;// contentTypeString == null ? null : Platform.getContentTypeManager().getContentType(contentTypeString);
 
-			IEditorDescriptor descriptor = registry.getDefaultEditor(editorInput.getName(), contentType);
+			final IEditorDescriptor descriptor = registry.getDefaultEditor(editorInput.getName(), contentType);
 
 			if (descriptor != null) {
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(editorInput, descriptor.getId());
+				activePage.openEditor(editorInput, descriptor.getId());
 			}
 		}
 	}
