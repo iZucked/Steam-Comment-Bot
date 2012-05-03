@@ -31,8 +31,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler;
 import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
-//import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
-
 /**
  * This is a sample new wizard. Its role is to create a new file resource in the provided container. If the container resource (a folder or a project) is selected in the workspace when the wizard is
  * opened, it will accept it as the target container. The wizard creates one file with the extension "scn". If a sample multi-page editor (also available as a template) is registered for the same
@@ -82,9 +80,10 @@ public class EmptyScenarioWizard extends Wizard implements INewWizard {
 					final List<EObject> models = new LinkedList<EObject>();
 					ManifestJointModel.createEmptySubModels(models);
 
-					IScenarioService scenarioService = container.getScenarioService();
+					final IScenarioService scenarioService = container.getScenarioService();
 
 					final ScenarioInstance instance = scenarioService.insert(container, Collections.<ScenarioInstance> emptySet(), models);
+					instance.setName(fileName);
 
 					final Metadata metadata = instance.getMetadata();
 					metadata.setCreated(new Date());
@@ -98,7 +97,7 @@ public class EmptyScenarioWizard extends Wizard implements INewWizard {
 							try {
 								final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 								OpenScenarioCommandHandler.openScenarioInstance(page, instance);
-							} catch (PartInitException e) {
+							} catch (final PartInitException e) {
 							}
 						}
 					});
