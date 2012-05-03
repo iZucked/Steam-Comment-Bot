@@ -17,7 +17,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.ecore.xmi;bundle-version="2.7.0",
  com.mmxlabs.models.mmxcore;bundle-version="2.0.0",
  com.mmxlabs.models.ui;bundle-version="1.0.0",
- com.mmxlabs.shiplingo.platform.models.manifest;bundle-version="1.0.0",
  com.mmxlabs.scenario.service.util;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
