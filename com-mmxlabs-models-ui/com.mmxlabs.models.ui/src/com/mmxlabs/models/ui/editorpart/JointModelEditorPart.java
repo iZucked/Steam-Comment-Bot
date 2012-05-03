@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -213,7 +214,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		setPartName(input.getName());
 		final MMXRootObject root;
 		if (input instanceof IScenarioServiceEditorInput) {
-			IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
+			
+			final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
+			
+			final ImageDescriptor imageDescriptor = ssInput.getImageDescriptor();
+			if (imageDescriptor != null) {
+				setTitleImage(imageDescriptor.createImage());
+			}
+			
 			final ScenarioInstance instance = ssInput.getScenarioInstance();
 			scenarioService = instance.getScenarioService();
 			
