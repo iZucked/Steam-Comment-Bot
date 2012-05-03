@@ -50,7 +50,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		final Object[] elements;
 		if (object instanceof ScenarioServiceRegistry) {
 			final ScenarioServiceRegistry scenarioServiceRegistry = (ScenarioServiceRegistry) object;
-			elements = scenarioServiceRegistry.getScenarioServices().toArray();
+			elements = scenarioServiceRegistry.getScenarioModel().getScenarioServices().toArray();
 		} else if (object instanceof IScenarioService) {
 			final IScenarioService scenarioService = (IScenarioService) object;
 			elements = scenarioService.getServiceModel().getElements().toArray();
