@@ -20,7 +20,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		final Object[] elements = super.getElements(object);
 
 		// Skip root node if there is only one item
-		if (elements.length == 1 && object instanceof ScenarioService) {
+		if (elements.length == 1 && elements[0] instanceof ScenarioService) {
 			return getChildren(elements[0]);
 		}
 		return elements;
