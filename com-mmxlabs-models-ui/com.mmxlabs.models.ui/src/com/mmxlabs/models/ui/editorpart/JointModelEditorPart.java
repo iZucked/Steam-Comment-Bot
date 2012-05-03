@@ -77,7 +77,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
 
-	private Stack<IExtraValidationContext> validationContextStack = new Stack<IExtraValidationContext>();
+	private final Stack<IExtraValidationContext> validationContextStack = new Stack<IExtraValidationContext>();
 
 	/**
 	 * The root object from {@link #jointModel}
@@ -95,16 +95,16 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	 * This caches reference value provider providers.
 	 */
 	private IReferenceValueProviderProvider referenceValueProviderCache = null;
-	private Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
+	private final Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
 	/**
 	 * This holds the selection of the active viewer.
 	 */
 	private ISelection editorSelection = StructuredSelection.EMPTY;
 
 	private List<IJointModelEditorContribution> contributions = new LinkedList<IJointModelEditorContribution>();
-	private ICommandHandler defaultCommandHandler = new ICommandHandler() {
+	private final ICommandHandler defaultCommandHandler = new ICommandHandler() {
 		@Override
-		public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
+		public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
 			getEditingDomain().getCommandStack().execute(command);
 		}
 
@@ -139,7 +139,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		return locked;
 	}
 
-	public void setLocked(boolean locked) {
+	public void setLocked(final boolean locked) {
 		this.locked = locked;
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.setLocked(locked);
@@ -151,18 +151,18 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	}
 
 	@Override
-	public void doSave(IProgressMonitor monitor) {
+	public void doSave(final IProgressMonitor monitor) {
 		// TODO use other invocation with scheduling rule
 		try {
 			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
 				@Override
-				public void run(IProgressMonitor monitor) throws CoreException {
+				public void run(final IProgressMonitor monitor) throws CoreException {
 					try {
 						saving = true;
 						monitor.beginTask("Saving", 1);
 						scenarioService.save(scenarioInstance);
 						monitor.worked(1);
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						log.error("IO Error during save", e);
 					} finally {
 						monitor.done();
@@ -173,7 +173,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				}
 
 			}, monitor);
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			log.error("Error during save", e);
 		}
 	}
@@ -190,10 +190,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				propertySheetPage = new PropertySheetPage();
 				propertySheetPage.setPropertySourceProvider(new IPropertySourceProvider() {
 					@Override
-					public IPropertySource getPropertySource(Object object) {
+					public IPropertySource getPropertySource(final Object object) {
 						for (final IJointModelEditorContribution contribution : contributions) {
 							if (contribution instanceof IPropertySourceProvider) {
-								IPropertySource delegate = ((IPropertySourceProvider) contribution).getPropertySource(object);
+								final IPropertySource delegate = ((IPropertySourceProvider) contribution).getPropertySource(object);
 								if (delegate != null)
 									return delegate;
 							}
@@ -232,7 +232,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			EObject ro;
 			try {
 				ro = scenarioService.load(instance);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				throw new RuntimeException("IO Exception loading instance", e);
 			}
 			
@@ -246,7 +246,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			lockedAdapter = new EContentAdapter() {
 
 				@Override
-				public void notifyChanged(Notification notification) {
+				public void notifyChanged(final Notification notification) {
 					super.notifyChanged(notification);
 
 					if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locked()) {
@@ -279,7 +279,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 			commandStack.addCommandStackListener(new CommandStackListener() {
 				@Override
-				public void commandStackChanged(EventObject event) {
+				public void commandStackChanged(final EventObject event) {
 					if (commandStack.isSaveNeeded()) {
 						firePropertyChange(IEditorPart.PROP_DIRTY);
 					}
@@ -354,12 +354,12 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	}
 
 	@Override
-	public void setPageImage(int pageIndex, Image image) {
+	public void setPageImage(final int pageIndex, final Image image) {
 		super.setPageImage(pageIndex, image);
 	}
 
 	@Override
-	public void setPageText(int pageIndex, String text) {
+	public void setPageText(final int pageIndex, final String text) {
 		super.setPageText(pageIndex, text);
 	}
 
@@ -378,7 +378,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	 * @param reference
 	 * @return
 	 */
-	public IReferenceValueProvider getReferenceValueProvider(EClass owner, EReference reference) {
+	public IReferenceValueProvider getReferenceValueProvider(final EClass owner, final EReference reference) {
 		return referenceValueProviderCache.getReferenceValueProvider(owner, reference);
 	}
 
@@ -396,17 +396,17 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	}
 
 	@Override
-	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+	public void addSelectionChangedListener(final ISelectionChangedListener listener) {
 		selectionChangedListeners.add(listener);
 	}
 
 	@Override
-	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+	public void removeSelectionChangedListener(final ISelectionChangedListener listener) {
 		selectionChangedListeners.remove(listener);
 	}
 
 	@Override
-	public void setSelection(ISelection selection) {
+	public void setSelection(final ISelection selection) {
 		this.editorSelection = selection;
 		final SelectionChangedEvent event = new SelectionChangedEvent(this, getSelection());
 		for (final ISelectionChangedListener l : selectionChangedListeners) {
