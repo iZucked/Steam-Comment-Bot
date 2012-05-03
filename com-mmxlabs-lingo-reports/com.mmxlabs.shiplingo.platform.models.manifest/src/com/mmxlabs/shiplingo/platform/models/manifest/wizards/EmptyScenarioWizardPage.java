@@ -128,43 +128,12 @@ public class EmptyScenarioWizardPage extends WizardPage {
 
 	private void dialogChanged() {
 
-		
 		Container c = scenarioServiceSelectionGroup.getSelectedContainer();
 		if (!(c instanceof Folder || c instanceof ScenarioInstance)) {
 			updateStatus("A Folder or Scenario must be selected");
 			return;
 		}
-		// IResource container = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(getContainerName()));
-		// String fileName = getFileName();
-		//
-		// if (getContainerName().length() == 0) {
-		// updateStatus("File container must be specified");
-		// return;
-		// }
-		// if (container == null || (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
-		// updateStatus("File container must exist");
-		// return;
-		// }
-		// if (!container.isAccessible()) {
-		// updateStatus("Project must be writable");
-		// return;
-		// }
-		// if (fileName.length() == 0) {
-		// updateStatus("File name must be specified");
-		// return;
-		// }
-		// if (fileName.replace('\\', '/').indexOf('/', 1) > 0) {
-		// updateStatus("File name must be valid");
-		// return;
-		// }
-		// int dotLoc = fileName.lastIndexOf('.');
-		// if (dotLoc != -1) {
-		// String ext = fileName.substring(dotLoc + 1);
-		// if (ext.equalsIgnoreCase("scn") == false) {
-		// updateStatus("File extension must be \"scn\"");
-		// return;
-		// }
-		// }
+
 		updateStatus(null);
 	}
 
