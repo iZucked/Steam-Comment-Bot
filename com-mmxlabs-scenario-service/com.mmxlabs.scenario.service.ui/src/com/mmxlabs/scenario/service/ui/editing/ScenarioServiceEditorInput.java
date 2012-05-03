@@ -5,13 +5,18 @@
 package com.mmxlabs.scenario.service.ui.editing;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
+import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IPersistableElement;
 
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.provider.ScenarioServiceItemProviderAdapterFactory;
 
 public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput {
+
+	private final ScenarioServiceItemProviderAdapterFactory adapterFactory = new ScenarioServiceItemProviderAdapterFactory();
 
 	private final ScenarioInstance scenarioInstance;
 
@@ -31,7 +36,8 @@ public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput {
 
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-		return null;
+		final IItemLabelProvider lp = (IItemLabelProvider) adapterFactory.adapt(scenarioInstance, IItemLabelProvider.class);
+		return ExtendedImageRegistry.INSTANCE.getImageDescriptor(lp.getImage(scenarioInstance));
 	}
 
 	@Override
