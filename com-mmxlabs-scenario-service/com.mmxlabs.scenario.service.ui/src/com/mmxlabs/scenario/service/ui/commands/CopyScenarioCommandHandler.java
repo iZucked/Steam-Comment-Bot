@@ -14,6 +14,7 @@ import java.util.Iterator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
@@ -46,7 +47,7 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 				if (element instanceof ScenarioInstance) {
 					final ScenarioInstance instance = (ScenarioInstance) element;
 					final URLTransfer transfer = URLTransfer.getInstance();
-					
+					LocalTransfer l;
 					final IScenarioService service = instance.getScenarioService();
 					URI scenarioURI;
 					try {
