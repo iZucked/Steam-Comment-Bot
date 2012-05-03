@@ -26,6 +26,7 @@ import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioServiceSelectionGroup;
 import com.mmxlabs.shiplingo.platform.models.manifest.Activator;
 
 /**
