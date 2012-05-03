@@ -85,7 +85,6 @@ public class FileScenarioService extends AbstractScenarioService {
 				log.error("Exception project folder for store: ", e);
 			}
 		}
-		System.err.println(resource);
 		if (resource != null && resource.getParent().exists() == false) {
 			// create folder for resource somehow
 			try {

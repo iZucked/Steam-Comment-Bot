@@ -5,11 +5,9 @@
 package com.mmxlabs.scenario.service.workspace;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
@@ -33,7 +31,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -46,10 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.model.service.IModelService;
-import com.mmxlabs.models.mmxcore.MMXCoreFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
@@ -62,9 +55,10 @@ import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 import com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry;
 
-public class WorkspaceScenarioService implements IScenarioService {
+public class WorkspaceScenarioService extends AbstractScenarioService {
 
 	private static final Logger log = LoggerFactory.getLogger(WorkspaceScenarioService.class);
 
@@ -145,8 +139,6 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 	private IModelService modelService;
 
-	private ScenarioService scenarioService;
-
 	private final Map<String, ScenarioInstance> instanceMap = new HashMap<String, ScenarioInstance>();
 
 	private final Map<IResource, Container> mapWorkspaceToModel = new WeakHashMap<IResource, Container>();
@@ -154,16 +146,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 	private workspaceChangeListener workspaceChangeListener;
 
 	public WorkspaceScenarioService() {
-	}
-
-	@Override
-	public String getName() {
-		return "Workspace Scenario Service";
-	}
-
-	@Override
-	public ScenarioService getServiceModel() {
-		return scenarioService;
+		super("Workspace Scenario Service");
 	}
 
 	public void start(final ComponentContext context) {
@@ -172,37 +155,24 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 		final String scenarioServiceID = d.get("component.id").toString();
 
-		scenarioService = initialise();
-
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		scanForScenarios(scenarioServiceID, root, scenarioService);
+		scanForScenarios(scenarioServiceID, root, getServiceModel());
 
 		workspaceChangeListener = new workspaceChangeListener();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(workspaceChangeListener);
 	}
 
 	public void stop(final ComponentContext context) {
-		scenarioService = null;
+		
 		modelService = null;
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(workspaceChangeListener);
 		workspaceChangeListener = null;
 	}
 
-	private ScenarioService initialise() {
-
+	protected ScenarioService initServiceModel() {
 		final ScenarioService serviceService = ScenarioServiceFactory.eINSTANCE.createScenarioService();
-		serviceService.setName(getName());
-		serviceService.setDescription(getName());
-
-		serviceService.setServiceRef(this);
-		// TODO: Forbid direct editing of model expect via this class
 
 		return serviceService;
-	}
-
-	@Override
-	public ScenarioInstance getScenarioInstance(final String uuid) {
-		return instanceMap.get(uuid);
 	}
 
 	public EditingDomain initEditingDomain(final EObject rootObject, final ScenarioInstance instance) {
@@ -228,10 +198,6 @@ public class WorkspaceScenarioService implements IScenarioService {
 
 		// create editing domain
 		return new CommandProviderAwareEditingDomain(adapterFactory, commandStack, rootObject, commandProviderTracker);
-	}
-
-	public void scanForScenarios(final String scenarioServiceID) {
-
 	}
 
 	public void scanForScenarios(final String scenarioServiceID, final IContainer workspaceContainer, final Container modelContainer) {
@@ -350,11 +316,6 @@ public class WorkspaceScenarioService implements IScenarioService {
 	}
 
 	@Override
-	public boolean exists(final String uuid) {
-		return instanceMap.containsKey(uuid);
-	}
-
-	@Override
 	public void delete(final ScenarioInstance instance) {
 		for (final IResource resource : mapWorkspaceToModel.keySet()) {
 			if (mapWorkspaceToModel.get(resource) == instance) {
@@ -366,57 +327,6 @@ public class WorkspaceScenarioService implements IScenarioService {
 				return;
 			}
 		}
-	}
-
-	@Override
-	public EObject load(final ScenarioInstance instance) throws IOException {
-		if (instance.getInstance() != null) {
-			return instance.getInstance();
-		}
-		final List<EObject> parts = new ArrayList<EObject>();
-		final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-
-		for (final String uuid : instance.getDependencyUUIDs()) {
-			final ScenarioInstance dep = getScenarioInstance(uuid);
-			if (dep != null) {
-				load(dep);
-				if (dep.getInstance() != null) {
-					final EObject depInstance = dep.getInstance();
-					if (depInstance instanceof MMXRootObject) {
-						// this should probably always be true.
-						for (final MMXSubModel sub : ((MMXRootObject) depInstance).getSubModels()) {
-							implementation.addSubModel(sub.getSubModelInstance());
-						}
-					} else {
-						parts.add(depInstance); // hmm
-					}
-				}
-			}
-		}
-
-		// create MMXRootObject and connect submodel instances into it.
-		for (final String subModelURI : instance.getSubModelURIs()) {
-			// acquire sub models
-			log.debug("Loading submodel from " + subModelURI);
-			final IModelInstance modelInstance = modelService.getModel(URI.createURI(subModelURI));
-			if (modelInstance.getModel() instanceof UUIDObject) {
-				implementation.addSubModel((UUIDObject) modelInstance.getModel());
-			} else if (modelInstance.getModel() != null) {
-				parts.add(modelInstance.getModel());
-			} else {
-				log.warn("Null value for model instance " + subModelURI);
-			}
-		}
-		parts.add(implementation);
-		instance.setInstance(implementation);
-
-		final EditingDomain domain = initEditingDomain(implementation, instance);
-		instance.getAdapters().put(EditingDomain.class, domain);
-		instance.getAdapters().put(BasicCommandStack.class, (BasicCommandStack) domain.getCommandStack());
-
-		modelService.resolve(parts);
-
-		return implementation;
 	}
 
 	@Override
@@ -480,30 +390,6 @@ public class WorkspaceScenarioService implements IScenarioService {
 		// Create instance element and attach.
 		load(scenarioInstance);
 		return scenarioInstance;
-	}
-
-	@Override
-	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException {
-		final List<EObject> originalSubModels = new ArrayList<EObject>();
-		for (final String subModelURI : original.getSubModelURIs()) {
-
-			try {
-				final IModelInstance instance = modelService.getModel(URI.createURI(subModelURI));
-				originalSubModels.add(instance.getModel());
-			} catch (final IOException e1) {
-
-			}
-		}
-
-		final Collection<EObject> duppedSubModels = EcoreUtil.copyAll(originalSubModels);
-
-		final Collection<ScenarioInstance> dependencies = new ArrayList<ScenarioInstance>();
-
-		for (final String uuids : original.getDependencyUUIDs()) {
-			dependencies.add(getScenarioInstance(uuids));
-		}
-
-		return insert(destination, dependencies, duppedSubModels);
 	}
 
 	/*

@@ -6,13 +6,18 @@ package com.mmxlabs.scenario.service.ui.navigator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 
 public class ScenarioServiceContentProvider extends AdapterFactoryContentProvider {
 
@@ -21,6 +26,8 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	 */
 	private boolean showOnlyContainers = false;
 
+	private final Map<Object, Boolean> filteredElements = new WeakHashMap<Object, Boolean>();
+	
 	public ScenarioServiceContentProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 	}
@@ -29,6 +36,12 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	public Object[] getElements(final Object object) {
 
 		return getChildren(object);
+	}
+
+	@Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		filteredElements.clear();
+		super.inputChanged(viewer, oldInput, newInput);
 	}
 
 	@Override
@@ -49,7 +62,8 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		// We need to record something so the notification can force a full refresh of the viewer.
 
 		// // Skip root node if there is only one item
-		if (elements.length == 1 && super.getParent(object) == null) {
+		if (elements.length == 1 && elements[0] instanceof ScenarioService) {
+			filteredElements.put(elements[0], true);
 			return getChildren(elements[0]);
 		}
 
@@ -63,7 +77,6 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	 * @return
 	 */
 	private Object[] filter(final Object[] elements) {
-
 		if (showOnlyContainers) {
 			// Allow Objects down to the Container
 			final List<Object> c = new ArrayList<Object>(elements.length);
@@ -76,6 +89,8 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 					c.add(e);
 				} else if (e instanceof ScenarioServiceRegistry) {
 					c.add(e);
+				} else {
+					filteredElements.put(e, true);
 				}
 			}
 			return c.toArray();
@@ -96,4 +111,21 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	public void setShowOnlyContainers(final boolean showOnlyContainers) {
 		this.showOnlyContainers = showOnlyContainers;
 	}
+
+	@Override
+	public void notifyChanged(final Notification arg0) {
+		super.notifyChanged(arg0);
+
+		Object notifier = arg0.getNotifier();
+		if (filteredElements.containsKey(notifier)) {
+			viewer.getControl().getDisplay().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					viewer.refresh();
+				}
+			});
+		}
+	}
+	
+	
 }
