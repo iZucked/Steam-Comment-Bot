@@ -28,4 +28,7 @@ public interface IModelCommandProvider {
 			final Class<? extends Command> commandClass, 
 			final CommandParameter parameter, 
 			final Command input);
+	
+	public void startCommandProvision();
+	public void endCommandProvision();
 }

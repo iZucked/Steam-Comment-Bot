@@ -8,6 +8,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -16,6 +18,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * 
  */
 public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDomain {
+	private static final Logger log = LoggerFactory.getLogger(CommandProviderAwareEditingDomain.class);
 	private final EObject rootObject;
 	private final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker;
 
@@ -35,12 +38,23 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		if (!isCommandProvidersDisabled()) {
 			final CompoundCommand wrapper = new CompoundCommand();
 			wrapper.append(normal);
-			for (final IModelCommandProvider provider : commandProviderTracker.getServices(new IModelCommandProvider[0])) {
+			IModelCommandProvider[] providers = commandProviderTracker.getServices(new IModelCommandProvider[0]);
+			for (final IModelCommandProvider provider : providers) provider.startCommandProvision();
+			
+			for (final IModelCommandProvider provider : providers){
 				final Command addition = provider.provideAdditionalCommand(this, (MMXRootObject) rootObject, commandClass, commandParameter, normal);
-				if (addition != null)
-					wrapper.append(addition);
+				if (addition != null) {
+					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
+					if (addition.canExecute() == false) {
+						log.warn("Provided command was not executable, ignoring it");
+					} else {
+						wrapper.append(addition);
+					}
+				}
 			}
-
+			
+			for (final IModelCommandProvider provider : providers) provider.endCommandProvision();
+			
 			return wrapper.unwrap();
 		} else {
 			return normal;

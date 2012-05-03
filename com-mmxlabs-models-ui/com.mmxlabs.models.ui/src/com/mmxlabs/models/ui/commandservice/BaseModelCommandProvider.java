@@ -6,6 +6,7 @@ package com.mmxlabs.models.ui.commandservice;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -104,5 +105,36 @@ public abstract class BaseModelCommandProvider implements IModelCommandProvider 
 	protected Command objectDeleted(final EditingDomain domain, MMXRootObject rootObject, Object deleted){
 		return null;
 	}
+
+	private ThreadLocal<AtomicInteger> provisionStack = new ThreadLocal<AtomicInteger>();
+	private ThreadLocal<Object> provisionContext = new ThreadLocal<Object>();
 	
+	protected void setContext(final Object context) {
+		provisionContext.set(context);
+	}
+	
+	protected Object getContext() {
+		return provisionContext.get();
+	}
+	
+	protected int getProvisionDepth() {
+		return provisionStack.get().get();
+	}
+	
+	@Override
+	public void startCommandProvision() {
+		if (provisionStack.get() == null) {
+			provisionStack.set(new AtomicInteger(0));
+		}
+		if (provisionStack.get().getAndIncrement() == 0) {
+			provisionContext.set(null);
+		}
+	}
+
+	@Override
+	public void endCommandProvision() {
+		if (provisionStack.get().decrementAndGet() == 0) {
+			provisionContext.set(null);
+		}
+	}
 }
