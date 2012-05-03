@@ -40,6 +40,7 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 
 	public ImportCSVWizard() {
 		super();
+		this.setNeedsProgressMonitor(true);
 	}
 
 	/*
@@ -49,54 +50,13 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-
-		final Container container = mainPage.getScenarioContainer();
-		final String fileName = mainPage.getFileName();
-
-		final IRunnableWithProgress op = new IRunnableWithProgress() {
-			@Override
-			public void run(final IProgressMonitor monitor) throws InvocationTargetException {
-				monitor.beginTask("Creating " + fileName, 2);
-				try {
-					final List<EObject> models = new LinkedList<EObject>();
-					ManifestJointModel.createEmptySubModels(models);
-
-					IScenarioService scenarioService = container.getScenarioService();
-
-					final ScenarioInstance instance = scenarioService.insert(container, Collections.<ScenarioInstance> emptySet(), models);
-
-					final Metadata metadata = instance.getMetadata();
-					metadata.setCreated(new Date());
-					metadata.setLastModified(new Date());
-
-					monitor.worked(1);
-					monitor.setTaskName("Opening file for editing...");
-					getShell().getDisplay().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-								OpenScenarioCommandHandler.openScenarioInstance(page, instance);
-							} catch (PartInitException e) {
-							}
-						}
-					});
-					monitor.worked(1);
-				} catch (final IOException e) {
-					throw new InvocationTargetException(e);
-				} finally {
-					monitor.done();
-				}
+		final ScenarioInstance instance = filesPage.getScenarioInstance();
+		if (instance != null) {
+			try {
+				final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				OpenScenarioCommandHandler.openScenarioInstance(page, instance);
+			} catch (PartInitException e) {
 			}
-		};
-		try {
-			getContainer().run(true, false, op);
-		} catch (final InterruptedException e) {
-			return false;
-		} catch (final InvocationTargetException e) {
-			final Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), "Error", realException.getMessage());
-			return false;
 		}
 		return true;
 	}
