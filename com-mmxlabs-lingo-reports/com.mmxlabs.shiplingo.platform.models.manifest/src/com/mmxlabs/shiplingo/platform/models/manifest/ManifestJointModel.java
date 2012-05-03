@@ -175,6 +175,26 @@ public class ManifestJointModel extends JointModel {
 		return rootObject;
 	}
 
+	public static void createEmptySubModels(List<EObject> models) {
+		models.add(PortFactory.eINSTANCE.createPortModel());
+		models.add(FleetFactory.eINSTANCE.createFleetModel());
+		models.add(CargoFactory.eINSTANCE.createCargoModel());
+
+		{
+			PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
+			models.add(pricingModel);
+			FleetCostModel fleetCostModel = PricingFactory.eINSTANCE.createFleetCostModel();
+			pricingModel.setFleetCost(fleetCostModel);
+		}
+
+		models.add(InputFactory.eINSTANCE.createInputModel());
+		models.add(ScheduleFactory.eINSTANCE.createScheduleModel());
+		models.add(CommercialFactory.eINSTANCE.createCommercialModel());
+		models.add(OptimiserFactory.eINSTANCE.createOptimiserModel());
+		models.add(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
+
+	}
+
 	public ManifestJointModel(final MMXRootObject rootObject, final URI file_) throws IOException {
 		setFile(file_);
 		final Resource resource = createManifestResource();
