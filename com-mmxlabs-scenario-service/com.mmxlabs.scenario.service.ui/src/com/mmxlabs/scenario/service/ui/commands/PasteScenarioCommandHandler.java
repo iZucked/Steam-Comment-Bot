@@ -5,6 +5,7 @@
 package com.mmxlabs.scenario.service.ui.commands;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
@@ -37,20 +38,26 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		final Clipboard clipboard = new Clipboard(HandlerUtil.getActiveWorkbenchWindow(event).getShell().getDisplay());
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
 		final ISelection selection = activePage.getSelection();
 		
 		final Container container = getContainer(selection);
 		
-		if (container == null) return null;
-		
-		if (!pasteFromURI(clipboard, container)) {
-			pasteFromFiles(clipboard, container);
+		if (container == null) {
+			return null;
 		}
 		
-		clipboard.dispose();
+		final Clipboard clipboard = new Clipboard(HandlerUtil.getActiveWorkbenchWindow(event).getShell().getDisplay());
+		try {
+			if (!pasteFromURI(clipboard, container)) {
+				pasteFromFiles(clipboard, container);
+			}
+		} catch (final IOException e) {
+			throw new ExecutionException(e.getMessage(), e);	
+		} finally {
+			clipboard.dispose();
+		}
 		
 		return null;
 	}
@@ -58,8 +65,9 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	/**
 	 * @param clipboard
 	 * @param container
+	 * @throws IOException 
 	 */
-	private boolean pasteFromFiles(Clipboard clipboard, Container container) {
+	private boolean pasteFromFiles(Clipboard clipboard, Container container) throws IOException {
 		final Object fileData = clipboard.getContents(FileTransfer.getInstance());
 		final IScenarioService service = container.getScenarioService();
 		if (fileData instanceof String[]) {
@@ -94,8 +102,9 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	/**
 	 * @param clipboard
 	 * @param container
+	 * @throws IOException 
 	 */
-	private boolean pasteFromURI(final Clipboard clipboard, final Container container) {
+	private boolean pasteFromURI(final Clipboard clipboard, final Container container) throws IOException {
 		final String url = (String) clipboard.getContents(URLTransfer.getInstance());
 		if (url == null) return false;
 		try {

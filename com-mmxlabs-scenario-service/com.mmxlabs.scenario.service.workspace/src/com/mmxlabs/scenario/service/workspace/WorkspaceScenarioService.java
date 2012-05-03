@@ -282,11 +282,8 @@ public class WorkspaceScenarioService implements IScenarioService {
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 
 			final Resource manifestResource = resourceSet.createResource(manifestURI);
-			try {
-				manifestResource.load(null);
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
+			manifestResource.load(null);
+
 			final Manifest manifest = (Manifest) manifestResource.getContents().get(0);
 
 			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
@@ -423,7 +420,7 @@ public class WorkspaceScenarioService implements IScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) {
+	public ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) throws IOException {
 		IResource containerResource = null;
 		for (final Map.Entry<IResource, Container> e : mapWorkspaceToModel.entrySet()) {
 			if (e.getValue() == container) {
@@ -479,11 +476,14 @@ public class WorkspaceScenarioService implements IScenarioService {
 		}
 
 		// by this point we should have detected the new scenario and loaded it as a consequence of the listener above
-		return getScenarioInstance(uuid);
+		ScenarioInstance scenarioInstance = getScenarioInstance(uuid);
+		// Create instance element and attach.
+		load(scenarioInstance);
+		return scenarioInstance;
 	}
 
 	@Override
-	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) {
+	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException {
 		final List<EObject> originalSubModels = new ArrayList<EObject>();
 		for (final String subModelURI : original.getSubModelURIs()) {
 
@@ -514,8 +514,9 @@ public class WorkspaceScenarioService implements IScenarioService {
 	@Override
 	public void save(final ScenarioInstance scenarioInstance) throws IOException {
 		final EObject instance = scenarioInstance.getInstance();
-		if (instance == null)
+		if (instance == null) {
 			return;
+		}
 		for (final String uris : scenarioInstance.getSubModelURIs()) {
 			final IModelInstance modelInstance = modelService.getModel(URI.createURI(uris));
 			if (modelInstance != null) {

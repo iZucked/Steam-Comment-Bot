@@ -205,7 +205,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 	}
 	
 	@Override
-	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) {
+	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException {
 		log.debug("Duplicating " + original.getUuid() + " into " + destination);
 		final List<EObject> originalSubModels = new ArrayList<EObject>();
 		for (final String subModelURI : original.getSubModelURIs()) {

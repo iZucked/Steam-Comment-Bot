@@ -54,8 +54,9 @@ public interface IScenarioService {
 	 * @param models
 	 *            the new models which this scenario will own; these ought not be in any resources at this point. New resources and storage will be sorted out for them by this scenario service.
 	 * @return a new scenario instance, which will contain a new root object as its instance attribute
+	 * @throws IOException 
 	 */
-	ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models);
+	ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) throws IOException;
 
 	/**
 	 * Create a duplicate of the given scenario and place it in the destination. Any models owned by the original will be duplicated into new resources; dependencies of the original will not be
@@ -64,8 +65,9 @@ public interface IScenarioService {
 	 * @param original
 	 * @param destination
 	 * @return the new, duplicated instance.
+	 * @throws IOException 
 	 */
-	ScenarioInstance duplicate(final ScenarioInstance original, final Container destination);
+	ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException;
 
 	/**
 	 * Delete the given scenario instance from this scenario service.
