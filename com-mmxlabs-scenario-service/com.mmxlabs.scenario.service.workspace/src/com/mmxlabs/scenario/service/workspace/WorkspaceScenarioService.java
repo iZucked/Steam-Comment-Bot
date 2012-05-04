@@ -131,7 +131,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 	private workspaceChangeListener workspaceChangeListener;
 
 	public WorkspaceScenarioService() {
-		super("Workspace Scenario Service");
+		super("Workspace");
 	}
 
 	public void start(final ComponentContext context) {
