@@ -149,7 +149,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 	}
 
 	public void stop(final ComponentContext context) {
-		
+
 		modelService = null;
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(workspaceChangeListener);
 		workspaceChangeListener = null;
@@ -160,7 +160,6 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 
 		return serviceService;
 	}
-
 
 	public void scanForScenarios(final String scenarioServiceID, final IContainer workspaceContainer, final Container modelContainer) {
 		if (workspaceContainer.isAccessible()) {
@@ -233,34 +232,8 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 			metadata.setContentType(manifest.getScenarioType());
 			scenarioInstance.setMetadata(metadata);
 
-		} 
-//		else if (r.getName().endsWith("scn")) {
-//			final ResourceSet resourceSet = new ResourceSetImpl();
-//			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-//
-//			final Resource manifestResource = resourceSet.createResource(manifestURI);
-//			try {
-//				manifestResource.load(null);
-//			} catch (final IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-//			scenarioInstance.setAdapters(new HashMap<Class<?>, Object>());
-//			scenarioInstance.setUuid(UUID.randomUUID().toString());
-//
-//			final com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest manifest = (com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest) manifestResource.getContents().get(0);
-//
-//			for (final Entry entry : manifest.getEntries()) {
-//				final URI uri = URI.createURI("/" + entry.getRelativePath()).resolve(manifestURI);
-//				scenarioInstance.getSubModelURIs().add(uri.toString());
-//			}
-//
-//			final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-//
-//			metadata.setContentType("old-scenario");
-//			scenarioInstance.setMetadata(metadata);
-//		}
+		}
+
 		if (scenarioInstance != null) {
 			scenarioInstance.getAdapters().put(IScenarioService.class, this);
 			scenarioInstance.setName(r.getName());
