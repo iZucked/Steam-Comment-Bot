@@ -5,7 +5,6 @@
 package com.mmxlabs.models.ui.impl;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,12 +33,12 @@ import com.mmxlabs.models.ui.editors.util.EditorUtils;
  * 
  */
 public class DefaultTopLevelComposite extends Composite implements IDisplayComposite {
-	private IDisplayComposite topLevel = null;
-	private List<EReference> childReferences = new LinkedList<EReference>();
-	private List<IDisplayComposite> childComposites = new LinkedList<IDisplayComposite>();
-	private ICommandHandler commandHandler;
-	private IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
-	private IInlineEditorWrapper editorWrapper = IInlineEditorWrapper.IDENTITY;
+	protected IDisplayComposite topLevel = null;
+	protected List<EReference> childReferences = new LinkedList<EReference>();
+	protected List<IDisplayComposite> childComposites = new LinkedList<IDisplayComposite>();
+	protected ICommandHandler commandHandler;
+	protected IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
+	protected IInlineEditorWrapper editorWrapper = IInlineEditorWrapper.IDENTITY;
 
 	public DefaultTopLevelComposite(final Composite parent, final int style) {
 		super(parent, style);

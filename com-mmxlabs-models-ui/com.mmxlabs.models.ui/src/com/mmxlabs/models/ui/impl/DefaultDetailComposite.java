@@ -36,14 +36,14 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 
 	private ICommandHandler commandHandler;
 	private EClass displayedClass;
-	private IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
+	protected IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
 	private IInlineEditorWrapper wrapper = IInlineEditorWrapper.IDENTITY;
 
 	public DefaultDetailComposite(final Composite parent, final int style) {
 		super(parent, style);
 	}
 
-	private final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
+	protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
 
 	@Override
 	public void addInlineEditor(IInlineEditor editor) {
