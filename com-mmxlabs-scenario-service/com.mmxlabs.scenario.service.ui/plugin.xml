@@ -227,6 +227,7 @@
          </command>
          <command
                commandId="com.mmxlabs.scenario.service.ui.newfolder"
+               icon="icons/newfolder_wiz.gif"
                label="New Folder"
                style="push"
                tooltip="A">
