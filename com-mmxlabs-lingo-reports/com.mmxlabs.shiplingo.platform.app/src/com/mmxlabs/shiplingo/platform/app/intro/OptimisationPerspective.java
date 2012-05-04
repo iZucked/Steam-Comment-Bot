@@ -53,7 +53,7 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut("com.mmxlabs.rcp.navigator");
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
-		layout.addPerspectiveShortcut("com.mmxlabs.demo.app.perspective.editing");
-		layout.addPerspectiveShortcut("com.mmxlabs.demo.app.perspective.analytics");
+		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.editing");
+		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.analysis");
 	}
 }
