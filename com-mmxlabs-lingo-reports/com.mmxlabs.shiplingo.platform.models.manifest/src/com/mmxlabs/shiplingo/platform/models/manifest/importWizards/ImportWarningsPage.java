@@ -9,15 +9,13 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
-import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
-import com.mmxlabs.shiplingo.platform.models.manifest.wizards.ScenarioServiceNewScenarioPage;
 
 /**
  * Page for displaying the warnings from an import job
@@ -115,5 +113,10 @@ public class ImportWarningsPage extends WizardPage {
 	@Override
 	public boolean isPageComplete() {
 		return filesPage.getImportContext() != null;
+	}
+	
+	@Override
+	public IWizardPage getPreviousPage() {
+		return null;
 	}
 }
