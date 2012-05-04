@@ -50,6 +50,7 @@ import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
@@ -170,7 +171,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 					ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | 
 					ColumnViewerEditor.TABBING_VERTICAL | 
 					ColumnViewerEditor.KEYBOARD_ACTIVATION);
-			
+
 			return scenarioViewer;
 		} else {
 			throw new RuntimeException("Did not expect two calls to createViewer()");
@@ -212,6 +213,8 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		scenarioViewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
+		
+		scenarioViewer.setExtraValidationContext(new DefaultExtraValidationContext(getJointModelEditorPart().getRootObject()));
 		
 		final Grid table = scenarioViewer.getGrid();
 
