@@ -230,7 +230,43 @@
                icon="icons/newfolder_wiz.gif"
                label="New Folder"
                style="push"
-               tooltip="A">
+               tooltip="Create a new folder">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
+         <command
+               commandId="org.eclipse.ui.edit.copy"
+               label="Copy"
+               style="push">
+            <visibleWhen>
+            	<or>
+               		<with
+                     	variable="selection">
+                  		<iterate ifEmpty="false">
+                  		<or>
+                     		<instanceof
+                           		value="com.mmxlabs.scenario.service.model.Folder">
+                     		</instanceof>
+                     		<instanceof
+                           		value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     		</instanceof>
+                     		</or>
+                  		</iterate>
+               		</with>
+               </or>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.paste"
+               label="Paste"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.delete"
+               label="Delete"
+               style="push">
          </command>
       </menuContribution>
    </extension>
