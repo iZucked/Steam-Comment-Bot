@@ -117,9 +117,13 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 		}
 		final Pair<EObject, EReference> key = new Pair<EObject, EReference>(container, reference);
 		final List<EObject> insertions = extraContainedObjects.get(key);
-		if (insertions != null) result.addAll(insertions);
+		if (insertions != null) {
+			result.addAll(insertions);
+		}
 		final List<EObject> deletions = ignoredContainedObjects.get(key);
-		result.removeAll(deletions);
+		if (deletions != null) {
+			result.removeAll(deletions);
+		}
 		
 		return result;
 	}
