@@ -28,7 +28,7 @@ import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceSelectionGroup;
-import com.mmxlabs.shiplingo.platform.models.manifest.Activator;
+import com.mmxlabs.shiplingo.platform.models.manifest.internal.Activator;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well as the file name. The page will only accept file name without the extension OR with the extension that matches the
