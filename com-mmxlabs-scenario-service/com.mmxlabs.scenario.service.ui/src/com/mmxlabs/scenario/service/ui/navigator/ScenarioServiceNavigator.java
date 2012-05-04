@@ -162,13 +162,14 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		
 		TreeColumn labelColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		labelColumn.setText("Name");
+		labelColumn.setWidth(300);
+		
 		TreeColumn checkColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		checkColumn.setText("Show");
 		
 		TreeColumn progressColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		progressColumn.setText("Opt");
 		
-		labelColumn.pack();
 		checkColumn.pack();
 		progressColumn.pack();
 		
