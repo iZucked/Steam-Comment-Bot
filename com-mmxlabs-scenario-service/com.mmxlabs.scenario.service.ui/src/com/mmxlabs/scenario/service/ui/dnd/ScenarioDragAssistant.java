@@ -87,7 +87,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						container.getElements().addAll(containers);
 					} else if (aDropTargetEvent.detail == DND.DROP_COPY) {
 
-						for (Container c : containers) {
+						for (final Container c : containers) {
 							if (c instanceof Folder) {
 								copyFolder(container, (Folder) c);
 							} else {
@@ -105,9 +105,9 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		return Status.CANCEL_STATUS;
 	}
 
-	private void copyScenario(Container container, ScenarioInstance scenario) {
+	private void copyScenario(final Container container, final ScenarioInstance scenario) {
 
-		ScenarioInstance instance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+		final ScenarioInstance instance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 		instance.setName(scenario.getName());
 		instance.setMetadata(EcoreUtil.copy(scenario.getMetadata()));
 		instance.setUuid(UUID.randomUUID().toString());
@@ -116,7 +116,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		// ScenarioInstance instance = scenario.getScenarioService().copy(scenario);
 		container.getElements().add(instance);
 
-		for (Container c : scenario.getElements()) {
+		for (final Container c : scenario.getElements()) {
 			if (c instanceof Folder) {
 				copyFolder(instance, (Folder) c);
 			} else {
@@ -125,14 +125,14 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		}
 	}
 
-	private void copyFolder(Container container, Folder folder) {
+	private void copyFolder(final Container container, final Folder folder) {
 
 		final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
 		f.setName(folder.getName());
 		f.setMetadata(EcoreUtil.copy(folder.getMetadata()));
 		container.getElements().add(f);
 
-		for (Container c : folder.getElements()) {
+		for (final Container c : folder.getElements()) {
 			if (c instanceof Folder) {
 				copyFolder(f, (Folder) c);
 			} else {
