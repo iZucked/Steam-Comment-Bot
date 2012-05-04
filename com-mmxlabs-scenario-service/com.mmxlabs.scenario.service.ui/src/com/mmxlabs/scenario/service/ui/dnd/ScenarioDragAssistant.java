@@ -81,15 +81,12 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						}
 					}
 
-					
 					// TODO: This should really invoke a shared move/copy etc command/action handler
-					
+
 					if (aDropTargetEvent.detail == DND.DROP_MOVE) {
 						container.getElements().addAll(containers);
 					} else if (aDropTargetEvent.detail == DND.DROP_COPY) {
-						
-						
-						
+
 						for (Container c : containers) {
 							if (c instanceof Folder) {
 								copyFolder(container, (Folder) c);
