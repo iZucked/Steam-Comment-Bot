@@ -24,14 +24,14 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public abstract class ScenarioViewerPartView extends ViewPart implements IScenarioEditingLocation, ISelectionListener {
+public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener {
 	private static final String SCENARIO_NAVIGATOR_ID="com.mmxlabs.scenario.service.ui.navigator";
 	private ScenarioInstance scenarioInstance;
 	private ReferenceValueProviderCache valueProviderCache;
+	
 	protected void listenToScenarioSelection() {
 		getSite().getPage().addSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 	}
-	
 	
 	@Override
 	public void dispose() {
@@ -116,12 +116,12 @@ public abstract class ScenarioViewerPartView extends ViewPart implements IScenar
 		
 		@Override
 		public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
-			return ScenarioViewerPartView.this.getReferenceValueProviderCache();
+			return ScenarioInstanceView.this.getReferenceValueProviderCache();
 		}
 		
 		@Override
 		public EditingDomain getEditingDomain() {
-			return ScenarioViewerPartView.this.getEditingDomain();
+			return ScenarioInstanceView.this.getEditingDomain();
 		}
 	};
 	
