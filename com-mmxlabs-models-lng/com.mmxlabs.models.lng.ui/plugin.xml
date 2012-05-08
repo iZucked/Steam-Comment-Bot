@@ -32,5 +32,16 @@
          </FeatureAnyOf>
       </editorFactory>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="com.mmxlabs.models.lng.views.physical"
+            name="Physical Data">
+      </category>
+      <category
+            id="com.mmxlabs.models.lng.views.logical"
+            name="Logical Data">
+      </category>
+   </extension>
 
 </plugin>
