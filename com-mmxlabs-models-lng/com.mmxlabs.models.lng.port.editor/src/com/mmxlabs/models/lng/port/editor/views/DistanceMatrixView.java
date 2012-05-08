@@ -11,10 +11,10 @@ import org.eclipse.swt.widgets.Composite;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.ui.editorpart.PortGroupEditorPane;
-import com.mmxlabs.models.ui.editorpart.ScenarioViewerPartView;
+import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public class DistanceMatrixView extends ScenarioViewerPartView {
+public class DistanceMatrixView extends ScenarioInstanceView {
 
 	/**
 	 * The ID of the view as specified by the extension.
