@@ -11,16 +11,12 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class LockScenarioCommandHandler extends AbstractHandler {
-
-	private IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
 
 	/**
 	 * the command has been executed, so extract extract the needed information from the application context.
