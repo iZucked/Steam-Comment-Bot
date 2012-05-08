@@ -7,6 +7,7 @@ package com.mmxlabs.scenario.service.util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,6 +42,7 @@ import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
@@ -201,6 +203,11 @@ public abstract class AbstractScenarioService implements IScenarioService {
 			if (modelInstance != null) {
 				modelInstance.save();
 			}
+		}
+		// Update last modified date
+		final Metadata metadata = scenarioInstance.getMetadata();
+		if (metadata != null) {
+			metadata.setLastModified(new Date());
 		}
 	}
 	
