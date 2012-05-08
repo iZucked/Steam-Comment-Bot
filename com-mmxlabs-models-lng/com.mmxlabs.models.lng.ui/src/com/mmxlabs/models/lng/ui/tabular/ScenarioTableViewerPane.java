@@ -236,6 +236,8 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		scenarioViewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
 		
+		scenarioViewer.setExtraValidationContext(new DefaultExtraValidationContext(getJointModelEditorPart().getRootObject()));
+		
 		final Grid table = scenarioViewer.getGrid();
 
 		table.setHeaderVisible(true);
