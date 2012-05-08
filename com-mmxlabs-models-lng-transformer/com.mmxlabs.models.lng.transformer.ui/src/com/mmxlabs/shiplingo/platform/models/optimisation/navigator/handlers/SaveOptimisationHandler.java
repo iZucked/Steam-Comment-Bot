@@ -12,6 +12,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.slf4j.Logger;
@@ -119,7 +120,11 @@ public class SaveOptimisationHandler extends AbstractOptimisationHandler {
 			return false;
 		}
 
-		final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow == null) {
+			return false;
+		}
+		final ISelection selection = activeWorkbenchWindow.getSelectionService().getSelection();
 
 		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
