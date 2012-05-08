@@ -51,7 +51,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * An abstract base class suitable for most scenario services.
  * 
  * @author hinton
- *
+ * 
  */
 public abstract class AbstractScenarioService implements IScenarioService {
 	private static final Logger log = LoggerFactory.getLogger(AbstractScenarioService.class);
@@ -59,16 +59,16 @@ public abstract class AbstractScenarioService implements IScenarioService {
 	private ScenarioService serviceModel;
 	protected IModelService modelService;
 	private static final EAttribute uuidAttribute = ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid();
-	
+
 	protected AbstractScenarioService(final String name) {
 		this.name = name;
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
 	}
-	
+
 	public IModelService getModelService() {
 		return modelService;
 	}
@@ -77,7 +77,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		this.modelService = modelService;
 	}
 
-	//TODO consider replacing these two methods with a faster mapping approach based on a hashtable + adapter
+	// TODO consider replacing these two methods with a faster mapping approach based on a hashtable + adapter
 	// to maintain the hashtable's contents.
 	@Override
 	public boolean exists(final String uuid) {
@@ -86,19 +86,21 @@ public abstract class AbstractScenarioService implements IScenarioService {
 
 	@Override
 	public ScenarioInstance getScenarioInstance(final String uuid) {
-		SELECT query = new SELECT(1, new FROM(getServiceModel()), new WHERE(new EObjectAttributeValueCondition(uuidAttribute, 
-				new StringValue(uuid))));
+		SELECT query = new SELECT(1, new FROM(getServiceModel()), new WHERE(new EObjectAttributeValueCondition(uuidAttribute, new StringValue(uuid))));
 		IQueryResult result = query.execute();
-		if (result.isEmpty())return null;
-		else return (ScenarioInstance) result.getEObjects().iterator().next();
+		if (result.isEmpty())
+			return null;
+		else
+			return (ScenarioInstance) result.getEObjects().iterator().next();
 	}
-	
+
 	/**
 	 * Subclasses should use this method to create the initial service model.
+	 * 
 	 * @return
 	 */
 	protected abstract ScenarioService initServiceModel();
-	
+
 	@Override
 	public ScenarioService getServiceModel() {
 		synchronized (this) {
@@ -110,7 +112,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		}
 		return serviceModel;
 	}
-	
+
 	@Override
 	public EObject load(final ScenarioInstance instance) throws IOException {
 		if (instance.getInstance() != null) {
@@ -134,7 +136,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 							implementation.addSubModel(sub.getSubModelInstance());
 						}
 					} else {
-						parts.add(depInstance); 
+						parts.add(depInstance);
 					}
 				}
 			}
@@ -157,17 +159,17 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		instance.setInstance(implementation);
 
 		final EditingDomain domain = initEditingDomain(implementation, instance);
-		
+
 		instance.setAdapters(new HashMap<Class<?>, Object>());
-		
+
 		instance.getAdapters().put(EditingDomain.class, domain);
 		instance.getAdapters().put(BasicCommandStack.class, (BasicCommandStack) domain.getCommandStack());
-		
+
 		modelService.resolve(parts);
 
 		return implementation;
 	}
-	
+
 	public EditingDomain initEditingDomain(final EObject rootObject, final ScenarioInstance instance) {
 		final BasicCommandStack commandStack = new BasicCommandStack() {
 			@Override
@@ -192,12 +194,13 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		// create editing domain
 		return new CommandProviderAwareEditingDomain(adapterFactory, commandStack, rootObject, commandProviderTracker);
 	}
-	
+
 	@Override
 	public void save(final ScenarioInstance scenarioInstance) throws IOException {
 		final EObject instance = scenarioInstance.getInstance();
-		if (instance == null)
+		if (instance == null) {
 			return;
+		}
 		for (final String uris : scenarioInstance.getSubModelURIs()) {
 			final IModelInstance modelInstance = modelService.getModel(URI.createURI(uris));
 			if (modelInstance != null) {
@@ -210,13 +213,13 @@ public abstract class AbstractScenarioService implements IScenarioService {
 			metadata.setLastModified(new Date());
 		}
 	}
-	
+
 	@Override
 	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException {
 		log.debug("Duplicating " + original.getUuid() + " into " + destination);
 		final List<EObject> originalSubModels = new ArrayList<EObject>();
 		for (final String subModelURI : original.getSubModelURIs()) {
-			log.debug("Loading submodel "+subModelURI);
+			log.debug("Loading submodel " + subModelURI);
 			try {
 				final IModelInstance instance = modelService.getModel(URI.createURI(subModelURI));
 				originalSubModels.add(instance.getModel());
@@ -233,6 +236,13 @@ public abstract class AbstractScenarioService implements IScenarioService {
 			dependencies.add(getScenarioInstance(uuids));
 		}
 
-		return insert(destination, dependencies, duppedSubModels);
+		ScenarioInstance dup = insert(destination, dependencies, duppedSubModels);
+		// Copy across various bits of information.
+		dup.getMetadata().setContentType(original.getMetadata().getContentType());
+		dup.getMetadata().setCreated(original.getMetadata().getCreated());
+		dup.getMetadata().setLastModified(new Date());
+		dup.setName(original.getName());
+
+		return dup;
 	}
 }
