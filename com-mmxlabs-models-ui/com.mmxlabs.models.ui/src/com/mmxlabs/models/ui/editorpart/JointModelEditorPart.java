@@ -38,6 +38,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -68,12 +69,11 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 /**
  * An editor part for editing MMX Root Objects.
  * 
- * TODO top level object may want to contribute functionality
  * 
  * @author hinton
  * 
  */
-public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider {
+public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider, IScenarioEditingLocation {
 
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
 
@@ -135,10 +135,18 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	public JointModelEditorPart() {
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#isLocked()
+	 */
+	@Override
 	public boolean isLocked() {
 		return locked;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setLocked(boolean)
+	 */
+	@Override
 	public void setLocked(final boolean locked) {
 		this.locked = locked;
 		for (final IJointModelEditorContribution contribution : contributions) {
@@ -183,6 +191,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Object getAdapter(final Class adapter) {
 		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
@@ -302,14 +311,26 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		validationContextStack.push(new DefaultExtraValidationContext(getRootObject()));
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getExtraValidationContext()
+	 */
+	@Override
 	public IExtraValidationContext getExtraValidationContext() {
 		return validationContextStack.peek();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#pushExtraValidationContext(com.mmxlabs.models.ui.validation.IExtraValidationContext)
+	 */
+	@Override
 	public void pushExtraValidationContext(final IExtraValidationContext context) {
 		validationContextStack.push(context);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#popExtraValidationContext()
+	 */
+	@Override
 	public void popExtraValidationContext() {
 		validationContextStack.pop();
 	}
@@ -343,6 +364,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getEditingDomain()
+	 */
 	@Override
 	public EditingDomain getEditingDomain() {
 		return editingDomain;
@@ -365,10 +389,18 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		super.setPageText(pageIndex, text);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getAdapterFactory()
+	 */
+	@Override
 	public AdapterFactory getAdapterFactory() {
 		return adapterFactory;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getReferenceValueProviderCache()
+	 */
+	@Override
 	public IReferenceValueProviderProvider getReferenceValueProviderCache() {
 		return referenceValueProviderCache;
 	}
@@ -384,10 +416,18 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		return referenceValueProviderCache.getReferenceValueProvider(owner, reference);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getDefaultCommandHandler()
+	 */
+	@Override
 	public ICommandHandler getDefaultCommandHandler() {
 		return defaultCommandHandler;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getRootObject()
+	 */
+	@Override
 	public MMXRootObject getRootObject() {
 		return rootObject;
 	}
@@ -416,10 +456,18 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setDisableCommandProviders(boolean)
+	 */
+	@Override
 	public void setDisableCommandProviders(final boolean disable) {
 		editingDomain.setCommandProvidersDisabled(disable);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setDisableUpdates(boolean)
+	 */
+	@Override
 	public void setDisableUpdates(final boolean disable) {
 		if (disable) {
 			disableAdapters(getRootObject());
@@ -448,11 +496,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			enableAdapters(o);
 	}
 
-	/**
-	 * This makes sure that one content viewer, either for the current page or the outline view, if it has focus, is the current one. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setCurrentViewer(org.eclipse.jface.viewers.Viewer)
 	 */
+	@Override
 	public void setCurrentViewer(final Viewer viewer) {
 		// If it is changing...
 		//
@@ -492,5 +539,21 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			//
 			setSelection(currentViewer == null ? StructuredSelection.EMPTY : currentViewer.getSelection());
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getScenarioInstance()
+	 */
+	@Override
+	public ScenarioInstance getScenarioInstance() {
+		return scenarioInstance;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getShell()
+	 */
+	@Override
+	public Shell getShell() {
+		return getSite().getShell();
 	}
 }
