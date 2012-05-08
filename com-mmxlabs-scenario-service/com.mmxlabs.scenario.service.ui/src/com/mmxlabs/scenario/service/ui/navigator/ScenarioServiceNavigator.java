@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.navigator.CommonNavigator;
@@ -264,5 +265,11 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			super.handleDoubleClick(anEvent);
 		}
 
+	}
+
+	protected ActionGroup createCommonActionGroup() {
+		// Return an anonymous implementation to suppress default actions
+		return new ActionGroup() {
+		};
 	}
 }
