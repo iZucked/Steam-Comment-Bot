@@ -9,10 +9,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
@@ -31,6 +33,12 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	
 	protected void listenToScenarioSelection() {
 		getSite().getPage().addSelectionListener(SCENARIO_NAVIGATOR_ID, this);
+		IViewPart findView = getSite().getPage().findView(SCENARIO_NAVIGATOR_ID);
+		if (findView != null) {
+			if (findView instanceof ISelectionProvider) {
+				selectionChanged(findView, ((ISelectionProvider) findView).getSelection());
+			}
+		}
 	}
 	
 	@Override
