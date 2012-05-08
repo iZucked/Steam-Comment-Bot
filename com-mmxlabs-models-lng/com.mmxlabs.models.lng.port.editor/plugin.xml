@@ -138,4 +138,31 @@
        </OwnerAnyOf>
     </editorFactory>
  </extension>
+ <extension
+       point="org.eclipse.ui.views">
+    <category
+          id="com.mmxlabs.models.lng.port.editor"
+          name="Port and Distance Views">
+    </category>
+    <view
+          category="com.mmxlabs.models.lng.port.editor"
+          class="com.mmxlabs.models.lng.port.editor.views.PortView"
+          icon="icons/sample.gif"
+          id="com.mmxlabs.models.lng.port.editor.views.PortView"
+          name="Ports">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.port.editor"
+          class="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
+          icon="icons/sample.gif"
+          id="com.mmxlabs.models.lng.port.editor.views.PortGroupsView"
+          name="Port Groups">
+    </view>
+ </extension>
+ <extension
+       point="org.eclipse.help.contexts">
+    <contexts
+          file="contexts.xml">
+    </contexts>
+ </extension>
 </plugin>
