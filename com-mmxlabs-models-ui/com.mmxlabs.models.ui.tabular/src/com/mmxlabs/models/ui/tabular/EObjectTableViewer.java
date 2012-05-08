@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.ui.tabular;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,21 +15,13 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EValidator;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -62,6 +53,10 @@ import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.tabular.filter.FilterUtils;
 import com.mmxlabs.models.ui.tabular.filter.IFilter;
+import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.models.ui.validation.ValidationContentAdapter;
+import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 /**
@@ -242,7 +237,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
-		final EMFPath path = new CompiledEMFPath(true, pathObjects);
+		final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
 		return addColumn(columnName, renderer, manipulator, path);
 	}
 
