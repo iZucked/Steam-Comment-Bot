@@ -88,6 +88,7 @@ public class EmptyScenarioWizard extends Wizard implements INewWizard {
 					final Metadata metadata = instance.getMetadata();
 					metadata.setCreated(new Date());
 					metadata.setLastModified(new Date());
+					metadata.setContentType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
 
 					monitor.worked(1);
 					monitor.setTaskName("Opening file for editing...");

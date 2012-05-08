@@ -226,6 +226,7 @@ public class ImportCSVFilesPage extends WizardPage {
 								final Metadata metadata = instance.getMetadata();
 								metadata.setCreated(new Date());
 								metadata.setLastModified(new Date());
+								metadata.setContentType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
 
 								ImportCSVFilesPage.this.setScenarioInstance(instance);
 								
