@@ -10,11 +10,15 @@ import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.ModelValidationService;
 
+import com.mmxlabs.models.mmxcore.IMMXAdapter;
+
 /**
  * Abstract {@link EContentAdapter} implementation to run batch validation on various {@link Notification}s. This is an abstract implementation with a method {@link #validationStatus(IStatus)} to
  * notify implementing classes that validation has completed validation and returns the status result.
  */
-public abstract class ValidationContentAdapter extends EContentAdapter {
+public abstract class ValidationContentAdapter extends EContentAdapter implements IMMXAdapter {
+
+	private boolean enabled = true;
 
 	private IBatchValidator validator = null;
 
@@ -32,15 +36,34 @@ public abstract class ValidationContentAdapter extends EContentAdapter {
 
 	public abstract void validationStatus(IStatus status);
 
+	public void performValidation() {
+		createValidator();
+
+		// Run the validation
+		final IStatus status = helper.runValidation(validator, extraContext, Collections.singleton(currentTarget));
+
+		// Notify implementors
+		validationStatus(status);
+
+	}
+
+	private void createValidator() {
+		if (validator == null) {
+			// Set up a batch validation
+			validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+			validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+		}
+	}
+
 	public void notifyChanged(final Notification notification) {
+
+		if (!isEnabled()) {
+			return;
+		}
 
 		// Ignore adapter notifications
 		if (notification.getEventType() != Notification.REMOVING_ADAPTER) {
-			if (validator == null) {
-				// Set up a batch validation
-				validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
-				validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
-			}
+			createValidator();
 
 			// Run the validation
 			final EObject target = currentTarget == null ? (EObject) notification.getNotifier() : currentTarget;
@@ -77,5 +100,19 @@ public abstract class ValidationContentAdapter extends EContentAdapter {
 	 */
 	public void setExtraContext(final IExtraValidationContext extraContext) {
 		this.extraContext = extraContext;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	@Override
+	public void enable() {
+		enabled = true;
+	}
+
+	@Override
+	public void disable() {
+		enabled = false;
 	}
 }
