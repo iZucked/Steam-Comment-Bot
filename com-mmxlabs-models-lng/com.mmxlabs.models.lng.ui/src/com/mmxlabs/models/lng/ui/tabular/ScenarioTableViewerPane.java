@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
@@ -42,7 +43,7 @@ import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
@@ -59,17 +60,41 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected static final String ADD_REMOVE_GROUP = "addremove";
 	protected static final String EDIT_GROUP = "edit";
 	private ScenarioTableViewer scenarioViewer;
-	private JointModelEditorPart jointModelEditorPart;
+	private IScenarioEditingLocation jointModelEditorPart;
 
 	private FilterField filterField;
+	private ToolBarManager externalToolbarManager;
 
-	public ScenarioTableViewerPane(IWorkbenchPage page, JointModelEditorPart part) {
+	public ScenarioTableViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
 		super(page, part);
-		this.jointModelEditorPart = part;
+		this.jointModelEditorPart = location;
 	}
 
 	protected ScenarioTableViewer getScenarioViewer() {
 		return scenarioViewer;
+	}
+	
+	@Override
+	public void dispose() {
+		if (externalToolbarManager != null) {
+			externalToolbarManager.removeAll();
+			externalToolbarManager.update(true);
+		}
+		externalToolbarManager = null;
+		super.dispose();
+	}
+
+	public void setExternalToolBarManager(final ToolBarManager manager) {
+		this.externalToolbarManager = manager;
+	}
+
+	@Override
+	public ToolBarManager getToolBarManager() {
+		if (externalToolbarManager != null) {
+			return externalToolbarManager;
+		} else {
+			return super.getToolBarManager();
+		}
 	}
 
 	@Override
@@ -92,7 +117,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			control.marginHeight = 0;
 
 			// Create a title bar.
-			createTitleBar();
+			if (externalToolbarManager == null) createTitleBar();
 
 			final Composite inner = new Composite(control, SWT.NONE);
 			filterField = new FilterField(inner);
@@ -116,8 +141,6 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			hookFocus(viewer.getControl());
 		}
 	}
-
-	
 	
 	@Override
 	public ScenarioTableViewer createViewer(Composite parent) {
@@ -198,7 +221,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		return jointModelEditorPart.getReferenceValueProviderCache();
 	}
 
-	public JointModelEditorPart getJointModelEditorPart() {
+	public IScenarioEditingLocation getJointModelEditorPart() {
 		return jointModelEditorPart;
 	}
 
@@ -255,7 +278,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			}
 
 			@Override
-			public JointModelEditorPart getEditorPart() {
+			public IScenarioEditingLocation getEditorPart() {
 				return jointModelEditorPart;
 			}
 		});
@@ -301,7 +324,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		return new ScenarioModifyingAction("Delete") {
 			{
 				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
-				jointModelEditorPart.addSelectionChangedListener(this);
+				viewer.addSelectionChangedListener(this);
 			}
 
 			@Override

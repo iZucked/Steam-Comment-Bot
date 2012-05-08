@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.widgets.FileDialog;
 
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -27,7 +28,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 public class SimpleImportAction extends ImportAction {
 	private ScenarioTableViewer viewer;
 
-	public SimpleImportAction(final JointModelEditorPart part, final ScenarioTableViewer viewer) {
+	public SimpleImportAction(final IScenarioEditingLocation part, final ScenarioTableViewer viewer) {
 		super(part);
 		this.viewer = viewer;
 	}
@@ -40,7 +41,7 @@ public class SimpleImportAction extends ImportAction {
 		final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(containment.getEReferenceType());
 		// open file picker
 
-		final FileDialog fileDialog = new FileDialog(part.getSite().getShell());
+		final FileDialog fileDialog = new FileDialog(part.getShell());
 		fileDialog.setFilterExtensions(new String[] {"*.csv"});
 		final String path = fileDialog.open();
 		

@@ -25,7 +25,7 @@ import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
@@ -49,7 +49,7 @@ public final class AddModelAction {
 
 		public MMXRootObject getRootObject();
 		
-		public JointModelEditorPart getEditorPart();
+		public IScenarioEditingLocation getEditorPart();
 	}
 
 	public final static Action create(final EClass eClass, final IAddContext context) {

@@ -8,7 +8,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 
 /**
@@ -16,9 +16,9 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
  *
  */
 public class DuplicateAction extends ScenarioModifyingAction {
-	private JointModelEditorPart part;
+	private IScenarioEditingLocation part;
 
-	public DuplicateAction(final JointModelEditorPart part) {
+	public DuplicateAction(final IScenarioEditingLocation part) {
 		super("Duplicate selection");
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/fastview_restore.gif"));
 		this.part = part;
@@ -27,7 +27,7 @@ public class DuplicateAction extends ScenarioModifyingAction {
 	@Override
 	public void run() {
 		final IStructuredSelection selection = (IStructuredSelection) getLastSelection();
-		final DetailCompositeDialog dcd = new DetailCompositeDialog(part.getSite().getShell(), part.getDefaultCommandHandler());
+		final DetailCompositeDialog dcd = new DetailCompositeDialog(part.getShell(), part.getDefaultCommandHandler());
 		dcd.setReturnDuplicates(true);
 		dcd.open(part, part.getRootObject(), selection.toList());
 	}

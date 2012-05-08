@@ -33,6 +33,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.LockableAction;
@@ -42,8 +43,8 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
  *
  */
 public abstract class ImportAction extends LockableAction {
-	protected final JointModelEditorPart part;
-	public ImportAction(final JointModelEditorPart part) {
+	protected final IScenarioEditingLocation part;
+	public ImportAction(final IScenarioEditingLocation part) {
 		super("Import", AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
 		this.part = part;
 	}
@@ -66,7 +67,7 @@ public abstract class ImportAction extends LockableAction {
 
 			doImportStages(context);
 			if (context.getProblems().isEmpty() == false) {
-				final ImportProblemDialog ipd = new ImportProblemDialog(part.getSite().getShell());
+				final ImportProblemDialog ipd = new ImportProblemDialog(part.getShell());
 				ipd.open(context);
 			}
 		} finally {
