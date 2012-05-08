@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui.validation;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
@@ -40,10 +41,15 @@ public class ValidationHelper {
 				}
 			}
 		});
-		
-		Executors.newSingleThreadExecutor().execute(validationTask);
-		
+
+		// Validation should run in it's own thread - separate to any other validation task, so create an executor to manage the thread.
+		final ExecutorService executor = Executors.newSingleThreadExecutor();
+
 		try {
+			// Submit a task to the executor
+			executor.execute(validationTask);
+
+			// Block until there is a result to return
 			return validationTask.get();
 		} catch (final InterruptedException e) {
 			log.error("Interrupted validating " + targets, e);
@@ -51,6 +57,9 @@ public class ValidationHelper {
 		} catch (final ExecutionException e) {
 			log.error("Error excuting validation on " + targets, e);
 			return null;
+		} finally {
+			// Force executor shutdown
+			executor.shutdownNow();
 		}
 	}
 }
