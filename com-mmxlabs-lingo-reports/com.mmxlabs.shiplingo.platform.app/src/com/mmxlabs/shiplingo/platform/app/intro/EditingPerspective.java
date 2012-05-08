@@ -14,13 +14,13 @@ public class EditingPerspective implements IPerspectiveFactory {
 	public void createInitialLayout(final IPageLayout layout) {
 
 		final IFolderLayout navFolder = layout.createFolder("navFolder", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
-		navFolder.addView("com.mmxlabs.rcp.navigator");
+		navFolder.addView("com.mmxlabs.scenario.service.ui.navigator");
 
-		layout.addShowViewShortcut("com.mmxlabs.rcp.navigator");
+		layout.addShowViewShortcut("com.mmxlabs.scenario.service.ui.navigator");
 
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
-		layout.addPerspectiveShortcut("com.mmxlabs.demo.app.perspective.optimisation");
-		layout.addPerspectiveShortcut("com.mmxlabs.demo.app.perspective.analytics");
+		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.optimisation");
+		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.analysis");
 	}
 }

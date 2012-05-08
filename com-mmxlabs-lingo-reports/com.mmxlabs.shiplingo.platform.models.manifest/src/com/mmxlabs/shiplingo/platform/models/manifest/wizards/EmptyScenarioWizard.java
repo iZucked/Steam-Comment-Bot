@@ -4,41 +4,42 @@
  */
 package com.mmxlabs.shiplingo.platform.models.manifest.wizards;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.core.runtime.*;
-import org.eclipse.jface.operation.*;
-import java.lang.reflect.InvocationTargetException;
-import java.util.UUID;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.core.resources.*;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.common.util.URI;
-
-import java.io.*;
-
-import org.eclipse.ui.*;
-import org.eclipse.ui.ide.IDE;
-
+import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler;
 import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
- * This is a sample new wizard. Its role is to create a new file 
- * resource in the provided container. If the container resource
- * (a folder or a project) is selected in the workspace 
- * when the wizard is opened, it will accept it as the target
- * container. The wizard creates one file with the extension
- * "scn". If a sample multi-page editor (also available
- * as a template) is registered for the same extension, it will
- * be able to open it.
+ * This is a sample new wizard. Its role is to create a new file resource in the provided container. If the container resource (a folder or a project) is selected in the workspace when the wizard is
+ * opened, it will accept it as the target container. The wizard creates one file with the extension "scn". If a sample multi-page editor (also available as a template) is registered for the same
+ * extension, it will be able to open it.
  */
 
 public class EmptyScenarioWizard extends Wizard implements INewWizard {
-	private EmptyScenarioWizardPage page;
+
+	private ScenarioServiceNewScenarioPage page;
 	private ISelection selection;
 
 	/**
@@ -48,32 +49,61 @@ public class EmptyScenarioWizard extends Wizard implements INewWizard {
 		super();
 		setNeedsProgressMonitor(true);
 	}
-	
+
+	public void setSelection(final ISelection selection) {
+		this.selection = selection;
+	}
+
 	/**
 	 * Adding the page to the wizard.
 	 */
 
 	@Override
 	public void addPages() {
-		page = new EmptyScenarioWizardPage(selection);
+		page = new ScenarioServiceNewScenarioPage(selection);
 		addPage(page);
 	}
 
 	/**
-	 * This method is called when 'Finish' button is pressed in
-	 * the wizard. We will create an operation and run it
-	 * using wizard as execution context.
+	 * This method is called when 'Finish' button is pressed in the wizard. We will create an operation and run it using wizard as execution context.
 	 */
 	@Override
 	public boolean performFinish() {
-		final String containerName = page.getContainerName();
+		final Container container = page.getScenarioContainer();
 		final String fileName = page.getFileName();
-		IRunnableWithProgress op = new IRunnableWithProgress() {
+
+		final IRunnableWithProgress op = new IRunnableWithProgress() {
 			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException {
+			public void run(final IProgressMonitor monitor) throws InvocationTargetException {
+				monitor.beginTask("Creating " + fileName, 2);
 				try {
-					doFinish(containerName, fileName, monitor);
-				} catch (CoreException e) {
+					final List<EObject> models = new LinkedList<EObject>();
+					ManifestJointModel.createEmptySubModels(models);
+
+					final IScenarioService scenarioService = container.getScenarioService();
+
+					final ScenarioInstance instance = scenarioService.insert(container, Collections.<ScenarioInstance> emptySet(), models);
+					instance.setName(fileName);
+
+					final Metadata metadata = instance.getMetadata();
+					metadata.setCreated(new Date());
+					metadata.setLastModified(new Date());
+					metadata.setContentType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
+
+					monitor.worked(1);
+					monitor.setTaskName("Opening file for editing...");
+					getShell().getDisplay().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+								OpenScenarioCommandHandler.openScenarioInstance(page, instance);
+							} catch (final PartInitException e) {
+							}
+						}
+					});
+					monitor.worked(1);
+				} catch (final IOException e) {
 					throw new InvocationTargetException(e);
 				} finally {
 					monitor.done();
@@ -82,92 +112,18 @@ public class EmptyScenarioWizard extends Wizard implements INewWizard {
 		};
 		try {
 			getContainer().run(true, false, op);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			return false;
-		} catch (InvocationTargetException e) {
-			Throwable realException = e.getTargetException();
+		} catch (final InvocationTargetException e) {
+			final Throwable realException = e.getTargetException();
 			MessageDialog.openError(getShell(), "Error", realException.getMessage());
 			return false;
 		}
 		return true;
 	}
-	
-	/**
-	 * The worker method. It will find the container, create the
-	 * file if missing or just replace its contents, and open
-	 * the editor on the newly created file.
-	 */
 
-	private void doFinish(
-		String containerName,
-		String fileName,
-		IProgressMonitor monitor)
-		throws CoreException {
-		// create a sample file
-		monitor.beginTask("Creating " + fileName, 2);
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		IResource resource = root.findMember(new Path(containerName));
-		if (!resource.exists() || !(resource instanceof IContainer)) {
-			throwCoreException("Container \"" + containerName + "\" does not exist.");
-		}
-		IContainer container = (IContainer) resource;
-		final IFile file = container.getFile(new Path(fileName));
-		try {
-			InputStream stream = openContentStream();
-			if (file.exists()) {
-				file.setContents(stream, true, true, monitor);
-			} else {
-				file.create(stream, true, monitor);
-			}
-			stream.close();
-		} catch (IOException e) {
-		}
-		monitor.worked(1);
-		monitor.setTaskName("Opening file for editing...");
-		getShell().getDisplay().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				IWorkbenchPage page =
-					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				try {
-					IDE.openEditor(page, file, true);
-				} catch (PartInitException e) {
-				}
-			}
-		});
-		monitor.worked(1);
-	}
-	
-	/**
-	 * We will initialize file contents with a blank scenario.
-	 */
-
-	private InputStream openContentStream() {
-		try {
-			final File tempFile = File.createTempFile(UUID.randomUUID() + "", "scn");
-			final ManifestJointModel model = ManifestJointModel.createEmptyModel(URI.createFileURI(tempFile.getCanonicalPath()));
-			model.save();
-			tempFile.deleteOnExit();
-			return new FileInputStream(tempFile);
-		} catch (IOException e) {
-		}
-		
-		return null;
-	}
-
-	private void throwCoreException(String message) throws CoreException {
-		IStatus status =
-			new Status(IStatus.ERROR, "com.mmxlabs.models.lng.demo", IStatus.OK, message, null);
-		throw new CoreException(status);
-	}
-
-	/**
-	 * We will accept the selection in the workbench to see if
-	 * we can initialize from it.
-	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
-	 */
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		this.selection = selection;
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
+		setSelection(selection);
 	}
 }

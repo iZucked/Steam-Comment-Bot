@@ -9,6 +9,8 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.shiplingo.platform.models.manifest,
  com.mmxlabs.shiplingo.platform.models.manifest.adapters,
+ com.mmxlabs.shiplingo.platform.models.manifest.exportWizards,
+ com.mmxlabs.shiplingo.platform.models.manifest.importWizards,
  com.mmxlabs.shiplingo.platform.models.manifest.manifest,
  com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl,
  com.mmxlabs.shiplingo.platform.models.manifest.manifest.util,
@@ -30,7 +32,12 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.util;bundle-version="1.0.0",
  com.mmxlabs.models.lng.optimiser;bundle-version="1.0.0",
  com.mmxlabs.models.lng.transformer;bundle-version="1.0.0",
- com.mmxlabs.models.lng.analytics;bundle-version="1.0.0"
+ com.mmxlabs.models.lng.analytics;bundle-version="1.0.0",
+ com.mmxlabs.scenario.service.manifest;bundle-version="1.0.0",
+ com.mmxlabs.scenario.service.model;bundle-version="1.0.0",
+ com.mmxlabs.scenario.service.ui;bundle-version="1.0.0",
+ org.eclipse.emf.edit.ui;bundle-version="2.7.0",
+ org.slf4j.api;bundle-version="1.6.4"
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.scheduler.optimiser;version="1.0.0"
-Bundle-Activator: com.mmxlabs.shiplingo.platform.models.manifest.Activator
+Bundle-Activator: com.mmxlabs.shiplingo.platform.models.manifest.internal.Activator

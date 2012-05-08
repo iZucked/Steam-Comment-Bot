@@ -4,54 +4,76 @@
  */
 package com.mmxlabs.shiplingo.platform.models.manifest.importWizards;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler;
+import com.mmxlabs.shiplingo.platform.models.manifest.wizards.ScenarioServiceNewScenarioPage;
 
 public class ImportCSVWizard extends Wizard implements IImportWizard {
-	
-	ImportCSVWizardPage mainPage;
+
+	ScenarioServiceNewScenarioPage mainPage;
 	private ImportCSVFilesPage filesPage;
 	private ImportWarningsPage warnings;
 
 	public ImportCSVWizard() {
 		super();
+		this.setNeedsProgressMonitor(true);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	@Override
 	public boolean performFinish() {
-		
-		IFile file = mainPage.createNewFile();
-        if (file == null)
-            return false;
-        return true;
+		final ScenarioInstance instance = filesPage.getScenarioInstance();
+		if (instance != null) {
+			try {
+				final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				OpenScenarioCommandHandler.openScenarioInstance(page, instance);
+			} catch (PartInitException e) {
+			}
+		}
+		return true;
 	}
-	 
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
 	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		setWindowTitle("CSV Import Wizard"); //NON-NLS-1
+		setWindowTitle("CSV Import Wizard"); // NON-NLS-1
 		setNeedsProgressMonitor(true);
-		filesPage = new ImportCSVFilesPage("CSV Files");
+		mainPage = new ScenarioServiceNewScenarioPage(selection);
+		filesPage = new ImportCSVFilesPage("CSV Files", mainPage);
 		warnings = new ImportWarningsPage("Warnings", filesPage);
-		mainPage = new ImportCSVWizardPage("Import CSV",selection, warnings); //NON-NLS-1
 	}
-	
-	/* (non-Javadoc)
-     * @see org.eclipse.jface.wizard.IWizard#addPages()
-     */
-    @Override
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.wizard.IWizard#addPages()
+	 */
+	@Override
 	public void addPages() {
-        super.addPages(); 
-        addPage(filesPage);
-        addPage(warnings);
-        addPage(mainPage);
-    }
+		super.addPages();
+		addPage(mainPage);
+		addPage(filesPage);
+		addPage(warnings);
+	}
+
+	@Override
+	public boolean canFinish() {
+		return warnings.isPageComplete();
+	}
 }

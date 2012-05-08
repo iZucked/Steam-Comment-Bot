@@ -42,25 +42,6 @@ public class ImportCSVWizardPage extends WizardNewFileCreationPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#getInitialContents()
-	 */
-	@Override
-	protected InputStream getInitialContents() {
-		try {
-			final MMXRootObject root = previousPage.getRootObject();
-			final File tempFile = File.createTempFile(UUID.randomUUID().toString(), "scn");
-			tempFile.deleteOnExit();
-			final ManifestJointModel djm = new ManifestJointModel(root, URI.createFileURI(tempFile.getCanonicalPath()));
-			djm.save();
-			return new FileInputStream(tempFile);
-		} catch (FileNotFoundException e) {
-			return null;
-		} catch (IOException e) {
-			return null;
-		}
-	}
-
-	/* (non-Javadoc)
 	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#getNewFileLabel()
 	 */
 	@Override
@@ -73,6 +54,6 @@ public class ImportCSVWizardPage extends WizardNewFileCreationPage {
 	 */
 	@Override
 	protected IStatus validateLinkedResource() {
-		return new Status(IStatus.OK, "com.mmxlabs.models.lng.demo", IStatus.OK, "", null); //NON-NLS-1 //NON-NLS-2
+		return new Status(IStatus.OK, "com.mmxlabs.shiplingo.platform.models.manifest", IStatus.OK, "", null); //NON-NLS-1 //NON-NLS-2
 	}
 }

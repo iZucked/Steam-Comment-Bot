@@ -154,7 +154,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// private IWorkbenchAction previousAction;
 
 	// IDE-specific actions
-	private IWorkbenchAction openWorkspaceAction;
+//	private IWorkbenchAction openWorkspaceAction;
 
 	private IWorkbenchAction projectPropertyDialogAction;
 
@@ -460,7 +460,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menu.add(getPrintItem());
 		menu.add(new GroupMarker(IWorkbenchActionConstants.PRINT_EXT));
 		menu.add(new Separator());
-		menu.add(openWorkspaceAction);
 		menu.add(new GroupMarker(IWorkbenchActionConstants.OPEN_EXT));
 		menu.add(new Separator());
 		menu.add(importResourcesAction);
@@ -831,7 +830,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// upAction = null;
 		// nextAction = null;
 		// previousAction = null;
-		openWorkspaceAction = null;
+//		openWorkspaceAction = null;
 		projectPropertyDialogAction = null;
 		newWizardAction = null;
 		newWizardDropDownAction = null;
@@ -1076,8 +1075,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// buildProjectAction = IDEActionFactory.BUILD_PROJECT.create(window);
 		// register(buildProjectAction);
 
-		openWorkspaceAction = IDEActionFactory.OPEN_WORKSPACE.create(window);
-		register(openWorkspaceAction);
+//		openWorkspaceAction = IDEActionFactory.OPEN_WORKSPACE.create(window);
+//		register(openWorkspaceAction);
 
 		projectPropertyDialogAction = IDEActionFactory.OPEN_PROJECT_PROPERTIES.create(window);
 		register(projectPropertyDialogAction);

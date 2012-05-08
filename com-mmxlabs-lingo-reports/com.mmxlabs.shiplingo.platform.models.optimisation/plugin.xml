@@ -328,6 +328,23 @@
                      tooltip="Derive scenario">
                </command>
          </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=Imports">
+            <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+                  label="Import Scenaio from CSV"
+                  style="push">
+            </command>
+         </menuContribution>
+      </extension>
+      <extension
+            point="org.eclipse.ui.commands">
+         <command
+               defaultHandler="com.mmxlabs.shiplingo.platform.models.manifest.importWizards.ImportCSVWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+               name="Import Scenario from CSV">
+         </command>
       </extension>
    
 </plugin>
