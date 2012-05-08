@@ -16,6 +16,12 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
+/**
+ * Command Handler to toggle {@link ScenarioInstance} locked state.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class LockScenarioCommandHandler extends AbstractHandler {
 
 	/**
