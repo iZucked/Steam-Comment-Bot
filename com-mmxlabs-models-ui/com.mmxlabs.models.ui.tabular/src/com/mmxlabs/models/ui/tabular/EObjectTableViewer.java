@@ -56,6 +56,7 @@ import com.mmxlabs.models.ui.tabular.filter.IFilter;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.ValidationContentAdapter;
+import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 /**
@@ -82,21 +83,21 @@ public class EObjectTableViewer extends GridTableViewer {
 				for (final EObject o : objectsToUpdate) {
 					EObjectTableViewer.this.update(o, null);
 					EObjectTableViewer.this.updateObjectExternalNotifiers(o);
-
+					
 					// consider refresh?
 				}
 				objectsToUpdate.clear();
 				waitingForUpdate = false;
 			}
-		}
+		}		
 	};
-
+	
 	final MMXContentAdapter adapter = new MMXContentAdapter() {
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
 			// System.err.println(notification);
 			if (notification.isTouch() == false) {
-				if (notification.getEventType() == Notification.REMOVING_ADAPTER)
+				if (notification.getEventType() == Notification.REMOVING_ADAPTER) 
 					return;
 				// this is a change, so we have to refresh.
 				// ideally we just want to update the changed object, but we
@@ -115,7 +116,7 @@ public class EObjectTableViewer extends GridTableViewer {
 					return;
 				}
 				while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null)) {
-
+					
 				}
 				if (source != null) {
 					synchronized (objectsToUpdate) {
@@ -141,14 +142,14 @@ public class EObjectTableViewer extends GridTableViewer {
 	 * should be refreshed (e.g. after an import)
 	 */
 	EObject currentContainer;
-
+	
 	/**
 	 * @return the currentContainer
 	 */
 	public EObject getCurrentContainer() {
 		return currentContainer;
 	}
-
+	
 	public EReference getCurrentContainment() {
 		return currentReference;
 	}
@@ -236,8 +237,8 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
-		final EMFPath path = new EMFPath(true, pathObjects);// new CompiledEMFPath(true, pathObjects);
-		return addColumn(columnName, renderer, manipulator, path);
+//		final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
+		return addColumn(columnName, renderer, manipulator, new EMFPath(true, pathObjects));
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
@@ -282,32 +283,31 @@ public class EObjectTableViewer extends GridTableViewer {
 			mnems.add(initials.toLowerCase());
 		}
 
-		// GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer) {
-		// long timer = 0;
-		//
-		// /*
-		// * (non-Javadoc)
-		// *
-		// * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
-		// */
-		// @Override
-		// protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
-		// final long fireTime = System.currentTimeMillis();
-		// final boolean activate = (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
-		// || ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.F2) && ((fireTime - timer) > 500)); // this is a hack; for some reason without
-		// // this we get loads of keydown events.
-		// timer = fireTime;
-		// return activate;
-		// }
-		//
-		// }, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
+//		GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer) {
+//			long timer = 0;
+//
+//			/*
+//			 * (non-Javadoc)
+//			 * 
+//			 * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
+//			 */
+//			@Override
+//			protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
+//				final long fireTime = System.currentTimeMillis();
+//				final boolean activate = (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
+//						|| ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.F2) && ((fireTime - timer) > 500)); // this is a hack; for some reason without
+//																																							// this we get loads of keydown events.
+//				timer = fireTime;
+//				return activate;
+//			}
+//
+//		}, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
 
 		columnSortOrder.add(tColumn);
 
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public Color getBackground(final Object element) {
-
 				if (validationErrors.containsKey(element)) {
 					final IStatus s = validationErrors.get(element);
 					if (s.getSeverity() == IStatus.ERROR) {

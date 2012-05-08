@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
@@ -333,7 +333,7 @@ public class DetailCompositeDialog extends Dialog {
 		this.returnDuplicates = returnDuplicates;
 	}
 
-	public int open(final JointModelEditorPart editorPart, final MMXRootObject rootObject, final List<EObject> objects) {
+	public int open(final IScenarioEditingLocation editorPart, final MMXRootObject rootObject, final List<EObject> objects) {
 		return open(editorPart, rootObject, objects, false);
 	}
 
@@ -341,7 +341,7 @@ public class DetailCompositeDialog extends Dialog {
 
 	private MMXRootObject rootObject;
 
-	public int open(final JointModelEditorPart part, final MMXRootObject rootObject, final List<EObject> objects, final boolean locked) {
+	public int open(final IScenarioEditingLocation part, final MMXRootObject rootObject, final List<EObject> objects, final boolean locked) {
 		validationContext = new DefaultExtraValidationContext(part.getExtraValidationContext());
 		part.pushExtraValidationContext(validationContext);
 		this.rootObject = rootObject;
