@@ -30,15 +30,15 @@ public class LockScenarioCommandHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
+		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
-		ISelection selection = activePage.getSelection();
+		final ISelection selection = activePage.getSelection();
 		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection strucSelection = (IStructuredSelection) selection;
-			for (Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
-				Object element = iterator.next();
+			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
+				final Object element = iterator.next();
 				if (element instanceof ScenarioInstance) {
-					ScenarioInstance model = (ScenarioInstance) element;
+					final ScenarioInstance model = (ScenarioInstance) element;
 
 					model.setLocked(!model.isLocked());
 				}
