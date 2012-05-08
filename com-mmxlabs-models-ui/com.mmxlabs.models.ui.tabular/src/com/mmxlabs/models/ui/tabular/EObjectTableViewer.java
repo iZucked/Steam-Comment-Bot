@@ -475,7 +475,7 @@ public class EObjectTableViewer extends GridTableViewer {
 				}
 
 				contentProvider.inputChanged(viewer, oldInput, newInput);
-				
+
 				// Tell the adapter to validate the input rather than changed objects
 				validationAdapter.setTarget(newInput);
 
@@ -483,6 +483,17 @@ public class EObjectTableViewer extends GridTableViewer {
 				if (newInput instanceof EObject) {
 					final EObject eObject = (EObject) newInput;
 					eObject.eAdapters().add(validationAdapter);
+				}
+
+				if (newInput != null) {
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							// Perform initial validation
+							validationAdapter.performValidation();
+						}
+					});
 				}
 			}
 
