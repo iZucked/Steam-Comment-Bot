@@ -206,6 +206,34 @@
                </and>
             </or></enabledWhen>
       </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.RenameElementHandler"
+            commandId="org.eclipse.ui.edit.rename">
+         <activeWhen>
+            <iterate>
+               <or>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.Folder">
+                  </instanceof>
+               </or>
+            </iterate>
+         </activeWhen>
+         <enabledWhen>
+            <iterate>
+               <or>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.Folder">
+                  </instanceof>
+               </or>
+            </iterate>
+         </enabledWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -236,6 +264,11 @@
       <menuContribution
             allPopups="false"
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
+         <command
+               commandId="org.eclipse.ui.edit.rename"
+               label="Rename"
+               style="push">
+         </command>
          <command
                commandId="org.eclipse.ui.edit.copy"
                label="Copy"
