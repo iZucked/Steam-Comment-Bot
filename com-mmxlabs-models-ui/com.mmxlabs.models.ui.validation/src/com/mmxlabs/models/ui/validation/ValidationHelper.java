@@ -19,17 +19,16 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.ui.validation.internal.Activator;
 
 /**
- * A helper class for running validations which lets you pass extra data into the validation.
- * Validation constraints can access the extra data using {@link IValidationInputService}, and so long
- * as the validation has been run through a helper class like this they will be able to access the right copy.
+ * A helper class for running validations which lets you pass extra data into the validation. Validation constraints can access the extra data using {@link IValidationInputService}, and so long as the
+ * validation has been run through a helper class like this they will be able to access the right copy.
  * 
  * @author hinton
- *
+ * 
  */
 public class ValidationHelper {
 	private static final Logger log = LoggerFactory.getLogger(ValidationHelper.class);
-	public IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext,
-			final Collection<? extends EObject> targets) {
+
+	public IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final Collection<? extends EObject> targets) {
 		final FutureTask<IStatus> validationTask = new FutureTask<IStatus>(new Callable<IStatus>() {
 			@Override
 			public IStatus call() throws Exception {
@@ -46,10 +45,10 @@ public class ValidationHelper {
 		
 		try {
 			return validationTask.get();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			log.error("Interrupted validating " + targets, e);
 			return null;
-		} catch (ExecutionException e) {
+		} catch (final ExecutionException e) {
 			log.error("Error excuting validation on " + targets, e);
 			return null;
 		}
