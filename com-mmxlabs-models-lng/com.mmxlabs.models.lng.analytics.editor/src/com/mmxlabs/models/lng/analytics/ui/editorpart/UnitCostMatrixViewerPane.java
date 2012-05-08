@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.ui.actions.EvaluateUnitCostMatrixAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
@@ -28,8 +29,8 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
  *
  */
 public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
-	public UnitCostMatrixViewerPane(IWorkbenchPage page, JointModelEditorPart part) {
-		super(page, part);
+	public UnitCostMatrixViewerPane(IWorkbenchPage page, JointModelEditorPart part, final IScenarioEditingLocation location) {
+		super(page, part, location);
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 		final EvaluateUnitCostMatrixAction evaluateAction = new EvaluateUnitCostMatrixAction(getJointModelEditorPart());
 		getToolBarManager().appendToGroup(EDIT_GROUP, evaluateAction);
 		getToolBarManager().update(true);
-		getJointModelEditorPart().addSelectionChangedListener(evaluateAction);
+		viewer.addSelectionChangedListener(evaluateAction);
 		defaultSetTitle("Unit Cost Matrices");
 		
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {			

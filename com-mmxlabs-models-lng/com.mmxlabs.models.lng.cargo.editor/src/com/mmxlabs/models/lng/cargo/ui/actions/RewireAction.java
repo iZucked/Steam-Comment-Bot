@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.ui.dialogs.WiringDialog;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 /**
@@ -25,14 +26,14 @@ import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
  *
  */
 public class RewireAction extends ScenarioModifyingAction {
-	private JointModelEditorPart part;
+	private IScenarioEditingLocation part;
 
-	public RewireAction(final JointModelEditorPart part) {
+	public RewireAction(final IScenarioEditingLocation iScenarioEditingLocation) {
 		super("Rewire");
 		try {
 			setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.cargo.editor/icons/rewire_icon.png")));
 		} catch (final MalformedURLException e) {}
-		this.part = part;
+		this.part = iScenarioEditingLocation;
 	}
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.action.Action#run()

@@ -15,13 +15,14 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
@@ -33,8 +34,8 @@ import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
  *
  */
 public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
-	public OptimiserSettingsEditorPane(IWorkbenchPage page, JointModelEditorPart part) {
-		super(page, part);
+	public OptimiserSettingsEditorPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
+		super(page, part, location);
 	}
 
 	/* (non-Javadoc)

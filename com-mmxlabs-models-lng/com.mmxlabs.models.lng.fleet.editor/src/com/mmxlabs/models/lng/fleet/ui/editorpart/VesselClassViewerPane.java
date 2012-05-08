@@ -33,12 +33,12 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
@@ -51,7 +51,7 @@ import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
@@ -67,11 +67,11 @@ import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class VesselClassViewerPane extends ScenarioTableViewerPane {
-	private JointModelEditorPart jointModelEditor;
+	private IScenarioEditingLocation jointModelEditor;
 
-	public VesselClassViewerPane(IWorkbenchPage page, JointModelEditorPart part) {
-		super(page, part);
-		this.jointModelEditor = part;
+	public VesselClassViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
+		super(page, part, location);
+		this.jointModelEditor = location;
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 					protected void doImportStages(final DefaultImportContext context) {
 						final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getBaseFuel());
 						
-						final FileDialog fileDialog = new FileDialog(part.getSite().getShell());
+						final FileDialog fileDialog = new FileDialog(part.getShell());
 						fileDialog.setFilterExtensions(new String[] {"*.csv"});
 						final String path = fileDialog.open();
 						
@@ -221,7 +221,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 						final LockableAction edit = new LockableAction("Edit...") {
 							public void run() {
 								final DetailCompositeDialog dcd = new DetailCompositeDialog(
-										jointModelEditor.getSite().getShell(), 
+										jointModelEditor.getShell(), 
 										jointModelEditor.getDefaultCommandHandler());
 								dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) baseFuel));
 							}
@@ -266,7 +266,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 						}
 
 						@Override
-						public JointModelEditorPart getEditorPart() {
+						public IScenarioEditingLocation getEditorPart() {
 							return jointModelEditor;
 						}
 					});

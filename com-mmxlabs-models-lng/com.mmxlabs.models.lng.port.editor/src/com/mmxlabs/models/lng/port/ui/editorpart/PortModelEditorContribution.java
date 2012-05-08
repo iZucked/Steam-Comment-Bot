@@ -22,12 +22,12 @@ public class PortModelEditorContribution extends BaseJointModelEditorContributio
 	@Override
 	public void addPages(Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
-		portViewerPane = new PortEditorPane(editorPart.getSite().getPage(), editorPart);
+		portViewerPane = new PortEditorPane(editorPart.getSite().getPage(), editorPart, editorPart);
 		portViewerPane.createControl(sash);
 		portViewerPane.init(Collections.singletonList(PortPackage.eINSTANCE.getPortModel_Ports()),
 				editorPart.getAdapterFactory());
 		
-		groupViewerPane = new PortGroupEditorPane(editorPart.getSite().getPage(), editorPart);
+		groupViewerPane = new PortGroupEditorPane(editorPart.getSite().getPage(), editorPart, editorPart);
 		groupViewerPane.createControl(sash);
 		groupViewerPane.init(Collections.singletonList(PortPackage.eINSTANCE.getPortModel_PortGroups()),
 				editorPart.getAdapterFactory());

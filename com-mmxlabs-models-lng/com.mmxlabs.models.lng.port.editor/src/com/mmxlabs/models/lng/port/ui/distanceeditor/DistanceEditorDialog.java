@@ -35,6 +35,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -253,11 +254,11 @@ public class DistanceEditorDialog extends Dialog {
 		return distanceModel;
 	}
 
-	public int open(final JointModelEditorPart part, final Route dm) {
-		this.valueProviderProvider = part.getReferenceValueProviderCache();
-		this.editingDomain = part.getEditingDomain();
+	public int open(final IScenarioEditingLocation iScenarioEditingLocation, final Route dm) {
+		this.valueProviderProvider = iScenarioEditingLocation.getReferenceValueProviderCache();
+		this.editingDomain = iScenarioEditingLocation.getEditingDomain();
 		this.distanceModel = EcoreUtil.copy(dm);
-		this.rootObject = part.getRootObject();
+		this.rootObject = iScenarioEditingLocation.getRootObject();
 		return super.open();
 	}
 

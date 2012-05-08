@@ -10,10 +10,11 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
@@ -24,8 +25,8 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
  *
  */
 public class VesselRoutePricingPane extends ScenarioTableViewerPane {
-	public VesselRoutePricingPane(IWorkbenchPage page, JointModelEditorPart part) {
-		super(page, part);
+	public VesselRoutePricingPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
+		super(page, part, location);
 	}
 
 	@Override

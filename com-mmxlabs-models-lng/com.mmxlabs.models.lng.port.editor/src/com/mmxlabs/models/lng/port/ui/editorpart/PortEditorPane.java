@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -42,7 +43,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
@@ -50,8 +51,8 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class PortEditorPane extends ScenarioTableViewerPane {
 
-	public PortEditorPane(final IWorkbenchPage page, final JointModelEditorPart part) {
-		super(page, part);
+	public PortEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location) {
+		super(page, part, location);
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 					final ImportAction importR = new ImportAction(getJointModelEditorPart()) {
 						@Override
 						protected void doImportStages(DefaultImportContext context) {
-							final FileDialog fileDialog = new FileDialog(part.getSite().getShell());
+							final FileDialog fileDialog = new FileDialog(part.getShell());
 							fileDialog.setFilterExtensions(new String[] {"*.csv"});
 							final String path = fileDialog.open();
 							
@@ -134,13 +135,13 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 					
 					@Override
 					protected void doImportStages(DefaultImportContext context) {
-						final FileDialog fileDialog = new FileDialog(part.getSite().getShell());
+						final FileDialog fileDialog = new FileDialog(part.getShell());
 						fileDialog.setFilterExtensions(new String[] {"*.csv"});
 						final String path = fileDialog.open();
 						
 						if (path == null) return;
 						
-						final InputDialog input = new InputDialog(part.getSite().getShell(), "Name for new canal", "Enter a new name for the new canal","canal", new IInputValidator() {
+						final InputDialog input = new InputDialog(part.getShell(), "Name for new canal", "Enter a new name for the new canal","canal", new IInputValidator() {
 									@Override
 									public String isValid(final String newText) {
 										if (newText.trim().isEmpty()) {

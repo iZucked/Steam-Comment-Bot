@@ -25,7 +25,7 @@ public class OptimiserModelEditorContribution extends BaseJointModelEditorContri
 	 */
 	@Override
 	public void addPages(Composite parent) {
-		pane = new OptimiserSettingsEditorPane(editorPart.getSite().getPage(), editorPart);
+		pane = new OptimiserSettingsEditorPane(editorPart.getSite().getPage(), editorPart, editorPart);
 		
 		pane.createControl(parent);
 		pane.init(
