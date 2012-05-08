@@ -56,78 +56,80 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	private final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker;
 
 	private CommonViewer viewer = null;
-	
-	private IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
+
+	private final IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 		@Override
-		public void selected(IScenarioServiceSelectionProvider provider, Collection<ScenarioInstance> deselected) {
+		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected) {
 			if (viewer != null) {
-				for (final ScenarioInstance instance : deselected) viewer.refresh(instance, true);
+				for (final ScenarioInstance instance : deselected)
+					viewer.refresh(instance, true);
 			}
 		}
-		
+
 		@Override
-		public void deselected(IScenarioServiceSelectionProvider provider, Collection<ScenarioInstance> deselected) {
+		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected) {
 			if (viewer != null) {
-				for (final ScenarioInstance instance : deselected) viewer.refresh(instance, true);
+				for (final ScenarioInstance instance : deselected)
+					viewer.refresh(instance, true);
 			}
 		}
 	};
 
-	private IEclipseJobManagerListener jobManagerListener = new IEclipseJobManagerListener() {
-		
-		private IJobControlListener jobControlListener = new IJobControlListener() {
+	private final IEclipseJobManagerListener jobManagerListener = new IEclipseJobManagerListener() {
+
+		private final IJobControlListener jobControlListener = new IJobControlListener() {
 			@Override
-			public boolean jobStateChanged(IJobControl job, EJobState oldState, EJobState newState) {
+			public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
 				tryRefresh();
 				return true;
 			}
-			
+
 			@Override
-			public boolean jobProgressUpdated(IJobControl job, int progressDelta) {
+			public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
 				tryRefresh();
 				return true;
 			}
 		};
 
 		@Override
-		public void jobSelected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource) {
-			
+		public void jobSelected(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
+
 		}
-		
+
 		@Override
-		public void jobRemoved(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
+		public void jobRemoved(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 			control.removeListener(jobControlListener);
 			tryRefresh();
 		}
-		
+
 		@Override
-		public void jobManagerRemoved(IEclipseJobManager eclipseJobManager, IJobManager jobManager) {
-			
+		public void jobManagerRemoved(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
+
 		}
-		
+
 		@Override
-		public void jobManagerAdded(IEclipseJobManager eclipseJobManager, IJobManager jobManager) {
-			
+		public void jobManagerAdded(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
+
 		}
-		
+
 		@Override
-		public void jobDeselected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource) {
-			
+		public void jobDeselected(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
+
 		}
-		
+
 		@Override
-		public void jobAdded(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource) {
+		public void jobAdded(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 			control.addListener(jobControlListener);
 			tryRefresh();
 		}
 	};
-	
+
 	public ScenarioServiceNavigator() {
 		super();
 
 		tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
-		
+
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
 		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
 	}
@@ -139,52 +141,55 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
 		super.dispose();
 	}
-	
+
 	protected void tryRefresh() {
 		Display.getDefault().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
 				final CommonViewer viewer1 = viewer;
-				if (viewer1 != null) viewer1.refresh();
+				if (viewer1 != null)
+					viewer1.refresh();
 			}
-		
+
 		});
 	}
 
 	@Override
 	protected CommonViewer createCommonViewer(final Composite aParent) {
 		final CommonViewer viewer = super.createCommonViewer(aParent);
-		
+
 		this.viewer = viewer;
-		
+
 		viewer.getTree().setHeaderVisible(true);
-		
-		TreeColumn labelColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
+
+		final TreeColumn labelColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		labelColumn.setText("Name");
 		labelColumn.setWidth(300);
-		
-		TreeColumn checkColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
+
+		final TreeColumn checkColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		checkColumn.setText("Show");
-		
-		TreeColumn progressColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
+
+		final TreeColumn progressColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		progressColumn.setText("Opt");
-		
+
 		checkColumn.pack();
 		progressColumn.pack();
-		
+
 		final Tree tree = viewer.getTree();
 		tree.addMouseListener(new MouseAdapter() {
 
-			/* (non-Javadoc)
+			/*
+			 * (non-Javadoc)
+			 * 
 			 * @see org.eclipse.swt.events.MouseAdapter#mouseDown(org.eclipse.swt.events.MouseEvent)
 			 */
 			@Override
-			public void mouseDown(MouseEvent e) {
-				for(TreeItem item : tree.getSelection()) {
-					if(item.getImage() != null) {
-						if((e.x > item.getImageBounds(1).x) && (e.x < (item.getImageBounds(1).x + item.getImage().getBounds().width))) {
-							if((e.y > item.getImageBounds(1).y) && (e.y < (item.getImageBounds(1).y + item.getImage().getBounds().height))) {
+			public void mouseDown(final MouseEvent e) {
+				for (final TreeItem item : tree.getSelection()) {
+					if (item.getImage() != null) {
+						if ((e.x > item.getImageBounds(1).x) && (e.x < (item.getImageBounds(1).x + item.getImage().getBounds().width))) {
+							if ((e.y > item.getImageBounds(1).y) && (e.y < (item.getImageBounds(1).y + item.getImage().getBounds().height))) {
 								final Object data = item.getData();
 								if (data instanceof ScenarioInstance) {
 									final ScenarioInstance instance = (ScenarioInstance) data;
@@ -195,9 +200,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 					}
 				}
 			}
-			
+
 		});
-		
+
 		return viewer;
 	}
 
@@ -215,7 +220,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	 * @generated
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		ExtendedPropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain) {
+		final ExtendedPropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain) {
 			@Override
 			public void setSelectionToViewer(final List<?> selection) {
 				// ScenarioServiceNavigator.this.setSelectionToViewer(selection);
@@ -244,15 +249,15 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	}
 
 	@Override
-	protected void handleDoubleClick(DoubleClickEvent anEvent) {
-		ICommandService commandService = (ICommandService) getSite().getService(ICommandService.class);
+	protected void handleDoubleClick(final DoubleClickEvent anEvent) {
+		final ICommandService commandService = (ICommandService) getSite().getService(ICommandService.class);
 
-		Command command = commandService.getCommand("com.mmxlabs.scenario.service.ui.open");
+		final Command command = commandService.getCommand("com.mmxlabs.scenario.service.ui.open");
 		if (command.isEnabled()) {
-			IHandlerService handlerService = (IHandlerService) getSite().getService(IHandlerService.class);
+			final IHandlerService handlerService = (IHandlerService) getSite().getService(IHandlerService.class);
 			try {
 				handlerService.executeCommand("com.mmxlabs.scenario.service.ui.open", null);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				log.error(e.getMessage(), e);
 			}
 		} else {
