@@ -102,7 +102,8 @@ public class EObjectTableViewer extends GridTableViewer {
 		public void reallyNotifyChanged(final Notification notification) {
 			// System.err.println(notification);
 			if (notification.isTouch() == false) {
-				if (notification.getEventType() == Notification.REMOVING_ADAPTER) return;
+				if (notification.getEventType() == Notification.REMOVING_ADAPTER) 
+					return;
 				// this is a change, so we have to refresh.
 				// ideally we just want to update the changed object, but we
 				// get the notification from
@@ -138,6 +139,8 @@ public class EObjectTableViewer extends GridTableViewer {
 	private final LinkedList<Pair<EMFPath, ICellRenderer>> cellRenderers = new LinkedList<Pair<EMFPath, ICellRenderer>>();
 
 	private final ArrayList<GridColumn> columnSortOrder = new ArrayList<GridColumn>();
+
+	private IExtraValidationContext extraValidationContext;
 
 	/**
 	 * A one-element list referring to the EObject which contains all the display elements. #adapter uses this to determine when a notification comes on the top-level object, and so all the contents
@@ -213,6 +216,10 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	private boolean displayValidationErrors = true;
 
+	private ValidationContentAdapter validationAdapter;
+
+	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
+
 	public boolean isDisplayValidationErrors() {
 		return displayValidationErrors;
 	}
@@ -235,7 +242,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
-		final EMFPath path = new EMFPath(true, pathObjects);//new CompiledEMFPath(true, pathObjects);
+		final EMFPath path = new CompiledEMFPath(true, pathObjects);
 		return addColumn(columnName, renderer, manipulator, path);
 	}
 
@@ -306,24 +313,12 @@ public class EObjectTableViewer extends GridTableViewer {
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public Color getBackground(final Object element) {
-				if (isDisplayValidationErrors()) {
-					final EObject object = (EObject) element;
-
-					if (hasValidationError(object)) {
+				if (validationErrors.containsKey(element)) {
+					final IStatus s = validationErrors.get(element);
+					if (s.getSeverity() == IStatus.ERROR) {
 						return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-					}
-
-					// TODO hack because this is very slow and canals contain many
-					// elements
-//					if ((object instanceof Canal) || (object instanceof VesselClass)) {
-//						return super.getBackground(element);
-//					}
-
-					final TreeIterator<EObject> iterator = object.eAllContents();
-					while (iterator.hasNext()) {
-						if (hasValidationError(iterator.next())) {
-							return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-						}
+					} else if (s.getSeverity() == IStatus.WARNING) {
+						return Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
 					}
 				}
 				return super.getBackground(element);
@@ -333,37 +328,6 @@ public class EObjectTableViewer extends GridTableViewer {
 			public String getText(final Object element) {
 				return renderer.render(path.get((EObject) element));
 			}
-
-			private boolean hasValidationError(final EObject object) {
-
-				// PErhaps store error as adapter?
-
-				final Resource r = object.eResource();
-				if (r == null) {
-					return false;
-				}
-				try {
-					if (r.getURI().isPlatform() == false) {
-						return false;
-					}
-					final IFile containingFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(r.getURI().toPlatformString(true)));
-					final IMarker[] markers = containingFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-					for (final IMarker marker : markers) {
-						final String uri = marker.getAttribute(EValidator.URI_ATTRIBUTE, null);
-						if (uri == null) {
-							continue;
-						}
-						final URI uri2 = URI.create(uri);
-						if (uri2.getFragment().equals(r.getURIFragment(object))) {
-							return true;
-						}
-					}
-				} catch (final CoreException e) {
-				}
-
-				return false;
-			}
-
 		});
 
 		column.setEditingSupport(new EditingSupport(viewer) {
@@ -458,12 +422,84 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 		});
 
+		validationAdapter = new ValidationContentAdapter(extraValidationContext) {
+			@Override
+			public void validationStatus(final IStatus status) {
+				validationErrors.clear();
+
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						processStatus(status);
+					}
+				});
+
+			}
+
+			void processStatus(final IStatus status) {
+
+				if (status.isMultiStatus()) {
+					for (final IStatus s : status.getChildren()) {
+						processStatus(s);
+					}
+				}
+				if (status instanceof IDetailConstraintStatus) {
+					final IDetailConstraintStatus detailConstraintStatus = (IDetailConstraintStatus) status;
+					if (!status.isOK()) {
+
+						setStatus(detailConstraintStatus.getTarget(), status);
+						update(detailConstraintStatus.getTarget(), null);
+
+						for (final EObject e : detailConstraintStatus.getObjects()) {
+							setStatus(e, status);
+							update(e, null);
+						}
+					}
+				}
+			}
+
+			void setStatus(final EObject e, final IStatus s) {
+				final IStatus existing = validationErrors.get(e);
+				if (existing == null || s.getSeverity() > existing.getSeverity()) {
+					validationErrors.put(e, s);
+				}
+			}
+		};
+
 		viewer.setContentProvider(
 
 		new IStructuredContentProvider() {
+
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+
+				// Remove adapter from old input
+				if (oldInput instanceof EObject) {
+					final EObject eObject = (EObject) oldInput;
+					eObject.eAdapters().remove(validationAdapter);
+				}
+
 				contentProvider.inputChanged(viewer, oldInput, newInput);
+
+				// Tell the adapter to validate the input rather than changed objects
+				validationAdapter.setTarget(newInput);
+
+				// Add adapter to new input
+				if (newInput instanceof EObject) {
+					final EObject eObject = (EObject) newInput;
+					eObject.eAdapters().add(validationAdapter);
+				}
+
+				if (newInput != null) {
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							// Perform initial validation
+							validationAdapter.performValidation();
+						}
+					});
+				}
 			}
 
 			@Override
@@ -538,6 +574,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	private EReference currentReference;
+
 	public void init(final AdapterFactory adapterFactory, final EReference... path) {
 		init(new IStructuredContentProvider() {
 			@SuppressWarnings("rawtypes")
@@ -564,13 +601,12 @@ public class EObjectTableViewer extends GridTableViewer {
 
 			@Override
 			public void dispose() {
-				
+
 			}
 
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput,
-					Object newInput) {
-				
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+
 			}
 		});
 	}
@@ -710,5 +746,16 @@ public class EObjectTableViewer extends GridTableViewer {
 		final Pair<EMFPath, ICellRenderer> pathAndRenderer = (Pair<EMFPath, ICellRenderer>) column.getColumn().getData(COLUMN_RENDERER_AND_PATH);
 		cellRenderers.remove(pathAndRenderer);
 		column.getColumn().dispose();
+	}
+
+	public IExtraValidationContext getExtraValidationContext() {
+		return extraValidationContext;
+	}
+
+	public void setExtraValidationContext(final IExtraValidationContext extraValidationContext) {
+		this.extraValidationContext = extraValidationContext;
+		if (validationAdapter != null) {
+			validationAdapter.setExtraContext(extraValidationContext);
+		}
 	}
 }

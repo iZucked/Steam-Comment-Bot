@@ -51,22 +51,35 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		g.setText(EditorUtils.unmangle(eClass.getName()));
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
-		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().
-				getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass);
+		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
+
+		createChildComposites(root, object, eClass, this);
+
+		topLevel.display(root, object, range);
+		final Iterator<EReference> refs = childReferences.iterator();
+		final Iterator<IDisplayComposite> children = childComposites.iterator();
+
+		while (refs.hasNext()) {
+			children.next().display(root, (EObject) object.eGet(refs.next()), range);
+		}
+
+		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));
+	}
+
+	protected void createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent) {
 		for (final EReference ref : eClass.getEAllReferences()) {
 			if (shouldDisplay(ref)) {
 				final EObject value = (EObject) object.eGet(ref);
 				if (value != null) {
-					final Group g2 = new Group(this, SWT.NONE);
+					final Group g2 = new Group(parent, SWT.NONE);
 					g2.setText(EditorUtils.unmangle(ref.getName()));
 					g2.setLayout(new FillLayout());
 					g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
-					
-					final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().
-							getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass());
-					
+
+					final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass());
+
 					sub.setCommandHandler(commandHandler);
 					sub.setEditorWrapper(editorWrapper);
 					childReferences.add(ref);
@@ -74,17 +87,6 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 				}
 			}
 		}
-
-		topLevel.display(root, object, range);
-		final Iterator<EReference> refs = childReferences.iterator();
-		final Iterator<IDisplayComposite> children = childComposites
-				.iterator();
-
-		while (refs.hasNext()) {
-			children.next().display(root, (EObject) object.eGet(refs.next()), range);
-		}
-		
-		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));
 	}
 
 	protected boolean shouldDisplay(EReference ref) {
@@ -112,12 +114,13 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	@Override
 	public void setEditorWrapper(IInlineEditorWrapper wrapper) {
 		this.editorWrapper = wrapper;
-		if (topLevel != null) topLevel.setEditorWrapper(editorWrapper);
+		if (topLevel != null)
+			topLevel.setEditorWrapper(editorWrapper);
 		for (final IDisplayComposite child : childComposites) {
 			child.setEditorWrapper(editorWrapper);
 		}
 	}
-	
+
 	public ICommandHandler getCommandHandler() {
 		return commandHandler;
 	}
