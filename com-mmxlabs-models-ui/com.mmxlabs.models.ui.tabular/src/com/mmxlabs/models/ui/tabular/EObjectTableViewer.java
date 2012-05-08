@@ -237,8 +237,8 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
-		final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
-		return addColumn(columnName, renderer, manipulator, path);
+//		final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
+		return addColumn(columnName, renderer, manipulator, new EMFPath(true, pathObjects));
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
