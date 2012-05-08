@@ -468,14 +468,18 @@ public class EObjectTableViewer extends GridTableViewer {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
+				// Remove adapter from old input
 				if (oldInput instanceof EObject) {
 					final EObject eObject = (EObject) oldInput;
 					eObject.eAdapters().remove(validationAdapter);
 				}
 
 				contentProvider.inputChanged(viewer, oldInput, newInput);
+				
+				// Tell the adapter to validate the input rather than changed objects
 				validationAdapter.setTarget(newInput);
 
+				// Add adapter to new input
 				if (newInput instanceof EObject) {
 					final EObject eObject = (EObject) newInput;
 					eObject.eAdapters().add(validationAdapter);
