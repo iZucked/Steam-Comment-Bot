@@ -232,4 +232,28 @@
        </OwnerAnyOf>
     </editorFactory>
  </extension>
+ <extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.fleet.editor.views.VesselView"
+          id="com.mmxlabs.models.lng.fleet.editor.views.VesselView"
+          name="Vessels"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.fleet.editor.views.VesselClassView"
+          id="com.mmxlabs.models.lng.fleet.editor.views.VesselClassView"
+          name="Vessel Classes"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.views.logical"
+          class="com.mmxlabs.models.lng.fleet.editor.views.VesselEventView"
+          id="com.mmxlabs.models.lng.fleet.editor.views.VesselEventView"
+          name="Vessel Events"
+          restorable="true">
+    </view>
+ </extension>
 </plugin>
