@@ -26,6 +26,7 @@ import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 
 /**
@@ -53,6 +54,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 			if (selection instanceof IStructuredSelection) {
 				final HashSet<EObject> containers = new HashSet<EObject>();
 				EObject eTarget = (EObject) target;
+				if (target instanceof ScenarioService) return Status.CANCEL_STATUS;
 				while (eTarget != null) {
 					containers.add(eTarget);
 					eTarget = eTarget.eContainer();
