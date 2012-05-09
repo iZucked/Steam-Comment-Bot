@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.ui.dnd;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
@@ -47,6 +49,22 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 		// Only handle local "within eclipse" transfer
 		if (LocalSelectionTransfer.getTransfer().isSupportedType(transferType) && target instanceof Container) {
+			final ISelection selection = LocalSelectionTransfer.getTransfer().getSelection();
+			if (selection instanceof IStructuredSelection) {
+				final HashSet<EObject> containers = new HashSet<EObject>();
+				EObject eTarget = (EObject) target;
+				while (eTarget != null) {
+					containers.add(eTarget);
+					eTarget = eTarget.eContainer();
+				}
+				for (final Object o : ((IStructuredSelection) selection).toArray()) {
+					if (o instanceof EObject) {
+						// since containers contains the full hierarchy above the drop target, if o is in that hierarchy then we are dragging
+						// something into something which it contains, so cancel the drop
+						if (containers.contains(o)) return Status.CANCEL_STATUS;
+					}
+				}
+			}
 			return Status.OK_STATUS;
 		}
 
