@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.Viewer;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterFactory;
@@ -27,8 +28,10 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	 */
 	private boolean showOnlyContainers = false;
 
+	private boolean showArchivedElements = false;
+
 	private final Map<Object, Boolean> filteredElements = new WeakHashMap<Object, Boolean>();
-	
+
 	public ScenarioServiceContentProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 	}
@@ -40,7 +43,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	}
 
 	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		filteredElements.clear();
 		super.inputChanged(viewer, oldInput, newInput);
 	}
@@ -78,26 +81,42 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	 * @return
 	 */
 	private Object[] filter(final Object[] elements) {
-		if (showOnlyContainers) {
-			// Allow Objects down to the Container
-			final List<Object> c = new ArrayList<Object>(elements.length);
-			for (final Object e : elements) {
-				if (e instanceof Container) {
-					c.add(e);
-				} else if (e instanceof ScenarioModel) {
-					c.add(e);
-				} else if (e instanceof IScenarioService) {
-					c.add(e);
-				} else if (e instanceof ScenarioServiceRegistry) {
-					c.add(e);
+
+		// No filtering to be done.
+		if (!isShowOnlyContainers() && isShowArchivedElements()) {
+			return elements;
+		}
+		final List<Object> c = new ArrayList<Object>(elements.length);
+
+		// Allow Objects down to the Container
+		for (final Object e : elements) {
+			if (e instanceof Container) {
+				if (e instanceof ScenarioInstance) {
+					// Filter out archived scenarios.
+					if (((ScenarioInstance) e).isArchived() && !isShowArchivedElements()) {
+						filteredElements.put(e, true);
+					} else {
+						c.add(e);
+					}
 				} else {
+					c.add(e);
+				}
+			} else if (e instanceof ScenarioModel) {
+				c.add(e);
+			} else if (e instanceof IScenarioService) {
+				c.add(e);
+			} else if (e instanceof ScenarioServiceRegistry) {
+				c.add(e);
+			} else {
+				// Anything else may be filtered 
+				if (isShowOnlyContainers()) {
 					filteredElements.put(e, true);
+				} else {
+					c.add(e);
 				}
 			}
-			return c.toArray();
 		}
-
-		return elements;
+		return c.toArray();
 	}
 
 	@Override
@@ -113,11 +132,20 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		this.showOnlyContainers = showOnlyContainers;
 	}
 
+	public boolean isShowArchivedElements() {
+		return showArchivedElements;
+	}
+
+	public void setShowArchivedElements(final boolean showArchivedElements) {
+		this.showArchivedElements = showArchivedElements;
+	}
+
 	@Override
 	public void notifyChanged(final Notification arg0) {
 		super.notifyChanged(arg0);
 
-		Object notifier = arg0.getNotifier();
+		// Filtered elements are not present in tree viewer, but we may still need to show child entries - force a full refresh rather than a partial update
+		final Object notifier = arg0.getNotifier();
 		if (filteredElements.containsKey(notifier)) {
 			viewer.getControl().getDisplay().asyncExec(new Runnable() {
 				@Override
@@ -127,6 +155,4 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			});
 		}
 	}
-	
-	
 }
