@@ -432,7 +432,7 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 
 			void processStatus(final IStatus status) {
-
+				if (status == null) return;
 				if (status.isMultiStatus()) {
 					for (final IStatus s : status.getChildren()) {
 						processStatus(s);
