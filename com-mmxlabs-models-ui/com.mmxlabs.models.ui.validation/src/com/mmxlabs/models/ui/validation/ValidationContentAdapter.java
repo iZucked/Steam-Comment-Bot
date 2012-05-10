@@ -37,6 +37,10 @@ public abstract class ValidationContentAdapter extends EContentAdapter implement
 	public abstract void validationStatus(IStatus status);
 
 	public void performValidation() {
+		if (currentTarget == null) {
+			return;
+		}
+
 		createValidator();
 
 		// Run the validation
