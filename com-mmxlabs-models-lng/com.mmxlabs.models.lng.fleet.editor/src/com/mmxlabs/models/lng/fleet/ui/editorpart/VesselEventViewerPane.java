@@ -10,6 +10,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
@@ -19,7 +20,7 @@ import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
@@ -28,11 +29,11 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
 public class VesselEventViewerPane extends ScenarioTableViewerPane {
 
-	private JointModelEditorPart jointModelEditor;
+	private IScenarioEditingLocation jointModelEditor;
 
-	public VesselEventViewerPane(IWorkbenchPage page, JointModelEditorPart part) {
-		super(page, part);
-		this.jointModelEditor = part;
+	public VesselEventViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
+		super(page, part, location);
+		this.jointModelEditor = location;
 	}
 
 	@Override

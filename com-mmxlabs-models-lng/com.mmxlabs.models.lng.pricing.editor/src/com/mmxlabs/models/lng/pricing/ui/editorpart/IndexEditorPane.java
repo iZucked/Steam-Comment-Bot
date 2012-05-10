@@ -13,13 +13,14 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.DialogFeatureManipulator;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -27,8 +28,8 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 
 public class IndexEditorPane extends ScenarioTableViewerPane {
-	public IndexEditorPane(final IWorkbenchPage page, final JointModelEditorPart part) {
-		super(page, part);
+	public IndexEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location) {
+		super(page, part, location);
 	}
 
 	@Override

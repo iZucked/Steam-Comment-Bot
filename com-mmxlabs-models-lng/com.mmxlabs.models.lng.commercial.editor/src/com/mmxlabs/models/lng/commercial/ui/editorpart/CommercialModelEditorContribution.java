@@ -24,9 +24,9 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 	public void addPages(final Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
 		
-		entityEditorPane = new EntityEditorPane(editorPart.getSite().getPage(), editorPart);
-		purchaseContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart);
-		salesContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart);
+		entityEditorPane = new EntityEditorPane(editorPart.getSite().getPage(), editorPart, editorPart);
+		purchaseContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart, editorPart);
+		salesContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart, editorPart);
 
 		entityEditorPane.createControl(sash);
 		salesContractEditorPane.createControl(sash);

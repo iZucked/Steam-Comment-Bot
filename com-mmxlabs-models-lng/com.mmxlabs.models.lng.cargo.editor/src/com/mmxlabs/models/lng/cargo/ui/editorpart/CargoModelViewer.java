@@ -17,6 +17,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -29,17 +30,17 @@ import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 public class CargoModelViewer extends ScenarioTableViewerPane {
-	private JointModelEditorPart part;
+	private IScenarioEditingLocation part;
 	
-	public CargoModelViewer(IWorkbenchPage page, JointModelEditorPart part) {
-		super(page, part);
-		this.part = part;
+	public CargoModelViewer(IWorkbenchPage page, IWorkbenchPart part, final IScenarioEditingLocation location) {
+		super(page, part, location);
+		this.part = location;
 	}
 	
 	@Override
@@ -47,8 +48,8 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory);
 		final RewireAction rewire = new RewireAction(getJointModelEditorPart());
 		final RotateSlotsAction rotate = new RotateSlotsAction(getJointModelEditorPart());
-		part.addSelectionChangedListener(rotate);
-		part.addSelectionChangedListener(rewire);
+		viewer.addSelectionChangedListener(rotate);
+		viewer.addSelectionChangedListener(rewire);
 		getToolBarManager().appendToGroup("edit", rewire);
 		getToolBarManager().appendToGroup("edit", rotate);
 		getToolBarManager().update(true);

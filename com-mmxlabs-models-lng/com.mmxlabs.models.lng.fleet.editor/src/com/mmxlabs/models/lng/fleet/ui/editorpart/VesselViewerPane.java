@@ -12,13 +12,14 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
@@ -26,11 +27,11 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
 public class VesselViewerPane extends ScenarioTableViewerPane {
 
-	private JointModelEditorPart jointModelEditor;
+	private IScenarioEditingLocation jointModelEditor;
 
-	public VesselViewerPane(IWorkbenchPage page, JointModelEditorPart part) {
-		super(page, part);
-		this.jointModelEditor = part;
+	public VesselViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
+		super(page, part, location);
+		this.jointModelEditor = location;
 	}
 
 	@Override

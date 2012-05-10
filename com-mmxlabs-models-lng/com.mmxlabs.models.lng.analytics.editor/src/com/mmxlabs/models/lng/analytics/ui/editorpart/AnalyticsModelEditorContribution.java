@@ -56,7 +56,7 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 	@Override
 	public void addPages(Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
-		final UnitCostMatrixViewerPane viewer = new UnitCostMatrixViewerPane(editorPart.getSite().getPage(), editorPart);
+		final UnitCostMatrixViewerPane viewer = new UnitCostMatrixViewerPane(editorPart.getSite().getPage(), editorPart, editorPart);
 		
 		viewer.createControl(sash);
 		viewer.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getAnalyticsModel_RoundTripMatrices()), editorPart.getAdapterFactory());

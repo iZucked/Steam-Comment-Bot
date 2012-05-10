@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -27,6 +28,7 @@ import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.transformer.IAnalyticsTransformer;
 import com.mmxlabs.models.lng.analytics.transformer.impl.AnalyticsTransformer;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 /**
@@ -37,9 +39,9 @@ import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
  */
 public class EvaluateUnitCostMatrixAction extends ScenarioModifyingAction {
 	final IAnalyticsTransformer transformer = new AnalyticsTransformer();
-	private JointModelEditorPart part;
+	private IScenarioEditingLocation part;
 	
-	public EvaluateUnitCostMatrixAction(final JointModelEditorPart part) {
+	public EvaluateUnitCostMatrixAction(final IScenarioEditingLocation part) {
 		this.part = part;
 		setText("Evaluate Cost Matrix");
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", 
@@ -82,7 +84,8 @@ public class EvaluateUnitCostMatrixAction extends ScenarioModifyingAction {
 		};
 		
 		try {
-			part.getSite().getPage().showView("org.eclipse.ui.views.ProgressView");
+			
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProgressView");
 		} catch (PartInitException e) {
 		}
 		

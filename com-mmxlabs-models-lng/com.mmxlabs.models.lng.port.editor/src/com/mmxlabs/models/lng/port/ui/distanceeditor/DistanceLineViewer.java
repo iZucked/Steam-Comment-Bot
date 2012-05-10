@@ -73,7 +73,7 @@ public class DistanceLineViewer extends GridTableViewer {
 		setContentProvider(new IStructuredContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
+				
 			}
 
 			@Override

@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 /**
  * @author hinton
@@ -28,12 +29,12 @@ import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 public class RotateSlotsAction extends ScenarioModifyingAction {
 	private IEditingDomainProvider editingDomainProvider;
 
-	public RotateSlotsAction(final IEditingDomainProvider edProvider) {
+	public RotateSlotsAction(final IScenarioEditingLocation iScenarioEditingLocation) {
 		super("Swap Discharge Slots");
 		try {
 			setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.cargo.editor/icons/swap.gif")));
 		} catch (final MalformedURLException e) {}
-		this.editingDomainProvider = edProvider;
+		this.editingDomainProvider = iScenarioEditingLocation;
 	}
 
 	/* (non-Javadoc)
