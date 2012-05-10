@@ -4,16 +4,21 @@
  */
 package com.mmxlabs.scenario.service.ui.commands;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorRegistry;
@@ -85,7 +90,28 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 			final IEditorDescriptor descriptor = registry.getDefaultEditor(editorInput.getName(), contentType);
 
 			if (descriptor != null) {
-				activePage.openEditor(editorInput, descriptor.getId());
+
+				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+				try {
+					dialog.run(false, false, new IRunnableWithProgress() {
+						public void run(final IProgressMonitor monitor) {
+							monitor.beginTask("Opening editor", IProgressMonitor.UNKNOWN);
+							try {
+								activePage.openEditor(editorInput, descriptor.getId());
+								monitor.worked(1);
+							} catch (final PartInitException e) {
+								log.error(e.getMessage(), e);
+							} finally {
+								monitor.done();
+							}
+						}
+					});
+				} catch (final InvocationTargetException e) {
+					log.error(e.getMessage(), e);
+				} catch (final InterruptedException e) {
+					log.error(e.getMessage(), e);
+				}
+
 			}
 		}
 	}
