@@ -361,7 +361,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	@Override
 	public void setFocus() {
-
+		getControl(getActivePage()).setFocus();
 	}
 
 	/* (non-Javadoc)
