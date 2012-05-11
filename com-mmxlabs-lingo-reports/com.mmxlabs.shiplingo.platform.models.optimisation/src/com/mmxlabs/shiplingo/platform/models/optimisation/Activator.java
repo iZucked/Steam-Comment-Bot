@@ -8,7 +8,8 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.analytics.ui.liveeval.IResourceEvaluator;
+import com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StartOptimisationHandler;
 
 /**
@@ -24,7 +25,7 @@ public class Activator extends AbstractUIPlugin {
 
 	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerServiceTracker;
 
-	private ServiceRegistration<IResourceEvaluator> evaluator;
+	private ServiceRegistration<IScenarioInstanceEvaluator> evaluator;
 
 	/**
 	 * The constructor
@@ -44,10 +45,10 @@ public class Activator extends AbstractUIPlugin {
 		jobManagerServiceTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context, IEclipseJobManager.class.getName(), null);
 		jobManagerServiceTracker.open();
 		final StartOptimisationHandler handler = new StartOptimisationHandler(false);
-		evaluator = context.registerService(IResourceEvaluator.class, new IResourceEvaluator() {
+		evaluator = context.registerService(IScenarioInstanceEvaluator.class, new IScenarioInstanceEvaluator() {
 			@Override
-			public void evaluate(final IResource resource) {
-//				handler.evaluateResource(getJobManager(), resource);
+			public void evaluate(final ScenarioInstance instance) {
+				handler.evaluateScenarioInstance(getJobManager(), instance);
 			}
 		}, null);
 	}
