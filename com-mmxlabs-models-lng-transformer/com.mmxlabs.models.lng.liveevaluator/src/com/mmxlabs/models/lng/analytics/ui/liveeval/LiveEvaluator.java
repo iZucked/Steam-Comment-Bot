@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditorPlugin;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * Updates schedule when their dirty bit is set.
@@ -22,10 +23,10 @@ import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
  */
 public class LiveEvaluator extends MMXAdapterImpl {
 	private static final Logger log = LoggerFactory.getLogger(LiveEvaluator.class);
-	private IResource resource;
 	private Thread evaluatorThread = null;
-	public LiveEvaluator(final IResource resource) {
-		this.resource = resource;
+	private ScenarioInstance instance;
+	public LiveEvaluator(final ScenarioInstance instance) {
+		this.instance = instance;
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 	private class Evaluator implements Runnable {
 		@Override
 		public void run() {
-			log.debug("Waiting 2s to evaluate " + resource.getName());
+			log.debug("Waiting 2s to evaluate " + instance.getName());
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
@@ -57,19 +58,18 @@ public class LiveEvaluator extends MMXAdapterImpl {
 				return;
 			}
 			
-			final IResourceEvaluator evaluator = AnalyticsEditorPlugin.getPlugin().getResourceEvaluator();
+			final IScenarioInstanceEvaluator evaluator = AnalyticsEditorPlugin.getPlugin().getResourceEvaluator();
 			if (evaluator != null) {
-				final MMXRootObject rootObject = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
 				if (Thread.interrupted()) {
 					run();
 					return;
 				}
-				synchronized (rootObject) {
-					log.debug("About to evaluate " + resource.getName());
-					evaluator.evaluate(resource);
+				synchronized (instance) {
+					log.debug("About to evaluate " + instance.getName());
+					evaluator.evaluate(instance);
 				}
 			} else {
-				log.debug("Could not find evaluator when evaluating " + resource.getName());
+				log.debug("Could not find evaluator when evaluating " + instance.getName());
 			}
 		}
 	}
