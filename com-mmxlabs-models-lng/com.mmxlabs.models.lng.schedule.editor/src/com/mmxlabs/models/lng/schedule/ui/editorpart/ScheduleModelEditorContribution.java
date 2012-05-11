@@ -63,7 +63,6 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 		}
 	}
 
-
 	@Override
 	public void dispose() {
 		for (final UUIDObject sub : adaptedObjects) {
