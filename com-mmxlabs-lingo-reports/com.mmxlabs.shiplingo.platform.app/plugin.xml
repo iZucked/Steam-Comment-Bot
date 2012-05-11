@@ -37,6 +37,11 @@
             id="com.mmxlabs.shiplingo.platform.app.perspective.analysis"
             name="Analysis">
       </perspective>
+      <perspective
+            class="com.mmxlabs.shiplingo.platform.app.intro.PhysicalPerspective"
+            id="com.mmxlabs.shiplingo.platform.app.perspective.physical"
+            name="Physical Model">
+      </perspective>
    </extension>
    <extension
          id="product"

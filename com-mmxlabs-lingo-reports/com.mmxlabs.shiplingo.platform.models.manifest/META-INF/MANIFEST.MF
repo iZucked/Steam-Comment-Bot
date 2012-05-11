@@ -9,6 +9,8 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.shiplingo.platform.models.manifest,
  com.mmxlabs.shiplingo.platform.models.manifest.adapters,
+ com.mmxlabs.shiplingo.platform.models.manifest.exportWizards,
+ com.mmxlabs.shiplingo.platform.models.manifest.importWizards,
  com.mmxlabs.shiplingo.platform.models.manifest.manifest,
  com.mmxlabs.shiplingo.platform.models.manifest.manifest.impl,
  com.mmxlabs.shiplingo.platform.models.manifest.manifest.util,

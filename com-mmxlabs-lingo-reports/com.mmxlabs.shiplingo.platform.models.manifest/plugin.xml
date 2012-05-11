@@ -40,7 +40,7 @@
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             file-extensions="scn"
-            id="com.mmxlabs.models.lng.demo.scnfile"
+            id="com.mmxlabs.shiplingo.platform.models.manifest.scnfile"
             name="SCN File"
             priority="normal">
       </content-type>
@@ -54,7 +54,7 @@
             id="com.mmxlabs.models.lng.demo.scneditor"
             name="SCN Editor">
          <contentTypeBinding
-               contentTypeId="com.mmxlabs.models.lng.demo.scnfile">
+               contentTypeId="com.mmxlabs.shiplingo.platform.models.manifest.scnfile">
          </contentTypeBinding>
       </editor>
    </extension>

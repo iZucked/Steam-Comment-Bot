@@ -46,6 +46,7 @@
       <feature id="com.mmxlabs.models.mmxcore.runtime.feature"/>
       <feature id="com.mmxlabs.models.lng.ui.runtime.feature"/>
       <feature id="com.mmxlabs.rcp.common.feature"/>
+      <feature id="com.mmxlabs.scenario.service.feature"/>
    </features>
 
    <configurations>
