@@ -70,6 +70,10 @@ public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput {
 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapter) {
+		if (ScenarioInstance.class.isAssignableFrom(adapter)) {
+			return scenarioInstance;
+		}
+
 		return Platform.getAdapterManager().getAdapter(this, adapter);
 	}
 
