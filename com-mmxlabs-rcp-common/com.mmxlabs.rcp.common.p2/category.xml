@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.mmxlabs.rcp.common.feature_1.0.0.qualifier.jar" id="com.mmxlabs.rcp.common.feature" version="1.0.0.qualifier">
+   <feature id="com.mmxlabs.rcp.common.feature" version="0.0.0">
       <category name="all"/>
    </feature>
-   <feature url="features/com.mmxlabs.rcp.common.feature.source_1.0.0.qualifier.jar" id="com.mmxlabs.rcp.common.feature.source" version="1.0.0.qualifier">
+   <feature id="com.mmxlabs.rcp.common.feature.source" version="0.0.0">
       <category name="all"/>
    </feature>
    <category-def name="all" label="RCP - Common"/>
