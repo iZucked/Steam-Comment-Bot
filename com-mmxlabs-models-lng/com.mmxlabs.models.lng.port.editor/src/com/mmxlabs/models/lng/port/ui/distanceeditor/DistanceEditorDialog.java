@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.port.ui.distanceeditor;
 
+import java.lang.ref.WeakReference;
+
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.ToolBarManager;
@@ -32,11 +34,13 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.menus.IMenuService;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -54,7 +58,14 @@ public class DistanceEditorDialog extends Dialog {
 	private Route distanceModel;
 	private EditingDomain editingDomain;
 	private MMXRootObject rootObject;
-
+	private static WeakReference<PortModel> currentPortModel;
+	
+	private static WeakReference<Route> currentDistanceModel;
+	
+	public static Route getCurrentDistanceModel() {
+		return currentDistanceModel.get();
+	}
+	
 	public DistanceEditorDialog(final Shell parentShell) {
 		super(parentShell);
 	}
@@ -84,7 +95,6 @@ public class DistanceEditorDialog extends Dialog {
 					menuService.releaseContributions(barManager);
 				}
 			});
-			barManager.update(true);
 		}
 		
 //		barManager.add(new ImportCSVAction() {
@@ -268,16 +278,24 @@ public class DistanceEditorDialog extends Dialog {
 		return distanceModel;
 	}
 
-	public int open(final IScenarioEditingLocation iScenarioEditingLocation, final Route dm) {
+	public int open(final IWorkbenchSite site,
+			final IScenarioEditingLocation iScenarioEditingLocation,
+			final Route dm) {
 		iScenarioEditingLocation.getReferenceValueProviderCache();
 		this.editingDomain = iScenarioEditingLocation.getEditingDomain();
 		this.distanceModel = EcoreUtil.copy(dm);
+		currentDistanceModel = new WeakReference<Route>(distanceModel);
 		this.rootObject = iScenarioEditingLocation.getRootObject();
+		currentPortModel = new WeakReference<PortModel>(rootObject.getSubModel(PortModel.class));
 		return super.open();
 	}
 
 	@Override
 	protected boolean isResizable() {
 		return true;
+	}
+
+	public static PortModel getCurrentPortModel() {
+		return currentPortModel.get();
 	}
 }

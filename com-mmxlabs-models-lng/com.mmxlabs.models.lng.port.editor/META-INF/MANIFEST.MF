@@ -8,7 +8,8 @@ Bundle-Activator: com.mmxlabs.models.lng.port.presentation.PortEditorPlugin$Impl
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.mmxlabs.models.lng.port.presentation
+Export-Package: com.mmxlabs.models.lng.port.presentation,
+ com.mmxlabs.models.lng.port.ui.distanceeditor
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;visibility:=reexport,
  com.mmxlabs.models.lng.port.edit;visibility:=reexport,

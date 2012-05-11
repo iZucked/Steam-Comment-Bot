@@ -282,7 +282,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 						dm.setName(newName);
 						dm.setCanal(true);
 						final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
-						if (ded.open(getJointModelEditorPart(), dm) == Window.OK) {
+						if (ded.open(PortEditorPane.this.part.getSite(), getJointModelEditorPart(), dm) == Window.OK) {
 							dm = ded.getResult();
 						}
 
@@ -313,7 +313,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 				private Route edit(final Route distanceModel) {
 					final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
-					if (ded.open(getJointModelEditorPart(), distanceModel) == Window.OK) {
+					if (ded.open(PortEditorPane.this.part.getSite(), getJointModelEditorPart(), distanceModel) == Window.OK) {
 						return ded.getResult();
 					}
 					return null;
