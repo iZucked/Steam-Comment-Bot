@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Group;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
@@ -68,24 +67,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		// We know there is only the load and discharge slot, so two columns
 		middle.setLayout(new GridLayout(2, true));
 
-		for (final EReference ref : eClass.getEAllReferences()) {
-			if (shouldDisplay(ref)) {
-				final EObject value = (EObject) object.eGet(ref);
-				if (value != null) {
-					final Group g2 = new Group(middle, SWT.NONE);
-					g2.setText(EditorUtils.unmangle(ref.getName()));
-					g2.setLayout(new FillLayout());
-					g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
-
-					final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass());
-
-					sub.setCommandHandler(commandHandler);
-					sub.setEditorWrapper(editorWrapper);
-					childReferences.add(ref);
-					childComposites.add(sub);
-				}
-			}
-		}
+		createChildComposites(root, object, eClass, middle);
 
 		// Additional Group for the bottom section
 		final Group g2 = new Group(this, SWT.NONE);
