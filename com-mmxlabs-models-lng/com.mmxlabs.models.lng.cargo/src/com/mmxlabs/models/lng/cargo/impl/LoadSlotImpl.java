@@ -3,12 +3,15 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -22,6 +25,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getCargoCV <em>Cargo CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isArriveCold <em>Arrive Cold</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getCargo <em>Cargo</em>}</li>
  * </ul>
  * </p>
  *
@@ -85,6 +89,16 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * @ordered
 	 */
 	protected boolean arriveColdESet;
+
+	/**
+	 * The cached value of the '{@link #getCargo() <em>Cargo</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargo()
+	 * @generated
+	 * @ordered
+	 */
+	protected Cargo cargo;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -200,6 +214,66 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Cargo getCargo() {
+		if (cargo != null && cargo.eIsProxy()) {
+			InternalEObject oldCargo = (InternalEObject)cargo;
+			cargo = (Cargo)eResolveProxy(oldCargo);
+			if (cargo != oldCargo) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.LOAD_SLOT__CARGO, oldCargo, cargo));
+			}
+		}
+		return cargo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Cargo basicGetCargo() {
+		return cargo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCargo(Cargo newCargo, NotificationChain msgs) {
+		Cargo oldCargo = cargo;
+		cargo = newCargo;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__CARGO, oldCargo, newCargo);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCargo(Cargo newCargo) {
+		if (newCargo != cargo) {
+			NotificationChain msgs = null;
+			if (cargo != null)
+				msgs = ((InternalEObject)cargo).eInverseRemove(this, CargoPackage.CARGO__LOAD_SLOT, Cargo.class, msgs);
+			if (newCargo != null)
+				msgs = ((InternalEObject)newCargo).eInverseAdd(this, CargoPackage.CARGO__LOAD_SLOT, Cargo.class, msgs);
+			msgs = basicSetCargo(newCargo, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__CARGO, newCargo, newCargo));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public double getSlotOrPortCV() {
@@ -216,12 +290,45 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case CargoPackage.LOAD_SLOT__CARGO:
+				if (cargo != null)
+					msgs = ((InternalEObject)cargo).eInverseRemove(this, CargoPackage.CARGO__LOAD_SLOT, Cargo.class, msgs);
+				return basicSetCargo((Cargo)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case CargoPackage.LOAD_SLOT__CARGO:
+				return basicSetCargo(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CargoPackage.LOAD_SLOT__CARGO_CV:
 				return getCargoCV();
 			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
 				return isArriveCold();
+			case CargoPackage.LOAD_SLOT__CARGO:
+				if (resolve) return getCargo();
+				return basicGetCargo();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -239,6 +346,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 				return;
 			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
 				setArriveCold((Boolean)newValue);
+				return;
+			case CargoPackage.LOAD_SLOT__CARGO:
+				setCargo((Cargo)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -258,6 +368,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
 				unsetArriveCold();
 				return;
+			case CargoPackage.LOAD_SLOT__CARGO:
+				setCargo((Cargo)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -274,6 +387,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 				return isSetCargoCV();
 			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
 				return isSetArriveCold();
+			case CargoPackage.LOAD_SLOT__CARGO:
+				return cargo != null;
 		}
 		return super.eIsSet(featureID);
 	}

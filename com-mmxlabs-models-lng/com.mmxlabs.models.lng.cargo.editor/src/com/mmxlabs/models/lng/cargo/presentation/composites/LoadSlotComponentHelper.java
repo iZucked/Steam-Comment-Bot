@@ -65,6 +65,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_cargoCVEditor(detailComposite, topClass);
 		add_arriveColdEditor(detailComposite, topClass);
+		add_cargoEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the cargoCV feature on LoadSlot
@@ -81,5 +82,16 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_arriveColdEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__ARRIVE_COLD));
+	}
+
+	/**
+	 * Create the editor for the cargo feature on LoadSlot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_cargoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		// This is an opposite reference - not for direct UI consumption
+		
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__CARGO));
 	}
 }

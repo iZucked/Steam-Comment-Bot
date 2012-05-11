@@ -29,6 +29,7 @@ import org.eclipse.emf.common.util.EList;
 public interface Cargo extends ACargo {
 	/**
 	 * Returns the value of the '<em><b>Load Slot</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargo <em>Cargo</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Load Slot</em>' reference isn't clear,
@@ -38,7 +39,8 @@ public interface Cargo extends ACargo {
 	 * @return the value of the '<em>Load Slot</em>' reference.
 	 * @see #setLoadSlot(LoadSlot)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_LoadSlot()
-	 * @model required="true"
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getCargo
+	 * @model opposite="cargo" required="true"
 	 * @generated
 	 */
 	LoadSlot getLoadSlot();
@@ -55,6 +57,7 @@ public interface Cargo extends ACargo {
 
 	/**
 	 * Returns the value of the '<em><b>Discharge Slot</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo <em>Cargo</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Discharge Slot</em>' reference isn't clear,
@@ -64,7 +67,8 @@ public interface Cargo extends ACargo {
 	 * @return the value of the '<em>Discharge Slot</em>' reference.
 	 * @see #setDischargeSlot(DischargeSlot)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_DischargeSlot()
-	 * @model required="true"
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo
+	 * @model opposite="cargo" required="true"
 	 * @generated
 	 */
 	DischargeSlot getDischargeSlot();

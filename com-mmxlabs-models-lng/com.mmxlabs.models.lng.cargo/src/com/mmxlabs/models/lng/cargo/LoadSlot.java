@@ -14,6 +14,7 @@ package com.mmxlabs.models.lng.cargo;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargoCV <em>Cargo CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargo <em>Cargo</em>}</li>
  * </ul>
  * </p>
  *
@@ -127,6 +128,34 @@ public interface LoadSlot extends Slot {
 	 * @generated
 	 */
 	boolean isSetArriveCold();
+
+	/**
+	 * Returns the value of the '<em><b>Cargo</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot <em>Load Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo</em>' reference.
+	 * @see #setCargo(Cargo)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot_Cargo()
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot
+	 * @model opposite="loadSlot"
+	 * @generated
+	 */
+	Cargo getCargo();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargo <em>Cargo</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo</em>' reference.
+	 * @see #getCargo()
+	 * @generated
+	 */
+	void setCargo(Cargo value);
 
 	/**
 	 * <!-- begin-user-doc -->

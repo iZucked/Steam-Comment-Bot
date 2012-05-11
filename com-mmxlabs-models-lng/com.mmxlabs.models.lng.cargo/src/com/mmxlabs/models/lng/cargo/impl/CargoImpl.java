@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.types.impl.ACargoImpl;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -148,11 +149,33 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLoadSlot(LoadSlot newLoadSlot) {
+	public NotificationChain basicSetLoadSlot(LoadSlot newLoadSlot, NotificationChain msgs) {
 		LoadSlot oldLoadSlot = loadSlot;
 		loadSlot = newLoadSlot;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__LOAD_SLOT, oldLoadSlot, loadSlot));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__LOAD_SLOT, oldLoadSlot, newLoadSlot);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLoadSlot(LoadSlot newLoadSlot) {
+		if (newLoadSlot != loadSlot) {
+			NotificationChain msgs = null;
+			if (loadSlot != null)
+				msgs = ((InternalEObject)loadSlot).eInverseRemove(this, CargoPackage.LOAD_SLOT__CARGO, LoadSlot.class, msgs);
+			if (newLoadSlot != null)
+				msgs = ((InternalEObject)newLoadSlot).eInverseAdd(this, CargoPackage.LOAD_SLOT__CARGO, LoadSlot.class, msgs);
+			msgs = basicSetLoadSlot(newLoadSlot, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__LOAD_SLOT, newLoadSlot, newLoadSlot));
 	}
 
 	/**
@@ -186,11 +209,33 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDischargeSlot(DischargeSlot newDischargeSlot) {
+	public NotificationChain basicSetDischargeSlot(DischargeSlot newDischargeSlot, NotificationChain msgs) {
 		DischargeSlot oldDischargeSlot = dischargeSlot;
 		dischargeSlot = newDischargeSlot;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__DISCHARGE_SLOT, oldDischargeSlot, dischargeSlot));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__DISCHARGE_SLOT, oldDischargeSlot, newDischargeSlot);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDischargeSlot(DischargeSlot newDischargeSlot) {
+		if (newDischargeSlot != dischargeSlot) {
+			NotificationChain msgs = null;
+			if (dischargeSlot != null)
+				msgs = ((InternalEObject)dischargeSlot).eInverseRemove(this, CargoPackage.DISCHARGE_SLOT__CARGO, DischargeSlot.class, msgs);
+			if (newDischargeSlot != null)
+				msgs = ((InternalEObject)newDischargeSlot).eInverseAdd(this, CargoPackage.DISCHARGE_SLOT__CARGO, DischargeSlot.class, msgs);
+			msgs = basicSetDischargeSlot(newDischargeSlot, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__DISCHARGE_SLOT, newDischargeSlot, newDischargeSlot));
 	}
 
 	/**
@@ -258,6 +303,42 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 */
 	public CargoType getCargoType() {
 		return CargoType.FLEET;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case CargoPackage.CARGO__LOAD_SLOT:
+				if (loadSlot != null)
+					msgs = ((InternalEObject)loadSlot).eInverseRemove(this, CargoPackage.LOAD_SLOT__CARGO, LoadSlot.class, msgs);
+				return basicSetLoadSlot((LoadSlot)otherEnd, msgs);
+			case CargoPackage.CARGO__DISCHARGE_SLOT:
+				if (dischargeSlot != null)
+					msgs = ((InternalEObject)dischargeSlot).eInverseRemove(this, CargoPackage.DISCHARGE_SLOT__CARGO, DischargeSlot.class, msgs);
+				return basicSetDischargeSlot((DischargeSlot)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case CargoPackage.CARGO__LOAD_SLOT:
+				return basicSetLoadSlot(null, msgs);
+			case CargoPackage.CARGO__DISCHARGE_SLOT:
+				return basicSetDischargeSlot(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
