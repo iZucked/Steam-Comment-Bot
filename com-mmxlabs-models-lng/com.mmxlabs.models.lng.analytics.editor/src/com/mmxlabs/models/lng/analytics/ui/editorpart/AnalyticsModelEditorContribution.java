@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.analytics.ui.editorpart;
 
 import java.util.Collections;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
@@ -38,7 +37,7 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 		
 		final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
 		if (schedule != null) {
-			evaluator = new LiveEvaluator((IResource) editorPart.getEditorInput().getAdapter(IResource.class));
+			evaluator = new LiveEvaluator(editorPart.getScenarioInstance());
 			schedule.eAdapters().add(evaluator);
 		}
 	}

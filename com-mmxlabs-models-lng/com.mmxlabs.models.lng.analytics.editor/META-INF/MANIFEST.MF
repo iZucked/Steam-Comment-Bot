@@ -28,5 +28,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.lng.schedule;bundle-version="1.0.0",
  com.mmxlabs.jobmanager;bundle-version="1.0.0",
  com.mmxlabs.jobmanager.eclipse;bundle-version="1.0.0",
- org.slf4j.api;bundle-version="1.6.1"
+ org.slf4j.api;bundle-version="1.6.1",
+ com.mmxlabs.scenario.service.model;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy

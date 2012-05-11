@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.liveeval;
 
-import org.eclipse.core.resources.IResource;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+
 
 /**
  * This is a bodge to make the evaluation handler from the platform available here.
@@ -12,6 +13,6 @@ import org.eclipse.core.resources.IResource;
  * @author hinton
  *
  */
-public interface IResourceEvaluator {
-	public void evaluate(final IResource resource);
+public interface IScenarioInstanceEvaluator {
+	public void evaluate(final ScenarioInstance instance);
 }

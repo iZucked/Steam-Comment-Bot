@@ -14,7 +14,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.models.lng.analytics.ui.commands.UnitCostMatrixCommandProvider;
-import com.mmxlabs.models.lng.analytics.ui.liveeval.IResourceEvaluator;
+import com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
@@ -87,7 +87,7 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 	 */
 	public static class Implementation extends EclipseUIPlugin {
 		private ServiceRegistration<IModelCommandProvider> commandService;
-		private ServiceTracker<IResourceEvaluator, IResourceEvaluator> evaluatorTracker;
+		private ServiceTracker<IScenarioInstanceEvaluator, IScenarioInstanceEvaluator> evaluatorTracker;
 	
 		/**
 		 * Creates an instance.
@@ -111,7 +111,7 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 			super.start(context);
 			IModelCommandProvider commandProvider = new UnitCostMatrixCommandProvider();
 			commandService = context.registerService(IModelCommandProvider.class, commandProvider , null);
-			evaluatorTracker = new ServiceTracker<IResourceEvaluator, IResourceEvaluator>(context, IResourceEvaluator.class, null);
+			evaluatorTracker = new ServiceTracker<IScenarioInstanceEvaluator, IScenarioInstanceEvaluator>(context, IScenarioInstanceEvaluator.class, null);
 			evaluatorTracker.open();
 		}
 
@@ -125,7 +125,7 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 			super.stop(context);
 		}
 		
-		public IResourceEvaluator getResourceEvaluator() {
+		public IScenarioInstanceEvaluator getResourceEvaluator() {
 			return evaluatorTracker.getService();
 		}
 	}
