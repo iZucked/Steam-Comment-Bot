@@ -333,7 +333,7 @@
                locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=Imports">
             <command
                   commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
-                  label="Import Scenaio from CSV"
+                  label="Import Scenario from CSV"
                   style="push">
             </command>
          </menuContribution>
