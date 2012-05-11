@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultStartTime <em>Default Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#isAllowCooldown <em>Allow Cooldown</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSize <em>Default Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getPortCode <em>Port Code</em>}</li>
  * </ul>
  * </p>
  *
@@ -232,4 +233,30 @@ public interface Port extends APort {
 	 * @generated
 	 */
 	void setDefaultWindowSize(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Code</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Code</em>' attribute.
+	 * @see #setPortCode(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_PortCode()
+	 * @model required="true"
+	 * @generated
+	 */
+	String getPortCode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getPortCode <em>Port Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Code</em>' attribute.
+	 * @see #getPortCode()
+	 * @generated
+	 */
+	void setPortCode(String value);
 } // Port

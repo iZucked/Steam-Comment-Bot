@@ -213,6 +213,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getPort_PortCode() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getRoute() {
 		return routeEClass;
 	}
@@ -233,6 +242,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 */
 	public EAttribute getRoute_Canal() {
 		return (EAttribute)routeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRoute_RoutingOptions() {
+		return (EAttribute)routeEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -362,10 +380,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__DEFAULT_START_TIME);
 		createEAttribute(portEClass, PORT__ALLOW_COOLDOWN);
 		createEAttribute(portEClass, PORT__DEFAULT_WINDOW_SIZE);
+		createEAttribute(portEClass, PORT__PORT_CODE);
 
 		routeEClass = createEClass(ROUTE);
 		createEReference(routeEClass, ROUTE__LINES);
 		createEAttribute(routeEClass, ROUTE__CANAL);
+		createEAttribute(routeEClass, ROUTE__ROUTING_OPTIONS);
 
 		portGroupEClass = createEClass(PORT_GROUP);
 		createEReference(portGroupEClass, PORT_GROUP__CONTENTS);
@@ -430,10 +450,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_DefaultStartTime(), ecorePackage.getEInt(), "defaultStartTime", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_AllowCooldown(), ecorePackage.getEBoolean(), "allowCooldown", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultWindowSize(), ecorePackage.getEInt(), "defaultWindowSize", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_PortCode(), ecorePackage.getEString(), "portCode", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(routeEClass, Route.class, "Route", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoute_Lines(), this.getRouteLine(), null, "lines", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoute_Canal(), ecorePackage.getEBoolean(), "canal", null, 1, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRoute_RoutingOptions(), ecorePackage.getEString(), "routingOptions", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portGroupEClass, PortGroup.class, "PortGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortGroup_Contents(), theTypesPackage.getAPortSet(), null, "contents", null, 0, -1, PortGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

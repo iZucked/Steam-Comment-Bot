@@ -20,11 +20,15 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultWindowSize" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portCode" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Route" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ARoute">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lines" upperBound="-1"
         eType="#//RouteLine" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canal" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="routingOptions" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortGroup" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
     <eOperations name="collect" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort">

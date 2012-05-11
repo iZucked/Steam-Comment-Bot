@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultStartTime <em>Default Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#isAllowCooldown <em>Allow Cooldown</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultWindowSize <em>Default Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getPortCode <em>Port Code</em>}</li>
  * </ul>
  * </p>
  *
@@ -176,6 +177,26 @@ public class PortImpl extends APortImpl implements Port {
 	 * @ordered
 	 */
 	protected int defaultWindowSize = DEFAULT_WINDOW_SIZE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPortCode() <em>Port Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PORT_CODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPortCode() <em>Port Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String portCode = PORT_CODE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -360,6 +381,27 @@ public class PortImpl extends APortImpl implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getPortCode() {
+		return portCode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortCode(String newPortCode) {
+		String oldPortCode = portCode;
+		portCode = newPortCode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__PORT_CODE, oldPortCode, portCode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -379,6 +421,8 @@ public class PortImpl extends APortImpl implements Port {
 				return isAllowCooldown();
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				return getDefaultWindowSize();
+			case PortPackage.PORT__PORT_CODE:
+				return getPortCode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -417,6 +461,9 @@ public class PortImpl extends APortImpl implements Port {
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				setDefaultWindowSize((Integer)newValue);
 				return;
+			case PortPackage.PORT__PORT_CODE:
+				setPortCode((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -453,6 +500,9 @@ public class PortImpl extends APortImpl implements Port {
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				setDefaultWindowSize(DEFAULT_WINDOW_SIZE_EDEFAULT);
 				return;
+			case PortPackage.PORT__PORT_CODE:
+				setPortCode(PORT_CODE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -481,6 +531,8 @@ public class PortImpl extends APortImpl implements Port {
 				return allowCooldown != ALLOW_COOLDOWN_EDEFAULT;
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				return defaultWindowSize != DEFAULT_WINDOW_SIZE_EDEFAULT;
+			case PortPackage.PORT__PORT_CODE:
+				return PORT_CODE_EDEFAULT == null ? portCode != null : !PORT_CODE_EDEFAULT.equals(portCode);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -511,6 +563,8 @@ public class PortImpl extends APortImpl implements Port {
 		result.append(allowCooldown);
 		result.append(", defaultWindowSize: ");
 		result.append(defaultWindowSize);
+		result.append(", portCode: ");
+		result.append(portCode);
 		result.append(')');
 		return result.toString();
 	}

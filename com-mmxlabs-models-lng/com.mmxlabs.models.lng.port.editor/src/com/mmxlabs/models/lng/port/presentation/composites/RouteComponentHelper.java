@@ -66,6 +66,7 @@ public class RouteComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_linesEditor(detailComposite, topClass);
 		add_canalEditor(detailComposite, topClass);
+		add_routingOptionsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the lines feature on Route
@@ -82,5 +83,14 @@ public class RouteComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_canalEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__CANAL));
+	}
+
+	/**
+	 * Create the editor for the routingOptions feature on Route
+	 *
+	 * @generated
+	 */
+	protected void add_routingOptionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__ROUTING_OPTIONS));
 	}
 }

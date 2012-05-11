@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -34,6 +35,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getLines <em>Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#isCanal <em>Canal</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRoutingOptions <em>Routing Options</em>}</li>
  * </ul>
  * </p>
  *
@@ -69,6 +71,16 @@ public class RouteImpl extends ARouteImpl implements Route {
 	 * @ordered
 	 */
 	protected boolean canal = CANAL_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getRoutingOptions() <em>Routing Options</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRoutingOptions()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> routingOptions;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -127,6 +139,18 @@ public class RouteImpl extends ARouteImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<String> getRoutingOptions() {
+		if (routingOptions == null) {
+			routingOptions = new EDataTypeUniqueEList<String>(String.class, this, PortPackage.ROUTE__ROUTING_OPTIONS);
+		}
+		return routingOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -148,6 +172,8 @@ public class RouteImpl extends ARouteImpl implements Route {
 				return getLines();
 			case PortPackage.ROUTE__CANAL:
 				return isCanal();
+			case PortPackage.ROUTE__ROUTING_OPTIONS:
+				return getRoutingOptions();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -168,6 +194,10 @@ public class RouteImpl extends ARouteImpl implements Route {
 			case PortPackage.ROUTE__CANAL:
 				setCanal((Boolean)newValue);
 				return;
+			case PortPackage.ROUTE__ROUTING_OPTIONS:
+				getRoutingOptions().clear();
+				getRoutingOptions().addAll((Collection<? extends String>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -186,6 +216,9 @@ public class RouteImpl extends ARouteImpl implements Route {
 			case PortPackage.ROUTE__CANAL:
 				setCanal(CANAL_EDEFAULT);
 				return;
+			case PortPackage.ROUTE__ROUTING_OPTIONS:
+				getRoutingOptions().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -202,6 +235,8 @@ public class RouteImpl extends ARouteImpl implements Route {
 				return lines != null && !lines.isEmpty();
 			case PortPackage.ROUTE__CANAL:
 				return canal != CANAL_EDEFAULT;
+			case PortPackage.ROUTE__ROUTING_OPTIONS:
+				return routingOptions != null && !routingOptions.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -218,6 +253,8 @@ public class RouteImpl extends ARouteImpl implements Route {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (canal: ");
 		result.append(canal);
+		result.append(", routingOptions: ");
+		result.append(routingOptions);
 		result.append(')');
 		return result.toString();
 	}

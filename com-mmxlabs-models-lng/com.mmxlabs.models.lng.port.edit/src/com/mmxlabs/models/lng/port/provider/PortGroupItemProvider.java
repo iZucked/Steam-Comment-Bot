@@ -78,7 +78,7 @@ public class PortGroupItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_PortGroup_contents_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortGroup_contents_feature", "_UI_PortGroup_type"),
+				 getString("_UI_PortGroup_contents_description"),
 				 PortPackage.Literals.PORT_GROUP__CONTENTS,
 				 true,
 				 false,

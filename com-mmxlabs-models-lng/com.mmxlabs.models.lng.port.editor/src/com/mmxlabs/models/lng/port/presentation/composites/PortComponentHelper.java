@@ -75,6 +75,7 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_defaultStartTimeEditor(detailComposite, topClass);
 		add_allowCooldownEditor(detailComposite, topClass);
 		add_defaultWindowSizeEditor(detailComposite, topClass);
+		add_portCodeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the capabilities feature on Port
@@ -145,5 +146,14 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_defaultWindowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE));
+	}
+
+	/**
+	 * Create the editor for the portCode feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_portCodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__PORT_CODE));
 	}
 }

@@ -71,6 +71,7 @@ public class PortItemProvider
 			addDefaultStartTimePropertyDescriptor(object);
 			addAllowCooldownPropertyDescriptor(object);
 			addDefaultWindowSizePropertyDescriptor(object);
+			addPortCodePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -87,7 +88,7 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_capabilities_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_capabilities_feature", "_UI_Port_type"),
+				 getString("_UI_Port_capabilities_description"),
 				 PortPackage.Literals.PORT__CAPABILITIES,
 				 true,
 				 false,
@@ -109,7 +110,7 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_timeZone_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_timeZone_feature", "_UI_Port_type"),
+				 getString("_UI_Port_timeZone_description"),
 				 PortPackage.Literals.PORT__TIME_ZONE,
 				 true,
 				 false,
@@ -131,7 +132,7 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_loadDuration_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_loadDuration_feature", "_UI_Port_type"),
+				 getString("_UI_Port_loadDuration_description"),
 				 PortPackage.Literals.PORT__LOAD_DURATION,
 				 true,
 				 false,
@@ -153,7 +154,7 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_dischargeDuration_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_dischargeDuration_feature", "_UI_Port_type"),
+				 getString("_UI_Port_dischargeDuration_description"),
 				 PortPackage.Literals.PORT__DISCHARGE_DURATION,
 				 true,
 				 false,
@@ -175,7 +176,7 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_cvValue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_cvValue_feature", "_UI_Port_type"),
+				 getString("_UI_Port_cvValue_description"),
 				 PortPackage.Literals.PORT__CV_VALUE,
 				 true,
 				 false,
@@ -197,7 +198,7 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_defaultStartTime_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultStartTime_feature", "_UI_Port_type"),
+				 getString("_UI_Port_defaultStartTime_description"),
 				 PortPackage.Literals.PORT__DEFAULT_START_TIME,
 				 true,
 				 false,
@@ -219,7 +220,7 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_allowCooldown_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_allowCooldown_feature", "_UI_Port_type"),
+				 getString("_UI_Port_allowCooldown_description"),
 				 PortPackage.Literals.PORT__ALLOW_COOLDOWN,
 				 true,
 				 false,
@@ -241,12 +242,34 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_defaultWindowSize_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultWindowSize_feature", "_UI_Port_type"),
+				 getString("_UI_Port_defaultWindowSize_description"),
 				 PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Code feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortCodePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_portCode_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_portCode_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__PORT_CODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -296,6 +319,7 @@ public class PortItemProvider
 			case PortPackage.PORT__DEFAULT_START_TIME:
 			case PortPackage.PORT__ALLOW_COOLDOWN:
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
+			case PortPackage.PORT__PORT_CODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

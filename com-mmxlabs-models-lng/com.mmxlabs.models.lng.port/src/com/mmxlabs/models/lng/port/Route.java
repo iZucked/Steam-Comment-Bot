@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getLines <em>Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#isCanal <em>Canal</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Route#getRoutingOptions <em>Routing Options</em>}</li>
  * </ul>
  * </p>
  *
@@ -67,5 +68,21 @@ public interface Route extends ARoute {
 	 * @generated
 	 */
 	void setCanal(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Routing Options</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.String}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Routing Options</em>' attribute list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Routing Options</em>' attribute list.
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_RoutingOptions()
+	 * @model
+	 * @generated
+	 */
+	EList<String> getRoutingOptions();
 
 } // Route
