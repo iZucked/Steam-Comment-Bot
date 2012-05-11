@@ -13,7 +13,7 @@ public class PhysicalPerspective implements IPerspectiveFactory {
 		final IFolderLayout viewsFolder = layout.createFolder("viewsFolder", IPageLayout.TOP, 1, IPageLayout.ID_EDITOR_AREA);
 		
 		viewsFolder.addView("com.mmxlabs.models.lng.port.editor.views.PortView");
-		viewsFolder.addView("com.mmxlabs.models.lng.port.editor.views.PortGroupView");
+		viewsFolder.addView("com.mmxlabs.models.lng.port.editor.views.PortGroupsView");
 		viewsFolder.addView("com.mmxlabs.models.lng.fleet.editor.views.VesselView");
 		viewsFolder.addView("com.mmxlabs.models.lng.fleet.editor.views.VesselClassView");
 		// consider other views which could go here?
