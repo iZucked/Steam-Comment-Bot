@@ -14,6 +14,8 @@ import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -30,14 +32,14 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.menus.IMenuService;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
-import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 
 /**
@@ -47,11 +49,10 @@ import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
  * 
  */
 public class DistanceEditorDialog extends Dialog {
-	private static final int IMPORT_CSV = 0x10;
+	private static final String DISTANCE_EDITOR_TOOLBAR_ID = "toolbar:com.mmxlabs.models.lng.port.ui.distanceeditor.toolbar";
 	private DistanceLineViewer viewer;
 	private Route distanceModel;
 	private EditingDomain editingDomain;
-	private IReferenceValueProviderProvider valueProviderProvider;
 	private MMXRootObject rootObject;
 
 	public DistanceEditorDialog(final Shell parentShell) {
@@ -73,6 +74,19 @@ public class DistanceEditorDialog extends Dialog {
 
 		final ToolBarManager barManager = new ToolBarManager(SWT.BORDER | SWT.RIGHT);
 
+		final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
+		
+		if (menuService != null) {
+			menuService.populateContributionManager(barManager, DISTANCE_EDITOR_TOOLBAR_ID);
+			getShell().addDisposeListener(new DisposeListener() {				
+				@Override
+				public void widgetDisposed(final DisposeEvent e) {
+					menuService.releaseContributions(barManager);
+				}
+			});
+			barManager.update(true);
+		}
+		
 //		barManager.add(new ImportCSVAction() {
 //			@Override
 //			protected EObject getToplevelObject() {
@@ -255,7 +269,7 @@ public class DistanceEditorDialog extends Dialog {
 	}
 
 	public int open(final IScenarioEditingLocation iScenarioEditingLocation, final Route dm) {
-		this.valueProviderProvider = iScenarioEditingLocation.getReferenceValueProviderCache();
+		iScenarioEditingLocation.getReferenceValueProviderCache();
 		this.editingDomain = iScenarioEditingLocation.getEditingDomain();
 		this.distanceModel = EcoreUtil.copy(dm);
 		this.rootObject = iScenarioEditingLocation.getRootObject();
