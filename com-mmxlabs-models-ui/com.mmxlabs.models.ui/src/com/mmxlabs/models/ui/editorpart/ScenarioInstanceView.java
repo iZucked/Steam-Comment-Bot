@@ -19,6 +19,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.IMMXRootObjectProvider;
+import com.mmxlabs.models.ui.IScenarioInstanceProvider;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -26,7 +28,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener {
+public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener, IScenarioInstanceProvider, IMMXRootObjectProvider {
 	private static final String SCENARIO_NAVIGATOR_ID="com.mmxlabs.scenario.service.ui.navigator";
 	private ScenarioInstance scenarioInstance;
 	private ReferenceValueProviderCache valueProviderCache;
