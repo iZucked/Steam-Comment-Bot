@@ -190,4 +190,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			currentScheme = colourScheme;
 		}
 	}
+	
+	
 }

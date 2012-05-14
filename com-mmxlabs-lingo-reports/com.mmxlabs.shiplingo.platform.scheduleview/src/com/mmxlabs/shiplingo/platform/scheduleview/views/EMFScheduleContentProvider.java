@@ -6,11 +6,9 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
@@ -71,7 +69,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
+		
 	}
 
 	@Override
@@ -137,5 +135,4 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 		return null;
 	}
-
 }

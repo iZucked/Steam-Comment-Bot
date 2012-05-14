@@ -22,5 +22,9 @@ public class EditingPerspective implements IPerspectiveFactory {
 
 		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.optimisation");
 		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.analysis");
+		
+		final IFolderLayout dataFolder = layout.createFolder("dataFolder", IPageLayout.RIGHT, 0.75f, IPageLayout.ID_EDITOR_AREA);
+		dataFolder.addView("com.mmxlabs.models.lng.port.editor.views.PortView");
+		dataFolder.addView("com.mmxlabs.models.lng.fleet.editor.views.VesselView");
 	}
 }
