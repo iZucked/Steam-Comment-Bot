@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.ui.tabular;
 
 import java.util.List;
 
+import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.ecore.EObject;
@@ -10,6 +11,7 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.ContributionManager;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
@@ -35,6 +37,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.IMenuService;
 
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
@@ -316,7 +319,16 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			final String toolbarID = getToolbarID();
 			final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
 			if (menuService != null) {
+				System.err.println(toolbarID);
 				menuService.populateContributionManager(toolbar, toolbarID);
+				
+				for (final IContributionItem item : toolbar.getItems()) {
+					if (item instanceof CommandContributionItem) {
+						final CommandContributionItem cci = (CommandContributionItem) item;
+						System.err.println(cci.getCommand());
+					}
+				}
+				
 				viewer.getControl().addDisposeListener(new DisposeListener() {
 					@Override
 					public void widgetDisposed(DisposeEvent e) {
