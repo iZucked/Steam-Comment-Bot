@@ -319,7 +319,6 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			final String toolbarID = getToolbarID();
 			final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
 			if (menuService != null) {
-				System.err.println(toolbarID);
 				menuService.populateContributionManager(toolbar, toolbarID);
 				
 				for (final IContributionItem item : toolbar.getItems()) {
