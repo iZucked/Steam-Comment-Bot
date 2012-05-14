@@ -35,6 +35,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.menus.IMenuService;
 
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
@@ -73,6 +74,10 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 	protected ScenarioTableViewer getScenarioViewer() {
 		return scenarioViewer;
+	}
+	
+	protected String getToolbarID() {
+		return "toolbar:" + getClass().getCanonicalName();
 	}
 	
 	@Override
@@ -306,6 +311,21 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, importAction);
 		}
 
+		// add extension points to toolbar
+		{
+			final String toolbarID = getToolbarID();
+			final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
+			if (menuService != null) {
+				menuService.populateContributionManager(toolbar, toolbarID);
+				viewer.getControl().addDisposeListener(new DisposeListener() {
+					@Override
+					public void widgetDisposed(DisposeEvent e) {
+						menuService.releaseContributions(toolbar);
+					}
+				});
+			}			
+		}
+		
 		toolbar.update(true);
 	}
 
