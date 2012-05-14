@@ -5,6 +5,8 @@
 package com.mmxlabs.scenario.service.file;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -196,13 +198,44 @@ public class FileScenarioService extends AbstractScenarioService {
 	@Override
 	protected ScenarioService initServiceModel() {
 		resource = resourceSet.createResource(storeURI);
-		
+		boolean resourceExisted = false;
 		try {
 			resource.load(options);
+			resourceExisted = true;
 		} catch (final IOException ex) {
-			resource.getContents().add(ScenarioServiceFactory.eINSTANCE.createScenarioService());
+			
 		}
 		
+		if (resource.getContents().isEmpty()) {
+			resource.getContents().add(ScenarioServiceFactory.eINSTANCE.createScenarioService());
+			if (resourceExisted) {
+				// consider loading backup?
+			}
+		} else {
+			// back-up resource
+			try {
+				log.debug("Backing up " + storeURI);
+				final InputStream inputStream = resourceSet.getURIConverter()
+						.createInputStream(storeURI);
+				try {
+					final OutputStream outputStream = resourceSet
+							.getURIConverter().createOutputStream(
+									URI.createURI(storeURI.toString()
+											+ ".backup"));
+					int x;
+					while ((x = inputStream.read()) != -1) {
+						outputStream.write(x);
+					}
+					outputStream.close();
+				} finally {
+					inputStream.close();
+				}
+
+			} catch (IOException e) {
+
+			}
+		}
+
 		final ScenarioService result = (ScenarioService) resource.getContents().get(0);
 		
 		result.setDescription("File scenario service with store " + storeURI);
