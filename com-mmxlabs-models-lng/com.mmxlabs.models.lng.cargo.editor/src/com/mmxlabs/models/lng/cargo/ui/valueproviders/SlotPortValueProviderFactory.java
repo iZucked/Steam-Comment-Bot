@@ -32,74 +32,57 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 
 /**
- * This is a restricted case reference value provider which filters the port
- * list on slots to those allowed by the slots' contract.
+ * This is a restricted case reference value provider which filters the port list on slots to those allowed by the slots' contract.
  * 
  * @author hinton
  * 
  */
-public class SlotPortValueProviderFactory implements
-		IReferenceValueProviderFactory {
+public class SlotPortValueProviderFactory implements IReferenceValueProviderFactory {
 	private final IReferenceValueProviderFactory delegate;
 
 	public SlotPortValueProviderFactory() {
-		this.delegate = Activator
-				.getDefault()
-				.getReferenceValueProviderFactoryRegistry()
-				.getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(),
-						TypesPackage.eINSTANCE.getAPort());
+		this.delegate = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), TypesPackage.eINSTANCE.getAPort());
 	}
 
 	@Override
-	public IReferenceValueProvider createReferenceValueProvider(
-			final EClass owner, final EReference reference,
-			final MMXRootObject rootObject) {
+	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
 		if (delegate == null)
 			return null;
-		final IReferenceValueProvider delegateFactory = delegate
-				.createReferenceValueProvider(owner, reference, rootObject);
+		final IReferenceValueProvider delegateFactory = delegate.createReferenceValueProvider(owner, reference, rootObject);
 		if (reference == CargoPackage.eINSTANCE.getSlot_Port()) {
 			return new IReferenceValueProvider() {
 				@Override
-				public boolean updateOnChangeToFeature(Object changedFeature) {
-					return delegateFactory
-							.updateOnChangeToFeature(changedFeature);
+				public boolean updateOnChangeToFeature(final Object changedFeature) {
+					return delegateFactory.updateOnChangeToFeature(changedFeature);
 				}
 
 				@Override
-				public Iterable<Pair<Notifier, List<Object>>> getNotifiers(
-						EObject referer, EReference feature,
-						EObject referenceValue) {
-					return delegateFactory.getNotifiers(referer, feature,
-							referenceValue);
+				public Iterable<Pair<Notifier, List<Object>>> getNotifiers(final EObject referer, final EReference feature, final EObject referenceValue) {
+					return delegateFactory.getNotifiers(referer, feature, referenceValue);
 				}
 
 				@Override
-				public String getName(EObject referer, EReference feature,
-						EObject referenceValue) {
-					return delegateFactory.getName(referer, feature,
-							referenceValue);
+				public String getName(final EObject referer, final EReference feature, final EObject referenceValue) {
+					return delegateFactory.getName(referer, feature, referenceValue);
 				}
 
 				@Override
-				public List<Pair<String, EObject>> getAllowedValues(
-						final EObject target, final EStructuralFeature field) {
-					final List<Pair<String, EObject>> delegateValue = delegateFactory
-							.getAllowedValues(target, field);
+				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 
 					if (target instanceof Slot) {
-						final PortCapability capability = 
-								(target instanceof LoadSlot ? PortCapability.LOAD :PortCapability.DISCHARGE);
+						final PortCapability capability = (target instanceof LoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
 						final ArrayList<Pair<String, EObject>> filterOne = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> p : delegateValue) {
-							if (((Port)p.getSecond()).getCapabilities().contains(capability)) {
+							if (((Port) p.getSecond()).getCapabilities().contains(capability)) {
 								filterOne.add(p);
 							}
 						}
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						final Slot slot = (Slot) target;
 						final Contract contract = slot.getContract();
-						if (contract == null) return delegateValue;
+						if (contract == null)
+							return delegateValue;
 						final UniqueEList<APortSet> marks = new UniqueEList<APortSet>();
 						final HashSet<APort> ports = new HashSet<APort>();
 						for (final APortSet set : contract.getAllowedPorts()) {
@@ -110,8 +93,16 @@ public class SlotPortValueProviderFactory implements
 								filteredList.add(value);
 							}
 						}
-						// don't allow an empty list as the option if we can avoid it
-						if (filteredList.isEmpty()) return filterOne.isEmpty() ? delegateValue : filterOne;
+
+						{
+							// Make sure current selection is in the list
+							final Port port = slot.getPort();
+							final Pair<String, EObject> pair = new Pair<String, EObject>(port.getName(), port);
+							if (!filteredList.contains(pair)) {
+								filteredList.add(pair);
+							}
+						}
+
 						return filteredList;
 					}
 					return delegateValue;

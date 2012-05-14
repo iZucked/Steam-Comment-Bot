@@ -128,6 +128,24 @@
                      class="Slot">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.SlotPortCapabilityConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.SlotPortCapabilityConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Slot Port Capability"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  A {0} slot has a port without the required {0} capability.
+               </message>
+               <description>
+                  Load and Discharge slots need ports with Load and Discharge capabilities respectively.
+               </description>
+               <target
+                     class="Slot">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

@@ -329,8 +329,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getLoadSlot_Cargo() {
+		return (EReference)loadSlotEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getDischargeSlot() {
 		return dischargeSlotEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDischargeSlot_Cargo() {
+		return (EReference)dischargeSlotEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -462,8 +480,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__ARRIVE_COLD);
+		createEReference(loadSlotEClass, LOAD_SLOT__CARGO);
 
 		dischargeSlotEClass = createEClass(DISCHARGE_SLOT);
+		createEReference(dischargeSlotEClass, DISCHARGE_SLOT__CARGO);
 
 		cargoModelEClass = createEClass(CARGO_MODEL);
 		createEReference(cargoModelEClass, CARGO_MODEL__LOAD_SLOTS);
@@ -528,8 +548,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(cargoEClass, Cargo.class, "Cargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCargo_LoadSlot(), this.getLoadSlot(), null, "loadSlot", null, 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargo_DischargeSlot(), this.getDischargeSlot(), null, "dischargeSlot", null, 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargo_LoadSlot(), this.getLoadSlot(), this.getLoadSlot_Cargo(), "loadSlot", null, 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargo_DischargeSlot(), this.getDischargeSlot(), this.getDischargeSlot_Cargo(), "dischargeSlot", null, 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargo_AllowRewiring(), ecorePackage.getEBoolean(), "allowRewiring", null, 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargo_AllowedVessels(), theTypesPackage.getAVesselSet(), null, "allowedVessels", null, 0, -1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -561,10 +581,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLoadSlot_ArriveCold(), ecorePackage.getEBoolean(), "arriveCold", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLoadSlot_Cargo(), this.getCargo(), this.getCargo_LoadSlot(), "cargo", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(loadSlotEClass, ecorePackage.getEDouble(), "getSlotOrPortCV", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(dischargeSlotEClass, DischargeSlot.class, "DischargeSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDischargeSlot_Cargo(), this.getCargo(), this.getCargo_DischargeSlot(), "cargo", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoModelEClass, CargoModel.class, "CargoModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCargoModel_LoadSlots(), this.getLoadSlot(), null, "loadSlots", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

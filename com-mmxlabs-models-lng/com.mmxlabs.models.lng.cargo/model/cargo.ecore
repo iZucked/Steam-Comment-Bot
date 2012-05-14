@@ -6,9 +6,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ACargo">
     <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" lowerBound="1"
-        eType="#//LoadSlot"/>
+        eType="#//LoadSlot" eOpposite="#//LoadSlot/cargo"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" lowerBound="1"
-        eType="#//DischargeSlot"/>
+        eType="#//DischargeSlot" eOpposite="#//DischargeSlot/cargo"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowRewiring" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1"
@@ -49,8 +49,13 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="arriveCold" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="#//Cargo"
+        eOpposite="#//Cargo/loadSlot"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DischargeSlot" eSuperTypes="#//Slot"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DischargeSlot" eSuperTypes="#//Slot">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="#//Cargo"
+        eOpposite="#//Cargo/dischargeSlot"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CargoModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlots" upperBound="-1"
         eType="#//LoadSlot" containment="true"/>

@@ -63,5 +63,17 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_cargoEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the cargo feature on DischargeSlot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_cargoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		// This is an opposite reference - not for direct UI consumption
+		
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__CARGO));
 	}
 }
