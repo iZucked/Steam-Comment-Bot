@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
+import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
@@ -53,6 +54,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.shiplingo.platform.scheduleview.Activator;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.AlternatingCargoColourScheme;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownColourScheme;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.FuelChoiceColourScheme;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.HighSpeedColourScheme;
@@ -177,14 +179,18 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		};
 		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
-
-		viewer.setContentProvider(new EMFScheduleContentProvider());
+		
+		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider();
+		viewer.setContentProvider(contentProvider);
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer);
 		labelProvider.addColourScheme(new VesselStateColourScheme());
 		labelProvider.addColourScheme(new FuelChoiceColourScheme());
 		labelProvider.addColourScheme(new RouteChoiceColourScheme());
 		labelProvider.addColourScheme(new HighSpeedColourScheme());
 		labelProvider.addColourScheme(new CooldownColourScheme());
+		labelProvider.addColourScheme(new AlternatingCargoColourScheme(
+				ColorCache.getColor(220, 20, 50),
+				ColorCache.getColor(20,155,124)));
 		viewer.setLabelProvider(labelProvider);
 		// TODO: Hook up action to alter sort behaviour
 		// Then refresh
