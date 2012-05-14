@@ -106,5 +106,64 @@
               name="LNG Scenario Export">
         </category>
      </extension>
+     <extension
+           point="org.eclipse.ui.menus">
+         <menuContribution
+               allPopups="false"
+               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=Imports">
+            <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <and>
+                        <count
+                              value="1">
+                        </count>
+                        <iterate>
+                           <or>
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.Container">
+                              </instanceof>
+                           </or>
+                        </iterate>
+                     </and>
+                  </with>
+               </visibleWhen>
+            </command>
+                        <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
+                  style="push">
+                           <visibleWhen
+                                 checkEnabled="false">
+                              <with
+                                    variable="selection">
+                                 <iterate>
+                                    <or>
+                                       <instanceof
+                                             value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                                       </instanceof>
+                                    </or>
+                                 </iterate>
+                              </with>
+                           </visibleWhen>
+            </command>
+         </menuContribution>
 
+     </extension>
+      <extension
+            point="org.eclipse.ui.commands">
+         <command
+               defaultHandler="com.mmxlabs.shiplingo.platform.models.manifest.importWizards.ImportCSVWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+               name="Import Scenario from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards.ExportCSVWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
+               name="Export Scenario as CSV">
+         </command>
+      </extension>
 </plugin>
