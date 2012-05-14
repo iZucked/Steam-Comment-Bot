@@ -307,12 +307,15 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 					final CompoundCommand cc = new CompoundCommand();
 					cc.append(DeleteCommand.create(ed, distanceModel.getLines()));
 					cc.append(AddCommand.create(ed, distanceModel, PortPackage.eINSTANCE.getRoute_Lines(), newModel.getLines()));
+					getJointModelEditorPart().setDisableUpdates(true);
 					ed.getCommandStack().execute(cc);
+					getJointModelEditorPart().setDisableUpdates(false);
 					// display error
 				}
 
 				private Route edit(final Route distanceModel) {
 					final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
+					
 					if (ded.open(PortEditorPane.this.part.getSite(), getJointModelEditorPart(), distanceModel) == Window.OK) {
 						return ded.getResult();
 					}
