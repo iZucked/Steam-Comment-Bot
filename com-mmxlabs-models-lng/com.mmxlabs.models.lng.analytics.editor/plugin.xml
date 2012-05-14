@@ -94,4 +94,14 @@
           inheritable="false">
     </displayCompositeFactory>
  </extension>
+ <extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.models.lng.views.logical"
+          class="com.mmxlabs.models.lng.analytics.ui.views.CostMatrixView"
+          id="com.mmxlabs.models.lng.analytics.editor.views.CostMatrixView"
+          name="Cost Matrices"
+          restorable="true">
+    </view>
+ </extension>
 </plugin>

@@ -13,13 +13,13 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.ui.actions.EvaluateUnitCostMatrixAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
@@ -29,7 +29,7 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
  *
  */
 public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
-	public UnitCostMatrixViewerPane(IWorkbenchPage page, JointModelEditorPart part, final IScenarioEditingLocation location) {
+	public UnitCostMatrixViewerPane(IWorkbenchPage page, IWorkbenchPart part, final IScenarioEditingLocation location) {
 		super(page, part, location);
 	}
 
@@ -38,7 +38,6 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory);
 		addNameManipulator("Name");
 
-		
 		addTypicalColumn("Hire Rate", 
 				new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_NotionalDayRate(), getEditingDomain()));
 

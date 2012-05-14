@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 
 import com.mmxlabs.common.Pair;
@@ -39,18 +40,18 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 
 public class CostMatrixViewer extends ViewerPane implements ISelectionChangedListener {
 	private UnitCostMatrixViewerPane selectionProvider;
 	private GridTableViewer grid;
 	private UnitCostMatrix currentInput;
-	private JointModelEditorPart jointModelEditorPart;
+	private IScenarioEditingLocation jointModelEditorPart;
 
-	public CostMatrixViewer(final IWorkbenchPage page, final JointModelEditorPart part, final UnitCostMatrixViewerPane selectionProvider) {
+	public CostMatrixViewer(final IWorkbenchPage page, final IWorkbenchPart part,final IScenarioEditingLocation location, final UnitCostMatrixViewerPane selectionProvider) {
 		super(page, part);
-		this.jointModelEditorPart = part;
+		this.jointModelEditorPart = location;
 		this.selectionProvider = selectionProvider;
 	}
 
@@ -121,7 +122,7 @@ public class CostMatrixViewer extends ViewerPane implements ISelectionChangedLis
 			public void doubleClick(final DoubleClickEvent event) {
 				// display properties view
 				try {
-					jointModelEditorPart.getSite().getPage().showView("org.eclipse.ui.views.PropertySheet");
+					part.getSite().getPage().showView("org.eclipse.ui.views.PropertySheet");
 				} catch (PartInitException e) {
 				}
 			}

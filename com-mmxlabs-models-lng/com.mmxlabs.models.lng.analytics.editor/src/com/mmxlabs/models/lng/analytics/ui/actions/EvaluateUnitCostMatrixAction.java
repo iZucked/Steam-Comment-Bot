@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.analytics.transformer.IAnalyticsTransformer;
 import com.mmxlabs.models.lng.analytics.transformer.impl.AnalyticsTransformer;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 /**
  * An action which updates the values in a unit cost matrix or matrices
