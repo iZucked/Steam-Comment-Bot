@@ -39,7 +39,6 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.importer.RouteImporter;
 import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorDialog;
-import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -61,9 +60,9 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		
 		addNameManipulator("Name");
 	
-		for (final PortCapability capability : PortCapability.values()) {
-			addTypicalColumn(capability.getName(), new CapabilityManipulator(capability, getJointModelEditorPart().getEditingDomain()));
-		}
+//		for (final PortCapability capability : PortCapability.values()) {
+//			addTypicalColumn(capability.getName(), new CapabilityManipulator(capability, getJointModelEditorPart().getEditingDomain()));
+//		}
 		
 		final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
 		getToolBarManager().appendToGroup(EDIT_GROUP, dmaAction);
