@@ -321,13 +321,6 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			if (menuService != null) {
 				menuService.populateContributionManager(toolbar, toolbarID);
 				
-				for (final IContributionItem item : toolbar.getItems()) {
-					if (item instanceof CommandContributionItem) {
-						final CommandContributionItem cci = (CommandContributionItem) item;
-						System.err.println(cci.getCommand());
-					}
-				}
-				
 				viewer.getControl().addDisposeListener(new DisposeListener() {
 					@Override
 					public void widgetDisposed(DisposeEvent e) {
