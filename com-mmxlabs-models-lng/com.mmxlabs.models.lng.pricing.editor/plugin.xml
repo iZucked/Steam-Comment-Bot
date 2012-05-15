@@ -205,5 +205,11 @@
           eClassName="com.mmxlabs.models.lng.pricing.PortCost"
           inheritable="true">
     </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.pricing.editor.indexImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.DataIndexImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.Index"
+          inheritable="true">
+    </classImporter>
  </extension>
 </plugin>
