@@ -127,9 +127,8 @@ public class FileScenarioService extends AbstractScenarioService {
 	@Override
 	public void delete(final Container container) {
 		{
-			final Iterator<Container> subIterator = container.getElements().iterator();
-			while (subIterator.hasNext()) {
-				delete(subIterator.next());
+			while (container.getElements().isEmpty() == false) {
+				delete(container.getElements().get(0));
 			}
 		}
 

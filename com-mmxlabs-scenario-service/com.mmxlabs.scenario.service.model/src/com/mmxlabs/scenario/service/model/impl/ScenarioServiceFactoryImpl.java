@@ -21,7 +21,8 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioServiceFactoryImpl extends EFactoryImpl implements ScenarioServiceFactory {
+public class ScenarioServiceFactoryImpl extends EFactoryImpl implements
+		ScenarioServiceFactory {
 	/**
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
@@ -30,7 +31,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 */
 	public static ScenarioServiceFactory init() {
 		try {
-			ScenarioServiceFactory theScenarioServiceFactory = (ScenarioServiceFactory) EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.scenario.service/model/1");
+			ScenarioServiceFactory theScenarioServiceFactory = (ScenarioServiceFactory) EPackage.Registry.INSTANCE
+					.getEFactory("http://com.mmxlabs.scenario.service/model/1");
 			if (theScenarioServiceFactory != null) {
 				return theScenarioServiceFactory;
 			}
@@ -69,7 +71,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 		case ScenarioServicePackage.METADATA:
 			return createMetadata();
 		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The class '" + eClass.getName()
+					+ "' is not a valid classifier");
 		}
 	}
 
@@ -86,7 +89,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 		case ScenarioServicePackage.OBJECT:
 			return createObjectFromString(eDataType, initialValue);
 		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '"
+					+ eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -103,7 +107,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 		case ScenarioServicePackage.OBJECT:
 			return convertObjectToString(eDataType, instanceValue);
 		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '"
+					+ eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -162,7 +167,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Class<?> createClassFromString(EDataType eDataType, String initialValue) {
+	public Class<?> createClassFromString(EDataType eDataType,
+			String initialValue) {
 		return (Class<?>) super.createFromString(initialValue);
 	}
 
@@ -180,7 +186,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Object createObjectFromString(EDataType eDataType, String initialValue) {
+	public Object createObjectFromString(EDataType eDataType,
+			String initialValue) {
 		return super.createFromString(eDataType, initialValue);
 	}
 
@@ -189,7 +196,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertObjectToString(EDataType eDataType, Object instanceValue) {
+	public String convertObjectToString(EDataType eDataType,
+			Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

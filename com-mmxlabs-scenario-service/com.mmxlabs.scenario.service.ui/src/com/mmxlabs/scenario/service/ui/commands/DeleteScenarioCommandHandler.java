@@ -9,6 +9,7 @@ import java.util.Iterator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPage;
@@ -31,14 +32,20 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
 				final Object element = iterator.next();
-				if (element instanceof ScenarioInstance) {
-					final ScenarioInstance model = (ScenarioInstance) element;
-					final IScenarioService service = model.getScenarioService();
-					service.delete(model);
-				} else if (element instanceof Container) {
+				if (element instanceof Container) {
 					final Container container = (Container) element;
+					int subCount = container.getContainedInstanceCount();
+					if (container instanceof ScenarioInstance) subCount--;
+					if (subCount > 0) {
+						final MessageDialog dialog = new MessageDialog(HandlerUtil.getActiveShell(event), 
+								"Delete " + container.getName() + " and contents?", 
+								null, "Do you really want to delete " + container.getName() + " and its contents (" + subCount + " scenarios)", MessageDialog.CONFIRM, 
+								new String[] {"Don't Delete", "Delete"}, 0);
+						if (dialog.open() != 1) {
+							return null;
+						}
+					}
 					final IScenarioService service = container.getScenarioService();
-//					service.delete(container);
 					service.delete(container);
 				}
 			}

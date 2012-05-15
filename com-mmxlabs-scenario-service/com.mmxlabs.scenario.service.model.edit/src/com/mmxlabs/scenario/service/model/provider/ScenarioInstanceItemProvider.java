@@ -32,8 +32,9 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioInstanceItemProvider extends ContainerItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
-		IItemPropertySource {
+public class ScenarioInstanceItemProvider extends ContainerItemProvider
+		implements IEditingDomainItemProvider, IStructuredItemContentProvider,
+		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -55,7 +56,6 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
 			addUuidPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
 			addAdaptersPropertyDescriptor(object);
@@ -66,27 +66,23 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	}
 
 	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_name_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Uuid feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addUuidPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_uuid_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_uuid_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__UUID, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(
+				((ComposeableAdapterFactory) adapterFactory)
+						.getRootAdapterFactory(),
+				getResourceLocator(),
+				getString("_UI_ScenarioInstance_uuid_feature"),
+				getString("_UI_PropertyDescriptor_description",
+						"_UI_ScenarioInstance_uuid_feature",
+						"_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__UUID, true,
+				false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+				null));
 	}
 
 	/**
@@ -96,9 +92,17 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	 * @generated
 	 */
 	protected void addLockedPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_locked_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_locked_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__LOCKED, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(
+				((ComposeableAdapterFactory) adapterFactory)
+						.getRootAdapterFactory(),
+				getResourceLocator(),
+				getString("_UI_ScenarioInstance_locked_feature"),
+				getString("_UI_PropertyDescriptor_description",
+						"_UI_ScenarioInstance_locked_feature",
+						"_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__LOCKED,
+				true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				null, null));
 	}
 
 	/**
@@ -108,9 +112,17 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	 * @generated
 	 */
 	protected void addAdaptersPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_adapters_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_adapters_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__ADAPTERS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(
+				((ComposeableAdapterFactory) adapterFactory)
+						.getRootAdapterFactory(),
+				getResourceLocator(),
+				getString("_UI_ScenarioInstance_adapters_feature"),
+				getString("_UI_PropertyDescriptor_description",
+						"_UI_ScenarioInstance_adapters_feature",
+						"_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__ADAPTERS,
+				true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				null, null));
 	}
 
 	/**
@@ -120,9 +132,18 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	 * @generated
 	 */
 	protected void addSubModelURIsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_subModelURIs_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_subModelURIs_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__SUB_MODEL_UR_IS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(
+						((ComposeableAdapterFactory) adapterFactory)
+								.getRootAdapterFactory(),
+						getResourceLocator(),
+						getString("_UI_ScenarioInstance_subModelURIs_feature"),
+						getString("_UI_PropertyDescriptor_description",
+								"_UI_ScenarioInstance_subModelURIs_feature",
+								"_UI_ScenarioInstance_type"),
+						ScenarioServicePackage.Literals.SCENARIO_INSTANCE__SUB_MODEL_UR_IS,
+						true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -132,10 +153,18 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	 * @generated
 	 */
 	protected void addDependencyUUIDsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_dependencyUUIDs_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_dependencyUUIDs_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(
+						((ComposeableAdapterFactory) adapterFactory)
+								.getRootAdapterFactory(),
+						getResourceLocator(),
+						getString("_UI_ScenarioInstance_dependencyUUIDs_feature"),
+						getString("_UI_PropertyDescriptor_description",
+								"_UI_ScenarioInstance_dependencyUUIDs_feature",
+								"_UI_ScenarioInstance_type"),
+						ScenarioServicePackage.Literals.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS,
+						true, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -147,11 +176,14 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(
+			Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__METADATA);
-			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__INSTANCE);
+			childrenFeatures
+					.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__METADATA);
+			childrenFeatures
+					.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__INSTANCE);
 		}
 		return childrenFeatures;
 	}
@@ -216,17 +248,18 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ScenarioInstance.class)) {
-		case ScenarioServicePackage.SCENARIO_INSTANCE__NAME:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__SUB_MODEL_UR_IS:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			fireNotifyChanged(new ViewerNotification(notification,
+					notification.getNotifier(), false, true));
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+			fireNotifyChanged(new ViewerNotification(notification,
+					notification.getNotifier(), true, false));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -240,10 +273,13 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(
+			Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__METADATA, ScenarioServiceFactory.eINSTANCE.createMetadata()));
+		newChildDescriptors.add(createChildParameter(
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__METADATA,
+				ScenarioServiceFactory.eINSTANCE.createMetadata()));
 	}
 
 }

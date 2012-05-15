@@ -33,8 +33,9 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioModelItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
-		IItemPropertySource {
+public class ScenarioModelItemProvider extends ItemProviderAdapter implements
+		IEditingDomainItemProvider, IStructuredItemContentProvider,
+		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -68,9 +69,17 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 	 * @generated
 	 */
 	protected void addScenarioServicesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioModel_scenarioServices_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioModel_scenarioServices_feature", "_UI_ScenarioModel_type"),
-				ScenarioServicePackage.Literals.SCENARIO_MODEL__SCENARIO_SERVICES, true, false, true, null, null, null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(
+						((ComposeableAdapterFactory) adapterFactory)
+								.getRootAdapterFactory(),
+						getResourceLocator(),
+						getString("_UI_ScenarioModel_scenarioServices_feature"),
+						getString("_UI_PropertyDescriptor_description",
+								"_UI_ScenarioModel_scenarioServices_feature",
+								"_UI_ScenarioModel_type"),
+						ScenarioServicePackage.Literals.SCENARIO_MODEL__SCENARIO_SERVICES,
+						true, false, true, null, null, null));
 	}
 
 	/**
@@ -82,10 +91,12 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(
+			Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_MODEL__SCENARIO_SERVICES);
+			childrenFeatures
+					.add(ScenarioServicePackage.Literals.SCENARIO_MODEL__SCENARIO_SERVICES);
 		}
 		return childrenFeatures;
 	}
@@ -111,7 +122,8 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioModel"));
+		return overlayImage(object,
+				getResourceLocator().getImage("full/obj16/ScenarioModel"));
 	}
 
 	/**
@@ -138,7 +150,8 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 
 		switch (notification.getFeatureID(ScenarioModel.class)) {
 		case ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+			fireNotifyChanged(new ViewerNotification(notification,
+					notification.getNotifier(), true, false));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -152,7 +165,8 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(
+			Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 
