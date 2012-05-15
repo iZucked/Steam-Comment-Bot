@@ -16,37 +16,40 @@ import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 
 public class FleetModelEditorContribution extends BaseJointModelEditorContribution<FleetModel> {	
 	private VesselViewerPane vesselViewerPane;
-	private VesselClassViewerPane vesselClassViewerPane;
+//	private VesselClassViewerPane vesselClassViewerPane;
 	private VesselEventViewerPane eventViewerPane;
-	private int pageNumber;
 
 	@Override
 	public void addPages(final Composite parent) {
-		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart);
-		eventViewerPane.createControl(parent);
-		eventViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_VesselEvents()), editorPart.getAdapterFactory());
-		
-		int eventPage = editorPart.addPage(eventViewerPane.getControl());
-		editorPart.setPageText(eventPage, "Events");
-
-		
 		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
+		
 		vesselViewerPane = new VesselViewerPane(editorPart.getSite().getPage(), editorPart, editorPart);
 		vesselViewerPane.createControl(sash);
 		vesselViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_Vessels()),
 				editorPart.getAdapterFactory());
 		
-		vesselClassViewerPane = new VesselClassViewerPane(editorPart.getSite().getPage(), editorPart, editorPart);
-		vesselClassViewerPane.createControl(sash);
-		vesselClassViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_VesselClasses()),
-				editorPart.getAdapterFactory());
+		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart);
+		eventViewerPane.createControl(sash);
+		eventViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_VesselEvents()), editorPart.getAdapterFactory());
 		
 		vesselViewerPane.getViewer().setInput(modelObject);
-		vesselClassViewerPane.getViewer().setInput(modelObject);
 		eventViewerPane.getViewer().setInput(modelObject);
 		
-		pageNumber = editorPart.addPage(sash);
-		editorPart.setPageText(pageNumber, "Fleet");
+		int eventPage = editorPart.addPage(sash);
+		editorPart.setPageText(eventPage, "Fleet");
+		
+//		
+//		vesselClassViewerPane = new VesselClassViewerPane(editorPart.getSite().getPage(), editorPart, editorPart);
+//		vesselClassViewerPane.createControl(sash);
+//		vesselClassViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_VesselClasses()),
+//				editorPart.getAdapterFactory());
+//		
+//		vesselViewerPane.getViewer().setInput(modelObject);
+//		eventViewerPane.getViewer().setInput(modelObject);
+//		vesselClassViewerPane.getViewer().setInput(modelObject);
+//		
+//		pageNumber = editorPart.addPage(sash);
+//		editorPart.setPageText(pageNumber, "Fleet");
 	}
 
 	/* (non-Javadoc)
@@ -54,7 +57,7 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 	 */
 	@Override
 	public void setLocked(boolean locked) {
-		vesselClassViewerPane.setLocked(locked);
+//		vesselClassViewerPane.setLocked(locked);
 		vesselViewerPane.setLocked(locked);
 		eventViewerPane.setLocked(locked);
 	}
