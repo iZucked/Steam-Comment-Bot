@@ -5,6 +5,7 @@
 package com.mmxlabs.model.service.impl;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -154,14 +155,20 @@ public class ModelService implements IModelService {
 			final HashMap<IModelInstance, byte[]> backups = new HashMap<IModelInstance, byte[]>();
 			// first copy every instance's current save state into a byte array
 			for (final IModelInstance instance : instances) {
-				final InputStream input = converter.createInputStream(instance.getURI());
-				final ByteArrayOutputStream creator = new ByteArrayOutputStream(2048); //2K? is this a reasonable size?
-				int value;
-				while ((value = input.read()) != -1) creator.write(value);
-				creator.flush();
-				backups.put(instance, creator.toByteArray());
-				creator.close();
-				input.close();
+				try {
+					final InputStream input = converter
+							.createInputStream(instance.getURI());
+					final ByteArrayOutputStream creator = new ByteArrayOutputStream(
+							2048); // 2K? is this a reasonable size?
+					int value;
+					while ((value = input.read()) != -1)
+						creator.write(value);
+					creator.flush();
+					backups.put(instance, creator.toByteArray());
+					creator.close();
+					input.close();
+				} catch (final FileNotFoundException fnfe) {
+				}
 			}
 			// now try saving each instance
 			final List<IModelInstance> touchedInstances = new ArrayList<IModelInstance>();
