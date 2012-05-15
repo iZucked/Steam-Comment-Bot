@@ -158,7 +158,8 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 		proxy.setReference(ref);
 		proxy.setResolvedReferent(u);
 		proxy.setReferentID(u.getUuid());
-		proxy.setReferentOwner(referent.eResource().getURI().toString());
+		if (referent.eResource() != null)
+			proxy.setReferentOwner(referent.eResource().getURI().toString());
 		proxy.setIndex(index);
 		
 		getProxies().add(proxy);
