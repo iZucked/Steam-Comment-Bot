@@ -471,32 +471,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	 */
 	@Override
 	public void setDisableUpdates(final boolean disable) {
-		if (disable) {
-			disableAdapters(getRootObject());
-		} else {
-			enableAdapters(getRootObject());
-		}
+		editingDomain.setAdaptersEnabled(!disable);
 	}
 
-	private void disableAdapters(final EObject top) {
-		for (final Adapter a : top.eAdapters()) {
-			if (a instanceof IMMXAdapter) {
-				((IMMXAdapter) a).disable();
-			}
-		}
-		for (final EObject o : top.eContents())
-			disableAdapters(o);
-	}
-
-	private void enableAdapters(final EObject top) {
-		for (final Adapter a : top.eAdapters()) {
-			if (a instanceof IMMXAdapter) {
-				((IMMXAdapter) a).enable();
-			}
-		}
-		for (final EObject o : top.eContents())
-			enableAdapters(o);
-	}
 
 	/* (non-Javadoc)
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setCurrentViewer(org.eclipse.jface.viewers.Viewer)

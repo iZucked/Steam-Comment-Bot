@@ -21,6 +21,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.IMMXRootObjectProvider;
 import com.mmxlabs.models.ui.IScenarioInstanceProvider;
+import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -67,6 +68,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		extraValidationContext.clear();
 		this.scenarioInstance = instance;
 		if (instance != null) {
+			getRootObject();
 			this.valueProviderCache = new ReferenceValueProviderCache(getRootObject());
 			extraValidationContext.push(new DefaultExtraValidationContext(getRootObject()));
 		} else {
@@ -151,12 +153,18 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public void setDisableCommandProviders(boolean disable) {
-		
+		final EditingDomain editingDomain = getEditingDomain();
+		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+			((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(disable);
+		}
 	}
 
 	@Override
 	public void setDisableUpdates(boolean disable) {
-		
+		final EditingDomain editingDomain = getEditingDomain();
+		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+			((CommandProviderAwareEditingDomain) editingDomain).setAdaptersEnabled(!disable);
+		}
 	}
 
 	@Override
