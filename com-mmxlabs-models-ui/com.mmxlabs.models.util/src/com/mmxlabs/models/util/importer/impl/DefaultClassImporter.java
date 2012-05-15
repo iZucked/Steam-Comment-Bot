@@ -119,13 +119,16 @@ public class DefaultClassImporter implements IClassImporter {
 		return reference.getEReferenceType();
 	}
 
+	
+	
 	protected void importReferences(final IFieldMap row,
 			IImportContext context, final EClass rowClass,
 			final EObject instance, final LinkedList<EObject> results) {
 		for (final EReference reference : rowClass.getEAllReferences()) {
+			if (!shouldImportReference(reference)) continue;
 			final String lcrn = reference.getName().toLowerCase();
 			if (row.containsKey(lcrn)) {
-				// defer lookup
+				// The reference itself is present, so do a lookup later
 				final String referentName = row.get(lcrn).trim();
 				if (!referentName.isEmpty()) {
 					context.doLater(new SetReference(instance, reference,
@@ -133,18 +136,22 @@ public class DefaultClassImporter implements IClassImporter {
 							context));
 				}
 			} else {
+				// The reference is missing entirely
 				if (reference.isMany())
 					continue;
+				// Maybe it is a sub-object; find any sub-keys
 				final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
 
 				if (subKeys.isEmpty()) {
 					if (reference.isContainment()) {
 						populateWithBlank(instance, reference);
+						
+						notifyMissingFields((EObject) instance.eGet(reference), 
+								context.createProblem("Field not present", true, false, true),
+								context);
+						
+						
 					}
-					
-					notifyMissingFields((EObject) instance.eGet(reference), 
-							context.createProblem("Field not present", true, false, true),
-							context);
 					
 					context.addProblem(
 							context.createProblem(reference.getName() + " is missing from "
@@ -168,6 +175,10 @@ public class DefaultClassImporter implements IClassImporter {
 		}
 	}
 	
+	protected boolean shouldImportReference(final EReference reference) {
+		return true;
+	}
+
 	private void notifyMissingFields(EObject blank, final IImportProblem delegate, IImportContext context) {
 		if (blank == null) return;
 		for (final EAttribute attribute : blank.eClass().getEAllAttributes()) {
