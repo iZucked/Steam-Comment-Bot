@@ -304,14 +304,17 @@ public class DefaultClassImporter implements IClassImporter {
 
 	protected Map<String, String> exportObject(final EObject object) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
-		for (final EReference reference : object.eClass().getEAllReferences()) {
-			if (shouldExportFeature(reference))
-				exportReference(object, reference, result);
-		}
+		
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
 			if (shouldExportFeature(attribute))
 				exportAttribute(object, attribute, result);
 		}
+		
+		for (final EReference reference : object.eClass().getEAllReferences()) {
+			if (shouldExportFeature(reference))
+				exportReference(object, reference, result);
+		}
+		
 		return result;
 	}
 
