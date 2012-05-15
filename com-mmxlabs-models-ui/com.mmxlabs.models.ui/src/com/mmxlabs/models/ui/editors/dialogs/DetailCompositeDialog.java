@@ -133,7 +133,7 @@ public class DetailCompositeDialog extends Dialog {
 			// range is the full set of objects which the display composite
 			// might touch; we need to duplicate all of these
 			final Collection<EObject> duplicateRange = EcoreUtil.copyAll(range);
-			ranges .put(original, duplicateRange);
+			ranges.put(original, duplicateRange);
 			final Iterator<EObject> rangeIterator = range.iterator();
 			final Iterator<EObject> duplicateRangeIterator = duplicateRange.iterator();
 			while (rangeIterator.hasNext() && duplicateRangeIterator.hasNext()) {
@@ -148,7 +148,7 @@ public class DetailCompositeDialog extends Dialog {
 			if (!returnDuplicates) {
 				final Iterator	<EObject> rangeIterator2 = range.iterator();
 				final Iterator<EObject> duplicateIterator = duplicateRange.iterator();
-				while (rangeIterator.hasNext() && duplicateIterator.hasNext()) {
+				while (rangeIterator2.hasNext() && duplicateIterator.hasNext()) {
 					final EObject original2 = rangeIterator2.next();
 					final EObject duplicate = duplicateIterator.next();
 					validationContext.replace(original2, duplicate);
