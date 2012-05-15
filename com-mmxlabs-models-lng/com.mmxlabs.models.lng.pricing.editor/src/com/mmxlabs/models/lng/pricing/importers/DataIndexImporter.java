@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +21,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.DerivedIndex;
+import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -73,32 +75,56 @@ public class DataIndexImporter implements IClassImporter {
 
 	@Override
 	public Collection<EObject> importObject(EClass targetClass, Map<String, String> row, IImportContext context) {
-		final DataIndex<Number> result = PricingFactory.eINSTANCE.createDataIndex();
-
+		final Index<Number> result;
+		if (row.containsKey("expression")) {
+			if (row.get("expression").isEmpty() == false) {
+				final DerivedIndex<Number> di = PricingFactory.eINSTANCE.createDerivedIndex();
+				result = di;
+			} else {
+				result = PricingFactory.eINSTANCE.createDataIndex();
+			}
+		} else {
+			result = PricingFactory.eINSTANCE.createDataIndex();
+		}
+		
 		if (row.containsKey("name")) {
 			result.setName(row.get("name"));
 		} else {
 			context.addProblem(context.createProblem("Index name is missing", true, true, true));
 		}
-
-		for (final String s : row.keySet()) {
-			try {
-				final Date date = shortDate.parse(s);
-				if (row.get(s).isEmpty())
-					continue;
+		
+		if (result instanceof DataIndex) {
+			final DataIndex<Number> data = (DataIndex<Number>) result;
+			for (final String s : row.keySet()) {
 				try {
-					final Number n = parseAsInt ? Integer.parseInt(row.get(s)) : Double.parseDouble(row.get(s));
+					final Date date = shortDate.parse(s);
+					if (row.get(s).isEmpty())
+						continue;
+					try {
+						final Number n = parseAsInt ? Integer.parseInt(row.get(s)) : Double.parseDouble(row.get(s));
 
-					final IndexPoint<Number> point = PricingFactory.eINSTANCE.createIndexPoint();
-					point.setDate(date);
-					point.setValue(n);
-					result.getPoints().add(point);
-				} catch (final NumberFormatException nfe) {
-					context.addProblem(context.createProblem("The value " + row.get(s) + " is not a number", true, true, true));
+						final IndexPoint<Number> point = PricingFactory.eINSTANCE.createIndexPoint();
+						point.setDate(date);
+						point.setValue(n);
+						data.getPoints().add(point);
+					} catch (final NumberFormatException nfe) {
+						context.addProblem(context.createProblem("The value " + row.get(s) + " is not a number", true, true, true));
+					}
+				} catch (ParseException ex) {
+					if (s.equals("name") == false && s.equals("expression") == false) {
+						context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
+					}
 				}
-			} catch (ParseException ex) {
-				if (s.equals("name") == false) {
-					context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
+			}
+		} else {
+			for (final String s : row.keySet()) {
+				try {
+					shortDate.parse(s);
+					if (row.get(s).isEmpty() == false) {
+						context.addProblem(context.createProblem("Indices with an expression should not have any values set", true, true, true));
+					}
+				} catch (ParseException ex) {
+					
 				}
 			}
 		}
@@ -114,13 +140,19 @@ public class DataIndexImporter implements IClassImporter {
 		for (final EObject o : objects) {
 			if (o instanceof DataIndex) {
 				final DataIndex<Number> i = (DataIndex) o;
-				final Map<String, String> row = new HashMap<String, String>();
+				final Map<String, String> row = new LinkedHashMap<String, String>();
 				row.put("name", i.getName());
 				for (final IndexPoint<Number> pt : i.getPoints()) {
 					final Number n = pt.getValue();
 					final Date dt = pt.getDate();
 					row.put(shortDate.format(dt), n.toString());
 				}
+				result.add(row);
+			} else if (o instanceof DerivedIndex) {
+				final DerivedIndex<Number> derived = (DerivedIndex<Number>) o;
+				final Map<String, String> row = new LinkedHashMap<String, String>();
+				row.put("name", derived.getName());
+				row.put("expression", derived.getExpression());
 				result.add(row);
 			}
 		}
