@@ -7,8 +7,8 @@ package com.mmxlabs.models.util.importer.impl;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -303,7 +303,7 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	protected Map<String, String> exportObject(final EObject object) {
-		final Map<String, String> result = new HashMap<String, String>();
+		final Map<String, String> result = new LinkedHashMap<String, String>();
 		for (final EReference reference : object.eClass().getEAllReferences()) {
 			if (shouldExportFeature(reference))
 				exportReference(object, reference, result);
