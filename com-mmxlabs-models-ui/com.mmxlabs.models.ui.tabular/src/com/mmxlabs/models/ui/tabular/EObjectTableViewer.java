@@ -94,6 +94,17 @@ public class EObjectTableViewer extends GridTableViewer {
 	
 	final MMXContentAdapter adapter = new MMXContentAdapter() {
 		@Override
+		protected void missedNotification() {
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					if (!getControl().isDisposed())
+						refresh();
+				}
+			});
+		}
+
+		@Override
 		public void reallyNotifyChanged(final Notification notification) {
 			// System.err.println(notification);
 			if (notification.isTouch() == false) {
