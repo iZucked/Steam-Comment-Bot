@@ -75,4 +75,11 @@ public interface IModelService {
 	 * @param parts
 	 */
 	void resolve(List<EObject> parts);
+	
+	/**
+	 * Try to save several model instances together; if any of these fail to save, back out of the save instead.
+	 * @param instances
+	 * @throws IOException 
+	 */
+	void saveTogether(final Collection<IModelInstance> instances) throws IOException;
 }

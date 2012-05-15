@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.model.service.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,6 +18,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -139,6 +143,44 @@ public class ModelService implements IModelService {
 		} else {
 			for (final EObject child : part.eContents())
 				resolve(child, table);
+		}
+	}
+
+	@Override
+	public void saveTogether(final Collection<IModelInstance> instances) throws IOException {
+		// 1. backup all old model files
+		synchronized (this) {
+			final URIConverter converter = resourceSet.getURIConverter();
+			final HashMap<IModelInstance, byte[]> backups = new HashMap<IModelInstance, byte[]>();
+			// first copy every instance's current save state into a byte array
+			for (final IModelInstance instance : instances) {
+				final InputStream input = converter.createInputStream(instance.getURI());
+				final ByteArrayOutputStream creator = new ByteArrayOutputStream(2048); //2K? is this a reasonable size?
+				int value;
+				while ((value = input.read()) != -1) creator.write(value);
+				creator.flush();
+				backups.put(instance, creator.toByteArray());
+				creator.close();
+				input.close();
+			}
+			// now try saving each instance
+			final List<IModelInstance> touchedInstances = new ArrayList<IModelInstance>();
+			try {
+				for (final IModelInstance instance : instances) {
+					touchedInstances.add(instance);
+					instance.save();
+				}
+			} catch (IOException error) {
+				// if an instance didn't save, copy all the backups back
+				for (final IModelInstance instance : touchedInstances) {
+					final byte[] backup = backups.get(instance);
+					final OutputStream output = converter.createOutputStream(instance.getURI());
+					output.write(backup);
+					output.flush();
+					output.close();
+				}
+				throw error;
+			}
 		}
 	}
 }
