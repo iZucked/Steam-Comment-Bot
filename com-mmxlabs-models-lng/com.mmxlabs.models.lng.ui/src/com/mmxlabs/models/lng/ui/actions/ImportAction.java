@@ -31,10 +31,10 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
@@ -58,13 +58,16 @@ public abstract class ImportAction extends LockableAction {
 			context.setRootObject(part.getRootObject());
 
 			// first set up all existing named objects
-			final TreeIterator<EObject> allObjects = context.getRootObject().eAllContents();
-			while (allObjects.hasNext()) {
-				final EObject o = allObjects.next();
-				if (o instanceof NamedObject)
-					context.registerNamedObject((NamedObject) o);
+			for (final MMXSubModel subModel : context.getRootObject().getSubModels()) {
+				final TreeIterator<EObject> allObjects = subModel.getSubModelInstance().eAllContents();
+				
+				while (allObjects.hasNext()) {
+					final EObject o = allObjects.next();
+					if (o instanceof NamedObject)
+						context.registerNamedObject((NamedObject) o);
+				}
 			}
-
+			
 			doImportStages(context);
 			if (context.getProblems().isEmpty() == false) {
 				final ImportProblemDialog ipd = new ImportProblemDialog(part.getShell());
