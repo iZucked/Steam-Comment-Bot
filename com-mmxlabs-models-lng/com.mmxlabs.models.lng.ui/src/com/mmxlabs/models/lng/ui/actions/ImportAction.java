@@ -114,8 +114,10 @@ public abstract class ImportAction extends LockableAction {
 		}
 
 		merge.append(setter);
-		merge.append(DeleteCommand.create(domain, deletedObjects));
-		merge.append(AddCommand.create(domain, container, containment, importedObjects));
+		if (deletedObjects.isEmpty() == false)
+			merge.append(DeleteCommand.create(domain, deletedObjects));
+		if (importedObjects.isEmpty() == false)
+			merge.append(AddCommand.create(domain, container, containment, importedObjects));
 		
 		return merge;
 	}
