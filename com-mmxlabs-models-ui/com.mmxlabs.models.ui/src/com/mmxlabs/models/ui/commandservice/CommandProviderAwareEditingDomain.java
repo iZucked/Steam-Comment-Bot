@@ -3,6 +3,7 @@ package com.mmxlabs.models.ui.commandservice;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.CommandParameter;
@@ -11,7 +12,9 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.mmxcore.IMMXAdapter;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.MMXSubModel;
 
 /**
  * EditingDomain implementation which is aware of {@link IModelCommandProvider}s and provides a mechanism to enable or disable their execution.
@@ -19,18 +22,46 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDomain {
 	private static final Logger log = LoggerFactory.getLogger(CommandProviderAwareEditingDomain.class);
-	private final EObject rootObject;
+	private final MMXRootObject rootObject;
 	private final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker;
 
 	private boolean commandProvidersDisabled = false;
 
-	public CommandProviderAwareEditingDomain(final AdapterFactory adapterFactory, final CommandStack commandStack, final EObject rootObject,
+	public CommandProviderAwareEditingDomain(final AdapterFactory adapterFactory, final CommandStack commandStack, final MMXRootObject rootObject,
 			final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker) {
 		super(adapterFactory, commandStack);
 		this.rootObject = rootObject;
 		this.commandProviderTracker = commandProviderTracker;
 	}
 
+	public void setAdaptersEnabled(final boolean enabled) {
+		for (final MMXSubModel subModel : rootObject.getSubModels()) {
+			if (enabled) enableAdapters(subModel.getSubModelInstance());
+			else disableAdapters(subModel.getSubModelInstance());
+		}
+		
+	}
+	
+	private void disableAdapters(final EObject top) {
+		for (final Adapter a : top.eAdapters()) {
+			if (a instanceof IMMXAdapter) {
+				((IMMXAdapter) a).disable();
+			}
+		}
+		for (final EObject o : top.eContents())
+			disableAdapters(o);
+	}
+	
+	private void enableAdapters(final EObject top) {
+		for (final Adapter a : top.eAdapters()) {
+			if (a instanceof IMMXAdapter) {
+				((IMMXAdapter) a).enable();
+			}
+		}
+		for (final EObject o : top.eContents())
+			enableAdapters(o);
+	}
+	
 	@Override
 	public Command createCommand(final Class<? extends Command> commandClass, final CommandParameter commandParameter) {
 		final Command normal = super.createCommand(commandClass, commandParameter);
