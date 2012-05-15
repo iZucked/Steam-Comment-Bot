@@ -244,7 +244,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public void delete(final ScenarioInstance instance) {
+	public void delete(final Container instance) {
 		for (final IResource resource : mapWorkspaceToModel.keySet()) {
 			if (mapWorkspaceToModel.get(resource) == instance) {
 				try {

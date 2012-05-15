@@ -15,6 +15,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class DeleteScenarioCommandHandler extends AbstractHandler {
@@ -34,6 +35,11 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 					final ScenarioInstance model = (ScenarioInstance) element;
 					final IScenarioService service = model.getScenarioService();
 					service.delete(model);
+				} else if (element instanceof Container) {
+					final Container container = (Container) element;
+					final IScenarioService service = container.getScenarioService();
+//					service.delete(container);
+					service.delete(container);
 				}
 			}
 		}

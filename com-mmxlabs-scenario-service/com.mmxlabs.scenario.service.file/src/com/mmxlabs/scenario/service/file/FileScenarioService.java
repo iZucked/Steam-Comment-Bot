@@ -124,25 +124,33 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public void delete(final ScenarioInstance instance) {
-		final EObject container = instance.eContainer();
-		final EStructuralFeature containment = instance.eContainingFeature();
+	public void delete(final Container container) {
+		for (final Container sub : container.getElements()) {
+			delete(sub);
+		}
+		
+		final EObject parent = container.eContainer();
+		final EStructuralFeature containment = container.eContainingFeature();
 		if (container != null && containment != null) {
 			if (containment.isMany()) {
-				final EList<EObject> value = (EList<EObject>) container.eGet(containment);
-				while (value.remove(instance));
+				final EList<EObject> value = (EList<EObject>) parent.eGet(containment);
+				while (value.remove(container));
 			} else {
-				container.eSet(containment, null);
+				parent.eSet(containment, null);
 			}
 		}
 		
 		// destroy models
-		for (final String modelInstanceURI : instance.getSubModelURIs()) {
-			try {
-				final IModelInstance modelInstance = modelService.getModel(URI.createURI(modelInstanceURI));
-				modelInstance.delete();
-			} catch (final IOException e) {
-				log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting submodel " + modelInstanceURI, e);
+		if (container instanceof ScenarioInstance) {
+			final ScenarioInstance instance = (ScenarioInstance) container;
+		
+			for (final String modelInstanceURI : instance.getSubModelURIs()) {
+				try {
+					final IModelInstance modelInstance = modelService.getModel(URI.createURI(modelInstanceURI));
+					modelInstance.delete();
+				} catch (final IOException e) {
+					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting submodel " + modelInstanceURI, e);
+				}
 			}
 		}
 	}
