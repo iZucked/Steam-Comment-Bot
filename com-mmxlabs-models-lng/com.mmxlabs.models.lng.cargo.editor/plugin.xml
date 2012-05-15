@@ -145,6 +145,12 @@
           eClassName="com.mmxlabs.models.lng.cargo.Cargo"
           inheritable="true">
     </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.cargo.editor.loadSlotImporter"
+          classImporterClass="com.mmxlabs.models.lng.cargo.importer.LoadSlotImporter"
+          eClassName="com.mmxlabs.models.lng.cargo.LoadSlot"
+          inheritable="true">
+    </classImporter>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
