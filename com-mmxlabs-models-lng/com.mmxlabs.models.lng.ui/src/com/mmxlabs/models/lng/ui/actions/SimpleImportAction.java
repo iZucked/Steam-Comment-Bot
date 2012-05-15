@@ -15,7 +15,6 @@ import org.eclipse.swt.widgets.FileDialog;
 
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
