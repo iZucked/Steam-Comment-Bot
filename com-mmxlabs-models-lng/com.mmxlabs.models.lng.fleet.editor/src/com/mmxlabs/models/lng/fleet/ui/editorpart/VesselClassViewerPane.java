@@ -175,10 +175,14 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 									if (vc.getName().equals(vesselName)) {
 										final Pair<List<FuelConsumption>, List<FuelConsumption>> ladenAndBallastConsumptions = consumptions.get(vesselName).getSecond();
 										// apply change
-										command.append(DeleteCommand.create(ed, vc.getLadenAttributes().getFuelConsumption()));
-										command.append(DeleteCommand.create(ed, vc.getBallastAttributes().getFuelConsumption()));
-										command.append(AddCommand.create(ed, vc.getLadenAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), ladenAndBallastConsumptions.getFirst()));
-										command.append(AddCommand.create(ed, vc.getBallastAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), ladenAndBallastConsumptions.getSecond()));
+										if (vc.getLadenAttributes().getFuelConsumption().isEmpty() == false)
+											command.append(DeleteCommand.create(ed, vc.getLadenAttributes().getFuelConsumption()));
+										if (vc.getBallastAttributes().getFuelConsumption().isEmpty() == false)
+											command.append(DeleteCommand.create(ed, vc.getBallastAttributes().getFuelConsumption()));
+										if (ladenAndBallastConsumptions.getFirst().isEmpty() == false)
+											command.append(AddCommand.create(ed, vc.getLadenAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), ladenAndBallastConsumptions.getFirst()));
+										if (ladenAndBallastConsumptions.getSecond().isEmpty() == false)
+											command.append(AddCommand.create(ed, vc.getBallastAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), ladenAndBallastConsumptions.getSecond()));
 										continue each_vessel;
 									}
 								}
