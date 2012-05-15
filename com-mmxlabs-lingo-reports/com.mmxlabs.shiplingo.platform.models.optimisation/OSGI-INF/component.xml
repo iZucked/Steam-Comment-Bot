@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.shiplingo.platform.models.optimisation.evaluator" immediate="true">
+   <implementation class="com.mmxlabs.shiplingo.platform.models.optimisation.ScenarioInstanceEvaluator"/>
+   <service>
+   	<provide interface="com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator" />
+   </service>
+</scr:component>
