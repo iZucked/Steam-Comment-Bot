@@ -9,9 +9,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -37,6 +39,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.importer.RouteImporter;
 import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorDialog;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
@@ -105,19 +108,22 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								reader = new CSVReader(path);
 								final Route importRoute = routeImporter.importRoute(reader, context);
 								context.run();
-								
 								final CompoundCommand cc = new CompoundCommand();
-								
+								cc.append(IdentityCommand.INSTANCE);
 								// remove old lines and add new ones.
-								cc.append(RemoveCommand.create(
-										getEditingDomain(),
-										r.getLines()));
-								
-								cc.append(AddCommand.create(getEditingDomain(),
-										r, PortPackage.eINSTANCE.getRoute_Lines(),
-										importRoute.getLines()));
-								
-								getEditingDomain().getCommandStack().execute(cc);
+								if (r.getLines().isEmpty() == false)
+									cc.append(RemoveCommand.create(
+											getEditingDomain(), r.getLines()));
+								if (importRoute.getLines().isEmpty() == false)
+									cc.append(AddCommand.create(
+											getEditingDomain(), r,
+											PortPackage.eINSTANCE
+													.getRoute_Lines(),
+											importRoute.getLines()));
+								getJointModelEditorPart().setDisableUpdates(true);
+								getEditingDomain().getCommandStack()
+										.execute(cc);
+								getJointModelEditorPart().setDisableUpdates(false);
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
@@ -167,10 +173,12 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								importRoute.setName(newName);
 								importRoute.setCanal(true);
 								
+								getJointModelEditorPart().setDisableUpdates(true);
 								getJointModelEditorPart().getEditingDomain().getCommandStack().execute(
 										AddCommand.create(getJointModelEditorPart().getEditingDomain(), 
 												pm, PortPackage.eINSTANCE.getPortModel_Routes(),
 												importRoute));
+								getJointModelEditorPart().setDisableUpdates(false);
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
