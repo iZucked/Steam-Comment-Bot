@@ -92,9 +92,15 @@ public class EObjectTableViewer extends GridTableViewer {
 		}		
 	};
 	
+	boolean skipMissedAdapterNotification = false;
+	
 	final MMXContentAdapter adapter = new MMXContentAdapter() {
 		@Override
 		protected void missedNotification() {
+			if (skipMissedAdapterNotification) {
+				skipMissedAdapterNotification = false;
+				return;
+			}
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
@@ -634,6 +640,9 @@ public class EObjectTableViewer extends GridTableViewer {
 
 		externalReferences.clear();
 		externalNotifiersByObject.clear();
+		
+		//TODO put this into IMMXAdapter#enable(boolean)
+		skipMissedAdapterNotification = true;
 		adapter.enable();
 		externalAdapter.enable();
 	}
