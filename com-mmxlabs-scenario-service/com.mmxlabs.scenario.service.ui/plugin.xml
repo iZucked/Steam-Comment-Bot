@@ -110,8 +110,13 @@
             <iterate>
                <and>
                   <instanceof
-                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        value="com.mmxlabs.scenario.service.model.Container">
                   </instanceof>
+                  <not>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioService">
+                     </instanceof>
+                  </not>
                </and>
             </iterate>
          </activeWhen>
@@ -119,8 +124,13 @@
             <iterate>
                <and>
                   <instanceof
-                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        value="com.mmxlabs.scenario.service.model.Container">
                   </instanceof>
+                  <not>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioService">
+                     </instanceof>
+                  </not>
                </and>
             </iterate>
          </enabledWhen>
