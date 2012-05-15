@@ -10,16 +10,13 @@ import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.ModelValidationService;
 
-import com.mmxlabs.models.mmxcore.IMMXAdapter;
+import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 
 /**
  * Abstract {@link EContentAdapter} implementation to run batch validation on various {@link Notification}s. This is an abstract implementation with a method {@link #validationStatus(IStatus)} to
  * notify implementing classes that validation has completed validation and returns the status result.
  */
-public abstract class ValidationContentAdapter extends EContentAdapter implements IMMXAdapter {
-
-	private boolean enabled = true;
-
+public abstract class ValidationContentAdapter extends MMXContentAdapter {
 	private IBatchValidator validator = null;
 
 	private final ValidationHelper helper;
@@ -59,12 +56,7 @@ public abstract class ValidationContentAdapter extends EContentAdapter implement
 		}
 	}
 
-	public void notifyChanged(final Notification notification) {
-
-		if (!isEnabled()) {
-			return;
-		}
-
+	public void reallyNotifyChanged(final Notification notification) {
 		// Ignore adapter notifications
 		if (notification.getEventType() != Notification.REMOVING_ADAPTER) {
 			createValidator();
@@ -76,7 +68,11 @@ public abstract class ValidationContentAdapter extends EContentAdapter implement
 			// Notify implementors
 			validationStatus(status);
 		}
-		super.notifyChanged(notification);
+	}
+
+	@Override
+	protected void missedNotification() {
+		performValidation();
 	}
 
 	/**
@@ -85,7 +81,6 @@ public abstract class ValidationContentAdapter extends EContentAdapter implement
 	 * @param newInput
 	 */
 	public void setTarget(final Object newInput) {
-
 		if (newInput instanceof EObject) {
 			this.currentTarget = (EObject) newInput;
 		} else {
@@ -104,19 +99,5 @@ public abstract class ValidationContentAdapter extends EContentAdapter implement
 	 */
 	public void setExtraContext(final IExtraValidationContext extraContext) {
 		this.extraContext = extraContext;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	@Override
-	public void enable() {
-		enabled = true;
-	}
-
-	@Override
-	public void disable() {
-		enabled = false;
 	}
 }
