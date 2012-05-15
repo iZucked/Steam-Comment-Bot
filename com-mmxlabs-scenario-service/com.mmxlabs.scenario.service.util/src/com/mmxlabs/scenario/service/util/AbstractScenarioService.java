@@ -201,12 +201,14 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		if (instance == null) {
 			return;
 		}
+		final List<IModelInstance> models = new ArrayList<IModelInstance>();
 		for (final String uris : scenarioInstance.getSubModelURIs()) {
 			final IModelInstance modelInstance = modelService.getModel(URI.createURI(uris));
 			if (modelInstance != null) {
-				modelInstance.save();
+				models.add(modelInstance);
 			}
 		}
+		modelService.saveTogether(models);
 		// Update last modified date
 		final Metadata metadata = scenarioInstance.getMetadata();
 		if (metadata != null) {
