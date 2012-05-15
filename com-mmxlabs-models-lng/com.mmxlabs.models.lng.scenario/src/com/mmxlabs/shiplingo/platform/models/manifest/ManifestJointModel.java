@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -176,7 +177,13 @@ public class ManifestJointModel extends JointModel {
 	}
 
 	public static void createEmptySubModels(List<EObject> models) {
-		models.add(PortFactory.eINSTANCE.createPortModel());
+		{
+			PortModel portModel = PortFactory.eINSTANCE.createPortModel();
+			final Route direct = PortFactory.eINSTANCE.createRoute();
+			direct.setName("Direct");
+			portModel.getRoutes().add(direct);
+			models.add(portModel);
+		}
 		models.add(FleetFactory.eINSTANCE.createFleetModel());
 		models.add(CargoFactory.eINSTANCE.createCargoModel());
 
