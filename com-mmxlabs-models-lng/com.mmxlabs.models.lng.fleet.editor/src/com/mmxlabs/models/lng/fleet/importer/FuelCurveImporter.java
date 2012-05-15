@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -116,13 +117,13 @@ public class FuelCurveImporter {
 		final List<Map<String, String>> rows = new ArrayList<Map<String, String>>(vesselClasses.size() * 2);
 		
 		for (final VesselClass vc : vesselClasses) {
-			final Map<String, String> ladenRow = new HashMap<String, String>();
+			final Map<String, String> ladenRow = new LinkedHashMap<String, String>();
 			ladenRow.put("class", vc.getName());
 			ladenRow.put("state", "laden");
 			exportConsumptions(vc.getLadenAttributes().getFuelConsumption(), ladenRow);
 			rows.add(ladenRow);
 			
-			final Map<String, String> ballastRow = new HashMap<String, String>();
+			final Map<String, String> ballastRow = new LinkedHashMap<String, String>();
 			ballastRow.put("class", vc.getName());
 			ballastRow.put("state", "ballast");
 			exportConsumptions(vc.getBallastAttributes().getFuelConsumption(), ballastRow);
