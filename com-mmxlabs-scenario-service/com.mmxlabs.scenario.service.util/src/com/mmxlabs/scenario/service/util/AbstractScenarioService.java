@@ -192,7 +192,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		// return new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
 
 		// create editing domain
-		return new CommandProviderAwareEditingDomain(adapterFactory, commandStack, rootObject, commandProviderTracker);
+		return new CommandProviderAwareEditingDomain(adapterFactory, commandStack, (MMXRootObject) rootObject, commandProviderTracker);
 	}
 
 	@Override
