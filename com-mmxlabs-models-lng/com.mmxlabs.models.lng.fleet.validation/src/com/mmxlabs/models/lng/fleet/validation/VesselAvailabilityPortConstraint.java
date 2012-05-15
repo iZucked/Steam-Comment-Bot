@@ -49,6 +49,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 			if (container instanceof Vessel) {
 				final Vessel vessel = (Vessel) container;
 				final VesselClass vesselClass = (VesselClass) vessel.getVesselClass();
+				if (vesselClass == null) return ctx.createSuccessStatus();
 				final Set<APort> inaccessiblePortSet = SetUtils.getPorts(vesselClass.getInaccessiblePorts());
 				if (!availablility.getStartAt().isEmpty()) {
 
