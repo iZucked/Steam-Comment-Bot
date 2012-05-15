@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -125,22 +126,28 @@ public class FileScenarioService extends AbstractScenarioService {
 
 	@Override
 	public void delete(final Container container) {
-		for (final Container sub : container.getElements()) {
-			delete(sub);
+		{
+			final Iterator<Container> subIterator = container.getElements().iterator();
+			while (subIterator.hasNext()) {
+				delete(subIterator.next());
+			}
 		}
+
 		
 		final EObject parent = container.eContainer();
-		final EStructuralFeature containment = container.eContainingFeature();
-		if (container != null && containment != null) {
-			if (containment.isMany()) {
-				final EList<EObject> value = (EList<EObject>) parent.eGet(containment);
-				while (value.remove(container));
-			} else {
-				parent.eSet(containment, null);
+		if (parent != null) {
+			final EStructuralFeature containment = container.eContainingFeature();
+			if (container != null && containment != null) {
+				if (containment.isMany()) {
+					final EList<EObject> value = (EList<EObject>) parent.eGet(containment);
+					while (value.remove(container));
+				} else {
+					parent.eSet(containment, null);
+				}
 			}
 		}
 		
-		// destroy models
+		// destroy models, if there are any
 		if (container instanceof ScenarioInstance) {
 			final ScenarioInstance instance = (ScenarioInstance) container;
 		
