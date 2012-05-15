@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -17,6 +21,7 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.impl.SetReference;
 
 /**
@@ -51,8 +56,17 @@ public class RouteImporter {
 						context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
 						lines.add(line);
 					} catch (final NumberFormatException nfe) {
-						if (entry.getValue().isEmpty() == false) {
-							fromName = entry.getValue();
+						try {
+							final double distance = Double.parseDouble(entry.getValue());
+							final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
+							line.setDistance((int) distance);
+							row.get(entry.getKey());
+							context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
+							lines.add(line);
+						} catch (final NumberFormatException nfe2) {
+							if (entry.getValue().isEmpty() == false) {
+								fromName = entry.getValue();
+							}
 						}
 					}
 				}
@@ -60,12 +74,29 @@ public class RouteImporter {
 				if (fromName != null) {
 					for (final RouteLine line : lines) {
 						context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_From(), fromName, context));
+						context.doLater(new IDeferment() {
+							
+							@Override
+							public void run(IImportContext context) {
+								if (line.getTo() == null || line.getFrom() == null) {
+									// delete line
+									final EObject eContainer = line.eContainer();
+									final EStructuralFeature eContainingFeature = line.eContainingFeature();
+									((List) eContainer.eGet(eContainingFeature)).remove(line);
+								}
+							}
+							
+							@Override
+							public int getStage() {
+								return IImportContext.STAGE_MODIFY_SUBMODELS;
+							}
+						});
 						result.getLines().add(line);
 					}
 				} else {
 					// TODO warn
 				}
-
+				
 				lines.clear();
 			}
 		} catch (final IOException ex) {
