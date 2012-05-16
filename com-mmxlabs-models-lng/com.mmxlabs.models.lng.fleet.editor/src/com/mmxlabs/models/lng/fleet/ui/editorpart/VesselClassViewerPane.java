@@ -138,6 +138,9 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 				addActionToMenu(importFuels, menu);
 
 				final Action importFuelCurves = new LockableAction("Import Consumption Curves") {
+					{
+						setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
+					}
 					@Override
 					public void run() {
 						final DefaultImportContext context = new DefaultImportContext();
