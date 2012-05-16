@@ -70,8 +70,8 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 		final VesselClass vesselClassThree = vesselsOfClassThree.get(0).getVesselClass();
 		final VesselClass vesselClassFour = vesselsOfClassFour.get(0).getVesselClass();
 
-		// create some cargos.
-		SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
+		// create some cargoes.
+		SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue);
 
 		// add some constraints.
 		// vessel class One can't go to port A.

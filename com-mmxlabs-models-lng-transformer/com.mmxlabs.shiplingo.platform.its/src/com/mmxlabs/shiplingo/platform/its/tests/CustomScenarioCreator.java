@@ -426,7 +426,7 @@ public class CustomScenarioCreator {
 
 		cargoModel.getLoadSlots().add(load);
 		cargoModel.getDischargeSlots().add(dis);
-		cargoModel.getCargos().add(cargo);
+		cargoModel.getCargoes().add(cargo);
 
 		return cargo;
 	}
@@ -634,9 +634,9 @@ public class CustomScenarioCreator {
 	 */
 	public boolean addAllowedVesselsOnCargo(final Cargo cargo, final ArrayList<Vessel> allowedVessels) {
 
-		if (cargoModel.getCargos().contains(cargo)) {
+		if (cargoModel.getCargoes().contains(cargo)) {
 
-			for (final Cargo c : cargoModel.getCargos()) {
+			for (final Cargo c : cargoModel.getCargoes()) {
 				if (c.equals(cargo)) {
 					c.getAllowedVessels().addAll(allowedVessels);
 

@@ -36,13 +36,13 @@ public class CargoExistenceCheckTest {
 	private final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 	/**
-	 * Create a scenario with some cargos and vessels. Check that all cargos added to the scenario are in the output.
+	 * Create a scenario with some cargoes and vessels. Check that all cargoes added to the scenario are in the output.
 	 */
 	@Test
 	public void test() {
 
-		// A list to hold all cargos that are input.
-		final ArrayList<Cargo> inputCargos = new ArrayList<Cargo>();
+		// A list to hold all cargoes that are input.
+		final ArrayList<Cargo> inputCargoes = new ArrayList<Cargo>();
 
 		final int loadPrice = 1;
 		final int cvValue = 10;
@@ -63,8 +63,8 @@ public class CargoExistenceCheckTest {
 		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false);
 		csc.addVesselSimple("classThree", numOfClassThree, 11, 12, 500000, 13, 15, 15, 0, true);
 
-		// create some cargos.
-		inputCargos.addAll(Arrays.asList(SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue)));
+		// create some cargoes.
+		inputCargoes.addAll(Arrays.asList(SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue)));
 
 		final MMXRootObject scenario = csc.buildScenario();
 
@@ -80,32 +80,32 @@ public class CargoExistenceCheckTest {
 		ScenarioTools.printSequences(result);
 
 		// check the output
-		this.checkCargos(result, inputCargos);
+		this.checkCargoes(result, inputCargoes);
 	}
 
 	/**
-	 * Check all the cargos in output are in the input cargos once.
+	 * Check all the cargoes in output are in the input cargoes once.
 	 * 
 	 * @param result
-	 *            The evaluated scenario (containing the cargos in the output)
-	 * @param inputCargos
-	 *            The cargos that were input into the unevaluated scenario.
+	 *            The evaluated scenario (containing the cargoes in the output)
+	 * @param inputCargoes
+	 *            The cargoes that were input into the unevaluated scenario.
 	 */
-	private void checkCargos(final Schedule result, final ArrayList<Cargo> inputCargos) {
+	private void checkCargoes(final Schedule result, final ArrayList<Cargo> inputCargoes) {
 
-		final int numOfInputCargos = inputCargos.size();
+		final int numOfInputCargoes = inputCargoes.size();
 
-		Assert.assertEquals("Same number of cargoes in the output as in the input", numOfInputCargos, result.getCargoAllocations().size());
+		Assert.assertEquals("Same number of cargoes in the output as in the input", numOfInputCargoes, result.getCargoAllocations().size());
 
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
 			final Cargo c = ca.getInputCargo();
 
-			Assert.assertTrue("Input cargo is in output", inputCargos.contains(c));
+			Assert.assertTrue("Input cargo is in output", inputCargoes.contains(c));
 
-			inputCargos.remove(c);
+			inputCargoes.remove(c);
 		}
 
-		Assert.assertEquals("All cargos in output", 0, inputCargos.size());
+		Assert.assertEquals("All cargoes in output", 0, inputCargoes.size());
 	}
 }
