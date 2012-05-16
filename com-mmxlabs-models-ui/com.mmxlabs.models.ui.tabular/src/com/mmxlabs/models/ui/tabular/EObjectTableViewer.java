@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -56,7 +57,6 @@ import com.mmxlabs.models.ui.tabular.filter.IFilter;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.ValidationContentAdapter;
-import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 /**
@@ -83,16 +83,15 @@ public class EObjectTableViewer extends GridTableViewer {
 				for (final EObject o : objectsToUpdate) {
 					EObjectTableViewer.this.update(o, null);
 					EObjectTableViewer.this.updateObjectExternalNotifiers(o);
-					
+
 					// consider refresh?
 				}
 				objectsToUpdate.clear();
 				waitingForUpdate = false;
 			}
-		}		
+		}
 	};
-	
-	
+
 	final MMXContentAdapter adapter = new MMXContentAdapter() {
 		@Override
 		protected void missedNotifications(final List<Notification> notifications) {
@@ -114,7 +113,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		public void reallyNotifyChanged(final Notification notification) {
 			// System.err.println(notification);
 			if (notification.isTouch() == false) {
-				if (notification.getEventType() == Notification.REMOVING_ADAPTER) 
+				if (notification.getEventType() == Notification.REMOVING_ADAPTER)
 					return;
 				// this is a change, so we have to refresh.
 				// ideally we just want to update the changed object, but we
@@ -133,7 +132,7 @@ public class EObjectTableViewer extends GridTableViewer {
 					return;
 				}
 				while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null)) {
-					
+
 				}
 				if (source != null) {
 					synchronized (objectsToUpdate) {
@@ -159,14 +158,14 @@ public class EObjectTableViewer extends GridTableViewer {
 	 * should be refreshed (e.g. after an import)
 	 */
 	EObject currentContainer;
-	
+
 	/**
 	 * @return the currentContainer
 	 */
 	public EObject getCurrentContainer() {
 		return currentContainer;
 	}
-	
+
 	public EReference getCurrentContainment() {
 		return currentReference;
 	}
@@ -242,6 +241,8 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	public EObjectTableViewer(final Composite parent, final int style) {
 		super(parent, style);
+
+		ColumnViewerToolTipSupport.enableFor(this);
 	}
 
 	public void setFilterString(final String filterString) {
@@ -254,7 +255,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
-//		final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
+		// final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
 		return addColumn(columnName, renderer, manipulator, new EMFPath(true, pathObjects));
 	}
 
@@ -300,25 +301,25 @@ public class EObjectTableViewer extends GridTableViewer {
 			mnems.add(initials.toLowerCase());
 		}
 
-//		GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer) {
-//			long timer = 0;
-//
-//			/*
-//			 * (non-Javadoc)
-//			 * 
-//			 * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
-//			 */
-//			@Override
-//			protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
-//				final long fireTime = System.currentTimeMillis();
-//				final boolean activate = (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
-//						|| ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.F2) && ((fireTime - timer) > 500)); // this is a hack; for some reason without
-//																																							// this we get loads of keydown events.
-//				timer = fireTime;
-//				return activate;
-//			}
-//
-//		}, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
+		// GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer) {
+		// long timer = 0;
+		//
+		// /*
+		// * (non-Javadoc)
+		// *
+		// * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
+		// */
+		// @Override
+		// protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
+		// final long fireTime = System.currentTimeMillis();
+		// final boolean activate = (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
+		// || ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.F2) && ((fireTime - timer) > 500)); // this is a hack; for some reason without
+		// // this we get loads of keydown events.
+		// timer = fireTime;
+		// return activate;
+		// }
+		//
+		// }, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
 
 		columnSortOrder.add(tColumn);
 
@@ -340,6 +341,37 @@ public class EObjectTableViewer extends GridTableViewer {
 			public String getText(final Object element) {
 				return renderer.render(path.get((EObject) element));
 			}
+
+			@Override
+			public String getToolTipText(final Object element) {
+				if (validationErrors.containsKey(element)) {
+					final IStatus s = validationErrors.get(element);
+					if (!s.isOK()) {
+						return getMessages(s);
+					}
+				}
+				return super.getToolTipText(element);
+			}
+
+			/**
+			 * Extract message hierachy and construct the tool tip message.
+			 * 
+			 * @param status
+			 * @return
+			 */
+			private String getMessages(final IStatus status) {
+				if (status.isMultiStatus()) {
+					final StringBuilder sb = new StringBuilder();
+					for (final IStatus s : status.getChildren()) {
+						sb.append(getMessages(s));
+						sb.append("\n");
+					}
+					return sb.toString();
+				} else {
+					return status.getMessage();
+				}
+			}
+
 		});
 
 		column.setEditingSupport(new EditingSupport(viewer) {
@@ -449,7 +481,8 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 
 			void processStatus(final IStatus status) {
-				if (status == null) return;
+				if (status == null)
+					return;
 				if (status.isMultiStatus()) {
 					for (final IStatus s : status.getChildren()) {
 						processStatus(s);
@@ -640,8 +673,8 @@ public class EObjectTableViewer extends GridTableViewer {
 
 		externalReferences.clear();
 		externalNotifiersByObject.clear();
-		
-		//TODO put this into IMMXAdapter#enable(boolean)
+
+		// TODO put this into IMMXAdapter#enable(boolean)
 		adapter.enable();
 		externalAdapter.enable();
 	}
