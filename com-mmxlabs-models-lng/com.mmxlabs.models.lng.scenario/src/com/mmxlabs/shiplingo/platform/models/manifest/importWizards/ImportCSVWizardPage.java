@@ -4,22 +4,11 @@
  */
 package com.mmxlabs.shiplingo.platform.models.manifest.importWizards;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.UUID;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
-
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 
 public class ImportCSVWizardPage extends WizardNewFileCreationPage {
