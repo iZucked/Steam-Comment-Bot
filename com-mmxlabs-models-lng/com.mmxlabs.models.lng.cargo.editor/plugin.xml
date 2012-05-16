@@ -186,7 +186,7 @@
           category="com.mmxlabs.models.lng.views.logical"
           class="com.mmxlabs.models.lng.cargo.editor.views.CargoView"
           id="com.mmxlabs.models.lng.cargo.editor.CargoView"
-          name="Cargos"
+          name="Cargoes"
           restorable="true">
     </view>
  </extension>

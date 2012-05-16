@@ -39,7 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getLoadSlots <em>Load Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getDischargeSlots <em>Discharge Slots</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCargos <em>Cargos</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCargoes <em>Cargoes</em>}</li>
  * </ul>
  * </p>
  *
@@ -87,14 +87,14 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	protected EList<DischargeSlot> dischargeSlots;
 
 	/**
-	 * The cached value of the '{@link #getCargos() <em>Cargos</em>}' containment reference list.
+	 * The cached value of the '{@link #getCargoes() <em>Cargoes</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCargos()
+	 * @see #getCargoes()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Cargo> cargos;
+	protected EList<Cargo> cargoes;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -165,11 +165,11 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Cargo> getCargos() {
-		if (cargos == null) {
-			cargos = new EObjectContainmentEList<Cargo>(Cargo.class, this, CargoPackage.CARGO_MODEL__CARGOS);
+	public EList<Cargo> getCargoes() {
+		if (cargoes == null) {
+			cargoes = new EObjectContainmentEList<Cargo>(Cargo.class, this, CargoPackage.CARGO_MODEL__CARGOES);
 		}
-		return cargos;
+		return cargoes;
 	}
 
 	/**
@@ -184,8 +184,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return ((InternalEList<?>)getLoadSlots()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS:
 				return ((InternalEList<?>)getDischargeSlots()).basicRemove(otherEnd, msgs);
-			case CargoPackage.CARGO_MODEL__CARGOS:
-				return ((InternalEList<?>)getCargos()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO_MODEL__CARGOES:
+				return ((InternalEList<?>)getCargoes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -204,8 +204,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return getLoadSlots();
 			case CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS:
 				return getDischargeSlots();
-			case CargoPackage.CARGO_MODEL__CARGOS:
-				return getCargos();
+			case CargoPackage.CARGO_MODEL__CARGOES:
+				return getCargoes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -230,9 +230,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				getDischargeSlots().clear();
 				getDischargeSlots().addAll((Collection<? extends DischargeSlot>)newValue);
 				return;
-			case CargoPackage.CARGO_MODEL__CARGOS:
-				getCargos().clear();
-				getCargos().addAll((Collection<? extends Cargo>)newValue);
+			case CargoPackage.CARGO_MODEL__CARGOES:
+				getCargoes().clear();
+				getCargoes().addAll((Collection<? extends Cargo>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -255,8 +255,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS:
 				getDischargeSlots().clear();
 				return;
-			case CargoPackage.CARGO_MODEL__CARGOS:
-				getCargos().clear();
+			case CargoPackage.CARGO_MODEL__CARGOES:
+				getCargoes().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -276,8 +276,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return loadSlots != null && !loadSlots.isEmpty();
 			case CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS:
 				return dischargeSlots != null && !dischargeSlots.isEmpty();
-			case CargoPackage.CARGO_MODEL__CARGOS:
-				return cargos != null && !cargos.isEmpty();
+			case CargoPackage.CARGO_MODEL__CARGOES:
+				return cargoes != null && !cargoes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

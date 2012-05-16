@@ -50,7 +50,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
 /**
  * A composite for displaying a wiring editor. Contains a {@link WiringDiagram}, which lets the user view and edit a matching in a bipartite graph, and provides the interfacing logic to apply a new
- * matching to the cargos passed in through {@link #setCargos(List)}.
+ * matching to the cargoes passed in through {@link #setCargoes(List)}.
  * 
  * The {@link #createApplyCommand(EditingDomain)} applies the changes.
  * 
@@ -58,16 +58,16 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
  * 
  */
 public class WiringComposite extends Composite {
-	private final ArrayList<Cargo> cargos = new ArrayList<Cargo>();
+	private final ArrayList<Cargo> cargoes = new ArrayList<Cargo>();
 	private final ArrayList<Integer> wiring = new ArrayList<Integer>();
 
-	final List<PortAndDateComposite> lhsComposites = new ArrayList<PortAndDateComposite>(cargos.size());
-	final List<PortAndDateComposite> rhsComposites = new ArrayList<PortAndDateComposite>(cargos.size());
+	final List<PortAndDateComposite> lhsComposites = new ArrayList<PortAndDateComposite>(cargoes.size());
+	final List<PortAndDateComposite> rhsComposites = new ArrayList<PortAndDateComposite>(cargoes.size());
 
 	final List<String> newNames = new ArrayList<String>();
 	// final List<String> newTypes = new ArrayList<String>();
 
-	final List<Cargo> newCargos = new LinkedList<Cargo>();
+	final List<Cargo> newCargoes = new LinkedList<Cargo>();
 
 	private IReferenceValueProvider portProvider;
 
@@ -82,19 +82,19 @@ public class WiringComposite extends Composite {
 	}
 
 	/**
-	 * Set the cargos, and reset the wiring to match these cargos.
+	 * Set the cargoes, and reset the wiring to match these cargoes.
 	 * 
-	 * @param cargos
+	 * @param cargoes
 	 */
-	public void setCargos(final List<Cargo> cargos) {
+	public void setCargoes(final List<Cargo> cargoes) {
 		// delete existing children
 		for (final Control c : getChildren()) {
 			c.dispose();
 		}
 		wiring.clear();
-		this.cargos.clear();
-		this.cargos.addAll(cargos);
-		for (int i = 0; i < cargos.size(); i++) {
+		this.cargoes.clear();
+		this.cargoes.addAll(cargoes);
+		for (int i = 0; i < cargoes.size(); i++) {
 			wiring.add(i); // set default wiring
 		}
 
@@ -102,7 +102,7 @@ public class WiringComposite extends Composite {
 
 		newNames.clear();
 		// newTypes.clear();
-		for (final Cargo c : cargos) {
+		for (final Cargo c : cargoes) {
 			newNames.add(c.getName());
 			// newTypes.add(c.getCargoType().getName());
 		}
@@ -134,22 +134,22 @@ public class WiringComposite extends Composite {
 
 		wiring.add(-1); // preserve bogus element
 		// duplicate last cargo?
-		final Cargo prototype = cargos.get(cargos.size() - 1);
+		final Cargo prototype = cargoes.get(cargoes.size() - 1);
 		final Cargo newCargo = EcoreUtil.copy(prototype);
 		final LoadSlot newLoad = EcoreUtil.copy(prototype.getLoadSlot());
 		final DischargeSlot newDischarge = EcoreUtil.copy(prototype.getDischargeSlot());
 		newCargo.setLoadSlot(newLoad);
 		newCargo.setDischargeSlot(newDischarge);
 
-		final String name = "New cargo " + (newCargos.size() + 1);
+		final String name = "New cargo " + (newCargoes.size() + 1);
 
 		newCargo.setName(name);
 
 		newNames.add(name);
 
-		cargos.add(newCargo);
+		cargoes.add(newCargo);
 		// newTypes.add(newCargo.getCargoType().getName());
-		newCargos.add(newCargo);
+		newCargoes.add(newCargo);
 
 		for (final Control c : getChildren()) {
 			c.dispose();
@@ -299,7 +299,7 @@ public class WiringComposite extends Composite {
 		WiringDiagram wiringDiagram = null;
 		Listener selectionListener = null;
 		int index = 0;
-		for (final Cargo cargo : cargos) {
+		for (final Cargo cargo : cargoes) {
 			final int finalIndex = index;
 			final Text idLabel = new Text(this, SWT.RIGHT | SWT.BORDER);
 
@@ -340,7 +340,7 @@ public class WiringComposite extends Composite {
 					@Override
 					protected List<Float> getTerminalPositions() {
 						final float littleOffset = getBounds().y;
-						final ArrayList<Float> vMidPoints = new ArrayList<Float>(cargos.size());
+						final ArrayList<Float> vMidPoints = new ArrayList<Float>(cargoes.size());
 						// get vertical coordinates of labels
 
 						float lastMidpointButOne = 0;
@@ -373,7 +373,7 @@ public class WiringComposite extends Composite {
 					}
 				};
 				// wiring diagram is tall
-				wiringDiagram.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, cargos.size() + 1));
+				wiringDiagram.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, cargoes.size() + 1));
 
 				final WiringDiagram wiringDiagram2 = wiringDiagram;
 
@@ -415,7 +415,7 @@ public class WiringComposite extends Composite {
 		final ArrayList<Color> wireColors = new ArrayList<Color>();
 		final Color green = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 		final Color black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-		for (final Cargo cargo : cargos) {
+		for (final Cargo cargo : cargoes) {
 			terminalColors.add(new Pair<Color, Color>(green, green));
 			wireColors.add(black);
 		}
@@ -445,7 +445,7 @@ public class WiringComposite extends Composite {
 
 		// update modified properties
 		int index = 0;
-		for (final Cargo cargo : cargos) {
+		for (final Cargo cargo : cargoes) {
 			command.append(SetCommand.create(domain, cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newNames.get(index)));
 			command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort()));
 			command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate()));
@@ -460,18 +460,18 @@ public class WiringComposite extends Composite {
 		for (int i = 0; i < wiring.size() - 1; i++) {
 			int newTail = wiring.get(i);
 			if (newTail != i) {
-				final Slot slot = cargos.get(newTail).getDischargeSlot();
-				final Cargo cargo = cargos.get(i);
+				final Slot slot = cargoes.get(newTail).getDischargeSlot();
+				final Cargo cargo = cargoes.get(i);
 				command.append(SetCommand.create(domain, cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), slot));
 			}
 		}
 
-		// add new cargos back into container
-		final EObject container = cargos.get(0).eContainer();
-		final EStructuralFeature feature = cargos.get(0).eContainingFeature();
-		if (!newCargos.isEmpty()) {
-			command.append(AddCommand.create(domain, container, feature, newCargos));
-			for (final Cargo cargo : newCargos) {
+		// add new cargoes back into container
+		final EObject container = cargoes.get(0).eContainer();
+		final EStructuralFeature feature = cargoes.get(0).eContainingFeature();
+		if (!newCargoes.isEmpty()) {
+			command.append(AddCommand.create(domain, container, feature, newCargoes));
+			for (final Cargo cargo : newCargoes) {
 				command.append(AddCommand.create(domain, container, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargo.getLoadSlot()));
 				command.append(AddCommand.create(domain, container, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargo.getDischargeSlot()));
 			}

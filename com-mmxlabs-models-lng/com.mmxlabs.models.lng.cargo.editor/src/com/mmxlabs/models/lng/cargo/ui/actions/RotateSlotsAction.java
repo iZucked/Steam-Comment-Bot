@@ -42,14 +42,14 @@ public class RotateSlotsAction extends ScenarioModifyingAction {
 	 */
 	@Override
 	public void run() {
-		final List<Cargo> cargos = (List<Cargo>) ((IStructuredSelection) getLastSelection()).toList();
+		final List<Cargo> cargoes = (List<Cargo>) ((IStructuredSelection) getLastSelection()).toList();
 		final EditingDomain domain = editingDomainProvider.getEditingDomain();
 		
 		final CompoundCommand cc = new CompoundCommand();
 		
-		DischargeSlot evictedSlot = cargos.get(cargos.size()-1).getDischargeSlot();
+		DischargeSlot evictedSlot = cargoes.get(cargoes.size()-1).getDischargeSlot();
 		
-		for (final Cargo cargo : cargos) {
+		for (final Cargo cargo : cargoes) {
 			cc.append(SetCommand.create(domain, cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), evictedSlot));
 			evictedSlot = cargo.getDischargeSlot();
 		}

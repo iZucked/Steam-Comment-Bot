@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlots <em>Load Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlots <em>Discharge Slots</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargos <em>Cargos</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoes <em>Cargoes</em>}</li>
  * </ul>
  * </p>
  *
@@ -60,20 +60,20 @@ public interface CargoModel extends UUIDObject, NamedObject {
 	EList<DischargeSlot> getDischargeSlots();
 
 	/**
-	 * Returns the value of the '<em><b>Cargos</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Cargoes</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.Cargo}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Cargos</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Cargoes</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cargos</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_Cargos()
+	 * @return the value of the '<em>Cargoes</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_Cargoes()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<Cargo> getCargos();
+	EList<Cargo> getCargoes();
 
 } // end of  CargoModel
 

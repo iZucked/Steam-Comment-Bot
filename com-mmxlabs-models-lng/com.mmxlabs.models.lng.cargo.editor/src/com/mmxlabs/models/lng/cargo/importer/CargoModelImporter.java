@@ -30,7 +30,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 			.getClassImporter(CargoPackage.eINSTANCE.getCargo());
 	private HashMap<String, String> inputs = new HashMap<String, String>();
 	{
-		inputs.put(CARGO_KEY, "Cargos");
+		inputs.put(CARGO_KEY, "Cargoes");
 	}
 	@Override
 	public Map<String, String> getRequiredInputs() {
@@ -47,7 +47,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 			final Collection<EObject> values = cargoImporter.importObjects(CargoPackage.eINSTANCE.getCargo(), reader, context);
 			for (final EObject object : values) {
 				if (object instanceof Cargo) {
-					cargoModel.getCargos().add((Cargo) object);
+					cargoModel.getCargoes().add((Cargo) object);
 				} else if (object instanceof LoadSlot) {
 					cargoModel.getLoadSlots().add((LoadSlot) object);
 				} else if (object instanceof DischargeSlot) {
@@ -62,6 +62,6 @@ public class CargoModelImporter implements ISubmodelImporter {
 	@Override
 	public void exportModel(UUIDObject model,
 			Map<String, Collection<Map<String, String>>> output) {
-		output.put(CARGO_KEY, cargoImporter.exportObjects(((CargoModel) model).getCargos()));
+		output.put(CARGO_KEY, cargoImporter.exportObjects(((CargoModel) model).getCargoes()));
 	}
 }

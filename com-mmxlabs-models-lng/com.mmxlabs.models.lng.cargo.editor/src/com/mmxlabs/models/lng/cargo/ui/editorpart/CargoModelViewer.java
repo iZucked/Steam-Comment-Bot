@@ -82,7 +82,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 				"Discharge Contract",
 				new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_DischargeSlot());
 		
-		setTitle("Cargos", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
+		setTitle("Cargoes", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 
 	@Override
@@ -90,18 +90,18 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		return new SimpleImportAction(part, getScenarioViewer()) {
 			@Override
 			protected Command mergeImports(EObject container, EReference containment, Collection<EObject> imports) {
-				final List<EObject> cargos = new ArrayList<EObject>();
+				final List<EObject> cargoes = new ArrayList<EObject>();
 				final List<EObject> loads = new ArrayList<EObject>();
 				final List<EObject> discharges = new ArrayList<EObject>();
 				
 				for (final EObject o : imports) {
-					if (o instanceof Cargo) cargos.add(o);
+					if (o instanceof Cargo) cargoes.add(o);
 					else if (o instanceof LoadSlot) loads.add(o);
 					else if (o instanceof DischargeSlot) discharges.add(o);
 				}
 				
 				final CompoundCommand mergeAll = new CompoundCommand();
-				mergeAll.append(super.mergeImports(container, containment, cargos));
+				mergeAll.append(super.mergeImports(container, containment, cargoes));
 				mergeAll.append(super.mergeImports(container, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loads));
 				mergeAll.append(super.mergeImports(container, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), discharges));
 				return mergeAll;

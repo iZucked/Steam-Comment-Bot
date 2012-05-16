@@ -68,7 +68,7 @@ public class ScheduleComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_completeEditor(detailComposite, topClass);
 		add_sequencesEditor(detailComposite, topClass);
-		add_unscheduledCargosEditor(detailComposite, topClass);
+		add_unscheduledCargoesEditor(detailComposite, topClass);
 		add_cargoAllocationsEditor(detailComposite, topClass);
 		add_slotAllocationsEditor(detailComposite, topClass);
 		add_fitnessesEditor(detailComposite, topClass);
@@ -90,13 +90,14 @@ public class ScheduleComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__SEQUENCES));
 	}
 	/**
-	 * Create the editor for the unscheduledCargos feature on Schedule
+	 * Create the editor for the unscheduledCargoes feature on Schedule
 	 *
 	 * @generated
 	 */
-	protected void add_unscheduledCargosEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__UNSCHEDULED_CARGOS));
+	protected void add_unscheduledCargoesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__UNSCHEDULED_CARGOES));
 	}
+
 	/**
 	 * Create the editor for the cargoAllocations feature on Schedule
 	 *

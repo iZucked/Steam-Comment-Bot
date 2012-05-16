@@ -109,7 +109,7 @@ public class CargoModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS);
-			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CARGOS);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CARGOES);
 		}
 		return childrenFeatures;
 	}
@@ -169,7 +169,7 @@ public class CargoModelItemProvider
 				return;
 			case CargoPackage.CARGO_MODEL__LOAD_SLOTS:
 			case CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS:
-			case CargoPackage.CARGO_MODEL__CARGOS:
+			case CargoPackage.CARGO_MODEL__CARGOES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -209,7 +209,7 @@ public class CargoModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CargoPackage.Literals.CARGO_MODEL__CARGOS,
+				(CargoPackage.Literals.CARGO_MODEL__CARGOES,
 				 CargoFactory.eINSTANCE.createCargo()));
 	}
 

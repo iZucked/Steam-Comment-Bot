@@ -67,7 +67,7 @@ public class CargoModelComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_loadSlotsEditor(detailComposite, topClass);
 		add_dischargeSlotsEditor(detailComposite, topClass);
-		add_cargosEditor(detailComposite, topClass);
+		add_cargoesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the loadSlots feature on CargoModel
@@ -86,11 +86,11 @@ public class CargoModelComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS));
 	}
 	/**
-	 * Create the editor for the cargos feature on CargoModel
+	 * Create the editor for the cargoes feature on CargoModel
 	 *
 	 * @generated
 	 */
-	protected void add_cargosEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__CARGOS));
+	protected void add_cargoesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__CARGOES));
 	}
 }

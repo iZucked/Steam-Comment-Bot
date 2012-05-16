@@ -21,7 +21,7 @@
     <genClasses ecoreClass="schedule.ecore#//Schedule">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Schedule/complete"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/sequences"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/unscheduledCargos"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/unscheduledCargoes"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/cargoAllocations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/slotAllocations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/fitnesses"/>

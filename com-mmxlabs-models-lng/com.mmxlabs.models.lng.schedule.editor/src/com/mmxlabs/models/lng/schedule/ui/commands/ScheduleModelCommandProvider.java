@@ -24,7 +24,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.commandservice.BaseModelCommandProvider;
 
 /**
- * Command provider which detects the deletion of cargos and kills the
+ * Command provider which detects the deletion of cargoes and kills the
  * corresponding entries in any schedule.
  * 
  * @author hinton

@@ -17,7 +17,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#isComplete <em>Complete</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSequences <em>Sequences</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargos <em>Unscheduled Cargos</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargoes <em>Unscheduled Cargoes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getFitnesses <em>Fitnesses</em>}</li>
@@ -72,20 +72,20 @@ public interface Schedule extends MMXObject {
 	EList<Sequence> getSequences();
 
 	/**
-	 * Returns the value of the '<em><b>Unscheduled Cargos</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Unscheduled Cargoes</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.UnscheduledCargo}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Unscheduled Cargos</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Unscheduled Cargoes</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Unscheduled Cargos</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_UnscheduledCargos()
+	 * @return the value of the '<em>Unscheduled Cargoes</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_UnscheduledCargoes()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<UnscheduledCargo> getUnscheduledCargos();
+	EList<UnscheduledCargo> getUnscheduledCargoes();
 
 	/**
 	 * Returns the value of the '<em><b>Cargo Allocations</b></em>' containment reference list.
