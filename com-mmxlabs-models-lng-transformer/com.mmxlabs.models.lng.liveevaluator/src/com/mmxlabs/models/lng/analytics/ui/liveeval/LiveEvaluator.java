@@ -4,14 +4,12 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.liveeval;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.notify.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditorPlugin;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
