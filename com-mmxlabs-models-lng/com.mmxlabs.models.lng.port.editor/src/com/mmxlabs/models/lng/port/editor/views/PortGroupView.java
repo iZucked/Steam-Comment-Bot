@@ -1,19 +1,18 @@
 package com.mmxlabs.models.lng.port.editor.views;
 
-import java.util.Arrays;
-
-import org.eclipse.emf.ecore.EReference;
+import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.ui.editorpart.PortGroupEditorPane;
-import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
+import com.mmxlabs.models.lng.port.ui.editorpart.PortGroupViewerContainer;
+import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public class PortGroupView extends ScenarioTableViewerView<PortGroupEditorPane> {
+public class PortGroupView extends ScenarioInstanceView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.models.lng.port.editor.views.PortGroupView";
+	private PortGroupViewerContainer ogvc;
 
 	/**
 	 * The constructor.
@@ -23,17 +22,26 @@ public class PortGroupView extends ScenarioTableViewerView<PortGroupEditorPane> 
 	}
 
 	@Override
-	protected PortGroupEditorPane createViewerPane() {
-		return new PortGroupEditorPane(getSite().getPage(), this, this);
+	public void createPartControl(final Composite parent) {
+		listenToScenarioSelection();
+		
+		ogvc = new PortGroupViewerContainer();
+		ogvc.createViewer(parent);
 	}
 
 	@Override
-	protected void initViewerPane(PortGroupEditorPane pane) {
-		pane.init(Arrays
-				.asList(new EReference[] { PortPackage.eINSTANCE
-						.getPortModel_PortGroups() }), null);
-		pane.getViewer().setInput(
-				getRootObject().getSubModel(PortModel.class));
+	public void setFocus() {
+		
 	}
-	
+
+	@Override
+	protected void displayScenarioInstance(ScenarioInstance instance) {
+		super.displayScenarioInstance(instance);
+		
+		if (instance != null && getRootObject() != null && ogvc != null) {
+			ogvc.setInput(getRootObject().getSubModel(PortModel.class));
+		} else {
+			if (ogvc != null) ogvc.setInput(null);
+		}
+	}
 }
