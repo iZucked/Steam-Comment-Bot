@@ -1,6 +1,7 @@
 package com.mmxlabs.models.ui.validation;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Notification;
@@ -58,7 +59,7 @@ public abstract class ValidationContentAdapter extends MMXContentAdapter {
 
 	public void reallyNotifyChanged(final Notification notification) {
 		// Ignore adapter notifications
-		if (notification.getEventType() != Notification.REMOVING_ADAPTER) {
+		if (!notification.isTouch()) {
 			createValidator();
 
 			// Run the validation
@@ -67,12 +68,18 @@ public abstract class ValidationContentAdapter extends MMXContentAdapter {
 
 			// Notify implementors
 			validationStatus(status);
+			return;
 		}
 	}
 
 	@Override
-	protected void missedNotification() {
-		performValidation();
+	protected void missedNotifications(final List<Notification> notifications) {
+		for (final Notification notification : notifications) {
+			if (!notification.isTouch()) {
+				performValidation();
+				return;
+			}
+		}
 	}
 
 	/**

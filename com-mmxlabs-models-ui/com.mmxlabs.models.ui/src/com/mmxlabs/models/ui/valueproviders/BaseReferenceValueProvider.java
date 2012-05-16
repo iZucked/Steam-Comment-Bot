@@ -98,6 +98,18 @@ public abstract class BaseReferenceValueProvider extends MMXContentAdapter imple
 		}
 	}
 	
+	@Override
+	protected void missedNotifications(final List<Notification> missed) {
+		for (final Notification notification : missed) {
+			if (!notification.isTouch()
+					&& isRelevantTarget(notification.getNotifier(),
+							notification.getFeature())) {
+				cacheValues();
+				return;
+			}
+		}
+	}
+
 	/**
 	 * A method which subclasses can override to decide whether the values need re-caching
 	 * when a notification says this feature has changed.
