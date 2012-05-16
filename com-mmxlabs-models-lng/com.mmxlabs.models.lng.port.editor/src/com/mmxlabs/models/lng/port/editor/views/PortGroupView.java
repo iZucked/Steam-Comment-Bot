@@ -1,22 +1,40 @@
 package com.mmxlabs.models.lng.port.editor.views;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.widgets.Composite;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ICheckStateProvider;
+import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+
+import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.ui.editorpart.PortGroupViewerContainer;
-import com.mmxlabs.models.lng.ui.actions.AddModelAction;
-import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
-import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.lng.port.ui.editorpart.PortGroupEditorPane;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
-import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class PortGroupView extends ScenarioInstanceView {
@@ -24,83 +42,184 @@ public class PortGroupView extends ScenarioInstanceView {
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.models.lng.port.editor.views.PortGroupView";
-	private PortGroupViewerContainer ogvc;
+	
+	private SashForm sash;
+	private PortGroupEditorPane viewerPane;
 
-	/**
-	 * The constructor.
-	 */
-	public PortGroupView() {
-		
-	}
+	private CheckboxTableViewer contentViewer;
 
 	@Override
 	public void createPartControl(final Composite parent) {
+		sash = new SashForm(parent, SWT.VERTICAL);
 		listenToScenarioSelection();
 		
-		ogvc = new PortGroupViewerContainer();
-		ogvc.createViewer(parent);
-		
-		final IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-		
-		final Action adder = AddModelAction.create(PortPackage.eINSTANCE.getPortGroup(), 
-				new IAddContext() {
-					
-					@Override
-					public MMXRootObject getRootObject() {
-						return PortGroupView.this.getRootObject();
-					}
-					
-					@Override
-					public IScenarioEditingLocation getEditorPart() {
-						return PortGroupView.this;
-					}
-					
-					@Override
-					public EReference getContainment() {
-						return PortPackage.eINSTANCE.getPortModel_PortGroups();
-					}
-					
-					@Override
-					public EObject getContainer() {
-						return getRootObject().getSubModel(PortModel.class);
-					}
-					
-					@Override
-					public ICommandHandler getCommandHandler() {
-						return PortGroupView.this.getDefaultCommandHandler();
-					}
-				}
-				);
-		
-		
-		if (adder != null) toolBarManager.add(adder);
-		
-		toolBarManager.add(new ScenarioModifyingAction() {
-			
-			@Override
-			protected boolean isApplicableToSelection(ISelection selection) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		});
-		
-		toolBarManager.update(true);
 	}
 
 	@Override
 	public void setFocus() {
-		
+		sash.setFocus();
 	}
 
+	final ILabelProvider nameLabelProvider = new LabelProvider() {
+		@Override
+		public String getText(Object element) {
+			if (element instanceof NamedObject) {
+				return ((NamedObject) element).getName();
+			} else {
+				return "";
+			}
+		}
+	};
+
+	private IContentProvider portProvider = new IStructuredContentProvider() {
+		Viewer viewer;
+		private MMXContentAdapter contentAdapter = new MMXContentAdapter() {
+			@Override
+			public void reallyNotifyChanged(Notification notification) {
+				if (notification.isTouch() == false) refresh();
+			}
+
+			private void refresh() {
+				if (viewer != null && viewer.getControl().isDisposed()) {
+					// remove myself
+					if (lastInput != null) lastInput.eAdapters().remove(this);
+				} else {
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							if (viewer != null && !viewer.getControl().isDisposed()) viewer.refresh();
+						}
+					});
+				}
+			}
+		};
+		
+		EObject lastInput;
+		
+		@Override
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			if (oldInput instanceof EObject) {
+				((EObject) oldInput).eAdapters().remove(contentAdapter);
+			}
+			if (newInput instanceof EObject) {
+				((EObject) newInput).eAdapters().add(contentAdapter);
+				lastInput = (EObject) newInput;
+			} else {
+				lastInput = null;
+			}
+			
+			viewer.refresh();
+		}
+		
+		@Override
+		public void dispose() {
+			if (lastInput != null)
+				lastInput.eAdapters().remove(this);
+			lastInput = null;
+		}
+		
+		@Override
+		public Object[] getElements(Object inputElement) {
+			if (inputElement instanceof PortModel) {
+				Object[] array = ((PortModel) inputElement).getPorts().toArray();
+				Arrays.sort(array, (Comparator) new Comparator<NamedObject>() {
+					@Override
+					public int compare(NamedObject o1, NamedObject o2) {
+						return o1.getName().compareTo(o2.getName());
+					}
+				});
+				return array;
+			}
+			return new Object[0];
+		}
+	};
+	
 	@Override
 	protected void displayScenarioInstance(ScenarioInstance instance) {
-		super.displayScenarioInstance(instance);
-		
-		if (instance != null && getRootObject() != null && ogvc != null) {
-			ogvc.setInput(getRootObject().getSubModel(PortModel.class));
-			ogvc.setEditingDomain(getEditingDomain());
-		} else {
-			if (ogvc != null) ogvc.setInput(null);
+		if (instance != getScenarioInstance()) {
+			if (viewerPane != null) {
+				viewerPane.dispose();
+				viewerPane = null;
+				contentViewer = null;
+			}
+			
+			final Composite parent = sash.getParent();
+			sash.dispose();
+			sash = new SashForm(parent, SWT.VERTICAL);
+			
+			super.displayScenarioInstance(instance);
+			if (instance != null) {
+				viewerPane = new PortGroupEditorPane(getSite().getPage(), this, this);
+				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
+				viewerPane.createControl(sash);
+				viewerPane.init(Collections.singletonList(PortPackage.eINSTANCE.getPortModel_PortGroups()),
+						getAdapterFactory());
+				viewerPane.getViewer().setInput(getRootObject().getSubModel(PortModel.class));
+				
+				contentViewer = CheckboxTableViewer.newCheckList(sash, SWT.SINGLE|SWT.V_SCROLL|SWT.BORDER);
+				contentViewer.setLabelProvider(nameLabelProvider);
+				contentViewer.setContentProvider(portProvider);
+				
+				viewerPane.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+					@Override
+					public void selectionChanged(SelectionChangedEvent event) {
+						final ISelection selection = event.getSelection();
+						if (selection instanceof IStructuredSelection) {
+							final Object element = ((IStructuredSelection) selection).getFirstElement();
+							if (element instanceof PortGroup) {
+								contentViewer.setInput(((PortGroup) element).eContainer());
+								return;
+							}
+						}
+						
+						contentViewer.setInput(null);
+					}
+				});
+				
+				contentViewer.setCheckStateProvider(new ICheckStateProvider() {
+					@Override
+					public boolean isGrayed(Object element) {
+						return false;
+					}
+					
+					@Override
+					public boolean isChecked(Object element) {
+						if (viewerPane.getViewer().getControl().isDisposed()) return false;
+						final ISelection selection = viewerPane.getViewer().getSelection();
+						
+						if (selection instanceof IStructuredSelection) {
+							final Object e = ((IStructuredSelection) selection).getFirstElement();
+							if (e instanceof PortGroup) {
+								return ((PortGroup) e).getContents().contains(element);
+							}
+						}
+						
+						return false;
+					}
+				});
+				
+				contentViewer.addCheckStateListener(new ICheckStateListener() {
+					@Override
+					public void checkStateChanged(CheckStateChangedEvent event) {
+						if (viewerPane.getViewer().getControl().isDisposed()) return;
+						final ISelection selection = viewerPane.getViewer().getSelection();
+						
+						if (selection instanceof IStructuredSelection) {
+							final Object e = ((IStructuredSelection) selection).getFirstElement();
+							if (e instanceof PortGroup) {
+								final EditingDomain ed = getEditingDomain();
+								if (event.getChecked())
+									ed.getCommandStack().execute(AddCommand.create(ed, e, PortPackage.eINSTANCE.getPortGroup_Contents(), event.getElement()));
+								else
+									ed.getCommandStack().execute(RemoveCommand.create(ed, e, PortPackage.eINSTANCE.getPortGroup_Contents(), event.getElement()));
+							}
+						}
+					}
+				});
+				
+				sash.setWeights(new int[]{1,5});
+			}
+			parent.layout(true);
 		}
 	}
 }

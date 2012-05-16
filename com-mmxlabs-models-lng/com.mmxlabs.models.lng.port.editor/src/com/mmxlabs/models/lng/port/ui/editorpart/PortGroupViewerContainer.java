@@ -161,4 +161,8 @@ public class PortGroupViewerContainer {
 		groupViewer.refresh();
 		contentViewer.refresh();
 	}
+
+	public Viewer getGroupViewer() {
+		return groupViewer;
+	}
 }
