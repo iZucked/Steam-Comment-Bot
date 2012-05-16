@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -69,10 +70,10 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(UUIDObject model,
-			Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(MMXRootObject root,
+			UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
 		final CommercialModel cm = (CommercialModel) model;
-		output.put(ENTITIES_KEY, entityImporter.exportObjects(cm.getEntities()));
+		output.put(ENTITIES_KEY, entityImporter.exportObjects(cm.getEntities(), root));
 		final LinkedList<PurchaseContract> purchase = new LinkedList<PurchaseContract>();
 		final LinkedList<SalesContract> sales = new LinkedList<SalesContract>();
 		for (final SalesContract c : cm.getSalesContracts()) {
@@ -81,7 +82,7 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		for (final PurchaseContract c : cm.getPurchaseContracts()) {
 			purchase.add(c);
 		}
-		output.put(SALES_CON_KEY, salesImporter.exportObjects(sales));
-		output.put(PURCHASE_CON_KEY, purchaseImporter.exportObjects(purchase));
+		output.put(SALES_CON_KEY, salesImporter.exportObjects(sales, root));
+		output.put(PURCHASE_CON_KEY, purchaseImporter.exportObjects(purchase, root));
 	}
 }

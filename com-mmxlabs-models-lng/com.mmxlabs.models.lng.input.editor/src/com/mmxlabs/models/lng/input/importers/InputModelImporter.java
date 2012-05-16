@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -30,8 +31,8 @@ public class InputModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(UUIDObject model,
-			Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(MMXRootObject root,
+			UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
 		
 	}
 

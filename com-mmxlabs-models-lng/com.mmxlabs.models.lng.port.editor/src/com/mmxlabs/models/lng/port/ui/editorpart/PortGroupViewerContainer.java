@@ -1,5 +1,8 @@
 package com.mmxlabs.models.lng.port.ui.editorpart;
 
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -14,42 +17,32 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 public class PortGroupViewerContainer {
 	protected TableViewer groupViewer;
 	protected CheckboxTableViewer contentViewer;
 	private PortModel portModel;
+	private EditingDomain editingDomain;
+	
+	public void setEditingDomain(final EditingDomain domain) {
+		this.editingDomain = domain;
+	}
 	
 	public void createViewer(final Composite container) {
-		final Composite inner = new Composite(container, SWT.NONE);
-		inner.setLayout(new GridLayout(2, true));
+		final SashForm sash = new SashForm(container, SWT.VERTICAL);
 		
-		final Composite g = new Composite(inner, SWT.NONE);
+		groupViewer = new TableViewer(sash, SWT.SINGLE|SWT.V_SCROLL|SWT.BORDER);
 		
-		g.setLayout(new GridLayout(1, true));
-		g.setLayoutData(new GridData(GridData.FILL_BOTH));
+		contentViewer = CheckboxTableViewer.newCheckList(sash, SWT.SINGLE|SWT.V_SCROLL|SWT.BORDER);
 		
-		final Composite g_buttons = new Composite(g, SWT.NONE);
-		g_buttons.setLayout(new GridLayout(2, false));
-		g_buttons.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		
-		
-		groupViewer = new TableViewer(g, SWT.SINGLE|SWT.V_SCROLL|SWT.BORDER);
-		
-		groupViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		contentViewer = CheckboxTableViewer.newCheckList(inner, SWT.SINGLE|SWT.V_SCROLL|SWT.BORDER);
-		
-		contentViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+		sash.setWeights(new int[]{1,9});
 		
 		final ILabelProvider nameLabelProvider = new LabelProvider() {
 			@Override
@@ -134,10 +127,12 @@ public class PortGroupViewerContainer {
 					final Object o = ((IStructuredSelection) selection).getFirstElement();
 					
 					if (o instanceof PortGroup) {
-						if (event.getChecked())
-							((PortGroup) o).getContents().add((APortSet) p);
+						if (event.getChecked()) 
+							editingDomain.getCommandStack().execute(
+									AddCommand.create(editingDomain, o, PortPackage.eINSTANCE.getPortGroup_Contents(), p));
 						else
-							((PortGroup) o).getContents().remove(p);
+							editingDomain.getCommandStack().execute(
+									RemoveCommand.create(editingDomain, o, PortPackage.eINSTANCE.getPortGroup_Contents(), p));
 					}
 				}
 			}

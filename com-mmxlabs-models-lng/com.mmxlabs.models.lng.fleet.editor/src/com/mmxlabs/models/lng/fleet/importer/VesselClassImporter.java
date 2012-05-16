@@ -125,13 +125,15 @@ public class VesselClassImporter extends DefaultClassImporter {
 		return result;
 	}
 
+	
+	
 	@Override
-	protected Map<String, String> exportObject(EObject object) {
+	protected Map<String, String> exportObject(EObject object, final MMXRootObject root) {
 		final VesselClass vc = (VesselClass) object;
-		final Map<String, String> result = super.exportObject(object);
+		final Map<String, String> result = super.exportObject(object, root);
 		
 		for (final VesselClassRouteParameters routeParameters : vc.getRouteParameters()) {
-			final Map<String, String> exportedParameters = parameterImporter.exportObjects(Collections.singleton(routeParameters)).iterator().next();
+			final Map<String, String> exportedParameters = parameterImporter.exportObjects(Collections.singleton(routeParameters), root).iterator().next();
 			final String route = exportedParameters.get("route");
 			exportedParameters.remove("route");
 			final String prefix = route + ".parameters.";
@@ -140,16 +142,12 @@ public class VesselClassImporter extends DefaultClassImporter {
 			}
 		}
 		
-		while (!(object instanceof MMXRootObject) && !(object == null)) {
-			object = object.eContainer();
-		}
-		
 		if (object instanceof MMXRootObject) {
-			final PricingModel pm = ((MMXRootObject) object).getSubModel(PricingModel.class);
+			final PricingModel pm = root.getSubModel(PricingModel.class);
 			if (pm != null) {
 				for (final RouteCost rc : pm.getRouteCosts()) {
 					if (rc.getVesselClass() == vc) {
-						final Map<String, String> exportedCost = routeCostImporter.exportObjects(Collections.singleton(rc)).iterator().next();
+						final Map<String, String> exportedCost = routeCostImporter.exportObjects(Collections.singleton(rc), root).iterator().next();
 						exportedCost.remove("vesselclass");
 						final String route = exportedCost.get("route");
 						exportedCost.remove("route");

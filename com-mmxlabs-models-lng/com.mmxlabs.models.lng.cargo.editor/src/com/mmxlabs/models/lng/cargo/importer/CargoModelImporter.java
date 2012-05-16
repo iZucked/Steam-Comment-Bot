@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -60,8 +61,8 @@ public class CargoModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(UUIDObject model,
-			Map<String, Collection<Map<String, String>>> output) {
-		output.put(CARGO_KEY, cargoImporter.exportObjects(((CargoModel) model).getCargoes()));
+	public void exportModel(MMXRootObject root,
+			UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
+		output.put(CARGO_KEY, cargoImporter.exportObjects(((CargoModel) model).getCargoes(), root));
 	}
 }

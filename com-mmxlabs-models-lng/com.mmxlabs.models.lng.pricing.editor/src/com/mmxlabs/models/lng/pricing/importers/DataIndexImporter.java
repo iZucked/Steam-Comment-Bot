@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -138,7 +139,7 @@ public class DataIndexImporter implements IClassImporter {
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(Collection<? extends EObject> objects) {
+	public Collection<Map<String, String>> exportObjects(Collection<? extends EObject> objects, MMXRootObject root) {
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (final EObject o : objects) {
 			if (o instanceof DataIndex) {

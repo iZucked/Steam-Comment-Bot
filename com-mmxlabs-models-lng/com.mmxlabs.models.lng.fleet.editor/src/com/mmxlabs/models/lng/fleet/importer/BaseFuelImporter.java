@@ -59,17 +59,12 @@ public class BaseFuelImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	protected Map<String, String> exportObject(EObject object) {
+	protected Map<String, String> exportObject(EObject object, final MMXRootObject root) {
 		final BaseFuel bf = (BaseFuel) object;
-		final Map<String, String> result = super.exportObject(object);
-		
-		while (!(object instanceof MMXRootObject) && !(object == null)) {
-			object = object.eContainer();
-		}
+		final Map<String, String> result = super.exportObject(object, root);
 		
 		if (object instanceof MMXRootObject) {
-			final MMXRootObject rootObject = (MMXRootObject) object;
-			final PricingModel pm = rootObject.getSubModel(PricingModel.class);
+			final PricingModel pm = root.getSubModel(PricingModel.class);
 			if (pm != null) {
 				for (final BaseFuelCost cost : pm.getFleetCost().getBaseFuelPrices()) {
 					if (cost.getFuel() == bf) {

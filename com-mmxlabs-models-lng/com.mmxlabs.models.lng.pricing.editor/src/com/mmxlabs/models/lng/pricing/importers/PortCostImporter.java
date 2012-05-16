@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
@@ -39,8 +40,8 @@ public class PortCostImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	protected Map<String, String> exportObject(EObject object) {
-		final Map<String, String> result = super.exportObject(object);
+	protected Map<String, String> exportObject(EObject object, MMXRootObject root) {
+		final Map<String, String> result = super.exportObject(object, root);
 		
 		for (final PortCostEntry pce : ((PortCost) object).getEntries()) {
 			result.put(pce.getActivity().name() + "Cost", Integer.toString(pce.getCost()));

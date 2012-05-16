@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -85,8 +86,8 @@ public class PortModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(UUIDObject model,
-			Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(MMXRootObject root,
+			UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
 		for (final Route r : ((PortModel)model).getRoutes()) {
 			Collection<Map<String, String>> result = routeImporter.exportRoute(r);
 			if (r.getName().equals(DIRECT_NAME)) {
@@ -98,8 +99,8 @@ public class PortModelImporter implements ISubmodelImporter {
 				output.put(r.getName(), result);
 			}
 		}
-		output.put(PORT_KEY, portImporter.exportObjects(((PortModel)model).getPorts()));
-		output.put(PORT_GROUP_KEY, portGroupImporter.exportObjects(((PortModel)model).getPortGroups()));
+		output.put(PORT_KEY, portImporter.exportObjects(((PortModel)model).getPorts(), root));
+		output.put(PORT_GROUP_KEY, portGroupImporter.exportObjects(((PortModel)model).getPortGroups(), root));
 	}
 
 }

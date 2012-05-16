@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -42,7 +43,7 @@ public class OptimiserModelImporter implements ISubmodelImporter {
 	 * @see com.mmxlabs.models.util.importer.ISubmodelImporter#exportModel(com.mmxlabs.models.mmxcore.UUIDObject, java.util.Map)
 	 */
 	@Override
-	public void exportModel(UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(MMXRootObject root, UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
 		
 		
 	}
