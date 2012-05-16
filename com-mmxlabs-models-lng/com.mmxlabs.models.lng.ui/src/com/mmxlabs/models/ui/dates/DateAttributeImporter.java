@@ -22,9 +22,9 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 	final SimpleDateFormat consistentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:00");
 	final SimpleDateFormat dateWithShortTime = new SimpleDateFormat("yyyy-MM-dd HH");
 	
-	final SimpleDateFormat consistentSlashDate = new SimpleDateFormat("yyyy-MM-dd");
-	final SimpleDateFormat consistentSlashDateTime = new SimpleDateFormat("yyyy-MM-dd HH:00");
-	final SimpleDateFormat slashDateWithShortTime = new SimpleDateFormat("yyyy-MM-dd HH");
+	final SimpleDateFormat consistentSlashDate = new SimpleDateFormat("yyyy/MM/dd");
+	final SimpleDateFormat consistentSlashDateTime = new SimpleDateFormat("yyyy/MM/dd HH:00");
+	final SimpleDateFormat slashDateWithShortTime = new SimpleDateFormat("yyyy/MM/dd HH");
 
 	public DateAttributeImporter() {
 		final TimeZone utc = TimeZone.getTimeZone("UTC");
