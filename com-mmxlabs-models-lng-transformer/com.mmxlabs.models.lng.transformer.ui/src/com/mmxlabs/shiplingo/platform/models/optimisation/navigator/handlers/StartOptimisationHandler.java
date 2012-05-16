@@ -66,7 +66,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 				if (obj instanceof ScenarioInstance) {
-					return evaluateScenarioInstance(jobManager, (ScenarioInstance) obj);
+					return evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, optimising);
 				}
 				
 			}
@@ -75,7 +75,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 		return null;
 	}
 
-	public Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance) {
+	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final boolean optimising) {
 //		final IStatus status = (IStatus) resource.getAdapter(IStatus.class);
 //		if (status.matches(IStatus.ERROR)) {
 //			Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Validation errors were found in the resource " + resource.getName()));
