@@ -142,23 +142,26 @@ public class VesselClassImporter extends DefaultClassImporter {
 			}
 		}
 		
-		if (object instanceof MMXRootObject) {
-			final PricingModel pm = root.getSubModel(PricingModel.class);
-			if (pm != null) {
-				for (final RouteCost rc : pm.getRouteCosts()) {
-					if (rc.getVesselClass() == vc) {
-						final Map<String, String> exportedCost = routeCostImporter.exportObjects(Collections.singleton(rc), root).iterator().next();
-						exportedCost.remove("vesselclass");
-						final String route = exportedCost.get("route");
-						exportedCost.remove("route");
-						final String prefix = route + ".pricing.";
-						for (final Map.Entry<String, String> e : exportedCost.entrySet()) {
-							result.put(prefix + e.getKey(), e.getValue());
-						}
+
+		final PricingModel pm = root.getSubModel(PricingModel.class);
+		if (pm != null) {
+			for (final RouteCost rc : pm.getRouteCosts()) {
+				if (rc.getVesselClass() == vc) {
+					final Map<String, String> exportedCost = routeCostImporter
+							.exportObjects(Collections.singleton(rc), root)
+							.iterator().next();
+					exportedCost.remove("vesselclass");
+					final String route = exportedCost.get("route");
+					exportedCost.remove("route");
+					final String prefix = route + ".pricing.";
+					for (final Map.Entry<String, String> e : exportedCost
+							.entrySet()) {
+						result.put(prefix + e.getKey(), e.getValue());
 					}
 				}
 			}
 		}
+		
 		
 		return result;
 	}
