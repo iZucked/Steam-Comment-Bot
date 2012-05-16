@@ -21,6 +21,10 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 	final SimpleDateFormat consistentDate = new SimpleDateFormat("yyyy-MM-dd");
 	final SimpleDateFormat consistentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:00");
 	final SimpleDateFormat dateWithShortTime = new SimpleDateFormat("yyyy-MM-dd HH");
+	
+	final SimpleDateFormat consistentSlashDate = new SimpleDateFormat("yyyy-MM-dd");
+	final SimpleDateFormat consistentSlashDateTime = new SimpleDateFormat("yyyy-MM-dd HH:00");
+	final SimpleDateFormat slashDateWithShortTime = new SimpleDateFormat("yyyy-MM-dd HH");
 
 	public DateAttributeImporter() {
 		final TimeZone utc = TimeZone.getTimeZone("UTC");
@@ -52,6 +56,24 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 
 		try {
 			final Date result = consistentDate.parse(dateString);
+			return result;
+		} catch (final ParseException ex) {
+		}
+		
+		try {
+			final Date result = consistentSlashDateTime.parse(dateString);
+			return result;
+		} catch (final ParseException ex) {
+		}
+
+		try {
+			final Date result = slashDateWithShortTime.parse(dateString);
+			return result;
+		} catch (final ParseException ex) {
+		}
+
+		try {
+			final Date result = consistentSlashDate.parse(dateString);
 			return result;
 		} catch (final ParseException ex) {
 		}
