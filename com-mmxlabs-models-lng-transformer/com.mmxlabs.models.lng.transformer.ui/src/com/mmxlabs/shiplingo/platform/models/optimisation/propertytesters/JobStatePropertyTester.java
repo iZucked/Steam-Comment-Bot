@@ -15,13 +15,23 @@ public class JobStatePropertyTester extends PropertyTester {
 
 	@Override
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
+		boolean b = reallyTest(receiver, property, expectedValue);
+//		if (receiver instanceof ScenarioInstance) System.err.println(((ScenarioInstance) receiver).getName() + "." + property + "=" + b);
+		return b;
+	}
+
+	private boolean reallyTest(final Object receiver, final String property,
+			final Object expectedValue) {
+		
+		final EJobState state = getJobState(receiver);
+		
 		if ("jobState".equals(property)) {
-			return testJobState(receiver, expectedValue);
+			if (expectedValue != null && state != null) {
+				return expectedValue.toString().equalsIgnoreCase(state.name());
+			}
 		} else if ("canPause".equals(property)) {
-			final EJobState state = getJobState(receiver);
 			if (state == EJobState.RUNNING) return true;
 		} else if ("canPlay".equals(property)) {
-			final EJobState state = getJobState(receiver);
 			if (state == null) return true;
 			switch (state) {
 			case CANCELLED:
@@ -33,7 +43,6 @@ public class JobStatePropertyTester extends PropertyTester {
 			default: return false;
 			}
 		} else if ("canTerminate".equals(property)) {
-			final EJobState state = getJobState(receiver);
 			if (state == null) return false;
 			switch (state) {
 			case RUNNING:
@@ -42,7 +51,6 @@ public class JobStatePropertyTester extends PropertyTester {
 			default: return false;
 			}
 		} else if ("hasActiveJob".equals(property)) {
-			final EJobState state = getJobState(receiver);
 			if (state == null) return false;
 			switch (state) {
 			case RUNNING:
@@ -56,7 +64,6 @@ public class JobStatePropertyTester extends PropertyTester {
 			default: return false;
 			}
 		}
-		
 		
 		return false;
 	}
@@ -76,16 +83,5 @@ public class JobStatePropertyTester extends PropertyTester {
 			}
 		}
 		return null;
-	}
-	
-	private boolean testJobState(final Object receiver,
-			final Object expectedValue) {
-		final EJobState state = getJobState(receiver);
-		
-		if (expectedValue != null && state != null) {
-			return expectedValue.toString().equalsIgnoreCase(state.name());
-		}
-					
-		return false;
 	}
 }

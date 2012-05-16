@@ -70,46 +70,4 @@ public class PauseOptimisationHandler extends AbstractOptimisationHandler {
 
 		return null;
 	}
-
-	@Override
-	public boolean isEnabled() {
-
-		// We could do some of this in plugin.xml - but not been able to
-		// configure it properly.
-		// Plugin.xml will make it enabled if the resource can be a Scenario.
-		// But need finer grained control depending on optimisation state.
-
-		if (!super.isEnabled()) {
-			return false;
-		}
-
-		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		if (activeWorkbenchWindow == null) {
-			return false;
-		}
-		final ISelection selection = activeWorkbenchWindow.getSelectionService().getSelection();
-
-		if ((selection != null) && (selection instanceof IStructuredSelection)) {
-			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
-
-			final Iterator<?> itr = strucSelection.iterator();
-			while (itr.hasNext()) {
-				final Object obj = itr.next();
-				if (obj instanceof ScenarioInstance) {
-					final ScenarioInstance instance = (ScenarioInstance) obj;
-
-					final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-					final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
-					final IJobControl control = jobManager.getControlForJob(job);
-
-					if (control == null) {
-						return false;
-					}
-					return (control.getJobState() == EJobState.RUNNING);
-				}
-			}
-		}
-
-		return false;
-	}
 }
