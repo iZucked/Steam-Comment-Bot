@@ -1,5 +1,6 @@
 [patterns]
 **.java = native
+**.target = native
 **.txt = native
 **.ini = native
 **.product = native
