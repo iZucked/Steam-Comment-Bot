@@ -184,6 +184,9 @@ public class PortGroupView extends ScenarioInstanceView {
 					
 					@Override
 					public boolean isChecked(Object element) {
+						if (viewerPane == null) return false;
+						if (viewerPane.getViewer() == null) return false;
+						if (viewerPane.getViewer().getControl() == null) return false;
 						if (viewerPane.getViewer().getControl().isDisposed()) return false;
 						final ISelection selection = viewerPane.getViewer().getSelection();
 						
