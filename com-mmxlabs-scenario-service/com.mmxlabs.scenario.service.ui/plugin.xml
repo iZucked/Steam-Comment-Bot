@@ -139,6 +139,8 @@
             class="com.mmxlabs.scenario.service.ui.commands.CopyScenarioCommandHandler"
             commandId="org.eclipse.ui.edit.copy">
          <activeWhen>
+               <with
+                     variable="selection">
             <iterate>
                <and>
                   <instanceof
@@ -146,8 +148,11 @@
                   </instanceof>
                </and>
             </iterate>
+               </with>
          </activeWhen>
          <enabledWhen>
+                <with
+                     variable="selection">
             <iterate>
                <and>
                   <instanceof
@@ -155,12 +160,15 @@
                   </instanceof>
                </and>
             </iterate>
+            </with>
          </enabledWhen>
       </handler>
       <handler
             class="com.mmxlabs.scenario.service.ui.commands.PasteScenarioCommandHandler"
             commandId="org.eclipse.ui.edit.paste">
          <activeWhen>
+                <with
+                     variable="selection">
             <iterate>
                <and>
                   <instanceof
@@ -168,8 +176,11 @@
                   </instanceof>
                </and>
             </iterate>
+            </with>
          </activeWhen>
          <enabledWhen>
+                <with
+                     variable="selection">
             <iterate>
                <and>
                   <instanceof
@@ -177,6 +188,7 @@
                   </instanceof>
                </and>
             </iterate>
+            </with>
          </enabledWhen>
       </handler>
       <handler
