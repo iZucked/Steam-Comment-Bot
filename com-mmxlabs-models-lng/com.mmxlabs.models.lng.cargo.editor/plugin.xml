@@ -151,6 +151,12 @@
           eClassName="com.mmxlabs.models.lng.cargo.LoadSlot"
           inheritable="true">
     </classImporter>
+      <classImporter
+          ID="com.mmxlabs.models.lng.cargo.editor.dischargeSlotImporter"
+          classImporterClass="com.mmxlabs.models.lng.cargo.importer.DischargeSlotImporter"
+          eClassName="com.mmxlabs.models.lng.cargo.DischargeSlot"
+          inheritable="true">
+    </classImporter>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
