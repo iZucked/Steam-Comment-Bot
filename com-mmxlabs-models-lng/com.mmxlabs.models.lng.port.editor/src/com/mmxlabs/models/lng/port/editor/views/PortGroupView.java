@@ -50,7 +50,7 @@ public class PortGroupView extends ScenarioInstanceView {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		sash = new SashForm(parent, SWT.VERTICAL);
+		sash = new SashForm(parent, SWT.HORIZONTAL);
 		listenToScenarioSelection();
 		
 	}
@@ -108,7 +108,7 @@ public class PortGroupView extends ScenarioInstanceView {
 				lastInput = null;
 			}
 			
-			viewer.refresh();
+			if (newInput != oldInput) viewer.refresh();
 		}
 		
 		@Override
@@ -145,7 +145,7 @@ public class PortGroupView extends ScenarioInstanceView {
 			
 			final Composite parent = sash.getParent();
 			sash.dispose();
-			sash = new SashForm(parent, SWT.VERTICAL);
+			sash = new SashForm(parent, SWT.HORIZONTAL);
 			
 			super.displayScenarioInstance(instance);
 			if (instance != null) {
@@ -217,7 +217,7 @@ public class PortGroupView extends ScenarioInstanceView {
 					}
 				});
 				
-				sash.setWeights(new int[]{1,5});
+				sash.setWeights(new int[]{2,2});
 			}
 			parent.layout(true);
 		}
