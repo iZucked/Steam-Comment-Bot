@@ -76,7 +76,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 					final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(modelInstance.eClass());
 					if (importer != null) {
 						final Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
-						importer.exportModel(modelInstance, outputs);
+						importer.exportModel(rootObject, modelInstance, outputs);
 
 						for (final String key : outputs.keySet()) {
 							final Collection<Map<String, String>> rows = outputs.get(key);
