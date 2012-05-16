@@ -7,15 +7,6 @@ package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.HandlerEvent;
 import org.eclipse.core.commands.IHandler;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWindowListener;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchListener;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
@@ -70,40 +61,6 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 			control.removeListener(jobListener);
 		}
 	};
-
-	private final ISelectionListener selectionListener = new ISelectionListener() {
-
-		@Override
-		public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-			// Create Event to trigger enabled state update
-			final HandlerEvent handlerEvent = new HandlerEvent(AbstractOptimisationHandler.this, true, false);
-
-			// Fire the event
-			AbstractOptimisationHandler.this.fireHandlerChanged(handlerEvent);
-		}
-	};
-	
-	private final IWindowListener windowListener = new IWindowListener() {
-		@Override
-		public void windowOpened(final IWorkbenchWindow window) {
-			
-		}
-		
-		@Override
-		public void windowDeactivated(final IWorkbenchWindow window) {
-			window.getSelectionService().removeSelectionListener(selectionListener);
-		}
-		
-		@Override
-		public void windowClosed(final IWorkbenchWindow window) {
-			window.getSelectionService().removeSelectionListener(selectionListener);
-		}
-		
-		@Override
-		public void windowActivated(final IWorkbenchWindow window) {
-			window.getSelectionService().addSelectionListener(selectionListener);
-		}
-	};
 	
 	/**
 	 * The constructor.
@@ -119,8 +76,6 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 			final IJobControl control = jmv.getControlForJob(j);
 			control.addListener(jobListener);
 		}
-
-		PlatformUI.getWorkbench().addWindowListener(windowListener);
 	}
 
 	@Override
