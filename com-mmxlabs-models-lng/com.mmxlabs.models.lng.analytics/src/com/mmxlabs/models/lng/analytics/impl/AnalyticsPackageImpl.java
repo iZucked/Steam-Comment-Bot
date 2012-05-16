@@ -817,25 +817,25 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		  (getUnitCostMatrix_MinimumLoad(), 
 		   source, 
 		   new String[] {
-			 "unit", "M3"
+			 "unit", "m3"
 		   });		
 		addAnnotation
 		  (getUnitCostMatrix_MaximumLoad(), 
 		   source, 
 		   new String[] {
-			 "unit", "M3"
+			 "unit", "m3"
 		   });		
 		addAnnotation
 		  (getUnitCostMatrix_MinimumDischarge(), 
 		   source, 
 		   new String[] {
-			 "unit", "M3"
+			 "unit", "m3"
 		   });		
 		addAnnotation
 		  (getUnitCostMatrix_MaximumDischarge(), 
 		   source, 
 		   new String[] {
-			 "unit", "M3"
+			 "unit", "m3"
 		   });		
 		addAnnotation
 		  (getUnitCostMatrix_CargoPrice(), 

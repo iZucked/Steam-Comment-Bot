@@ -98,7 +98,7 @@
         eType="#//FuelAmount" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="FuelUnit" instanceTypeName="FuelUnit">
-    <eLiterals name="M3" literal="M3"/>
+    <eLiterals name="M3" literal="m3"/>
     <eLiterals name="MT" value="1" literal="MT"/>
     <eLiterals name="MMBTU" value="2" literal="MMBTU"/>
   </eClassifiers>

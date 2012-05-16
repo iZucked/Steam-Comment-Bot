@@ -94,7 +94,7 @@ public interface VesselClass extends AVesselClass {
 	 * @see #setCapacity(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_Capacity()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
 	 * @generated
 	 */
 	int getCapacity();
@@ -255,7 +255,7 @@ public interface VesselClass extends AVesselClass {
 	 * @see #setMinHeel(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_MinHeel()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
 	 * @generated
 	 */
 	int getMinHeel();
@@ -336,7 +336,7 @@ public interface VesselClass extends AVesselClass {
 	 * @see #setCoolingVolume(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_CoolingVolume()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
 	 * @generated
 	 */
 	int getCoolingVolume();

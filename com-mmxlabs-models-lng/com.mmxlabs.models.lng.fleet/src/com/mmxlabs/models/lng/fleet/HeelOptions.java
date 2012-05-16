@@ -38,7 +38,7 @@ public interface HeelOptions extends MMXObject {
 	 * @see #setVolumeAvailable(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getHeelOptions_VolumeAvailable()
 	 * @model unsettable="true" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
 	 * @generated
 	 */
 	int getVolumeAvailable();

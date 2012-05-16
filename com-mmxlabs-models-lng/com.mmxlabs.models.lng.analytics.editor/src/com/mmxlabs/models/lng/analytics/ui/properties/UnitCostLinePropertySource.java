@@ -146,14 +146,14 @@ public class UnitCostLinePropertySource implements IPropertySource {
 			public Object get(UnitCostLine line) {
 				return line.getVolumeLoaded();
 			}
-		}, "M3 Loaded", OVERVIEW, integerLabelProvider));
+		}, "m3 Loaded", OVERVIEW, integerLabelProvider));
 		
 		descriptors.add(makeDescriptor(new IPropertyGetter() {
 			@Override
 			public Object get(UnitCostLine line) {
 				return line.getVolumeDischarged();
 			}
-		}, "M3 Discharged", OVERVIEW, integerLabelProvider));
+		}, "m3 Discharged", OVERVIEW, integerLabelProvider));
 		
 		addVisitDescriptors(descriptors, "2. Loading", (Visit) line.getCostComponents().get(0));
 		addVoyageDescriptors(descriptors, "3. Laden Voyage", (Voyage) line.getCostComponents().get(1));

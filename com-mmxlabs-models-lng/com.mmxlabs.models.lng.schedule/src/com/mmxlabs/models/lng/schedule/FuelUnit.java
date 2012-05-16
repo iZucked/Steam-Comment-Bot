@@ -28,9 +28,7 @@ public enum FuelUnit implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	M3(0, "M3", "M3"),
-
-	/**
+	M3(0, "M3", "m3"), /**
 	 * The '<em><b>MT</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -59,7 +57,7 @@ public enum FuelUnit implements Enumerator {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #M3
-	 * @model
+	 * @model literal="m3"
 	 * @generated
 	 * @ordered
 	 */
