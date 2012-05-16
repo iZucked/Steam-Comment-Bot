@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.ui.editorpart;
 
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -78,38 +77,24 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 	public void init(List<EReference> path, AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
-		
+
 		getToolBarManager().appendToGroup("edit", new BaseFuelEditorAction());
 		getToolBarManager().update(true);
-		
-		addTypicalColumn("Name", new BasicAttributeManipulator(
-				MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain));
 
-		addTypicalColumn(
-				"Capacity (m3)",
-				new NumericAttributeManipulator(FleetPackage.eINSTANCE
-						.getVesselClass_Capacity(), editingDomain));
+		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain));
 
-		addTypicalColumn(
-				"Inaccessible Ports",
-				new MultipleReferenceManipulator(FleetPackage.eINSTANCE
-						.getVesselClass_InaccessiblePorts(), jointModelEditor
-						.getReferenceValueProviderCache(), editingDomain,
-						MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		addTypicalColumn("Capacity (m3)", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClass_Capacity(), editingDomain));
 
-			addTypicalColumn("Laden Fuel Usage", 
-					new VSAManipulator(FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(), editingDomain)
-					);
-			
-			addTypicalColumn("Ballast Fuel Usage", 
-					new VSAManipulator(FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(), editingDomain)
-					);
+		addTypicalColumn("Inaccessible Ports", new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts(), jointModelEditor.getReferenceValueProviderCache(),
+				editingDomain, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-		
-		setTitle("Vessel Classes", PlatformUI.getWorkbench().getSharedImages()
-				.getImage(ISharedImages.IMG_DEF_VIEW));
+//		addTypicalColumn("Laden Fuel Usage", new VSAManipulator(FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(), editingDomain));
+//
+//		addTypicalColumn("Ballast Fuel Usage", new VSAManipulator(FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(), editingDomain));
+
+		setTitle("Vessel Classes", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
-	
+
 	@Override
 	protected Action createImportAction() {
 		final Action def = super.createImportAction();
@@ -118,6 +103,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 			{
 				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
 			}
+
 			@Override
 			protected void populate(Menu menu) {
 				addActionToMenu(def, menu);
@@ -125,40 +111,44 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 					{
 						setText("Import Base Fuels");
 					}
+
 					@Override
 					protected void doImportStages(final DefaultImportContext context) {
 						final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getBaseFuel());
-						
+
 						final FileDialog fileDialog = new FileDialog(part.getShell());
-						fileDialog.setFilterExtensions(new String[] {"*.csv"});
+						fileDialog.setFilterExtensions(new String[] { "*.csv" });
 						final String path = fileDialog.open();
-						
-						if (path == null) return;
-						
+
+						if (path == null)
+							return;
+
 						CSVReader reader;
 						try {
 							reader = new CSVReader(path);
 							final Collection<EObject> importedObjects = importer.importObjects(FleetPackage.eINSTANCE.getBaseFuel(), reader, context);
 							context.run();
-							part.getEditingDomain().getCommandStack().execute(mergeLists(getScenarioViewer().getCurrentContainer(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels(), new ArrayList<EObject>(importedObjects)));
+							part.getEditingDomain().getCommandStack()
+									.execute(mergeLists(getScenarioViewer().getCurrentContainer(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels(), new ArrayList<EObject>(importedObjects)));
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 					}
 				};
 				addActionToMenu(importFuels, menu);
-				
+
 				final Action importFuelCurves = new LockableAction("Import Consumption Curves") {
 					@Override
 					public void run() {
 						final DefaultImportContext context = new DefaultImportContext();
 						final FuelCurveImporter importer = new FuelCurveImporter();
 						final FileDialog fileDialog = new FileDialog(part.getSite().getShell());
-						fileDialog.setFilterExtensions(new String[] {"*.csv"});
+						fileDialog.setFilterExtensions(new String[] { "*.csv" });
 						final String path = fileDialog.open();
-						
-						if (path == null) return;
-						
+
+						if (path == null)
+							return;
+
 						CSVReader reader;
 						try {
 							jointModelEditor.setDisableUpdates(true);
@@ -168,8 +158,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 							final EditingDomain ed = jointModelEditor.getEditingDomain();
 							final CompoundCommand command = new CompoundCommand();
 							final FleetModel fleet = jointModelEditor.getRootObject().getSubModel(FleetModel.class);
-							each_vessel:
-							for (final String vesselName : consumptions.keySet()) {
+							each_vessel: for (final String vesselName : consumptions.keySet()) {
 								// find vessel class
 								for (final VesselClass vc : fleet.getVesselClasses()) {
 									if (vc.getName().equals(vesselName)) {
@@ -180,16 +169,18 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 										if (vc.getBallastAttributes().getFuelConsumption().isEmpty() == false)
 											command.append(DeleteCommand.create(ed, vc.getBallastAttributes().getFuelConsumption()));
 										if (ladenAndBallastConsumptions.getFirst().isEmpty() == false)
-											command.append(AddCommand.create(ed, vc.getLadenAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), ladenAndBallastConsumptions.getFirst()));
+											command.append(AddCommand.create(ed, vc.getLadenAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(),
+													ladenAndBallastConsumptions.getFirst()));
 										if (ladenAndBallastConsumptions.getSecond().isEmpty() == false)
-											command.append(AddCommand.create(ed, vc.getBallastAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), ladenAndBallastConsumptions.getSecond()));
+											command.append(AddCommand.create(ed, vc.getBallastAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(),
+													ladenAndBallastConsumptions.getSecond()));
 										continue each_vessel;
 									}
 								}
 								// collect problem
 								context.addProblem(consumptions.get(vesselName).getFirst());
 							}
-							
+
 							ed.getCommandStack().execute(command);
 						} catch (IOException e) {
 							context.addProblem(context.createProblem("IO Error: " + e.getMessage(), false, false, false));
@@ -199,7 +190,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 						}
 					}
 				};
-				
+
 				addActionToMenu(importFuelCurves, menu);
 			}
 		};
@@ -210,28 +201,27 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 			super("Base Fuels");
 			try {
 				setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.fleet.editor/icons/oildrop.png")));
-			} catch (final MalformedURLException e) {}
+			} catch (final MalformedURLException e) {
+			}
 		}
-		
+
 		@Override
 		protected void populate(final Menu menu) {
 			final FleetModel fleetModel = jointModelEditor.getRootObject().getSubModel(FleetModel.class);
 			boolean b = false;
 			for (final BaseFuel baseFuel : fleetModel.getBaseFuels()) {
 				b = true;
-				final Action editBase = new AbstractMenuAction(baseFuel.getName()) {					
+				final Action editBase = new AbstractMenuAction(baseFuel.getName()) {
 					@Override
 					protected void populate(Menu submenu) {
 						final LockableAction edit = new LockableAction("Edit...") {
 							public void run() {
-								final DetailCompositeDialog dcd = new DetailCompositeDialog(
-										jointModelEditor.getShell(), 
-										jointModelEditor.getDefaultCommandHandler());
+								final DetailCompositeDialog dcd = new DetailCompositeDialog(jointModelEditor.getShell(), jointModelEditor.getDefaultCommandHandler());
 								dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) baseFuel));
 							}
 						};
 						addActionToMenu(edit, submenu);
-						
+
 						final Action delete = new LockableAction("Delete...") {
 							public void run() {
 								final ICommandHandler handler = jointModelEditor.getDefaultCommandHandler();
@@ -243,55 +233,54 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 				};
 				addActionToMenu(editBase, menu);
 			}
-			
+
 			if (b) {
 				new MenuItem(menu, SWT.SEPARATOR);
 			}
-			final Action newBase = 
-					AddModelAction.create(FleetPackage.eINSTANCE.getBaseFuel(), new IAddContext() {
-						@Override
-						public MMXRootObject getRootObject() {
-							return jointModelEditor.getRootObject();
-						}
-						
-						@Override
-						public EReference getContainment() {
-							return FleetPackage.eINSTANCE.getFleetModel_BaseFuels();
-						}
-						
-						@Override
-						public EObject getContainer() {
-							return fleetModel;
-						}
-						
-						@Override
-						public ICommandHandler getCommandHandler() {
-							return jointModelEditor.getDefaultCommandHandler();
-						}
+			final Action newBase = AddModelAction.create(FleetPackage.eINSTANCE.getBaseFuel(), new IAddContext() {
+				@Override
+				public MMXRootObject getRootObject() {
+					return jointModelEditor.getRootObject();
+				}
 
-						@Override
-						public IScenarioEditingLocation getEditorPart() {
-							return jointModelEditor;
-						}
-					});
+				@Override
+				public EReference getContainment() {
+					return FleetPackage.eINSTANCE.getFleetModel_BaseFuels();
+				}
+
+				@Override
+				public EObject getContainer() {
+					return fleetModel;
+				}
+
+				@Override
+				public ICommandHandler getCommandHandler() {
+					return jointModelEditor.getDefaultCommandHandler();
+				}
+
+				@Override
+				public IScenarioEditingLocation getEditorPart() {
+					return jointModelEditor;
+				}
+			});
 			if (newBase != null) {
 				newBase.setText("Add new base fuel...");
 				addActionToMenu(newBase, menu);
 			}
 		}
 	}
-	
+
 	class VSAManipulator extends DialogFeatureManipulator {
 
-		public VSAManipulator(EStructuralFeature field,
-				EditingDomain editingDomain) {
+		public VSAManipulator(EStructuralFeature field, EditingDomain editingDomain) {
 			super(field, editingDomain);
 		}
+
 		@Override
 		protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(cellEditorWindow.getShell(), jointModelEditor.getDefaultCommandHandler());
-			
-			final VesselStateAttributes attributes = (VesselStateAttributes) EcoreUtil.copy((EObject)getValue(object));
+
+			final VesselStateAttributes attributes = (VesselStateAttributes) EcoreUtil.copy((EObject) getValue(object));
 			if (dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) attributes)) == Window.OK) {
 				return attributes;
 			} else {
