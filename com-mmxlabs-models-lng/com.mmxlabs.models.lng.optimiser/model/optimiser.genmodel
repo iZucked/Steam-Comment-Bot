@@ -23,7 +23,7 @@
           ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimiserSettings/seed"/>
       <genFeatures property="None" children="true" createChild="true" propertyDescription="A list of extra arguments to the optimiser"
           ecoreFeature="ecore:EReference optimiser.ecore#//OptimiserSettings/arguments"/>
-      <genFeatures createChild="false" propertyDescription="If true, rewiring will be allowed by default, otherwise not (cargos can override this)"
+      <genFeatures createChild="false" propertyDescription="If true, rewiring will be allowed by default, otherwise not (cargoes can override this)"
           ecoreFeature="ecore:EAttribute optimiser.ecore#//OptimiserSettings/rewire"/>
     </genClasses>
     <genClasses ecoreClass="optimiser.ecore#//Objective">

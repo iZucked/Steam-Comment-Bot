@@ -69,7 +69,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//FleetModel/baseFuels"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//BaseFuel">
-      <genFeatures createChild="false" propertyDescription="The ratio relating 1 MT of this base fuel to 1M3 of LNG"
+      <genFeatures createChild="false" propertyDescription="The ratio relating 1 MT of this base fuel to 1 m3 of LNG"
           ecoreFeature="ecore:EAttribute fleet.ecore#//BaseFuel/equivalenceFactor"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//DryDockEvent"/>

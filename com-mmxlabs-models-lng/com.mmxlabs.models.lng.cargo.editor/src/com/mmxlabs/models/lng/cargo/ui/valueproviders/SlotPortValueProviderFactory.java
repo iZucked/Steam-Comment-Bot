@@ -81,8 +81,9 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						final Slot slot = (Slot) target;
 						final Contract contract = slot.getContract();
-						if (contract == null)
-							return delegateValue;
+						if (contract == null) {
+							return filterOne;
+						}
 						final UniqueEList<APortSet> marks = new UniqueEList<APortSet>();
 						final HashSet<APort> ports = new HashSet<APort>();
 						for (final APortSet set : contract.getAllowedPorts()) {

@@ -272,13 +272,13 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__SEQUENCES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Unscheduled Cargos</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Unscheduled Cargoes</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__UNSCHEDULED_CARGOS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int SCHEDULE__UNSCHEDULED_CARGOES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Allocations</b></em>' containment reference list.
@@ -2976,15 +2976,15 @@ public interface SchedulePackage extends EPackage {
 	EReference getSchedule_Sequences();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargos <em>Unscheduled Cargos</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargoes <em>Unscheduled Cargoes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Unscheduled Cargos</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargos()
+	 * @return the meta object for the containment reference list '<em>Unscheduled Cargoes</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargoes()
 	 * @see #getSchedule()
 	 * @generated
 	 */
-	EReference getSchedule_UnscheduledCargos();
+	EReference getSchedule_UnscheduledCargoes();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}'.
@@ -3926,12 +3926,12 @@ public interface SchedulePackage extends EPackage {
 		EReference SCHEDULE__SEQUENCES = eINSTANCE.getSchedule_Sequences();
 
 		/**
-		 * The meta object literal for the '<em><b>Unscheduled Cargos</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Unscheduled Cargoes</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SCHEDULE__UNSCHEDULED_CARGOS = eINSTANCE.getSchedule_UnscheduledCargos();
+		EReference SCHEDULE__UNSCHEDULED_CARGOES = eINSTANCE.getSchedule_UnscheduledCargoes();
 
 		/**
 		 * The meta object literal for the '<em><b>Cargo Allocations</b></em>' containment reference list feature.

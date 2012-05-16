@@ -20,11 +20,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	public void addPages(final Composite parent) {
 		this.viewerPane = new CargoModelViewer(editorPart.getSite().getPage(), editorPart, editorPart);
 		viewerPane.createControl(parent);
-		viewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_Cargos()),
+		viewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_Cargoes()),
 				editorPart.getAdapterFactory());
 		viewerPane.getViewer().setInput(modelObject);
 		pageNumber = editorPart.addPage(viewerPane.getControl());
-		editorPart.setPageText(pageNumber, "Cargos");
+		editorPart.setPageText(pageNumber, "Cargoes");
 	}
 
 	@Override

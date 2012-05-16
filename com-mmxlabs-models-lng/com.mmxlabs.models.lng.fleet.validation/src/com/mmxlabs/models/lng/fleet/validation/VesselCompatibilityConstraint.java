@@ -9,7 +9,7 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 
 /**
- * A constraint which checks that cargos are not being carried by vessels
+ * A constraint which checks that cargoes are not being carried by vessels
  * which cannot do the job.
  * @author Tom Hinton
  *

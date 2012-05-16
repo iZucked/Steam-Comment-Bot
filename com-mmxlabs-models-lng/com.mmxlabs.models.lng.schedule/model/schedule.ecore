@@ -15,7 +15,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sequences" upperBound="-1"
         eType="#//Sequence" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="unscheduledCargos" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unscheduledCargoes" upperBound="-1"
         eType="#//UnscheduledCargo" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocations" upperBound="-1"
         eType="#//CargoAllocation" containment="true"/>
@@ -98,7 +98,7 @@
         eType="#//FuelAmount" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="FuelUnit" instanceTypeName="FuelUnit">
-    <eLiterals name="M3" literal="M3"/>
+    <eLiterals name="M3" literal="m3"/>
     <eLiterals name="MT" value="1" literal="MT"/>
     <eLiterals name="MMBTU" value="2" literal="MMBTU"/>
   </eClassifiers>

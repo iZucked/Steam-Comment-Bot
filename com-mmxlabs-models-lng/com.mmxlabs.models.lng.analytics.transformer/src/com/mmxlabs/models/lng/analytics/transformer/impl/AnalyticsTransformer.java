@@ -210,7 +210,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			
 			monitor.worked(5);
 			monitor.subTask("Creating a cargo for each entry");
-			final List<ICargo> cargos = new ArrayList<ICargo>(loadPorts.size() * dischargePorts.size());
+			final List<ICargo> cargoes = new ArrayList<ICargo>(loadPorts.size() * dischargePorts.size());
 			final ILoadPriceCalculator2 loadCalculator = new FixedPriceContract(0);
 			final IShippingPriceCalculator dischargeCalculator = new FixedPriceContract(Calculator.scaleToInt(spec.getCargoPrice()));
 			final List<IVessel> vessels = new ArrayList<IVessel>(loadPorts.size() * dischargePorts.size());
@@ -252,7 +252,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 									Calculator.scale(spec.getMinimumDischarge()), Calculator.scale(spec.getMaximumDischarge()), dischargeCalculator, dischargePort.getDischargeDuration(), false);
 
 							final ICargo cargo = builder.createCargo(id, loadSlot, dischargeSlot, false);
-							cargos.add(cargo);
+							cargoes.add(cargo);
 							// create vessel
 							
 							final int timeAtReturn = timeAtDischarge + dischargePort.getDischargeDuration() + minTimeDL + spec.getReturnIdleTime();
@@ -277,10 +277,10 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			final IStartEndRequirementProvider startEndProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
 			final IPortSlotProvider slotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 
-			final int[][] arrivalTimes = new int[cargos.size()][3];
+			final int[][] arrivalTimes = new int[cargoes.size()][3];
 			monitor.subTask("Preparing to evaluate");
 			int index = 0;
-			for (final ICargo cargo : cargos) {
+			for (final ICargo cargo : cargoes) {
 				final IResource resource = vesselProvider.getResource(vesselIterator.next());
 				final IModifiableSequence sequence = sequences.getModifiableSequence(resource);
 				// set up sequence and arrival times

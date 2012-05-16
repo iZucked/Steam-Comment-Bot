@@ -39,7 +39,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setNboRate(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_NboRate()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3/d'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3/d'"
 	 * @generated
 	 */
 	int getNboRate();
@@ -66,7 +66,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setIdleNBORate(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_IdleNBORate()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3/d'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3/d'"
 	 * @generated
 	 */
 	int getIdleNBORate();

@@ -86,7 +86,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 				MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain));
 
 		addTypicalColumn(
-				"Capacity (M3)",
+				"Capacity (m3)",
 				new NumericAttributeManipulator(FleetPackage.eINSTANCE
 						.getVesselClass_Capacity(), editingDomain));
 

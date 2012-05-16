@@ -37,7 +37,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
  * 
  * 
  * Normal usage is to call {@link #open(List, EditingDomain)} with a list of
- * cargos to rewire. If the user presses the OK button the dialog will then
+ * cargoes to rewire. If the user presses the OK button the dialog will then
  * execute a command to make the necessary changes.
  * 
  * @author Tom Hinton
@@ -51,7 +51,7 @@ public class WiringDialog extends Dialog {
 		super(parent);
 	}
 
-	public void open(final List<Cargo> cargos, final EditingDomain domain,
+	public void open(final List<Cargo> cargoes, final EditingDomain domain,
 			final IReferenceValueProvider portProvider) {
 		final Shell shell = new Shell((SWT.DIALOG_TRIM & ~SWT.CLOSE)
 				| SWT.APPLICATION_MODAL | SWT.RESIZE);
@@ -134,7 +134,7 @@ public class WiringDialog extends Dialog {
 		});
 
 		wiringComposite.setPortProvider(portProvider);
-		wiringComposite.setCargos(cargos);
+		wiringComposite.setCargoes(cargoes);
 
 		wiringComposite.addListener(SWT.Modify, new Listener() {
 			{

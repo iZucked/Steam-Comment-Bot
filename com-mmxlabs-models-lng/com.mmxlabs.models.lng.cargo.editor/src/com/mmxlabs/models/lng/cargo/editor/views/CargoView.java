@@ -21,7 +21,7 @@ public class CargoView extends ScenarioTableViewerView<CargoModelViewer> {
 	protected void initViewerPane(CargoModelViewer pane) {
 		pane.init(Arrays
 				.asList(new EReference[] { CargoPackage.eINSTANCE
-						.getCargoModel_Cargos() }), null);
+						.getCargoModel_Cargoes() }), null);
 		pane.getViewer().setInput(
 				getRootObject().getSubModel(CargoModel.class));
 	}

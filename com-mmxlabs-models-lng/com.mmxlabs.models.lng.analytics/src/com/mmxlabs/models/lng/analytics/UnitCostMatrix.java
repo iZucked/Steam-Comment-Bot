@@ -210,7 +210,7 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @see #setMinimumLoad(int)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_MinimumLoad()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
 	 * @generated
 	 */
 	int getMinimumLoad();
@@ -237,7 +237,7 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @see #setMaximumLoad(int)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_MaximumLoad()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
 	 * @generated
 	 */
 	int getMaximumLoad();
@@ -264,7 +264,7 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @see #setMinimumDischarge(int)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_MinimumDischarge()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
 	 * @generated
 	 */
 	int getMinimumDischarge();
@@ -291,7 +291,7 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @see #setMaximumDischarge(int)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_MaximumDischarge()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='M3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
 	 * @generated
 	 */
 	int getMaximumDischarge();

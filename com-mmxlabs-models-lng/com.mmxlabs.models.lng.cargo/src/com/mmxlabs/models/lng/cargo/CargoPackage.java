@@ -662,13 +662,13 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__DISCHARGE_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Cargos</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Cargoes</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL__CARGOS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int CARGO_MODEL__CARGOES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -1323,15 +1323,15 @@ public interface CargoPackage extends EPackage {
 	EReference getCargoModel_DischargeSlots();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargos <em>Cargos</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoes <em>Cargoes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Cargos</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCargos()
+	 * @return the meta object for the containment reference list '<em>Cargoes</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCargoes()
 	 * @see #getCargoModel()
 	 * @generated
 	 */
-	EReference getCargoModel_Cargos();
+	EReference getCargoModel_Cargoes();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}'.
@@ -1609,12 +1609,12 @@ public interface CargoPackage extends EPackage {
 		EReference CARGO_MODEL__DISCHARGE_SLOTS = eINSTANCE.getCargoModel_DischargeSlots();
 
 		/**
-		 * The meta object literal for the '<em><b>Cargos</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Cargoes</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CARGO_MODEL__CARGOS = eINSTANCE.getCargoModel_Cargos();
+		EReference CARGO_MODEL__CARGOES = eINSTANCE.getCargoModel_Cargoes();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotSlotImpl <em>Spot Slot</em>}' class.

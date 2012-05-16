@@ -69,6 +69,7 @@ public class ScheduleModelItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addDirtyPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -91,6 +92,28 @@ public class ScheduleModelItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Dirty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDirtyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ScheduleModel_dirty_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ScheduleModel_dirty_feature", "_UI_ScheduleModel_type"),
+				 SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -164,6 +187,7 @@ public class ScheduleModelItemProvider
 
 		switch (notification.getFeatureID(ScheduleModel.class)) {
 			case SchedulePackage.SCHEDULE_MODEL__NAME:
+			case SchedulePackage.SCHEDULE_MODEL__DIRTY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE:

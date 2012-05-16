@@ -31,7 +31,7 @@
     <genClasses ecoreClass="cargo.ecore#//CargoModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/loadSlots"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dischargeSlots"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/cargos"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/cargoes"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//SpotSlot">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//SpotSlot/market"/>

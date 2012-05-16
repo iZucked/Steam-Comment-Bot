@@ -1070,7 +1070,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		  (getVesselClass_Capacity(), 
 		   source, 
 		   new String[] {
-			 "unit", "M3"
+			 "unit", "m3"
 		   });		
 		addAnnotation
 		  (getVesselClass_FillCapacity(), 
@@ -1096,7 +1096,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		  (getVesselClass_MinHeel(), 
 		   source, 
 		   new String[] {
-			 "unit", "M3"
+			 "unit", "m3"
 		   });		
 		addAnnotation
 		  (getVesselClass_WarmingTime(), 
@@ -1114,7 +1114,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		  (getVesselClass_CoolingVolume(), 
 		   source, 
 		   new String[] {
-			 "unit", "M3"
+			 "unit", "m3"
 		   });		
 		addAnnotation
 		  (getVesselClass_PilotLightRate(), 
@@ -1126,19 +1126,19 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		  (getHeelOptions_VolumeAvailable(), 
 		   source, 
 		   new String[] {
-			 "unit", "M3"
+			 "unit", "m3"
 		   });		
 		addAnnotation
 		  (getVesselStateAttributes_NboRate(), 
 		   source, 
 		   new String[] {
-			 "unit", "M3/d"
+			 "unit", "m3/d"
 		   });		
 		addAnnotation
 		  (getVesselStateAttributes_IdleNBORate(), 
 		   source, 
 		   new String[] {
-			 "unit", "M3/d"
+			 "unit", "m3/d"
 		   });		
 		addAnnotation
 		  (getVesselStateAttributes_IdleBaseRate(), 

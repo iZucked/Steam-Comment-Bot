@@ -61,7 +61,7 @@
         eType="#//LoadSlot" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlots" upperBound="-1"
         eType="#//DischargeSlot" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="cargos" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoes" upperBound="-1"
         eType="#//Cargo" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SpotSlot" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">

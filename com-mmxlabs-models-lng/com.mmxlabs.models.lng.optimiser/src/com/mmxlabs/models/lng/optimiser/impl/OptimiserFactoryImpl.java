@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.optimiser.impl;
 
+import com.mmxlabs.models.lng.optimiser.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
