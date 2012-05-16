@@ -20,7 +20,7 @@ public class LNGTransferDetailTree extends DetailTree {
 	public LNGTransferDetailTree(final String key, final long lngVolume, final int lngPricePerM3, final int cvValue) {
 		super(key, Calculator.multiply(lngVolume, lngPricePerM3));
 		addChild("Volume", lngVolume);
-		addChild("Price/M3", lngPricePerM3);
+		addChild("Price/m3", lngPricePerM3);
 		addChild("CV Value", cvValue);
 		addChild("MMBTu", Calculator.multiply(cvValue, lngVolume));
 		addChild("Price/MMBTu", Calculator.divide(lngPricePerM3, cvValue));
