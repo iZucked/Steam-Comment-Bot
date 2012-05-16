@@ -95,7 +95,9 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 		}
 
 		// Track user selection changes and cause enabled state to change
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
+		try {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
+		} catch (final Throwable thr) {}
 	}
 
 	@Override
