@@ -36,6 +36,14 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
+                     <not>
+                        <or>
+                           <test
+                                 property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.jobState"
+                                 value="RUNNING">
+                           </test>
+                        </or>
+                     </not>
                   </and>
                </iterate>
             </enabledWhen>
@@ -49,10 +57,6 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
-                     <test
-                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.jobState"
-                           value="RUNNING">
-                     </test>
                   </and>
                </iterate>
             </enabledWhen>
