@@ -109,6 +109,7 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 
 	@Override
 	public void dispose() {
+
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override
