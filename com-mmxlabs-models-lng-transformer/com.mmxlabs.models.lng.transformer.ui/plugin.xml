@@ -36,14 +36,9 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
-                     <not>
-                        <or>
-                           <test
-                                 property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.jobState"
-                                 value="RUNNING">
-                           </test>
-                        </or>
-                     </not>
+                     <test
+                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPlay">
+                     </test>
                   </and>
                </iterate>
             </enabledWhen>
@@ -57,6 +52,9 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
+                     <test
+                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canTerminate">
+                     </test>
                   </and>
                </iterate>
             </enabledWhen>
@@ -70,6 +68,9 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
+                     <test
+                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPause">
+                     </test>
                   </and>
                </iterate>
             </enabledWhen>
@@ -96,6 +97,11 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
+                     <not>
+                        <test
+                              property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.hasActiveJob">
+                        </test>
+                     </not>
                   </and>
                </iterate>
             </enabledWhen>
@@ -343,7 +349,7 @@
                class="com.mmxlabs.shiplingo.platform.models.optimisation.propertytesters.JobStatePropertyTester"
                id="com.mmxlabs.shiplingo.platform.models.optimisation.propertyTester"
                namespace="com.mmxlabs.shiplingo.platform.models.optimisation.properties"
-               properties="jobState"
+               properties="jobState,canPause,canPlay,canTerminate,hasActiveJob"
                type="com.mmxlabs.scenario.service.model.ScenarioInstance">
          </propertyTester>
       </extension>
