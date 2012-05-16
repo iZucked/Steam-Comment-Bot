@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.scenario.service.ui.commands;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -19,6 +23,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
@@ -51,24 +56,39 @@ public class NewFolderCommandHandler extends AbstractHandler {
 		return null;
 	}
 
-	private void createFolderInContainer(final IWorkbenchPage activePage,
-			final Container o) {
-		final InputDialog inputDialog = new InputDialog(activePage.getActivePart().getSite().getShell(), "Folder Name", "Enter a name for the new folder", "New folder", 
-				new IInputValidator() {
-					
-					@Override
-					public String isValid(String newText) {
-						if (newText.isEmpty()) return "The folder's name cannot be empty";
-						return null;
-					}
-				}
-				);
+	private void createFolderInContainer(final IWorkbenchPage activePage, final Container o) {
+
+		final Set<String> folderNames = new HashSet<String>();
+		for (Container c : o.getElements()) {
+			if (c instanceof Folder) {
+				folderNames.add(((Folder) c).getName());
+			} else if (c instanceof ScenarioInstance) {
+				folderNames.add(((ScenarioInstance) c).getName());
+			}
+		}
+
+		final String prefix = "New folder";
+		String initialValue = prefix;
+		int counter = 1;
+		while (folderNames.contains(initialValue)) {
+			initialValue = prefix + " (" + counter++ + ")";
+		}
+
+		final InputDialog inputDialog = new InputDialog(activePage.getActivePart().getSite().getShell(), "Folder Name", "Enter a name for the new folder", initialValue, new IInputValidator() {
+
+			@Override
+			public String isValid(String newText) {
+				if (newText.isEmpty())
+					return "The folder's name cannot be empty";
+				return null;
+			}
+		});
 		if (inputDialog.open() == Window.OK) {
 			final String name = inputDialog.getValue();
-			
+
 			final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
 			f.setName(name);
-			
+
 			o.getElements().add(f);
 		}
 	}
