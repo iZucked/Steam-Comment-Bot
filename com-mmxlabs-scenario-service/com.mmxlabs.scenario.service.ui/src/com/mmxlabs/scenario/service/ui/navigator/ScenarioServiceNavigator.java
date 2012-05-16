@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
@@ -190,28 +191,35 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			 */
 			@Override
 			public void mouseDown(final MouseEvent e) {
-				for (final TreeItem item : tree.getSelection()) {
-					if (item.getImage() != null) {
-						if ((e.x > item.getImageBounds(1).x) && (e.x < (item.getImageBounds(1).x + item.getImage().getBounds().width))) {
-							if ((e.y > item.getImageBounds(1).y) && (e.y < (item.getImageBounds(1).y + item.getImage().getBounds().height))) {
-								final Object data = item.getData();
-								if (data instanceof ScenarioInstance) {
-									final ScenarioInstance instance = (ScenarioInstance) data;
-									Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
-								}
+				for (final TreeItem i : tree.getItems()) {
+					processTreeItem(i, e);
+				}
+			}
+
+			private void processTreeItem(final TreeItem item, final MouseEvent e) {
+				if (item.getImage() != null) {
+					final Rectangle imageBounds = item.getImageBounds(1);
+					if ((e.x > imageBounds.x) && (e.x < (imageBounds.x + item.getImage().getBounds().width))) {
+						if ((e.y > imageBounds.y) && (e.y < (imageBounds.y + item.getImage().getBounds().height))) {
+							final Object data = item.getData();
+							if (data instanceof ScenarioInstance) {
+								final ScenarioInstance instance = (ScenarioInstance) data;
+								Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
 							}
 						}
 					}
 				}
+				for (final TreeItem i : item.getItems()) {
+					processTreeItem(i, e);
+				}
 			}
 		});
-
 
 		return viewer;
 	}
 
 	@Override
-	public void init(IViewSite aSite, IMemento aMemento) throws PartInitException {
+	public void init(final IViewSite aSite, final IMemento aMemento) throws PartInitException {
 		super.init(aSite, aMemento);
 
 		// Enable linking by default
