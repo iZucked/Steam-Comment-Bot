@@ -49,6 +49,10 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
+                     <test
+                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.jobState"
+                           value="RUNNING">
+                     </test>
                   </and>
                </iterate>
             </enabledWhen>
@@ -328,5 +332,15 @@
                      tooltip="Derive scenario">
                </command>
          </menuContribution>
+      </extension>
+      <extension
+            point="org.eclipse.core.expressions.propertyTesters">
+         <propertyTester
+               class="com.mmxlabs.shiplingo.platform.models.optimisation.propertytesters.JobStatePropertyTester"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.propertyTester"
+               namespace="com.mmxlabs.shiplingo.platform.models.optimisation.properties"
+               properties="jobState"
+               type="com.mmxlabs.scenario.service.model.ScenarioInstance">
+         </propertyTester>
       </extension>
 </plugin>
