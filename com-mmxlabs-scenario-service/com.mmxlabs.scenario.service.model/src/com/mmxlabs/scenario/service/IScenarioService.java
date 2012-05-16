@@ -72,9 +72,9 @@ public interface IScenarioService {
 	/**
 	 * Delete the given scenario instance from this scenario service.
 	 * 
-	 * @param instance
+	 * @param container
 	 */
-	void delete(ScenarioInstance instance);
+	void delete(Container container);
 
 	/**
 	 * Ensures that the given scenario instance's actual implementation (getInstance() method) is loaded and resolved.

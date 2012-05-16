@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -124,25 +125,38 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public void delete(final ScenarioInstance instance) {
-		final EObject container = instance.eContainer();
-		final EStructuralFeature containment = instance.eContainingFeature();
-		if (container != null && containment != null) {
-			if (containment.isMany()) {
-				final EList<EObject> value = (EList<EObject>) container.eGet(containment);
-				while (value.remove(instance));
-			} else {
-				container.eSet(containment, null);
+	public void delete(final Container container) {
+		{
+			while (container.getElements().isEmpty() == false) {
+				delete(container.getElements().get(0));
+			}
+		}
+
+		
+		final EObject parent = container.eContainer();
+		if (parent != null) {
+			final EStructuralFeature containment = container.eContainingFeature();
+			if (container != null && containment != null) {
+				if (containment.isMany()) {
+					final EList<EObject> value = (EList<EObject>) parent.eGet(containment);
+					while (value.remove(container));
+				} else {
+					parent.eSet(containment, null);
+				}
 			}
 		}
 		
-		// destroy models
-		for (final String modelInstanceURI : instance.getSubModelURIs()) {
-			try {
-				final IModelInstance modelInstance = modelService.getModel(URI.createURI(modelInstanceURI));
-				modelInstance.delete();
-			} catch (final IOException e) {
-				log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting submodel " + modelInstanceURI, e);
+		// destroy models, if there are any
+		if (container instanceof ScenarioInstance) {
+			final ScenarioInstance instance = (ScenarioInstance) container;
+		
+			for (final String modelInstanceURI : instance.getSubModelURIs()) {
+				try {
+					final IModelInstance modelInstance = modelService.getModel(URI.createURI(modelInstanceURI));
+					modelInstance.delete();
+				} catch (final IOException e) {
+					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting submodel " + modelInstanceURI, e);
+				}
 			}
 		}
 	}

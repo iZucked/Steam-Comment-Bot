@@ -192,7 +192,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		// return new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
 
 		// create editing domain
-		return new CommandProviderAwareEditingDomain(adapterFactory, commandStack, rootObject, commandProviderTracker);
+		return new CommandProviderAwareEditingDomain(adapterFactory, commandStack, (MMXRootObject) rootObject, commandProviderTracker);
 	}
 
 	@Override
@@ -201,12 +201,14 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		if (instance == null) {
 			return;
 		}
+		final List<IModelInstance> models = new ArrayList<IModelInstance>();
 		for (final String uris : scenarioInstance.getSubModelURIs()) {
 			final IModelInstance modelInstance = modelService.getModel(URI.createURI(uris));
 			if (modelInstance != null) {
-				modelInstance.save();
+				models.add(modelInstance);
 			}
 		}
+		modelService.saveTogether(models);
 		// Update last modified date
 		final Metadata metadata = scenarioInstance.getMetadata();
 		if (metadata != null) {

@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.Container#getParent <em>Parent</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.Container#getElements <em>Elements</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.Container#isArchived <em>Archived</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.Container#getName <em>Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -101,6 +102,32 @@ public interface Container extends EObject {
 	void setArchived(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Name</em>' attribute.
+	 * @see #setName(String)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getContainer_Name()
+	 * @model
+	 * @generated
+	 */
+	String getName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.Container#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * @see #getName()
+	 * @generated
+	 */
+	void setName(String value);
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="com.mmxlabs.scenario.service.model.IScenarioService" required="true"
@@ -108,5 +135,14 @@ public interface Container extends EObject {
 	 * @generated
 	 */
 	IScenarioService getScenarioService();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='int accumulator = 0;\nfor (final Container container : getElements()) {\n\taccumulator += container.getContainedInstanceCount();\n}\nreturn accumulator;'"
+	 * @generated
+	 */
+	int getContainedInstanceCount();
 
 } // Container
