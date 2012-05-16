@@ -51,9 +51,7 @@ public class SimpleImportAction extends ImportAction {
 			reader = new CSVReader(path);
 			final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
 			context.run();
-			part.setDisableUpdates(true);
 			part.getEditingDomain().getCommandStack().execute(mergeImports(container, containment, importedObjects));
-			part.setDisableUpdates(false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

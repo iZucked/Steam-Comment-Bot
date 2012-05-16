@@ -74,8 +74,8 @@ public abstract class ImportAction extends LockableAction {
 				ipd.open(context);
 			}
 		} finally {
-			part.setDisableUpdates(false);
 			part.setDisableCommandProviders(false);
+			part.setDisableUpdates(false);
 		}
 	}
 
