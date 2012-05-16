@@ -85,7 +85,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 //				eAllocation.setDischargePriceM3(allocation.getDischargeM3Price());
 //				eAllocation.setFuelVolume(allocation.getFuelVolume() / Calculator.ScaleFactor); // yes? no?
 				eAllocation.setDischargeVolume((int) (allocation.getDischargeVolume() / Calculator.ScaleFactor));
-
+				eAllocation.setLoadVolume((int) (allocation.getLoadVolume() / Calculator.ScaleFactor));
 //				eAllocation.setSequence();
 
 				output.getCargoAllocations().add(eAllocation);
