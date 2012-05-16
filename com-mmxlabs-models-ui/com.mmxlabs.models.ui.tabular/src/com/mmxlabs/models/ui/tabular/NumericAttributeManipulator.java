@@ -7,7 +7,6 @@ package com.mmxlabs.models.ui.tabular;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
