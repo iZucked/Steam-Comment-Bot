@@ -36,7 +36,9 @@ public class CostMatrixView extends ScenarioInstanceView {
 		if (instance != getScenarioInstance()) {
 			if (viewerPane != null) {
 				viewerPane.dispose();
+				matrixViewer.dispose();
 				viewerPane = null;
+				matrixViewer = null;
 			}
 			
 			final Composite parent = sash.getParent();

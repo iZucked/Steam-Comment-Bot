@@ -54,7 +54,7 @@ public class CostMatrixViewer extends ViewerPane implements ISelectionChangedLis
 		this.jointModelEditorPart = location;
 		this.selectionProvider = selectionProvider;
 	}
-
+	
 	private void makeViewer(final Composite composite) {
 		this.grid = new GridTableViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		// setLayout(new FillLayout());
