@@ -265,6 +265,13 @@
             allPopups="false"
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
          <command
+               commandId="com.mmxlabs.scenario.service.ui.newfolder"
+               icon="icons/newfolder_wiz.gif"
+               label="New Folder"
+               style="push"
+               tooltip="Create a new folder">
+         </command>
+         <command
                commandId="org.eclipse.ui.edit.rename"
                label="Rename"
                style="push">
