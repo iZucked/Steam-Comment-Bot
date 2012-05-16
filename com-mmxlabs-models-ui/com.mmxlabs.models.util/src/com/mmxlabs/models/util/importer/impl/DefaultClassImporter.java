@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -289,20 +290,20 @@ public class DefaultClassImporter implements IClassImporter {
 
 	@Override
 	public Collection<Map<String, String>> exportObjects(
-			Collection<? extends EObject> objects) {
+			Collection<? extends EObject> objects, final MMXRootObject root) {
 		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
 		
 		if (objects.isEmpty()) return result;
 		
 		for (final EObject object : objects) {
-			final Map<String, String> flattened = exportObject(object);
+			final Map<String, String> flattened = exportObject(object, root);
 			flattened.put(KIND_KEY, object.eClass().getName());
 			result.add(flattened);
 		}
 		return result;
 	}
 
-	protected Map<String, String> exportObject(final EObject object) {
+	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 		
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
@@ -312,7 +313,7 @@ public class DefaultClassImporter implements IClassImporter {
 		
 		for (final EReference reference : object.eClass().getEAllReferences()) {
 			if (shouldExportFeature(reference))
-				exportReference(object, reference, result);
+				exportReference(object, reference, result, root);
 		}
 		
 		return result;
@@ -329,7 +330,7 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	protected void exportReference(EObject object, EReference reference,
-			Map<String, String> result) {
+			Map<String, String> result, MMXRootObject root) {
 		if (shouldFlattenReference(reference)) {
 			final EObject value = (EObject) object.eGet(reference);
 			if (value != null) {
@@ -337,7 +338,7 @@ public class DefaultClassImporter implements IClassImporter {
 						.getImporterRegistry().getClassImporter(value.eClass());
 				if (importer != null) {
 					final Map<String, String> subMap = importer
-							.exportObjects(Collections.singleton(value))
+							.exportObjects(Collections.singleton(value), root)
 							.iterator().next();
 					for (final Map.Entry<String, String> e : subMap.entrySet()) {
 						result.put(reference.getName() + DOT + e.getKey(),

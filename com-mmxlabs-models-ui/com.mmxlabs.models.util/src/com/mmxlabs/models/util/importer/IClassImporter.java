@@ -10,6 +10,8 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+
 /**
  * Instances of this do the heavy lifting for import jobs. Some model elements do not fit into this form and should be
  * handled by custom logic, of course.
@@ -42,5 +44,5 @@ public interface IClassImporter {
 	 * @param objects
 	 * @return
 	 */
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects);
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject rootObject);
 }
