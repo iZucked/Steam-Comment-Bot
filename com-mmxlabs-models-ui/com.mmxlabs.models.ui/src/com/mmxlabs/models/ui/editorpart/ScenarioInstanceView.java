@@ -36,12 +36,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	
 	protected void listenToScenarioSelection() {
 		getSite().getPage().addSelectionListener(SCENARIO_NAVIGATOR_ID, this);
-		final IViewPart findView = getSite().getPage().findView(SCENARIO_NAVIGATOR_ID);
-		if (findView != null) {
-			if (findView instanceof ISelectionProvider) {
-				selectionChanged(findView, ((ISelectionProvider) findView).getSelection());
-			}
-		}
+		selectionChanged(null, getSite().getPage().getSelection(SCENARIO_NAVIGATOR_ID));
 	}
 	
 	@Override

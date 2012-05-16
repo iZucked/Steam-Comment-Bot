@@ -104,8 +104,8 @@ public class EObjectTableViewer extends GridTableViewer {
 								refresh();
 						}
 					});
+					return;
 				}
-				return;
 			}
 		}
 
