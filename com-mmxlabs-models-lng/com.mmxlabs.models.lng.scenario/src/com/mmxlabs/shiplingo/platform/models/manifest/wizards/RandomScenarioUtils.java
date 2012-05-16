@@ -487,7 +487,7 @@ public class RandomScenarioUtils {
 
 		CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
 		PortModel portModel = scenario.getSubModel(PortModel.class);
-		final int index = cargoModel.getCargos().size();
+		final int index = cargoModel.getCargoes().size();
 
 		Port loadPort = null, dischargePort = null;
 		for (final Port p : portModel.getPorts()) {
@@ -563,7 +563,7 @@ public class RandomScenarioUtils {
 		cargo.setLoadSlot(loadSlot);
 		cargo.setDischargeSlot(dischargeSlot);
 
-		cargoModel.getCargos().add(cargo);
+		cargoModel.getCargoes().add(cargo);
 		cargoModel.getLoadSlots().add(loadSlot);
 		cargoModel.getDischargeSlots().add(dischargeSlot);
 	}
@@ -650,7 +650,7 @@ public class RandomScenarioUtils {
 		co.setDurationInDays(size);
 		co.getAllowedVessels().add(RandomHelper.chooseElementFrom(random, fleetModel.getVesselClasses()));
 
-		co.setPort(RandomHelper.chooseElementFrom(random, cargoModel.getCargos()).getLoadSlot().getPort());
+		co.setPort(RandomHelper.chooseElementFrom(random, cargoModel.getCargoes()).getLoadSlot().getPort());
 
 		co.setRelocateTo(co.getPort());
 
