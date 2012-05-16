@@ -153,20 +153,25 @@ public class CostMatrixViewer extends ViewerPane implements ISelectionChangedLis
 
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
-			missedNotification();
+			missedNotifications(Collections.singletonList(notification));
 		}
 
 		@Override
-		protected void missedNotification() {
+		protected void missedNotifications(final List<Notification> notifications) {
 			if (!waitingForRefresh) {
-				waitingForRefresh = true;
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						setInput(currentInput);
-						waitingForRefresh = false;
+				for (final Notification n : notifications) {
+					if (!n.isTouch()) {
+						waitingForRefresh = true;
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								setInput(currentInput);
+								waitingForRefresh = false;
+							}
+						});
+						return;
 					}
-				});
+				}
 			}
 		}
 	};

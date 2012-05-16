@@ -34,5 +34,4 @@ public class PortGroupEditorPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), jointModelEditor.getEditingDomain()));
 		setTitle("Port Groups", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
-	
 }
