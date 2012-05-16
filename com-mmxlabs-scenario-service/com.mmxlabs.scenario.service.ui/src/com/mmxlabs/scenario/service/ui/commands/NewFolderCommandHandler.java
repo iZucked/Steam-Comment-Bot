@@ -21,6 +21,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -34,23 +35,30 @@ public class NewFolderCommandHandler extends AbstractHandler {
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
 		final ISelection selection = activePage.getSelection();
+		// No selection - either the root element is a scenario service or it is the registry (in which case the user should select the service)
 		if (selection.isEmpty()) {
 			// create a new folder in the top scenario service?
-			final ServiceTracker<IScenarioService, IScenarioService> tracker = new ServiceTracker<IScenarioService, IScenarioService>(Activator.getDefault().getBundle().getBundleContext(), IScenarioService.class, null);
+			final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault().getBundle()
+					.getBundleContext(), ScenarioServiceRegistry.class, null);
 			tracker.open();
-			
-			final IScenarioService service = tracker.getService();
-			if (service != null) {
-				final ScenarioService top = service.getServiceModel();
-				createFolderInContainer(activePage, top);
+
+			final ScenarioServiceRegistry serviceRegistry = tracker.getService();
+			if (serviceRegistry != null) {
+
+				final Collection<IScenarioService> scenarioServices = serviceRegistry.getScenarioServices();
+				if (scenarioServices.size() == 1) {
+
+					final ScenarioService top = scenarioServices.iterator().next().getServiceModel();
+					createFolderInContainer(activePage, top);
+				}
 			}
-			
+
 			tracker.close();
 		} else if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 			final Object o = strucSelection.getFirstElement();
 			if (o instanceof Container) {
-				createFolderInContainer(activePage, (Container)o);
+				createFolderInContainer(activePage, (Container) o);
 			}
 		}
 		return null;
