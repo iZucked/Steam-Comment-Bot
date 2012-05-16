@@ -20,7 +20,7 @@ public class AlternatingCargoColourScheme implements IScheduleViewColourScheme {
 	
 	@Override
 	public String getName() {
-		return "Alternating Cargos";
+		return "Alternating Cargoes";
 	}
 
 	@Override

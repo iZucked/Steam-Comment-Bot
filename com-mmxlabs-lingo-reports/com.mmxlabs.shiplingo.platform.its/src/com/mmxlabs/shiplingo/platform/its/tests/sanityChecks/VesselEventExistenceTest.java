@@ -108,7 +108,7 @@ public class VesselEventExistenceTest {
 	 * 
 	 * @param result
 	 *            The evaluated scenario (containing the VesselEvents in the output)
-	 * @param inputCargos
+	 * @param inputVesselEvents
 	 *            The VesselEvents that were input into the unevaluated scenario.
 	 */
 	private void checkVesselEvents(final Schedule result, final ArrayList<VesselEvent> inputVesselEvents) {

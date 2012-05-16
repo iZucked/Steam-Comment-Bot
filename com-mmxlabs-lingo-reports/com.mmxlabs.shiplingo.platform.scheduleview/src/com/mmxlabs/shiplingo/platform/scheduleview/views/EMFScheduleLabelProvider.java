@@ -6,6 +6,7 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.viewers.BaseLabelProvider;
@@ -22,6 +23,8 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 /**
  * @author hinton
@@ -49,13 +52,21 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
 
-//			final MMXRootObject root = xxx;
-			//final String name = root.getName();
-			// final String name =
-			// URI.decode(sequence.eResource().getURI().lastSegment()).replaceAll(".scenario","");
+			String text = sequence.getName();
 
-			// TODO: Re-add scenario name
-			return sequence.getName(); // + "\n" + name;
+			// Add scenario instance name to field if multiple scenarios are selected
+			final Object input = viewer.getInput();
+			if (input instanceof IScenarioViewerSynchronizerOutput) {
+				final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
+
+				final Collection<Object> collectedElements = output.getCollectedElements();
+				if (collectedElements.size() > 1) {
+					final ScenarioInstance instance = output.getScenarioInstance(sequence.eContainer());
+					text += "\n" + instance.getName();
+				}
+			}
+
+			return text;
 		}
 		return null;
 	}
@@ -119,9 +130,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			if (element instanceof FuelUsage) {
 				final FuelUsage fuel = (FuelUsage) element;
 				for (final FuelQuantity fq : fuel.getFuels()) {
-					sb.append(String.format("%s, %,d %s, $%,d\n",
-							fq.getFuel().toString(), fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit().toString(),
-							fq.getCost()));
+					sb.append(String.format("%s, %,d %s, $%,d\n", fq.getFuel().toString(), fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit().toString(), fq.getCost()));
 				}
 			}
 
@@ -141,7 +150,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof Sequence) {
 			return getText(element);
 		} else if (element instanceof Event) {
-//			final String displayTypeName = ((PortVisit) element).getDisplayTypeName();
+			// final String displayTypeName = ((PortVisit) element).getDisplayTypeName();
 			return "Port Visit: ";// + displayTypeName;
 		}
 		return null;
@@ -190,6 +199,5 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			currentScheme = colourScheme;
 		}
 	}
-	
-	
+
 }

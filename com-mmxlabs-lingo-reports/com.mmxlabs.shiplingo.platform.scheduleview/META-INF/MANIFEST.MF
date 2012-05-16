@@ -30,7 +30,8 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.models.lng.schedule;bundle-version="1.0.0",
  com.mmxlabs.models.lng.types;bundle-version="1.0.0",
  com.mmxlabs.models.ui.validation;bundle-version="1.0.0",
- com.mmxlabs.models.util;bundle-version="1.0.0"
+ com.mmxlabs.models.util;bundle-version="1.0.0",
+ com.mmxlabs.scenario.service.model;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.shiplingo.platform.scheduleview,

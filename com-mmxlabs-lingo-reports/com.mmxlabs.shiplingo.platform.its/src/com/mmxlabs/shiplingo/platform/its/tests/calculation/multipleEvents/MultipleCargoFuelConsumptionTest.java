@@ -37,7 +37,7 @@ public class MultipleCargoFuelConsumptionTest {
 	private static final int loadPrice = 1;
 
 	/**
-	 * One vessel must take two cargos from port A to port B. NBO should be cheaper always.
+	 * One vessel must take two cargoes from port A to port B. NBO should be cheaper always.
 	 */
 	@Test
 	public void twoCargoTest() {
