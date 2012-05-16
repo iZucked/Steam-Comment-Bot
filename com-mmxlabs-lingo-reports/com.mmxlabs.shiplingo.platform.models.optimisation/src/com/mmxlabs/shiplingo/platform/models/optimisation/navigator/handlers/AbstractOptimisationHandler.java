@@ -8,6 +8,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.HandlerEvent;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -96,17 +97,28 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 
 		// Track user selection changes and cause enabled state to change
 		try {
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
+			Display.getDefault().asyncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
+				}
+			});
 		} catch (final Throwable thr) {}
 	}
 
 	@Override
 	public void dispose() {
-
-		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		if (activeWorkbenchWindow != null) {
-			activeWorkbenchWindow.getSelectionService().removeSelectionListener(selectionListener);
-		}
+		Display.getDefault().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+				if (activeWorkbenchWindow != null) {
+					activeWorkbenchWindow.getSelectionService().removeSelectionListener(selectionListener);
+				}
+			}
+		});
 
 		final IEclipseJobManager jmv = Activator.getDefault().getJobManager();
 
