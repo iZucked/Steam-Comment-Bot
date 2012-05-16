@@ -56,20 +56,20 @@ public class SanityCheckTools {
 	}
 
 	/**
-	 * Add a number of cargos to the scenario in a random-ish manner. For every port a cargo is added to go to every other port.
+	 * Add a number of cargoes to the scenario in a random-ish manner. For every port a cargo is added to go to every other port.
 	 * 
 	 * @param ports
-	 *            The ports to add cargos to.
+	 *            The ports to add cargoes to.
 	 * @param loadPrice
 	 * @param dischargePrice
 	 * @param cvValue
 	 */
-	public static Cargo[] addCargos(final CustomScenarioCreator csc, final Port[] ports, final int loadPrice, final float dischargePrice, final float cvValue) {
+	public static Cargo[] addCargoes(final CustomScenarioCreator csc, final Port[] ports, final int loadPrice, final float dischargePrice, final float cvValue) {
 
 		// For each port there is a cargo from every other port (i.e. no cargo goes from one port to the same port).
-		// This gives the number of cargos below.
-		final int numOfCargos = ports.length * (ports.length - 1);// - ports.length;
-		final Cargo[] inputCargos = new Cargo[numOfCargos];
+		// This gives the number of cargoes below.
+		final int numOfCargoes = ports.length * (ports.length - 1);// - ports.length;
+		final Cargo[] inputCargoes = new Cargo[numOfCargoes];
 		int i = 0;
 
 		final Date cargoStart = new Date(System.currentTimeMillis());
@@ -81,7 +81,7 @@ public class SanityCheckTools {
 
 					final Cargo c = csc.addCargo(portX.getName() + " to " + portY.getName() + " in " + duration + ".", portX, portY, loadPrice, dischargePrice, cvValue, cargoStart, duration);
 
-					inputCargos[i++] = c;
+					inputCargoes[i++] = c;
 
 					duration += 25;
 					cargoStart.setTime(cargoStart.getTime() + TimeUnit.DAYS.toMillis(1));
@@ -93,7 +93,7 @@ public class SanityCheckTools {
 			}
 		}
 
-		return inputCargos;
+		return inputCargoes;
 	}
 
 	/**

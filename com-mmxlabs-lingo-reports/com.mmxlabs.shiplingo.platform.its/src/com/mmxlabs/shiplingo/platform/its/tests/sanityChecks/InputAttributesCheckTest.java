@@ -67,8 +67,8 @@ public class InputAttributesCheckTest {
 		csc.addVesselSimple("classThree", numOfClassThree, 20, 25, 10000, 17, 14, 10, 1000, false);
 		csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true);
 
-		// create some cargos.
-		SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
+		// create some cargoes.
+		SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue);
 
 		final MMXRootObject scenario = csc.buildScenario();
 		final MMXRootObject copiedScenario = EcoreUtil.copy(scenario);

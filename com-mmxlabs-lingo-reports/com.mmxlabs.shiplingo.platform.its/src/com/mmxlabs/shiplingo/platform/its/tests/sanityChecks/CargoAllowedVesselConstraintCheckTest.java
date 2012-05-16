@@ -63,8 +63,8 @@ public class CargoAllowedVesselConstraintCheckTest {
 		csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false);
 		final ArrayList<Vessel> vesselsClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
 
-		// create some cargos.
-		final ArrayList<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue)));
+		// create some cargoes.
+		final ArrayList<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue)));
 
 		// add a constraint to one cargo - it can only be carried by the one vessel that is class four.
 		final Cargo constrainedCargo = cargoes.get(0);
@@ -126,8 +126,8 @@ public class CargoAllowedVesselConstraintCheckTest {
 		// class four vessels will not be allowed to carry any cargoes.
 		csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true);
 
-		// create some cargos.
-		final ArrayList<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue)));
+		// create some cargoes.
+		final ArrayList<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue)));
 
 		// constrain all cargoes so none of class four can carry any.
 		for (final Cargo c : cargoes) {

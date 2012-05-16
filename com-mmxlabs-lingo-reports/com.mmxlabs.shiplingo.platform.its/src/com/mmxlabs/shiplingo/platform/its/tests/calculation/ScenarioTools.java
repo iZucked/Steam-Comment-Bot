@@ -424,7 +424,7 @@ public class ScenarioTools {
 		cargo.setName("CARGO");
 
 		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
-		cargoModel.getCargos().add(cargo);
+		cargoModel.getCargoes().add(cargo);
 		cargoModel.getLoadSlots().add(load);
 		cargoModel.getDischargeSlots().add(dis);
 

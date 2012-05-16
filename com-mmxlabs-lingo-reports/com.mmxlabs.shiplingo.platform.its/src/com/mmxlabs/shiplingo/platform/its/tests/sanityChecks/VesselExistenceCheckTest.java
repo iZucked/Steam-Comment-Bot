@@ -31,7 +31,7 @@ public class VesselExistenceCheckTest {
 	private final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 	/**
-	 * Create a load of vessels of varying classes and store them in an ArrayList. Create a load of ports with varying distances. Create a load of cargos to different ports and with different
+	 * Create a load of vessels of varying classes and store them in an ArrayList. Create a load of ports with varying distances. Create a load of cargoes to different ports and with different
 	 * durations. Check that the output contains all of the vessels in the ArrayList. <br>
 	 * There are many more vessels than required (so a lot will be idle) to try and trip up the optimiser and ensure it doesn't remove vessels that aren't used.
 	 */
@@ -81,8 +81,8 @@ public class VesselExistenceCheckTest {
 		inputVessels.addAll(Arrays.asList(csc.addVessel("classFour", numOfClassFour, numOfSpotCharterClassFour, baseFuelUnitPrice, eqivFactor, speed, speed, capacity, speed, consumption, speed,
 				consumption, consumption, NBORate, NBORate, speed, consumption, speed, consumption, consumption, NBORate, NBORate, pilotLight, minHeelVol, isTimeChartered)));
 
-		// create some cargos.
-		SanityCheckTools.addCargos(csc, ports, loadPrice, dischargePrice, cvValue);
+		// create some cargoes.
+		SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue);
 
 		final MMXRootObject scenario = csc.buildScenario();
 
