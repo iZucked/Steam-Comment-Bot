@@ -253,6 +253,24 @@
                      class="VesselEvent">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.TimeCharterCostConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.TimeCharterCostConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Time Charter Hire Cost"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  Vessel {0} has invalid start and end requirement dates - the start occurs after the end.
+               </message>
+               <description>
+                  The end requirement of the vessel should be after the start requirement.
+               </description>
+               <target
+                     class="Vessel">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
