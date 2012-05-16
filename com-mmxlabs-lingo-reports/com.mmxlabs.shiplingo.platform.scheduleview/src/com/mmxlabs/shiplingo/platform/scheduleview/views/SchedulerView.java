@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -19,8 +18,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -47,10 +44,8 @@ import com.mmxlabs.ganttviewer.PackAction;
 import com.mmxlabs.ganttviewer.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.shiplingo.platform.scheduleview.Activator;
@@ -199,21 +194,21 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		viewer.setComparator(viewerComparator);
 
 		viewer.setInput(getViewSite());
-
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(final DoubleClickEvent event) {
-				final Object selection = event.getSelection();
-				// find what we have double-clicked
-				if (selection instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) selection;
-					final Slot slot = slotVisit.getSlotAllocation().getSlot();
-					// TODO factor out to somewhere useful:
-					final EObject c = slot.eContainer();
-
-				}
-			}
-		});
+//
+//		viewer.addDoubleClickListener(new IDoubleClickListener() {
+//			@Override
+//			public void doubleClick(final DoubleClickEvent event) {
+//				final Object selection = event.getSelection();
+//				// find what we have double-clicked
+//				if (selection instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) selection;
+//					final Slot slot = slotVisit.getSlotAllocation().getSlot();
+//					// TODO factor out to somewhere useful:
+//					final EObject c = slot.eContainer();
+//
+//				}
+//			}
+//		});
 
 		// Create the help context id for the viewer's control. This is in the
 		// format of pluginid.contextId
