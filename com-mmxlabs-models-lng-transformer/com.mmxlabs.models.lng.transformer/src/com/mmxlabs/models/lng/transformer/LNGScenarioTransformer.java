@@ -520,7 +520,7 @@ public class LNGScenarioTransformer {
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 
 		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-		for (final Cargo eCargo : cargoModel.getCargos()) {
+		for (final Cargo eCargo : cargoModel.getCargoes()) {
 			// ignore all non-fleet cargoes, as far as optimisation goes.
 			if (eCargo.getCargoType().equals(CargoType.FLEET) == false) {
 				continue;

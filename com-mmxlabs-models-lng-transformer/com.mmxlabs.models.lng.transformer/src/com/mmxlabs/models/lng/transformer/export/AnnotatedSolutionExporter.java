@@ -268,7 +268,7 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
-		// now patch up laden/ballast journey references in the cargos
+		// now patch up laden/ballast journey references in the cargoes
 		for (final Sequence eSequence : output.getSequences()) {
 			CargoAllocation allocation = null;
 			for (final Event event : eSequence.getEvents()) {
@@ -294,9 +294,9 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
-		// connect back-references to input cargos.
+		// connect back-references to input cargoes.
 		final CargoModel cargoModel = inputScenario.getSubModel(CargoModel.class);
-		for (final Cargo cargo : cargoModel.getCargos()) {
+		for (final Cargo cargo : cargoModel.getCargoes()) {
 			for (final CargoAllocation allocation : output.getCargoAllocations()) {
 				if (allocation.getLoadAllocation().isSetSlot() && allocation.getDischargeAllocation().isSetSlot() && allocation.getLoadAllocation().getSlot() == cargo.getLoadSlot()
 						&& allocation.getDischargeAllocation().getSlot() == cargo.getDischargeSlot()) {
