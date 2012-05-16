@@ -10,6 +10,9 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWindowListener;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -79,7 +82,29 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 			AbstractOptimisationHandler.this.fireHandlerChanged(handlerEvent);
 		}
 	};
-
+	
+	private final IWindowListener windowListener = new IWindowListener() {
+		@Override
+		public void windowOpened(final IWorkbenchWindow window) {
+			
+		}
+		
+		@Override
+		public void windowDeactivated(final IWorkbenchWindow window) {
+			window.getSelectionService().removeSelectionListener(selectionListener);
+		}
+		
+		@Override
+		public void windowClosed(final IWorkbenchWindow window) {
+			window.getSelectionService().removeSelectionListener(selectionListener);
+		}
+		
+		@Override
+		public void windowActivated(final IWorkbenchWindow window) {
+			window.getSelectionService().addSelectionListener(selectionListener);
+		}
+	};
+	
 	/**
 	 * The constructor.
 	 */
@@ -95,32 +120,11 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 			control.addListener(jobListener);
 		}
 
-		// Track user selection changes and cause enabled state to change
-		try {
-			Display.getDefault().asyncExec(new Runnable() {
-				
-				@Override
-				public void run() {
-					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
-				}
-			});
-		} catch (final Throwable thr) {}
+		PlatformUI.getWorkbench().addWindowListener(windowListener);
 	}
 
 	@Override
 	public void dispose() {
-
-		Display.getDefault().asyncExec(new Runnable() {
-			
-			@Override
-			public void run() {
-				final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-				if (activeWorkbenchWindow != null) {
-					activeWorkbenchWindow.getSelectionService().removeSelectionListener(selectionListener);
-				}
-			}
-		});
-
 		final IEclipseJobManager jmv = Activator.getDefault().getJobManager();
 
 		jmv.removeEclipseJobManagerListener(jobManagerListener);
