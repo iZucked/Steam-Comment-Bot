@@ -39,10 +39,13 @@ public class ScenarioServiceSelectionGroup extends Composite {
 
 		treeViewer = new TreeViewer(this, SWT.NONE);
 		final ScenarioServiceContentProvider cp = new ScenarioServiceContentProvider();
-		cp.setShowOnlyContainers(true);
+
+		cp.setShowFolders(true);
+		cp.setShowScenarioInstances(true);
+
 		treeViewer.setContentProvider(cp);
 		treeViewer.setLabelProvider(new ScenarioServiceLabelProvider());
-		
+
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(final SelectionChangedEvent event) {
 				final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
