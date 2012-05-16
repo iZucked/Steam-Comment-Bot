@@ -22,6 +22,9 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -201,10 +204,18 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 					}
 				}
 			}
-
 		});
 
+
 		return viewer;
+	}
+
+	@Override
+	public void init(IViewSite aSite, IMemento aMemento) throws PartInitException {
+		super.init(aSite, aMemento);
+
+		// Enable linking by default
+		setLinkingEnabled(true);
 	}
 
 	@Override
