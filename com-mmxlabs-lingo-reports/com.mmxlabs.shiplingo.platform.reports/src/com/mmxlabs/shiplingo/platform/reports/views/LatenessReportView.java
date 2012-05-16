@@ -4,16 +4,13 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;

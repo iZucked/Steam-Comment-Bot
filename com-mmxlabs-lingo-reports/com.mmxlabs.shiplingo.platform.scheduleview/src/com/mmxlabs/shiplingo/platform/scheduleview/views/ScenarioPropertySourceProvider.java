@@ -97,7 +97,7 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 				// get a source for the contained object
 
 				if (reference.isMany()) {
-					for (final Object o : ((Iterable) value)) {
+					for (final Object o : ((Iterable<?>) value)) {
 						final IPropertySource subSource = getPropertySource(o);
 
 						subSources.add(new Pair<EReference, IPropertySource>(reference, subSource));

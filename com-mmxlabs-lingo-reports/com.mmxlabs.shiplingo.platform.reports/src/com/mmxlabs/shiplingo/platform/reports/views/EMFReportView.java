@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -47,7 +46,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;

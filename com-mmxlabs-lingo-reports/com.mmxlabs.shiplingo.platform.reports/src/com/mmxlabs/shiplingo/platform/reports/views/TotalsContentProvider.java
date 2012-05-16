@@ -130,7 +130,6 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 //		output.add(new RowData(scheduleName, "Total Profit", false, totalTotalRevenue));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		rowData = new RowData[0];

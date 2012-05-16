@@ -41,7 +41,6 @@
 		<module>com.mmxlabs.shiplingo.platform.app</module>
 
 		<module>com.mmxlabs.shiplingo.platform.scheduleview</module>
-		<module>com.mmxlabs.shiplingo.platform.navigator</module>
 
 		<module>com.mmxlabs.shiplingo.platform.models.manifest</module>
 		<module>com.mmxlabs.shiplingo.platform.models.optimisation</module>
