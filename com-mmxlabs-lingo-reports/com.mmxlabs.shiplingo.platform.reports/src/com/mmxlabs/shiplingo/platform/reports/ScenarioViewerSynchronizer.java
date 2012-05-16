@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
@@ -101,8 +102,13 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	}
 
 	@Override
-	protected void missedNotification() {
-		refreshViewer();
+	protected void missedNotifications(final List<Notification> notifications) {
+		for (final Notification notification : notifications) {
+			if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule() || notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule()) {
+				refreshViewer();
+				return;
+			}
+		}
 	}
 
 	private boolean needsRefresh;
