@@ -40,7 +40,6 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
