@@ -13,10 +13,11 @@ public class EditingPerspective implements IPerspectiveFactory {
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
 
-		final IFolderLayout navFolder = layout.createFolder("navFolder", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
-		navFolder.addView("com.mmxlabs.scenario.service.ui.navigator");
+		
+//		final IFolderLayout navFolder = layout.createFolder("navFolder", IPageLayout.LEFT, 0.3f, IPageLayout.ID_EDITOR_AREA);
+//		navFolder.addView("com.mmxlabs.scenario.service.ui.navigator");
+//		layout.addShowViewShortcut("com.mmxlabs.scenario.service.ui.navigator");
 
-		layout.addShowViewShortcut("com.mmxlabs.scenario.service.ui.navigator");
 
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
