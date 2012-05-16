@@ -182,9 +182,14 @@
                         value="1">
                   </count>
                   <iterate>
-                     <instanceof
-                           value="com.mmxlabs.scenario.service.model.Container">
-                     </instanceof>
+                     <or>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.Folder">
+                        </instanceof>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioService">
+                        </instanceof>
+                     </or>
                   </iterate>
                </and>
             </or>
@@ -199,9 +204,14 @@
                         value="1">
                   </count>
                   <iterate>
-                     <instanceof
-                           value="com.mmxlabs.scenario.service.model.Container">
-                     </instanceof>
+                     <or>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.Folder">
+                        </instanceof>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioService">
+                        </instanceof>
+                     </or>
                   </iterate>
                </and>
             </or></enabledWhen>
