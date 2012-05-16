@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.shiplingo.platform.models.manifest.wizards;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -81,7 +84,7 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 		gd.horizontalSpan = 2;
 		scenarioServiceSelectionGroup.setLayoutData(gd);
 
-		Label label = new Label(container, SWT.NULL);
+		final Label label = new Label(container, SWT.NULL);
 		label.setText("&File name:");
 		fileText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -121,7 +124,7 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 			}
 		}
 
-		fileText.setText("empty_scenario.scn");
+		fileText.setText("");
 	}
 
 	/**
@@ -130,9 +133,25 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 
 	private void dialogChanged() {
 
-		Container c = scenarioServiceSelectionGroup.getSelectedContainer();
+		final Container c = scenarioServiceSelectionGroup.getSelectedContainer();
 		if (!(c instanceof Folder || c instanceof ScenarioInstance || c instanceof ScenarioService)) {
 			updateStatus("A Folder or Scenario must be selected");
+			return;
+		}
+
+		final String scenarioName = fileText.getText();
+		if (scenarioName.isEmpty()) {
+			updateStatus("A name for the scenario must be specified");
+			return;
+		}
+
+		// Check for naming conflicts
+		final Set<String> existing = new HashSet<String>();
+		for (final Container e : c.getElements()) {
+			existing.add(e.getName());
+		}
+		if (existing.contains(scenarioName)) {
+			updateStatus("A item with the specified name already exists.");
 			return;
 		}
 
