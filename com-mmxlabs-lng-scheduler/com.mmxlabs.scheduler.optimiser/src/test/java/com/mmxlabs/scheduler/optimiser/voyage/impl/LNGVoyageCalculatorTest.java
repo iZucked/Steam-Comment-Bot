@@ -1150,6 +1150,6 @@ public class LNGVoyageCalculatorTest {
 	//
 	// TODO: Test load/discharge limits
 	//
-	// TODO: Test none cargos
+	// TODO: Test none cargoes
 
 }
