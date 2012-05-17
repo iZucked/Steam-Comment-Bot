@@ -73,7 +73,8 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * @author hinton
  * 
  */
-public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider, IScenarioEditingLocation , IMMXRootObjectProvider, IScenarioInstanceProvider{
+public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider, IScenarioEditingLocation, IMMXRootObjectProvider,
+		IScenarioInstanceProvider {
 
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
 
@@ -135,7 +136,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	public JointModelEditorPart() {
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#isLocked()
 	 */
 	@Override
@@ -143,7 +146,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		return locked;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setLocked(boolean)
 	 */
 	@Override
@@ -222,21 +227,21 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		setPartName(input.getName());
 		final MMXRootObject root;
 		if (input instanceof IScenarioServiceEditorInput) {
-			
+
 			final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
-			
+
 			final ImageDescriptor imageDescriptor = ssInput.getImageDescriptor();
 			if (imageDescriptor != null) {
 				setTitleImage(imageDescriptor.createImage());
 			}
-			
+
 			final ScenarioInstance instance = ssInput.getScenarioInstance();
 			scenarioService = instance.getScenarioService();
-			
+
 			if (scenarioService == null) {
 				throw new IllegalStateException("Scenario Service does not exist yet a scenario service editor input has been used");
 			}
-			
+
 			scenarioInstance = instance;
 			EObject ro;
 			try {
@@ -244,7 +249,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			} catch (final IOException e) {
 				throw new RuntimeException("IO Exception loading instance", e);
 			}
-			
+
 			if (ro == null) {
 				throw new RuntimeException("Instance was not loaded");
 			}
@@ -292,9 +297,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			contributions = Activator.getDefault().getJointModelEditorContributionRegistry().initEditorContributions(this, rootObject);
 
 			referenceValueProviderCache = new ReferenceValueProviderCache(rootObject);
-
-			// Activator.getDefault().getJobManager().addEclipseJobManagerListener(jobManagerListener);
-
 		}
 
 		site.setSelectionProvider(this);
@@ -303,7 +305,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		validationContextStack.push(new DefaultExtraValidationContext(getRootObject()));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getExtraValidationContext()
 	 */
 	@Override
@@ -311,7 +315,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		return validationContextStack.peek();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#pushExtraValidationContext(com.mmxlabs.models.ui.validation.IExtraValidationContext)
 	 */
 	@Override
@@ -319,7 +325,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		validationContextStack.push(context);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#popExtraValidationContext()
 	 */
 	@Override
@@ -356,7 +364,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		getControl(getActivePage()).setFocus();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getEditingDomain()
 	 */
 	@Override
@@ -381,7 +391,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		super.setPageText(pageIndex, text);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getAdapterFactory()
 	 */
 	@Override
@@ -389,7 +401,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		return adapterFactory;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getReferenceValueProviderCache()
 	 */
 	@Override
@@ -408,7 +422,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		return referenceValueProviderCache.getReferenceValueProvider(owner, reference);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getDefaultCommandHandler()
 	 */
 	@Override
@@ -416,7 +432,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		return defaultCommandHandler;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getRootObject()
 	 */
 	@Override
@@ -448,7 +466,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setDisableCommandProviders(boolean)
 	 */
 	@Override
@@ -456,7 +476,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		editingDomain.setCommandProvidersDisabled(disable);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setDisableUpdates(boolean)
 	 */
 	@Override
@@ -464,8 +486,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		editingDomain.setAdaptersEnabled(!disable);
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setCurrentViewer(org.eclipse.jface.viewers.Viewer)
 	 */
 	@Override
@@ -510,7 +533,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getScenarioInstance()
 	 */
 	@Override
@@ -518,7 +543,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		return scenarioInstance;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getShell()
 	 */
 	@Override
