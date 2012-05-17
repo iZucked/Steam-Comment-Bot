@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.ui;
 
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.SWT;
@@ -22,14 +23,14 @@ import com.mmxlabs.scenario.service.ui.navigator.PieChartRenderer;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterFactory;
 
 public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider implements ITableLabelProvider {
-	private final ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> selectionProviderTracker
-		= new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(Activator.getDefault().getBundle().getBundleContext(), IScenarioServiceSelectionProvider.class, null);
-	
+	private final ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> selectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(
+			Activator.getDefault().getBundle().getBundleContext(), IScenarioServiceSelectionProvider.class, null);
+
 	public ScenarioServiceLabelProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 		selectionProviderTracker.open();
 	}
-	
+
 	@Override
 	public void dispose() {
 		selectionProviderTracker.close();
@@ -37,19 +38,33 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	}
 
 	@Override
-	public String getColumnText(Object object, int columnIndex) {
+	public String getColumnText(final Object object, final int columnIndex) {
 		switch (columnIndex) {
 		case 0:
-			return super.getColumnText(object, columnIndex);
+			String text = super.getColumnText(object, columnIndex);
+
+			if (object instanceof ScenarioInstance) {
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
+				if (scenarioInstance.getAdapters() != null) {
+					final BasicCommandStack stack = (BasicCommandStack) scenarioInstance.getAdapters().get(BasicCommandStack.class);
+					if (stack != null) {
+						if (stack.isSaveNeeded()) {
+							text = "* " + text;
+						}
+					}
+				}
+			}
+
+			return text;
 		default:
 			return "";
 		}
 	}
 
 	private IEclipseJobManager jobManager = null;
-	
+
 	@Override
-	public Image getColumnImage(Object object, int columnIndex) {
+	public Image getColumnImage(final Object object, final int columnIndex) {
 		switch (columnIndex) {
 		case 1:
 			// virtual checkbox
@@ -74,12 +89,10 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 					final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
 					final IJobControl control = jobManager.getControlForJob(job);
 					if (control != null) {
-						final Color minorColor = 
-								(control.getJobState() == EJobState.PAUSED || control.getJobState() == EJobState.PAUSING) ?
-										Display.getDefault().getSystemColor(SWT.COLOR_YELLOW) :
-								new Color(Display.getDefault(), 100, 230, 120);
+						final Color minorColor = (control.getJobState() == EJobState.PAUSED || control.getJobState() == EJobState.PAUSING) ? Display.getDefault().getSystemColor(SWT.COLOR_YELLOW)
+								: new Color(Display.getDefault(), 100, 230, 120);
 						final Color majorColor = new Color(Display.getDefault(), 240, 80, 85);
-						
+
 						return PieChartRenderer.renderPie(minorColor, majorColor, control.getProgress() / 100.0);
 					}
 				}
