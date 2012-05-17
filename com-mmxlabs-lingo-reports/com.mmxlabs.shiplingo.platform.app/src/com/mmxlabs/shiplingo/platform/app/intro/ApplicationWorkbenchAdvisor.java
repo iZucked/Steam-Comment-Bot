@@ -36,6 +36,7 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.osgi.framework.Bundle;
 
+import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceSaveHook;
 import com.mmxlabs.shiplingo.platform.app.Activator;
 import com.mmxlabs.shiplingo.platform.app.DelayedOpenFileProcessor;
 
@@ -98,6 +99,14 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 
 	@Override
+	public boolean preShutdown() {
+
+		boolean ret = ScenarioServiceSaveHook.saveScenarioService();
+
+		return ret && super.preShutdown();
+	}
+
+	@Override
 	public void postShutdown() {
 		disconnectFromWorkspace();
 	}
@@ -144,9 +153,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				public void run(final IProgressMonitor monitor) {
 					try {
 						ResourcesPlugin.getWorkspace().save(true, monitor);
-						
-						// TODO: Hook in scenario service save resources
-						
+
 					} catch (final CoreException e) {
 						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 					}
