@@ -19,9 +19,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
-import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
@@ -50,7 +50,7 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 			public Object[] getElements(Object object) {
 				final ArrayList<Object> result = new ArrayList<Object>();
 				for (final Object o : super.getElements(object)) {
-					if (o instanceof APortSet && o != input) {
+					if (o instanceof Port && o != input) {
 						result.add(o);
 					}
 				}
