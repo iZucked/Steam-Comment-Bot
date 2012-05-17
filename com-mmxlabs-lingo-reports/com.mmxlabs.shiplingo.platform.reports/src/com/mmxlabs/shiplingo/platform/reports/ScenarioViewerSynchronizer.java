@@ -132,7 +132,6 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		public void run() {
 			synchronized (this) {
 				while (needsRefresh) {
-					log.debug("Running refresh on " + viewer.getClass());
 					final IScenarioViewerSynchronizerOutput data = collectObjects();
 					viewer.setInput(data);
 					needsRefresh = false;
@@ -142,7 +141,6 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	};
 
 	private void refreshViewer() {
-		log.debug("Scheduling refresh for " + viewer.getClass().getCanonicalName());
 		synchronized (this) {
 			needsRefresh = true;
 			Display.getDefault().asyncExec(refresh);
