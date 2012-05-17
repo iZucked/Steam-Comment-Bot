@@ -144,6 +144,9 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				public void run(final IProgressMonitor monitor) {
 					try {
 						ResourcesPlugin.getWorkspace().save(true, monitor);
+						
+						// TODO: Hook in scenario service save resources
+						
 					} catch (final CoreException e) {
 						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 					}
