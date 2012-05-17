@@ -131,7 +131,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 	private workspaceChangeListener workspaceChangeListener;
 
 	public WorkspaceScenarioService() {
-		super("Workspace");
+		super("Workspace (for testing)");
 	}
 
 	public void start(final ComponentContext context) {
@@ -244,7 +244,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public void delete(final ScenarioInstance instance) {
+	public void delete(final Container instance) {
 		for (final IResource resource : mapWorkspaceToModel.keySet()) {
 			if (mapWorkspaceToModel.get(resource) == instance) {
 				try {

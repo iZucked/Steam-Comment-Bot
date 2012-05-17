@@ -11,16 +11,18 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
+/**
+ * Command Handler to toggle {@link ScenarioInstance} locked state.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class LockScenarioCommandHandler extends AbstractHandler {
-
-	private IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
 
 	/**
 	 * the command has been executed, so extract extract the needed information from the application context.
@@ -28,15 +30,15 @@ public class LockScenarioCommandHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
+		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
-		ISelection selection = activePage.getSelection();
+		final ISelection selection = activePage.getSelection();
 		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection strucSelection = (IStructuredSelection) selection;
-			for (Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
-				Object element = iterator.next();
+			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
+				final Object element = iterator.next();
 				if (element instanceof ScenarioInstance) {
-					ScenarioInstance model = (ScenarioInstance) element;
+					final ScenarioInstance model = (ScenarioInstance) element;
 
 					model.setLocked(!model.isLocked());
 				}

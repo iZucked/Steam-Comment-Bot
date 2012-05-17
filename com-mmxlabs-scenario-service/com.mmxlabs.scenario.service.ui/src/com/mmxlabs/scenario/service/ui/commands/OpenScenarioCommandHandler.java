@@ -4,17 +4,22 @@
  */
 package com.mmxlabs.scenario.service.ui.commands;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbenchPage;
@@ -25,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 
 public class OpenScenarioCommandHandler extends AbstractHandler {
@@ -68,7 +74,7 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 		openEditor(editorInput);
 	}
 
-	public static void openEditor(final IEditorInput editorInput) throws PartInitException {
+	public static void openEditor(final IScenarioServiceEditorInput editorInput) throws PartInitException {
 
 		final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		final IEditorPart editorPart = activePage.findEditor(editorInput);
@@ -78,13 +84,34 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 			activePage.activate(editorPart);
 		} else {
 			final IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
-			// String contentTypeString = editorInput.getContentType();
-			final IContentType contentType = null;// contentTypeString == null ? null : Platform.getContentTypeManager().getContentType(contentTypeString);
+			final String contentTypeString = editorInput.getContentType();
+			final IContentType contentType = contentTypeString == null ? null : Platform.getContentTypeManager().getContentType(contentTypeString);
 
 			final IEditorDescriptor descriptor = registry.getDefaultEditor(editorInput.getName(), contentType);
 
 			if (descriptor != null) {
-				activePage.openEditor(editorInput, descriptor.getId());
+
+				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+				try {
+					dialog.run(false, false, new IRunnableWithProgress() {
+						public void run(final IProgressMonitor monitor) {
+							monitor.beginTask("Opening editor", IProgressMonitor.UNKNOWN);
+							try {
+								activePage.openEditor(editorInput, descriptor.getId());
+								monitor.worked(1);
+							} catch (final PartInitException e) {
+								log.error(e.getMessage(), e);
+							} finally {
+								monitor.done();
+							}
+						}
+					});
+				} catch (final InvocationTargetException e) {
+					log.error(e.getMessage(), e);
+				} catch (final InterruptedException e) {
+					log.error(e.getMessage(), e);
+				}
+
 			}
 		}
 	}

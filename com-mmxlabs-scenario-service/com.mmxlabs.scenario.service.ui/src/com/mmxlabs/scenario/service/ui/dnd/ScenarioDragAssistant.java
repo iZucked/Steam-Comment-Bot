@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.ui.dnd;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
@@ -24,6 +26,7 @@ import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 
 /**
@@ -47,6 +50,23 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 		// Only handle local "within eclipse" transfer
 		if (LocalSelectionTransfer.getTransfer().isSupportedType(transferType) && target instanceof Container) {
+			final ISelection selection = LocalSelectionTransfer.getTransfer().getSelection();
+			if (selection instanceof IStructuredSelection) {
+				final HashSet<EObject> containers = new HashSet<EObject>();
+				EObject eTarget = (EObject) target;
+				if (target instanceof ScenarioService) return Status.CANCEL_STATUS;
+				while (eTarget != null) {
+					containers.add(eTarget);
+					eTarget = eTarget.eContainer();
+				}
+				for (final Object o : ((IStructuredSelection) selection).toArray()) {
+					if (o instanceof EObject) {
+						// since containers contains the full hierarchy above the drop target, if o is in that hierarchy then we are dragging
+						// something into something which it contains, so cancel the drop
+						if (containers.contains(o)) return Status.CANCEL_STATUS;
+					}
+				}
+			}
 			return Status.OK_STATUS;
 		}
 
@@ -81,16 +101,13 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						}
 					}
 
-					
 					// TODO: This should really invoke a shared move/copy etc command/action handler
-					
+
 					if (aDropTargetEvent.detail == DND.DROP_MOVE) {
 						container.getElements().addAll(containers);
 					} else if (aDropTargetEvent.detail == DND.DROP_COPY) {
-						
-						
-						
-						for (Container c : containers) {
+
+						for (final Container c : containers) {
 							if (c instanceof Folder) {
 								copyFolder(container, (Folder) c);
 							} else {
@@ -108,9 +125,9 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		return Status.CANCEL_STATUS;
 	}
 
-	private void copyScenario(Container container, ScenarioInstance scenario) {
+	private void copyScenario(final Container container, final ScenarioInstance scenario) {
 
-		ScenarioInstance instance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+		final ScenarioInstance instance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 		instance.setName(scenario.getName());
 		instance.setMetadata(EcoreUtil.copy(scenario.getMetadata()));
 		instance.setUuid(UUID.randomUUID().toString());
@@ -119,7 +136,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		// ScenarioInstance instance = scenario.getScenarioService().copy(scenario);
 		container.getElements().add(instance);
 
-		for (Container c : scenario.getElements()) {
+		for (final Container c : scenario.getElements()) {
 			if (c instanceof Folder) {
 				copyFolder(instance, (Folder) c);
 			} else {
@@ -128,14 +145,14 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		}
 	}
 
-	private void copyFolder(Container container, Folder folder) {
+	private void copyFolder(final Container container, final Folder folder) {
 
 		final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
 		f.setName(folder.getName());
 		f.setMetadata(EcoreUtil.copy(folder.getMetadata()));
 		container.getElements().add(f);
 
-		for (Container c : folder.getElements()) {
+		for (final Container c : folder.getElements()) {
 			if (c instanceof Folder) {
 				copyFolder(f, (Folder) c);
 			} else {

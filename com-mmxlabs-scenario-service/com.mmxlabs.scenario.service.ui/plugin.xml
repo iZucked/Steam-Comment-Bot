@@ -110,8 +110,13 @@
             <iterate>
                <and>
                   <instanceof
-                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        value="com.mmxlabs.scenario.service.model.Container">
                   </instanceof>
+                  <not>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioService">
+                     </instanceof>
+                  </not>
                </and>
             </iterate>
          </activeWhen>
@@ -119,8 +124,13 @@
             <iterate>
                <and>
                   <instanceof
-                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        value="com.mmxlabs.scenario.service.model.Container">
                   </instanceof>
+                  <not>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioService">
+                     </instanceof>
+                  </not>
                </and>
             </iterate>
          </enabledWhen>
@@ -129,6 +139,8 @@
             class="com.mmxlabs.scenario.service.ui.commands.CopyScenarioCommandHandler"
             commandId="org.eclipse.ui.edit.copy">
          <activeWhen>
+               <with
+                     variable="selection">
             <iterate>
                <and>
                   <instanceof
@@ -136,8 +148,11 @@
                   </instanceof>
                </and>
             </iterate>
+               </with>
          </activeWhen>
          <enabledWhen>
+                <with
+                     variable="selection">
             <iterate>
                <and>
                   <instanceof
@@ -145,12 +160,15 @@
                   </instanceof>
                </and>
             </iterate>
+            </with>
          </enabledWhen>
       </handler>
       <handler
             class="com.mmxlabs.scenario.service.ui.commands.PasteScenarioCommandHandler"
             commandId="org.eclipse.ui.edit.paste">
          <activeWhen>
+                <with
+                     variable="selection">
             <iterate>
                <and>
                   <instanceof
@@ -158,8 +176,11 @@
                   </instanceof>
                </and>
             </iterate>
+            </with>
          </activeWhen>
          <enabledWhen>
+                <with
+                     variable="selection">
             <iterate>
                <and>
                   <instanceof
@@ -167,6 +188,7 @@
                   </instanceof>
                </and>
             </iterate>
+            </with>
          </enabledWhen>
       </handler>
       <handler
@@ -182,9 +204,14 @@
                         value="1">
                   </count>
                   <iterate>
-                     <instanceof
-                           value="com.mmxlabs.scenario.service.model.Container">
-                     </instanceof>
+                     <or>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.Folder">
+                        </instanceof>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioService">
+                        </instanceof>
+                     </or>
                   </iterate>
                </and>
             </or>
@@ -199,12 +226,45 @@
                         value="1">
                   </count>
                   <iterate>
-                     <instanceof
-                           value="com.mmxlabs.scenario.service.model.Container">
-                     </instanceof>
+                     <or>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.Folder">
+                        </instanceof>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioService">
+                        </instanceof>
+                     </or>
                   </iterate>
                </and>
             </or></enabledWhen>
+      </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.RenameElementHandler"
+            commandId="org.eclipse.ui.edit.rename">
+         <activeWhen>
+            <iterate>
+               <or>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.Folder">
+                  </instanceof>
+               </or>
+            </iterate>
+         </activeWhen>
+         <enabledWhen>
+            <iterate>
+               <or>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.Folder">
+                  </instanceof>
+               </or>
+            </iterate>
+         </enabledWhen>
       </handler>
    </extension>
    <extension
@@ -236,6 +296,18 @@
       <menuContribution
             allPopups="false"
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
+         <command
+               commandId="com.mmxlabs.scenario.service.ui.newfolder"
+               icon="icons/newfolder_wiz.gif"
+               label="New Folder"
+               style="push"
+               tooltip="Create a new folder">
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.rename"
+               label="Rename"
+               style="push">
+         </command>
          <command
                commandId="org.eclipse.ui.edit.copy"
                label="Copy"

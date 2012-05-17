@@ -32,7 +32,9 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class FolderItemProvider extends ContainerItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class FolderItemProvider extends ContainerItemProvider implements
+		IEditingDomainItemProvider, IStructuredItemContentProvider,
+		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -54,21 +56,8 @@ public class FolderItemProvider extends ContainerItemProvider implements IEditin
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Folder_name_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Folder_name_feature", "_UI_Folder_type"), ScenarioServicePackage.Literals.FOLDER__NAME, true, false, false,
-				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -80,10 +69,12 @@ public class FolderItemProvider extends ContainerItemProvider implements IEditin
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(
+			Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ScenarioServicePackage.Literals.FOLDER__METADATA);
+			childrenFeatures
+					.add(ScenarioServicePackage.Literals.FOLDER__METADATA);
 		}
 		return childrenFeatures;
 	}
@@ -109,7 +100,8 @@ public class FolderItemProvider extends ContainerItemProvider implements IEditin
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Folder"));
+		return overlayImage(object,
+				getResourceLocator().getImage("full/obj16/Folder"));
 	}
 
 	/**
@@ -136,11 +128,9 @@ public class FolderItemProvider extends ContainerItemProvider implements IEditin
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Folder.class)) {
-		case ScenarioServicePackage.FOLDER__NAME:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-			return;
 		case ScenarioServicePackage.FOLDER__METADATA:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+			fireNotifyChanged(new ViewerNotification(notification,
+					notification.getNotifier(), true, false));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -154,10 +144,13 @@ public class FolderItemProvider extends ContainerItemProvider implements IEditin
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(
+			Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.FOLDER__METADATA, ScenarioServiceFactory.eINSTANCE.createMetadata()));
+		newChildDescriptors.add(createChildParameter(
+				ScenarioServicePackage.Literals.FOLDER__METADATA,
+				ScenarioServiceFactory.eINSTANCE.createMetadata()));
 	}
 
 }

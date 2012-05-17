@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.FolderImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.FolderImpl#getMetadata <em>Metadata</em>}</li>
  * </ul>
  * </p>
@@ -31,26 +30,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public class FolderImpl extends ContainerImpl implements Folder {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getMetadata() <em>Metadata</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -85,27 +64,6 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.FOLDER__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public Metadata getMetadata() {
 		return metadata;
 	}
@@ -115,11 +73,14 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetMetadata(Metadata newMetadata, NotificationChain msgs) {
+	public NotificationChain basicSetMetadata(Metadata newMetadata,
+			NotificationChain msgs) {
 		Metadata oldMetadata = metadata;
 		metadata = newMetadata;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.FOLDER__METADATA, oldMetadata, newMetadata);
+			ENotificationImpl notification = new ENotificationImpl(this,
+					Notification.SET, ScenarioServicePackage.FOLDER__METADATA,
+					oldMetadata, newMetadata);
 			if (msgs == null)
 				msgs = notification;
 			else
@@ -137,14 +98,22 @@ public class FolderImpl extends ContainerImpl implements Folder {
 		if (newMetadata != metadata) {
 			NotificationChain msgs = null;
 			if (metadata != null)
-				msgs = ((InternalEObject) metadata).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioServicePackage.FOLDER__METADATA, null, msgs);
+				msgs = ((InternalEObject) metadata).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE
+								- ScenarioServicePackage.FOLDER__METADATA,
+						null, msgs);
 			if (newMetadata != null)
-				msgs = ((InternalEObject) newMetadata).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioServicePackage.FOLDER__METADATA, null, msgs);
+				msgs = ((InternalEObject) newMetadata).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE
+								- ScenarioServicePackage.FOLDER__METADATA,
+						null, msgs);
 			msgs = basicSetMetadata(newMetadata, msgs);
 			if (msgs != null)
 				msgs.dispatch();
 		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.FOLDER__METADATA, newMetadata, newMetadata));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.FOLDER__METADATA, newMetadata,
+					newMetadata));
 	}
 
 	/**
@@ -153,7 +122,8 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd,
+			int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case ScenarioServicePackage.FOLDER__METADATA:
 			return basicSetMetadata(null, msgs);
@@ -169,8 +139,6 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case ScenarioServicePackage.FOLDER__NAME:
-			return getName();
 		case ScenarioServicePackage.FOLDER__METADATA:
 			return getMetadata();
 		}
@@ -185,9 +153,6 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case ScenarioServicePackage.FOLDER__NAME:
-			setName((String) newValue);
-			return;
 		case ScenarioServicePackage.FOLDER__METADATA:
 			setMetadata((Metadata) newValue);
 			return;
@@ -203,9 +168,6 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case ScenarioServicePackage.FOLDER__NAME:
-			setName(NAME_EDEFAULT);
-			return;
 		case ScenarioServicePackage.FOLDER__METADATA:
 			setMetadata((Metadata) null);
 			return;
@@ -221,29 +183,10 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case ScenarioServicePackage.FOLDER__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case ScenarioServicePackage.FOLDER__METADATA:
 			return metadata != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy())
-			return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(')');
-		return result.toString();
 	}
 
 } //FolderImpl

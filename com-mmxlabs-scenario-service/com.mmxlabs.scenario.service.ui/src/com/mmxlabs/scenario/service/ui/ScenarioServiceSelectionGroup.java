@@ -3,10 +3,6 @@ package com.mmxlabs.scenario.service.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.TableView;
-
-import javax.swing.text.TabableView;
-
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -16,8 +12,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -40,17 +35,16 @@ public class ScenarioServiceSelectionGroup extends Composite {
 	}
 
 	public void createContents() {
-		final GridLayout layout = new GridLayout();
-		layout.marginWidth = 0;
-		setLayout(layout);
-		setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		setLayout(new FillLayout());
 
 		treeViewer = new TreeViewer(this, SWT.NONE);
 		final ScenarioServiceContentProvider cp = new ScenarioServiceContentProvider();
-		cp.setShowOnlyContainers(true);
+
+		cp.setShowFolders(true);
+		cp.setShowScenarioInstances(true);
+
 		treeViewer.setContentProvider(cp);
 		treeViewer.setLabelProvider(new ScenarioServiceLabelProvider());
-		treeViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(final SelectionChangedEvent event) {
