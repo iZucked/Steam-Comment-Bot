@@ -87,6 +87,8 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public Comparable getComparable(final Object object) {
-		return (Comparable) super.getValue(object);
+		final Object object2 = super.getValue(object);
+		if (object2 instanceof Comparable) return (Comparable) object2;
+		return -Integer.MAX_VALUE;
 	}
 }

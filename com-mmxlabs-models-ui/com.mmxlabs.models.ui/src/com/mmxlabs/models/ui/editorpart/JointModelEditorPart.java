@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
@@ -51,9 +50,10 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.mmxcore.IMMXAdapter;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.IMMXRootObjectProvider;
+import com.mmxlabs.models.ui.IScenarioInstanceProvider;
 import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
@@ -73,7 +73,7 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * @author hinton
  * 
  */
-public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider, IScenarioEditingLocation {
+public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider, IScenarioEditingLocation , IMMXRootObjectProvider, IScenarioInstanceProvider{
 
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
 
@@ -469,32 +469,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	 */
 	@Override
 	public void setDisableUpdates(final boolean disable) {
-		if (disable) {
-			disableAdapters(getRootObject());
-		} else {
-			enableAdapters(getRootObject());
-		}
+		editingDomain.setAdaptersEnabled(!disable);
 	}
 
-	private void disableAdapters(final EObject top) {
-		for (final Adapter a : top.eAdapters()) {
-			if (a instanceof IMMXAdapter) {
-				((IMMXAdapter) a).disable();
-			}
-		}
-		for (final EObject o : top.eContents())
-			disableAdapters(o);
-	}
-
-	private void enableAdapters(final EObject top) {
-		for (final Adapter a : top.eAdapters()) {
-			if (a instanceof IMMXAdapter) {
-				((IMMXAdapter) a).enable();
-			}
-		}
-		for (final EObject o : top.eContents())
-			enableAdapters(o);
-	}
 
 	/* (non-Javadoc)
 	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setCurrentViewer(org.eclipse.jface.viewers.Viewer)

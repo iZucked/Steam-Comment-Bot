@@ -7,6 +7,7 @@ package com.mmxlabs.models.util.importer;
 import java.util.Collection;
 import java.util.Map;
 
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
@@ -30,8 +31,9 @@ public interface ISubmodelImporter {
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context);
 	/**
 	 * Turn the given model instance into a bunch of output values, keyed like the inputs.
+	 * @param root TODO
 	 * @param model
 	 * @param output
 	 */
-	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output);
+	public void exportModel(MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output);
 }

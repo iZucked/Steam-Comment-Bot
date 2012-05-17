@@ -10,7 +10,8 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -31,10 +32,12 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 	@Override
 	public Control createControl(final Composite parent) {
 		final Composite contents = new Composite(parent, SWT.NONE);
-		contents.setLayout(new RowLayout(SWT.HORIZONTAL));
+		contents.setLayout(new GridLayout(2, false));
 		
 		final Label description = new Label(contents, SWT.NONE);
+		description.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 		final Button button = new Button(contents, SWT.NONE);
+		button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
 		button.setText("Edit");
 		this.description = description;
 		this.button = button;
@@ -54,8 +57,10 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
 						final Object o = displayDialog(getValue());
-						if (o != null)
+						if (o != null) {
 							doSetValue(o);
+							updateDisplay(getValue());
+						}
 					}
 					
 					@Override

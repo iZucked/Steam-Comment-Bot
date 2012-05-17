@@ -11,6 +11,7 @@ import com.mmxlabs.models.util.importer.IAttributeImporter;
 
 @ExtensionBean("com.mmxlabs.models.util.import.attributes")
 public interface IAttributeImporterExtension {
+	@MapName("ID")
 	public String getID();
 	@MapName("attributeImporterClass")
 	public IAttributeImporter createImporter();

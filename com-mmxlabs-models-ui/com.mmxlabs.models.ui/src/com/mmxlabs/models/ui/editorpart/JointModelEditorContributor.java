@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.models.ui.editorpart;
 
+import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
 import org.eclipse.ui.IEditorActionBarContributor;
-import org.eclipse.ui.part.EditorActionBarContributor;
 
-public class JointModelEditorContributor extends EditorActionBarContributor implements IEditorActionBarContributor {
+public class JointModelEditorContributor extends EditingDomainActionBarContributor implements IEditorActionBarContributor {
 
 }

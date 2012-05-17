@@ -7,8 +7,8 @@ package com.mmxlabs.models.util.importer.impl;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -119,13 +120,16 @@ public class DefaultClassImporter implements IClassImporter {
 		return reference.getEReferenceType();
 	}
 
+	
+	
 	protected void importReferences(final IFieldMap row,
 			IImportContext context, final EClass rowClass,
 			final EObject instance, final LinkedList<EObject> results) {
 		for (final EReference reference : rowClass.getEAllReferences()) {
+			if (!shouldImportReference(reference)) continue;
 			final String lcrn = reference.getName().toLowerCase();
 			if (row.containsKey(lcrn)) {
-				// defer lookup
+				// The reference itself is present, so do a lookup later
 				final String referentName = row.get(lcrn).trim();
 				if (!referentName.isEmpty()) {
 					context.doLater(new SetReference(instance, reference,
@@ -133,18 +137,22 @@ public class DefaultClassImporter implements IClassImporter {
 							context));
 				}
 			} else {
+				// The reference is missing entirely
 				if (reference.isMany())
 					continue;
+				// Maybe it is a sub-object; find any sub-keys
 				final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
 
 				if (subKeys.isEmpty()) {
 					if (reference.isContainment()) {
 						populateWithBlank(instance, reference);
+						
+						notifyMissingFields((EObject) instance.eGet(reference), 
+								context.createProblem("Field not present", true, false, true),
+								context);
+						
+						
 					}
-					
-					notifyMissingFields((EObject) instance.eGet(reference), 
-							context.createProblem("Field not present", true, false, true),
-							context);
 					
 					context.addProblem(
 							context.createProblem(reference.getName() + " is missing from "
@@ -168,6 +176,10 @@ public class DefaultClassImporter implements IClassImporter {
 		}
 	}
 	
+	protected boolean shouldImportReference(final EReference reference) {
+		return true;
+	}
+
 	private void notifyMissingFields(EObject blank, final IImportProblem delegate, IImportContext context) {
 		if (blank == null) return;
 		for (final EAttribute attribute : blank.eClass().getEAllAttributes()) {
@@ -278,29 +290,32 @@ public class DefaultClassImporter implements IClassImporter {
 
 	@Override
 	public Collection<Map<String, String>> exportObjects(
-			Collection<? extends EObject> objects) {
+			Collection<? extends EObject> objects, final MMXRootObject root) {
 		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
 		
 		if (objects.isEmpty()) return result;
 		
 		for (final EObject object : objects) {
-			final Map<String, String> flattened = exportObject(object);
+			final Map<String, String> flattened = exportObject(object, root);
 			flattened.put(KIND_KEY, object.eClass().getName());
 			result.add(flattened);
 		}
 		return result;
 	}
 
-	protected Map<String, String> exportObject(final EObject object) {
-		final Map<String, String> result = new HashMap<String, String>();
-		for (final EReference reference : object.eClass().getEAllReferences()) {
-			if (shouldExportFeature(reference))
-				exportReference(object, reference, result);
-		}
+	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
+		final Map<String, String> result = new LinkedHashMap<String, String>();
+		
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
 			if (shouldExportFeature(attribute))
 				exportAttribute(object, attribute, result);
 		}
+		
+		for (final EReference reference : object.eClass().getEAllReferences()) {
+			if (shouldExportFeature(reference))
+				exportReference(object, reference, result, root);
+		}
+		
 		return result;
 	}
 
@@ -315,7 +330,7 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	protected void exportReference(EObject object, EReference reference,
-			Map<String, String> result) {
+			Map<String, String> result, MMXRootObject root) {
 		if (shouldFlattenReference(reference)) {
 			final EObject value = (EObject) object.eGet(reference);
 			if (value != null) {
@@ -323,7 +338,7 @@ public class DefaultClassImporter implements IClassImporter {
 						.getImporterRegistry().getClassImporter(value.eClass());
 				if (importer != null) {
 					final Map<String, String> subMap = importer
-							.exportObjects(Collections.singleton(value))
+							.exportObjects(Collections.singleton(value), root)
 							.iterator().next();
 					for (final Map.Entry<String, String> e : subMap.entrySet()) {
 						result.put(reference.getName() + DOT + e.getKey(),
