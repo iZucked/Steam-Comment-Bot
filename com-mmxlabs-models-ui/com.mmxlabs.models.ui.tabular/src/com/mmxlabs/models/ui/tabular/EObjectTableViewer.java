@@ -327,7 +327,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		column.setLabelProvider(new ColumnLabelProvider() {
 
 			private final Color errorColour = new Color(Display.getDefault(), new RGB(255, 100, 100));
-			private final Color warningColour = new Color(Display.getDefault(), new RGB(0, 255, 255));
+			private final Color warningColour = new Color(Display.getDefault(), new RGB(255, 242, 0));
 
 			@Override
 			public Color getBackground(final Object element) {
