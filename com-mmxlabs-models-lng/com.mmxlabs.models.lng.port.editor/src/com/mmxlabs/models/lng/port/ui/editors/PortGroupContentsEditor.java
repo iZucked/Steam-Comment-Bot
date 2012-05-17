@@ -58,6 +58,15 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 				Collections.sort(result, (Comparator) new Comparator<NamedObject>() {
 					@Override
 					public int compare(NamedObject arg0, NamedObject arg1) {
+						if (arg0 == null) {
+							if (arg1 == null) {
+								return 0
+							} else {
+								return 1;
+							}
+						} else if (arg1 == null) {
+							return -1;
+						}
 						return arg0.getName().compareTo(arg1.getName());
 					}
 				});
