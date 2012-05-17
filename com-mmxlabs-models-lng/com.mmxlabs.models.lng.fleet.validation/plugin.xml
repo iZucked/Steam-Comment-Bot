@@ -262,10 +262,10 @@
                   severity="WARNING"
                   statusCode="1">
                <message>
-                  Vessel {0} has invalid start and end requirement dates - the start occurs after the end.
+                  Vessel {0} has time charter set, but no cost set.
                </message>
                <description>
-                  The end requirement of the vessel should be after the start requirement.
+                  A time charter vessel should have a daily hire rate
                </description>
                <target
                      class="Vessel">
