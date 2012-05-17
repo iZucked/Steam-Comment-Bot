@@ -74,8 +74,8 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_windowStartEditor(detailComposite, topClass);
 		add_windowStartTimeEditor(detailComposite, topClass);
 		add_windowSizeEditor(detailComposite, topClass);
-		add_portEditor(detailComposite, topClass);
 		add_contractEditor(detailComposite, topClass);
+		add_portEditor(detailComposite, topClass);
 		add_durationEditor(detailComposite, topClass);
 		add_minQuantityEditor(detailComposite, topClass);
 		add_maxQuantityEditor(detailComposite, topClass);

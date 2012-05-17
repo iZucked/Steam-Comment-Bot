@@ -35,8 +35,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStartTime <em>Window Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowSize <em>Window Size</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
@@ -118,15 +118,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	protected boolean windowSizeESet;
 
 	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port port;
-
-	/**
 	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getContract()
@@ -134,6 +125,15 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * @ordered
 	 */
 	protected Contract contract;
+
+	/**
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port port;
 
 	/**
 	 * The default value of the '{@link #getDuration() <em>Duration</em>}' attribute.
@@ -271,13 +271,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	public void setWindowStart(Date newWindowStart) {
 		Date oldWindowStart = windowStart;
 		windowStart = newWindowStart;
-		
-//		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
-		
-//		calendar.setTime(windowStart);
-		
-//		if (calendar.get(Calendar.HOUR_OF_DAY) != 0) throw new RuntimeException("Hour of day is " + calendar.get(Calendar.HOUR_OF_DAY));
-		
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_START, oldWindowStart, windowStart));
 	}
@@ -688,12 +681,12 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return getWindowStartTime();
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				return getWindowSize();
-			case CargoPackage.SLOT__PORT:
-				if (resolve) return getPort();
-				return basicGetPort();
 			case CargoPackage.SLOT__CONTRACT:
 				if (resolve) return getContract();
 				return basicGetContract();
+			case CargoPackage.SLOT__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
 			case CargoPackage.SLOT__DURATION:
 				return getDuration();
 			case CargoPackage.SLOT__MIN_QUANTITY:
@@ -722,11 +715,11 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				setWindowSize((Integer)newValue);
 				return;
-			case CargoPackage.SLOT__PORT:
-				setPort((Port)newValue);
-				return;
 			case CargoPackage.SLOT__CONTRACT:
 				setContract((Contract)newValue);
+				return;
+			case CargoPackage.SLOT__PORT:
+				setPort((Port)newValue);
 				return;
 			case CargoPackage.SLOT__DURATION:
 				setDuration((Integer)newValue);
@@ -760,11 +753,11 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				unsetWindowSize();
 				return;
-			case CargoPackage.SLOT__PORT:
-				setPort((Port)null);
-				return;
 			case CargoPackage.SLOT__CONTRACT:
 				setContract((Contract)null);
+				return;
+			case CargoPackage.SLOT__PORT:
+				setPort((Port)null);
 				return;
 			case CargoPackage.SLOT__DURATION:
 				unsetDuration();
@@ -795,10 +788,10 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return isSetWindowStartTime();
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				return isSetWindowSize();
-			case CargoPackage.SLOT__PORT:
-				return port != null;
 			case CargoPackage.SLOT__CONTRACT:
 				return contract != null;
+			case CargoPackage.SLOT__PORT:
+				return port != null;
 			case CargoPackage.SLOT__DURATION:
 				return isSetDuration();
 			case CargoPackage.SLOT__MIN_QUANTITY:

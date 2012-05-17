@@ -66,8 +66,8 @@ public class SlotItemProvider
 			addWindowStartPropertyDescriptor(object);
 			addWindowStartTimePropertyDescriptor(object);
 			addWindowSizePropertyDescriptor(object);
-			addPortPropertyDescriptor(object);
 			addContractPropertyDescriptor(object);
+			addPortPropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
