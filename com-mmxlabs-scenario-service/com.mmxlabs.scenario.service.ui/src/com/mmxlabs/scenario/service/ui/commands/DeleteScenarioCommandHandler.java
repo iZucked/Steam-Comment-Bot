@@ -4,11 +4,15 @@
  */
 package com.mmxlabs.scenario.service.ui.commands;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -30,24 +34,35 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 		final ISelection selection = activePage.getSelection();
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+			final ArrayList<Container> itemsToDelete = new ArrayList<Container>();
 			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
 				final Object element = iterator.next();
 				if (element instanceof Container) {
 					final Container container = (Container) element;
-					int subCount = container.getContainedInstanceCount();
-					if (container instanceof ScenarioInstance) subCount--;
-					if (subCount > 0) {
-						final MessageDialog dialog = new MessageDialog(HandlerUtil.getActiveShell(event), 
-								"Delete " + container.getName() + " and contents?", 
-								null, "Do you really want to delete " + container.getName() + " and its contents (" + subCount + " scenarios)", MessageDialog.CONFIRM, 
-								new String[] {"Don't Delete", "Delete"}, 0);
-						if (dialog.open() != 1) {
-							return null;
-						}
-					}
-					final IScenarioService service = container.getScenarioService();
-					service.delete(container);
+					
+					itemsToDelete.add(container);
 				}
+			}
+			
+			final List<EObject> filtered = EcoreUtil.filterDescendants(itemsToDelete);
+			int totalChildCount = 0;
+			for (final EObject object : filtered) {
+				totalChildCount += ((Container) object).getContainedInstanceCount();
+			}
+			
+			if (totalChildCount > 0) {
+				final MessageDialog dialog = new MessageDialog(HandlerUtil.getActiveShell(event), 
+						"Delete selection and contents?", 
+						null, "Do you really want to delete the selection and all and its contents (" + totalChildCount + " scenarios)", MessageDialog.CONFIRM, 
+						new String[] {"Don't Delete", "Delete"}, 0);
+				if (dialog.open() != 1) {
+					return null;
+				}
+			}
+			for (final EObject object : filtered) {
+				final Container container = (Container) object;
+				final IScenarioService service = container.getScenarioService();
+				service.delete(container);
 			}
 		}
 

@@ -174,7 +174,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		final BasicCommandStack commandStack = new BasicCommandStack() {
 			@Override
 			public void execute(final Command command) {
-				synchronized (rootObject) {
+				synchronized (instance) {
 					super.execute(command);
 				}
 			}
