@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 
 public class NamedObjectComponentHelper extends BaseComponentHelper {

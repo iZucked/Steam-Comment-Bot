@@ -43,7 +43,7 @@ public class MMXRootObjectValueProviderCacheAdapterFactory implements IAdapterFa
 	}
 
 	@Override
-	public Class[] getAdapterList() {
+	public Class<?>[] getAdapterList() {
 		return new Class[] {ReferenceValueProviderCache.class};
 	}
 }

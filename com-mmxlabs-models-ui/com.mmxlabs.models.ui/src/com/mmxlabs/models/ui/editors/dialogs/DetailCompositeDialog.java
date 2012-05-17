@@ -707,13 +707,13 @@ public class DetailCompositeDialog extends Dialog {
 			// object, rather than generate a SetCommand.
 			if (original.eClass().getEAllContainments().contains(feature)) {
 				if (feature.isMany()) {
-					if (!((Collection)original.eGet(feature)).isEmpty())
+					if (!((Collection<?>)original.eGet(feature)).isEmpty())
 					compound.append(
-							RemoveCommand.create(editingDomain, original, feature, (Collection) original.eGet(feature))
+							RemoveCommand.create(editingDomain, original, feature, (Collection<?>) original.eGet(feature))
 							);
-					if (!((Collection)duplicate.eGet(feature)).isEmpty())
+					if (!((Collection<?>)duplicate.eGet(feature)).isEmpty())
 					compound.append(
-							AddCommand.create(editingDomain, original, feature, (Collection) duplicate.eGet(feature))
+							AddCommand.create(editingDomain, original, feature, (Collection<?>) duplicate.eGet(feature))
 							);
 //					final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection) duplicate.eGet(feature));
 //					if (mas.canExecute() == false) {
@@ -735,7 +735,7 @@ public class DetailCompositeDialog extends Dialog {
 				continue;
 			}
 			if (feature.isMany()) {
-				final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection) duplicate.eGet(feature));
+				final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection<?>) duplicate.eGet(feature));
 				if (mas.canExecute() == false) {
 					log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
 							"Attempt to set feature which could not be set."));
