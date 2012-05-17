@@ -41,7 +41,6 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.importer.RouteImporter;
-import com.mmxlabs.models.lng.port.presentation.PortEditorPlugin;
 import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorDialog;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -71,9 +70,12 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 		final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
 		getToolBarManager().appendToGroup(EDIT_GROUP, dmaAction);
-		getToolBarManager().update(true);
 		
-		getToolBarManager().appendToGroup(EDIT_GROUP, new Action("PG") {
+		getToolBarManager().appendToGroup(EDIT_GROUP, new Action() {
+			{
+				setImageDescriptor(
+						AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "/icons/group.gif"));
+			}
 			@Override
 			public void run() {
 				final DetailCompositeDialog dcd = new DetailCompositeDialog(PortEditorPane.this.getJointModelEditorPart().getShell(), PortEditorPane.this.getJointModelEditorPart().getDefaultCommandHandler());
@@ -81,6 +83,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			}
 		});
 		
+		getToolBarManager().update(true);
 		defaultSetTitle("Ports");
 	}
 
