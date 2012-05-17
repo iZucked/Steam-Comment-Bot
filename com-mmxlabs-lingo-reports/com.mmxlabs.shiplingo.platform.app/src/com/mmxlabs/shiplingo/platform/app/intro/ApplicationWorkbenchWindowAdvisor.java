@@ -32,4 +32,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		
 		configurer.setTitle("ShipLiNGO");
 	}
+	
+	@Override
+	public void openIntro() {
+		// Disable intro page opening
+	}
 }
