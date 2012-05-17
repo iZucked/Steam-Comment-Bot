@@ -32,10 +32,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.menus.IMenuService;
 
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
@@ -67,15 +70,23 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	private FilterField filterField;
 	private ToolBarManager externalToolbarManager;
 
-	public ScenarioTableViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
+	private IActionBars actionBars;
+	private Action deleteAction;
+
+	public ScenarioTableViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
 		super(page, part);
 		this.jointModelEditorPart = location;
+		this.actionBars = actionBars;
 	}
 
 	protected ScenarioTableViewer getScenarioViewer() {
 		return scenarioViewer;
 	}
-	
+
+	protected String getToolbarID() {
+		return "toolbar:" + getClass().getCanonicalName();
+	}
+
 	@Override
 	public void dispose() {
 		if (externalToolbarManager != null) {
@@ -119,7 +130,8 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			control.marginHeight = 0;
 
 			// Create a title bar.
-			if (externalToolbarManager == null) createTitleBar();
+			if (externalToolbarManager == null)
+				createTitleBar();
 
 			final Composite inner = new Composite(control, SWT.NONE);
 			filterField = new FilterField(inner);
@@ -143,14 +155,14 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			hookFocus(viewer.getControl());
 		}
 	}
-	
+
 	@Override
 	public ScenarioTableViewer createViewer(Composite parent) {
 		if (scenarioViewer == null) {
 			scenarioViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
 
 			scenarioViewer.addOpenListener(new IOpenListener() {
-				
+
 				@Override
 				public void open(OpenEvent event) {
 					if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
@@ -178,24 +190,18 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 			scenarioViewer.getGrid().setCellSelectionEnabled(true);
 			filterField.setViewer(scenarioViewer);
-			
+
 			final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(scenarioViewer) {
 				protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
-					return event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL 
-							|| event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION
+					return event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL || event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION
 							|| event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC;
 				}
 			};
-			
-			GridViewerEditor.create(scenarioViewer, actSupport, 
-					ColumnViewerEditor.KEYBOARD_ACTIVATION | 
-					GridViewerEditor.SELECTION_FOLLOWS_EDITOR | 
-//					ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK |
-					ColumnViewerEditor.TABBING_HORIZONTAL | 
-					ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | 
-					ColumnViewerEditor.TABBING_VERTICAL | 
-					ColumnViewerEditor.KEYBOARD_ACTIVATION);
-			
+
+			GridViewerEditor.create(scenarioViewer, actSupport, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR |
+			// ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK |
+					ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
+
 			return scenarioViewer;
 		} else {
 			throw new RuntimeException("Did not expect two calls to createViewer()");
@@ -237,9 +243,9 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		scenarioViewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
-		
+
 		scenarioViewer.setExtraValidationContext(new DefaultExtraValidationContext(getJointModelEditorPart().getRootObject()));
-		
+
 		final Grid table = scenarioViewer.getGrid();
 
 		table.setHeaderVisible(true);
@@ -257,9 +263,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		toolbar.appendToGroup(VIEW_GROUP, filter);
 
 		final EReference containment = path.get(path.size() - 1);
-		
-		
-		
+
 		final Action addAction = AddModelAction.create(containment.getEReferenceType(), new IAddContext() {
 			@Override
 			public MMXRootObject getRootObject() {
@@ -286,20 +290,23 @@ public class ScenarioTableViewerPane extends ViewerPane {
 				return jointModelEditorPart;
 			}
 		});
-		
+
 		if (addAction != null) {
 			// if we can't add one, we can't duplicate one either.
 			final Action dupAction = createDuplicateAction();
-			
+
 			if (dupAction != null) {
 				toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
 			}
-			
+
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 		}
-		final Action deleteAction = createDeleteAction();
+		deleteAction = createDeleteAction();
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
+		}
+		if (actionBars != null) {
+			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
 
 		final Action importAction = createImportAction();
@@ -307,11 +314,32 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, importAction);
 		}
 
+		// add extension points to toolbar
+		{
+			final String toolbarID = getToolbarID();
+			final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
+			if (menuService != null) {
+				menuService.populateContributionManager(toolbar, toolbarID);
+
+				viewer.getControl().addDisposeListener(new DisposeListener() {
+					@Override
+					public void widgetDisposed(DisposeEvent e) {
+						menuService.releaseContributions(toolbar);
+					}
+				});
+			}
+		}
+		
+		if (actionBars != null) {
+			actionBars.updateActionBars();
+		}
+
 		toolbar.update(true);
 	}
 
 	/**
 	 * Return an action which duplicates the selection
+	 * 
 	 * @return
 	 */
 	protected Action createDuplicateAction() {
@@ -352,6 +380,14 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected void requestActivation() {
 		super.requestActivation();
 		jointModelEditorPart.setCurrentViewer(scenarioViewer);
+		
+		if (actionBars != null) {
+			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+		}
+		if (actionBars != null) {
+			actionBars.updateActionBars();
+		}
+
 	}
 
 	public void setLocked(final boolean locked) {
