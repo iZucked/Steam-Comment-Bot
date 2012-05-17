@@ -261,6 +261,14 @@ public class DetailCompositeDialog extends Dialog {
 	 * Create an editor view for the selected object and display it.
 	 */
 	private void updateEditor() {
+		if (inputs.isEmpty()) {
+			if (displayComposite != null) {
+				displayComposite.getComposite().dispose();
+				displayComposite = null;
+			}
+			// TODO display a message?
+			return;
+		}
 		final EObject selection = inputs.get(selectedObjectIndex);
 
 		getShell().setText("Editing " + EditorUtils.unmangle(selection.eClass().getName()) + " " + (1 + selectedObjectIndex) + " of " + inputs.size());
@@ -419,6 +427,9 @@ public class DetailCompositeDialog extends Dialog {
 				add.execute();
 				inputs.add(settings.iterator().next().getInstance());
 				addedInputs.add(settings.iterator().next().getInstance());
+				if (inputs.get(inputs.size()-1) instanceof NamedObject) {
+					((NamedObject) inputs.get(inputs.size()-1)).setName("New " + factory.getLabel());
+				}
 				selectionViewer.refresh();
 				selectionViewer.setSelection(new StructuredSelection(inputs.get(inputs.size()-1)));
 			}
@@ -437,7 +448,7 @@ public class DetailCompositeDialog extends Dialog {
 			if (factories.size() == 1) {
 				barManager.add(createAddAction(factories.get(0)));
 			} else {
-				
+				// multi-adder //TODO
 			}
 		}
 		
@@ -474,10 +485,11 @@ public class DetailCompositeDialog extends Dialog {
 							EObject original = duplicateToOriginal.get(o);
 							originalToDuplicate.remove(original);
 							duplicateToOriginal.remove(o);
+							validationContext.ignore(o);
+							validationContext.ignore(original);
 						}
 						
 						ranges.remove(element);
-						
 						inputs.remove(elementIndex);
 						if (inputs.size() > 0) {
 							selectionViewer.setSelection(new StructuredSelection(inputs.get(selectedObjectIndex)));
@@ -485,6 +497,7 @@ public class DetailCompositeDialog extends Dialog {
 							selectionViewer.setSelection(StructuredSelection.EMPTY);
 						}
 						selectionViewer.refresh();
+						updateEditor();
 					}
 				}
 			}
