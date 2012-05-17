@@ -28,7 +28,6 @@ import org.osgi.framework.ServiceReference;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceSelectionGroup;
 import com.mmxlabs.shiplingo.platform.models.manifest.internal.Activator;
@@ -54,7 +53,7 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 	public ScenarioServiceNewScenarioPage(final ISelection selection) {
 		super("wizardPage");
 		setTitle("Choose file name");
-		setDescription("This wizard creates a new file with *.scn extension that can be opened by a multi-page editor.");
+		setDescription("Select a name for a new scenario file and a location to store it in.");
 		this.selection = selection;
 	}
 
@@ -134,8 +133,8 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 	private void dialogChanged() {
 
 		final Container c = scenarioServiceSelectionGroup.getSelectedContainer();
-		if (!(c instanceof Folder || c instanceof ScenarioInstance || c instanceof ScenarioService)) {
-			updateStatus("A Folder or Scenario must be selected");
+		if (!(c instanceof Folder || c instanceof ScenarioService)) {
+			updateStatus("A Folder must be selected");
 			return;
 		}
 
