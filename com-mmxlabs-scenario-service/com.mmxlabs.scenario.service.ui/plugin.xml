@@ -15,9 +15,28 @@
             <contentExtension
                   isRoot="true"
                   pattern="com.mmxlabs.scenario.service.ui.navigatorContent">
+            </contentExtension>
+            <contentExtension
+                  pattern="com.mmxlabs.scenario.service.ui.ScenarioServiceLinkHelper">
             </contentExtension>            
          </includes>
       </viewerContentBinding>
+      <viewer
+            viewerId="com.mmxlabs.scenario.service.ui.navigator">
+         <options>
+            <property
+                  name="org.eclipse.ui.navigator.hideAvailableCustomizationsDialog"
+                  value="true">
+            </property>
+            <property
+                  name="org.eclipse.ui.navigator.hideAvailableExtensionsTab"
+                  value="true">
+            </property>
+            <property
+                  name="org.eclipse.ui.navigator.customizeViewDialogHelpContext" value="">
+            </property>
+         </options>
+      </viewer>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -344,6 +363,23 @@
                name="Imports">
          </separator>
       </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.linkHelper">
+      <linkHelper
+            class="com.mmxlabs.scenario.service.ui.ScenarioServiceLinkHelper"
+            id="com.mmxlabs.scenario.service.ui.ScenarioServiceLinkHelper">
+         <editorInputEnablement>
+            <instanceof
+                  value="com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput">
+            </instanceof>
+         </editorInputEnablement>
+         <selectionEnablement>
+            <instanceof
+                  value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+            </instanceof>
+         </selectionEnablement>
+      </linkHelper>
    </extension>
 
 </plugin>

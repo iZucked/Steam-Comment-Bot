@@ -26,7 +26,6 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.navigator.CommonNavigator;
@@ -191,27 +190,49 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			 */
 			@Override
 			public void mouseDown(final MouseEvent e) {
-				for (final TreeItem i : tree.getItems()) {
-					processTreeItem(i, e);
-				}
-			}
 
-			private void processTreeItem(final TreeItem item, final MouseEvent e) {
-				if (item.getImage() != null) {
-					final Rectangle imageBounds = item.getImageBounds(1);
-					if ((e.x > imageBounds.x) && (e.x < (imageBounds.x + item.getImage().getBounds().width))) {
-						if ((e.y > imageBounds.y) && (e.y < (imageBounds.y + item.getImage().getBounds().height))) {
-							final Object data = item.getData();
-							if (data instanceof ScenarioInstance) {
-								final ScenarioInstance instance = (ScenarioInstance) data;
-								Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
+				TreeItem selected = null;
+				for (final TreeItem i : tree.getItems()) {
+					selected = processTreeItem(i, e);
+					if (selected != null) {
+						break;
+					}
+				}
+				if (selected != null) {
+					if (e.button == 1) {
+
+						final Rectangle imageBounds = selected.getImageBounds(1);
+						if ((e.x > imageBounds.x) && (e.x < (imageBounds.x + selected.getImage().getBounds().width))) {
+							if ((e.y > imageBounds.y) && (e.y < (imageBounds.y + selected.getImage().getBounds().height))) {
+
+								final Object data = selected.getData();
+								if (data instanceof ScenarioInstance) {
+									final ScenarioInstance instance = (ScenarioInstance) data;
+									Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
+								}
 							}
 						}
 					}
+				} else {
+					tree.deselectAll();
+				}
+			}
+
+			private TreeItem processTreeItem(final TreeItem item, final MouseEvent e) {
+
+				if (item.getImage() != null) {
+					final Rectangle imageBounds = item.getBounds();
+					if ((e.y > imageBounds.y) && (e.y < (imageBounds.y + item.getImage().getBounds().height))) {
+						return item;
+					}
 				}
 				for (final TreeItem i : item.getItems()) {
-					processTreeItem(i, e);
+					final TreeItem selected = processTreeItem(i, e);
+					if (selected != null) {
+						return selected;
+					}
 				}
+				return null;
 			}
 		});
 
@@ -284,11 +305,5 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			super.handleDoubleClick(anEvent);
 		}
 
-	}
-
-	protected ActionGroup createCommonActionGroup() {
-		// Return an anonymous implementation to suppress default actions
-		return new ActionGroup() {
-		};
 	}
 }
