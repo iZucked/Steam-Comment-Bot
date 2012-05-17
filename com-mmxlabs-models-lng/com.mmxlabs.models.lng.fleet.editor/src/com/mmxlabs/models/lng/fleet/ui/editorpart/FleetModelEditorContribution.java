@@ -23,12 +23,12 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 	public void addPages(final Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
 		
-		vesselViewerPane = new VesselViewerPane(editorPart.getSite().getPage(), editorPart, editorPart);
+		vesselViewerPane = new VesselViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		vesselViewerPane.createControl(sash);
 		vesselViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_Vessels()),
 				editorPart.getAdapterFactory());
 		
-		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart);
+		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		eventViewerPane.createControl(sash);
 		eventViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_VesselEvents()), editorPart.getAdapterFactory());
 		

@@ -14,6 +14,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -27,40 +28,39 @@ import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 public class EntityEditorPane extends ScenarioTableViewerPane {
-	public EntityEditorPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
-		super(page, part, location);
+	public EntityEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+		super(page, part, location, actionBars);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		addNameManipulator("Name");
-		
+
 		addTypicalColumn("Is Shipping", new ShippingEntityManipulator());
-		
+
 		defaultSetTitle("Entities");
 	}
-	
+
 	class ShippingEntityManipulator implements ICellRenderer, ICellManipulator {
 		@Override
-		public void setValue(Object object, Object value) {
+		public void setValue(final Object object, final Object value) {
 			if (object instanceof LegalEntity) {
 				final LegalEntity settings = (LegalEntity) object;
 				if (settings.eContainer() instanceof CommercialModel) {
 					final CommercialModel cm = (CommercialModel) settings.eContainer();
-					getEditingDomain().getCommandStack().execute(
-							SetCommand.create(getEditingDomain(), cm, CommercialPackage.eINSTANCE.getCommercialModel_ShippingEntity(), settings));
+					getEditingDomain().getCommandStack().execute(SetCommand.create(getEditingDomain(), cm, CommercialPackage.eINSTANCE.getCommercialModel_ShippingEntity(), settings));
 				}
 			}
 		}
 
 		@Override
-		public CellEditor getCellEditor(Composite parent, Object object) {
+		public CellEditor getCellEditor(final Composite parent, final Object object) {
 			return new ComboBoxCellEditor(parent, new String[] { "Y", "N" });
 		}
 
 		@Override
-		public Object getValue(Object object) {
+		public Object getValue(final Object object) {
 			if (object instanceof LegalEntity) {
 				final LegalEntity settings = (LegalEntity) object;
 				if (((CommercialModel) settings.eContainer()).getShippingEntity() == settings)
@@ -70,27 +70,27 @@ public class EntityEditorPane extends ScenarioTableViewerPane {
 		}
 
 		@Override
-		public boolean canEdit(Object object) {
+		public boolean canEdit(final Object object) {
 			return true;
 		}
 
 		@Override
-		public String render(Object object) {
+		public String render(final Object object) {
 			return ((Integer) getValue(object)) == 0 ? "Y" : "N";
 		}
 
 		@Override
-		public Comparable getComparable(Object object) {
+		public Comparable getComparable(final Object object) {
 			return render(object);
 		}
 
 		@Override
-		public Object getFilterValue(Object object) {
+		public Object getFilterValue(final Object object) {
 			return render(object);
 		}
 
 		@Override
-		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 			return Collections.emptySet();
 		}
 	}

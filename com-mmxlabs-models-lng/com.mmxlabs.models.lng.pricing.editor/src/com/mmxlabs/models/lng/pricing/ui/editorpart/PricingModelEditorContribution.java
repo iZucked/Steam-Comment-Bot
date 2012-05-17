@@ -34,23 +34,23 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		final SashForm sash2 = new SashForm(sash, SWT.HORIZONTAL);
 		final SashForm sash3 = new SashForm(sash, SWT.HORIZONTAL);
 		
-		charter = new CharterPricingPane(editorPart.getSite().getPage(), editorPart, editorPart);
+		charter = new CharterPricingPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		charter.createControl(sash2);
 		charter.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FleetCost(), PricingPackage.eINSTANCE.getFleetCostModel_CharterCosts() }),
 				editorPart.getAdapterFactory());
 		charter.getViewer().setInput(modelObject);
 
-		route = new VesselRoutePricingPane(editorPart.getSite().getPage(), editorPart, editorPart);
+		route = new VesselRoutePricingPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		route.createControl(sash2);
 		route.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_RouteCosts() }), editorPart.getAdapterFactory());
 		route.getViewer().setInput(modelObject);
 
-		cool = new CooldownPricingEditorPane(editorPart.getSite().getPage(), editorPart, editorPart);
+		cool = new CooldownPricingEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		cool.createControl(sash3);
 		cool.init(Arrays.asList(new EReference[] {PricingPackage.eINSTANCE.getPricingModel_CooldownPrices()}), editorPart.getAdapterFactory());
 		cool.getViewer().setInput(modelObject);
 		
-		port = new PortCostPricingPane(editorPart.getSite().getPage(), editorPart, editorPart);
+		port = new PortCostPricingPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		port.createControl(sash3);
 		port.init(Arrays.asList(new EReference[] {PricingPackage.eINSTANCE.getPricingModel_PortCosts()}), editorPart.getAdapterFactory());
 		port.getViewer().setInput(modelObject);
@@ -64,12 +64,12 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 
 	private void addIndexPage(final Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
-		final IndexEditorPane pane = new IndexEditorPane(editorPart.getSite().getPage(), editorPart, editorPart);
+		final IndexEditorPane pane = new IndexEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		pane.createControl(sash);
 		pane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()), editorPart.getAdapterFactory());
 		pane.getViewer().setInput(modelObject);
 
-		final IndexEditorPane pane2 = new IndexEditorPane(editorPart.getSite().getPage(), editorPart, editorPart);
+		final IndexEditorPane pane2 = new IndexEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		pane2.createControl(sash);
 		pane2.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CharterIndices()), editorPart.getAdapterFactory());
 		pane2.getViewer().setInput(modelObject);

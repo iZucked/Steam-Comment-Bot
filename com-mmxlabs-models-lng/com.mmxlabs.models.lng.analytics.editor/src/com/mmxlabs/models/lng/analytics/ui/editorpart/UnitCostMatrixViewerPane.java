@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -25,43 +26,39 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
 /**
  * A viewer pane for editing unit cost matrix definitions
+ * 
  * @author hinton
- *
+ * 
  */
 public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
-	public UnitCostMatrixViewerPane(IWorkbenchPage page, IWorkbenchPart part, final IScenarioEditingLocation location) {
-		super(page, part, location);
+	public UnitCostMatrixViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+		super(page, part, location, actionBars);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		addNameManipulator("Name");
 
-		addTypicalColumn("Hire Rate", 
-				new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_NotionalDayRate(), getEditingDomain()));
+		addTypicalColumn("Hire Rate", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_NotionalDayRate(), getEditingDomain()));
 
-		addTypicalColumn("Vessel", 
-				new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_Vessel(), getReferenceValueProviderCache(), getEditingDomain()));
+		addTypicalColumn("Vessel", new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_Vessel(), getReferenceValueProviderCache(), getEditingDomain()));
 
-		addTypicalColumn("Speed", 
-				new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_Speed(), getEditingDomain()));
-		
-		addTypicalColumn("Base Price", 
-				new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_BaseFuelPrice(), getEditingDomain()));
-		
-		addTypicalColumn("LNG Price", 
-				new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CargoPrice(), getEditingDomain()));
-		
+		addTypicalColumn("Speed", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_Speed(), getEditingDomain()));
+
+		addTypicalColumn("Base Price", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_BaseFuelPrice(), getEditingDomain()));
+
+		addTypicalColumn("LNG Price", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CargoPrice(), getEditingDomain()));
+
 		final EvaluateUnitCostMatrixAction evaluateAction = new EvaluateUnitCostMatrixAction(getJointModelEditorPart());
 		getToolBarManager().appendToGroup(EDIT_GROUP, evaluateAction);
 		getToolBarManager().update(true);
 		viewer.addSelectionChangedListener(evaluateAction);
 		defaultSetTitle("Unit Cost Matrices");
-		
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {			
+
+		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
+			public void selectionChanged(final SelectionChangedEvent event) {
 				final ISelection selection = event.getSelection();
 				if (selection instanceof IStructuredSelection) {
 					if (!selection.isEmpty()) {

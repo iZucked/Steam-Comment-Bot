@@ -47,7 +47,7 @@ public class CostMatrixView extends ScenarioInstanceView {
 			
 			super.displayScenarioInstance(instance);
 			if (instance != null) {
-				viewerPane = new UnitCostMatrixViewerPane(getSite().getPage(), this, this);
+				viewerPane = new UnitCostMatrixViewerPane(getSite().getPage(), this, this, getViewSite().getActionBars());
 				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
 				viewerPane.createControl(sash);
 				viewerPane.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getAnalyticsModel_RoundTripMatrices()),

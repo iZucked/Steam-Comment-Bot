@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -27,15 +28,15 @@ public class CooldownPricingEditorPane extends ScenarioTableViewerPane {
 	 * @param page
 	 * @param part
 	 */
-	public CooldownPricingEditorPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
-		super(page, part, location);
+	public CooldownPricingEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+		super(page, part, location, actionBars);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane#init(java.util.List, org.eclipse.emf.common.notify.AdapterFactory)
 	 */
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		addTypicalColumn("Ports", new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getCooldownPrice_Ports(), getReferenceValueProviderCache(), getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 		addTypicalColumn("Index", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getCooldownPrice_Index(), getReferenceValueProviderCache(), getEditingDomain()));

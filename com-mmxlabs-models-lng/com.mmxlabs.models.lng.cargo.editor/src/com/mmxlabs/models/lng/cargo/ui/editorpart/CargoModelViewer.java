@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -38,8 +39,8 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 public class CargoModelViewer extends ScenarioTableViewerPane {
 	private IScenarioEditingLocation part;
 	
-	public CargoModelViewer(IWorkbenchPage page, IWorkbenchPart part, final IScenarioEditingLocation location) {
-		super(page, part, location);
+	public CargoModelViewer(IWorkbenchPage page, IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+		super(page, part, location, actionBars);
 		this.part = location;
 	}
 	

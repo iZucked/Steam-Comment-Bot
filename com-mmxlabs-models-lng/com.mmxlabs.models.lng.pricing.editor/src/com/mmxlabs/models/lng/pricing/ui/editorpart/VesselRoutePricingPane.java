@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.action.Action;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -22,22 +23,22 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
  * Quick hack for vessel route cost editing
  * 
  * @author hinton
- *
+ * 
  */
 public class VesselRoutePricingPane extends ScenarioTableViewerPane {
-	public VesselRoutePricingPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
-		super(page, part, location);
+	public VesselRoutePricingPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+		super(page, part, location, actionBars);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-		
+
 		addTypicalColumn("Route", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getRouteCost_Route(), getReferenceValueProviderCache(), getEditingDomain()));
 		addTypicalColumn("Vessel Class", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getRouteCost_VesselClass(), getReferenceValueProviderCache(), getEditingDomain()));
 		addTypicalColumn("Laden Toll", new NumericAttributeManipulator(PricingPackage.eINSTANCE.getRouteCost_LadenCost(), getEditingDomain()));
 		addTypicalColumn("Ballast Toll", new NumericAttributeManipulator(PricingPackage.eINSTANCE.getRouteCost_BallastCost(), getEditingDomain()));
-		
+
 		defaultSetTitle("Route Pricing");
 	}
 

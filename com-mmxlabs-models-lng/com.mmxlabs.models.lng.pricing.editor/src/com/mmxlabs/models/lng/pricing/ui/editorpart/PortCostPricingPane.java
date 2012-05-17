@@ -17,6 +17,7 @@ import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -41,8 +42,8 @@ import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
  *
  */
 public class PortCostPricingPane extends ScenarioTableViewerPane {
-	public PortCostPricingPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
-		super(page, part, location);
+	public PortCostPricingPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, final IActionBars actionBars) {
+		super(page, part, location, actionBars);
 	}
 
 	@Override

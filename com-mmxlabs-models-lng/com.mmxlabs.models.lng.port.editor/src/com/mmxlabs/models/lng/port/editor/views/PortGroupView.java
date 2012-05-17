@@ -149,7 +149,7 @@ public class PortGroupView extends ScenarioInstanceView {
 			
 			super.displayScenarioInstance(instance);
 			if (instance != null) {
-				viewerPane = new PortGroupEditorPane(getSite().getPage(), this, this);
+				viewerPane = new PortGroupEditorPane(getSite().getPage(), this, this, getViewSite().getActionBars());
 				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
 				viewerPane.createControl(sash);
 				viewerPane.init(Collections.singletonList(PortPackage.eINSTANCE.getPortModel_PortGroups()),

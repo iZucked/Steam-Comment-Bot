@@ -13,7 +13,7 @@ public class VesselEventView extends ScenarioTableViewerView<VesselEventViewerPa
 
 	@Override
 	protected VesselEventViewerPane createViewerPane() {
-		return new VesselEventViewerPane(getSite().getPage(), this, this);
+		return new VesselEventViewerPane(getSite().getPage(), this, this, getViewSite().getActionBars());
 	}
 
 	@Override

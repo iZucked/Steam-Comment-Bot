@@ -30,6 +30,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -52,56 +53,57 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class PortEditorPane extends ScenarioTableViewerPane {
 
-	public PortEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location) {
-		super(page, part, location);
+	public PortEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+		super(page, part, location, actionBars);
 	}
 
 	@Override
 	public void init(List<EReference> path, AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-		
+
 		addNameManipulator("Name");
-	
-//		for (final PortCapability capability : PortCapability.values()) {
-//			addTypicalColumn(capability.getName(), new CapabilityManipulator(capability, getJointModelEditorPart().getEditingDomain()));
-//		}
-		
+
+		// for (final PortCapability capability : PortCapability.values()) {
+		// addTypicalColumn(capability.getName(), new CapabilityManipulator(capability, getJointModelEditorPart().getEditingDomain()));
+		// }
+
 		final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
 		getToolBarManager().appendToGroup(EDIT_GROUP, dmaAction);
 		getToolBarManager().update(true);
 		defaultSetTitle("Ports");
 	}
-	
+
 	@Override
 	protected Action createImportAction() {
 		final Action importPorts = super.createImportAction();
-		
+
 		importPorts.setText("Import ports...");
 		final AbstractMenuAction importMenu = new AbstractMenuAction("Import Ports and Distances") {
 			{
 				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
 			}
-			
+
 			@Override
 			protected void populate(Menu menu) {
 				addActionToMenu(importPorts, menu);
 				final PortModel pm = getJointModelEditorPart().getRootObject().getSubModel(PortModel.class);
 				new MenuItem(menu, SWT.SEPARATOR);
-				
+
 				final HashSet<String> existingNames = new HashSet<String>();
-				
+
 				for (final Route r : pm.getRoutes()) {
 					existingNames.add(r.getName());
 					final ImportAction importR = new ImportAction(getJointModelEditorPart()) {
 						@Override
 						protected void doImportStages(DefaultImportContext context) {
 							final FileDialog fileDialog = new FileDialog(part.getShell());
-							fileDialog.setFilterExtensions(new String[] {"*.csv"});
+							fileDialog.setFilterExtensions(new String[] { "*.csv" });
 							final String path = fileDialog.open();
-							
-							if (path == null) return;
+
+							if (path == null)
+								return;
 							final RouteImporter routeImporter = new RouteImporter();
-							
+
 							CSVReader reader;
 							try {
 								reader = new CSVReader(path);
@@ -111,72 +113,65 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								cc.append(IdentityCommand.INSTANCE);
 								// remove old lines and add new ones.
 								if (r.getLines().isEmpty() == false)
-									cc.append(RemoveCommand.create(
-											getEditingDomain(), r.getLines()));
+									cc.append(RemoveCommand.create(getEditingDomain(), r.getLines()));
 								if (importRoute.getLines().isEmpty() == false)
-									cc.append(AddCommand.create(
-											getEditingDomain(), r,
-											PortPackage.eINSTANCE
-													.getRoute_Lines(),
-											importRoute.getLines()));
+									cc.append(AddCommand.create(getEditingDomain(), r, PortPackage.eINSTANCE.getRoute_Lines(), importRoute.getLines()));
 								getJointModelEditorPart().setDisableUpdates(true);
-								getEditingDomain().getCommandStack()
-										.execute(cc);
+								getEditingDomain().getCommandStack().execute(cc);
 								getJointModelEditorPart().setDisableUpdates(false);
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
 						}
 					};
-					
+
 					importR.setText("Re-import " + r.getName() + " matrix...");
 					addActionToMenu(importR, menu);
 				}
-				
+
 				new MenuItem(menu, SWT.SEPARATOR);
-				
+
 				final ImportAction importNew = new ImportAction(getJointModelEditorPart()) {
-					
+
 					@Override
 					protected void doImportStages(DefaultImportContext context) {
 						final FileDialog fileDialog = new FileDialog(part.getShell());
-						fileDialog.setFilterExtensions(new String[] {"*.csv"});
+						fileDialog.setFilterExtensions(new String[] { "*.csv" });
 						final String path = fileDialog.open();
-						
-						if (path == null) return;
-						
-						final InputDialog input = new InputDialog(part.getShell(), "Name for new canal", "Enter a new name for the new canal","canal", new IInputValidator() {
-									@Override
-									public String isValid(final String newText) {
-										if (newText.trim().isEmpty()) {
-											return "The canal must have a name";
-										}
-										if (existingNames.contains(newText)) {
-											return "Another route already has the name " + newText;
-										}
-										return null;
-									}
-								});
+
+						if (path == null)
+							return;
+
+						final InputDialog input = new InputDialog(part.getShell(), "Name for new canal", "Enter a new name for the new canal", "canal", new IInputValidator() {
+							@Override
+							public String isValid(final String newText) {
+								if (newText.trim().isEmpty()) {
+									return "The canal must have a name";
+								}
+								if (existingNames.contains(newText)) {
+									return "Another route already has the name " + newText;
+								}
+								return null;
+							}
+						});
 						if (input.open() == Window.OK) {
 							final String newName = input.getValue();
 							final RouteImporter routeImporter = new RouteImporter();
-							
+
 							CSVReader reader;
 							try {
 								reader = new CSVReader(path);
-								
+
 								final Route importRoute = routeImporter.importRoute(reader, context);
-								
+
 								context.run();
-								
+
 								importRoute.setName(newName);
 								importRoute.setCanal(true);
-								
+
 								getJointModelEditorPart().setDisableUpdates(true);
-								getJointModelEditorPart().getEditingDomain().getCommandStack().execute(
-										AddCommand.create(getJointModelEditorPart().getEditingDomain(), 
-												pm, PortPackage.eINSTANCE.getPortModel_Routes(),
-												importRoute));
+								getJointModelEditorPart().getEditingDomain().getCommandStack()
+										.execute(AddCommand.create(getJointModelEditorPart().getEditingDomain(), pm, PortPackage.eINSTANCE.getPortModel_Routes(), importRoute));
 								getJointModelEditorPart().setDisableUpdates(false);
 							} catch (IOException e) {
 								e.printStackTrace();
@@ -184,13 +179,13 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 						}
 					}
 				};
-				
+
 				importNew.setText("Import new canal...");
-				
+
 				addActionToMenu(importNew, menu);
 			}
 		};
-		
+
 		return importMenu;
 	}
 
@@ -199,7 +194,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			super("Edit distances");
 			try {
 				setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.port.editor/icons/earth.gif")));
-			} catch (final MalformedURLException e) {}
+			} catch (final MalformedURLException e) {
+			}
 			setToolTipText("Edit distance matrices and canals");
 		}
 
@@ -236,23 +232,24 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 										});
 								if (input.open() == Window.OK) {
 									final String newName = input.getValue();
-									getJointModelEditorPart().getEditingDomain().getCommandStack().execute(SetCommand.create(getJointModelEditorPart().getEditingDomain(), canal, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newName));
+									getJointModelEditorPart().getEditingDomain().getCommandStack()
+											.execute(SetCommand.create(getJointModelEditorPart().getEditingDomain(), canal, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newName));
 								}
 							}
 						};
 						addActionToMenu(renameCanal, menu2);
 						if (canal.isCanal()) {
 							final Action deleteCanal = new Action("Delete " + canal.getName() + "...") {
-							@Override
-							public void run() {
-								if (MessageDialog.openQuestion(part.getSite().getShell(), "Delete canal " + canal.getName(), "Are you sure you want to delete the canal \"" + canal.getName()
-										+ "\"?")) {
-									getJointModelEditorPart().getEditingDomain().getCommandStack().execute(
-											DeleteCommand.create(getJointModelEditorPart().getEditingDomain(), Collections.singleton(canal)));
+								@Override
+								public void run() {
+									if (MessageDialog.openQuestion(part.getSite().getShell(), "Delete canal " + canal.getName(), "Are you sure you want to delete the canal \"" + canal.getName()
+											+ "\"?")) {
+										getJointModelEditorPart().getEditingDomain().getCommandStack()
+												.execute(DeleteCommand.create(getJointModelEditorPart().getEditingDomain(), Collections.singleton(canal)));
+									}
 								}
-							}
-						};
-						addActionToMenu(deleteCanal, menu2);
+							};
+							addActionToMenu(deleteCanal, menu2);
 						}
 
 					}
@@ -304,7 +301,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			return new LockableAction("Edit " + name + " distances...") {
 				@Override
 				public void run() {
-					
+
 					final Route newModel = edit(distanceModel);
 					if (newModel == null) {
 						return;
@@ -321,7 +318,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 				private Route edit(final Route distanceModel) {
 					final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
-					
+
 					if (ded.open(PortEditorPane.this.part.getSite(), getJointModelEditorPart(), distanceModel) == Window.OK) {
 						return ded.getResult();
 					}
@@ -331,5 +328,3 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		}
 	}
 }
-
-

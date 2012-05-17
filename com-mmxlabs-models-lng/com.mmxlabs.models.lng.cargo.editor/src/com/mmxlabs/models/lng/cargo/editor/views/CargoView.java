@@ -14,7 +14,7 @@ public class CargoView extends ScenarioTableViewerView<CargoModelViewer> {
 
 	@Override
 	protected CargoModelViewer createViewerPane() {
-		return new CargoModelViewer(getSite().getPage(), this, this);
+		return new CargoModelViewer(getSite().getPage(), this, this, getViewSite().getActionBars());
 	}
 
 	@Override

@@ -12,7 +12,7 @@ import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 public class VesselClassView extends ScenarioTableViewerView<VesselClassViewerPane> {
 	@Override
 	protected VesselClassViewerPane createViewerPane() {
-		return new VesselClassViewerPane(getSite().getPage(), this, this);
+		return new VesselClassViewerPane(getSite().getPage(), this, this, getViewSite().getActionBars());
 	}
 
 	@Override

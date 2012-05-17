@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -29,44 +30,42 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
 public class VesselEventViewerPane extends ScenarioTableViewerPane {
 
-	private IScenarioEditingLocation jointModelEditor;
+	private final IScenarioEditingLocation jointModelEditor;
 
-	public VesselEventViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
-		super(page, part, location);
+	public VesselEventViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+		super(page, part, location, actionBars);
 		this.jointModelEditor = location;
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 
-		addTypicalColumn("Type", 
-				new NonEditableColumn() {
-					@Override
-					public String render(Object object) {
-						if (object instanceof CharterOutEvent) {
-							return "Charter Out";
-						} else if (object instanceof DryDockEvent) {
-							return "Dry Dock";
-						} else if (object instanceof MaintenanceEvent) {
-							return "Maintenance Event";
-						} else {
-							return "Unknown Event";
-						}
-					}
-				});
-		
+		addTypicalColumn("Type", new NonEditableColumn() {
+			@Override
+			public String render(final Object object) {
+				if (object instanceof CharterOutEvent) {
+					return "Charter Out";
+				} else if (object instanceof DryDockEvent) {
+					return "Dry Dock";
+				} else if (object instanceof MaintenanceEvent) {
+					return "Maintenance Event";
+				} else {
+					return "Unknown Event";
+				}
+			}
+		});
+
 		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Earliest Start", new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselEvent_StartAfter(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Latest Start", new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselEvent_StartBy(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Port", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVesselEvent_Port(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Duration", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselEvent_DurationInDays(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Vessels", 
-				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		addTypicalColumn("Vessels",
+				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
+						MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-		setTitle("Vessel Events", PlatformUI.getWorkbench().getSharedImages()
-				.getImage(ISharedImages.IMG_DEF_VIEW));
+		setTitle("Vessel Events", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 
-	
 }

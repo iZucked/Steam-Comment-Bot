@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -66,15 +67,15 @@ import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class VesselClassViewerPane extends ScenarioTableViewerPane {
-	private IScenarioEditingLocation jointModelEditor;
+	private final IScenarioEditingLocation jointModelEditor;
 
-	public VesselClassViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
-		super(page, part, location);
+	public VesselClassViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+		super(page, part, location, actionBars);
 		this.jointModelEditor = location;
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
 
@@ -88,9 +89,9 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Inaccessible Ports", new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts(), jointModelEditor.getReferenceValueProviderCache(),
 				editingDomain, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-//		addTypicalColumn("Laden Fuel Usage", new VSAManipulator(FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(), editingDomain));
-//
-//		addTypicalColumn("Ballast Fuel Usage", new VSAManipulator(FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(), editingDomain));
+		// addTypicalColumn("Laden Fuel Usage", new VSAManipulator(FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(), editingDomain));
+		//
+		// addTypicalColumn("Ballast Fuel Usage", new VSAManipulator(FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(), editingDomain));
 
 		setTitle("Vessel Classes", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
@@ -105,7 +106,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 			}
 
 			@Override
-			protected void populate(Menu menu) {
+			protected void populate(final Menu menu) {
 				addActionToMenu(def, menu);
 				final Action importFuels = new ImportAction(getJointModelEditorPart()) {
 					{
@@ -130,7 +131,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 							context.run();
 							part.getEditingDomain().getCommandStack()
 									.execute(mergeLists(getScenarioViewer().getCurrentContainer(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels(), new ArrayList<EObject>(importedObjects)));
-						} catch (IOException e) {
+						} catch (final IOException e) {
 							e.printStackTrace();
 						}
 					}
@@ -141,6 +142,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 					{
 						setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
 					}
+
 					@Override
 					public void run() {
 						final DefaultImportContext context = new DefaultImportContext();
@@ -185,7 +187,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 							}
 
 							ed.getCommandStack().execute(command);
-						} catch (IOException e) {
+						} catch (final IOException e) {
 							context.addProblem(context.createProblem("IO Error: " + e.getMessage(), false, false, false));
 						} finally {
 							jointModelEditor.setDisableUpdates(false);
@@ -216,7 +218,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 				b = true;
 				final Action editBase = new AbstractMenuAction(baseFuel.getName()) {
 					@Override
-					protected void populate(Menu submenu) {
+					protected void populate(final Menu submenu) {
 						final LockableAction edit = new LockableAction("Edit...") {
 							public void run() {
 								final DetailCompositeDialog dcd = new DetailCompositeDialog(jointModelEditor.getShell(), jointModelEditor.getDefaultCommandHandler());
@@ -275,7 +277,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 
 	class VSAManipulator extends DialogFeatureManipulator {
 
-		public VSAManipulator(EStructuralFeature field, EditingDomain editingDomain) {
+		public VSAManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
 			super(field, editingDomain);
 		}
 

@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -23,30 +24,26 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
  * Charter price editor
  * 
  * @author hinton
- *
+ * 
  */
 public class CharterPricingPane extends ScenarioTableViewerPane {
-	public CharterPricingPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
-		super(page, part, location);
+	public CharterPricingPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+		super(page, part, location, actionBars);
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-		
-		addTypicalColumn("Vessel Classes",
-				new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getCharterCostModel_VesselClasses(), 
-						getReferenceValueProviderCache(), getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		
-		addTypicalColumn("Spot Count", 
-				new NumericAttributeManipulator(PricingPackage.eINSTANCE.getCharterCostModel_SpotCharterCount(), getEditingDomain()));
-		
-		addTypicalColumn("Hiring Index", 
-				new SingleReferenceManipulator(PricingPackage.eINSTANCE.getCharterCostModel_CharterInPrice(), getReferenceValueProviderCache(), getEditingDomain()));
-		
-		addTypicalColumn("Lending Index", 
-				new SingleReferenceManipulator(PricingPackage.eINSTANCE.getCharterCostModel_CharterOutPrice(), getReferenceValueProviderCache(), getEditingDomain()));
-		
+
+		addTypicalColumn("Vessel Classes", new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getCharterCostModel_VesselClasses(), getReferenceValueProviderCache(), getEditingDomain(),
+				MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+
+		addTypicalColumn("Spot Count", new NumericAttributeManipulator(PricingPackage.eINSTANCE.getCharterCostModel_SpotCharterCount(), getEditingDomain()));
+
+		addTypicalColumn("Hiring Index", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getCharterCostModel_CharterInPrice(), getReferenceValueProviderCache(), getEditingDomain()));
+
+		addTypicalColumn("Lending Index", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getCharterCostModel_CharterOutPrice(), getReferenceValueProviderCache(), getEditingDomain()));
+
 		defaultSetTitle("Charter Pricing");
 	}
 }

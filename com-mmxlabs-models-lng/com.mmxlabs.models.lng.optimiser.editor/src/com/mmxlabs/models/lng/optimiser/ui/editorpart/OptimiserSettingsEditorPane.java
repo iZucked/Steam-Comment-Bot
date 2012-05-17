@@ -14,6 +14,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -34,15 +35,15 @@ import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
  *
  */
 public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
-	public OptimiserSettingsEditorPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location) {
-		super(page, part, location);
+	public OptimiserSettingsEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+		super(page, part, location, actionBars);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane#init(java.util.List, org.eclipse.emf.common.notify.AdapterFactory)
 	 */
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 		addNameManipulator("Name");
 
@@ -81,7 +82,7 @@ public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
 	
 	class SelectedSettingsManipulator implements ICellRenderer, ICellManipulator {
 		@Override
-		public void setValue(Object object, Object value) {
+		public void setValue(final Object object, final Object value) {
 			if (object instanceof OptimiserSettings) {
 				final OptimiserSettings settings = (OptimiserSettings) object;
 				if (settings.eContainer() instanceof OptimiserModel) {
@@ -93,12 +94,12 @@ public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
 		}
 
 		@Override
-		public CellEditor getCellEditor(Composite parent, Object object) {
+		public CellEditor getCellEditor(final Composite parent, final Object object) {
 			return new ComboBoxCellEditor(parent, new String[] { "Y", "N" });
 		}
 
 		@Override
-		public Object getValue(Object object) {
+		public Object getValue(final Object object) {
 			if (object instanceof OptimiserSettings) {
 				final OptimiserSettings settings = (OptimiserSettings) object;
 				if (((OptimiserModel) settings.eContainer()).getActiveSetting() == settings)
@@ -108,27 +109,27 @@ public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
 		}
 
 		@Override
-		public boolean canEdit(Object object) {
+		public boolean canEdit(final Object object) {
 			return true;
 		}
 
 		@Override
-		public String render(Object object) {
+		public String render(final Object object) {
 			return ((Integer) getValue(object)) == 0 ? "Y" : "N";
 		}
 
 		@Override
-		public Comparable getComparable(Object object) {
+		public Comparable getComparable(final Object object) {
 			return render(object);
 		}
 
 		@Override
-		public Object getFilterValue(Object object) {
+		public Object getFilterValue(final Object object) {
 			return render(object);
 		}
 
 		@Override
-		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 			return Collections.emptySet();
 		}
 	}

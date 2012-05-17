@@ -22,7 +22,7 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 
 	@Override
 	protected PortEditorPane createViewerPane() {
-		return new PortEditorPane(getSite().getPage(), this, this);
+		return new PortEditorPane(getSite().getPage(), this, this, getViewSite().getActionBars());
 	}
 
 	@Override
