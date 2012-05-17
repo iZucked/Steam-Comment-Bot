@@ -23,19 +23,19 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 public class CommandUtil {
 	public static CompoundCommand createMultipleAttributeSetter(
 			final EditingDomain editingDomain, final EObject target,
-			final EStructuralFeature feature, final Collection value) {
+			final EStructuralFeature feature, final Collection<?> value) {
 		final CompoundCommand setter = new CompoundCommand();
 
 		if (feature.isUnique()) {
-			final Collection oldValues = (Collection) target.eGet(feature);
-			final Collection newValues = (Collection) value;
+			final Collection<?> oldValues = (Collection<?>) target.eGet(feature);
+			final Collection<?> newValues = (Collection<?>) value;
 
 			// this is everything not in the new value list
-			final ArrayList removeValues = new ArrayList(oldValues);
+			final ArrayList<?> removeValues = new ArrayList<Object>(oldValues);
 			removeValues.removeAll(newValues);
 
 			// this is everything actually being added
-			final ArrayList addedValues = new ArrayList(newValues);
+			final ArrayList<?> addedValues = new ArrayList<Object>(newValues);
 			addedValues.removeAll(oldValues);
 
 			setter.append(new IdentityCommand());
@@ -49,9 +49,9 @@ public class CommandUtil {
 		} else {
 			setter.append(SetCommand.create(editingDomain, target, feature,
 					SetCommand.UNSET_VALUE));
-			if (((Collection) value).size() > 0) {
+			if (((Collection<?>) value).size() > 0) {
 				setter.append(AddCommand.create(editingDomain, target, feature,
-						(Collection) value));
+						(Collection<?>) value));
 			}
 		}
 		return setter;
