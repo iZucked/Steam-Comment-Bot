@@ -82,7 +82,7 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 	protected Command createSetCommand(Object value) {
 		final CompoundCommand setter = CommandUtil
 				.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature,
-						(Collection) value);
+						(Collection<?>) value);
 		return setter;
 	}
 	
@@ -109,7 +109,7 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 				}, "Select values:");
 		dlg.setTitle("Value Selection");
 		
-		dlg.setInitialSelections(((Collection) getValue()).toArray());
+		dlg.setInitialSelections(((Collection<?>) getValue()).toArray());
 		dlg.setBlockOnOpen(true);
 		dlg.open();
 		Object[] result = dlg.getResult();

@@ -95,7 +95,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		final CompoundCommand setter = CommandUtil
 				.createMultipleAttributeSetter(
 						commandHandler.getEditingDomain(), input, feature,
-						(Collection) value);
+						(Collection<?>) value);
 		return setter;
 	}
 

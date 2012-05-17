@@ -28,7 +28,7 @@ public class EnumCheckboxEditor extends BooleanInlineEditor {
 	protected Object getValue() {
 		final Object superValue = super.getValue();
 		if (superValue instanceof Collection)
-		return ((Collection)superValue).contains(enumValue);
+		return ((Collection<?>)superValue).contains(enumValue);
 		else return Boolean.FALSE;
 	}
 
