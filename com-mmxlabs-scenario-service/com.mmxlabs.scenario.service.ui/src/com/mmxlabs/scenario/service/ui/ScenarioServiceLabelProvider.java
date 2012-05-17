@@ -89,11 +89,16 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 					final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
 					final IJobControl control = jobManager.getControlForJob(job);
 					if (control != null) {
+						if (control.getJobState() == EJobState.COMPLETED) {
+							return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/complete_job.gif").createImage();
+						}
 						final Color minorColor = (control.getJobState() == EJobState.PAUSED || control.getJobState() == EJobState.PAUSING) ? Display.getDefault().getSystemColor(SWT.COLOR_YELLOW)
 								: new Color(Display.getDefault(), 100, 230, 120);
 						final Color majorColor = new Color(Display.getDefault(), 240, 80, 85);
 
 						return PieChartRenderer.renderPie(minorColor, majorColor, control.getProgress() / 100.0);
+					} else {
+						return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/no_job.gif").createImage();
 					}
 				}
 			}
