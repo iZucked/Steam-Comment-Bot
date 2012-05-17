@@ -123,7 +123,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 					needsRefresh = false;
 				}
 			}
-		}		
+		}
 	};
 
 	private void refreshViewer() {
