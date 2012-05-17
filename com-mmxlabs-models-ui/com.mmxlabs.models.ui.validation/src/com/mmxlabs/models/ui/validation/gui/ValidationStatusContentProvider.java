@@ -27,8 +27,9 @@ public class ValidationStatusContentProvider implements ITreeContentProvider {
 		if (inputElement instanceof IStatus) {
 			final IStatus status = (IStatus) inputElement;
 			if (status.isMultiStatus()) {
-
 				return status.getChildren();
+			} else {
+				return new Object[] { status };
 			}
 		}
 
