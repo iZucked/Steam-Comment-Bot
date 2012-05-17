@@ -101,7 +101,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 				filtered = !isShowMetadata();
 			} else if (e instanceof ScenarioModel) {
 				filtered = !isShowScenarioServices();
-			} else if (e instanceof IScenarioService) {
+			} else if (e instanceof IScenarioService || e instanceof ScenarioService) {
 				filtered = !isShowScenarioServices();
 			} else if (e instanceof ScenarioServiceRegistry) {
 				filtered = false;
