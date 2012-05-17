@@ -132,9 +132,7 @@ public class EObjectTableViewer extends GridTableViewer {
 					});
 					return;
 				}
-				while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null)) {
-
-				}
+				source = getElementForNotificationTarget(source);
 				if (source != null) {
 					synchronized (objectsToUpdate) {
 						objectsToUpdate.add(source);
@@ -148,6 +146,14 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 		}
 	};
+
+	protected EObject getElementForNotificationTarget(EObject source) {
+		while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null)) {
+
+		}
+		return source;
+	}
+
 	private final LinkedList<Pair<EMFPath, ICellRenderer>> cellRenderers = new LinkedList<Pair<EMFPath, ICellRenderer>>();
 
 	private final ArrayList<GridColumn> columnSortOrder = new ArrayList<GridColumn>();
