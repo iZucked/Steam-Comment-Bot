@@ -42,13 +42,9 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 public final class AddModelAction {
 	public interface IAddContext {
 		public ICommandHandler getCommandHandler();
-
 		public EObject getContainer();
-
 		public EReference getContainment();
-
 		public MMXRootObject getRootObject();
-		
 		public IScenarioEditingLocation getEditorPart();
 	}
 
@@ -98,14 +94,14 @@ class SingleAddAction extends LockableAction {
 			
 			if (editor.open(context.getEditorPart(), context.getRootObject(), Collections.singletonList(settings.iterator().next().getInstance()))
 					!= Window.OK) {
-				final List<EObject> del = new ArrayList<EObject>(settings.size());
-				for (final ISetting s : settings) {
-					del.add(s.getInstance());
-				}
+//				final List<EObject> del = new ArrayList<EObject>(settings.size());
+//				for (final ISetting s : settings) {
+//					del.add(s.getInstance());
+//				}
 				// delete what we created.
-				final Command command = DeleteCommand.create(context.getCommandHandler().getEditingDomain(), del);
-				context.getCommandHandler().getEditingDomain().getCommandStack().execute(command);
-				
+//				final Command command = DeleteCommand.create(context.getCommandHandler().getEditingDomain(), del);
+//				context.getCommandHandler().getEditingDomain().getCommandStack().execute(command);
+				add.undo(); 
 			}
 		}
 	}

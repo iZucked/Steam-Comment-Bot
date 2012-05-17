@@ -31,6 +31,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -167,7 +168,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 					if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
 						final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
 						if (structuredSelection.isEmpty() == false) {
-							if (structuredSelection.size() == 1) {
+//							if (structuredSelection.size() == 1) {
 								final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getDefaultCommandHandler());
 								try {
 									jointModelEditorPart.setDisableUpdates(true);
@@ -175,13 +176,13 @@ public class ScenarioTableViewerPane extends ViewerPane {
 								} finally {
 									jointModelEditorPart.setDisableUpdates(false);
 								}
-							} else {
-								if (scenarioViewer.isLocked() == false) {
-									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart
-											.getDefaultCommandHandler());
-									mdd.open(structuredSelection.toList());
-								}
-							}
+//							} else {
+//								if (scenarioViewer.isLocked() == false) {
+//									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart
+//											.getDefaultCommandHandler());
+//									mdd.open(structuredSelection.toList());
+//								}
+//							}
 						}
 					}
 				}
