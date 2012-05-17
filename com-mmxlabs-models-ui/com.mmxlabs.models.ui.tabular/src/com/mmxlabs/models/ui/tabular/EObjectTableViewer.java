@@ -40,6 +40,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -324,14 +325,18 @@ public class EObjectTableViewer extends GridTableViewer {
 		columnSortOrder.add(tColumn);
 
 		column.setLabelProvider(new ColumnLabelProvider() {
+
+			private final Color errorColour = new Color(Display.getDefault(), new RGB(255, 100, 100));
+			private final Color warningColour = new Color(Display.getDefault(), new RGB(0, 255, 255));
+
 			@Override
 			public Color getBackground(final Object element) {
 				if (validationErrors.containsKey(element)) {
 					final IStatus s = validationErrors.get(element);
 					if (s.getSeverity() == IStatus.ERROR) {
-						return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+						return errorColour;
 					} else if (s.getSeverity() == IStatus.WARNING) {
-						return Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+						return warningColour;
 					}
 				}
 				return super.getBackground(element);
@@ -372,6 +377,12 @@ public class EObjectTableViewer extends GridTableViewer {
 				}
 			}
 
+			@Override
+			public void dispose() {
+				errorColour.dispose();
+				warningColour.dispose();
+				super.dispose();
+			}
 		});
 
 		column.setEditingSupport(new EditingSupport(viewer) {
