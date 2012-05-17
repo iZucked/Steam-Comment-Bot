@@ -40,7 +40,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 	public String writeAttribute(EObject container, EAttribute attribute,
 			Object value) {
 		if (attribute.isMany()) {
-			final EList eValues = (EList) container.eGet(attribute);
+			final EList<?> eValues = (EList<?>) container.eGet(attribute);
 			final StringBuffer result = new StringBuffer();
 			boolean comma = false;
 			for (final Object o : eValues) {
