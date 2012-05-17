@@ -27,7 +27,7 @@ public class ScenarioServiceLinkHelper implements ILinkHelper {
 			final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
 			final IEditorPart editorPart = aPage.findEditor(editorInput);
 			if (editorPart != null) {
-				aPage.activate(editorPart);
+				aPage.bringToTop(editorPart);
 			}
 		}
 	}
