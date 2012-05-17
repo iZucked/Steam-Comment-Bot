@@ -183,4 +183,26 @@
        </command>
     </menuContribution>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.port.ui.editors.PortGroupContentsEditorFactory"
+          featureNameEquals="contents"
+          id="com.mmxlabs.models.lng.port.editor.portGroupEditorFactory">
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.port.PortGroup">
+          </EClassExtends>
+       </OwnerAnyOf>
+    </editorFactory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.port.PortGroup"
+          factory="com.mmxlabs.models.lng.port.ui.editors.PortGroupCompositeFactory"
+          id="com.mmxlabs.models.lng.port.editor.portGroupCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+ </extension>
 </plugin>
