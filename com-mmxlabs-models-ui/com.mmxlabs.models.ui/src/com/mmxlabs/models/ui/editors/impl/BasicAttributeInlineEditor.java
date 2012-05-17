@@ -9,7 +9,6 @@ package com.mmxlabs.models.ui.editors.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -122,7 +121,6 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 		// Update control tool-tips using IItemPropertyDescriptor
 		if (input != null && tooltipControl != null) {
-
 			// Set to blank by default - and replace below if the feature is
 			// found
 			String toolTip = "";
@@ -340,16 +338,17 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		// Create decorator for validation items
 		{
 			validationDecoration = new ControlDecoration(c, SWT.LEFT | SWT.TOP);
+			validationDecoration.hide();
 
 			// These should be the defaults...
 			validationDecoration.setShowHover(true);
 			validationDecoration.setShowOnlyOnFocus(false);
 
 			// Set a default image
-			validationDecoration.setImage(decorationInfo.getImage());
+			// commented out, because this takes about 70% of the runtime of displaying the editor
+//			validationDecoration.setImage(decorationInfo.getImage());
 
 			// Hide by default
-			validationDecoration.hide();
 		}
 
 		// Store reference to this control so we can display tool tips.
