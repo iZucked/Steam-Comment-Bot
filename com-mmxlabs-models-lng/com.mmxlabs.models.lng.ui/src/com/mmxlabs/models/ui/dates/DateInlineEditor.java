@@ -28,7 +28,7 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	
 	@Override
 	protected void updateValueDisplay(Object value) {
-		dateFormatter.setTimeZone(LocalDateUtil.getTimeZone(value, (EAttribute) this.feature));
+		dateFormatter.setTimeZone(LocalDateUtil.getTimeZone(input, (EAttribute) this.feature));
 		formattedText.setValue(value);
 	}
 
