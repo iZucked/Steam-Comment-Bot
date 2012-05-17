@@ -18,6 +18,22 @@
             </contentExtension>            
          </includes>
       </viewerContentBinding>
+      <viewer
+            viewerId="com.mmxlabs.scenario.service.ui.navigator">
+         <options>
+            <property
+                  name="org.eclipse.ui.navigator.hideAvailableCustomizationsDialog"
+                  value="true">
+            </property>
+            <property
+                  name="org.eclipse.ui.navigator.hideAvailableExtensionsTab"
+                  value="true">
+            </property>
+            <property
+                  name="org.eclipse.ui.navigator.customizeViewDialogHelpContext" value="">
+            </property>
+         </options>
+      </viewer>
    </extension>
    <extension
          point="org.eclipse.ui.views">

@@ -307,10 +307,4 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		}
 
 	}
-
-	protected ActionGroup createCommonActionGroup() {
-		// Return an anonymous implementation to suppress default actions
-		return new ActionGroup() {
-		};
-	}
 }
